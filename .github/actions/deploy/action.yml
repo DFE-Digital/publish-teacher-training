@@ -1,0 +1,129 @@
+name: deploy
+description: deploys application
+
+inputs:
+  actions-api-access-token:
+    required: true
+  arm-access-key:
+    required: true
+  azure-credentials:
+    required: true
+  environment:
+    description: Environment to deploy to
+    required: true
+  pr-number:
+    description: PR number for the review app
+    required: false
+  sha:
+    description: Commit sha to be deployed
+    required: true
+  slack-webhook:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set Environment variables
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.pr-number }}" ]; then
+          echo "DEPLOY_ENV=${{ inputs.environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
+          echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
+          echo "DEPLOY_URL=https://teacher-training-api-pr-${{ inputs.pr-number }}.london.cloudapps.digital" >> $GITHUB_ENV
+          echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
+        else
+          echo "DEPLOY_ENV=${{ inputs.environment }}" >> $GITHUB_ENV
+          echo "DEPLOY_URL=https://${{ inputs.environment }}.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_ENV
+          echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
+        fi;
+
+        tf_vars_file=terraform/workspace_variables/${{ inputs.environment }}.tfvars.json
+        echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+    - name: Start ${{ inputs.environment }} Deployment
+      uses: bobheadxi/deployments@v1
+      id:   deployment
+      with:
+        step: start
+        token: ${{ github.token }}
+        env:   ${{ env.DEPLOY_ENV }}
+        ref: ${{ env.DEPLOY_REF }}
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform v0.13.5
+      uses: hashicorp/setup-terraform@v1.2.1
+      with:
+        terraform_version: 0.13.5
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ inputs.azure-credentials }}
+
+    - name: Validate Azure Key Vault secrets
+      uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
+      with:
+        KEY_VAULT: ${{ env.key_vault_name }}
+        SECRETS: |
+          ${{ env.key_vault_app_secret_name }}
+          ${{ env.key_vault_infra_secret_name }}
+
+    - name: Terraform init, plan & apply
+      shell: bash
+      run: make ${{ inputs.environment }} ci deploy
+      env:
+        ARM_ACCESS_KEY:             ${{ inputs.arm-access-key }}
+        IMAGE_TAG:                  ${{ inputs.sha }}
+        TF_VAR_azure_credentials:   ${{ inputs.azure-credentials }}
+        CONFIRM_PRODUCTION:         yes
+
+    - name: Trigger ${{ inputs.environment }} Smoke Tests
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: Smoke Tests
+        ref: ${{ env.DEPLOY_REF }}
+        token:    ${{ inputs.actions-api-access-token }}
+        inputs:   '{"environment": "${{ inputs.environment }}", "pr": "${{ inputs.pr-number }}"}'
+
+    - name: Wait for smoke tests
+      id:   wait_for_smoke_tests
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      with:
+        token: ${{ github.token }}
+        ref:   ${{ env.DEPLOY_REF }}
+        checkName: smoke-tests-${{ inputs.environment }} 
+        timeoutSeconds:  300
+        intervalSeconds: 15
+
+    - name: Stop when smoke tests fail
+      if:   steps.wait_for_smoke_tests.outputs.conclusion != 'success'
+      shell: bash
+      run: exit 1
+
+    - name: Update ${{ env.DEPLOY_ENV }} status
+      if:   always()
+      uses: bobheadxi/deployments@v1
+      with:
+        step:   finish
+        token:  ${{ github.token }}
+        env:    ${{ env.DEPLOY_ENV }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env_url: ${{ env.DEPLOY_URL }}
+        ref: ${{ env.DEPLOY_REF }}
+        override: false
+
+    - name: Alert on Failure
+      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Deploy to ${{ env.DEPLOY_ENV }} Failed
+        SLACK_MESSAGE: ':alert: <!channel> Build failure on ${{ env.DEPLOY_ENV }} :sadparrot:'
+        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}

@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -7,8 +7,18 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
 jobs:
   build:
+    name: Build
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/teacher-training-api
@@ -64,8 +74,7 @@ jobs:
         tags: |
           ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-        push: ${{ github.actor != 'dependabot[bot]' }}
-        load: ${{ github.actor == 'dependabot[bot]' }}
+        push: true
         cache-from: |
           type=registry,ref=${{ env.DOCKER_IMAGE}}:master
           type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
@@ -74,63 +83,6 @@ jobs:
         build-args: |
           BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
-
-    - name: Trigger Review App Deployment
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Deploy
-        ref: ${{ github.head_ref }}
-        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"pr": "${{ github.event.pull_request.number }}", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
-
-    - name: Pull image if not loaded
-      if: ${{ github.actor != 'dependabot[bot]' }}
-      run: |
-        docker pull ${DOCKER_IMAGE}:${{ env.DOCKER_IMAGE_TAG }}
-
-    - name: Setup tests
-      run: |
-        docker-compose up --no-build -d
-        docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-        docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
-        docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-
-    - name: Run Ruby Linter
-      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
-
-    - name: Run tests
-      run: |
-        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-        docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-
-    - name: Wait for review app deployment
-      id: wait_for_review_app_deployment
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      uses: fountainhead/action-wait-for-check@v1.0.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        ref: ${{ github.head_ref }}
-        checkName: ${{ github.event.pull_request.number }} Deployment
-        timeoutSeconds:  1800
-        intervalSeconds: 10
-
-    - name: Exit if review app deployment failed
-      if: ${{ steps.wait_for_review_app_deployment.outputs.conclusion != '' && steps.wait_for_review_app_deployment.outputs.conclusion != 'success' }}
-      run: exit 1
-
-    - name: Trigger Deployment
-      if: ${{ success() && github.ref == 'refs/heads/master' }}
-      uses: benc-uk/workflow-dispatch@v1
-      with:
-        workflow: Deploy
-        token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN  }}
-        inputs: '{"qa": "true", "staging": "true", "production": "true", "sandbox": "true", "sha": "${{ env.DOCKER_IMAGE_TAG }}"}'
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
@@ -143,3 +95,96 @@ jobs:
         SLACK_TITLE: Build failure
         SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  test:
+    name: Test
+    needs: [build]
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set environment variables
+      run: |
+        echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
+    - name: Pull docker images
+      run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+
+    - name: Setup tests
+      run: |
+        docker-compose up --no-build -d
+        docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+        docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+        docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
+
+    - name: Run Ruby Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
+
+    - name: Run tests
+      run: |
+        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+        docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+      env:
+        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+
+    - name: Alert Test Failures
+      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Test failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Test failure :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-review-app:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to Review
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          environment: review
+          pr-number: ${{ github.event.pull_request.number }}
+          sha: ${{ needs.build.outputs.image_tag }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-all:
+    name: Deployment To All
+    concurrency: deploy_all
+    if: ${{ success() && github.ref == 'refs/heads/master' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        environment: [qa,staging,production,sandbox]
+      max-parallel: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to ${{ matrix.environment }}
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          environment: ${{ matrix.environment }}
+          sha: ${{ needs.test.outputs.image_tag }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
