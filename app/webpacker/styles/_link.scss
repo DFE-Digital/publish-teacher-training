@@ -1,0 +1,5 @@
+.govuk-link {
+  &.app-link--destructive {
+    color: $govuk-error-colour;
+  }
+}
