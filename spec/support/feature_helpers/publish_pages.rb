@@ -168,6 +168,10 @@ module FeatureHelpers
       @publish_course_withdrawal_page ||= PageObjects::Publish::Courses::WithdrawalPage.new
     end
 
+    def publish_course_deletion_page
+      @publish_course_deletion_page ||= PageObjects::Publish::Courses::DeletePage.new
+    end
+
     def gcse_requirements_page
       @gcse_requirements_page ||= PageObjects::Publish::Courses::GcseRequirementsPage.new
     end
