@@ -12,7 +12,7 @@ module PageObjects
 
         element :confirm_course_code, "#publish-course-withdrawal-form-confirm-course-code-field"
 
-        element :submit, 'input.govuk-button[type="submit"]'
+        element :submit, 'button.govuk-button[type="submit"]'
 
         def error_messages
           errors.map(&:text)
