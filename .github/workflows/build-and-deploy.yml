@@ -151,10 +151,20 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+      - name: Start review-${{ github.event.pull_request.number }} Deployment
+        uses: bobheadxi/deployments@v1
+        id:   deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env:   review-${{ github.event.pull_request.number }}
+          ref: ${{ github.head_ref }}
+
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Deploy App to Review
+        id: deploy_review
         uses: ./.github/actions/deploy/
         with:
           actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
@@ -165,9 +175,24 @@ jobs:
           sha: ${{ needs.build.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
+      - name: Update review-${{ github.event.pull_request.number }} status
+        if:   always()
+        uses: bobheadxi/deployments@v1
+        with:
+          step:   finish
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    review-${{ github.event.pull_request.number }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
+          ref: ${{ github.head_ref }}
+
   deploy-all:
     name: Deployment To All
     concurrency: deploy_all
+    environment: 
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/master' }}
     needs: [test]
     runs-on: ubuntu-latest
@@ -180,6 +205,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy App to ${{ matrix.environment }}
+        id: deploy_app
         uses: ./.github/actions/deploy/
         with:
           actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}

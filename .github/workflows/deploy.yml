@@ -19,12 +19,16 @@ on:
 jobs:
   deploy:
     name: Deployment to ${{ github.event.inputs.environment }}
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Deploy App to ${{ github.event.inputs.environment }}
+        id: deploy_app
         uses: ./.github/actions/deploy/
         with:
           actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
