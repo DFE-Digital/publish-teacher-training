@@ -23,12 +23,22 @@ feature "Deleting courses" do
     then_i_should_see_an_error_message
   end
 
+  scenario "attempting to delete a published course" do
+    and_there_is_a_published_course
+    when_i_visit_the_course_deletion_page
+    then_i_am_redirected_to_the_courses_page
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
   def and_there_is_a_course_i_want_to_delete
     given_a_course_exists(enrichments: [build(:course_enrichment, :initial_draft)])
+  end
+
+  def and_there_is_a_published_course
+    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
   end
 
   def when_i_visit_the_course_deletion_page

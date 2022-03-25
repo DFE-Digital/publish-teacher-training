@@ -1,6 +1,8 @@
 module Publish
   module Courses
     class DeletionsController < PublishController
+      before_action :redirect_to_courses, if: -> { course.is_published? }
+
       def edit
         authorize(provider)
 
@@ -25,6 +27,13 @@ module Publish
       end
 
     private
+
+      def redirect_to_courses
+        redirect_to publish_provider_recruitment_cycle_courses_path(
+          provider.provider_code,
+          course.recruitment_cycle_year,
+        )
+      end
 
       def course
         @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
