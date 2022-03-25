@@ -24,8 +24,8 @@ feature "Editing course information" do
   context "copying content from another course" do
     let!(:course_2) do
       create(
-        :course, :with_accrediting_provider,
-        #provider: provider_for_copy_from_list,
+        :course,
+        provider: provider,
         name: "Biology",
         enrichments: [course_2_enrichment]
       )
@@ -33,19 +33,9 @@ feature "Editing course information" do
 
     let!(:course_3) do
       create :course,
-            name: "Biology",
-            #provider: provider_for_copy_from_list,
-            enrichments: [ course_3_enrichment]
-    end
-
-    let!(:provider_for_copy_from_list) do
-      create :provider, :accredited_body,
-             accrediting_provider_enrichments: [{
-              "UcasProviderCode" => provider.provider_code,
-              "Description" => Faker::Lorem.sentence,
-            }]
-            #courses: [course_2, course_3],
-            #provider_code: provider.provider_code
+        provider: provider,
+        name: "Biology",
+        enrichments: [ course_3_enrichment]
     end
 
     let(:course_2_enrichment) do
@@ -68,6 +58,19 @@ feature "Editing course information" do
       )
       #binding.pry
       publish_course_information_page.copy_content.copy(course_2)
+
+      [
+        "Your changes are not yet saved",
+        "About the course",
+        "Interview process",
+        "How school placements work",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).to have_content(name)
+      end
+
+      expect(publish_course_information_page.about_course.value).to eq(course_2_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course_2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course_2_enrichment.how_school_placements_work)
     end
   end
 
