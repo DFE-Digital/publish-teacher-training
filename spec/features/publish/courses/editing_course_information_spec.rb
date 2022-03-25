@@ -21,30 +21,30 @@ feature "Editing course information" do
   end
 
   context "copying content from another course" do
-    let!(:course_2) do
+    let!(:course2) do
       create(
         :course,
         provider: provider,
         name: "Biology",
-        enrichments: [course_2_enrichment],
+        enrichments: [course2_enrichment],
       )
     end
 
-    let!(:course_3) do
+    let!(:course3) do
       create :course,
              provider: provider,
              name: "Biology",
-             enrichments: [course_3_enrichment]
+             enrichments: [course3_enrichment]
     end
 
-    let(:course_2_enrichment) do
+    let(:course2_enrichment) do
       build(:course_enrichment,
             about_course: "Course 2 - About course",
             interview_process: "Course 2 - Interview process",
             how_school_placements_work: "Course 2 - How teaching placements work")
     end
 
-    let(:course_3_enrichment) do
+    let(:course3_enrichment) do
       build(:course_enrichment,
             about_course: "Course 3 - About course",
             interview_process: "",
@@ -55,7 +55,7 @@ feature "Editing course information" do
       publish_course_information_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
       )
-      publish_course_information_page.copy_content.copy(course_2)
+      publish_course_information_page.copy_content.copy(course2)
 
       [
         "Your changes are not yet saved",
@@ -66,16 +66,16 @@ feature "Editing course information" do
         expect(publish_course_information_page.copy_content_warning).to have_content(name)
       end
 
-      expect(publish_course_information_page.about_course.value).to eq(course_2_enrichment.about_course)
-      expect(publish_course_information_page.interview_process.value).to eq(course_2_enrichment.interview_process)
-      expect(publish_course_information_page.school_placements.value).to eq(course_2_enrichment.how_school_placements_work)
+      expect(publish_course_information_page.about_course.value).to eq(course2_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
     end
 
     scenario "only fields with values are copied if the source is incomplete" do
       publish_course_information_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course_2.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code,
       )
-      publish_course_information_page.copy_content.copy(course_3)
+      publish_course_information_page.copy_content.copy(course3)
 
       [
         "Your changes are not yet saved",
@@ -91,9 +91,9 @@ feature "Editing course information" do
         expect(publish_course_information_page.copy_content_warning).not_to have_content(name)
       end
 
-      expect(publish_course_information_page.about_course.value).to eq(course_3_enrichment.about_course)
-      expect(publish_course_information_page.interview_process.value).to eq(course_2_enrichment.interview_process)
-      expect(publish_course_information_page.school_placements.value).to eq(course_2_enrichment.how_school_placements_work)
+      expect(publish_course_information_page.about_course.value).to eq(course3_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
     end
   end
 
