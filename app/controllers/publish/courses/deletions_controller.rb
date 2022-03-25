@@ -40,11 +40,7 @@ module Publish
       end
 
       def deletion_params
-        return { course_code: nil } if params[:publish_course_deletion_form].blank?
-
-        params
-          .require(:publish_course_deletion_form)
-          .permit(CourseDeletionForm::FIELDS)
+        params.require(:publish_course_deletion_form).permit(CourseDeletionForm::FIELDS)
       end
     end
   end

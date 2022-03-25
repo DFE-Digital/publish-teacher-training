@@ -45,7 +45,7 @@ feature "Deleting courses" do
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
-    ) 
+    )
   end
 
   def when_i_visit_the_course_deletion_page
