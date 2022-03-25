@@ -16,6 +16,61 @@ feature "Editing course information" do
     and_the_course_information_is_updated
   end
 
+  #scenario "copying course information with no courses available" do
+    #then_i_should_see_the_related_sidebar
+    #and_i_should_see_the_reuse_content
+  #end
+
+  context "copying content from another course" do
+    let!(:course_2) do
+      create(
+        :course, :with_accrediting_provider,
+        #provider: provider_for_copy_from_list,
+        name: "Biology",
+        enrichments: [course_2_enrichment]
+      )
+    end
+
+    let!(:course_3) do
+      create :course,
+            name: "Biology",
+            #provider: provider_for_copy_from_list,
+            enrichments: [ course_3_enrichment]
+    end
+
+    let!(:provider_for_copy_from_list) do
+      create :provider, :accredited_body,
+             accrediting_provider_enrichments: [{
+              "UcasProviderCode" => provider.provider_code,
+              "Description" => Faker::Lorem.sentence,
+            }]
+            #courses: [course_2, course_3],
+            #provider_code: provider.provider_code
+    end
+
+    let(:course_2_enrichment) do
+      build(:course_enrichment,
+            about_course: "Course 2 - About course",
+            interview_process: "Course 2 - Interview process",
+            how_school_placements_work: "Course 2 - How teaching placements work"
+      )
+    end
+
+    let(:course_3_enrichment) do
+      build(:course_enrichment,
+            about_course: "Course 3 - About course",
+      )
+    end
+
+    scenario "all fields get copied if all are present" do
+      publish_course_information_page.load(
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      )
+      #binding.pry
+      publish_course_information_page.copy_content.copy(course_2)
+    end
+  end
+
   scenario "updating with invalid data" do
     and_i_submit_with_invalid_data
     then_i_should_see_an_error_message
@@ -27,6 +82,16 @@ feature "Editing course information" do
 
   def and_there_is_a_course_i_want_to_edit
     given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+  end
+
+  def then_i_should_see_the_related_sidebar
+    expect(publish_course_information_page).to have_related_sidebar
+  end
+
+  def and_i_should_see_the_reuse_content
+    publish_course_information_page.related_sidebar.within do |sidebar|
+      expect(sidebar).to have_use_content
+    end
   end
 
   def when_i_visit_the_course_information_page
@@ -73,6 +138,6 @@ feature "Editing course information" do
   end
 
   def provider
-    @current_user.providers.first
+    @provider ||= @current_user.providers.first
   end
 end

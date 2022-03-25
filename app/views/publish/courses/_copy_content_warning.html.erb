@@ -1,0 +1,19 @@
+<% if copied_fields.any? %>
+  <%= govuk_notification_banner(
+    title_text: t("notification_banner.warning"),
+    classes: "govuk-notification-banner--warning",
+    html_attributes: {
+      data: { qa: "copy-course-warning" },
+      role: "alert",
+    },
+  ) do |notification_banner| %>
+    <% notification_banner.heading(text: "Your changes are not yet saved") %>
+    <p class="govuk-body">We’ve copied these fields from <%= @source_course.name %> (<%= @source_course.course_code %>):</p>
+    <ul class="govuk-list">
+      <% copied_fields.each do |name, field| %>
+        <li><%= govuk_link_to name, "#publish-course-information-form-#{field.gsub("_", "-")}-field", class: "govuk-notification-banner__link" %></li>
+      <% end %>
+    </ul>
+    <p class="govuk-body">Please check them and make your changes before saving.</p>
+  <% end %>
+<% end %>
