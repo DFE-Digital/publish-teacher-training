@@ -1,0 +1,53 @@
+name: smoke-test
+description: runs smoke tests
+
+inputs:
+  environment:
+    description: Environment to run tests in
+    required: true
+  pr-number:
+    description: PR number if testing a review app
+    required: false
+  slack-webhook:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Ruby 2.7.5
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.5
+
+    - name: install bundler and gems
+      shell: bash
+      run: |
+        gem install bundler
+        echo 'gem "httparty"' >> Gemfile
+        echo 'gem "rspec"' >> Gemfile
+        bundle
+
+    - name: Set Environment variables
+      shell: bash
+      run: |
+        if [ ! -z "${{ inputs.pr-number }}" ]; then
+          PR_NUMBER=${{ inputs.pr-number }}
+          echo "base_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
+          echo "publish_api_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
+        fi;
+
+    - name: Smoke Tests ${{ inputs.environment }}
+      shell: bash
+      run: RAILS_ENV=${{ inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
+
+    - name: 'Notify #twd_publish_tech on failure'
+      if: ${{ failure() && inputs.environment != 'review' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Smoke tests failure
+        SLACK_MESSAGE: ':alert: <!channel> Smoke tests failure on ${{ inputs.environment }} :sadparrot:'
+        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
