@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "../sections/errorlink"
-require_relative "../sections/related_sidebar"
 require_relative "../sections/copy_content"
 
 module PageObjects
