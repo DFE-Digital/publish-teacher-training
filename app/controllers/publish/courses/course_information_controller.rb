@@ -39,7 +39,7 @@ module Publish
       def fetch_course_to_copy_from
         @source_course = ::Courses::Fetch.by_code(
           provider_code: params[:provider_code],
-          course_code: params[:copy_from]
+          course_code: params[:copy_from],
         )
       end
 
