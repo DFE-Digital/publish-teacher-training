@@ -44,7 +44,7 @@ module Courses
     ].freeze
 
     def self.get_present_fields_in_source_course(fields, source_course, course)
-      fields.map do |_name, field|
+      fields.filter_map do |_name, field|
         source_value = source_course.enrichments.last[field]
         if source_value.present?
           course.enrichments.last[field] = source_value

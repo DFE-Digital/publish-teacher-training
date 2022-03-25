@@ -16,10 +16,9 @@ feature "Editing course information" do
     and_the_course_information_is_updated
   end
 
-  #scenario "copying course information with no courses available" do
-    #then_i_should_see_the_related_sidebar
-    #and_i_should_see_the_reuse_content
-  #end
+  scenario "copying course information with no courses available" do
+    then_i_should_see_the_reuse_content
+  end
 
   context "copying content from another course" do
     let!(:course_2) do
@@ -49,6 +48,8 @@ feature "Editing course information" do
     let(:course_3_enrichment) do
       build(:course_enrichment,
             about_course: "Course 3 - About course",
+            interview_process: "",
+            how_school_placements_work: ""
       )
     end
 
@@ -56,7 +57,6 @@ feature "Editing course information" do
       publish_course_information_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
       )
-      #binding.pry
       publish_course_information_page.copy_content.copy(course_2)
 
       [
@@ -69,6 +69,31 @@ feature "Editing course information" do
       end
 
       expect(publish_course_information_page.about_course.value).to eq(course_2_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course_2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course_2_enrichment.how_school_placements_work)
+    end
+
+    scenario "only fields with values are copied if the source is incomplete" do
+      publish_course_information_page.load(
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course_2.course_code,
+      )
+      publish_course_information_page.copy_content.copy(course_3)
+
+      [
+        "Your changes are not yet saved",
+        "About the course",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).to have_content(name)
+      end
+
+      [
+        "Interview process",
+        "How school placements work",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).not_to have_content(name)
+      end
+
+      expect(publish_course_information_page.about_course.value).to eq(course_3_enrichment.about_course)
       expect(publish_course_information_page.interview_process.value).to eq(course_2_enrichment.interview_process)
       expect(publish_course_information_page.school_placements.value).to eq(course_2_enrichment.how_school_placements_work)
     end
@@ -87,14 +112,8 @@ feature "Editing course information" do
     given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
   end
 
-  def then_i_should_see_the_related_sidebar
-    expect(publish_course_information_page).to have_related_sidebar
-  end
-
-  def and_i_should_see_the_reuse_content
-    publish_course_information_page.related_sidebar.within do |sidebar|
-      expect(sidebar).to have_use_content
-    end
+  def then_i_should_see_the_reuse_content
+    expect(publish_course_information_page).to have_use_content
   end
 
   def when_i_visit_the_course_information_page

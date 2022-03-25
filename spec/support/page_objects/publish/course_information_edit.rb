@@ -15,11 +15,10 @@ module PageObjects
       element :about_course, "#publish-course-information-form-about-course-field"
       element :interview_process, "#publish-course-information-form-interview-process-field"
       element :school_placements, "#publish-course-information-form-how-school-placements-work-field"
-
-      #section :related_sidebar, Sections::RelatedSidebar, '[data-qa="course__related_sidebar"]'
-      section :copy_content, Sections::CopyContent
-
+      element :use_content, '[data-qa="course__use_content"]'
       element :submit, 'button.govuk-button[type="submit"]'
+
+      section :copy_content, Sections::CopyContent
 
       def error_messages
         errors.map(&:text)
