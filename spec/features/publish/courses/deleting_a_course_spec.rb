@@ -9,7 +9,8 @@ feature "Deleting courses" do
 
   scenario "i can delete a course" do
     and_there_is_a_course_i_want_to_delete
-    when_i_visit_the_course_deletion_page
+    when_i_visit_the_course_page
+    and_i_click_the_delete_link
     and_i_confirm_the_course_code
     and_i_submit
     then_i_should_see_a_success_message
@@ -41,10 +42,20 @@ feature "Deleting courses" do
     given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
   end
 
+  def when_i_visit_the_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    ) 
+  end
+
   def when_i_visit_the_course_deletion_page
     publish_course_deletion_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
+  end
+
+  def and_i_click_the_delete_link
+    publish_provider_courses_show_page.status_sidebar.delete_course_link.click
   end
 
   def and_i_confirm_the_course_code
