@@ -51,11 +51,6 @@ module Publish
         @self_accredited_courses = @self_accredited_courses&.reject { |c| c.id == course.id }
       end
 
-      #def build_course
-      #  super
-      #  authorize @course
-      #end
-
       def course_information_params
         params
           .require(:publish_course_information_form)
