@@ -187,10 +187,6 @@ private
     given_a_site_exists(:full_time_vacancies, :suspended, site: build(:site, location_name: "Not running Uni"))
   end
 
-  def given_a_site_exists(*traits, **overrides)
-    course.site_statuses << build(:site_status, *traits, **overrides)
-  end
-
   def when_i_visit_the_vacancy_edit_page_for_a_course
     publish_provider_vacancies_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,

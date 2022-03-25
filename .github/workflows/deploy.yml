@@ -3,162 +3,37 @@ name: Deploy
 on:
   workflow_dispatch:
     inputs:
-      qa:
-        description: Deploy to qa?
-        default: 'false'
+      environment:
+        description: Environment to deploy to
         required: true
-      staging:
-        description: Deploy to staging?
-        default: 'false'
-        required: true
-      production:
-        description: Deploy to production?
-        default: 'false'
-        required: true
-      sandbox:
-        description: Deploy to sandbox?
-        default: 'false'
-        required: true
-      pr:
-        description: PR number for the review app
-        required: false
+        type: choice
+        options:
+        - qa
+        - staging
+        - production
+        - sandbox
       sha:
         description: Commit sha to be deployed
         required: true
 
 jobs:
-  prepare-matrix:
-    name: Prepare Environment Matrix
-    runs-on: ubuntu-latest
-    outputs:
-      environments: ${{ steps.select-environments.outputs.environments || steps.set-pr-environment.outputs.environments }}
-    steps:
-      - id:   select-environments
-        if:   github.event.inputs.pr == ''
-        uses: DFE-Digital/bat-infrastructure/actions/prepare-environment-matrix@main
-
-      - id:  set-pr-environment
-        if:  github.event.inputs.pr != ''
-        run: echo "::set-output name=environments::$PR"
-        env:
-          PR: '{"environment": ["${{ github.event.inputs.pr }}"]}'
-
-      - uses: DFE-Digital/github-actions/turnstyle@master
-        name: Wait for other inprogress deployment runs
-        with:
-          initial-wait-seconds: 12
-          poll-interval-seconds: 20
-          abort-after-seconds: 3600
-          same-branch-only: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   deploy:
-    name: ${{ matrix.environment }} Deployment
+    name: Deployment to ${{ github.event.inputs.environment }}
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
     runs-on: ubuntu-latest
-    needs: [prepare-matrix]
-    strategy:
-      max-parallel: 1
-      matrix: ${{ fromJson(needs.prepare-matrix.outputs.environments) }}
     steps:
-      - name: Start ${{ matrix.environment }} Deployment
-        uses: bobheadxi/deployments@v0.4.3
-        id:   deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env:   ${{ matrix.environment }}
-
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Terraform v0.13.5
-        uses: hashicorp/setup-terraform@v1.2.1
+      - name: Deploy App to ${{ github.event.inputs.environment }}
+        id: deploy_app
+        uses: ./.github/actions/deploy/
         with:
-          terraform_version: 0.13.5
-
-      - name: Set Environment variables
-        run: |
-          echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
-          if [ -n "${{ github.event.inputs.pr }}" ]; then
-            PR_NUMBER=${{ github.event.inputs.pr }}
-            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-            echo "DEPLOY_ENV=review" >> $GITHUB_ENV
-            echo "APP_NAME=$PR_NUMBER" >> $GITHUB_ENV
-            echo "DEPLOY_URL=https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> $GITHUB_ENV
-            DEPLOY_ENV=review
-          else
-            echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
-            echo "DEPLOY_URL=https://$DEPLOY_ENV.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_ENV
-          fi;
-
-          tf_vars_file=terraform/workspace_variables/${DEPLOY_ENV}.tfvars.json
-          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-        env:
-          DEPLOY_ENV: ${{ matrix.environment }}
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
-
-      - name: Validate Azure Key Vault secrets
-        uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
-        with:
-          KEY_VAULT: ${{ env.key_vault_name }}
-          SECRETS: |
-            ${{ env.key_vault_app_secret_name }}
-            ${{ env.key_vault_infra_secret_name }}
-
-      - name: Terraform init, plan & apply
-        run: make ${{env.DEPLOY_ENV}} ci deploy
-        env:
-          ARM_ACCESS_KEY:             ${{ secrets[format('ARM_ACCESS_KEY_{0}', env.DEPLOY_ENV)] }}
-          IMAGE_TAG:                  ${{ github.event.inputs.sha }}
-          TF_VAR_azure_credentials:   ${{ secrets[format('AZURE_CREDENTIALS_{0}', env.DEPLOY_ENV)] }}
-          CONFIRM_PRODUCTION:         yes
-
-      - name: Trigger ${{ env.DEPLOY_ENV }} Smoke Tests
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: Smoke Tests
-          token:    ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
-          inputs:   '{"environment": "${{ env.DEPLOY_ENV }}", "pr": "${{ env.PR_NUMBER }}"}'
-
-      - name: Wait for smoke tests
-        id:   wait_for_smoke_tests
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref:   ${{ github.ref }}
-          checkName: smoke-tests-${{ env.DEPLOY_ENV }}
-          timeoutSeconds:  300
-          intervalSeconds: 15
-
-      - name: Stop when smoke tests fail
-        if:   steps.wait_for_smoke_tests.outputs.conclusion == 'failure'
-        run: exit 1
-
-      - name: Update ${{ matrix.environment }} status
-        if:   ${{ always() }}
-        uses: bobheadxi/deployments@v0.4.3
-        with:
-          step:   finish
-          token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    ${{ matrix.environment }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ env.DEPLOY_URL }}
-
-      - name: Alert on Failure
-        if: ${{ failure() && github.ref == 'refs/heads/master' }}
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: twd_publish_tech
-          SLACK_COLOR: '#ef5343'
-          SLACK_ICON_EMOJI: ':github-logo:'
-          SLACK_USERNAME: Teacher Training API
-          SLACK_TITLE: Deploy to ${{ matrix.environment }} Failed
-          SLACK_MESSAGE: ':alert: <!channel> Build failure on ${{ matrix.environment }} :sadparrot:'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', github.event.inputs.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
+          environment: ${{ github.event.inputs.environment }}
+          sha: ${{ github.event.inputs.sha }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

@@ -28,9 +28,9 @@
 
         <%= f.govuk_email_field :email_address, label: { text: "Email address" } %>
 
-        <%= f.govuk_text_field :organisation %>
+        <%= f.govuk_text_field :organisation, label: { text: "Their organisation" } %>
 
-        <%= f.govuk_text_area :reason, width: "two-thirds" %>
+        <%= f.govuk_text_area :reason, width: "two-thirds", label: { text: "Reason they need access" } %>
       <% end %>
 
       <%= f.govuk_submit "Request access" %>

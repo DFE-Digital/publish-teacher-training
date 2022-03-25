@@ -117,6 +117,10 @@ Rails.application.routes.draw do
           patch "/fees", on: :member, to: "courses/fees#update"
           get "/salary", on: :member, to: "courses/salary#edit"
           patch "/salary", on: :member, to: "courses/salary#update"
+
+          get "/withdraw", on: :member, to: "courses/withdrawals#edit"
+          patch "/withdraw", on: :member, to: "courses/withdrawals#update"
+
           get "/locations", on: :member, to: "courses/sites#edit"
           put "/locations", on: :member, to: "courses/sites#update"
 
@@ -139,6 +143,12 @@ Rails.application.routes.draw do
 
           get "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#edit"
           put "/gcses-pending-or-equivalency-tests", on: :member, to: "courses/gcse_requirements#update"
+
+          get "/subjects", on: :member, to: "courses/subjects#edit"
+          put "/subjects", on: :member, to: "courses/subjects#update"
+
+          get "/modern-languages", on: :member, to: "courses/modern_languages#edit"
+          put "/modern-languages", on: :member, to: "courses/modern_languages#update"
         end
 
         scope module: :providers do

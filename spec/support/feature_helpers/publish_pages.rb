@@ -60,8 +60,16 @@ module FeatureHelpers
       @new_subjects_page ||= PageObjects::Publish::Courses::NewSubjects.new
     end
 
+    def subjects_edit_page
+      @subjects_edit_page ||= PageObjects::Publish::Courses::SubjectsEdit.new
+    end
+
     def new_modern_languages_page
       @new_modern_languages_page ||= PageObjects::Publish::Courses::NewModernLanguages.new
+    end
+
+    def modern_languages_edit_page
+      @modern_languages_edit_page ||= PageObjects::Publish::Courses::ModernLanguagesEdit.new
     end
 
     def new_age_range_page
@@ -154,6 +162,10 @@ module FeatureHelpers
 
     def publish_course_outcome_page
       @publish_course_outcome_page ||= PageObjects::Publish::Courses::OutcomeEditPage.new
+    end
+
+    def publish_course_withdrawal_page
+      @publish_course_withdrawal_page ||= PageObjects::Publish::Courses::WithdrawalPage.new
     end
 
     def gcse_requirements_page

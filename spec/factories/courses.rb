@@ -68,7 +68,7 @@ FactoryBot.define do
         when "primary"
           course.subjects << find_or_create(:primary_subject, :primary)
         when "secondary"
-          course.subjects << find_or_create(:secondary_subject, :science)
+          course.subjects << find_or_create(:secondary_subject, :drama)
         when "further_education"
           course.subjects << find_or_create(:further_education_subject)
         end

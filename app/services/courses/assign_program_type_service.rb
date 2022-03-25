@@ -9,6 +9,8 @@ module Courses
       when "fee"
         course.program_type = update_fee_program(course)
       end
+
+      # NOTE: This looks like unwarranted side effects
       course.save
     end
 

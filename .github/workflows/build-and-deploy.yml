@@ -1,0 +1,216 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: ghcr.io/dfe-digital/teacher-training-api
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get values for current commit (Push)
+      if: github.event_name == 'push'
+      run: |
+        GIT_REF=${{github.ref}}
+        GIT_BRANCH=${GIT_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
+    - name: Get values for current commit (Pull request)
+      if: github.event_name == 'pull_request'
+      run: |
+        # This is the actual PR branch
+        GIT_REF=${{ github.head_ref }}
+        GIT_BRANCH=${GIT_REF##*/}
+        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+        # This is the latest commit on the actual PR branch
+        echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
+    - name: Login to GitHub Container Registry
+      if: github.actor != 'dependabot[bot]'
+      uses: docker/login-action@v1.12.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build Teacher-Training-Api-Middleman
+      uses: docker/build-push-action@v2
+      with:
+        tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+        push: ${{ github.actor != 'dependabot[bot]' }}
+        load: ${{ github.actor == 'dependabot[bot]' }}
+        target: middleman
+        cache-from: |
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+        build-args: BUILDKIT_INLINE_CACHE=1
+
+    - name: Build Teacher-Training-Api
+      uses: docker/build-push-action@v2
+      with:
+        tags: |
+          ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+          ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+        push: true
+        cache-from: |
+          type=registry,ref=${{ env.DOCKER_IMAGE}}:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+        build-args: |
+          BUILDKIT_INLINE_CACHE=1
+          COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+
+    - name: Alert Build Failures
+      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Build failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  test:
+    name: Test
+    needs: [build]
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set environment variables
+      run: |
+        echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
+    - name: Pull docker images
+      run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+
+    - name: Setup tests
+      run: |
+        docker-compose up --no-build -d
+        docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+        docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+        docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
+
+    - name: Run Ruby Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
+
+    - name: Run tests
+      run: |
+        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+        docker-compose exec -T web /bin/sh -c 'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+      env:
+        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+
+    - name: Alert Test Failures
+      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_publish_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Teacher Training API
+        SLACK_TITLE: Test failure
+        SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Test failure :sadparrot:'
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-review-app:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start review-${{ github.event.pull_request.number }} Deployment
+        uses: bobheadxi/deployments@v1
+        id:   deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env:   review-${{ github.event.pull_request.number }}
+          ref: ${{ github.head_ref }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to Review
+        id: deploy_review
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          environment: review
+          pr-number: ${{ github.event.pull_request.number }}
+          sha: ${{ needs.build.outputs.image_tag }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Update review-${{ github.event.pull_request.number }} status
+        if:   always()
+        uses: bobheadxi/deployments@v1
+        with:
+          step:   finish
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    review-${{ github.event.pull_request.number }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
+          ref: ${{ github.head_ref }}
+
+  deploy-all:
+    name: Deployment To All
+    concurrency: deploy_all
+    environment: 
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/master' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        environment: [qa,staging,production,sandbox]
+      max-parallel: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Deploy App to ${{ matrix.environment }}
+        id: deploy_app
+        uses: ./.github/actions/deploy/
+        with:
+          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          environment: ${{ matrix.environment }}
+          sha: ${{ needs.test.outputs.image_tag }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

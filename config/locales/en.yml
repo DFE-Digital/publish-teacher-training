@@ -387,6 +387,10 @@ en:
           attributes:
             study_mode:
               blank: "Pick full time, part time or full time and part time"
+        publish/course_withdrawal_form:
+          attributes:
+            confirm_course_code:
+              invalid_code: "Enter the course code %{course_code} to withdraw this course"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
