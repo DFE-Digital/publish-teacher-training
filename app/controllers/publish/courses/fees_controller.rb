@@ -9,7 +9,7 @@ module Publish
 
         @course_fee_form = CourseFeeForm.new(course_enrichment)
         copy_content_check(::Courses::Copy::FEES_FIELDS)
-        #binding.pry
+        # binding.pry
       end
 
       def update

@@ -46,14 +46,12 @@ feature "Editing course length and funding type" do
               fee_uk_eu: "8000",
               fee_international: "20000",
               fee_details: "Test fee details",
-              financial_support: "Test financial support",
-        )
+              financial_support: "Test financial support")
       end
 
       let(:course3_enrichment) do
         build(:course_enrichment,
-              course_length: "custom"
-        )
+              course_length: "custom")
       end
 
       scenario "all fields get copied if all are present" do
@@ -73,9 +71,9 @@ feature "Editing course length and funding type" do
         end
 
         expect(publish_course_fee_page.course_length.one_year).to be_checked
-        expect(publish_course_fee_page.course_length.upto_two_years).to_not be_checked
-        expect(publish_course_fee_page.course_length.other).to_not be_checked
-        #expect(publish_course_fee_page.course_length.other_text).to be_blank
+        expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
+        expect(publish_course_fee_page.course_length.other).not_to be_checked
+        # expect(publish_course_fee_page.course_length.other_text).to be_blank
         expect(publish_course_fee_page.uk_fee.value).to eq(course2_enrichment.fee_uk_eu.to_s)
         expect(publish_course_fee_page.international_fee.value).to eq(course2_enrichment.fee_international.to_s)
         expect(publish_course_fee_page.financial_support.value).to eq(course2_enrichment.financial_support)
