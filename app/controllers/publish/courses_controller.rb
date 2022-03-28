@@ -64,6 +64,29 @@ module Publish
       authorize @course
     end
 
+    def publish
+      fetch_course
+      authorize @course
+
+      if @course.publishable?
+        @course.publish_sites
+        @course.publish_enrichment(@current_user)
+        NotificationService::CoursePublished.call(course: @course)
+
+        flash[:success] = "Your course has been published."
+
+        redirect_to publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        )
+      else
+        @errors = @course.errors.messages
+        fetch_course
+        render :show
+      end
+    end
+
   private
 
     def course_params
