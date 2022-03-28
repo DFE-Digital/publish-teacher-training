@@ -28,7 +28,7 @@ module DegreeRowContentComponent
     end
 
     def has_errors?
-      inset_text_css_classes.include?("app-inset-text--error")
+      return unless inset_text_css_classes.include?("app-inset-text--error")
     end
 
   private
