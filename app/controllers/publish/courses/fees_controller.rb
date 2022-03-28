@@ -1,10 +1,15 @@
 module Publish
   module Courses
     class FeesController < BaseFundingTypeController
+      include CopyCourseContent
+      decorates_assigned :source_course
+
       def edit
         authorize(provider)
 
         @course_fee_form = CourseFeeForm.new(course_enrichment)
+        copy_content_check(::Courses::Copy::FEES_FIELDS)
+        #binding.pry
       end
 
       def update

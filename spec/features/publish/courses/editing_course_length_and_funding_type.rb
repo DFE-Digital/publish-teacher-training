@@ -17,6 +17,80 @@ feature "Editing course length and funding type" do
       and_the_course_fee_is_updated
     end
 
+    scenario "copying course information with no courses available" do
+      and_there_is_a_course_i_want_to_edit(:fee_type_based)
+      when_i_visit_the_course_fee_page
+      then_i_should_see_the_reuse_content
+    end
+
+    context "copying content from another course" do
+      let!(:course2) do
+        create(
+          :course,
+          provider: provider,
+          name: "Biology",
+          enrichments: [course2_enrichment],
+        )
+      end
+
+      let!(:course3) do
+        create :course,
+               provider: provider,
+               name: "Biology",
+               enrichments: [course3_enrichment]
+      end
+
+      let(:course2_enrichment) do
+        build(:course_enrichment,
+              course_length: "OneYear",
+              fee_uk_eu: "8000",
+              fee_international: "20000",
+              fee_details: "Test fee details",
+              financial_support: "Test financial support",
+        )
+      end
+
+      let(:course3_enrichment) do
+        build(:course_enrichment,
+              course_length: "custom"
+        )
+      end
+
+      scenario "all fields get copied if all are present" do
+        and_there_is_a_course_i_want_to_edit(:fee_type_based)
+        when_i_visit_the_course_fee_page
+        publish_course_fee_page.copy_content.copy(course2)
+
+        [
+          "Your changes are not yet saved",
+          "Course length",
+          "Fee for UK students",
+          "Fee for international students",
+          "Fee details",
+          "Financial support",
+        ].each do |name|
+          expect(publish_course_fee_page.copy_content_warning).to have_content(name)
+        end
+
+        expect(publish_course_fee_page.course_length.one_year).to be_checked
+        expect(publish_course_fee_page.course_length.upto_two_years).to_not be_checked
+        expect(publish_course_fee_page.course_length.other).to_not be_checked
+        #expect(publish_course_fee_page.course_length.other_text).to be_blank
+        expect(publish_course_fee_page.uk_fee.value).to eq(course2_enrichment.fee_uk_eu.to_s)
+        expect(publish_course_fee_page.international_fee.value).to eq(course2_enrichment.fee_international.to_s)
+        expect(publish_course_fee_page.financial_support.value).to eq(course2_enrichment.financial_support)
+      end
+
+      scenario "custom course length" do
+        and_there_is_a_course_i_want_to_edit(:fee_type_based)
+        when_i_visit_the_course_fee_page
+        publish_course_fee_page.copy_content.copy(course3)
+
+        expect(publish_course_fee_page.course_length.other).to be_checked
+        expect(publish_course_fee_page.course_length.other_text).to eq(course3_enrichment.course_length)
+      end
+    end
+
     scenario "updating with invalid data" do
       and_there_is_a_course_i_want_to_edit(:fee_type_based)
       when_i_visit_the_course_fee_page
@@ -63,6 +137,10 @@ feature "Editing course length and funding type" do
     publish_course_salary_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
+  end
+
+  def then_i_should_see_the_reuse_content
+    expect(publish_course_fee_page).to have_use_content
   end
 
   def and_i_update_the_length_and_fee

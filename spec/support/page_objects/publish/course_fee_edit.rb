@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../sections/errorlink"
+require_relative "../sections/copy_content"
 
 module PageObjects
   module Publish
@@ -16,10 +17,14 @@ module PageObjects
         element :other_text, "#publish-course-fee-form-course-length-other-length-field"
       end
 
+      element :copy_content_warning, '[data-qa="copy-course-warning"]'
       element :uk_fee, "#publish-course-fee-form-fee-uk-eu-field"
       element :international_fee, "#publish-course-fee-form-fee-international-field"
       element :fee_details, "#publish-course-fee-form-fee-details-field"
       element :financial_support, "#publish-course-fee-form-financial-support-field"
+      element :use_content, '[data-qa="course__use_content"]'
+
+      section :copy_content, Sections::CopyContent
 
       element :submit, 'button.govuk-button[type="submit"]'
 

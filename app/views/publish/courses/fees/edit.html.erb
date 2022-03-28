@@ -5,6 +5,10 @@
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
 <% end %>
 
+<% if params[:copy_from].present? %>
+  <%= render partial: "publish/courses/copy_content_warning", locals: { copied_fields: @copied_fields } %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -29,6 +33,7 @@
       <h3 class="govuk-heading-m">Course fees</h3>
 
       <%= f.govuk_text_field(:fee_uk_eu,
+        value: @course.enrichments.last[:fee_uk_eu],
         form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },
         label: { text: "Fee for UK students", size: "s" },
         prefix_text: "£",
@@ -36,6 +41,7 @@
         data: { qa: "course_fee_uk_eu" }) %>
 
       <%= f.govuk_text_field(:fee_international,
+        value: @course.enrichments.last[:fee_international],
         form_group: { id: "fee-international" },
         label: { text: "Fee for international students (optional)", size: "s" },
         prefix_text: "£",
@@ -51,6 +57,7 @@
       </ul>
 
       <%= f.govuk_text_area(:fee_details,
+        value: @course.enrichments.last[:fee_details],
         label: { text: "Fee details (optional)", size: "s" },
         rows: 15,
         max_words: 250,
@@ -63,6 +70,7 @@
       <p class="govuk-body">You do not need to add details of any DfE bursaries and subject scholarships here. These will be published automatically to your course page</p>
 
       <%= f.govuk_text_area(:financial_support,
+        value: @course.enrichments.last[:financial_support],
         label: { text: "Financial support you offer (optional)", size: "s" },
         rows: 15,
         max_words: 250,
@@ -71,4 +79,13 @@
       <%= f.govuk_submit "Save" %>
     <% end %>
   </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      },
+    ) %>
+  </aside>
 </div>
