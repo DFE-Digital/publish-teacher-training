@@ -5,6 +5,10 @@
   <%= govuk_back_link_to @backlink %>
 <% end %>
 
+<% if params[:copy_from].present? %>
+  <%= render partial: "publish/courses/copy_content_warning", locals: { copied_fields: @copied_fields } %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -25,18 +29,18 @@
 
       <p class="govuk-body">Candidates will be advised that their degree subject should match or be closely related to <%= @course.name %>.</p>
 
-      <%= f.govuk_radio_buttons_fieldset :additional_degree_subject_requirements, legend: { text: "Do you have any additional degree subject requirements?" } do %>
-        <%= f.govuk_radio_button :additional_degree_subject_requirements, false, label: { text: "No" }, data: { qa: "degree_subject_requirements__no_radio" }, link_errors: true %>
-        <%= f.govuk_radio_button :additional_degree_subject_requirements, true, label: { text: "Yes" }, data: { qa: "degree_subject_requirements__yes_radio" } do %>
-          <%= f.govuk_text_area :degree_subject_requirements,
-            form_group: { id: "degree-subject-requirements" },
-            label: { text: "Degree subject requirements" }, 
-            data: { qa: "degree_subject_requirements__requirements" } 
-          %>
-        <% end %>
-      <% end %>
+      <%= render partial: "publish/courses/degrees/additional_degree_subject_requirements", locals: { f: f, course_object: @source_course ? source_course : @course } %>
 
       <%= f.govuk_submit "Save", data: { qa: "degree_subject_requirements__save" } %>
     <% end %>
   </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      },
+    ) %>
+  </aside>
 </div>

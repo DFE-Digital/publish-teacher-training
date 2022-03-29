@@ -12,6 +12,15 @@ private
     end
   end
 
+  def copy_subject_requirements_check(fields)
+    fetch_course_list_to_copy_from
+
+    if params[:copy_from].present?
+      fetch_course_to_copy_from
+      @copied_fields = ::Courses::Copy.get_subject_requirement_fields(fields, @source_course, @course)
+    end
+  end
+
   def fetch_course_to_copy_from
     @source_course = ::Courses::Fetch.by_code(
       provider_code: params[:provider_code],
