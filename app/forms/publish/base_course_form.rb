@@ -12,7 +12,9 @@ module Publish
 
   private
 
-    def after_successful_save_action; end
+    def after_successful_save_action
+      NotificationService::CourseUpdated.call(course: course)
+    end
 
     def save_action
       assign_attributes_to_model
