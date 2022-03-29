@@ -32,7 +32,8 @@ private
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    @user = create(:user, :with_provider)
+    provider = create(:provider)
+    @user = create(:user, providers: [provider])
     given_i_am_authenticated(user: @user)
   end
 
