@@ -51,7 +51,11 @@ feature "Editing course length and funding type" do
 
       let(:course3_enrichment) do
         build(:course_enrichment,
-              course_length: "custom")
+              course_length: "5 years",
+              fee_uk_eu: "",
+              fee_international: "",
+              fee_details: "",
+              financial_support: "")
       end
 
       scenario "all fields get copied if all are present" do
@@ -73,18 +77,38 @@ feature "Editing course length and funding type" do
         expect(publish_course_fee_page.course_length.one_year).to be_checked
         expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
         expect(publish_course_fee_page.course_length.other).not_to be_checked
-        # expect(publish_course_fee_page.course_length.other_text).to be_blank
+        # the below test hangs locally
+        expect(publish_course_fee_page.course_length.other_text).to be_blank
         expect(publish_course_fee_page.uk_fee.value).to eq(course2_enrichment.fee_uk_eu.to_s)
         expect(publish_course_fee_page.international_fee.value).to eq(course2_enrichment.fee_international.to_s)
         expect(publish_course_fee_page.financial_support.value).to eq(course2_enrichment.financial_support)
       end
 
-      scenario "custom course length" do
+      scenario "with custom course length and all other fields empty" do
         and_there_is_a_course_i_want_to_edit(:fee_type_based)
         when_i_visit_the_course_fee_page
         publish_course_fee_page.copy_content.copy(course3)
 
+        [
+          "Your changes are not yet saved",
+          "Course length",
+        ].each do |name|
+          expect(publish_course_fee_page.copy_content_warning).to have_content(name)
+        end
+
+        [
+          "Fee for UK students",
+          "Fee for international students",
+          "Fee details",
+          "Financial support",
+        ].each do |name|
+          expect(publish_course_fee_page.copy_content_warning).to_not have_content(name)
+        end
+
+        expect(publish_course_fee_page.course_length.one_year).to_not be_checked
+        expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
         expect(publish_course_fee_page.course_length.other).to be_checked
+        # the below test hangs locally
         expect(publish_course_fee_page.course_length.other_text).to eq(course3_enrichment.course_length)
       end
     end
