@@ -16,14 +16,14 @@ feature "Publishing courses" do
   end
 
   scenario "i can re-publish a course" do
-    given_ive_published_a_course
-    and_i_make_some_new_changes
+    and_i_have_previously_published_a_course
+    when_i_make_some_new_changes
     then_i_should_see_the_unpublished_changes_message
     and_i_should_see_the_publish_button
   end
 
   scenario "attempting to publish with errors" do
-    and_there_is_a_course_i_just_created
+    and_there_is_a_draft_course
     when_i_visit_the_course_page
     and_i_click_the_publish_link
     then_i_should_see_an_error_message_for_the_gcses
@@ -36,7 +36,7 @@ feature "Publishing courses" do
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  def given_ive_published_a_course
+  def and_i_have_previously_published_a_course
     and_there_is_a_course_i_want_to_publish
     when_i_visit_the_course_page
     and_i_click_the_publish_link
@@ -52,7 +52,7 @@ feature "Publishing courses" do
     )
   end
 
-  def and_there_is_a_course_i_just_created
+  def and_there_is_a_draft_course
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: "location 1")],
@@ -81,7 +81,7 @@ feature "Publishing courses" do
     expect(course.reload.is_published?).to be(true)
   end
 
-  def and_i_make_some_new_changes
+  def when_i_make_some_new_changes
     publish_course_information_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code)
     publish_course_information_page.about_course.set("some new description")
     publish_course_information_page.submit.click

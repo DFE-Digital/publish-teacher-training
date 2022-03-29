@@ -2,8 +2,7 @@
 
 require "rails_helper"
 
-describe ApplicationHelper do
-  include ApplicationHelper
+describe ApplicationHelper, type: :helper do
   include ViewHelper
   include GovukComponentsHelper
   include GovukLinkHelper

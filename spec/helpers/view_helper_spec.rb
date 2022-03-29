@@ -2,9 +2,7 @@
 
 require "rails_helper"
 
-describe ViewHelper do
-  include ViewHelper
-
+describe ViewHelper, type: :helper do
   describe "#enrichment_error_url" do
     let(:provider) { build(:provider, recruitment_cycle: build(:recruitment_cycle, year: 2022)) }
     let(:course) { build(:course, provider: provider) }

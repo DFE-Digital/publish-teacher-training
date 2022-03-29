@@ -21,7 +21,7 @@ module GcseRequirementsComponent
     end
 
     def has_errors?
-      return unless inset_text_css_classes.include?("app-inset-text--error")
+      inset_text_css_classes.include?("app-inset-text--error")
     end
 
   private
