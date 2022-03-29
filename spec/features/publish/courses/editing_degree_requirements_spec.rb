@@ -103,7 +103,7 @@ feature "Editing degree requirements" do
           provider: provider,
           name: "Biology",
           additional_degree_subject_requirements: true,
-          degree_subject_requirements: "Course 2 requirements"
+          degree_subject_requirements: "Course 2 requirements",
         )
       end
 
@@ -113,7 +113,7 @@ feature "Editing degree requirements" do
           provider: provider,
           name: "Biology",
           additional_degree_subject_requirements: nil,
-          degree_subject_requirements: nil
+          degree_subject_requirements: nil,
         )
       end
 
@@ -125,13 +125,13 @@ feature "Editing degree requirements" do
         [
           "Your changes are not yet saved",
           "Additional degree subject requirements",
-          "Degree subject requirements"
+          "Degree subject requirements",
         ].each do |name|
           expect(publish_degree_subject_requirement_page.copy_content_warning).to have_content(name)
         end
 
         expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
-        expect(publish_degree_subject_requirement_page.no_radio).to_not be_checked
+        expect(publish_degree_subject_requirement_page.no_radio).not_to be_checked
         # this test hangs locally
         expect(publish_degree_subject_requirement_page.requirements).to eq(course2.degree_subject_requirements)
       end
@@ -141,7 +141,7 @@ feature "Editing degree requirements" do
         when_i_visit_the_degrees_subject_requirements_page
         publish_degree_subject_requirement_page.copy_content.copy(course3)
 
-        expect(publish_degree_subject_requirement_page).to_not have_copy_content_warning
+        expect(publish_degree_subject_requirement_page).not_to have_copy_content_warning
       end
     end
   end

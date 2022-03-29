@@ -54,15 +54,7 @@ module Courses
     end
 
     def self.get_subject_requirement_fields(fields, source_course, course)
-      #fields.filter_map do |name, field|
-      #  source_value = source_course[field]
-      #  binding.pry
-      #  unless source_value.nil?
-      #    course[field] = source_value
-      #    [name, field]
-      #  end
       fields.select do |_name, field|
-        #binding.pry
         source_value = source_course[field]
         course[field] = source_value
       end

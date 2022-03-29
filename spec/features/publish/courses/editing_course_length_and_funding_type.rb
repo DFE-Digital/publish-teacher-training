@@ -102,10 +102,10 @@ feature "Editing course length and funding type" do
           "Fee details",
           "Financial support",
         ].each do |name|
-          expect(publish_course_fee_page.copy_content_warning).to_not have_content(name)
+          expect(publish_course_fee_page.copy_content_warning).not_to have_content(name)
         end
 
-        expect(publish_course_fee_page.course_length.one_year).to_not be_checked
+        expect(publish_course_fee_page.course_length.one_year).not_to be_checked
         expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
         expect(publish_course_fee_page.course_length.other).to be_checked
         # the below test hangs locally
