@@ -4,7 +4,15 @@ on:
     inputs:
       environment:
         description: 'The environment to run tests against (qa, staging, production, sandbox or review)'
+        default: qa
         required: true
+        type: choice
+        options:
+        - review
+        - qa
+        - staging
+        - production
+        - sandbox
       pr:
         description: 'The PR number if the environment is review'
         required: false
@@ -12,46 +20,14 @@ on:
 jobs:
   smoke_tests:
     name: smoke-tests-${{ github.event.inputs.environment }}
+    concurrency: smoke-tests-${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Ruby 2.7.5
-        uses: ruby/setup-ruby@v1
+      - name: Run Smoke Tests for ${{ github.event.inputs.environment }}
+        uses: ./.github/actions/smoke-test/
         with:
-          ruby-version: 2.7.5
-
-      - name: install bundler and gems
-        run: |
-          gem install bundler
-          echo 'gem "httparty"' >> Gemfile
-          echo 'gem "rspec"' >> Gemfile
-          bundle
-
-      - uses: softprops/turnstyle@v1
-        name: Wait for other runs
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
-
-      - name: Set Environment variables
-        run: |
-          if [ ! -z "${{ github.event.inputs.pr }}" ]; then
-            PR_NUMBER=${{ github.event.inputs.pr }}
-            echo "base_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
-            echo "publish_api_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
-          fi;
-
-      - name: Smoke Tests ${{ github.event.inputs.environment }}
-        run: RAILS_ENV=${{ github.event.inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
-
-      - name: 'Notify #twd_publish_tech on failure'
-        if: ${{ failure() && github.event.inputs.environment != 'review' }}
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: twd_publish_tech
-          SLACK_COLOR: '#ef5343'
-          SLACK_ICON_EMOJI: ':github-logo:'
-          SLACK_USERNAME: Teacher Training API
-          SLACK_TITLE: Smoke tests failure
-          SLACK_MESSAGE: ':alert: <!channel> Smoke tests failure on ${{ github.event.inputs.environment }} :sadparrot:'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          environment: ${{ github.event.inputs.environment }}
+          pr-number: ${{ github.event.inputs.pr }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

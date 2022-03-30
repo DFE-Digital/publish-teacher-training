@@ -70,6 +70,7 @@ production: ## Set DEPLOY_ENV to production
 	$(if $(CONFIRM_PRODUCTION), , $(error Production can only run with CONFIRM_PRODUCTION))
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
+	$(eval PARTIAL_HOSTNAME=www)
 
 .PHONY: loadtest
 loadtest: ## Set DEPLOY_ENV to loadtest
@@ -125,3 +126,25 @@ print-app-secrets: read-keyvault-config install-fetch-config
 console:
 	cf target -s ${space}
 	cf ssh teacher-training-api-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
+
+enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance CONFIRM_PRODUCTION=y
+	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
+	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
+	cf target -s ${space}
+	cd service_unavailable_page && cf push
+	eval cf map-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf map-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2 
+	echo Waiting 5s for route to be registered... && sleep 5
+	eval cf unmap-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG} 
+	cf unmap-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+
+disable-maintenance: ## make qa disable-maintenance / make prod disable-maintenance CONFIRM_PRODUCTION=y
+	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
+	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
+	cf target -s ${space}
+	eval cf map-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG} 
+	cf map-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	echo Waiting 5s for route to be registered... && sleep 5
+	eval cf unmap-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf unmap-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2 	
+	cf delete -rf ttapi-unavailable

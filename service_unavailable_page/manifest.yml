@@ -1,0 +1,7 @@
+---
+applications:
+- name: ttapi-unavailable
+  path: web
+  buildpacks:
+  - nginx_buildpack
+  instances: 2

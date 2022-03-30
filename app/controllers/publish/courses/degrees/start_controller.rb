@@ -7,6 +7,7 @@ module Publish
 
           @start_form = DegreeStartForm.new
           @start_form.build_from_course(course)
+          @start_form.valid? if show_errors_on_publish?
         end
 
         def update

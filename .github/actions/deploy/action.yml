@@ -78,28 +78,12 @@ runs:
         TF_VAR_azure_credentials:   ${{ inputs.azure-credentials }}
         CONFIRM_PRODUCTION:         yes
 
-    - name: Trigger ${{ inputs.environment }} Smoke Tests
-      uses: benc-uk/workflow-dispatch@v1
+    - name: Run Smoke Tests for ${{ inputs.environment }}
+      uses: ./.github/actions/smoke-test/
       with:
-        workflow: Smoke Tests
-        ref: ${{ env.DEPLOY_REF }}
-        token:    ${{ inputs.actions-api-access-token }}
-        inputs:   '{"environment": "${{ inputs.environment }}", "pr": "${{ inputs.pr-number }}"}'
-
-    - name: Wait for smoke tests
-      id:   wait_for_smoke_tests
-      uses: fountainhead/action-wait-for-check@v1.0.0
-      with:
-        token: ${{ github.token }}
-        ref:   ${{ env.DEPLOY_REF }}
-        checkName: smoke-tests-${{ inputs.environment }} 
-        timeoutSeconds:  300
-        intervalSeconds: 15
-
-    - name: Stop when smoke tests fail
-      if:   steps.wait_for_smoke_tests.outputs.conclusion != 'success'
-      shell: bash
-      run: exit 1
+        environment: ${{ inputs.environment }}
+        pr-number: ${{ inputs.pr-number }}
+        slack-webhook: ${{ inputs.slack-webhook }}
 
     - name: Alert on Failure
       if: ${{ failure() && github.ref == 'refs/heads/master' }}
