@@ -1,14 +1,15 @@
 module Publish
   module Courses
     class GcseRequirementsController < PublishController
+      include CopyCourseContent
+      decorates_assigned :source_course
+
       def edit
         authorize(provider)
 
-        if params[:copy_from].present?
-          @copied_fields = Courses::Copy.get_present_fields_in_source_course(Courses::Copy::GCSE_FIELDS, @source_course, course)
-        end
-
         @gcse_requirements_form = GcseRequirementsForm.build_from_course(course)
+        copy_boolean_check(::Courses::Copy::GCSE_FIELDS)
+      #binding.pry
       end
 
       def update

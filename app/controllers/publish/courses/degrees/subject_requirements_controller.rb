@@ -11,7 +11,7 @@ module Publish
 
           set_backlink
           @subject_requirements_form = SubjectRequirementForm.build_from_course(course)
-          copy_subject_requirements_check(::Courses::Copy::SUBJECT_REQUIREMENTS_FIELDS)
+          copy_boolean_check(::Courses::Copy::SUBJECT_REQUIREMENTS_FIELDS)
         end
 
         def update

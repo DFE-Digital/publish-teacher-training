@@ -53,7 +53,7 @@ module Courses
       end
     end
 
-    def self.get_subject_requirement_fields(fields, source_course, course)
+    def self.get_boolean_fields(fields, source_course, course)
       fields.select do |_name, field|
         source_value = source_course[field]
         course[field] = source_value

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative "../../sections/copy_content"
 
 module PageObjects
   module Publish
@@ -6,6 +7,7 @@ module PageObjects
       class GcseRequirementsPage < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}"
 
+        element :copy_content_warning, '[data-qa="copy-course-warning"]'
         element :pending_gcse_yes_radio, '[data-qa="gcse_requirements__pending_gcse_yes_radio"]'
         element :pending_gcse_no_radio, '[data-qa="gcse_requirements__pending_gcse_no_radio"]'
 
@@ -15,6 +17,9 @@ module PageObjects
         element :science_equivalency, '[data-qa="gcse_requirements__science_equivalency"]'
         element :additional_requirements, '[data-qa="gcse_requirements__additional_requirements"]'
         element :gcse_equivalency_no_radio, '[data-qa="gcse_requirements__gcse_equivalency_no_radio"]'
+        element :use_content, '[data-qa="course__use_content"]'
+
+        section :copy_content, Sections::CopyContent
 
         element :save, '[data-qa="gcse_requirements__save"]'
       end
