@@ -132,8 +132,7 @@ feature "Editing degree requirements" do
 
         expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
         expect(publish_degree_subject_requirement_page.no_radio).not_to be_checked
-        # this test hangs locally
-        expect(publish_degree_subject_requirement_page.requirements).to eq(course2.degree_subject_requirements)
+        expect(publish_degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
       end
 
       scenario "with all fields empty" do

@@ -77,8 +77,7 @@ feature "Editing course length and funding type" do
         expect(publish_course_fee_page.course_length.one_year).to be_checked
         expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
         expect(publish_course_fee_page.course_length.other).not_to be_checked
-        # the below test hangs locally
-        expect(publish_course_fee_page.course_length.other_text).to be_blank
+        expect(publish_course_fee_page.course_length.other_text.value).to be_blank
         expect(publish_course_fee_page.uk_fee.value).to eq(course2_enrichment.fee_uk_eu.to_s)
         expect(publish_course_fee_page.international_fee.value).to eq(course2_enrichment.fee_international.to_s)
         expect(publish_course_fee_page.financial_support.value).to eq(course2_enrichment.financial_support)
@@ -108,8 +107,7 @@ feature "Editing course length and funding type" do
         expect(publish_course_fee_page.course_length.one_year).not_to be_checked
         expect(publish_course_fee_page.course_length.upto_two_years).not_to be_checked
         expect(publish_course_fee_page.course_length.other).to be_checked
-        # the below test hangs locally
-        expect(publish_course_fee_page.course_length.other_text).to eq(course3_enrichment.course_length)
+        expect(publish_course_fee_page.course_length.other_text.value).to eq(course3_enrichment.course_length)
       end
     end
 
