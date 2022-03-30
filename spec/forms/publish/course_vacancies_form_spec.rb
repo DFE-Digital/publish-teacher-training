@@ -81,21 +81,21 @@ module Publish
               .with(course: course, vacancy_statuses: vacancy_statuses)
               subject.save!
             end
+          end
 
-            context "with part time time study mode" do
-              let(:study_mode) { :part_time }
-              let(:site_statuses) { [findable_with_part_time_vacancies] }
-              let(:status) { "part_time_vacancies" }
-              let(:id) { findable_with_part_time_vacancies.id }
-              let(:findable_with_part_time_vacancies) { build(:site_status, :part_time_vacancies, :findable, site: site) }
+          context "with part time study mode" do
+            let(:study_mode) { :part_time }
+            let(:site_statuses) { [findable_with_part_time_vacancies] }
+            let(:status) { "part_time_vacancies" }
+            let(:id) { findable_with_part_time_vacancies.id }
+            let(:findable_with_part_time_vacancies) { build(:site_status, :part_time_vacancies, :findable, site: site) }
 
-              let(:updated_site_names) { provider.sites.map(&:location_name) }
+            let(:updated_site_names) { provider.sites.map(&:location_name) }
 
-              it "calls the course vacancies updated notification service" do
-                expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-                .with(course: course, vacancy_statuses: vacancy_statuses)
-                subject.save!
-              end
+            it "calls the course vacancies updated notification service" do
+              expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
+              .with(course: course, vacancy_statuses: vacancy_statuses)
+              subject.save!
             end
           end
         end

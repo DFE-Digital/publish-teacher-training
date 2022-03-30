@@ -39,7 +39,7 @@ module Publish
       context "same site_ids to course site_ids" do
         let(:params) { { site_ids: course.site_ids } }
 
-        it "calls the course sites updated notification service" do
+        it "does not call the course subjects updated notification service" do
           expect(NotificationService::CourseSitesUpdated).not_to receive(:call)
           subject.save!
         end
