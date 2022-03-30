@@ -605,10 +605,6 @@ class Course < ApplicationRecord
     ucas_status == :new
   end
 
-  def has_fees?
-    funding_type == "fee"
-  end
-
   def funding_type=(funding_type)
     assign_program_type_service = Courses::AssignProgramTypeService.new
     assign_program_type_service.execute(funding_type, self)

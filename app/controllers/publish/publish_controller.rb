@@ -17,7 +17,7 @@ module Publish
     end
 
     def show_errors_on_publish?
-      return true if params[:display_errors].present?
+      params[:display_errors].present?
     end
   end
 end
