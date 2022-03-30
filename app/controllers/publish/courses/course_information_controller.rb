@@ -5,6 +5,7 @@ module Publish
         authorize(provider)
 
         @course_information_form = CourseInformationForm.new(course_enrichment)
+        @course_information_form.valid? if show_errors_on_publish?
       end
 
       def update

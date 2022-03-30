@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+require_relative "../../sections/errorlink"
+
 module PageObjects
   module Publish
     module Courses
       class GcseRequirementsPage < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}"
+
+        sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
 
         element :pending_gcse_yes_radio, '[data-qa="gcse_requirements__pending_gcse_yes_radio"]'
         element :pending_gcse_no_radio, '[data-qa="gcse_requirements__pending_gcse_no_radio"]'
@@ -17,6 +21,10 @@ module PageObjects
         element :gcse_equivalency_no_radio, '[data-qa="gcse_requirements__gcse_equivalency_no_radio"]'
 
         element :save, '[data-qa="gcse_requirements__save"]'
+
+        def error_messages
+          errors.map(&:text)
+        end
       end
     end
   end

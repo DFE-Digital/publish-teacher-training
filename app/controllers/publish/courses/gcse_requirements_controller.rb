@@ -9,6 +9,7 @@ module Publish
         end
 
         @gcse_requirements_form = GcseRequirementsForm.build_from_course(course)
+        @gcse_requirements_form.valid? if show_errors_on_publish?
       end
 
       def update

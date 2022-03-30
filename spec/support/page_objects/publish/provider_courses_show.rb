@@ -2,11 +2,14 @@
 
 require_relative "../sections/summary_list"
 require_relative "../sections/status_sidebar"
+require_relative "../sections/errorlink"
 
 module PageObjects
   module Publish
     class ProviderCoursesShow < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}"
+
+      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
 
       section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :interview_process, Sections::SummaryList, '[data-qa="enrichment__interview_process"]'
@@ -25,6 +28,10 @@ module PageObjects
 
       element :caption, ".govuk-caption-l"
       element :basic_details_link, "a.govuk-link.govuk-tabs__tab", text: "Basic details"
+
+      def error_messages
+        errors.map(&:text)
+      end
     end
   end
 end

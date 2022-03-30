@@ -64,6 +64,27 @@ module Publish
       authorize @course
     end
 
+    def publish
+      fetch_course
+      authorize @course
+
+      if @course.publishable?
+        publish_course
+        flash[:success] = "Your course has been published."
+
+        redirect_to publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        )
+      else
+        @errors = format_publish_error_messages
+
+        fetch_course
+        render :show
+      end
+    end
+
   private
 
     def course_params
@@ -101,6 +122,18 @@ module Publish
 
     def self_accredited_courses
       @self_accredited_courses ||= courses_by_accrediting_provider.delete(provider.provider_name)
+    end
+
+    def publish_course
+      @course.publish_sites
+      @course.publish_enrichment(@current_user)
+      NotificationService::CoursePublished.call(course: @course)
+    end
+
+    def format_publish_error_messages
+      @course.errors.messages.transform_values do |error_messages|
+        error_messages.map { |message| message.gsub(/^\^/, "") }
+      end
     end
   end
 end

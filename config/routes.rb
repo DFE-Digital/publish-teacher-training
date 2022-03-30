@@ -122,6 +122,7 @@ Rails.application.routes.draw do
           patch "/withdraw", on: :member, to: "courses/withdrawals#update"
           get "/delete", on: :member, to: "courses/deletions#edit"
           delete "/delete", on: :member, to: "courses/deletions#destroy"
+          post "/publish", on: :member, to: "courses#publish"
 
           get "/locations", on: :member, to: "courses/sites#edit"
           put "/locations", on: :member, to: "courses/sites#update"
