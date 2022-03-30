@@ -11,7 +11,7 @@ module PageObjects
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}"
 
         element :copy_content_warning, '[data-qa="copy-course-warning"]'
-        
+
         sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
 
         element :pending_gcse_yes_radio, '[data-qa="gcse_requirements__pending_gcse_yes_radio"]'
