@@ -374,6 +374,11 @@ en:
           attributes:
             site_ids:
               no_locations: "Select at least one location"
+        publish/course_vacancies_form:
+          attributes:
+            change_vacancies_confirmation:
+              confirm_close_application: "Please confirm there are no vacancies to close applications"
+              confirm_reopen_application: "Please confirm there are vacancies to reopen applications"
         publish/course_requirement_form:
           attributes:
             required_qualifications:

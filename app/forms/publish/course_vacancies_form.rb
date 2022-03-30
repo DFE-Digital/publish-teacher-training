@@ -1,7 +1,5 @@
 module Publish
-  class CourseVacanciesForm < BaseModelForm
-    alias_method :course, :model
-
+  class CourseVacanciesForm < BaseCourseForm
     FIELDS = %i[
       site_statuses
       change_vacancies_confirmation
@@ -24,6 +22,31 @@ module Publish
     end
 
   private
+
+    def after_successful_save_action
+      NotificationService::CourseVacanciesUpdated.call(
+        course: course,
+        vacancy_statuses: vacancy_statuses,
+      )
+    end
+
+    def vacancy_statuses
+      if course.has_multiple_running_sites_or_study_modes?
+        statuses_attributes.values.map do |value|
+          {
+            id: value[:id],
+            status: value[:vac_status],
+          }
+        end
+      else
+        [
+          {
+            id: statuses_attributes[:id],
+            status: statuses_attributes[:vac_status],
+          },
+        ]
+      end
+    end
 
     def compute_fields
       course
@@ -60,11 +83,7 @@ module Publish
     end
 
     def vacancies_confirmation_error_message
-      if course.has_vacancies?
-        "Please confirm there are no vacancies to close applications"
-      else
-        "Please confirm there are vacancies to reopen applications"
-      end
+      course.has_vacancies? ? :confirm_close_application : :confirm_reopen_application
     end
 
     def statuses_attributes
@@ -76,7 +95,7 @@ module Publish
     end
 
     def attributes_for_single_site_status
-      running_site_statuses.first.attributes.merge(vac_status: single_site_status_vacancy)
+      running_site_statuses.first.attributes.merge(vac_status: single_site_status_vacancy).with_indifferent_access
     end
 
     def attributes_for_multiple_site_statuses

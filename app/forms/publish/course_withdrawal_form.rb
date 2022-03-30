@@ -1,5 +1,5 @@
 module Publish
-  class CourseWithdrawalForm < BaseModelForm
+  class CourseWithdrawalForm < BaseCourseForm
     alias_method :course, :model
 
     FIELDS = %i[
@@ -13,12 +13,18 @@ module Publish
     def save!
       if valid?
         course.withdraw
+        after_successful_save_action
+        true
       else
         false
       end
     end
 
   private
+
+    def after_successful_save_action
+      NotificationService::CourseWithdrawn.call(course: course)
+    end
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

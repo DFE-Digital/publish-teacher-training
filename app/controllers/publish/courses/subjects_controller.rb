@@ -27,7 +27,7 @@ module Publish
             ),
           )
 
-        elsif assign_subjects_service.save
+        elsif course_subjects_form.save!
           flash[:success] = I18n.t("success.saved")
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -44,8 +44,8 @@ module Publish
 
     private
 
-      def assign_subjects_service
-        @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course: @course, subject_ids: selected_subject_ids)
+      def course_subjects_form
+        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: selected_subject_ids)
       end
 
       def modern_languages_subject_id
