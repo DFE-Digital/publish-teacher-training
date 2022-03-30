@@ -57,7 +57,6 @@ feature "GCSE equivalency requirements", type: :feature do
     end
 
     expect(gcse_requirements_page.pending_gcse_yes_radio).to be_checked
-
     expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
     expect(gcse_requirements_page.english_equivalency).to be_checked
     expect(gcse_requirements_page.maths_equivalency).to be_checked
@@ -70,13 +69,12 @@ feature "GCSE equivalency requirements", type: :feature do
     gcse_requirements_page.copy_content.copy(course2)
 
     expect(gcse_requirements_page).not_to have_copy_content_warning
-
-    expect(gcse_requirements_page.pending_gcse_yes_radio).to be_checked
-
-    expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
-    expect(gcse_requirements_page.english_equivalency).to be_checked
-    expect(gcse_requirements_page.maths_equivalency).to be_checked
-    expect(gcse_requirements_page.additional_requirements.text).to eq course3.additional_gcse_equivalencies
+    expect(gcse_requirements_page.copy_content_warning).not_to have_content
+    expect(gcse_requirements_page.pending_gcse_no_radio).to be_checked
+    expect(gcse_requirements_page.gcse_equivalency_no_radio).to be_checked
+    expect(gcse_requirements_page.english_equivalency).not_to be_checked
+    expect(gcse_requirements_page.maths_equivalency).not_to be_checked
+    expect(gcse_requirements_page.additional_requirements.text).to eq("")
   end
 
 private

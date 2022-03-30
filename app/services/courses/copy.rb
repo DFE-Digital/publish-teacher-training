@@ -56,7 +56,7 @@ module Courses
     def self.get_boolean_fields(fields, source_course, course)
       fields.select do |_name, field|
         source_value = source_course[field]
-        course[field] = source_value
+        course[field] = source_value if source_value.present?
       end
     end
   end
