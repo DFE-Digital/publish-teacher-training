@@ -9,7 +9,7 @@ module Publish
 
         @gcse_requirements_form = GcseRequirementsForm.build_from_course(course)
         copy_boolean_check(::Courses::Copy::GCSE_FIELDS)
-      #binding.pry
+        @gcse_requirements_form.valid? if show_errors_on_publish?
       end
 
       def update

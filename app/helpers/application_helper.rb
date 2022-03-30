@@ -12,29 +12,30 @@ module ApplicationHelper
   #   render "pagy/paginator", pagy: pagy
   # end
 
-  # def enrichment_error_link(model, field, error)
-  #   href = case model
-  #          when :course
-  #            enrichment_error_url(
-  #              provider_code: @provider.provider_code,
-  #              course: @course,
-  #              field: field.to_s,
-  #              message: error,
-  #            )
-  #          when :provider
-  #            provider_enrichment_error_url(
-  #              provider: @provider,
-  #              field: field.to_s,
-  #            )
-  #          end
+  # rubocop:disable Rails/HelperInstanceVariable
+  # TODO: refactor enrichment_error_link method to not use an instance variable
+  def enrichment_error_link(model, field, error)
+    href = case model
+           when :course
+             enrichment_error_url(
+               provider_code: @provider.provider_code,
+               course: @course,
+               field: field.to_s,
+               message: error,
+             )
+           when :provider
+             provider_enrichment_error_url(
+               provider: @provider,
+               field: field.to_s,
+             )
+           end
 
-  #   govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do
-  #     govuk_link_to(error, href)
-  #   end
-  # end
+    govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do
+      govuk_link_to(error, href)
+    end
+  end
 
   # TODO: refactor enrichment_summary method to not use an instance variable
-  # rubocop:disable Rails/HelperInstanceVariable
   def enrichment_summary(summary_list, model, key, value, fields, truncate_value: true, action_path: nil, action_visually_hidden_text: nil)
     action = render_action(action_path, action_visually_hidden_text)
 

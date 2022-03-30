@@ -12,7 +12,7 @@
 <% if @recruitment_cycle.current_and_open? %>
   <p class="govuk-body">Publish your changes.</p>
   <p class="govuk-body">You can make changes to this course after publishing it.</p>
-  <%= govuk_button_to("Publish", publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+  <%= govuk_button_to("Publish", publish_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     class: "govuk-!-margin-bottom-0",
     data: { qa: "course__publish" }) %>
 <% else %>
@@ -21,7 +21,8 @@
   <% else %>
     <p class="govuk-body">Publish this course and it will appear on Find when the cycle opens in <%= Settings.next_cycle_open_date.to_s(:month) %>.</p>
   <% end %>
-  <%= govuk_button_to("Publish in #{Settings.next_cycle_open_date.to_s(:month)}", publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+  <%= govuk_button_to("Publish in #{Settings.next_cycle_open_date.to_s(:month)}", 
+    publish_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     class: "govuk-!-margin-bottom-0",
     data: { qa: "course__publish" }) %>
 <% end %>

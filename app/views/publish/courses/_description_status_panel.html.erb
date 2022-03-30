@@ -31,9 +31,7 @@
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
     <h3 class="govuk-heading-m govuk-visually-hidden">Delete</h3>
     <p class="govuk-body">
-      <%= govuk_link_to "Delete this course" %>
-
-      <%# govuk_link_to "Delete this course", delete_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__delete-link" } %>
+      <%= govuk_link_to "Delete this course", delete_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__delete-link" } %>
     </p>
   <% end %>
 </div>

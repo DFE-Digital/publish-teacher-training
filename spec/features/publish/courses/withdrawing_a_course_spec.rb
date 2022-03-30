@@ -70,7 +70,7 @@ feature "Withdrawing courses" do
   end
 
   def and_i_submit
-    publish_course_information_page.submit.click
+    publish_course_withdrawal_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -89,7 +89,7 @@ feature "Withdrawing courses" do
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_information_page.error_messages).to include(
+    expect(publish_course_withdrawal_page.error_messages).to include(
       "Enter the course code #{course.course_code} to withdraw this course",
     )
   end
