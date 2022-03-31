@@ -1,0 +1,47 @@
+<% content_for :page_title, "Courses as an accredited body" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+  Courses as an accredited body
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">Use this section to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>see who lists you as their accredited body</li>
+      <li>see which courses you’re the accredited body for</li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Training providers</h2>
+    <ul class="govuk-list" data-qa="provider__training_providers_list">
+      <% @training_providers.each do |training_provider| %>
+        <li data-qa="training_provider">
+          <h3 class="govuk-heading-s">
+            <%= govuk_link_to(
+              training_provider.provider_name,
+              publish_provider_recruitment_cycle_training_provider_courses_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                training_provider.provider_code,
+              ),
+              class: "govuk-!-font-weight-bold",
+              data: { qa: "link" },
+            ) %>
+            <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
+              <%= pluralize(@course_counts[training_provider.provider_code], "course") %>
+            </span>
+          </h3>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
