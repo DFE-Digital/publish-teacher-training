@@ -44,4 +44,23 @@
       <% end %>
     </ul>
   </div>
+
+  <% unless @training_providers.empty? %>
+    <aside class="govuk-grid-column-one-third">
+      <div class="app-status-box" data-qa="download-section">
+        <h2 class="govuk-heading-m">Download</h2>
+        <p class="govuk-body">Export all the courses you’re the accredited body for.</p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            "Download as a CSV file",
+            download_training_providers_courses_publish_provider_recruitment_cycle_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              format: :csv,
+            ),
+          ) %>
+        </p>
+      </div>
+    </aside>
+  <% end %>
 </div>
