@@ -60,7 +60,7 @@ feature "GCSE equivalency requirements", type: :feature do
     expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
     expect(gcse_requirements_page.english_equivalency).to be_checked
     expect(gcse_requirements_page.maths_equivalency).to be_checked
-    expect(gcse_requirements_page.additional_requirements.text).to eq course3.additional_gcse_equivalencies
+    expect(gcse_requirements_page.additional_requirements.value).to eq course3.additional_gcse_equivalencies
   end
 
   scenario "a provider copies gcse data from another course with missing fields" do

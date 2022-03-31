@@ -10,15 +10,89 @@ feature "Editing course requirements" do
   end
 
   scenario "i can update the requirements of the course" do
+    then_i_should_see_the_reuse_content
     and_i_update_the_requirements
     and_i_submit
     then_i_should_see_a_success_message
     and_the_course_requirements_are_updated
   end
 
+  context "copying content from another course" do
+    let!(:course2) do
+      create(
+        :course,
+        provider: provider,
+        name: "Biology",
+        enrichments: [course2_enrichment],
+      )
+    end
+
+    let!(:course3) do
+      create :course,
+             provider: provider,
+             name: "Biology",
+             enrichments: [course3_enrichment]
+    end
+
+    let(:course2_enrichment) do
+      build(:course_enrichment,
+            personal_qualities: "Test personal qualities",
+            other_requirements: "Test other requirements")
+    end
+
+    let(:course3_enrichment) do
+      build(:course_enrichment,
+        personal_qualities: "Test course 3",
+        other_requirements: "")
+    end
+
+    scenario "all fields get copied if all are present" do
+      when_i_visit_the_course_requirements_page
+      publish_course_requirements_page.copy_content.copy(course2)
+
+      [
+        "Your changes are not yet saved",
+        "Personal qualities",
+        "Other requirements",
+      ].each do |name|
+        expect(publish_course_requirements_page.copy_content_warning).to have_content(name)
+      end
+
+      expect(publish_course_requirements_page.personal_qualities.value).to eq(course2_enrichment.personal_qualities)
+      expect(publish_course_requirements_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
+    end
+
+    scenario "missing fields do not get copied" do
+      publish_course_requirements_page.load(
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code,
+      )
+      publish_course_requirements_page.copy_content.copy(course3)
+
+      [
+        "Your changes are not yet saved",
+        "Personal qualities",
+      ].each do |name|
+        expect(publish_course_requirements_page.copy_content_warning).to have_content(name)
+      end
+
+      [
+        "other requirements",
+      ].each do |name|
+        expect(publish_course_requirements_page.copy_content_warning).not_to have_content(name)
+      end
+
+      expect(publish_course_requirements_page.personal_qualities.value).to eq(course3_enrichment.personal_qualities)
+      #expect(publish_course_requirements_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
+    end
+  end
+
   scenario "updating with invalid data" do
     and_i_submit_with_invalid_data
     then_i_should_see_an_error_message
+  end
+
+  def then_i_should_see_the_reuse_content
+    expect(publish_course_requirements_page).to have_use_content
   end
 
   def given_i_am_authenticated_as_a_provider_user

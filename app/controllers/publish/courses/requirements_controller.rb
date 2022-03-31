@@ -1,10 +1,18 @@
 module Publish
   module Courses
     class RequirementsController < PublishController
+      include CopyCourseContent
+      decorates_assigned :source_course
+
       def edit
         authorize(provider)
 
         @course_requirement_form = CourseRequirementForm.new(course_enrichment)
+        if @course.recruitment_cycle_year.to_i >= Provider::CHANGES_INTRODUCED_IN_2022_CYCLE
+          copy_content_check(::Courses::Copy::POST_2022_CYCLE_REQUIREMENTS_FIELDS)
+        else
+          copy_content_check(::Courses::Copy::PRE_2022_CYCLE_REQUIREMENTS_FIELDS)
+        end
       end
 
       def update
