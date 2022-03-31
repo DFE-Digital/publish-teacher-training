@@ -82,7 +82,7 @@ feature "Editing course requirements" do
       end
 
       expect(publish_course_requirements_page.personal_qualities.value).to eq(course3_enrichment.personal_qualities)
-      # expect(publish_course_requirements_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
+      expect(publish_course_requirements_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
     end
   end
 
