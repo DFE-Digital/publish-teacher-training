@@ -17,8 +17,8 @@ feature "GCSE equivalency requirements", type: :feature do
     and_i_click_save
     # this is not working with the form changes
     # binding.pry
-    # and_i_am_on_the_course_page
-    # and_i_see_the_success_summary
+    and_i_am_on_the_course_page
+    and_i_see_the_success_summary
   end
 
   scenario "a provider views course pages with course 2 GCSE requirements" do

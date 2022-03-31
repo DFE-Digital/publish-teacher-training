@@ -29,7 +29,7 @@
             <% end %>
           <% end %>
           <%= f.govuk_text_area :additional_gcse_equivalencies,
-            value: course.additional_gcse_equivalencies,
+            value: course_object.additional_gcse_equivalencies,
             label: { text: "Details about equivalency tests you offer or accept", size: "s" }, hint: { text: "For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay." }, data: { qa: "gcse_requirements__additional_requirements" }, max_words: 200 %>
         <% end %>
         <%= f.govuk_radio_button :accept_gcse_equivalency, false,
