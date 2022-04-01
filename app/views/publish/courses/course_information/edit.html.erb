@@ -122,7 +122,7 @@
 
       <%= f.govuk_text_area(:how_school_placements_work,
         value: @course.enrichments.last[:how_school_placements_work],
-        label: { text: "How school placements work", size: "s" },
+        label: { text: @course.placements_heading, size: "s" },
         max_words: 350,
         rows: 15) %>
 
