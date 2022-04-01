@@ -1,17 +1,17 @@
 <%= f.govuk_radio_buttons_fieldset :additional_degree_subject_requirements, legend: { text: "Do you have any additional degree subject requirements?" } do %>
-        <%= f.govuk_radio_button :additional_degree_subject_requirements, false, label: { text: "No" }, data: { qa: "degree_subject_requirements__no_radio" }, link_errors: true %>
+  <%= f.govuk_radio_button :additional_degree_subject_requirements, false, label: { text: "No" }, data: { qa: "degree_subject_requirements__no_radio" }, link_errors: true %>
 
-        <%= f.govuk_radio_button(:additional_degree_subject_requirements,
-          true,
-          checked: course_object.additional_degree_subject_requirements,
-          label: { text: "Yes" },
-          data: { qa: "degree_subject_requirements__yes_radio" }) do %>
+  <%= f.govuk_radio_button(:additional_degree_subject_requirements,
+    true,
+    checked: course_object.additional_degree_subject_requirements,
+    label: { text: "Yes" },
+    data: { qa: "degree_subject_requirements__yes_radio" }) do %>
 
-          <%= f.govuk_text_area :degree_subject_requirements,
-            value: course_object.additional_degree_subject_requirements ? course_object.degree_subject_requirements : "",
-            form_group: { id: "degree-subject-requirements" },
-            label: { text: "Degree subject requirements" },
-            data: { qa: "degree_subject_requirements__requirements" }
-          %>
-        <% end %>
-      <% end %>
+    <%= f.govuk_text_area :degree_subject_requirements,
+      value: course_object.additional_degree_subject_requirements ? course_object.degree_subject_requirements : "",
+      form_group: { id: "degree-subject-requirements" },
+      label: { text: "Degree subject requirements" },
+      data: { qa: "degree_subject_requirements__requirements" }
+    %>
+  <% end %>
+<% end %>
