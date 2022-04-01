@@ -47,7 +47,7 @@ feature "Editing course information" do
     let(:course3_enrichment) do
       build(:course_enrichment,
             about_course: "Course 3 - About course",
-            interview_process: "",
+            interview_process: nil,
             how_school_placements_work: "")
     end
 

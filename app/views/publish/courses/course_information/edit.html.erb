@@ -1,5 +1,5 @@
 <% page_title = "Course information" %>
-<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_information_form.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_information_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
@@ -22,7 +22,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= course.name_and_code %></span>
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
         <%= page_title %>
       </h1>
 
@@ -85,7 +85,7 @@
 
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-      <h3 class="govuk-heading-m" id="how-school-placements-work">How school placements work</h3>
+      <h3 class="govuk-heading-m" id="how-school-placements-work"><%= @course.placements_heading %></h3>
 
       <p class="govuk-body">
         Give candidates more information about the schools they’ll be teaching in. Tell them:

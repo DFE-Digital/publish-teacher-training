@@ -1,7 +1,6 @@
 module Publish
   module Courses
     class CourseInformationController < PublishController
-      include CourseBasicDetailConcern
       include CopyCourseContent
 
       def edit
@@ -32,6 +31,10 @@ module Publish
       end
 
     private
+
+      def course
+        @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
+      end
 
       def course_information_params
         params
