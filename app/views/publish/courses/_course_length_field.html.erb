@@ -4,13 +4,13 @@
     id: form_object.errors.key?(:course_length) ? "course_length-error" : "course-length",
   }) do %>
     <%= f.govuk_radio_button(:course_length, "OneYear",
-      checked: @course.enrichments.last[:course_length] == "OneYear",
+      checked: @course.course_length == "OneYear",
       data: { qa: "course_course_length_oneyear" },
       label: { text: "1 year" },
       link_errors: true) %>
 
     <%= f.govuk_radio_button(:course_length, "TwoYears",
-      checked: @course.enrichments.last[:course_length] == "TwoYears",
+      checked: @course.course_length == "TwoYears",
       label: { text: "Up to 2 years" },
       data: { qa: "course_course_length_twoyears" }) %>
 
