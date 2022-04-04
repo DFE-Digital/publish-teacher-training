@@ -16,6 +16,87 @@ feature "Editing course information" do
     and_the_course_information_is_updated
   end
 
+  scenario "copying course information with no courses available" do
+    then_i_should_see_the_reuse_content
+  end
+
+  context "copying content from another course" do
+    let!(:course2) do
+      create(
+        :course,
+        provider: provider,
+        name: "Biology",
+        enrichments: [course2_enrichment],
+      )
+    end
+
+    let!(:course3) do
+      create :course,
+             provider: provider,
+             name: "Biology",
+             enrichments: [course3_enrichment]
+    end
+
+    let(:course2_enrichment) do
+      build(:course_enrichment,
+            about_course: "Course 2 - About course",
+            interview_process: "Course 2 - Interview process",
+            how_school_placements_work: "Course 2 - How teaching placements work")
+    end
+
+    let(:course3_enrichment) do
+      build(:course_enrichment,
+            about_course: "Course 3 - About course",
+            interview_process: nil,
+            how_school_placements_work: "")
+    end
+
+    scenario "all fields get copied if all are present" do
+      publish_course_information_page.load(
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      )
+      publish_course_information_page.copy_content.copy(course2)
+
+      [
+        "Your changes are not yet saved",
+        "About the course",
+        "Interview process",
+        "How school placements work",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).to have_content(name)
+      end
+
+      expect(publish_course_information_page.about_course.value).to eq(course2_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
+    end
+
+    scenario "only fields with values are copied if the source is incomplete" do
+      publish_course_information_page.load(
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code,
+      )
+      publish_course_information_page.copy_content.copy(course3)
+
+      [
+        "Your changes are not yet saved",
+        "About the course",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).to have_content(name)
+      end
+
+      [
+        "Interview process",
+        "How school placements work",
+      ].each do |name|
+        expect(publish_course_information_page.copy_content_warning).not_to have_content(name)
+      end
+
+      expect(publish_course_information_page.about_course.value).to eq(course3_enrichment.about_course)
+      expect(publish_course_information_page.interview_process.value).to eq(course2_enrichment.interview_process)
+      expect(publish_course_information_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
+    end
+  end
+
   scenario "updating with invalid data" do
     and_i_submit_with_invalid_data
     then_i_should_see_an_error_message
@@ -27,6 +108,10 @@ feature "Editing course information" do
 
   def and_there_is_a_course_i_want_to_edit
     given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+  end
+
+  def then_i_should_see_the_reuse_content
+    expect(publish_course_information_page).to have_use_content
   end
 
   def when_i_visit_the_course_information_page
@@ -73,6 +158,6 @@ feature "Editing course information" do
   end
 
   def provider
-    @current_user.providers.first
+    @provider ||= @current_user.providers.first
   end
 end

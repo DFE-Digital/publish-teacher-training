@@ -1,0 +1,11 @@
+<%= f.govuk_radio_button(:course_length, "Other",
+  checked: course_object.other_course_length?,
+  label: { text: "Other" },
+  data: { qa: "course_course_length_other" }) do %>
+
+  <%= f.govuk_text_field(:course_length_other_length,
+    value: course_object.other_course_length? ? course_object.course_length : "",
+    label: { text: "Course length", size: "s" },
+    width: 20,
+    data: { qa: "course_course_length_other_length" }) %>
+<% end %>

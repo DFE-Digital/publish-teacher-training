@@ -1,0 +1,38 @@
+<%= f.govuk_radio_buttons_fieldset :accept_pending_gcse, legend: { text: "Will you consider candidates with pending GCSEs?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their GCSEs." } do %>
+  <%= f.govuk_radio_button :accept_pending_gcse, true,
+    checked: course_object.accept_pending_gcse,
+    label: { text: "Yes" }, data: { qa: "gcse_requirements__pending_gcse_yes_radio" }, link_errors: true %>
+
+  <%= f.govuk_radio_button :accept_pending_gcse, false,
+    checked: course_object.accept_pending_gcse == false,
+    label: { text: "No" }, data: { qa: "gcse_requirements__pending_gcse_no_radio" } %>
+<% end %>
+
+<%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates who need to take an equivalency test in English, maths or science?", size: "m" } do %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, true,
+    checked: course_object.accept_gcse_equivalency,
+    label: { text: "Yes" }, data: { qa: "gcse_requirements__gcse_equivalency_yes_radio" }, link_errors: true do %>
+
+    <%= f.govuk_fieldset legend: { text: "Which subjects will you accept equivalency tests in?", size: "s" } do %>
+      <%= f.govuk_check_box :accept_english_gcse_equivalency, "English",
+        checked: course_object.accept_english_gcse_equivalency,
+        label: { text: "English" }, data: { qa: "gcse_requirements__english_equivalency" } %>
+
+      <%= f.govuk_check_box :accept_maths_gcse_equivalency, "Maths",
+        checked: course_object.accept_maths_gcse_equivalency,
+        label: { text: "Maths" }, data: { qa: "gcse_requirements__maths_equivalency" } %>
+
+      <% if @course.primary_course? %>
+        <%= f.govuk_check_box :accept_science_gcse_equivalency, "Science",
+          checked: course_object.accept_science_gcse_equivalency,
+          label: { text: "Science" }, data: { qa: "gcse_requirements__science_equivalency" } %>
+      <% end %>
+    <% end %>
+    <%= f.govuk_text_area :additional_gcse_equivalencies,
+      value: course_object.additional_gcse_equivalencies,
+      label: { text: "Details about equivalency tests you offer or accept", size: "s" }, hint: { text: "For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay." }, data: { qa: "gcse_requirements__additional_requirements" }, max_words: 200 %>
+  <% end %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, false,
+    checked: course_object.accept_gcse_equivalency == false,
+    label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
+<% end %>

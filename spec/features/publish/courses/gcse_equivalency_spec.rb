@@ -13,8 +13,10 @@ feature "GCSE equivalency requirements", type: :feature do
     and_i_click_save
     and_i_see_equivalency_errors
 
+    and_i_set_the_gcse_requirements
     then_i_fill_the_equivalency_requirements
     and_i_click_save
+
     and_i_am_on_the_course_page
     and_i_see_the_success_summary
   end
@@ -39,9 +41,9 @@ feature "GCSE equivalency requirements", type: :feature do
     then_i_see_the_form_pre_populated
   end
 
-  scenario "a provider copies gcse data from another course", skip: true do
-    course_page.load_with_course(course)
-    visit_gcse_requirements_page
+  scenario "a provider copies gcse data from another course with all fields" do
+    given_i_am_authenticated(user: user_with_courses)
+    when_i_visit_the_course_gcse_requirements_page(course: course)
     gcse_requirements_page.copy_content.copy(course3)
 
     [
@@ -52,21 +54,33 @@ feature "GCSE equivalency requirements", type: :feature do
       "Accept Maths GCSE equivalency",
       "Additional GCSE equivalencies",
     ].each do |name|
-      expect(gcse_requirements_page.warning_message).to have_content(name)
+      expect(gcse_requirements_page.copy_content_warning).to have_content(name)
     end
 
     expect(gcse_requirements_page.pending_gcse_yes_radio).to be_checked
-
     expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
     expect(gcse_requirements_page.english_equivalency).to be_checked
     expect(gcse_requirements_page.maths_equivalency).to be_checked
-    expect(gcse_requirements_page.additional_requirements.text).to eq course3.additional_gcse_equivalencies
+    expect(gcse_requirements_page.additional_requirements.value).to eq course3.additional_gcse_equivalencies
+  end
+
+  scenario "a provider copies gcse data from another course with missing fields" do
+    given_i_am_authenticated(user: user_with_courses)
+    when_i_visit_the_course_gcse_requirements_page(course: course)
+    gcse_requirements_page.copy_content.copy(course2)
+
+    expect(gcse_requirements_page).not_to have_copy_content_warning
+    expect(gcse_requirements_page.pending_gcse_no_radio).to be_checked
+    expect(gcse_requirements_page.gcse_equivalency_no_radio).to be_checked
+    expect(gcse_requirements_page.english_equivalency).not_to be_checked
+    expect(gcse_requirements_page.maths_equivalency).not_to be_checked
+    expect(gcse_requirements_page.additional_requirements.text).to eq("")
   end
 
 private
 
   def user_with_courses
-    course = build(:course, :secondary, course_code: "XXX1", additional_gcse_equivalencies: nil)
+    course = build(:course, :secondary, course_code: "XXX1", additional_gcse_equivalencies: "")
     course2 = build(:course, :primary, course_code: "XXX2", accept_pending_gcse: false, accept_gcse_equivalency: false, additional_gcse_equivalencies: nil)
     course3 = build(:course, :secondary,
                     course_code: "XXX3", accept_pending_gcse: true, accept_gcse_equivalency: true,

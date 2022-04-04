@@ -2,6 +2,8 @@ module Publish
   module Courses
     module Degrees
       class SubjectRequirementsController < PublishController
+        include CopyCourseContent
+        decorates_assigned :source_course
         before_action :redirect_to_course_details_page_if_course_is_primary
 
         def edit
@@ -9,6 +11,7 @@ module Publish
 
           set_backlink
           @subject_requirements_form = SubjectRequirementForm.build_from_course(course)
+          copy_boolean_check(::Courses::Copy::SUBJECT_REQUIREMENTS_FIELDS)
         end
 
         def update

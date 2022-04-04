@@ -5,6 +5,10 @@
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
 <% end %>
 
+<% if params[:copy_from].present? %>
+  <%= render partial: "publish/courses/copy_content_warning", locals: { copied_fields: @copied_fields } %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -56,6 +60,7 @@
       ) %>
 
       <%= f.govuk_text_area(:about_course,
+        value: @course.enrichments.last[:about_course],
         label: { text: "About this course", size: "s" },
         max_words: 400,
         rows: 20) %>
@@ -73,6 +78,7 @@
       </ul>
 
       <%= f.govuk_text_area(:interview_process,
+        value: @course.enrichments.last[:interview_process],
         label: { text: "Interview process (optional)", size: "s" },
         max_words: 250,
         rows: 15) %>
@@ -115,6 +121,7 @@
       <% end %>
 
       <%= f.govuk_text_area(:how_school_placements_work,
+        value: @course.enrichments.last[:how_school_placements_work],
         label: { text: @course.placements_heading, size: "s" },
         max_words: 350,
         rows: 15) %>
@@ -122,4 +129,13 @@
       <%= f.govuk_submit "Save" %>
     <% end %>
   </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      },
+    ) %>
+  </aside>
 </div>

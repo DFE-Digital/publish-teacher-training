@@ -14,6 +14,7 @@ feature "Editing degree requirements" do
     then_i_should_see_the_degree_grade_page
     when_i_set_a_required_grade
     then_i_should_see_the_subject_requirements_page
+    then_i_should_see_the_reuse_content
     when_i_set_additional_requirements
     then_i_should_see_a_success_message
     and_the_required_grade_is_updated_with("two_one")
@@ -94,6 +95,58 @@ feature "Editing degree requirements" do
       and_i_submit
       then_i_should_see_an_error_message("Enter details of degree subject requirements")
     end
+
+    context "copying content from another course" do
+      let!(:course2) do
+        create(
+          :course,
+          provider: provider,
+          name: "Biology",
+          additional_degree_subject_requirements: true,
+          degree_subject_requirements: "Course 2 requirements",
+        )
+      end
+
+      let!(:course3) do
+        create(
+          :course,
+          provider: provider,
+          name: "Biology",
+          additional_degree_subject_requirements: nil,
+          degree_subject_requirements: nil,
+        )
+      end
+
+      scenario "all fields get copied if all are present" do
+        given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
+        when_i_visit_the_degrees_subject_requirements_page
+        publish_degree_subject_requirement_page.copy_content.copy(course2)
+
+        [
+          "Your changes are not yet saved",
+          "Additional degree subject requirements",
+          "Degree subject requirements",
+        ].each do |name|
+          expect(publish_degree_subject_requirement_page.copy_content_warning).to have_content(name)
+        end
+
+        expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
+        expect(publish_degree_subject_requirement_page.no_radio).not_to be_checked
+        expect(publish_degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
+      end
+
+      scenario "with all fields empty" do
+        given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
+        when_i_visit_the_degrees_subject_requirements_page
+        publish_degree_subject_requirement_page.copy_content.copy(course3)
+
+        expect(publish_degree_subject_requirement_page).not_to have_copy_content_warning
+      end
+    end
+  end
+
+  def then_i_should_see_the_reuse_content
+    expect(publish_degree_subject_requirement_page).to have_use_content
   end
 
   def given_i_am_authenticated_as_a_provider_user

@@ -1,0 +1,32 @@
+<div class="app-status-box"">
+  <% if @self_accredited_courses.present? || @courses_by_accrediting_provider.present? %>
+    <h3 class="govuk-heading-m">Copy content from another course</h3>
+    <p class="govuk-body">Fill in this page with content from another course.</p>
+    <p class="govuk-body">This will replace any existing content.</p>
+    <%= form_for course, url: page_path, data: { qa: "course__copy-content-form" }, method: :get do |form| %>
+      <div class="govuk-form-group">
+        <label class="govuk-label govuk-label--s" for="copy-from">Copy from</label>
+        <select id="copy-from" name="copy_from" class="govuk-select">
+          <option value="" selected="selected">Pick a course</option>
+          <% if @self_accredited_courses %>
+            <%= render partial: "publish/courses/course_select_option", collection: @self_accredited_courses, as: :other_course %>
+          <% end %>
+
+          <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
+            <optgroup label="<%= accrediting_provider %>">
+              <%= render partial: "publish/courses/course_select_option", collection: courses, as: :other_course %>
+            </optgroup>
+          <% end %>
+        </select>
+      </div>
+      <%= form.submit "Copy content", class: "govuk-button govuk-!-margin-bottom-0", name: nil, data: { qa: "course__copy" } %>
+    <% end %>
+  <% else %>
+    <h3 class="govuk-heading-m" data-qa="course__use_content">Use this content again</h3>
+    <p class="govuk-body">When you&#8217;ve added content to this page, you can copy it to other courses</p>
+  <% end %>
+
+  <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+
+  <%= render partial: "publish/courses/markdown_formatting" %>
+</div>
