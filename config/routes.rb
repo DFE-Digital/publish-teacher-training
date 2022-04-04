@@ -52,6 +52,7 @@ Rails.application.routes.draw do
         get "/about", on: :member, to: "providers#about"
         put "/about", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
+        get "/training-providers-courses", on: :member, to: "training_providers/course_exports#index", as: "download_training_providers_courses"
 
         resources :training_providers, path: "/training-providers", only: [:index], param: :code do
           resources :courses, only: [:index], controller: "training_providers/courses"

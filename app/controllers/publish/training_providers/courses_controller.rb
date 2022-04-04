@@ -16,7 +16,7 @@ module Publish
       def fetch_courses
         training_provider
           .courses
-          .includes(:enrichments, site_statuses: [:site], provider: [:recruitment_cycle])
+          .includes(:enrichments, :site_statuses, provider: [:recruitment_cycle])
           .where(accredited_body_code: provider.provider_code)
           .order(:name)
           .map(&:decorate)
