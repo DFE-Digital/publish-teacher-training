@@ -53,6 +53,10 @@ Rails.application.routes.draw do
         put "/about", on: :member, to: "providers#update"
         get "/details", on: :member, to: "providers#details"
 
+        resources :training_providers, path: "/training-providers", only: [:index], param: :code do
+          resources :courses, only: [:index], controller: "training_providers/courses"
+        end
+
         resource :courses, only: %i[create] do
           resource :outcome, on: :member, only: %i[new], controller: "courses/outcome" do
             get "continue"

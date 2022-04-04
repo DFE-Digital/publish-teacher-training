@@ -175,5 +175,13 @@ module FeatureHelpers
     def gcse_requirements_page
       @gcse_requirements_page ||= PageObjects::Publish::Courses::GcseRequirementsPage.new
     end
+
+    def training_providers_page
+      @training_providers_page ||= PageObjects::Publish::TrainingProviderIndex.new
+    end
+
+    def training_provider_courses_page
+      @training_provider_courses_page ||= PageObjects::Publish::TrainingProviders::CourseIndex.new
+    end
   end
 end
