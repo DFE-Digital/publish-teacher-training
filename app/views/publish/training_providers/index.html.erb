@@ -34,7 +34,7 @@
                 training_provider.provider_code,
               ),
               class: "govuk-!-font-weight-bold",
-              data: { qa: "link" },
+              data: { qa: "training_provider_name" },
             ) %>
             <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
               <%= pluralize(@course_counts[training_provider.provider_code], "course") %>
