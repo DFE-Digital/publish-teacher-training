@@ -1,0 +1,37 @@
+<table class="govuk-table">
+  <caption class="govuk-visually-hidden">A list of confirmed allocations for <%= next_allocation_cycle_period_text %></caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header govuk-!-width-two-thirds" scope="col">
+        Organisation
+      </th>
+      <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+        Allocation (granted)
+      </th>
+      <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+        Uplift (granted)
+      </th>
+      <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+        Total places (granted)
+      </th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+  <% confirmed_allocations.each do |allocation| %>
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" data-qa="provider-name" scope="row">
+        <%= allocation[:training_provider_name] %>
+      </th>
+      <td class="govuk-table__cell" data-qa="confirmed-places">
+        <%= allocation[:confirmed_number_of_places] %>
+      </td>
+      <td class="govuk-table__cell" data-qa="uplifts">
+        <%= allocation[:uplifts] %>
+      </td>
+      <td class="govuk-table__cell">
+        <%= allocation[:total] %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
