@@ -1,9 +1,26 @@
 module Publish
   class ProvidersController < PublishController
-    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+    #rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+    decorates_assigned :provider
 
     def index
       authorize :provider, :index?
+
+      page = (params[:page] || 1).to_i
+      per_page = 10
+
+      @providers = providers.page(page)
+
+      @pagy = Pagy.new(count: @providers.count, page: page, items: per_page)
+
+      render "providers/no_providers", status: :forbidden if @providers.empty?
+      redirect_to publish_provider_path(@providers.first.provider_code) if @providers.size == 1
+    end
+
+    def show
+      #def provider
+        @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:code])
+      #end
     end
 
     def details
@@ -40,6 +57,10 @@ module Publish
     end
 
   private
+
+    def providers
+      RecruitmentCycle.current.providers.where(id: current_user.providers)
+    end
 
     def redirect_to_contact_page_with_ukprn_error
       flash[:error] = { id: "publish-provider-contact-form-ukprn-field", message: "Please enter a UKPRN before continuing" }

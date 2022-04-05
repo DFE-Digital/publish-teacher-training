@@ -1,0 +1,10 @@
+<%= render partial: "publish/recruitment_cycles/about_organisation", locals: { provider: provider, year: year } %>
+<%= render partial: "recruitment_cycles/locations_info", locals: { provider: provider, year: year } %>
+<%= render partial: "recruitment_cycles/courses_info", locals: { provider: provider, year: year } %>
+<%= render partial: "recruitment_cycles/courses_accredited_body", locals: { provider: provider, year: year } %>
+
+<% if recruitment_cycle.current? %>
+  <%= render partial: "recruitment_cycles/allocations", locals: { provider: provider, year: year } %>
+<% elsif recruitment_cycle.next? %>
+  <%= render partial: "recruitment_cycles/allocations", locals: { provider: provider.from_previous_recruitment_cycle, year: year.to_i.pred } %>
+<% end %>

@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
 
-    resources :providers, path: "organisations", param: :code, only: [] do
+    resources :providers, path: "organisations", param: :code, only: [:show] do
       get "/users", on: :member, to: "users#index"
       get "/request-access", on: :member, to: "providers/access_requests#new"
       post "/request-access", on: :member, to: "providers/access_requests#create"
