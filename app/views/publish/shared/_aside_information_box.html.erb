@@ -1,0 +1,17 @@
+<aside class="govuk-grid-column-one-third">
+  <div class="app-status-box">
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-2"><%= govuk_link_to "Users", users_publish_provider_path(code: @provider.provider_code) %></h2>
+    <p class="govuk-body">View users who manage your courses.</p>
+
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+    <h2 class="govuk-heading-s">Your courses for the <%= "#{Settings.current_cycle} to #{Settings.current_cycle + 1}" %> cycle</h2>
+    <p class="govuk-body">
+      Courses you publish for the <%= "#{Settings.current_cycle} to #{Settings.current_cycle + 1}" %> cycle will be made available on Find postgraduate teacher training for candidates to view.
+    </p>
+
+    <h2 class="govuk-heading-s">Support and guidance</h2>
+    <p class="govuk-body">If you have a question, or you’ve had a problem using Publish, you can email:</p>
+    <p class="govuk-body"><%= bat_contact_mail_to subject: "Support and guidance" %></p>
+  </div>
+</aside>

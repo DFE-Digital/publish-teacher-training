@@ -18,9 +18,7 @@ module Publish
     end
 
     def show
-      #def provider
-        @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:code])
-      #end
+      authorize provider, :show?
     end
 
     def details
@@ -57,6 +55,10 @@ module Publish
     end
 
   private
+
+    def provider
+      @provider ||= recruitment_cycle.providers.find_by!(provider_code:  params[:provider_code] || params[:code])
+    end
 
     def providers
       RecruitmentCycle.current.providers.where(id: current_user.providers)

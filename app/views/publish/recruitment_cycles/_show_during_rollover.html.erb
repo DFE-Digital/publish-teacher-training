@@ -1,0 +1,48 @@
+<h2 class="govuk-heading-m">
+  <%= govuk_link_to(
+    "Current cycle (#{current_recruitment_cycle_period_text})",
+    publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_cycle),
+    data: { qa: "provider__courses__current_cycle" },
+  ) %>
+</h2>
+<p class="govuk-body">Use this section to:</p>
+<ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+  <li>manage current courses</li>
+  <li>edit locations and vacancies for current courses</li>
+  <% if @provider.accredited_body? %>
+    <li>see which courses you’re currently the accredited body for</li>
+    <li>view requests you’ve already made to recruit for fee-funded PE in the next cycle</li>
+  <% end %>
+</ul>
+
+<% if @provider.from_next_recruitment_cycle %>
+  <h2 class="govuk-heading-m">
+    <%= govuk_link_to(
+      "Next cycle (#{next_recruitment_cycle_period_text})",
+      publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_cycle + 1),
+      data: { qa: "provider__courses__next_cycle" },
+    ) %>
+  </h2>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+    <li>prepare your courses for the next cycle</li>
+    <li>manage locations for the next cycle</li>
+    <% if @provider.accredited_body? %>
+      <li>see which courses in the next cycle you’re the accredited body for</li>
+      <li>view requests you’ve already made to recruit for fee-funded PE in the next cycle</li>
+    <% end %>
+  </ul>
+<% else %>
+  <h2 class="govuk-heading-m">
+    <%= "Next cycle (#{next_recruitment_cycle_period_text})" %>
+  </h2>
+
+  <p class="govuk-body">
+    You did not publish any courses in the last cycle. Only providers with published
+    or withdrawn courses are rolled over.
+  </p>
+
+  <p class="govuk-body">
+    If you think this is a mistake contact us on <br>
+    <%= bat_contact_mail_to(subject: "Rollover support and guidance") %>
+  </p>
+<% end %>

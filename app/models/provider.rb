@@ -328,6 +328,14 @@ class Provider < ApplicationRecord
     can_sponsor_student_visa == false && can_sponsor_skilled_worker_visa == false
   end
 
+  def from_next_recruitment_cycle
+    Provider.where(recruitment_cycle_year: recruitment_cycle_year.to_i.succ)
+      .find(provider_code)
+      .first
+  #rescue JsonApiClient::Errors::NotFound
+    #nil
+  end
+
 private
 
   scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
