@@ -18,7 +18,7 @@ describe AllocationsView do
       end
       let(:allocations) { [repeat_allocation, initial_allocation] }
 
-      it {
+      it do
         expect(subject).to eq([
           {
             training_provider_name: training_provider.provider_name,
@@ -31,7 +31,7 @@ describe AllocationsView do
             request_type: AllocationsView::RequestType::REPEAT,
           },
         ])
-      }
+      end
     end
 
     context "Accredited body has declined an allocation for a training provider" do
@@ -41,7 +41,7 @@ describe AllocationsView do
       end
       let(:allocations) { [declined_allocation, initial_allocation] }
 
-      it {
+      it do
         expect(subject).to eq([
           {
             training_provider_name: training_provider.provider_name,
@@ -54,13 +54,13 @@ describe AllocationsView do
             request_type: AllocationsView::RequestType::DECLINED,
           },
         ])
-      }
+      end
     end
 
     context "Accredited body is yet to repeat or decline an allocation for a training provider" do
       let(:allocations) { [] }
 
-      it {
+      it do
         expect(subject).to eq([
           {
             training_provider_name: training_provider.provider_name,
@@ -75,7 +75,7 @@ describe AllocationsView do
             status_colour: AllocationsView::Colour::GREY,
           },
         ])
-      }
+      end
     end
   end
 
@@ -94,7 +94,7 @@ describe AllocationsView do
 
         let(:allocations) { [initial_allocation, repeat_allocation] }
 
-        it {
+        it do
           expect(subject).to eq([
             {
               training_provider_name: training_provider.provider_name,
@@ -105,7 +105,7 @@ describe AllocationsView do
               request_type: AllocationsView::RequestType::INITIAL,
             },
           ])
-        }
+        end
       end
 
       context "1 place requested" do
@@ -153,18 +153,20 @@ describe AllocationsView do
 
         let(:allocations) { [confirmed_repeat_allocation, confirmed_initial_allocation] }
 
-        it {
-          expect(subject).to eq([{ training_provider_name: training_provider.provider_name,
-                                   number_of_places: confirmed_repeat_allocation.number_of_places,
-                                   confirmed_number_of_places: confirmed_repeat_allocation.confirmed_number_of_places,
-                                   uplifts: confirmed_repeat_allocation.allocation_uplift.uplifts,
-                                   total: confirmed_repeat_allocation.confirmed_number_of_places + confirmed_repeat_allocation.allocation_uplift.uplifts },
-                                 { training_provider_name: another_training_provider.provider_name,
-                                   number_of_places: confirmed_initial_allocation.number_of_places,
-                                   confirmed_number_of_places: confirmed_initial_allocation.confirmed_number_of_places,
-                                   uplifts: confirmed_initial_allocation.allocation_uplift.uplifts,
-                                   total: confirmed_initial_allocation.confirmed_number_of_places + confirmed_initial_allocation.allocation_uplift.uplifts }])
-        }
+        it do
+          expect(subject).to eq([
+            { training_provider_name: training_provider.provider_name,
+              number_of_places: confirmed_repeat_allocation.number_of_places,
+              confirmed_number_of_places: confirmed_repeat_allocation.confirmed_number_of_places,
+              uplifts: confirmed_repeat_allocation.allocation_uplift.uplifts,
+              total: confirmed_repeat_allocation.confirmed_number_of_places + confirmed_repeat_allocation.allocation_uplift.uplifts },
+            { training_provider_name: another_training_provider.provider_name,
+              number_of_places: confirmed_initial_allocation.number_of_places,
+              confirmed_number_of_places: confirmed_initial_allocation.confirmed_number_of_places,
+              uplifts: confirmed_initial_allocation.allocation_uplift.uplifts,
+              total: confirmed_initial_allocation.confirmed_number_of_places + confirmed_initial_allocation.allocation_uplift.uplifts },
+          ])
+        end
       end
 
       context "no confirmed declined allocations are returned" do
@@ -174,17 +176,13 @@ describe AllocationsView do
 
         let(:allocations) { [confirmed_declined_allocation] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
 
       context "no allocations are returned if their status is 'YET TO REQUEST'" do
         let(:allocations) { [] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
     end
   end
@@ -199,14 +197,14 @@ describe AllocationsView do
         end
         let(:allocations) { [repeat_allocation] }
 
-        it {
+        it do
           expect(subject).to eq([{
             training_provider_name: training_provider.provider_name,
             training_provider_code: training_provider.provider_code,
             status_colour: AllocationsView::Colour::GREEN,
             status: AllocationsView::Status::REQUESTED,
           }])
-        }
+        end
       end
 
       context "returns allocations if their status is 'INITIAL'" do
@@ -215,14 +213,14 @@ describe AllocationsView do
         end
         let(:allocations) { [initial_allocation] }
 
-        it {
+        it do
           expect(subject).to eq([{
             training_provider_name: training_provider.provider_name,
             training_provider_code: training_provider.provider_code,
             status_colour: AllocationsView::Colour::GREEN,
             status: AllocationsView::Status::REQUESTED,
           }])
-        }
+        end
 
         it "does not display number of requested places in the status" do
           expect(subject.first[:status]).to eq("REQUESTED")
@@ -236,18 +234,14 @@ describe AllocationsView do
         let(:training_providers) { [training_provider] }
         let(:allocations) { [declined_allocation] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
 
       context "no allocations are returned if their status is 'YET TO REQUEST'" do
         let(:training_providers) { [training_provider] }
         let(:allocations) { [] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
 
       describe "allocation ordering" do
@@ -263,14 +257,16 @@ describe AllocationsView do
         let(:allocations) { [initial_allocation, repeat_allocation] }
 
         it "is sorted by the provider name" do
-          expect(subject).to eq([{ training_provider_name: training_provider.provider_name,
-                                   training_provider_code: training_provider.provider_code,
-                                   status_colour: AllocationsView::Colour::GREEN,
-                                   status: AllocationsView::Status::REQUESTED },
-                                 { training_provider_name: another_training_provider.provider_name,
-                                   training_provider_code: another_training_provider.provider_code,
-                                   status_colour: AllocationsView::Colour::GREEN,
-                                   status: AllocationsView::Status::REQUESTED }])
+          expect(subject).to eq([
+            { training_provider_name: training_provider.provider_name,
+              training_provider_code: training_provider.provider_code,
+              status_colour: AllocationsView::Colour::GREEN,
+              status: AllocationsView::Status::REQUESTED },
+            { training_provider_name: another_training_provider.provider_name,
+              training_provider_code: another_training_provider.provider_code,
+              status_colour: AllocationsView::Colour::GREEN,
+              status: AllocationsView::Status::REQUESTED },
+          ])
         end
 
         it "does not display number of requested places in the status" do
@@ -289,14 +285,14 @@ describe AllocationsView do
 
         let(:allocations) { [declined_allocation] }
 
-        it {
+        it do
           expect(subject).to eq([{
             training_provider_name: training_provider.provider_name,
             training_provider_code: training_provider.provider_code,
             status: AllocationsView::Status::NOT_REQUESTED,
             status_colour: AllocationsView::Colour::RED,
           }])
-        }
+        end
       end
 
       context "returns allocations where status is 'YET TO REQUEST'" do
@@ -304,14 +300,14 @@ describe AllocationsView do
 
         let(:training_providers) { [training_provider] }
 
-        it {
+        it do
           expect(subject).to eq([{
             training_provider_name: training_provider.provider_name,
             training_provider_code: training_provider.provider_code,
             status: AllocationsView::Status::NO_REQUEST_SENT,
             status_colour: AllocationsView::Colour::GREY,
           }])
-        }
+        end
       end
 
       context "no allocations are returned if their status is 'REQUESTED" do
@@ -323,9 +319,7 @@ describe AllocationsView do
 
         let(:training_providers) { [training_provider] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
 
       context "no allocations are returned if their status is 'INITIAL'" do
@@ -337,9 +331,7 @@ describe AllocationsView do
 
         let(:training_providers) { [training_provider] }
 
-        it {
-          expect(subject).to eq([])
-        }
+        it { expect(subject).to eq([]) }
       end
 
       describe "allocation ordering" do
@@ -351,16 +343,18 @@ describe AllocationsView do
         let(:allocations) { [] }
 
         it "is sorted by the provider name" do
-          expect(subject).to eq([{ training_provider_name: training_provider.provider_name,
-                                   training_provider_code: training_provider.provider_code,
-                                   status: AllocationsView::Status::NO_REQUEST_SENT,
-                                   status_colour: AllocationsView::Colour::GREY },
-                                 {
-                                   training_provider_name: another_training_provider.provider_name,
-                                   training_provider_code: another_training_provider.provider_code,
-                                   status: AllocationsView::Status::NO_REQUEST_SENT,
-                                   status_colour: AllocationsView::Colour::GREY,
-                                 }])
+          expect(subject).to eq([
+            { training_provider_name: training_provider.provider_name,
+              training_provider_code: training_provider.provider_code,
+              status: AllocationsView::Status::NO_REQUEST_SENT,
+              status_colour: AllocationsView::Colour::GREY },
+            {
+              training_provider_name: another_training_provider.provider_name,
+              training_provider_code: another_training_provider.provider_code,
+              status: AllocationsView::Status::NO_REQUEST_SENT,
+              status_colour: AllocationsView::Colour::GREY,
+            },
+          ])
         end
       end
     end
