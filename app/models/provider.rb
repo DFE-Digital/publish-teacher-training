@@ -329,11 +329,7 @@ class Provider < ApplicationRecord
   end
 
   def from_next_recruitment_cycle
-    Provider.where(recruitment_cycle_year: recruitment_cycle_year.to_i.succ)
-      .find(provider_code)
-      .first
-  #rescue JsonApiClient::Errors::NotFound
-    #nil
+    Provider.joins(:recruitment_cycle).where('recruitment_cycle.year = ?', "#{Settings.current_recruitment_cycle_year.succ}").find_by(provider_code: provider_code)
   end
 
 private
