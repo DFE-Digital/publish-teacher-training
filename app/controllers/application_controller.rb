@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   before_action :authenticate
 
-  include Pundit
+  include Pundit::Authorization
 
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
 

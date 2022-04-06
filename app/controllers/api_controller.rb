@@ -1,7 +1,7 @@
 class APIController < ActionController::API
   include EmitsRequestEvents
   include ActionController::HttpAuthentication::Token::ControllerMethods
-  include Pundit
+  include Pundit::Authorization
 
   # child must define authenticate method
   before_action :authenticate
