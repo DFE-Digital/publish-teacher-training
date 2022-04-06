@@ -1,0 +1,24 @@
+<% content_for :page_title, @recruitment_cycle.title %>
+<%= content_for :before_content, render_breadcrumbs(:recruitment_cycle) %>
+
+<h1 class="govuk-heading-l">
+  <%= @recruitment_cycle.title %>
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if @recruitment_cycle.next? %>
+      <p class="govuk-body-l">
+        Prepare your courses and locations for the next cycle. Your records have been copied from the current cycle.
+      </p>
+    <% else %>
+      <p class="govuk-body-l">
+        Manage courses, locations and vacancies in the current&nbsp;cycle.
+      </p>
+    <% end %>
+
+    <%= render partial: "publish/recruitment_cycles/provider_info", locals: { provider: @provider, year: params[:year], recruitment_cycle: @recruitment_cycle } %>
+  </div>
+
+  <%= render partial: "publish/shared/aside_information_box" %>
+</div>
