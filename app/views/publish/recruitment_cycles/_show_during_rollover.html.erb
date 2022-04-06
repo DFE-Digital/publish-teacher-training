@@ -1,7 +1,7 @@
 <h2 class="govuk-heading-m">
   <%= govuk_link_to(
     "Current cycle (#{current_recruitment_cycle_period_text})",
-    publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_cycle),
+    publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_recruitment_cycle_year),
     data: { qa: "provider__courses__current_cycle" },
   ) %>
 </h2>
@@ -19,7 +19,7 @@
   <h2 class="govuk-heading-m">
     <%= govuk_link_to(
       "Next cycle (#{next_recruitment_cycle_period_text})",
-      publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_cycle + 1),
+      publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_recruitment_cycle_year + 1),
       data: { qa: "provider__courses__next_cycle" },
     ) %>
   </h2>
