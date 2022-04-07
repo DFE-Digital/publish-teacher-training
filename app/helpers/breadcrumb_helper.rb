@@ -12,7 +12,7 @@ module BreadcrumbHelper
       )
     end
   end
-
+  # rubocop:disable Rails/HelperInstanceVariable
   def organisations_breadcrumb
     @has_multiple_providers ? { "Organisations" => providers_path } : {}
   end
@@ -85,4 +85,5 @@ module BreadcrumbHelper
     path = provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
     provider_breadcrumb.merge({ "PE courses for #{next_allocation_cycle_period_text}" => path })
   end
+  # rubocop:enable Rails/HelperInstanceVariable
 end

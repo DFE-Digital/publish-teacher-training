@@ -1,6 +1,6 @@
 module Publish
   class ProvidersController < PublishController
-    #rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+    # rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     decorates_assigned :provider
 
     def index
@@ -57,7 +57,7 @@ module Publish
   private
 
     def provider
-      @provider ||= recruitment_cycle.providers.find_by!(provider_code:  params[:provider_code] || params[:code])
+      @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])
     end
 
     def providers
