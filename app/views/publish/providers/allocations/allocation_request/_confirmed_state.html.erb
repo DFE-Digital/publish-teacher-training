@@ -1,0 +1,63 @@
+
+<% content_for :page_title, "PE courses for #{next_allocation_cycle_period_text}" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">PE allocations for <%= next_allocation_cycle_period_text %></h1>
+
+    <% if @allocations_view.confirmed_allocation_places.any? %>
+      <p class="govuk-body">
+        Organisations that offered fee-funded PE last year will receive the same amount of places for <%= next_allocation_cycle_period_text %>.
+      </p>
+
+      <p class="govuk-body">
+        Organisations that are offering PE for the first time in <%= next_allocation_cycle_period_text %> will receive 50% of their request.
+      </p>
+
+      <p class="govuk-body">
+        DfE expects providers to recruit in line with their allocation. If you determine that there is an additional need for PE trainees, you may request an uplift to the number of PE (fee-funded) places your organisation has been allocated.
+      </p>
+
+      <p class="govuk-body">
+        Requests for an uplift can be made via this form from 9am on Tuesday 5 October: <%= govuk_link_to "Request an uplift.", "https://docs.google.com/forms/d/e/1FAIpQLSd2lAc7kTV0daQqJKkbMacHQzVzqhrXHmjLzHYsGKwyhOeKnQ/viewform?usp=sf_link" %>
+      </p>
+
+      <p class="govuk-body">
+        The team will review your request and you’ll be notified of the outcome via email.
+        We do not expect providers to submit multiple requests throughout the cycle so any requests should be mindful of likely need throughout ITT2022.
+        Please be aware that DfE will be closely monitoring PE recruitment and reserves the right to stop PE recruitment at any time.
+      </p>
+
+      <p class="govuk-body">
+        Organisations can now also publish PE with EBacc subject courses, and make them available for candidates to view on <%= govuk_link_to "Find postgraduate teacher training.", "https://www.gov.uk/find-postgraduate-teacher-training-courses"%>
+      </p>
+
+      <p class="govuk-body">
+        Contact us at <%= bat_contact_mail_to %> if you have any questions.
+      </p>
+
+      <%= render partial: "publish/providers/allocations/allocation_report/confirmed_state", locals: {
+                 confirmed_allocations: @allocations_view.confirmed_allocation_places,
+               } %>
+    <% else %>
+      <p class="govuk-body">
+        You did not request any allocations for fee-funded PE courses for <%= next_allocation_cycle_period_text %>.
+      </p>
+
+      <p class="govuk-body">
+        Any current PE courses (<%= current_allocation_cycle_period_text %>) that you have not requested allocations for will not run in <%= next_allocation_cycle_period_text %>.
+      </p>
+
+      <p class="govuk-body">
+        Contact us at <%= bat_contact_mail_to %> if you have any questions.
+      </p>
+    <% end %>
+  </div>
+</div>
