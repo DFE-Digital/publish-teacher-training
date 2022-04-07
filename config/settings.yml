@@ -103,7 +103,7 @@ features:
     # actually starting when it would be set to false
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: true
+    can_edit_current_and_next_cycles: false
   allocations:
     # state: open # Users can make requests for allocations
     # state: closed # Readonly - Users can see if they have or have not made request (does not show number of places)

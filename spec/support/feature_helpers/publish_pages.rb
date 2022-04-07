@@ -183,5 +183,9 @@ module FeatureHelpers
     def training_provider_courses_page
       @training_provider_courses_page ||= PageObjects::Publish::TrainingProviders::CourseIndex.new
     end
+
+    def allocations_page
+      @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
+    end
   end
 end
