@@ -329,7 +329,7 @@ class Provider < ApplicationRecord
   end
 
   def from_next_recruitment_cycle
-    Provider.joins(:recruitment_cycle).where('recruitment_cycle.year = ?', "#{Settings.current_recruitment_cycle_year.succ}").find_by(provider_code: provider_code)
+    Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Settings.current_recruitment_cycle_year.succ.to_s }).find_by(provider_code: provider_code)
   end
 
 private
