@@ -1,4 +1,8 @@
 en:
+  allocations_for_pe:
+    open_state_link_text: "Request PE courses for %{period}"
+    closed_state_link_text: "Request PE courses for %{period}"
+    confirmed_state_link_text: "View your PE allocations for %{period}"
   helpers:
     hint:
       site:

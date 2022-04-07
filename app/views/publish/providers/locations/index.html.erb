@@ -4,10 +4,9 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
-    old_publish_link_for(
       publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
     )
-  ) %>
+  %>
 <% end %>
 
 <div class="govuk-grid-row">
