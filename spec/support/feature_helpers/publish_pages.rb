@@ -187,5 +187,9 @@ module FeatureHelpers
     def allocations_page
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
+
+    def terms_and_conditions_page
+      @terms_and_conditions_page ||= PageObjects::Publish::Terms.new
+    end
   end
 end
