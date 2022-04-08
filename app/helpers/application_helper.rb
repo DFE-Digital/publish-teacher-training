@@ -1,5 +1,9 @@
 module ApplicationHelper
-  # include Pagy::Frontend
+  include Pagy::Frontend
+
+  def pagy_govuk_nav(pagy)
+    render "pagy/paginator", pagy: pagy
+  end
 
   def header_items(current_user)
     return unless current_user

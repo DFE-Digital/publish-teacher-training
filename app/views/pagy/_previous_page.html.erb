@@ -1,0 +1,12 @@
+<li class="app-pagination__item app-pagination__item--previous">
+  <%= govuk_link_to "#{request.path}?page=#{pagy.prev}", rel: "prev", class: "app-pagination__link" do %>
+    <span class="app-pagination__link-title">
+      <svg class="app-pagination__link-icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17" viewBox="0 0 17 13">
+        <path fill="currentColor" d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+      </svg>
+      Previous page
+    </span>
+    <span class="govuk-visually-hidden">:</span>
+    <span class="app-pagination__link-label"><%= pagy.prev %> of <%= pagy.pages %></span>
+  <% end %>
+</li>

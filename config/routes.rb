@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   root to: "publish/providers#index"
+  get "/publish/organisations", to: redirect("/")
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
   mount OpenApi::Rswag::Api::Engine => "/api-docs"

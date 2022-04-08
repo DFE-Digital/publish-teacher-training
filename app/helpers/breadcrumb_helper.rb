@@ -12,6 +12,7 @@ module BreadcrumbHelper
       )
     end
   end
+
   # rubocop:disable Rails/HelperInstanceVariable
   def organisations_breadcrumb
     @has_multiple_providers ? { "Organisations" => providers_path } : {}
