@@ -167,6 +167,8 @@ Rails.application.routes.draw do
           put "/contact", on: :member, to: "contacts#update"
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
+
+          resources :allocations, only: %i[index], on: :member, param: :training_provider_code
         end
       end
     end
