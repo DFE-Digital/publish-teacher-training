@@ -1,0 +1,17 @@
+<% content_for :page_title, "Tell us which organisation you’re part of" %>
+
+<div class="govuk-grid-row" data-qa="errors__no_providers">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Tell us which organisation you’re part of</h1>
+    <p class="govuk-body">You’ve successfully signed in to your DfE account but the email address you’ve used is not currently linked to an organisation. This can happen if:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the email address you used is different to the one we sent the invitation email to</li>
+      <li>you haven’t yet been invited by someone in your organisation</li>
+      <li>another user in your organisation has removed your account</li>
+    </ul>
+
+    <p class="govuk-body">To access your organisation’s courses, make sure that you've signed in with the correct email address. If it looks right, you'll need to email us instead to tell us which organisation you need access to.</p>
+    <p class="govuk-body">Email us at <%= bat_contact_mail_to  %></p>
+  </div>
+</div>
