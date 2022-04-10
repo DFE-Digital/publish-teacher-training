@@ -8,7 +8,7 @@ module Publish
       @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])
       authorize provider, :show?
       unless @provider.rolled_over?
-        redirect_to provider_path(@provider.provider_code)
+        redirect_to publish_provider_path(@provider.provider_code)
       end
     end
 

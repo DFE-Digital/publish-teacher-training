@@ -11,9 +11,9 @@ module Publish
 
       @providers = providers.page(page)
 
-      @pagy = Pagy.new(count: @providers.count, page: page, items: per_page)
+      @pagy = Pagy.new(count: providers.count, page: page, items: per_page)
 
-      render "providers/no_providers", status: :forbidden if @providers.empty?
+      render "publish/providers/no_providers", status: :forbidden if @providers.empty?
       redirect_to publish_provider_path(@providers.first.provider_code) if @providers.size == 1
     end
 
