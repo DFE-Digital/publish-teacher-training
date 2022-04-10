@@ -12,10 +12,6 @@ module ApplicationHelper
     items
   end
 
-  # def pagy_govuk_nav(pagy)
-  #   render "pagy/paginator", pagy: pagy
-  # end
-
   # rubocop:disable Rails/HelperInstanceVariable
   # TODO: refactor enrichment_error_link method to not use an instance variable
   def enrichment_error_link(model, field, error)
