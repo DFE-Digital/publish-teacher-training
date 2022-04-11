@@ -16,3 +16,5 @@ authentication:
 
 features:
   display_migration_signin: false
+  allocations:
+    state: closed
