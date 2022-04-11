@@ -20,7 +20,7 @@
         <th class="govuk-table__header" data-qa="provider-name" scope="row">
           <%= allocation[:training_provider_name] %>
         </th>
-        <td class="govuk-table__cell">
+        <td class="govuk-table__cell" data-qa="status">
           <%= govuk_tag(text: allocation[:status], colour: allocation[:status_colour]) %>
         </td>
       </tr>
