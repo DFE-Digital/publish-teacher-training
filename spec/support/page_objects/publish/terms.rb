@@ -5,11 +5,11 @@ require_relative "../sections/errorlink"
 module PageObjects
   module Publish
     class Terms < PageObjects::Base
-      set_url "/accept-terms"
+      set_url "/publish/accept-terms"
 
       sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
-      element :accept_terms, "#publish-accept-terms-form-terms-accepted-1-field"
+      element :accept_terms, "#publish-interruption-accept-terms-form-terms-accepted-1-field"
 
       element :submit, 'button.govuk-button[type="submit"]'
 

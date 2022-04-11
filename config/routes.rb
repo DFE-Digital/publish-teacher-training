@@ -23,8 +23,6 @@ Rails.application.routes.draw do
   get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
-  get "/accept-terms", to: "terms#edit", as: :accept_terms
-  patch "/accept-terms", to: "terms#update"
 
   if AuthenticationService.persona?
     get "/personas", to: "personas#index"
@@ -43,6 +41,8 @@ Rails.application.routes.draw do
 
   namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
+    get "/accept-terms", to: "terms#edit", as: :accept_terms
+    patch "/accept-terms", to: "terms#update"
 
     resources :providers, path: "organisations", param: :code, only: [] do
       get "/users", on: :member, to: "users#index"

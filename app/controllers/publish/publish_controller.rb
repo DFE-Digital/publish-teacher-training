@@ -24,7 +24,7 @@ module Publish
 
     def check_interrupt_redirects(use_redirect_back_to: true)
       if !current_user.accepted_terms?
-        redirect_to accept_terms_path
+        redirect_to publish_accept_terms_path
         # elsif user_state_to_redirect_paths[user_from_session.aasm.current_state]
         #   redirect_to user_state_to_redirect_paths[user_from_session.aasm.current_state]
         # elsif show_rollover_page?

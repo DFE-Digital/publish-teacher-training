@@ -55,7 +55,7 @@ feature "Accepting terms" do
 
   def then_i_should_see_an_error_message
     expect(publish_course_study_mode_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/accept_terms_form.attributes.terms_accepted.accepted"),
+      I18n.t("activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted"),
     )
   end
 end
