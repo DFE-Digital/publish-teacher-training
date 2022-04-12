@@ -1,0 +1,35 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <div class="app-status-box app-status-box--admin">
+      <p class="govuk-body">
+        <%= govuk_tag(text: "Admin feature", colour: "purple") %>
+      </p>
+
+      <%= form_with url: publish_providers_search_path, method: :get do |form| %>
+        <% error = flash[:error] && flash[:error]["message"] == "Name or provider code" %>
+        <div class="govuk-form-group<% if error %> govuk-form-group--error<% end %>">
+          <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
+            Search for an organisation
+            <span class="govuk-hint">Enter the name or provider code</span>
+            <% if error %>
+              <span class="govuk-error-message" id="provider-error" data-qa="provider-error">
+                Please enter the name or provider code
+              </span>
+            <% end %>
+          <% end %>
+          <%= form.text_field :query,
+                              id: "provider",
+                              value: params[:query],
+                              class: "govuk-input",
+                              data: { qa: "provider-search" } %>
+          <!-- <div id="provider-list" data-provider-list="<%= @hello %>"></div>-->
+          <div id="provider-autocomplete"></div>
+        </div>
+        <%= form.submit "Search", name: nil, class: "govuk-button govuk-!-margin-bottom-0", data: { qa: "find-providers" } %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%#= javascript_pack_tag 'admin_search'%>
