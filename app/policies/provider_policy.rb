@@ -27,6 +27,10 @@ class ProviderPolicy
     user.present?
   end
 
+  def search?
+    user.admin?
+  end
+
   def show?
     user.admin? || user.providers.include?(provider)
   end

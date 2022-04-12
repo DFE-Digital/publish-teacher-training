@@ -42,6 +42,10 @@ Rails.application.routes.draw do
 
   namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
+    get "/providers/search", to: "providers#search"
+    get "/providers/suggest", to: "providers#suggest"
+    #get "/providers/suggest_any", to: "provider_suggestions#suggest_any"
+    #get "/providers/suggest_any_accredited_body", to: "provider_suggestions#suggest_any_accredited_body"
 
     resources :providers, path: "organisations", param: :code, only: [:show] do
       get "/users", on: :member, to: "users#index"

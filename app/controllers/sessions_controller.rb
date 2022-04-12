@@ -39,8 +39,8 @@ private
 
     if saved_path
       saved_path
-    elsif current_user.admin?
-      support_providers_path
+    # elsif current_user.admin?
+    #  support_providers_path
     else
       publish_root_path
     end
