@@ -1,4 +1,5 @@
 name: Build and Deploy
+concurrency: build_and_deploy_${{ github.ref_name }}
 
 on:
   push:
@@ -187,7 +188,6 @@ jobs:
 
   deploy-all:
     name: Deployment To All
-    concurrency: deploy_all
     environment: 
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy_app.outputs.deploy-url }}
