@@ -35,6 +35,8 @@ authentication:
 current_recruitment_cycle_year: 2022
 next_cycle_open_date: 2022-10-5
 allocation_cycle_year: 2021
+allocations_close_date: 2021-07-02
+
 govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: 42a9723d-b5a1-413a-89e6-bbdd073373ab

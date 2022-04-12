@@ -486,4 +486,5 @@ en:
     formats:
       default: "%-d %B %Y"
       short: "%B %Y"
+      govuk_short: "%-d %B"
 

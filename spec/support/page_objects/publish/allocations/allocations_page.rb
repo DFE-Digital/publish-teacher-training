@@ -14,6 +14,7 @@ module PageObjects
           element :actions, "td[:nth-child(2)"
           element :allocation_number, '[data-qa="confirmed-places"]'
           element :uplift_number, '[data-qa="uplifts"]'
+          element :status, '[data-qa="status"]'
         end
       end
     end
