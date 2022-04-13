@@ -68,7 +68,7 @@ module Publish
       end
 
       provider_code = provider_query
-                        .split(" ")
+                        .split
                         .last
                         .gsub(/[()]/, "")
 
@@ -83,10 +83,10 @@ module Publish
 
     def providers
       @providers ||= if current_user.admin?
-        RecruitmentCycle.current.providers
-      else
-        RecruitmentCycle.current.providers.where(id: current_user.providers)
-      end
+                       RecruitmentCycle.current.providers
+                     else
+                       RecruitmentCycle.current.providers.where(id: current_user.providers)
+                     end
     end
 
     def redirect_to_contact_page_with_ukprn_error
