@@ -400,6 +400,10 @@ en:
           attributes:
             confirm_course_code:
               invalid_code: "Enter the course code %{course_code} to delete this course"
+        publish/interruption/accept_terms_form:
+          attributes:
+            terms_accepted:
+              accepted: "You must accept the terms and conditions to continue"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
