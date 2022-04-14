@@ -1,0 +1,107 @@
+<% content_for :page_title, "Request PE courses for #{next_allocation_cycle_period_text}" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Request PE courses for <%= next_allocation_cycle_period_text %></h1>
+
+    <p class="govuk-body">
+      You must request any fee-funded PE courses for <%= next_allocation_cycle_period_text %> by
+      <%= l(Settings.allocations_close_date.to_date) %>. You do not need to
+      request any other courses, including salaried PE.
+    </p>
+
+    <p class="govuk-body">
+      Once you’ve made a request, you can change it before
+      <%= l(Settings.allocations_close_date.to_date, format: :govuk_short) %>.
+    </p>
+
+    <% if @training_providers.present? %>
+      <h2 class="govuk-heading-l" data-qa="request-again-header">
+        Do you want to request PE again for these organisations?
+      </h2>
+
+      <p class="govuk-body">
+        These are the organisations currently offering fee-funded PE that you’re
+        the accredited body for. You’ll be included if you offer your own
+        courses.
+      </p>
+      <p class="govuk-body">
+        Tell us if these organisations want to run PE again. You will not need
+        to request a specific number of places. These will be decided by DfE
+        based on each organisation’s current allocation.
+      </p>
+
+      <p class="govuk-body">
+        <%= govuk_link_to "View your previous allocations", Settings.allocations.view_previous_link, target: "_blank" %>
+      </p>
+
+      <p class="govuk-body">
+        We’ll contact you in September to tell you if the request has been
+        approved and how many places have been allocated.
+      </p>
+    <% end %>
+  </div>
+
+  <% if @training_providers.present? %>
+    <div class="govuk-grid-column-full">
+      <%= render partial: "publish/providers/allocations/request_status", locals: {
+        allocations: @allocations_view.repeat_allocation_statuses,
+        request_type: "repeat",
+      } %>
+    </div>
+  <% end %>
+
+  <% if @allocations_view.initial_allocation_statuses.present? %>
+    <div class="govuk-grid-column-full">
+      <h3 class="govuk-heading-m">New PE courses <%= next_allocation_cycle_period_text %></h3>
+
+      <%= render partial: "publish/providers/allocations/request_status", locals: {
+        allocations: @allocations_view.initial_allocation_statuses,
+        request_type: "initial",
+      } %>
+    </div>
+  <% end %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @training_providers.present? %>
+      <h2 class="govuk-heading-l">
+        Do you want to request PE for any other organisations?
+      </h2>
+    <% end %>
+
+    <p class="govuk-body">
+      <% if @training_providers.present? %>
+        Request fee-funded PE for <%= next_allocation_cycle_period_text %> for any organisations not
+        currently offering this course.
+      <% else %>
+        Select the name of the organisation(s) offering this course.
+      <% end %>
+
+      We’ll need to know how many places each one would like to offer.
+    </p>
+
+    <%= govuk_button_link_to(
+      "Choose an organisation",
+      #initial_request_provider_recruitment_cycle_allocations_path(
+      #   @provider.provider_code,
+      #   @provider.recruitment_cycle_year,
+      # ),
+    ) %>
+
+    <h2 class="govuk-heading-m">
+      Tell us what you think about this process
+    </h2>
+    <p class="govuk-body">
+      <%= govuk_link_to "Take part in our brief survey to help us improve Publish",
+                  "https://forms.gle/4EuNG8XGm3AqavRU9",
+                  class: "govuk-!-font-weight-bold",
+                  target: "_blank" %>
+  </div>
+</div>

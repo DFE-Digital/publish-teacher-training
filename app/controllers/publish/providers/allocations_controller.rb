@@ -24,7 +24,7 @@ module Publish
       end
 
       def training_providers
-        @training_providers ||= (allocations[previous_recruitment_cycle.year.to_i] || []).filter_map { |a|
+        @training_providers ||= (allocations[previous_recruitment_cycle.year.to_s] || []).filter_map { |a|
           a.provider if a.request_type != AllocationsView::RequestType::DECLINED
         }.sort_by(&:provider_name)
       end
