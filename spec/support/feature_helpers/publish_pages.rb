@@ -191,5 +191,9 @@ module FeatureHelpers
     def terms_and_conditions_page
       @terms_and_conditions_page ||= PageObjects::Publish::Terms.new
     end
+
+    def rollover_page
+      @rollover_page ||= PageObjects::Publish::Rollover.new
+    end
   end
 end

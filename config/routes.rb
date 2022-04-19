@@ -41,6 +41,9 @@ Rails.application.routes.draw do
 
   namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
+    get "/rollover", to: "rollover#new", as: :rollover
+    post "/rollover", to: "rollover#create"
+
     get "/accept-terms", to: "terms#edit", as: :accept_terms
     patch "/accept-terms", to: "terms#update"
 

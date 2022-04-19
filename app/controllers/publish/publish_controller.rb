@@ -25,16 +25,18 @@ module Publish
     def check_interrupt_redirects(use_redirect_back_to: true)
       if !current_user.accepted_terms?
         redirect_to publish_accept_terms_path
-        # elsif user_state_to_redirect_paths[user_from_session.aasm.current_state]
-        #   redirect_to user_state_to_redirect_paths[user_from_session.aasm.current_state]
-        # elsif show_rollover_page?
-        #   redirect_to rollover_path
+      elsif show_rollover_page?
+        redirect_to publish_rollover_path
         # elsif show_rollover_recruitment_page?
         #   redirect_to rollover_recruitment_path
       elsif use_redirect_back_to
         redirect_to session[:redirect_back_to] if session[:redirect_back_to].present?
         session.delete(:redirect_back_to)
       end
+    end
+
+    def show_rollover_page?
+      FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") && current_user.current_rollover_acceptance.blank?
     end
   end
 end

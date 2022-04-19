@@ -76,6 +76,11 @@ class User < ApplicationRecord
     accept_terms_date_utc.present?
   end
 
+  def current_rollover_acceptance
+    interrupt_page_acknowledgements
+      .includes(:recruitment_cycle).find_by(page: "rollover", recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
+  end
+
 private
 
   def email_is_lowercase

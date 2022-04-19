@@ -1,0 +1,49 @@
+<% content_for :page_title, "Prepare for the next cycle" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Prepare for the next cycle
+    </h1>
+
+    <p class="govuk-body">
+      Your courses, locations and details have been copied.
+    </p>
+
+    <p class="govuk-body">
+      Courses for the next cycle will be published on <%= l(Settings.next_cycle_open_date) %>.
+    </p>
+
+    <p class="govuk-body">
+      Before then, you can:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-4">
+      <li>add new courses</li>
+      <li>delete courses</li>
+      <li>edit the details of your courses</li>
+    </ul>
+
+    <h2 class="govuk-heading-m">New for the <%= next_recruitment_cycle_period_text %> cycle</h2>
+
+    <p class="govuk-body">
+      All applications will be made via Apply for teaching training, not UCAS.
+    </p>
+
+    <p class="govuk-body">
+      You will need to confirm:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-4">
+      <li>degree requirements</li>
+      <li>GCSE requirements</li>
+      <li>if candidates can get visa sponsorship</li>
+      <li>locations of school placements</li>
+      <li>the <abbr class="app-!-text-decoration-underline-dotted" title="Unique Reference Number">URN</abbr> for each school course location</li>
+      <li>the <abbr class="app-!-text-decoration-underline-dotted" title="UK Provider Reference Number">UKPRN</abbr> for your organisation</li>
+      <li>the <abbr class="app-!-text-decoration-underline-dotted" title="Unique Reference Number">URN</abbr> if your organisation is a lead school</li>
+    </ul>
+
+    <%= govuk_button_to "Continue", publish_rollover_path, method: :post %>
+  </div>
+</div>
