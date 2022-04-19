@@ -7,7 +7,6 @@ feature "Authentication with Personas" do
     given_persona_based_authentication_is_active
     when_i_go_to_sign_in
     then_i_am_given_the_option_to_sign_in_with_a_persona
-    # when_i_sign_in_with_persona
   end
 
   def given_persona_based_authentication_is_active
@@ -21,9 +20,5 @@ feature "Authentication with Personas" do
   def then_i_am_given_the_option_to_sign_in_with_a_persona
     expect(sign_in_page).to have_text("Use Personas to access an account.")
     expect(sign_in_page).to have_link("Sign in using a Persona")
-  end
-
-  def when_i_sign_in_with_persona
-    sign_in_page.sign_in_button.click
   end
 end

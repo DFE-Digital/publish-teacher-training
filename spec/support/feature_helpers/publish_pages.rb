@@ -187,5 +187,13 @@ module FeatureHelpers
     def allocations_page
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
+
+    def publish_providers_show_page
+      @publish_providers_show_page ||= PageObjects::Publish::ProvidersShow.new
+    end
+
+    def publish_providers_index_page
+      @publish_providers_index_page ||= PageObjects::Publish::ProvidersIndex.new
+    end
   end
 end

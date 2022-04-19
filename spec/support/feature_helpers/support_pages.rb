@@ -81,9 +81,5 @@ module FeatureHelpers
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end
-
-    def persona_index_page
-      @personas_page ||= PageObjects::PersonaIndex.new
-    end
   end
 end

@@ -1,6 +1,6 @@
 <% if @provider.accredited_body? %>
   <h2 class="govuk-heading-m">
-    <%= govuk_link_to "Courses as an accredited body", publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, year) %>
+    <%= govuk_link_to "Courses as an accredited body", publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, year), data: { qa: "courses-as-an-accredited-body" } %>
   </h2>
   <p class="govuk-body">Use this section to:</p>
   <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">

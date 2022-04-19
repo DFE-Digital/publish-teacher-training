@@ -6,6 +6,6 @@ module PageObjects
 
     element :page_heading, ".govuk-heading-l"
 
-    element :sign_in_button, '[data-qa="sign-in-using-a-persona"]'
+    element :sign_in_button, '.qa-sign_in_button'
   end
 end

@@ -1,11 +1,7 @@
 <% if provider.accredited_body? %>
   <h2 class="govuk-heading-m">
-  <!-- below link not working? -->
-    <%= govuk_link_to t("allocations_for_pe.#{Allocation.journey_mode}_state_link_text", period: next_allocation_cycle_period_text)
-    #
-    # TODO
-    # publish_provider_recruitment_cycle_allocations_path(provider.provider_code, year)
-    %>
+  <!-- below back link not working? -->
+    <%= govuk_link_to t("allocations_for_pe.#{Allocation.journey_mode}_state_link_text", period: next_allocation_cycle_period_text), publish_provider_recruitment_cycle_allocations_path(provider.provider_code, year), data: { qa: "allocations" } %>
   </h2>
 
   <p class="govuk-body">In this section, you can view:</p>

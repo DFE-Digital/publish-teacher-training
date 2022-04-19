@@ -1,4 +1,4 @@
-<div class="govuk-grid-row">
+<div class="govuk-grid-row" data-qa="admin-search-box">
   <div class="govuk-grid-column-full">
 
     <div class="app-status-box app-status-box--admin">
@@ -23,7 +23,6 @@
                               value: params[:query],
                               class: "govuk-input",
                               data: { qa: "provider-search" } %>
-          <!-- <div id="provider-list" data-provider-list="<%= @hello %>"></div>-->
           <div id="provider-autocomplete"></div>
         </div>
         <%= form.submit "Search", name: nil, class: "govuk-button govuk-!-margin-bottom-0", data: { qa: "find-providers" } %>
@@ -31,5 +30,3 @@
     </div>
   </div>
 </div>
-
-<%#= javascript_pack_tag 'admin_search'%>
