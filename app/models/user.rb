@@ -72,6 +72,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def accepted_terms?
+    accept_terms_date_utc.present?
+  end
+
 private
 
   def email_is_lowercase

@@ -44,6 +44,8 @@ Rails.application.routes.draw do
     get "/organisations", to: "providers#index", as: :root
     get "/providers/search", to: "providers#search"
     get "/providers/suggest", to: "providers#suggest"
+    get "/accept-terms", to: "terms#edit", as: :accept_terms
+    patch "/accept-terms", to: "terms#update"
 
     resources :providers, path: "organisations", param: :code, only: [:show] do
       get "/users", on: :member, to: "users#index"

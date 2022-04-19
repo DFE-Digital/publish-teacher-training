@@ -1,0 +1,74 @@
+<% content_for :page_title, "PE courses for #{next_allocation_cycle_period_text}" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+    old_publish_link_for(
+      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">PE courses for <%= next_allocation_cycle_period_text %></h1>
+
+    <% if @allocations_view.requested_allocations_statuses.any? || @allocations_view.not_requested_allocations_statuses.any? %>
+      <p class="govuk-body">
+        You can no longer request fee-funded PE for <%= next_allocation_cycle_period_text %>.
+        The request window closed on <%= l(Settings.allocations_close_date.to_date, format: :govuk_short) %>.
+      </p>
+
+      <p class="govuk-body">
+        Your requests are set out below. In September, we’ll tell you if they’ve
+        been approved and, if so, how many places have been allocated for each
+        organisation.
+      </p>
+
+      <p class="govuk-body">
+        Also included are current courses that were not requested for <%= next_allocation_cycle_period_text %>.
+      </p>
+
+      <p class="govuk-body">
+        For now, if you have any questions contact <%= bat_contact_mail_to %>.
+      </p>
+
+      <%= render(
+        partial: "publish/providers/allocations/allocation_report/closed_state",
+        locals: {
+          section_heading: "Courses for #{next_allocation_cycle_period_text}",
+          allocations: @allocations_view.requested_allocations_statuses,
+          request_type: "repeat",
+        },
+      ) %>
+
+      <%= render(
+        partial: "publish/providers/allocations/allocation_report/closed_state",
+        locals: {
+          section_heading: "Courses not running in #{next_allocation_cycle_period_text}",
+          allocations: @allocations_view.not_requested_allocations_statuses,
+          request_type: "repeat",
+        },
+      ) %>
+    <% else %>
+      <p class="govuk-body">
+        You did not request fee-funded PE for <%= next_allocation_cycle_period_text %>.
+      </p>
+
+      <p class="govuk-body">
+        Your organisation, and any organisations you’re the accredited body for,
+        will not be offering this course - even if it’s being offered in <%= current_allocation_cycle_period_text %>.
+        You can not run this course in <%= next_allocation_cycle_period_text %> without permission from the Department for Education.
+      </p>
+
+      <p class="govuk-body">
+        If you have any questions, contact <%= bat_contact_mail_to %>.
+      </p>
+    <% end %>
+
+    <h2 class="govuk-heading-m">
+      Tell us what you think about this process
+    </h2>
+    <p class="govuk-body">
+      <%= govuk_link_to "Take part in our brief survey to help us improve Publish", "https://forms.gle/4EuNG8XGm3AqavRU9", class: "govuk-!-font-weight-bold", target: "_blank" %>
+    </p>
+  </div>
+</div>

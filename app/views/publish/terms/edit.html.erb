@@ -1,0 +1,32 @@
+<% content_for :page_title, title_with_error_prefix("Accept Terms and Conditions", @accept_terms_form.errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @accept_terms_form,
+      url: publish_accept_terms_path,
+      method: :patch,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Before you begin</h1>
+      <p class="govuk-body">We need you to read and agree to our terms and conditions.</p>
+      <p class="govuk-body">These set out your responsibilities when publishing content to Publish teacher training courses. This includes making sure your content:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>is relevant to the service and accurate</li>
+        <li>is not offensive, inappropriate or discriminatory</li>
+        <li>belongs to you</li>
+      </ul>
+      <p class="govuk-body">Read our full <%= govuk_link_to "terms and conditions", terms_path %>.</p>
+
+      <hr class="govuk-footer__section-break">
+
+      <%= f.govuk_check_boxes_fieldset :terms_accepted, multiple: false, legend: nil do %>
+        <%= f.govuk_check_box :terms_accepted, 1, 0, link_errors: true, multiple: false, label: { text: "I agree to the terms and conditions" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue", data: { qa: "terms__continue" } %>
+    <% end %>
+  </div>
+</div>

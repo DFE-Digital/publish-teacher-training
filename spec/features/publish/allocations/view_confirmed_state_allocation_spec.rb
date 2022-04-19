@@ -1,25 +1,27 @@
 require "rails_helper"
 
 RSpec.feature "PE allocations" do
-  before do
-    allow(Settings.features.allocations).to receive(:state).and_return("confirmed")
-    allow(Settings).to receive(:allocation_cycle_year).and_return(2022)
-    given_i_am_authenticated(user: user_with_accredited_bodies)
-    and_there_is_a_previous_recruitment_cycle
-  end
-
-  context "when a provider does not have allocations assigned to them" do
-    scenario "an accredited body views PE allocations page" do
-      when_i_visit_allocations_page(accredited_body_with_no_allocation)
-      then_it_has_the_correct_no_allocations_message
+  context "allocations state is confirmed" do
+    before do
+      allow(Settings.features.allocations).to receive(:state).and_return("confirmed")
+      allow(Settings).to receive(:allocation_cycle_year).and_return(2022)
+      given_i_am_authenticated(user: user_with_accredited_bodies)
+      and_there_is_a_previous_recruitment_cycle
     end
-  end
 
-  context "When a provider has allocations assigned to them" do
-    scenario "an accredited body views PE allocations page" do
-      and_an_allocation_exists_assigned_to_accredited_body
-      when_i_visit_allocations_page(accredited_body_with_allocation)
-      then_it_has_the_correct_allocations_content
+    context "when a provider does not have allocations assigned to them" do
+      scenario "an accredited body views PE allocations page" do
+        when_i_visit_allocations_page(accredited_body_with_no_allocation)
+        then_it_has_the_correct_no_allocations_message
+      end
+    end
+
+    context "When a provider has allocations assigned to them" do
+      scenario "an accredited body views PE allocations page" do
+        and_an_allocation_exists_assigned_to_accredited_body
+        when_i_visit_allocations_page(accredited_body_with_allocation)
+        then_it_has_the_correct_allocations_content
+      end
     end
   end
 
@@ -66,7 +68,9 @@ private
   end
 
   def then_it_has_the_correct_no_allocations_message
-    expect(allocations_page).to have_content("You did not request any allocations for fee-funded PE courses for #{next_allocation_cycle_period_text}")
+    expect(allocations_page).to have_content(
+      "You did not request any allocations for fee-funded PE courses for #{next_allocation_cycle_period_text}",
+    )
   end
 
   def then_it_has_the_correct_allocations_content
