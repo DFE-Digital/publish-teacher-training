@@ -16,7 +16,11 @@ module Publish
 
     def suggest
       authorize :provider, :show?
-      @provider_list = providers.map { |provider| { code: provider.provider_code, name: provider.provider_name } }
+
+      @provider_list = providers
+                        .provider_search(params[:query])
+                        .limit(10)
+                        .map { |provider| { code: provider.provider_code, name: provider.provider_name } }
       render json: @provider_list
     end
 
@@ -64,7 +68,7 @@ module Publish
 
       if provider_query.blank?
         flash[:error] = { id: "provider-error", message: "Name or provider code" }
-        return redirect_to organisations_path
+        return redirect_to publish_root_path
       end
 
       provider_code = provider_query
