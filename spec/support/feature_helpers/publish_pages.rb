@@ -194,6 +194,7 @@ module FeatureHelpers
 
     def publish_providers_index_page
       @publish_providers_index_page ||= PageObjects::Publish::ProvidersIndex.new
+    end
 
     def terms_and_conditions_page
       @terms_and_conditions_page ||= PageObjects::Publish::Terms.new
