@@ -10,10 +10,9 @@ module PageObjects
 
         sections :rows, "tbody tr" do
           element :provider_name, '[data-qa="provider-name"]'
-          element :status, "td[:nth-child(1)"
-          element :actions, "td[:nth-child(2)"
           element :allocation_number, '[data-qa="confirmed-places"]'
           element :uplift_number, '[data-qa="uplifts"]'
+          element :total_number, '[data-qa="total"]'
           element :status, '[data-qa="status"]'
         end
       end

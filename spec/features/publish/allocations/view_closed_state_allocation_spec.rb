@@ -11,7 +11,7 @@ RSpec.feature "PE allocations" do
 
     context "when a provider does not have allocations assigned to them" do
       scenario "an accredited body views PE allocations page" do
-        when_i_visit_allocations_page(accredited_body_with_no_allocation)
+        when_i_visit_allocations_page(accredited_body_with_no_allocations)
         then_it_has_the_correct_no_allocations_message
       end
     end
@@ -19,7 +19,7 @@ RSpec.feature "PE allocations" do
     context "When a provider has allocations assigned to them" do
       scenario "an accredited body views PE allocations page" do
         and_an_allocation_exists_assigned_to_accredited_body
-        when_i_visit_allocations_page(accredited_body_with_allocation)
+        when_i_visit_allocations_page(accredited_body_with_allocations)
         then_it_has_the_correct_allocations_content
       end
     end
@@ -35,14 +35,14 @@ private
     @current_recruitment_cycle ||= find_or_create(:recruitment_cycle)
   end
 
-  def accredited_body_with_allocation
+  def accredited_body_with_allocations
     @accredited_body ||= build(:provider, :accredited_body,
                                recruitment_cycle: current_recruitment_cycle)
   end
 
-  def accredited_body_with_no_allocation
-    @accredited_body_with_no_allocation ||= build(:provider, :accredited_body,
-                                                  recruitment_cycle: current_recruitment_cycle)
+  def accredited_body_with_no_allocations
+    @accredited_body_with_no_allocations ||= build(:provider, :accredited_body,
+                                                   recruitment_cycle: current_recruitment_cycle)
   end
 
   def training_provider
@@ -51,7 +51,7 @@ private
 
   def user_with_accredited_bodies
     @user_with_accredited_bodies ||= create(:user, providers:
-      [accredited_body_with_allocation, accredited_body_with_no_allocation])
+      [accredited_body_with_allocations, accredited_body_with_no_allocations])
   end
 
   def next_allocation_cycle_period_text
@@ -82,7 +82,7 @@ private
     @allocation ||= create(
       :allocation,
       :repeat,
-      accredited_body: accredited_body_with_allocation,
+      accredited_body: accredited_body_with_allocations,
       provider: training_provider,
     )
   end
