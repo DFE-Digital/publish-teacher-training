@@ -44,6 +44,9 @@ Rails.application.routes.draw do
     get "/organisations", to: "providers#index", as: :root
     get "/providers/search", to: "providers#search"
     get "/providers/suggest", to: "providers#suggest"
+    get "/rollover", to: "rollover#new", as: :rollover
+    post "/rollover", to: "rollover#create"
+
     get "/accept-terms", to: "terms#edit", as: :accept_terms
     patch "/accept-terms", to: "terms#update"
 
