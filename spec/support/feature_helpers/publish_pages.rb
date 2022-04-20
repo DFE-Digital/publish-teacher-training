@@ -195,5 +195,9 @@ module FeatureHelpers
     def rollover_page
       @rollover_page ||= PageObjects::Publish::Rollover.new
     end
+
+    def rollover_recruitment_page
+      @rollover_recruitment_page ||= PageObjects::Publish::RolloverRecruitment.new
+    end
   end
 end
