@@ -10,7 +10,6 @@ module PageObjects
       element :pagination_pages, ".app-pagination__link-label"
       element :search_input, 'input[id="provider"]'
       element :search_button, '[data-qa="find-providers"]'
-
     end
   end
 end
