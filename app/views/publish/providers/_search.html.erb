@@ -11,7 +11,7 @@
         <div class="govuk-form-group<% if error %> govuk-form-group--error<% end %>">
           <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
             Search for an organisation
-            <span class="govuk-hint">Enter the name or provider code</span>
+            <span class="govuk-hint govuk-!-display-inline">Enter the name or provider code</span>
             <% if error %>
               <span class="govuk-error-message" id="provider-error" data-qa="provider-error">
                 Please enter the name or provider code

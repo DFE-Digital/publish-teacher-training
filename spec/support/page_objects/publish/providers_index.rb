@@ -7,10 +7,10 @@ module PageObjects
 
       element :admin_search_box, '[data-qa="admin-search-box"]'
       element :provider_list, '[data-qa="provider-list"]'
+      element :pagination_pages, ".app-pagination__link-label"
+      element :search_input, 'input[id="provider"]'
+      element :search_button, '[data-qa="find-providers"]'
 
-      # def providers
-      #   page.find_all(".qa-provider_row")
-      # end
     end
   end
 end
