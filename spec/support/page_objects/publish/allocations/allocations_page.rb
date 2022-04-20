@@ -15,6 +15,18 @@ module PageObjects
           element :total_number, '[data-qa="total"]'
           element :status, '[data-qa="status"]'
         end
+
+        sections :repeat_allocations, '[data-qa="repeat-allocations-table"]' do
+          element :provider_name, '[data-qa="provider-name"]'
+          element :status, '[data-qa="status"]'
+          element :actions, '[data-qa="actions"]'
+        end
+
+        sections :initial_allocations, '[data-qa="initial-allocations-table"]' do
+          element :provider_name, '[data-qa="provider-name"]'
+          element :status, '[data-qa="status"]'
+          element :actions, '[data-qa="actions"]'
+        end
       end
     end
   end
