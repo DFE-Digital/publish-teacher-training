@@ -37,7 +37,7 @@ feature "Accepting rollover" do
   end
 
   def then_i_should_be_returned_to_the_publish_service_page
-    expect(page).to have_current_path("/")
+    expect(page).to have_current_path(publish_root_path)
   end
 
   def and_the_user_is_marked_as_accepting_rollover

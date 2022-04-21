@@ -10,7 +10,7 @@ module Publish
       @accept_terms_form = Interruption::AcceptTermsForm.new(current_user, params: accept_term_params)
 
       if @accept_terms_form.save!
-        redirect_to root_path
+        redirect_to publish_root_path
       else
         render :edit
       end

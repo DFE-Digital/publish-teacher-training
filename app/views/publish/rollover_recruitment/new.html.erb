@@ -1,0 +1,20 @@
+<% content_for :page_title, "Recruiting for the #{next_recruitment_cycle_period_text} cycle" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Requesting permission to recruit for the <%= next_recruitment_cycle_period_text %> cycle
+    </h1>
+
+    <p class="govuk-body">
+      You are now able to request permission to recruit for fee-funded PE for the <%= next_recruitment_cycle_period_text %> cycle.
+    </p>
+
+    <p class="govuk-body">
+      You do not need to request permission to recruit in Publish for any courses other than fee-funded PE.
+      Accredited bodies should request fee-funded PE by <%= l(Settings.allocations_close_date) %>.
+    </p>
+
+    <%= govuk_button_to "Continue", publish_rollover_recruitment_path, method: :post %>
+  </div>
+</div>
