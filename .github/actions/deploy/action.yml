@@ -2,8 +2,6 @@ name: deploy
 description: deploys application
 
 inputs:
-  actions-api-access-token:
-    required: true
   arm-access-key:
     required: true
   azure-credentials:
