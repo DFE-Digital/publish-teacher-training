@@ -15,6 +15,7 @@ class Site < ApplicationRecord
 
   audited associated_with: :provider
 
+  has_many :site_statuses, dependent: :destroy
   belongs_to :provider
 
   validates :location_name, uniqueness: { scope: :provider_id }

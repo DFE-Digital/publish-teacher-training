@@ -36,7 +36,7 @@ module Support
     end
 
     def destroy
-      site.discard!
+      site.destroy!
 
       redirect_to support_provider_locations_path(provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
     end
