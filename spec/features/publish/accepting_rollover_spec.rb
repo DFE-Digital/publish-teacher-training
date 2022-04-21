@@ -16,7 +16,7 @@ feature "Accepting rollover" do
   scenario "i can accept the rollover interruption" do
     then_i_am_taken_to_the_rollover_page
     when_i_accept_rollover
-    then_i_should_be_returned_to_the_publish_service_page
+    then_i_should_be_redirected_to_the_providers_show_page
     and_the_user_is_marked_as_accepting_rollover
   end
 
@@ -36,8 +36,8 @@ feature "Accepting rollover" do
     rollover_page.submit.click
   end
 
-  def then_i_should_be_returned_to_the_publish_service_page
-    expect(page).to have_current_path("/")
+  def then_i_should_be_redirected_to_the_providers_show_page
+    expect(publish_providers_show_page).to be_displayed
   end
 
   def and_the_user_is_marked_as_accepting_rollover
