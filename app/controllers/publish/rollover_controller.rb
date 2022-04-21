@@ -9,7 +9,7 @@ module Publish
         page: "rollover",
       )
 
-      redirect_to root_path
+      redirect_to publish_root_path
     end
   end
 end
