@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     get "/providers/suggest", to: "providers#suggest"
     get "/rollover", to: "rollover#new", as: :rollover
     post "/rollover", to: "rollover#create"
+    get "/rollover-recruitment", to: "rollover_recruitment#new", as: :rollover_recruitment
+    post "/rollover-recruitment", to: "rollover_recruitment#create"
 
     get "/accept-terms", to: "terms#edit", as: :accept_terms
     patch "/accept-terms", to: "terms#update"

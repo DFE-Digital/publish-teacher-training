@@ -77,8 +77,11 @@ class User < ApplicationRecord
   end
 
   def current_rollover_acceptance
-    interrupt_page_acknowledgements
-      .includes(:recruitment_cycle).find_by(page: "rollover", recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
+    current_page_acknowledgement_for("rollover")
+  end
+
+  def current_rollover_recruitment_acceptance
+    current_page_acknowledgement_for("rollover_recruitment")
   end
 
 private
@@ -87,5 +90,10 @@ private
     if email.present? && email.downcase != email
       errors.add(:email, "must be lowercase")
     end
+  end
+
+  def current_page_acknowledgement_for(page)
+    interrupt_page_acknowledgements
+      .includes(:recruitment_cycle).find_by(page: page, recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
   end
 end

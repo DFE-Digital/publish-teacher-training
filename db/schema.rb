@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_10_150031) do
+ActiveRecord::Schema.define(version: 2022_04_21_115255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
@@ -331,8 +331,6 @@ ActiveRecord::Schema.define(version: 2022_01_10_150031) do
     t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
-    t.index ["provider_id", "code"], name: "idx_site_code_discarded_at_not_null", where: "(discarded_at IS NOT NULL)"
-    t.index ["provider_id", "code"], name: "idx_site_code_discarded_at_null", where: "(discarded_at IS NULL)"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
   end
 

@@ -27,7 +27,7 @@ module Publish
       context "different site_ids to course site_ids" do
         let(:params) { { site_ids: provider.site_ids } }
 
-        let(:updated_site_names) { provider.sites.map(&:location_name) }
+        let(:updated_site_names) { provider.sites.order(:location_name).map(&:location_name) }
 
         it "calls the course sites updated notification service" do
           expect(NotificationService::CourseSitesUpdated).to receive(:call)
