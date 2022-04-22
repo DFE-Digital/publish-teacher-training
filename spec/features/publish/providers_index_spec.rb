@@ -1,32 +1,32 @@
 require "rails_helper"
 
 feature "Providers index" do
-  context "user with multiple accredited bodies" do
-    let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
-    let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-    let(:accredited_body1) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-    let(:user) { create(:user, providers: [accredited_body, accredited_body1]) }
-
-    scenario "view page as Mary" do
-      given_i_am_authenticated(user: user)
-      when_i_visit_the_publish_providers_index_page
-      i_should_see_the_provider_list
-      i_should_not_see_the_admin_search_box
-    end
+  scenario "view page as Mary - multi provider user" do
+    given_i_am_authenticated_as_a_multi_provider_user
+    when_i_visit_the_publish_providers_index_page
+    i_should_see_the_provider_list
+    i_should_not_see_the_admin_search_box
   end
 
-  context "admin user" do
-    let(:user) { create(:user, :admin) }
+  scenario "view page as Colin - admin user" do
+    given_i_am_authenticated_as_an_admin_user
+    and_there_are_providers
+    when_i_visit_the_publish_providers_index_page
+    i_should_see_the_provider_list
+    i_should_see_the_admin_search_box
+    i_should_see_the_pagination_link
+    i_can_search_with_provider_details
+  end
 
-    scenario "view page as Colin" do
-      given_i_am_authenticated(user: user)
-      and_there_are_providers
-      when_i_visit_the_publish_providers_index_page
-      i_should_see_the_provider_list
-      i_should_see_the_admin_search_box
-      i_should_see_the_pagination_link
-      i_can_search_with_provider_details
-    end
+  def given_i_am_authenticated_as_a_multi_provider_user
+    current_recruitment_cycle = find_or_create(:recruitment_cycle)
+    accredited_body = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle)
+    accredited_body1 = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle)
+    given_i_am_authenticated(user: create(:user, providers: [accredited_body, accredited_body1]))
+  end
+
+  def given_i_am_authenticated_as_an_admin_user
+    given_i_am_authenticated(user: create(:user, :admin))
   end
 
   def i_can_search_with_provider_details

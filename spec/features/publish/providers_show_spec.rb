@@ -3,36 +3,34 @@
 require "rails_helper"
 
 feature "Providers show" do
-  context "user with single provider" do
-    let(:user) { create(:user, :with_provider) }
-
-    scenario "view page as Anne" do
-      given_i_am_authenticated(user: user)
-      when_i_visit_the_publish_providers_show_page
-      i_should_see_the_organisations_link
-      i_should_see_the_locations_link
-      i_should_see_the_courses_link
-      i_should_see_the_users_partial
-      i_should_not_see_the_accredited_courses_link
-      i_should_not_see_the_allocations_link
-    end
+  scenario "view page as Anne - user with single provider" do
+    given_i_am_authenticated_as_a_provider_user
+    when_i_visit_the_publish_providers_show_page
+    i_should_see_the_organisations_link
+    i_should_see_the_locations_link
+    i_should_see_the_courses_link
+    i_should_see_the_users_partial
+    i_should_not_see_the_accredited_courses_link
+    i_should_not_see_the_allocations_link
   end
 
-  context "user with accredited body" do
-    let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
-    let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-    let(:user) { create(:user, providers: [accredited_body]) }
+  scenario "view page as Susy - user with accredited body" do
+    given_i_am_authenticated_as_an_accredited_body_user
+    when_i_visit_the_publish_providers_show_page
+    i_should_see_the_organisations_link
+    i_should_see_the_locations_link
+    i_should_see_the_courses_link
+    i_should_see_the_users_partial
+    i_should_see_the_accredited_courses_link
+    i_should_see_the_allocations_link
+  end
 
-    scenario "view page as Susy" do
-      given_i_am_authenticated(user: user)
-      when_i_visit_the_publish_providers_show_page
-      i_should_see_the_organisations_link
-      i_should_see_the_locations_link
-      i_should_see_the_courses_link
-      i_should_see_the_users_partial
-      i_should_see_the_accredited_courses_link
-      i_should_see_the_allocations_link
-    end
+  def given_i_am_authenticated_as_a_provider_user
+    given_i_am_authenticated(user: create(:user, :with_provider))
+  end
+
+  def given_i_am_authenticated_as_an_accredited_body_user
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
   end
 
   def when_i_visit_the_publish_providers_show_page
