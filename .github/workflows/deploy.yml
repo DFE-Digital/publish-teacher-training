@@ -32,7 +32,6 @@ jobs:
         id: deploy_app
         uses: ./.github/actions/deploy/
         with:
-          actions-api-access-token: ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
           arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', github.event.inputs.environment)] }}
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
           environment: ${{ github.event.inputs.environment }}
