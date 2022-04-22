@@ -20,7 +20,7 @@ module Publish
           render :new
         elsif other_selected_with_no_autocompleted_code?(code)
           redirect_to(
-            search_new_provider_recruitment_cycle_courses_accredited_body_path(
+            search_new_publish_provider_recruitment_cycle_courses_accredited_body_path(
               query: @accredited_body,
               course: course_params,
             ),
@@ -32,6 +32,8 @@ module Publish
       end
 
       def search_new
+        authorize(provider, :can_create_course?)
+
         # These are not before_action hooks as they conflict with hooks
         # defined within the CourseBasicDetailConcern and cannot be overridden
         # without causing failures in other routes in this controller
@@ -39,9 +41,7 @@ module Publish
         build_provider
         build_previous_course_creation_params
         @query = params[:query]
-        @provider_suggestions = ProviderSuggestion.suggest_any_accredited_body(@query)
-      rescue JsonApiClient::Errors::ClientError => e
-        @errors = e
+        @provider_suggestions = recruitment_cycle.providers.with_findable_courses.provider_search(@query).limit(10)
       end
 
       def update
@@ -65,9 +65,7 @@ module Publish
       def search
         build_course
         @query = params[:query]
-        @provider_suggestions = ProviderSuggestion.suggest_any_accredited_body(@query)
-      rescue JsonApiClient::Errors::ClientError => e
-        @errors = e
+        @provider_suggestions = recruitment_cycle.providers.with_findable_courses.provider_search(@query).limit(10)
       end
 
     private

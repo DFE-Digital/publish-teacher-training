@@ -33,6 +33,7 @@ module Publish
             :accredited_body_code,
           )
           .permit(
+            :start_date,
             :applications_open_from,
             :day,
             :month,
