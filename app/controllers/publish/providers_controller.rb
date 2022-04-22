@@ -81,10 +81,6 @@ module Publish
 
   private
 
-    def provider
-      @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])
-    end
-
     def providers
       @providers ||= if current_user.admin?
                        RecruitmentCycle.current.providers
