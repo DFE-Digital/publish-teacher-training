@@ -3,8 +3,7 @@ module Publish
     def show
       authorize provider, :show?
 
-      # @recruitment_cycle = RecruitmentCycle.find_by(year: params[:year])
-      @recruitment_cycle = recruitment_cycle
+      @recruitment_cycle = RecruitmentCycle.find_by(year: params[:year])
       @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])
 
       unless @provider.rolled_over?
