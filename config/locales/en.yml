@@ -423,8 +423,8 @@ en:
   pagy:
     overflow: "The requested page param was out of range and invalid for this request."
   success:
-    published: "Your changes have been published."
-    saved: "Your changes have been saved."
+    published: "Your changes have been published"
+    saved: "Your changes have been saved"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"
