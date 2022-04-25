@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate
 
   include Pundit::Authorization
+  include Pagy::Backend
 
   before_action :enforce_basic_auth, if: -> { BasicAuthenticable.required? }
 

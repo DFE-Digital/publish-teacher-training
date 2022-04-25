@@ -1,7 +1,6 @@
 {
   "name": "teacher-training-api",
   "private": true,
-
   "engines": {
     "node": "16.x"
   },
@@ -11,7 +10,7 @@
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.1",
     "@rails/webpacker": "^5.4.3",
-    "accessible-autocomplete": "^2.0.3",
+    "accessible-autocomplete": "^2.0.4",
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.9.1",
     "govuk-frontend": "^3.9.1",

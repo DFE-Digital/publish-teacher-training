@@ -1,0 +1,17 @@
+<% if provider.accredited_body? %>
+  <h2 class="govuk-heading-m">
+  <!-- below back link not working? -->
+    <%= govuk_link_to t("allocations_for_pe.#{Allocation.journey_mode}_state_link_text", period: next_allocation_cycle_period_text), publish_provider_recruitment_cycle_allocations_path(provider.provider_code, year), data: { qa: "allocations" } %>
+  </h2>
+
+  <p class="govuk-body">In this section, you can view:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <% if Allocation.journey_mode == "confirmed" %>
+      <li><%= next_allocation_cycle_period_text %> allocations for your own fee-funded PE courses</li>
+      <li><%= next_allocation_cycle_period_text %> allocations for fee-funded PE courses you’re the accredited body for</li>
+    <% else %>
+      <li>your own courses</li>
+      <li>courses you’re the accredited body for (you must request these on behalf of training partners)</li>
+    <% end %>
+  </ul>
+<% end %>

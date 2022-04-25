@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   namespace :publish, as: :publish do
     get "/organisations", to: "providers#index", as: :root
+    get "/providers/search", to: "providers#search"
+    get "/providers/suggest", to: "providers#suggest"
     get "/rollover", to: "rollover#new", as: :rollover
     post "/rollover", to: "rollover#create"
     get "/rollover-recruitment", to: "rollover_recruitment#new", as: :rollover_recruitment
@@ -49,7 +51,7 @@ Rails.application.routes.draw do
     get "/accept-terms", to: "terms#edit", as: :accept_terms
     patch "/accept-terms", to: "terms#update"
 
-    resources :providers, path: "organisations", param: :code, only: [] do
+    resources :providers, path: "organisations", param: :code, only: [:show] do
       get "/users", on: :member, to: "users#index"
       get "/request-access", on: :member, to: "providers/access_requests#new"
       post "/request-access", on: :member, to: "providers/access_requests#create"

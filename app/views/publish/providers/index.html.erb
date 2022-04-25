@@ -4,6 +4,14 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= govuk_link_to 'Click here to view', "#{Settings.publish_url}/organisations"  %>
+    <% if current_user.present? && current_user["admin"] %>
+      <%= render partial: "publish/providers/search" %>
+    <% end %>
+
+    <ul class="govuk-list" data-qa="provider-list">
+      <%= render partial: "publish/providers/provider", collection: @providers %>
+    </ul>
+
+    <%= pagy_govuk_nav(@pagy).html_safe %>
   </div>
 </div>

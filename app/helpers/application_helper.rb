@@ -1,5 +1,9 @@
 module ApplicationHelper
-  # include Pagy::Frontend
+  include Pagy::Frontend
+
+  def pagy_govuk_nav(pagy)
+    render "pagy/paginator", pagy: pagy
+  end
 
   def header_items(current_user)
     return unless current_user
@@ -7,10 +11,6 @@ module ApplicationHelper
     items = [{ name: t("header.items.sign_out"), url: sign_out_path }]
     items
   end
-
-  # def pagy_govuk_nav(pagy)
-  #   render "pagy/paginator", pagy: pagy
-  # end
 
   # rubocop:disable Rails/HelperInstanceVariable
   # TODO: refactor enrichment_error_link method to not use an instance variable

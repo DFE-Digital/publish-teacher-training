@@ -60,7 +60,7 @@ module Publish
       def build_recruitment_cycle
         cycle_year = params.fetch(
           :recruitment_cycle_year,
-          Settings.current_cycle,
+          Settings.current_recruitment_cycle_year,
         )
 
         @recruitment_cycle = RecruitmentCycle.find_by(year: cycle_year)

@@ -188,6 +188,14 @@ module FeatureHelpers
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
 
+    def publish_providers_show_page
+      @publish_providers_show_page ||= PageObjects::Publish::ProvidersShow.new
+    end
+
+    def publish_providers_index_page
+      @publish_providers_index_page ||= PageObjects::Publish::ProvidersIndex.new
+    end
+
     def terms_and_conditions_page
       @terms_and_conditions_page ||= PageObjects::Publish::Terms.new
     end

@@ -32,6 +32,14 @@ class Allocation < ApplicationRecord
     )
   end
 
+  def self.journey_mode
+    {
+      "open" => "open",
+      "closed" => "closed",
+      "confirmed" => "confirmed",
+    }.fetch(Settings.features.allocations.state, "open")
+  end
+
 private
 
   def accredited_body_is_an_accredited_body
