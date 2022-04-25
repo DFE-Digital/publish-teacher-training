@@ -11,6 +11,15 @@ module Publish
       super
     end
 
+    def save_action
+      model.transaction do
+        assign_attributes_to_model
+        update_site_statuses
+        after_successful_save_action
+        true
+      end
+    end
+
   private
 
     attr_reader :previous_site_names
@@ -27,6 +36,15 @@ module Publish
 
     def updated_site_names
       @updated_site_names ||= course.sites.map(&:location_name)
+    end
+
+    def update_site_statuses
+      model.site_statuses.each do |site_status|
+        site_status.update!(
+          publish: :published,
+          status: :running,
+        )
+      end
     end
 
     def compute_fields
