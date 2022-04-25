@@ -83,7 +83,6 @@
         max_words: 250,
         rows: 15) %>
 
-      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.changes_ttl")) %>
       <%= f.govuk_submit "Save and publish changes" %>
     <% end %>
   </div>
