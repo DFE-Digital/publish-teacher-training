@@ -14,7 +14,7 @@ module Publish
 
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
         if @course_study_mode_form.save!
-          flash[:success] = I18n.t("success.saved")
+          flash[:success] = I18n.t("success.value_published", value: "full or part time")
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

@@ -28,7 +28,7 @@ module Publish
 
         @course_location_form = CourseLocationForm.new(@course, params: location_params)
         if @course_location_form.save!
-          success_message = @course.is_running? ? "Course locations saved and published" : "Course locations saved"
+          success_message = @course.is_running? ? I18n.t("success.value_published", value: "course locations") : "Course locations saved"
           flash[:success] = success_message
 
           redirect_to publish_provider_recruitment_cycle_course_path(

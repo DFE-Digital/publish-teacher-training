@@ -424,6 +424,8 @@ en:
     overflow: "The requested page param was out of range and invalid for this request."
   success:
     published: "Your changes have been published"
+    value_published: "Changes to %{value} published"
+    value_saved: "Changes to %{value} saved"
     saved: "Your changes have been saved"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
   links:
