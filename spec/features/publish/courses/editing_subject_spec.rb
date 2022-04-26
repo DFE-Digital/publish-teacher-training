@@ -34,7 +34,7 @@ feature "updating a subject" do
 private
 
   def and_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.saved"))
+    expect(page).to have_content(I18n.t("success.value_published", value: "secondary subject"))
   end
 
   def given_i_am_authenticated_as_a_provider_user

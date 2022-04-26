@@ -51,7 +51,7 @@ feature "Editing course study mode" do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.saved"))
+    expect(page).to have_content(I18n.t("success.value_published", value: "full or part time"))
   end
 
   def and_the_course_study_mode_is_updated
