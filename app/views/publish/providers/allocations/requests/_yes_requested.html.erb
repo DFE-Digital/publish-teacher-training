@@ -1,0 +1,40 @@
+<% content_for :page_title, "Request Sent" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_panel(
+      title_text: "Request sent",
+      text: "You’ve confirmed that #{@allocation.provider.provider_name} would like to offer PE in #{next_allocation_cycle_period_text}.",
+      classes: "govuk-!-margin-bottom-6",
+      html_attributes: {
+        data: { qa: "page-heading" },
+      },
+    ) %>
+    <h2 class="govuk-heading-m">What happens now?</h2>
+    <p class="govuk-body">
+      You have until <%= Settings.allocations_close_date.to_s(:govuk_short) %> to
+      change this request. After this date,  we’ll send an email to your
+      organisation confirming your choice and setting out next steps.
+    </p>
+    <h2 class="govuk-heading-m">
+      How many places will be allocated?
+    </h2>
+    <p class="govuk-body">
+      In September we'll let you know how many places we've allocated for this course.
+      <% unless @allocation.initial? %>
+        This will be based on the organisation's allocation for <%= current_allocation_cycle_period_text %>.
+      <% end %>
+    </p>
+
+    <p class="govuk-body">
+      If you have any questions, contact <%= bat_contact_mail_to %>.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+        "Return to Request PE courses for #{next_allocation_cycle_period_text}",
+        publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      ) %>
+    </p>
+  </div>
+</div>

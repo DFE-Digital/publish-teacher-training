@@ -44,6 +44,8 @@ class AllocationPolicy
     user_is_admin_or_belongs_to_accredited_body?
   end
 
+  alias_method :initial_request?, :index?
+
 private
 
   def user_belongs_to_the_accredited_body?

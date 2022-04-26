@@ -178,7 +178,11 @@ Rails.application.routes.draw do
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
 
-          resources :allocations, only: %i[index], on: :member, param: :training_provider_code
+            member do
+              post :create
+              get :show
+            end
+          end
         end
       end
     end

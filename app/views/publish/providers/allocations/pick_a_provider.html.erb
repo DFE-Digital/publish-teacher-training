@@ -1,0 +1,67 @@
+<% content_for :page_title, "Pick a provider" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(initial_request_publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @recruitment_cycle.year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Pick a provider</h1>
+
+    <p class="govuk-body">You searched for ‘<%= params[:training_provider_query] %>’</p>
+    <p class="govuk-body">We found these providers which matched your search:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <% training_providers.each do |training_provider| %>
+        <li>
+          <% allocation = @recruitment_cycle.allocations.find_by(accredited_body: @provider, provider: training_provider) %>
+          <% if allocation.present? %>
+            <%= govuk_link_to(
+              "#{training_provider.provider_name} (#{training_provider.provider_code})",
+              edit_provider_recruitment_cycle_allocation_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                training_provider.provider_code,
+                id: allocation.id,
+              ),
+            ) %>
+          <% else %>
+            <%= govuk_link_to(
+              "#{training_provider.provider_name} (#{training_provider.provider_code})",
+              initial_request_publish_provider_recruitment_cycle_allocations_path(
+                training_provider_code: training_provider.provider_code,
+              ),
+            ) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+    <%= govuk_details(summary_text: "Try another provider") do %>
+      <%= form_with(
+        url: initial_request_publish_provider_recruitment_cycle_allocations_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          training_provider_code: params[:training_provider_code],
+        ),
+        skip_enforcing_utf8: true,
+        method: :get,
+        builder: GOVUKDesignSystemFormBuilder::FormBuilder,
+      ) do |f| %>
+
+        <%= f.hidden_field :training_provider_code, value: "-1" %>
+
+        <div class="govuk-form-group">
+          <%= f.govuk_text_field :training_provider_query, label: { text: "Organisation name" } %>
+          <div id="provider-autocomplete"></div>
+        </div>
+
+        <%= f.govuk_submit "Search again" %>
+      <% end %>
+    <% end %>
+
+    <p class="govuk-body">To add a new provider to Publish, you should contact <%= bat_contact_mail_to %></p>
+  </div>
+</div>

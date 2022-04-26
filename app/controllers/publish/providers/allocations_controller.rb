@@ -9,7 +9,64 @@ module Publish
         )
       end
 
+      def create
+        service = Allocations::Create.new(allocation_params.merge(accredited_body_id: provider.id, request_type: get_request_type(allocation_params)))
+
+        authorize service.object
+
+        @allocation = Publish::RepeatRequestForm.new(request_type: params[:request_type])
+
+        if @allocation.valid? && service.execute
+
+          redirect_to publish_provider_recruitment_cycle_allocation_path(id: service.object.id)
+        else
+          render :new_repeat_request
+        end
+      end
+
+      def show
+        @allocation = Allocation.find(params[:id])
+        provider
+
+        authorize @allocation
+      end
+
+      def initial_request
+        authorize(Allocation)
+
+        provider
+        flow = InitialRequestFlow.new(params: params)
+
+        if request.post? && flow.valid? && flow.redirect?
+          redirect_to flow.redirect_path
+        else
+          render flow.template, locals: flow.locals
+        end
+      end
+
     private
+
+      def allocation_params
+        params.except(:authenticity_token, :training_provider_code, :on, :provider_code, :recruitment_cycle_year).permit(
+          :number_of_places,
+          :request_type,
+        ).merge(
+          provider: recruitment_cycle.providers.find_by(provider_code: params[:training_provider_code]),
+        )
+      end
+
+      def get_request_type(permitted_params)
+        return permitted_params[:request_type] if permitted_params[:request_type].present?
+
+        case permitted_params[:number_of_places]
+        when "0"
+          "declined"
+        when nil
+          "repeat"
+        else
+          "initial"
+        end
+      end
 
       def previous_recruitment_cycle
         @previous_recruitment_cycle ||= recruitment_cycle.previous
