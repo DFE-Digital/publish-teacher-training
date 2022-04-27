@@ -1,0 +1,23 @@
+#!/bin/bash
+set -eu
+
+CF_ORG_NAME='dfe'
+SPACE=$1
+POSTGRES_DATABASE_NAME=$2
+BACKUP_ARCHIVE_FILENAME=$3
+
+if [[ -z "${SPACE}" ]]; then
+  echo "SPACE environment variable not set"
+  exit 1
+fi
+
+BACKUP_FILENAME=$(tar -xvzf "${BACKUP_ARCHIVE_FILENAME}")
+
+if [[ ! -f "${BACKUP_FILENAME}" ]]; then
+  echo "${BACKUP_FILENAME} does not exist."
+  exit 1
+else
+  echo "Restoring ${BACKUP_FILENAME} to ${POSTGRES_DATABASE_NAME} in ${CF_ORG_NAME}/${SPACE}"
+  cf target -o "${CF_ORG_NAME}" -s "${SPACE}"
+  cf conduit ${POSTGRES_DATABASE_NAME} -- psql < "${BACKUP_FILENAME}"
+fi
