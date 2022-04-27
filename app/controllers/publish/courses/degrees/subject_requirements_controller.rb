@@ -20,7 +20,7 @@ module Publish
           @subject_requirements_form = SubjectRequirementForm.new(subject_requirements_params)
 
           if @subject_requirements_form.save(@course)
-            flash[:success] = I18n.t("success.saved")
+            flash[:success] = I18n.t("success.value_published", value: "degree requirements")
 
             redirect_to publish_provider_recruitment_cycle_course_path
           else
