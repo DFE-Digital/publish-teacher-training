@@ -10,7 +10,7 @@
       <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
       <% if current_user.associated_with_accredited_body? %>
-        <% header.navigation_item(text: "Notifications", href: old_publish_notifications_path, active: current_page?(old_publish_notifications_path)) %>
+        <% header.navigation_item(text: "Notifications", href: publish_notifications_path, active: current_page?(publish_notifications_path)) %>
       <% end %>
       <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
       <% header.navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>

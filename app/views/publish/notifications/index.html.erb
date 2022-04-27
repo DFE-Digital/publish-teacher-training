@@ -1,0 +1,41 @@
+<% content_for :page_title, title_with_error_prefix("Manage notifications", @notification_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@notifications_view.back_link_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @notification_form,
+      url: publish_notification_path(current_user.id),
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l" data-qa="page-heading">
+        <span class="govuk-caption-l">Notifications for accredited bodies</span>
+        Changes to courses
+      </h1>
+
+      <p class="govuk-body">
+        We’ll tell you when a training provider:
+      </p>
+      <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-6">
+        <li>publishes a new course on Find postgraduate teacher training</li>
+        <li>makes a change to an existing course</li>
+        <li>withdraws a course</li>
+        <li>changes the vacancy status of a course</li>
+      </ul>
+
+      <%= f.hidden_field :provider_code, value: @notifications_view.provider_code %>
+
+      <%= f.govuk_radio_buttons_fieldset(:explicitly_enabled, legend: { text: "Would you like to receive email notifications?", size: "m" }) do %>
+        <%= f.govuk_radio_button(:explicitly_enabled, true, label: { text: "Yes, send me notifications" }, link_errors: true) %>
+        <%= f.govuk_radio_button(:explicitly_enabled, false, label: { text: "No" }) %>
+      <% end %>
+
+      <%= f.govuk_submit "Save", data: { qa: "notifications__save" } %>
+    <% end %>
+  </div>
+</div>
