@@ -188,8 +188,8 @@ module FeatureHelpers
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
 
-    def allocations_show_page
-      @allocations_show_page ||= PageObjects::Publish::Allocations::AllocationsShowPage.new
+    def publish_allocations_show_page
+      @publish_allocations_show_page ||= PageObjects::Publish::Allocations::AllocationsShowPage.new
     end
 
     def who_are_you_requesting_a_course_for_page

@@ -367,6 +367,6 @@ RSpec.feature "PE allocations" do
   end
 
   def then_i_see_confirmation_page
-    expect(allocations_show_page.page_heading).to have_content("Request sent")
+    expect(publish_allocations_show_page.page_heading).to have_content("Request sent")
   end
 end
