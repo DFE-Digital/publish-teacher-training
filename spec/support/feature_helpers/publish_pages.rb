@@ -188,6 +188,26 @@ module FeatureHelpers
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
 
+    def allocations_show_page
+      @allocations_show_page ||= PageObjects::Publish::Allocations::AllocationsShowPage.new
+    end
+
+    def who_are_you_requesting_a_course_for_page
+      @who_are_you_requesting_a_course_for_page ||= PageObjects::Publish::Allocations::Request::WhoAreYouRequestingACourseForPage.new
+    end
+
+    def number_of_places_page
+      @number_of_places_page ||= PageObjects::Publish::Allocations::Request::NumberOfPlacesPage.new
+    end
+
+    def check_your_info_page
+      @check_your_info_page ||= PageObjects::Publish::Allocations::Request::CheckYourInfoPage.new
+    end
+
+    def pick_a_provider_page
+      @pick_a_provider_page ||= PageObjects::Publish::Allocations::Request::PickAProviderPage.new
+    end
+
     def publish_providers_show_page
       @publish_providers_show_page ||= PageObjects::Publish::ProvidersShow.new
     end

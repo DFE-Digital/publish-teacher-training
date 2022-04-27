@@ -9,6 +9,7 @@ class InitialRequestFlow
     @params = params
   end
 
+  # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def template
     if check_your_information_page?
       "publish/providers/allocations/check_your_information"
@@ -22,7 +23,9 @@ class InitialRequestFlow
       "publish/providers/allocations/initial_request"
     end
   end
+  # rubocop:enable Lint/DuplicateBranch: Duplicate branch body detected
 
+  # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def locals
     if number_of_places_page? || check_your_information_page?
       {
@@ -47,6 +50,7 @@ class InitialRequestFlow
       }
     end
   end
+  # rubocop:enable Lint/DuplicateBranch: Duplicate branch body detected
 
   def redirect?
     return false if valid_number_of_places?

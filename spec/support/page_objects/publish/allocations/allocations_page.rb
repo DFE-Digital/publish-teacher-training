@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../../sections/errorlink"
-
 module PageObjects
   module Publish
     module Allocations
@@ -27,6 +25,8 @@ module PageObjects
           element :status, '[data-qa="status"]'
           element :actions, '[data-qa="actions"]'
         end
+
+        element :choose_an_organisation, ".govuk-button", text: "Choose an organisation"
       end
     end
   end

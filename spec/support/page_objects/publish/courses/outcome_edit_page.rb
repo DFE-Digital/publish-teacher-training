@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../sections/errorlink"
-require_relative "../../sections/qualification"
+require_relative "../../sections/radio_button"
 
 module PageObjects
   module Publish
@@ -11,7 +11,7 @@ module PageObjects
 
         sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
-        sections :qualifications, Sections::Qualification, ".govuk-radios__item"
+        sections :qualifications, Sections::RadioButton, ".govuk-radios__item"
 
         element :qts, "#course_qualification_qts"
         element :pgce_with_qts, "#course_qualification_pgce_with_qts"
