@@ -24,7 +24,7 @@
         <%= f.govuk_radio_button :degree_grade_required, false, label: { text: "No" }, data: { qa: "start__no_radio" } %>
       <% end %>
 
-      <%= f.govuk_submit "Continue", data: { qa: "start__save" } %>
+      <%= f.govuk_submit @course.is_primary? ? "Save" : "Continue", data: { qa: "start__save" } %>
     <% end %>
   </div>
 </div>

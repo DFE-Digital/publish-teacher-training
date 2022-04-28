@@ -18,7 +18,7 @@ module Publish
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
         if @gcse_requirements_form.save(course)
-          flash[:success] = I18n.t("success.saved")
+          flash[:success] = @course.is_published? ? I18n.t("success.value_published", value: "gcse requirements") : I18n.t("success.value_saved", value: "gcse requirements")
 
           redirect_to publish_provider_recruitment_cycle_course_path
         else

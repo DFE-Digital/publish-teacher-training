@@ -31,7 +31,7 @@
 
      <%= render partial: "publish/courses/gcse_requirements", locals: { f: f, course_object: @source_course ? source_course : @course } %>
 
-      <%= f.submit "Save", class: "govuk-button", data: { qa: "gcse_requirements__save" } %>
+      <%= f.submit @course.is_published? ? "Save and publish" : "Save", class: "govuk-button", data: { qa: "gcse_requirements__save" } %>
     <% end %>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">

@@ -16,7 +16,7 @@ module Publish
           @start_form = DegreeStartForm.new(degree_grade_required: grade_required_params)
 
           if course.is_primary? && @start_form.save(course)
-            flash[:success] = I18n.t("success.value_published", value: "minimum degree classification")
+            flash[:success] = I18n.t("success.value_saved", value: "minimum degree classification")
 
             redirect_to publish_provider_recruitment_cycle_course_path
           elsif @start_form.save(course)

@@ -28,7 +28,9 @@ module Publish
           )
 
         elsif course_subjects_form.save!
-          flash[:success] = I18n.t("success.value_published", value: "secondary subject")
+          value = @course.is_primary? ? "primary subject" : "secondary subject"
+          flash[:success] = @course.is_published? ? I18n.t("success.value_published", value: value) : I18n.t("success.value_saved", value: value)
+
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
