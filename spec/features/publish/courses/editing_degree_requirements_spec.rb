@@ -209,7 +209,7 @@ feature "Editing degree requirements" do
   end
 
   def then_i_should_see_a_success_message(value)
-    expect(page).to have_content I18n.t("success.value_published", value: value)
+    expect(page).to have_content I18n.t("success.value_saved", value: value)
   end
 
   def and_the_additional_requirements_are_updated
