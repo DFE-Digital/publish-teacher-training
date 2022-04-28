@@ -234,15 +234,6 @@ RSpec.feature "PE allocations" do
     @current_recruitment_cycle ||= find_or_create(:recruitment_cycle)
   end
 
-  def accredited_body
-    @accredited_body ||= build(:provider, :accredited_body,
-                               recruitment_cycle: current_recruitment_cycle)
-  end
-
-  def given_i_am_signed_in_as_a_user_from_the_accredited_body
-    signed_in_user(provider: accredited_body)
-  end
-
   def training_provider
     @training_provider ||= create(:provider, provider_name: "Acme SCITT", recruitment_cycle: current_recruitment_cycle)
   end
