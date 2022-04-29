@@ -723,7 +723,6 @@ private
   end
 
   def latest_enrichment
-   # enrichments.max_by(&:created_at)
     enrichments.order(created_at: :desc).first
   end
 

@@ -37,7 +37,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save", data: { qa: "course__save" } %>
+      <%= f.govuk_submit course.only_published? ? "Save and publish" : "Save", data: { qa: "course__save" } %>
     <% end %>
   </div>
 </div>
