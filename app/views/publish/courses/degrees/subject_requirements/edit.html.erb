@@ -31,7 +31,8 @@
 
       <%= render partial: "publish/courses/degrees/additional_degree_subject_requirements", locals: { f: f, course_object: @source_course ? source_course : @course } %>
 
-      <%= f.govuk_submit @course.is_running? ? "Save and publish" : "Save", data: { qa: "degree_subject_requirements__save" } %>
+      <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save", data: { qa: "degree_subject_requirements__save" } %>
+
     <% end %>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
