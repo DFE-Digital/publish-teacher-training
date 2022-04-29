@@ -19,7 +19,7 @@
 
       <%= render 'form_fields', form: form %>
 
-      <%= form.submit course.only_published? ? "Save and publish" : "Save",
+      <%= form.submit course.is_published? ? "Save and publish" : "Save",
         class: "govuk-button", data: { qa: 'course__save' }
       %>
     <% end %>

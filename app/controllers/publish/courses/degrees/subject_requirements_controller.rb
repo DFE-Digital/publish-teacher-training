@@ -21,7 +21,6 @@ module Publish
 
           if @subject_requirements_form.save(@course)
             flash_message("degree requirements")
-            #flash[:success] = @course.is_published? ? I18n.t("success.value_published", value: "degree requirements") : I18n.t("success.value_saved", value: "degree requirements")
 
             redirect_to publish_provider_recruitment_cycle_course_path
           else

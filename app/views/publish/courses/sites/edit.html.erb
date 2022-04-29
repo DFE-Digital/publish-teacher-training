@@ -45,7 +45,7 @@
        <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.only_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
     <% end %>
   </div>
 </div>

@@ -15,7 +15,8 @@ module Publish
         return render :edit if @errors.present?
 
         if @course.update(course_params)
-          flash[:success] = @course.is_published? ? I18n.t("success.value_published", value: "course outcome") : I18n.t("success.value_saved", value: "course outcome")
+          details_flash_message("course outcome")
+
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,

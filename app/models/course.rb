@@ -723,8 +723,10 @@ private
   end
 
   def latest_enrichment
-    if enrichments.count == 1
-      enrichments.order(created_at: :desc).first
+    return if enrichments.empty?
+
+    if enrichments.last.created_at.nil?
+      enrichments.last
     else
       enrichments.max_by(&:created_at)
     end
