@@ -723,7 +723,11 @@ private
   end
 
   def latest_enrichment
-    enrichments.order(created_at: :desc).first
+    if enrichments.count == 1
+      enrichments.order(created_at: :desc).first
+    else
+      enrichments.max_by(&:created_at)
+    end
   end
 
   def assignable_after_publish(course_params, is_admin)
