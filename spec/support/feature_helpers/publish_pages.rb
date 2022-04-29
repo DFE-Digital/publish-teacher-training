@@ -207,5 +207,13 @@ module FeatureHelpers
     def rollover_recruitment_page
       @rollover_recruitment_page ||= PageObjects::Publish::RolloverRecruitment.new
     end
+
+    def notifications_page
+      @notifications_page ||= PageObjects::Publish::Notification.new
+    end
+
+    def header
+      @header ||= PageObjects::Publish::Header.new
+    end
   end
 end

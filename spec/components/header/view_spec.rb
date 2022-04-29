@@ -4,6 +4,8 @@ require "rails_helper"
 
 module Header
   describe View do
+    include Rails.application.routes.url_helpers
+
     alias_method :component, :page
 
     it "renders Service's name" do
@@ -11,9 +13,9 @@ module Header
       expect(component.find(".govuk-header__product-name")).to have_text("Test Service")
     end
 
-    it "links to Old Publish homepage" do
+    it "links to the homepage" do
       render_inline(described_class.new(service_name: "Test Service"))
-      expect(page.has_link?(nil, href: Settings.publish_url)).to be true
+      expect(page.has_link?(nil, href: publish_root_path)).to be true
     end
 
     it "doesn't contain a sign out link if no current user" do
@@ -35,13 +37,13 @@ module Header
     end
 
     context "for a non-admin user" do
-      it "links to Old Publish notifications section if associated_with_accredited_body" do
+      it "links to the notifications section if associated_with_accredited_body" do
         user = build(:user)
         allow(user).to receive(:associated_with_accredited_body?).and_return true
 
         render_inline(described_class.new(service_name: "Test Service", current_user: user))
 
-        expect(page.has_link?("Notifications", href: "#{Settings.publish_url}/notifications")).to be true
+        expect(page.has_link?("Notifications", href: publish_notifications_path)).to be true
       end
     end
   end

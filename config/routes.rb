@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     get "/accept-terms", to: "terms#edit", as: :accept_terms
     patch "/accept-terms", to: "terms#update"
 
+    resources :notifications, path: "/notifications", controller: "notifications", only: %i[index update]
+
     resources :providers, path: "organisations", param: :code, only: [:show] do
       get "/users", on: :member, to: "users#index"
       get "/request-access", on: :member, to: "providers/access_requests#new"

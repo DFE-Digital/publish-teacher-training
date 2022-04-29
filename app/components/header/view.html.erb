@@ -1,5 +1,5 @@
 <%= govuk_header(
-  homepage_url: old_publish_homepage_path,
+  homepage_url: publish_root_path,
   classes: "govuk-!-display-none-print app-header app-header--wide-logo #{environment_header_class}",
   navigation_classes: "govuk-header__navigation--end") do |header| %>
 
@@ -10,7 +10,7 @@
       <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
       <% if current_user.associated_with_accredited_body? %>
-        <% header.navigation_item(text: "Notifications", href: old_publish_notifications_path, active: current_page?(old_publish_notifications_path)) %>
+        <% header.navigation_item(text: "Notifications", href: publish_notifications_path, active: current_page?(publish_notifications_path)) %>
       <% end %>
       <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
       <% header.navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
