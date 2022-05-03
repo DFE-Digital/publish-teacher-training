@@ -16,7 +16,7 @@ feature "Editing degree requirements" do
     then_i_should_see_the_subject_requirements_page
     then_i_should_see_the_reuse_content
     when_i_set_additional_requirements
-    then_i_should_see_a_success_message
+    then_i_should_see_a_success_message("degree requirements")
     and_the_required_grade_is_updated_with("two_one")
     and_the_additional_requirements_are_updated
   end
@@ -27,7 +27,7 @@ feature "Editing degree requirements" do
     and_i_do_not_require_a_classification
     then_i_should_see_the_subject_requirements_page
     when_i_set_additional_requirements
-    then_i_should_see_a_success_message
+    then_i_should_see_a_success_message("degree requirements")
     and_the_required_grade_is_updated_with("not_required")
     and_the_additional_requirements_are_updated
   end
@@ -39,7 +39,7 @@ feature "Editing degree requirements" do
       and_i_require_a_classification
       then_i_should_see_the_degree_grade_page
       when_i_set_a_required_grade
-      then_i_should_see_a_success_message
+      then_i_should_see_a_success_message("minimum degree classification")
       and_the_required_grade_is_updated_with("two_one")
     end
 
@@ -47,7 +47,7 @@ feature "Editing degree requirements" do
       and_there_is_a_primary_course_i_want_to_edit
       when_i_visit_the_degrees_start_page
       and_i_do_not_require_a_classification
-      then_i_should_see_a_success_message
+      then_i_should_see_a_success_message("minimum degree classification")
       and_the_required_grade_is_updated_with("not_required")
     end
   end
@@ -208,8 +208,8 @@ feature "Editing degree requirements" do
     publish_course_requirements_page.submit.click
   end
 
-  def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.saved"))
+  def then_i_should_see_a_success_message(value)
+    expect(page).to have_content I18n.t("success.value_saved", value: value)
   end
 
   def and_the_additional_requirements_are_updated

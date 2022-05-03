@@ -67,7 +67,7 @@ private
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.saved"))
+    expect(page).to have_content(I18n.t("success.value_saved", value: "age range"))
   end
 
   def and_the_course_age_range_is_updated(age_range)

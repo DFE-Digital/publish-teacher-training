@@ -29,23 +29,23 @@
     <p class="govuk-body govuk-body govuk-!-margin-bottom-6"><%= govuk_link_to "Manage all your locations", publish_provider_recruitment_cycle_locations_path(@provider.provider_code), data: { qa: "course__manage_provider_locations_link" } %> to add to or edit this list.</p>
 
     <%= form_with(
-      model: @course_location_form, 
-      url: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), 
+      model: @course_location_form,
+      url: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       method: :put,
       local: true
     ) do |f| %>
 
       <%= f.govuk_check_boxes_fieldset :site_ids, legend: nil do %>
        <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
-          <%= f.govuk_check_box :site_ids, 
-              site.id, 
+          <%= f.govuk_check_box :site_ids,
+              site.id,
               label: { text: site.location_name, size: "s" },
               hint: { text: site.full_address },
               link_errors: index.zero? %>
        <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_running? ? "Save and publish changes" : "Save" %>
+      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
     <% end %>
   </div>
 </div>

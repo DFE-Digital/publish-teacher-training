@@ -184,6 +184,6 @@ private
   end
 
   def and_i_see_the_success_summary
-    expect(publish_provider_courses_index_page.success_summary).to have_content(I18n.t("success.saved"))
+    expect(publish_provider_courses_index_page.success_summary).to have_content(I18n.t("success.value_saved", value: "GCSE requirements"))
   end
 end

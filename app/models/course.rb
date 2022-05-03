@@ -581,6 +581,10 @@ class Course < ApplicationRecord
       qualification_assignable(course_params)
   end
 
+  def only_published?
+    content_status == :published
+  end
+
   def is_published?
     %i[published published_with_unpublished_changes].include? content_status
   end
@@ -719,7 +723,13 @@ private
   end
 
   def latest_enrichment
-    enrichments.max_by(&:created_at)
+    return if enrichments.empty?
+
+    if enrichments.last.created_at.nil?
+      enrichments.last
+    else
+      enrichments.max_by(&:created_at)
+    end
   end
 
   def assignable_after_publish(course_params, is_admin)

@@ -24,7 +24,7 @@
         <%= f.govuk_radio_button :grade, "third_class", label: { text: "Third or above (or equivalent)" }, data: { qa: "degree_grade__third_class" } %>
       <% end %>
 
-      <%= f.govuk_submit "Save", data: { qa: "degree_grade__save" } %>
+      <%= f.govuk_submit @course.is_primary? ? "Save": "Continue", data: { qa: "degree_grade__save" } %>
     <% end %>
   </div>
 </div>

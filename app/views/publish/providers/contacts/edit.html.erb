@@ -83,8 +83,7 @@
           data: { qa: "postcode" }) %>
       <% end %>
 
-      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.changes_ttl")) %>
-      <%= f.govuk_submit "Save and publish changes" %>
+      <%= f.govuk_submit "Save and publish" %>
     <% end %>
   </div>
 </div>

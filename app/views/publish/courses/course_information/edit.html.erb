@@ -126,7 +126,7 @@
         max_words: 350,
         rows: 15) %>
 
-      <%= f.govuk_submit "Save" %>
+      <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
     <% end %>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">

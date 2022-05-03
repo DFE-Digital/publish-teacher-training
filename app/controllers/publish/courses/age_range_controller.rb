@@ -14,7 +14,7 @@ module Publish
 
       def update
         if form_object.valid?
-          flash[:success] = I18n.t("success.saved")
+          course_details_success_message("age range")
 
           update_age_range_param
 

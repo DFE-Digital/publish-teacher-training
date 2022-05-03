@@ -59,7 +59,7 @@ feature "Editing course outcome" do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.saved"))
+    expect(page).to have_content(I18n.t("success.value_saved", value: "course outcome"))
   end
 
   def and_the_course_outcome_is_updated

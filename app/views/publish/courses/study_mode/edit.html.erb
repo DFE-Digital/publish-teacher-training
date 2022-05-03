@@ -2,8 +2,8 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(
-    course.provider_code, 
-    course.recruitment_cycle_year, 
+    course.provider_code,
+    course.recruitment_cycle_year,
     course.course_code)
   ) %>
 <% end %>
@@ -13,8 +13,8 @@
     <%= form_with(
       model: @course_study_mode_form,
       url: full_part_time_publish_provider_recruitment_cycle_course_path(
-        course.provider_code, 
-        course.recruitment_cycle_year, 
+        course.provider_code,
+        course.recruitment_cycle_year,
         course.course_code,
       ),
       method: :put,
@@ -34,7 +34,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_running? ? "Save and publish changes" : "Save" %>
+      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
     <% end %>
   </div>
 </div>

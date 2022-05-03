@@ -1,5 +1,7 @@
 module Publish
   class PublishController < ApplicationController
+    include SuccessMessage
+
     layout "publish"
 
     before_action :check_interrupt_redirects

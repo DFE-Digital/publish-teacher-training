@@ -1,6 +1,8 @@
 module Publish
   module Courses
     class BaseFundingTypeController < PublishController
+      include SuccessMessage
+
     private
 
       def course

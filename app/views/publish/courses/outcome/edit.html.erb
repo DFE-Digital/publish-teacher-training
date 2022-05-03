@@ -12,8 +12,8 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: course,
                   url: outcome_publish_provider_recruitment_cycle_course_path(
-                    @course.provider_code, 
-                    @course.recruitment_cycle_year, 
+                    @course.provider_code,
+                    @course.recruitment_cycle_year,
                     @course.course_code),
                   method: :put do |form| %>
 
@@ -23,7 +23,7 @@
 
       <%= render "form_fields", form: form, course_name_and_code: course_name_and_code %>
 
-      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
+      <%= form.submit course.is_published? ? "Save and publish" : "Save",
                       class: "govuk-button", data: { qa: "course__save" } %>
     <% end %>
   </div>

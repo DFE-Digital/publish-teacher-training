@@ -8,6 +8,28 @@ module Publish
         super
       end
 
+      def update
+        authorize(provider)
+
+        @errors = errors
+        return render :edit if @errors.present?
+
+        if @course.update(course_params)
+          course_details_success_message("course outcome")
+
+          redirect_to(
+            details_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+            ),
+          )
+        else
+          @errors = @course.errors.messages
+          render :edit
+        end
+      end
+
       def new
         super
       end
