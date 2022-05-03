@@ -29,7 +29,7 @@ module Publish
 
         elsif course_subjects_form.save!
           value = @course.is_primary? ? "primary subject" : "secondary subject"
-          details_flash_message(value)
+          course_details_success_message(value)
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(

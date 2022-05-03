@@ -18,7 +18,7 @@ module Publish
         @course_information_form = CourseInformationForm.new(course_enrichment, params: course_information_params)
 
         if @course_information_form.save!
-          flash_message("course information")
+          course_description_success_message("course information")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

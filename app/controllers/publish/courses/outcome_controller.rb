@@ -15,7 +15,7 @@ module Publish
         return render :edit if @errors.present?
 
         if @course.update(course_params)
-          details_flash_message("course outcome")
+          course_details_success_message("course outcome")
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(

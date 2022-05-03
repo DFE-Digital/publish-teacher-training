@@ -18,7 +18,7 @@ module Publish
         @course_fee_form = CourseFeeForm.new(course_enrichment, params: formatted_params)
 
         if @course_fee_form.save!
-          flash_message("course length and fees")
+          course_description_success_message("course length and fees")
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
