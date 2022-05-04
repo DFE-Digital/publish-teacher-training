@@ -48,6 +48,7 @@ qa: ## Set DEPLOY_ENV to qa
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
 	$(eval space=bat-qa)
 	$(eval paas_env=qa)
+	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
 .PHONY: staging
 staging: ## Set DEPLOY_ENV to staging
@@ -71,6 +72,7 @@ production: ## Set DEPLOY_ENV to production
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
 	$(eval PARTIAL_HOSTNAME=www)
+	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION)
 
 .PHONY: loadtest
 loadtest: ## Set DEPLOY_ENV to loadtest
@@ -110,6 +112,9 @@ install-fetch-config:
 		&& chmod +x bin/fetch_config.rb \
 		|| true
 
+read-deployment-config:
+	$(eval export postgres_database_name=teacher-training-api-postgres-${paas_env})
+
 read-keyvault-config:
 	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
@@ -133,18 +138,23 @@ enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance
 	cf target -s ${space}
 	cd service_unavailable_page && cf push
 	eval cf map-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2 
+	cf map-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
-	eval cf unmap-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG} 
+	eval cf unmap-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf unmap-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 
 disable-maintenance: ## make qa disable-maintenance / make prod disable-maintenance CONFIRM_PRODUCTION=y
 	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
 	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
 	cf target -s ${space}
-	eval cf map-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG} 
+	eval cf map-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf map-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
 	eval cf unmap-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2 	
+	cf unmap-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	cf delete -rf ttapi-unavailable
+
+restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
+	$(eval BACKUP_ARCHIVE_FILENAME=$(shell bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}))
+	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
+	bin/restore-nightly-backup ${space} ${postgres_database_name} ${BACKUP_ARCHIVE_FILENAME}
