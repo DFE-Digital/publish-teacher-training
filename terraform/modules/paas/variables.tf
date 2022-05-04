@@ -31,6 +31,10 @@ variable "publish_gov_uk_host_names" {
   type = list
 }
 
+variable "restore_from_db_guid" {}
+
+variable "db_backup_before_point_in_time" {}
+
 locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
   web_app_name                 = "teacher-training-api-${local.app_name_suffix}"
@@ -52,13 +56,17 @@ locals {
     }
   )
 
+  postgres_backup_restore_params = var.restore_from_db_guid != "" && var.db_backup_before_point_in_time != "" ? {
+    restore_from_point_in_time_of     = var.restore_from_db_guid
+    restore_from_point_in_time_before = var.db_backup_before_point_in_time
+  } : {}
   postgres_extensions = {
     enable_extensions = ["pg_buffercache", "pg_stat_statements", "btree_gin", "btree_gist"]
   }
   review_app_postgres_params = {
     restore_from_latest_snapshot_of = local.qa_postgres_service_instance
   }
-  postgres_params = merge(local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
+  postgres_params = merge(local.postgres_backup_restore_params, local.postgres_extensions, var.app_environment == "review" ? local.review_app_postgres_params : {})
 
   web_app_routes = flatten([
     cloudfoundry_route.web_app_cloudapps_digital_route,

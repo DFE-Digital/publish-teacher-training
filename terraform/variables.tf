@@ -26,6 +26,14 @@ variable paas_worker_app_stopped { default = false }
 
 variable paas_app_config_file { default = "./workspace_variables/app_config.yml" }
 
+variable paas_restore_from_db_guid {
+  default = ""
+}
+
+variable paas_db_backup_before_point_in_time {
+  default = ""
+}
+
 variable key_vault_name {}
 
 variable key_vault_resource_group {}

@@ -158,3 +158,29 @@ restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # 
 	$(eval BACKUP_ARCHIVE_FILENAME=$(shell bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}))
 	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
 	bin/restore-nightly-backup ${space} ${postgres_database_name} ${BACKUP_ARCHIVE_FILENAME}
+
+get-image-tag:
+	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app teacher-training-api-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))
+	@echo ${TAG}
+
+get-postgres-instance-guid: ## Gets the postgres service instance's guid make qa get-postgres-instance-guid
+	$(eval export DB_INSTANCE_GUID=$(shell cf target -s ${space} 1> /dev/null && cf service teacher-training-api-postgres-${paas_env} --guid))
+	@echo ${DB_INSTANCE_GUID}
+
+rename-postgres-service: ## make qa rename-postgres-service
+	cf target -s ${space} 1> /dev/null
+	cf rename-service teacher-training-api-postgres-${paas_env} teacher-training-api-postgres-${paas_env}-old
+
+remove-postgres-tf-state: deploy-init ## make qa remove-postgres-tf-state PASSCODE=xxxx
+	cd terraform && terraform state rm module.paas.cloudfoundry_service_instance.postgres
+
+set-restore-variables:
+	$(if $(IMAGE_TAG), , $(error can only run with an IMAGE_TAG))
+	$(if $(DB_INSTANCE_GUID), , $(error can only run with DB_INSTANCE_GUID, get it by running `make ${space} get-postgres-instance-guid`))
+	$(if $(SNAPSHOT_TIME), , $(error can only run with BEFORE_TIME, eg SNAPSHOT_TIME="2021-09-14 16:00:00"))
+	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/teacher-training-api:$(IMAGE_TAG))
+	$(eval export TF_VAR_paas_restore_from_db_guid=$(DB_INSTANCE_GUID))
+	$(eval export TF_VAR_paas_db_backup_before_point_in_time=$(SNAPSHOT_TIME))
+	echo "Restoring teacher-training-api from $(TF_VAR_paas_restore_from_db_guid) before $(TF_VAR_paas_db_backup_before_point_in_time)"
+
+restore-postgres: set-restore-variables deploy ##  make dev DB_INSTANCE_GUID=abcdb262-79d1-xx1x-b1dc-0534fb9b4 SNAPSHOT_TIME="2021-11-16 15:20:00" passcode=xxxxx restore-postgres
