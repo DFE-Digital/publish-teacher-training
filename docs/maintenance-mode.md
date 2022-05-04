@@ -2,7 +2,7 @@
 
 The repo includes a simple service unavailable page page that can be pushed to a cf app.  Traffic can be rerouted to it instead of the main application. This is handy in case of a critical bug being discovered where we need to take the service offline, or in case of maintenance where we want to avoid users interacting with the service.
 
-When enabled, all requests will receive the [service unavailable page](/service_unavailable_page/web/public/internal/index.html).
+When enabled, all requests, except requests to `/api` will receive the [service unavailable page](/service_unavailable_page/web/public/internal/index.html).  API requests will receive an empty 503 response.
 
 ### Enable Maintenance mode
 
