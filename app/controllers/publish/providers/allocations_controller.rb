@@ -9,6 +9,22 @@ module Publish
         )
       end
 
+      def new_repeat_request
+        authorize(Allocation)
+        provider
+        training_provider
+        @allocation = RepeatRequestForm.new
+      end
+
+      def edit
+        @allocation = Allocation.includes(:provider, :accredited_body)
+        .find(params[:id])
+
+        authorize @allocation
+
+        training_provider
+      end
+
       def create
         service = Allocations::Create.new(allocation_params.merge(accredited_body_id: provider.id, request_type: get_request_type(allocation_params)))
 
@@ -17,16 +33,28 @@ module Publish
         @allocation = Publish::RepeatRequestForm.new(request_type: params[:request_type])
 
         if @allocation.valid? && service.execute
-
           redirect_to publish_provider_recruitment_cycle_allocation_path(id: service.object.id)
         else
           render :new_repeat_request
         end
       end
 
+      def update
+        @allocation = Allocation.find(params[:id])
+
+        @allocation.request_type = params[:request_type]
+
+        authorize @allocation
+
+        @allocation.save if @allocation.changed?
+
+        redirect_to publish_provider_recruitment_cycle_allocation_path(id: @allocation.id)
+      end
+
       def show
         @allocation = Allocation.find(params[:id])
         provider
+        training_provider
 
         authorize @allocation
       end
@@ -46,13 +74,17 @@ module Publish
 
     private
 
+      def training_provider
+        @training_provider ||= recruitment_cycle.providers.find_by(provider_code: params[:training_provider_code])
+      end
+
       def allocation_params
-        params.except(:authenticity_token, :training_provider_code, :on, :provider_code, :recruitment_cycle_year).permit(
+        params.slice(
           :number_of_places,
           :request_type,
         ).merge(
           provider: recruitment_cycle.providers.find_by(provider_code: params[:training_provider_code]),
-        )
+        ).to_unsafe_hash
       end
 
       def get_request_type(permitted_params)

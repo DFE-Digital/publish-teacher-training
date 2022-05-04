@@ -6,6 +6,8 @@ module PageObjects
       class AllocationsPage < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/allocations"
 
+        element :header, "h1"
+
         sections :rows, "tbody tr" do
           element :provider_name, '[data-qa="provider-name"]'
           element :allocation_number, '[data-qa="confirmed-places"]'
@@ -17,7 +19,7 @@ module PageObjects
         sections :repeat_allocations, '[data-qa="repeat-allocations-table"]' do
           element :provider_name, '[data-qa="provider-name"]'
           element :status, '[data-qa="status"]'
-          element :actions, '[data-qa="actions"]'
+          element :actions, '[data-qa="actions"] > .govuk-link'
         end
 
         sections :initial_allocations, '[data-qa="initial-allocations-table"]' do

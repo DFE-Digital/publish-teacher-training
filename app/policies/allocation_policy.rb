@@ -44,7 +44,9 @@ class AllocationPolicy
     user_is_admin_or_belongs_to_accredited_body?
   end
 
+  alias_method :edit?, :update?
   alias_method :initial_request?, :index?
+  alias_method :new_repeat_request?, :index?
 
 private
 

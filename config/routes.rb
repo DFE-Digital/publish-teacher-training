@@ -185,8 +185,11 @@ Rails.application.routes.draw do
             end
 
             member do
+              get :new_repeat_request, path: "new-repeat-request"
               post :create
               get :show
+              get :edit, path: "edit", param: :id
+              patch :update
             end
           end
         end

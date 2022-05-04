@@ -192,6 +192,14 @@ module FeatureHelpers
       @publish_allocations_show_page ||= PageObjects::Publish::Allocations::AllocationsShowPage.new
     end
 
+    def publish_allocations_edit_page
+      @publish_allocations_edit_page ||= PageObjects::Publish::Allocations::AllocationsEditPage.new
+    end
+
+    def publish_new_repeat_request_page
+      @publish_new_repeat_request_page ||= PageObjects::Publish::Allocations::NewRepeatRequestPage.new
+    end
+
     def who_are_you_requesting_a_course_for_page
       @who_are_you_requesting_a_course_for_page ||= PageObjects::Publish::Allocations::Request::WhoAreYouRequestingACourseForPage.new
     end
