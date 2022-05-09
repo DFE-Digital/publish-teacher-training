@@ -2,7 +2,7 @@ module BigQuery
   class RequestEvent
     def initialize
       @event_hash = {
-        environment: ENV["RAILS_ENV"],
+        environment: ENV.fetch("RAILS_ENV", nil),
         occurred_at: Time.zone.now.iso8601,
         event_type: "web_request",
       }
