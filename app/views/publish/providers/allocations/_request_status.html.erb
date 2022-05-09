@@ -36,12 +36,12 @@
             <% if allocation[:request_type] == AllocationsView::RequestType::INITIAL %>
               <%= govuk_link_to(
                 "Change",
-                # get_edit_initial_request_provider_recruitment_cycle_allocation_path(
-                #   @provider.provider_code,
-                #   @provider.recruitment_cycle_year,
-                #   allocation[:training_provider_code],
-                #   id: allocation[:id],
-                # ),
+                publish_provider_recruitment_cycle_allocation_get_edit_initial_request_path(
+                  @provider.provider_code,
+                  @provider.recruitment_cycle_year,
+                  allocation[:training_provider_code],
+                  id: allocation[:id],
+                ),
               ) %>
             <% else %>
               <%= govuk_link_to(

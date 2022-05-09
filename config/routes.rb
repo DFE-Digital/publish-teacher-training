@@ -191,6 +191,13 @@ Rails.application.routes.draw do
               get :edit, path: "edit", param: :id
               patch :update
             end
+            scope :initial_requests do
+              get :edit, to: "edit_initial_allocations#edit", as: "get_edit_initial_request"
+              post :edit, to: "edit_initial_allocations#edit", as: "post_edit_initial_request"
+              post :update, to: "edit_initial_allocations#update", as: "update_initial_request"
+              get :delete, to: "edit_initial_allocations#delete", as: "delete_initial_request"
+              get :confirm_deletion, to: "edit_initial_allocations#confirm_deletion"
+            end
           end
         end
       end

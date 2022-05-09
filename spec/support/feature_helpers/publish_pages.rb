@@ -216,6 +216,14 @@ module FeatureHelpers
       @pick_a_provider_page ||= PageObjects::Publish::Allocations::Request::PickAProviderPage.new
     end
 
+    def do_you_want_page
+      @do_you_want_page ||= PageObjects::Publish::Allocations::EditInitialAllocations::DoYouWantPage.new
+    end
+
+    def check_answers_page
+      @check_answers_page ||= PageObjects::Publish::Allocations::EditInitialAllocations::CheckAnswersPage.new
+    end
+
     def publish_providers_show_page
       @publish_providers_show_page ||= PageObjects::Publish::ProvidersShow.new
     end

@@ -26,7 +26,7 @@ module Publish
       end
 
       def create
-        service = Allocations::Create.new(allocation_params.merge(accredited_body_id: provider.id, request_type: get_request_type(allocation_params)))
+        service = ::Allocations::Create.new(allocation_params.merge(accredited_body_id: provider.id, request_type: get_request_type(allocation_params)))
 
         authorize service.object
 

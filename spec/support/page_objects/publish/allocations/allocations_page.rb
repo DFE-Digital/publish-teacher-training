@@ -25,7 +25,7 @@ module PageObjects
         sections :initial_allocations, '[data-qa="initial-allocations-table"]' do
           element :provider_name, '[data-qa="provider-name"]'
           element :status, '[data-qa="status"]'
-          element :actions, '[data-qa="actions"]'
+          element :actions, '[data-qa="actions"] > .govuk-link'
         end
 
         element :choose_an_organisation, ".govuk-button", text: "Choose an organisation"

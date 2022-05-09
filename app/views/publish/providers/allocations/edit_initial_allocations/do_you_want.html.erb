@@ -1,0 +1,37 @@
+<% page_title = "Do you want to request PE for this organisation?" %>
+<% content_for :page_title, title_with_error_prefix(page_title, form_object.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_allocations_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: form_object,
+      url:
+      publish_provider_recruitment_cycle_allocation_post_edit_initial_request_url(
+        provider.provider_code,
+        provider.recruitment_cycle_year,
+        training_provider.provider_code,
+      ),
+      method: :post,
+      scope: "",
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:request_type,
+        legend: { text: page_title, size: "l", tag: "h1" },
+        caption: { text: "#{training_provider.provider_name} ", size: "l" }) do %>
+        <%= f.govuk_radio_button :request_type, AllocationsView::RequestType::INITIAL, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :request_type, AllocationsView::RequestType::DECLINED, label: { text: "No" } %>
+      <% end %>
+
+      <%= hidden_field_tag :id, allocation.id %>
+      <%= hidden_field_tag "next_step", "number_of_places" %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+  </div>
+</div>

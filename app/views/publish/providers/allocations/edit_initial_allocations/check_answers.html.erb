@@ -3,12 +3,14 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
-    initial_request_publish_provider_recruitment_cycle_allocations_path(
-      @provider.provider_code,
-      @provider.recruitment_cycle_year,
-      training_provider_code: params[:training_provider_code],
+    publish_provider_recruitment_cycle_allocation_get_edit_initial_request_path(
+      provider.provider_code,
+      recruitment_cycle.year,
+      training_provider.provider_code,
       number_of_places: params[:number_of_places],
-      change: true,
+      request_type: params[:request_type],
+      next_step: "number_of_places",
+      id: allocation.id,
     ),
   ) %>
 <% end %>
@@ -16,12 +18,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-      url: publish_provider_recruitment_cycle_allocation_path(
-        @provider.provider_code,
-        @provider.recruitment_cycle_year,
-        training_provider_code: params[:training_provider_code],
-        number_of_places: params[:number_of_places],
+      model: form_object,
+      url: publish_provider_recruitment_cycle_allocation_update_initial_request_path(
+        provider.provider_code,
+        recruitment_cycle.year,
+        training_provider.provider_code,
+        id: allocation.id,
       ),
+      scope: "",
       skip_enforcing_utf8: true,
     ) do |f| %>
 
@@ -35,21 +39,23 @@
           <% row.key { "Places requested" } %>
           <% row.value { params[:number_of_places] } %>
           <% row.action({
-            href: initial_request_publish_provider_recruitment_cycle_allocations_path(
-              @provider.provider_code,
-              @provider.recruitment_cycle_year,
-              training_provider_code: params[:training_provider_code],
+            href: publish_provider_recruitment_cycle_allocation_get_edit_initial_request_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              training_provider.provider_code,
               number_of_places: params[:number_of_places],
-              change: true,
+              request_type: params[:request_type],
+              next_step: "number_of_places",
+              id: allocation.id,
             ),
             visually_hidden_text: "places requested",
           }) %>
         <% end %>
       <% end %>
 
-      <%= hidden_field_tag "request_type", AllocationsView::RequestType::INITIAL %>
-      <%= hidden_field_tag "training_provider_code", params[:training_provider_code] %>
       <%= hidden_field_tag "number_of_places", params[:number_of_places] %>
+      <%= hidden_field_tag "request_type", params[:request_type] %>
+      <%= hidden_field_tag "finish_flow", "1" %>
 
       <%= f.govuk_submit "Send request", data: { qa: "allocations__send_request" } %>
     <% end %>

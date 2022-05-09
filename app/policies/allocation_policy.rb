@@ -45,6 +45,8 @@ class AllocationPolicy
   end
 
   alias_method :edit?, :update?
+  alias_method :delete?, :update?
+  alias_method :confirm_deletion?, :index?
   alias_method :initial_request?, :index?
   alias_method :new_repeat_request?, :index?
 
