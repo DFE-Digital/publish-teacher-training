@@ -67,5 +67,6 @@ user = User.find(email: "jon@email.com")
 # Find the provider
 provider = RecruitmentCycle.current.providers.find_by(provider_code: "2E1")
 
-user.providers << provider
+# Use the user association service to link the two as it also deals with notifications
+UserAssociationsService::Create.call(user: user, provider: provider)
 ```
