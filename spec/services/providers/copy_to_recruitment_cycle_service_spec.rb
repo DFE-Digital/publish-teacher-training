@@ -17,6 +17,7 @@ describe Providers::CopyToRecruitmentCycleService do
     }
     let(:provider) {
       create :provider,
+             :with_users,
              sites: [site],
              ucas_preferences: ucas_preferences,
              contacts: contacts
@@ -111,6 +112,12 @@ describe Providers::CopyToRecruitmentCycleService do
       service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(new_provider.organisation).to eq provider.organisation
+    end
+
+    it "assigns the new provider to users" do
+      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+
+      expect(new_provider.users).to eq provider.users
     end
 
     it "copies over the ucas_preferences" do
