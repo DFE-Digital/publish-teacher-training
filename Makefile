@@ -155,9 +155,9 @@ disable-maintenance: ## make qa disable-maintenance / make prod disable-maintena
 	cf delete -rf ttapi-unavailable
 
 restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
-	$(eval BACKUP_ARCHIVE_FILENAME=$(shell bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}))
+	bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}
 	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
-	bin/restore-nightly-backup ${space} ${postgres_database_name} ${BACKUP_ARCHIVE_FILENAME}
+	bin/restore-nightly-backup ${space} ${postgres_database_name} ${paas_env}_backup- ${BACKUP_DATE}
 
 get-image-tag:
 	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app teacher-training-api-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))

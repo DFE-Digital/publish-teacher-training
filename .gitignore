@@ -41,6 +41,7 @@ bin/fetch_config.rb
 /.devcontainer/*
 
 # Ignore sanitised production data dump
+*.sql.tar.gz
 *.sql.gz
 *.sql
 

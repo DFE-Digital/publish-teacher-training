@@ -13,7 +13,7 @@ Alert all developers that no one should merge to main branch.
 
 ### Local Dependencies
 
-You will need the [az](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) and [cf](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) CLIs installed as well as [make](https://www.gnu.org/software/make/) and either [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) or [tfenv](https://github.com/tfutils/tfenv#installation).
+You will need the [az](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) and [cf](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) CLIs installed as well as [jq](https://stedolan.github.io/jq/download/), [make](https://www.gnu.org/software/make/) and either [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) or [tfenv](https://github.com/tfutils/tfenv#installation).
 
 ### Maintenance mode
 
@@ -50,13 +50,13 @@ cf delete-service <instance-name>
 Then recreate the lost postgres database instance using the following make recipes `deploy-plan` and `deploy`.  To see the proposed changes:
 
 ```
-TAG=$(cf app teacher-training-api-prod | grep -Po "docker image:\s+\S+:\K\w+")
-make <env> deploy-plan passcode=<my-passcode> IMAGE_TAG=${TAG}
+TAG=$(cf app teacher-training-api-qa | awk -F : '$1 == "docker image" {print $3}')
+make <env> deploy-plan PASSCODE=<my-passcode> IMAGE_TAG=${TAG}
 ```
 To apply proposed changes i.e. create new database instance:
 ```
-TAG=$(cf app teacher-training-api-prod | grep -Po "docker image:\s+\S+:\K\w+")
-make <env> deploy-plan passcode=<my-passcode> CONFIRM_RESTORE=YES IMAGE_TAG=${TAG}
+TAG=$(cf app teacher-training-api-qa | awk -F : '$1 == "docker image" {print $3}')
+make <env> deploy PASSCODE=<my-passcode> IMAGE_TAG=${TAG}
 ```
 This will create a new postgres database instance as described in the terraform configuration file.
 
@@ -64,10 +64,18 @@ This will create a new postgres database instance as described in the terraform 
 
 ### Restore Data From Nightly Backup
 
-Once the lost database instance has been recreated, the last nightly backup will need to be restored. To achieve this, use the following makefile recipe: `restore-data-from-nightly-backup`. The following will need to be set: `passcode` (a [GOV.UK PaaS one-time passcode](https://login.london.cloud.service.gov.uk/passcode)), `CONFIRM_PRODUCTION=YES`,  `CONFIRM_RESTORE=YES` and `BACKUP_DATE="yyyy-mm-dd"`.  You will need to be logged into GovUK PaaS and Azure using the `az` and `cf` CLIs.
+You will need to be logged into GovUK PaaS and Azure using the `az` and `cf` CLIs.  You will need to raise a [PIM](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-resource-roles-activate-your-roles) request to elevate your credentials for a production restore.  A collegue will need to approve this for you.
+
+Once the lost database instance has been recreated, the last nightly backup will need to be restored. To achieve this, use the following makefile recipe: `restore-data-from-nightly-backup`. The following will need to be set: `CONFIRM_PRODUCTION=YES`,  `CONFIRM_RESTORE=YES` and `BACKUP_DATE="yyyy-mm-dd"`.
+
+The make recipe `restore-data-from-nightly-backup` executes 2 scripts, these should be committed with the execute permission (755) set but these may have been inadvertently altered.  If you get a permissions error executing them run `chmod +x <path/to/script>`.
 
 ```
-make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
+# space is the name of the environment in GOV.UK PaaS, eg 'bat-prod'
+# env is the target environment in the make file e.g. 'production'
+az login
+cf login -o dfe -s <space> -u my.name@digital.education.gov.uk
+make <env> restore-data-from-nightly-backup BACKUP_DATE="yyyy-mm-dd" CONFIRM_RESTORE=YES CONFIRM_PRODUCTION=YES
 ```
 
 This will download the latest daily backup from Azure Storage and then populate the new database with data.  If more than one backup has been created on the date specified the script will select the most recent from that date.
@@ -120,8 +128,8 @@ The following variables need to be set: DB_INSTANCE_GUID (the output of the 'Get
 The following commands combine the makefile recipes above to initiate the restore process by using the approriate variable values:
 
 ```
-# env is the target environment in the make file e.g. 'production'
 # space is the name of the environment in GOV.UK PaaS, eg 'bat-prod'
+# env is the target environment in the make file e.g. 'production'
 az login
 cf login -o dfe -s <space> -u my.name@digital.education.gov.uk
 PASSCODE=xxxx # obtain from https://login.london.cloud.service.gov.uk/passcode
