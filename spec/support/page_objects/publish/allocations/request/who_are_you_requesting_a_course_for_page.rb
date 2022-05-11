@@ -18,12 +18,11 @@ module PageObjects
           element :training_provider_search, "#training-provider-query-field"
 
           def providers
-            @providers ||=
-              radio_buttons.reject do |x| x == find_an_organisation_not_listed_above end
+            @providers ||= radio_buttons.reject { |x| x == find_an_organisation_not_listed_above }
           end
 
           def find_an_organisation_not_listed_above
-            @find_an_organisation_not_listed_above ||= radio_buttons.find do |x| x.text == "Find an organisation not listed above" end
+            @find_an_organisation_not_listed_above ||= radio_buttons.find { |x| x.text == "Find an organisation not listed above" }
           end
         end
       end

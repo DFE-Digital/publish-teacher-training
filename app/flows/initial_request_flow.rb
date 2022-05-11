@@ -126,8 +126,12 @@ private
     @training_providers_with_fee_paying_pe_course ||=
 
       training_provider_search_service.new(
-        provider: provider, params: { filter: { subjects: PE_SUBJECT_CODE,
-                                                funding_type: "fee" } }
+        provider: provider,
+        params: {
+          filter: {
+            subjects: PE_SUBJECT_CODE, funding_type: "fee"
+          },
+        },
       ).call
   end
 
