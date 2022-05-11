@@ -1,0 +1,38 @@
+<% page_title = "How many places would you like to request?" %>
+<% content_for :page_title, title_with_error_prefix(page_title, form_object.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(initial_request_publish_provider_recruitment_cycle_allocations_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: form_object,
+      url: initial_request_publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      scope: "",
+      skip_enforcing_utf8: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :number_of_places,
+        label: { text: page_title, size: "l", tag: "h1" },
+        caption: { text: "#{training_provider.provider_name} ", size: "l" },
+        pattern: "[0-9]*",
+        inputmode: "numeric",
+        width: 10 do %>
+
+      <p class="govuk-body govuk-!-margin-bottom-4">
+        Tell us how many places the organisation would like to offer for this
+        course. Make sure this number is as accurate as possible.
+      </p>
+
+    <% end %>
+
+    <%= hidden_field_tag "training_provider_code", params[:training_provider_code] %>
+
+    <%= f.govuk_submit %>
+  <% end %>
+  </div>
+</div>

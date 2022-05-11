@@ -188,6 +188,42 @@ module FeatureHelpers
       @allocations_page ||= PageObjects::Publish::Allocations::AllocationsPage.new
     end
 
+    def publish_allocations_show_page
+      @publish_allocations_show_page ||= PageObjects::Publish::Allocations::AllocationsShowPage.new
+    end
+
+    def publish_allocations_edit_page
+      @publish_allocations_edit_page ||= PageObjects::Publish::Allocations::AllocationsEditPage.new
+    end
+
+    def publish_new_repeat_request_page
+      @publish_new_repeat_request_page ||= PageObjects::Publish::Allocations::NewRepeatRequestPage.new
+    end
+
+    def who_are_you_requesting_a_course_for_page
+      @who_are_you_requesting_a_course_for_page ||= PageObjects::Publish::Allocations::Request::WhoAreYouRequestingACourseForPage.new
+    end
+
+    def number_of_places_page
+      @number_of_places_page ||= PageObjects::Publish::Allocations::Request::NumberOfPlacesPage.new
+    end
+
+    def check_your_info_page
+      @check_your_info_page ||= PageObjects::Publish::Allocations::Request::CheckYourInfoPage.new
+    end
+
+    def pick_a_provider_page
+      @pick_a_provider_page ||= PageObjects::Publish::Allocations::Request::PickAProviderPage.new
+    end
+
+    def do_you_want_page
+      @do_you_want_page ||= PageObjects::Publish::Allocations::EditInitialAllocations::DoYouWantPage.new
+    end
+
+    def check_answers_page
+      @check_answers_page ||= PageObjects::Publish::Allocations::EditInitialAllocations::CheckAnswersPage.new
+    end
+
     def publish_providers_show_page
       @publish_providers_show_page ||= PageObjects::Publish::ProvidersShow.new
     end

@@ -1,0 +1,5 @@
+<% if @allocation.repeat? || @allocation.initial? %>
+  <%= render partial: "publish/providers/allocations/requests/yes_requested" %>
+<% else %>
+  <%= render partial: "publish/providers/allocations/requests/not_requested" %>
+<% end %>

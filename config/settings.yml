@@ -34,8 +34,11 @@ authentication:
 
 current_recruitment_cycle_year: 2022
 next_cycle_open_date: 2022-10-5
+
 allocation_cycle_year: 2021
 allocations_close_date: 2021-07-02
+allocations:
+  view_previous_link: https://www.gov.uk/government/publications/initial-teacher-training-allocations-academic-year-2021-to-2022
 
 govuk_notify:
   api_key: please_change_me

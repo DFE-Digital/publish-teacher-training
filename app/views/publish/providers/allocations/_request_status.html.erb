@@ -1,0 +1,63 @@
+<% if allocations.present? %>
+  <table class="govuk-table" data-qa="<%= request_type %>-allocations-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header govuk-!-width-two-thirds" scope="col">
+          Organisation
+        </th>
+        <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+          Status
+        </th>
+        <th class="govuk-table__header" scope="col">
+          <span class="govuk-visually-hidden">Actions</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <% allocations.each do |allocation| %>
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" data-qa="provider-name" scope="row">
+          <%= allocation[:training_provider_name] %>
+        </th>
+        <td class="govuk-table__cell" data-qa="status">
+          <%= govuk_tag(text: allocation[:status], colour: allocation[:status_colour]) %>
+        </td>
+        <td class="govuk-table__cell" data-qa="actions">
+          <% if allocation[:status] == AllocationsView::Status::YET_TO_REQUEST %>
+            <%= govuk_link_to(
+              "Confirm choice",
+              new_repeat_request_publish_provider_recruitment_cycle_allocation_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                allocation[:training_provider_code],
+              ),
+            ) %>
+          <% else %>
+            <% if allocation[:request_type] == AllocationsView::RequestType::INITIAL %>
+              <%= govuk_link_to(
+                "Change",
+                publish_provider_recruitment_cycle_allocation_get_edit_initial_request_path(
+                  @provider.provider_code,
+                  @provider.recruitment_cycle_year,
+                  allocation[:training_provider_code],
+                  id: allocation[:id],
+                ),
+              ) %>
+            <% else %>
+              <%= govuk_link_to(
+                "Change",
+                edit_publish_provider_recruitment_cycle_allocation_path(
+                  @provider.provider_code,
+                  @provider.recruitment_cycle_year,
+                  allocation[:training_provider_code],
+                  id: allocation[:id],
+                ),
+              ) %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>

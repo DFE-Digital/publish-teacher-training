@@ -1,0 +1,53 @@
+<% page_title = "Who are you requesting a course for?" %>
+<% content_for :page_title, title_with_error_prefix(page_title, form_object.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_allocations_path(provider.provider_code, provider.recruitment_cycle_year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: form_object,
+      scope: "",
+      url: initial_request_publish_provider_recruitment_cycle_allocations_path(provider.provider_code, provider.recruitment_cycle_year),
+      skip_enforcing_utf8: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:training_provider_code, legend: { text: page_title, size: "l", tag: "h1" }) do %>
+        <p class="govuk-body">
+          This should be the name of the organisation offering the course. For
+          example, a lead school or your own organisation, if you’re offering it.
+        </p>
+
+        <% if training_providers.present? %>
+          <% training_providers.each do |training_provider| %>
+            <%= f.govuk_radio_button :training_provider_code,
+              training_provider.provider_code,
+              label: { text: training_provider.provider_name },
+              link_errors: true %>
+          <% end %>
+
+          <%= f.govuk_radio_divider %>
+
+          <%= f.govuk_radio_button :training_provider_code, "-1", label: { text: "Find an organisation not listed above" } do %>
+            <%= f.govuk_text_field :training_provider_query, label: { text: "Organisation name" } %>
+            <div id="provider-autocomplete"></div>
+          <% end %>
+        <% else %>
+          <%= hidden_field_tag "training_provider_code", "-1" %>
+          <%= f.govuk_text_field :training_provider_query, label: { text: "Find an organisation" } %>
+          <div id="provider-autocomplete"></div>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+    <% end %>
+
+    <p class="govuk-body">
+      To add a new organisation to Publish, contact <%= bat_contact_mail_to %>.
+    </p>
+  </div>
+</div>

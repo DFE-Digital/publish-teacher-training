@@ -5,7 +5,7 @@ require "forwardable"
 
 module PageObjects
   module Sections
-    class Qualification < PageObjects::Sections::Base
+    class RadioButton < PageObjects::Sections::Base
       extend Forwardable
 
       element :name, ".govuk-radios__label"

@@ -16,6 +16,7 @@ FactoryBot.define do
     end
     trait :initial do
       request_type { "initial" }
+      number_of_places { 1 }
     end
     trait :with_allocation_uplift do
       association :allocation_uplift

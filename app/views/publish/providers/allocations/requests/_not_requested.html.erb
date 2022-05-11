@@ -1,0 +1,32 @@
+<% content_for :page_title, "Thank you" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l" data-qa="page-heading">
+      <span class="govuk-caption-l"><%= @training_provider.provider_name %></span>
+      Thank you
+    </h1>
+    <p class="govuk-body">
+      You've confirmed that <%= @training_provider.provider_name %> will not be
+      offering fee-funded PE in <%= next_allocation_cycle_period_text %>.
+    </p>
+
+    <h2 class="govuk-heading-m">What happens now?</h2>
+    <p class="govuk-body">
+      You don't need to do anything else. If you want to change this choice, you
+      have until <%= Settings.allocations_close_date.to_s(:govuk_short) %> to do
+      so.
+    </p>
+
+    <p class="govuk-body">
+      If you have any questions, contact <%= bat_contact_mail_to %>.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+        "Return to Request PE courses for #{next_allocation_cycle_period_text}",
+        publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      ) %>
+    </p>
+  </div>
+</div>

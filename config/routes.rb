@@ -178,7 +178,27 @@ Rails.application.routes.draw do
           get "/visas", on: :member, to: "visas#edit"
           put "/visas", on: :member, to: "visas#update"
 
-          resources :allocations, only: %i[index], on: :member, param: :training_provider_code
+          resources :allocations, only: %i[index], on: :member, param: :training_provider_code do
+            collection do
+              get :initial_request, path: "request"
+              post :initial_request, path: "request"
+            end
+
+            member do
+              get :new_repeat_request, path: "new-repeat-request"
+              post :create
+              get :show
+              get :edit, path: "edit", param: :id
+              patch :update
+            end
+            scope :initial_requests do
+              get :edit, to: "edit_initial_allocations#edit", as: "get_edit_initial_request"
+              post :edit, to: "edit_initial_allocations#edit", as: "post_edit_initial_request"
+              post :update, to: "edit_initial_allocations#update", as: "update_initial_request"
+              get :delete, to: "edit_initial_allocations#delete", as: "delete_initial_request"
+              get :confirm_deletion, to: "edit_initial_allocations#confirm_deletion"
+            end
+          end
         end
       end
     end
