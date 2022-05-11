@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 module PublishHelper
-  def old_publish_link_for(path)
-    "#{Settings.publish_url}#{path.sub(/\/publish\//, '/')}"
-  end
-
   def markdown(source)
     render = Govuk::MarkdownRenderer
     # Options: https://github.com/vmg/redcarpet#and-its-like-really-simple-to-use
