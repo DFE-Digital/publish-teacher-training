@@ -39,7 +39,7 @@ module Publish
       end
 
       def confirm_deletion
-        authorize Allocation
+        authorize provider, :show?
         @allocation = Allocation.new(request_type: AllocationsView::RequestType::DECLINED)
 
         training_provider

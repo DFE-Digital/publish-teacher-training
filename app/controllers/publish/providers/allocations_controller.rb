@@ -2,7 +2,7 @@ module Publish
   module Providers
     class AllocationsController < PublishController
       def index
-        authorize(Allocation)
+        authorize provider, :show?
 
         @allocations_view = AllocationsView.new(
           allocations: allocations[Settings.allocation_cycle_year.to_s] || [], training_providers: training_providers,
@@ -10,7 +10,7 @@ module Publish
       end
 
       def new_repeat_request
-        authorize(Allocation)
+        authorize provider, :show?
         provider
         training_provider
         @allocation = RepeatRequestForm.new
@@ -60,7 +60,7 @@ module Publish
       end
 
       def initial_request
-        authorize(Allocation)
+        authorize provider, :show?
 
         provider
         flow = InitialRequestFlow.new(params: params)
