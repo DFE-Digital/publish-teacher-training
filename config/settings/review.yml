@@ -20,4 +20,4 @@ allocations_close_date: 2022-07-02
 features:
   display_migration_signin: false
   allocations:
-    state: closed
+    state: confirmed
