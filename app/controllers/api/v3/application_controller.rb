@@ -7,7 +7,6 @@ module API
 
       before_action :store_request_id
 
-
       def authenticate
         authenticate_or_request_with_http_token do |token|
           @current_user = AuthenticationService.new(logger: Rails.logger).execute(token)
