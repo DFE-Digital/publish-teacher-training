@@ -15,7 +15,7 @@ module BreadcrumbHelper
 
   # rubocop:disable Rails/HelperInstanceVariable
   def organisations_breadcrumb
-    @has_multiple_providers ? { "Organisations" => providers_path } : {}
+    current_user.has_multiple_providers? ? { "Organisations" => root_path } : {}
   end
 
   def provider_breadcrumb
@@ -33,57 +33,57 @@ module BreadcrumbHelper
   end
 
   def courses_breadcrumb
-    path = provider_recruitment_cycle_courses_path(@provider.provider_code)
+    path = publish_provider_recruitment_cycle_courses_path(@provider.provider_code)
     recruitment_cycle_breadcrumb.merge({ "Courses" => path })
   end
 
   def course_breadcrumb
-    path = provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+    path = publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
     courses_breadcrumb.merge({ course.name_and_code => path })
   end
 
   def sites_breadcrumb
-    path = provider_recruitment_cycle_sites_path(@provider.provider_code, @recruitment_cycle.year)
+    path = publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @recruitment_cycle.year)
     recruitment_cycle_breadcrumb.merge({ "Locations" => path })
   end
 
   def organisation_details_breadcrumb
-    path = details_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
+    path = details_publish_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
     recruitment_cycle_breadcrumb.merge({ "About your organisation" => path })
   end
 
   def users_breadcrumb
-    path = details_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
+    path = details_publish_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
     recruitment_cycle_breadcrumb.merge({ "Users" => path })
   end
 
   def edit_site_breadcrumb
-    path = edit_provider_recruitment_cycle_site_path(@provider.provider_code, @site.recruitment_cycle_year, @site.id)
-    sites_breadcrumb.merge({ @site_name_before_update => path })
+    path = edit_publish_provider_recruitment_cycle_location_path(@provider.provider_code, @recruitment_cycle.year, @site.id)
+    sites_breadcrumb.merge({ @site.location_name.dup => path })
   end
 
   def new_site_breadcrumb
-    path = new_provider_recruitment_cycle_site_path(@provider.provider_code)
+    path = new_publish_provider_recruitment_cycle_location_path(@provider.provider_code)
     sites_breadcrumb.merge({ "Add a location" => path })
   end
 
   def training_providers_breadcrumb
-    path = training_providers_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    path = publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)
     provider_breadcrumb.merge({ "Courses as an accredited body" => path })
   end
 
   def training_provider_courses_breadcrumb
-    path = training_provider_courses_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year, @training_provider.provider_code)
+    path = publish_provider_recruitment_cycle_training_provider_courses_path(@provider.provider_code, @provider.recruitment_cycle_year, @training_provider.provider_code)
     training_providers_breadcrumb.merge({ "#{@training_provider.provider_name}’s courses" => path })
   end
 
   def allocations_breadcrumb
-    path = provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    path = publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
     provider_breadcrumb.merge({ "Request PE courses for #{next_allocation_cycle_period_text}" => path })
   end
 
   def allocations_closed_breadcrumb
-    path = provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
+    path = publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
     provider_breadcrumb.merge({ "PE courses for #{next_allocation_cycle_period_text}" => path })
   end
   # rubocop:enable Rails/HelperInstanceVariable

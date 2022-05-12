@@ -1,11 +1,5 @@
 <% content_for :page_title, "PE courses for #{next_allocation_cycle_period_text}" %>
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(
-    old_publish_link_for(
-      publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    )
-  ) %>
-<% end %>
+<%= content_for :before_content, render_breadcrumbs("allocations_closed") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

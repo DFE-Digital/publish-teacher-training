@@ -84,6 +84,10 @@ class User < ApplicationRecord
     current_page_acknowledgement_for("rollover_recruitment")
   end
 
+  def has_multiple_providers?
+    providers.count > 1
+  end
+
 private
 
   def email_is_lowercase

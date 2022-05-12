@@ -1,9 +1,6 @@
 <% page_title = "Add a location" %>
 <% content_for :page_title, title_with_error_prefix(page_title, @location_form.errors.any?) %>
-
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_locations_path(@location_form.provider_code, @location_form.recruitment_cycle_year)) %>
-<% end %>
+<%= content_for :before_content, render_breadcrumbs(:new_site) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
