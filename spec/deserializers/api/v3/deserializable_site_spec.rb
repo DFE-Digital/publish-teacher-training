@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe API::V2::DeserializableSite do
+describe API::V3::DeserializableSite do
   let(:site) { build(:site) }
   let(:site_jsonapi) do
     JSON.parse(jsonapi_renderer.render(

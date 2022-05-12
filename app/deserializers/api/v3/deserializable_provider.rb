@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class DeserializableProvider < JSONAPI::Deserializable::Resource
       PROVIDER_ATTRIBUTES = %i[
         train_with_us
