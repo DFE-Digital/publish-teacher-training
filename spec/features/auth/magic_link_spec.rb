@@ -7,10 +7,14 @@ feature "Authentication with magic links" do
 
   before do
     given_magic_link_auth_is_enabled
-    and_a_user_exists
+  end
+
+  after do
+    disable_magic_link_auth
   end
 
   scenario "Receiving a magic link" do
+    and_a_user_exists
     when_i_go_to_sign_in
     then_i_am_taken_to_the_magic_link_page
     and_i_am_given_the_option_to_sign_in_with_a_magic_link
@@ -122,5 +126,10 @@ feature "Authentication with magic links" do
 
   def expired_token_message
     I18n.t("publish_authentication.magic_link.expired")
+  end
+
+  def disable_magic_link_auth
+    allow(AuthenticationService).to receive(:mode).and_return(nil)
+    Rails.application.reload_routes!
   end
 end
