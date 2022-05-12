@@ -1,9 +1,20 @@
 module API
   module V3
     class ApplicationController < PublicAPIController
+      attr_reader :current_user
+
       rescue_from ActiveRecord::RecordNotFound, with: :jsonapi_404
 
       before_action :store_request_id
+
+
+      def authenticate
+        authenticate_or_request_with_http_token do |token|
+          @current_user = AuthenticationService.new(logger: Rails.logger).execute(token)
+          assign_sentry_contexts
+          @current_user.present?
+        end
+      end
 
       def jsonapi_404
         render jsonapi: nil, status: :not_found
