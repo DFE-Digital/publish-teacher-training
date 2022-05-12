@@ -1,13 +1,19 @@
 name: Database Backup and Restore
 
 on:
-  schedule: # 03:00 UTC Mon-Fri
-    - cron: '0 3 * * 1-5'
+  schedule: # 03:00 UTC
+    - cron: '0 3 * * *'
   workflow_dispatch:
+    inputs:
+      overwriteThisMorningsBackup:
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   backup:
     name: Sanitise Production Database Backup
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.overwriteThisMorningsBackup == 'true') }}
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -36,7 +42,7 @@ jobs:
 
       - name: Backup Teacher Training API Prod Database
         run: |
-          now=$(date +"%F-%H-%M-%S")
+          now=$(date +"%F")
           PROD_BACKUP=prod_backup-$now.sql
           cf conduit teacher-training-api-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
           tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
