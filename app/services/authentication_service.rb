@@ -8,13 +8,25 @@ class AuthenticationService
   class << self
     DFE_SIGNIN = "dfe_signin".freeze
     PERSONA = "persona".freeze
+    MAGIC_LINK = "magic_link".freeze
 
     def mode
-      Settings.authentication.mode == PERSONA ? PERSONA : DFE_SIGNIN
+      case Settings.authentication.mode
+      when MAGIC_LINK
+        MAGIC_LINK
+      when PERSONA
+        PERSONA
+      else
+        DFE_SIGNIN
+      end
     end
 
     def dfe_signin?
       mode == DFE_SIGNIN
+    end
+
+    def magic_link?
+      mode == MAGIC_LINK
     end
 
     def persona?

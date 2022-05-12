@@ -48,7 +48,7 @@ class UserSession
   end
 
   def logout_url
-    if AuthenticationService.persona?
+    if AuthenticationService.magic_link? || AuthenticationService.persona?
       "/sign-in"
     else
       dfe_logout_url

@@ -248,6 +248,14 @@ module FeatureHelpers
       @notifications_page ||= PageObjects::Publish::Notification.new
     end
 
+    def magic_link_page
+      @magic_link_page ||= PageObjects::Publish::MagicLink.new
+    end
+
+    def magic_link_confirmation_page
+      @magic_link_confirmation_page ||= PageObjects::Publish::MagicLinkConfirmation.new
+    end
+
     def header
       @header ||= PageObjects::Publish::Header.new
     end
