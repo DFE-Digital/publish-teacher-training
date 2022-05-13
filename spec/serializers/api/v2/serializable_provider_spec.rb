@@ -55,7 +55,7 @@ describe API::V2::SerializableProvider do
         class: {
           User: API::V2::SerializableUser,
           Provider: API::V2::SerializableProvider,
-          Site: API::V2::SerializableSite,
+          Site: API::V3::SerializableSite,
           Contact: API::V2::SerializableContact,
         },
         include: %i[

@@ -29,7 +29,7 @@ describe CourseSerializersService do
       ModernLanguagesSubject: API::V3::SerializableSubject,
       FurtherEducationSubject: API::V3::SerializableSubject,
       SiteStatus: API::V3::SerializableSiteStatus,
-      Site: API::V2::SerializableSite,
+      Site: API::V3::SerializableSite,
       Provider: API::V2::SerializableProvider,
       ProviderEnrichment: API::V2::SerializableProviderEnrichment,
       RecruitmentCycle: API::V2::SerializableRecruitmentCycle,

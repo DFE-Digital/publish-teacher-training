@@ -6,7 +6,7 @@ describe API::V3::DeserializableSite do
     JSON.parse(jsonapi_renderer.render(
       site,
       class: {
-        Site: API::V2::SerializableSite,
+        Site: API::V3::SerializableSite,
       },
     ).to_json)["data"]
   end
