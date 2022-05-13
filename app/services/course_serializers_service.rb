@@ -6,7 +6,7 @@ class CourseSerializersService
     secondary_subject_serializer: API::V3::SerializableSubject,
     modern_languages_subject_serializer: API::V3::SerializableSubject,
     further_education_subject_serializer: API::V3::SerializableSubject,
-    site_status_serializer: API::V2::SerializableSiteStatus,
+    site_status_serializer: API::V3::SerializableSiteStatus,
     site_serializer: API::V2::SerializableSite,
     provider_serializer: API::V2::SerializableProvider,
     provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,

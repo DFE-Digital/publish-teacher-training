@@ -28,7 +28,7 @@ describe CourseSerializersService do
       SecondarySubject: API::V3::SerializableSubject,
       ModernLanguagesSubject: API::V3::SerializableSubject,
       FurtherEducationSubject: API::V3::SerializableSubject,
-      SiteStatus: API::V2::SerializableSiteStatus,
+      SiteStatus: API::V3::SerializableSiteStatus,
       Site: API::V2::SerializableSite,
       Provider: API::V2::SerializableProvider,
       ProviderEnrichment: API::V2::SerializableProviderEnrichment,
