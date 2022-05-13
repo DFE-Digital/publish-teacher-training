@@ -417,7 +417,6 @@ en:
             email:
               blank: "Enter an email adddress"
               invalid: "Enter a valid email address"
-              does_not_exist: "We cannot find an account with that email address"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

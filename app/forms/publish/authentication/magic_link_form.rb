@@ -6,11 +6,10 @@ module Publish
       attr_accessor :email
 
       validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-      validate :user_exists
 
       def submit
         if valid?
-          GenerateAndSendMagicLinkService.call(user: user)
+          GenerateAndSendMagicLinkService.call(user: user) if user.present?
           true
         else
           false
@@ -21,10 +20,6 @@ module Publish
 
       def user
         @user ||= User.find_by(email: email)
-      end
-
-      def user_exists
-        errors.add(:email, :does_not_exist) if user.nil?
       end
     end
   end
