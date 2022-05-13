@@ -22,7 +22,7 @@ describe CourseSerializersService do
 
   let(:default_class_serializers) do
     {
-      Course: API::V2::SerializableCourse,
+      Course: API::V3::SerializableCourse,
       Subject: API::V3::SerializableSubject,
       PrimarySubject: API::V3::SerializableSubject,
       SecondarySubject: API::V3::SerializableSubject,

@@ -13,7 +13,7 @@ JSONAPI::Rails.configure do |config|
     klass = names.pop
 
     h[k] = [
-      "API::V2::Serializable#{klass}",
+      "API::V3::Serializable#{klass}",
       [*names, klass].join("::"),
     ].lazy
       .map(&:safe_constantize)
