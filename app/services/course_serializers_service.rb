@@ -1,6 +1,6 @@
 class CourseSerializersService
   def initialize(
-    course_serializer: API::V2::SerializableCourse,
+    course_serializer: API::V3::SerializableCourse,
     subject_serializer: API::V3::SerializableSubject,
     primary_subject_serializer: API::V3::SerializableSubject,
     secondary_subject_serializer: API::V3::SerializableSubject,
@@ -8,7 +8,7 @@ class CourseSerializersService
     further_education_subject_serializer: API::V3::SerializableSubject,
     site_status_serializer: API::V3::SerializableSiteStatus,
     site_serializer: API::V3::SerializableSite,
-    provider_serializer: API::V2::SerializableProvider,
+    provider_serializer: API::V3::SerializableProvider,
     provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
     recruitment_cycle_serializer: API::V2::SerializableRecruitmentCycle,
     v3_subject_area_serializer: API::V3::SerializableSubjectArea
