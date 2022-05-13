@@ -23,11 +23,11 @@ describe CourseSerializersService do
   let(:default_class_serializers) do
     {
       Course: API::V2::SerializableCourse,
-      Subject: API::V2::SerializableSubject,
-      PrimarySubject: API::V2::SerializableSubject,
-      SecondarySubject: API::V2::SerializableSubject,
-      ModernLanguagesSubject: API::V2::SerializableSubject,
-      FurtherEducationSubject: API::V2::SerializableSubject,
+      Subject: API::V3::SerializableSubject,
+      PrimarySubject: API::V3::SerializableSubject,
+      SecondarySubject: API::V3::SerializableSubject,
+      ModernLanguagesSubject: API::V3::SerializableSubject,
+      FurtherEducationSubject: API::V3::SerializableSubject,
       SiteStatus: API::V2::SerializableSiteStatus,
       Site: API::V2::SerializableSite,
       Provider: API::V2::SerializableProvider,
@@ -35,11 +35,11 @@ describe CourseSerializersService do
       RecruitmentCycle: API::V2::SerializableRecruitmentCycle,
       v3: {
         SubjectArea: API::V3::SerializableSubjectArea,
-        Subject: API::V2::SerializableSubject,
-        PrimarySubject: API::V2::SerializableSubject,
-        SecondarySubject: API::V2::SerializableSubject,
-        ModernLanguagesSubject: API::V2::SerializableSubject,
-        FurtherEducationSubject: API::V2::SerializableSubject,
+        Subject: API::V3::SerializableSubject,
+        PrimarySubject: API::V3::SerializableSubject,
+        SecondarySubject: API::V3::SerializableSubject,
+        ModernLanguagesSubject: API::V3::SerializableSubject,
+        FurtherEducationSubject: API::V3::SerializableSubject,
       },
     }
   end

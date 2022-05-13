@@ -70,8 +70,8 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Subject: API::V2::SerializableSubject,
-          PrimarySubject: API::V2::SerializableSubject,
+          Subject: API::V3::SerializableSubject,
+          PrimarySubject: API::V3::SerializableSubject,
         },
         include: [
           :subjects,

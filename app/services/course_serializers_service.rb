@@ -1,11 +1,11 @@
 class CourseSerializersService
   def initialize(
     course_serializer: API::V2::SerializableCourse,
-    subject_serializer: API::V2::SerializableSubject,
-    primary_subject_serializer: API::V2::SerializableSubject,
-    secondary_subject_serializer: API::V2::SerializableSubject,
-    modern_languages_subject_serializer: API::V2::SerializableSubject,
-    further_education_subject_serializer: API::V2::SerializableSubject,
+    subject_serializer: API::V3::SerializableSubject,
+    primary_subject_serializer: API::V3::SerializableSubject,
+    secondary_subject_serializer: API::V3::SerializableSubject,
+    modern_languages_subject_serializer: API::V3::SerializableSubject,
+    further_education_subject_serializer: API::V3::SerializableSubject,
     site_status_serializer: API::V2::SerializableSiteStatus,
     site_serializer: API::V2::SerializableSite,
     provider_serializer: API::V2::SerializableProvider,
