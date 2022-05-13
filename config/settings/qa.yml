@@ -6,7 +6,7 @@ search_ui:
   base_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
 
 # URL of this app for the callback after sigining in
-base_url: https://qa2.publish-teacher-training-courses.service.gov.uk
+base_url: https://qa.publish-teacher-training-courses.service.gov.uk
 
 bg_jobs:
   save_statistic:
