@@ -6,7 +6,7 @@ describe API::V3::DeserializableProvider do
     JSON.parse(jsonapi_renderer.render(
       provider,
       class: {
-        Course: API::V2::SerializableProvider,
+        Course: API::V3::SerializableProvider,
       },
     ).to_json)["data"]
   end

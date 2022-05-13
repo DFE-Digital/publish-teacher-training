@@ -30,7 +30,7 @@ describe CourseSerializersService do
       FurtherEducationSubject: API::V3::SerializableSubject,
       SiteStatus: API::V3::SerializableSiteStatus,
       Site: API::V3::SerializableSite,
-      Provider: API::V2::SerializableProvider,
+      Provider: API::V3::SerializableProvider,
       ProviderEnrichment: API::V2::SerializableProviderEnrichment,
       RecruitmentCycle: API::V2::SerializableRecruitmentCycle,
       v3: {

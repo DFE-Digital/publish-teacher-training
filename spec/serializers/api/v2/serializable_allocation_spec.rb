@@ -13,7 +13,7 @@ describe API::V2::SerializableAllocation do
       allocation,
       class: {
         Allocation: API::V2::SerializableAllocation,
-        Provider: API::V2::SerializableProvider,
+        Provider: API::V3::SerializableProvider,
         AllocationUplift: API::V2::SerializableAllocationUplift,
       },
       include: %i[
