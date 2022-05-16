@@ -81,7 +81,7 @@ describe EmitsRequestEvents, type: :request do
   end
 
   def stub_feature(enabled)
-    allow(FeatureService).to receive(:enabled?).with(:new_publish).and_return(:false)
+    allow(FeatureService).to receive(:enabled?).with(:new_publish).and_return(false)
     allow(FeatureService).to receive(:enabled?).with(:send_request_data_to_bigquery).and_return(enabled)
   end
 end
