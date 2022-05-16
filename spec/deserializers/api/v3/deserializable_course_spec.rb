@@ -6,7 +6,7 @@ describe API::V3::DeserializableCourse do
     JSON.parse(jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V2::SerializableCourse,
+        Course: API::V3::SerializableCourse,
       },
     ).to_json)["data"]
   end
