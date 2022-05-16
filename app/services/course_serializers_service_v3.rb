@@ -9,7 +9,6 @@ class CourseSerializersServiceV3
     site_status_serializer: API::V3::SerializableSiteStatus,
     site_serializer: API::V3::SerializableSite,
     provider_serializer: API::V3::SerializableProvider,
-    # provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
     recruitment_cycle_serializer: API::V3::SerializableRecruitmentCycle,
     subject_area_serializer: API::V3::SerializableSubjectArea
   )
@@ -22,7 +21,6 @@ class CourseSerializersServiceV3
     @site_serializer = site_serializer
     @site_status_serializer = site_status_serializer
     @provider_serializer = provider_serializer
-    # @provider_enrichment_serializer = provider_enrichment_serializer
     @recruitment_cycle_serializer = recruitment_cycle_serializer
     @subject_area_serializer = subject_area_serializer
   end
@@ -38,7 +36,6 @@ class CourseSerializersServiceV3
       SiteStatus: @site_status_serializer,
       Site: @site_serializer,
       Provider: @provider_serializer,
-      # ProviderEnrichment: @provider_enrichment_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
       SubjectArea: @subject_area_serializer,
     }
