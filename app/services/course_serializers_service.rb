@@ -24,7 +24,7 @@ class CourseSerializersService
     @provider_serializer = provider_serializer
     @recruitment_cycle_serializer = recruitment_cycle_serializer
 
-    @subject_area_serializer = v3_subject_area_serializer
+    @subject_area_serializer = subject_area_serializer
   end
 
   def execute
