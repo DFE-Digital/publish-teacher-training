@@ -8,10 +8,8 @@ Rails.application.routes.draw do
     get "/", to: redirect("/docs/")
   end
 
-  if FeatureService.enabled?(:new_publish)
-    constraints(host: /www2\./) do
-      match "/(*path)" => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
-    end
+  constraints(host: /www2\./) do
+    match "/(*path)" => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
   end
 
   root to: "publish/providers#index"
