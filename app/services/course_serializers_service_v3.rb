@@ -10,7 +10,8 @@ class CourseSerializersServiceV3
     site_serializer: API::V3::SerializableSite,
     provider_serializer: API::V3::SerializableProvider,
     # provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
-    recruitment_cycle_serializer: API::V3::SerializableRecruitmentCycle
+    recruitment_cycle_serializer: API::V3::SerializableRecruitmentCycle,
+    subject_area_serializer: API::V3::SerializableSubjectArea
   )
     @course_serializer = course_serializer
     @subject_serializer = subject_serializer
@@ -23,6 +24,7 @@ class CourseSerializersServiceV3
     @provider_serializer = provider_serializer
     # @provider_enrichment_serializer = provider_enrichment_serializer
     @recruitment_cycle_serializer = recruitment_cycle_serializer
+    @subject_area_serializer = subject_area_serializer
   end
 
   def execute
@@ -38,6 +40,7 @@ class CourseSerializersServiceV3
       Provider: @provider_serializer,
       ProviderEnrichment: @provider_enrichment_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
+      SubjectArea: @subject_area_serializer,
     }
   end
 end
