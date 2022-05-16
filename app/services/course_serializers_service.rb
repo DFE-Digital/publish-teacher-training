@@ -38,15 +38,6 @@ class CourseSerializersService
       Provider: @provider_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
       SubjectArea: @subject_area_serializer,
-      # v3: {
-      #   SubjectArea: @v3_subject_area_serializer,
-      #   # this is ok until the serializers for subjects need to diverge from V2
-      #   Subject: @subject_serializer,
-      #   PrimarySubject: @primary_subject_serializer,
-      #   SecondarySubject: @secondary_subject_serializer,
-      #   ModernLanguagesSubject: @modern_languages_subject_serializer,
-      #   FurtherEducationSubject: @further_education_subject_serializer,
-      # },
     }
   end
 end
