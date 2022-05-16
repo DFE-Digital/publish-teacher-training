@@ -33,14 +33,15 @@ describe CourseSerializersService do
       Provider: API::V3::SerializableProvider,
       # ProviderEnrichment: API::V2::SerializableProviderEnrichment,
       RecruitmentCycle: API::V3::SerializableRecruitmentCycle,
-      v3: {
-        SubjectArea: API::V3::SerializableSubjectArea,
-        Subject: API::V3::SerializableSubject,
-        PrimarySubject: API::V3::SerializableSubject,
-        SecondarySubject: API::V3::SerializableSubject,
-        ModernLanguagesSubject: API::V3::SerializableSubject,
-        FurtherEducationSubject: API::V3::SerializableSubject,
-      },
+      SubjectArea: API::V3::SerializableSubjectArea,
+      # v3: {
+      #   SubjectArea: API::V3::SerializableSubjectArea,
+      #   Subject: API::V3::SerializableSubject,
+      #   PrimarySubject: API::V3::SerializableSubject,
+      #   SecondarySubject: API::V3::SerializableSubject,
+      #   ModernLanguagesSubject: API::V3::SerializableSubject,
+      #   FurtherEducationSubject: API::V3::SerializableSubject,
+      # },
     }
   end
 
@@ -57,14 +58,15 @@ describe CourseSerializersService do
       Provider: provider_serializer_spy,
       # ProviderEnrichment: provider_enrichment_serializer_spy,
       RecruitmentCycle: recruitment_cycle_serializer_spy,
-      v3: {
-        SubjectArea: subject_area_serializer_spy,
-        Subject: subject_serializer_spy,
-        PrimarySubject: primary_subject_serializer_spy,
-        SecondarySubject: secondary_subject_serializer_spy,
-        ModernLanguagesSubject: modern_languages_subject_serializer_spy,
-        FurtherEducationSubject: further_education_subject_serializer_spy,
-      },
+      SubjectArea: API::V3::SerializableSubjectArea,
+      # v3: {
+      #   SubjectArea: subject_area_serializer_spy,
+      #   Subject: subject_serializer_spy,
+      #   PrimarySubject: primary_subject_serializer_spy,
+      #   SecondarySubject: secondary_subject_serializer_spy,
+      #   ModernLanguagesSubject: modern_languages_subject_serializer_spy,
+      #   FurtherEducationSubject: further_education_subject_serializer_spy,
+      # },
     }
   end
 
