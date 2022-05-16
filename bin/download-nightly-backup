@@ -36,11 +36,10 @@ fi
 STORAGE_CONN_STR="$(az keyvault secret show --name ${BACKUP_STORAGE_SECRET_NAME} --vault-name ${KEY_VAULT_NAME} | jq -r .value)"
 
 BACKUP_ARCHIVE_FILENAME=$(az storage blob list --connection-string ${STORAGE_CONN_STR} --container-name ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} --prefix ${BACKUP_FILENAME_PREFIX}${BACKUP_DATE} --output json --query [-1].name | jq -r)
-if [[ -z "${BACKUP_ARCHIVE_FILENAME}" ]]; then
+if [[ -z ${BACKUP_ARCHIVE_FILENAME} ]]; then
   echo "There are no files found matching the prefix ${BACKUP_FILENAME_PREFIX}${BACKUP_DATE} in container ${AZURE_BACKUP_STORAGE_CONTAINER_NAME}"
   exit 1
 else
+  echo "Downloading ${BACKUP_ARCHIVE_FILENAME} ..."
   az storage blob download --connection-string ${STORAGE_CONN_STR} -c ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} -n ${BACKUP_ARCHIVE_FILENAME} -f ${BACKUP_ARCHIVE_FILENAME} --output none
 fi
-
-echo ${BACKUP_ARCHIVE_FILENAME}
