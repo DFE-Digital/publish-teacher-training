@@ -9,7 +9,7 @@ class CourseSerializersService
     site_status_serializer: API::V3::SerializableSiteStatus,
     site_serializer: API::V3::SerializableSite,
     provider_serializer: API::V3::SerializableProvider,
-    provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
+    # provider_enrichment_serializer: API::V2::SerializableProviderEnrichment,
     recruitment_cycle_serializer: API::V3::SerializableRecruitmentCycle,
     v3_subject_area_serializer: API::V3::SerializableSubjectArea
   )
@@ -22,7 +22,7 @@ class CourseSerializersService
     @site_serializer = site_serializer
     @site_status_serializer = site_status_serializer
     @provider_serializer = provider_serializer
-    @provider_enrichment_serializer = provider_enrichment_serializer
+    # @provider_enrichment_serializer = provider_enrichment_serializer
     @recruitment_cycle_serializer = recruitment_cycle_serializer
 
     @v3_subject_area_serializer = v3_subject_area_serializer
