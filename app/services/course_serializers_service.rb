@@ -39,7 +39,7 @@ class CourseSerializersService
       SiteStatus: @site_status_serializer,
       Site: @site_serializer,
       Provider: @provider_serializer,
-      ProviderEnrichment: @provider_enrichment_serializer,
+      # ProviderEnrichment: @provider_enrichment_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
       v3: {
         SubjectArea: @v3_subject_area_serializer,
