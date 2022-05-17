@@ -8,7 +8,7 @@ module API
           subjects = subjects.order(:subject_name)
         end
 
-        render jsonapi: subjects, fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute[:v3]
+        render jsonapi: subjects, fields: fields_param, include: params[:include], class: CourseSerializersService.new.execute
       end
     end
   end
