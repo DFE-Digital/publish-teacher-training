@@ -45,7 +45,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V2::SerializableProvider,
         },
         include: [
           :provider,
@@ -70,8 +70,8 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Subject: API::V3::SerializableSubject,
-          PrimarySubject: API::V3::SerializableSubject,
+          Subject: API::V2::SerializableSubject,
+          PrimarySubject: API::V2::SerializableSubject,
         },
         include: [
           :subjects,
@@ -90,7 +90,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V2::SerializableProvider,
         },
         include: [
           :accrediting_provider,
@@ -109,7 +109,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V2::SerializableProvider,
         },
         include: [
           :site_status,
@@ -128,7 +128,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V2::SerializableProvider,
         },
         include: [
           :site,

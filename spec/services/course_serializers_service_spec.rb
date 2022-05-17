@@ -10,8 +10,9 @@ describe CourseSerializersService do
   let(:site_status_serializer_spy) { spy }
   let(:site_serializer_spy) { spy }
   let(:provider_serializer_spy) { spy }
+  let(:provider_enrichment_serializer_spy) { spy }
   let(:recruitment_cycle_serializer_spy) { spy }
-  let(:subject_area_serializer_spy) { spy }
+  let(:v3_subject_area_serializer_spy) { spy }
 
   let(:course) { spy("course", present?: true) }
 
@@ -21,17 +22,25 @@ describe CourseSerializersService do
 
   let(:default_class_serializers) do
     {
-      Course: API::V3::SerializableCourse,
-      Subject: API::V3::SerializableSubject,
-      PrimarySubject: API::V3::SerializableSubject,
-      SecondarySubject: API::V3::SerializableSubject,
-      ModernLanguagesSubject: API::V3::SerializableSubject,
-      FurtherEducationSubject: API::V3::SerializableSubject,
-      SiteStatus: API::V3::SerializableSiteStatus,
-      Site: API::V3::SerializableSite,
-      Provider: API::V3::SerializableProvider,
-      RecruitmentCycle: API::V3::SerializableRecruitmentCycle,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      Course: API::V2::SerializableCourse,
+      Subject: API::V2::SerializableSubject,
+      PrimarySubject: API::V2::SerializableSubject,
+      SecondarySubject: API::V2::SerializableSubject,
+      ModernLanguagesSubject: API::V2::SerializableSubject,
+      FurtherEducationSubject: API::V2::SerializableSubject,
+      SiteStatus: API::V2::SerializableSiteStatus,
+      Site: API::V2::SerializableSite,
+      Provider: API::V2::SerializableProvider,
+      ProviderEnrichment: API::V2::SerializableProviderEnrichment,
+      RecruitmentCycle: API::V2::SerializableRecruitmentCycle,
+      v3: {
+        SubjectArea: API::V3::SerializableSubjectArea,
+        Subject: API::V2::SerializableSubject,
+        PrimarySubject: API::V2::SerializableSubject,
+        SecondarySubject: API::V2::SerializableSubject,
+        ModernLanguagesSubject: API::V2::SerializableSubject,
+        FurtherEducationSubject: API::V2::SerializableSubject,
+      },
     }
   end
 
@@ -46,8 +55,16 @@ describe CourseSerializersService do
       SiteStatus: site_status_serializer_spy,
       Site: site_serializer_spy,
       Provider: provider_serializer_spy,
+      ProviderEnrichment: provider_enrichment_serializer_spy,
       RecruitmentCycle: recruitment_cycle_serializer_spy,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      v3: {
+        SubjectArea: v3_subject_area_serializer_spy,
+        Subject: subject_serializer_spy,
+        PrimarySubject: primary_subject_serializer_spy,
+        SecondarySubject: secondary_subject_serializer_spy,
+        ModernLanguagesSubject: modern_languages_subject_serializer_spy,
+        FurtherEducationSubject: further_education_subject_serializer_spy,
+      },
     }
   end
 

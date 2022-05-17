@@ -119,7 +119,7 @@ private
   end
 
   def training_provider_search_service
-    API::V3::AccreditedProviderTrainingProvidersController::TrainingProviderSearch
+    API::V2::AccreditedProviderTrainingProvidersController::TrainingProviderSearch
   end
 
   def training_providers_with_fee_paying_pe_course
