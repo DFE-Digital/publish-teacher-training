@@ -24,7 +24,7 @@ module API
           )
 
         render jsonapi: @provider,
-               class: CourseSerializersService.new.execute,
+               class: CourseSerializersServiceV3.new.execute,
                include: params[:include],
                fields: { providers: %i[provider_code provider_name courses
                                        recruitment_cycle_year address1 address2
