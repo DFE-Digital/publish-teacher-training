@@ -467,6 +467,21 @@ describe Course, type: :model do
           it { is_expected.to be_nil }
         end
       end
+
+      context "invalid_enrichment" do
+        let(:course) { create(:course, enrichments: [invalid_enrichment]) }
+        let(:invalid_enrichment) { build(:course_enrichment, about_course: "") }
+
+        before do
+          subject
+          invalid_enrichment.about_course = Faker::Lorem.sentence(word_count: 1000)
+          subject.valid?
+        end
+
+        it "adds enrichment errors" do
+          expect(subject.errors.full_messages).not_to be_empty
+        end
+      end
     end
 
     describe "publishable?" do
