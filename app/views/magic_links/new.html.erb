@@ -1,0 +1,30 @@
+<% page_title = "Sign in" %>
+<% content_for :page_title, page_title %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= govuk_notification_banner(title_text: t("notification_banner.info")) do |notification_banner| %>
+      <% notification_banner.heading(text: "Temporary login") %>
+      <p class="govuk-body">DfE Sign-in is experiencing problems. You need to sign in using your email address.</p>
+    <% end %>
+
+    <h1 class="govuk-heading-l">
+      <%= page_title %>
+    </h1>
+
+    <p class="govuk-body-l">You must sign in to your account to publish teacher training courses.</p>
+
+    <%= form_with(
+      model: @magic_link_form,
+      url: magic_link_path
+    ) do |f| %>
+      <%= f.govuk_text_field :email, label: { text: "Email address", size: "m" } %>
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+    <h2 class="govuk-heading-m">Ask for an account</h2>
+    <p class="govuk-body">Do not have an account? You can get one by emailing <%= bat_contact_mail_to %>. Please include the full names and email addresses of anyone who needs access.</p>
+  </div>
+</div>

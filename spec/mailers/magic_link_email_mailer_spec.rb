@@ -28,7 +28,7 @@ describe MagicLinkEmailMailer, type: :mailer do
     it "includes the magic link url in the personalisation" do
       expect(mail.govuk_notify_personalisation[:magic_link_url]).to(
         eq(
-          "#{Settings.publish_url}/signin_with_magic_link" \
+          "#{Settings.base_url}/signin_with_magic_link" \
           "?email=#{user.email}" \
           "&token=#{user.magic_link_token}",
         ),
