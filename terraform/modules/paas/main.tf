@@ -55,9 +55,10 @@ resource cloudfoundry_app worker_app {
 }
 
 resource cloudfoundry_route web_app_cloudapps_digital_route {
+  for_each = toset(local.cloudapp_names)
   domain   = data.cloudfoundry_domain.london_cloudapps_digital.id
   space    = data.cloudfoundry_space.space.id
-  hostname = local.web_app_name
+  hostname = each.value
 }
 
 resource cloudfoundry_route web_app_service_gov_uk_route {

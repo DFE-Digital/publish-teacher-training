@@ -1,0 +1,28 @@
+gcp_api_key: please_change_me
+publish_api_url: https://teacher-training-api-rollover.london.cloudapps.digital
+publish_url: https://publish-rollover.london.cloudapps.digital
+find_url: https://find-rollover.london.cloudapps.digital
+
+# URL of this app for the callback after sigining in
+base_url: https://teacher-training-api-rollover.london.cloudapps.digital
+
+search_ui:
+  base_url: https://find-rollover.london.cloudapps.digital
+
+dfe_signin:
+  issuer: https://pp-oidc.signin.education.gov.uk
+  profile: https://pp-profile.signin.education.gov.uk
+  secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
+  user_search_url: https://pp-support.signin.education.gov.uk/users
+
+bg_jobs:
+  save_statistic:
+    cron: "0 0 * * *" # daily at midnight
+    class: "SaveStatisticJob"
+    queue: save_statistic
+environment:
+  label: "Rollover"
+  name: "rollover"
+
+features:
+  send_request_data_to_bigquery: false

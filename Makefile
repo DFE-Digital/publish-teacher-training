@@ -86,6 +86,13 @@ ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
 	$(eval export AUTO_APPROVE=-auto-approve)
 
+.PHONY: rollover
+rollover: ## Set DEPLOY_ENV to rollover
+	$(eval DEPLOY_ENV=rollover)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
+	$(eval space=bat-prod)
+	$(eval paas_env=rollover)
+
 deploy-init:
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=master))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
@@ -126,6 +133,14 @@ edit-app-secrets: read-keyvault-config install-fetch-config
 
 print-app-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
+		-f yaml
+
+edit-infra-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
+		-e -d azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} -f yaml
+
+print-infra-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
 		-f yaml
 
 console:
