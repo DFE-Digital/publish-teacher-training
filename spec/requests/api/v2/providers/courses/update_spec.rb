@@ -338,6 +338,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "returns validation errors" do
         perform_request(course)
 
+        expect("Invalid about_course".in?(subject)).to be(true)
         expect("Invalid interview_process".in?(subject)).to be(true)
         expect("Invalid how_school_placements_work".in?(subject)).to be(true)
         expect("Invalid required_qualifications".in?(subject)).to be(true)
@@ -408,6 +409,21 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
         perform_request(course)
       }.to(change { course.reload.content_status }.from(:published).to(:published_with_unpublished_changes))
     end
+
+    context "with invalid data" do
+      let(:enrichment_attributes) do
+        { about_course: Faker::Lorem.sentence(word_count: 1000) }
+      end
+
+      subject { JSON.parse(response.body)["errors"].map { |e| e["title"] } }
+
+      it "returns validation errors" do
+        perform_request(course)
+
+        expect("Invalid enrichments".in?(subject)).to be(false)
+        expect("Invalid about_course".in?(subject)).to be(true)
+      end
+    end
   end
 
   context "course has a rolled-over enrichment" do
@@ -459,6 +475,7 @@ describe "PATCH /providers/:provider_code/courses/:course_code" do
       it "returns validation errors" do
         perform_request(course)
 
+        expect("Invalid about_course".in?(subject)).to be(true)
         expect("Invalid interview_process".in?(subject)).to be(true)
         expect("Invalid how_school_placements_work".in?(subject)).to be(true)
         expect("Invalid required_qualifications".in?(subject)).to be(true)

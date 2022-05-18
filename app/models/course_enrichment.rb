@@ -26,12 +26,20 @@ class CourseEnrichment < ApplicationRecord
     status.in? %w[draft rolled_over]
   end
 
+  # About this course
+  # TODO POST MIGRATION: Move out of this as it's handled in the form object
+  validates :about_course, presence: true, on: :publish
+  validates :about_course, words_count: { maximum: 400 }
+
   validates :interview_process, words_count: { maximum: 250 }
 
   validates :how_school_placements_work, presence: true, on: :publish
   validates :how_school_placements_work, words_count: { maximum: 350 }
 
-  # Fees
+  # Course length and fees
+
+  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
+  validates :course_length, presence: true, on: :publish
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
   validates :fee_uk_eu,
@@ -53,6 +61,11 @@ class CourseEnrichment < ApplicationRecord
   validates :financial_support,
             words_count: { maximum: 250 },
             if: :is_fee_based?
+
+  # Course length and salary
+  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
+  validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
+  validates :salary_details, words_count: { maximum: 250 }, unless: :is_fee_based?
 
   # Requirements and qualifications
 
