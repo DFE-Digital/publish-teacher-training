@@ -31,10 +31,7 @@ class CourseEnrichment < ApplicationRecord
   validates :how_school_placements_work, presence: true, on: :publish
   validates :how_school_placements_work, words_count: { maximum: 350 }
 
-  # Course length and fees
-
-  # TODO: POST MIGRATION: Move out of this as it's handled in the form object
-  validates :course_length, presence: true, on: :publish
+  # Fees
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
   validates :fee_uk_eu,

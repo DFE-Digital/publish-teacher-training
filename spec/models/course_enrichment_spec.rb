@@ -66,22 +66,6 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  describe "course_length attribute" do
-    let(:course_length_text) { "this course is great" }
-
-    subject { build :course_enrichment, course_length: course_length_text }
-
-    context "when nil" do
-      let(:course_length_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
   describe "how_school_placements_work attribute" do
     let(:how_school_placements_work_text) { "this course is great" }
 
