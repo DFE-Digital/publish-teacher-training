@@ -60,7 +60,6 @@ describe "Publishable API v2", type: :request do
             "Enter details about this course",
             "Enter details about school placements",
             "Enter a course length",
-            "Enter details about the salary for this course",
             "Enter GCSE requirements",
             "Select at least one location for this course",
           ])
