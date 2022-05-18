@@ -26,11 +26,6 @@ class CourseEnrichment < ApplicationRecord
     status.in? %w[draft rolled_over]
   end
 
-  # About this course
-  # TODO POST MIGRATION: Move out of this as it's handled in the form object
-  validates :about_course, presence: true, on: :publish
-  validates :about_course, words_count: { maximum: 400 }
-
   validates :interview_process, words_count: { maximum: 250 }
 
   validates :how_school_placements_work, presence: true, on: :publish
