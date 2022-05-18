@@ -137,10 +137,7 @@ describe "Publish API v2", type: :request do
         it "has validation errors" do
           expect(json_data.map { |error| error["detail"] }).to match_array([
             "Select at least one location for this course",
-            "Enter details about this course",
             "Enter details about school placements",
-            "Enter a course length",
-            "Enter details about the salary for this course",
             "Enter GCSE requirements",
           ])
         end
@@ -161,9 +158,7 @@ describe "Publish API v2", type: :request do
 
           it "has validation error details" do
             expect(json_data.map { |error| error["detail"] }).to match_array([
-              "Enter details about this course",
               "Enter details about school placements",
-              "Enter a course length",
               "Enter details about the fee for UK and EU students",
               "Enter GCSE requirements",
             ])
@@ -171,9 +166,7 @@ describe "Publish API v2", type: :request do
 
           it "has validation error pointers" do
             expect(json_data.map { |error| error["source"]["pointer"] }).to match_array([
-              "/data/attributes/about_course",
               "/data/attributes/how_school_placements_work",
-              "/data/attributes/course_length",
               "/data/attributes/fee_uk_eu",
               nil,
             ])
@@ -196,10 +189,7 @@ describe "Publish API v2", type: :request do
 
           it "has validation errors" do
             expect(json_data.map { |error| error["detail"] }).to match_array([
-              "Enter details about this course",
               "Enter details about school placements",
-              "Enter a course length",
-              "Enter details about the salary for this course",
               "Enter GCSE requirements",
             ])
           end

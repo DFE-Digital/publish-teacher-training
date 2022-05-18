@@ -66,44 +66,6 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  describe "about_course attribute" do
-    let(:about_course_text) { "this course is great" }
-
-    subject { build :course_enrichment, about_course: about_course_text }
-
-    context "with over 400 words" do
-      let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:about_course_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
-  describe "course_length attribute" do
-    let(:course_length_text) { "this course is great" }
-
-    subject { build :course_enrichment, course_length: course_length_text }
-
-    context "when nil" do
-      let(:course_length_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
   describe "how_school_placements_work attribute" do
     let(:how_school_placements_work_text) { "this course is great" }
 
@@ -195,30 +157,6 @@ describe CourseEnrichment, type: :model do
     end
   end
 
-  describe "salary_details attribute" do
-    let(:salary_details_text) { "this course is great" }
-
-    let(:salaried_course) { build :course, :with_salary }
-
-    subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
-
-    context "with over 250 words" do
-      let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
-
-      it { is_expected.not_to be_valid }
-    end
-
-    context "when nil" do
-      let(:salary_details_text) { nil }
-
-      it { is_expected.to be_valid }
-
-      describe "on publish" do
-        it { is_expected.not_to be_valid :publish }
-      end
-    end
-  end
-
   describe "validation for publish" do
     let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
 
@@ -259,7 +197,6 @@ describe CourseEnrichment, type: :model do
     context "salary based course" do
       let(:course_enrichment) { build(:course_enrichment, :with_salary_based_course) }
 
-      it { is_expected.to validate_presence_of(:salary_details).on(:publish) }
       it { is_expected.not_to validate_presence_of(:fee_uk_eu).on(:publish) }
       it { is_expected.not_to validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { is_expected.not_to validate_numericality_of(:fee_international).on(:publish) }
@@ -269,13 +206,6 @@ describe CourseEnrichment, type: :model do
 
         expect(course_enrichment).not_to be_valid :publish
         expect(course_enrichment.errors[:required_qualifications]).to be_present
-      end
-
-      it "validates maximum word count for salary_details" do
-        course_enrichment.salary_details = Faker::Lorem.sentence(word_count: 250 + 1)
-
-        expect(course_enrichment).not_to be_valid :publish
-        expect(course_enrichment.errors[:salary_details]).to be_present
       end
 
       context "fee based fields" do
