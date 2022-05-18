@@ -130,6 +130,9 @@ gem "cssbundling-rails", "~> 1.1"
 gem "jsbundling-rails", "~> 1.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 
+# for sending analytics data to the analytics platform
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v0.1.0"
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"

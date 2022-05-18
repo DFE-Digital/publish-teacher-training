@@ -6,6 +6,17 @@ GIT
     custom_error_message (1.2.1)
 
 GIT
+  remote: https://github.com/DFE-Digital/dfe-analytics.git
+  revision: c7a07e5dd461616dc0a701e9a0b9f0d7cd0fb22e
+  tag: v0.1.0
+  specs:
+    dfe-analytics (0.1.0)
+      google-cloud-bigquery (~> 1.38)
+      i18n
+      rails (>= 6)
+      request_store_rails (~> 2)
+
+GIT
   remote: https://github.com/DFE-Digital/jsonapi-rails.git
   revision: 359d794d916caebc2ea2cf907477227279b4fac3
   specs:
@@ -521,6 +532,8 @@ GEM
       uber (< 0.2.0)
     request_store (1.5.1)
       rack (>= 1.4)
+    request_store_rails (2.0.0)
+      concurrent-ruby (~> 1.0)
     retriable (3.1.2)
     rexml (3.2.5)
     rspec (3.11.0)
@@ -695,6 +708,7 @@ DEPENDENCIES
   cssbundling-rails (~> 1.1)
   custom_error_message!
   database_cleaner
+  dfe-analytics!
   discard
   draper
   dry-container

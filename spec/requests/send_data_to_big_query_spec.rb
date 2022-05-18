@@ -22,7 +22,7 @@ class UnauthenticatedTestController < PublicAPIController
   end
 end
 
-describe EmitsRequestEvents, type: :request do
+xdescribe EmitsRequestEvents, type: :request do
   let!(:user) { create(:user) }
 
   before do

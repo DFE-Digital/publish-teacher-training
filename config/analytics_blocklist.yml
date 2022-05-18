@@ -1,0 +1,63 @@
+---
+:shared:
+  :audit:
+  - id
+  - auditable_id
+  - auditable_type
+  - associated_id
+  - associated_type
+  - user_id
+  - user_type
+  - username
+  - action
+  - audited_changes
+  - version
+  - comment
+  - remote_address
+  - request_uuid
+  - created_at
+  :provider:
+  - scheme_member
+  - contact_name
+  - email
+  - telephone
+  :access_request:
+  - email_address
+  - first_name
+  - last_name
+  - reason
+  - requester_id
+  - requester_email
+  - discarded_at
+  :contact:
+  - name
+  - email
+  - telephone
+  :course_enrichment:
+  - about_course
+  - course_length
+  - fee_details
+  - fee_international
+  - fee_uk_eu
+  - financial_support
+  - how_school_placements_work
+  - interview_process
+  - other_requirements
+  - personal_qualities
+  - required_qualifications
+  - salary_details
+  :provider_ucas_preference:
+  - id
+  - provider_id
+  - type_of_gt12
+  - send_application_alerts
+  - application_alert_email
+  - gt12_response_destination
+  - created_at
+  - updated_at
+  :user:
+  - email
+  - first_name
+  - last_name
+  - sign_in_user_id
+  - magic_link_token

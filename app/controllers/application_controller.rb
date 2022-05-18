@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include EmitsRequestEvents
+  include DfE::Analytics::Requests
   include Authentication
 
   helper_method :current_user
