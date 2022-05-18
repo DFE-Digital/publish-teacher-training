@@ -12,8 +12,7 @@ search_ui:
 
 authentication:
   secret: secret
-  # mode: persona
-  mode: magic_link
+  mode: persona
 
 allocation_cycle_year: 2022
 allocations_close_date: 2022-07-02
