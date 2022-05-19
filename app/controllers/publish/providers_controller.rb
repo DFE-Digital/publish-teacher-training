@@ -25,7 +25,13 @@ module Publish
     end
 
     def show
-      authorize provider, :show?
+      authorize provider
+
+      if FeatureService.enabled?(:new_publish_navigation) && !provider.rolled_over?
+        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
+      else
+        :show?
+      end
     end
 
     def details
