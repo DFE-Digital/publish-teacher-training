@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class AccreditedProviderTrainingProvidersController < API::V2::ApplicationController
       before_action :build_recruitment_cycle
       before_action :build_provider
