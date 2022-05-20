@@ -56,11 +56,11 @@
       <% if @provider && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? && @provider.recruitment_cycle %>
         <%= render(NavigationBar::View.new(
           items: [
-            { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: "Locations", url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: "Users", url: users_publish_provider_path(code: @provider.provider_code) },
-            { name: "Training partners", url: publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: "Organisation details", url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.locations"), url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.users"), url: users_publish_provider_path(code: @provider.provider_code) },
+            { name: t("navigation_bar.training_partners"), url: publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.organisation_details"), url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
           ],
           current_path: request.path,
           current_user: @current_user
@@ -70,10 +70,10 @@
       <% elsif @provider && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? && @provider.recruitment_cycle %>
         <%= render(NavigationBar::View.new(
           items: [
-            { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: "Locations", url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: "Users", url: users_publish_provider_path(code: @provider.provider_code) },
-            { name: "Organisation details", url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.locations"), url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: t("navigation_bar.users"), url: users_publish_provider_path(code: @provider.provider_code) },
+            { name: t("navigation_bar.organisation_details"), url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
           ],
           current_path: request.path,
           current_user: @current_user
