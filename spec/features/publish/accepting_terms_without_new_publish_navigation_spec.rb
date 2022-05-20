@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # To be deleted when new_publish_navigation feature flag is removed
 
 require "rails_helper"

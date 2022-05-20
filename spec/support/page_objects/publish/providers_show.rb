@@ -20,7 +20,6 @@ module PageObjects
       element :nav_courses, :link, "Courses"
       element :nav_users, :link, "Users"
       element :nav_training_partners, :link, "Training partners"
-
     end
   end
 end
