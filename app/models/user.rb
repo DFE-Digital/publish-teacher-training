@@ -88,6 +88,10 @@ class User < ApplicationRecord
     providers.count > 1
   end
 
+  def has_multiple_providers_in_current_recruitment_cycle?
+    providers_via_organisations.where(recruitment_cycle: RecruitmentCycle.current).count > 1
+  end
+
 private
 
   def email_is_lowercase
