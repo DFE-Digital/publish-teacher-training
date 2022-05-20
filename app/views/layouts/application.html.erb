@@ -54,7 +54,7 @@
         <% end %>
       <% end %>
 
-      <% if FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? %>
+      <% if FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? %>
         <%= render(NavigationBar::View.new(
           items: [
             { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
@@ -67,6 +67,20 @@
           current_user: @current_user
           )
           ) %>
+
+        <% elsif FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? %>
+        <%= render(NavigationBar::View.new(
+          items: [
+            { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: "Locations", url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+            { name: "Users", url: users_publish_provider_path(code: @provider.provider_code) },
+            { name: "Organisation details", url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
+          ],
+          current_path: request.path,
+          current_user: @current_user
+        )
+            ) %>
+
       <% end %>
 
     <% end %>
