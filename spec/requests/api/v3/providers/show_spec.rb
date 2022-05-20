@@ -30,7 +30,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
   let(:contact) { build(:contact) }
   let(:ucas_preferences) { build(:provider_ucas_preference) }
-  # TODO: update this
+  # TODO: update this code
   let(:expected_response) {
     {
       "data" => {

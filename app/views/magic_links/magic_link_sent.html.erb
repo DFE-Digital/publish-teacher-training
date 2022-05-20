@@ -1,0 +1,18 @@
+<% content_for :page_title, "Check your email" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Check your email
+    </h1>
+    <p class="govuk-body-l">
+      We’ve sent you an email. Click on the link in the email to confirm your address and
+      sign in to Publish teacher training courses.
+    </p>
+    <p class="govuk-body">
+      If our email doesn’t arrive within 5 minutes, check your spam and trash folder,
+      <%= govuk_link_to "try again", sign_in_path %> or email 
+      <%= bat_contact_mail_to "support", subject: "Publish teacher training courses support", class: "govuk-footer__link" %>.
+    </p>
+  </div>
+</div>

@@ -6,6 +6,8 @@ module PageObjects
 
     element :page_heading, ".govuk-heading-l"
 
+    element :email_field, "#user-email-field"
+
     element :sign_in_button, ".qa-sign_in_button"
   end
 end

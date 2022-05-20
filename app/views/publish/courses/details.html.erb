@@ -1,9 +1,5 @@
 <% content_for :page_title, "#{course.name_and_code} - Courses" %>
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(
-      publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)
-  ) %>
-<% end %>
+<%= content_for :before_content, render_breadcrumbs(:course) %>
 
 <h1 class="govuk-heading-l">
   <span class="govuk-caption-l"><%= course.description %></span>

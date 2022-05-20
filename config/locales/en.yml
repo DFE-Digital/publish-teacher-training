@@ -17,6 +17,10 @@ en:
   change: "Change"
   page_titles:
     error_prefix: "Error: "
+  publish_authentication:
+    magic_link:
+      invalid_token: "Magic link could not be verified, please request a new one"
+      expired: "Magic link has expired, please request a new one"
   edit_options:
     entry_requirements:
       must_have_qualification_at_application_time:
@@ -408,6 +412,11 @@ en:
           attributes:
             terms_accepted:
               accepted: "You must accept the terms and conditions to continue"
+        publish/authentication/magic_link_form:
+          attributes:
+            email:
+              blank: "Enter an email adddress"
+              invalid: "Enter a valid email address"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

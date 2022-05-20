@@ -86,6 +86,13 @@ ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
 	$(eval export AUTO_APPROVE=-auto-approve)
 
+.PHONY: rollover
+rollover: ## Set DEPLOY_ENV to rollover
+	$(eval DEPLOY_ENV=rollover)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
+	$(eval space=bat-prod)
+	$(eval paas_env=rollover)
+
 deploy-init:
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=master))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
@@ -128,6 +135,14 @@ print-app-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
 		-f yaml
 
+edit-infra-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
+		-e -d azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} -f yaml
+
+print-infra-secrets: read-keyvault-config install-fetch-config
+	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
+		-f yaml
+
 console:
 	cf target -s ${space}
 	cf ssh teacher-training-api-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
@@ -155,9 +170,9 @@ disable-maintenance: ## make qa disable-maintenance / make prod disable-maintena
 	cf delete -rf ttapi-unavailable
 
 restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
-	$(eval BACKUP_ARCHIVE_FILENAME=$(shell bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}))
+	bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}
 	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
-	bin/restore-nightly-backup ${space} ${postgres_database_name} ${BACKUP_ARCHIVE_FILENAME}
+	bin/restore-nightly-backup ${space} ${postgres_database_name} ${paas_env}_backup- ${BACKUP_DATE}
 
 get-image-tag:
 	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app teacher-training-api-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))

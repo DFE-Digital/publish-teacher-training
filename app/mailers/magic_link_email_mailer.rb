@@ -13,6 +13,6 @@ class MagicLinkEmailMailer < GovukNotifyRails::Mailer
 private
 
   def magic_link_url_for_user(user)
-    "#{Settings.publish_url}/signin_with_magic_link?email=#{user.email}&token=#{user.magic_link_token}"
+    "#{Settings.base_url}/signin_with_magic_link?email=#{user.email}&token=#{user.magic_link_token}"
   end
 end

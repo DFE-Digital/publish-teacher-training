@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     get "/", to: redirect("/docs/")
   end
 
+  constraints(host: /www2\./) do
+    match "/(*path)" => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
+  end
+
   root to: "publish/providers#index"
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
@@ -24,7 +28,13 @@ Rails.application.routes.draw do
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
 
-  if AuthenticationService.persona?
+  if AuthenticationService.magic_link?
+    get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links
+    post "/magic-link", to: "magic_links#create"
+    get "/magic-link-sent", to: "magic_links#magic_link_sent"
+    get "/signin_with_magic_link", to: "magic_link_sessions#create", as: "signin_with_magic_link"
+    get "/auth/dfe/signout", to: "sessions#destroy"
+  elsif AuthenticationService.persona?
     get "/personas", to: "personas#index"
     post "/auth/developer/callback", to: "sessions#callback"
     get "/auth/developer/signout", to: "sessions#destroy"
