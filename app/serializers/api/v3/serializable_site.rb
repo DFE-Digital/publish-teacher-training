@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class SerializableSite < JSONAPI::Serializable::Resource
       include JsonapiCacheKeyHelper
 

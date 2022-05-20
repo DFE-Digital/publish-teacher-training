@@ -12,7 +12,7 @@ module API
                fields: fields_param,
                include: params[:include],
                meta: { count: course_search.size },
-               class: CourseSerializersServiceV3.new(provider_serializer: API::V3::SerializableProvider).execute,
+               class: CourseSerializersService.new(provider_serializer: API::V3::SerializableProvider).execute,
                cache: Rails.cache
       end
 
@@ -24,7 +24,7 @@ module API
           render jsonapi: @course,
                  fields: fields_param,
                  include: params[:include],
-                 class: CourseSerializersServiceV3.new.execute
+                 class: CourseSerializersService.new.execute
         else
           raise ActiveRecord::RecordNotFound
         end

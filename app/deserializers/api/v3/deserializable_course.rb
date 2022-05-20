@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class DeserializableCourse < JSONAPI::Deserializable::Resource
       COURSE_ATTRIBUTES = %i[
         about_course

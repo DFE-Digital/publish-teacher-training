@@ -1,8 +1,8 @@
 require "rails_helper"
 
-describe API::V2::SerializableSubject do
+describe API::V3::SerializableSubject do
   let(:non_bursary_subject) { find_or_create :primary_subject, :primary_with_english }
-  let(:resource) { API::V2::SerializableSubject.new object: non_bursary_subject }
+  let(:resource) { API::V3::SerializableSubject.new object: non_bursary_subject }
 
   it "sets type to users" do
     expect(resource.jsonapi_type).to eq :subjects
@@ -25,7 +25,7 @@ describe API::V2::SerializableSubject do
   #       enhancement course available
   xcontext "when a bursary subject with subject knowledge enhancement course available" do
     let(:bursary_subject) { find_or_create(:secondary_subject, :mathematics) }
-    let(:resource) { API::V2::SerializableSubject.new object: bursary_subject }
+    let(:resource) { API::V3::SerializableSubject.new object: bursary_subject }
 
     it { is_expected.to have_attribute(:bursary_amount).with_value(bursary_subject.financial_incentive.bursary_amount) }
     it { is_expected.to have_attribute(:early_career_payments).with_value(bursary_subject.financial_incentive.early_career_payments) }
