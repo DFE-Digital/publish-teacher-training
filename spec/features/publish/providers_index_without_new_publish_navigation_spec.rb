@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # These tests can be deleted when the `publish_new_navigation` feature flag is removed. All these tests are covered in `provider_index_spec.rb`
-=======
->>>>>>> 1ab091c3 (Rework provider index specs)
 require "rails_helper"
 
 feature "Providers index" do
