@@ -15,6 +15,7 @@ en:
       sign_out: "Sign out"
   cancel: "Cancel"
   change: "Change"
+  change_organisation: "Change organisation"
   page_titles:
     error_prefix: "Error: "
   publish_authentication:

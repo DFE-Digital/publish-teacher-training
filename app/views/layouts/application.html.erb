@@ -47,9 +47,11 @@
           <%= yield :before_content %>
         <% end %>
       </div>
+
+      <%= govuk_link_to t('change_organisation'), root_path %>
+
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
-
           <%= render(FlashBanner::View.new(flash: flash)) %>
 
           <%= yield %>
