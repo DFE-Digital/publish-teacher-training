@@ -47,14 +47,13 @@
       </div>
 
     <% if FeatureService.enabled?(:new_publish_navigation) %>
-
       <% if current_user %>
         <% if current_user.has_multiple_providers_in_current_recruitment_cycle? && @provider && !request.path.include?('support') %>
          <%= render TitleBar::View.new(title: @provider.provider_name) %>
         <% end %>
       <% end %>
 
-      <% if FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? %>
+      <% if @provider && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? && @provider.recruitment_cycle %>
         <%= render(NavigationBar::View.new(
           items: [
             { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
@@ -68,7 +67,7 @@
           )
           ) %>
 
-        <% elsif FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? %>
+      <% elsif @provider && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? && @provider.recruitment_cycle %>
         <%= render(NavigationBar::View.new(
           items: [
             { name: "Courses", url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
@@ -80,9 +79,7 @@
           current_user: @current_user
         )
             ) %>
-
       <% end %>
-
     <% end %>
 
       <main class="govuk-main-wrapper " id="main-content" role="main">
