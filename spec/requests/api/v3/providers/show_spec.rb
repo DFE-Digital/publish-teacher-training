@@ -30,7 +30,6 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
   let(:contact) { build(:contact) }
   let(:ucas_preferences) { build(:provider_ucas_preference) }
-  # TODO: update this code
   let(:expected_response) {
     {
       "data" => {
@@ -39,11 +38,16 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         "attributes" => {
           "provider_code" => provider.provider_code,
           "provider_name" => provider.provider_name,
+          "train_with_us" => provider.train_with_us,
+          "train_with_disability" => provider.train_with_disability,
           "address1" => provider.address1,
           "address2" => provider.address2,
           "address3" => provider.address3,
           "address4" => provider.address4,
           "postcode" => provider.postcode,
+          "telephone" => provider.telephone,
+          "email" => provider.email,
+          "website" => provider.website,
           "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
           "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
           "recruitment_cycle_year" => provider.recruitment_cycle.year,
