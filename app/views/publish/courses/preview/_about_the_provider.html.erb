@@ -5,7 +5,7 @@
       <%= markdown(@provider.train_with_us) %>
     <% else %>
       <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
-        <p class="govuk-body">Please add details <%= govuk_link_to "about your organisation", about_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) %>.</p>
+        <p class="govuk-body">Please add details <%= govuk_link_to "about your organisation", about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) %>.</p>
       <% end %>
     <% end %>
   </div>
