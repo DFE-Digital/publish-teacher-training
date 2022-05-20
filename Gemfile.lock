@@ -242,7 +242,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    govuk-components (3.0.3)
+    govuk-components (3.0.4)
       activemodel (>= 6.1)
       railties (>= 6.1)
       view_component (~> 2.49.1)
