@@ -13,20 +13,6 @@ describe "PATCH /api/v2/users/generate_and_send_magic_link", type: :request do
     )
   end
 
-  context "when unauthenticated" do
-    let(:payload) { { email: "foo@bar" } }
-
-    before do
-      perform_request
-    end
-
-    subject { response }
-
-    xit { is_expected.to have_http_status(:ok) }
-
-    xit "should send an email to the user saying they don't have an account"
-  end
-
   context "when authenticated and authorised" do
     it "returns the status OK" do
       perform_request
