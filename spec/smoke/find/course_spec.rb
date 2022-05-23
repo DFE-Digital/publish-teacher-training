@@ -27,7 +27,7 @@ class FindResultsPage
 
   def courses
     response.css(".app-search-results .app-search-results__item .app-search-result__item-title").map do |course|
-      Course.new(course.css(".govuk-link").first["href"])
+      Course.new(course.css('a[data-qa="course__link"]').first["href"])
     end
   end
 end
