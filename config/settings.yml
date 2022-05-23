@@ -115,4 +115,4 @@ features:
     # state: open # Users can make requests for allocations
     # state: closed # Readonly - Users can see if they have or have not made request (does not show number of places)
     state: confirmed # final allocation places are displayed to users in a readonly state
-    new_publish_navigation: false
+  new_publish_navigation: false
