@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe API::V2::AccreditedProviderTrainingProvidersController do
+RSpec.describe API::V3::AccreditedProviderTrainingProvidersController do
   let(:current_user) do
     create(:user, admin: true, email: "admin@digital.education.gov.uk")
   end
