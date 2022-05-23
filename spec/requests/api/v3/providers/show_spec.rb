@@ -39,38 +39,19 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         "attributes" => {
           "provider_code" => provider.provider_code,
           "provider_name" => provider.provider_name,
-          "accredited_body?" => false,
-          "train_with_us" => provider.train_with_us,
-          "train_with_disability" => provider.train_with_disability,
           "address1" => provider.address1,
           "address2" => provider.address2,
           "address3" => provider.address3,
           "address4" => provider.address4,
           "postcode" => provider.postcode,
-          "region_code" => provider.region_code,
           "telephone" => provider.telephone,
           "email" => provider.email,
           "website" => provider.website,
+          "train_with_us" => provider.train_with_us,
+          "train_with_disability" => provider.train_with_disability,
           "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
           "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
           "recruitment_cycle_year" => provider.recruitment_cycle.year,
-          "accredited_bodies" => [{
-            "provider_code" => accrediting_provider.provider_code,
-            "provider_name" => accrediting_provider.provider_name,
-            "description" => description,
-          }],
-        },
-        "relationships" => {
-          "sites" => {
-            "meta" => {
-              "included" => false,
-            },
-          },
-          "courses" => {
-            "meta" => {
-              "count" => provider.courses.count,
-            },
-          },
         },
       },
       "jsonapi" => {
@@ -104,74 +85,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     it "has a data section with the correct attributes" do
       perform_request
 
-      expect(json_response).to eq(
-        "data" => {
-          "id" => provider.id.to_s,
-          "type" => "providers",
-          "attributes" => {
-            "provider_code" => provider.provider_code,
-            "provider_name" => provider.provider_name,
-            "accredited_body?" => false,
-            "train_with_us" => provider.train_with_us,
-            "train_with_disability" => provider.train_with_disability,
-            "address1" => provider.address1,
-            "address2" => provider.address2,
-            "address3" => provider.address3,
-            "address4" => provider.address4,
-            "postcode" => provider.postcode,
-            "region_code" => provider.region_code,
-            "telephone" => provider.telephone,
-            "email" => provider.email,
-            "website" => provider.website,
-            "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
-            "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-            "recruitment_cycle_year" => provider.recruitment_cycle.year,
-            "accredited_bodies" => [{
-              "provider_code" => accrediting_provider.provider_code,
-              "provider_name" => accrediting_provider.provider_name,
-              "description" => description,
-            }],
-          },
-          "relationships" => {
-            "sites" => {
-              "data" => [
-                {
-                  "type" => "sites",
-                  "id" => site.id.to_s,
-                },
-              ],
-            },
-            "courses" => {
-              "meta" => {
-                "count" => provider.courses.count,
-              },
-            },
-          },
-        },
-        "included" => [
-          {
-            "id" => site.id.to_s,
-            "type" => "sites",
-            "attributes" => {
-              "code" => site.code,
-              "location_name" => site.location_name,
-              "address1" => site.address1,
-              "address2" => site.address2,
-              "address3" => site.address3,
-              "address4" => site.address4,
-              "postcode" => site.postcode,
-              "region_code" => site.region_code,
-              "latitude" => site.latitude,
-              "longitude" => site.longitude,
-              "urn" => site.urn,
-              "recruitment_cycle_year" => site.recruitment_cycle.year,
-            },
-          },
-        ],
-        "jsonapi" => {
-          "version" => "1.0",
-        },
-      )
+      expect(json_response).to eq(expected_response)
     end
   end
 
