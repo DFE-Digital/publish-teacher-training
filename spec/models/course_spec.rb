@@ -2534,23 +2534,6 @@ describe Course, type: :model do
         expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject"])
       end
     end
-
-    # NOTE: There is currently no finanical incentives for `primary with maths`.
-    xcontext "when primary with maths" do
-      subject do
-        create(
-          :course,
-          level: "primary",
-          name: "Primary with mathematics",
-          course_code: "AAAA",
-          subjects: [find_or_create(:primary_subject, :primary_with_mathematics)],
-        )
-      end
-
-      it "includes additional requirements" do
-        expect(subject.bursary_requirements).to eql(["a degree of 2:2 or above in any subject", "at least grade B in maths A-level (or an equivalent)"])
-      end
-    end
   end
 
   describe "rollable?" do
