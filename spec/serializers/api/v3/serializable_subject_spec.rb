@@ -21,15 +21,12 @@ describe API::V3::SerializableSubject do
     it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
   end
 
-  # NOTE: There is no longer any bursary subject with subject knowledge
-  #       enhancement course available
-  xcontext "when a bursary subject with subject knowledge enhancement course available" do
+  context "when a bursary subject with subject knowledge enhancement course available" do
     let(:bursary_subject) { find_or_create(:secondary_subject, :mathematics) }
     let(:resource) { API::V3::SerializableSubject.new object: bursary_subject }
 
     it { is_expected.to have_attribute(:bursary_amount).with_value(bursary_subject.financial_incentive.bursary_amount) }
     it { is_expected.to have_attribute(:early_career_payments).with_value(bursary_subject.financial_incentive.early_career_payments) }
     it { is_expected.to have_attribute(:scholarship).with_value(bursary_subject.financial_incentive.scholarship) }
-    it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(true) }
   end
 end

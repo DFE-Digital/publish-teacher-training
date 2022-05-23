@@ -171,28 +171,6 @@ describe API::V3::SerializableCourse do
     end
   end
 
-  # TODO: level now drives the valid subjects that can be assigned to a
-  #       given course
-  # TODO: bursary and scholarship info should now live in the database
-  # TODO: chase up FINANCIAL_SUPPORT
-  xcontext "subjects & level" do
-    let(:course) { create(:course, subjects: subjects) }
-
-    describe "are taken from the course" do
-      let(:subjects) { [find_or_create(:primary_subject, :primary)] }
-
-      it { expect(subject["attributes"]).to include("level" => "primary") }
-      it { expect(subject["attributes"]).to include("subjects" => %w[Primary]) }
-    end
-
-    describe "determine bursary and scholarship info" do
-      let(:subjects) { [find_or_create(:ucas_subject, :secondary), find_or_create(:ucas_subject, subject_name: "Russian")] }
-
-      it { expect(subject["attributes"]).to include("has_bursary?" => true) }
-      it { expect(subject["attributes"]).to include("has_scholarship_and_bursary?" => false) }
-    end
-  end
-
   describe "attributes retrieved from enrichments" do
     subject { parsed_json["data"]["attributes"] }
 
