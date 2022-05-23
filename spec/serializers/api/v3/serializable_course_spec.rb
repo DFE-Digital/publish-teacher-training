@@ -70,8 +70,8 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Subject: API::V2::SerializableSubject,
-          PrimarySubject: API::V2::SerializableSubject,
+          Subject: API::V3::SerializableSubject,
+          PrimarySubject: API::V3::SerializableSubject,
         },
         include: [
           :subjects,
@@ -90,7 +90,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V2::SerializableProvider,
+          Provider: API::V3::SerializableProvider,
         },
         include: [
           :accrediting_provider,
