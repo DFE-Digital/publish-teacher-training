@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class SerializableRecruitmentCycle < JSONAPI::Serializable::Resource
       type "recruitment_cycles"
 
