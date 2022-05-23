@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe API::V2::DeserializableCourse do
+describe API::V3::DeserializableCourse do
   let(:course) { build(:course) }
   let(:course_jsonapi) do
     JSON.parse(jsonapi_renderer.render(
@@ -16,7 +16,7 @@ describe API::V2::DeserializableCourse do
     subject { described_class.new({}).reverse_mapping }
 
     it "always contains all attributes" do
-      API::V2::DeserializableCourse::COURSE_ATTRIBUTES.each do |attribute|
+      API::V3::DeserializableCourse::COURSE_ATTRIBUTES.each do |attribute|
         expect(subject[attribute.to_sym]).to eq("/data/attributes/#{attribute}")
       end
     end
