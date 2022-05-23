@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe API::V2::ProvidersController do
+RSpec.describe API::V3::ProvidersController do
   before do
     allow(controller).to receive(:authenticate).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)

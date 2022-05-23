@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe API::V2::CoursesController, type: :controller do
+describe API::V3::CoursesController, type: :controller do
   let(:site_status) { build(:site_status, :new) }
   let(:dfe_subject) { find_or_create(:primary_subject, :primary) }
   let(:provider) { create(:provider) }
