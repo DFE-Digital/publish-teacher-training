@@ -45,7 +45,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V2::SerializableProvider,
+          Provider: API::V3::SerializableProvider,
         },
         include: [
           :provider,
@@ -109,7 +109,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V2::SerializableProvider,
+          Provider: API::V3::SerializableProvider,
         },
         include: [
           :site_status,
@@ -128,7 +128,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V2::SerializableProvider,
+          Provider: API::V3::SerializableProvider,
         },
         include: [
           :site,
