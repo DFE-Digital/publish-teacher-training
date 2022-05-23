@@ -1,5 +1,5 @@
 module API
-  module V2
+  module V3
     class DeserializableSite < JSONAPI::Deserializable::Resource
       attributes :address1,
                  :address2,
