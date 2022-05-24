@@ -1,0 +1,11 @@
+@import "../base.scss";
+
+.title-bar-link {
+  float: right;
+  margin-top: govuk-spacing(2);
+}
+
+.title-bar-inline {
+  display: inline-block;
+  margin-top: govuk-spacing(2);
+}
