@@ -1,12 +1,6 @@
 # frozen_string_literal: true
-
-# To be deleted when new_publish_navigation feature flag is removed
-
-<<<<<<< HEAD
 # These tests can be deleted when the `publish_new_navigation` feature flag is removed. All these tests are covered in `provider_index_spec.rb`
 
-=======
->>>>>>> f262c7bc (Rework provider show specs)
 require "rails_helper"
 
 feature "Providers show" do
