@@ -46,7 +46,6 @@
         <%= yield :before_content %>
       </div>
 
-<<<<<<< HEAD
     <% if FeatureService.enabled?(:new_publish_navigation) %>
 
       <% if current_user %>
@@ -55,7 +54,7 @@
         <% end %>
       <% end %>
 
-      <% if @provider && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? && @provider.recruitment_cycle && !request.path.include?('support')%>
+      <% if @provider && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? && @provider.recruitment_cycle && !request.path.include?('support') %>
         <%= render(NavigationBar::View.new(
           items: [
             { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
@@ -69,7 +68,7 @@
           )
           ) %>
 
-      <% elsif FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? && !@provider.recruitment_cycle.nil?  %>
+      <% elsif FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? && !@provider.recruitment_cycle.nil? && !request.path.include?('support') %>
         <%= render(NavigationBar::View.new(
           items: [
             { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
