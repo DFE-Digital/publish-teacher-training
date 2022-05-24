@@ -78,6 +78,14 @@ module FeatureHelpers
       @allocation_uplift_new_page ||= PageObjects::Support::AllocationUpliftNew.new
     end
 
+    def access_requests_page
+      @access_requests_page ||= PageObjects::Support::AccessRequests::Index.new
+    end
+
+    def access_requests_confirm_page
+      @access_requests_confirm_page ||= PageObjects::Support::AccessRequests::Confirm.new
+    end
+
     def sign_in_page
       @sign_in_page ||= PageObjects::SignIn.new
     end

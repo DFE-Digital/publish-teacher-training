@@ -1,0 +1,21 @@
+<% page_title = "Inform the publisher" %>
+<% content_for :page_title, page_title %>
+
+<h1 class="govuk-heading-l"><%= page_title %></h1>
+
+<p class="govuk-body">
+  Inform the publisher about the change to their access:
+
+  <ol class="govuk-list govuk-list--number">
+    <li>Check whether <%= govuk_link_to "they already have a DfE Sign-in account", "#{Settings.dfe_signin.user_search_url}?criteria=#{@access_request.email_address}", data: { qa: "dfe_signin_search_link" } %></li>
+    <li>In <%= govuk_link_to "GOV.UK Notify", Settings.notify.service_url, data: { qa: "notify_service_link" } %>, send an email to <strong><%= @recipient_email_address %></strong> using:
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the <%= govuk_link_to "REGISTERED template", Settings.notify.registered_user_template_url, data: { qa: "registered_user_link" } %> if they have a DfE Sign-in account</li>
+        <li>the <%= govuk_link_to "UNREGISTERED template", Settings.notify.unregistered_user_template_url, data: { qa: "unregistered_user_link" } %> if they don’t</li>
+      </ul>
+  </ol>
+</p>
+
+<p class="govuk-body">
+  <%= govuk_button_link_to "Done", publish_access_requests_path, class: "govuk-!-margin-bottom-0", data: { qa: "done_link" } %>
+</p>

@@ -1,0 +1,14 @@
+<tr class="govuk-table__row" data-qa="access-request">
+  <td class="govuk-table__cell" data-qa="access-request__id"><%= access_request.id %></td>
+  <td class="govuk-table__cell" data-qa="access-request__request_date"><%= access_request.request_date_utc&.to_date.to_s(:long) %></td>
+  <td class="govuk-table__cell" data-qa="access-request__requester"><%= user_details(access_request.requester) %></td>
+  <td class="govuk-table__cell" data-qa="access-request__recipient">
+    <%= access_request.first_name %>
+    <%= access_request.last_name %>
+    &lt;<%= access_request.email_address %>&gt;
+  </td>
+  <td class="govuk-table__cell">
+    <%= govuk_button_link_to "View Request", confirm_publish_access_request_path(access_request.id), class: "govuk-!-margin-bottom-1", data: { qa: "access-request__view_request" } %>
+  </td>
+  <td class="govuk-table__cell" data-qa="access-request__organisation"><%= access_request.organisation %></td>
+</tr>

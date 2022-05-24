@@ -5,6 +5,10 @@ support_email: becomingateacher@digital.education.gov.uk
 
 search_ui:
   base_url: https://localhost:5000
+notify:
+  service_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534
+  unregistered_user_template_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534/templates/9ecac443-8cfd-49ac-ac59-e7ffa0ab6278
+  registered_user_template_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534/templates/4da327dd-907a-4619-abe6-45f348bb2fa3
 
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
