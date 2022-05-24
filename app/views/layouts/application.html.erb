@@ -48,7 +48,7 @@
         <% end %>
       </div>
 
-    <% unless current_user.nil? %>
+    <% if current_user %>
       <% if FeatureService.enabled?(:new_publish_navigation) && current_user.has_multiple_providers_in_current_recruitment_cycle? && !@provider.nil? && !request.path.include?('support') %>
        <%= render TitleBar::View.new(title: @provider.provider_name) %>
       <% end %>
