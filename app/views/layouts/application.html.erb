@@ -43,7 +43,9 @@
         <%= render PhaseBanner::View.new %>
         <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
-        <%= yield :before_content %>
+        <% unless FeatureService.enabled?(:new_publish_navigation) %>
+          <%= yield :before_content %>
+        <% end %>
       </div>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
