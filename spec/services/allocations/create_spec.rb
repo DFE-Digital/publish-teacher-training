@@ -72,5 +72,11 @@ RSpec.describe Allocations::Create do
         expect(subject.object.number_of_places).to eq(previous_number_of_places)
       end
     end
+
+    context 'testing rand' do
+      let(:random_number) { rand(1..99) }
+
+      expect(random_number).to eq 0
+    end
   end
 end
