@@ -17,11 +17,11 @@
     data: { qa: "course__publish" }) %>
 <% else %>
   <% if course.is_published? %>
-    <p class="govuk-body">Publish your changes and they will appear on Find when the cycle opens in <%= Settings.next_cycle_open_date.to_s(:month) %>.</p>
+    <p class="govuk-body">Publish your changes and they will appear on Find when the cycle opens on <%= Date::MONTHNAMES[Settings.next_cycle_open_date.to_date.month] %>.</p>
   <% else %>
-    <p class="govuk-body">Publish this course and it will appear on Find when the cycle opens in <%= Settings.next_cycle_open_date.to_s(:month) %>.</p>
+    <p class="govuk-body">Publish this course and it will appear on Find when the cycle opens in <%= Date::MONTHNAMES[Settings.next_cycle_open_date.to_date.month] %>.</p>
   <% end %>
-  <%= govuk_button_to("Publish in #{Settings.next_cycle_open_date.to_s(:month)}", 
+  <%= govuk_button_to("Publish in #{Date::MONTHNAMES[Settings.next_cycle_open_date.to_date.month]}",
     publish_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     class: "govuk-!-margin-bottom-0",
     data: { qa: "course__publish" }) %>
