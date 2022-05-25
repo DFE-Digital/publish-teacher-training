@@ -76,7 +76,9 @@ RSpec.describe Allocations::Create do
     context 'testing rand' do
       let(:random_number) { rand(1..99) }
 
-      expect(random_number).to eq 0
+      it 'tests rand for 0' do
+        expect(random_number).to eq 0
+      end
     end
   end
 end
