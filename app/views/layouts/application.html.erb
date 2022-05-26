@@ -54,32 +54,10 @@
         <% end %>
       <% end %>
 
-      <% if @provider && !current_page?(root_path) && !@provider.rolled_over? && @provider.accredited_body? && @provider.recruitment_cycle && !request.path.include?('support') %>
-        <%= render(NavigationBar::View.new(
-          items: [
-            { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: t("navigation_bar.locations"), url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: t("navigation_bar.users"), url: users_publish_provider_path(code: @provider.provider_code) },
-            { name: t("navigation_bar.training_partners"), url: publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: t("navigation_bar.organisation_details"), url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-          ],
-          current_path: request.path,
-          current_user: @current_user
-          )
-          ) %>
-
-      <% elsif FeatureService.enabled?(:new_publish_navigation) && @provider.present? && !current_page?(root_path) && !@provider.rolled_over? && !@provider.accredited_body? && !@provider.recruitment_cycle.nil? && !request.path.include?('support') %>
-        <%= render(NavigationBar::View.new(
-          items: [
-            { name: t("navigation_bar.courses"), url: publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: t("navigation_bar.locations"), url: publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-            { name: t("navigation_bar.users"), url: users_publish_provider_path(code: @provider.provider_code) },
-            { name: t("navigation_bar.organisation_details"), url: details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) },
-          ],
-          current_path: request.path,
-          current_user: @current_user
-        )
-            ) %>
+      <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
+          <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
+      <% elsif render_navigation_bar?(@provider) && !@provider.accredited_body? %>
+          <%= render partial: "publish/shared/navigation_bar_without_training_partners" %>
       <% end %>
     <% end %>
 
