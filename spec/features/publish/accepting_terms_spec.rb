@@ -22,7 +22,7 @@ feature "Accepting terms" do
   end
 
   def given_the_new_publish_flow_feature_flag_is_enabled
-    allow(Settings.features).to receive(:new_publish_navigation).and_return(true)
+    enable_features(:new_publish_navigation)
   end
 
   def given_i_am_a_user_who_has_not_accepted_the_terms
