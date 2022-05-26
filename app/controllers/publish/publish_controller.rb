@@ -15,7 +15,7 @@ module Publish
     end
 
     def recruitment_cycle
-      cycle_year = params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year
+      cycle_year = params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year
 
       @recruitment_cycle ||= RecruitmentCycle.find_by!(year: cycle_year)
     end
