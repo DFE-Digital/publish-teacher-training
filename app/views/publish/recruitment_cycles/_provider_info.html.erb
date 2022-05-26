@@ -3,8 +3,7 @@
 <%= render partial: "publish/recruitment_cycles/courses_info", locals: { provider: provider, year: year } %>
 <%= render partial: "publish/recruitment_cycles/courses_accredited_body", locals: { provider: provider, year: year } %>
 
+<!-- Remove this once the current cycle is set to 2023 -->
 <% if recruitment_cycle.current? %>
   <%= render partial: "publish/recruitment_cycles/allocations", locals: { provider: provider, year: year } %>
-<% elsif recruitment_cycle.next? %>
-  <%= render partial: "publish/recruitment_cycles/allocations", locals: { provider: provider.from_previous_recruitment_cycle, year: year.to_i.pred } %>
 <% end %>
