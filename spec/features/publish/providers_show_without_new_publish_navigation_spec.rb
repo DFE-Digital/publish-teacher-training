@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# These tests can be deleted when the `publish_new_navigation` feature flag is removed. All these tests are covered in `provider_index_spec.rb`
+# These tests can be deleted when the `publish_new_navigation` feature flag is removed. All these tests are covered in `primary_nav_spec.rb`
 
 require "rails_helper"
 
