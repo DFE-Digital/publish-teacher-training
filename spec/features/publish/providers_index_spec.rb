@@ -24,7 +24,7 @@ feature "Providers index" do
     i_should_see_the_pagination_link
     i_can_search_with_provider_details
 
-    i_should_not_see_the_change_organisation_link
+    i_should_see_the_change_organisation_link
   end
 
   def given_the_new_publish_flow_feature_flag_is_enabled
@@ -86,10 +86,6 @@ feature "Providers index" do
 
   def when_i_click_the_change_organisation_link
     click_link "Change organisation"
-  end
-
-  def i_should_not_see_the_change_organisation_link
-    expect(page).not_to have_text "Change organisation"
   end
 
   def given_the_new_publish_flow_feature_flag_is_enabled
