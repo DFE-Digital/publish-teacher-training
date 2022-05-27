@@ -43,9 +43,7 @@
         <%= render PhaseBanner::View.new %>
         <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
-        <% unless FeatureService.enabled?(:new_publish_navigation) %>
-          <%= yield :before_content %>
-        <% end %>
+        <%= yield :before_content %>
       </div>
 
     <% if current_user %>
