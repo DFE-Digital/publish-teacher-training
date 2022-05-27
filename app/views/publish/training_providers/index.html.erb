@@ -7,7 +7,7 @@
 <%= content_for :before_content, render_breadcrumbs(:training_providers) %>
 
   <h1 class="govuk-heading-l">
-    <% unless @provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation) %>
+    <% if @provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation) %>
       <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
     <% end %>
 
