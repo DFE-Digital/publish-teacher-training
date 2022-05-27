@@ -22,6 +22,12 @@ en:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
       expired: "Magic link has expired, please request a new one"
+  navigation_bar:
+    courses: "Courses"
+    locations: "Locations"
+    users: "Users"
+    training_partners: "Training partners"
+    organisation_details: "Organisation details"
   edit_options:
     entry_requirements:
       must_have_qualification_at_application_time:

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# When the `new_publish_navigation` feature flag is removed this file along with the associated tests can be deleted.
+
 module PageObjects
   module Publish
     class ProvidersShow < PageObjects::Base

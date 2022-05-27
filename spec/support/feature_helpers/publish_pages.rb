@@ -259,5 +259,9 @@ module FeatureHelpers
     def header
       @header ||= PageObjects::Publish::Header.new
     end
+
+    def primary_nav
+      @primary_nav ||= PageObjects::Publish::PrimaryNav.new
+    end
   end
 end

@@ -27,6 +27,10 @@ feature "Providers index" do
     i_should_not_see_the_change_organisation_link
   end
 
+  def given_the_new_publish_flow_feature_flag_is_enabled
+    enable_features(:new_publish_navigation)
+  end
+
   def and_i_am_authenticated_as_a_multi_provider_user
     current_recruitment_cycle = find_or_create(:recruitment_cycle)
     accredited_body = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle, provider_name: "Bat School")
@@ -42,8 +46,8 @@ feature "Providers index" do
   def i_can_search_with_provider_details
     publish_providers_index_page.search_input.set "Really big school (A01)"
     publish_providers_index_page.search_button.click
-    expect(publish_providers_show_page).to be_displayed
-    expect(publish_providers_show_page.current_url).to end_with("A01")
+    expect(publish_provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page.current_url).to end_with("A01/2022/courses")
   end
 
   def i_should_see_the_pagination_link

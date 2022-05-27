@@ -46,9 +46,18 @@
         <%= yield :before_content %>
       </div>
 
-    <% if current_user %>
-      <% if FeatureService.enabled?(:new_publish_navigation) && current_user.has_multiple_providers_in_current_recruitment_cycle? && !@provider.nil? && !request.path.include?('support') %>
-       <%= render TitleBar::View.new(title: @provider.provider_name) %>
+    <% if FeatureService.enabled?(:new_publish_navigation) %>
+
+      <% if current_user %>
+        <% if current_user.has_multiple_providers_in_current_recruitment_cycle? && @provider && !request.path.include?('support') %>
+         <%= render TitleBar::View.new(title: @provider.provider_name) %>
+        <% end %>
+      <% end %>
+
+      <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
+          <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
+      <% elsif render_navigation_bar?(@provider) && !@provider.accredited_body? %>
+          <%= render partial: "publish/shared/navigation_bar_without_training_partners" %>
       <% end %>
     <% end %>
 
