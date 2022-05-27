@@ -49,7 +49,7 @@
     <% if FeatureService.enabled?(:new_publish_navigation) %>
 
       <% if current_user %>
-        <% if current_user.has_multiple_providers_in_current_recruitment_cycle? && @provider && !request.path.include?('support') %>
+        <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
          <%= render TitleBar::View.new(title: @provider.provider_name) %>
         <% end %>
       <% end %>
