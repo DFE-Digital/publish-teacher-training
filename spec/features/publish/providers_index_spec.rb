@@ -28,7 +28,7 @@ feature "Providers index" do
   end
 
   def given_the_new_publish_flow_feature_flag_is_enabled
-    allow(Settings.features).to receive(:new_publish_navigation).and_return(true)
+    enable_features(:new_publish_navigation)
   end
 
   def and_i_am_authenticated_as_a_multi_provider_user
