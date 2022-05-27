@@ -12,7 +12,7 @@ feature "Accepting terms" do
   scenario "i can accept the terms and conditions" do
     then_i_am_taken_to_the_terms_page
     when_i_accept_the_terms_and_conditions
-    then_i_should_be_redirected_to_the_providers_show_page
+    then_i_should_be_redirected_to_the_courses_index_page
     and_the_user_is_marked_as_accepting_the_terms
   end
 
@@ -42,7 +42,7 @@ feature "Accepting terms" do
     and_i_submit
   end
 
-  def then_i_should_be_redirected_to_the_providers_show_page
+  def then_i_should_be_redirected_to_the_courses_index_page
     expect(publish_provider_courses_index_page).to be_displayed
   end
 
