@@ -56,9 +56,8 @@ describe API::V3::SerializableCourse do
     it { is_expected.to have_relationship(:provider) }
 
     it "includes the provider" do
-      expect(parsed_json["included"])
-        .to(include(have_type("providers")
-          .and(have_id(provider.id.to_s))))
+      expect(parsed_json["included"]).to(include(have_type("providers")))
+      expect(parsed_json["included"].first["id"]).to eq(provider.id.to_s)
     end
   end
 

@@ -263,5 +263,9 @@ module FeatureHelpers
     def primary_nav
       @primary_nav ||= PageObjects::Publish::PrimaryNav.new
     end
+
+    def footer
+      @footer ||= PageObjects::Publish::Footer.new
+    end
   end
 end

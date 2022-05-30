@@ -1,0 +1,22 @@
+<% content_for :page_title, "Access requests" %>
+
+<h1 class="govuk-heading-l">
+  Open access requests (<%= @access_requests.count %>)
+</h1>
+
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col">Request #</th>
+      <th class="govuk-table__header" scope="col">Made at</th>
+      <th class="govuk-table__header" scope="col">Requester</th>
+      <th class="govuk-table__header" scope="col">Recipient</th>
+      <th class="govuk-table__header" scope="col">Actions</th>
+      <th class="govuk-table__header" scope="col">Organisation</th>
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+    <%= render partial: "access_request", collection: @access_requests %>
+  </tbody>
+</table>
