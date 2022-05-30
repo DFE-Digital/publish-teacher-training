@@ -6,7 +6,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+      <% if rolled_over_and_new_nav?(@provider) %>
+        <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
+      <% end %>
       <%= page_title %>
     </h1>
 
