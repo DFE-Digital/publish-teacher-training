@@ -1,5 +1,7 @@
 module Publish
   class AccessRequestsController < PublishController
+    before_action -> { authorize(access_request) }, except: :index
+
     def index
       authorize(AccessRequest)
 
@@ -7,24 +9,16 @@ module Publish
     end
 
     def approve
-      authorize(access_request)
-
       access_request.approved!
       flash[:success] = "Successfully approved request"
       redirect_to inform_publisher_publish_access_request_path
     end
 
-    def inform_publisher
-      authorize(access_request)
-    end
+    def inform_publisher; end
 
-    def confirm
-      authorize(access_request)
-    end
+    def confirm; end
 
     def destroy
-      authorize(access_request)
-
       access_request.destroy
       flash[:success] = "Successfully deleted the Access Request"
       redirect_to publish_access_requests_path
