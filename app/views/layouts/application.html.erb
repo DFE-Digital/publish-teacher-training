@@ -53,6 +53,7 @@
          <%= render TitleBar::View.new(title: @provider.provider_name) %>
         <% end %>
       <% end %>
+    </div>
 
       <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
           <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
@@ -61,6 +62,7 @@
       <% end %>
     <% end %>
 
+    <div class="govuk-width-container">
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
           <%= render(FlashBanner::View.new(flash: flash)) %>
