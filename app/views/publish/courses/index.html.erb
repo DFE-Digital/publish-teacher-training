@@ -2,7 +2,7 @@
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
 
 <h1 class="govuk-heading-l">
-  <% if @provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation) %>
+  <% if rolled_over_and_new_nav?(@provider) %>
     <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
   <% end %>
   Courses

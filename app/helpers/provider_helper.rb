@@ -31,6 +31,11 @@ module ProviderHelper
     end
   end
 
+  # The method below can be deleted when the feature flag is removed
+  def rolled_over_and_new_nav?(provider)
+    provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation)
+  end
+
 private
 
   def visa_sponsorship_call_to_action(provider)
