@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class PhaseBanner::View < ViewComponent::Base
+  def initialize(no_border: false)
+    super
+    @no_border = no_border
+  end
+
   def environment_label
     Settings.environment.label
   end

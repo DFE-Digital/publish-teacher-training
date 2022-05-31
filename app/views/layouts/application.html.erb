@@ -40,7 +40,11 @@
 
     <div class="govuk-width-container">
       <div class="govuk-width-container">
-        <%= render PhaseBanner::View.new %>
+        <% if display_phase_banner_border?(current_user) %>
+          <%= render PhaseBanner::View.new(no_border: true) %>
+        <% else  %>
+          <%= render PhaseBanner::View.new %>
+        <% end %>
         <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
         <%= yield :before_content %>
