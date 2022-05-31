@@ -23,6 +23,6 @@ class NavigationBar::View < GovukComponent::Base
 private
 
   def show_current_link?(item)
-    item.fetch(:current, false) || current_path == item.fetch(:url)
+    item.fetch(:current, false) || current_path.include?(item.fetch(:url))
   end
 end
