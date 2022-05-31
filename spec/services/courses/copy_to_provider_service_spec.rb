@@ -46,10 +46,24 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.open_for_applications?).to be_falsey
   end
 
-  it "updates the applications_open_from and start date attributes" do
-    service.execute(course: course, new_provider: new_provider)
-    expect(new_course.start_date).to eq course.start_date + 1.year
-    expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
+  context "applications open from date" do
+    it "updates the applications_open_from and start date attributes" do
+      service.execute(course: course, new_provider: new_provider)
+      expect(new_course.start_date).to eq course.start_date + 1.year
+      expect(new_course.applications_open_from).to eq course.applications_open_from + 1.year
+    end
+
+    context "when the original course's date is before the next cycle's start date" do
+      before do
+        course.applications_open_from = Date.new(provider.recruitment_cycle.year.to_i - 1, 10, 1)
+      end
+
+      it "sets the new course's applications open from date correctly" do
+        service.execute(course: course, new_provider: new_provider)
+
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+      end
+    end
   end
 
   it "leaves the existing course alone" do
