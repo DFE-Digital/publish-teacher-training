@@ -16,7 +16,7 @@ module Courses
         new_course.uuid = nil
         new_course.provider = new_provider
         year_differential = new_course.recruitment_cycle.year.to_i - course.recruitment_cycle.year.to_i
-        new_course.applications_open_from = course.applications_open_from + year_differential.year
+        new_course.applications_open_from = adjusted_applications_open_from_date(course, year_differential)
         new_course.start_date = course.start_date + year_differential.year
         new_course.subjects = course.subjects
         new_course.save!(validate: false)
@@ -43,6 +43,16 @@ module Courses
       return if last_enrichment.blank?
 
       @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)
+    end
+
+    def adjusted_applications_open_from_date(course, year_differential)
+      next_cycle = RecruitmentCycle.next_recruitment_cycle
+
+      if course.applications_open_from + year_differential.year >= next_cycle.application_start_date
+        course.applications_open_from + year_differential.year
+      else
+        next_cycle.application_start_date
+      end
     end
   end
 end

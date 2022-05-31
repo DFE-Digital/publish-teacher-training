@@ -197,7 +197,7 @@ class CourseDecorator < ApplicationDecorator
       "As soon as the course is on Find (recommended)"
     else
       year = recruitment_cycle.year.to_i
-      day_month = Date.parse(recruitment_cycle.application_start_date).strftime("%-d %B")
+      day_month = recruitment_cycle.application_start_date.strftime("%-d %B")
       "On #{day_month} when applications for the #{year} to #{year + 1} cycle open"
     end
   end
@@ -340,6 +340,10 @@ class CourseDecorator < ApplicationDecorator
 
   def about_accrediting_body
     object.accrediting_provider_description
+  end
+
+  def has_physical_education_subject?
+    subjects.map(&:subject_name).include?("Physical education")
   end
 
 private
