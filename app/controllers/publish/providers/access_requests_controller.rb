@@ -1,6 +1,8 @@
 module Publish
   module Providers
     class AccessRequestsController < PublishController
+      before_action :provider
+
       def new
         authorize AccessRequest
 
