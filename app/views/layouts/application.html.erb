@@ -47,7 +47,6 @@
         <% end %>
         <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
-        <%= yield :before_content %>
       </div>
 
     <% if FeatureService.enabled?(:new_publish_navigation) %>
@@ -67,6 +66,7 @@
     <% end %>
 
     <div class="govuk-width-container">
+      <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
           <%= render(FlashBanner::View.new(flash: flash)) %>
