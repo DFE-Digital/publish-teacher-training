@@ -81,8 +81,7 @@ The way we do it:
 4. Provide a way to specify exactly what associated object(s) override.
 5. When creating a memoized object that is included in the creation of another
    object, use `build` to prevent secondary objects from being created.
-6. Factories can be tested too, e.g.
-   <https://github.com/DFE-Digital/teacher-training-api/blob/master/spec/factory_specs/course_spec.rb>
+6. Factories can be tested too.
 7. Don't continue the `count` trait pattern you might find already in the code
    for creating many related objects, that turned out not to be such a great
    idea. Help eliminate them if you can.
