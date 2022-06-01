@@ -38,13 +38,6 @@ module PhaseBanner
       end
     end
 
-    context "when false is passed in to 'no_border'" do
-      it "renders a border" do
-        render_inline(described_class.new(no_border: false))
-        expect(page).not_to have_css(".app-phase-banner--no-border")
-      end
-    end
-
     context "when true is passed in to 'no_border'" do
       it "does not render a border" do
         render_inline(described_class.new(no_border: true))
