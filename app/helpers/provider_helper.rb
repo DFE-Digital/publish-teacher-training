@@ -1,14 +1,4 @@
 module ProviderHelper
-  def add_course_url(email, provider)
-    cycle_key = is_current_cycle(provider.recruitment_cycle_year) ? "current_cycle" : "next_cycle"
-
-    if provider.accredited_body?
-      google_form_url_for(Settings.google_forms[cycle_key].new_pe_course_for_accredited_bodies, email, provider)
-    else
-      google_form_url_for(Settings.google_forms[cycle_key].new_pe_course_for_unaccredited_bodies, email, provider)
-    end
-  end
-
   def visa_sponsorship_status(provider)
     if !provider.declared_visa_sponsorship?
       visa_sponsorship_call_to_action(provider)
