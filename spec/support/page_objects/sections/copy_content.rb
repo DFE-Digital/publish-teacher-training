@@ -8,7 +8,7 @@ module PageObjects
       set_default_search_arguments '[data-qa="course__copy-content-form"]'
 
       def copy_options
-        find('select#copy-from').all('option').collect(&:text)
+        find("select#copy-from").all("option").collect(&:text)
       end
 
       def copy(course)

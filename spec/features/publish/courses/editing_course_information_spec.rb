@@ -59,7 +59,7 @@ feature "Editing course information" do
       list_options = publish_course_information_page.copy_content.copy_options
       expect(Course.count).to eq 3
       expect(list_options.size).to eq 3
-      expect(list_options.shift).to eq('Pick a course')
+      expect(list_options.shift).to eq("Pick a course")
       expect(list_options.any? { |x| x[@course.name] }).to be_falsey
     end
 
