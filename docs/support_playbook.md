@@ -62,7 +62,7 @@ p.courses.update(accredited_body_code: "1YK")
 When doing this, you should check if the user already exists in prod. When testing locally, you'll likely be working with a sanitised database dump.
 
 ```ruby
-user = User.find(email: "jon@email.com")
+user = User.find_by(email: "jon@email.com")
 
 # Find the provider
 provider = RecruitmentCycle.current.providers.find_by(provider_code: "2E1")
