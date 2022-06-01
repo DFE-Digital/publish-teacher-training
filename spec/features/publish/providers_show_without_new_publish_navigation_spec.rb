@@ -5,6 +5,10 @@
 require "rails_helper"
 
 feature "Providers show" do
+  before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
+  end
+
   scenario "view page as Anne - user with single provider" do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_publish_providers_show_page

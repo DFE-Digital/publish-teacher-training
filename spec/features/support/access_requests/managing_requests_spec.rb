@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Viewing and approving requests" do
   before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_authenticated(user: admin)
     and_there_are_access_requests
   end

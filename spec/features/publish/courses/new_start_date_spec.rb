@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "choosing a start date" do
   before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_start_date_page
   end

@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "Viewing courses as an accredited body" do
   before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_authenticated_as_an_accredited_body_user
     and_some_courses_exist_with_one_i_accredit
     when_i_visit_the_training_providers_page

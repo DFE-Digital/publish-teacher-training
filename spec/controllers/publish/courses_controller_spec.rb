@@ -19,6 +19,7 @@ module Publish
       before do
         allow(controller).to receive(:authenticate).and_return(true)
         controller.instance_variable_set(:@current_user, user)
+        given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
       end
 
       it "calls NotificationService::CoursePublished when successful" do

@@ -1,6 +1,10 @@
 require "rails_helper"
 
 feature "Providers index" do
+  before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
+  end
+
   scenario "view page as Mary - multi provider user" do
     given_the_new_publish_flow_feature_flag_is_enabled
     and_i_am_authenticated_as_a_multi_provider_user

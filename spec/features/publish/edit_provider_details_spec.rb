@@ -4,6 +4,7 @@ require "rails_helper"
 
 feature "About Your Organisation section" do
   scenario "Provider user edits provider details" do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_a_provider_user
     and_my_provider_has_accrediting_providers
     when_i_visit_the_details_page

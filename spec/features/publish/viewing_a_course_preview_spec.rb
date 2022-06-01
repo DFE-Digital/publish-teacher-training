@@ -3,6 +3,10 @@
 require "rails_helper"
 
 feature "Course show" do
+  before do
+    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
+  end
+
   scenario "i can view the course basic details" do
     given_i_am_authenticated(user: user_with_fee_based_course)
     when_i_visit_the_course_preview_page

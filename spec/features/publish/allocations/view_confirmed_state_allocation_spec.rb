@@ -5,6 +5,7 @@ RSpec.feature "PE allocations" do
     before do
       allow(Settings.features.allocations).to receive(:state).and_return("confirmed")
       allow(Settings).to receive(:allocation_cycle_year).and_return(2022)
+      given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
       given_i_am_authenticated(user: user_with_accredited_bodies)
       and_there_is_a_previous_recruitment_cycle
     end
