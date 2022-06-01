@@ -67,7 +67,7 @@ module ApplicationHelper
   # rubocop:enable Rails/HelperInstanceVariable
 
   def display_phase_banner_border?(user)
-    user && !user.admin? && (user.providers_via_organisations.where recruitment_cycle: RecruitmentCycle.current).one?
+    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one?
   end
 
 private
