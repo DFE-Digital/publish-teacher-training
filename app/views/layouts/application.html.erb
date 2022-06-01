@@ -50,12 +50,13 @@
 
     <% if FeatureService.enabled?(:new_publish_navigation) %>
 
-      <% if current_user %>
-        <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
-         <%= render TitleBar::View.new(title: @provider.provider_name) %>
+      <div class="govuk-width-container">
+        <% if current_user %>
+          <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
+           <%= render TitleBar::View.new(title: @provider.provider_name) %>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
 
       <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
           <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
