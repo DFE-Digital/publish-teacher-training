@@ -4,7 +4,7 @@ concurrency: build_and_deploy_${{ github.ref_name }}
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types: [opened, reopened, synchronize, labeled]
 
@@ -84,7 +84,7 @@ jobs:
         push: true
         target: middleman
         cache-from: |
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: BUILDKIT_INLINE_CACHE=1
 
@@ -97,9 +97,9 @@ jobs:
         push: false
         load: true
         cache-from: |
-          type=registry,ref=${{ env.DOCKER_IMAGE}}:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:master
+          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
           BUILDKIT_INLINE_CACHE=1
@@ -123,7 +123,7 @@ jobs:
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Alert Build Failures
-      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      if: ${{ failure() && github.ref == 'refs/heads/main' }}
       uses: rtCamp/action-slack-notify@master
       env:
         SLACK_CHANNEL: twd_findpub_tech
@@ -171,7 +171,7 @@ jobs:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Alert Test Failures
-      if: ${{ failure() && github.ref == 'refs/heads/master' }}
+      if: ${{ failure() && github.ref == 'refs/heads/main' }}
       uses: rtCamp/action-slack-notify@master
       env:
         SLACK_CHANNEL: twd_findpub_tech
@@ -229,7 +229,7 @@ jobs:
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy_app.outputs.deploy-url }}
-    if: ${{ success() && github.ref == 'refs/heads/master' }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [test]
     runs-on: ubuntu-latest
     strategy:
