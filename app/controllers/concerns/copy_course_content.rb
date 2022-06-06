@@ -32,7 +32,7 @@ private
     @courses_by_accrediting_provider = ::Courses::Fetch.by_accrediting_provider(@provider)
     @self_accredited_courses = @courses_by_accrediting_provider.delete(@provider.provider_name)
 
-    @courses_by_accrediting_provider = @courses_by_accrediting_provider.reject { |c| c == course.id }
+    @courses_by_accrediting_provider&.transform_values! { |v| v.reject { |x| x.id == course.id } }
     @self_accredited_courses = @self_accredited_courses&.reject { |c| c.id == course.id }
   end
 end
