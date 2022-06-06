@@ -1,12 +1,14 @@
-<%= govuk_phase_banner(
-  tag: {
-    text: environment_label,
-    colour: environment_colour,
-  },
-) do %>
-  <% if sandbox_mode? %>
-    This is a test version of Publish for providers and software vendors
-  <% else %>
-    This is a new service – your <%= govuk_link_to "feedback", feedback_link_to %> will help us to improve it.
+<div class="app-phase-banner<%= @no_border ? ' app-phase-banner--no-border' : '' %> govuk-!-display-none-print">
+  <%= govuk_phase_banner(
+    tag: {
+      text: environment_label,
+      colour: environment_colour,
+    },
+  ) do %>
+    <% if sandbox_mode? %>
+      This is a test version of Publish for providers and software vendors
+    <% else %>
+      This is a new service – your <%= govuk_link_to "feedback", feedback_link_to %> will help us to improve it.
+    <% end %>
   <% end %>
-<% end %>
+</div>

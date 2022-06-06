@@ -38,21 +38,25 @@
       ) %>
     <% end %>
 
-    <div class="govuk-width-container">
       <div class="govuk-width-container">
-        <%= render PhaseBanner::View.new %>
+        <% if display_phase_banner_border?(current_user) && FeatureService.enabled?(:new_publish_navigation) %>
+          <%= render PhaseBanner::View.new(no_border: true) %>
+        <% else  %>
+          <%= render PhaseBanner::View.new %>
+        <% end %>
         <%= yield :navigation_bar %>
         <%= yield :breadcrumbs %>
-        <%= yield :before_content %>
       </div>
 
     <% if FeatureService.enabled?(:new_publish_navigation) %>
 
-      <% if current_user %>
-        <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
-         <%= render TitleBar::View.new(title: @provider.provider_name) %>
+      <div class="govuk-width-container">
+        <% if current_user %>
+          <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
+           <%= render TitleBar::View.new(title: @provider.provider_name) %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
 
       <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
           <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
@@ -61,6 +65,8 @@
       <% end %>
     <% end %>
 
+    <div class="govuk-width-container">
+      <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
           <%= render(FlashBanner::View.new(flash: flash)) %>

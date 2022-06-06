@@ -30,5 +30,19 @@ module PhaseBanner
       render_inline(described_class.new)
       expect(page).to have_text("This is a new service")
     end
+
+    context "when no value is passed in to 'no_border'" do
+      it "renders a border" do
+        render_inline(described_class.new)
+        expect(page).not_to have_css(".app-phase-banner--no-border")
+      end
+    end
+
+    context "when true is passed in to 'no_border'" do
+      it "does not render a border" do
+        render_inline(described_class.new(no_border: true))
+        expect(page).to have_css(".app-phase-banner--no-border")
+      end
+    end
   end
 end
