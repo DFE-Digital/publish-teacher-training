@@ -1,4 +1,4 @@
-![Build](https://github.com/DFE-Digital/teacher-training-api/workflows/Build/badge.svg?branch=master&event=push)
+![Build](https://github.com/DFE-Digital/teacher-training-api/workflows/Build/badge.svg)
 [![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg?token=JaYZey50Y8gfC00RvzkcrDz5OP-SwiBSTtbhkMw1KIs)](https://www.skylight.io/app/applications/NXAwzyZjkp2m)
 
 # Teacher Training API
@@ -32,7 +32,7 @@ asdf plugin add yarn
 asdf install
 ```
 
-When the versions are updated in master run `asdf install` again to update your
+When the versions are updated in main run `asdf install` again to update your
 installation.
 
 (We don't mandate asdf, you can use other tools if you prefer.)

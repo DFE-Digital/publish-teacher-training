@@ -3,7 +3,7 @@ name: Delete Review App
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [main]
 
 permissions:
   deployments: write
