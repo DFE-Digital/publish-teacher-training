@@ -3,13 +3,14 @@
 require "rails_helper"
 
 feature "Copying course information" do
-  context 'with accredited courses' do
+  context "with accredited courses" do
     before do
       given_i_am_authenticated_as_an_accredited_provider_user
       and_there_is_an_accredited_course_i_want_to_edit
       when_i_visit_the_course_information_page
     end
-    include_context 'copy_courses'
+
+    include_context "copy_courses"
 
     scenario "the course does not display its own name in the copy list" do
       publish_course_information_page.load(
@@ -24,13 +25,14 @@ feature "Copying course information" do
     end
   end
 
-  context 'with non accredited courses' do
+  context "with non accredited courses" do
     before do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_course_i_want_to_edit
       when_i_visit_the_course_information_page
     end
-    include_context 'copy_courses'
+
+    include_context "copy_courses"
 
     scenario "the course does not display its own name in the copy list" do
       publish_course_information_page.load(
