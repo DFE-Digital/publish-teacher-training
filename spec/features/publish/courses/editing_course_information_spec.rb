@@ -51,18 +51,6 @@ feature "Editing course information" do
             how_school_placements_work: "")
     end
 
-    scenario "the course does not display its own name in the copy list" do
-      publish_course_information_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
-      )
-
-      list_options = publish_course_information_page.copy_content.copy_options
-      expect(Course.count).to eq 3
-      expect(list_options.size).to eq 3
-      expect(list_options.shift).to eq("Pick a course")
-      expect(list_options.any? { |x| x[@course.name] }).to be_falsey
-    end
-
     scenario "all fields get copied if all are present" do
       publish_course_information_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,

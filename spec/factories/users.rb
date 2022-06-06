@@ -22,6 +22,10 @@ FactoryBot.define do
       providers { [create(:provider)] }
     end
 
+    trait :with_accredited_provider do
+      providers { [create(:provider, :accredited_body)] }
+    end
+
     trait :inactive do
       accept_terms_date_utc { nil }
     end
