@@ -15,15 +15,6 @@
                   method: :get do |form| %>
       <%= render "publish/courses/new_fields_holder", form: form, except_keys: [] do |fields| %>
         <%= render 'form_fields', form: fields %>
-
-        <div data-qa="course__google_form_link" >
-          <% if !current_user["admin"] && @course.level == "secondary" %>
-            <h2 class="govuk-heading-m"> Adding a Physical education course?</h2>
-            <p class="govuk-body">You’ll need to fill in a
-              <%= govuk_link_to "separate Google Form", add_course_url(current_user.email, @provider), rel: "noopener noreferrer", target: "_blank" %>,
-            as PE places are limited.</p>
-          <% end %>
-        </div>
       <% end %>
     <% end %>
   </div>
