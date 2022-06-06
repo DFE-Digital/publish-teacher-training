@@ -21,7 +21,7 @@ feature "Editing course information" do
   end
 
   context "copying content from another course" do
-    include_context 'copy_courses'
+    include_context "copy_courses"
 
     scenario "all fields get copied if all are present" do
       publish_course_information_page.load(
