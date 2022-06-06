@@ -10,7 +10,7 @@ module TitleBar
     end
 
     def link
-      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline"
+      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline govuk-link--no-visited-state"
     end
   end
 end
