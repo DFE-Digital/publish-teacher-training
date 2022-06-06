@@ -1,6 +1,6 @@
 require "rails_helper"
 
-shared_context 'copy_courses' do
+shared_context "copy_courses" do
   let!(:course2) do
     create(
       :course,
