@@ -41,6 +41,7 @@
   border-bottom-color: govuk-colour("red");
 }
 
+.app-header--production .govuk-header__container,
 .app-header--production.app-header--full-border {
   border-bottom-color: govuk-colour("blue");
 }
