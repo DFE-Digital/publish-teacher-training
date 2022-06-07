@@ -13,7 +13,21 @@ Alert all developers that no one should merge to main branch.
 
 ### Local Dependencies
 
-You will need the [az](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) and [cf](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) CLIs installed as well as [jq](https://stedolan.github.io/jq/download/), [make](https://www.gnu.org/software/make/) and either [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) or [tfenv](https://github.com/tfutils/tfenv#installation).
+You will need the following tools installed to successfully complete the process:
+- [az](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [cf](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
+- [conduit](https://github.com/alphagov/paas-cf-conduit)
+- pg_dump: `sudo apt-get install postgresql-client`
+- [jq](https://stedolan.github.io/jq/download/)
+- [make](https://www.gnu.org/software/make/)
+- either [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) or [tfenv](https://github.com/tfutils/tfenv#installation)
+
+When testing against a review environment (e.g. ending `pr-1234`) add `APP_NAME=1234` to the end of any `make review...` commands comment the final line `echo ..` and add the following in to the review target in the Makefile as well:
+
+```
+	$(eval space=bat-qa)
+	$(eval paas_env=pr-$(APP_NAME))
+```
 
 ### Maintenance mode
 
@@ -23,7 +37,7 @@ In either scenario it will probably be desirable to enable [Maintenance mode](ma
 
 ### Set up a virtual meeting
 
-Set up virtual meeting via Zoom, Slack, Teams or Google Hangout, inviting all the relevant technical stakeholders. Regularly provide updates on
+Set up a virtual meeting via Zoom, Slack, Teams or Google Meet, inviting all the relevant technical stakeholders. Regularly provide updates on
 the #twd_publish Slack channel to keep product owners abreast of developments.
 
 ### Internet Connection
@@ -35,20 +49,22 @@ Ensure whoever is executing the process has a reliable and reasonably fast Inter
 In case the database instance is lost, the objectives are:
 
 - Recreate the lost postgres database instance
-- Restore data from nightly backup stored in Azure.  The point-in-time and snapshot backups created by the PaaS Postgres service will not be available if it's been deleted.
+- Restore data from nightly backup stored in Azure. The point-in-time and snapshot backups created by the PaaS Postgres service will not be available if it's been deleted.
 
 ### Recreate the lost postgres database instance
 
 Please note, this process should take about 25 mins* to complete. In case the database service is deleted or in an inconsistent state we must recreate it and repopulate it.
-First make sure it is fully gone by running
 
+First make sure it is fully gone by running:
+
+N.B. When testing the `cf delete-service <instance name>` in the review environment the postgres service key needs deleting first. Retrieve the service key with `cf service-keys <instance name>` and then delete the service key using `cf delete-service-key <instance name> <service key name>`
 ```
 cf services | grep teacher-training-api
 # check output for lost or corrupted instance
 cf delete-service <instance-name>
 ```
-Then recreate the lost postgres database instance using the following make recipes `deploy-plan` and `deploy`.  To see the proposed changes:
 
+Then recreate the lost postgres database instance using the following make recipes `deploy-plan` and `deploy`. Replacing the `qa` in the app name below with `pr-1234` when testing in the review environment. To see the proposed changes:
 ```
 TAG=$(cf app teacher-training-api-qa | awk -F : '$1 == "docker image" {print $3}')
 make <env> deploy-plan PASSCODE=<my-passcode> IMAGE_TAG=${TAG}
@@ -64,7 +80,7 @@ This will create a new postgres database instance as described in the terraform 
 
 ### Restore Data From Nightly Backup
 
-You will need to be logged into GovUK PaaS and Azure using the `az` and `cf` CLIs.  You will need to raise a [PIM](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-resource-roles-activate-your-roles) request to elevate your credentials for a production restore.  A collegue will need to approve this for you.
+You will need to be logged into GovUK PaaS and Azure using the `az` and `cf` CLIs. You will need to raise a [PIM](https://docs.microsoft.com/en-us/azure/active-directory/privileged-identity-management/pim-resource-roles-activate-your-roles) request to elevate your credentials for a production restore. A collegue will need to approve this for you.
 
 Once the lost database instance has been recreated, the last nightly backup will need to be restored. To achieve this, use the following makefile recipe: `restore-data-from-nightly-backup`. The following will need to be set: `CONFIRM_PRODUCTION=YES`,  `CONFIRM_RESTORE=YES` and `BACKUP_DATE="yyyy-mm-dd"`.
 
@@ -78,7 +94,17 @@ cf login -o dfe -s <space> -u my.name@digital.education.gov.uk
 make <env> restore-data-from-nightly-backup BACKUP_DATE="yyyy-mm-dd" CONFIRM_RESTORE=YES CONFIRM_PRODUCTION=YES
 ```
 
-This will download the latest daily backup from Azure Storage and then populate the new database with data.  If more than one backup has been created on the date specified the script will select the most recent from that date.
+This will download the latest daily backup from Azure Storage and then populate the new database with data. If more than one backup has been created on the date specified the script will select the most recent from that date.
+
+During the restore process a number of errors are expected because the permission level being used is not high enough to perform actions on certain database objects. These are listed below:
+```
+ERROR:  must be owner of event trigger reassign_owned (or make_readable, forbid_ddl_reader)
+ERROR:  must be owner of function public.reassign_owned (or public.make_readable_generic, public.make_readable, public.forbid_ddl_reader)
+ERROR:  must be owner of extension uuid-ossp (or postgis, pg_stat_statements, pg_buffercache, citext, btree_gist, btree_gin)
+ERROR:  function "forbid_ddl_reader" already exists with same argument types (or "make_readable", "make_readable_generic", "reassign_owned")
+ERROR:  permission denied for table spatial_ref_sys
+ERROR:  permission denied to create event trigger "forbid_ddl_reader" (or "make_readable", "reassign_owned")
+```
 
 ## Data Loss
 
@@ -125,6 +151,8 @@ env is the target environment e.g. production
 
 The following variables need to be set: DB_INSTANCE_GUID (the output of the 'Get affected postgres instance guid' step, SNAPSHOT_TIME ("2021-09-14 16:00:00" IMPORTANT - this is UTC time!), passcode (a passcode from [GOV.UK PaaS one-time passcode](https://login.london.cloud.service.gov.uk/passcode)), CONFIRM_PRODUCTION (true) and tag (the docker tag for the application image).
 
+When running the restore-postgres target against a review environment, the `postgres_params` variable in `modules/paas/variables.tf` needs to be temporarily changed to `postgres_params = merge(local.postgres_backup_restore_params, local.postgres_extensions)`.
+
 The following commands combine the makefile recipes above to initiate the restore process by using the approriate variable values:
 
 ```
@@ -140,12 +168,12 @@ make <env> remove-postgres-tf-state PASSCODE=${PASSCODE} CONFIRM_PRODUCTION=true
 make <env> restore-postgres DB_INSTANCE_GUID=${DB_INSTANCE_GUID} SNAPSHOT_TIME="yyyy-mm-dd HH:MM:ss" PASSCODE=${PASSCODE} IMAGE_TAG=${TAG} CONFIRM_PRODUCTION=true
 ```
 
-You will be prompted to review the terraform plan.  Check for the following:
+You will be prompted to review the terraform plan. Check for the following:
 - the `cloudfoundry_app.docker_image` tags are **not** changing
 - a new database instance is being created using a point-in-time database backup of corrupted database
 - new service keys are created
 
-The restore process should take ~25 min.  Terraform should write logs to the console with progress, the bulk of the time will be spent recreating the postgres instance.
+The restore process should take ~25 min. Terraform should write logs to the console with progress, the bulk of the time will be spent recreating the postgres instance.
 
 ### PaaS documentation
 
