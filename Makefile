@@ -40,6 +40,9 @@ review:
 	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
+	$(eval space=bat-qa)
+	$(eval paas_env=pr-$(APP_NAME))
+	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	echo https://teacher-training-api-review-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
 
 .PHONY: qa
