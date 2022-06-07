@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "new course" do
+feature "new course", { can_edit_current_and_next_cycles: false } do
   scenario "creates the correct course" do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Managing a provider's courses" do
+feature "Managing a provider's courses", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_page

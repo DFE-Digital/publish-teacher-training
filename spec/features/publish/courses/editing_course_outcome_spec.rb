@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing course outcome" do
+feature "Editing course outcome", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

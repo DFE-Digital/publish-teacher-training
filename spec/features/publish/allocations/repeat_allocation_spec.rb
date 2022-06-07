@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "PE allocations" do
+RSpec.feature "PE allocations", { can_edit_current_and_next_cycles: false } do
   before do
     allow(Settings.features.allocations).to receive(:state).and_return("open")
     allow(Settings).to receive(:allocation_cycle_year).and_return(2022)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "PE allocations" do
+RSpec.feature "PE allocations", { can_edit_current_and_next_cycles: false } do
   context "allocations state is open" do
     before do
       allow(Settings.features.allocations).to receive(:state).and_return("open")

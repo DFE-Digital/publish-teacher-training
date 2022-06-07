@@ -15,7 +15,7 @@ module Publish
       )
     end
 
-    describe "#Publish" do
+    describe "#Publish", { can_edit_current_and_next_cycles: false } do
       before do
         allow(controller).to receive(:authenticate).and_return(true)
         controller.instance_variable_set(:@current_user, user)

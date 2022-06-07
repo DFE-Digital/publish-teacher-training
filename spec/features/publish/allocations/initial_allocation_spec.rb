@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "PE allocations" do
+RSpec.feature "PE allocations", { can_edit_current_and_next_cycles: false } do
   before do
     allow(Settings.features.allocations).to receive(:state).and_return("open")
     and_there_is_a_previous_recruitment_cycle

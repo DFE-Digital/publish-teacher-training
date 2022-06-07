@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "PE allocations" do
-  context "allocations state is confirmed" do
+  context "allocations state is confirmed", { can_edit_current_and_next_cycles: false } do
     before do
       allow(Settings.features.allocations).to receive(:state).and_return("confirmed")
       allow(Settings).to receive(:allocation_cycle_year).and_return(2022)

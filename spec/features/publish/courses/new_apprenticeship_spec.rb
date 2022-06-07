@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "selecting a teaching apprenticeship" do
+feature "selecting a teaching apprenticeship", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_accredited_body_provider_user
     when_i_visit_the_apprenticeship_page

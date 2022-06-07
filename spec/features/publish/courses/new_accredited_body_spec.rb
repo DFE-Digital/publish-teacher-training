@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "selection accredited_bodies" do
+feature "selection accredited_bodies", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_accredited_bodies_page

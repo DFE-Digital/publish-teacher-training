@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Course show" do
+feature "Course show", { can_edit_current_and_next_cycles: false } do
   scenario "i can view the course basic details" do
     given_i_am_authenticated(user: user_with_fee_based_course)
     when_i_visit_the_course_preview_page

@@ -575,7 +575,7 @@ describe CourseDecorator do
       end
     end
 
-    context "when the course has no start date" do
+    context "when the course has no start date", { can_edit_current_and_next_cycles: false } do
       let(:start_date) { nil }
 
       it "returns the September of the current cycle" do

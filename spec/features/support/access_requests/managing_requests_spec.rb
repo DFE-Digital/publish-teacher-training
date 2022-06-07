@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Viewing and approving requests" do
+feature "Viewing and approving requests", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated(user: admin)
     and_there_are_access_requests

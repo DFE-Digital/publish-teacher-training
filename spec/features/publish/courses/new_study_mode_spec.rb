@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "selecting full time or part time or full or part time" do
+feature "selecting full time or part time or full or part time", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_study_mode_page

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing course information" do
+feature "Editing course information", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
