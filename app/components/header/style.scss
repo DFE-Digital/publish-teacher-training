@@ -13,6 +13,9 @@
   }
 }
 
+.app-header--prod.app-header--full-border {
+  border-bottom-color: govuk-colour("blue");
+}
 
 .app-header--development .govuk-header__container,
 .app-header--development.app-header--full-border, {
@@ -39,11 +42,6 @@
 .app-header--staging .govuk-header__container,
 .app-header--staging.app-header--full-border {
   border-bottom-color: govuk-colour("red");
-}
-
-.app-header--production .govuk-header__container,
-.app-header--production.app-header--full-border {
-  border-bottom-color: govuk-colour("blue");
 }
 
 .govuk-header__navigation-list {
