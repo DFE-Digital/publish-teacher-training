@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Copying course information" do
+feature "Copying course information", { can_edit_current_and_next_cycles: false } do
   context "with accredited courses" do
     before do
       given_i_am_authenticated_as_an_accredited_provider_user
