@@ -128,7 +128,6 @@ module GovukTechDocs
         operations = get_operations(path)
         operations.compact.each do |key, operation|
           id = "#{path_id}-#{key.parameterize}"
-          text = :text
           parameters = parameters(operation, id)
           responses = responses(operation, id)
           curl_examples = curl_examples(operation, id)
