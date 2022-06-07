@@ -4,9 +4,8 @@
 
 require "rails_helper"
 
-feature "Accepting terms" do
+feature "Accepting terms", { can_edit_current_and_next_cycles: false } do
   before do
-    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_a_user_who_has_not_accepted_the_terms
     when_i_visit_the_publish_service
   end

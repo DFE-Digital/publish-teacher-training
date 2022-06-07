@@ -1,11 +1,7 @@
 # These tests can be deleted when the `publish_new_navigation` feature flag is removed. All these tests are covered in `provider_index_spec.rb`
 require "rails_helper"
 
-feature "Providers index" do
-  before do
-    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
-  end
-
+feature "Providers index", { can_edit_current_and_next_cycles: false } do
   scenario "view page as Mary - multi provider user" do
     given_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_publish_providers_index_page

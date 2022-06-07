@@ -2,9 +2,8 @@
 
 require "rails_helper"
 
-feature "Managing a provider's locations" do
+feature "Managing a provider's locations", { can_edit_current_and_next_cycles: false } do
   scenario "i can view and update a provider's locations" do
-    given_the_can_edit_current_and_next_cycles_feature_flag_is_disabled
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_locations_page
     then_i_should_see_a_list_of_locations
