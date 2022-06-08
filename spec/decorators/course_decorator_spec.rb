@@ -780,7 +780,7 @@ describe CourseDecorator do
 
     context "has no vacancies" do
       it "has link" do
-        expect(subject).to eq "No (<a class=\"govuk-link\" href=\"#{link}\">Edit<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
+        expect(subject).to eq "No (<a class=\"govuk-link\" href=\"#{link}\">Change<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
       end
 
       context "has been withdrawn" do
@@ -796,7 +796,7 @@ describe CourseDecorator do
       let(:has_vacancies) { true }
 
       it "has link" do
-        expect(subject).to eq "Yes (<a class=\"govuk-link\" href=\"#{link}\">Edit<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
+        expect(subject).to eq "Yes (<a class=\"govuk-link\" href=\"#{link}\">Change<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
       end
 
       context "has been withdrawn" do
