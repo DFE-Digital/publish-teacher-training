@@ -339,8 +339,8 @@ class Course < ApplicationRecord
   end
 
   def accrediting_provider_description
-    return nil if accrediting_provider.blank?
-    return nil if provider.accrediting_provider_enrichments.blank?
+    return if accrediting_provider.blank?
+    return if provider.accrediting_provider_enrichments.blank?
 
     accrediting_provider_enrichment = provider.accrediting_provider_enrichments
       .find do |provider|
@@ -440,7 +440,7 @@ class Course < ApplicationRecord
   end
 
   def funding_type
-    return nil if program_type.nil?
+    return if program_type.nil?
 
     if school_direct_salaried_training_programme?
       "salary"
