@@ -20,7 +20,7 @@ module PageObjects
 
       element :success_summary, ".govuk-notification-banner--success"
 
-      element :add_course, ".govuk-button", text: "Add a new course"
+      element :add_course, ".govuk-button", text: "Add course"
     end
   end
 end
