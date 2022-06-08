@@ -13,7 +13,7 @@ class UserNotificationPreferences
   end
 
   def updated_at
-    return nil if user_notifications.empty?
+    return if user_notifications.empty?
 
     user_notifications.maximum(:updated_at).iso8601
   end

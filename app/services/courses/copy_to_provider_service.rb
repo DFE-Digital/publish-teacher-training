@@ -6,8 +6,8 @@ module Courses
     end
 
     def execute(course:, new_provider:, force: false)
-      return nil unless course.rollable? || force
-      return nil if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
+      return unless course.rollable? || force
+      return if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
 
       new_course = nil
 

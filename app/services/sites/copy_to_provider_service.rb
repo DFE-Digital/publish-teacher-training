@@ -3,7 +3,7 @@ module Sites
     def execute(site:, new_provider:)
       new_site = new_provider.sites.find_by(code: site.code)
 
-      return nil if new_site.present?
+      return if new_site.present?
 
       new_site = site.dup
       new_site.provider_id = new_provider.id

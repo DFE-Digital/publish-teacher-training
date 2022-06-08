@@ -285,9 +285,7 @@ module GovukTechDocs
       end
 
       def get_schema_name(text)
-        unless text.is_a?(String)
-          return nil
-        end
+        return unless text.is_a?(String)
 
         # Schema dictates that it's always components['schemas']
         text.gsub(/#\/components\/schemas\//, "")
