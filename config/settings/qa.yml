@@ -29,9 +29,3 @@ basic_auth:
 features:
   send_request_data_to_bigquery: true
   new_publish_navigation: true
-  rollover:
-    # Normally a short period of time between rollover and the next cycle
-    # actually starting when it would be set to false
-    has_current_cycle_started?: true
-    # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: true
