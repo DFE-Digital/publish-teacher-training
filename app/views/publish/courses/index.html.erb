@@ -9,16 +9,14 @@
 </h1>
 
 
-<% if @provider.courses.count > 10 %>
   <%= govuk_button_link_to(
-    "Add a new course",
+    "Add course",
     new_publish_provider_recruitment_cycle_course_path(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     ),
     class: "govuk-!-margin-bottom-6",
   ) %>
-<% end %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
@@ -36,12 +34,3 @@
     <%= render partial: "course_table", locals: { courses: courses } %>
   </section>
 <% end %>
-
-<%= govuk_button_link_to(
-  "Add a new course",
-  new_publish_provider_recruitment_cycle_course_path(
-    provider_code: @provider.provider_code,
-    recruitment_cycle_year: @provider.recruitment_cycle_year,
-  ),
-  class: "govuk-!-margin-bottom-2",
-) %>
