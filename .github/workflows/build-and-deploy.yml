@@ -171,10 +171,10 @@ jobs:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Upload coverage results
-      if: ${{ success() }}
-      uses: actions/upload-artifact@v3
+      if: always()
+      uses: actions/upload-artifact@v2
       with:
-        name: coverage-report
+        name: Coverage_Report
         path: ${{ github.workspace }}/coverage/*
 
     - name: Alert Test Failures
