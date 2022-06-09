@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+
+DATABASE_TO_BACKUP=${1:-}
+REVIEW_ENV=${2:-}
+
+if [[ -z "${DATABASE_TO_BACKUP}" ]]; then
+  echo "DATABASE_TO_BACKUP environment variable not set"
+  exit 1
+fi
+
+if [[ -z "${REVIEW_ENV}" ]]; then
+  echo "REVIEW_ENV environment variable not set"
+  exit 1
+fi
+
+echo "DATABASE_TO_BACKUP: ${DATABASE_TO_BACKUP}"
+echo "REVIEW_ENV: ${REVIEW_ENV}"
+
+now=$(date +"%F")
+REVIEW_BACKUP=${REVIEW_ENV}_backup-${now}.sql
+
+if [[ -e ${REVIEW_BACKUP} ]]; then
+  echo "File ${REVIEW_BACKUP} already exists"
+else
+  cf conduit ${DATABASE_TO_BACKUP} -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $REVIEW_BACKUP
+  tar -cvzf ${REVIEW_BACKUP}.tar.gz ${REVIEW_BACKUP}
+fi

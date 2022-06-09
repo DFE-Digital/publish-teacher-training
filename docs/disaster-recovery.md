@@ -86,6 +86,8 @@ Once the lost database instance has been recreated, the last nightly backup will
 
 The make recipe `restore-data-from-nightly-backup` executes 2 scripts, these should be committed with the execute permission (755) set but these may have been inadvertently altered.  If you get a permissions error executing them run `chmod +x <path/to/script>`.
 
+When testing this step against a review environment a manual backup will need to be created from the review postgres instance. Use the make receipe `backup-review-database` by executing `make review backup-review-database APP_NAME=1234`. This can then be uploaded to the backup Azure storage container by executing `make review upload-review-backup BACKUP_DATE="yyyy-mm-dd" APP_NAME=1234`.
+
 ```
 # space is the name of the environment in GOV.UK PaaS, eg 'bat-prod'
 # env is the target environment in the make file e.g. 'production'
