@@ -18,16 +18,16 @@ module API
       type "courses"
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
-                 :course_code, :name, :study_mode, :qualification, :description,
-                 :content_status, :ucas_status, :funding_type,
-                 :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
-                 :age_range_in_years, :accrediting_provider,
-                 :accredited_body_code, :level, :changed_at, :uuid, :program_type,
-                 :accept_pending_gcse, :accept_gcse_equivalency,
-                 :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency,
-                 :accept_science_gcse_equivalency, :additional_gcse_equivalencies,
-                 :degree_grade, :additional_degree_subject_requirements,
-                 :degree_subject_requirements
+        :course_code, :name, :study_mode, :qualification, :description,
+        :content_status, :ucas_status, :funding_type,
+        :level, :is_send?, :english, :maths, :science, :gcse_subjects_required,
+        :age_range_in_years, :accrediting_provider,
+        :accredited_body_code, :level, :changed_at, :uuid, :program_type,
+        :accept_pending_gcse, :accept_gcse_equivalency,
+        :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency,
+        :accept_science_gcse_equivalency, :additional_gcse_equivalencies,
+        :degree_grade, :additional_degree_subject_requirements,
+        :degree_subject_requirements
 
       attribute :start_date do
         written_month_year(@object.start_date) if @object.start_date

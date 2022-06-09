@@ -5,7 +5,7 @@ module API
         type "provider_suggestions"
 
         attributes :ukprn,
-                   :urn
+          :urn
 
         attribute :code do
           @object.provider_code

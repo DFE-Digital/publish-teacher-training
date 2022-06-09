@@ -9,11 +9,11 @@ module API
         course_search = ::V3::CourseSearchService.call(filter: params[:filter], sort: params[:sort], course_scope: @courses)
 
         render jsonapi: paginate(course_search),
-               fields: fields_param,
-               include: params[:include],
-               meta: { count: course_search.size },
-               class: CourseSerializersService.new(provider_serializer: API::V3::SerializableProvider).execute,
-               cache: Rails.cache
+          fields: fields_param,
+          include: params[:include],
+          meta: { count: course_search.size },
+          class: CourseSerializersService.new(provider_serializer: API::V3::SerializableProvider).execute,
+          cache: Rails.cache
       end
 
       def show
@@ -22,9 +22,9 @@ module API
         if @course.is_published?
           # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
           render jsonapi: @course,
-                 fields: fields_param,
-                 include: params[:include],
-                 class: CourseSerializersService.new.execute
+            fields: fields_param,
+            include: params[:include],
+            class: CourseSerializersService.new.execute
         else
           raise ActiveRecord::RecordNotFound
         end

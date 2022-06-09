@@ -7,19 +7,19 @@ module API
         belongs_to :recruitment_cycle
 
         attributes :ukprn,
-                   :urn,
-                   :postcode,
-                   :provider_type,
-                   :region_code,
-                   :train_with_disability,
-                   :train_with_us,
-                   :website,
-                   :latitude,
-                   :longitude,
-                   :telephone,
-                   :email,
-                   :can_sponsor_skilled_worker_visa,
-                   :can_sponsor_student_visa
+          :urn,
+          :postcode,
+          :provider_type,
+          :region_code,
+          :train_with_disability,
+          :train_with_us,
+          :website,
+          :latitude,
+          :longitude,
+          :telephone,
+          :email,
+          :can_sponsor_skilled_worker_visa,
+          :can_sponsor_student_visa
 
         attribute :accredited_body do
           @object.accredited_body?

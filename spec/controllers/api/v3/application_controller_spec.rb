@@ -4,7 +4,7 @@ RSpec.describe API::V3::ApplicationController do
   controller do
     def index
       render jsonapi: paginate(Course.all),
-             class: CourseSerializersService.new.execute
+        class: CourseSerializersService.new.execute
     end
 
   private

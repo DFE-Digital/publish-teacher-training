@@ -7,7 +7,7 @@ class ProviderUCASPreference < ApplicationRecord
     not_coming: "Not coming",
     no_response: "No response",
   },
-       _prefix: "type_of_gt12"
+    _prefix: "type_of_gt12"
 
   enum send_application_alerts: {
     all: "Yes, required",
@@ -15,7 +15,7 @@ class ProviderUCASPreference < ApplicationRecord
     my_programmes: "Yes - only my programmes",
     accredited_programmes: "Yes - for accredited programmes only",
   },
-       _prefix: "send_application_alerts_for"
+    _prefix: "send_application_alerts_for"
 
   def gt12_contact=(gt12_contact)
     update(gt12_response_destination: gt12_contact)

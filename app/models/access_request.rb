@@ -19,15 +19,15 @@ class AccessRequest < ApplicationRecord
 
   def add_additional_attributes(requester_email)
     update(requester: User.find_by(email: requester_email),
-           request_date_utc: Time.now.utc,
-           status: :requested)
+      request_date_utc: Time.now.utc,
+      status: :requested)
   end
 
   alias_method :approve, :completed!
 
   validates :first_name, :last_name, :email_address,
-            :organisation, :reason, :requester_email,
-            presence: true
+    :organisation, :reason, :requester_email,
+    presence: true
 
   audited
 end

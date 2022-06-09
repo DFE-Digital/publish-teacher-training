@@ -65,11 +65,11 @@ describe AccessRequest, type: :model do
     let(:organisation) { build(:organisation) }
     let(:access_request) {
       build(:access_request,
-            organisation: user.organisations.first.name,
-            requester_email: user.email,
-            requester: nil,
-            request_date_utc: nil,
-            status: nil)
+        organisation: user.organisations.first.name,
+        requester_email: user.email,
+        requester: nil,
+        request_date_utc: nil,
+        status: nil)
     }
 
     before do

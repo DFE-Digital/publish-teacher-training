@@ -6,9 +6,9 @@ module API
           class LocationsController < API::Public::V1::ApplicationController
             def index
               render jsonapi: locations,
-                     include: include_param,
-                     expose: { course: course, location_statuses: location_statuses },
-                     class: API::Public::V1::SerializerService.call
+                include: include_param,
+                expose: { course: course, location_statuses: location_statuses },
+                class: API::Public::V1::SerializerService.call
             end
 
           private

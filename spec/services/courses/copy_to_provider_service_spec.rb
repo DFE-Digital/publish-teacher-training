@@ -7,16 +7,16 @@ RSpec.describe Courses::CopyToProviderService do
   let(:maths) { create :secondary_subject, :mathematics }
   let(:course) {
     build :course,
-          enrichments: [published_course_enrichment],
-          accrediting_provider: accrediting_provider,
-          subjects: [maths], level: "secondary"
+      enrichments: [published_course_enrichment],
+      accrediting_provider: accrediting_provider,
+      subjects: [maths], level: "secondary"
   }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
   let(:new_provider) {
     create :provider,
-           provider_code: provider.provider_code,
-           recruitment_cycle: new_recruitment_cycle
+      provider_code: provider.provider_code,
+      recruitment_cycle: new_recruitment_cycle
   }
   let(:new_course) {
     new_provider.reload.courses.find_by(course_code: course.course_code)
@@ -126,8 +126,8 @@ RSpec.describe Courses::CopyToProviderService do
   context "the course already exists in the new provider" do
     let!(:new_course) {
       create :course,
-             course_code: course.course_code,
-             provider: new_provider
+        course_code: course.course_code,
+        provider: new_provider
     }
 
     it "returns nil" do
@@ -150,9 +150,9 @@ RSpec.describe Courses::CopyToProviderService do
   context "the course has been deleted in the new provider" do
     let!(:new_course) do
       create :course,
-             :deleted,
-             course_code: course.course_code,
-             provider: new_provider
+        :deleted,
+        course_code: course.course_code,
+        provider: new_provider
     end
 
     it "returns nil" do
@@ -177,9 +177,9 @@ RSpec.describe Courses::CopyToProviderService do
     let!(:new_site) { create :site, provider: new_provider, code: site.code }
     let!(:site_status) {
       create :site_status,
-             :with_no_vacancies,
-             course: course,
-             site: site
+        :with_no_vacancies,
+        course: course,
+        site: site
     }
 
     before do

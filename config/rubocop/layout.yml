@@ -37,4 +37,4 @@ Layout/MultilineOperationIndentation:
   Enabled: false
 
 Layout/ArgumentAlignment:
-  EnforcedStyle: with_first_argument
+  EnforcedStyle: with_fixed_indentation

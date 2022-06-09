@@ -139,16 +139,16 @@ describe AllocationsView do
       context "returns confirmed repeat and initial allocations with number of places" do
         let(:confirmed_repeat_allocation) do
           build(:allocation, :repeat, :with_allocation_uplift, accredited_body: accredited_body,
-                                                               provider: training_provider,
-                                                               number_of_places: 1,
-                                                               confirmed_number_of_places: 3)
+            provider: training_provider,
+            number_of_places: 1,
+            confirmed_number_of_places: 3)
         end
 
         let(:confirmed_initial_allocation) do
           build(:allocation, :initial, :with_allocation_uplift, accredited_body: accredited_body,
-                                                                provider: another_training_provider,
-                                                                number_of_places: 2,
-                                                                confirmed_number_of_places: 4)
+            provider: another_training_provider,
+            number_of_places: 2,
+            confirmed_number_of_places: 4)
         end
 
         let(:allocations) { [confirmed_repeat_allocation, confirmed_initial_allocation] }

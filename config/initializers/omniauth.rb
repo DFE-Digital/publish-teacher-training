@@ -6,8 +6,8 @@ if AuthenticationService.persona?
 
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,
-             fields: %i[uid email first_name last_name],
-             uid_field: :uid
+      fields: %i[uid email first_name last_name],
+      uid_field: :uid
   end
 else
 

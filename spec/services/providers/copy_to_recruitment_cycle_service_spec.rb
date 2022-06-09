@@ -17,10 +17,10 @@ describe Providers::CopyToRecruitmentCycleService do
     }
     let(:provider) {
       create :provider,
-             :with_users,
-             sites: [site],
-             ucas_preferences: ucas_preferences,
-             contacts: contacts
+        :with_users,
+        sites: [site],
+        ucas_preferences: ucas_preferences,
+        contacts: contacts
     }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
@@ -87,7 +87,7 @@ describe Providers::CopyToRecruitmentCycleService do
       }
       let(:new_recruitment_cycle) {
         create :recruitment_cycle, :next,
-               providers: [new_provider]
+          providers: [new_provider]
       }
 
       it "does not make a copy of the provider" do

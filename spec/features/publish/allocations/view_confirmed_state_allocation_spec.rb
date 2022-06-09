@@ -37,12 +37,12 @@ private
 
   def accredited_body_with_allocations
     @accredited_body ||= build(:provider, :accredited_body,
-                               recruitment_cycle: current_recruitment_cycle)
+      recruitment_cycle: current_recruitment_cycle)
   end
 
   def accredited_body_with_no_allocations
     @accredited_body_with_no_allocations ||= build(:provider, :accredited_body,
-                                                   recruitment_cycle: current_recruitment_cycle)
+      recruitment_cycle: current_recruitment_cycle)
   end
 
   def training_provider
@@ -64,7 +64,7 @@ private
 
   def when_i_visit_allocations_page(provider)
     allocations_page.load(provider_code: provider.provider_code,
-                          recruitment_cycle_year: provider.recruitment_cycle_year)
+      recruitment_cycle_year: provider.recruitment_cycle_year)
   end
 
   def then_it_has_the_correct_no_allocations_message

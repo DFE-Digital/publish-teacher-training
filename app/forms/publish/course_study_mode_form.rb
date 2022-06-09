@@ -7,8 +7,8 @@ module Publish
     attr_accessor(*FIELDS)
 
     validates :study_mode,
-              presence: true,
-              inclusion: { in: Course.study_modes.keys }
+      presence: true,
+      inclusion: { in: Course.study_modes.keys }
 
   private
 

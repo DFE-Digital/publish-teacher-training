@@ -35,27 +35,27 @@ feature "Editing course length and funding type" do
 
       let!(:course3) do
         create :course,
-               provider: provider,
-               name: "Biology",
-               enrichments: [course3_enrichment]
+          provider: provider,
+          name: "Biology",
+          enrichments: [course3_enrichment]
       end
 
       let(:course2_enrichment) do
         build(:course_enrichment,
-              course_length: "OneYear",
-              fee_uk_eu: "8000",
-              fee_international: "20000",
-              fee_details: "Test fee details",
-              financial_support: "Test financial support")
+          course_length: "OneYear",
+          fee_uk_eu: "8000",
+          fee_international: "20000",
+          fee_details: "Test fee details",
+          financial_support: "Test financial support")
       end
 
       let(:course3_enrichment) do
         build(:course_enrichment,
-              course_length: "5 years",
-              fee_uk_eu: "",
-              fee_international: "",
-              fee_details: "",
-              financial_support: "")
+          course_length: "5 years",
+          fee_uk_eu: "",
+          fee_international: "",
+          fee_details: "",
+          financial_support: "")
       end
 
       scenario "all fields get copied if all are present" do

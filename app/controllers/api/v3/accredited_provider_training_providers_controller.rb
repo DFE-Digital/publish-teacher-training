@@ -59,10 +59,10 @@ module API
         end
 
         render jsonapi: providers,
-               include: params[:include],
-               meta: {
-                 accredited_courses_counts: accredited_courses_counts,
-               }
+          include: params[:include],
+          meta: {
+            accredited_courses_counts: accredited_courses_counts,
+          }
       end
 
       def show

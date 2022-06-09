@@ -12,13 +12,13 @@ describe AllocationCopyDataService do
 
   let!(:allocation1) {
     create(:allocation,
-           recruitment_cycle: previous_cycle, provider: provider1a, accredited_body: provider1a,
-           number_of_places: 5, confirmed_number_of_places: 5)
+      recruitment_cycle: previous_cycle, provider: provider1a, accredited_body: provider1a,
+      number_of_places: 5, confirmed_number_of_places: 5)
   }
   let!(:allocation2) {
     create(:allocation,
-           recruitment_cycle: previous_cycle, provider: provider2a, accredited_body: provider1a,
-           number_of_places: 10, confirmed_number_of_places: 10)
+      recruitment_cycle: previous_cycle, provider: provider2a, accredited_body: provider1a,
+      number_of_places: 10, confirmed_number_of_places: 10)
   }
 
   it "copies over previous allocations to current allocation year" do

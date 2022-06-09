@@ -5,10 +5,10 @@ describe Provider, type: :model do
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
-           provider_name: "ACME SCITT",
-           provider_code: "A01",
-           accrediting_provider_enrichments: accrediting_provider_enrichments,
-           courses: courses)
+      provider_name: "ACME SCITT",
+      provider_code: "A01",
+      accrediting_provider_enrichments: accrediting_provider_enrichments,
+      courses: courses)
   end
 
   describe "validation" do

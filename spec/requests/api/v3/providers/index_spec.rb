@@ -5,9 +5,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
 
   let!(:provider) {
     create(:provider,
-           provider_code: "1AT",
-           provider_name: "First provider",
-           contacts: [contact])
+      provider_code: "1AT",
+      provider_name: "First provider",
+      contacts: [contact])
   }
 
   let(:contact) { build(:contact) }
@@ -76,8 +76,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
     let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
     let(:next_provider) {
       create :provider,
-             provider_code: provider.provider_code,
-             recruitment_cycle: next_recruitment_cycle
+        provider_code: provider.provider_code,
+        recruitment_cycle: next_recruitment_cycle
     }
 
     describe "making a request without specifying a recruitment cycle" do
@@ -117,9 +117,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
     let(:base_provider_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers" }
     let(:provider_two) do
       create(:provider,
-             provider_code: "2AT",
-             provider_name: "Second provider",
-             contacts: [contact])
+        provider_code: "2AT",
+        provider_name: "Second provider",
+        contacts: [contact])
     end
 
     before do

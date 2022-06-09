@@ -4,13 +4,13 @@ describe GeocoderService do
   describe "#geocode" do
     let(:valid_site) {
       create(:site,
-             location_name: "Fun Academy",
-             address1: "Long Lane",
-             address2: "Holbury",
-             address3: "Southampton",
-             address4: "UK",
-             postcode: "SO45 2PA",
-             region_code: nil)
+        location_name: "Fun Academy",
+        address1: "Long Lane",
+        address2: "Holbury",
+        address3: "Southampton",
+        address4: "UK",
+        postcode: "SO45 2PA",
+        region_code: nil)
     }
 
     let(:invalid_site) do
@@ -21,13 +21,13 @@ describe GeocoderService do
 
     let(:site_with_no_address) do
       site = build(:site,
-                   location_name: "",
-                   address1: "",
-                   address2: "",
-                   address3: "",
-                   address4: "",
-                   postcode: "",
-                   region_code: nil)
+        location_name: "",
+        address1: "",
+        address2: "",
+        address3: "",
+        address4: "",
+        postcode: "",
+        region_code: nil)
       site.save!(validate: false)
       site
     end

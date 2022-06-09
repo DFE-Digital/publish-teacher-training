@@ -298,8 +298,8 @@ describe CourseEnrichment, type: :model do
 
     subject {
       create(:course_enrichment, :published,
-             last_published_timestamp_utc: last_published_timestamp_utc,
-             course: course)
+        last_published_timestamp_utc: last_published_timestamp_utc,
+        course: course)
     }
 
     describe "to initial draft" do

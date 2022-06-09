@@ -13,8 +13,8 @@ describe CoursePolicy do
     let(:course) { create(:course) }
     let!(:provider) {
       create(:provider,
-             courses: [course],
-             users: [user])
+        courses: [course],
+        users: [user])
     }
 
     it { is_expected.to permit(user, course) }

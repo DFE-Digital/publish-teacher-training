@@ -44,9 +44,9 @@ class MoveRecruitmentCycleToProvider < ActiveRecord::Migration[5.2]
 
   def down
     add_index    :provider,
-                 :provider_code,
-                 name: "IX_provider_provider_code",
-                 unique: true
+      :provider_code,
+      name: "IX_provider_provider_code",
+      unique: true
     remove_index :provider, %i[recruitment_cycle_id provider_code]
 
     say_with_time "AddRecruitmentCycleToCourse" do

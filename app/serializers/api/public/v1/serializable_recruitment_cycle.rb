@@ -5,7 +5,7 @@ module API
         type "recruitment_cycles"
 
         attributes :application_start_date,
-                   :application_end_date
+          :application_end_date
 
         attribute :year do
           @object.year.to_i
