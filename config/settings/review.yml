@@ -20,4 +20,3 @@ allocations_close_date: 2022-07-02
 features:
   allocations:
     state: confirmed
-  new_publish_navigation: true
