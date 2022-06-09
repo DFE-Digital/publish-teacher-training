@@ -74,4 +74,3 @@ yarn-debug.log*
 
 # Ignore snyk related cache
 .dccache
-
