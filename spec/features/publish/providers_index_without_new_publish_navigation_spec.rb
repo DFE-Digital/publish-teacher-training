@@ -2,6 +2,10 @@
 require "rails_helper"
 
 feature "Providers index", { can_edit_current_and_next_cycles: false } do
+  before do
+    given_that_the_new_publish_navigation_feature_flag_is_off
+  end
+
   scenario "view page as Mary - multi provider user" do
     given_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_publish_providers_index_page
@@ -17,6 +21,10 @@ feature "Providers index", { can_edit_current_and_next_cycles: false } do
     i_should_see_the_admin_search_box
     i_should_see_the_pagination_link
     i_can_search_with_provider_details
+  end
+
+  def given_that_the_new_publish_navigation_feature_flag_is_off
+    allow(Settings.features).to receive(:new_publish_navigation).and_return(false)
   end
 
   def given_i_am_authenticated_as_a_multi_provider_user
