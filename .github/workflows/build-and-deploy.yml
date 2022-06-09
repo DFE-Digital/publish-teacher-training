@@ -170,6 +170,13 @@ jobs:
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
+    - name: Upload coverage results
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: coverage/
+
     - name: Alert Test Failures
       if: ${{ failure() && github.ref == 'refs/heads/main' }}
       uses: rtCamp/action-slack-notify@master

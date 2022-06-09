@@ -7,9 +7,7 @@ require "audited-rspec"
 require "simplecov"
 
 SimpleCov.minimum_coverage 75
-SimpleCov.start do
-  add_filter "spec"
-end
+SimpleCov.start("rails")
 
 # If running specs in parallel this ensures SimpleCov results appears
 # upon completion of all specs
