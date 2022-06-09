@@ -5,6 +5,10 @@
 require "rails_helper"
 
 feature "Providers show", { can_edit_current_and_next_cycles: false } do
+  before do
+    given_that_the_new_publish_navigation_feature_flag_is_off
+  end
+
   scenario "view page as Anne - user with single provider" do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_publish_providers_show_page
@@ -25,6 +29,10 @@ feature "Providers show", { can_edit_current_and_next_cycles: false } do
     i_should_see_the_users_partial
     i_should_see_the_accredited_courses_link
     i_should_see_the_allocations_link
+  end
+
+  def given_that_the_new_publish_navigation_feature_flag_is_off
+    allow(Settings.features).to receive(:new_publish_navigation).and_return(false)
   end
 
   def given_i_am_authenticated_as_a_provider_user
