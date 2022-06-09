@@ -121,6 +121,14 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+    better_html (1.0.16)
+      actionview (>= 4.0)
+      activesupport (>= 4.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      html_tokenizer (~> 0.0.6)
+      parser (>= 2.4)
+      smart_properties
     bindata (2.4.10)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -210,6 +218,14 @@ GEM
       dry-core (~> 0.5, >= 0.5)
       dry-initializer (~> 3.0)
       dry-schema (~> 1.8, >= 1.8.0)
+    erb_lint (0.1.1)
+      activesupport
+      better_html (~> 1.0.7)
+      html_tokenizer
+      parser (>= 2.7.1.4)
+      rainbow
+      rubocop
+      smart_properties
     erubi (1.10.0)
     et-orbi (1.2.7)
       tzinfo
@@ -300,6 +316,7 @@ GEM
     hashie (5.0.0)
     html-attributes-utils (0.9.0)
       activesupport (>= 6.1.4.4)
+    html_tokenizer (0.0.7)
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -597,6 +614,7 @@ GEM
     site_prism-all_there (0.3.2)
     skylight (5.3.2)
       activesupport (>= 5.2.0)
+    smart_properties (1.17.0)
     spring (2.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -680,6 +698,7 @@ DEPENDENCIES
   discard
   draper
   dry-container
+  erb_lint
   factory_bot_rails (~> 6.2)
   fakefs
   faker
