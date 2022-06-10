@@ -175,7 +175,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Coverage_report
-        path: ${{ github.workspace }}/coverage/*
+        path: ${{ github.workspace }}/app/coverage/*
 
     - name: Alert Test Failures
       if: ${{ failure() && github.ref == 'refs/heads/main' }}
