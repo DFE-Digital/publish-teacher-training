@@ -35,6 +35,8 @@ services:
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
       - REDIS_URL=redis://redis:6379
       - RAILS_ENV=test
+    volumes:
+      - ${PWD}/out:/app/coverage
 
   bgJobs:
     image: ghcr.io/dfe-digital/teacher-training-api:${IMAGE_TAG:-latest}
