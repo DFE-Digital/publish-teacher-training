@@ -165,9 +165,7 @@ jobs:
     - name: Run tests
       run: |
         docker-compose run --rm -v ${PWD}/coverage:/app/coverage \
-        'bundle config --local disable_exec_load true' \
-        'bundle exec rake parallel:setup' \
-        'bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+        web /bin/sh -c "bundle config --local disable_exec_load true && 'bundle exec rake parallel:setup parallel:spec[,, -O .azure_parallel]'"
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
 
@@ -175,7 +173,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v3
       with:
-        name: Coverage_Report
+        name: Coverage_report
         path: ${{ github.workspace }}/coverage/*
 
     - name: Alert Test Failures
