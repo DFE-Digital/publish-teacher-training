@@ -39,7 +39,7 @@ describe Course, type: :model do
       timestamp = 1.hour.ago
       course.provider.update updated_at: timestamp
       course.touch
-      expect(course.provider.updated_at).to eq timestamp
+      expect(course.provider.updated_at).to be_within(1.second).of timestamp
     end
   end
 
@@ -1209,7 +1209,7 @@ describe Course, type: :model do
         course = create(:course, changed_at: 1.hour.ago)
         course.touch
         expect(course.changed_at).to eq course.updated_at
-        expect(course.changed_at).to eq Time.now.utc
+        expect(course.changed_at).to be_within(1.second).of Time.now.utc
       end
     end
   end
@@ -2580,11 +2580,11 @@ describe Course, type: :model do
     end
 
     it "sets changed_at" do
-      expect(course.changed_at).to eq(Time.zone.now)
+      expect(course.changed_at).to be_within(1.second).of(Time.zone.now)
     end
 
     it "touches the provider" do
-      expect(course.provider.changed_at).to eq(Time.zone.now)
+      expect(course.provider.changed_at).to be_within(1.second).of(Time.zone.now)
     end
   end
 

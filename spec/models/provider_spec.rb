@@ -125,7 +125,7 @@ describe Provider, type: :model do
         provider = create(:provider, updated_at: 1.hour.ago)
         provider.touch
         expect(provider.changed_at).to eq provider.updated_at
-        expect(provider.changed_at).to eq Time.now.utc
+        expect(provider.changed_at).to be_within(1.second).of(Time.now.utc)
       end
     end
   end
@@ -231,14 +231,14 @@ describe Provider, type: :model do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         provider.update_changed_at
-        expect(provider.changed_at).to eq Time.now.utc
+        expect(provider.changed_at).to be_within(1.second).of(Time.now.utc)
       end
     end
 
     it "sets changed_at to the given time" do
       timestamp = 1.hour.ago
       provider.update_changed_at timestamp: timestamp
-      expect(provider.changed_at).to eq timestamp
+      expect(provider.changed_at).to be_within(1.second).of(timestamp)
     end
 
     it "leaves updated_at unchanged" do
@@ -246,7 +246,7 @@ describe Provider, type: :model do
       provider.update updated_at: timestamp
 
       provider.update_changed_at
-      expect(provider.updated_at).to eq timestamp
+      expect(provider.updated_at).to be_within(1.second).of(timestamp)
     end
   end
 

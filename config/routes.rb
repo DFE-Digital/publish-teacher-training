@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
-  constraints(ApiConstraint.new) do
+  constraints(APIConstraint.new) do
     get "/", to: redirect("/docs/")
   end
 

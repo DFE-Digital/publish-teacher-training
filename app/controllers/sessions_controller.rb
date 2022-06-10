@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
   def destroy
     if current_user.present?
       UserSession.end_session!(session)
-      redirect_to user_session.logout_url
+      redirect_to(user_session.logout_url, allow_other_host: true)
     else
       redirect_to support_providers_path
     end

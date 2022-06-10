@@ -73,7 +73,7 @@ describe Site, type: :model do
     it "sets changed_at to the current time" do
       Timecop.freeze do
         site.touch
-        expect(site.provider.changed_at).to eq Time.now.utc
+        expect(site.provider.changed_at).to be_within(1.second).of(Time.now.utc)
       end
     end
 
@@ -81,7 +81,7 @@ describe Site, type: :model do
       timestamp = 1.hour.ago
       site.provider.update updated_at: timestamp
       site.touch
-      expect(site.provider.updated_at).to eq timestamp
+      expect(site.provider.updated_at).to be_within(1.second).of(timestamp)
     end
   end
 
