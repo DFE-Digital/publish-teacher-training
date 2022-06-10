@@ -164,7 +164,7 @@ jobs:
 
     - name: Run tests
       run: |
-        docker-compose run --rm -v ${PWD}/coverage:/app/coverage \
+        docker-compose run --rm -v ${PWD}/coverage:/app/coverage -e RAILS_ENV=test \
         web /bin/sh -c "bundle config --local disable_exec_load true && bundle exec rake parallel:setup parallel:spec[,, -O .azure_parallel]"
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
