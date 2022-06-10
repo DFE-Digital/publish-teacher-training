@@ -4,12 +4,10 @@ require "super_diff/rspec"
 require "fakefs/spec_helpers"
 require "webmock/rspec"
 require "audited-rspec"
-if ENV.fetch("COVERAGE", false)
-  require "simplecov"
+require "simplecov"
 
-  SimpleCov.minimum_coverage 75
-  SimpleCov.start("rails")
-end
+SimpleCov.minimum_coverage 85
+SimpleCov.start("rails")
 
 # If running specs in parallel this ensures SimpleCov results appears
 # upon completion of all specs
