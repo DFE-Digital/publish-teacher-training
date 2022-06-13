@@ -1,6 +1,7 @@
+// Entry point for your Sass build
 @import "./govuk_style_setup";
-@import "~govuk-frontend/govuk/all";
-@import "~@ministryofjustice/frontend/moj/all";
+@import "govuk-frontend/govuk/all";
+@import "@ministryofjustice/frontend/moj/all";
 
 $git-brand-colour: #159964;
 

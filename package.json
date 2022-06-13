@@ -5,21 +5,23 @@
     "node": "16.x"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
+    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules --quiet-deps"
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.1",
-    "@rails/webpacker": "^5.4.3",
     "accessible-autocomplete": "^2.0.4",
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.9.1",
+    "esbuild": "^0.14.43",
     "govuk-frontend": "^3.9.1",
     "jquery": "^3.6.0",
+    "sass": "^1.52.3",
     "set-value": "^4.0.1"
   },
   "devDependencies": {
-    "jest": "^26.5.3",
-    "webpack-dev-server": "3.11.3"
+    "jest": "^26.5.3"
   },
   "jest": {
     "roots": [
