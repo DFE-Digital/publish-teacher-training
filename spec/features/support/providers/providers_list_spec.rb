@@ -8,7 +8,7 @@ feature "View providers" do
   before do
     given_i_am_authenticated(user: user)
     and_there_are_providers
-    when_i_visit_the_provider_index_page
+    when_i_visit_the_support_provider_index_page
   end
 
   scenario "i can view the providers" do
@@ -19,11 +19,11 @@ feature "View providers" do
     create_list(:provider, 2)
   end
 
-  def when_i_visit_the_provider_index_page
-    provider_index_page.load
+  def when_i_visit_the_support_provider_index_page
+    support_provider_index_page.load
   end
 
   def then_i_see_the_providers
-    expect(provider_index_page.providers.size).to eq(2)
+    expect(support_provider_index_page.providers.size).to eq(2)
   end
 end

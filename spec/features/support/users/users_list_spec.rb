@@ -7,7 +7,7 @@ feature "View users" do
 
   scenario "i can view users" do
     given_i_am_authenticated(user: user)
-    when_i_visit_the_users_index_page
+    when_i_visit_the_support_users_index_page
     then_i_should_see_a_table_of_users
     when_i_click_the_name
     then_it_takes_me_to_the_users_page
@@ -17,24 +17,24 @@ feature "View users" do
     @provider = create(:provider)
   end
 
-  def when_i_visit_the_users_index_page
-    users_index_page.load
+  def when_i_visit_the_support_users_index_page
+    support_users_index_page.load
   end
 
   def and_click_on_the_users_tab
-    users_index_page.users_tab.click
+    support_users_index_page.users_tab.click
   end
 
   def then_i_should_see_a_table_of_users
-    expect(users_index_page.users.size).to eq(1)
-    expect(users_index_page.users.first.full_name.text).to eq(user.full_name)
+    expect(support_users_index_page.users.size).to eq(1)
+    expect(support_users_index_page.users.first.full_name.text).to eq(user.full_name)
   end
 
   def when_i_click_the_name
-    users_index_page.users.first.full_name.click
+    support_users_index_page.users.first.full_name.click
   end
 
   def then_it_takes_me_to_the_users_page
-    expect(users_show_page).to be_displayed
+    expect(support_users_show_page).to be_displayed
   end
 end

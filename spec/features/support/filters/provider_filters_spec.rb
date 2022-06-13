@@ -49,29 +49,29 @@ private
   end
 
   def when_i_visit_the_providers_index_page
-    provider_index_page.load
+    support_provider_index_page.load
   end
 
   def then_i_can_search_by_provider_name
-    provider_index_page.provider_name_or_code_search.set(@provider_one.provider_name)
+    support_provider_index_page.provider_name_or_code_search.set(@provider_one.provider_name)
   end
 
   def then_i_can_search_by_code
-    provider_index_page.provider_name_or_code_search.set(@provider_one.provider_code)
+    support_provider_index_page.provider_name_or_code_search.set(@provider_one.provider_code)
   end
 
   def and_when_i_click_apply_filters
-    provider_index_page.apply_filters.click
+    support_provider_index_page.apply_filters.click
   end
 
   def the_correct_provider_shows
-    expect(provider_index_page.providers.length).to eq(1)
-    expect(provider_index_page).to have_content(@provider_one.provider_name)
-    expect(provider_index_page).not_to have_content(@provider_two.provider_name)
+    expect(support_provider_index_page.providers.length).to eq(1)
+    expect(support_provider_index_page).to have_content(@provider_one.provider_name)
+    expect(support_provider_index_page).not_to have_content(@provider_two.provider_name)
   end
 
   def then_i_can_search_by_course_code
-    provider_index_page.course_code_search.set(@provider_one.courses.first.course_code)
+    support_provider_index_page.course_code_search.set(@provider_one.courses.first.course_code)
   end
 
   def given_i_have_filters_selected
@@ -81,12 +81,12 @@ private
   end
 
   def i_can_remove_filters
-    provider_index_page.remove_filters.click
+    support_provider_index_page.remove_filters.click
   end
 
   def and_i_can_see_unfiltered_results
-    expect(provider_index_page.providers.length).to eq 3
-    expect(provider_index_page).to have_content(@provider_one.provider_name)
-    expect(provider_index_page).to have_content(@provider_two.provider_name)
+    expect(support_provider_index_page.providers.length).to eq 3
+    expect(support_provider_index_page).to have_content(@provider_one.provider_name)
+    expect(support_provider_index_page).to have_content(@provider_two.provider_name)
   end
 end
