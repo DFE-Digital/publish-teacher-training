@@ -25,3 +25,7 @@ RSpec/AnyInstance:
 # Remove after migration
 Naming/PredicateName:
   Enabled: false
+
+# Remove after we fix offences
+Rails/I18nLocaleTexts:
+  Enabled: false

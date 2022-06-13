@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.5"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "6.1.6"
+gem "rails", "7.0.3"
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.4"
@@ -162,7 +162,7 @@ group :development, :test do
   gem "rspec-its"
 
   # Test framework
-  gem "rspec-rails"
+  gem "rspec-rails", "6.0.0.rc1"
 
   # A Ruby static code analyzer and formatter
   gem "rubocop", require: false
@@ -173,7 +173,7 @@ group :development, :test do
   # Allow us to freeze time in tests
   gem "timecop"
 
-  gem "open_api-rswag-specs"
+  gem "open_api-rswag-specs", github: "DFE-Digital/open-api-rswag"
 
   gem "factory_bot_rails", "~> 6.2"
   gem "fakefs", require: "fakefs/safe"

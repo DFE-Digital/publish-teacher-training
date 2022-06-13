@@ -5,7 +5,7 @@ module PageObjects
     class RolloverRecruitment < PageObjects::Base
       set_url "/publish/rollover-recruitment"
 
-      element :submit, 'input.govuk-button[type="submit"]'
+      element :submit, 'button.govuk-button[type="submit"]'
     end
   end
 end

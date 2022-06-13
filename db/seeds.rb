@@ -9,7 +9,6 @@ SubjectArea.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
-Organisation.destroy_all
 User.destroy_all
 AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
@@ -35,7 +34,7 @@ superuser = User.create!(
 )
 
 def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
-  provider = Provider.create!(
+  provider = Provider.new(
     provider_name: "Acme SCITT",
     provider_code: "A01",
     provider_type: "B",
@@ -43,11 +42,11 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     email: Faker::Internet.email,
     telephone: Faker::PhoneNumber.phone_number,
   )
-  organisation = Organisation.create!(name: "ACME SCITT Org")
-  organisation.providers << provider
-  superuser.organisations << organisation
+  provider.skip_geocoding = true
+  provider.save!
+  superuser.providers << provider
 
-  Site.create!(
+  site = Site.new(
     provider: provider,
     code: Faker::Number.number(digits: 1),
     location_name: Faker::Company.name,
@@ -58,6 +57,9 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     postcode: Faker::Address.postcode,
     urn: Faker::Number.number(digits: [5, 6].sample),
   )
+
+  site.skip_geocoding = true
+  site.save!
 
   primary_course = Course.create!(
     name: "Mathematics",
@@ -267,7 +269,7 @@ create_standard_provider_and_courses_for_cycle(current_recruitment_cycle, superu
 create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser)
 
 10.times do |i|
-  provider = Provider.create!(
+  provider = Provider.new(
     provider_name: "ACME SCITT #{i}",
     provider_code: "A#{i}",
     provider_type: "B",
@@ -276,8 +278,8 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     telephone: Faker::PhoneNumber.phone_number,
   )
 
-  organisation = Organisation.create!(name: "ACME#{i}")
-  organisation.providers << provider
+  provider.skip_geocoding = true
+  provider.save!
 
   user = User.create!(
     email: Faker::Internet.unique.email,
@@ -285,8 +287,8 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     last_name: Faker::Name.last_name,
   )
 
-  user.organisations << organisation
-  superuser.organisations << organisation
+  user.providers << provider
+  superuser.providers << provider
 end
 
 access_requester_user = User.all.reject(&:admin?).sample
@@ -301,6 +303,6 @@ access_requester_user = User.all.reject(&:admin?).sample
     request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample,
     reason: "No reason",
-    organisation: Organisation.first.name,
+    organisation: Provider.first.provider_name,
   )
 end
