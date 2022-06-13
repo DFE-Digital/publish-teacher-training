@@ -131,7 +131,7 @@ gem "jsbundling-rails", "~> 1.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 
 # for sending analytics data to the analytics platform
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v0.1.0"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.0.0"
 
 group :development, :test do
   # Prettyprint in console

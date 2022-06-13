@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require 'dfe/analytics/rspec/matchers'
+require "dfe/analytics/rspec/matchers"
 
 feature "Sending DFE Analytics events" do
   before do
@@ -16,7 +16,7 @@ feature "Sending DFE Analytics events" do
     then_it_has_sent_analytics_events
   end
 
-  private
+private
 
   def provider
     @provider ||= @current_user.providers.first
@@ -45,6 +45,6 @@ feature "Sending DFE Analytics events" do
   end
 
   def then_it_has_sent_analytics_events
-    expect([:web_request, :create_entity]).to have_been_enqueued_event_types
+    expect(%i[web_request create_entity]).to have_been_enqueued_as_analytics_events
   end
 end
