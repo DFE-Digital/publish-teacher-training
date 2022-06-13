@@ -1,9 +1,7 @@
-if AuthenticationService.persona?
-  class PersonasController < ApplicationController
-    layout "application"
+class PersonasController < ApplicationController
+  layout "application"
 
-    skip_before_action :authenticate
+  skip_before_action :authenticate
 
-    def index; end
-  end
+  def index; end
 end
