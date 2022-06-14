@@ -41,29 +41,29 @@ private
   end
 
   def when_i_visit_the_edit_age_range_page
-    publish_course_age_range_page.load(
+    age_range_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
   def when_i_select_a_preset_age_range
-    publish_course_age_range_page.five_to_eleven.click
+    age_range_edit_page.five_to_eleven.click
   end
 
   def when_i_select_a_custom_age_range
-    publish_course_age_range_page.age_range_other.click
-    publish_course_age_range_page.age_range_from_field.set("10")
-    publish_course_age_range_page.age_range_to_field.set("15")
+    age_range_edit_page.age_range_other.click
+    age_range_edit_page.age_range_from_field.set("10")
+    age_range_edit_page.age_range_to_field.set("15")
   end
 
   def when_i_select_an_invalid_age_range
-    publish_course_age_range_page.age_range_other.click
-    publish_course_age_range_page.age_range_from_field.set("10")
-    publish_course_age_range_page.age_range_to_field.set("5")
+    age_range_edit_page.age_range_other.click
+    age_range_edit_page.age_range_from_field.set("10")
+    age_range_edit_page.age_range_to_field.set("5")
   end
 
   def and_i_click_continue
-    publish_course_age_range_page.continue.click
+    age_range_edit_page.continue.click
   end
 
   def then_i_should_see_a_success_message
@@ -83,7 +83,7 @@ private
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_age_range_page.error_messages).to include(
+    expect(age_range_edit_page.error_messages).to include(
       I18n.t("activemodel.errors.models.publish/age_range_form.attributes.course_age_range_in_years_other_from.invalid"),
     )
   end

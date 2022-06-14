@@ -40,7 +40,7 @@ private
   end
 
   def when_i_visit_the_courses_page
-    publish_provider_courses_index_page.load(
+    provider_courses_index_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
@@ -62,7 +62,7 @@ private
   end
 
   def and_i_click_on_add_course
-    publish_provider_courses_index_page.add_course.click
+    provider_courses_index_page.add_course.click
   end
 
   def then_i_see_the_new_course_level_page
@@ -235,9 +235,9 @@ private
   end
 
   def save_course
-    expect { confirmation_page.save_button.click }.to change { provider.courses.reload.count } .from(0).to(1)
+    expect { course_confirmation_page.save_button.click }.to change { provider.courses.reload.count } .from(0).to(1)
 
-    expect(publish_provider_courses_index_page).to be_displayed
-    expect(publish_provider_courses_index_page.success_summary).to have_content("Your course has been created")
+    expect(provider_courses_index_page).to be_displayed
+    expect(provider_courses_index_page.success_summary).to have_content("Your course has been created")
   end
 end

@@ -19,14 +19,14 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
 
   scenario "wrong course code provided" do
     and_there_is_a_course_i_want_to_delete
-    when_i_visit_the_course_deletion_page
+    when_i_visit_the_delete_page
     and_i_submit_with_the_wrong_code
     then_i_should_see_an_error_message
   end
 
   scenario "attempting to delete a published course" do
     and_there_is_a_published_course
-    when_i_visit_the_course_deletion_page
+    when_i_visit_the_delete_page
     then_i_am_redirected_to_the_courses_page
   end
 
@@ -43,32 +43,32 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_page
-    publish_provider_courses_show_page.load(
+    provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
-  def when_i_visit_the_course_deletion_page
-    publish_course_deletion_page.load(
+  def when_i_visit_the_delete_page
+    delete_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
   def and_i_click_the_delete_link
-    publish_provider_courses_show_page.status_sidebar.delete_course_link.click
+    provider_courses_show_page.status_sidebar.delete_course_link.click
   end
 
   def and_i_confirm_the_course_code
-    publish_course_deletion_page.confirm_course_code.set(course.course_code)
+    delete_page.confirm_course_code.set(course.course_code)
   end
 
   def and_i_submit_with_the_wrong_code
-    publish_course_deletion_page.confirm_course_code.set("random")
+    delete_page.confirm_course_code.set("random")
     and_i_submit
   end
 
   def and_i_submit
-    publish_course_deletion_page.submit.click
+    delete_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -80,11 +80,11 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_redirected_to_the_courses_page
-    expect(publish_provider_courses_index_page).to be_displayed
+    expect(provider_courses_index_page).to be_displayed
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_deletion_page.error_messages).to include(
+    expect(delete_page.error_messages).to include(
       "Enter the course code #{course.course_code} to delete this course",
     )
   end

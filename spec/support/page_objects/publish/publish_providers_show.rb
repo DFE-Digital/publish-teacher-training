@@ -4,7 +4,7 @@
 
 module PageObjects
   module Publish
-    class ProvidersShow < PageObjects::Base
+    class PublishProvidersShow < PageObjects::Base
       set_url "/publish/organisations/{provider_code}"
 
       element :about_your_organisation, '[data-qa="about-your-organisation"]'

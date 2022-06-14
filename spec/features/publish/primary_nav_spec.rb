@@ -43,27 +43,27 @@ feature "Primary nav" do
   end
 
   def then_i_should_see_the_organisation_details_link
-    expect(primary_nav).to have_organisation_details
+    expect(primary_nav_page).to have_organisation_details
   end
 
   def and_i_should_see_the_locations_link
-    expect(primary_nav).to have_locations
+    expect(primary_nav_page).to have_locations
   end
 
   def and_i_should_see_the_courses_link
-    expect(primary_nav).to have_courses
+    expect(primary_nav_page).to have_courses
   end
 
   def and_i_should_see_the_users_link
-    expect(primary_nav).to have_users
+    expect(primary_nav_page).to have_users
   end
 
   def and_i_should_see_the_training_partners_link
-    expect(primary_nav).to have_training_partners
+    expect(primary_nav_page).to have_training_partners
   end
 
   def and_i_should_not_see_the_training_partners_link
-    expect(primary_nav).not_to have_training_partners
+    expect(primary_nav_page).not_to have_training_partners
   end
 
   def and_i_should_not_see_the_training_partners_link

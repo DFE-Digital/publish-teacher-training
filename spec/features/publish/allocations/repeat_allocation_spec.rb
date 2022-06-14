@@ -168,31 +168,31 @@ private
   end
 
   def then_i_see_allocations_edit_page(allocation)
-    expect(publish_allocations_edit_page).to be_displayed(
+    expect(allocations_edit_page).to be_displayed(
       provider_code: accredited_body_with_allocations.provider_code, recruitment_cycle_year: accredited_body_with_allocations.recruitment_cycle_year,
     )
-    expect(publish_allocations_edit_page.url_matches["query"]["id"]).to eq(allocation.id.to_s)
-    expect(publish_allocations_edit_page.header).to have_content("Do you want to request PE for this organisation?")
+    expect(allocations_edit_page.url_matches["query"]["id"]).to eq(allocation.id.to_s)
+    expect(allocations_edit_page.header).to have_content("Do you want to request PE for this organisation?")
   end
 
   def then_i_see_new_request_pe_allocations_page
-    expect(publish_new_repeat_request_page).to be_displayed(
+    expect(new_repeat_request_page).to be_displayed(
       provider_code: accredited_body_with_allocations.provider_code, recruitment_cycle_year: accredited_body_with_allocations.recruitment_cycle_year, training_provider_code: training_provider.provider_code,
     )
 
-    expect(publish_new_repeat_request_page.header).to have_content("Do you want to request PE for this organisation?")
+    expect(new_repeat_request_page.header).to have_content("Do you want to request PE for this organisation?")
   end
 
   def when_i_click_yes_on_the_new_repeat_page
-    publish_new_repeat_request_page.yes.click
+    new_repeat_request_page.yes.click
   end
 
   def when_i_click_yes_on_the_edit_page
-    publish_allocations_edit_page.yes.click
+    allocations_edit_page.yes.click
   end
 
   def when_i_click_no_on_the_new_repeat_page
-    publish_new_repeat_request_page.no.click
+    new_repeat_request_page.no.click
   end
 
   def when_i_click_change_on_the_allocation_page_for_the_repeat_allocation
@@ -202,19 +202,19 @@ private
   end
 
   def and_i_click_continue_on_the_edit_page
-    publish_allocations_edit_page.continue_button.click
+    allocations_edit_page.continue_button.click
   end
 
   def and_i_click_continue_on_the_new_repeat_page
-    publish_new_repeat_request_page.continue_button.click
+    new_repeat_request_page.continue_button.click
   end
 
   def and_i_see_the_confirmation_page
-    expect(publish_allocations_show_page).to be_displayed
+    expect(allocations_show_page).to be_displayed
   end
 
   def and_i_see_the_corresponding_page_title(title)
-    expect(publish_allocations_show_page.page_heading).to have_content(title)
+    expect(allocations_show_page.page_heading).to have_content(title)
   end
 
   alias_method :and_there_is_a_previous_recruitment_cycle, :previous_recruitment_cycle

@@ -2,7 +2,7 @@
 
 module FeatureHelpers
   module SupportPages
-    def provider_index_page
+    def support_provider_index_page
       @provider_index_page ||= PageObjects::Support::ProviderIndex.new
     end
 

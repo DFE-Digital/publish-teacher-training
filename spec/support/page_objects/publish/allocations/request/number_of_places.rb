@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Allocations
       module Request
-        class NumberOfPlacesPage < PageObjects::Base
+        class NumberOfPlaces < PageObjects::Base
           set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/allocations/request"
 
           element :header, "h1"

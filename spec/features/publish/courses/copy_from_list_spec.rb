@@ -7,17 +7,17 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
     before do
       given_i_am_authenticated_as_an_accredited_provider_user
       and_there_is_an_accredited_course_i_want_to_edit
-      when_i_visit_the_course_information_page
+      when_i_visit_the_course_information_edit_page
     end
 
     include_context "copy_courses"
 
     scenario "the course does not display its own name in the copy list" do
-      publish_course_information_page.load(
+      course_information_edit_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
       )
 
-      list_options = publish_course_information_page.copy_content.copy_options
+      list_options = course_information_edit_page.copy_content.copy_options
       expect(Course.count).to eq 3
       expect(list_options.size).to eq 3
       expect(list_options.shift).to eq("Pick a course")
@@ -29,17 +29,17 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
     before do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_course_i_want_to_edit
-      when_i_visit_the_course_information_page
+      when_i_visit_the_course_information_edit_page
     end
 
     include_context "copy_courses"
 
     scenario "the course does not display its own name in the copy list" do
-      publish_course_information_page.load(
+      course_information_edit_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
       )
 
-      list_options = publish_course_information_page.copy_content.copy_options
+      list_options = course_information_edit_page.copy_content.copy_options
       expect(Course.count).to eq 3
       expect(list_options.size).to eq 3
       expect(list_options.shift).to eq("Pick a course")
@@ -63,8 +63,8 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
     given_a_course_exists(:with_accrediting_provider, enrichments: [build(:course_enrichment, :published)])
   end
 
-  def when_i_visit_the_course_information_page
-    publish_course_information_page.load(
+  def when_i_visit_the_course_information_edit_page
+    course_information_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end

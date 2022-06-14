@@ -64,13 +64,13 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_page
-    publish_provider_courses_show_page.load(
+    provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
   def and_i_click_the_publish_link
-    publish_provider_courses_show_page.status_sidebar.publish_button.click
+    provider_courses_show_page.status_sidebar.publish_button.click
   end
 
   def then_i_should_see_a_success_message
@@ -82,9 +82,9 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_make_some_new_changes
-    publish_course_information_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code)
-    publish_course_information_page.about_course.set("some new description")
-    publish_course_information_page.submit.click
+    course_information_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code)
+    course_information_edit_page.about_course.set("some new description")
+    course_information_edit_page.submit.click
   end
 
   def then_i_should_see_the_unpublished_changes_message
@@ -92,15 +92,15 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_publish_button
-    expect(publish_provider_courses_show_page.status_sidebar.publish_button).to be_visible
+    expect(provider_courses_show_page.status_sidebar.publish_button).to be_visible
   end
 
   def then_i_should_see_an_error_message_for_the_gcses
-    expect(publish_provider_courses_show_page.error_messages).to include("Enter GCSE requirements")
+    expect(provider_courses_show_page.error_messages).to include("Enter GCSE requirements")
   end
 
   def when_i_click_the_error_message_link
-    publish_provider_courses_show_page.errors.first.link.click
+    provider_courses_show_page.errors.first.link.click
   end
 
   def then_it_takes_me_to_the_gcses_page

@@ -5,7 +5,7 @@ require "rails_helper"
 feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_visa_sponsorships_page
+    when_i_visit_the_provider_visa_sponsorships_page
   end
 
   scenario "i can update my visa sponsorships" do
@@ -25,17 +25,17 @@ feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false }
     provider.update!(can_sponsor_student_visa: nil, can_sponsor_skilled_worker_visa: nil)
   end
 
-  def when_i_visit_the_visa_sponsorships_page
-    visa_sponsorships_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year)
+  def when_i_visit_the_provider_visa_sponsorships_page
+    provider_visa_sponsorships_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year)
   end
 
   def and_i_set_my_visa_sponsorships
-    visa_sponsorships_page.can_sponsor_student_visa.choose
-    visa_sponsorships_page.can_sponsor_skilled_worker_visa.choose
+    provider_visa_sponsorships_page.can_sponsor_student_visa.choose
+    provider_visa_sponsorships_page.can_sponsor_skilled_worker_visa.choose
   end
 
   def and_i_submit
-    visa_sponsorships_page.save_and_publish.click
+    provider_visa_sponsorships_page.save_and_publish.click
   end
 
   def then_i_should_see_a_success_message

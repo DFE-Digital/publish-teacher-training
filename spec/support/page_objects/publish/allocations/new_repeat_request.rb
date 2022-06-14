@@ -3,7 +3,7 @@
 module PageObjects
   module Publish
     module Allocations
-      class NewRepeatRequestPage < PageObjects::Base
+      class NewRepeatRequest < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/allocations/{training_provider_code}/new-repeat-request"
 
         element :header, "h1"

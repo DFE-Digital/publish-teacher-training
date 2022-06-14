@@ -21,7 +21,7 @@ RSpec.feature "PE allocations", { can_edit_current_and_next_cycles: false } do
       scenario "an accredited body views PE allocations page" do
         and_an_initial_allocation_exists_assigned_to_accredited_body
         when_i_visit_allocations_page(accredited_body_with_allocations)
-        then_it_shows_the_initial_allocaions_table
+        then_it_shows_the_initial_allocations_table
       end
     end
 
@@ -114,7 +114,7 @@ private
     expect(allocations_page).not_to have_repeat_allocations
   end
 
-  def then_it_shows_the_initial_allocaions_table
+  def then_it_shows_the_initial_allocations_table
     expect(allocations_page.initial_allocations.first.provider_name.text).to eq initial_training_provider.provider_name
     expect(allocations_page.initial_allocations.first.status.text).to eq "1 PLACE REQUESTED"
     expect(allocations_page).not_to have_repeat_allocations

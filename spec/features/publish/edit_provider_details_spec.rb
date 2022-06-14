@@ -29,7 +29,7 @@ feature "About Your Organisation section", { can_edit_current_and_next_cycles: f
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     )
-    sign_in_page.sign_in_button.click
+    support_sign_in_page.sign_in_button.click
   end
 
   def then_i_can_edit_info_about_training_with_us

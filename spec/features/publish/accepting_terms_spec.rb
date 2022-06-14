@@ -30,20 +30,20 @@ feature "Accepting terms" do
   end
 
   def when_i_visit_the_publish_service
-    visit(publish_root_path)
+    visit(root_path)
   end
 
   def then_i_am_taken_to_the_terms_page
-    expect(terms_and_conditions_page).to be_displayed
+    expect(terms_page).to be_displayed
   end
 
   def when_i_accept_the_terms_and_conditions
-    terms_and_conditions_page.accept_terms.check
+    terms_page.accept_terms.check
     and_i_submit
   end
 
   def then_i_should_be_redirected_to_the_courses_index_page
-    expect(publish_provider_courses_index_page).to be_displayed
+    expect(provider_courses_index_page).to be_displayed
   end
 
   def and_the_user_is_marked_as_accepting_the_terms
@@ -55,11 +55,11 @@ feature "Accepting terms" do
   end
 
   def and_i_submit
-    terms_and_conditions_page.submit.click
+    terms_page.submit.click
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_study_mode_page.error_messages).to include(
+    expect(course_study_mode_edit_page.error_messages).to include(
       I18n.t("activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted"),
     )
   end
