@@ -34,10 +34,10 @@ feature "View provider courses" do
   end
 
   def then_i_should_see_a_table_of_courses
-    expect(support_provider_courses_index_page.courses_row.size).to eq(1)
+    expect(support_courses_index_page.courses_row.size).to eq(1)
 
-    expect(support_provider_courses_index_page.courses_row.first.name).to have_text(course.name)
-    expect(support_provider_courses_index_page.courses_row.first.name).to have_text(course.course_code)
-    expect(support_provider_courses_index_page.courses_row.first.change_link).to have_text("Change")
+    expect(support_courses_index_page.courses_row.first.name).to have_text(course.name)
+    expect(support_courses_index_page.courses_row.first.name).to have_text(course.course_code)
+    expect(support_courses_index_page.courses_row.first.change_link).to have_text("Change")
   end
 end

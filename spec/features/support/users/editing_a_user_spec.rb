@@ -58,10 +58,10 @@ private
   end
 
   def i_am_taken_to_the_user_show_page
-    expect(support_users_show_page).to be_displayed
+    expect(support_user_show_page).to be_displayed
   end
 
   def with_a_success_message
-    expect(support_users_show_page).to have_content("User successfully updated")
+    expect(support_user_show_page).to have_content("User successfully updated")
   end
 end

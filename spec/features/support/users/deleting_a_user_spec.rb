@@ -23,11 +23,11 @@ private
   end
 
   def when_i_visit_the_user_show_page(user_id)
-    support_users_show_page.load(id: user_id)
+    support_user_show_page.load(id: user_id)
   end
 
   def when_i_click_the_delete_button
-    support_users_show_page.delete_button.click
+    support_user_show_page.delete_button.click
   end
 
   def then_i_am_taken_to_the_user_index_page

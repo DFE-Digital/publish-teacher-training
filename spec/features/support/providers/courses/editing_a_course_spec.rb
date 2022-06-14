@@ -12,7 +12,7 @@ feature "Edit provider course details" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
-    when_i_visit_the_support_provider_courses_index_page
+    when_i_visit_the_support_courses_index_page
     and_click_on_the_first_course_change_link
     then_i_am_on_the_support_course_edit_page
   end
@@ -25,7 +25,7 @@ feature "Edit provider course details" do
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
       and_i_select_the_send_checkbox
       and_i_click_the_continue_button
-      then_i_am_redirected_back_to_the_support_provider_courses_index_page
+      then_i_am_redirected_back_to_the_support_courses_index_page
       and_the_course_name_and_code_are_updated
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
@@ -80,12 +80,12 @@ private
     provider
   end
 
-  def when_i_visit_the_support_provider_courses_index_page
-    support_provider_courses_index_page.load(provider_id: provider.id)
+  def when_i_visit_the_support_courses_index_page
+    support_courses_index_page.load(provider_id: provider.id)
   end
 
   def and_click_on_the_first_course_change_link
-    support_provider_courses_index_page.courses_row.first.change_link.click
+    support_courses_index_page.courses_row.first.change_link.click
   end
 
   alias_method :when_i_return_to_the_edit_page, :and_click_on_the_first_course_change_link
@@ -169,13 +169,13 @@ private
     support_course_edit_page.continue.click
   end
 
-  def then_i_am_redirected_back_to_the_support_provider_courses_index_page
-    expect(support_provider_courses_index_page).to be_displayed
+  def then_i_am_redirected_back_to_the_support_courses_index_page
+    expect(support_courses_index_page).to be_displayed
   end
 
   def and_the_course_name_and_code_are_updated
-    expect(support_provider_courses_index_page).to have_text(course_code)
-    expect(support_provider_courses_index_page).to have_text(course_name)
+    expect(support_courses_index_page).to have_text(course_code)
+    expect(support_courses_index_page).to have_text(course_name)
   end
 
   def and_i_select_the_send_checkbox

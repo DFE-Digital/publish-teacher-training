@@ -16,7 +16,7 @@ feature "Managing a provider's locations" do
     and_i_click_on_the_add_location_link
     then_should_be_on_the_create_page_for_the_location
     when_i_add_the_location_details
-    and_i_submit_for(support_provider_location_create_page)
+    and_i_submit_for(support_location_create_page)
     then_i_should_see_a_success_message_for(:created)
     and_the_new_location_should_show_in_the_list
   end
@@ -25,7 +25,7 @@ feature "Managing a provider's locations" do
     and_i_click_on_the_edit_link_for_a_location
     then_should_be_on_the_edit_page_for_the_location
     when_i_edit_the_location_details
-    and_i_submit_for(support_provider_location_edit_page)
+    and_i_submit_for(support_location_edit_page)
     then_i_should_see_a_success_message_for(:updated)
     and_the_location_details_are_updated
   end
@@ -43,46 +43,46 @@ feature "Managing a provider's locations" do
   end
 
   def when_i_visit_a_provider_locations_page
-    support_provider_locations_index_page.load(provider_id: provider.id)
+    support_locations_index_page.load(provider_id: provider.id)
   end
 
   def then_i_should_see_a_list_of_locations
-    expect(support_provider_locations_index_page.locations.size).to eq(1)
+    expect(support_locations_index_page.locations.size).to eq(1)
 
-    expect(support_provider_locations_index_page.locations.first.name).to have_text(site.location_name)
-    expect(support_provider_locations_index_page.locations.first.code).to have_text(site.code)
-    expect(support_provider_locations_index_page.locations.first.urn).to have_text(site.urn)
+    expect(support_locations_index_page.locations.first.name).to have_text(site.location_name)
+    expect(support_locations_index_page.locations.first.code).to have_text(site.code)
+    expect(support_locations_index_page.locations.first.urn).to have_text(site.urn)
   end
 
   def and_i_click_on_the_add_location_link
-    support_provider_locations_index_page.add_location.click
+    support_locations_index_page.add_location.click
   end
 
   def then_should_be_on_the_create_page_for_the_location
-    expect(support_provider_location_create_page).to be_displayed
+    expect(support_location_create_page).to be_displayed
   end
 
   def when_i_add_the_location_details
-    support_provider_location_create_page.location_form.location_name.set("Acre woods")
-    support_provider_location_create_page.location_form.urn.set("12345")
-    support_provider_location_create_page.location_form.building_and_street.set("100 Acre Woods")
-    support_provider_location_create_page.location_form.postcode.set("BN1 1AA")
+    support_location_create_page.location_form.location_name.set("Acre woods")
+    support_location_create_page.location_form.urn.set("12345")
+    support_location_create_page.location_form.building_and_street.set("100 Acre Woods")
+    support_location_create_page.location_form.postcode.set("BN1 1AA")
   end
 
   def and_the_new_location_should_show_in_the_list
-    expect(support_provider_locations_index_page.locations.first.name).to have_text("Acre woods")
+    expect(support_locations_index_page.locations.first.name).to have_text("Acre woods")
   end
 
   def and_i_click_on_the_edit_link_for_a_location
-    support_provider_locations_index_page.locations.first.edit_link.click
+    support_locations_index_page.locations.first.edit_link.click
   end
 
   def then_should_be_on_the_edit_page_for_the_location
-    expect(support_provider_location_edit_page).to be_displayed
+    expect(support_location_edit_page).to be_displayed
   end
 
   def when_i_edit_the_location_details
-    support_provider_location_edit_page.location_form.location_name.set("Updated location name")
+    support_location_edit_page.location_form.location_name.set("Updated location name")
   end
 
   def and_i_submit_for(page_object)
@@ -100,20 +100,20 @@ feature "Managing a provider's locations" do
   end
 
   def and_i_submit_with_invalid_data
-    support_provider_location_edit_page.location_form.location_name.set(nil)
-    and_i_submit_for(support_provider_location_edit_page)
+    support_location_edit_page.location_form.location_name.set(nil)
+    and_i_submit_for(support_location_edit_page)
   end
 
   def then_i_should_see_a_an_error_message
-    expect(support_provider_location_edit_page.errors.size).to eq(1)
+    expect(support_location_edit_page.errors.size).to eq(1)
   end
 
   def and_i_choose_to_delete_the_location
-    support_provider_location_edit_page.delete_record.click
+    support_location_edit_page.delete_record.click
   end
 
   def then_the_location_should_be_deleted
-    expect(support_provider_locations_index_page.locations.size).to eq(0)
+    expect(support_locations_index_page.locations.size).to eq(0)
   end
 
   def provider

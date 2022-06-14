@@ -35,6 +35,6 @@ feature "View users" do
   end
 
   def then_it_takes_me_to_the_users_page
-    expect(support_users_show_page).to be_displayed
+    expect(support_user_show_page).to be_displayed
   end
 end
