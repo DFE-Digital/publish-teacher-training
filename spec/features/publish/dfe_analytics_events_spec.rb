@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "dfe/analytics/rspec/matchers"
 
 feature "Sending DFE Analytics events" do
   before do
