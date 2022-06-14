@@ -81,7 +81,7 @@ feature "Authentication with magic links" do
   end
 
   def when_i_go_to_sign_in
-    support_sign_in_page.load
+    sign_in_page.load
   end
 
   def then_i_am_taken_to_the_magic_link_page
