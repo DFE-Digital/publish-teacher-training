@@ -1,5 +1,3 @@
-@import "../base.scss";
-
 .app-header--wide-logo {
   @include govuk-media-query($from: desktop) {
     .govuk-header__logo {
