@@ -29,6 +29,12 @@
   - requester_id
   - requester_email
   - discarded_at
+  :allocation_uplift:
+  - id
+  - allocation_id
+  - uplifts
+  - created_at
+  - updated_at
   :contact:
   - name
   - email
@@ -46,6 +52,15 @@
   - personal_qualities
   - required_qualifications
   - salary_details
+  :site:
+  - uuid
+  - discarded_at
+  :user_permission:
+  - id
+  - user_id
+  - provider_id
+  - created_at
+  - updated_at
   :provider_ucas_preference:
   - id
   - provider_id
