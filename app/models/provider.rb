@@ -134,7 +134,7 @@ class Provider < ApplicationRecord
 
   validates :provider_code, uniqueness: { scope: :recruitment_cycle }
 
-  validates :provider_type, presence: true
+  validates :provider_type, presence: { message: "Provider type can't be blank" }
 
   validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
 

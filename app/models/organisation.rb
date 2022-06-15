@@ -5,7 +5,7 @@ class Organisation < ApplicationRecord
 
   has_and_belongs_to_many :providers
 
-  validates :name, presence: true
+  validates :name, presence: { message: "Organisation name can't be blank" }
 
   has_associated_audits
   audited

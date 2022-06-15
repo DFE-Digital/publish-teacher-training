@@ -20,14 +20,14 @@ describe Provider, type: :model do
           provider.email = ""
           provider.valid? :update
 
-          expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+          expect(provider.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
         end
 
         it "validates email contains an @ symbol" do
           provider.email = "meow"
           provider.valid? :update
 
-          expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+          expect(provider.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
         end
 
         it "Does not validate the email if it is not present" do

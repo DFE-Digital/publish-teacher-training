@@ -60,14 +60,14 @@ describe Contact, type: :model do
         contact.email = ""
         contact.valid?
 
-        expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        expect(contact.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
       end
 
       it "validates email contains an @ symbol" do
         contact.email = "bar"
         contact.valid?
 
-        expect(contact.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+        expect(contact.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
       end
 
       it "Does not validate the email if it is present" do

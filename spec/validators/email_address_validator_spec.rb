@@ -26,7 +26,7 @@ describe EmailAddressValidator do
     it { is_expected.to be_falsey }
 
     it "returns the correct error message" do
-      expect(instance.errors[:email]).to(include("^Enter an email address in the correct format, like name@example.com"))
+      expect(instance.errors[:email]).to(include("Enter an email address in the correct format, like name@example.com"))
     end
   end
 
