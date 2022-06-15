@@ -136,7 +136,7 @@ class Provider < ApplicationRecord
 
   validates :provider_type, presence: { message: "Provider type can't be blank" }
 
-  validates :telephone, phone: { message: "^Enter a valid telephone number" }, if: :telephone_changed?
+  validates :telephone, phone: { message: "Enter a valid telephone number" }, if: :telephone_changed?
 
   # TODO: Remove this validation once the 2021 recruitment cycle is over
   validates :ukprn, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: "^UKPRN must be 8 numbers" }
