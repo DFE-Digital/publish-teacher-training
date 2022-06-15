@@ -143,6 +143,9 @@ group :development, :test do
   # Help eliminate N+1 queries
   gem "bullet"
 
+  # This is the new way to debug!
+  gem "debug"
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
 
