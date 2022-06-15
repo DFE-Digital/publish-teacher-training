@@ -10,9 +10,7 @@ class DfEAnalyticsEventsTestAPIController < APIController
     render plain: "T-HEST!"
   end
 
-  def authenticate
-    @current_user = User.last
-  end
+  def authenticate; end
 end
 
 class DfEAnalyticsEventsTestPublicAPIController < PublicAPIController
@@ -43,7 +41,6 @@ RSpec.describe "DFE Analytics integration" do
       expect do
         get "/api/test"
       end.to have_sent_analytics_event_types(:web_request)
-      Rails.application.reload_routes!
     end
   end
 
