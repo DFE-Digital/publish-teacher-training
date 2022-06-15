@@ -1,34 +1,34 @@
 <%= render GovukComponent::SummaryListComponent.new do |component|
-  component.row do |row|
-    row.key { "First name" }
-    row.value( text: @user.first_name, html_attributes: { id: "first_name" } )
-    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'first name')
-  end
+      component.row do |row|
+        row.key { "First name" }
+        row.value(text: @user.first_name, html_attributes: { id: "first_name" })
+        row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: "first name")
+      end
 
-  component.row do |row|
-    row.key { "Last name" }
-    row.value( text: @user.last_name, html_attributes: { id: "last_name" } )
-    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'last name')
-  end
+      component.row do |row|
+        row.key { "Last name" }
+        row.value(text: @user.last_name, html_attributes: { id: "last_name" })
+        row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: "last name")
+      end
 
-  component.row do |row|
-    row.key { "Email" }
-    row.value( text: @user.email, html_attributes: { id: "email" } )
-    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'email')
-  end
+      component.row do |row|
+        row.key { "Email" }
+        row.value(text: @user.email, html_attributes: { id: "email" })
+        row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: "email")
+      end
 
-  component.row do |row|
-    row.key { "Admin?" }
-    row.value( text: @user.admin?.to_s.capitalize, html_attributes: { id: "admin_status" } )
-    row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: 'admin')
-  end
+      component.row do |row|
+        row.key { "Admin?" }
+        row.value(text: @user.admin?.to_s.capitalize, html_attributes: { id: "admin_status" })
+        row.action(text: "Change", href: edit_support_user_path(@user), visually_hidden_text: "admin")
+      end
 
-  component.row do |row|
-    row.key { "Last login date" }
-    row.value { @user.last_login_date_utc.to_s }
-    row.action
-  end
-end %>
+      component.row do |row|
+        row.key { "Last login date" }
+        row.value { @user.last_login_date_utc.to_s }
+        row.action
+      end
+    end %>
 
 <%= govuk_button_to("Delete this user",
       support_user_path(@user),

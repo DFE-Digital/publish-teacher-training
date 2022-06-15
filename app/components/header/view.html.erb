@@ -1,7 +1,8 @@
 <%= govuk_header(
   homepage_url: publish_root_path,
   classes: "govuk-!-display-none-print app-header--full-border app-header--wide-logo #{environment_header_class}",
-  navigation_classes: "govuk-header__navigation--end") do |header| %>
+  navigation_classes: "govuk-header__navigation--end",
+) do |header| %>
 
   <% header.product_name(name: service_name) %>
 

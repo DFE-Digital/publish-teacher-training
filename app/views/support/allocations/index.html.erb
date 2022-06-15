@@ -5,5 +5,5 @@
 <%= render "support/menu" %>
 
 <%= render PaginatedFilter::View.new(filter_params: @filter_params, collection: @allocations) do %>
-  <%= render AllocationRecordCard::View.with_collection(@allocations)%>
+  <%= render AllocationRecordCard::View.with_collection(@allocations) %>
 <% end %>

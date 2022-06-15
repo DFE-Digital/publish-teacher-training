@@ -1,11 +1,13 @@
 <% content_for :page_title, title_with_error_prefix("Full time or part time? – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(
-    course.provider_code,
-    course.recruitment_cycle_year,
-    course.course_code)
-  ) %>
+  <%= govuk_back_link_to(
+        details_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code,
+        ),
+      ) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -18,7 +20,7 @@
         course.course_code,
       ),
       method: :put,
-      local: true
+      local: true,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>

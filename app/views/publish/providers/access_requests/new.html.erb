@@ -10,7 +10,7 @@
     <%= form_with(
       model: @access_request,
       url: request_access_publish_provider_path(params[:code]),
-      method: :post
+      method: :post,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -22,9 +22,9 @@
       <p class="govuk-body">You can request a DfE Sign-in account for others who manage your courses.</p>
 
       <%= f.govuk_fieldset legend: { text: "Request an account for:", size: "m" } do %>
-        <%= f.govuk_text_field :first_name, label: { text: 'First name' }, width: "one-half" %>
+        <%= f.govuk_text_field :first_name, label: { text: "First name" }, width: "one-half" %>
 
-        <%= f.govuk_text_field :last_name, label: { text: 'Last name' }, width: "one-half" %>
+        <%= f.govuk_text_field :last_name, label: { text: "Last name" }, width: "one-half" %>
 
         <%= f.govuk_email_field :email_address, label: { text: "Email address" } %>
 

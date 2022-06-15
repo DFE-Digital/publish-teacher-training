@@ -16,7 +16,7 @@
       <%= f.govuk_date_field(:applications_open_from, legend: { text: "Applications open from date" }) %>
 
       <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special Education Needs and Disability (SEND)" }, multiple: false do %>
-        <% f.govuk_check_box :is_send, :true, :false, label: { text: 'This course has an additional SEND specialism' }, multiple: false %>
+        <% f.govuk_check_box :is_send, true, false, label: { text: "This course has an additional SEND specialism" }, multiple: false %>
       <% end %>
 
       <%= f.govuk_submit t("support.update_record") %>
@@ -24,6 +24,6 @@
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_provider_courses_path) %>
-    </p> 
+    </p>
   </div>
 </div>

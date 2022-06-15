@@ -1,14 +1,17 @@
-<%= f.govuk_radio_buttons_fieldset(:has_vacancies,  legend: nil) do %>
-  <%= f.govuk_radio_button :has_vacancies, false, label: { text: "There are no vacancies", size: "s" }, 
-    hint: { text: "Close this course to new applications.<br>You can reopen a course later.".html_safe },
-    link_errors: true 
-  %>
+<%= f.govuk_radio_buttons_fieldset(:has_vacancies, legend: nil) do %>
+  <%= f.govuk_radio_button :has_vacancies,
+                           false,
+                           label: { text: "There are no vacancies", size: "s" },
+                           hint: { text: "Close this course to new applications.<br>You can reopen a course later.".html_safe },
+                           link_errors: true %>
 
   <%= f.govuk_radio_divider %>
 
-  <%= f.govuk_radio_button(:has_vacancies, true, label: { text: "There are some vacancies", size: "s" },
-    hint: { text: "Select the locations with vacancies" },
-    link_errors: true) do %>
+  <%= f.govuk_radio_button(:has_vacancies,
+                           true,
+                           label: { text: "There are some vacancies", size: "s" },
+                           hint: { text: "Select the locations with vacancies" },
+                           link_errors: true) do %>
 
     <% @site_statuses.sort_by { |status| status.site.location_name }.each do |site_status| %>
       <%= f.fields_for :site_statuses, site_status do |site_status| %>
@@ -22,4 +25,3 @@
     <% end %>
   <% end %>
 <% end %>
-

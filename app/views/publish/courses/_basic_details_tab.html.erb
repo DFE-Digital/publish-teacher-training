@@ -9,14 +9,14 @@
 
       <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
         <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
-        <% row.value { course.is_send?  } %>
+        <% row.value { course.is_send? } %>
         <% if @course.edit_course_options[:show_is_send] %>
           <% row.action({
-            #href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "SEND",
           }) %>
         <% else %>
-          <% row.action() %>
+          <% row.action %>
         <% end %>
       <% end %>
 
@@ -56,7 +56,7 @@
           <% row.key { "Apprenticeship" } %>
           <% row.value { course.apprenticeship? } %>
           <% if course.is_published? %>
-            <% row.action() %>
+            <% row.action %>
           <% else %>
             <% row.action({
               # href: apprenticeship_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
@@ -69,7 +69,7 @@
           <% row.key { "Fee or salary" } %>
           <% row.value { course.funding } %>
           <% if course.is_published? %>
-            <% row.action() %>
+            <% row.action %>
           <% else %>
             <% row.action({
               # href: fee_or_salary_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
@@ -114,7 +114,7 @@
           <% row.key { "Accredited body" } %>
           <% row.value { course.accrediting_provider&.provider_name } %>
           <% if course.is_published? %>
-            <% row.action() %>
+            <% row.action %>
           <% else %>
             <% row.action({
               # href: accredited_body_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
@@ -133,7 +133,7 @@
             # visually_hidden_text: "date applications open",
           }) %>
         <% else %>
-          <% row.action() %>
+          <% row.action %>
         <% end %>
       <% end %>
 
@@ -146,14 +146,14 @@
             # visually_hidden_text: "date course starts",
           }) %>
         <% else %>
-          <% row.action() %>
+          <% row.action %>
         <% end %>
       <% end %>
 
       <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
         <% row.key { "Title" } %>
         <% row.value { course.name } %>
-        <% row.action() %>
+        <% row.action %>
       <% end %>
 
       <% summary_list.row(html_attributes: { data: { qa: "course__description" } }) do |row| %>

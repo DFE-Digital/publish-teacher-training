@@ -4,39 +4,38 @@
 
   <%= f.govuk_text_field :location_name, label: { text: "Name", size: "m" } %>
 
-  <%= f.govuk_text_field(:urn, 
-    label: { text: "Unique Reference Number (URN)", size: "m" }, 
-    hint: 
-      { 
+  <%= f.govuk_text_field(:urn,
+    label: { text: "Unique Reference Number (URN)", size: "m" },
+    hint:
+      {
         text: safe_join(
           [
             "Find URNs on ", tag.a(
-              t("links.get_information_schools"), 
-              href: t("links.get_information_schools"), 
+              t("links.get_information_schools"),
+              href: t("links.get_information_schools"),
               target: "_blank",
-              class: "govuk-link"
+              class: "govuk-link",
             )
-          ]
-        ) 
+          ],
+        ),
       },
-    width: 10
-  ) %>
+    width: 10) %>
 
   <% if site.persisted? %>
     <%= f.govuk_text_field(:code, label: { text: "Location code", size: "m" }, width: 10) %>
   <% end %>
 
   <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
-    <%= f.govuk_text_field(:address1, label: { text: "Building and street"}) %>
+    <%= f.govuk_text_field(:address1, label: { text: "Building and street" }) %>
 
     <%= f.govuk_text_field(:address2, label: { hidden: true }) %>
 
-    <%= f.govuk_text_field(:address3, label: { text: "Town or city"}, width: "two-thirds") %>
+    <%= f.govuk_text_field(:address3, label: { text: "Town or city" }, width: "two-thirds") %>
 
-    <%= f.govuk_text_field(:address4, label: { text: "County"}, width: "two-thirds") %>
+    <%= f.govuk_text_field(:address4, label: { text: "County" }, width: "two-thirds") %>
 
     <%= f.govuk_text_field(:postcode, width: 10) %>
   <% end %>
 
-  <%= f.govuk_submit( site.persisted? ? t("support.update_record") : t("support.create_record")) %>
+  <%= f.govuk_submit(site.persisted? ? t("support.update_record") : t("support.create_record")) %>
 <% end %>

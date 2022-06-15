@@ -1,13 +1,17 @@
 <%= f.govuk_check_boxes_fieldset :change_vacancies_confirmation, multiple: false, legend: nil do %>
   <% if @course.has_vacancies? %>
-    <%= f.govuk_check_box :change_vacancies_confirmation, :no_vacancies_confirmation, multiple: false, link_errors: true, 
-      label: { text: 'I confirm there are no vacancies', size: 's' },
-      hint: { text: 'Close this course to new applications.<br>You can reopen a course later.'.html_safe }
-    %>
+    <%= f.govuk_check_box :change_vacancies_confirmation,
+                          :no_vacancies_confirmation,
+                          multiple: false,
+                          link_errors: true,
+                          label: { text: "I confirm there are no vacancies", size: "s" },
+                          hint: { text: "Close this course to new applications.<br>You can reopen a course later.".html_safe } %>
   <% else %>
-    <%= f.govuk_check_box :change_vacancies_confirmation, :has_vacancies_confirmation, multiple: false, link_errors: true, 
-      label: { text: 'I confirm there are vacancies', size: 's' },
-      hint: { text: 'Reopen this course to new applications.' }
-    %>
+    <%= f.govuk_check_box :change_vacancies_confirmation,
+                          :has_vacancies_confirmation,
+                          multiple: false,
+                          link_errors: true,
+                          label: { text: "I confirm there are vacancies", size: "s" },
+                          hint: { text: "Reopen this course to new applications." } %>
   <% end %>
 <% end %>

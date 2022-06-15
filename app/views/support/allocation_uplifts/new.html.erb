@@ -12,7 +12,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: [:support, @allocation_uplift], local: true do |f| %>
-        
+
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_field :uplifts, label: { text: "Allocation Uplift", size: "s" } %>
@@ -21,6 +21,6 @@
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_allocation_path(@allocation)) %>
-    </p> 
+    </p>
   </div>
 </div>

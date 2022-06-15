@@ -1,6 +1,6 @@
 <tr class="govuk-table__row" data-qa="access-request">
   <td class="govuk-table__cell" data-qa="access-request__id"><%= access_request.id %></td>
-  <td class="govuk-table__cell" data-qa="access-request__request_date"><%= access_request.request_date_utc&.to_date.to_fs(:long) %></td>
+  <td class="govuk-table__cell" data-qa="access-request__request_date"><%= access_request.request_date_utc&.to_date&.to_fs(:long) %></td>
   <td class="govuk-table__cell" data-qa="access-request__requester"><%= user_details(access_request.requester) %></td>
   <td class="govuk-table__cell" data-qa="access-request__recipient">
     <%= access_request.first_name %>

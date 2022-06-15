@@ -9,6 +9,6 @@ task default: []
 Rails.application.load_tasks
 Rake::Task["default"].clear
 
-task lint: ["lint:ruby"]
+task lint: %w[lint:ruby lint:erb]
 task parallel: ["parallel:spec"]
-task default: %i[parallel lint brakeman]
+task default: %i[lint parallel brakeman]

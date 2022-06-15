@@ -17,7 +17,7 @@
         <%= form.radio_button :applications_open_from, "other",
               class: "govuk-radios__input",
               checked: @course.applications_open_from.present? && @course.applications_open_from != @recruitment_cycle.application_start_date,
-              aria: { 'controls': "other-container" }, data: { qa: "applications_open_from_other" } %>
+              aria: { controls: "other-container" }, data: { qa: "applications_open_from_other" } %>
         <%= form.label :applications_open_from,
               for: "course_applications_open_from_other",
               value: "On a specific date",

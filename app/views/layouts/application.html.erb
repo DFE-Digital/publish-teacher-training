@@ -5,10 +5,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= canonical_tag %>
-    <%= tag :meta, name: "viewport", content: "width=device-width, initial-scale=1" %>
-    <%= tag :meta, property: "og:image", content: asset_path("govuk-frontend/govuk/assets/images/govuk-opengraph-image.png") %>
-    <%= tag :meta, name: "theme-color", content: "#0b0c0c" %>
-    <%= tag :meta, name: "ROBOTS", content: "NOINDEX, NOFOLLOW" %>
+    <%= tag.meta name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag.meta property: "og:image", content: asset_path("govuk-frontend/govuk/assets/images/govuk-opengraph-image.png") %>
+    <%= tag.meta name: "theme-color", content: "#0b0c0c" %>
+    <%= tag.meta name: "ROBOTS", content: "NOINDEX, NOFOLLOW" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
@@ -35,14 +35,14 @@
     <% else %>
       <%= render Header::View.new(
         service_name: I18n.t("service_name"),
-        current_user: current_user
+        current_user: current_user,
       ) %>
     <% end %>
 
       <div class="govuk-width-container">
         <% if display_phase_banner_border?(current_user) && FeatureService.enabled?(:new_publish_navigation) %>
           <%= render PhaseBanner::View.new(no_border: true) %>
-        <% else  %>
+        <% else %>
           <%= render PhaseBanner::View.new %>
         <% end %>
         <%= yield :navigation_bar %>

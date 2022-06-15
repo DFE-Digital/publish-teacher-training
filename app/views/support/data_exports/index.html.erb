@@ -11,7 +11,7 @@
         <h2 class="govuk-heading-m"><%= t(".#{data_export.type}.name") %></h2>
         <p class="govuk-body"><%= t(".#{data_export.type}.description") %></p>
 
-        <%= govuk_button_to "Download CSV", download_support_data_export_path(data_export.type), class: 'govuk-button--secondary' %>
+        <%= govuk_button_to "Download CSV", download_support_data_export_path(data_export.type), class: "govuk-button--secondary" %>
       </div>
     </div>
   </section>

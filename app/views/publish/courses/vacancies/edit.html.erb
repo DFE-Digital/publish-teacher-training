@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <% title_with_error_prefix("Edit vacancies – #{@course.name} (#{@course.course_code})", @course_vacancies_form.errors.any?)  %> 
+  <% title_with_error_prefix("Edit vacancies – #{@course.name} (#{@course.course_code})", @course_vacancies_form.errors.any?) %>
  <% end %>
 
 <% content_for :before_content do %>
@@ -11,9 +11,9 @@
     <%= form_with(
       model: @course_vacancies_form,
       url: vacancies_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle.year, @course.course_code),
-      method: :put
+      method: :put,
     ) do |form| %>
-      
+
       <%= form.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
@@ -28,13 +28,12 @@
       <% end %>
 
       <% if @course.has_multiple_running_sites_or_study_modes? %>
-        <%= form.govuk_submit "Publish changes"%>
+        <%= form.govuk_submit "Publish changes" %>
       <% elsif @course.has_vacancies? %>
         <%= form.govuk_submit "Close applications", class: "govuk-button--warning" %>
       <% else %>
-        <%= form.govuk_submit "Reopen applications"%>
+        <%= form.govuk_submit "Reopen applications" %>
       <% end %>
     <% end %>
   </div>
 </div>
-

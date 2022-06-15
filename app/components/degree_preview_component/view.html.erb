@@ -15,9 +15,7 @@
 <% else %>
   <%= govuk_inset_text(classes: "app-inset-text--important") do %>
     <p class="govuk-body">
-      Please add details <%= govuk_link_to "about degree requirements",
-        nil #degrees_start_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code,) 
-        %>.
+      Please add details <%= govuk_link_to "about degree requirements", nil %>.
     </p>
   <% end %>
 <% end %>

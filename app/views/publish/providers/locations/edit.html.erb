@@ -7,7 +7,7 @@
     <%= form_with(
       model: @location_form,
       url: publish_provider_recruitment_cycle_location_path(@location_form.provider_code, @location_form.recruitment_cycle_year, @location_form.site.id),
-      method: :patch
+      method: :patch,
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
