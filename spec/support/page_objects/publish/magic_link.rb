@@ -9,9 +9,5 @@ module PageObjects
 
       element :submit, 'button.govuk-button[type="submit"]'
     end
-
-    class MagicLinkConfirmation < PageObjects::Base
-      set_url "/magic-link-sent"
-    end
   end
 end

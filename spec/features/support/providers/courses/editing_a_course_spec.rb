@@ -12,9 +12,9 @@ feature "Edit provider course details" do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_with_courses
-    when_i_visit_the_provider_courses_index_page
+    when_i_visit_the_support_courses_index_page
     and_click_on_the_first_course_change_link
-    then_i_am_on_the_course_edit_page
+    then_i_am_on_the_support_course_edit_page
   end
 
   context "valid details" do
@@ -25,7 +25,7 @@ feature "Edit provider course details" do
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
       and_i_select_the_send_checkbox
       and_i_click_the_continue_button
-      then_i_am_redirected_back_to_the_provider_courses_index_page
+      then_i_am_redirected_back_to_the_support_courses_index_page
       and_the_course_name_and_code_are_updated
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
@@ -80,18 +80,18 @@ private
     provider
   end
 
-  def when_i_visit_the_provider_courses_index_page
-    provider_courses_index_page.load(provider_id: provider.id)
+  def when_i_visit_the_support_courses_index_page
+    support_courses_index_page.load(provider_id: provider.id)
   end
 
   def and_click_on_the_first_course_change_link
-    provider_courses_index_page.courses_row.first.change_link.click
+    support_courses_index_page.courses_row.first.change_link.click
   end
 
   alias_method :when_i_return_to_the_edit_page, :and_click_on_the_first_course_change_link
 
-  def then_i_am_on_the_course_edit_page
-    course_edit_page.load(provider_id: provider.id, course_id: provider.courses.first.id)
+  def then_i_am_on_the_support_course_edit_page
+    support_course_edit_page.load(provider_id: provider.id, course_id: provider.courses.first.id)
   end
 
   def course_code
@@ -143,82 +143,82 @@ private
   end
 
   def when_i_fill_in_course_code_with(course_code)
-    course_edit_page.course_code.set(course_code)
+    support_course_edit_page.course_code.set(course_code)
   end
 
   def and_i_fill_in_course_title_with(course_name)
-    course_edit_page.name.set(course_name)
+    support_course_edit_page.name.set(course_name)
   end
 
   def when_i_fill_in_course_start_date_with(day, month, year)
-    course_edit_page.start_date_day.set(day)
-    course_edit_page.start_date_month.set(month)
-    course_edit_page.start_date_year.set(year)
+    support_course_edit_page.start_date_day.set(day)
+    support_course_edit_page.start_date_month.set(month)
+    support_course_edit_page.start_date_year.set(year)
   end
 
   def when_i_fill_in_course_application_open_from_with(day, month, year)
-    course_edit_page.application_open_from_day.set(day)
-    course_edit_page.application_open_from_month.set(month)
-    course_edit_page.application_open_from_year.set(year)
+    support_course_edit_page.application_open_from_day.set(day)
+    support_course_edit_page.application_open_from_month.set(month)
+    support_course_edit_page.application_open_from_year.set(year)
   end
 
   alias_method :and_i_fill_in_course_start_date_with, :when_i_fill_in_course_start_date_with
   alias_method :and_i_fill_in_course_application_open_from_with, :when_i_fill_in_course_application_open_from_with
 
   def and_i_click_the_continue_button
-    course_edit_page.continue.click
+    support_course_edit_page.continue.click
   end
 
-  def then_i_am_redirected_back_to_the_provider_courses_index_page
-    expect(provider_courses_index_page).to be_displayed
+  def then_i_am_redirected_back_to_the_support_courses_index_page
+    expect(support_courses_index_page).to be_displayed
   end
 
   def and_the_course_name_and_code_are_updated
-    expect(provider_courses_index_page).to have_text(course_code)
-    expect(provider_courses_index_page).to have_text(course_name)
+    expect(support_courses_index_page).to have_text(course_code)
+    expect(support_courses_index_page).to have_text(course_name)
   end
 
   def and_i_select_the_send_checkbox
-    course_edit_page.send_specialism_checkbox.check
+    support_course_edit_page.send_specialism_checkbox.check
   end
 
   def then_i_see_the_updated_start_date
-    expect(course_edit_page.start_date_day.value).to eq(valid_date_day)
-    expect(course_edit_page.start_date_month.value).to eq(valid_date_month)
-    expect(course_edit_page.start_date_year.value).to eq(valid_date_year)
+    expect(support_course_edit_page.start_date_day.value).to eq(valid_date_day)
+    expect(support_course_edit_page.start_date_month.value).to eq(valid_date_month)
+    expect(support_course_edit_page.start_date_year.value).to eq(valid_date_year)
   end
 
   def then_i_see_the_updated_applications_open_from_date
-    expect(course_edit_page.application_open_from_day.value).to eq(valid_date_day)
-    expect(course_edit_page.application_open_from_month.value).to eq(valid_date_month)
-    expect(course_edit_page.application_open_from_year.value).to eq(valid_date_year)
+    expect(support_course_edit_page.application_open_from_day.value).to eq(valid_date_day)
+    expect(support_course_edit_page.application_open_from_month.value).to eq(valid_date_month)
+    expect(support_course_edit_page.application_open_from_year.value).to eq(valid_date_year)
   end
 
   def and_i_see_the_updated_send_specialism
-    expect(course_edit_page.send_specialism_checkbox.checked?).to be true
+    expect(support_course_edit_page.send_specialism_checkbox.checked?).to be true
   end
 
   def then_i_see_the_error_summary
-    expect(course_edit_page.error_summary).to be_visible
+    expect(support_course_edit_page.error_summary).to be_visible
   end
 
   def and_it_contains_invalid_value_errors
-    expect(course_edit_page.error_summary.text).to include("Course code is already taken")
-    expect(course_edit_page.error_summary.text).to include("October 2026 is not in the 2022 cycle")
+    expect(support_course_edit_page.error_summary.text).to include("Course code is already taken")
+    expect(support_course_edit_page.error_summary.text).to include("October 2026 is not in the 2022 cycle")
   end
 
   def and_it_contains_start_date_format_error
-    expect(course_edit_page.error_summary.text).to include("Start date format is invalid")
+    expect(support_course_edit_page.error_summary.text).to include("Start date format is invalid")
   end
 
   def and_it_contains_applications_open_from_format_error
-    expect(course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
+    expect(support_course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
   end
 
   def and_it_contains_blank_errors
-    expect(course_edit_page.error_summary.text).to include("Course code cannot be blank")
-    expect(course_edit_page.error_summary.text).to include("Course title cannot be blank")
-    expect(course_edit_page.error_summary.text).to include("Start date cannot have blank values")
-    expect(course_edit_page.error_summary.text).to include("Select when applications will open and enter the date if applicable")
+    expect(support_course_edit_page.error_summary.text).to include("Course code cannot be blank")
+    expect(support_course_edit_page.error_summary.text).to include("Course title cannot be blank")
+    expect(support_course_edit_page.error_summary.text).to include("Start date cannot have blank values")
+    expect(support_course_edit_page.error_summary.text).to include("Select when applications will open and enter the date if applicable")
   end
 end

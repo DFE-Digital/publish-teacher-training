@@ -23,19 +23,19 @@ private
   end
 
   def when_i_visit_the_user_show_page(user_id)
-    users_show_page.load(id: user_id)
+    support_user_show_page.load(id: user_id)
   end
 
   def when_i_click_the_delete_button
-    users_show_page.delete_button.click
+    support_user_show_page.delete_button.click
   end
 
   def then_i_am_taken_to_the_user_index_page
-    expect(users_index_page).to be_displayed
+    expect(support_users_index_page).to be_displayed
   end
 
   def with_a_success_message
-    expect(users_index_page).to have_content("User successfully deleted")
+    expect(support_users_index_page).to have_content("User successfully deleted")
   end
 
   def and_the_user_is_in_a_discarded_state

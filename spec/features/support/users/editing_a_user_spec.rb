@@ -6,7 +6,7 @@ feature "Editing a user" do
   before do
     given_i_am_authenticated(user: admin)
     and_a_user_exists
-    when_i_visit_the_user_edit_page
+    when_i_visit_the_support_user_edit_page
   end
 
   scenario "successfully changing details" do
@@ -32,36 +32,36 @@ private
     @admin ||= create(:user, :admin)
   end
 
-  def when_i_visit_the_user_edit_page
-    user_edit_page.load(id: @user.id)
+  def when_i_visit_the_support_user_edit_page
+    support_user_edit_page.load(id: @user.id)
   end
 
   def and_i_fill_in_correct_details
-    user_edit_page.first_name_field.set("El")
-    user_edit_page.last_name_field.set("Duderino")
-    user_edit_page.email_field.set("the_dude_abides@education.gov.uk")
-    user_edit_page.admin_checkbox.check
+    support_user_edit_page.first_name_field.set("El")
+    support_user_edit_page.last_name_field.set("Duderino")
+    support_user_edit_page.email_field.set("the_dude_abides@education.gov.uk")
+    support_user_edit_page.admin_checkbox.check
   end
 
   def and_i_fill_in_with_blank_details
-    user_edit_page.first_name_field.set("")
-    user_edit_page.last_name_field.set("")
-    user_edit_page.email_field.set("")
+    support_user_edit_page.first_name_field.set("")
+    support_user_edit_page.last_name_field.set("")
+    support_user_edit_page.email_field.set("")
   end
 
   def and_click_update
-    user_edit_page.update.click
+    support_user_edit_page.update.click
   end
 
   def i_am_met_with_error_messages
-    expect(user_edit_page).to have_content("can't be blank")
+    expect(support_user_edit_page).to have_content("can't be blank")
   end
 
   def i_am_taken_to_the_user_show_page
-    expect(users_show_page).to be_displayed
+    expect(support_user_show_page).to be_displayed
   end
 
   def with_a_success_message
-    expect(users_show_page).to have_content("User successfully updated")
+    expect(support_user_show_page).to have_content("User successfully updated")
   end
 end

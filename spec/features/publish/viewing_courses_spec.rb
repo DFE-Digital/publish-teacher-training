@@ -34,19 +34,19 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
   end
 
   def when_i_visit_the_courses_page
-    publish_provider_courses_index_page.load(
+    provider_courses_index_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
     )
   end
 
   def then_i_should_see_a_list_of_courses
-    expect(publish_provider_courses_index_page.courses.size).to eq(1)
+    expect(provider_courses_index_page.courses.size).to eq(1)
 
-    expect(publish_provider_courses_index_page.courses.first.name).to have_text(course.name)
+    expect(provider_courses_index_page.courses.first.name).to have_text(course.name)
   end
 
   def and_i_click_on_a_course
-    publish_provider_courses_index_page.courses.first.link.click
+    provider_courses_index_page.courses.first.link.click
   end
 
   def then_i_see_the_course
@@ -54,7 +54,7 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_on_add_course
-    publish_provider_courses_index_page.add_course.click
+    provider_courses_index_page.add_course.click
   end
 
   def then_i_see_the_new_course_level_page

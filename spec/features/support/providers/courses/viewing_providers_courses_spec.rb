@@ -6,7 +6,7 @@ feature "Viewing a providers courses" do
   scenario "Provider is discarded" do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_discarded_provider_with_courses
-    when_i_visit_the_provider_courses_index_page
+    when_i_visit_the_support_courses_index_page
     then_i_am_redirected_to_the_providers_page
   end
 
@@ -24,11 +24,11 @@ private
     provider
   end
 
-  def when_i_visit_the_provider_courses_index_page
-    provider_courses_index_page.load(provider_id: provider.id)
+  def when_i_visit_the_support_courses_index_page
+    support_courses_index_page.load(provider_id: provider.id)
   end
 
   def then_i_am_redirected_to_the_providers_page
-    expect(provider_index_page).to be_displayed
+    expect(support_provider_index_page).to be_displayed
   end
 end

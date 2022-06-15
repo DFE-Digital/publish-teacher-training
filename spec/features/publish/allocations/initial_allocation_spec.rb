@@ -358,6 +358,6 @@ RSpec.feature "PE allocations", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_see_confirmation_page
-    expect(publish_allocations_show_page.page_heading).to have_content("Request sent")
+    expect(allocations_show_page.page_heading).to have_content("Request sent")
   end
 end

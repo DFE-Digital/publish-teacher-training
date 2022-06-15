@@ -3,7 +3,7 @@
 module PageObjects
   module Publish
     module Allocations
-      class AllocationsPage < PageObjects::Base
+      class Allocations < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/allocations"
 
         element :header, "h1"

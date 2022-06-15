@@ -8,7 +8,7 @@ feature "View filtered providers" do
   before do
     given_i_am_authenticated(user: user)
     and_there_are_providers
-    when_i_visit_the_provider_index_page
+    when_i_visit_the_support_provider_index_page
   end
 
   scenario "i can view and filter the providers" do
@@ -38,12 +38,12 @@ feature "View filtered providers" do
     create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")])
   end
 
-  def when_i_visit_the_provider_index_page
-    provider_index_page.load
+  def when_i_visit_the_support_provider_index_page
+    support_provider_index_page.load
   end
 
   def then_i_see_the_providers
-    expect(provider_index_page.providers.size).to eq(2)
+    expect(support_provider_index_page.providers.size).to eq(2)
   end
 
   alias_method :then_i_see_the_unfiltered_providers, :then_i_see_the_providers
@@ -66,16 +66,16 @@ feature "View filtered providers" do
   end
 
   def then_i_see_providers_filtered_by_provider_name
-    expect(provider_index_page.providers.size).to eq(1)
-    expect(provider_index_page.providers.first.text).to have_content("Really big school A01")
+    expect(support_provider_index_page.providers.size).to eq(1)
+    expect(support_provider_index_page.providers.first.text).to have_content("Really big school A01")
   end
 
   alias_method :then_i_see_the_providers_filtered_by_provider_code_and_course_code, :then_i_see_providers_filtered_by_provider_name
 
   def then_i_see_the_providers_filtered_by_course_code
-    expect(provider_index_page.providers.size).to eq(2)
-    expect(provider_index_page.providers.first.text).to have_content("Really big school A01")
-    expect(provider_index_page.providers.last.text).to have_content("Slightly smaller school A02")
+    expect(support_provider_index_page.providers.size).to eq(2)
+    expect(support_provider_index_page.providers.first.text).to have_content("Really big school A01")
+    expect(support_provider_index_page.providers.last.text).to have_content("Slightly smaller school A02")
   end
 
   def when_i_remove_the_provider_filter

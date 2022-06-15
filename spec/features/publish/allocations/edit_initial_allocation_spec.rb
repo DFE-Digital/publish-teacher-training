@@ -299,7 +299,7 @@ private
   end
 
   def then_i_see_confirmation_page
-    expect(publish_allocations_show_page.page_heading).to have_content("Request sent")
+    expect(allocations_show_page.page_heading).to have_content("Request sent")
   end
 
   def then_i_see_the_confirm_deletion_page

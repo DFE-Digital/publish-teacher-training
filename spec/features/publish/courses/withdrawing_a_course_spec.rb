@@ -55,22 +55,22 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_withdrawal_page
-    publish_course_withdrawal_page.load(
+    withdrawal_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
   def and_i_confirm_the_course_code
-    publish_course_withdrawal_page.confirm_course_code.set(course.course_code)
+    withdrawal_page.confirm_course_code.set(course.course_code)
   end
 
   def and_i_submit_with_the_wrong_code
-    publish_course_withdrawal_page.confirm_course_code.set("random")
+    withdrawal_page.confirm_course_code.set("random")
     and_i_submit
   end
 
   def and_i_submit
-    publish_course_withdrawal_page.submit.click
+    withdrawal_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -85,11 +85,11 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_redirected_to_the_courses_page
-    expect(publish_provider_courses_index_page).to be_displayed
+    expect(provider_courses_index_page).to be_displayed
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_withdrawal_page.error_messages).to include(
+    expect(withdrawal_page.error_messages).to include(
       "Enter the course code #{course.course_code} to withdraw this course",
     )
   end

@@ -8,7 +8,7 @@ feature "View provider courses" do
   scenario "i can view courses belonging to a provider" do
     given_i_am_authenticated(user: user)
     and_there_is_a_provider_with_courses
-    when_i_visit_the_provider_show_page
+    when_i_visit_the_support_provider_show_page
     and_click_on_the_courses_tab
     then_i_should_see_a_table_of_courses
   end
@@ -25,19 +25,19 @@ feature "View provider courses" do
     provider
   end
 
-  def when_i_visit_the_provider_show_page
-    provider_show_page.load(id: provider.id)
+  def when_i_visit_the_support_provider_show_page
+    support_provider_show_page.load(id: provider.id)
   end
 
   def and_click_on_the_courses_tab
-    provider_show_page.courses_tab.click
+    support_provider_show_page.courses_tab.click
   end
 
   def then_i_should_see_a_table_of_courses
-    expect(provider_courses_index_page.courses_row.size).to eq(1)
+    expect(support_courses_index_page.courses_row.size).to eq(1)
 
-    expect(provider_courses_index_page.courses_row.first.name).to have_text(course.name)
-    expect(provider_courses_index_page.courses_row.first.name).to have_text(course.course_code)
-    expect(provider_courses_index_page.courses_row.first.change_link).to have_text("Change")
+    expect(support_courses_index_page.courses_row.first.name).to have_text(course.name)
+    expect(support_courses_index_page.courses_row.first.name).to have_text(course.course_code)
+    expect(support_courses_index_page.courses_row.first.change_link).to have_text("Change")
   end
 end

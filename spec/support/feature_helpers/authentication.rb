@@ -12,7 +12,7 @@ module FeatureHelpers
     end
 
     def visit_sign_in_page
-      sign_in_page = PageObjects::SignIn.new
+      sign_in_page = PageObjects::Publish::SignIn.new
       sign_in_page.load
       sign_in_page.sign_in_button.click
     end

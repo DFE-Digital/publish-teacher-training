@@ -6,7 +6,7 @@ require_relative "../../sections/radio_button"
 module PageObjects
   module Publish
     module Courses
-      class OutcomeEditPage < PageObjects::Base
+      class OutcomeEdit < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/outcome"
 
         sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"

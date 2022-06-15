@@ -7,7 +7,7 @@ require_relative "../../sections/errorlink"
 module PageObjects
   module Publish
     module Courses
-      class GcseRequirementsPage < PageObjects::Base
+      class GcseRequirements < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}"
 
         element :copy_content_warning, '[data-qa="copy-course-warning"]'

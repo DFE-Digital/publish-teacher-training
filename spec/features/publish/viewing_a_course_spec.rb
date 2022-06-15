@@ -59,23 +59,23 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_status_sidebar
-    expect(publish_provider_courses_show_page).to have_status_sidebar
+    expect(provider_courses_show_page).to have_status_sidebar
   end
 
   def and_i_should_see_the_unpublished_partial
-    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+    provider_courses_show_page.status_sidebar.within do |status_sidebar|
       expect(status_sidebar).to have_unpublished_partial
     end
   end
 
   def and_i_should_see_the_published_partial
-    publish_provider_courses_show_page.status_sidebar.within do |status_sidebar|
+    provider_courses_show_page.status_sidebar.within do |status_sidebar|
       expect(status_sidebar).to have_published_partial
     end
   end
 
   def and_i_click_on_basic_details
-    publish_provider_courses_show_page.basic_details_link.click
+    provider_courses_show_page.basic_details_link.click
   end
 
   def then_i_see_the_course_basic_details
@@ -106,97 +106,97 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_page
-    publish_provider_courses_show_page.load(
+    provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
   end
 
   def then_i_should_see_the_description_of_the_unpublished_changes_course
-    expect(publish_provider_courses_show_page.about_course).to have_content(
+    expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment_unpublished_changes.about_course,
     )
   end
 
   def then_i_should_see_the_description_of_the_initial_draft_course
-    expect(publish_provider_courses_show_page.about_course).to have_content(
+    expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment_initial_draft.about_course,
     )
   end
 
   def then_i_should_see_the_description_of_the_fee_course
-    expect(publish_provider_courses_show_page.caption).to have_content(
+    expect(provider_courses_show_page.caption).to have_content(
       course.description,
     )
-    expect(publish_provider_courses_show_page.title).to have_content(
+    expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
-    expect(publish_provider_courses_show_page.about_course).to have_content(
+    expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course,
     )
-    expect(publish_provider_courses_show_page.interview_process).to have_content(
+    expect(provider_courses_show_page.interview_process).to have_content(
       course_enrichment.interview_process,
     )
-    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
+    expect(provider_courses_show_page.how_school_placements_work).to have_content(
       course_enrichment.how_school_placements_work,
     )
-    expect(publish_provider_courses_show_page.course_length).to have_content(
+    expect(provider_courses_show_page.course_length).to have_content(
       "Up to 2 years",
     )
-    expect(publish_provider_courses_show_page.fee_uk_eu).to have_content(
+    expect(provider_courses_show_page.fee_uk_eu).to have_content(
       "£9,250",
     )
-    expect(publish_provider_courses_show_page.fee_international).to have_content(
+    expect(provider_courses_show_page.fee_international).to have_content(
       "£14,000",
     )
-    expect(publish_provider_courses_show_page.fee_details).to have_content(
+    expect(provider_courses_show_page.fee_details).to have_content(
       course_enrichment.fee_details,
     )
-    expect(publish_provider_courses_show_page).not_to have_salary_details
+    expect(provider_courses_show_page).not_to have_salary_details
 
-    expect(publish_provider_courses_show_page).to have_degree
-    expect(publish_provider_courses_show_page).to have_gcse
+    expect(provider_courses_show_page).to have_degree
+    expect(provider_courses_show_page).to have_gcse
 
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
+    expect(provider_courses_show_page.personal_qualities).to have_content(
       course_enrichment.personal_qualities,
     )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
+    expect(provider_courses_show_page.other_requirements).to have_content(
       course_enrichment.other_requirements,
     )
   end
 
   def then_i_should_see_the_description_of_the_salary_course
-    expect(publish_provider_courses_show_page.caption).to have_content(
+    expect(provider_courses_show_page.caption).to have_content(
       course.description,
     )
-    expect(publish_provider_courses_show_page.title).to have_content(
+    expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
-    expect(publish_provider_courses_show_page.about_course).to have_content(
+    expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course,
     )
-    expect(publish_provider_courses_show_page.interview_process).to have_content(
+    expect(provider_courses_show_page.interview_process).to have_content(
       course_enrichment.interview_process,
     )
-    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
+    expect(provider_courses_show_page.how_school_placements_work).to have_content(
       course_enrichment.how_school_placements_work,
     )
-    expect(publish_provider_courses_show_page.course_length).to have_content(
+    expect(provider_courses_show_page.course_length).to have_content(
       "Up to 2 years",
     )
-    expect(publish_provider_courses_show_page).not_to have_fee_uk_eu
+    expect(provider_courses_show_page).not_to have_fee_uk_eu
 
-    expect(publish_provider_courses_show_page).not_to have_fee_international
+    expect(provider_courses_show_page).not_to have_fee_international
 
-    expect(publish_provider_courses_show_page).not_to have_fee_details
-    expect(publish_provider_courses_show_page.salary_details).to have_content(
+    expect(provider_courses_show_page).not_to have_fee_details
+    expect(provider_courses_show_page.salary_details).to have_content(
       course_enrichment.salary_details,
     )
-    expect(publish_provider_courses_show_page).to have_degree
-    expect(publish_provider_courses_show_page).to have_gcse
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
+    expect(provider_courses_show_page).to have_degree
+    expect(provider_courses_show_page).to have_gcse
+    expect(provider_courses_show_page.personal_qualities).to have_content(
       course_enrichment.personal_qualities,
     )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
+    expect(provider_courses_show_page.other_requirements).to have_content(
       course_enrichment.other_requirements,
     )
   end

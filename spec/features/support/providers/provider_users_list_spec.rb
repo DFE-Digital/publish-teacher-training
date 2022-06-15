@@ -8,7 +8,7 @@ feature "View provider users" do
   scenario "i can view users belong to a provider" do
     given_i_am_authenticated(user: user)
     and_there_is_a_provider
-    when_i_visit_the_provider_show_page
+    when_i_visit_the_support_provider_show_page
     and_click_on_the_users_tab
     then_i_should_see_a_table_of_users
   end
@@ -17,15 +17,15 @@ feature "View provider users" do
     @provider = create(:provider, :with_users)
   end
 
-  def when_i_visit_the_provider_show_page
-    provider_show_page.load(id: @provider.id)
+  def when_i_visit_the_support_provider_show_page
+    support_provider_show_page.load(id: @provider.id)
   end
 
   def and_click_on_the_users_tab
-    provider_show_page.users_tab.click
+    support_provider_show_page.users_tab.click
   end
 
   def then_i_should_see_a_table_of_users
-    expect(provider_users_index_page.users.size).to eq(4)
+    expect(support_provider_users_index_page.users.size).to eq(4)
   end
 end

@@ -120,33 +120,33 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
       scenario "all fields get copied if all are present" do
         given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
         when_i_visit_the_degrees_subject_requirements_page
-        publish_degree_subject_requirement_page.copy_content.copy(course2)
+        degree_subject_requirement_page.copy_content.copy(course2)
 
         [
           "Your changes are not yet saved",
           "Additional degree subject requirements",
           "Degree subject requirements",
         ].each do |name|
-          expect(publish_degree_subject_requirement_page.copy_content_warning).to have_content(name)
+          expect(degree_subject_requirement_page.copy_content_warning).to have_content(name)
         end
 
-        expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
-        expect(publish_degree_subject_requirement_page.no_radio).not_to be_checked
-        expect(publish_degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
+        expect(degree_subject_requirement_page.yes_radio).to be_checked
+        expect(degree_subject_requirement_page.no_radio).not_to be_checked
+        expect(degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
       end
 
       scenario "with all fields empty" do
         given_a_course_exists(:secondary, degree_subject_requirements: "Maths A Level")
         when_i_visit_the_degrees_subject_requirements_page
-        publish_degree_subject_requirement_page.copy_content.copy(course3)
+        degree_subject_requirement_page.copy_content.copy(course3)
 
-        expect(publish_degree_subject_requirement_page).not_to have_copy_content_warning
+        expect(degree_subject_requirement_page).not_to have_copy_content_warning
       end
     end
   end
 
   def then_i_should_see_the_reuse_content
-    expect(publish_degree_subject_requirement_page).to have_use_content
+    expect(degree_subject_requirement_page).to have_use_content
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -162,50 +162,50 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
   end
 
   def when_i_visit_the_degrees_start_page
-    publish_degree_start_page.load(route_data)
+    degree_start_page.load(route_data)
   end
 
   def when_i_visit_the_degrees_grade_page
-    publish_degree_grade_page.load(route_data)
+    degree_grade_page.load(route_data)
   end
 
   def when_i_visit_the_degrees_subject_requirements_page
-    publish_degree_subject_requirement_page.load(route_data)
+    degree_subject_requirement_page.load(route_data)
   end
 
   def and_i_require_a_classification
-    publish_degree_start_page.yes_radio.choose
+    degree_start_page.yes_radio.choose
     and_i_submit
   end
 
   def and_i_do_not_require_a_classification
-    publish_degree_start_page.no_radio.choose
+    degree_start_page.no_radio.choose
     and_i_submit
   end
 
   def then_i_should_see_the_degree_grade_page
-    expect(publish_degree_grade_page).to be_displayed
+    expect(degree_grade_page).to be_displayed
   end
 
   def when_i_set_a_required_grade
-    publish_degree_grade_page.two_one.choose
+    degree_grade_page.two_one.choose
     and_i_submit
   end
 
   def then_i_should_see_the_subject_requirements_page
-    expect(publish_degree_subject_requirement_page).to be_displayed
+    expect(degree_subject_requirement_page).to be_displayed
   end
 
   def when_i_set_additional_requirements
     @some_additional_requiremet = "Some additional requirement"
 
-    publish_degree_subject_requirement_page.yes_radio.choose
-    publish_degree_subject_requirement_page.requirements.set(@some_additional_requiremet)
+    degree_subject_requirement_page.yes_radio.choose
+    degree_subject_requirement_page.requirements.set(@some_additional_requiremet)
     and_i_submit
   end
 
   def and_i_submit
-    publish_course_requirements_page.submit.click
+    course_requirement_edit_page.submit.click
   end
 
   def then_i_should_see_a_success_message(value)
@@ -224,20 +224,20 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
   end
 
   def then_the_start_page_should_show_the_selected_classification
-    expect(publish_degree_start_page.yes_radio).to be_checked
+    expect(degree_start_page.yes_radio).to be_checked
   end
 
   def then_the_grade_page_should_show_the_selected_grade
-    expect(publish_degree_grade_page.two_one).to be_checked
+    expect(degree_grade_page.two_one).to be_checked
   end
 
   def then_the_subject_requirements_page_should_show_the_requirements
-    expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
-    expect(publish_degree_subject_requirement_page.requirements.value).to eq("Maths A Level")
+    expect(degree_subject_requirement_page.yes_radio).to be_checked
+    expect(degree_subject_requirement_page.requirements.value).to eq("Maths A Level")
   end
 
   def then_i_should_see_an_error_message(message)
-    expect(publish_course_requirements_page.error_messages).to include(message)
+    expect(course_requirement_edit_page.error_messages).to include(message)
   end
 
   def provider

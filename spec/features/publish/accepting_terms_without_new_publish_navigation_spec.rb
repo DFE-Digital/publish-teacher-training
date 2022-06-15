@@ -36,11 +36,11 @@ feature "Accepting terms", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_taken_to_the_terms_page
-    expect(terms_and_conditions_page).to be_displayed
+    expect(terms_page).to be_displayed
   end
 
   def when_i_accept_the_terms_and_conditions
-    terms_and_conditions_page.accept_terms.check
+    terms_page.accept_terms.check
     and_i_submit
   end
 
@@ -57,11 +57,11 @@ feature "Accepting terms", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit
-    terms_and_conditions_page.submit.click
+    terms_page.submit.click
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_study_mode_page.error_messages).to include(
+    expect(course_study_mode_edit_page.error_messages).to include(
       I18n.t("activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted"),
     )
   end
