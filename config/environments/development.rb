@@ -64,6 +64,5 @@ Rails.application.configure do
   config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", "bats")
 
   # Logging
-  config.semantic_logger.add_appender(io: $stdout, level: Rails.application.config.log_level, formatter: Rails.application.config.log_formatter)
   config.log_format = :color
 end
