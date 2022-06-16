@@ -286,8 +286,9 @@ en:
           attributes:
             provider_name:
               too_long: "Enter a provider name that is 100 characters or fewer"
+              blank: "Enter provider name"
             provider_code:
-              blank: "Enter code"
+              blank: "Enter provider code"
             email:
               blank: "^Enter email address"
             website:
