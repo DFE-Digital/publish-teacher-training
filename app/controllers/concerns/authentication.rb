@@ -14,7 +14,7 @@ module Authentication
   def authenticate
     if !authenticated?
       session["post_dfe_sign_in_path"] = request.fullpath
-      redirect_to sign_in_path
+      redirect_to sign_in_path({ support: params[:controller].start_with?("support") })
     end
   end
 end
