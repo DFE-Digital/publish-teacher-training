@@ -1,0 +1,45 @@
+#!/bin/bash
+set -eu
+
+BACKUP_STORAGE_SECRET_NAME=${1:-}
+KEY_VAULT_NAME=${2:-}
+AZURE_BACKUP_STORAGE_CONTAINER_NAME=${3:-}
+BACKUP_ARCHIVE_FILENAME=${4:-}
+
+if [[ -z "${BACKUP_STORAGE_SECRET_NAME}" ]]; then
+  echo "BACKUP_STORAGE_SECRET_NAME environment variable not set"
+  exit 1
+fi
+
+if [[ -z "${KEY_VAULT_NAME}" ]]; then
+  echo "KEY_VAULT_NAME environment variable not set"
+  exit 1
+fi
+
+if [[ -z "${AZURE_BACKUP_STORAGE_CONTAINER_NAME}" ]]; then
+  echo "AZURE_BACKUP_STORAGE_CONTAINER_NAME environment variable not set"
+  exit 1
+fi
+
+if [[ -z "${BACKUP_ARCHIVE_FILENAME}" ]]; then
+  echo "BACKUP_ARCHIVE_FILENAME variable not set"
+  exit 1
+fi
+
+STORAGE_CONN_STR="$(az keyvault secret show --name ${BACKUP_STORAGE_SECRET_NAME} --vault-name ${KEY_VAULT_NAME} | jq -r .value)"
+
+if [[ ! -e ${BACKUP_ARCHIVE_FILENAME} ]]; then
+  echo "There are no files found matching ${BACKUP_ARCHIVE_FILENAME}"
+  exit 1
+else
+  echo "Checking if storage container ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} exists"
+  STORAGE_CONTAINER_EXISTS=$(az storage container exists --connection-string ${STORAGE_CONN_STR} -n ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} | jq -r .exists)
+
+  if [[ ${STORAGE_CONTAINER_EXISTS} = "false" ]]; then
+    echo "Creating storage container ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} ..."
+    az storage container create --connection-string ${STORAGE_CONN_STR} -n ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} --output none
+  fi
+
+  echo "Storage container created. Uploading ${BACKUP_ARCHIVE_FILENAME} ..."
+  az storage blob upload --connection-string ${STORAGE_CONN_STR} -c ${AZURE_BACKUP_STORAGE_CONTAINER_NAME} -n ${BACKUP_ARCHIVE_FILENAME} -f ${BACKUP_ARCHIVE_FILENAME} --overwrite --output none
+fi

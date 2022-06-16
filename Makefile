@@ -177,6 +177,12 @@ restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # 
 	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
 	bin/restore-nightly-backup ${space} ${postgres_database_name} ${paas_env}_backup- ${BACKUP_DATE}
 
+upload-review-backup: read-deployment-config read-keyvault-config # make review upload-review-backup BACKUP_DATE=2022-06-10 APP_NAME=1234
+	bin/upload-review-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup-${BACKUP_DATE}.sql.tar.gz
+
+backup-review-database: read-deployment-config # make review backup-review-database APP_NAME=1234
+	bin/backup-review-database ${postgres_database_name} ${paas_env}
+
 get-image-tag:
 	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app teacher-training-api-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))
 	@echo ${TAG}
