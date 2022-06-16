@@ -18,8 +18,8 @@
           <h1 class="govuk-fieldset__heading">Add a new provider</h1>
         </legend>
 
-        <%= f.govuk_text_field :provider_name, label: { text: "Name", size: "s" } %>
-        <%= f.govuk_text_field :provider_code, label: { text: "Code", size: "s" } %>
+        <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
+        <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" } %>
         <%= f.govuk_radio_buttons_fieldset(:provider_type, legend: { text: "What is the provider type?", size: "s" }) do %>
           <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "Lead School" }, link_errors: true  do %>
             <%= f.govuk_text_field :urn,
