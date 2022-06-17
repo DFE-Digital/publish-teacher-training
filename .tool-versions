@@ -8,3 +8,4 @@ cf 7.4.0
 azure-cli 2.36.0
 jq 1.6
 make 4.2.1
+redis 7.0.0
