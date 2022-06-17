@@ -18,9 +18,9 @@ services:
     build:
       context: .
       cache_from:
-        - ghcr.io/dfe-digital/teacher-training-api:${IMAGE_TAG:-latest}
-        - ghcr.io/dfe-digital/teacher-training-api-middleman:main
-    image: ghcr.io/dfe-digital/teacher-training-api:${IMAGE_TAG:-latest}
+        - ghcr.io/dfe-digital/publish-teacher-training:${IMAGE_TAG:-latest}
+        - ghcr.io/dfe-digital/publish-teacher-training-middleman:main
+    image: ghcr.io/dfe-digital/publish-teacher-training:${IMAGE_TAG:-latest}
     command: ash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b '0.0.0.0'"
     ports:
       - "3001:3001"
@@ -39,7 +39,7 @@ services:
       - ${PWD}/out:/app/coverage
 
   bgJobs:
-    image: ghcr.io/dfe-digital/teacher-training-api:${IMAGE_TAG:-latest}
+    image: ghcr.io/dfe-digital/publish-teacher-training:${IMAGE_TAG:-latest}
     command: bundle exec sidekiq -c 5 -C config/sidekiq.yml
     depends_on:
       - web
