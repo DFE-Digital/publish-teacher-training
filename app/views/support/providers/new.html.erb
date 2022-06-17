@@ -11,15 +11,63 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: [:support, @provider], local: true do |f| %>
 
-      <%= f.govuk_error_summary %>
+      <% if @provider.errors.size > 0 %>
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+          There is a problem
+        </h2>
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+            <% @provider_errors = [
+              :provider_name,
+              :provider_code,
+              :provider_type,
+              :urn,
+              :ukprn,
+              :email,
+              :telephone,
+              ]
+            %>
+            <% @provider_errors.each do |provider_error| %>
+              <% if @provider.errors.attribute_names.any? { |s| s[/^#{Regexp.quote(provider_error.to_s)}$/] } %>
+                <li>
+                  <%= link_to @provider.errors[provider_error][0], support_providers_path( anchor: "provider-#{provider_error.to_s.gsub('_', '-')}-field-error" ) %>
+                </li>
+              <% end %>
+            <% end %>
+
+            <% if @provider.errors.key?('organisations.name') %>
+              <li>
+                <a data-turbo="false" href="#provider-organisations-attributes-0-name-field-error"><%= @provider.errors['organisations.name'][0] %></a>
+              </li>
+            <% end %>
+
+            <% @site_errors = [
+              :"sites.code",
+              :"sites.urn",
+              :"sites.location_name",
+              :"sites.address1",
+              :"sites.postcode",
+              ] %>
+            <% @site_errors.each do |site_error| %>
+              <% if @provider.errors.attribute_names.any? { |s| s[site_error.to_s] } %>
+                <li>
+                  <%= link_to @provider.errors[site_error][0], support_providers_path( anchor: "provider-sites-attributes-0-#{site_error.to_s.split('.').pop.gsub('_', '-')}-field-error") %>
+                </li>
+              <% end %>
+            <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
 
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">Add a new provider</h1>
         </legend>
 
-        <%= f.govuk_text_field :provider_name, label: { text: "Name", size: "s" } %>
-        <%= f.govuk_text_field :provider_code, label: { text: "Code", size: "s" } %>
+        <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
+        <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" } %>
         <%= f.govuk_radio_buttons_fieldset(:provider_type, legend: { text: "What is the provider type?", size: "s" }) do %>
           <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "Lead School" }, link_errors: true  do %>
             <%= f.govuk_text_field :urn,

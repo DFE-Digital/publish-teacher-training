@@ -21,25 +21,25 @@ describe Site, type: :model do
   it "validates that code can only contain A-Z, 0-9 or -" do
     subject.code = "22,A"
     subject.valid?
-    expect(subject.errors[:code]).to include("must contain only A-Z, 0-9 or -")
+    expect(subject.errors[:code]).to include("Site code must contain only A-Z, 0-9 or -")
   end
 
   it "validates that URN cannot be letters" do
     subject.urn = "XXXXXX"
     subject.valid?
-    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+    expect(subject.errors[:urn]).to include("Site URN must be 5 or 6 numbers")
   end
 
   it "validates URN minimum length" do
     subject.urn = "1234"
     subject.valid?
-    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+    expect(subject.errors[:urn]).to include("Site URN must be 5 or 6 numbers")
   end
 
   it "validates URN maximum length" do
     subject.urn = "1234567"
     subject.valid?
-    expect(subject.errors[:urn]).to include("^URN must be 5 or 6 numbers")
+    expect(subject.errors[:urn]).to include("Site URN must be 5 or 6 numbers")
   end
 
   it "has a uuid" do

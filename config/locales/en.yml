@@ -211,12 +211,12 @@ en:
         site:
           attributes:
             location_name:
-              blank: "^Enter a name"
+              blank: "Enter a site location name"
               taken: "is in use by another location"
             address1:
-              blank: "^Enter a building and street"
+              blank: "Enter a building and street"
             postcode:
-              blank: "^Enter a postcode"
+              blank: "Enter a postcode"
         course:
           attributes:
             course_code:
@@ -286,6 +286,12 @@ en:
           attributes:
             provider_name:
               too_long: "Enter a provider name that is 100 characters or fewer"
+              blank: "Enter provider name"
+            provider_code:
+              blank: "Enter provider code"
+              taken: "Provider code already taken"
+            provider_type:
+              blank: "Provider type can't be blank"
             email:
               blank: "^Enter email address"
             website:
@@ -304,6 +310,10 @@ en:
               blank: "^Enter details about training with you"
             train_with_disability:
               blank: "^Enter details about training with a disability"
+        organisation:
+          attributes:
+            name:
+              blank: "Enter organisation name"
         access_request:
           attributes:
             first_name:

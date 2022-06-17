@@ -20,14 +20,14 @@ describe Provider, type: :model do
           provider.email = ""
           provider.valid? :update
 
-          expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+          expect(provider.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
         end
 
         it "validates email contains an @ symbol" do
           provider.email = "meow"
           provider.valid? :update
 
-          expect(provider.errors[:email]).to include("^Enter an email address in the correct format, like name@example.com")
+          expect(provider.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
         end
 
         it "Does not validate the email if it is not present" do
@@ -42,7 +42,7 @@ describe Provider, type: :model do
           provider.telephone = ""
           provider.valid? :update
 
-          expect(provider.errors[:telephone]).to include("^Enter a valid telephone number")
+          expect(provider.errors[:telephone]).to include("Enter a valid telephone number")
         end
 
         it "Correctly validates valid phone numbers" do
@@ -53,7 +53,7 @@ describe Provider, type: :model do
         it "Correctly invalidates invalid phone numbers" do
           provider.telephone = "123cat456"
           expect(provider.valid?(:update)).to be false
-          expect(provider.errors[:telephone]).to include("^Enter a valid telephone number")
+          expect(provider.errors[:telephone]).to include("Enter a valid telephone number")
         end
 
         it "Does not validate the telephone if it is not present" do

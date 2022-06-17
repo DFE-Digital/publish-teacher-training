@@ -72,7 +72,7 @@ describe Provider, type: :model do
 
         it "raises validation error" do
           expect(invalid_provider.valid?).to be false
-          expect(invalid_provider.errors.messages[:provider_code].first).to eq "has already been taken"
+          expect(invalid_provider.errors.messages[:provider_code].first).to eq "Provider code already taken"
         end
       end
 

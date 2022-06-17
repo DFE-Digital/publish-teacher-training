@@ -25,10 +25,10 @@ class Site < ApplicationRecord
             presence: true
   validates :postcode, postcode: true
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false, conditions: -> { where(discarded_at: nil) } },
-                   format: { with: /\A[A-Z0-9\-]+\z/, message: "must contain only A-Z, 0-9 or -" },
+                   format: { with: /\A[A-Z0-9\-]+\z/, message: "Site code must contain only A-Z, 0-9 or -" },
                    presence: true
 
-  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "^URN must be 5 or 6 numbers" }
+  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "Site URN must be 5 or 6 numbers" }
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 

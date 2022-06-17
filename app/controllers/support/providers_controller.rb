@@ -15,19 +15,6 @@ module Support
       if @provider.save
         redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
       else
-        # TODO: Move this into a form object, the error linking is currently broken and the code below violates
-        # modifying a frozen hash in the Rails 7 upgrade.
-
-        # # The below code is to fix a mismatch of error messages
-        # # for invalid forms in the support console.
-        # @provider.errors.messages.each { |k, v|
-        #   case k
-        #   when :"sites.urn", :email, :telephone
-        #     @provider.errors.messages[k] = v.first.gsub("^", "")
-        #   else
-        #     @provider.errors.messages[k] = "#{k.to_s.gsub(/.\.^?/, ' ').humanize} #{v.first}"
-        #   end
-        # }
         render :new
       end
     end
