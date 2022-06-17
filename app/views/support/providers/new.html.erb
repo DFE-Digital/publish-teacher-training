@@ -52,7 +52,7 @@
             <% @site_errors.each do |site_error| %>
               <% if @provider.errors.attribute_names.any? { |s| s[site_error.to_s] } %>
                 <li>
-                  <%= link_to @provider.errors[site_error][0], support_providers_path( anchor: "provider-sites-attributes-0-#{site_error.to_s.split('.').pop}-field-error") %>
+                  <%= link_to @provider.errors[site_error][0], support_providers_path( anchor: "provider-sites-attributes-0-#{site_error.to_s.split('.').pop.gsub('_', '-')}-field-error") %>
                 </li>
               <% end %>
             <% end %>
