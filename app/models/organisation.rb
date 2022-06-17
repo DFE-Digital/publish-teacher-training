@@ -5,7 +5,7 @@ class Organisation < ApplicationRecord
 
   has_and_belongs_to_many :providers
 
-  validates :name, presence: { message: "Enter organisation name" }
+  validates :name, presence: true
 
   has_associated_audits
   audited
