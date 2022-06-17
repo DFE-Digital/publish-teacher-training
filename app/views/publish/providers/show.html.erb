@@ -1,10 +1,10 @@
-<% content_for :page_title, @provider.provider_name %>
+<% content_for :page_title, t("page_titles.rollover.show") %>
 
 <% if current_user.has_multiple_providers? %>
   <%= content_for :before_content, render_breadcrumbs(:provider) %>
 <% end %>
 
-<h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
+<h1 class="govuk-heading-l"><%= t("page_titles.rollover.show") %></h1>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,5 +14,4 @@
      <%= render partial: "publish/recruitment_cycles/provider_info", locals: { provider: @provider, year: Settings.current_recruitment_cycle_year, recruitment_cycle: @recruitment_cycle } %>
     <% end %>
   </div>
-  <%= render partial: "publish/shared/aside_information_box" %>
 </div>
