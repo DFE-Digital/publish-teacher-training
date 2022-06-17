@@ -21,6 +21,10 @@ private
     @provider ||= @current_user.providers.first
   end
 
+  def publish_provider_courses_show_page
+    @publish_provider_courses_show_page ||= PageObjects::Publish::ProviderCoursesShow.new
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
