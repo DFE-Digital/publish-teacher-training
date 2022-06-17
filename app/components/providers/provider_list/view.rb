@@ -1,9 +1,9 @@
 module Providers
   module ProviderList
-    class View < GovukComponent::Base
+    class View < ApplicationComponent
       include Support::TimeHelper
 
-      def initialize(provider:)
+      def initialize(provider:, classes: [], html_attributes: {})
         super(classes: classes, html_attributes: html_attributes)
         @provider = provider
       end

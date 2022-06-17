@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NotificationBanner
-  class View < GovukComponent::Base
+  class View < ApplicationComponent
     attr_reader :text, :title_id
 
     SUCCESS_TITLE = "Success"
@@ -16,11 +16,11 @@ module NotificationBanner
       title_text: nil,
       text: nil,
       type: nil,
-      classes: [],
       role: nil,
       title_id: nil,
       disable_auto_focus: false,
-      html_attributes: nil
+      classes: [],
+      html_attributes: {}
     )
       super(classes: classes, html_attributes: html_attributes)
       @title_text = title_text

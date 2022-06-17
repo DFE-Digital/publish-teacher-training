@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Persona
-  class View < GovukComponent::Base
+  class View < ApplicationComponent
     attr_accessor :email_address, :first_name, :last_name
 
     def initialize(
@@ -9,7 +9,7 @@ module Persona
       first_name:,
       last_name:,
       classes: [],
-      html_attributes: nil
+      html_attributes: {}
     )
       super(classes: classes, html_attributes: html_attributes)
       @email_address = email_address
