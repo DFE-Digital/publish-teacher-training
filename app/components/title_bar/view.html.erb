@@ -5,9 +5,10 @@
     <%= change_organisation_link %>
     <% if rollover_active? %>
       <span class="govuk-hint title-bar-inline">
-        <%= "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} " %>
         <% if current_recruitment_cycle?  %>
-          - current
+          <%= "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current" %>
+        <% elsif next_recruitment_cycle? %>
+          <%= "- #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}" %>
         <% end %>
       </span>
     <% end %>

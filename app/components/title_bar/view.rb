@@ -22,6 +22,10 @@ module TitleBar
       params[:recruitment_cycle_year].to_i == Settings.current_recruitment_cycle_year
     end
 
+    def next_recruitment_cycle?
+      params[:recruitment_cycle_year].to_i == Settings.current_recruitment_cycle_year + 1
+    end
+
     def rollover_active?
       Settings.features.rollover.can_edit_current_and_next_cycles == true
     end
