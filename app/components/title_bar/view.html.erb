@@ -1,7 +1,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
-    <%= change_cycle_link(@provider) %>
+    <% if rollover_active? %>
+      <%= change_cycle_link(@provider) %>
+    <% end %>
     <%= change_organisation_link %>
     <% if rollover_active? %>
       <span class="govuk-hint title-bar-inline">
