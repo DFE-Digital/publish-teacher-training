@@ -6,10 +6,11 @@ module TitleBar
   describe View do
     alias_method :component, :page
     let(:title) { "BAT School" }
+    let(:provider_code) { "1BJ" }
 
     context "default" do
       before do
-        render_inline(described_class.new(title: title))
+        render_inline(described_class.new(title: title, provider: provider_code))
       end
 
       it "renders the provided title" do
