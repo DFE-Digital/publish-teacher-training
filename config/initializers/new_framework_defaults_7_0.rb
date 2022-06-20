@@ -10,7 +10,7 @@
 # https://guides.rubyonrails.org/upgrading_ruby_on_rails.html
 
 # Temporarily disable this until we clean up the reference data stuff
-Rails.configuration.active_record.belongs_to_required_by_default = true
+# Rails.configuration.active_record.belongs_to_required_by_default = false
 
 # `button_to` view helper will render `<button>` element, regardless of whether
 # or not the content is passed as the first argument or as a block.
