@@ -21,6 +21,26 @@ module TitleBar
         expect(component).to have_link("Change organisation", href: "/")
       end
 
+      it "does not render the recruitment cycle link" do
+        expect(component).not_to have_link("Change recruitment cycle", href: "/publish/organisations/1BJ")
+      end
+    end
+
+
+    context "during rollover" do
+      before do
+        allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+        render_inline(described_class.new(title: title, provider: provider_code))
+      end
+
+      it "renders the provided title" do
+        expect(component).to have_text("BAT School")
+      end
+
+      it "renders the change organisation link" do
+        expect(component).to have_link("Change organisation", href: "/")
+      end
+
       it "renders the recruitment cycle link" do
         expect(component).to have_link("Change recruitment cycle", href: "/publish/organisations/1BJ")
       end
