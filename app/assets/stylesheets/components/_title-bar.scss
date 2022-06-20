@@ -12,5 +12,8 @@
   display: inline;
   margin-right: govuk-spacing(2);
   padding-right: govuk-spacing(2);
+}
+
+.title-bar-item-separator:not(:last-child) {
   border-right: 1px solid $govuk-border-colour;
 }
