@@ -115,7 +115,7 @@ gem "govuk-components"
 gem "govuk_design_system_formbuilder"
 
 # DfE Sign-In
-gem "omniauth", "~> 1.9"
+gem "omniauth", "~> 2.1"
 gem "omniauth_openid_connect", "~> 0.4"
 gem "omniauth-rails_csrf_protection"
 
