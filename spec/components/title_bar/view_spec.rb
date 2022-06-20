@@ -26,7 +26,6 @@ module TitleBar
       end
     end
 
-
     context "during rollover" do
       before do
         allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
