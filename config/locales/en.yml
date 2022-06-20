@@ -20,6 +20,7 @@ en:
     error_prefix: "Error: "
     rollover:
       show: "Recruitment cycles"
+      change_cycle: "Change recruitment cycle"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"

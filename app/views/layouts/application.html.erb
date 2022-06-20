@@ -54,7 +54,7 @@
       <div class="govuk-width-container">
         <% if current_user %>
           <% if (current_user.has_multiple_providers_in_current_recruitment_cycle? || current_user.admin?) && @provider && !request.path.include?('support') %>
-           <%= render TitleBar::View.new(title: @provider.provider_name) %>
+           <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code) %>
           <% end %>
         <% end %>
       </div>

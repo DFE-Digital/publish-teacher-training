@@ -4,13 +4,18 @@ module TitleBar
   class View < ViewComponent::Base
     attr_accessor :title
 
-    def initialize(title:)
+    def initialize(title:, provider:)
       super
       @title = title
+      @provider = provider
     end
 
-    def link
-      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline govuk-link--no-visited-state"
+    def change_organisation_link
+      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline govuk-link--no-visited-state title-bar-inline-item"
+    end
+
+    def change_cycle_link(provider)
+      govuk_link_to t("page_titles.rollover.change_cycle"), publish_provider_path(code: provider), class: "title-bar-link inline govuk-link--no-visited-state"
     end
 
     def current_recruitment_cycle?

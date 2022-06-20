@@ -7,3 +7,10 @@
   display: inline-block;
   margin-top: govuk-spacing(2);
 }
+
+.title-bar-inline-item {
+  display: inline;
+  margin-right: govuk-spacing(2);
+  padding-right: govuk-spacing(2);
+  border-right: 1px solid $govuk-border-colour;
+}

@@ -1,7 +1,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
-    <%= link %>
+    <%= change_cycle_link(@provider) %>
+    <%= change_organisation_link %>
     <% if rollover_active? %>
       <span class="govuk-hint title-bar-inline">
         <%= "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} " %>
