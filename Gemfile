@@ -6,9 +6,6 @@ ruby "2.7.5"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "7.0.3"
 
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "webpacker", "~> 5.4"
-
 # Use PostgreSQL as the database for Active Record
 gem "pg"
 
@@ -127,6 +124,11 @@ gem "google-cloud-bigquery"
 
 # Faster JSON serialization
 gem "oj"
+
+# Rails 7 CSS and JS Bundling
+gem "cssbundling-rails", "~> 1.1"
+gem "jsbundling-rails", "~> 1.0"
+gem "sprockets-rails", require: "sprockets/railtie"
 
 group :development, :test do
   # Prettyprint in console

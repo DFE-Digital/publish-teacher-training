@@ -44,16 +44,31 @@ Run the following commands:
 ```bash
 yarn
 bundle
-bundle exec rake webpacker:compile
 bundle exec rails db:setup
 ```
 
 #### Run the server
 
+You can use [Foreman](https://github.com/ddollar/foreman) or [Overmind](https://github.com/DarthSim/overmind) to run all the processes needed for local dev. Once you have either of the two, you can run:
+
 ```bash
-bundle exec rails server
+./bin/dev
 ```
 
+Which will fire off the Rails server, watchers for JS/CSS changes and Sidekiq. You can also run them individually:
+
+```bash
+./bin/dev web
+```
+
+You don't have to use either of those tools. The script just wraps up the following commands:
+
+```bash
+bin/rails server -p 3001
+yarn build --watch
+yarn build:css --watch
+bundle exec sidekiq -t 25 -C config/sidekiq.yml
+```
 ### Docker
 
 Run this in a shell and leave it running:
