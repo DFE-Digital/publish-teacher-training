@@ -17,8 +17,12 @@ module TitleBar
         expect(component).to have_text("BAT School")
       end
 
-      it "renders the provided link" do
+      it "renders the change organisation link" do
         expect(component).to have_link("Change organisation", href: "/")
+      end
+
+      it "renders the recruitment cycle link" do
+        expect(component).to have_link("Change recruitment cycle", href: "/publish/organisations/1BJ")
       end
     end
   end
