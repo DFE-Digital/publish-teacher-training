@@ -11,7 +11,7 @@ Accepted
 This code base currently has a lot of `before_action` in controllers. For
 example:
 
-- https://github.com/DFE-Digital/teacher-training-api/blob/6e18d28cafe3d4595a15eb6670cc6950ddf692b8/app/controllers/api/v2/courses_controller.rb#L6
+- https://github.com/DFE-Digital/publish-teacher-training/blob/6e18d28cafe3d4595a15eb6670cc6950ddf692b8/app/controllers/api/v2/courses_controller.rb#L6
 
 These `before_action` calls typically load data into an instance variable
 which are then used later.

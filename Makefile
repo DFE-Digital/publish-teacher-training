@@ -100,7 +100,7 @@ deploy-init:
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
 	$(eval export TF_VAR_cf_sso_passcode=$(PASSCODE))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/teacher-training-api:$(IMAGE_TAG))
+	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_app_secrets_file=./workspace_variables/app_secrets.yml)
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	cd terraform && \
@@ -202,7 +202,7 @@ set-restore-variables:
 	$(if $(IMAGE_TAG), , $(error can only run with an IMAGE_TAG))
 	$(if $(DB_INSTANCE_GUID), , $(error can only run with DB_INSTANCE_GUID, get it by running `make ${space} get-postgres-instance-guid`))
 	$(if $(SNAPSHOT_TIME), , $(error can only run with BEFORE_TIME, eg SNAPSHOT_TIME="2021-09-14 16:00:00"))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/teacher-training-api:$(IMAGE_TAG))
+	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_restore_from_db_guid=$(DB_INSTANCE_GUID))
 	$(eval export TF_VAR_paas_db_backup_before_point_in_time=$(SNAPSHOT_TIME))
 	echo "Restoring teacher-training-api from $(TF_VAR_paas_restore_from_db_guid) before $(TF_VAR_paas_db_backup_before_point_in_time)"

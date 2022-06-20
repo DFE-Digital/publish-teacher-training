@@ -1,4 +1,4 @@
-![Build](https://github.com/DFE-Digital/teacher-training-api/workflows/Build/badge.svg)
+![Build](https://github.com/DFE-Digital/publish-teacher-training/workflows/Build/badge.svg)
 [![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg?token=JaYZey50Y8gfC00RvzkcrDz5OP-SwiBSTtbhkMw1KIs)](https://www.skylight.io/app/applications/NXAwzyZjkp2m)
 
 # Publish Teacher Training Courses
