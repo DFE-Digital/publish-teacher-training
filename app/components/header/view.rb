@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Header::View < GovukComponent::Base
+class Header::View < ApplicationComponent
   attr_reader :service_name, :current_user
 
   include ActiveModel
 
-  def initialize(service_name:, current_user: nil)
+  def initialize(service_name:, current_user: nil, classes: [], html_attributes: {})
     super(classes: classes, html_attributes: html_attributes)
     @service_name = service_name
     @current_user = current_user

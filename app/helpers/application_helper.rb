@@ -56,7 +56,7 @@ module ApplicationHelper
 
     summary_list.row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
       row.key { key.html_safe }
-      row.value(classes: classes) { value }
+      row.value(classes: classes || ["govuk-summary-list__value"]) { value }
       if action
         row.action(action)
       else

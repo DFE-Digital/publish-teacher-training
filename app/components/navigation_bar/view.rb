@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class NavigationBar::View < GovukComponent::Base
+class NavigationBar::View < ApplicationComponent
   attr_reader :items, :current_path
 
-  def initialize(items:, current_path:, current_user: {})
+  def initialize(items:, current_path:, current_user: {}, classes: [], html_attributes: {})
     super(classes: classes, html_attributes: html_attributes)
     @items = items
     @current_path = current_path

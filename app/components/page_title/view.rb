@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class PageTitle::View < GovukComponent::Base
+class PageTitle::View < ApplicationComponent
   I18N_FORMAT = /^\S*\.\S*$/.freeze
 
   attr_accessor :title
 
-  def initialize(title: "", has_errors: false)
+  def initialize(title: "", has_errors: false, classes: [], html_attributes: {})
     super(classes: classes, html_attributes: html_attributes)
     @title = title
     @has_errors = has_errors

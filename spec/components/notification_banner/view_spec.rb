@@ -50,11 +50,6 @@ module NotificationBanner
       end
     end
 
-    it "supports custom classes on the parent container" do
-      render_inline(View.new(classes: "test-css-class"))
-      expect(component).to have_selector(".test-css-class")
-    end
-
     it "supports custom title and text" do
       render_inline(View.new(title_text: "title", text: "text"))
       expect(component).to have_text("title")
