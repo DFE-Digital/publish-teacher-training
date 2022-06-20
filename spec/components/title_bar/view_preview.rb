@@ -6,11 +6,6 @@ module TitleBar
       render(View.new(title: title, provider: provider_code))
     end
 
-    def during_rollover
-      allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
-      render(View.new(title: title, provider: provider_code))
-    end
-
   private
 
     def title
