@@ -155,7 +155,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.1.0)
+    cssbundling-rails (1.1.1)
       railties (>= 6.0.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
@@ -362,7 +362,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.0)
+    minitest (5.16.1)
     msgpack (1.5.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
