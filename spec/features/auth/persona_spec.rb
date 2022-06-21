@@ -19,7 +19,7 @@ feature "Authentication with Personas" do
   end
 
   def given_persona_based_authentication_is_active
-    allow(AuthenticationService).to receive(:mode).and_return(:persona)
+    allow(AuthenticationService).to receive(:mode).and_return("persona")
   end
 
   def when_i_go_to_sign_in
