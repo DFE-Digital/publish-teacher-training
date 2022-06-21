@@ -2,12 +2,13 @@
 
 module TitleBar
   class View < ViewComponent::Base
-    attr_accessor :title
+    attr_accessor :title, :current_user
 
-    def initialize(title:, provider:)
+    def initialize(title:, provider:, current_user:)
       super
       @title = title
       @provider = provider
+      @current_user = current_user
     end
 
     def change_organisation_link

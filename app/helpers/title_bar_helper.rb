@@ -1,6 +1,6 @@
 module TitleBarHelper
   def render_title_bar?(current_user:, provider:)
-    current_user.has_multiple_providers_in_current_recruitment_cycle? || ((current_user.admin? &&
+    (current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1) || (Settings.features.can_edit_current_and_next_cycles = true) || ((current_user.admin? &&
     provider && !request.path.include?("support")) && !request.path.end_with?(provider.provider_code))
   end
 end
