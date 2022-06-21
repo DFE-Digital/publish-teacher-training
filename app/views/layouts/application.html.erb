@@ -53,7 +53,7 @@
 
       <div class="govuk-width-container">
         <% if current_user && @provider %>
-          <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code) %>
+          <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
            <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user: current_user) %>
           <% end %>
         <% end %>
