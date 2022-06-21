@@ -1,8 +1,9 @@
 module Courses
   class CopyToProviderService
-    def initialize(sites_copy_to_course:, enrichments_copy_to_course:)
+    def initialize(sites_copy_to_course:, enrichments_copy_to_course:, force:)
       @sites_copy_to_course = sites_copy_to_course
       @enrichments_copy_to_course = enrichments_copy_to_course
+      @force = force
     end
 
     def execute(course:, new_provider:)
@@ -44,7 +45,7 @@ module Courses
       last_enrichment = course.enrichments.most_recent.first
       return if last_enrichment.blank?
 
-      @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)
+      enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)
     end
 
     def adjusted_applications_open_from_date(course, year_differential)

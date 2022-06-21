@@ -28,8 +28,11 @@ RSpec.describe Courses::CopyToProviderService do
     described_class.new(
       sites_copy_to_course: mocked_sites_copy_to_course_service,
       enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
+      force: force,
     )
   end
+
+  let(:force) { false }
 
   it "makes a copy of the course in the new provider" do
     service.execute(course: course, new_provider: new_provider)
@@ -186,6 +189,7 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
+        force: force,
       ).execute(course: course, new_provider: new_provider)
     end
 
@@ -204,6 +208,7 @@ RSpec.describe Courses::CopyToProviderService do
   context "when the course is not rollable" do
     let(:site) { create :site, provider: provider }
     let!(:new_site) { create :site, provider: new_provider, code: site.code }
+    let(:force) { true }
 
     before do
       allow(course).to receive(:rollable?).and_return(false)
@@ -211,7 +216,8 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-      ).execute(course: course, new_provider: new_provider, force: true)
+        force: force,
+      ).execute(course: course, new_provider: new_provider)
     end
 
     it "still copies the course to the provider" do

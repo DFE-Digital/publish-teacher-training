@@ -1,8 +1,9 @@
 module Providers
   class CopyToRecruitmentCycleService
-    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:)
+    def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, force:)
       @copy_course_to_provider_service = copy_course_to_provider_service
       @copy_site_to_provider_service = copy_site_to_provider_service
+      @force = force
     end
 
     def execute(provider:, new_recruitment_cycle:, force: false)
@@ -40,7 +41,7 @@ module Providers
     end
 
   private
-    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service
+    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :force
 
     def copy_courses_to_new_provider(provider, new_provider)
       courses_count = 0
