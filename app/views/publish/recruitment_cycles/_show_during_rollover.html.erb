@@ -10,7 +10,7 @@
   <% if @provider.from_next_recruitment_cycle %>
     <li>
         <%= govuk_link_to(
-        "#{next_recruitment_cycle_period_text}",
+        next_recruitment_cycle_period_text.to_s,
         publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_recruitment_cycle_year + 1),
         data: { qa: "provider__courses__next_cycle" },
       ) %>

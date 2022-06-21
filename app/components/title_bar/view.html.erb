@@ -12,7 +12,7 @@
 
     <% if rollover_active? %>
       <span class="govuk-hint title-bar-inline">
-        <% if current_recruitment_cycle?  %>
+        <% if current_recruitment_cycle? %>
           <%= "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current" %>
         <% elsif next_recruitment_cycle? %>
           <%= "- #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}" %>
