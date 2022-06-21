@@ -7,8 +7,8 @@ describe Provider, type: :model do
     create(:provider,
       provider_name: "ACME SCITT",
       provider_code: "A01",
-      accrediting_provider_enrichments: accrediting_provider_enrichments,
-      courses: courses)
+      accrediting_provider_enrichments:,
+      courses:)
   end
 
   subject { provider }
@@ -339,8 +339,8 @@ describe Provider, type: :model do
     let(:provider) { create :provider, accrediting_provider: "N" }
 
     let(:accrediting_provider) { create :provider, accrediting_provider: "Y" }
-    let!(:course1) { create :course, accrediting_provider: accrediting_provider, provider: provider }
-    let!(:course2) { create :course, accrediting_provider: accrediting_provider, provider: provider }
+    let!(:course1) { create :course, accrediting_provider:, provider: }
+    let!(:course2) { create :course, accrediting_provider:, provider: }
 
     it "returns the course's accrediting provider" do
       expect(provider.accrediting_providers.first).to eq(accrediting_provider)
@@ -465,8 +465,8 @@ describe Provider, type: :model do
 
   describe "#next_available_course_code" do
     let(:provider) { create(:provider) }
-    let(:course1) { create(:course, provider: provider, course_code: "A123") }
-    let(:course2) { create(:course, provider: provider, course_code: "B456") }
+    let(:course1) { create(:course, provider:, course_code: "A123") }
+    let(:course2) { create(:course, provider:, course_code: "B456") }
 
     before do
       course1

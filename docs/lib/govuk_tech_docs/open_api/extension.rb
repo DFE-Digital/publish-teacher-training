@@ -7,7 +7,7 @@ module GovukTechDocs
     class Extension < Middleman::Extension
       expose_to_application api: :api
 
-      def initialize(app, options_hash = {}, &block)
+      def initialize(app, options_hash = {}, &)
         super
 
         @app = app

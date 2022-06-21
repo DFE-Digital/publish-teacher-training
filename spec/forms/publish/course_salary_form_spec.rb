@@ -8,7 +8,7 @@ module Publish
     let(:course) { build(:course, :salary_type_based) }
     let(:enrichment) { course.enrichments.find_or_initialize_draft }
 
-    subject { described_class.new(enrichment, params: params) }
+    subject { described_class.new(enrichment, params:) }
 
     describe "validations" do
       it { is_expected.to validate_presence_of(:course_length) }

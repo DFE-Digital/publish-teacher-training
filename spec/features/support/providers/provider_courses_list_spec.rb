@@ -6,7 +6,7 @@ feature "View provider courses" do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view courses belonging to a provider" do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user:)
     and_there_is_a_provider_with_courses
     when_i_visit_the_support_provider_show_page
     and_click_on_the_courses_tab

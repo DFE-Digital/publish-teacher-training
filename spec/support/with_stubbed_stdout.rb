@@ -13,7 +13,7 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
   else
     stderr ||= ""
     stdout = run stdin: stdin, stderr: stderr, &block
-    { stdout: stdout, stderr: stderr }
+    { stdout:, stderr: }
   end
 end
 

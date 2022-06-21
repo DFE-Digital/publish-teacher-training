@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe AllocationUplift, type: :model do
   let(:provider) { create(:provider, :accredited_body) }
   let(:recruitment_cycle) { create(:recruitment_cycle) }
-  let(:allocation) { create(:allocation, number_of_places: 1, provider: provider, recruitment_cycle: recruitment_cycle) }
-  let(:allocation_uplift) { create(:allocation_uplift, allocation: allocation) }
+  let(:allocation) { create(:allocation, number_of_places: 1, provider:, recruitment_cycle:) }
+  let(:allocation_uplift) { create(:allocation_uplift, allocation:) }
 
   it { is_expected.to belong_to(:allocation) }
 

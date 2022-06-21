@@ -8,7 +8,7 @@ module Courses
 
     def execute(course:, new_provider:)
       return unless course.rollable? || force
-      return if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
+      return if course_code_already_exists_on_provider?(course:, new_provider:)
 
       new_course = nil
 
@@ -27,7 +27,7 @@ module Courses
         course.sites.each do |site|
           new_site = new_provider.sites.find_by(code: site.code)
 
-          sites_copy_to_course.execute(new_site: new_site, new_course: new_course) if new_site.present?
+          @sites_copy_to_course.execute(new_site:, new_course:) if new_site.present?
         end
       end
       new_course
@@ -45,7 +45,7 @@ module Courses
       last_enrichment = course.enrichments.most_recent.first
       return if last_enrichment.blank?
 
-      enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course: new_course)
+      @enrichments_copy_to_course.execute(enrichment: last_enrichment, new_course:)
     end
 
     def adjusted_applications_open_from_date(course, year_differential)

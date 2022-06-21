@@ -22,7 +22,7 @@ module V3
       scope = scope.with_subjects(subject_codes) if subject_codes.any?
       scope = scope.with_provider_name(provider_name) if provider_name.present?
       scope = scope.with_send if send_courses_filter?
-      scope = scope.within(filter[:radius], origin: origin) if locations_filter?
+      scope = scope.within(filter[:radius], origin:) if locations_filter?
       scope = scope.with_funding_types(funding_types) if funding_types.any?
       scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
       scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?

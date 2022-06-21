@@ -16,7 +16,7 @@ module FlashBanner
         end
 
         before do
-          render_inline(described_class.new(flash: flash))
+          render_inline(described_class.new(flash:))
         end
 
         it "renders flash message" do

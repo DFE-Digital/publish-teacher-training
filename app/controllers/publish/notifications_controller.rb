@@ -5,7 +5,7 @@ module Publish
     def index
       authorize(current_user, :index?)
 
-      @notifications_view = NotificationsView.new(request: request, current_user: current_user)
+      @notifications_view = NotificationsView.new(request:, current_user:)
       @notification_form = NotificationForm.new(current_user)
     end
 
@@ -19,7 +19,7 @@ module Publish
 
         redirect_to redirect_to_path
       else
-        @notifications_view = NotificationsView.new(request: request, current_user: current_user)
+        @notifications_view = NotificationsView.new(request:, current_user:)
         render(:index)
       end
     end

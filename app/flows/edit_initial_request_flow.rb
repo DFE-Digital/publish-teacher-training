@@ -21,11 +21,11 @@ class EditInitialRequestFlow
 
   def locals
     {
-      training_provider: training_provider,
-      provider: provider,
-      form_object: form_object,
-      recruitment_cycle: recruitment_cycle,
-      allocation: allocation,
+      training_provider:,
+      provider:,
+      form_object:,
+      recruitment_cycle:,
+      allocation:,
     }
   end
 

@@ -190,7 +190,7 @@ describe API::V3::SerializableCourse do
 
   context "a new course" do
     let(:provider) { create :provider }
-    let(:course) { Course.new(provider: provider) }
+    let(:course) { Course.new(provider:) }
 
     subject { parsed_json["data"] }
 

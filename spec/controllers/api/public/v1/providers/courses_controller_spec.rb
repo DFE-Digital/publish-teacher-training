@@ -20,8 +20,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
     context "when there are courses" do
       before do
-        create(:course, provider: provider)
-        create(:course, provider: provider)
+        create(:course, provider:)
+        create(:course, provider:)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -36,13 +36,13 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
     context "with pagination" do
       before do
-        provider.courses << build_list(:course, 5, provider: provider)
+        provider.courses << build_list(:course, 5, provider:)
       end
 
-      let!(:courses) { create_list(:course, 3, provider: provider) }
+      let!(:courses) { create_list(:course, 3, provider:) }
       let(:pagination) do
         {
-          page: page,
+          page:,
           per_page: 3,
         }
       end
@@ -140,7 +140,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     end
 
     describe "include" do
-      let!(:course) { create(:course, :with_accrediting_provider, provider: provider) }
+      let!(:course) { create(:course, :with_accrediting_provider, provider:) }
 
       context "when includes specified" do
         before do
@@ -179,7 +179,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
   describe "#show" do
     context "when course exists" do
-      let!(:course) { create(:course, provider: provider) }
+      let!(:course) { create(:course, provider:) }
 
       before do
         get :show, params: {
@@ -197,7 +197,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
     context "with include" do
       let!(:course) do
-        create(:course, :with_accrediting_provider, provider: provider)
+        create(:course, :with_accrediting_provider, provider:)
       end
 
       let(:accredited_body) { course.accrediting_provider }

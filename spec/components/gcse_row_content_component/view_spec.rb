@@ -10,7 +10,7 @@ module GcseRowContentComponent
       it "renders a link to the gcse section" do
         course = build(
           :course,
-          provider: provider,
+          provider:,
           accept_pending_gcse: nil,
           accept_gcse_equivalency: nil,
           accept_english_gcse_equivalency: nil,
@@ -37,7 +37,7 @@ module GcseRowContentComponent
         it "renders 'Candidates with pending GCSEs will be considered'" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
           )
@@ -50,7 +50,7 @@ module GcseRowContentComponent
         it "renders 'Candidates with pending GCSEs will not be considered'" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: false,
             accept_gcse_equivalency: true,
           )
@@ -65,7 +65,7 @@ module GcseRowContentComponent
         it "renders 'Grade 4 (C) or above in English, maths and science, or equivalent qualification'" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             level: "primary",
@@ -81,7 +81,7 @@ module GcseRowContentComponent
         it "renders 'Grade 4 (C) or above in English and maths, or equivalent qualification'" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             level: "secondary",
@@ -97,7 +97,7 @@ module GcseRowContentComponent
         it "does not render conditional content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             level: "Further education",
           )
 
@@ -112,7 +112,7 @@ module GcseRowContentComponent
         it "renders the correct content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: false,
             additional_gcse_equivalencies: nil,
@@ -128,7 +128,7 @@ module GcseRowContentComponent
         it "renders the correct content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             accept_english_gcse_equivalency: true,
@@ -144,7 +144,7 @@ module GcseRowContentComponent
         it "renders the correct content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             accept_english_gcse_equivalency: true,
@@ -161,7 +161,7 @@ module GcseRowContentComponent
         it "renders the correct content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             accept_english_gcse_equivalency: true,
@@ -179,7 +179,7 @@ module GcseRowContentComponent
         it "renders the correct content" do
           course = build(
             :course,
-            provider: provider,
+            provider:,
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             additional_gcse_equivalencies: "Geography",
@@ -202,7 +202,7 @@ module GcseRowContentComponent
       context "a relevant error exists" do
         it "returns an error css class" do
           errors = double("errors", { values: ["Enter GCSE requirements"] })
-          expect(described_class.new(course: nil, errors: errors).inset_text_css_classes).to eq("app-inset-text--narrow-border app-inset-text--error")
+          expect(described_class.new(course: nil, errors:).inset_text_css_classes).to eq("app-inset-text--narrow-border app-inset-text--error")
         end
       end
     end

@@ -743,7 +743,7 @@ describe "GET v3/courses" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
       let(:request_path) { "/api/v3/courses" }
 
-      let(:course_in_next_cycle) { create(:course, provider: provider, site_statuses: [findable_status], enrichments: [published_enrichment]) }
+      let(:course_in_next_cycle) { create(:course, provider:, site_statuses: [findable_status], enrichments: [published_enrichment]) }
 
       before do
         course_in_next_cycle

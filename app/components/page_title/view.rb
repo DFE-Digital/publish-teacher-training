@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class PageTitle::View < ApplicationComponent
-  I18N_FORMAT = /^\S*\.\S*$/.freeze
+  I18N_FORMAT = /^\S*\.\S*$/
 
   attr_accessor :title
 
   def initialize(title: "", has_errors: false, classes: [], html_attributes: {})
-    super(classes: classes, html_attributes: html_attributes)
+    super(classes:, html_attributes:)
     @title = title
     @has_errors = has_errors
   end

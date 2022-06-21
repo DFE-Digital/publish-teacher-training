@@ -3,7 +3,7 @@
 module TabNavigation
   class ViewPreview < ViewComponent::Preview
     def default
-      render(View.new(items: items))
+      render(View.new(items:))
     end
 
     def with_current_item_highlited

@@ -206,7 +206,7 @@ FactoryBot.define do
       name { "#{identifier} course name" }
 
       provider { find_or_create :provider, :published_scitt }
-      sites { build_list(:site, 1, provider: provider) }
+      sites { build_list(:site, 1, provider:) }
     end
 
     trait :draft_enrichment do

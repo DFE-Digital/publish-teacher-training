@@ -9,9 +9,9 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
   let(:previous_course_name) { "primary with English" }
   let(:mail) do
     described_class.course_subjects_updated_email(
-      course: course,
+      course:,
       previous_subject_names: [previous_subject.subject_name],
-      previous_course_name: previous_course_name,
+      previous_course_name:,
       recipient: user,
     )
   end
@@ -70,9 +70,9 @@ describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
       let(:previous_course_name) { "Mathematics" }
       let(:mail) do
         described_class.course_subjects_updated_email(
-          course: course,
+          course:,
           previous_subject_names: [previous_subject.subject_name],
-          previous_course_name: previous_course_name,
+          previous_course_name:,
           recipient: user,
         )
       end

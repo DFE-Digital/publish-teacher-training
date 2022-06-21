@@ -7,7 +7,7 @@ module Publish
     let(:params) { {} }
     let(:provider) { build(:provider, can_sponsor_student_visa: nil, can_sponsor_skilled_worker_visa: nil) }
 
-    subject { described_class.new(provider, params: params) }
+    subject { described_class.new(provider, params:) }
 
     describe "validations" do
       before { subject.valid? }

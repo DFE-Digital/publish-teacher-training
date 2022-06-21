@@ -26,8 +26,8 @@ class Allocation < ApplicationRecord
 
   def previous
     Allocation.find_by(
-      provider_code: provider_code,
-      accredited_body_code: accredited_body_code,
+      provider_code:,
+      accredited_body_code:,
       recruitment_cycle: recruitment_cycle.previous,
     )
   end

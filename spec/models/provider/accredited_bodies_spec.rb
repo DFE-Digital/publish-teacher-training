@@ -7,8 +7,8 @@ describe Provider, type: :model do
     create(:provider,
       provider_name: "ACME SCITT",
       provider_code: "A01",
-      accrediting_provider_enrichments: accrediting_provider_enrichments,
-      courses: courses)
+      accrediting_provider_enrichments:,
+      courses:)
   end
 
   before do
@@ -43,7 +43,7 @@ describe Provider, type: :model do
 
     context "with an accrediting provider (via courses)" do
       let(:accrediting_provider) { build :provider, provider_code: "AP1" }
-      let(:courses) { [build(:course, course_code: "P33P", accrediting_provider: accrediting_provider)] }
+      let(:courses) { [build(:course, course_code: "P33P", accrediting_provider:)] }
 
       its(:length) { is_expected.to be(1) }
 

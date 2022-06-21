@@ -15,7 +15,7 @@ module NotificationService
 
     let(:course) { create(:course, accrediting_provider: accredited_body) }
 
-    let(:service_call) { described_class.call(course: course) }
+    let(:service_call) { described_class.call(course:) }
 
     def setup_notifications
       allow(CourseWithdrawEmailMailer).to receive(:course_withdraw_email).and_return(double(deliver_later: true))
@@ -28,20 +28,20 @@ module NotificationService
       it "sends notifications" do
         expect(CourseWithdrawEmailMailer).to receive(:course_withdraw_email)
         expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
-        described_class.call(course: course)
+        described_class.call(course:)
       end
     end
 
     context "with a course that is not in the current cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
       before { setup_notifications }
 
       it "does not send notifications" do
         expect(CourseWithdrawEmailMailer).not_to receive(:course_withdraw_email)
         expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
-        described_class.call(course: course)
+        described_class.call(course:)
       end
     end
 

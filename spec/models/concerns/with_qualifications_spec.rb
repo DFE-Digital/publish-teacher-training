@@ -13,7 +13,7 @@ describe WithQualifications, type: :model do
     specs.each do |spec|
       spec.each do |qualification, expected|
         context "course with qualification=#{qualification}" do
-          subject { build(:course, qualification: qualification) }
+          subject { build(:course, qualification:) }
 
           its(:qualifications) { is_expected.to eq(expected[:values]) }
           its(:qualifications_description) { is_expected.to eq(expected[:description]) }

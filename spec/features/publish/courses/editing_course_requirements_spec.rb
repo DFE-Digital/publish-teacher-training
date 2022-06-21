@@ -21,7 +21,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
     let!(:course2) do
       create(
         :course,
-        provider: provider,
+        provider:,
         name: "Biology",
         enrichments: [course2_enrichment],
       )
@@ -29,7 +29,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
     let!(:course3) do
       create :course,
-        provider: provider,
+        provider:,
         name: "Biology",
         enrichments: [course3_enrichment]
     end

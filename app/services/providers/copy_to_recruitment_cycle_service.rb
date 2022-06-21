@@ -73,11 +73,11 @@ module Providers
       courses
     end
 
-    def copy_courses_to_new_provider(_provider, new_provider, courses)
+    def copy_courses_to_new_provider(_provider, new_provider, _courses)
       courses_count = 0
 
-      courses.each do |course|
-        new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+      provider.courses.each do |course|
+        new_course = @copy_course_to_provider_service.execute(course:, new_provider:)
         courses_count += 1 if new_course.present?
       rescue StandardError
         Rails.logger.fatal "error trying to copy course #{course.course_code}"
@@ -91,7 +91,7 @@ module Providers
       sites_count = 0
 
       provider.sites.each do |site|
-        new_site = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
+        new_site = @copy_site_to_provider_service.execute(site:, new_provider:)
         sites_count += 1 if new_site.present?
       end
 

@@ -2,7 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def pagy_govuk_nav(pagy)
-    render "pagy/paginator", pagy: pagy
+    render "pagy/paginator", pagy:
   end
 
   def header_items(current_user)

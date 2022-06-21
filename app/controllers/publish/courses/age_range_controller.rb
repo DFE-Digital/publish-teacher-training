@@ -9,7 +9,7 @@ module Publish
           form_object.valid?
         end
 
-        render locals: { form_object: form_object }
+        render locals: { form_object: }
       end
 
       def update
@@ -28,7 +28,7 @@ module Publish
             )
           end
         else
-          render :edit, locals: { form_object: form_object }
+          render :edit, locals: { form_object: }
         end
       end
 

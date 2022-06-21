@@ -7,7 +7,7 @@ module Publish
     let(:params) { {} }
     let(:course) { create(:course) }
 
-    subject { described_class.new(course, params: params) }
+    subject { described_class.new(course, params:) }
 
     describe "validations" do
       before { subject.valid? }
@@ -26,7 +26,7 @@ module Publish
       end
 
       it "calls the course withdrawn notification service" do
-        expect(NotificationService::CourseWithdrawn).to receive(:call).with(course: course)
+        expect(NotificationService::CourseWithdrawn).to receive(:call).with(course:)
         subject.save!
       end
     end

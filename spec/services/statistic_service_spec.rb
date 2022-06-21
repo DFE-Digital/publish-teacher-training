@@ -7,7 +7,7 @@ describe StatisticService do
   let!(:previous_allocation_cycle) { find_or_create(:recruitment_cycle, :previous_allocation_cycle) }
 
   describe "#reporting" do
-    subject { described_class.reporting(recruitment_cycle: recruitment_cycle) }
+    subject { described_class.reporting(recruitment_cycle:) }
 
     it "calls the provider reporting service" do
       expect(ProviderReportingService).to receive(:call).with(providers_scope: recruitment_cycle.providers)

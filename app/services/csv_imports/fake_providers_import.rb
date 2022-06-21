@@ -18,10 +18,10 @@ module CSVImports
 
         service = Providers::CreateFakeProviderService.new(
           recruitment_cycle: RecruitmentCycle.current,
-          provider_name: provider_name,
-          provider_code: provider_code,
-          provider_type: provider_type,
-          is_accredited_body: is_accredited_body,
+          provider_name:,
+          provider_code:,
+          provider_type:,
+          is_accredited_body:,
         )
 
         @results << if service.execute

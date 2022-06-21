@@ -11,7 +11,7 @@ module NavigationBar
     let(:current_user) { build(:user) }
 
     before do
-      render_inline(described_class.new(items: items, current_path: current_path, current_user: current_user))
+      render_inline(described_class.new(items:, current_path:, current_user:))
     end
 
     context "where item current is true" do

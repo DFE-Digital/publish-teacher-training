@@ -14,10 +14,10 @@ module CourseVacancies
     context "course vacancies updated email" do
       let(:mail) do
         described_class.fully_updated(
-          course: course,
-          user: user,
+          course:,
+          user:,
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
-          vacancies_filled: vacancies_filled,
+          vacancies_filled:,
         )
       end
 
@@ -82,8 +82,8 @@ module CourseVacancies
     context "course vacancies partially updated email" do
       let(:mail) do
         described_class.partially_updated(
-          course: course,
-          user: user,
+          course:,
+          user:,
           datetime: DateTime.new(2001, 2, 3, 4, 5, 6),
           vacancies_opened: ["Main site", "London site"],
           vacancies_closed: ["Birmingham site", "Bristol site"],

@@ -22,7 +22,7 @@ describe Token::DecodeService do
 
   let(:encoded_token) do
     build_jwt(:apiv2,
-      payload: payload,
+      payload:,
       secret: encode_service_secret,
       algorithm: encode_service_algorithm,
       audience: encode_service_audience,
@@ -31,7 +31,7 @@ describe Token::DecodeService do
   end
 
   subject do
-    described_class.call(encoded_token: encoded_token,
+    described_class.call(encoded_token:,
       secret: Settings.authentication.secret,
       algorithm: Settings.authentication.algorithm,
       audience: Settings.authentication.audience,

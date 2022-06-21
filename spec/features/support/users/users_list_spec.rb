@@ -6,7 +6,7 @@ feature "View users" do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view users" do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user:)
     when_i_visit_the_support_users_index_page
     then_i_should_see_a_table_of_users
     when_i_click_the_name

@@ -42,7 +42,7 @@ module GovukTechDocs
       def path(text)
         path = @document.paths[text]
         id = text.parameterize
-        operations = operations(text: text, path: path, path_id: id)
+        operations = operations(text:, path:, path_id: id)
         @template_path.result(binding)
       end
 

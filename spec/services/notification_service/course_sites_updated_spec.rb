@@ -58,16 +58,16 @@ module NotificationService
           expect(CourseSitesUpdateEmailMailer).to receive(:course_sites_update_email)
           expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
           described_class.call(
-            course: course,
-            previous_site_names: previous_site_names,
-            updated_site_names: updated_site_names,
+            course:,
+            previous_site_names:,
+            updated_site_names:,
           )
         end
       end
 
       context "with a course that is not in the current cycle" do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
-        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
         before { setup_notifications }
 
@@ -75,9 +75,9 @@ module NotificationService
           expect(CourseSitesUpdateEmailMailer).not_to receive(:course_sites_update_email)
           expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
           described_class.call(
-            course: course,
-            previous_site_names: previous_site_names,
-            updated_site_names: updated_site_names,
+            course:,
+            previous_site_names:,
+            updated_site_names:,
           )
         end
       end
@@ -90,16 +90,16 @@ module NotificationService
             expect(CourseSitesUpdateEmailMailer)
               .to receive(:course_sites_update_email)
                     .with(
-                      course: course,
+                      course:,
                       recipient: subscribed_user,
-                      previous_site_names: previous_site_names,
-                      updated_site_names: updated_site_names,
+                      previous_site_names:,
+                      updated_site_names:,
                     ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
             described_class.call(
-              course: course,
-              previous_site_names: previous_site_names,
-              updated_site_names: updated_site_names,
+              course:,
+              previous_site_names:,
+              updated_site_names:,
             )
           end
 
@@ -109,9 +109,9 @@ module NotificationService
             expect(CourseSitesUpdateEmailMailer).not_to receive(:course_sites_update_email)
                                                           .with(course, user_subscribed_to_other_provider)
             described_class.call(
-              course: course,
-              previous_site_names: previous_site_names,
-              updated_site_names: updated_site_names,
+              course:,
+              previous_site_names:,
+              updated_site_names:,
             )
           end
         end
@@ -123,9 +123,9 @@ module NotificationService
             expect(CourseSitesUpdateEmailMailer)
               .not_to receive(:course_sites_update_email)
             described_class.call(
-              course: course,
-              previous_site_names: previous_site_names,
-              updated_site_names: updated_site_names,
+              course:,
+              previous_site_names:,
+              updated_site_names:,
             )
           end
         end
@@ -140,9 +140,9 @@ module NotificationService
           expect(CourseSitesUpdateEmailMailer)
             .not_to receive(:course_sites_update_email)
           described_class.call(
-            course: course,
-            previous_site_names: previous_site_names,
-            updated_site_names: updated_site_names,
+            course:,
+            previous_site_names:,
+            updated_site_names:,
           )
         end
       end

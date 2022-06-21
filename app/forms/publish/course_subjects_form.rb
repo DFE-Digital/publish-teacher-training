@@ -24,14 +24,14 @@ module Publish
       return if (previous_course_name == course.name) && (previous_subject_names == course.subjects.map(&:subject_name))
 
       NotificationService::CourseSubjectsUpdated.call(
-        course: course,
-        previous_subject_names: previous_subject_names,
-        previous_course_name: previous_course_name,
+        course:,
+        previous_subject_names:,
+        previous_course_name:,
       )
     end
 
     def assign_subjects_service
-      @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course: course, subject_ids: subject_ids)
+      @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course:, subject_ids:)
     end
 
     def save_action

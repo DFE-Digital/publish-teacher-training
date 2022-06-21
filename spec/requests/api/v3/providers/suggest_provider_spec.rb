@@ -4,7 +4,7 @@ describe "GET /provider-suggestions" do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:courses) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
   let(:courses2) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
-  let(:provider) { create(:provider, provider_name: "PROVIDER 1", courses: courses, latitude: 51.482578, longitude: -0.007659) }
+  let(:provider) { create(:provider, provider_name: "PROVIDER 1", courses:, latitude: 51.482578, longitude: -0.007659) }
   let(:provider2) { create(:provider, provider_name: "PROVIDER 2", courses: courses2, latitude: 52.482578, longitude: -0.107659) }
 
   context "current recruitment cycle" do
@@ -116,7 +116,7 @@ describe "GET /provider-suggestions" do
   it "limits responses to a maximum of 10 items" do
     11.times do
       courses = [build(:course, site_statuses: [build(:site_status, :findable)])]
-      create(:provider, provider_name: "provider X", courses: courses)
+      create(:provider, provider_name: "provider X", courses:)
     end
 
     get "/api/v3/provider-suggestions?query=provider"

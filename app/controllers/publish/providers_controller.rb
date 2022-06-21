@@ -8,7 +8,7 @@ module Publish
 
       page = (params[:page] || 1).to_i
       per_page = 10
-      @pagy, @providers = pagy(providers.order(:provider_name), page: page, items: per_page)
+      @pagy, @providers = pagy(providers.order(:provider_name), page:, items: per_page)
 
       render "publish/providers/no_providers", status: :forbidden if @providers.blank?
       redirect_to publish_provider_path(@providers.first.provider_code) if @providers.count == 1

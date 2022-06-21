@@ -3,8 +3,8 @@ require "rails_helper"
 describe Courses::AssignSubjectsService do
   subject do
     described_class.call(
-      course: course,
-      subject_ids: subject_ids,
+      course:,
+      subject_ids:,
     )
   end
 

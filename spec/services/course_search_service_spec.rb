@@ -29,7 +29,7 @@ RSpec.describe CourseSearchService do
     end
 
     describe "when no scope is passed" do
-      subject { described_class.call(filter: filter) }
+      subject { described_class.call(filter:) }
 
       let(:filter) { {} }
 
@@ -41,7 +41,7 @@ RSpec.describe CourseSearchService do
     end
 
     subject do
-      described_class.call(filter: filter, sort: sort, course_scope: scope)
+      described_class.call(filter:, sort:, course_scope: scope)
     end
 
     describe "sort by" do
@@ -178,7 +178,7 @@ RSpec.describe CourseSearchService do
         let(:longitude) { 0 }
         let(:latitude) { 1 }
         let(:radius) { 5 }
-        let(:filter) { { longitude: longitude, latitude: latitude, radius: radius } }
+        let(:filter) { { longitude:, latitude:, radius: } }
 
         it "adds the within scope" do
           expect(scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
@@ -191,7 +191,7 @@ RSpec.describe CourseSearchService do
       context "when a range is not specified" do
         let(:longitude) { 0 }
         let(:latitude) { 1 }
-        let(:filter) { { longitude: longitude, latitude: latitude } }
+        let(:filter) { { longitude:, latitude: } }
 
         it "does not add the within scope" do
           expect(scope).not_to receive(:within)
@@ -680,14 +680,14 @@ RSpec.describe CourseSearchService do
       over_5_miles_from_null_island = { latitude: 0.1, longitude: 0 }
 
       subject do
-        described_class.call(filter: filter,
+        described_class.call(filter:,
           sort: "distance",
           course_scope: scope)
       end
 
       let(:university_course) do
         create(:course, provider: university_provider,
-          site_statuses: [build(:site_status, :findable, site: site)],
+          site_statuses: [build(:site_status, :findable, site:)],
           enrichments: [build(:course_enrichment, :published)])
       end
       let(:scope) do

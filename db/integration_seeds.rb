@@ -30,7 +30,7 @@ module IntegrationSeeds
       add_user_to_organisation admin_user, organisation
 
       provider_code = "0AA"
-      provider = current_recruitment_cycle.providers.find_by(provider_code: provider_code)
+      provider = current_recruitment_cycle.providers.find_by(provider_code:)
       if provider.blank?
         provider = FactoryBot.find_or_create(
           :provider,
@@ -38,7 +38,7 @@ module IntegrationSeeds
           :accredited_body,
           recruitment_cycle: current_recruitment_cycle,
           organisations: [organisation],
-          provider_code: provider_code,
+          provider_code:,
           provider_name: "Integrated Testing School #{provider_code}",
 
           # We don't need the address, yet, but this may be the right pattern to
@@ -66,7 +66,7 @@ module IntegrationSeeds
       if site.nil?
         site = FactoryBot.find_or_create(
           :site,
-          provider: provider,
+          provider:,
           code: location_code,
           location_name: "Main Site",
           address1: "#{provider_code} DfE",
@@ -79,14 +79,14 @@ module IntegrationSeeds
       end
 
       course_code = "0AAA"
-      course = provider.courses.find_by(course_code: course_code)
+      course = provider.courses.find_by(course_code:)
       if course.blank?
         subject_computing = Subject::SecondarySubject.find_by(subject_code: "11")
         course = FactoryBot.find_or_create(
           :course,
           :secondary,
-          course_code: course_code,
-          provider: provider,
+          course_code:,
+          provider:,
           name: "Integrated Testing Course #{course_code}",
           age_range_in_years: "7_to_11",
           level: :secondary,
