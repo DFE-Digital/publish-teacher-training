@@ -530,4 +530,17 @@ en:
       default: "%-d %B %Y"
       short: "%B %Y"
       govuk_short: "%-d %B"
-
+  cookies:
+    heading: Cookies on Publish teacher training courses
+    accept: Accept analytics cookies
+    reject: Reject analytics cookies
+    message_html:
+      <p class="govuk-body">We use some essential cookies to make this service work.</p>
+      <p class="govuk-body app-js-only">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
+    cookies_page_link: View cookies
+    after_consent:
+      page_link_text: change your cookie settings
+      message:
+        You’ve <span class="decision accepted">accepted</span><span class="decision rejected"> rejected</span> analytics cookies.
+        You can %{cookie_preferences_link} at any time.
+      button_text_html: Hide this <span class="govuk-visually-hidden">cookies</span> message
