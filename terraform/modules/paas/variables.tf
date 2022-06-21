@@ -37,14 +37,14 @@ variable "db_backup_before_point_in_time" {}
 
 locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
-  web_app_name                 = "teacher-training-api-${local.app_name_suffix}"
+  web_app_name                 = "publish-teacher-training-${local.app_name_suffix}"
   publish_app_name             = "publish-${local.app_name_suffix}"
   cloudapp_names               = [local.web_app_name, local.publish_app_name]
-  worker_app_name              = "teacher-training-api-worker-${local.app_name_suffix}"
-  postgres_service_name        = "teacher-training-api-postgres-${local.app_name_suffix}"
-  redis_worker_service_name    = "teacher-training-api-worker-redis-${local.app_name_suffix}"
-  redis_cache_service_name     = "teacher-training-api-cache-redis-${local.app_name_suffix}"
-  logging_service_name         = "teacher-training-api-logit-${local.app_name_suffix}"
+  worker_app_name              = "publish-teacher-training-worker-${local.app_name_suffix}"
+  postgres_service_name        = "publish-teacher-training-postgres-${local.app_name_suffix}"
+  redis_worker_service_name    = "publish-teacher-training-worker-redis-${local.app_name_suffix}"
+  redis_cache_service_name     = "publish-teacher-training-cache-redis-${local.app_name_suffix}"
+  logging_service_name         = "publish-teacher-training-logit-${local.app_name_suffix}"
   deployment_strategy          = "blue-green-v2"
 # This is the guid of the QA postgres database and is used in review app db creation
 # It must be updated within 35 days if the QA db is recreated,

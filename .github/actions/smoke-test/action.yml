@@ -32,8 +32,8 @@ runs:
       run: |
         if [ ! -z "${{ inputs.pr-number }}" ]; then
           PR_NUMBER=${{ inputs.pr-number }}
-          echo "base_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
-          echo "publish_api_url: https://teacher-training-api-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
+          echo "base_url: https://publish-teacher-training-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
+          echo "publish_api_url: https://publish-teacher-training-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
         fi;
 
     - name: Smoke Tests ${{ inputs.environment }}

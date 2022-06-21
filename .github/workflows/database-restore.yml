@@ -44,7 +44,7 @@ jobs:
         run: |
           now=$(date +"%F")
           PROD_BACKUP=prod_backup-$now.sql
-          cf conduit teacher-training-api-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
+          cf conduit publish-teacher-training-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
           tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
           echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
 
@@ -124,4 +124,4 @@ jobs:
       - name: Restore backup to ${{ matrix.environment }}
         run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < backup_sanitised.sql
         env:
-          POSTGRES_SERVICE_INSTANCE: teacher-training-api-postgres-${{ matrix.environment }}
+          POSTGRES_SERVICE_INSTANCE: publish-teacher-training-postgres-${{ matrix.environment }}

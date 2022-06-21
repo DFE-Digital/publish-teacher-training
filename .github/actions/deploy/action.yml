@@ -31,7 +31,7 @@ runs:
       run: |
         if [ -n "${{ inputs.pr-number }}" ]; then
           echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
-          echo "::set-output name=deploy_url::https://teacher-training-api-pr-${{ inputs.pr-number }}.london.cloudapps.digital"
+          echo "::set-output name=deploy_url::https://publish-teacher-training-pr-${{ inputs.pr-number }}.london.cloudapps.digital"
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
           if [ ${{ inputs.environment }} == "production" ]; then
