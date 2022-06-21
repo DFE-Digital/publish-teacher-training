@@ -162,6 +162,9 @@ jobs:
     - name: Run Ruby Linter
       run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
 
+    - name: Run ERB Linter
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec erblint app'
+
     - name: Run tests
       run: |
         docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'

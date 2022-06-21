@@ -3,19 +3,19 @@ class CourseEnrichment < ApplicationRecord
   enum status: { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
   jsonb_accessor :json_data,
-                 about_course: [:string, { store_key: "AboutCourse" }],
-                 course_length: [:string, { store_key: "CourseLength" }],
-                 fee_details: [:string, { store_key: "FeeDetails" }],
-                 fee_international: [:integer, { store_key: "FeeInternational" }],
-                 fee_uk_eu: [:integer, { store_key: "FeeUkEu" }],
-                 financial_support: [:string, { store_key: "FinancialSupport" }],
-                 how_school_placements_work: [:string,
-                                              { store_key: "HowSchoolPlacementsWork" }],
-                 interview_process: [:string, { store_key: "InterviewProcess" }],
-                 other_requirements: [:string, { store_key: "OtherRequirements" }],
-                 personal_qualities: [:string, { store_key: "PersonalQualities" }],
-                 required_qualifications: [:string, { store_key: "Qualifications" }],
-                 salary_details: [:string, { store_key: "SalaryDetails" }]
+    about_course: [:string, { store_key: "AboutCourse" }],
+    course_length: [:string, { store_key: "CourseLength" }],
+    fee_details: [:string, { store_key: "FeeDetails" }],
+    fee_international: [:integer, { store_key: "FeeInternational" }],
+    fee_uk_eu: [:integer, { store_key: "FeeUkEu" }],
+    financial_support: [:string, { store_key: "FinancialSupport" }],
+    how_school_placements_work: [:string,
+                                 { store_key: "HowSchoolPlacementsWork" }],
+    interview_process: [:string, { store_key: "InterviewProcess" }],
+    other_requirements: [:string, { store_key: "OtherRequirements" }],
+    personal_qualities: [:string, { store_key: "PersonalQualities" }],
+    required_qualifications: [:string, { store_key: "Qualifications" }],
+    salary_details: [:string, { store_key: "SalaryDetails" }]
 
   belongs_to :course
 
@@ -40,24 +40,24 @@ class CourseEnrichment < ApplicationRecord
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
   validates :fee_uk_eu,
-            numericality: { allow_blank: true,
-                            only_integer: true,
-                            greater_than_or_equal_to: 0,
-                            less_than_or_equal_to: 100000 },
-            if: :is_fee_based?
+    numericality: { allow_blank: true,
+                    only_integer: true,
+                    greater_than_or_equal_to: 0,
+                    less_than_or_equal_to: 100000 },
+    if: :is_fee_based?
 
   validates :fee_international,
-            numericality: { allow_blank: true,
-                            only_integer: true,
-                            greater_than_or_equal_to: 0,
-                            less_than_or_equal_to: 100000 },
-            if: :is_fee_based?
+    numericality: { allow_blank: true,
+                    only_integer: true,
+                    greater_than_or_equal_to: 0,
+                    less_than_or_equal_to: 100000 },
+    if: :is_fee_based?
 
   validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
 
   validates :financial_support,
-            words_count: { maximum: 250 },
-            if: :is_fee_based?
+    words_count: { maximum: 250 },
+    if: :is_fee_based?
 
   # Course length and salary
   validates :salary_details, presence: true, on: :publish, unless: :is_fee_based?
@@ -82,8 +82,8 @@ class CourseEnrichment < ApplicationRecord
 
   def publish(current_user)
     update(status: "published",
-           last_published_timestamp_utc: Time.now.utc,
-           updated_by_user_id: current_user.id)
+      last_published_timestamp_utc: Time.now.utc,
+      updated_by_user_id: current_user.id)
   end
 
   def unpublish(initial_draft: true)

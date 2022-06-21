@@ -1,7 +1,7 @@
 class VacancyStatusDeterminationService
   attr_reader :vacancy_status_full_time,
-              :vacancy_status_part_time,
-              :course
+    :vacancy_status_part_time,
+    :course
 
   def self.call(vacancy_status_full_time:, vacancy_status_part_time:, course:)
     new(

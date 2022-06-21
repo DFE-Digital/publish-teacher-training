@@ -15,9 +15,9 @@ class User < ApplicationRecord
   has_many :providers, through: :user_permissions
 
   has_many :access_requests,
-           foreign_key: :requester_id,
-           primary_key: :id,
-           inverse_of: "requester"
+    foreign_key: :requester_id,
+    primary_key: :id,
+    inverse_of: "requester"
 
   has_many :interrupt_page_acknowledgements
 

@@ -7,14 +7,14 @@ describe "API" do
       tags "provider_suggestions"
       produces "application/json"
       parameter name: :query,
-                in: :query,
-                type: :string,
-                required: true,
-                description: "The provider's marketing name or code",
-                example: "oxf"
+        in: :query,
+        type: :string,
+        required: true,
+        description: "The provider's marketing name or code",
+        example: "oxf"
 
       curl_example description: "Suggest providers with the specified query",
-                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/provider_suggestions?query=oxf"
+        command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/provider_suggestions?query=oxf"
 
       response "200", "A list of provider suggestions matching the query term" do
         let(:query) { "oxf" }

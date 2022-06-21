@@ -9,9 +9,9 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:provider) { create :provider, recruitment_cycle: current_cycle }
   let(:courses_site_status) {
     build(:site_status,
-          :findable,
-          :full_time_vacancies,
-          site: create(:site, provider: provider))
+      :findable,
+      :full_time_vacancies,
+      site: create(:site, provider: provider))
   }
 
   let(:jsonapi_course) {
@@ -32,11 +32,11 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   }
   let(:course) {
     create :course,
-           :with_gcse_equivalency,
-           provider: provider,
-           enrichments: enrichments,
-           site_statuses: [courses_site_status],
-           applications_open_from: Time.now.utc
+      :with_gcse_equivalency,
+      provider: provider,
+      enrichments: enrichments,
+      site_statuses: [courses_site_status],
+      applications_open_from: Time.now.utc
   }
 
   context "with a published course" do
@@ -90,7 +90,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       get "/api/v3/recruitment_cycles/#{current_year}" \
           "/providers/#{provider.provider_code.downcase}" \
           "/courses/#{course.course_code.downcase}",
-          params: { include: "sites" }
+        params: { include: "sites" }
     end
 
     it "has a data section with the correct attributes" do

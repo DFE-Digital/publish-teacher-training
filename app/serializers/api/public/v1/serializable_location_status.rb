@@ -7,7 +7,7 @@ module API
         type "location_statuses"
 
         attributes :publish,
-                   :status
+          :status
 
         attribute :vacancy_status do
           @object.vac_status

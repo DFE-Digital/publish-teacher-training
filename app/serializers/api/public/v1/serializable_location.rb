@@ -23,12 +23,12 @@ module API
         belongs_to :recruitment_cycle
 
         attributes :code,
-                   :urn,
-                   :latitude,
-                   :longitude,
-                   :postcode,
-                   :region_code,
-                   :uuid
+          :urn,
+          :latitude,
+          :longitude,
+          :postcode,
+          :region_code,
+          :uuid
 
         attribute :name do
           @object.location_name

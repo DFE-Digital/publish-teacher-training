@@ -3,7 +3,7 @@
 <%= extends_layout :support do %>
   <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
-      text: 'All user records',
+      text: "All user records",
       href: support_users_path,
     ) %>
   <% end %>

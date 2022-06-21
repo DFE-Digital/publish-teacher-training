@@ -1,11 +1,13 @@
 <% content_for :page_title, title_with_error_prefix("Are you sure you want to withdraw #{@course.name_and_code})?", @course_deletion_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(
-    @course.provider_code, 
-    @course.recruitment_cycle_year, 
-    @course.course_code)
-  ) %>
+  <%= govuk_back_link_to(
+        publish_provider_recruitment_cycle_course_path(
+          @course.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
+      ) %>
 <% end %>
 
 <div class="govuk-grid-row">

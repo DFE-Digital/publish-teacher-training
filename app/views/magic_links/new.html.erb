@@ -16,7 +16,7 @@
 
     <%= form_with(
       model: @magic_link_form,
-      url: magic_link_path
+      url: magic_link_path,
     ) do |f| %>
       <%= f.govuk_text_field :email, label: { text: "Email address", size: "m" } %>
       <%= f.govuk_submit "Continue" %>

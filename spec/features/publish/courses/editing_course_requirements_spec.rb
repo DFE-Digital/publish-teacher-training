@@ -29,21 +29,21 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
     let!(:course3) do
       create :course,
-             provider: provider,
-             name: "Biology",
-             enrichments: [course3_enrichment]
+        provider: provider,
+        name: "Biology",
+        enrichments: [course3_enrichment]
     end
 
     let(:course2_enrichment) do
       build(:course_enrichment,
-            personal_qualities: "Test personal qualities",
-            other_requirements: "Test other requirements")
+        personal_qualities: "Test personal qualities",
+        other_requirements: "Test other requirements")
     end
 
     let(:course3_enrichment) do
       build(:course_enrichment,
-            personal_qualities: "Test course 3",
-            other_requirements: "")
+        personal_qualities: "Test course 3",
+        other_requirements: "")
     end
 
     scenario "all fields get copied if all are present" do

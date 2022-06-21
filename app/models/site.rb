@@ -20,13 +20,13 @@ class Site < ApplicationRecord
 
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
-            :address1,
-            :postcode,
-            presence: true
+    :address1,
+    :postcode,
+    presence: true
   validates :postcode, postcode: true
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false, conditions: -> { where(discarded_at: nil) } },
-                   format: { with: /\A[A-Z0-9\-]+\z/, message: "Site code must contain only A-Z, 0-9 or -" },
-                   presence: true
+    format: { with: /\A[A-Z0-9\-]+\z/, message: "Site code must contain only A-Z, 0-9 or -" },
+    presence: true
 
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "Site URN must be 5 or 6 numbers" }
 

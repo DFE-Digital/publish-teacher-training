@@ -18,41 +18,40 @@
         </h2>
           <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-            <% @provider_errors = [
-              :provider_name,
-              :provider_code,
-              :provider_type,
-              :urn,
-              :ukprn,
-              :email,
-              :telephone,
-              ]
-            %>
+            <% @provider_errors = %i[
+                provider_name
+                provider_code
+                provider_type
+                urn
+                ukprn
+                email
+                telephone
+              ] %>
             <% @provider_errors.each do |provider_error| %>
               <% if @provider.errors.attribute_names.any? { |s| s[/^#{Regexp.quote(provider_error.to_s)}$/] } %>
                 <li>
-                  <%= link_to @provider.errors[provider_error][0], support_providers_path( anchor: "provider-#{provider_error.to_s.gsub('_', '-')}-field-error" ) %>
+                  <%= link_to @provider.errors[provider_error][0], support_providers_path(anchor: "provider-#{provider_error.to_s.gsub('_', '-')}-field-error") %>
                 </li>
               <% end %>
             <% end %>
 
             <% if @provider.errors.key?('organisations.name') %>
               <li>
-                <a data-turbo="false" href="#provider-organisations-attributes-0-name-field-error"><%= @provider.errors['organisations.name'][0] %></a>
+                <a data-turbo="false" href="#provider-organisations-attributes-0-name-field-error"><%= @provider.errors["organisations.name"][0] %></a>
               </li>
             <% end %>
 
-            <% @site_errors = [
-              :"sites.code",
-              :"sites.urn",
-              :"sites.location_name",
-              :"sites.address1",
-              :"sites.postcode",
+            <% @site_errors = %i[
+              "sites.code"
+              "sites.urn"
+              "sites.location_name"
+              "sites.address1"
+              "sites.postcode"
               ] %>
             <% @site_errors.each do |site_error| %>
               <% if @provider.errors.attribute_names.any? { |s| s[site_error.to_s] } %>
                 <li>
-                  <%= link_to @provider.errors[site_error][0], support_providers_path( anchor: "provider-sites-attributes-0-#{site_error.to_s.split('.').pop.gsub('_', '-')}-field-error") %>
+                  <%= link_to @provider.errors[site_error][0], support_providers_path(anchor: "provider-sites-attributes-0-#{site_error.to_s.split('.').pop.gsub('_', '-')}-field-error") %>
                 </li>
               <% end %>
             <% end %>

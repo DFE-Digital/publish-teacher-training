@@ -10,19 +10,19 @@ describe UniqueCourseValidator do
 
   let(:existing_course) do
     create(:course,
-           provider: provider,
-           level: "primary",
-           subjects: [primary_with_english_subject],
-           age_range_in_years: "5_to_11",
-           qualification: "qts",
-           program_type: "pg_teaching_apprenticeship",
-           study_mode: "P",
-           maths: "not_required",
-           english: "not_required",
-           science: "not_required",
-           sites: [site_one],
-           accrediting_provider: accredited_body_one,
-           is_send: false)
+      provider: provider,
+      level: "primary",
+      subjects: [primary_with_english_subject],
+      age_range_in_years: "5_to_11",
+      qualification: "qts",
+      program_type: "pg_teaching_apprenticeship",
+      study_mode: "P",
+      maths: "not_required",
+      english: "not_required",
+      science: "not_required",
+      sites: [site_one],
+      accrediting_provider: accredited_body_one,
+      is_send: false)
   end
 
   let(:new_course) do

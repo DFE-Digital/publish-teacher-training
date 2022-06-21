@@ -7,34 +7,34 @@ describe "API" do
       tags "locations"
       produces "application/json"
       parameter name: :year,
-                in: :path,
-                type: :string,
-                required: true,
-                description: "The starting year of the recruitment cycle.",
-                example: Settings.current_recruitment_cycle_year
+        in: :path,
+        type: :string,
+        required: true,
+        description: "The starting year of the recruitment cycle.",
+        example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
-                in: :path,
-                type: :string,
-                required: true,
-                description: "The unique code of the provider.",
-                example: "T92"
+        in: :path,
+        type: :string,
+        required: true,
+        description: "The unique code of the provider.",
+        example: "T92"
       parameter name: :course_code,
-                in: :path,
-                type: :string,
-                description: "The code of the course.",
-                example: "X130"
+        in: :path,
+        type: :string,
+        description: "The code of the course.",
+        example: "X130"
       parameter name: :include,
-                in: :query,
-                type: :string,
-                required: false,
-                description: "The associated data for this resource.",
-                schema: {
-                  enum: %w[recruitment_cycle provider course location_status],
-                },
-                example: "recruitment_cycle,provider,course,location_status"
+        in: :query,
+        type: :string,
+        required: false,
+        description: "The associated data for this resource.",
+        schema: {
+          enum: %w[recruitment_cycle provider course location_status],
+        },
+        example: "recruitment_cycle,provider,course,location_status"
 
       curl_example description: "Get the locations of a course",
-                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22/locations"
+        command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses/2N22/locations"
 
       response "200", "The collection of locations for the specified course." do
         let(:course) { create(:course) }

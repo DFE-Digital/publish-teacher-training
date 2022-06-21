@@ -7,15 +7,15 @@ describe "API" do
       tags "subject_areas"
       produces "application/json"
       parameter name: :include,
-                in: :query,
-                type: :string,
-                required: false,
-                description: "The associated data for this resource.",
-                schema: { enum: %w[subjects] },
-                example: "subjects"
+        in: :query,
+        type: :string,
+        required: false,
+        description: "The associated data for this resource.",
+        schema: { enum: %w[subjects] },
+        example: "subjects"
 
       curl_example description: "Get all subject areas",
-                   command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subject_areas"
+        command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subject_areas"
 
       response "200", "The collection of subject areas." do
         let(:include) { nil }

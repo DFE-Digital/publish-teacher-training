@@ -164,7 +164,7 @@ private
 
   def when_i_visit_allocations_page(provider: accredited_body_with_allocations)
     allocations_page.load(provider_code: provider.provider_code,
-                          recruitment_cycle_year: provider.recruitment_cycle_year)
+      recruitment_cycle_year: provider.recruitment_cycle_year)
   end
 
   def previous_recruitment_cycle
@@ -190,7 +190,7 @@ private
 
   def accredited_body_with_allocations
     @accredited_body_with_allocations ||= build(:provider, :accredited_body,
-                                                recruitment_cycle: current_recruitment_cycle)
+      recruitment_cycle: current_recruitment_cycle)
   end
 
   def training_provider

@@ -2,7 +2,7 @@
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
-    text: 'User record',
+    text: "User record",
     href: support_user_path(@user),
   ) %>
 <% end %>
@@ -19,7 +19,7 @@
         <%= f.govuk_text_field :email, label: { text: "Email", size: "m" } %>
 
         <%= f.govuk_check_boxes_fieldset :admin, legend: { text: "Admin" }, multiple: false do %>
-          <% f.govuk_check_box :admin, :true, :false, label: { text: 'This user is an admin' }, multiple: false %>
+          <% f.govuk_check_box :admin, true, false, label: { text: "This user is an admin" }, multiple: false %>
         <% end %>
 
         <%= f.govuk_submit t("support.update_record") %>
@@ -27,7 +27,7 @@
 
       <p class="govuk-body">
         <%= govuk_link_to(t("cancel"), support_user_path) %>
-      </p> 
+      </p>
     </div>
   </div>
 </div>

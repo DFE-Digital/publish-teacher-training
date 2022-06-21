@@ -44,19 +44,19 @@ class Provider < ApplicationRecord
   has_many :sites, -> { kept }, inverse_of: :provider
 
   has_many :user_notifications,
-           foreign_key: :provider_code,
-           primary_key: :provider_code,
-           inverse_of: :provider
+    foreign_key: :provider_code,
+    primary_key: :provider_code,
+    inverse_of: :provider
 
   has_many :courses, -> { kept }, inverse_of: false
   has_one :ucas_preferences, class_name: "ProviderUCASPreference"
   has_many :contacts
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
-           -> { where(discarded_at: nil) },
-           class_name: "Course",
-           foreign_key: :accredited_body_code,
-           primary_key: :provider_code,
-           inverse_of: :accrediting_provider
+    -> { where(discarded_at: nil) },
+    class_name: "Course",
+    foreign_key: :accredited_body_code,
+    primary_key: :provider_code,
+    inverse_of: :accrediting_provider
 
   # We have a has_many relationship rather than has_one as
   # there are lead_schools that have PE courses ratified by more than
@@ -161,13 +161,13 @@ class Provider < ApplicationRecord
   end
 
   pg_search_scope :provider_search,
-                  against: %i[provider_code provider_name],
-                  using: { tsearch: { prefix: true } }
+    against: %i[provider_code provider_name],
+    using: { tsearch: { prefix: true } }
 
   pg_search_scope :course_search,
-                  associated_against: {
-                    courses: %i[course_code],
-                  }, using: { tsearch: { prefix: true } }
+    associated_against: {
+      courses: %i[course_code],
+    }, using: { tsearch: { prefix: true } }
 
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations

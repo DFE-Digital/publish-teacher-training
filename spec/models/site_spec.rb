@@ -114,12 +114,12 @@ describe Site, type: :model do
     # Geocoding stubbed with support/helpers.rb
     let(:site) do
       build(:site,
-            location_name: "Southampton High School",
-            address1: "Long Lane",
-            address2: "Holbury",
-            address3: "Southampton",
-            address4: nil,
-            postcode: "SO45 2PA")
+        location_name: "Southampton High School",
+        address1: "Long Lane",
+        address2: "Holbury",
+        address3: "Southampton",
+        address4: nil,
+        postcode: "SO45 2PA")
     end
 
     describe "#full_address" do
@@ -206,14 +206,14 @@ describe Site, type: :model do
       context "address" do
         let(:site) do
           create(:site,
-                 latitude: 1.456789,
-                 longitude: 1.456789,
-                 location_name: "Southampton High School",
-                 address1: "Long Lane",
-                 address2: "Holbury",
-                 address3: "Southampton",
-                 address4: nil,
-                 postcode: "SO45 2PA")
+            latitude: 1.456789,
+            longitude: 1.456789,
+            location_name: "Southampton High School",
+            address1: "Long Lane",
+            address2: "Holbury",
+            address3: "Southampton",
+            address4: nil,
+            postcode: "SO45 2PA")
         end
 
         context "has not changed" do

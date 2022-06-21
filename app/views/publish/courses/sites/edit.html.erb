@@ -32,7 +32,7 @@
       model: @course_location_form,
       url: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       method: :put,
-      local: true
+      local: true,
     ) do |f| %>
 
       <%= f.govuk_check_boxes_fieldset :site_ids, legend: nil do %>

@@ -17,9 +17,9 @@ class Course < ApplicationRecord
   audited
 
   validates :course_code,
-            uniqueness: { scope: :provider_id },
-            presence: true,
-            on: %i[create update]
+    uniqueness: { scope: :provider_id },
+    presence: true,
+    on: %i[create update]
 
   enum program_type: {
     higher_education_programme: "HE",
@@ -72,17 +72,17 @@ class Course < ApplicationRecord
   belongs_to :provider
 
   belongs_to :accrediting_provider,
-             ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
-             class_name: "Provider",
-             foreign_key: :accredited_body_code,
-             primary_key: :provider_code,
-             inverse_of: :accredited_courses,
-             optional: true
+    ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
+    class_name: "Provider",
+    foreign_key: :accredited_body_code,
+    primary_key: :provider_code,
+    inverse_of: :accredited_courses,
+    optional: true
 
   has_many :course_subjects,
-           -> { order :position },
-           inverse_of: :course,
-           before_add: :set_subject_position
+    -> { order :position },
+    inverse_of: :course,
+    before_add: :set_subject_position
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
@@ -106,13 +106,13 @@ class Course < ApplicationRecord
   has_many :site_statuses
   accepts_nested_attributes_for :site_statuses
   has_many :sites,
-           -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
-           through: :site_statuses
+    -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
+    through: :site_statuses
 
   has_many :modern_languages_subjects,
-           through: :course_subjects,
-           source: :subject,
-           class_name: "ModernLanguagesSubject"
+    through: :course_subjects,
+    source: :subject,
+    class_name: "ModernLanguagesSubject"
 
   has_many :enrichments, class_name: "CourseEnrichment" do
     def find_or_initialize_draft
@@ -144,7 +144,7 @@ class Course < ApplicationRecord
   end
 
   has_one :latest_published_enrichment, -> { published.order("created_at DESC, id DESC").limit(1) },
-          class_name: "CourseEnrichment"
+    class_name: "CourseEnrichment"
 
   scope :within, lambda { |range, origin:|
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin: origin))

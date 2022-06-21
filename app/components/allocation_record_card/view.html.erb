@@ -1,4 +1,4 @@
-<div class="allocation-record-card qa-provider_row <%= 'filter-row' if @iteration.first? %>">
+<div class="allocation-record-card qa-provider_row <%= "filter-row" if @iteration.first? %>">
   <div class="allocation-record-card__row-allocation-title">
     <h<%= heading_level %> class="govuk-heading-m allocation-record-card__allocation-title-header">
       <%= govuk_link_to provider_name, support_allocation_path(allocation.id) %>
