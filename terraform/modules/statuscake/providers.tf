@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     statuscake = {
-      source  = "terraform-providers/statuscake"
+      source  = "StatusCakeDev/statuscake"
       version = ">= 1.0.0"
     }
   }
