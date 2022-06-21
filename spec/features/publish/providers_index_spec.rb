@@ -43,6 +43,7 @@ feature "Providers index" do
     i_should_be_on_the_organisations_list
 
     and_i_click_on_a_provider
+    when_i_click_on_the_current_cycle_link
     and_click_change_recruitment_cycle
     i_should_be_on_the_organisation_switcher_page
   end
