@@ -16,18 +16,4 @@
       ) %>
     </li>
 </ul>
-<% else %>
-  <h2 class="govuk-heading-m">
-    <%= "Next cycle (#{next_recruitment_cycle_period_text})" %>
-  </h2>
-
-  <p class="govuk-body">
-    You did not publish any courses in the last cycle. Only providers with published
-    or withdrawn courses are rolled over.
-  </p>
-
-  <p class="govuk-body">
-    If you think this is a mistake contact us on <br>
-    <%= bat_contact_mail_to(subject: "Rollover support and guidance") %>
-  </p>
 <% end %>
