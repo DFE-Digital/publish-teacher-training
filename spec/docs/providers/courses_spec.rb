@@ -74,8 +74,8 @@ describe "API" do
         let(:include) { "provider" }
 
         before do
-          create(:course, provider: provider, course_code: "C100")
-          create(:course, provider: provider, course_code: "C101")
+          create(:course, provider:, course_code: "C100")
+          create(:course, provider:, course_code: "C101")
         end
 
         schema "$ref": "#/components/schemas/CourseListResponse"
@@ -123,7 +123,7 @@ describe "API" do
 
       response "200", "The collection of courses offered by the specified provider." do
         let(:provider) { create(:provider) }
-        let(:course) { create(:course, course_code: "A123", provider: provider) }
+        let(:course) { create(:course, course_code: "A123", provider:) }
 
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }

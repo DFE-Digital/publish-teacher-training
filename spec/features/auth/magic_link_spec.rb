@@ -65,7 +65,7 @@ feature "Authentication with magic links" do
   end
 
   def when_i_visit_the_magic_link_with(token)
-    visit signin_with_magic_link_path(email: @user.email, token: token)
+    visit signin_with_magic_link_path(email: @user.email, token:)
   end
 
   def then_i_am_signed_in

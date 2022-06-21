@@ -1,7 +1,7 @@
 class GenerateAndSendMagicLinkService
   class << self
     def call(user:)
-      new.call(user: user)
+      new.call(user:)
     end
   end
 

@@ -10,13 +10,13 @@ describe RolloverProviderService do
     allow(Courses::CopyToProviderService).to receive(:new).with(
       sites_copy_to_course: instance_of(Sites::CopyToCourseService),
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
-      force: force,
+      force:,
     ).and_return(copy_course_to_provider_service)
 
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
-      copy_course_to_provider_service: copy_course_to_provider_service,
+      copy_course_to_provider_service:,
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
-      force: force,
+      force:,
     ).and_return(copy_provider_to_recruitment_cycle_service)
   end
 
@@ -39,10 +39,10 @@ describe RolloverProviderService do
 
     it "passes the correct arguments down to the `CopyToRecruitmentCycle` service" do
       expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-        provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: course_codes,
+        provider:, new_recruitment_cycle: next_recruitment_cycle, course_codes:,
       )
 
-      described_class.call(provider_code: provider.provider_code, course_codes: course_codes, force: force)
+      described_class.call(provider_code: provider.provider_code, course_codes:, force:)
     end
   end
 end

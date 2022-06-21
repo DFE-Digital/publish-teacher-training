@@ -7,8 +7,8 @@ describe Provider, type: :model do
     create(:provider,
       provider_name: "ACME SCITT",
       provider_code: "A01",
-      accrediting_provider_enrichments: accrediting_provider_enrichments,
-      courses: courses)
+      accrediting_provider_enrichments:,
+      courses:)
   end
 
   describe "validation" do
@@ -75,9 +75,9 @@ describe Provider, type: :model do
 
     describe "#train_with_us" do
       let(:word_count) { 250 }
-      let(:train_with_us) { Faker::Lorem.sentence(word_count: word_count) }
+      let(:train_with_us) { Faker::Lorem.sentence(word_count:) }
 
-      subject { build :provider, train_with_us: train_with_us }
+      subject { build :provider, train_with_us: }
 
       context "word count within limit" do
         it { is_expected.to be_valid }
@@ -92,9 +92,9 @@ describe Provider, type: :model do
 
     describe "#train_with_disability" do
       let(:word_count) { 250 }
-      let(:train_with_disability) { Faker::Lorem.sentence(word_count: word_count) }
+      let(:train_with_disability) { Faker::Lorem.sentence(word_count:) }
 
-      subject { build :provider, train_with_disability: train_with_disability }
+      subject { build :provider, train_with_disability: }
 
       context "word count within limit" do
         it { is_expected.to be_valid }
@@ -116,7 +116,7 @@ describe Provider, type: :model do
           10.times do |index|
             result <<
               {
-                "Description" => Faker::Lorem.sentence(word_count: word_count),
+                "Description" => Faker::Lorem.sentence(word_count:),
                 "UcasProviderCode" => "UPC#{index}",
               }
           end
@@ -163,7 +163,7 @@ describe Provider, type: :model do
         let(:accrediting_provider_enrichments) {
           accrediting_providers.map do |ap|
             {
-              "Description" => Faker::Lorem.sentence(word_count: word_count),
+              "Description" => Faker::Lorem.sentence(word_count:),
               "UcasProviderCode" => ap.provider_code.to_s,
             }
           end
@@ -176,7 +176,7 @@ describe Provider, type: :model do
         end
 
         let(:provider) do
-          create :provider, courses: courses
+          create :provider, courses:
         end
 
         subject {

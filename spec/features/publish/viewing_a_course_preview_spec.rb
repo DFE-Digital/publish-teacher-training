@@ -214,8 +214,8 @@ private
     course_subject = find_or_create(:secondary_subject, :mathematics)
 
     course = build(
-      :course, :secondary, :fee_type_based, accrediting_provider: accrediting_provider,
-      site_statuses: site_statuses, enrichments: [course_enrichment],
+      :course, :secondary, :fee_type_based, accrediting_provider:,
+      site_statuses:, enrichments: [course_enrichment],
       degree_grade: "two_one",
       degree_subject_requirements: "Maths A level",
       subjects: [course_subject]
@@ -226,7 +226,7 @@ private
     }
 
     provider = build(
-      :provider, sites: sites, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+      :provider, sites:, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
     )
 
     create(

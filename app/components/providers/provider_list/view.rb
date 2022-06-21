@@ -4,7 +4,7 @@ module Providers
       include Support::TimeHelper
 
       def initialize(provider:, classes: [], html_attributes: {})
-        super(classes: classes, html_attributes: html_attributes)
+        super(classes:, html_attributes:)
         @provider = provider
       end
 

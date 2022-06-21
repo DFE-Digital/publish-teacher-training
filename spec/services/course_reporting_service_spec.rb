@@ -93,7 +93,7 @@ describe CourseReportingService do
 
   describe ".call" do
     describe "when scope is passed" do
-      subject { described_class.call(courses_scope: courses_scope) }
+      subject { described_class.call(courses_scope:) }
 
       it "applies the scopes" do
         expect(courses_scope).to receive(:distinct).and_return(distinct_courses_scope)

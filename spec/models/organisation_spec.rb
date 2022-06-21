@@ -10,7 +10,7 @@ describe Organisation, type: :model do
   end
 
   describe "validations" do
-    subject { build(:organisation, name: name) }
+    subject { build(:organisation, name:) }
 
     context "when name is empty string" do
       let(:name) { "  " }

@@ -36,7 +36,7 @@ describe Course, type: :model do
         context "with a valid date" do
           let(:course) do
             create(:course,
-              provider: provider,
+              provider:,
               applications_open_from: next_cycle.application_start_date)
           end
 
@@ -46,7 +46,7 @@ describe Course, type: :model do
         context "with an invalid date" do
           let(:course) do
             create(:course,
-              provider: provider,
+              provider:,
               applications_open_from: DateTime.new(current_year - 1, 10, 1))
           end
 
@@ -79,7 +79,7 @@ describe Course, type: :model do
         context "with a valid start date" do
           let(:course) do
             create(:course,
-              provider: provider,
+              provider:,
               start_date: DateTime.new(next_year, 9, 1))
           end
 
@@ -89,7 +89,7 @@ describe Course, type: :model do
         context "with an invalid start date" do
           let(:course) do
             create(:course,
-              provider: provider,
+              provider:,
               start_date: DateTime.new(next_year - 1, 9, 1))
           end
 

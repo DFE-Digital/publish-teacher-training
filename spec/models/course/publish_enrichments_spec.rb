@@ -12,7 +12,7 @@ describe Course, type: :model do
     let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
 
     let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
-    let(:course) { create(:course, enrichments: enrichments) }
+    let(:course) { create(:course, enrichments:) }
 
     subject { course.reload.enrichments }
 
@@ -24,7 +24,7 @@ describe Course, type: :model do
   end
 
   describe "#content_status" do
-    let(:course) { create(:course, enrichments: enrichments) }
+    let(:course) { create(:course, enrichments:) }
 
     subject { course }
 
@@ -83,7 +83,7 @@ describe Course, type: :model do
       subject do
         create(:course,
           changed_at: 10.minutes.ago,
-          enrichments: enrichments)
+          enrichments:)
       end
 
       its(:changed_at) { is_expected.to be_within(1.second).of Time.now.utc }
@@ -114,7 +114,7 @@ describe Course, type: :model do
         ]
       end
 
-      subject { create(:course, enrichments: enrichments) }
+      subject { create(:course, enrichments:) }
 
       it "publishes the draft" do
         subject.enrichments.each do |enrichment|

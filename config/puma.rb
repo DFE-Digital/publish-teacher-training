@@ -68,7 +68,7 @@ if env == "development" && Settings.use_ssl
     File.write(cert, root_cert, mode: "wb")
   end
 
-  ssl_bind "0.0.0.0", listen_port, cert: cert, key: key, verify_mode: "none"
+  ssl_bind "0.0.0.0", listen_port, cert:, key:, verify_mode: "none"
 else
   port listen_port
 end

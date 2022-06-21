@@ -11,7 +11,7 @@ module API
           render jsonapi: subjects,
             class: API::Public::V1::SerializerService.call,
             include: params[:include],
-            fields: fields
+            fields:
         end
 
         def fields

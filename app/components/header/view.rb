@@ -6,7 +6,7 @@ class Header::View < ApplicationComponent
   include ActiveModel
 
   def initialize(service_name:, current_user: nil, classes: [], html_attributes: {})
-    super(classes: classes, html_attributes: html_attributes)
+    super(classes:, html_attributes:)
     @service_name = service_name
     @current_user = current_user
   end

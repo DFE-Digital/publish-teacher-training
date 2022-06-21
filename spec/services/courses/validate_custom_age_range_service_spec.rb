@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Courses::ValidateCustomAgeRangeService do
   let(:service) { described_class.new }
-  let(:course) { build(:course, age_range_in_years: age_range_in_years) }
+  let(:course) { build(:course, age_range_in_years:) }
   let(:execute_service) { service.execute(age_range_in_years, course) }
 
   before do

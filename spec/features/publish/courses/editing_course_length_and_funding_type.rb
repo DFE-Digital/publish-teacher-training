@@ -27,7 +27,7 @@ feature "Editing course length and funding type" do
       let!(:course2) do
         create(
           :course,
-          provider: provider,
+          provider:,
           name: "Biology",
           enrichments: [course2_enrichment],
         )
@@ -35,7 +35,7 @@ feature "Editing course length and funding type" do
 
       let!(:course3) do
         create :course,
-          provider: provider,
+          provider:,
           name: "Biology",
           enrichments: [course3_enrichment]
       end

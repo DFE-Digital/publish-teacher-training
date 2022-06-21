@@ -7,7 +7,7 @@ module Publish
     let(:params) { { age_range_in_years: "10_to_20" } }
     let(:course) { build(:course) }
 
-    subject { described_class.new(course, params: params) }
+    subject { described_class.new(course, params:) }
 
     describe "#new" do
       context "when a custom age_range" do

@@ -15,7 +15,7 @@ module Publish
       return false unless valid?
 
       course.update(
-        additional_degree_subject_requirements: additional_degree_subject_requirements,
+        additional_degree_subject_requirements:,
         degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil,
       )
     end

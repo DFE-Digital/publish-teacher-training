@@ -38,8 +38,8 @@ module Publish
 
     def accredited_body(provider_name:, provider_code:, description:)
       AccreditedBody.new(
-        provider_name: provider_name,
-        provider_code: provider_code,
+        provider_name:,
+        provider_code:,
         description: params_description(provider_code) || description,
       )
     end
@@ -62,7 +62,7 @@ module Publish
     end
 
     def new_attributes
-      params.except(:accredited_bodies).merge(accrediting_provider_enrichments: accrediting_provider_enrichments)
+      params.except(:accredited_bodies).merge(accrediting_provider_enrichments:)
     end
 
     def add_enrichment_errors

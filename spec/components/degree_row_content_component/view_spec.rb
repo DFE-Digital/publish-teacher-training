@@ -7,12 +7,12 @@ module DegreeRowContentComponent
     include Rails.application.routes.url_helpers
 
     let(:recruitment_cycle) { build(:recruitment_cycle) }
-    let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
+    let(:provider) { build(:provider, recruitment_cycle:) }
     let(:course) do
       build(
         :course,
-        provider: provider,
-        degree_grade: degree_grade,
+        provider:,
+        degree_grade:,
         degree_subject_requirements: "Maths A level.",
       )
     end

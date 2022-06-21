@@ -11,7 +11,7 @@ module Persona
       classes: [],
       html_attributes: {}
     )
-      super(classes: classes, html_attributes: html_attributes)
+      super(classes:, html_attributes:)
       @email_address = email_address
       @first_name = first_name
       @last_name = last_name

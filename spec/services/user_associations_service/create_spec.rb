@@ -12,7 +12,7 @@ RSpec.describe UserAssociationsService::Create do
       subject do
         described_class.call(
           provider: new_accredited_body,
-          user: user,
+          user:,
         )
       end
 
@@ -20,7 +20,7 @@ RSpec.describe UserAssociationsService::Create do
         let(:user_notification) do
           create(
             :user_notification,
-            user: user,
+            user:,
             provider: accredited_body,
             course_publish: true,
             course_update: true,
@@ -30,7 +30,7 @@ RSpec.describe UserAssociationsService::Create do
         let(:new_user_notification) do
           create(
             :user_notification,
-            user: user,
+            user:,
             provider: new_accredited_body,
             course_publish: true,
             course_update: true,
@@ -75,7 +75,7 @@ RSpec.describe UserAssociationsService::Create do
     context "when adding to all providers" do
       subject do
         described_class.call(
-          user: user,
+          user:,
           all_providers: true,
         )
       end
@@ -87,7 +87,7 @@ RSpec.describe UserAssociationsService::Create do
         let(:user_notification) do
           create(
             :user_notification,
-            user: user,
+            user:,
             provider: accredited_body,
             course_publish: true,
             course_update: true,

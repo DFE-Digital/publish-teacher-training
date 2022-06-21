@@ -27,7 +27,7 @@ private
 
   def given_i_am_authenticated_as_a_provider_user
     user = create(:user, :with_provider)
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user:)
   end
 
   def and_i_visit_the_request_access_new_page

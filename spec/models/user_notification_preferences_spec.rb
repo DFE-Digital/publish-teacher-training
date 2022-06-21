@@ -7,7 +7,7 @@ describe UserNotificationPreferences do
     let(:user_notification) do
       create(
         :user_notification,
-        user: user,
+        user:,
         course_publish: preference,
         course_update: preference,
       )
@@ -54,7 +54,7 @@ describe UserNotificationPreferences do
         let(:user_notifications) do
           [
             user_notification,
-            create(:user_notification, user: user),
+            create(:user_notification, user:),
           ]
         end
 
@@ -77,7 +77,7 @@ describe UserNotificationPreferences do
     let(:user_notification1) do
       create(
         :user_notification,
-        user: user,
+        user:,
         course_publish: false,
         course_update: false,
         provider_code: accredited_body1.provider_code,
@@ -87,7 +87,7 @@ describe UserNotificationPreferences do
     let(:user_notification2) do
       create(
         :user_notification,
-        user: user,
+        user:,
         course_publish: false,
         course_update: false,
         provider_code: accredited_body2.provider_code,

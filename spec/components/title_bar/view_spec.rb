@@ -11,7 +11,7 @@ module TitleBar
 
     context "default" do
       before do
-        render_inline(described_class.new(title: title, current_user: current_user, provider: provider_code))
+        render_inline(described_class.new(title:, provider: provider_code))
       end
 
       it "renders the provided title" do
@@ -26,7 +26,7 @@ module TitleBar
     context "during rollover" do
       before do
         allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
-        render_inline(described_class.new(title: title, current_user: current_user, provider: provider_code))
+        render_inline(described_class.new(title:, current_user:, provider: provider_code))
       end
 
       it "renders the provided title" do

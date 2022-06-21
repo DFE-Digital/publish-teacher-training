@@ -41,8 +41,8 @@ FactoryBot.define do
     subject_code { sample_subject.second }
 
     after(:build) do |subject, _level|
-      financial_incentive = find_or_create(:financial_incentive, subject: subject)
-      subject.update(financial_incentive: financial_incentive)
+      financial_incentive = find_or_create(:financial_incentive, subject:)
+      subject.update(financial_incentive:)
     end
 
     trait :ancient_greek do

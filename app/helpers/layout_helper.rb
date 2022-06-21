@@ -3,10 +3,10 @@
 module LayoutHelper
   # Enables inheriting from and extending another layout.
   # Adapted from the nestive gem: https://github.com/rwz/nestive/blob/master/lib/nestive/layout_helper.rb#L84
-  def extends_layout(layout, &block)
+  def extends_layout(layout, &)
     layout = layout.to_s
     layout = "layouts/#{layout}" unless layout.include?("/")
-    view_flow.get(:layout).replace(capture(&block).to_s)
+    view_flow.get(:layout).replace(capture(&).to_s)
 
     render(template: layout)
   end

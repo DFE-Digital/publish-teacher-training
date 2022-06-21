@@ -44,7 +44,7 @@ module Support
   private
 
     def filtered_providers
-      @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params: filter_params)
+      @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params:)
     end
 
     def find_providers

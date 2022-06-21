@@ -11,11 +11,11 @@ RSpec.describe AllocationImporterService do
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, id: 1) }
   let(:path_to_csv) { Rails.root.join("tmp/physical_education.csv") }
-  let(:training_provider) { create(:provider, recruitment_cycle: recruitment_cycle) }
-  let(:accredited_body_provider) { create(:provider, :accredited_body, recruitment_cycle: recruitment_cycle) }
+  let(:training_provider) { create(:provider, recruitment_cycle:) }
+  let(:accredited_body_provider) { create(:provider, :accredited_body, recruitment_cycle:) }
 
   subject do
-    described_class.new(path_to_csv: path_to_csv)
+    described_class.new(path_to_csv:)
   end
 
   describe "#execute" do

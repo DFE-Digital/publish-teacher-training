@@ -74,10 +74,10 @@ module Support
 
     def assign_attributes_to_course
       attributes = {
-        course_code: course_code,
-        name: name,
-        start_date: start_date,
-        applications_open_from: applications_open_from,
+        course_code:,
+        name:,
+        start_date:,
+        applications_open_from:,
         is_send: send?,
       }
 

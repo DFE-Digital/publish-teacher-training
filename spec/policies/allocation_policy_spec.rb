@@ -9,7 +9,7 @@ describe AllocationPolicy do
   let(:training_provider) { create(:provider) }
   let(:allocation) do
     build(:allocation,
-      accredited_body: accredited_body,
+      accredited_body:,
       provider: training_provider,
       number_of_places: 1)
   end
@@ -53,7 +53,7 @@ describe AllocationPolicy do
   describe AllocationPolicy::Scope do
     let(:allocation) do
       create(:allocation,
-        accredited_body: accredited_body,
+        accredited_body:,
         provider: training_provider,
         number_of_places: 1)
     end

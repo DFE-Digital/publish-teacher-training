@@ -3,7 +3,7 @@
 module TitleBar
   class ViewPreview < ViewComponent::Preview
     def default
-      render(View.new(title: title, provider: provider_code, current_user: current_user))
+      render(View.new(title:, provider: provider_code, current_user:))
     end
 
   private

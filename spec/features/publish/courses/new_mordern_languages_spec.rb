@@ -47,7 +47,7 @@ private
 
   def when_i_visit_the_new_course_modern_languages_page(with_invalid_query: false)
     query = new_course_modern_languages_page_with_query(invalid: with_invalid_query)
-    new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: query)
+    new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query:)
   end
 
   def and_i_click_continue

@@ -18,7 +18,7 @@ module Publish
 
     def initialize(user:, params: {})
       @user = user
-      super(AccessRequest.new, params: params)
+      super(AccessRequest.new, params:)
     end
 
   private
@@ -28,7 +28,7 @@ module Publish
     end
 
     def assign_attributes_to_model
-      access_request.assign_attributes(fields.except(*fields_to_ignore_before_save).merge(requester_email: requester_email))
+      access_request.assign_attributes(fields.except(*fields_to_ignore_before_save).merge(requester_email:))
       access_request.add_additional_attributes(requester_email)
     end
 

@@ -7,9 +7,9 @@ describe VacancyStatusDeterminationService do
 
     subject do
       described_class.call(
-        vacancy_status_full_time: vacancy_status_full_time,
-        vacancy_status_part_time: vacancy_status_part_time,
-        course: course,
+        vacancy_status_full_time:,
+        vacancy_status_part_time:,
+        course:,
       )
     end
 

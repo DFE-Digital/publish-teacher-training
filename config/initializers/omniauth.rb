@@ -34,7 +34,7 @@ else
     scope: %i[email profile],
     path_prefix: "/auth",
     callback_path: "/auth/dfe/callback",
-    client_options: client_options,
+    client_options:,
   }
 
   Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options

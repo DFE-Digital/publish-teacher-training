@@ -20,7 +20,7 @@ next_recruitment_cycle = RecruitmentCycle.create(year: (current_recruitment_year
 Subjects::SubjectAreaCreatorService.new.execute
 Subjects::CreatorService.new.execute
 [2021, 2022].each do |year|
-  Subjects::FinancialIncentiveCreatorService.new(year: year).execute
+  Subjects::FinancialIncentiveCreatorService.new(year:).execute
 end
 Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2021).execute
 
@@ -38,7 +38,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     provider_name: "Acme SCITT",
     provider_code: "A01",
     provider_type: "B",
-    recruitment_cycle: recruitment_cycle,
+    recruitment_cycle:,
     email: Faker::Internet.email,
     telephone: Faker::PhoneNumber.phone_number,
   )
@@ -47,7 +47,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   superuser.providers << provider
 
   site = Site.new(
-    provider: provider,
+    provider:,
     code: Faker::Number.number(digits: 1),
     location_name: Faker::Company.name,
     address1: Faker::Address.building_number,
@@ -64,7 +64,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   primary_course = Course.create!(
     name: "Mathematics",
     course_code: "MAT2",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "PG",
     program_type: "SD",
@@ -92,7 +92,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   secondary_course1 = Course.create!(
     name: "Biology",
     course_code: "BIO3",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",
@@ -120,7 +120,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   secondary_course2 = Course.create!(
     name: "Arts",
     course_code: "AT05",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",
@@ -149,7 +149,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   further_education_course = Course.create!(
     name: "Further Education",
     course_code: "FE11",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",
@@ -177,7 +177,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   modern_language_course1 = Course.create!(
     name: "Other Languages",
     course_code: "OML9",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",
@@ -206,7 +206,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   modern_language_course2 = Course.create!(
     name: "Japanese",
     course_code: "N7",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",
@@ -235,7 +235,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
   modern_language_course3 = Course.create!(
     name: "Modern Languages",
     course_code: "ML1",
-    provider: provider,
+    provider:,
     start_date: Date.new(2019, 9, 1),
     profpost_flag: "BO",
     program_type: "HE",

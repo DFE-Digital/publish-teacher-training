@@ -19,7 +19,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
     context "when there are courses" do
       before do
-        provider.courses << build_list(:course, 2, provider: provider)
+        provider.courses << build_list(:course, 2, provider:)
       end
 
       context "with no recruitment cycle provided" do
@@ -54,7 +54,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
       context "with pagination" do
         before do
-          provider.courses << build_list(:course, 5, provider: provider)
+          provider.courses << build_list(:course, 5, provider:)
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
@@ -64,7 +64,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
         let(:pagination) do
           {
-            page: page,
+            page:,
             per_page: 3,
           }
         end
@@ -183,7 +183,7 @@ RSpec.describe API::Public::V1::CoursesController do
       context "with filtering" do
         context "with valid funding type" do
           before do
-            provider.courses << build(:course, provider: provider)
+            provider.courses << build(:course, provider:)
 
             allow(CourseSearchService).to receive(:call).and_return(Course.all)
 
@@ -204,7 +204,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
         context "when updated_since is invalid" do
           before do
-            provider.courses << build(:course, provider: provider)
+            provider.courses << build(:course, provider:)
 
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,

@@ -58,7 +58,7 @@ module Publish
     def build_new_course
       add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
 
-      @course = ::Courses::CreationService.call(course_params: course_params, provider: provider)
+      @course = ::Courses::CreationService.call(course_params:, provider:)
     end
 
     def build_course
@@ -110,7 +110,7 @@ module Publish
       if params[:goto_confirmation] && current_step != :subjects
         :confirmation
       else
-        CourseCreationStepService.new.execute(current_step: current_step, course: @course)[:next]
+        CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
       end
     end
 
@@ -138,7 +138,7 @@ module Publish
           :confirmation
         end
       else
-        CourseCreationStepService.new.execute(current_step: current_step, course: @course)[:previous]
+        CourseCreationStepService.new.execute(current_step:, course: @course)[:previous]
       end
     end
 

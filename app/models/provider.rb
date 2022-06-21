@@ -90,7 +90,7 @@ class Provider < ApplicationRecord
   end
 
   def current_accredited_courses
-    accredited_courses.includes(:provider).where(provider: { recruitment_cycle: recruitment_cycle })
+    accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
   end
 
   scope :changed_since, lambda { |timestamp|
@@ -329,7 +329,7 @@ class Provider < ApplicationRecord
   end
 
   def from_next_recruitment_cycle
-    Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Settings.current_recruitment_cycle_year.succ.to_s }).find_by(provider_code: provider_code)
+    Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Settings.current_recruitment_cycle_year.succ.to_s }).find_by(provider_code:)
   end
 
 private

@@ -21,7 +21,7 @@ RSpec.describe API::V3::ApplicationController do
   describe "pagination" do
     before do
       provider = create(:provider)
-      2.times.map { create(:course, provider: provider) }
+      2.times.map { create(:course, provider:) }
     end
 
     it "is enabled by default" do

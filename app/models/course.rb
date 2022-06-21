@@ -147,7 +147,7 @@ class Course < ApplicationRecord
     class_name: "CourseEnrichment"
 
   scope :within, lambda { |range, origin:|
-    joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin: origin))
+    joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin:))
   }
 
   scope :by_name_ascending, lambda {
@@ -200,7 +200,7 @@ class Course < ApplicationRecord
     where(id: CourseEnrichment.published.select(:course_id))
   }
 
-  scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: year }) }
+  scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: }) }
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
@@ -221,10 +221,10 @@ class Course < ApplicationRecord
 
   scope :with_provider_name, lambda { |provider_name|
     where(
-      provider_id: Provider.where(provider_name: provider_name),
+      provider_id: Provider.where(provider_name:),
     ).or(
       where(
-        accredited_body_code: Provider.where(provider_name: provider_name)
+        accredited_body_code: Provider.where(provider_name:)
                                        .select(:provider_code),
       ),
     )
@@ -329,9 +329,9 @@ class Course < ApplicationRecord
   end
 
   def self.get_by_codes(year, provider_code, course_code)
-    RecruitmentCycle.find_by(year: year)
-      .providers.find_by(provider_code: provider_code)
-      .courses.find_by(course_code: course_code)
+    RecruitmentCycle.find_by(year:)
+      .providers.find_by(provider_code:)
+      .courses.find_by(course_code:)
   end
 
   def generate_name
@@ -429,7 +429,7 @@ class Course < ApplicationRecord
   end
 
   def content_status
-    services[:content_status].execute(enrichment: latest_enrichment, recruitment_cycle: recruitment_cycle)
+    services[:content_status].execute(enrichment: latest_enrichment, recruitment_cycle:)
   end
 
   def ucas_status
@@ -499,10 +499,10 @@ class Course < ApplicationRecord
 
     if persisted?
       to_add = desired_sites - existing_sites
-      to_add.each { |site| add_site!(site: site) }
+      to_add.each { |site| add_site!(site:) }
 
       to_remove = existing_sites - desired_sites
-      to_remove.each { |site| remove_site!(site: site) }
+      to_remove.each { |site| remove_site!(site:) }
 
       sites.reload
     else
@@ -700,7 +700,7 @@ class Course < ApplicationRecord
     errors.clear
 
     new_errors.each do |attribute, message|
-      errors.add attribute, message: message
+      errors.add attribute, message:
     end
   end
 
@@ -708,13 +708,13 @@ private
 
   def add_site!(site:)
     is_course_new = ucas_status == :new
-    site_status = site_statuses.find_or_initialize_by(site: site)
+    site_status = site_statuses.find_or_initialize_by(site:)
     site_status.start! unless is_course_new
     site_status.save!
   end
 
   def remove_site!(site:)
-    site_status = site_statuses.find_by!(site: site)
+    site_status = site_statuses.find_by!(site:)
     ucas_status == :new ? site_status.destroy! : site_status.suspend!
   end
 

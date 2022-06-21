@@ -17,7 +17,7 @@ module TabNavigation
 
     context "default" do
       before do
-        render_inline(described_class.new(items: items))
+        render_inline(described_class.new(items:))
       end
 
       it "renders the provided links" do

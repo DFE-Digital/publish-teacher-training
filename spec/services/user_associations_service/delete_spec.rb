@@ -10,7 +10,7 @@ RSpec.describe UserAssociationsService::Delete do
   let(:user_notification1) do
     create(
       :user_notification,
-      user: user,
+      user:,
       provider: accredited_body1,
       course_publish: true,
       course_update: true,
@@ -20,7 +20,7 @@ RSpec.describe UserAssociationsService::Delete do
   let(:user_notification2) do
     create(
       :user_notification,
-      user: user,
+      user:,
       provider: accredited_body2,
       course_publish: true,
       course_update: true,
@@ -31,7 +31,7 @@ RSpec.describe UserAssociationsService::Delete do
     context "when removing access to a single provider" do
       subject do
         described_class.call(
-          user: user,
+          user:,
           providers: accredited_body1,
         )
       end
@@ -83,7 +83,7 @@ RSpec.describe UserAssociationsService::Delete do
     context "when removing access to multiple organsations" do
       subject do
         described_class.call(
-          user: user,
+          user:,
           providers: [accredited_body1, accredited_body2],
         )
       end
@@ -98,7 +98,7 @@ RSpec.describe UserAssociationsService::Delete do
       let(:user_notification3) do
         create(
           :user_notification,
-          user: user,
+          user:,
           provider: accredited_body3,
           course_publish: true,
           course_update: true,

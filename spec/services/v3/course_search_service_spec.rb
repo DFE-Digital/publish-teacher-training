@@ -15,14 +15,14 @@ RSpec.describe V3::CourseSearchService do
 
         it "orders by ascending provider name and course name" do
           sort = "name,provider.provider_name"
-          courses = described_class.call(sort: sort).all
+          courses = described_class.call(sort:).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A B B]
           expect(courses.map(&:name)).to eq %w[A C B D]
         end
 
         it "orders by descending provider name and course name" do
           sort = "-provider.provider_name,-name"
-          courses = described_class.call(sort: sort).all
+          courses = described_class.call(sort:).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[B B A A]
           expect(courses.map(&:name)).to eq %w[D B C A]
         end
@@ -31,7 +31,7 @@ RSpec.describe V3::CourseSearchService do
           sort = "name,provider.provider_name"
           filter = { "provider.provider_name": "A" }
 
-          courses = described_class.call(sort: sort, filter: filter).all
+          courses = described_class.call(sort:, filter:).all
           expect(courses.map { |c| c.provider.provider_name }).to eq %w[A A]
           expect(courses.map(&:name)).to eq %w[A C]
         end
@@ -64,7 +64,7 @@ RSpec.describe V3::CourseSearchService do
         end
 
         it "orders distance ascending" do
-          courses = described_class.call(sort: sort).all
+          courses = described_class.call(sort:).all
 
           expect(courses).to eq [near_course, far_course, furthest_course]
         end
@@ -72,7 +72,7 @@ RSpec.describe V3::CourseSearchService do
         it "does not contain duplicates when multiple sites per course" do
           near_course.site_statuses << build(:site_status, :findable, site: build(:site, **far_from_origin))
           near_course.site_statuses << build(:site_status, :findable, site: build(:site, **furthest_from_origin))
-          courses = described_class.call(sort: sort).all
+          courses = described_class.call(sort:).all
 
           expect(courses).to eq [near_course, far_course, furthest_course]
         end
@@ -96,7 +96,7 @@ RSpec.describe V3::CourseSearchService do
           matching2 = create(:course, :with_apprenticeship, study_mode: :part_time)
           create(:course, :with_apprenticeship, study_mode: :full_time) # non-matching
 
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [matching1, matching2]
         end
       end
@@ -108,7 +108,7 @@ RSpec.describe V3::CourseSearchService do
         let(:far_from_origin) { { latitude: 0.2, longitude: 0 } } # ~12 miles away
         let(:furthest_from_origin) { { latitude: 0.3, longitude: 0 } } # ~18 miles away
 
-        let(:filter) { { longitude: origin[:longitude], latitude: origin[:latitude], radius: radius } }
+        let(:filter) { { longitude: origin[:longitude], latitude: origin[:latitude], radius: } }
 
         let!(:furthest_course) do
           create(
@@ -130,7 +130,7 @@ RSpec.describe V3::CourseSearchService do
         end
 
         it "returns only courses within the radius" do
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to eq [near_course]
         end
       end
@@ -144,7 +144,7 @@ RSpec.describe V3::CourseSearchService do
         end
 
         it "returns only courses belonging to the named provider" do
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses.map { |c| c.provider.provider_name }).to eq ["University of Warwick"]
         end
       end
@@ -155,19 +155,19 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns only courses with a salary if filter value is 'salary'" do
           filter = { funding: "salary" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [with_salary]
         end
 
         it "returns all courses if filter value is 'all'" do
           filter = { funding: "all" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [with_salary, without_salary]
         end
 
         it "returns all courses if filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [with_salary, without_salary]
         end
       end
@@ -179,13 +179,13 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns only courses matching the specified qualifications" do
           filter = { qualification: "pgde,pgce_with_qts" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [pgde, pgce_with_qts]
         end
 
         it "returns all courses if filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [pgce, pgde, pgce_with_qts]
         end
       end
@@ -197,19 +197,19 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns only courses with vacancies when filter is true" do
           filter = { has_vacancies: true }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time_vacancies, part_time_vacancies]
         end
 
         it "returns all courses when filter is false" do
           filter = { has_vacancies: false }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time_vacancies, part_time_vacancies, no_vacancies]
         end
 
         it "returns all courses when filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time_vacancies, part_time_vacancies, no_vacancies]
         end
       end
@@ -220,19 +220,19 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns only findable courses when filter is true" do
           filter = { findable: true }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [findable]
         end
 
         it "returns all courses when filter is false" do
           filter = { findable: false }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [findable, not_findable]
         end
 
         it "returns all courses when filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [findable, not_findable]
         end
       end
@@ -243,25 +243,25 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns full_time courses when study_type is full_time" do
           filter = { study_type: "full_time" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time]
         end
 
         it "returns part_time courses when study_type is part_time" do
           filter = { study_type: "part_time" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [part_time]
         end
 
         it "returns all courses when both study types are present" do
           filter = { study_type: "full_time,part_time" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time, part_time]
         end
 
         it "returns all courses when filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [full_time, part_time]
         end
       end
@@ -273,31 +273,31 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns fee courses if funding_type is fee" do
           filter = { funding_type: "fee" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [fee]
         end
 
         it "returns salary courses if funding_type is salary" do
           filter = { funding_type: "salary" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [salary]
         end
 
         it "returns apprenticeship courses if funding_type is apprenticeship" do
           filter = { funding_type: "apprenticeship" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [apprenticeship]
         end
 
         it "returns all courses if all funding types present" do
           filter = { funding_type: "fee,salary,apprenticeship" }
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [fee, salary, apprenticeship]
         end
 
         it "returns all courses if filter is absent" do
           filter = {}
-          courses = described_class.call(filter: filter).all
+          courses = described_class.call(filter:).all
           expect(courses).to match_array [fee, salary, apprenticeship]
         end
       end
@@ -310,24 +310,24 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns two_two courses when degree_grade is two_two" do
           filter = { degree_grade: "two_two" }
-          expect(described_class.call(filter: filter).all).to match_array [two_two]
+          expect(described_class.call(filter:).all).to match_array [two_two]
         end
 
         it "returns not_required courses when degree_grade is not_required" do
           filter = { degree_grade: "not_required" }
-          expect(described_class.call(filter: filter).all).to match_array [not_required]
+          expect(described_class.call(filter:).all).to match_array [not_required]
         end
 
         it "returns all courses when degree_grade is all grades" do
           filter = { degree_grade: "two_one,two_two,third_class,not_required" }
-          expect(described_class.call(filter: filter).all).to match_array(
+          expect(described_class.call(filter:).all).to match_array(
             [two_one, two_two, third, not_required],
           )
         end
 
         it "returns all courses when degree_grade is absent" do
           filter = {}
-          expect(described_class.call(filter: filter).all).to match_array(
+          expect(described_class.call(filter:).all).to match_array(
             [two_one, two_two, third, not_required],
           )
         end
@@ -340,13 +340,13 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns courses matching the subject code" do
           filter = { subjects: primary_course1.subjects.first.subject_code }
-          expect(described_class.call(filter: filter).all).to match_array [primary_course1]
+          expect(described_class.call(filter:).all).to match_array [primary_course1]
         end
 
         it "returns all courses matching multiple subject codes" do
           subject_codes = "#{primary_course1.subjects.first.subject_code},#{secondary_course.subjects.first.subject_code}"
           filter = { subjects: subject_codes }
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             primary_course1,
             secondary_course,
           ]
@@ -354,7 +354,7 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns all courses when filter is absent" do
           filter = {}
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             primary_course1,
             primary_course2,
             secondary_course,
@@ -369,12 +369,12 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns SEND courses when filter is true" do
           filter = { send_courses: true }
-          expect(described_class.call(filter: filter).all).to match_array [send_course]
+          expect(described_class.call(filter:).all).to match_array [send_course]
         end
 
         it "returns all courses when filter is false" do
           filter = { send_courses: false }
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             send_course,
             non_send_course1,
             non_send_course2,
@@ -383,7 +383,7 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns all courses when filter is absent" do
           filter = {}
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             send_course,
             non_send_course1,
             non_send_course2,
@@ -418,12 +418,12 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns matching courses when filter is true" do
           filter = { can_sponsor_visa: true }
-          expect(described_class.call(filter: filter).all).to match_array [sponsered_course1, sponsered_course2]
+          expect(described_class.call(filter:).all).to match_array [sponsered_course1, sponsered_course2]
         end
 
         it "returns all courses when filter is false" do
           filter = { can_sponsor_visa: false }
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             sponsered_course1,
             sponsered_course2,
             unsponsered_course,
@@ -432,7 +432,7 @@ RSpec.describe V3::CourseSearchService do
 
         it "returns all courses when filter is absent" do
           filter = {}
-          expect(described_class.call(filter: filter).all).to match_array [
+          expect(described_class.call(filter:).all).to match_array [
             sponsered_course1,
             sponsered_course2,
             unsponsered_course,
@@ -449,7 +449,7 @@ RSpec.describe V3::CourseSearchService do
 
       subject do
         described_class.call(
-          filter: filter,
+          filter:,
           sort: "distance",
           course_scope: scope,
         )
@@ -459,7 +459,7 @@ RSpec.describe V3::CourseSearchService do
         create(
           :course,
           provider: university_provider,
-          site_statuses: [build(:site_status, :findable, site: site)],
+          site_statuses: [build(:site_status, :findable, site:)],
           enrichments: [build(:course_enrichment, :published)],
         )
       end

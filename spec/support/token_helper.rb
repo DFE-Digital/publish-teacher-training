@@ -14,6 +14,6 @@ module TokenHelper
 private
 
   def encode_to_token(payload)
-    build_jwt(:apiv2, payload: payload)
+    build_jwt(:apiv2, payload:)
   end
 end
