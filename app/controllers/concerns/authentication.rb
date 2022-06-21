@@ -14,7 +14,7 @@ module Authentication
   def authenticate
     unless authenticated?
       session["post_dfe_sign_in_path"] = request.fullpath
-      if AuthenticationService.mode == :persona
+      if AuthenticationService.mode == "persona"
         redirect_to sign_in_path({ support: params[:controller].start_with?("support") })
       else
         redirect_to sign_in_path
