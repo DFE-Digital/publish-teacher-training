@@ -40,12 +40,13 @@ module Providers
     end
 
   private
+    attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service
 
     def copy_courses_to_new_provider(provider, new_provider)
       courses_count = 0
 
       provider.courses.each do |course|
-        new_course = @copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
+        new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
         courses_count += 1 if new_course.present?
       rescue Exception # rubocop: disable Lint/RescueException
         Rails.logger.fatal "error trying to copy course #{course.course_code}"
@@ -59,7 +60,7 @@ module Providers
       sites_count = 0
 
       provider.sites.each do |site|
-        new_site = @copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
+        new_site = copy_site_to_provider_service.execute(site: site, new_provider: new_provider)
         sites_count += 1 if new_site.present?
       end
 

@@ -5,7 +5,7 @@ module Courses
       @enrichments_copy_to_course = enrichments_copy_to_course
     end
 
-    def execute(course:, new_provider:, force: false)
+    def execute(course:, new_provider:)
       return unless course.rollable? || force
       return if course_code_already_exists_on_provider?(course: course, new_provider: new_provider)
 
@@ -26,13 +26,15 @@ module Courses
         course.sites.each do |site|
           new_site = new_provider.sites.find_by(code: site.code)
 
-          @sites_copy_to_course.execute(new_site: new_site, new_course: new_course) if new_site.present?
+          sites_copy_to_course.execute(new_site: new_site, new_course: new_course) if new_site.present?
         end
       end
       new_course
     end
 
   private
+
+    attr_reader :sites_copy_to_course, :enrichments_copy_to_course, :force
 
     def course_code_already_exists_on_provider?(course:, new_provider:)
       new_provider.courses.with_discarded.where(course_code: course.course_code).any?
