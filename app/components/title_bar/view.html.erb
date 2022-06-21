@@ -6,7 +6,7 @@
       <%= change_cycle_link(@provider) %>
     <% end %>
 
-    <% if current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 %>
+    <% if current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin? %>
       <%= change_organisation_link %>
     <% end %>
 
