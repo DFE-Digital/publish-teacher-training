@@ -17,7 +17,7 @@
       </h1>
 
       <p class="govuk-body">When you’ve added a location, you can assign it to a course in the ‘Basic details’ tab of the course. Candidates will see a list of locations on the course page on Find.</p>
-      <%= render "form", f: f %>
+      <%= render "form", f: %>
       <%= f.govuk_submit "Save and publish", data: { qa: "location__publish-changes" } %>
     <% end %>
   </div>

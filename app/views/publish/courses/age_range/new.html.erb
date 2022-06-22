@@ -15,7 +15,7 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:age_range_in_years] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:age_range_in_years] do |fields| %>
         <%= render "publish/shared/error_wrapper", error_keys: [:age_range_in_years], data_qa: "course__age_range_in_years" do %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

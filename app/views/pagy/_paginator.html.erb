@@ -1,6 +1,6 @@
 <nav class="app-pagination" role="navigation" aria-label="Pagination">
   <ul class="app-pagination__list">
-    <%= render partial: "pagy/previous_page", locals: { pagy: pagy } if pagy.prev %>
-    <%= render partial: "pagy/next_page", locals: { pagy: pagy } if pagy.next %>
+    <%= render partial: "pagy/previous_page", locals: { pagy: } if pagy.prev %>
+    <%= render partial: "pagy/next_page", locals: { pagy: } if pagy.next %>
   </ul>
 </nav>

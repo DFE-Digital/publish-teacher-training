@@ -29,7 +29,7 @@
       GCSEs and equivalency tests
     </h1>
 
-     <%= render partial: "publish/courses/gcse_requirements", locals: { f: f, course_object: @source_course ? source_course : @course } %>
+     <%= render partial: "publish/courses/gcse_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
 
       <%= f.submit @course.only_published? ? "Save and publish" : "Save", class: "govuk-button", data: { qa: "gcse_requirements__save" } %>
     <% end %>

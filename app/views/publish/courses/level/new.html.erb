@@ -17,7 +17,7 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:level] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:level] do |fields| %>
         <%= render "publish/shared/error_wrapper", error_keys: [:level], data_qa: "course__level" do %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

@@ -14,7 +14,7 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:study_mode] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:study_mode] do |fields| %>
         <%= render "form_fields", form: fields %>
       <% end %>
     <% end %>

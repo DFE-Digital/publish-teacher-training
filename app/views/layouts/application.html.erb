@@ -35,7 +35,7 @@
     <% else %>
       <%= render Header::View.new(
         service_name: I18n.t("service_name"),
-        current_user: current_user,
+        current_user:,
       ) %>
     <% end %>
 
@@ -70,7 +70,7 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render(FlashBanner::View.new(flash: flash)) %>
+          <%= render(FlashBanner::View.new(flash:)) %>
 
           <%= yield %>
         </div>

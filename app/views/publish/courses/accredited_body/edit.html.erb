@@ -21,7 +21,7 @@
 
         <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_body">
           <% if provider.accredited_bodies.length > 0 %>
-            <%= render partial: "provider_suggestion", collection: provider.accredited_bodies, locals: { form: form } %>
+            <%= render partial: "provider_suggestion", collection: provider.accredited_bodies, locals: { form: } %>
 
             <div class="govuk-radios__divider">or</div>
 
@@ -39,11 +39,11 @@
             </div>
 
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
-              <%= render "provider_search_field", form: form %>
+              <%= render "provider_search_field", form: %>
             </div>
           <% else %>
             <%= form.hidden_field :accredited_body_code, value: :other %>
-            <%= render "provider_search_field", form: form %>
+            <%= render "provider_search_field", form: %>
           <% end %>
         </div>
 
