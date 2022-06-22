@@ -24,10 +24,6 @@
 <% end %>
 
 <h1 class="govuk-heading-l">
-  <% if rolled_over_and_new_nav?(@provider) %>
-    <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
-  <% end %>
-
   <% if FeatureService.enabled?(:new_publish_navigation) %>
     Organisation details
   <% else %>

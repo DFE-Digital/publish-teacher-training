@@ -1,12 +1,7 @@
 <% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
 
-<h1 class="govuk-heading-l">
-  <% if rolled_over_and_new_nav?(@provider) %>
-    <span class="govuk-caption-l"><%= @recruitment_cycle.title %></span>
-  <% end %>
-  Courses
-</h1>
+<h1 class="govuk-heading-l">Courses</h1>
 
   <%= govuk_button_link_to(
     "Add course",

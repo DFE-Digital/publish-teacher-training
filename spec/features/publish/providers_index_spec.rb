@@ -1,20 +1,21 @@
 require "rails_helper"
 
-feature "Providers index", { can_edit_current_and_next_cycles: false } do
+feature "Providers index" do
   scenario "view page as Mary - multi provider user" do
-    given_the_new_publish_flow_feature_flag_is_enabled
+    given_we_are_not_in_rollover
+    and_the_new_publish_flow_feature_flag_is_enabled
     and_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_providers_index_page
     i_should_see_the_provider_list
     i_should_not_see_the_admin_search_box
 
     and_i_click_on_a_provider
-    i_should_see_the_change_organisation_link
-    when_i_click_the_change_organisation_link
+    and_i_click_the_change_organisation_link
     i_should_see_the_provider_list
   end
 
   scenario "view page as Colin - admin user" do
+    given_we_are_not_in_rollover
     given_the_new_publish_flow_feature_flag_is_enabled
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
@@ -27,7 +28,55 @@ feature "Providers index", { can_edit_current_and_next_cycles: false } do
     i_should_see_the_change_organisation_link
   end
 
-  def given_the_new_publish_flow_feature_flag_is_enabled
+  scenario "view page as a multi org user during rollover" do
+    given_we_are_in_rollover
+    and_there_is_a_previous_recruitment_cycle
+    and_i_am_authenticated_as_a_multi_provider_user
+    and_there_are_providers
+    when_i_visit_the_providers_index_page
+    and_i_continue_past_the_recruitment_cycle_text
+    and_i_click_on_a_provider
+    i_should_be_on_the_organisation_switcher_page
+
+    when_i_click_on_the_current_cycle_link
+    and_i_click_the_change_organisation_link
+    i_should_be_on_the_organisations_list
+
+    and_i_click_on_a_provider
+    when_i_click_on_the_current_cycle_link
+    and_click_change_recruitment_cycle
+    i_should_be_on_the_organisation_switcher_page
+  end
+
+  def when_i_click_on_the_current_cycle_link
+    click_link "2021 to 2022 - current"
+  end
+
+  def and_i_continue_past_the_recruitment_cycle_text
+    click_button "Continue"
+  end
+
+  def and_there_is_a_previous_recruitment_cycle
+    find_or_create(:recruitment_cycle, :previous)
+  end
+
+  def i_should_be_on_the_organisation_switcher_page
+    expect(page).to have_text "Recruitment cycles"
+  end
+
+  def and_click_change_recruitment_cycle
+    click_link "Change recruitment cycle"
+  end
+
+  def given_we_are_not_in_rollover
+    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
+  end
+
+  def given_we_are_in_rollover
+    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+  end
+
+  def and_the_new_publish_flow_feature_flag_is_enabled
     enable_features(:new_publish_navigation)
   end
 
@@ -84,7 +133,12 @@ feature "Providers index", { can_edit_current_and_next_cycles: false } do
     expect(page).to have_text "Change organisation"
   end
 
-  def when_i_click_the_change_organisation_link
+  def i_should_be_on_the_organisations_list
+    expect(page).to have_current_path("/")
+    expect(page).to have_text "Organisations"
+  end
+
+  def and_i_click_the_change_organisation_link
     click_link "Change organisation"
   end
 

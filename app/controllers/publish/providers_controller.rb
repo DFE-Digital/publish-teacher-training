@@ -27,7 +27,7 @@ module Publish
     def show
       authorize provider
 
-      if FeatureService.enabled?(:new_publish_navigation)
+      if FeatureService.enabled?(:new_publish_navigation) && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
       else
         :show?
