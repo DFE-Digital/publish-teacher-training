@@ -20,9 +20,3 @@ allocations_close_date: 2022-07-02
 features:
   allocations:
     state: confirmed
-  rollover:
-    # Normally a short period of time between rollover and the next cycle
-    # actually starting when it would be set to false
-    has_current_cycle_started?: true
-    # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: true
