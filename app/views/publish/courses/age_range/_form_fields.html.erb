@@ -4,7 +4,7 @@
       <%= form.radio_button :age_range_in_years, value, class: "govuk-radios__input", data: { qa: "course__age_range_in_years_#{value}_radio" } %>
       <%= form.label :age_range_in_years,
             t("edit_options.age_range_in_years.#{value}.label"),
-            value: value,
+            value:,
             class: "govuk-label govuk-radios__label" %>
     </div>
   <% end %>

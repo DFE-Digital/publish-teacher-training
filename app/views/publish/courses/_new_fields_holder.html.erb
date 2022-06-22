@@ -1,5 +1,5 @@
 <%= render "publish/shared/course_creation_hidden_fields",
-  form: form,
+  form:,
   course_creation_params: @meta_course_creation_params,
   except_keys: [] %>
 
@@ -7,7 +7,7 @@
   <%= render "publish/shared/course_creation_hidden_fields",
     form: fields,
     course_creation_params: @course_creation_params,
-    except_keys: except_keys %>
+    except_keys: %>
   <%= yield fields %>
 <% end %>
 

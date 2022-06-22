@@ -5,7 +5,7 @@
      class: "govuk-input",
      aria: { describedby: @errors.key?(field) ? "#{field}-error" : "" },
      data: { qa: field.to_s },
-   }.merge(defined?(id) ? { id: id } : {}) %>
+   }.merge(defined?(id) ? { id: } : {}) %>
 
 <%= render "publish/shared/error_wrapper", error_keys: [field], data_qa: "course__#{field}" do %>
   <%= form.label field, label, {
