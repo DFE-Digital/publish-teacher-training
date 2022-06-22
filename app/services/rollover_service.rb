@@ -10,7 +10,7 @@ class RolloverService
     total_counts = { providers: 0, sites: 0, courses: 0 }
 
     total_bm = Benchmark.measure do
-      providers.each { |provider| rollover(provider, total_counts) }
+      provider_codes_to_copy.each { |provider_code| rollover(provider_code, total_counts) }
     end
 
     Rails.logger.info "Rollover done: " \
@@ -24,47 +24,13 @@ private
 
   attr_reader :provider_codes, :force
 
-  def rollover(provider, total_counts)
-    Rails.logger.info { "Copying provider #{provider.provider_code}: " }
-    counts = nil
-
-    bm = Benchmark.measure do
-      Provider.connection.transaction do
-        copy_courses_to_provider_service = Courses::CopyToProviderService.new(
-          sites_copy_to_course: Sites::CopyToCourseService.new,
-          enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
-        )
-
-        copy_provider_to_recruitment_cycle = Providers::CopyToRecruitmentCycleService.new(
-          copy_course_to_provider_service: copy_courses_to_provider_service,
-          copy_site_to_provider_service: Sites::CopyToProviderService.new,
-          logger: Logger.new($stdout),
-        )
-
-        counts = copy_provider_to_recruitment_cycle.execute(
-          provider: provider, new_recruitment_cycle: new_recruitment_cycle, force: force,
-        )
-      end
-    end
-
-    Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
-                      "#{counts[:sites]} sites copied, " \
-                      "#{counts[:courses]} courses copied " +
-                      format("in %.3f seconds", bm.real)
+  def rollover(provider_code, total_counts)
+    counts = RolloverProviderService.call(provider_code: provider_code, force: force)
 
     total_counts.merge!(counts) { |_, total, count| total + count }
   end
 
-  def new_recruitment_cycle
-    @new_recruitment_cycle ||= RecruitmentCycle.next_recruitment_cycle
-  end
-
-  def providers
-    @providers ||= if provider_codes.any?
-                     RecruitmentCycle.current_recruitment_cycle
-                                     .providers.where(provider_code: provider_codes.to_a.map(&:upcase))
-                   else
-                     RecruitmentCycle.current_recruitment_cycle.providers
-                   end
+  def provider_codes_to_copy
+    @provider_codes_to_copy ||= provider_codes.any? ? provider_codes.to_a.map(&:upcase) : RecruitmentCycle.current_recruitment_cycle.providers.pluck(:provider_code)
   end
 end

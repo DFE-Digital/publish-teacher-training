@@ -6,7 +6,7 @@ module Providers
       @force = force
     end
 
-    def execute(provider:, new_recruitment_cycle:, force: false)
+    def execute(provider:, new_recruitment_cycle:, course_codes: nil)
       providers_count = 0
       sites_count = 0
       courses_count = 0
@@ -29,7 +29,7 @@ module Providers
           # Order is important here. Sites should be copied over before courses
           # so that courses can link up to the correct sites in the new provider.
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider)
+          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider, courses_to_copy(provider, course_codes))
         end
       end
 
@@ -41,12 +41,42 @@ module Providers
     end
 
   private
+
     attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :force
 
-    def copy_courses_to_new_provider(provider, new_provider)
+    def courses_to_copy(provider, course_codes)
+      courses = []
+      if force
+        if course_codes.nil?
+          Rails.logger.info "no courses will be rollover"
+        else
+          courses = courses_from_course_codes(provider, course_codes)
+        end
+      elsif course_codes.nil?
+        courses = provider.courses
+      else
+        courses = courses_from_course_codes(provider, course_codes)
+      end
+
+      courses
+    end
+
+    def courses_from_course_codes(provider, course_codes)
+      courses = provider.courses.where(course_code: course_codes.to_a.map(&:upcase))
+
+      if courses.count != course_codes.count
+        error_message = "error courses found has discrepancies (#{courses.count} vs #{course_codes.count})"
+        Rails.logger.fatal error_message
+        raise error_message
+      end
+
+      courses
+    end
+
+    def copy_courses_to_new_provider(_provider, new_provider, courses)
       courses_count = 0
 
-      provider.courses.each do |course|
+      courses.each do |course|
         new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
         courses_count += 1 if new_course.present?
       rescue StandardError

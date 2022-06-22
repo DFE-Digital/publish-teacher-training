@@ -4,7 +4,8 @@ describe Providers::CopyToRecruitmentCycleService do
   describe "#execute" do
     let(:site) { build :site }
     let(:published_course_enrichment) { build :course_enrichment, :published }
-    let(:course) { create :course, enrichments: [published_course_enrichment], provider: provider }
+    let(:course_enrichments) { [published_course_enrichment] }
+    let(:course) { create :course, enrichments: course_enrichments, provider: provider }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) {
       [
@@ -35,8 +36,10 @@ describe Providers::CopyToRecruitmentCycleService do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
+        force: force,
       )
     end
+    let(:force) { false }
 
     before do
       course
@@ -160,15 +163,92 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "provider is not rollable?" do
-      context "force: true" do
-        before do
-          allow(provider).to receive(:rollable?).and_return(false)
+      let(:provider) {
+        create :provider,
+          :with_users,
+          sites: [site],
+          ucas_preferences: ucas_preferences,
+          contacts: contacts
+      }
+      let(:draft_course_enrichment) { build :course_enrichment }
+      let(:course_enrichments) { [draft_course_enrichment] }
+
+      it "is not rollable" do
+        expect(provider).not_to be_rollable
+      end
+
+      it "courses is not rollable" do
+        provider.courses.each do |course|
+          expect(course).not_to be_rollable
+        end
+      end
+
+      context "with force as true" do
+        let(:force) { true }
+        let(:course_codes) { nil }
+
+        subject do
+          service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle, course_codes: course_codes)
         end
 
         it "still copies the provider" do
           expect {
-            service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle, force: true)
+            subject
           }.to(change { new_recruitment_cycle.providers.count })
+        end
+
+        it "does not copies the courses" do
+          subject
+
+          expect(mocked_copy_course_service).not_to have_received(:execute).with(course: course, new_provider: new_provider)
+        end
+
+        it "logs info message" do
+          expect(Rails.logger).to receive(:info).with("no courses will be rollover")
+
+          subject
+        end
+
+        context "with course_codes as empty array" do
+          let(:course_codes) { [] }
+
+          it "still copies the provider" do
+            expect {
+              subject
+            }.to(change { new_recruitment_cycle.providers.count })
+          end
+
+          it "does not copies the courses" do
+            subject
+
+            expect(mocked_copy_course_service).not_to have_received(:execute)
+          end
+        end
+
+        context "with specified course_codes" do
+          let(:course_codes) { [course.course_code] }
+
+          it "still copies the provider" do
+            expect {
+              subject
+            }.to(change { new_recruitment_cycle.providers.count })
+          end
+
+          it "still copies the courses" do
+            subject
+
+            expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+          end
+        end
+
+        context "with unknown specified course_codes" do
+          let(:course_codes) { ["B05S"] }
+
+          it "errors out with correct message" do
+            expect {
+              subject
+            }.to raise_error("error courses found has discrepancies (0 vs 1)")
+          end
         end
       end
     end
