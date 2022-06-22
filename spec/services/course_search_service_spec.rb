@@ -578,7 +578,7 @@ RSpec.describe CourseSearchService do
         let(:filter) { {"hello" => "there"} }
 
         it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_degree_grades)
+          expect(scope).not_to receive(:with_subjects)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
