@@ -58,23 +58,3 @@ provider "registry.terraform.io/statuscakedev/statuscake" {
     "zh:e48c0536b185d8ebac7a3861f7cbbd28e1312fb4201586f4946cd0e6ffdb58ab",
   ]
 }
-
-provider "registry.terraform.io/terraform-providers/statuscake" {
-  version     = "1.0.0"
-  constraints = ">= 1.0.0, 1.0.0"
-  hashes = [
-    "h1:TMxj87sh1jnGwpXwBrR03UFj9J8hw8CHapEJhOHJTkM=",
-    "zh:31c02ab086abc7c3fa4048d20b6935e9afb36c77bfe699161bf3b55c097ad395",
-    "zh:52629d9a5f145f6f6e97027f1f43b8b85ad5027e1ba2beca3d75c09acd270c17",
-    "zh:5720945d2156f0ef5195e75364232d36ff2125be37400ff3c57a24d18ac29dc6",
-    "zh:744d332d3fc6ae55ee4ab6a7e06d43d8d7b44b4141329f17252ed87f33476fed",
-    "zh:856aaae789947beeb518d89271038fd73484e7fc9316573d75c0c9a8a935a5d1",
-    "zh:8ebc9605ec83bcfebf365fbcc784e857ea49f7de9e2d48592c602e78f444424f",
-    "zh:a95d2a2eeb0e879cb9039bb7f8d2242db76bf524af21fdfd0e4a2debef330d00",
-    "zh:b05d2f24df5e089101585668c466800a4b824c78c7edafa4e122295ecbb0a337",
-    "zh:d27561eed69bdac244a87904c6ce0b665001a1859a7454d90c4e581bc8258331",
-    "zh:da58fe8c48c053dc93c51ec69c3da25f5875867ff51832d1aa8e4d0b33879987",
-    "zh:e82ac1fe93c4cf6311423625cc9d5c4ba0aa7eee5411506cb4d06843cc47216e",
-    "zh:fb96f2f900aa47165639957aae6491a530c6547e6632d6d81eeee56dd810bd5d",
-  ]
-}
