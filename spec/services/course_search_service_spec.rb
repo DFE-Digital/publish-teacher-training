@@ -527,7 +527,7 @@ RSpec.describe CourseSearchService do
       end
 
       context "when not a string" do
-        let(:filter) { {"hello" => "there"} }
+        let(:filter) { { "hello" => "there" } }
 
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_degree_grades)
@@ -575,7 +575,7 @@ RSpec.describe CourseSearchService do
       end
 
       context "when not a string" do
-        let(:filter) { {"hello" => "there"} }
+        let(:filter) { { "hello" => "there" } }
 
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_subjects)
