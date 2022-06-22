@@ -212,12 +212,14 @@ private
 
   def degree_grades
     return [] if filter[:degree_grade].blank?
+    return [] unless filter[:degree_grade].is_a?(String)
 
     filter[:degree_grade].split(",")
   end
 
   def subject_codes
     return [] if filter[:subjects].blank?
+    return [] unless filter[:subjects].is_a?(String)
 
     filter[:subjects].split(",")
   end
