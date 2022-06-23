@@ -22,11 +22,16 @@ Rails.application.routes.draw do
   get "/sign-out", to: "sessions#sign_out"
 
   get "/accessibility", to: "pages#accessibility", as: :accessibility
-  get "/cookies", to: "pages#cookies", as: :cookies
   get "/guidance", to: "pages#guidance", as: :guidance
   get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
+
+  if FeatureService.enabled?(:google_analytics)
+    resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
+  else
+    get "/cookies", to: "pages#cookies", as: :cookies
+  end
 
   if AuthenticationService.magic_link?
     get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links

@@ -38,6 +38,11 @@ authentication:
   # mode: magic_link  # when dfe_signin is down
   # mode: persona     # none critical systems, ie localhost
 
+cookies:
+  consent:
+    name: _consented_to_analytics_cookies
+    expire_after_days: 182
+
 current_recruitment_cycle_year: 2022
 next_cycle_open_date: 2022-10-5
 
@@ -88,6 +93,7 @@ feedback:
 features:
   send_request_data_to_bigquery: false
   new_publish_navigation: true
+  google_analytics: false
   rollover:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false
