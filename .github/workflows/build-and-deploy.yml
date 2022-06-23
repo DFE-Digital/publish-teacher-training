@@ -165,6 +165,9 @@ jobs:
     - name: Run ERB Linter
       run: docker-compose exec -T web /bin/sh -c 'bundle exec erblint app'
 
+    - name: Run DfE Analytics checks
+      run: docker-compose exec -T web /bin/sh -c 'bundle exec rake dfe:analytics:check'
+
     - name: Run tests
       run: |
         docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'

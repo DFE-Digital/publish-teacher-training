@@ -1,5 +1,5 @@
 class APIController < ActionController::API
-  include EmitsRequestEvents
+  include DfE::Analytics::Requests
   include ActionController::HttpAuthentication::Token::ControllerMethods
   include Pundit::Authorization
 

@@ -1,4 +1,4 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
-  include EmitsEntityEvents
+  include DfE::Analytics::Entities
 end

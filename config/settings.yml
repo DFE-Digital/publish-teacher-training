@@ -84,7 +84,7 @@ google:
   bigquery:
     project_id: replaceme
     dataset: replaceme
-    api_json_key: ""
+    api_json_key: "{}"
     table_name: events
 
 feedback:

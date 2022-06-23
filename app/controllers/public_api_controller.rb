@@ -1,5 +1,5 @@
 class PublicAPIController < ActionController::API
-  include EmitsRequestEvents
+  include DfE::Analytics::Requests
   include Pagy::Backend
   include ErrorHandlers::Pagy
   include Pundit::Authorization

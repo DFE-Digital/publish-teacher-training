@@ -4,6 +4,8 @@ require "super_diff/rspec"
 require "fakefs/spec_helpers"
 require "webmock/rspec"
 require "audited-rspec"
+require "dfe/analytics/rspec/matchers"
+
 if ENV.fetch("COVERAGE", false)
   require "simplecov"
 
