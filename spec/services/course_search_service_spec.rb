@@ -525,6 +525,17 @@ RSpec.describe CourseSearchService do
           expect(subject).to eq(expected_scope)
         end
       end
+
+      context "when not a string" do
+        let(:filter) { { "hello" => "there" } }
+
+        it "doesn't add the scope" do
+          expect(scope).not_to receive(:with_degree_grades)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
     end
 
     describe "filter[subjects]" do
@@ -554,6 +565,17 @@ RSpec.describe CourseSearchService do
 
       context "when absent" do
         let(:filter) { {} }
+
+        it "doesn't add the scope" do
+          expect(scope).not_to receive(:with_subjects)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "when not a string" do
+        let(:filter) { { "hello" => "there" } }
 
         it "doesn't add the scope" do
           expect(scope).not_to receive(:with_subjects)
