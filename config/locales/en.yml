@@ -437,6 +437,10 @@ en:
             email:
               blank: "Enter an email adddress"
               invalid: "Enter a valid email address"
+        publish/cookie_preferences_form:
+          attributes:
+            consent:
+              blank: Select yes if you want to accept Google Analytics cookies
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
