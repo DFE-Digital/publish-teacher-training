@@ -43,7 +43,7 @@ review:
 	$(eval space=bat-qa)
 	$(eval paas_env=pr-$(APP_NAME))
 	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
-	echo https://teacher-training-api-review-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
+	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
 
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
@@ -123,7 +123,7 @@ install-fetch-config:
 		|| true
 
 read-deployment-config:
-	$(eval export postgres_database_name=teacher-training-api-postgres-${paas_env})
+	$(eval export postgres_database_name=publish-teacher-training-postgres-${paas_env})
 
 read-keyvault-config:
 	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
@@ -148,7 +148,7 @@ print-infra-secrets: read-keyvault-config install-fetch-config
 
 console:
 	cf target -s ${space}
-	cf ssh teacher-training-api-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
+	cf ssh publish-teacher-training-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
 
 enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance CONFIRM_PRODUCTION=y
 	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
@@ -158,15 +158,15 @@ enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance
 	eval cf map-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf map-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
-	eval cf unmap-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	eval cf unmap-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf unmap-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 
 disable-maintenance: ## make qa disable-maintenance / make prod disable-maintenance CONFIRM_PRODUCTION=y
 	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
 	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
 	cf target -s ${space}
-	eval cf map-route teacher-training-api-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route teacher-training-api-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	eval cf map-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf map-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
 	eval cf unmap-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf unmap-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
@@ -184,16 +184,16 @@ backup-review-database: read-deployment-config # make review backup-review-datab
 	bin/backup-review-database ${postgres_database_name} ${paas_env}
 
 get-image-tag:
-	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app teacher-training-api-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))
+	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app publish-teacher-training-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))
 	@echo ${TAG}
 
 get-postgres-instance-guid: ## Gets the postgres service instance's guid make qa get-postgres-instance-guid
-	$(eval export DB_INSTANCE_GUID=$(shell cf target -s ${space} 1> /dev/null && cf service teacher-training-api-postgres-${paas_env} --guid))
+	$(eval export DB_INSTANCE_GUID=$(shell cf target -s ${space} 1> /dev/null && cf service publish-teacher-training-postgres-${paas_env} --guid))
 	@echo ${DB_INSTANCE_GUID}
 
 rename-postgres-service: ## make qa rename-postgres-service
 	cf target -s ${space} 1> /dev/null
-	cf rename-service teacher-training-api-postgres-${paas_env} teacher-training-api-postgres-${paas_env}-old
+	cf rename-service publish-teacher-training-postgres-${paas_env} publish-teacher-training-postgres-${paas_env}-old
 
 remove-postgres-tf-state: deploy-init ## make qa remove-postgres-tf-state PASSCODE=xxxx
 	cd terraform && terraform state rm module.paas.cloudfoundry_service_instance.postgres
@@ -205,6 +205,6 @@ set-restore-variables:
 	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_restore_from_db_guid=$(DB_INSTANCE_GUID))
 	$(eval export TF_VAR_paas_db_backup_before_point_in_time=$(SNAPSHOT_TIME))
-	echo "Restoring teacher-training-api from $(TF_VAR_paas_restore_from_db_guid) before $(TF_VAR_paas_db_backup_before_point_in_time)"
+	echo "Restoring publish-teacher-training from $(TF_VAR_paas_restore_from_db_guid) before $(TF_VAR_paas_db_backup_before_point_in_time)"
 
 restore-postgres: set-restore-variables deploy ##  make qa restore-postgres IMAGE_TAG=12345abcdef67890ghijklmnopqrstuvwxyz1234 DB_INSTANCE_GUID=abcdb262-79d1-xx1x-b1dc-0534fb9b4 SNAPSHOT_TIME="2021-11-16 15:20:00" PASSCODE=xxxxx

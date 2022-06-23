@@ -59,19 +59,19 @@ First make sure it is fully gone by running:
 
 N.B. When testing the `cf delete-service <instance name>` in the review environment the postgres service key needs deleting first. Retrieve the service key with `cf service-keys <instance name>` and then delete the service key using `cf delete-service-key <instance name> <service key name>`
 ```
-cf services | grep teacher-training-api
+cf services | grep publish-teacher-training
 # check output for lost or corrupted instance
 cf delete-service <instance-name>
 ```
 
 Then recreate the lost postgres database instance using the following make recipes `deploy-plan` and `deploy`. Replacing the `qa` in the app name below with `pr-1234` when testing in the review environment. To see the proposed changes:
 ```
-TAG=$(cf app teacher-training-api-qa | awk -F : '$1 == "docker image" {print $3}')
+TAG=$(cf app publish-teacher-training-qa | awk -F : '$1 == "docker image" {print $3}')
 make <env> deploy-plan PASSCODE=<my-passcode> IMAGE_TAG=${TAG}
 ```
 To apply proposed changes i.e. create new database instance:
 ```
-TAG=$(cf app teacher-training-api-qa | awk -F : '$1 == "docker image" {print $3}')
+TAG=$(cf app publish-teacher-training-qa | awk -F : '$1 == "docker image" {print $3}')
 make <env> deploy PASSCODE=<my-passcode> IMAGE_TAG=${TAG}
 ```
 This will create a new postgres database instance as described in the terraform configuration file.
@@ -186,5 +186,5 @@ Gov UK PaaS Documentation on Point-in-time database recovery can be found [here]
 Once the database has been successfully restored, the corrupted database instance should be deleted.
 
 ```
-cf delete-service teacher-training-api-postgres-<env>-old -f
+cf delete-service publish-teacher-training-postgres-<env>-old -f
 ```
