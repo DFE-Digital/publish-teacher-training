@@ -24,6 +24,9 @@ end
 
 RSpec.describe "DFE Analytics integration" do
   before do
+    allow(FeatureService).to receive(:enabled?).with(:google_analytics).and_return(false)
+    allow(FeatureService).to receive(:enabled?).with(:send_request_data_to_bigquery).and_return(true)
+
     Rails.application.routes.draw do
       get "/api/test", to: "dfe_analytics_events_test_api#test"
       get "/api/public/v1/test", to: "dfe_analytics_events_test_public_api#test"
@@ -36,8 +39,6 @@ RSpec.describe "DFE Analytics integration" do
 
   describe APIController do
     it "sends events using DFE Analytics" do
-      allow(FeatureService).to receive(:enabled?).with(:send_request_data_to_bigquery).and_return(true)
-
       expect do
         get "/api/test"
       end.to have_sent_analytics_event_types(:web_request)
