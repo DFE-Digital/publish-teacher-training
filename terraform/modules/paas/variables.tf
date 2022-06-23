@@ -46,7 +46,10 @@ locals {
   redis_cache_service_name     = "teacher-training-api-cache-redis-${local.app_name_suffix}"
   logging_service_name         = "teacher-training-api-logit-${local.app_name_suffix}"
   deployment_strategy          = "blue-green-v2"
-  qa_postgres_service_instance = "eef01a89-0659-4eae-8220-8a142fa4502e"
+# This is the guid of the QA postgres database and is used in review app db creation
+# It must be updated within 35 days if the QA db is recreated,
+# as that is how long automated snapshots are kept
+  qa_postgres_service_instance = "6ee1518e-5a3c-4d08-abe4-6847ff7919b0"
 
   worker_app_start_command = "bundle exec sidekiq -c 5 -C config/sidekiq.yml"
 
