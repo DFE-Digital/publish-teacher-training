@@ -18,10 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Terraform v0.13.5
+      - name: Setup Terraform v0.14.11
         uses: hashicorp/setup-terraform@v1.2.1
         with:
-          terraform_version: 0.13.5
+          terraform_version: 0.14.11
 
       - name: Set Environment variables
         run: |
