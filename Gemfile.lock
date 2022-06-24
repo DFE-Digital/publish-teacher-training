@@ -666,7 +666,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
-    uk_postcode (2.1.7)
+    uk_postcode (2.1.8)
     unicode-display_width (2.1.0)
     uniform_notifier (1.16.0)
     validate_email (0.1.6)
