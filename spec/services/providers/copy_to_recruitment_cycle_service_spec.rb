@@ -204,7 +204,7 @@ describe Providers::CopyToRecruitmentCycleService do
         end
 
         it "logs info message" do
-          expect(Rails.logger).to receive(:info).with("no courses will be rollover")
+          expect(Rails.logger).to receive(:info).with("no courses will be roll overed")
 
           subject
         end
@@ -247,7 +247,7 @@ describe Providers::CopyToRecruitmentCycleService do
           it "errors out with correct message" do
             expect {
               subject
-            }.to raise_error("error courses found has discrepancies (0 vs 1)")
+            }.to raise_error("Error: discrepancy between courses found and provided course codes (0 vs 1)")
           end
         end
       end

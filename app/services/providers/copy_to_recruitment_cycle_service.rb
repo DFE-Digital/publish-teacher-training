@@ -48,7 +48,7 @@ module Providers
       courses = []
       if force
         if course_codes.nil?
-          Rails.logger.info "no courses will be rollover"
+          Rails.logger.info "no courses will be roll overed"
         else
           courses = courses_from_course_codes(provider, course_codes)
         end
@@ -64,8 +64,8 @@ module Providers
     def courses_from_course_codes(provider, course_codes)
       courses = provider.courses.where(course_code: course_codes.to_a.map(&:upcase))
 
-      if courses.count != course_codes.count
-        error_message = "error courses found has discrepancies (#{courses.count} vs #{course_codes.count})"
+      unless courses.count == course_codes.count
+        error_message = "Error: discrepancy between courses found and provided course codes (#{courses.count} vs #{course_codes.count})"
         Rails.logger.fatal error_message
         raise error_message
       end
