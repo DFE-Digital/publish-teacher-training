@@ -7,7 +7,7 @@ module Publish
       authorize :provider, :index?
 
       page = (params[:page] || 1).to_i
-      per_page = 10
+      per_page = 30
       @pagy, @providers = pagy(providers.order(:provider_name), page:, items: per_page)
 
       render "publish/providers/no_providers", status: :forbidden if @providers.blank?
