@@ -12,7 +12,7 @@ module TitleBar
     end
 
     def change_organisation_link
-      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
+      govuk_link_to t("change_organisation"), root_path({ recruitment_cycle_year: params[:recruitment_cycle_year] }), class: "title-bar-link inline govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
     end
 
     def change_cycle_link(provider)

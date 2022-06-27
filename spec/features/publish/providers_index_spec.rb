@@ -134,7 +134,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_organisations_list
-    expect(page).to have_current_path("/")
+    expect(page).to have_current_path("/?current_cycle=true")
     expect(page).to have_text "Organisations"
   end
 
