@@ -24,3 +24,12 @@ $git-brand-colour: #159964;
 @import "pagination";
 @import "autocomplete";
 @import "cookie_banner";
+
+body:not(.js-enabled) .app-js-only {
+  display: none;
+}
+
+// Display for no-js only
+.js-enabled .app-no-js-only {
+  display: none;
+}
