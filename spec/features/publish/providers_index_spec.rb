@@ -100,7 +100,7 @@ feature "Providers index" do
   end
 
   def i_should_see_the_pagination_link
-    expect(providers_index_page.pagination_pages.text).to eq("2 of 3")
+    expect(providers_index_page.pagination_pages.text).to eq("2 of 2")
   end
 
   def when_i_visit_the_providers_index_page
@@ -122,7 +122,7 @@ feature "Providers index" do
   def and_there_are_providers
     create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")])
     create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")])
-    create_list(:provider, 20)
+    create_list(:provider, 30)
   end
 
   def and_i_click_on_a_provider

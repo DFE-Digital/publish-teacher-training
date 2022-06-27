@@ -9,13 +9,13 @@ module TitleBar
     let(:provider_code) { "1BJ" }
     let(:current_user) { create(:user) }
 
-    context "default" do
+    context "single org users" do
       before do
         render_inline(described_class.new(title:, current_user:, provider: provider_code))
       end
 
-      it "renders the provided title" do
-        expect(component).to have_text("BAT School")
+      it "does not render the provided title" do
+        expect(component).not_to have_text("BAT School")
       end
 
       it "does not render the recruitment cycle link" do
@@ -23,7 +23,7 @@ module TitleBar
       end
     end
 
-    context "during rollover" do
+    context "single org users during rollover" do
       before do
         allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
         render_inline(described_class.new(title:, current_user:, provider: provider_code))
