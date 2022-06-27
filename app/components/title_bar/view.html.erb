@@ -1,6 +1,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
+
+    <% if (current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin?) || FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") %>
+      <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
+    <% end %>
 
     <% if rollover_active? %>
       <%= change_cycle_link(@provider) %>
