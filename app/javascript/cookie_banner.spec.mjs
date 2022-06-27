@@ -8,13 +8,14 @@ const templateHTML = `
       data-cookie-consent-name=${cookieName} data-cookie-consent-expiry-after-days="182">
     <div class="govuk-cookie-banner__message govuk-width-container">
       <div class="govuk-button-group">
-        <button value="yes">Accept analytics cookies</button>
-        <button value="no">Reject analytics cookies</button>
+        <button value="accepted">Accept analytics cookies</button>
+        <button value="rejected">Reject analytics cookies</button>
       </div>
     </div>
   </div>
   <div class="govuk-cookie-banner" role="region" aria-label="Cookie banner" hidden="true"
     data-module="govuk-cookie-after-consent-banner">
+      <span></span>
       <button type="button" class="govuk-button">Hide this message</button>
   </div>
 </div>`
@@ -44,7 +45,7 @@ describe('CookieBanner', () => {
         it("it stores the user's answer on the cookie and hides banner", () => {
           const banner = CookieBanner.init()
           banner.$acceptButton.click()
-          expect(document.cookie).toEqual(`${cookieName}=yes`)
+          expect(document.cookie).toEqual(`${cookieName}=accepted`)
           expect(banner.$banner.hidden).toBeTruthy()
           expect(banner.$afterConsentBanner.hidden).toBeFalsy()
         })
@@ -54,7 +55,7 @@ describe('CookieBanner', () => {
         it("it stores the user's answer on the cookie and hides banner", () => {
           const banner = CookieBanner.init()
           banner.$rejectButton.click()
-          expect(document.cookie).toEqual(`${cookieName}=no`)
+          expect(document.cookie).toEqual(`${cookieName}=rejected`)
           expect(banner.$banner.hidden).toBeTruthy()
           expect(banner.$afterConsentBanner.hidden).toBeFalsy()
         })

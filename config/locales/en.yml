@@ -541,6 +541,6 @@ en:
     after_consent:
       page_link_text: change your cookie settings
       message:
-        You’ve <span class="decision accepted">accepted</span><span class="decision rejected"> rejected</span> analytics cookies.
+        You’ve <span class="decision">rejected</span> analytics cookies.
         You can %{cookie_preferences_link} at any time.
       button_text_html: Hide this <span class="govuk-visually-hidden">cookies</span> message

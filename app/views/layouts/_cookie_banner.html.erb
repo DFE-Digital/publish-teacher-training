@@ -8,10 +8,10 @@
   <%= cookie_banner.message(heading_text: t("cookies.heading"),
                             text: t("cookies.message_html")) do |message| %>
     <% message.action do %>
-      <button value="yes" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
+      <button value="accepted" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.accept") %>
       </button>
-      <button value="no" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
+      <button value="rejected" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.reject") %>
       </button>
       <%= govuk_link_to(t("cookies.cookies_page_link")) %>

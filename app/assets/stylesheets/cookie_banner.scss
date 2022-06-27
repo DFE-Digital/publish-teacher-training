@@ -1,17 +1,5 @@
 .govuk-cookie-banner {
   .decision {
-    display: none;
-  }
-
-  &[data-consented="yes"] {
-    .accepted {
-      display: inline;
-    }
-  }
-
-  &[data-consented="no"] {
-    .rejected {
-      display: inline;
-    }
+    display: inline;
   }
 }

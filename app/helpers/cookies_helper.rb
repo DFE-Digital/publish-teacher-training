@@ -2,10 +2,10 @@
 
 module CookiesHelper
   def hide_cookie_banner?
-    request.cookie_jar[Settings.cookies.consent.name] =~ /yes|no/ || !FeatureService.enabled?(:google_analytics)
+    request.cookie_jar[Settings.cookies.consent.name] =~ /accepted|rejected/ || !FeatureService.enabled?(:google_analytics)
   end
 
   def google_analytics_allowed?
-    request.cookie_jar[Settings.cookies.consent.name] == "yes"
+    request.cookie_jar[Settings.cookies.consent.name] == "accepted"
   end
 end

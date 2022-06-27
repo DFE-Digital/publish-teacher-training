@@ -18,8 +18,8 @@ export default class CookieBanner {
       this.expiryAfterDays = this.$banner.attributes['data-cookie-consent-expiry-after-days'].value
       this.$afterConsentBanner = document.querySelector('[data-module="govuk-cookie-after-consent-banner"]')
 
-      this.$acceptButton = this.$banner.querySelector('[value="yes"]')
-      this.$rejectButton = this.$banner.querySelector('[value="no"]')
+      this.$acceptButton = this.$banner.querySelector('[value="accepted"]')
+      this.$rejectButton = this.$banner.querySelector('[value="rejected"]')
       this.$hideButton = this.$afterConsentBanner.querySelector('button')
 
       this.bindEvents()
@@ -39,7 +39,7 @@ export default class CookieBanner {
   saveAnswer (answer) {
     setCookie(this.cookieName, answer, { days: this.expiryAfterDays })
     this.hideBanner()
-    this.$afterConsentBanner.setAttribute('data-consented', answer)
+    this.$afterConsentBanner.querySelector('span').textContent = answer
     this.showAfterConsentBanner()
   }
 
