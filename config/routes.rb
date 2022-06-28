@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get "/user-not-found", to: "sign_in#new"
   get "/sign-out", to: "sessions#sign_out"
 
+  # Do we need this?
+  # get 'auth/failure', to: "sign_in#new"
+
   get "/accessibility", to: "pages#accessibility", as: :accessibility
   get "/cookies", to: "pages#cookies", as: :cookies
   get "/guidance", to: "pages#guidance", as: :guidance
