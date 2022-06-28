@@ -1,4 +1,4 @@
-FROM ruby:2.7.5-alpine3.15 AS middleman
+FROM ruby:3.1-alpine3.15 AS middleman
 
 RUN apk add --update --no-cache npm git build-base
 
@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:2.7.5-alpine3.15
+FROM ruby:3.1-alpine3.15
 
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
