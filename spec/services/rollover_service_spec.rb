@@ -10,16 +10,19 @@ describe RolloverService do
     allow(Courses::CopyToProviderService).to receive(:new).with(
       sites_copy_to_course: instance_of(Sites::CopyToCourseService),
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
+      force: force,
     ).and_return(copy_course_to_provider_service)
 
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service: copy_course_to_provider_service,
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
-      logger: instance_of(Logger),
+      force: force,
     ).and_return(copy_provider_to_recruitment_cycle_service)
   end
 
   describe ".call" do
+    let(:force) { false }
+
     context "with provider codes" do
       let(:provider) { create(:provider, provider_code: "AB1") }
       let(:provider_to_ignore) { create(:provider, provider_code: "CD2") }
@@ -39,7 +42,7 @@ describe RolloverService do
 
       it "passes the providers in provider_codes to the `CopyToRecruitmentCycle` service" do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
         )
 
         no_output { described_class.call(provider_codes: ["AB1"]) }
@@ -47,7 +50,7 @@ describe RolloverService do
 
       it "doesn't pass other providers" do
         expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-          provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
         )
 
         no_output { described_class.call(provider_codes: ["AB1"]) }
@@ -60,15 +63,15 @@ describe RolloverService do
 
         it "doesn't pass other providers" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           no_output { described_class.call(provider_codes: ["AB1"]) }
@@ -95,10 +98,10 @@ describe RolloverService do
 
       it "passes all providers `CopyToRecruitmentCycle` service" do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
         )
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-          provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+          provider: other_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
         )
 
         no_output { described_class.call(provider_codes: []) }
@@ -111,15 +114,15 @@ describe RolloverService do
 
         it "doesn't pass other providers" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: past_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           expect(copy_provider_to_recruitment_cycle_service).not_to receive(:execute).with(
-            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, force: false,
+            provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
           no_output { described_class.call(provider_codes: []) }
@@ -127,12 +130,14 @@ describe RolloverService do
       end
 
       context "force: true" do
+        let(:force) { true }
+
         it "passes the argument to the `CopyToRecruitmentCycle` service" do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
-            provider: provider, new_recruitment_cycle: next_recruitment_cycle, force: true,
+            provider: provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil,
           )
 
-          no_output { described_class.call(provider_codes: [], force: true) }
+          no_output { described_class.call(provider_codes: [], force: force) }
         end
       end
     end
