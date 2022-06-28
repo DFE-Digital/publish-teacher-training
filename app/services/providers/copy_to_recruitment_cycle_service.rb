@@ -29,7 +29,7 @@ module Providers
           # Order is important here. Sites should be copied over before courses
           # so that courses can link up to the correct sites in the new provider.
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
-          courses_count = copy_courses_to_new_provider(provider, rolled_over_provider, courses_to_copy(provider, course_codes))
+          courses_count = copy_courses_to_new_provider(rolled_over_provider, courses_to_copy(provider, course_codes))
         end
       end
 
@@ -73,9 +73,8 @@ module Providers
       courses
     end
 
-    def copy_courses_to_new_provider(_provider, new_provider, courses)
+    def copy_courses_to_new_provider(new_provider, courses)
       courses_count = 0
-
       courses.each do |course|
         new_course = copy_course_to_provider_service.execute(course: course, new_provider: new_provider)
         courses_count += 1 if new_course.present?
