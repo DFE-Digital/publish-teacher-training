@@ -24,7 +24,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
           <% row.key { "Level" } %>
           <% row.value { course.level.humanize } %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_level_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "level",
           }) %>
@@ -33,7 +33,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
           <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
           <% row.value { course.is_send? } %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_level_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "SEND",
           }) %>
@@ -43,7 +43,7 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
             <% row.key { "Subject".pluralize(course.subjects.length) } %>
             <% row.value { course.sorted_subjects } %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_subjects_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "subjects",
             }) %>
@@ -52,7 +52,7 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
             <% row.key { "Age range" } %>
             <% row.value { course.age_range } %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_age_range_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "age range",
             }) %>
@@ -62,7 +62,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
           <% row.key { "Outcome" } %>
           <% row.value { course.outcome } %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_outcome_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "outcome",
           }) %>
@@ -72,7 +72,7 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
             <% row.key { "Apprenticeship" } %>
             <% row.value { course.apprenticeship? } %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "if apprenticeship",
             }) %>
@@ -81,7 +81,7 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__fee_or_salary" } }) do |row| %>
             <% row.key { "Fee or salary" } %>
             <% row.value { course.funding } %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "if fee or salary",
             }) %>
@@ -91,7 +91,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
           <% row.key { "Full or part time" } %>
           <% row.value { course.study_mode&.humanize } %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_study_mode_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "if full or part time",
           }) %>
@@ -121,7 +121,7 @@
             <% end %>
           <% end %>
           <% if @course.provider.sites.count > 1 %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_locations_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "locations",
             }) %>
@@ -132,7 +132,7 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__accredited_body" } }) do |row| %>
             <% row.key { "Accredited body" } %>
             <% row.value { course.accrediting_provider.provider_name } %>
-            <% row.action({
+            <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_accredited_body_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "accredited body",
             }) %>
@@ -148,7 +148,7 @@
               <%= l(course.applications_open_from&.to_date) %>
             <% end %>
           <% end %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_applications_open_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "date applications open",
           }) %>
@@ -157,7 +157,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
           <% row.key { "Course starts" } %>
           <% row.value { course.start_date.present? ? l(course.start_date&.to_date, format: :short) : nil } %>
-          <% row.action({
+          <% row.action(**{
             href: new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "date course starts",
           }) %>

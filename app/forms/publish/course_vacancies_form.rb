@@ -12,7 +12,7 @@ module Publish
 
     validate :vacancies_confirmation
 
-    def initialize(*params)
+    def initialize(model, params: {})
       @site_statuses = []
       super
     end

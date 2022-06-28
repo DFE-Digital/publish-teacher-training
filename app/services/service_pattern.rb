@@ -14,7 +14,7 @@ module ServicePattern
     def call(**args)
       return new.call if args.empty?
 
-      new(args).call
+      new(**args).call
     end
   end
 end

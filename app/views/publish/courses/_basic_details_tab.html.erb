@@ -11,7 +11,7 @@
         <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
         <% row.value { course.is_send? } %>
         <% if @course.edit_course_options[:show_is_send] %>
-          <% row.action({
+          <% row.action(**{
             # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "SEND",
           }) %>
@@ -24,7 +24,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
           <% row.key { "Subject".pluralize(course.subjects.count) } %>
           <% row.value { course.sorted_subjects } %>
-          <% row.action({
+          <% row.action(**{
             href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "subjects",
           }) %>
@@ -35,7 +35,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
           <% row.key { "Age range" } %>
           <% row.value { course.age_range } %>
-          <% row.action({
+          <% row.action(**{
             href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "age range",
           }) %>
@@ -45,7 +45,7 @@
       <% summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
         <% row.key { "Outcome" } %>
         <% row.value { course.outcome } %>
-        <% row.action({
+        <% row.action(**{
           href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "outcome",
         }) %>
@@ -58,7 +58,7 @@
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
-            <% row.action({
+            <% row.action(**{
               # href: apprenticeship_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
               # visually_hidden_text: "if apprenticeship",
             }) %>
@@ -71,7 +71,7 @@
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
-            <% row.action({
+            <% row.action(**{
               # href: fee_or_salary_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
               # visually_hidden_text: "if fee or salary",
             }) %>
@@ -82,7 +82,7 @@
       <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
         <% row.key { "Full or part time" } %>
         <% row.value { course.study_mode&.humanize } %>
-        <% row.action({
+        <% row.action(**{
           href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "if full or part time",
         }) %>
@@ -103,7 +103,7 @@
             </ul>
           <% end %>
         <% end %>
-        <% row.action({
+        <% row.action(**{
           href: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "locations",
         }) %>
@@ -116,7 +116,7 @@
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
-            <% row.action({
+            <% row.action(**{
               # href: accredited_body_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
               # visually_hidden_text: "accredited body",
             }) %>
@@ -128,7 +128,7 @@
         <% row.key { "Applications open" } %>
         <% row.value { l(course.applications_open_from&.to_date) } %>
         <% if @course.edit_course_options[:show_applications_open] %>
-          <% row.action({
+          <% row.action(**{
             # href: applications_open_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             # visually_hidden_text: "date applications open",
           }) %>
@@ -141,7 +141,7 @@
         <% row.key { "Course starts" } %>
         <% row.value { l(course.start_date&.to_date, format: :short) } %>
         <% if @course.edit_course_options[:show_start_date] %>
-          <% row.action({
+          <% row.action(**{
             # href: start_date_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             # visually_hidden_text: "date course starts",
           }) %>
