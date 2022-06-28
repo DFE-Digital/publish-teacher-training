@@ -87,6 +87,9 @@ google:
     api_json_key: "{}"
     table_name: events
 
+google_tag_manager:
+  tracking_id: change_me
+
 feedback:
   link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
 
