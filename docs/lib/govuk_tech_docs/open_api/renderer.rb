@@ -18,7 +18,6 @@ module GovukTechDocs
         @template_operation = get_renderer("operation.html.erb")
         @template_parameters = get_renderer("parameters.html.erb")
         @template_responses = get_renderer("responses.html.erb")
-        @template_any_of = get_renderer("any_of.html.erb")
         @template_curl_examples = get_renderer("curl_examples.html.erb")
       end
 
@@ -53,10 +52,6 @@ module GovukTechDocs
 
         title = schema_data[0]
         schema = schema_data[1]
-
-        if schema_data[1]["anyOf"]
-          return @template_any_of.result(binding)
-        end
 
         @template_schema.result(binding)
       end
@@ -108,15 +103,6 @@ module GovukTechDocs
           end
         end
         properties.each do |property|
-          # Must be a schema be referenced by another schema
-          # And not a property of a schema
-          if property.node_context.referenced_by.to_s.include?("#/components/schemas") &&
-              !property.node_context.source_location.to_s.include?("/properties/")
-            schema_name = get_schema_name(property.node_context.source_location.to_s)
-          end
-          if !schema_name.nil?
-            schemas.push schema_name
-          end
           # Check sub-properties for references
           schemas.concat(schemas_from_schema(property))
         end
@@ -289,15 +275,6 @@ module GovukTechDocs
 
         # Schema dictates that it's always components['schemas']
         text.gsub(/#\/components\/schemas\//, "")
-      end
-
-      def get_schema_link(schema)
-        schema_name = get_schema_name schema.node_context.source_location.to_s
-        if !schema_name.nil?
-          id = "schema-#{schema_name.parameterize}"
-          output = "<a href='\##{id}'>#{schema_name}</a>"
-          output
-        end
       end
 
       def schemas_data

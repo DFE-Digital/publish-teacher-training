@@ -16,12 +16,6 @@
 
           <td>
             <%= markdown(response.description) %>
-
-            <% if response.content['application/json'] %>
-              <p>
-                This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
-              </p>
-            <% end %>
           </td>
         </tr>
       <% end %>
@@ -39,12 +33,6 @@
       </summary>
 
       <div class="govuk-details__text">
-        <% if response.content['application/json'] %>
-          <p>
-            This response returns a <%= get_schema_link(response.content['application/json'].schema) %> schema.
-          </p>
-        <% end %>
-
         <% if response.content['application/json']
           if response.content['application/json']["example"]
             request_body = json_prettyprint(response.content['application/json']["example"])
