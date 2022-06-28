@@ -57,14 +57,14 @@ jobs:
         uses: Azure/get-keyvault-secrets@v1
         with:
           keyvault: s121p01-shared-kv-01
-          secrets: TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION
+          secrets: PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION
         id: GetSecretAction
 
       - name: Upload Backup to Azure Storage
         run: |
           az storage blob upload --container-name prod-db-backup \
           --file ${PROD_BACKUP}.tar.gz --name ${PROD_BACKUP}.tar.gz \
-          --connection-string '${{ env.TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION }}'
+          --connection-string '${{ env.PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION }}'
 
       - name: Sanitise the Database backup
         run: |
