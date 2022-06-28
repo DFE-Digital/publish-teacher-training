@@ -14,7 +14,7 @@
       <button value="rejected" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.reject") %>
       </button>
-      <%= govuk_link_to(t("cookies.cookies_page_link")) %>
+      <%= govuk_link_to(t("cookies.cookies_page_link"), cookies_path) %>
     <% end %>
   <% end %>
 <% end %>
@@ -22,7 +22,7 @@
   "hidden" => true,
   "data-module" => "govuk-cookie-after-consent-banner",
 }) do |cookie_banner| %>
-  <% cookie_preferences_link = govuk_link_to(t("cookies.after_consent.page_link_text")) %>
+  <% cookie_preferences_link = govuk_link_to(t("cookies.after_consent.page_link_text"), cookies_path) %>
   <%= cookie_banner.message(text: t("cookies.after_consent.message",
                                     cookie_preferences_link: cookie_preferences_link).html_safe) do |message| %>
     <% message.action do %>
