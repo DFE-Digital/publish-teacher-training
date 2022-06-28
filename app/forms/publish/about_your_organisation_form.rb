@@ -18,7 +18,7 @@ module Publish
 
     def accredited_bodies
       @accredited_bodies ||= provider.accredited_bodies.map do |ab|
-        accredited_body(ab)
+        accredited_body(**ab)
       end
     end
 

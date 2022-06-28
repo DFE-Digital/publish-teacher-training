@@ -25,14 +25,14 @@ module DegreeRowContentComponent
       let(:degree_grade) { nil }
 
       it "renders a link to the degree section" do
-        expect(page).to have_link(
+        expect(page.has_link?(
           "Enter degree requirements",
           href: degrees_start_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             provider.recruitment_cycle.year,
             course.course_code,
           ),
-        )
+        )).to be true
       end
     end
 

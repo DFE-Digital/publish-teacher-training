@@ -28,9 +28,8 @@ module Publish
                                             end
     end
 
-    def initialize(*args)
+    def initialize(model, params: nil)
       super
-
       if process_custom_range?
         self.course_age_range_in_years_other_from = extract_from_years
         self.course_age_range_in_years_other_to = extract_to_years

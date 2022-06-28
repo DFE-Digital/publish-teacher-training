@@ -8,7 +8,7 @@ module V3
 
     class << self
       def call(**args)
-        new(args).call
+        new(**args).call
       end
     end
 

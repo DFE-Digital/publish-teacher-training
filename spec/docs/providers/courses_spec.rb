@@ -78,7 +78,7 @@ describe "API" do
           create(:course, provider:, course_code: "C101")
         end
 
-        schema "$ref": "#/components/schemas/CourseListResponse"
+        schema({ "$ref": "#/components/schemas/CourseListResponse" })
 
         run_test!
       end
@@ -130,7 +130,7 @@ describe "API" do
         let(:course_code) { course.course_code }
         let(:include) { "provider" }
 
-        schema "$ref": "#/components/schemas/CourseSingleResponse"
+        schema({ "$ref": "#/components/schemas/CourseSingleResponse" })
 
         run_test!
       end

@@ -72,7 +72,7 @@ describe "API" do
           create(:course, course_code: "C100")
         end
 
-        schema "$ref": "#/components/schemas/CourseListResponse"
+        schema({ "$ref": "#/components/schemas/CourseListResponse" })
 
         run_test!
       end
