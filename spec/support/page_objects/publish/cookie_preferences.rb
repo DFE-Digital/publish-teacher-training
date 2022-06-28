@@ -9,8 +9,8 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
 
-      element :yes_option, "#publish-cookie-preferences-form-consent-yes-field"
-      element :no_option, "#publish-cookie-preferences-form-consent-no-field"
+      element :yes_option, "#publish-cookie-preferences-form-consent-accepted-field"
+      element :no_option, "#publish-cookie-preferences-form-consent-rejected-field"
 
       element :submit, 'button.govuk-button[type="submit"]'
 
