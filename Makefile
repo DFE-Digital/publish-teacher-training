@@ -42,7 +42,7 @@ review:
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
 	$(eval space=bat-qa)
 	$(eval paas_env=pr-$(APP_NAME))
-	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
+	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
 
 .PHONY: qa
@@ -51,7 +51,7 @@ qa: ## Set DEPLOY_ENV to qa
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
 	$(eval space=bat-qa)
 	$(eval paas_env=qa)
-	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
+	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
 .PHONY: staging
 staging: ## Set DEPLOY_ENV to staging
@@ -75,7 +75,7 @@ production: ## Set DEPLOY_ENV to production
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
 	$(eval PARTIAL_HOSTNAME=www)
-	$(eval backup_storage_secret_name=TTAPI-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION)
+	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION)
 
 .PHONY: loadtest
 loadtest: ## Set DEPLOY_ENV to loadtest
