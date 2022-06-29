@@ -1,6 +1,6 @@
 ---
 applications:
-- name: ttapi-unavailable
+- name: publish-unavailable
   path: web
   buildpacks:
   - nginx_buildpack

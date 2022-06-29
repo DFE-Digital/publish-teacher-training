@@ -155,8 +155,8 @@ enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance
 	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
 	cf target -s ${space}
 	cd service_unavailable_page && cf push
-	eval cf map-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	eval cf map-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf map-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
 	eval cf unmap-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf unmap-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
@@ -168,9 +168,9 @@ disable-maintenance: ## make qa disable-maintenance / make prod disable-maintena
 	eval cf map-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
 	cf map-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
 	echo Waiting 5s for route to be registered... && sleep 5
-	eval cf unmap-route ttapi-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route ttapi-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
-	cf delete -rf ttapi-unavailable
+	eval cf unmap-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
+	cf unmap-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	cf delete -rf publish-unavailable
 
 restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
 	bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}

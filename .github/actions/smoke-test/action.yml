@@ -47,7 +47,7 @@ runs:
         SLACK_CHANNEL: twd_findpub_tech
         SLACK_COLOR: '#ef5343'
         SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Teacher Training API
+        SLACK_USERNAME: Publish Teacher Training
         SLACK_TITLE: Smoke tests failure
         SLACK_MESSAGE: ':alert: <!channel> Smoke tests failure on ${{ inputs.environment }} :sadparrot:'
         SLACK_WEBHOOK: ${{ inputs.slack-webhook }}

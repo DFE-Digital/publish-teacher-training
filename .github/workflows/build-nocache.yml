@@ -94,7 +94,7 @@ jobs:
           SLACK_CHANNEL: twd_findpub_tech
           SLACK_COLOR: '#ef5343'
           SLACK_ICON_EMOJI: ':github-logo:'
-          SLACK_USERNAME: Teacher Training API
+          SLACK_USERNAME: Publish Teacher Training
           SLACK_TITLE: Build failure on weekly rebuild cache workflow
-          SLACK_MESSAGE: ':alert: <!channel> Teacher Training API Build failure :sadparrot:'
+          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
