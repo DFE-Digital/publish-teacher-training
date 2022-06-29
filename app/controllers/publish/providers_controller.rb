@@ -32,10 +32,10 @@ module Publish
 
       if FeatureService.enabled?(:new_publish_navigation) && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-      elsif @recruitment_cycle_year == RecruitmentCycle.current.year
+      elsif @recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
         session.delete("recruitment_cycle_year")
-      elsif @recruitment_cycle_year == RecruitmentCycle.current.next.year
+      elsif @recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year + 1
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year.next)
         session.delete("recruitment_cycle_year")
       else

@@ -36,16 +36,17 @@ feature "Providers index" do
     when_i_visit_the_providers_index_page
     and_i_continue_past_the_recruitment_cycle_text
     and_i_click_on_a_provider
-    i_should_be_on_the_organisation_switcher_page
+    i_should_be_on_the_recruitment_cycle_switcher_page
 
-    when_i_click_on_the_current_cycle_link
-    and_i_click_the_change_organisation_link
-    i_should_be_on_the_organisations_list
-
-    and_i_click_on_a_provider
     when_i_click_on_the_current_cycle_link
     and_click_change_recruitment_cycle
-    i_should_be_on_the_organisation_switcher_page
+    i_should_be_on_the_recruitment_cycle_switcher_page
+
+    when_i_click_on_the_current_cycle_link
+    i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
+    and_i_click_the_change_organisation_link
+    and_i_click_on_a_provider
+    i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
   end
 
   def when_i_click_on_the_current_cycle_link
@@ -60,8 +61,13 @@ feature "Providers index" do
     find_or_create(:recruitment_cycle, :previous)
   end
 
-  def i_should_be_on_the_organisation_switcher_page
+  def i_should_be_on_the_recruitment_cycle_switcher_page
     expect(page).to have_text "Recruitment cycles"
+  end
+
+  def i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
+    expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Settings.current_recruitment_cycle_year}/courses")
+    expect(page).to have_text "Courses"
   end
 
   def and_click_change_recruitment_cycle
@@ -134,7 +140,7 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_organisations_list
-    expect(page).to have_current_path("/?current_cycle=true")
+    expect(page).to have_current_path("/?recruitment_cycle_year=#{Settings.current_recruitment_cycle_year}")
     expect(page).to have_text "Organisations"
   end
 
