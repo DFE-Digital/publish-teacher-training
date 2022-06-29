@@ -40,7 +40,7 @@ jobs:
          CF_SPACE_NAME: bat-prod
          INSTALL_CONDUIT: true
 
-      - name: Backup Teacher Training API Prod Database
+      - name: Backup Publish Teacher Training Prod Database
         run: |
           now=$(date +"%F")
           PROD_BACKUP=prod_backup-$now.sql
