@@ -156,20 +156,20 @@ enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance
 	cf target -s ${space}
 	cd service_unavailable_page && cf push
 	eval cf map-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	cf map-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
 	echo Waiting 5s for route to be registered... && sleep 5
 	eval cf unmap-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	cf unmap-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
 
 disable-maintenance: ## make qa disable-maintenance / make prod disable-maintenance CONFIRM_PRODUCTION=y
 	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
 	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
 	cf target -s ${space}
 	eval cf map-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	cf map-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
 	echo Waiting 5s for route to be registered... && sleep 5
 	eval cf unmap-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}2
+	cf unmap-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
 	cf delete -rf publish-unavailable
 
 restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
