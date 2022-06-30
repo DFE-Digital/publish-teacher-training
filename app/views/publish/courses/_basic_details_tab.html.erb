@@ -140,10 +140,8 @@
       <% summary_list.row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
         <% row.key { "Course starts" } %>
         <% row.value do %>
-          <ul class="govuk-list">
-            <li><%= l(course.start_date&.to_date, format: :short) %></li>
-            <li>Academic year <%= course.cycle_range %></li>
-          </ul>
+          <p class="govuk-body"><%= l(course.start_date&.to_date, format: :short) %></p>
+          <p class="govuk-hint">Academic year <%= course.cycle_range %></p>
         <% end %>
         <% if @course.edit_course_options[:show_start_date] %>
           <% row.action({
