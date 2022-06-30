@@ -53,7 +53,7 @@
     <% end %>
 
       <div class="govuk-width-container">
-        <% if dont_display_phase_banner_border?(current_user) && FeatureService.enabled?(:new_publish_navigation) && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") %>
+        <% if dont_display_phase_banner_border?(current_user) %>
           <%= render PhaseBanner::View.new(no_border: true) %>
         <% else %>
           <%= render PhaseBanner::View.new %>
