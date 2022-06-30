@@ -5,7 +5,7 @@ module Publish
         authorize provider, :show?
 
         @allocations_view = AllocationsView.new(
-          allocations: allocations[Settings.allocation_cycle_year.to_s] || [], training_providers: training_providers,
+          allocations: allocations[Settings.allocation_cycle_year.to_s] || [], training_providers:,
         )
       end
 
@@ -63,7 +63,7 @@ module Publish
         authorize provider, :show?
 
         provider
-        flow = InitialRequestFlow.new(params: params)
+        flow = InitialRequestFlow.new(params:)
 
         if request.post? && flow.valid? && flow.redirect?
           redirect_to flow.redirect_path

@@ -208,7 +208,7 @@ private
   def initial_allocation
     @initial_allocation ||= create(
       :allocation, :initial,
-      accredited_body: accredited_body,
+      accredited_body:,
       provider: training_provider_with_allocation,
       number_of_places: 2
     )

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CourseAttributeFormatterService do
-  subject { CourseAttributeFormatterService.call(name: name, value: value) }
+  subject { CourseAttributeFormatterService.call(name:, value:) }
 
   shared_examples_for "value is nil" do
     context "with an unknown value" do

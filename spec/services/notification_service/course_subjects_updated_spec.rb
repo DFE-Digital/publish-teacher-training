@@ -55,9 +55,9 @@ module NotificationService
 
       def call_service
         described_class.call(
-          course: course,
-          previous_subject_names: previous_subject_names,
-          previous_course_name: previous_course_name,
+          course:,
+          previous_subject_names:,
+          previous_course_name:,
         )
       end
 
@@ -74,7 +74,7 @@ module NotificationService
 
       context "with a course that is not in the current cycle" do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
-        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
         it "does not send a notification" do
           expect(CourseSubjectsUpdatedEmailMailer).not_to receive(:course_subjects_updated_email)
@@ -90,9 +90,9 @@ module NotificationService
             expect(CourseSubjectsUpdatedEmailMailer)
               .to receive(:course_subjects_updated_email)
               .with(
-                course: course,
-                previous_subject_names: previous_subject_names,
-                previous_course_name: previous_course_name,
+                course:,
+                previous_subject_names:,
+                previous_course_name:,
                 recipient: subscribed_user,
               ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)

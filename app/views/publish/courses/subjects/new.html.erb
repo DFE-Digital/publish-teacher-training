@@ -13,7 +13,7 @@
                     @provider.recruitment_cycle_year,
                   ),
                   method: :get do |form| %>
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [] do |fields| %>
         <%= render "form_fields", form: fields %>
       <% end %>
     <% end %>

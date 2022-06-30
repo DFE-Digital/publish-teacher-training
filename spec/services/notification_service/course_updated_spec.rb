@@ -23,7 +23,7 @@ module NotificationService
       )
     end
 
-    let(:service_call) { described_class.call(course: course) }
+    let(:service_call) { described_class.call(course:) }
     let(:findable) { true }
     let(:self_accredited) { false }
 
@@ -46,7 +46,7 @@ module NotificationService
 
     context "with a course that is not in the current cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
       before { setup_notifications }
 
@@ -68,7 +68,7 @@ module NotificationService
             expect(CourseUpdateEmailMailer)
               .to receive(:course_update_email)
               .with(
-                course: course,
+                course:,
                 attribute_name: "age_range_in_years",
                 original_value: "3_to_7",
                 updated_value: "7_to_14",
@@ -87,8 +87,8 @@ module NotificationService
             expect(CourseUpdateEmailMailer)
               .to receive(:course_update_email)
               .with(
-                course: course,
-                attribute_name: attribute_name,
+                course:,
+                attribute_name:,
                 original_value: "expect_to_achieve_before_training_begins",
                 updated_value: "must_have_qualification_at_application_time",
                 recipient: subscribed_user1,

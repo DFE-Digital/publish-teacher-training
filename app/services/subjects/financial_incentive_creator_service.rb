@@ -71,8 +71,8 @@ module Subjects
 
     def execute
       subject_and_financial_incentives.each do |subject_name, financial_incentive_attributes|
-        @subject.where(subject_name: subject_name).each do |subject|
-          @financial_incentive.find_or_create_by(subject: subject, **financial_incentive_attributes)
+        @subject.where(subject_name:).each do |subject|
+          @financial_incentive.find_or_create_by(subject:, **financial_incentive_attributes)
         end
       end
     end

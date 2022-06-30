@@ -9,20 +9,20 @@
     <% if course.salaried? %>
       <%= render partial: "publish/courses/preview/financial_support/salaried" %>
     <% elsif course.use_financial_support_placeholder? %>
-      <%= render partial: "publish/courses/preview/financial_support/placeholder", locals: { course: course } %>
+      <%= render partial: "publish/courses/preview/financial_support/placeholder", locals: { course: } %>
     <% elsif course.excluded_from_bursary? %>
-      <%= render partial: "publish/courses/preview/financial_support/loan", locals: { course: course } %>
+      <%= render partial: "publish/courses/preview/financial_support/loan", locals: { course: } %>
     <% elsif course.bursary_only? %>
-      <%= render partial: "publish/courses/preview/financial_support/bursary", locals: { course: course } %>
+      <%= render partial: "publish/courses/preview/financial_support/bursary", locals: { course: } %>
     <% elsif course.has_scholarship_and_bursary? %>
-      <%= render partial: "publish/courses/preview/financial_support/scholarship_and_bursary", locals: { course: course } %>
+      <%= render partial: "publish/courses/preview/financial_support/scholarship_and_bursary", locals: { course: } %>
     <% else %>
-      <%= render partial: "publish/courses/preview/financial_support/loan", locals: { course: course } %>
+      <%= render partial: "publish/courses/preview/financial_support/loan", locals: { course: } %>
     <% end %>
   </aside>
 
   <% if course.has_fees? %>
-    <%= render partial: "publish/courses/preview/fees", locals: { course: course } %>
+    <%= render partial: "publish/courses/preview/fees", locals: { course: } %>
   <% end %>
 
   <% if course.financial_support.present? %>

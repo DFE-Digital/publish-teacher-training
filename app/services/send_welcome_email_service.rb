@@ -2,7 +2,7 @@ class SendWelcomeEmailService
   class MissingFirstNameError < StandardError; end
   class << self
     def call(current_user:)
-      new.call(current_user: current_user)
+      new.call(current_user:)
     end
   end
 

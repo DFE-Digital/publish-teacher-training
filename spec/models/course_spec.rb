@@ -235,7 +235,7 @@ describe Course, type: :model do
 
     describe "accredited_body_order" do
       let(:provider) { create(:provider) }
-      let(:delivered_course) { create(:course, provider: provider) }
+      let(:delivered_course) { create(:course, provider:) }
       let(:accredited_course) { create(:course, accrediting_provider: provider) }
 
       before do
@@ -322,7 +322,7 @@ describe Course, type: :model do
     describe "valid?" do
       context "A new course" do
         let(:provider) { build(:provider) }
-        let(:course) { Course.new(provider: provider) }
+        let(:course) { Course.new(provider:) }
         let(:errors) { course.errors.messages }
 
         before { course.valid?(:new) }
@@ -340,7 +340,7 @@ describe Course, type: :model do
         end
 
         context "With modern languages as a subject" do
-          let(:course) { Course.new(provider: provider, subjects: [modern_languages]) }
+          let(:course) { Course.new(provider:, subjects: [modern_languages]) }
 
           it "Requires a language to be selected" do
             error = errors[:modern_languages_subjects]
@@ -599,8 +599,8 @@ describe Course, type: :model do
       describe "validate_degree_requirements_publishable" do
         let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
-        let(:course_with_degree_grade) { create(:course, provider: provider) }
-        let(:course_without_degree_grade) { create(:course, provider: provider, degree_grade: nil) }
+        let(:course_with_degree_grade) { create(:course, provider:) }
+        let(:course_without_degree_grade) { create(:course, provider:, degree_grade: nil) }
 
         context "when degree grade is present" do
           it "returns true and does not add an error" do
@@ -621,8 +621,8 @@ describe Course, type: :model do
       describe "validate_gcse_requirements_publishable" do
         let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
-        let(:publishable_course) { create(:course, provider: provider, accept_pending_gcse: true, accept_gcse_equivalency: false) }
-        let(:unpublishable_course) { create(:course, provider: provider, accept_pending_gcse: nil) }
+        let(:publishable_course) { create(:course, provider:, accept_pending_gcse: true, accept_gcse_equivalency: false) }
+        let(:unpublishable_course) { create(:course, provider:, accept_pending_gcse: nil) }
 
         context "when accept_pending_gcse and accept_gcse_equivalency are present" do
           it "returns true and does not add an error" do
@@ -649,7 +649,7 @@ describe Course, type: :model do
       let(:course1) do
         create(
           :course,
-          enrichments: enrichments,
+          enrichments:,
           site_statuses: [
             build(:site_status, :findable, site: build(:site, longitude: 0, latitude: 0)),
           ],
@@ -659,7 +659,7 @@ describe Course, type: :model do
       let(:course2) do
         create(
           :course,
-          enrichments: enrichments,
+          enrichments:,
           site_statuses: [
             build(:site_status, :findable, site: build(:site, longitude: 32, latitude: 32)),
           ],
@@ -679,7 +679,7 @@ describe Course, type: :model do
     describe ".published" do
       subject { described_class.published }
 
-      let(:test_course) { create(:course, enrichments: enrichments) }
+      let(:test_course) { create(:course, enrichments:) }
 
       before do
         test_course
@@ -747,7 +747,7 @@ describe Course, type: :model do
     describe ".with_recruitment_cycle" do
       subject { described_class.with_recruitment_cycle(provider.recruitment_cycle.year) }
 
-      let(:test_course) { create(:course, provider: provider) }
+      let(:test_course) { create(:course, provider:) }
 
       before { test_course }
 
@@ -771,7 +771,7 @@ describe Course, type: :model do
     describe ".findable" do
       subject { described_class.findable }
 
-      let(:test_course) { create(:course, site_statuses: site_statuses) }
+      let(:test_course) { create(:course, site_statuses:) }
 
       before { test_course }
 
@@ -803,7 +803,7 @@ describe Course, type: :model do
     describe ".with_vacancies" do
       subject { described_class.with_vacancies }
 
-      let(:test_course) { create(:course, site_statuses: site_statuses) }
+      let(:test_course) { create(:course, site_statuses:) }
 
       before { test_course }
 
@@ -1076,7 +1076,7 @@ describe Course, type: :model do
     describe ".with_provider_name" do
       let(:provider) { create(:provider, provider_name: "ACME") }
       let(:provider2) { create(:provider, provider_name: "DAVE") }
-      let(:course) { create(:course, provider: provider) }
+      let(:course) { create(:course, provider:) }
       let(:provider_name) { "ACME" }
       let(:accredited_provider_name) { "University of Awesome" }
       let(:accredited_provider) { build(:provider, :accredited_body, provider_name: accredited_provider_name) }
@@ -1111,7 +1111,7 @@ describe Course, type: :model do
     describe ".with_accredited_bodies" do
       context "course with an accredited body" do
         let!(:provider) { create(:provider) }
-        let!(:course) { create(:course, provider: provider) }
+        let!(:course) { create(:course, provider:) }
         let!(:accredited_provider) { create(:provider, :accredited_body) }
         let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
@@ -1141,7 +1141,7 @@ describe Course, type: :model do
     describe ".provider_can_sponsor_visa" do
       subject { described_class.provider_can_sponsor_visa }
 
-      let(:course) { create(:course, provider: provider) }
+      let(:course) { create(:course, provider:) }
 
       before do
         course
@@ -1151,7 +1151,7 @@ describe Course, type: :model do
         let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false) }
 
         context "and is a salaried course" do
-          let(:course) { create(:course, :salary_type_based, provider: provider) }
+          let(:course) { create(:course, :salary_type_based, provider:) }
 
           it "returns the course" do
             expect(subject).to eq [course]
@@ -1159,7 +1159,7 @@ describe Course, type: :model do
         end
 
         context "and is non-salaried course" do
-          let(:course) { create(:course, :fee_type_based, provider: provider) }
+          let(:course) { create(:course, :fee_type_based, provider:) }
 
           it "does not return the course" do
             expect(subject).to eq []
@@ -1171,7 +1171,7 @@ describe Course, type: :model do
         let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true) }
 
         context "and is non-salaried course" do
-          let(:course) { create(:course, :fee_type_based, provider: provider) }
+          let(:course) { create(:course, :fee_type_based, provider:) }
 
           it "returns the course" do
             expect(subject).to eq [course]
@@ -1179,7 +1179,7 @@ describe Course, type: :model do
         end
 
         context "and is a salaried course" do
-          let(:course) { create(:course, :salary_type_based, provider: provider) }
+          let(:course) { create(:course, :salary_type_based, provider:) }
 
           it "does not return the course" do
             expect(subject).to eq []
@@ -1225,13 +1225,13 @@ describe Course, type: :model do
 
   context "with sites" do
     let(:provider) { build(:provider) }
-    let(:first_site) { build(:site, provider: provider) }
+    let(:first_site) { build(:site, provider:) }
     let(:first_site_status) { create(:site_status, :running, site: first_site) }
-    let(:second_site) { build(:site, provider: provider) }
+    let(:second_site) { build(:site, provider:) }
     let(:second_site_status) { create(:site_status, :suspended, site: second_site) }
-    let(:new_site) { build(:site, provider: provider) }
+    let(:new_site) { build(:site, provider:) }
 
-    subject { create(:course, provider: provider, site_statuses: [first_site_status, second_site_status]) }
+    subject { create(:course, provider:, site_statuses: [first_site_status, second_site_status]) }
 
     describe "#sites" do
       it "onlies return new and running sites" do
@@ -1241,14 +1241,14 @@ describe Course, type: :model do
 
     describe "sites=" do
       let(:new_site_status) { build(:site_status, :new, site: site_with_new_site_status) }
-      let(:site_with_new_site_status) { build(:site, provider: provider) }
+      let(:site_with_new_site_status) { build(:site, provider:) }
 
       before do
         subject.sites = [second_site, new_site]
       end
 
       context "with a ucas_status of new" do
-        subject { create(:course, provider: provider, site_statuses: [new_site_status]) }
+        subject { create(:course, provider:, site_statuses: [new_site_status]) }
 
         it "does not set the site to running" do
           expect(second_site_status.reload.status).to eq("suspended")
@@ -1297,20 +1297,20 @@ describe Course, type: :model do
   context "with site statuses" do
     let(:provider) { build(:provider, sites: [site]) }
     let(:site) { build(:site) }
-    let(:new_site_status) { build(:site_status, :new, site: site) }
-    let(:new_site_status2) { build(:site_status, :new, site: site) }
-    let(:findable) { build(:site_status, :findable, site: site) }
-    let(:suspended) { build(:site_status, :suspended, site: site) }
-    let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site: site) }
-    let(:default) { build(:site_status, site: site) }
-    let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies, site: site) }
-    let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies, site: site) }
-    let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site: site) }
-    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site: site) }
-    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site: site) }
+    let(:new_site_status) { build(:site_status, :new, site:) }
+    let(:new_site_status2) { build(:site_status, :new, site:) }
+    let(:findable) { build(:site_status, :findable, site:) }
+    let(:suspended) { build(:site_status, :suspended, site:) }
+    let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site:) }
+    let(:default) { build(:site_status, site:) }
+    let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies, site:) }
+    let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies, site:) }
+    let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
+    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
+    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
     let(:site_statuses) { [] }
 
-    subject { create(:course, provider: provider, site_statuses: site_statuses) }
+    subject { create(:course, provider:, site_statuses:) }
 
     describe "#findable_site_statuses" do
       context "with a site_statuses association that have been loaded" do
@@ -1417,7 +1417,7 @@ describe Course, type: :model do
 
     describe "#has_vacancies? (when site_statuses not loaded)" do
       subject {
-        create(:course, site_statuses: site_statuses).reload
+        create(:course, site_statuses:).reload
       }
 
       context "for a single site status that has vacancies" do
@@ -1452,8 +1452,8 @@ describe Course, type: :model do
 
       let(:course) do
         create(:course,
-          site_statuses: site_statuses,
-          applications_open_from: applications_open_from)
+          site_statuses:,
+          applications_open_from:)
       end
 
       subject { course }
@@ -1528,8 +1528,8 @@ describe Course, type: :model do
 
       let(:course) do
         create(:course,
-          site_statuses: site_statuses,
-          applications_open_from: applications_open_from)
+          site_statuses:,
+          applications_open_from:)
       end
 
       subject {
@@ -1710,7 +1710,7 @@ describe Course, type: :model do
 
     specs.each do |study_mode, expected_description|
       context study_mode.to_s do
-        subject { create(:course, study_mode: study_mode) }
+        subject { create(:course, study_mode:) }
 
         its(:study_mode_description) { is_expected.to eq(expected_description) }
       end
@@ -1784,7 +1784,7 @@ describe Course, type: :model do
       expect(course).to delegate_method_to_service(
         :content_status,
         "Courses::ContentStatusService",
-      ).with_arguments(enrichment: enrichment1, recruitment_cycle: recruitment_cycle)
+      ).with_arguments(enrichment: enrichment1, recruitment_cycle:)
     end
   end
 
@@ -1861,7 +1861,7 @@ describe Course, type: :model do
     context "when the provider is on the PROVIDERS_REQUIRING_GCSE_GRADE_5 list" do
       let(:course) do
         provider = create(:provider, provider_code: Course::PROVIDERS_REQUIRING_GCSE_GRADE_5.sample)
-        create(:course, provider: provider)
+        create(:course, provider:)
       end
 
       its(:gcse_grade_required) { is_expected.to eq(5) }
@@ -1871,7 +1871,7 @@ describe Course, type: :model do
       let(:course) do
         provider = create(:provider)
         accrediting_provider = create(:provider, provider_code: Course::PROVIDERS_REQUIRING_GCSE_GRADE_5.sample)
-        create(:course, provider: provider, accrediting_provider: accrediting_provider)
+        create(:course, provider:, accrediting_provider:)
       end
 
       its(:gcse_grade_required) { is_expected.to eq(5) }
@@ -1964,9 +1964,9 @@ describe Course, type: :model do
   describe "adding and removing sites on a course" do
     let(:provider) { build(:provider) }
     # this code will be removed and fixed properly in the next pr
-    let(:new_site) { create(:site, provider: provider, code: "A") }
+    let(:new_site) { create(:site, provider:, code: "A") }
     # this code will be removed and fixed properly in the next pr
-    let(:existing_site) { create(:site, provider: provider, code: "B") }
+    let(:existing_site) { create(:site, provider:, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
 
     subject { create(:course, site_statuses: [existing_site_status]) }
@@ -2033,7 +2033,7 @@ describe Course, type: :model do
 
   describe "#accrediting_provider_description" do
     let(:accrediting_provider) { nil }
-    let(:course) { create(:course, accrediting_provider: accrediting_provider) }
+    let(:course) { create(:course, accrediting_provider:) }
 
     subject { course.accrediting_provider_description }
 
@@ -2043,9 +2043,9 @@ describe Course, type: :model do
 
     context "for courses with accrediting provider" do
       let(:accrediting_provider) { build(:provider) }
-      let(:course) { create(:course, provider: provider, accrediting_provider: accrediting_provider) }
+      let(:course) { create(:course, provider:, accrediting_provider:) }
 
-      let(:provider) { build(:provider, accrediting_provider_enrichments: accrediting_provider_enrichments) }
+      let(:provider) { build(:provider, accrediting_provider_enrichments:) }
 
       context "without any accrediting_provider_enrichments" do
         let(:accrediting_provider_enrichments) { nil }
@@ -2087,7 +2087,7 @@ describe Course, type: :model do
           salary_details
         ].freeze
 
-      let(:course) { create(:course, enrichments: enrichments) }
+      let(:course) { create(:course, enrichments:) }
       let(:actual_enrichment_attributes) do
         subject.attributes.slice(*copyable_enrichment_attributes)
       end
@@ -2170,8 +2170,8 @@ describe Course, type: :model do
 
     context "course is in the next recruitment cycle" do
       let(:recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:provider)          { create :provider, recruitment_cycle: recruitment_cycle }
-      let(:course) { create :course, provider: provider }
+      let(:provider)          { create :provider, recruitment_cycle: }
+      let(:course) { create :course, provider: }
 
       it { is_expected.to be_truthy }
     end
@@ -2183,7 +2183,7 @@ describe Course, type: :model do
         course = create(:course)
 
         site = create(:site)
-        create(:site_status, :new, site: site, course: course)
+        create(:site_status, :new, site:, course:)
 
         course
       end
@@ -2223,7 +2223,7 @@ describe Course, type: :model do
           course = subject
 
           site = create(:site)
-          create(:site_status, :running, :published, site: site, course: course)
+          create(:site_status, :running, :published, site:, course:)
 
           expect { course.discard }.to raise_error(
             "You cannot delete the running course #{course}",
@@ -2237,16 +2237,16 @@ describe Course, type: :model do
     context "a new course with a given date" do
       let(:applications_open_from) { Time.zone.today }
 
-      subject { create(:course, applications_open_from: applications_open_from) }
+      subject { create(:course, applications_open_from:) }
 
       its(:applications_open_from) { is_expected.to eq applications_open_from }
     end
 
     context "a new course within a recruitment cycle" do
       let(:recruitment_cycle) { build :recruitment_cycle, :next }
-      let(:provider)          { build :provider, recruitment_cycle: recruitment_cycle }
+      let(:provider)          { build :provider, recruitment_cycle: }
 
-      subject { create :course, :applications_open_from_not_set, provider: provider }
+      subject { create :course, :applications_open_from_not_set, provider: }
 
       its(:applications_open_from) { is_expected.to eq recruitment_cycle.application_start_date }
     end
@@ -2297,7 +2297,7 @@ describe Course, type: :model do
   end
 
   describe "#self_accredited?" do
-    subject { create(:course, provider: provider) }
+    subject { create(:course, provider:) }
 
     context "when self accredited" do
       let(:provider) { build(:provider, :accredited_body) }
@@ -2438,7 +2438,7 @@ describe Course, type: :model do
           :generate_name,
           "Courses::GenerateCourseNameService",
         ).with_arguments(
-          course: course,
+          course:,
         ),
       )
     end
@@ -2451,7 +2451,7 @@ describe Course, type: :model do
           :assignable_master_subjects,
           "Courses::AssignableMasterSubjectService",
         ).with_arguments(
-          course: course,
+          course:,
         ),
       )
     end
@@ -2464,7 +2464,7 @@ describe Course, type: :model do
           :assignable_subjects,
           "Courses::AssignableSubjectService",
         ).with_arguments(
-          course: course,
+          course:,
         ),
       )
     end

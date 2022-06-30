@@ -28,9 +28,9 @@ module Publish
       return if previous_site_names == updated_site_names
 
       NotificationService::CourseSitesUpdated.call(
-        course: course,
-        previous_site_names: previous_site_names,
-        updated_site_names: updated_site_names,
+        course:,
+        previous_site_names:,
+        updated_site_names:,
       )
     end
 

@@ -7,7 +7,7 @@ module BreadcrumbHelper
 
     if breadcrumbs && !FeatureService.enabled?(:new_publish_navigation)
       render GovukComponent::BreadcrumbsComponent.new(
-        breadcrumbs: breadcrumbs,
+        breadcrumbs:,
         classes: "govuk-!-display-none-print",
       )
     end

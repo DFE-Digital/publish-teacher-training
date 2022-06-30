@@ -5,10 +5,10 @@ describe Enrichments::CopyToCourseService do
   let(:course) { create(:course) }
   let(:new_course) { create(:course) }
   let(:published_enrichment) do
-    create :course_enrichment, :published, course: course
+    create :course_enrichment, :published, course:
   end
 
-  before { service.execute(enrichment: published_enrichment, new_course: new_course) }
+  before { service.execute(enrichment: published_enrichment, new_course:) }
 
   subject { new_course.enrichments }
 

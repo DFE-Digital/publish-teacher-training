@@ -9,7 +9,7 @@
 <%= form_for course,
   url: continue_publish_provider_recruitment_cycle_courses_locations_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
   method: :get do |form| %>
-  <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:sites_ids] do |fields| %>
+  <%= render "publish/courses/new_fields_holder", form:, except_keys: [:sites_ids] do |fields| %>
     <%= render "publish/shared/error_wrapper", error_keys: [:sites], data_qa: "course__sites" do %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">

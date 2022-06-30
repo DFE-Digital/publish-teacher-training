@@ -5,9 +5,9 @@ class VacancyStatusDeterminationService
 
   def self.call(vacancy_status_full_time:, vacancy_status_part_time:, course:)
     new(
-      vacancy_status_full_time: vacancy_status_full_time,
-      vacancy_status_part_time: vacancy_status_part_time,
-      course: course,
+      vacancy_status_full_time:,
+      vacancy_status_part_time:,
+      course:,
     ).vacancy_status
   end
 

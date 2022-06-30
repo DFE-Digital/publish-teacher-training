@@ -10,7 +10,7 @@ module Filters
       let(:filters) { { text_search: "South Park Elementary" } }
 
       before do
-        render_inline(described_class.new(filters: filters))
+        render_inline(described_class.new(filters:))
       end
 
       it "renders all the correct details" do

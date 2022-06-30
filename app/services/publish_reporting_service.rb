@@ -6,7 +6,7 @@ class PublishReportingService
 
   class << self
     def call(recruitment_cycle_scope:)
-      new(recruitment_cycle_scope: recruitment_cycle_scope).call
+      new(recruitment_cycle_scope:).call
     end
   end
 
@@ -99,7 +99,7 @@ private
       with_2_recent_active_users: grouped_providers_with_x_active_users[2] || 0,
       with_3_recent_active_users: grouped_providers_with_x_active_users[3] || 0,
       with_4_recent_active_users: grouped_providers_with_x_active_users[4] || 0,
-      with_more_than_5_recent_active_users: with_more_than_5_recent_active_users,
+      with_more_than_5_recent_active_users:,
     }
   end
 

@@ -11,8 +11,8 @@ describe Courses::CreationService do
 
   subject do
     described_class.call(
-      course_params: valid_course_params, provider: provider,
-      next_available_course_code: next_available_course_code
+      course_params: valid_course_params, provider:,
+      next_available_course_code:
     )
   end
 

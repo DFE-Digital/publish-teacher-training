@@ -15,10 +15,10 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship, :with_gcse_equivalency,
       level: "primary",
       name: "Mathematics",
-      provider: provider,
+      provider:,
       start_date: Time.now.utc,
       study_mode: :full_time,
-      subjects: subjects,
+      subjects:,
       is_send: true,
       site_statuses: [courses_site_status],
       enrichments: [enrichment],
@@ -26,14 +26,14 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       english: :must_have_qualification_at_application_time,
       science: :must_have_qualification_at_application_time,
       age_range_in_years: "3_to_7",
-      applications_open_from: applications_open_from)
+      applications_open_from:)
   end
 
   let(:courses_site_status) do
     build(:site_status,
       :findable,
       :with_any_vacancy,
-      site: create(:site, provider: provider))
+      site: create(:site, provider:))
   end
 
   let(:enrichment)     { build :course_enrichment, :published }

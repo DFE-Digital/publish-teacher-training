@@ -13,16 +13,16 @@ module AllocationRecordCard
         Allocation.new(
           id: 1,
           confirmed_number_of_places: 3,
-          provider: provider,
-          accredited_body: accredited_body,
-          allocation_uplift: allocation_uplift,
+          provider:,
+          accredited_body:,
+          allocation_uplift:,
         ),
         Allocation.new(
           id: 2,
           confirmed_number_of_places: 5,
-          provider: provider,
-          accredited_body: accredited_body,
-          allocation_uplift: allocation_uplift,
+          provider:,
+          accredited_body:,
+          allocation_uplift:,
         ),
       ]
     end

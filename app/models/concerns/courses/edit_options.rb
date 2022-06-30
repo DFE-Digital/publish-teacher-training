@@ -17,7 +17,7 @@ module Courses
       # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
       def edit_course_options
         {
-          entry_requirements: entry_requirements,
+          entry_requirements:,
           qualifications: qualification_options,
           age_range_in_years: age_range_options,
           start_dates: start_date_options,
@@ -26,8 +26,8 @@ module Courses
           show_start_date: show_start_date?,
           show_applications_open: show_applications_open?,
           subjects: potential_subjects,
-          modern_languages: modern_languages,
-          modern_languages_subject: modern_languages_subject,
+          modern_languages:,
+          modern_languages_subject:,
         }.with_indifferent_access
       end
     end

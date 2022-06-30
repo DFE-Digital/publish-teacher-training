@@ -80,7 +80,7 @@ RSpec.describe SiteStatus, type: :model do
     describe "if has part-time vacancies" do
       let(:course) { build(:course, study_mode: :part_time) }
 
-      subject { create(:site_status, :findable, :part_time_vacancies, course: course) }
+      subject { create(:site_status, :findable, :part_time_vacancies, course:) }
 
       it { is_expected.to have_vacancies }
     end
@@ -94,7 +94,7 @@ RSpec.describe SiteStatus, type: :model do
     describe "if has both full-time and part-time vacancies" do
       let(:course) { build(:course, study_mode: :full_time_or_part_time) }
 
-      subject { create(:site_status, :findable, :both_full_time_and_part_time_vacancies, course: course) }
+      subject { create(:site_status, :findable, :both_full_time_and_part_time_vacancies, course:) }
 
       it { is_expected.to have_vacancies }
     end
@@ -137,7 +137,7 @@ RSpec.describe SiteStatus, type: :model do
 
         spec[:valid_states].each do |state|
           context "vac_status set to #{state}" do
-            subject { build(:site_status, vac_status: state, course: course) }
+            subject { build(:site_status, vac_status: state, course:) }
 
             it { is_expected.to be_valid }
           end
@@ -145,7 +145,7 @@ RSpec.describe SiteStatus, type: :model do
 
         spec[:invalid_states].each do |state|
           context "vac_status set to #{state}" do
-            subject { build(:site_status, vac_status: state, course: course) }
+            subject { build(:site_status, vac_status: state, course:) }
 
             it { is_expected.not_to be_valid }
 

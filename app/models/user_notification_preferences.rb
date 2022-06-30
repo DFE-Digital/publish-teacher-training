@@ -28,7 +28,7 @@ class UserNotificationPreferences
             user_id: id,
             course_publish: enable_notifications,
             course_update: enable_notifications,
-            provider_code: provider_code,
+            provider_code:,
           )
         end
       end

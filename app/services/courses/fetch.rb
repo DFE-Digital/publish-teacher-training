@@ -3,9 +3,9 @@ module Courses
     class << self
       def by_code(provider_code:, course_code:)
         RecruitmentCycle.current.providers
-          .find_by(provider_code: provider_code)
+          .find_by(provider_code:)
           .courses
-          .find_by(course_code: course_code)
+          .find_by(course_code:)
       end
 
       def by_accrediting_provider(provider)

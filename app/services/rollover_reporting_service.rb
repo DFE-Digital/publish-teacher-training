@@ -23,7 +23,7 @@ class RolloverReportingService
           new_courses_published: new_courses_published_count,
           deleted_courses: deleted_courses_count,
           existing_courses_in_draft: existing_courses_in_draft_count,
-          existing_courses_in_review: existing_courses_in_review,
+          existing_courses_in_review:,
         },
       }
     end

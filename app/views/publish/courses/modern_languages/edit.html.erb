@@ -18,11 +18,11 @@
       <%= render "publish/shared/error_messages", error_keys: [:modern_languages_subjects] %>
 
       <%= render "publish/shared/course_creation_hidden_fields",
-        form: form,
+        form:,
         course_creation_params: params.fetch(:course, {}).slice(:subjects_ids),
         except_keys: [] %>
 
-      <%= render "form_fields", form: form %>
+      <%= render "form_fields", form: %>
 
       <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
         class: "govuk-button", data: { qa: "course__save" } %>

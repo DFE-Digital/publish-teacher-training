@@ -22,7 +22,7 @@ describe "API" do
       response "200", "The list of subjects" do
         let(:sort) { "name" }
 
-        schema "$ref": "#/components/schemas/SubjectListResponse"
+        schema({ "$ref": "#/components/schemas/SubjectListResponse" })
 
         run_test!
       end

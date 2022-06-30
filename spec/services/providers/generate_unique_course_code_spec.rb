@@ -13,7 +13,7 @@ describe Providers::GenerateUniqueCourseCodeService do
     it 'calls "Providers::GenerateCourseCodeService" once' do
       expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
-      service.execute(existing_codes: existing_codes)
+      service.execute(existing_codes:)
     end
   end
 
@@ -24,7 +24,7 @@ describe Providers::GenerateUniqueCourseCodeService do
       it 'calls "Providers::GenerateCourseCodeService" once' do
         expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
 
-        service.execute(existing_codes: existing_codes)
+        service.execute(existing_codes:)
       end
     end
 
@@ -34,7 +34,7 @@ describe Providers::GenerateUniqueCourseCodeService do
       it 'calls "Providers::GenerateCourseCodeService" twice' do
         expect(mocked_gen_code_service).to receive(:execute).twice.and_return("A111", "A000")
 
-        service.execute(existing_codes: existing_codes)
+        service.execute(existing_codes:)
       end
     end
   end
@@ -49,7 +49,7 @@ describe Providers::GenerateUniqueCourseCodeService do
                                                             .times
                                                             .and_return(*existing_codes, expected_code)
 
-        expect(service.execute(existing_codes: existing_codes)).to eq(expected_code)
+        expect(service.execute(existing_codes:)).to eq(expected_code)
       end
     end
   end

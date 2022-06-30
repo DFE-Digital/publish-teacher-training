@@ -5,7 +5,7 @@ module TabNavigation
     attr_reader :items
 
     def initialize(items:, classes: [], html_attributes: {})
-      super(classes: classes, html_attributes: html_attributes)
+      super(classes:, html_attributes:)
       @items = items
     end
   end

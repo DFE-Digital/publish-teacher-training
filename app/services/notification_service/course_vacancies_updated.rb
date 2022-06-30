@@ -26,10 +26,10 @@ module NotificationService
     def send_course_vacancies_updated_notification(vacancies_filled:)
       users.each do |user|
         CourseVacancies::UpdatedMailer.fully_updated(
-          course: course,
-          user: user,
+          course:,
+          user:,
           datetime: DateTime.now,
-          vacancies_filled: vacancies_filled,
+          vacancies_filled:,
         ).deliver_later
       end
     end
@@ -37,11 +37,11 @@ module NotificationService
     def send_course_vacancies_partially_updated_notification
       users.each do |user|
         CourseVacancies::UpdatedMailer.partially_updated(
-          course: course,
-          user: user,
+          course:,
+          user:,
           datetime: DateTime.now,
-          vacancies_opened: vacancies_opened,
-          vacancies_closed: vacancies_closed,
+          vacancies_opened:,
+          vacancies_closed:,
         ).deliver_later
       end
     end

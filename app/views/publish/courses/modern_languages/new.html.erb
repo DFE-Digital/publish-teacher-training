@@ -14,7 +14,7 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:modern_languages] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:modern_languages] do |fields| %>
         <%= render "form_fields", form: fields %>
       <% end %>
     <% end %>

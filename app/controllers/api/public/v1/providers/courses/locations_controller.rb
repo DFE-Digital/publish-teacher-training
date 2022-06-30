@@ -7,7 +7,7 @@ module API
             def index
               render jsonapi: locations,
                 include: include_param,
-                expose: { course: course, location_statuses: location_statuses },
+                expose: { course:, location_statuses: },
                 class: API::Public::V1::SerializerService.call
             end
 

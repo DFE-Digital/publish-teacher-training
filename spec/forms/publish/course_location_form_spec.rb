@@ -9,9 +9,9 @@ module Publish
     let(:site2) { build(:site, location_name: "location 2") }
     let(:site_status) { build(:site_status, :running, site: site1) }
     let(:provider) { build(:provider, sites: [site1, site2]) }
-    let(:course) { create(:course, provider: provider, site_statuses: [site_status]) }
+    let(:course) { create(:course, provider:, site_statuses: [site_status]) }
 
-    subject { described_class.new(course, params: params) }
+    subject { described_class.new(course, params:) }
 
     describe "validations" do
       before { subject.valid? }
@@ -31,7 +31,7 @@ module Publish
 
         it "calls the course sites updated notification service" do
           expect(NotificationService::CourseSitesUpdated).to receive(:call)
-          .with(course: course, previous_site_names: previous_site_names, updated_site_names: updated_site_names)
+          .with(course:, previous_site_names:, updated_site_names:)
           subject.save!
         end
       end

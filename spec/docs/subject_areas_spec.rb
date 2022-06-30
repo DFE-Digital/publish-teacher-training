@@ -20,7 +20,7 @@ describe "API" do
       response "200", "The collection of subject areas." do
         let(:include) { nil }
 
-        schema "$ref": "#/components/schemas/SubjectAreaListResponse"
+        schema({ "$ref": "#/components/schemas/SubjectAreaListResponse" })
 
         run_test!
       end

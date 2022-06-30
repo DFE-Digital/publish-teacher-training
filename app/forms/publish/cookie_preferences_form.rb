@@ -4,7 +4,7 @@ module Publish
 
     attr_accessor :consent, :cookies, :cookie_name, :expiry_date
 
-    validates :consent, presence: true, inclusion: { in: %w[yes no] }
+    validates :consent, presence: true, inclusion: { in: %w[accepted rejected] }
 
     def initialize(cookies, params = {})
       @cookies = cookies

@@ -21,7 +21,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
 
     context "when a course has locations" do
       before do
-        course.sites << build_list(:site, 2, provider: provider)
+        course.sites << build_list(:site, 2, provider:)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,

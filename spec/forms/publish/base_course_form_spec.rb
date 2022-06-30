@@ -13,13 +13,13 @@ module Publish
     let(:params) { {} }
     let(:course) { create(:course) }
 
-    let(:form) { InheritedBaseCourseForm.new(course, params: params) }
+    let(:form) { InheritedBaseCourseForm.new(course, params:) }
 
     subject { form }
 
     describe "#save!" do
       it "calls the course updated notification service" do
-        expect(NotificationService::CourseUpdated).to receive(:call).with(course: course)
+        expect(NotificationService::CourseUpdated).to receive(:call).with(course:)
         subject.save!
       end
     end

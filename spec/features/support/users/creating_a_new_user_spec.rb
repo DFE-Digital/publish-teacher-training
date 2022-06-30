@@ -6,7 +6,7 @@ feature "Creating a new user" do
   let(:user) { create(:user, :admin) }
 
   before do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user:)
     when_i_visit_the_user_index_page
     and_i_click_on_add_a_user
     then_i_am_taken_to_the_support_user_new_page

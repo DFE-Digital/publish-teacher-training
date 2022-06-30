@@ -28,7 +28,7 @@ module Courses
 
       course.course_code = provider.next_available_course_code if next_available_course_code
 
-      AssignSubjectsService.call(course: course, subject_ids: subject_ids)
+      AssignSubjectsService.call(course:, subject_ids:)
 
       course.valid?(:new)
       course.remove_carat_from_error_messages

@@ -18,15 +18,28 @@
     <%= stylesheet_link_tag "accessible-autocomplete/dist/accessible-autocomplete.min" %>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <% if google_analytics_allowed? %>
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','<%= Settings.google_tag_manager.tracking_id %>');</script>
+    <% end %>
   </head>
 
   <body class="govuk-template__body <%= yield :body_class %>">
-    <noscript>
-      <iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-PD8MFNL" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
+    <% if google_analytics_allowed? %>
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <% end %>
+
     <script>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
+
+    <% unless hide_cookie_banner? %>
+      <%= render("layouts/cookie_banner") %>
+    <% end %>
 
     <%= govuk_skip_link %>
 
@@ -35,7 +48,7 @@
     <% else %>
       <%= render Header::View.new(
         service_name: I18n.t("service_name"),
-        current_user: current_user,
+        current_user:,
       ) %>
     <% end %>
 
@@ -54,7 +67,7 @@
       <div class="govuk-width-container">
         <% if current_user && @provider %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
-           <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user: current_user) %>
+           <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
           <% end %>
         <% end %>
       </div>
@@ -70,7 +83,7 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render(FlashBanner::View.new(flash: flash)) %>
+          <%= render(FlashBanner::View.new(flash:)) %>
 
           <%= yield %>
         </div>

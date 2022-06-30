@@ -38,7 +38,7 @@
         <% summary_list.row do |row| %>
           <% row.key { "Places requested" } %>
           <% row.value { params[:number_of_places] } %>
-          <% row.action({
+          <% row.action(**{
             href: publish_provider_recruitment_cycle_allocation_get_edit_initial_request_path(
               provider.provider_code,
               recruitment_cycle.year,

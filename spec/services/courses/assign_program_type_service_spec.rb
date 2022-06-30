@@ -14,7 +14,7 @@ describe Courses::AssignProgramTypeService do
 
     context "and the course is not self_accredited" do
       let(:provider) { create(:provider, accrediting_provider: "N") }
-      let(:course) { create(:course, :with_accrediting_provider, provider: provider) }
+      let(:course) { create(:course, :with_accrediting_provider, provider:) }
 
       it "returns :school_direct_salaried_training_programme" do
         expect(course.program_type).to eq("school_direct_salaried_training_programme")
@@ -32,7 +32,7 @@ describe Courses::AssignProgramTypeService do
 
   context "when the funding_type is fee" do
     let(:funding_type) { "fee" }
-    let(:provider) { build(:provider, provider_type: provider_type) }
+    let(:provider) { build(:provider, provider_type:) }
 
     context "and the course is not self accredited" do
       let(:course) { create(:course, :with_accrediting_provider) }
@@ -48,7 +48,7 @@ describe Courses::AssignProgramTypeService do
 
       context "and they are a scitt" do
         let(:trait) { :scitt }
-        let(:course) { create(:course, provider: provider) }
+        let(:course) { create(:course, provider:) }
 
         it "returns :scitt_programme" do
           expect(course.program_type).to eq("scitt_programme")
@@ -57,7 +57,7 @@ describe Courses::AssignProgramTypeService do
 
       context "and they are a HEI" do
         let(:trait) { :university }
-        let(:course) { create(:course, provider: provider) }
+        let(:course) { create(:course, provider:) }
 
         it "returns :higher_education_programme" do
           expect(course.program_type).to eq("higher_education_programme")

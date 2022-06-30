@@ -3,11 +3,11 @@ require "rails_helper"
 describe RolloverReportingService do
   let(:published_running_site) { create(:site_status, :published, :running) }
   let(:provider) { create(:provider, :next_recruitment_cycle) }
-  let(:published_course) { create(:course, provider: provider, site_statuses: [published_running_site]) }
-  let(:new_published_course) { create(:course, age: provider.recruitment_cycle.created_at + 28.hours, provider: provider, site_statuses: [published_running_site]) }
-  let(:deleted_course) { create(:course, :deleted, provider: provider) }
-  let(:course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 25.hours, provider: provider) }
-  let(:second_course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 26.hours, provider: provider) }
+  let(:published_course) { create(:course, provider:, site_statuses: [published_running_site]) }
+  let(:new_published_course) { create(:course, age: provider.recruitment_cycle.created_at + 28.hours, provider:, site_statuses: [published_running_site]) }
+  let(:deleted_course) { create(:course, :deleted, provider:) }
+  let(:course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 25.hours, provider:) }
+  let(:second_course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 26.hours, provider:) }
 
   describe ".call" do
     subject(:result) { described_class.call }

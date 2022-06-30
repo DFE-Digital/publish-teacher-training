@@ -110,6 +110,6 @@ class PerformanceDashboardService
 private
 
   def reporting
-    @reporting ||= StatisticService.reporting(recruitment_cycle: recruitment_cycle)
+    @reporting ||= StatisticService.reporting(recruitment_cycle:)
   end
 end

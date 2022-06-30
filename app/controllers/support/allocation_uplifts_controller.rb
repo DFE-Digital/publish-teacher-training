@@ -5,7 +5,7 @@ module Support
     end
 
     def new
-      @allocation_uplift = AllocationUplift.new(allocation: allocation)
+      @allocation_uplift = AllocationUplift.new(allocation:)
     end
 
     def create

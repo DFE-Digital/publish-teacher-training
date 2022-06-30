@@ -3,7 +3,7 @@
 module Filters
   class ViewPreview < ViewComponent::Preview
     def show_filter
-      render(Filters::View.new(filters: filters, filter_model: filter_model))
+      render(Filters::View.new(filters:, filter_model:))
     end
 
   private

@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:2.7.5-alpine3.15
+FROM ruby:3.1-alpine3.15
 
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
@@ -48,6 +48,8 @@ ADD . $APP_HOME/
 COPY --from=middleman /public/ $APP_HOME/public/docs/
 
 RUN ls /app/public/ && \
+    yarn build && \
+    yarn build:css && \
     bundle exec rake assets:precompile && \
     rm -rf node_modules tmp
 

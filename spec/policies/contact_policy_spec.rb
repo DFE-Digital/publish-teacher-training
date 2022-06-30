@@ -3,7 +3,7 @@ require "rails_helper"
 describe ContactPolicy do
   let(:user) { create(:user) }
   let(:provider) { create(:provider) }
-  let(:contact) { create(:contact, provider: provider) }
+  let(:contact) { create(:contact, provider:) }
 
   subject { described_class }
 

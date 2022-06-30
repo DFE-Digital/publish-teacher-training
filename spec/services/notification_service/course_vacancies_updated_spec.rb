@@ -20,7 +20,7 @@ module NotificationService
       ]
     end
 
-    let(:service_call) { described_class.call(course: course, vacancy_statuses: vacancy_statuses) }
+    let(:service_call) { described_class.call(course:, vacancy_statuses:) }
 
     def setup_notifications
       allow(CourseVacancies::UpdatedMailer).to receive(:fully_updated).and_return(double(deliver_later: true))
@@ -40,7 +40,7 @@ module NotificationService
 
     context "with a course that is not in the current cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
       before { setup_notifications }
 
@@ -63,8 +63,8 @@ module NotificationService
           expect(CourseVacancies::UpdatedMailer)
             .to receive(:fully_updated)
                   .with(
-                    course: course,
-                    user: user,
+                    course:,
+                    user:,
                     datetime: DateTime.now,
                     vacancies_filled: true,
                   ).and_return(mailer = double)
@@ -107,8 +107,8 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                      course: course,
-                      user: user,
+                      course:,
+                      user:,
                       datetime: DateTime.now,
                       vacancies_filled: true,
                     })
@@ -131,8 +131,8 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
                     .with({
-                      course: course,
-                      user: user,
+                      course:,
+                      user:,
                       datetime: DateTime.now,
                       vacancies_filled: false,
                     })
@@ -165,8 +165,8 @@ module NotificationService
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:partially_updated)
                     .with({
-                      course: course,
-                      user: user,
+                      course:,
+                      user:,
                       datetime: DateTime.now,
                       vacancies_closed: [first_site_status.site.location_name],
                       vacancies_opened: [second_site_status.site.location_name],

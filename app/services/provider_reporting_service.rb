@@ -10,7 +10,7 @@ class ProviderReportingService
 
   class << self
     def call(providers_scope:)
-      new(providers_scope: providers_scope).call
+      new(providers_scope:).call
     end
   end
 

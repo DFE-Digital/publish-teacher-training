@@ -87,6 +87,9 @@ google:
     api_json_key: "{}"
     table_name: events
 
+google_tag_manager:
+  tracking_id: change_me
+
 feedback:
   link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
 
@@ -105,3 +108,8 @@ features:
     # state: open # Users can make requests for allocations
     # state: closed # Readonly - Users can see if they have or have not made request (does not show number of places)
     state: confirmed # final allocation places are displayed to users in a readonly state
+
+cookies:
+  consent:
+    name: _consented_to_analytics_cookies
+    expire_after_days: 182

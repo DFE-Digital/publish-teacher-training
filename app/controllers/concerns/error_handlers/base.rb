@@ -19,7 +19,7 @@ module ErrorHandlers
       if resource.nil?
         render json: error_hash(status, message), status: status
       else
-        render jsonapi_errors: resource.errors, status: status
+        render jsonapi_errors: resource.errors, status:
       end
     end
 
@@ -27,9 +27,9 @@ module ErrorHandlers
       {
         errors: [
           {
-            status: status,
+            status:,
             title: I18n.t("errors.#{status}.title"),
-            detail: I18n.t("errors.#{status}.detail", message: message),
+            detail: I18n.t("errors.#{status}.detail", message:),
           },
         ],
       }

@@ -9,7 +9,7 @@ module Publish
 
       def submit
         if valid?
-          GenerateAndSendMagicLinkService.call(user: user) if user.present?
+          GenerateAndSendMagicLinkService.call(user:) if user.present?
           true
         else
           false
@@ -19,7 +19,7 @@ module Publish
     private
 
       def user
-        @user ||= User.find_by(email: email)
+        @user ||= User.find_by(email:)
       end
     end
   end

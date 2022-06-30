@@ -23,7 +23,7 @@ module Publish
   private
 
     def after_successful_save_action
-      NotificationService::CourseWithdrawn.call(course: course)
+      NotificationService::CourseWithdrawn.call(course:)
     end
 
     def compute_fields

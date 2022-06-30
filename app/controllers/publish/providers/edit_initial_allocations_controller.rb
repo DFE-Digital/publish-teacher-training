@@ -4,7 +4,7 @@ module Publish
       def edit
         authorize allocation
 
-        flow = EditInitialRequestFlow.new(params: params)
+        flow = EditInitialRequestFlow.new(params:)
 
         if request.post? && flow.valid?
           redirect_to flow.redirect_path

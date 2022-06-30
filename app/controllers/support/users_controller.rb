@@ -57,7 +57,7 @@ module Support
     end
 
     def filtered_users
-      Support::Filter.call(model_data_scope: User.order(:last_name), filter_params: filter_params)
+      Support::Filter.call(model_data_scope: User.order(:last_name), filter_params:)
     end
 
     def filter_params

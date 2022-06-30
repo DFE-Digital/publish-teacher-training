@@ -44,7 +44,7 @@ describe "API" do
         let(:course_code) { course.course_code }
         let(:include) { "provider" }
 
-        schema "$ref": "#/components/schemas/CourseLocationListResponse"
+        schema({ "$ref": "#/components/schemas/CourseLocationListResponse" })
 
         before do
           course.sites << build_list(
