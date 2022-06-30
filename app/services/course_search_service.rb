@@ -10,8 +10,8 @@ class CourseSearchService
   end
 
   class << self
-    def call(**args)
-      new(**args).call
+    def call(...)
+      new(...).call
     end
   end
 
