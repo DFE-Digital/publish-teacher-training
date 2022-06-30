@@ -52,6 +52,9 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_details_page.start_date).to have_content(
       "January 2022",
     )
+    expect(provider_courses_details_page.start_date).to have_content(
+      "Academic year",
+    )
     expect(provider_courses_details_page.name).to have_content(
       course.name,
     )

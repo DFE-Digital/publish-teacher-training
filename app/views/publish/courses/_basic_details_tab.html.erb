@@ -141,7 +141,7 @@
         <% row.key { "Course starts" } %>
         <% row.value do %>
           <p class="govuk-body"><%= l(course.start_date&.to_date, format: :short) %></p>
-          <p class="govuk-hint">Academic year <%= course.cycle_range %></p>
+          <p class="govuk-hint">Academic year <%= course.academic_year %></p>
         <% end %>
         <% if @course.edit_course_options[:show_start_date] %>
           <% row.action({
