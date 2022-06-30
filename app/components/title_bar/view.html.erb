@@ -1,7 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    <% if (current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin?) || FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") %>
+    <% if multiple_providers_or_admin?(current_user) || rollover_active? %>
       <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
     <% end %>
 
@@ -9,7 +9,7 @@
       <%= change_cycle_link(@provider) %>
     <% end %>
 
-    <% if current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin? %>
+    <% if multiple_providers_or_admin?(current_user) %>
       <%= change_organisation_link %>
     <% end %>
 

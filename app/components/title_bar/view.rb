@@ -31,6 +31,10 @@ module TitleBar
       Settings.features.rollover.can_edit_current_and_next_cycles == true
     end
 
+    def multiple_providers_or_admin?(current_user)
+      current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin?
+    end
+
     def current_recruitment_cycle_year
       Settings.current_recruitment_cycle_year - 1
     end
