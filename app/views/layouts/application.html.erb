@@ -28,6 +28,10 @@
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
 
+    <% unless hide_cookie_banner? %>
+      <%= render("layouts/cookie_banner") %>
+    <% end %>
+
     <%= govuk_skip_link %>
 
     <% if content_for?(:header) %>

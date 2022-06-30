@@ -48,6 +48,8 @@ ADD . $APP_HOME/
 COPY --from=middleman /public/ $APP_HOME/public/docs/
 
 RUN ls /app/public/ && \
+    yarn build && \
+    yarn build:css && \
     bundle exec rake assets:precompile && \
     rm -rf node_modules tmp
 

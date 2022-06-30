@@ -82,7 +82,7 @@
       </table>
 
       <%= f.govuk_collection_radio_buttons :consent,
-                                          [%w[yes Yes], %w[no No]],
+                                          [%w[accepted Yes], %w[rejected No]],
                                           :first,
                                           :last,
                                           legend: { text: "Do you want to accept Google Analytics cookies?", size: "s" } %>
