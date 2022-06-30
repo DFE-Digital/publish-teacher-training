@@ -65,7 +65,7 @@
     <% if FeatureService.enabled?(:new_publish_navigation) %>
 
       <div class="govuk-width-container">
-        <% if current_user && @provider %>
+        <% if current_user && @provider && !params[:controller].start_with?("support") %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
            <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
           <% end %>
