@@ -100,7 +100,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
       let!(:course2) do
         create(
           :course,
-          provider: provider,
+          provider:,
           name: "Biology",
           additional_degree_subject_requirements: true,
           degree_subject_requirements: "Course 2 requirements",
@@ -110,7 +110,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
       let!(:course3) do
         create(
           :course,
-          provider: provider,
+          provider:,
           name: "Biology",
           additional_degree_subject_requirements: nil,
           degree_subject_requirements: nil,
@@ -209,7 +209,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_see_a_success_message(value)
-    expect(page).to have_content I18n.t("success.value_saved", value: value)
+    expect(page).to have_content I18n.t("success.value_saved", value:)
   end
 
   def and_the_additional_requirements_are_updated

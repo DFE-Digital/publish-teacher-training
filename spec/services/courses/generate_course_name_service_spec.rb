@@ -5,9 +5,9 @@ describe Courses::GenerateCourseNameService do
   let(:subjects) { [] }
   let(:is_send) { false }
   let(:level) { "primary" }
-  let(:course) { Course.new(level: level, subjects: subjects, is_send: is_send) }
+  let(:course) { Course.new(level:, subjects:, is_send:) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
-  let(:generated_title) { service.execute(course: course) }
+  let(:generated_title) { service.execute(course:) }
 
   before do
     SecondarySubject.clear_modern_languages_cache

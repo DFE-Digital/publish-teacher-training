@@ -24,7 +24,7 @@ module Token
         secret,
         true,
         {
-          algorithm: algorithm,
+          algorithm:,
           verify_iss: true,
           verify_aud: true,
           verify_sub: true,

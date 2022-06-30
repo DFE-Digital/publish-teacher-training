@@ -19,7 +19,7 @@ module Filters
     end
 
     def filter_attributes
-      "::Filters::#{filter_model}Attributes::View".constantize.new(filters: filters)
+      "::Filters::#{filter_model}Attributes::View".constantize.new(filters:)
     end
 
     def filter_label(filter)

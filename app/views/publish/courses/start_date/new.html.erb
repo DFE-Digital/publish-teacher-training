@@ -16,7 +16,7 @@
                   url: continue_publish_provider_recruitment_cycle_courses_start_date_path(@provider.provider_code, @provider.recruitment_cycle_year),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form: form, except_keys: [:start_date] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:start_date] do |fields| %>
         <%= render "form_fields", form: fields %>
       <% end %>
     <% end %>

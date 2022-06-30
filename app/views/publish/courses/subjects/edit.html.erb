@@ -16,7 +16,7 @@
 
       <%= form.govuk_error_summary %>
 
-      <%= render "form_fields", form: form %>
+      <%= render "form_fields", form: %>
 
       <%= form.submit course.is_published? ? "Save and publish" : "Save",
         class: "govuk-button", data: { qa: "course__save" } %>

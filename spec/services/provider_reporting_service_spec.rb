@@ -87,7 +87,7 @@ describe ProviderReportingService do
 
   describe ".call" do
     describe "when scope is passed" do
-      subject { described_class.call(providers_scope: providers_scope) }
+      subject { described_class.call(providers_scope:) }
 
       it "applies the scopes" do
         expect(providers_scope).to receive(:distinct).and_return(distinct_providers_scope)

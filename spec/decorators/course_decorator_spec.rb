@@ -31,11 +31,11 @@ describe CourseDecorator do
       name: "Mathematics",
       qualification: "pgce_with_qts",
       study_mode: "full_time",
-      start_date: start_date,
+      start_date:,
       site_statuses: [site_status],
-      provider: provider,
+      provider:,
       accrediting_provider: provider,
-      subjects: subjects,
+      subjects:,
       enrichments: [course_enrichment],
       funding_type: "fee",
     )
@@ -44,7 +44,7 @@ describe CourseDecorator do
   let(:start_date) { Time.zone.local(current_recruitment_cycle.year) }
   let(:site) { build_stubbed(:site) }
   let(:site_status) do
-    build_stubbed(:site_status, :full_time_vacancies, site: site)
+    build_stubbed(:site_status, :full_time_vacancies, site:)
   end
 
   let(:decorated_course) { course.decorate }

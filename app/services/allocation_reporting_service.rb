@@ -6,7 +6,7 @@ class AllocationReportingService
 
   class << self
     def call(recruitment_cycle_scope:)
-      new(recruitment_cycle_scope: recruitment_cycle_scope).call
+      new(recruitment_cycle_scope:).call
     end
   end
 

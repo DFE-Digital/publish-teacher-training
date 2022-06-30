@@ -5,10 +5,10 @@ describe CourseSitesUpdateEmailMailer, type: :mailer do
   let(:user) { create(:user) }
   let(:mail) do
     described_class.course_sites_update_email(
-      course: course,
+      course:,
       recipient: user,
-      previous_site_names: previous_site_names,
-      updated_site_names: updated_site_names,
+      previous_site_names:,
+      updated_site_names:,
     )
   end
   let(:previous_site_names) { ["location 1", "location 2"] }

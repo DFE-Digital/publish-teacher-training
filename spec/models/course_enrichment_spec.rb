@@ -141,10 +141,10 @@ describe CourseEnrichment, type: :model do
   describe "required_qualifications attribute" do
     let(:required_qualifications_text) { "this course is great" }
     let(:recruitment_cycle) { build(:recruitment_cycle, year: "2021") }
-    let(:provider) { build(:provider, recruitment_cycle: recruitment_cycle) }
-    let(:course) { build(:course, provider: provider) }
+    let(:provider) { build(:provider, recruitment_cycle:) }
+    let(:course) { build(:course, provider:) }
 
-    subject { build :course_enrichment, required_qualifications: required_qualifications_text, course: course }
+    subject { build :course_enrichment, required_qualifications: required_qualifications_text, course: }
 
     context "with over 100 words" do
       let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -293,13 +293,13 @@ describe CourseEnrichment, type: :model do
 
   describe "#unpublish" do
     let(:provider) { create(:provider) }
-    let(:course) { create(:course, provider: provider) }
+    let(:course) { create(:course, provider:) }
     let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
 
     subject {
       create(:course_enrichment, :published,
-        last_published_timestamp_utc: last_published_timestamp_utc,
-        course: course)
+        last_published_timestamp_utc:,
+        course:)
     }
 
     describe "to initial draft" do

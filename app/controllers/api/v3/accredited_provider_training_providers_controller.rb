@@ -32,7 +32,7 @@ module API
         end
 
         def eligible_training_provider_ids
-          CourseSearchService.call(filter: params[:filter], course_scope: course_scope)
+          CourseSearchService.call(filter: params[:filter], course_scope:)
                              .pluck(:provider_id)
         end
 
@@ -48,7 +48,7 @@ module API
       def index
         authorize @provider, :can_list_training_providers?
 
-        providers = TrainingProviderSearch.new(provider: @provider, params: params)
+        providers = TrainingProviderSearch.new(provider: @provider, params:)
                                           .call
                                           .include_accredited_courses_counts(@provider.provider_code)
 
@@ -61,7 +61,7 @@ module API
         render jsonapi: providers,
           include: params[:include],
           meta: {
-            accredited_courses_counts: accredited_courses_counts,
+            accredited_courses_counts:,
           }
       end
 

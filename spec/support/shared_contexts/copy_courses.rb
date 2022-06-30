@@ -4,7 +4,7 @@ shared_context "copy_courses" do
   let!(:course2) do
     create(
       :course,
-      provider: provider,
+      provider:,
       name: "Biology",
       enrichments: [course2_enrichment],
     )
@@ -12,7 +12,7 @@ shared_context "copy_courses" do
 
   let!(:course3) do
     create :course,
-      provider: provider,
+      provider:,
       name: "Biology",
       enrichments: [course3_enrichment]
   end

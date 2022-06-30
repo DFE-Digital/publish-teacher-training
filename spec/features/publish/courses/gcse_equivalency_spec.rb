@@ -3,7 +3,7 @@ require "rails_helper"
 feature "GCSE equivalency requirements", { can_edit_current_and_next_cycles: false } do
   scenario "a provider completes the gcse equivalency requirements section" do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course: course)
+    when_i_visit_the_course_gcse_requirements_page(course:)
 
     and_i_click_save
     and_i_see_pending_gcse_and_equivalency_tests_errors
@@ -43,7 +43,7 @@ feature "GCSE equivalency requirements", { can_edit_current_and_next_cycles: fal
 
   scenario "a provider copies gcse data from another course with all fields" do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course: course)
+    when_i_visit_the_course_gcse_requirements_page(course:)
     gcse_requirements_page.copy_content.copy(course3)
 
     [
@@ -66,7 +66,7 @@ feature "GCSE equivalency requirements", { can_edit_current_and_next_cycles: fal
 
   scenario "a provider copies gcse data from another course with missing fields" do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course: course)
+    when_i_visit_the_course_gcse_requirements_page(course:)
     gcse_requirements_page.copy_content.copy(course2)
 
     expect(gcse_requirements_page).not_to have_copy_content_warning

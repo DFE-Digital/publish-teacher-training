@@ -14,9 +14,9 @@ class HeartbeatController < ActionController::API
 
     status = checks.values.all? ? :ok : :service_unavailable
 
-    render status: status,
+    render status:,
       json: {
-        checks: checks,
+        checks:,
       }
   end
 

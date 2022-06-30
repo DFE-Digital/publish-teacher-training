@@ -7,7 +7,7 @@ module FlashBanner
     FLASH_TYPES = %w[success warning info].freeze
 
     def initialize(flash:, classes: [], html_attributes: {})
-      super(classes: classes, html_attributes: html_attributes)
+      super(classes:, html_attributes:)
       @flash = flash
     end
 

@@ -9,7 +9,7 @@ module Filters
     let(:filter_model) { [Provider, User, Allocation].sample }
 
     before do
-      render_inline(described_class.new(filters: nil, filter_model: filter_model))
+      render_inline(described_class.new(filters: nil, filter_model:))
     end
 
     it "renders all the correct details" do

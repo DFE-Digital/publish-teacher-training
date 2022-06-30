@@ -10,7 +10,7 @@ describe UniqueCourseValidator do
 
   let(:existing_course) do
     create(:course,
-      provider: provider,
+      provider:,
       level: "primary",
       subjects: [primary_with_english_subject],
       age_range_in_years: "5_to_11",

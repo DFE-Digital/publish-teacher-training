@@ -15,7 +15,7 @@ module Support
     end
 
     def filtered_allocations
-      @filtered_allocations ||= Support::Filter.call(model_data_scope: Allocation.current_allocations, filter_params: filter_params)
+      @filtered_allocations ||= Support::Filter.call(model_data_scope: Allocation.current_allocations, filter_params:)
     end
 
     def filter_params

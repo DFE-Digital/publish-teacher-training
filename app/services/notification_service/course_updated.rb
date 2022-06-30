@@ -14,10 +14,10 @@ module NotificationService
 
         users.each do |user|
           CourseUpdateEmailMailer.course_update_email(
-            course: course,
+            course:,
             attribute_name: updated_attribute,
-            original_value: original_value,
-            updated_value: updated_value,
+            original_value:,
+            updated_value:,
             recipient: user,
           ).deliver_later
         end

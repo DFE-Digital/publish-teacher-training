@@ -9,9 +9,9 @@ RSpec.describe Providers::CreateFakeProviderService do
     described_class.new(
       provider_name: "Fake Provider",
       provider_code: "123",
-      provider_type: provider_type,
-      recruitment_cycle: recruitment_cycle,
-      is_accredited_body: is_accredited_body,
+      provider_type:,
+      recruitment_cycle:,
+      is_accredited_body:,
     )
   end
 
@@ -25,7 +25,7 @@ RSpec.describe Providers::CreateFakeProviderService do
 
   context "a provider with that code already exists" do
     before do
-      create(:provider, provider_code: "123", recruitment_cycle: recruitment_cycle)
+      create(:provider, provider_code: "123", recruitment_cycle:)
     end
 
     it "does not complete" do

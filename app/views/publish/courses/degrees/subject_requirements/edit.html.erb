@@ -29,7 +29,7 @@
 
       <p class="govuk-body">Candidates will be advised that their degree subject should match or be closely related to <%= @course.name %>.</p>
 
-      <%= render partial: "publish/courses/degrees/additional_degree_subject_requirements", locals: { f: f, course_object: @source_course ? source_course : @course } %>
+      <%= render partial: "publish/courses/degrees/additional_degree_subject_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
 
       <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save", data: { qa: "degree_subject_requirements__save" } %>
 

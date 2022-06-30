@@ -27,7 +27,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :published)],
       provider: create(:provider),
-      accrediting_provider: accrediting_provider,
+      accrediting_provider:,
     )
 
     create(:course, enrichments: [build(:course_enrichment, :published)], provider: create(:provider))

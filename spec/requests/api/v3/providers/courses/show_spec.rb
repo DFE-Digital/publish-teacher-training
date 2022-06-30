@@ -11,7 +11,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     build(:site_status,
       :findable,
       :full_time_vacancies,
-      site: create(:site, provider: provider))
+      site: create(:site, provider:))
   }
 
   let(:jsonapi_course) {
@@ -33,8 +33,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:course) {
     create :course,
       :with_gcse_equivalency,
-      provider: provider,
-      enrichments: enrichments,
+      provider:,
+      enrichments:,
       site_statuses: [courses_site_status],
       applications_open_from: Time.now.utc
   }

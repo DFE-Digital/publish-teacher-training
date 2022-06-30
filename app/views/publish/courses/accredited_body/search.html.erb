@@ -22,7 +22,7 @@
         <p class="govuk-body">We found these providers which matched your search:</p>
 
         <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
-          <%= render partial: "provider_suggestion", collection: @provider_suggestions, locals: { form: form } %>
+          <%= render partial: "provider_suggestion", collection: @provider_suggestions, locals: { form: } %>
           <div class="govuk-radios__divider">or</div>
 
           <div class="govuk-radios__item">
@@ -38,7 +38,7 @@
           </div>
 
           <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
-            <%= render "provider_search_field", form: form %>
+            <%= render "provider_search_field", form: %>
           </div>
         </div>
       <% else %>
@@ -47,7 +47,7 @@
         <p class="govuk-body">Try another search:</p>
 
         <%= form.hidden_field :accredited_body_code, value: :other %>
-        <%= render "provider_search_field", form: form %>
+        <%= render "provider_search_field", form: %>
       <% end %>
 
       <%= form.submit course.is_running? ? "Save and publish changes" : "Save",

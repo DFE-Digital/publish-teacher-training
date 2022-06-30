@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe API::Public::V1::SubjectsController do
   describe "#index" do
     before do
-      get(:index, params: params)
+      get(:index, params:)
     end
 
     context "when there are no params" do

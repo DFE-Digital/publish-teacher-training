@@ -7,11 +7,11 @@ module Publish
     let(:params) { subject_ids }
     let(:subject_ids) { [biology_secondary_subject.id] }
     let(:name) { "History" }
-    let(:course) { create(:course, :secondary, subjects: [history_secondary_subject], name: name) }
+    let(:course) { create(:course, :secondary, subjects: [history_secondary_subject], name:) }
     let(:biology_secondary_subject) { find_or_create(:secondary_subject, :biology) }
     let(:history_secondary_subject) { find_or_create(:secondary_subject, :history) }
 
-    subject { described_class.new(course, params: params) }
+    subject { described_class.new(course, params:) }
 
     describe "#save!" do
       let(:previous_site_names) { course.sites.map(&:location_name) }
@@ -22,7 +22,7 @@ module Publish
 
         it "calls the course subjects updated notification service" do
           expect(NotificationService::CourseSubjectsUpdated).to receive(:call)
-          .with(course: course, previous_subject_names: previous_subject_names, previous_course_name: previous_course_name)
+          .with(course:, previous_subject_names:, previous_course_name:)
           subject.save!
         end
       end

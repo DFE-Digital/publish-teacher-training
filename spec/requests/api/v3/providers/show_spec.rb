@@ -17,16 +17,16 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     }]
   end
   let(:accrediting_provider) { create :provider }
-  let(:course) { create :course, accrediting_provider: accrediting_provider }
+  let(:course) { create :course, accrediting_provider: }
   let(:courses) { [course] }
   let!(:provider) do
     create(:provider,
       sites: [site],
       users: [user],
-      accrediting_provider_enrichments: accrediting_provider_enrichments,
-      courses: courses,
+      accrediting_provider_enrichments:,
+      courses:,
       contacts: [contact],
-      ucas_preferences: ucas_preferences)
+      ucas_preferences:)
   end
   let(:contact) { build(:contact) }
   let(:ucas_preferences) { build(:provider_ucas_preference) }

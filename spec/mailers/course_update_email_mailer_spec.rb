@@ -7,7 +7,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
   context "sending an email to a user" do
     let(:mail) do
       described_class.course_update_email(
-        course: course,
+        course:,
         attribute_name: "qualification",
         original_value: "original",
         updated_value: "updated",
@@ -114,7 +114,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
       context "study mode is updated to #{scenario[:updated_value]}" do
         let(:mail) do
           described_class.course_update_email(
-            course: course,
+            course:,
             attribute_name: "study_mode",
             original_value: scenario[:original_value],
             updated_value: scenario[:updated_value],
@@ -146,7 +146,7 @@ describe CourseUpdateEmailMailer, type: :mailer do
     let(:mail) do
       course.name = "new course"
       described_class.course_update_email(
-        course: course,
+        course:,
         attribute_name: "name",
         original_value: previous_name,
         updated_value: "new course",

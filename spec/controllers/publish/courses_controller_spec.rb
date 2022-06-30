@@ -11,7 +11,7 @@ module Publish
         :with_gcse_equivalency,
         enrichments: [build(:course_enrichment, :initial_draft)],
         sites: [create(:site, location_name: "location 1")],
-        provider: provider,
+        provider:,
       )
     end
 
@@ -22,7 +22,7 @@ module Publish
       end
 
       it "calls NotificationService::CoursePublished when successful" do
-        expect(NotificationService::CoursePublished).to receive(:call).with(course: course)
+        expect(NotificationService::CoursePublished).to receive(:call).with(course:)
 
         post :publish, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,

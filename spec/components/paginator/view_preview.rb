@@ -3,7 +3,7 @@
 module Paginator
   class ViewPreview < ViewComponent::Preview
     def on_first_page_of_many
-      render(Paginator::View.new(scope: scope))
+      render(Paginator::View.new(scope:))
     end
 
     def on_second_page_of_many

@@ -2,7 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def pagy_govuk_nav(pagy)
-    render "pagy/paginator", pagy: pagy
+    render "pagy/paginator", pagy:
   end
 
   def header_items(current_user)
@@ -58,7 +58,7 @@ module ApplicationHelper
       row.key { key.html_safe }
       row.value(classes: classes || ["govuk-summary-list__value"]) { value }
       if action
-        row.action(action)
+        row.action(**action)
       else
         row.action
       end

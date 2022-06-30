@@ -7,12 +7,12 @@ module Publish
     let(:params) { {} }
     let(:provider) { build(:provider, sites: [site]) }
     let(:site) { build(:site) }
-    let(:findable) { build(:site_status, :findable, site: site) }
+    let(:findable) { build(:site_status, :findable, site:) }
     let(:study_mode) { :full_time }
-    let(:course) { create(:course, study_mode, provider: provider, site_statuses: site_statuses) }
+    let(:course) { create(:course, study_mode, provider:, site_statuses:) }
     let(:site_statuses) { [findable] }
 
-    subject { described_class.new(course, params: params) }
+    subject { described_class.new(course, params:) }
 
     describe "validations" do
       before { subject.valid? }
@@ -33,10 +33,10 @@ module Publish
     end
 
     describe "#save!" do
-      let(:vacancy_statuses) { [{ id: id, status: status }] }
+      let(:vacancy_statuses) { [{ id:, status: }] }
 
       context "multi sites" do
-        let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site: site) }
+        let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site:) }
         let(:site_statuses) { [findable, with_any_vacancy] }
         let(:id) { with_any_vacancy.id }
 
@@ -49,14 +49,14 @@ module Publish
 
           it "calls the course vacancies updated notification service" do
             expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-            .with(course: course, vacancy_statuses: vacancy_statuses)
+            .with(course:, vacancy_statuses:)
             subject.save!
           end
         end
       end
 
       context "single site" do
-        let(:params) { { change_vacancies_confirmation: change_vacancies_confirmation } }
+        let(:params) { { change_vacancies_confirmation: } }
         let(:id) { findable.id }
 
         context "with change_vacancies_confirmation as no_vacancies_confirmation" do
@@ -65,7 +65,7 @@ module Publish
 
           it "calls the course vacancies updated notification service" do
             expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-            .with(course: course, vacancy_statuses: vacancy_statuses)
+            .with(course:, vacancy_statuses:)
             subject.save!
           end
         end
@@ -78,7 +78,7 @@ module Publish
 
             it "calls the course vacancies updated notification service" do
               expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-              .with(course: course, vacancy_statuses: vacancy_statuses)
+              .with(course:, vacancy_statuses:)
               subject.save!
             end
           end
@@ -88,13 +88,13 @@ module Publish
             let(:site_statuses) { [findable_with_part_time_vacancies] }
             let(:status) { "part_time_vacancies" }
             let(:id) { findable_with_part_time_vacancies.id }
-            let(:findable_with_part_time_vacancies) { build(:site_status, :part_time_vacancies, :findable, site: site) }
+            let(:findable_with_part_time_vacancies) { build(:site_status, :part_time_vacancies, :findable, site:) }
 
             let(:updated_site_names) { provider.sites.map(&:location_name) }
 
             it "calls the course vacancies updated notification service" do
               expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-              .with(course: course, vacancy_statuses: vacancy_statuses)
+              .with(course:, vacancy_statuses:)
               subject.save!
             end
           end

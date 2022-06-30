@@ -1,5 +1,5 @@
 class NotificationsView
-  ORGANISATION_URL_PATTERN = /\/organisations\/(\S+)\/?/.freeze
+  ORGANISATION_URL_PATTERN = /\/organisations\/(\S+)\/?/
 
   def initialize(
     request:,

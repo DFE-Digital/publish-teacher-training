@@ -25,8 +25,8 @@ describe AllocationReportingService do
 
   let(:expected) do
     {
-      previous: previous,
-      current: current,
+      previous:,
+      current:,
     }
   end
 
@@ -49,7 +49,7 @@ describe AllocationReportingService do
 
   describe ".call" do
     describe "when scope is passed" do
-      subject { described_class.call(recruitment_cycle_scope: recruitment_cycle_scope) }
+      subject { described_class.call(recruitment_cycle_scope:) }
 
       it "applies the scopes" do
         expect(recruitment_cycle_scope).to receive(:previous).and_return(previous_recruitment_cycle_scope)

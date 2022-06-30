@@ -34,7 +34,7 @@ describe "API" do
         let(:provider_code) { provider.provider_code }
         let(:include) { "provider" }
 
-        schema "$ref": "#/components/schemas/ProviderLocationListResponse"
+        schema({ "$ref": "#/components/schemas/ProviderLocationListResponse" })
 
         before do
           provider.sites << build_list(

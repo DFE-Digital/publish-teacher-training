@@ -5,7 +5,7 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:site) { build :site }
     let(:published_course_enrichment) { build :course_enrichment, :published }
     let(:course_enrichments) { [published_course_enrichment] }
-    let(:course) { create :course, enrichments: course_enrichments, provider: provider }
+    let(:course) { create :course, enrichments: course_enrichments, provider: }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) {
       [
@@ -20,8 +20,8 @@ describe Providers::CopyToRecruitmentCycleService do
       create :provider,
         :with_users,
         sites: [site],
-        ucas_preferences: ucas_preferences,
-        contacts: contacts
+        ucas_preferences:,
+        contacts:
     }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
@@ -36,7 +36,7 @@ describe Providers::CopyToRecruitmentCycleService do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
-        force: force,
+        force:,
       )
     end
     let(:force) { false }
@@ -52,14 +52,14 @@ describe Providers::CopyToRecruitmentCycleService do
         ),
       ).to be_nil
 
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       expect(new_provider).not_to be_nil
       expect(new_provider).not_to eq provider
     end
 
     it "leaves the existing provider alone" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       expect(recruitment_cycle.reload.providers).to eq [provider]
     end
@@ -71,7 +71,7 @@ describe Providers::CopyToRecruitmentCycleService do
         expect(Rails.logger).to receive(:fatal).with("error trying to copy course #{course.course_code}")
 
         expect {
-          service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+          service.execute(provider:, new_recruitment_cycle:)
         }.to raise_error(StandardError)
       end
     end
@@ -87,37 +87,37 @@ describe Providers::CopyToRecruitmentCycleService do
       }
 
       it "does not make a copy of the provider" do
-        expect { service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle) }
+        expect { service.execute(provider:, new_recruitment_cycle:) }
           .not_to(change { new_recruitment_cycle.reload.providers.count })
       end
 
       it "copies over the sites" do
-        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+        service.execute(provider:, new_recruitment_cycle:)
 
-        expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
+        expect(mocked_copy_site_service).to have_received(:execute).with(site:, new_provider:)
       end
 
       it "copies over the courses" do
-        service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+        service.execute(provider:, new_recruitment_cycle:)
 
-        expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+        expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
       end
     end
 
     it "assigns the new provider to organisation" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       expect(new_provider.organisation).to eq provider.organisation
     end
 
     it "assigns the new provider to users" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       expect(new_provider.users).to eq provider.users
     end
 
     it "copies over the ucas_preferences" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       compare_attrs = %w[
         type_of_gt12
@@ -130,7 +130,7 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it "copies over the contacts" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
       compare_attrs = %w[name email telephone]
       expect(new_provider.contacts.map { |c| c.attributes.slice(compare_attrs) })
@@ -138,22 +138,22 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it "copies over the sites" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
-      expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
+      expect(mocked_copy_site_service).to have_received(:execute).with(site:, new_provider:)
     end
 
     it "copies over the courses" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      service.execute(provider:, new_recruitment_cycle:)
 
-      expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+      expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
     end
 
     it "returns a hash of the counts of copied objects" do
       allow(mocked_copy_course_service).to receive(:execute).and_return(double)
       allow(mocked_copy_site_service).to receive(:execute).and_return(double)
 
-      output = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
+      output = service.execute(provider:, new_recruitment_cycle:)
 
       expect(output).to eq(
         providers: 1,
@@ -167,8 +167,8 @@ describe Providers::CopyToRecruitmentCycleService do
         create :provider,
           :with_users,
           sites: [site],
-          ucas_preferences: ucas_preferences,
-          contacts: contacts
+          ucas_preferences:,
+          contacts:
       }
       let(:draft_course_enrichment) { build :course_enrichment }
       let(:course_enrichments) { [draft_course_enrichment] }
@@ -188,7 +188,7 @@ describe Providers::CopyToRecruitmentCycleService do
         let(:course_codes) { nil }
 
         subject do
-          service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle, course_codes: course_codes)
+          service.execute(provider:, new_recruitment_cycle:, course_codes:)
         end
 
         it "still copies the provider" do
@@ -200,7 +200,7 @@ describe Providers::CopyToRecruitmentCycleService do
         it "does not copies the courses" do
           subject
 
-          expect(mocked_copy_course_service).not_to have_received(:execute).with(course: course, new_provider: new_provider)
+          expect(mocked_copy_course_service).not_to have_received(:execute).with(course:, new_provider:)
         end
 
         it "logs info message" do
@@ -237,7 +237,7 @@ describe Providers::CopyToRecruitmentCycleService do
           it "still copies the courses" do
             subject
 
-            expect(mocked_copy_course_service).to have_received(:execute).with(course: course, new_provider: new_provider)
+            expect(mocked_copy_course_service).to have_received(:execute).with(course:, new_provider:)
           end
         end
 

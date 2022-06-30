@@ -4,7 +4,7 @@ describe Course, type: :model do
   describe "#publishable?" do
     let(:course) { create(:course) }
     let(:site) { create(:site) }
-    let(:site_status) { create(:site_status, :new, site: site) }
+    let(:site_status) { create(:site_status, :new, site:) }
 
     subject { course }
 

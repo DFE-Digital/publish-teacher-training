@@ -34,7 +34,7 @@ describe ProviderUCASPreference, type: :model do
   end
 
   describe "gt12_contact=" do
-    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:provider) { create(:provider, ucas_preferences:) }
     let(:ucas_preferences) { build(:provider_ucas_preference) }
     let(:new_email_address) { "test@email.com" }
 
@@ -48,7 +48,7 @@ describe ProviderUCASPreference, type: :model do
   end
 
   describe "application_alert_contact= (email)" do
-    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:provider) { create(:provider, ucas_preferences:) }
     let(:old_application_alert_contact) { "old@example.org" }
     let(:ucas_preferences) { build(:provider_ucas_preference, application_alert_email: old_application_alert_contact) }
     let(:new_application_alert_contact) { "new@example.com" }
@@ -62,7 +62,7 @@ describe ProviderUCASPreference, type: :model do
   end
 
   describe "application_alert_contact= (url)" do
-    let(:provider) { create(:provider, ucas_preferences: ucas_preferences) }
+    let(:provider) { create(:provider, ucas_preferences:) }
     let(:old_application_alert_contact) { "https://example.org/foo/bar" }
     let(:ucas_preferences) { build(:provider_ucas_preference, application_alert_email: old_application_alert_contact) }
     let(:new_application_alert_contact) { "http://example.com/" }

@@ -22,7 +22,7 @@ module NotificationBanner
       classes: [],
       html_attributes: {}
     )
-      super(classes: classes, html_attributes: html_attributes)
+      super(classes:, html_attributes:)
       @title_text = title_text
       @text = text
       @type = type

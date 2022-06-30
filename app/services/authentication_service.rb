@@ -47,7 +47,7 @@ private
 
   def decoded_token
     @decoded_token ||= Token::DecodeService.call(
-      encoded_token: encoded_token,
+      encoded_token:,
       secret: Settings.authentication.secret,
       algorithm: Settings.authentication.algorithm,
       audience: Settings.authentication.audience,

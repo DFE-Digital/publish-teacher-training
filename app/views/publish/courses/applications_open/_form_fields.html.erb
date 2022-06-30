@@ -37,19 +37,19 @@
           <div class="govuk-date-input">
             <div class="govuk-date-input__item">
               <%= render "publish/shared/form_field",
-                form: form, field: :day do |field, options| %>
+                form:, field: :day do |field, options| %>
                 <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-2") %>
               <% end %>
             </div>
             <div class="govuk-date-input__item">
               <%= render "publish/shared/form_field",
-                form: form, field: :month do |field, options| %>
+                form:, field: :month do |field, options| %>
                 <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-2") %>
               <% end %>
             </div>
             <div class="govuk-date-input__item">
               <%= render "publish/shared/form_field",
-                form: form, field: :year do |field, options| %>
+                form:, field: :year do |field, options| %>
                 <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-4") %>
               <% end %>
             </div>

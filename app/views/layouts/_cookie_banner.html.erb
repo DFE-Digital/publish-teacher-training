@@ -24,7 +24,7 @@
 }) do |cookie_banner| %>
   <% cookie_preferences_link = govuk_link_to(t("cookies.after_consent.page_link_text"), cookies_path) %>
   <%= cookie_banner.message(text: t("cookies.after_consent.message",
-                                    cookie_preferences_link: cookie_preferences_link).html_safe) do |message| %>
+                                    cookie_preferences_link:).html_safe) do |message| %>
     <% message.action do %>
       <button type="button" class="govuk-button"><%= t("cookies.after_consent.button_text_html") %></button>
     <% end %>

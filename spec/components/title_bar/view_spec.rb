@@ -11,7 +11,7 @@ module TitleBar
 
     context "default" do
       before do
-        render_inline(described_class.new(title: title, current_user: current_user, provider: provider_code))
+        render_inline(described_class.new(title:, current_user:, provider: provider_code))
       end
 
       it "renders the provided title" do
@@ -19,14 +19,14 @@ module TitleBar
       end
 
       it "does not render the recruitment cycle link" do
-        expect(component).not_to have_link("Change recruitment cycle", href: "/publish/organisations/1BJ")
+        expect(component.has_link?("Change recruitment cycle", href: "/publish/organisations/1BJ")).to be false
       end
     end
 
     context "during rollover" do
       before do
         allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
-        render_inline(described_class.new(title: title, current_user: current_user, provider: provider_code))
+        render_inline(described_class.new(title:, current_user:, provider: provider_code))
       end
 
       it "renders the provided title" do
@@ -34,7 +34,7 @@ module TitleBar
       end
 
       it "renders the recruitment cycle link" do
-        expect(component).to have_link("Change recruitment cycle", href: "/publish/organisations/1BJ")
+        expect(component.has_link?("Change recruitment cycle", href: "/publish/organisations/1BJ")).to be true
       end
     end
   end

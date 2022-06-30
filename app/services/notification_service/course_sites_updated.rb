@@ -13,9 +13,9 @@ module NotificationService
 
       users_to_notify.each do |user|
         CourseSitesUpdateEmailMailer.course_sites_update_email(
-          course: course,
-          previous_site_names: previous_site_names,
-          updated_site_names: updated_site_names,
+          course:,
+          previous_site_names:,
+          updated_site_names:,
           recipient: user,
         ).deliver_later
       end

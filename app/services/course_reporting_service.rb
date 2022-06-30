@@ -8,7 +8,7 @@ class CourseReportingService
 
   class << self
     def call(courses_scope:)
-      new(courses_scope: courses_scope).call
+      new(courses_scope:).call
     end
   end
 

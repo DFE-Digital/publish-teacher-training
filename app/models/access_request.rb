@@ -14,7 +14,7 @@ class AccessRequest < ApplicationRecord
   scope :by_request_date, -> { order(request_date_utc: :asc) }
 
   def recipient
-    User.new(first_name: first_name, last_name: last_name, email: email_address)
+    User.new(first_name:, last_name:, email: email_address)
   end
 
   def add_additional_attributes(requester_email)

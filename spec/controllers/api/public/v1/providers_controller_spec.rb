@@ -82,7 +82,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
         let(:pagination) do
           {
-            page: page,
+            page:,
             per_page: 1,
           }
         end
@@ -341,7 +341,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           before do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
-              filter: filter,
+              filter:,
             }
           end
 
@@ -368,7 +368,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
       before do
         get :show, params: {
-          recruitment_cycle_year: recruitment_cycle_year,
+          recruitment_cycle_year:,
           code: provider_code,
         }
       end
@@ -415,7 +415,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
       before do
         get :show, params: {
-          recruitment_cycle_year: recruitment_cycle_year,
+          recruitment_cycle_year:,
           code: provider_code,
         }
       end

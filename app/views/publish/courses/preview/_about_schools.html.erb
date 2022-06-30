@@ -3,9 +3,9 @@
   <div data-qa="course__about_schools">
     <div class="app-advice__body">
       <% if course.provider.provider_type == "university" && course.provider.provider_code != 'B31' %>
-        <%= render partial: "publish/courses/preview/placement/hei", locals: { course: course } %>
+        <%= render partial: "publish/courses/preview/placement/hei", locals: { course: } %>
       <% elsif course.program_type == 'scitt_programme' && course.provider.provider_code != 'E65' %>
-        <%= render partial: "publish/courses/preview/placement/scitt", locals: { course: course } %>
+        <%= render partial: "publish/courses/preview/placement/scitt", locals: { course: } %>
       <% end %>
     </div>
     <% if course.how_school_placements_work.present? %>

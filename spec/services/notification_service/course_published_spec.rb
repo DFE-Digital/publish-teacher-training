@@ -55,20 +55,20 @@ module NotificationService
         it "sends notifications" do
           expect(CoursePublishEmailMailer).to receive(:course_publish_email)
           expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
-          described_class.call(course: course)
+          described_class.call(course:)
         end
       end
 
       context "with a course that is not in the current cycle" do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
-        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider: provider) }
+        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
         before { setup_notifications }
 
         it "does not notifications" do
           expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
           expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
-          described_class.call(course: course)
+          described_class.call(course:)
         end
       end
 
@@ -81,7 +81,7 @@ module NotificationService
               .to receive(:course_publish_email)
               .with(course, subscribed_user).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
-            described_class.call(course: course)
+            described_class.call(course:)
           end
 
           it "does not email non subscribed users" do
@@ -89,7 +89,7 @@ module NotificationService
               .with(course, non_subscribed_user)
             expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
               .with(course, user_subscribed_to_other_provider)
-            described_class.call(course: course)
+            described_class.call(course:)
           end
         end
 
@@ -99,7 +99,7 @@ module NotificationService
           it "does not mail subscribed users" do
             expect(CoursePublishEmailMailer)
               .not_to receive(:course_publish_email)
-            described_class.call(course: course)
+            described_class.call(course:)
           end
         end
       end
@@ -112,7 +112,7 @@ module NotificationService
         it "does not mail subscribed users" do
           expect(CoursePublishEmailMailer)
             .not_to receive(:course_publish_email)
-          described_class.call(course: course)
+          described_class.call(course:)
         end
       end
     end

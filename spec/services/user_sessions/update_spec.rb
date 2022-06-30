@@ -5,7 +5,7 @@ require "rails_helper"
 module UserSessions
   describe Update do
     describe ".call" do
-      let(:service) { described_class.call(user: user, user_session: user_session) }
+      let(:service) { described_class.call(user:, user_session:) }
 
       context "when user are valid" do
         let(:user) { create(:user) }

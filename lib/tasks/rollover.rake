@@ -5,7 +5,7 @@ namespace :rollover do
     course_codes = args[:course_codes]
     force = args[:force] == "true"
 
-    RolloverProviderService.call(provider_code: provider_code, course_codes: course_codes&.split, force: force)
+    RolloverProviderService.call(provider_code:, course_codes: course_codes&.split, force:)
   end
 
   desc "Rollover providers, courses and locations to the next cycle"

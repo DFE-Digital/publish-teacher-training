@@ -59,7 +59,7 @@ describe "API" do
         let(:year) { "2020" }
         let(:include) { "recruitment_cycle" }
 
-        schema "$ref": "#/components/schemas/ProviderListResponse"
+        schema({ "$ref" => "#/components/schemas/ProviderListResponse" })
 
         run_test!
       end
@@ -102,7 +102,7 @@ describe "API" do
         let(:provider_code) { provider.provider_code }
         let(:include) { nil }
 
-        schema "$ref": "#/components/schemas/ProviderSingleResponse"
+        schema({ "$ref" => "#/components/schemas/ProviderSingleResponse" })
 
         run_test!
       end
@@ -112,7 +112,7 @@ describe "API" do
         let(:provider_code) { "999" }
         let(:include) { nil }
 
-        schema "$ref": "#/components/schemas/404ErrorResponse"
+        schema({ "$ref" => "#/components/schemas/404ErrorResponse" })
 
         run_test!
       end

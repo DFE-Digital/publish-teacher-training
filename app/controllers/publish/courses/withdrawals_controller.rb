@@ -36,7 +36,7 @@ module Publish
                     "Courses that have not been published should be deleted not withdrawn"
                   end
 
-        flash[:error] = { id: "withdraw-error", message: message }
+        flash[:error] = { id: "withdraw-error", message: }
 
         redirect_to publish_provider_recruitment_cycle_courses_path(
           provider.provider_code,

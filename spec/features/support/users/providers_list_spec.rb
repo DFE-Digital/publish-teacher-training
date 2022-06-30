@@ -6,7 +6,7 @@ feature "View providers" do
   let(:user) { create(:user, :admin) }
 
   before do
-    given_i_am_authenticated(user: user)
+    given_i_am_authenticated(user:)
     and_there_are_providers
     when_i_visit_the_support_provider_index_page
   end

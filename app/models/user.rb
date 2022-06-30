@@ -102,6 +102,6 @@ private
 
   def current_page_acknowledgement_for(page)
     interrupt_page_acknowledgements
-      .includes(:recruitment_cycle).find_by(page: page, recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
+      .includes(:recruitment_cycle).find_by(page:, recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
   end
 end

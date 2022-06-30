@@ -10,13 +10,13 @@ describe AuthenticationService do
     let(:logger_spy) { spy }
     let(:payload) do
       {
-        email: email,
-        sign_in_user_id: sign_in_user_id,
-        first_name: first_name,
-        last_name: last_name,
+        email:,
+        sign_in_user_id:,
+        first_name:,
+        last_name:,
       }
     end
-    let(:token) { build_jwt(:apiv2, payload: payload) }
+    let(:token) { build_jwt(:apiv2, payload:) }
 
     let(:service) { described_class.new(logger: logger_spy) }
 
@@ -67,7 +67,7 @@ describe AuthenticationService do
       end
 
       context "when the email is already in use" do
-        let!(:existing_user) { create(:user, email: email) }
+        let!(:existing_user) { create(:user, email:) }
 
         it { is_expected.to eq user }
 

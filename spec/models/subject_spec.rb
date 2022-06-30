@@ -8,7 +8,7 @@ describe Subject, type: :model do
   its(:to_s) { is_expected.to eq("Modern languages (other)") }
 
   it "can get a financial incentive" do
-    financial_incentive = create(:financial_incentive, subject: subject)
+    financial_incentive = create(:financial_incentive, subject:)
     expect(subject.financial_incentive).to eq(financial_incentive)
   end
 

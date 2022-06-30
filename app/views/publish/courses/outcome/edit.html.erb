@@ -22,7 +22,7 @@
         <span class="govuk-caption-l"><%= course.name_and_code %></span>
       <% end %>
 
-      <%= render "form_fields", form: form, course_name_and_code: course_name_and_code %>
+      <%= render "form_fields", form:, course_name_and_code: %>
 
       <%= form.submit course.is_published? ? "Save and publish" : "Save",
                       class: "govuk-button", data: { qa: "course__save" } %>

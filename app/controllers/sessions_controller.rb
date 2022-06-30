@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
     UserSession.begin_session!(session, request.env["omniauth.auth"])
 
     if current_user
-      UserSessions::Update.call(user: current_user, user_session: user_session)
+      UserSessions::Update.call(user: current_user, user_session:)
 
       redirect_to after_sign_in_path
     else

@@ -18,12 +18,12 @@ module Publish
       set_equivalency_values_to_false unless accept_gcse_equivalency
 
       course.update(
-        accept_pending_gcse: accept_pending_gcse,
-        accept_gcse_equivalency: accept_gcse_equivalency,
-        accept_english_gcse_equivalency: accept_english_gcse_equivalency,
-        accept_maths_gcse_equivalency: accept_maths_gcse_equivalency,
-        accept_science_gcse_equivalency: accept_science_gcse_equivalency,
-        additional_gcse_equivalencies: additional_gcse_equivalencies,
+        accept_pending_gcse:,
+        accept_gcse_equivalency:,
+        accept_english_gcse_equivalency:,
+        accept_maths_gcse_equivalency:,
+        accept_science_gcse_equivalency:,
+        additional_gcse_equivalencies:,
       )
     end
 

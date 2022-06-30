@@ -19,7 +19,7 @@ describe "API" do
       response "200", "A list of provider suggestions matching the query term" do
         let(:query) { "oxf" }
 
-        schema "$ref": "#/components/schemas/ProviderSuggestionListResponse"
+        schema({ "$ref": "#/components/schemas/ProviderSuggestionListResponse" })
 
         run_test!
       end
@@ -27,7 +27,7 @@ describe "API" do
       response "400", "A bad request" do
         let(:query) { nil }
 
-        schema "$ref": "#/components/schemas/400ErrorResponse"
+        schema({ "$ref": "#/components/schemas/400ErrorResponse" })
 
         run_test!
       end

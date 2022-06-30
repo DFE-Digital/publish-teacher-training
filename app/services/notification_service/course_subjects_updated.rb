@@ -18,9 +18,9 @@ module NotificationService
 
       users.each do |user|
         CourseSubjectsUpdatedEmailMailer.course_subjects_updated_email(
-          course: course,
-          previous_subject_names: previous_subject_names,
-          previous_course_name: previous_course_name,
+          course:,
+          previous_subject_names:,
+          previous_course_name:,
           recipient: user,
         ).deliver_later
       end

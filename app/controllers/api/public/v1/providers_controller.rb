@@ -4,7 +4,7 @@ module API
       class ProvidersController < API::Public::V1::ApplicationController
         def index
           render jsonapi: paginate(providers),
-            include: params[:include], class: API::Public::V1::SerializerService.call, fields: fields
+            include: params[:include], class: API::Public::V1::SerializerService.call, fields:
         end
 
         def show
@@ -17,7 +17,7 @@ module API
           render jsonapi: provider,
             class: API::Public::V1::SerializerService.call,
             include: params[:include],
-            fields: fields
+            fields:
         end
 
       private

@@ -83,7 +83,7 @@ describe PublishReportingService do
         allow(recruitment_cycle_scope).to receive(:providers).and_return(providers_scope)
       end
 
-      subject { described_class.call(recruitment_cycle_scope: recruitment_cycle_scope) }
+      subject { described_class.call(recruitment_cycle_scope:) }
 
       it "applies the scopes" do
         expect(User).to receive(:count).and_return(666)

@@ -16,14 +16,14 @@ describe Sites::CopyToProviderService do
     let(:service) { described_class.new }
 
     it "makes a copy of the course in the new provider" do
-      service.execute(site: site, new_provider: next_provider)
+      service.execute(site:, new_provider: next_provider)
 
       next_site = next_provider.reload.sites.find_by(code: site.code)
       expect(next_site).not_to be_nil
     end
 
     it "leaves the existing site alone" do
-      service.execute(site: site, new_provider: next_provider)
+      service.execute(site:, new_provider: next_provider)
 
       expect(provider.reload.sites).to eq [site]
     end
@@ -40,7 +40,7 @@ describe Sites::CopyToProviderService do
         # do for next_site doesn't seem to work so we have to assign it here.
         next_site.update code: site.code
 
-        expect { service.execute(site: site, new_provider: next_provider) }
+        expect { service.execute(site:, new_provider: next_provider) }
           .not_to(change { next_provider.reload.sites.count })
       end
     end
@@ -55,7 +55,7 @@ describe Sites::CopyToProviderService do
       end
 
       it "makes a copy of the course in the new provider" do
-        service.execute(site: site, new_provider: next_provider)
+        service.execute(site:, new_provider: next_provider)
 
         next_site = next_provider.reload.sites.find_by(code: site.code)
         expect(next_site).not_to be_nil

@@ -25,7 +25,7 @@ private
   attr_reader :provider_codes, :force
 
   def rollover(provider_code, total_counts)
-    counts = RolloverProviderService.call(provider_code: provider_code, force: force)
+    counts = RolloverProviderService.call(provider_code:, force:)
 
     total_counts.merge!(counts) { |_, total, count| total + count }
   end

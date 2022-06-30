@@ -2,13 +2,13 @@ require "rails_helper"
 
 describe Course, type: :model do
   describe "withdraw" do
-    let(:course) { create(:course, provider: provider, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
+    let(:course) { create(:course, provider:, site_statuses: [site_status1, site_status2, site_status3], enrichments: [enrichment]) }
     let(:provider) { build(:provider) }
     let(:enrichment) { build(:course_enrichment) }
-    let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site: site) }
-    let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site: site) }
-    let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site: site) }
-    let(:site) { build(:site, provider: provider) }
+    let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site:) }
+    let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site:) }
+    let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site:) }
+    let(:site) { build(:site, provider:) }
 
     before do
       course.withdraw

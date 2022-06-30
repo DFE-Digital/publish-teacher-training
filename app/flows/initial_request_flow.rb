@@ -29,14 +29,14 @@ class InitialRequestFlow
   def locals
     if number_of_places_page? || check_your_information_page?
       {
-        training_provider: training_provider,
-        form_object: form_object,
+        training_provider:,
+        form_object:,
       }
     elsif blank_search_query? || empty_search_results?
       {
         training_providers: training_providers_without_associated,
-        form_object: form_object,
-        provider: provider,
+        form_object:,
+        provider:,
       }
     elsif pick_a_provider_page?
       {
@@ -45,8 +45,8 @@ class InitialRequestFlow
     else
       {
         training_providers: training_providers_without_associated,
-        form_object: form_object,
-        provider: provider,
+        form_object:,
+        provider:,
       }
     end
   end
@@ -126,7 +126,7 @@ private
     @training_providers_with_fee_paying_pe_course ||=
 
       training_provider_search_service.new(
-        provider: provider,
+        provider:,
         params: {
           filter: {
             subjects: PE_SUBJECT_CODE, funding_type: "fee"
@@ -136,7 +136,7 @@ private
   end
 
   def all_training_providers
-    @all_training_providers ||= training_provider_search_service.new(provider: provider, params: {}).call
+    @all_training_providers ||= training_provider_search_service.new(provider:, params: {}).call
   end
 
   def training_providers_with_previous_allocations
