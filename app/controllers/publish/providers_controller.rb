@@ -1,5 +1,6 @@
 module Publish
   class ProvidersController < PublishController
+    include ProviderHelper
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     decorates_assigned :provider
 
@@ -30,12 +31,12 @@ module Publish
       authorize provider
       @recruitment_cycle_year = session[:recruitment_cycle_year]
 
-      if FeatureService.enabled?(:new_publish_navigation) && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+      if rollover_inactive_and_new_nav?
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-      elsif (@recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year) && (Settings.features.rollover.can_edit_current_and_next_cycles == true)
+      elsif rollover_active_and_current_cycle?(@recruitment_cycle_year)
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
         session.delete("recruitment_cycle_year")
-      elsif (@recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year + 1) && (Settings.features.rollover.can_edit_current_and_next_cycles == true)
+      elsif rollover_active_and_next_cycle?(@recruitment_cycle_year)
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year.next)
         session.delete("recruitment_cycle_year")
       else
