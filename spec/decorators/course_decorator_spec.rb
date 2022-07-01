@@ -596,6 +596,36 @@ describe CourseDecorator do
     end
   end
 
+  describe "#academic_year" do
+    context "when the course has a September start date" do
+      let(:start_date) { Date.new(2021, 9, 1) }
+      it "returns the course's academic year" do
+        expect(decorated_course.academic_year).to eq("2021 to 2022")
+      end
+    end
+
+    context "when the course has a December start date" do
+      let(:start_date) { Date.new(2021, 12, 1) }
+      it "returns the course's academic year" do
+        expect(decorated_course.academic_year).to eq("2021 to 2022")
+      end
+    end
+
+    context "when the course has a January start date" do
+      let(:start_date) { Date.new(2023, 1, 1) }
+      it "returns the course's academic year" do
+        expect(decorated_course.academic_year).to eq("2022 to 2023")
+      end
+    end
+
+    context "when the course has an August start date" do
+      let(:start_date) { Date.new(2023, 8, 1) }
+      it "returns the course's academic year" do
+        expect(decorated_course.academic_year).to eq("2022 to 2023")
+      end
+    end
+  end
+
   describe "#other_course_length?" do
     before do
       allow(course.enrichments).to receive(:most_recent).and_return([course_enrichment])
