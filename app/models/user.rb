@@ -85,7 +85,11 @@ class User < ApplicationRecord
   end
 
   def has_multiple_providers_in_current_recruitment_cycle?
-    providers_via_organisations.where(recruitment_cycle: RecruitmentCycle.current).count > 1
+    providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1
+  end
+
+  def multiple_providers_or_admin?
+    admin? || has_multiple_providers_in_current_recruitment_cycle?
   end
 
 private

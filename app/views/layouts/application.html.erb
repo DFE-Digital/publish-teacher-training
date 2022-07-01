@@ -72,11 +72,7 @@
         <% end %>
       </div>
 
-      <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
-          <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
-      <% elsif render_navigation_bar?(@provider) && !@provider.accredited_body? %>
-          <%= render partial: "publish/shared/navigation_bar_without_training_partners" %>
-      <% end %>
+    <%= render partial: "publish/shared/navigation_bar" %>
     <% end %>
 
     <div class="govuk-width-container">

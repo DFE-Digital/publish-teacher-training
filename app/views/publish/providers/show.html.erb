@@ -8,10 +8,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @provider.rolled_over? %>
-      <%= render partial: "publish/recruitment_cycles/show_during_rollover" %>
-    <% else %>
-     <%= render partial: "publish/recruitment_cycles/provider_info", locals: { provider: @provider, year: Settings.current_recruitment_cycle_year, recruitment_cycle: @recruitment_cycle } %>
-    <% end %>
+    <%= render partial: "publish/recruitment_cycles/show_during_rollover" %>
   </div>
 </div>

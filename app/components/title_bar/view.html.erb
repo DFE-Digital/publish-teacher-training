@@ -1,26 +1,22 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    <% if multiple_providers_or_admin?(current_user) || rollover_active? %>
+    <% if multiple_providers_or_admin? || rollover_active? %>
       <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
+    <% end %>
+
+    <% if rollover_active? %>
+      <span class="govuk-hint title-bar-inline">
+        <%= recruitment_label %>
+      </span>
     <% end %>
 
     <% if rollover_active? %>
       <%= change_cycle_link(@provider) %>
     <% end %>
 
-    <% if multiple_providers_or_admin?(current_user) %>
+    <% if multiple_providers_or_admin? %>
       <%= change_organisation_link %>
-    <% end %>
-
-    <% if rollover_active? %>
-      <span class="govuk-hint title-bar-inline">
-        <% if current_recruitment_cycle? %>
-          <%= "- #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year} - current" %>
-        <% elsif next_recruitment_cycle? %>
-          <%= "- #{current_recruitment_cycle_year + 1} to #{next_recruitment_cycle_year + 1}" %>
-        <% end %>
-      </span>
     <% end %>
   </div>
 </div>
