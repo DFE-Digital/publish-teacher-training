@@ -31,7 +31,7 @@ module Publish
       authorize provider
       @recruitment_cycle_year = session[:recruitment_cycle_year]
 
-      if rollover_inactive_and_new_nav?
+      if rollover_inactive
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
       elsif rollover_active_and_current_cycle?(@recruitment_cycle_year)
         redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)

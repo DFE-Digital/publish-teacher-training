@@ -1,32 +1,13 @@
-<% if FeatureService.enabled?(:new_publish_navigation) %>
-  <% content_for :page_title, "Training partners" %>
-<% else %>
-  <% content_for :page_title, "Courses as an accredited body" %>
-<% end %>
-
+<% content_for :page_title, "Training partners" %>
 <%= content_for :before_content, render_breadcrumbs(:training_providers) %>
 
   <h1 class="govuk-heading-l">
-    <% if FeatureService.enabled?(:new_publish_navigation) %>
-      Training partners
-    <% else %>
-      Courses as an accredited body
-    <% end %>
+    Training partners
   </h1>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% unless FeatureService.enabled?(:new_publish_navigation) %>
-      <p class="govuk-body">Use this section to:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>see who lists you as their accredited body</li>
-        <li>see which courses you’re the accredited body for</li>
-      </ul>
-    <% end %>
 
-    <% unless FeatureService.enabled?(:new_publish_navigation) %>
-      <h2 class="govuk-heading-m">Training providers</h2>
-    <% end %>
     <ul class="govuk-list" data-qa="provider__training_providers_list">
       <% @training_providers.each do |training_provider| %>
         <li data-qa="training_provider">

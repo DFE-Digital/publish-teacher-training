@@ -21,13 +21,8 @@ module ProviderHelper
     end
   end
 
-  # The method below can be deleted when the feature flag is removed
-  def rolled_over_and_new_nav?(provider)
-    provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation)
-  end
-
-  def rollover_inactive_and_new_nav?
-    !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") && FeatureService.enabled?(:new_publish_navigation)
+  def rollover_inactive
+    !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
   end
 
   def rollover_active_and_current_cycle?(recruitment_cycle_year)

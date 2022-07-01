@@ -28,7 +28,7 @@ feature "Opting into notifications" do
   end
 
   def when_i_visit_accredited_body_page
-    publish_providers_show_page.load(id: accrediting_provider.provider_code)
+    provider_courses_index_page.load(id: accrediting_provider.provider_code)
   end
 
   def and_i_click_on_notifications_link
@@ -54,7 +54,7 @@ feature "Opting into notifications" do
   end
 
   def then_i_should_see_my_preferences_have_been_saved
-    expect(publish_providers_show_page)
+    expect(provider_courses_index_page)
       .to have_content("Email notification preferences for #{@current_user.email} have been saved")
   end
 
