@@ -48,7 +48,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  describe "with an inital draft course" do
+  describe "with an initial draft course" do
     scenario "i can view the unpublished partial" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
       when_i_visit_the_course_page
@@ -121,12 +121,13 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment_initial_draft.about_course,
     )
+
+    expect(provider_courses_show_page.content_status).to have_content(
+      "Draft",
+    )
   end
 
   def then_i_should_see_the_description_of_the_fee_course
-    expect(provider_courses_show_page.caption).to have_content(
-      course.description,
-    )
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
@@ -165,12 +166,14 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_the_description_of_the_salary_course
-    expect(provider_courses_show_page.caption).to have_content(
-      course.description,
-    )
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
+
+    expect(provider_courses_show_page.content_status).to have_content(
+      "Published",
+    )
+
     expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course,
     )
