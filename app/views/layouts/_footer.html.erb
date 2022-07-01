@@ -15,12 +15,14 @@
           <ul class="govuk-footer__meta-custom govuk-list govuk-!-font-size-16 govuk-!-margin-bottom-8">
             <li>Email: <%= bat_contact_mail_to subject: "Publish teacher training courses support", class: "govuk-footer__link" %></li>
             <li class="govuk-!-margin-bottom-4">We respond within 5 working days, or one working day for more urgent queries</li>
-            <li><%= link_to "How to publish teacher training courses", guidance_path, class: "govuk-footer__link" %></li>
             <li><%= link_to "Teacher Training Courses API documentation", "https://api.publish-teacher-training-courses.service.gov.uk", class: "govuk-footer__link" %></li>
           </ul>
 
           <h2 class="govuk-visually-hidden">Support links</h2>
           <ul class="govuk-footer__inline-list govuk-!-margin-bottom-0">
+            <li class="govuk-footer__inline-list-item">
+              <%= link_to "How to use this service",  how_to_use_this_service_path, class: "govuk-footer__link" %>
+            </li>
             <li class="govuk-footer__inline-list-item">
               <%= link_to "Accessibility", accessibility_path, class: "govuk-footer__link" %>
             </li>
