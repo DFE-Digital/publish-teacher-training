@@ -26,9 +26,8 @@
   </div>
 <% end %>
 
-<h1 class="govuk-heading-l">
-  <span class="govuk-caption-l"><%= course.description %></span>
-  <%= course.name_and_code %>
+<h1 class="govuk-heading-l" >
+  <%= course.name_and_code %> <span data-qa=“course__content-status”><%= course.status_tag %></span>
 </h1>
 
 <div class="govuk-tabs app-tabs app-tabs--course">

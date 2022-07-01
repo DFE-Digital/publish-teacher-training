@@ -26,8 +26,8 @@ module PageObjects
       section :other_requirements, Sections::SummaryList, '[data-qa="enrichment__other_requirements"]'
       section :status_sidebar, Sections::StatusSidebar, '[data-qa="course__status_panel"]'
 
-      element :caption, ".govuk-caption-l"
       element :basic_details_link, "a.govuk-link.govuk-tabs__tab", text: "Basic details"
+      element :content_status, '[data-qa="course__content-status"]'
 
       def error_messages
         errors.map(&:text)
