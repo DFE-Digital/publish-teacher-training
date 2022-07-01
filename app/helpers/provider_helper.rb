@@ -26,6 +26,18 @@ module ProviderHelper
     provider.rolled_over? && FeatureService.enabled?(:new_publish_navigation)
   end
 
+  def rollover_inactive_and_new_nav?
+    !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") && FeatureService.enabled?(:new_publish_navigation)
+  end
+
+  def rollover_active_and_current_cycle?(recruitment_cycle_year)
+    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") && (recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year)
+  end
+
+  def rollover_active_and_next_cycle?(recruitment_cycle_year)
+    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") && (recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year + 1)
+  end
+
 private
 
   def visa_sponsorship_call_to_action(provider)

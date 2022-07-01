@@ -66,8 +66,8 @@ module ApplicationHelper
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
-  def display_phase_banner_border?(user)
-    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one?
+  def dont_display_phase_banner_border?(user)
+    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && FeatureService.enabled?(:new_publish_navigation) && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
   end
 
 private

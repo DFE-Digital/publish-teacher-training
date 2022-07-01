@@ -12,7 +12,7 @@ module TitleBar
     end
 
     def change_organisation_link
-      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link inline govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
+      govuk_link_to t("change_organisation"), root_path({ recruitment_cycle_year: params[:recruitment_cycle_year] }), class: "title-bar-link inline govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
     end
 
     def change_cycle_link(provider)
@@ -29,6 +29,10 @@ module TitleBar
 
     def rollover_active?
       Settings.features.rollover.can_edit_current_and_next_cycles == true
+    end
+
+    def multiple_providers_or_admin?(current_user)
+      current_user.providers.where(recruitment_cycle: RecruitmentCycle.current).count > 1 || current_user.admin?
     end
 
     def current_recruitment_cycle_year
