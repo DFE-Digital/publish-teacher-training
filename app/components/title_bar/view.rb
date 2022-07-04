@@ -16,11 +16,11 @@ module TitleBar
   private
 
     def change_organisation_link
-      govuk_link_to t("change_organisation"), root_path({ recruitment_cycle_year: }), class: "title-bar-link govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
+      govuk_link_to t("change_organisation"), root_path, class: "title-bar-link govuk-link--no-visited-state title-bar-inline-item title-bar-item-separator"
     end
 
     def change_cycle_link(provider)
-      govuk_link_to t("page_titles.rollover.change_cycle"), publish_provider_path(code: provider), class: "title-bar-link govuk-link--no-visited-state"
+      govuk_link_to t("page_titles.rollover.change_cycle"), publish_provider_path(code: provider, switcher: true), class: "title-bar-link govuk-link--no-visited-state"
     end
 
     def current_recruitment_cycle?
@@ -32,7 +32,7 @@ module TitleBar
     end
 
     def recruitment_cycle_year
-      (params[:recruitment_cycle_year] || params[:year] || session[:recruitment_cycle_year]).to_i
+      (params[:recruitment_cycle_year] || params[:year] || session[:cycle_year]).to_i
     end
 
     def rollover_active?

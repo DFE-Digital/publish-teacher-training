@@ -1,6 +1,10 @@
 module RolloverHelper
   def rollover_inactive
-    !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    !rollover_active
+  end
+
+  def rollover_active?
+    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
   end
 
   def rollover_active_and_current_cycle?(recruitment_cycle_year)

@@ -13,8 +13,6 @@ module Publish
 
       render "publish/providers/no_providers", status: :forbidden if @providers.blank?
       redirect_to publish_provider_path(@providers.first.provider_code) if @providers.count == 1
-
-      session[:recruitment_cycle_year] = params[:recruitment_cycle_year]
     end
 
     def suggest
@@ -28,19 +26,19 @@ module Publish
     end
 
     def show
+      if session[:cycle_year].present?
+        @cycle_year = session[:cycle_year]
+      end
       authorize provider
-      @recruitment_cycle_year = session[:recruitment_cycle_year]
 
-      if rollover_inactive
-        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-      elsif rollover_active_and_current_cycle?(@recruitment_cycle_year)
-        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
-        session.delete("recruitment_cycle_year")
-      elsif rollover_active_and_next_cycle?(@recruitment_cycle_year)
-        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year.next)
-        session.delete("recruitment_cycle_year")
+      if rollover_active?
+        if session[:cycle_year].present? && params[:switcher] != "true"
+          redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
+        else
+          :show?
+        end
       else
-        :show?
+        redirect_to publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year)
       end
     end
 

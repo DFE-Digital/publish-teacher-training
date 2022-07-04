@@ -24,6 +24,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    session.delete(:cycle_year)
     if current_user.present?
       UserSession.end_session!(session)
       redirect_to(user_session.logout_url, allow_other_host: true)
