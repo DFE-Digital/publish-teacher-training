@@ -7,7 +7,7 @@ module PageObjects
     class RequestAccessNew < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/request-access"
 
-      element :request_access, ".govuk-button"
+      element :request_access, ".govuk-button", text: "Request access"
       element :heading, "h1"
 
       element :first_name, "#publish-access-request-form-first-name-field"

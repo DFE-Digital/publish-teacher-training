@@ -9,7 +9,7 @@ module PageObjects
 
           element :header, "h1"
           element :number_of_places_field, "#number-of-places-field"
-          element :continue, ".govuk-button"
+          element :continue, ".govuk-button", text: "Continue"
         end
       end
     end

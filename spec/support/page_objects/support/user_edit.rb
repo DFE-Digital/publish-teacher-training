@@ -10,7 +10,7 @@ module PageObjects
       element :email_field, "#user-email-field"
       element :admin_checkbox, "#user-admin-true-field"
 
-      element :update, ".govuk-button"
+      element :update, ".govuk-button", text: "Update"
     end
   end
 end

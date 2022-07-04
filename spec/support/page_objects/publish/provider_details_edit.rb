@@ -8,7 +8,7 @@ module PageObjects
       element :accredited_body_description_field, "textarea[name=\"publish_about_your_organisation_form[accredited_bodies][][description]\"]"
       element :train_with_disability_field, "textarea[name=\"publish_about_your_organisation_form[train_with_disability]\"]"
 
-      element :save_and_publish, ".govuk-button"
+      element :save_and_publish, ".govuk-button", text: "Save and publish"
     end
   end
 end

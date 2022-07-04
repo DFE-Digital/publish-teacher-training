@@ -10,7 +10,7 @@ module PageObjects
       element :urn, "#publish-provider-contact-form-urn-field"
       element :address1, "#publish-provider-contact-form-address1-field"
 
-      element :save_and_publish, ".govuk-button"
+      element :save_and_publish, ".govuk-button", text: "Save and publish"
 
       def errors
         within(error_summary) do

@@ -6,7 +6,7 @@ module PageObjects
       set_url "/support/allocations/{allocation_id}/uplifts/{uplift_id}/edit"
 
       element :allocation_uplift_amount, "#allocation-uplift-uplifts-field"
-      element :submit, ".govuk-button"
+      element :submit, ".govuk-button", text: "Continue"
     end
   end
 end
