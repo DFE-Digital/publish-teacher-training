@@ -184,14 +184,6 @@ class CourseDecorator < ApplicationDecorator
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
 
-  def academic_year
-    if course.start_date.month >= 9
-      "#{course.start_date.year} to #{course.start_date.year.to_i + 1}"
-    else
-      "#{course.start_date.year.to_i - 1} to #{course.start_date.year}"
-    end
-  end
-
   def age_range
     if object.age_range_in_years.present?
       I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)

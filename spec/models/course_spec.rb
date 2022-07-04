@@ -2623,4 +2623,42 @@ describe Course, type: :model do
       end
     end
   end
+
+  describe "#academic_year" do
+    context "when the course has a September start date" do
+      let(:start_date) { Date.new(2021, 9, 1) }
+      subject { build(:course, start_date: start_date) }
+
+      it "returns the course's academic year" do
+        expect(subject.academic_year).to eq("2021 to 2022")
+      end
+    end
+
+    context "when the course has a December start date" do
+      let(:start_date) { Date.new(2021, 12, 1) }
+      subject { build(:course, start_date: start_date) }
+
+      it "returns the course's academic year" do
+        expect(subject.academic_year).to eq("2021 to 2022")
+      end
+    end
+
+    context "when the course has a January start date" do
+      let(:start_date) { Date.new(2023, 1, 1) }
+      subject { build(:course, start_date: start_date) }
+
+      it "returns the course's academic year" do
+        expect(subject.academic_year).to eq("2022 to 2023")
+      end
+    end
+
+    context "when the course has an August start date" do
+      let(:start_date) { Date.new(2023, 8, 1) }
+      subject { build(:course, start_date: start_date) }
+
+      it "returns the course's academic year" do
+        expect(subject.academic_year).to eq("2022 to 2023")
+      end
+    end
+  end
 end
