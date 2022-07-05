@@ -447,6 +447,18 @@ RSpec.describe API::Public::V1::SubjectsController do
             "id" => "37",
             "type" => "subjects",
             "attributes" => {
+              "name" => "Physical education with an EBacc subject",
+              "code" => "C7",
+              "bursary_amount" => nil,
+              "early_career_payments" => nil,
+              "scholarship" => nil,
+              "subject_knowledge_enhancement_course_available" => nil,
+            },
+          },
+          {
+            "id" => "38",
+            "type" => "subjects",
+            "attributes" => {
               "name" => "French",
               "code" => "15",
               "bursary_amount" => "10000",
@@ -456,7 +468,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "38",
+            "id" => "39",
             "type" => "subjects",
             "attributes" => {
               "name" => "English as a second or other language",
@@ -468,7 +480,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "39",
+            "id" => "40",
             "type" => "subjects",
             "attributes" => {
               "name" => "German",
@@ -480,7 +492,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "40",
+            "id" => "41",
             "type" => "subjects",
             "attributes" => {
               "name" => "Italian",
@@ -492,7 +504,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "41",
+            "id" => "42",
             "type" => "subjects",
             "attributes" => {
               "name" => "Japanese",
@@ -504,7 +516,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "42",
+            "id" => "43",
             "type" => "subjects",
             "attributes" => {
               "name" => "Mandarin",
@@ -516,7 +528,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "43",
+            "id" => "44",
             "type" => "subjects",
             "attributes" => {
               "name" => "Russian",
@@ -528,7 +540,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "44",
+            "id" => "45",
             "type" => "subjects",
             "attributes" => {
               "name" => "Spanish",
@@ -540,7 +552,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "45",
+            "id" => "46",
             "type" => "subjects",
             "attributes" => {
               "name" => "Modern languages (other)",
@@ -552,7 +564,7 @@ RSpec.describe API::Public::V1::SubjectsController do
             },
           },
           {
-            "id" => "46",
+            "id" => "47",
             "type" => "subjects",
             "attributes" => {
               "name" => "Further education",
@@ -611,6 +623,7 @@ RSpec.describe API::Public::V1::SubjectsController do
           "Music",
           "Philosophy",
           "Physical education",
+          "Physical education with an EBacc subject",
           "Physics",
           "Primary",
           "Primary with English",

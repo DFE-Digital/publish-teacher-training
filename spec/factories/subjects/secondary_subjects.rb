@@ -26,6 +26,7 @@ FactoryBot.define do
     "Music" => "W3",
     "Philosophy" => "P1",
     "Physical education" => "C6",
+    "Physical education with an EBacc subject" => "C7",
     "Physics" => "F3",
     "Psychology" => "C8",
     "Religious education" => "V6",
@@ -163,6 +164,11 @@ FactoryBot.define do
     trait :physical_education do
       subject_name { "Physical education" }
       subject_code { subjects["Physical education"] }
+    end
+
+    trait :physical_education_with_ebacc do
+      subject_name { "Physical education with an EBacc subject" }
+      subject_code { subjects["Physical education with an EBacc subject"] }
     end
 
     trait :physics do

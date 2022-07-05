@@ -77,6 +77,7 @@ describe Course, type: :model do
           find(:secondary_subject, :music),
           find(:secondary_subject, :philosophy),
           find(:secondary_subject, :physical_education),
+          find(:secondary_subject, :physical_education_with_ebacc),
           find(:secondary_subject, :physics),
           find(:secondary_subject, :psychology),
           find(:secondary_subject, :religious_education),
