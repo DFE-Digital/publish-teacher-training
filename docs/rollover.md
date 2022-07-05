@@ -131,7 +131,7 @@ running:
     ```bash
     bundle exec rake 'rollover:create_recruitment_cycle"[YYYY, "YYYY-MM-DD", "YYYY-MM-DD"]'
     # example
-    bundle exec rake 'rollover:create_recruitment_cycle[2023, "2022-10-14", "2023-09-30"]'
+    bundle exec rake 'rollover:create_recruitment_cycle[2023, "2022-10-11", "2023-09-29"]'
     ```
 
 2. Rollover providers by running:
@@ -139,12 +139,9 @@ running:
     ```bash
     bundle exec rake rollover:providers
     ```
-3. Create **new Google forms** for adding PE courses for the next cycle and
-  update the links in the settings `google_forms: next_cycle`.
 
-4. Create a **Start Rollover PR** including the following code changes:
+3. Create a **Start Rollover PR** including the following code changes:
     - Update the setting for `can_edit_current_and_next_cycles: true`
-    - Update the links in the settings `google_forms: next_cycle`
     - Any hardcoded copy changes
 
 ### Begin Rollover launch
@@ -157,8 +154,6 @@ running:
 
 1. Create an **End Rollover PR** including the following code changes:
     - Update the setting for `can_edit_current_and_next_cycles: false`
-    - Replace `google_forms: current_cycle:` settings with those in
-      `google_forms: next_cycle:`
     - Any hardcoded copy changes
     - Increment setting `current_recruitment_cycle_year`
     - Increment year in setting `next_cycle_open_date`
