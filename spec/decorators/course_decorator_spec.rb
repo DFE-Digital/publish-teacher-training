@@ -814,4 +814,28 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe "#vacancies_panel" do
+    subject { course.decorate.vacancies_panel }
+
+    let(:link) do
+      "/publish/organisations/#{provider.provider_code}/#{current_recruitment_cycle.year}/courses/#{course.course_code}/vacancies"
+    end
+
+    it "has link" do
+      expect(subject).to eq "<a class=\"govuk-link\" href=\"#{link}\">Change vacancies</a>"
+    end
+  end
+
+  describe "#on_find_panel" do
+    subject { course.decorate.on_find_panel }
+
+    let(:link) do
+      "#{Settings.search_ui.base_url}/course/#{provider.provider_code}/#{course.course_code}"
+    end
+
+    it "has link" do
+      expect(subject).to eq("<a class=\"govuk-link\" href=\"#{link}\">View on Find</a>")
+    end
+  end
 end
