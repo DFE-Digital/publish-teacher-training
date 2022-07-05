@@ -22,9 +22,19 @@ feature "View pages", type: :feature do
     expect(page) .to have_selector("h1", text: "Privacy policy")
   end
 
-  scenario "Navigate to /guidance" do
-    visit "/guidance"
-    expect(page) .to have_selector("h1", text: "Guidance for Publish teacher training courses")
+  scenario "Navigate to /how-to-use-this-service" do
+    visit "/how-to-use-this-service"
+    expect(page) .to have_selector("h1", text: "How to use this service")
+  end
+
+  scenario "Navigate to /how-to-use-this-service/course-summary-examples" do
+    visit "/how-to-use-this-service/course-summary-examples"
+    expect(page) .to have_selector("h1", text: " Course summary examples")
+  end
+
+  scenario "Navigate to /how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses" do
+    visit "/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses"
+    expect(page) .to have_selector("h1", text: " Writing descriptions for Publish teacher training courses")
   end
 
   scenario "Navigate to /accessibility" do
