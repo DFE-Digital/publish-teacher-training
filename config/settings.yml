@@ -96,7 +96,7 @@ feedback:
 features:
   send_request_data_to_bigquery: false
   new_publish_navigation: true
-  google_analytics: false
+  google_analytics: true
   rollover:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false

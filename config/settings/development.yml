@@ -8,5 +8,4 @@ gcp_api_key: please_change_me
 environment:
   label: "development"
   name: "development"
-features:
-  google_analytics: true
+

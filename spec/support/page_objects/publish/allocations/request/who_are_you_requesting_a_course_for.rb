@@ -13,7 +13,7 @@ module PageObjects
 
           sections :radio_buttons, Sections::RadioButton, ".govuk-radios__item"
 
-          element :continue, ".govuk-button"
+          element :continue, ".govuk-button", text: "Continue"
 
           element :training_provider_search, "#training-provider-query-field"
 

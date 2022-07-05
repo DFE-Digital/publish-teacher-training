@@ -11,7 +11,7 @@
     <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_path(code: @provider.provider_code) %>
     <% @users.each do |user| %>
       <div>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1" data-qa="provider_user">
           <%= "#{user.first_name} #{user.last_name}" %>
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-0"><%= user.email %></p>

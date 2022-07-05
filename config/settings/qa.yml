@@ -28,4 +28,3 @@ basic_auth:
 
 features:
   send_request_data_to_bigquery: true
-  google_analytics: true

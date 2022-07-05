@@ -16,7 +16,7 @@ module PageObjects
         element :application_open_from_year, "#support_edit_course_form_applications_open_from_1i"
         element :send_specialism_checkbox, "#support-edit-course-form-is-send-true-field"
         element :error_summary, ".govuk-error-summary"
-        element :continue, ".govuk-button"
+        element :continue, ".govuk-button", text: "Update"
       end
     end
   end

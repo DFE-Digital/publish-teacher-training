@@ -8,7 +8,7 @@ module PageObjects
       element :provider_name, "#provider-provider-name-field"
       element :provider_type, "#provider-provider-type-field"
       element :error_summary, ".govuk-error-summary"
-      element :submit, ".govuk-button"
+      element :submit, ".govuk-button", text: "Update"
     end
   end
 end
