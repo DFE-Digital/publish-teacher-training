@@ -76,10 +76,6 @@ class User < ApplicationRecord
     accept_terms_date_utc.present?
   end
 
-  def current_rollover_acceptance
-    current_page_acknowledgement_for("rollover")
-  end
-
   def current_rollover_recruitment_acceptance
     current_page_acknowledgement_for("rollover_recruitment")
   end
