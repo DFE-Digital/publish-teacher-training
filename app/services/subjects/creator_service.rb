@@ -57,6 +57,7 @@ module Subjects
         { subject_name: "Latin", subject_code: "A0" },
         { subject_name: "Ancient Greek", subject_code: "A1" },
         { subject_name: "Ancient Hebrew", subject_code: "A2" },
+        { subject_name: "Physical education with an EBacc subject", subject_code: "C7" },
       ]
 
       modern_languages = [

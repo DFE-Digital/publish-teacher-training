@@ -446,6 +446,18 @@ describe "GET v3 /subjects" do
         "id" => "37",
         "type" => "subjects",
         "attributes" => {
+          "subject_name" => "Physical education with an EBacc subject",
+          "subject_code" => "C7",
+          "bursary_amount" => nil,
+          "early_career_payments" => nil,
+          "scholarship" => nil,
+          "subject_knowledge_enhancement_course_available" => nil,
+        },
+      },
+      {
+        "id" => "38",
+        "type" => "subjects",
+        "attributes" => {
           "subject_name" => "French",
           "subject_code" => "15",
           "bursary_amount" => "10000",
@@ -455,7 +467,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "38",
+        "id" => "39",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "English as a second or other language",
@@ -467,7 +479,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "39",
+        "id" => "40",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "German",
@@ -479,7 +491,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "40",
+        "id" => "41",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Italian",
@@ -491,7 +503,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "41",
+        "id" => "42",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Japanese",
@@ -503,7 +515,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "42",
+        "id" => "43",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Mandarin",
@@ -515,7 +527,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "43",
+        "id" => "44",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Russian",
@@ -527,7 +539,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "44",
+        "id" => "45",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Spanish",
@@ -539,7 +551,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "45",
+        "id" => "46",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Modern languages (other)",
@@ -551,7 +563,7 @@ describe "GET v3 /subjects" do
         },
       },
       {
-        "id" => "46",
+        "id" => "47",
         "type" => "subjects",
         "attributes" => {
           "subject_name" => "Further education",
@@ -829,67 +841,74 @@ describe "GET v3 /subjects" do
           "id" => "37",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "French",
+            "subject_name" => "Physical education with an EBacc subject",
           },
         },
         {
           "id" => "38",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "English as a second or other language",
+            "subject_name" => "French",
           },
         },
         {
           "id" => "39",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "German",
+            "subject_name" => "English as a second or other language",
           },
         },
         {
           "id" => "40",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Italian",
+            "subject_name" => "German",
           },
         },
         {
           "id" => "41",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Japanese",
+            "subject_name" => "Italian",
           },
         },
         {
           "id" => "42",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Mandarin",
+            "subject_name" => "Japanese",
           },
         },
         {
           "id" => "43",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Russian",
+            "subject_name" => "Mandarin",
           },
         },
         {
           "id" => "44",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Spanish",
+            "subject_name" => "Russian",
           },
         },
         {
           "id" => "45",
           "type" => "subjects",
           "attributes" => {
-            "subject_name" => "Modern languages (other)",
+            "subject_name" => "Spanish",
           },
         },
         {
           "id" => "46",
+          "type" => "subjects",
+          "attributes" => {
+            "subject_name" => "Modern languages (other)",
+          },
+        },
+        {
+          "id" => "47",
           "type" => "subjects",
           "attributes" => {
             "subject_name" => "Further education",
@@ -938,6 +957,7 @@ describe "GET v3 /subjects" do
           "Music",
           "Philosophy",
           "Physical education",
+          "Physical education with an EBacc subject",
           "Physics",
           "Primary",
           "Primary with English",
