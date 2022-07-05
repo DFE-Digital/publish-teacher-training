@@ -316,6 +316,14 @@ class Course < ApplicationRecord
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
 
+  def academic_year
+    if start_date.month >= 9
+      "#{start_date.year} to #{start_date.year.to_i + 1}"
+    else
+      "#{start_date.year.to_i - 1} to #{start_date.year}"
+    end
+  end
+
   def rollable_withdrawn?
     content_status == :withdrawn
   end
