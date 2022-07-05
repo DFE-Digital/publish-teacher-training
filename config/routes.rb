@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   get "/performance-dashboard", to: "pages#performance_dashboard", as: :performance_dashboard
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
+  get "/how-to-use-this-service", to: "pages#how_to_use_this_service"
+  get "/how-to-use-this-service/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
+  get "/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses", to: "pages#writing_descriptions_for_publish_teacher_training_courses", as: :writing_descriptions_for_publish_teacher_training_courses
 
   if FeatureService.enabled?(:google_analytics)
     resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies

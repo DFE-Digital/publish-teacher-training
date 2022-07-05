@@ -26,38 +26,27 @@
         <%= page_title %>
       </h1>
 
-      <p class="govuk-body">Give candidates a short summary of the course to help them decide if it’s right for them.</p>
+      <p class="govuk-body">The course summary appears at the top of the page on Find, so it's important that candidates can quickly learn why this course is different from another.</p>
 
-      <p class="govuk-body">Provide information like:</p>
+      <p class="govuk-body">Tell candidates:</p>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li>what they’ll learn (for example, what units are taught)</li>
+        <li>where they’ll spend their time</li>
         <li>how the course is structured</li>
-        <li>whether it has any distinctive features</li>
-      </ul>
-
-      <p class="govuk-body">You could include details such as:</p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>how candidates are assessed</li>
-        <li>the size of the workload (for example, how many essays per term)</li>
-        <li>league-table rankings and student employability ratings</li>
-        <li>quotes from past students</li>
+        <li>how they’ll be supported - for example, tutors and mentoring</li>
       </ul>
 
       <p class="govuk-body">Remember to:</p>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li>use short paragraphs (no more than five sentences each)</li>
-        <li>use bullet points where possible (to check formatting, use the ‘preview’ function after saving your content)</li>
-        <li>spell out all acronyms the first time you use them, for example, ITT, NQT, EAL, ICT (candidates may not be familiar with these terms)
-        </li>
+        <li>avoid too much detail - you can use the other sections to elaborate</li>
+        <li>use bullet points and paragraphs to make your content easy to read</li>
+        <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
       </ul>
 
-      <%= govuk_details(
-        summary_text: "Several courses in the same subject?",
-        text: "If you offer more than one course in the same subject, such as two Primary courses, it’s important to say how they differ (for example, differences in teaching placements or in the focus of the training). Otherwise, candidates may be unable to decide between them.",
-      ) %>
+      <p class="govuk-body">
+        <%= govuk_link_to "View more guidance and course summary examples", course_summary_examples_path %>
+      </p>
 
       <%= f.govuk_text_area(:about_course,
         value: @course.enrichments.last[:about_course],
@@ -69,12 +58,14 @@
 
       <h3 class="govuk-heading-m" id="interview-process">Interview process</h3>
 
-      <p class="govuk-body">Tell candidates:</p>
+      <p class="govuk-body">
+        Include information about:
+      </p>
+
       <ul class="govuk-list govuk-list--bullet">
-        <li>how many interviews they’ll have</li>
-        <li>how long each interview will be</li>
-        <li>who’ll be interviewing them - will it be one-on-one or a group interview?</li>
-        <li>whether they’ll have to sit any tests - if so, how can they prepare?</li>
+        <li>how many interviews candidates will have</li>
+        <li>who will be interviewing them</li>
+        <li>any tests needed - if so, how they can prepare</li>
       </ul>
 
       <%= f.govuk_text_area(:interview_process,
@@ -95,14 +86,13 @@
         <li>how many placements a candidate will have</li>
         <li>how much time they’ll spend in each school</li>
         <li>if mentors are available within the schools</li>
-        <li>the average distance candidates have to travel from home to school</li>
       </ul>
 
       <p class="govuk-body">You could also mention:</p>
+
       <ul class="govuk-list govuk-list--bullet">
-        <li>the age ranges taught (for example, 11 to 16 or 11 to 18)</li>
+        <li>the average distance candidates have to travel from home to school</li>
         <li>how many schools you partner with in total</li>
-        <li>whether candidates are able to change schools</li>
         <li>how placement schools are selected</li>
       </ul>
 
