@@ -16,6 +16,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
       and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
     end
   end
 
@@ -25,6 +26,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
     end
   end
 
@@ -34,6 +36,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
     end
   end
@@ -44,6 +47,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
       and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
   end
@@ -54,6 +58,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_initial_draft_course
       and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
   end
@@ -62,15 +67,30 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page).to have_status_sidebar
   end
 
+  def and_i_should_see_the_course_button_panel
+    expect(provider_courses_show_page).to have_course_button_panel
+  end
+
   def and_i_should_see_the_unpublished_partial
     provider_courses_show_page.status_sidebar.within do |status_sidebar|
       expect(status_sidebar).to have_unpublished_partial
+    end
+
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_publish_button
+      expect(course_button_panel).to have_delete_link
     end
   end
 
   def and_i_should_see_the_published_partial
     provider_courses_show_page.status_sidebar.within do |status_sidebar|
       expect(status_sidebar).to have_published_partial
+    end
+
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_view_on_find
+      expect(course_button_panel).to have_withdraw_link
+      expect(course_button_panel).to have_vacancies_link
     end
   end
 
