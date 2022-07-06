@@ -26,7 +26,7 @@
   </div>
 <% end %>
 
-<h1 class="govuk-heading-l">
+<h1 class="govuk-heading-l <%= "govuk-!-margin-bottom-2" if (course.is_published? && course.is_running?) || course.is_withdrawn? %>">
   <%= course.name_and_code %> <span data-qa=“course__content-status”><%= course.status_tag %></span>
 </h1>
 

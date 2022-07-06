@@ -63,6 +63,15 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  describe "with a withdrawn course" do
+    scenario "i can view the withdrawn course" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
+      when_i_visit_the_course_page
+      then_i_should_see_the_course_button_panel
+      and_i_should_see_the_course_withdrawn_date
+    end
+  end
+
   def and_i_should_see_the_status_sidebar
     expect(provider_courses_show_page).to have_status_sidebar
   end
@@ -70,6 +79,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   def and_i_should_see_the_course_button_panel
     expect(provider_courses_show_page).to have_course_button_panel
   end
+
+  alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
 
   def and_i_should_see_the_unpublished_partial
     provider_courses_show_page.status_sidebar.within do |status_sidebar|
@@ -91,6 +102,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       expect(course_button_panel).to have_view_on_find
       expect(course_button_panel).to have_withdraw_link
       expect(course_button_panel).to have_vacancies_link
+      expect(course_button_panel).to have_last_publish_date
     end
   end
 
@@ -100,6 +112,12 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def then_i_see_the_course_basic_details
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/details")
+  end
+
+  def and_i_should_see_the_course_withdrawn_date
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_withdrawn_date
+    end
   end
 
   def course_enrichment
@@ -112,6 +130,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def course_enrichment_initial_draft
     @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
+  end
+
+  def course_enrichment_withdrawn
+    @course_enrichment_withdrawn ||= build(:course_enrichment, :withdrawn)
   end
 
   def given_i_am_authenticated_as_a_provider_user(course:)
