@@ -823,7 +823,7 @@ describe CourseDecorator do
     end
 
     it "has link" do
-      expect(subject).to eq "<a class=\"govuk-link\" href=\"#{link}\">Change vacancies</a>"
+      expect(subject).to eq "<a class=\"govuk-link govuk-!-margin-right-2\" href=\"#{link}\">Change vacancies</a>"
     end
   end
 
@@ -835,7 +835,7 @@ describe CourseDecorator do
     end
 
     it "has link" do
-      expect(subject).to eq("<a class=\"govuk-link\" href=\"#{link}\">View on Find</a>")
+      expect(subject).to eq("<a class=\"govuk-link govuk-!-margin-right-2\" href=\"#{link}\">View on Find</a>")
     end
   end
 end

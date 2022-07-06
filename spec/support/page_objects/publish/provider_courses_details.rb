@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 require_relative "../sections/summary_list"
+require_relative "../sections/course_button_panel"
 
 module PageObjects
   module Publish
     class ProviderCoursesDetails < PageObjects::Base
       set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/details"
-
-      element :caption, ".govuk-caption-l"
 
       section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :level, Sections::SummaryList, '[data-qa="course__level"]'
@@ -27,6 +26,7 @@ module PageObjects
       section :course_code, Sections::SummaryList, '[data-qa="course__course_code"]'
       section :allocations, Sections::SummaryList, '[data-qa="course__allocations"]'
       section :contact_support_link, Sections::SummaryList, '[data-qa="course__contact_support_link"]'
+      section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'
 
       element :description_link, "a.govuk-link.govuk-tabs__tab", text: "Description"
     end
