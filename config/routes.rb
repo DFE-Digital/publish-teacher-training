@@ -61,8 +61,6 @@ Rails.application.routes.draw do
     get "/organisations", to: "providers#index", as: :root
     get "/providers/search", to: "providers#search"
     get "/providers/suggest", to: "providers#suggest"
-    get "/rollover", to: "rollover#new", as: :rollover
-    post "/rollover", to: "rollover#create"
     get "/rollover-recruitment", to: "rollover_recruitment#new", as: :rollover_recruitment
     post "/rollover-recruitment", to: "rollover_recruitment#create"
 

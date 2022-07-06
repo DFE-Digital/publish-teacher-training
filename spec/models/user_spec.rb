@@ -269,31 +269,4 @@ describe User, type: :model do
       end
     end
   end
-
-  describe "#current_rollover_acceptance" do
-    let(:current_rollover_acceptance) do
-      create(:interrupt_page_acknowledgement, user: subject, recruitment_cycle: create(:recruitment_cycle))
-    end
-
-    let(:previous_rollover_acceptance) do
-      create(:interrupt_page_acknowledgement, user: subject, recruitment_cycle: create(:recruitment_cycle, :previous))
-    end
-
-    context "when there is no current rollover acceptance" do
-      it "returns nil" do
-        expect(subject.current_rollover_acceptance).to be_nil
-      end
-    end
-
-    context "when there is a current rollover acceptance" do
-      before do
-        previous_rollover_acceptance
-        current_rollover_acceptance
-      end
-
-      it "returns the current rollover acceptance" do
-        expect(subject.current_rollover_acceptance).to eq(current_rollover_acceptance)
-      end
-    end
-  end
 end

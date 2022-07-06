@@ -34,7 +34,6 @@ feature "Providers index" do
     and_i_am_authenticated_as_a_multi_provider_user
     and_there_are_providers
     when_i_visit_the_providers_index_page
-    and_i_continue_past_the_recruitment_cycle_text
     and_i_click_on_a_provider
     i_should_be_on_the_recruitment_cycle_switcher_page
 
@@ -51,10 +50,6 @@ feature "Providers index" do
 
   def when_i_click_on_the_current_cycle_link
     click_link "2021 to 2022 - current"
-  end
-
-  def and_i_continue_past_the_recruitment_cycle_text
-    click_button "Continue"
   end
 
   def and_there_is_a_previous_recruitment_cycle
