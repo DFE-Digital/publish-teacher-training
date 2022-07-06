@@ -9,7 +9,8 @@ module Publish
     end
 
     def approve
-      access_request.approved!
+      AccessRequestApprovalService.call(access_request)
+
       flash[:success] = "Successfully approved request"
       redirect_to inform_publisher_publish_access_request_path
     end
