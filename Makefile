@@ -184,7 +184,7 @@ backup-review-database: read-deployment-config # make review backup-review-datab
 	bin/backup-review-database ${postgres_database_name} ${paas_env}
 
 get-image-tag:
-	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app publish-teacher-training-${paas_env} | grep -Po "docker image:\s+\S+:\K\w+"))
+	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app publish-teacher-training-${paas_env} | awk -F : '$$1 == "docker image" {print $$3}'))
 	@echo ${TAG}
 
 get-postgres-instance-guid: ## Gets the postgres service instance's guid make qa get-postgres-instance-guid
