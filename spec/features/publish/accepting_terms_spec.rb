@@ -4,7 +4,6 @@ require "rails_helper"
 
 feature "Accepting terms" do
   before do
-    given_the_new_publish_flow_feature_flag_is_enabled
     given_i_am_a_user_who_has_not_accepted_the_terms
     when_i_visit_the_publish_service
   end
@@ -19,10 +18,6 @@ feature "Accepting terms" do
   scenario "i am shown an error if i do not accept the terms" do
     and_i_do_not_accept_the_terms_and_conditions
     then_i_should_see_an_error_message
-  end
-
-  def given_the_new_publish_flow_feature_flag_is_enabled
-    enable_features(:new_publish_navigation)
   end
 
   def given_i_am_a_user_who_has_not_accepted_the_terms

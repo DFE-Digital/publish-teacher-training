@@ -3,7 +3,6 @@ require "rails_helper"
 feature "Providers index" do
   scenario "view page as Mary - multi provider user" do
     given_we_are_not_in_rollover
-    and_the_new_publish_flow_feature_flag_is_enabled
     and_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_providers_index_page
     i_should_see_the_provider_list
@@ -16,7 +15,6 @@ feature "Providers index" do
 
   scenario "view page as Colin - admin user" do
     given_we_are_not_in_rollover
-    given_the_new_publish_flow_feature_flag_is_enabled
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
     when_i_visit_the_providers_index_page
@@ -46,6 +44,26 @@ feature "Providers index" do
     and_i_click_the_change_organisation_link
     and_i_click_on_a_provider
     i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
+
+    # Tests below for a couple of bugs which prevented those pages from knowing about the recruitment cycle
+
+    when_i_click_on_users
+    i_should_see_the_recruitment_cycle_text
+
+    when_i_click_on_organisations
+    i_should_see_the_recruitment_cycle_text
+  end
+
+  def i_should_see_the_recruitment_cycle_text
+    expect(title_bar_page).to have_recruitment_cycle_text
+  end
+
+  def when_i_click_on_users
+    primary_nav_page.users.click
+  end
+
+  def when_i_click_on_organisations
+    primary_nav_page.organisation_details.click
   end
 
   def when_i_click_on_the_current_cycle_link
@@ -75,10 +93,6 @@ feature "Providers index" do
 
   def given_we_are_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
-  end
-
-  def and_the_new_publish_flow_feature_flag_is_enabled
-    enable_features(:new_publish_navigation)
   end
 
   def and_i_am_authenticated_as_a_multi_provider_user
@@ -141,9 +155,5 @@ feature "Providers index" do
 
   def and_i_click_the_change_organisation_link
     click_link "Change organisation"
-  end
-
-  def given_the_new_publish_flow_feature_flag_is_enabled
-    allow(Settings.features).to receive(:new_publish_navigation).and_return(true)
   end
 end

@@ -2,11 +2,7 @@
 <%= content_for :before_content, render_breadcrumbs(:training_provider_courses) %>
 
 <h1 class="govuk-heading-l">
-  <% if FeatureService.enabled?(:new_publish_navigation) %>
-    <span class="govuk-caption-l">Training partner</span>
-  <% else %>
-    <span class="govuk-caption-l">Training provider</span>
-  <% end %>
+  <span class="govuk-caption-l">Training partner</span>
   <%= @training_provider.provider_name %>
 </h1>
 

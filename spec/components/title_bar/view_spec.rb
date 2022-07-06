@@ -34,7 +34,7 @@ module TitleBar
       end
 
       it "renders the recruitment cycle link" do
-        expect(component.has_link?("Change recruitment cycle", href: "/publish/organisations/1BJ")).to be true
+        expect(component.has_link?("Change recruitment cycle", href: "/publish/organisations/1BJ?switcher=true")).to be true
       end
     end
   end

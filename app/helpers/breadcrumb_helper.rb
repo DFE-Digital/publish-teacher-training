@@ -4,13 +4,6 @@ module BreadcrumbHelper
 
     # Don't link last item in breadcrumb
     breadcrumbs[breadcrumbs.keys.last] = nil
-
-    if breadcrumbs && !FeatureService.enabled?(:new_publish_navigation)
-      render GovukComponent::BreadcrumbsComponent.new(
-        breadcrumbs:,
-        classes: "govuk-!-display-none-print",
-      )
-    end
   end
 
   # rubocop:disable Rails/HelperInstanceVariable

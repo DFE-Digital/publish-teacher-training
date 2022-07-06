@@ -62,8 +62,6 @@
         <%= yield :breadcrumbs %>
       </div>
 
-    <% if FeatureService.enabled?(:new_publish_navigation) %>
-
       <div class="govuk-width-container">
         <% if current_user && @provider && !params[:controller].start_with?("support") %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
@@ -72,12 +70,7 @@
         <% end %>
       </div>
 
-      <% if render_navigation_bar?(@provider) && @provider.accredited_body? %>
-          <%= render partial: "publish/shared/navigation_bar_with_training_partners" %>
-      <% elsif render_navigation_bar?(@provider) && !@provider.accredited_body? %>
-          <%= render partial: "publish/shared/navigation_bar_without_training_partners" %>
-      <% end %>
-    <% end %>
+    <%= render partial: "publish/shared/navigation_bar" %>
 
     <div class="govuk-width-container">
       <%= yield :before_content %>
