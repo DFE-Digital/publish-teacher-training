@@ -2427,6 +2427,7 @@ describe Course, type: :model do
       it "returns false" do
         expect(course.content_status).to eq(:withdrawn)
         expect(course.is_published?).to be(false)
+        expect(course.withdrawn_at).not_to be_nil
       end
     end
   end

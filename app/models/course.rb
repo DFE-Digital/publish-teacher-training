@@ -491,6 +491,10 @@ class Course < ApplicationRecord
     latest_enrichment&.last_published_timestamp_utc
   end
 
+  def withdrawn_at
+    latest_enrichment&.updated_at if is_withdrawn?
+  end
+
   def publish_sites
     site_statuses.status_new_status.each(&:start!)
     site_statuses.status_running.unpublished_on_ucas.each(&:published_on_ucas!)
@@ -606,7 +610,7 @@ class Course < ApplicationRecord
   end
 
   def is_withdrawn?
-    content_status == "withdrawn" || not_running?
+    content_status == "withdrawn" || content_status == :withdrawn || not_running?
   end
 
   def not_running?
