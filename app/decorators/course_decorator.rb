@@ -11,10 +11,6 @@ class CourseDecorator < ApplicationDecorator
     content.html_safe
   end
 
-  def vacancies_panel
-    edit_vacancy_link_panel.html_safe
-  end
-
   def find_url(provider = object.provider)
     h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code)
   end
@@ -29,10 +25,6 @@ class CourseDecorator < ApplicationDecorator
     else
       not_on_find
     end
-  end
-
-  def on_find_panel(provider = object.provider)
-    h.govuk_link_to("View on Find", h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code), class: "govuk-!-margin-right-2")
   end
 
   def open_or_closed_for_applications
@@ -369,12 +361,6 @@ private
   def edit_vacancy_link
     h.govuk_link_to(h.vacancies_publish_provider_recruitment_cycle_course_path(object.provider_code, object.recruitment_cycle.year, object.course_code)) do
       h.raw("Change<span class=\"govuk-visually-hidden\"> vacancies for #{name_and_code}</span>")
-    end
-  end
-
-  def edit_vacancy_link_panel
-    h.govuk_link_to(h.vacancies_publish_provider_recruitment_cycle_course_path(object.provider_code, object.recruitment_cycle.year, object.course_code), class: "govuk-!-margin-right-2") do
-      h.raw("Change vacancies")
     end
   end
 
