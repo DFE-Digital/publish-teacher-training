@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
       UserSession.end_session!(session)
       redirect_to(user_session.logout_url, allow_other_host: true)
     else
-      redirect_to support_providers_path
+      redirect_to publish_root_path
     end
   end
 

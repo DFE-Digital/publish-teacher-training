@@ -36,7 +36,8 @@ feature "Authentication" do
 
   def and_i_cannot_access_the_support_interface
     visit support_providers_path
-    expect(page).to have_content "User is not an admin"
-    expect(page).to have_current_path sign_in_path
+    expect(page).to have_current_path support_providers_path
+    expect(page.status_code).to eq(403)
+    expect(page.find("h1")).to have_content("You are not permitted to see this page")
   end
 end

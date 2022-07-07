@@ -7,8 +7,7 @@ module Support
 
     def check_user_is_admin
       if !current_user.admin?
-        flash[:warning] = "User is not an admin"
-        redirect_to sign_in_path
+        render "errors/forbidden", status: :forbidden, formats: :html
       end
     end
   end
