@@ -9,7 +9,7 @@ module TitleBar
     let(:provider_code) { "1BJ" }
     let(:current_user) { create(:user) }
 
-    context "single org users" do
+    context "single org users", { can_edit_current_and_next_cycles: false } do
       before do
         render_inline(described_class.new(title:, current_user:, provider: provider_code))
       end
