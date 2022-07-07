@@ -15,7 +15,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
-      and_i_should_see_the_status_sidebar
       and_i_should_see_the_course_button_panel
     end
   end
@@ -25,7 +24,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_status_sidebar
       and_i_should_see_the_course_button_panel
     end
   end
@@ -35,7 +33,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary", site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_status_sidebar
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
     end
@@ -46,7 +43,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
-      and_i_should_see_the_status_sidebar
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
@@ -57,7 +53,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_initial_draft_course
-      and_i_should_see_the_status_sidebar
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
@@ -72,10 +67,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  def and_i_should_see_the_status_sidebar
-    expect(provider_courses_show_page).to have_status_sidebar
-  end
-
   def and_i_should_see_the_course_button_panel
     expect(provider_courses_show_page).to have_course_button_panel
   end
@@ -83,10 +74,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
 
   def and_i_should_see_the_unpublished_partial
-    provider_courses_show_page.status_sidebar.within do |status_sidebar|
-      expect(status_sidebar).to have_unpublished_partial
-    end
-
     provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
       expect(course_button_panel).to have_delete_link
@@ -94,10 +81,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_published_partial
-    provider_courses_show_page.status_sidebar.within do |status_sidebar|
-      expect(status_sidebar).to have_published_partial
-    end
-
     provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_view_on_find
       expect(course_button_panel).to have_withdraw_link

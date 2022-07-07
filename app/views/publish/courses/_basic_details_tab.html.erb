@@ -187,24 +187,4 @@
       <% end %>
     <% end %>
   </div>
-
-  <% if course.is_running? || course.new_and_not_running? %>
-    <aside class="govuk-grid-column-one-third">
-      <div class="app-status-box">
-        <h3 class="govuk-heading-m">Changing your basic details</h3>
-        <p class="govuk-body">At the moment you can change:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li><abbr class="app-!-text-decoration-underline-dotted" title="Special educational needs and disability">SEND</abbr> specialism</li>
-          <% course.listing_basic_details.each do |details| %>
-            <li><%= details %></li>
-          <% end %>
-        </ul>
-
-        <p class="govuk-body">
-          To request other changes to your basic details contact the Becoming a Teacher team:<br>
-          <%= bat_contact_mail_to subject: "Edit #{course.name} (#{@provider.provider_code}/#{course.course_code})", data: { qa: "course__contact_support_link" } %>
-        </p>
-      </div>
-    </aside>
-  <% end %>
 </div>

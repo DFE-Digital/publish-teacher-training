@@ -44,7 +44,7 @@ private
   end
 
   def and_i_click_the_publish_link
-    publish_provider_courses_show_page.status_sidebar.publish_button.click
+    publish_provider_courses_show_page.course_button_panel.publish_button.click
   end
 
   def then_it_has_sent_analytics_events

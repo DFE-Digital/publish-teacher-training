@@ -25,9 +25,9 @@ private
       published: { text: "Published", colour: "green" },
       withdrawn: { text: "Withdrawn", colour: "red" },
       empty: { text: "Empty", colour: "grey" },
-      draft: { text: "Draft", colour: "yellow" },
+      draft: { text: "Draft", colour: "grey" },
       published_with_unpublished_changes: { text: "Published&nbsp;*", colour: "green" },
-      rolled_over: { text: "Rolled over", colour: "grey" },
+      rolled_over: { text: "Rolled over", colour: "yellow" },
     }
   end
 
