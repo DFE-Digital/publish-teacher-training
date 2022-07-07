@@ -126,7 +126,7 @@ en:
         users:
           index: "Users"
           show: "User overview"
-          new: "Add a user"
+          new: "Add user"
           edit: "Edit a user"
         allocations:
           index: "Allocations"
