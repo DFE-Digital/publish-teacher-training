@@ -1,9 +1,9 @@
 <span class="govuk-body" data-qa="course__is_findable">
-  <%= course.on_find_panel %>
+  <%= govuk_link_to "View on Find", search_ui_course_page_url(provider_code: course.provider.provider_code, course_code: course.course_code), class: "govuk-!-margin-right-2" %>
 </span>
 <span class="govuk-body" data-qa="course__has_vacancies">
-  <%= course.vacancies_panel %>
+  <%= govuk_link_to "Change vacancies", vacancies_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle.year, course.course_code), class: "govuk-!-margin-right-2" %>
 </span>
-<span class="govuk-body">
-  <%= govuk_link_to "Withdraw course", withdraw_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive govuk-!-margin-right-2", data: { qa: "course__withdraw-link" } %>
+<span class="govuk-body" data-qa="course__withdraw-link">
+  <%= govuk_link_to "Withdraw course", withdraw_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive govuk-!-margin-right-2" %>
 </span>

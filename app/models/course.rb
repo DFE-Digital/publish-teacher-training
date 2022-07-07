@@ -610,7 +610,7 @@ class Course < ApplicationRecord
   end
 
   def is_withdrawn?
-    content_status == "withdrawn" || content_status == :withdrawn || not_running?
+    content_status.match?(/withdrawn/) || not_running?
   end
 
   def not_running?

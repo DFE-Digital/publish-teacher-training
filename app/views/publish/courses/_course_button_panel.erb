@@ -1,11 +1,11 @@
 <div data-qa="course__button_panel">
   <% if course.is_published? && course.is_running? %>
     <span class="govuk-hint govuk-!-font-size-16" data-qa="course__last_publish_date">
-      Last published <%= l(course.last_published_at&.to_date) %> at <%= course.last_published_at.strftime("%l:%M%P") %>
+      Last published <%= l(course.last_published_at.to_date) %> at <%= course.last_published_at.strftime("%l:%M%P") %>
     </span>
   <% elsif course.is_withdrawn? %>
     <span class="govuk-hint govuk-!-font-size-16" data-qa="course__withdrawn_date">
-      Withdrawn on <%= l(course.withdrawn_at&.to_date) %> at <%= course.withdrawn_at.strftime("%l:%M%P") %>
+      Withdrawn on <%= l(course.withdrawn_at.to_date) %> at <%= course.withdrawn_at.strftime("%l:%M%P") %>
     </span>
   <% end %>
 
