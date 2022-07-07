@@ -68,6 +68,8 @@ private
 
   def then_the_request_should_be_approved
     expect(page).to have_text("Successfully approved request")
+    expect(access_request).to be_completed
+    expect(target_user.providers).to include(access_request.requester.providers.first)
   end
 
   def then_the_request_should_be_deleted
@@ -81,5 +83,13 @@ private
 
   def admin
     @admin ||= create(:user, :admin)
+  end
+
+  def access_request
+    @access_request ||= AccessRequest.first
+  end
+
+  def target_user
+    @target_user ||= User.find_by(email: access_request.email_address.downcase)
   end
 end
