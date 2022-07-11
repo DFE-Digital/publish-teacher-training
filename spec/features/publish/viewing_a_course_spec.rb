@@ -55,6 +55,14 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_description_of_the_initial_draft_course
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
+      and_i_should_see_the_rollover_button
+      when_i_click_the_rollover_button
+      then_i_should_see_the_rollover_form_page
+      given_there_is_a_next_recruitment_cycle
+      when_i_click_the_rollover_course_button
+      then_i_should_see_the_course_show_page_with_success_message
+      when_i_click_the_view_rollover_link
+      then_i_should_see_the_rolled_over_course_show_page
     end
   end
 
@@ -67,8 +75,50 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  def then_i_should_see_the_rolled_over_course_show_page
+    expect(page).to have_content "Rolled over"
+  end
+
+  def then_i_should_see_the_course_show_page_with_success_message
+    expect(page).to have_content "Your course has been rolled over."
+  end
+
+  def when_i_click_the_view_rollover_link
+    provider_courses_show_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    )
+    provider_courses_show_page.rolled_over_course_link.click
+  end
+
+  def given_there_is_a_next_recruitment_cycle
+    next_year = RecruitmentCycle.current.year.to_i + 1
+    RecruitmentCycle.create(year: next_year, application_start_date: Date.new(next_year - 1, 10, 1), application_end_date: Date.new(next_year, 9, 30 ) )
+  end
+
+  def when_i_click_the_rollover_course_button
+    rollover_form_page.rollover_course_button.click
+  end
+
+  def then_i_should_see_the_rollover_form_page
+    rollover_form_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    )
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/rollover?")
+    expect(page).to have_content "Are you sure you want to roll over the course into the next recruitement cycle?"
+  end
+
+  def rollover_form_page
+    @rollover_form_page ||= PageObjects::Publish::DraftRollover.new
+  end
+
   def and_i_should_see_the_course_button_panel
     expect(provider_courses_show_page).to have_course_button_panel
+  end
+
+  def and_i_should_see_the_rollover_button
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_rollover_button
+    end
   end
 
   alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
@@ -91,6 +141,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_on_basic_details
     provider_courses_show_page.basic_details_link.click
+  end
+
+  def when_i_click_the_rollover_button
+    provider_courses_show_page.course_button_panel.rollover_button.click
   end
 
   def then_i_see_the_course_basic_details

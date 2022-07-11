@@ -332,6 +332,10 @@ class Course < ApplicationRecord
     is_published? || rollable_withdrawn?
   end
 
+  def rolled_over?
+    recruitment_cycle.next&.courses&.exists?(course_code: course_code, provider: {provider_code: provider_code})
+  end
+
   def update_notification_attributes
     %w[name age_range_in_years qualification study_mode maths english science]
   end
