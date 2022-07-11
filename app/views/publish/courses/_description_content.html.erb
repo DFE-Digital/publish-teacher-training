@@ -88,12 +88,18 @@
     <% enrichment_summary(
       summary_list,
       :course,
-      "Financial support you offer (optional)",
+      "Financial support you offer",
       course.financial_support,
       %w[financial_support],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
       action_visually_hidden_text: "details of financial support you offer",
     ) %>
+
+    <% summary_list.row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
+      <% row.key { "Financial support from the government" } %>
+      <% row.value { course.financial_incentive_details } %>
+      <% row.action %>
+    <% end %>
   <% else %>
     <% enrichment_summary(
       summary_list,
