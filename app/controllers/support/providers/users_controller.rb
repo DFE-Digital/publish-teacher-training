@@ -20,6 +20,11 @@ module Support
         redirect_to support_provider_users_path(provider)
       end
 
+      def new
+        provider
+        @user = User.new
+      end
+
     private
 
       def provider

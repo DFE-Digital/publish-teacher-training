@@ -244,6 +244,7 @@ Rails.application.routes.draw do
       end
       resources :courses, only: %i[index edit update]
       resources :locations
+      resources :users, controller: "providers/users"
     end
 
     resources :users do
