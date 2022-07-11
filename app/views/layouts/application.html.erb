@@ -81,6 +81,7 @@
           <%= yield %>
         </div>
       </main>
+      <%= debug params %>
     </div>
     <%= render partial: "layouts/footer" %>
     <%= yield(:before_body_close) %>

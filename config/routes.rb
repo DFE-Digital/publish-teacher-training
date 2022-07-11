@@ -165,6 +165,9 @@ Rails.application.routes.draw do
           delete "/delete", on: :member, to: "courses/deletions#destroy"
           post "/publish", on: :member, to: "courses#publish"
 
+          get "/rollover", on: :member, to: "courses/draft_rollover#edit"
+          post "/rollover", on: :member, to: "courses/draft_rollover#update"
+
           get "/locations", on: :member, to: "courses/sites#edit"
           put "/locations", on: :member, to: "courses/sites#update"
 
