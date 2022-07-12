@@ -66,6 +66,17 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  describe "rollover with an empty course" do
+    scenario "i can see the error message" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [], funding_type: "salary"))
+      given_there_is_a_next_recruitment_cycle
+      when_i_visit_the_rollover_form_page
+      when_i_click_the_rollover_course_button
+      then_i_should_see_the_error_message
+    end
+  end
+
+
   describe "with a withdrawn course" do
     scenario "i can view the withdrawn course" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
@@ -73,6 +84,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_course_button_panel
       and_i_should_see_the_course_withdrawn_date
     end
+  end
+
+  def then_i_should_see_the_error_message
+    expect(page).to have_content "Course must have draft status"
   end
 
   def then_i_should_see_the_rolled_over_course_show_page
@@ -99,6 +114,9 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     rollover_form_page.rollover_course_button.click
   end
 
+  def when_i_visit_the_rollover_form_page
+  end
+
   def then_i_should_see_the_rollover_form_page
     rollover_form_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
@@ -106,6 +124,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/rollover?")
     expect(page).to have_content "Are you sure you want to roll over the course into the next recruitement cycle?"
   end
+
+  alias_method :when_i_visit_the_rollover_form_page, :then_i_should_see_the_rollover_form_page
 
   def rollover_form_page
     @rollover_form_page ||= PageObjects::Publish::DraftRollover.new

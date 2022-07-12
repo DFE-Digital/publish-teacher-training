@@ -22,7 +22,6 @@ module Publish
             @course.course_code,
           )
         else
-          # handle some errors?
           render :edit
         end
 

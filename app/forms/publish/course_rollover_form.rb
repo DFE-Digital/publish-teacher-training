@@ -2,7 +2,6 @@ module Publish
   class CourseRolloverForm
     include ActiveModel::Model
 
-
     attr_accessor :course
 
     def initialize(course)
@@ -24,7 +23,7 @@ module Publish
     def course_is_draft
       return if @course.content_status == :draft
 
-      errors.add(:course_is_draft, message: "Hello")
+      errors.add(:course_is_draft, message: "Course must have draft status")
     end
 
   end
