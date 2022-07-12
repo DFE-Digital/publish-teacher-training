@@ -121,12 +121,13 @@ en:
             new: "Add a location"
             edit: "Edit location details"
           users:
+            new: "Add user"
+            check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
         users:
           index: "Users"
           show: "User overview"
-          new: "Add user"
           edit: "Edit a user"
         allocations:
           index: "Allocations"
