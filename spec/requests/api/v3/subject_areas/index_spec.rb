@@ -9,110 +9,114 @@ describe "GET v3 /subject_areas" do
   end
 
   it "returns the correct data" do
-    expect(json_response).to eq("data" => [
-      {
-        "id" => "PrimarySubject",
-        "type" => "subject_areas",
-        "attributes" => {
-          "name" => "Primary",
-          "typename" => "PrimarySubject",
-        },
-        "relationships" => {
-          "subjects" => {
-            "meta" => {
-              "included" => false,
-            },
-          },
-        },
-      },
-      {
-        "id" => "SecondarySubject",
-        "type" => "subject_areas",
-        "attributes" => {
-          "name" => "Secondary",
-          "typename" => "SecondarySubject",
-        },
-        "relationships" => {
-          "subjects" => {
-            "meta" => {
-              "included" => false,
-            },
-          },
-        },
-      },
-      {
-        "id" => "ModernLanguagesSubject",
-        "type" => "subject_areas",
-        "attributes" => {
-          "name" => "Secondary: Modern languages",
-          "typename" => "ModernLanguagesSubject",
-        },
-        "relationships" => {
-          "subjects" => {
-            "meta" => {
-              "included" => false,
-            },
-          },
-        },
-      },
-      {
-        "id" => "FurtherEducationSubject",
-        "type" => "subject_areas",
-        "attributes" => {
-          "name" => "Further education",
-          "typename" => "FurtherEducationSubject",
-        },
-        "relationships" => {
-          "subjects" => {
-            "meta" => {
-              "included" => false,
-            },
-          },
-        },
-      },
-    ],
-      "jsonapi" => {
-        "version" => "1.0",
-      })
-  end
-
-  context "when specifying particular fields" do
-    let(:request_path) { "/api/v3/subject_areas?fields[subject_areas]=typename" }
-
-    it "returns the correct data" do
-      expect(json_response).to eq("data" => [
+    expect(json_response).to eq(
+      "data" => [
         {
           "id" => "PrimarySubject",
           "type" => "subject_areas",
           "attributes" => {
+            "name" => "Primary",
             "typename" => "PrimarySubject",
+          },
+          "relationships" => {
+            "subjects" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
           },
         },
         {
           "id" => "SecondarySubject",
           "type" => "subject_areas",
           "attributes" => {
+            "name" => "Secondary",
             "typename" => "SecondarySubject",
+          },
+          "relationships" => {
+            "subjects" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
           },
         },
         {
           "id" => "ModernLanguagesSubject",
           "type" => "subject_areas",
           "attributes" => {
+            "name" => "Secondary: Modern languages",
             "typename" => "ModernLanguagesSubject",
+          },
+          "relationships" => {
+            "subjects" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
           },
         },
         {
           "id" => "FurtherEducationSubject",
           "type" => "subject_areas",
           "attributes" => {
+            "name" => "Further education",
             "typename" => "FurtherEducationSubject",
+          },
+          "relationships" => {
+            "subjects" => {
+              "meta" => {
+                "included" => false,
+              },
+            },
           },
         },
       ],
+      "jsonapi" => {
+        "version" => "1.0",
+      },
+    )
+  end
+
+  context "when specifying particular fields" do
+    let(:request_path) { "/api/v3/subject_areas?fields[subject_areas]=typename" }
+
+    it "returns the correct data" do
+      expect(json_response).to eq(
+        "data" => [
+          {
+            "id" => "PrimarySubject",
+            "type" => "subject_areas",
+            "attributes" => {
+              "typename" => "PrimarySubject",
+            },
+          },
+          {
+            "id" => "SecondarySubject",
+            "type" => "subject_areas",
+            "attributes" => {
+              "typename" => "SecondarySubject",
+            },
+          },
+          {
+            "id" => "ModernLanguagesSubject",
+            "type" => "subject_areas",
+            "attributes" => {
+              "typename" => "ModernLanguagesSubject",
+            },
+          },
+          {
+            "id" => "FurtherEducationSubject",
+            "type" => "subject_areas",
+            "attributes" => {
+              "typename" => "FurtherEducationSubject",
+            },
+          },
+        ],
         "jsonapi" => {
           "version" => "1.0",
-        })
+        },
+      )
     end
   end
 
