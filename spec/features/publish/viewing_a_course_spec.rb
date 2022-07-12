@@ -76,7 +76,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
-
   describe "with a withdrawn course" do
     scenario "i can view the withdrawn course" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
@@ -107,15 +106,14 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def given_there_is_a_next_recruitment_cycle
     next_year = RecruitmentCycle.current.year.to_i + 1
-    RecruitmentCycle.create(year: next_year, application_start_date: Date.new(next_year - 1, 10, 1), application_end_date: Date.new(next_year, 9, 30 ) )
+    RecruitmentCycle.create(year: next_year, application_start_date: Date.new(next_year - 1, 10, 1), application_end_date: Date.new(next_year, 9, 30))
   end
 
   def when_i_click_the_rollover_course_button
     rollover_form_page.rollover_course_button.click
   end
 
-  def when_i_visit_the_rollover_form_page
-  end
+  def when_i_visit_the_rollover_form_page; end
 
   def then_i_should_see_the_rollover_form_page
     rollover_form_page.load(

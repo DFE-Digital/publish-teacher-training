@@ -11,11 +11,7 @@ module Publish
     validate :course_is_draft
 
     def save!
-      if valid?
-        true
-      else
-        false
-      end
+      valid?
     end
 
   private
@@ -25,6 +21,5 @@ module Publish
 
       errors.add(:course_is_draft, message: "Course must have draft status")
     end
-
   end
 end

@@ -333,7 +333,7 @@ class Course < ApplicationRecord
   end
 
   def rolled_over?
-    recruitment_cycle.next&.courses&.exists?(course_code: course_code, provider: {provider_code: provider_code})
+    recruitment_cycle.next&.courses&.exists?(course_code:, provider: { provider_code: })
   end
 
   def update_notification_attributes
