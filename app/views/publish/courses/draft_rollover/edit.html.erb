@@ -26,14 +26,15 @@
         Are you sure you want to roll over the course into the next recruitement cycle?
       </h1>
 
-      <%= f.govuk_submit "Roll over course", class: "govuk-button", data: { qa: "course__rollover-course"} %>
+      <%= f.govuk_submit "Roll over course", class: "govuk-button", data: { qa: "course__rollover-course" } %>
     <% end %>
 
     <p class="govuk-body govuk-!-margin-top-5">
       <%= govuk_link_to(
         "Cancel",
-        publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code), method: :get,
-        no_visited_state: true,
+        publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+        method: :get,
+        no_visited_state: true
       ) %>
     </p>
   </div>
