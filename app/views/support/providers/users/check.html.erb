@@ -1,0 +1,68 @@
+<%= render PageTitle::View.new(title: t("support.providers.users.check")) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_support_provider_user_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @user_form, url: new_support_provider_user_path, local: true) do |f| %>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <span class="govuk-caption-l"><%= t("support.providers.users.new") %> - <%= @provider.provider_name %></span>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.users.check") %></h1>
+        </legend>
+
+        <dl class="govuk-summary-list">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              <%= t("support.providers.users.first_name") %>
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_form.first_name %>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <%= govuk_link_to t("change"),new_support_provider_user_path(@provider) %>
+              <span class="govuk-visually-hidden"> <%= t("support.providers.users.first_name") %></span>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              <%= t("support.providers.users.last_name") %>
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_form.last_name %>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <%= govuk_link_to t("change"),new_support_provider_user_path(@provider) %>
+              <span class="govuk-visually-hidden"> <%= t("support.providers.users.last_name") %></span>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              <%= t("support.providers.users.email") %>
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <%= @user_form.email %>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <%= govuk_link_to t("change"),new_support_provider_user_path(@provider) %>
+              <span class="govuk-visually-hidden"><%= t("support.providers.users.email") %></span>
+          </div>
+        </dl>
+
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            The user will be sent an email to tell them you’ve added them to <%= @provider.provider_name %>.
+          </strong>
+        </div>
+
+        <%= f.govuk_submit(t("support.providers.users.new")) %>
+      </fieldset>
+    <% end %>
+
+    <%= govuk_link_to(t("cancel"), users_support_provider_path(@provider)) %>
+  </div>
+</div>

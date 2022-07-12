@@ -128,6 +128,7 @@ en:
         users:
           index: "Users"
           show: "User overview"
+          new: "Add a user"
           edit: "Edit a user"
         allocations:
           index: "Allocations"
@@ -188,6 +189,13 @@ en:
         users:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
+    providers:
+      users:
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email address"
+        new: "Add user"
+        check: "Check your answers"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
