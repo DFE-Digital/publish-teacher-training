@@ -1,19 +1,59 @@
-.title-bar-link {
-  float: right;
+.title-bar {
+  @include govuk-clearfix;
   margin-top: govuk-spacing(2);
+  margin-bottom: govuk-spacing(2);
 }
 
-.title-bar-inline {
-  display: inline-block;
-  margin-top: govuk-spacing(2);
+.title-bar__title {
+  @include govuk-font($size: 19, $weight: "bold");
+  @include govuk-media-query($from: tablet) {
+    float: left;
+    width: 60%;
+  }
 }
 
-.title-bar-inline-item {
+.title-bar__link {
+  @include govuk-link-common;
+
+  &:link,
+  &:visited {
+    color: govuk-colour("blue");
+  }
+}
+
+.title-bar__actions {
+  margin: 0; // Reset default user agent styles
+
+  @include govuk-media-query($from: tablet) {
+    display: table-cell;
+    width: 40%;
+    padding-right: 0;
+    text-align: right;
+    float: right;
+  }
+}
+
+.title-bar__actions-list {
+  width: 100%;
+  margin: 0; // Reset default user agent styles
+  padding: 0; // Reset default user agent styles
+}
+
+.title-bar__actions-list-item {
   display: inline;
   margin-right: govuk-spacing(2);
   padding-right: govuk-spacing(2);
 }
 
-.title-bar-item-separator:not(:last-child) {
+// In older browsers such as IE8, :last-child is not available,
+// so only show the border divider where it is available.
+.title-bar__actions-list-item:not(:last-child) {
   border-right: 1px solid $govuk-border-colour;
 }
+
+.title-bar__actions-list-item:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border: 0;
+}
+

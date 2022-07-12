@@ -97,6 +97,6 @@ class CourseEnrichment < ApplicationRecord
   end
 
   def required_qualifications_needed?
-    (course&.provider&.recruitment_cycle&.year.to_i) < Course::STRUCTURED_REQUIREMENTS_REQUIRED_FROM
+    course&.provider&.recruitment_cycle&.year.to_i < Course::STRUCTURED_REQUIREMENTS_REQUIRED_FROM
   end
 end

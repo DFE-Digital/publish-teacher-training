@@ -1,22 +1,32 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    <% if multiple_providers_or_admin? || rollover_active? %>
-      <p class="govuk-heading-s title-bar-inline govuk-!-margin-bottom-2"><%= title %></p>
-    <% end %>
+    <div class="title-bar" aria-label="Organisation switcher">
+      <% if multiple_providers_or_admin? || rollover_active? %>
+        <div class="title-bar__title">
+          <%= title %>
 
-    <% if rollover_active? %>
-      <span class="govuk-hint title-bar-inline">
-        <%= recruitment_label %>
-      </span>
-    <% end %>
+          <% if rollover_active? %>
+            <span class="govuk-hint govuk-!-display-inline">
+              <%= recruitment_label %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
 
-    <% if rollover_active? %>
-      <%= change_cycle_link(@provider) %>
-    <% end %>
-
-    <% if multiple_providers_or_admin? %>
-      <%= change_organisation_link %>
-    <% end %>
+      <div class="title-bar__actions">
+        <% if change_items.count == 1 %>
+          <%= change_items.first %>
+        <% else %>
+          <ul class="title-bar__actions-list">
+            <% reversed_change_items.each do |item| item %>
+              <li class="title-bar__actions-list-item">
+                <%= item %>
+            <% end %>
+            </li>
+          </ul>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
