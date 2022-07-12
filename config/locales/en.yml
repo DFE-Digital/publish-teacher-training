@@ -530,6 +530,9 @@ en:
       default: "%-d %B %Y"
       short: "%B %Y"
       govuk_short: "%-d %B"
+  time:
+    formats:
+      last_event: "%-d %B %Y at %l:%M%P"
   cookies:
     heading: Cookies on Publish teacher training courses
     accept: Accept analytics cookies
