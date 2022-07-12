@@ -17,9 +17,9 @@ module Publish
   private
 
     def course_is_draft
-      return if @course.content_status == :draft
+      return if course.content_status == :draft
 
-      errors.add(:course_is_draft, message: "Course must have draft status")
+      errors.add(:course_is_draft, message: I18n.t("activemodel.errors.models.publish/course_rollover_form.course_is_draft"))
     end
   end
 end
