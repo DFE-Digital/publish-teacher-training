@@ -13,11 +13,11 @@ class Contact < ApplicationRecord
   validates :permission_given, acceptance: true
 
   enum type: {
-    admin: "admin",
-    utt: "utt",
-    web_link: "web_link",
-    fraud: "fraud",
-    finance: "finance",
-  },
+         admin: "admin",
+         utt: "utt",
+         web_link: "web_link",
+         fraud: "fraud",
+         finance: "finance",
+       },
     _suffix: "contact"
 end
