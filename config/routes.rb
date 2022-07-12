@@ -244,9 +244,13 @@ Rails.application.routes.draw do
       end
       resources :courses, only: %i[index edit update]
       resources :locations
-      resources :users, controller: "providers/users"
+      resources :users, controller: "providers/users" do
+        collection do
+          get :check, path: "check"
+          post :check, path: "check"
+        end
+      end
     end
-
     resources :users do
       scope module: :users do
         resource :providers, on: :member, only: %i[show]
