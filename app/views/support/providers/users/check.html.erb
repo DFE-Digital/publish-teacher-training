@@ -5,8 +5,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @user_form, url: new_support_provider_user_path, local: true) do |f| %>
-
+    <%= form_with(model: @user_form, url: check_support_provider_users_path, local: true) do |f| %>
+    <%= f.hidden_field(:email, value: @user_form.email)%>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <span class="govuk-caption-l"><%= t("support.providers.users.new") %> - <%= @provider.provider_name %></span>

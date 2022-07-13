@@ -6,11 +6,12 @@ module Support
       first_name
       last_name
       email
+      id
     ].freeze
 
     attr_accessor(*FIELDS)
 
-    alias :user :model
+    # alias :user :model
 
     validates :first_name, presence: true
     validates :last_name, presence: true
@@ -21,7 +22,7 @@ module Support
   private
 
     def compute_fields
-      user.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end
 
     def form_store_key
@@ -35,9 +36,11 @@ module Support
     end
 
     def email_is_unique
-      if email.present? && User.exists?(email: email)
-        errors.add(:email, "must be unique")
-      end
+      # return if user.persisted? && user.email == email
+      #
+      # if email.present? && User.exists?(email:)
+      #   errors.add(:email, "must be unique")
+      # end
     end
   end
 end

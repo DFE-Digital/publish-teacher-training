@@ -21,14 +21,11 @@ module Support
       end
 
       def new
-        user = provider.users.new
         @user_form = UserForm.new(current_user, user)
       end
 
       def create
-        user = provider.users.new
         @user_form = UserForm.new(current_user, user, params: user_params)
-
         if @user_form.stash
           redirect_to check_support_provider_users_path
         else
@@ -37,16 +34,25 @@ module Support
       end
 
       def check
-        user = provider.users.new
         @user_form = UserForm.new(current_user, user)
+        if request.method == "POST"
+          if @user_form.save!
+            UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
+            redirect_to support_provider_users_path
+            flash[:success] = "User added"
+          end
+        end
       end
 
     private
+      def user
+        provider
+        User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
+      end
 
       def user_params
         params.require(:support_user_form).permit(:first_name, :last_name, :email)
       end
-
 
       def provider
         @provider ||= Provider.find(params[:provider_id])
