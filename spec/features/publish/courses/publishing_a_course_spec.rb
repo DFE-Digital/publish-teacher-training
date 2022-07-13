@@ -70,7 +70,7 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_click_the_publish_link
-    provider_courses_show_page.status_sidebar.publish_button.click
+    provider_courses_show_page.course_button_panel.publish_button.click
   end
 
   def then_i_should_see_a_success_message
@@ -92,7 +92,7 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_publish_button
-    expect(provider_courses_show_page.status_sidebar.publish_button).to be_visible
+    expect(provider_courses_show_page.course_button_panel.publish_button).to be_visible
   end
 
   def then_i_should_see_an_error_message_for_the_gcses

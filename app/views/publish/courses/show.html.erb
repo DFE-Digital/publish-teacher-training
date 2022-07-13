@@ -26,10 +26,11 @@
   </div>
 <% end %>
 
-<h1 class="govuk-heading-l">
-  <span class="govuk-caption-l"><%= course.description %></span>
-  <%= course.name_and_code %>
+<h1 class="govuk-heading-l <%= "govuk-!-margin-bottom-2" if (course.is_published? && course.is_running?) || course.is_withdrawn? %>">
+  <%= course.name_and_code %> <span data-qa="course__content-status"><%= course.status_tag %></span>
 </h1>
+
+<%= render partial: "course_button_panel" %>
 
 <div class="govuk-tabs app-tabs app-tabs--course">
   <h2 class="govuk-tabs__title">Contents</h2>
@@ -66,9 +67,6 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <%= render partial: "description_content" %>
-      </div>
-      <div class="govuk-grid-column-one-third" data-qa="course__status_panel">
-        <%= render partial: "description_status_panel" %>
       </div>
     </div>
   </section>

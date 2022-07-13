@@ -30,12 +30,12 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_see_the_course_basic_details
-    expect(provider_courses_details_page.caption).to have_content(
-      course.description,
-    )
     expect(provider_courses_details_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
+
+    expect(provider_courses_details_page).to have_course_button_panel
+
     expect(provider_courses_details_page.subjects).to have_content(
       course.subjects.sort.join,
     )

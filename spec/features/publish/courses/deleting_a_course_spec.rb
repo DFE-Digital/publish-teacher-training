@@ -55,7 +55,7 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_click_the_delete_link
-    provider_courses_show_page.status_sidebar.delete_course_link.click
+    provider_courses_show_page.course_button_panel.delete_link.click
   end
 
   def and_i_confirm_the_course_code

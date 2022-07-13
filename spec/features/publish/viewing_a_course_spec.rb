@@ -15,7 +15,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
-      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
     end
   end
 
@@ -24,7 +24,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
     end
   end
 
@@ -33,7 +33,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary", site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
     end
   end
@@ -43,34 +43,49 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
-      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
   end
 
-  describe "with an inital draft course" do
+  describe "with an initial draft course" do
     scenario "i can view the unpublished partial" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_initial_draft_course
-      and_i_should_see_the_status_sidebar
+      and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
     end
   end
 
-  def and_i_should_see_the_status_sidebar
-    expect(provider_courses_show_page).to have_status_sidebar
+  describe "with a withdrawn course" do
+    scenario "i can view the withdrawn course" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
+      when_i_visit_the_course_page
+      then_i_should_see_the_course_button_panel
+      and_i_should_see_the_course_withdrawn_date
+    end
   end
 
+  def and_i_should_see_the_course_button_panel
+    expect(provider_courses_show_page).to have_course_button_panel
+  end
+
+  alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
+
   def and_i_should_see_the_unpublished_partial
-    provider_courses_show_page.status_sidebar.within do |status_sidebar|
-      expect(status_sidebar).to have_unpublished_partial
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_publish_button
+      expect(course_button_panel).to have_delete_link
     end
   end
 
   def and_i_should_see_the_published_partial
-    provider_courses_show_page.status_sidebar.within do |status_sidebar|
-      expect(status_sidebar).to have_published_partial
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_view_on_find
+      expect(course_button_panel).to have_withdraw_link
+      expect(course_button_panel).to have_vacancies_link
+      expect(course_button_panel).to have_last_publish_date
     end
   end
 
@@ -80,6 +95,12 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def then_i_see_the_course_basic_details
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/details")
+  end
+
+  def and_i_should_see_the_course_withdrawn_date
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_withdrawn_date
+    end
   end
 
   def course_enrichment
@@ -92,6 +113,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def course_enrichment_initial_draft
     @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
+  end
+
+  def course_enrichment_withdrawn
+    @course_enrichment_withdrawn ||= build(:course_enrichment, :withdrawn)
   end
 
   def given_i_am_authenticated_as_a_provider_user(course:)
@@ -121,12 +146,13 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment_initial_draft.about_course,
     )
+
+    expect(provider_courses_show_page.content_status).to have_content(
+      "Draft",
+    )
   end
 
   def then_i_should_see_the_description_of_the_fee_course
-    expect(provider_courses_show_page.caption).to have_content(
-      course.description,
-    )
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
@@ -165,12 +191,14 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_the_description_of_the_salary_course
-    expect(provider_courses_show_page.caption).to have_content(
-      course.description,
-    )
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
+
+    expect(provider_courses_show_page.content_status).to have_content(
+      "Published",
+    )
+
     expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course,
     )
