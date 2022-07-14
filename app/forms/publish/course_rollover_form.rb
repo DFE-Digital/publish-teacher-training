@@ -10,10 +10,6 @@ module Publish
 
     validate :course_is_draft
 
-    def save!
-      valid?
-    end
-
   private
 
     def course_is_draft
