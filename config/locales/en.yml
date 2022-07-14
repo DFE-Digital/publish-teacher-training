@@ -384,6 +384,14 @@ en:
               blank: "Enter their organisation"
             reason:
               blank: "Enter why they need access"
+        support/user_form:
+          attributes:
+            email:
+              blank: "Enter an email address"
+            first_name:
+              blank: "Enter a first name"
+            last_name:
+              blank: "Enter a last name"
         publish/course_information_form:
           attributes:
             about_course:

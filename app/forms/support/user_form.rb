@@ -15,7 +15,7 @@ module Support
 
     validates :first_name, presence: true
     validates :last_name, presence: true
-    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
+    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "Enter an email address in the correct format, like name@example.com" }
     validate :email_is_lowercase
     validate :email_is_unique
 
