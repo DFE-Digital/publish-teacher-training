@@ -234,7 +234,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns 404" do
-        expect(response.status).to be(404)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
@@ -248,7 +248,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns 404" do
-        expect(response.status).to be(404)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

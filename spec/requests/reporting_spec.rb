@@ -209,7 +209,7 @@ describe "GET /reporting" do
     allocation_recruitment_cycle
     previous_allocation_cycle
     get "/reporting"
-    expect(response.status).to eq(200)
+    expect(response).to have_http_status(:ok)
     expect(JSON.parse(response.body)).to eq(expected)
   end
 end

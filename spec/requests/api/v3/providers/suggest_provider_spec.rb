@@ -127,7 +127,7 @@ describe "GET /provider-suggestions" do
   it "returns status: bad request (400) if query is empty" do
     get "/api/v3/provider-suggestions"
 
-    expect(response.status).to eq(400)
+    expect(response).to have_http_status(:bad_request)
   end
 
   it "returns status: bad request (400) if query is too short" do
@@ -135,12 +135,12 @@ describe "GET /provider-suggestions" do
 
     get "/api/v3/provider-suggestions?query=#{provider.provider_name[0, 2]}"
 
-    expect(response.status).to eq(400)
+    expect(response).to have_http_status(:bad_request)
   end
 
   it "returns status: success (200) if start of query is not alphanumeric" do
     get "/api/v3/provider-suggestions?query=%22%22%22%22"
 
-    expect(response.status).to eq(200)
+    expect(response).to have_http_status(:ok)
   end
 end
