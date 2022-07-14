@@ -3,7 +3,6 @@
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-two-quarters">Email</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-two-quarters">Action</th>
     </tr>
   </thead>
 
@@ -12,23 +11,13 @@
       <tr class="govuk-table__row user-row">
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= govuk_link_to user.full_name, support_user_path(user) %>
+              <%= govuk_link_to(user.full_name, support_provider_user_path(@provider, user), class: "govuk-heading-s govuk-!-margin-bottom-0") %>
           </span>
         </td>
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= user.email %>
-          </span>
-        </td>
-
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= govuk_button_to("Remove user",
-              support_user_permission_path(user.user_permissions.find_by(provider_id: provider.id)),
-              id: "remove-provider",
-              method: :delete,
-              class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0") %>
           </span>
         </td>
       </tr>

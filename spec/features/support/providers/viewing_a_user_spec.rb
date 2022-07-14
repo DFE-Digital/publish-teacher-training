@@ -13,7 +13,7 @@ feature "Viewing a user" do
   end
 
   scenario "i am directed to the user show page" do
-    then_i_am_directed_to_the_user_show_page
+    then_i_am_directed_to_the_provider_user_show_page
   end
 
   def when_i_visit_the_support_provider_show_page
@@ -21,7 +21,8 @@ feature "Viewing a user" do
   end
 
   def and_there_is_a_user
-    @user = create(:user, :with_provider)
+    @user = create(:user, :with_provider, last_login_date_utc: Time.zone.yesterday)
+    @user.providers << create(:provider)
   end
 
   def and_click_on_the_users_tab
@@ -36,11 +37,16 @@ feature "Viewing a user" do
     support_provider_users_index_page.users.first.full_name.click
   end
 
-  def then_i_am_directed_to_the_user_show_page
-    expect(support_user_show_page).to be_displayed
-    expect(support_user_show_page.first_name.text).to eq @user.first_name
-    expect(support_user_show_page.last_name.text).to eq @user.last_name
-    expect(support_user_show_page.email.text).to eq @user.email
-    expect(support_user_show_page.admin_status.text).to eq "False"
+  def then_i_am_directed_to_the_provider_user_show_page
+    expect(support_provider_user_show_page).to be_displayed
+    expect(support_provider_user_show_page.first_name.text).to eq(@user.first_name)
+    expect(support_provider_user_show_page.last_name.text).to eq(@user.last_name)
+    expect(support_provider_user_show_page.email.text).to eq(@user.email)
+    expect(support_provider_user_show_page.organisations.text).to eq(@user.providers.map(&:provider_name).join)
+    expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
+  end
+
+  def support_provider_user_show_page
+    @support_provider_user_show_page ||= PageObjects::Support::Provider::UserShow.new
   end
 end
