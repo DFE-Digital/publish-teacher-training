@@ -14,8 +14,7 @@ feature "Adding user to provider as an admin" do
     scenario "With valid details" do
       given_i_visit_the_support_provider_users_index_page
       and_the_user_i_want_to_add_has_not_already_been_added
-
-      when_i_click_add_user
+      and_i_click_add_user
       and_i_fill_in_first_name
       and_i_fill_in_last_name
       and_i_fill_in_email
@@ -23,7 +22,11 @@ feature "Adding user to provider as an admin" do
       then_i_should_be_on_the_check_page
       and_the_user_should_not_be_added_to_the_database
 
-      when_i_click_add_user
+      when_i_click_change_first_name
+      and_i_enter_a_new_first_name
+      and_i_continue
+      and_i_click_add_user
+
       then_i_should_see_the_users_name_listed
       and_i_should_see_the_users_email_listed
       and_the_user_should_be_added_to_the_database
@@ -65,7 +68,7 @@ feature "Adding user to provider as an admin" do
     support_users_new_page.email.set("viola_fisher@boyle.io")
   end
 
-  def when_i_click_add_user
+  def and_i_click_add_user
     support_users_check_page.add_user.click
   end
 
@@ -74,7 +77,7 @@ feature "Adding user to provider as an admin" do
   end
 
   def then_i_should_see_the_users_name_listed
-    expect(page).to have_text("Asa Bernhard")
+    expect(page).to have_text("Aba Bernhard")
   end
 
   def and_i_should_see_the_users_email_listed
@@ -101,5 +104,13 @@ feature "Adding user to provider as an admin" do
 
   def and_the_user_should_not_be_added_to_the_database
     expect(Provider.find_by(provider_name: "School of bats").users.where(email: "viola_fisher@boyle.io").blank?).to be(true)
+  end
+
+  def when_i_click_change_first_name
+    support_users_check_page.change_first_name.click
+  end
+
+  def and_i_enter_a_new_first_name
+    support_users_new_page.first_name.set("Aba")
   end
 end

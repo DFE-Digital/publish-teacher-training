@@ -22,7 +22,7 @@
               <%= @user_form.first_name %>
             </dd>
             <dd class="govuk-summary-list__actions">
-              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider) %>
+              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider), class: "first_name" %>
               <span class="govuk-visually-hidden"> <%= t("support.providers.users.first_name") %></span>
             </dd>
           </div>
@@ -34,7 +34,7 @@
               <%= @user_form.last_name %>
             </dd>
             <dd class="govuk-summary-list__actions">
-              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider) %>
+              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider), class: "last_name" %>
               <span class="govuk-visually-hidden"> <%= t("support.providers.users.last_name") %></span>
             </dd>
           </div>
@@ -46,7 +46,7 @@
               <%= @user_form.email %>
             </dd>
             <dd class="govuk-summary-list__actions">
-              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider) %>
+              <%= govuk_link_to t("change"), new_support_provider_user_path(@provider), class: "email" %>
               <span class="govuk-visually-hidden"><%= t("support.providers.users.email") %></span>
           </div>
         </dl>
