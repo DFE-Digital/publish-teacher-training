@@ -9,7 +9,7 @@ class UserStore
     @user = user
   end
 
-  FORM_SECTION_KEYS = %i[
+  FORM_STORE_KEYS = %i[
     user
   ].freeze
 
@@ -21,25 +21,19 @@ class UserStore
     set(form_store_key, value)
   end
 
-  def get(key)
-    value = redis.get("#{user.id}_#{key}")
+  def get(form_store_key)
+    value = redis.get("#{user.id}_#{form_store_key}")
     JSON.parse(value) if value.present?
   end
 
 private
 
-  def set(key, values)
-    raise(InvalidKeyError) unless FORM_SECTION_KEYS.include?(key)
+  def set(form_store_key, values)
+    raise(InvalidKeyError) unless FORM_STORE_KEYS.include?(form_store_key)
 
-    redis.set("#{user.id}_#{key}", values.to_json)
+    redis.set("#{user.id}_#{form_store_key}", values.to_json)
 
     true
-  end
-
-  def clear_all
-    FORM_SECTION_KEYS.each do |key|
-      redis.set("#{user.id}_#{key}", nil)
-    end
   end
 
   def redis
