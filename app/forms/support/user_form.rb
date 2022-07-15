@@ -28,7 +28,7 @@ module Support
 
     def email_is_lowercase
       if email.present? && email.downcase != email
-        errors.add(:email, "must be lowercase")
+        errors.add(:email, I18n.t("activemodel.errors.models.support/user_form.attributes.email.lowercase"))
       end
     end
   end
