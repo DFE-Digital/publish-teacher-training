@@ -55,7 +55,6 @@ feature "Adding user to provider as an admin" do
 
   def and_i_fill_in_first_name
     support_users_new_page.first_name.set("Asa")
-
   end
 
   def and_i_fill_in_last_name

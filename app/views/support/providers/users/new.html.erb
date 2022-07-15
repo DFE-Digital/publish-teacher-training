@@ -10,10 +10,9 @@
 
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})"%></span>
+          <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
           <h1 class="govuk-fieldset__heading"><%= t("support.providers.users.new") %></h1>
         </legend>
-
 
         <%= f.govuk_text_field :first_name, label: { text: t("support.providers.users.first_name"), size: "s" }, width: 20 %>
         <%= f.govuk_text_field :last_name, label: { text: t("support.providers.users.last_name"), size: "s" }, width: 20 %>

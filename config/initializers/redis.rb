@@ -5,7 +5,7 @@ class RedisSetting
 
   def initialize(config = nil)
     @config = {
-      url: ENV["REDIS_URL"],
+      url: ENV.fetch("REDIS_URL", nil),
     }.merge(parse_config(config))
   end
 
@@ -29,6 +29,6 @@ end
 
 class RedisClient
   def self.current
-    @current ||= Redis.new(url: RedisSetting.new(ENV["VCAP_SERVICES"]).url)
+    @current ||= Redis.new(url: RedisSetting.new(ENV.fetch("VCAP_SERVICES", nil)).url)
   end
 end

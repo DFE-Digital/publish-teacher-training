@@ -25,16 +25,6 @@ class Form
     end
   end
 
-  def missing_fields
-    return [] if valid?
-
-    [
-      errors.attribute_names.filter_map do |attribute_name|
-        attribute_name if public_send(attribute_name).blank?
-      end,
-    ]
-  end
-
   def clear_stash
     store.clear_stash(form_store_key)
   end
@@ -43,11 +33,11 @@ class Form
     store.stash(form_store_key, fields.except(*fields_to_ignore_before_stash)) if valid?
   end
 
+private
+
   def store
     @store ||= UserStore.new(user)
   end
-
-private
 
   def assign_attributes_to_model
     model.assign_attributes(fields.except(*fields_to_ignore_before_save))

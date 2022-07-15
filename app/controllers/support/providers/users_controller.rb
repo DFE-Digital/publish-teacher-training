@@ -35,16 +35,15 @@ module Support
 
       def check
         @user_form = UserForm.new(current_user, user)
-        if request.method == "POST"
-          if @user_form.save!
-            UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
-            redirect_to support_provider_users_path
-            flash[:success] = "User added"
-          end
+        if request.method == "POST" && @user_form.save!
+          UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
+          redirect_to support_provider_users_path
+          flash[:success] = "User added"
         end
       end
 
     private
+
       def user
         provider
         User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
