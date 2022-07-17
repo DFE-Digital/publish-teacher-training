@@ -49,3 +49,8 @@ body:not(.js-enabled) .app-js-only {
     }
   }
 }
+
+// This ensures govuk-button-to form wrapper is aligned within button groups properly
+.govuk-button-group {
+  form { display: contents; }
+}

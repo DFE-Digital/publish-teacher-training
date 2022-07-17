@@ -14,7 +14,7 @@
   <% enrichment_summary(
     summary_list,
     :course,
-    "Interview process (optional)",
+    "Interview process",
     course.interview_process,
     %w[interview_process],
     action_path: "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#interview-process",
@@ -64,7 +64,7 @@
     <% enrichment_summary(
       summary_list,
       :course,
-      "Fee for international students (optional)",
+      "Fee for international students",
       number_to_currency(course.fee_international),
       %w[fee_international],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
@@ -74,7 +74,7 @@
     <% enrichment_summary(
       summary_list,
       :course,
-      "Fee details (optional)",
+      "Fee details",
       course.fee_details,
       %w[fee_details],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
@@ -84,12 +84,18 @@
     <% enrichment_summary(
       summary_list,
       :course,
-      "Financial support you offer (optional)",
+      "Financial support you offer",
       course.financial_support,
       %w[financial_support],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
       action_visually_hidden_text: "details of financial support you offer",
     ) %>
+
+    <% summary_list.row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
+      <% row.key { "Financial support from the government" } %>
+      <% row.value { course.financial_incentive_details } %>
+      <% row.action %>
+    <% end %>
   <% else %>
     <% enrichment_summary(
       summary_list,
@@ -141,7 +147,7 @@
   <% enrichment_summary(
     summary_list,
     :course,
-    "Personal qualities (optional)",
+    "Personal qualities",
     course.personal_qualities,
     %w[personal_qualities],
     action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
@@ -151,7 +157,7 @@
   <% enrichment_summary(
     summary_list,
     :course,
-    "Other requirements (optional)",
+    "Other requirements",
     course.other_requirements,
     %w[other_requirements],
     action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",

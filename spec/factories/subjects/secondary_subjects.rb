@@ -36,13 +36,14 @@ FactoryBot.define do
   factory :secondary_subject do
     transient do
       sample_subject { subjects.to_a.sample }
+      bursary_amount { nil }
     end
 
     subject_name { sample_subject.first }
     subject_code { sample_subject.second }
 
-    after(:build) do |subject, _level|
-      financial_incentive = find_or_create(:financial_incentive, subject:)
+    after(:build) do |subject, evaluator|
+      financial_incentive = find_or_create(:financial_incentive, subject:, bursary_amount: evaluator.bursary_amount)
       subject.update(financial_incentive:)
     end
 

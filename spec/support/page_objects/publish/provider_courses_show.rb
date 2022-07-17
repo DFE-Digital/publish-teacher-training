@@ -19,6 +19,7 @@ module PageObjects
       section :fee_details, Sections::SummaryList, '[data-qa="enrichment__fee_details"]'
       section :course_length, Sections::SummaryList, '[data-qa="enrichment__course_length"]'
       section :financial_support, Sections::SummaryList, '[data-qa="enrichment__financial_support"]'
+      section :financial_incentives, Sections::SummaryList, '[data-qa="course__financial_incentives"]'
       section :salary_details, Sections::SummaryList, '[data-qa="enrichment__salary_details"]'
       section :degree, Sections::SummaryList, '[data-qa="enrichment__degree_grade"]'
       section :gcse, Sections::SummaryList, '[data-qa="enrichment__accept_pending_gcse"]'

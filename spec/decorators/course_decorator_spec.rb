@@ -814,4 +814,46 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe "#financial_incentive_details" do
+    subject { course.decorate.financial_incentive_details }
+
+    context "course has no financial incentive" do
+      it "returns the correct details under 'financial_incentive_details'" do
+        expect(subject).to eq("None available")
+      end
+    end
+
+    context "course has financial incentive" do
+      before do
+        allow(course).to receive(:financial_incentives).and_return([financial_incentive])
+      end
+
+      context "course has both bursary and scholarship available" do
+        let(:financial_incentive) { build_stubbed(:financial_incentive, scholarship: "2000", bursary_amount: "3000") }
+
+        it "returns the correct details under 'financial_incentive_details'" do
+          expect(subject).to eq("Scholarships of £2,000 and bursaries of £3,000 are available")
+        end
+      end
+
+      context "course only has bursary available" do
+        let(:financial_incentive) { build_stubbed(:financial_incentive, bursary_amount: "3000") }
+
+        it "returns the correct details under 'financial_incentive_details'" do
+          expect(subject).to eq("Bursaries of £3,000 available")
+        end
+      end
+    end
+
+    context "course is in the next cycle" do
+      before do
+        allow(course).to receive(:recruitment_cycle_year).and_return(current_recruitment_cycle.year.to_i + 1)
+      end
+
+      it "returns the correct details under 'financial_incentive_details'" do
+        expect(subject).to eq("Information not yet available")
+      end
+    end
+  end
 end

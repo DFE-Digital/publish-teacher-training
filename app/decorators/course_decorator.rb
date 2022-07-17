@@ -1,4 +1,6 @@
 class CourseDecorator < ApplicationDecorator
+  include ActiveSupport::NumberHelper
+
   delegate_all
 
   def name_and_code
@@ -320,6 +322,21 @@ class CourseDecorator < ApplicationDecorator
 
   def financial_support
     object.enrichment_attribute(:financial_support)
+  end
+
+  def financial_incentive_details
+    financial_incentive = object.financial_incentives.first
+    bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
+    scholarship = number_to_currency(financial_incentive&.scholarship)
+
+    return I18n.t("components.course.financial_incentives.not_yet_available") if course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year
+    return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
+
+    if bursary_amount.present? && scholarship.present?
+      return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:)
+    end
+
+    I18n.t("components.course.financial_incentives.bursary", amount: bursary_amount)
   end
 
   def salary_details
