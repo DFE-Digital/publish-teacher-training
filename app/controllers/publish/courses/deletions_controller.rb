@@ -1,7 +1,7 @@
 module Publish
   module Courses
     class DeletionsController < PublishController
-      before_action :redirect_to_courses, if: -> { course.is_published? }
+      before_action :redirect_to_courses, if: -> { course.present? && course.is_published? }
 
       def edit
         authorize(provider)
@@ -17,6 +17,7 @@ module Publish
         if @course_deletion_form.destroy!
           flash[:success] = "#{@course.name} (#{@course.course_code}) has been deleted"
 
+          # Should we redirect to the current years courses?
           redirect_to publish_provider_recruitment_cycle_courses_path(
             provider.provider_code,
             recruitment_cycle.year,
@@ -36,7 +37,7 @@ module Publish
       end
 
       def course
-        @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
+        @course ||= CourseDecorator.new(provider.courses.find_by(course_code: params[:code]))
       end
 
       def deletion_params

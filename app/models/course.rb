@@ -82,7 +82,8 @@ class Course < ApplicationRecord
   has_many :course_subjects,
     -> { order :position },
     inverse_of: :course,
-    before_add: :set_subject_position
+    before_add: :set_subject_position,
+    dependent: :destroy
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
@@ -114,7 +115,7 @@ class Course < ApplicationRecord
     source: :subject,
     class_name: "ModernLanguagesSubject"
 
-  has_many :enrichments, class_name: "CourseEnrichment" do
+  has_many :enrichments, class_name: "CourseEnrichment", dependent: :destroy do
     def find_or_initialize_draft
       # This is a ruby search as opposed to an AR search, because calling `draft`
       # will return a new instance of a CourseEnrichment object which is different

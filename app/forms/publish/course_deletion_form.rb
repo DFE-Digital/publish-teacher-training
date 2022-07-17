@@ -12,7 +12,7 @@ module Publish
 
     def destroy!
       if valid?
-        course.discard!
+        course.recruitment_cycle.next? ? course.destroy : course.discard!
       else
         false
       end
