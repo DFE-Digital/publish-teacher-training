@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UserAddedToProviderMailer, type: :mailer do
+describe NewUserAddedBySupportTeamMailer, type: :mailer do
   context "Sending an email to a user" do
     let(:user) { create :user }
 
@@ -9,7 +9,7 @@ describe UserAddedToProviderMailer, type: :mailer do
     before { mail }
 
     it "Sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.user_added_to_provider_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.new_user_added_by_support_team_id)
     end
 
     it "Sends an email to the correct email address" do

@@ -37,7 +37,7 @@ module UserAssociationsService
     end
 
     def send_user_added_to_provider_email
-      UserAddedToProviderMailer.user_added_to_provider_email(recipient: user).deliver_later
+      NewUserAddedBySupportTeamMailer.user_added_to_provider_email(recipient: user).deliver_later
     end
 
     def add_user_to_all_providers
