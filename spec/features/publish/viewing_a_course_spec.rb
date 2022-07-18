@@ -49,6 +49,11 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
       and_i_should_not_see_the_rollover_button
+
+      given_there_is_a_next_recruitment_cycle
+      when_i_visit_the_rollover_form_page
+      when_i_click_the_rollover_course_button
+      then_i_should_see_the_error_message
     end
   end
 
@@ -101,10 +106,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_course_button_panel
       and_i_should_see_the_course_withdrawn_date
     end
-  end
-
-  def then_i_should_see_the_error_message
-    expect(page).to have_content "Course must have draft status"
   end
 
   def then_i_should_see_the_rolled_over_course_show_page
