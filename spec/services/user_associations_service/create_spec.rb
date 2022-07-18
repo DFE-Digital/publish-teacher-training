@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe UserAssociationsService::Create do
+RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycles: false } do
   let(:user) { create :user }
 
   describe "#call" do
-    context "when adding to a single organsation" do
+    context "when adding to a single organisation" do
       let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
 
-      let(:new_accredited_body) { create(:provider, :accredited_body) }
+      let(:new_accredited_body) { create(:provider, :accredited_body, provider_code: "AAA") }
 
       let(:action_mailer) { double }
 
@@ -81,6 +81,17 @@ RSpec.describe UserAssociationsService::Create do
           subject
 
           expect(UserNotification.where(user_id: user.id).count).to eq(0)
+        end
+      end
+
+      context "during rollover", { can_edit_current_and_next_cycles: true } do
+        let!(:next_new_accredited_body) { create(:provider, :accredited_body, :next_recruitment_cycle, provider_code: "AAA") }
+
+        it "creates user_permissions association in both cycles" do
+          subject
+          expect(new_accredited_body.users).to eq([user])
+          expect(next_new_accredited_body.users).to eq([user])
+          expect(user.providers).to include(accredited_body, new_accredited_body, next_new_accredited_body)
         end
       end
     end
