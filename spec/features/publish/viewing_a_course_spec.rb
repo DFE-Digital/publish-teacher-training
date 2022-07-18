@@ -53,6 +53,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   describe "with an initial draft course" do
     scenario "i can view the unpublished partial" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
+      given_there_is_a_next_recruitment_cycle
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_initial_draft_course
       and_i_should_see_the_course_button_panel
@@ -60,7 +61,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       and_i_should_see_the_rollover_button
       when_i_click_the_rollover_button
       then_i_should_see_the_rollover_form_page
-      given_there_is_a_next_recruitment_cycle
       when_i_click_the_rollover_course_button
       then_i_should_see_the_course_show_page_with_success_message
       when_i_click_the_view_rollover_link
