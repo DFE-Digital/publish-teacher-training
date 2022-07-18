@@ -1,0 +1,11 @@
+<div data-qa="course__button_panel">
+  <% if course.has_unpublished_changes? %>
+    <%= render partial: "publish/courses/course_button_panel/unpublished" %>
+  <% elsif course.is_published? && course.is_running? %>
+    <%= render partial: "publish/courses/course_button_panel/published" %>
+  <% elsif course.is_withdrawn? %>
+    <%= render partial: "publish/courses/course_button_panel/withdrawn" %>
+  <% else %>
+    <%= render partial: "publish/courses/course_button_panel/unpublished" %>
+  <% end %>
+</div>

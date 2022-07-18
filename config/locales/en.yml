@@ -145,6 +145,12 @@ en:
         user_types:
           admin: "Admin User"
           provider: "Provider User"
+    course:
+      financial_incentives:
+        none: "None available"
+        not_yet_available: "Information not yet available"
+        bursary_and_scholarship: "Scholarships of %{scholarship} and bursaries of %{bursary_amount} are available"
+        bursary: "Bursaries of %{amount} available"
   course:
     update_email:
       name: "title"
@@ -532,6 +538,9 @@ en:
       default: "%-d %B %Y"
       short: "%B %Y"
       govuk_short: "%-d %B"
+  time:
+    formats:
+      last_event: "%-d %B %Y at %l:%M%P"
   cookies:
     heading: Cookies on Publish teacher training courses
     accept: Accept analytics cookies

@@ -199,7 +199,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
         it "returns Bad Request" do
           perform_request
 
-          expect(response.status).to eq(400)
+          expect(response).to have_http_status(:bad_request)
         end
       end
     end

@@ -70,3 +70,14 @@ provider = RecruitmentCycle.current.providers.find_by(provider_code: "2E1")
 # Use the user association service to link the two as it also deals with notifications
 UserAssociationsService::Create.call(user: user, provider: provider)
 ```
+
+## Manually rolling over courses
+
+Sometimes a provider will need specific courses to be rolled over by support e.g. when they've not run courses in the current cycle, but want to use courses that did get rolled over from the previous cycle.
+
+You'll need to run the `rollover:provider` rake task, and to do this you need the provider code and the course codes for the rolling-over courses.
+
+When in the appropriate environment, run the following from the command line in the `app` directory:
+
+```
+$ /usr/local/bin/bundle exec rails rollover:provider[provider_code,'course_code1 course_code2',true]

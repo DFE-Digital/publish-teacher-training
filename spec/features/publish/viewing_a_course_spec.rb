@@ -3,6 +3,8 @@
 require "rails_helper"
 
 feature "Course show", { can_edit_current_and_next_cycles: false } do
+  include ActiveSupport::NumberHelper
+
   scenario "i can view the course basic details" do
     given_i_am_authenticated_as_a_provider_user(course: build(:course))
     when_i_visit_the_course_page
@@ -12,7 +14,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   describe "with a fee paying course" do
     scenario "i can view a fee course" do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "fee"))
+      given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_fee_course
       and_i_should_see_the_course_button_panel
@@ -179,6 +181,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
   end
 
+  def financial_incentive
+    @financial_incentive ||= build(:financial_incentive, bursary_amount: 10000)
+  end
+
   def course_enrichment_unpublished_changes
     @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
   end
@@ -249,6 +255,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page.fee_details).to have_content(
       course_enrichment.fee_details,
     )
+    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10000))
     expect(provider_courses_show_page).not_to have_salary_details
 
     expect(provider_courses_show_page).to have_degree
@@ -307,5 +314,15 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def course
     provider.courses.first
+  end
+
+  def course_with_financial_incentive
+    build(
+      :course,
+      :secondary,
+      enrichments: [course_enrichment],
+      funding_type: "fee",
+      subjects: [build(:secondary_subject, bursary_amount: 10000)],
+    )
   end
 end
