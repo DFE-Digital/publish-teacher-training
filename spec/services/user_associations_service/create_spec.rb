@@ -9,11 +9,24 @@ RSpec.describe UserAssociationsService::Create do
 
       let(:new_accredited_body) { create(:provider, :accredited_body) }
 
+      let(:action_mailer) { double }
+
       subject do
         described_class.call(
           provider: new_accredited_body,
           user:,
         )
+      end
+
+      before do
+        allow(NewUserAddedBySupportTeamMailer).to receive(:user_added_to_provider_email).and_return(action_mailer)
+        allow(action_mailer).to receive(:deliver_later)
+      end
+
+      it "sends the email to the user" do
+        subject
+        expect(NewUserAddedBySupportTeamMailer).to have_received(:user_added_to_provider_email).with(hash_including(recipient: user))
+        expect(action_mailer).to have_received(:deliver_later)
       end
 
       context "when user have saved notification preferences" do

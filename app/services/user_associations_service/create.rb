@@ -28,11 +28,16 @@ module UserAssociationsService
         add_user_to_all_providers
       else
         add_user_to_a_single_provider
+        send_user_added_to_provider_email
       end
     end
 
     def add_user_to_a_single_provider
       provider.users << user
+    end
+
+    def send_user_added_to_provider_email
+      NewUserAddedBySupportTeamMailer.user_added_to_provider_email(recipient: user).deliver_later
     end
 
     def add_user_to_all_providers
