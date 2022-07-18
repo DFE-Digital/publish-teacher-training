@@ -49,11 +49,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
       and_i_should_not_see_the_rollover_button
-
-      given_there_is_a_next_recruitment_cycle
-      when_i_visit_the_rollover_form_page
-      when_i_click_the_rollover_course_button
-      then_i_should_see_the_error_message
     end
   end
 
