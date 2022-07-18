@@ -7,6 +7,8 @@ module Publish
     let(:draft_enrichment) { build(:course_enrichment, :initial_draft) }
     let(:rolled_over_enrichment) { build(:course_enrichment, :rolled_over) }
     let(:published_enrichment) { build(:course_enrichment, :published) }
+    let(:withdrawn_enrichment) { build(:course_enrichment, :withdrawn) }
+    let(:unpublished_changes_enrichment) { build(:course_enrichment, :subsequent_draft) }
 
     subject { described_class.new(course) }
 
@@ -37,7 +39,23 @@ module Publish
     describe "published course" do
       let(:course) { build(:course, enrichments: [published_enrichment]) }
 
-      it "is valid" do
+      it "is invalid" do
+        expect(subject).not_to be_valid
+      end
+    end
+
+    describe "unpublished changes course" do
+      let(:course) { build(:course, enrichments: [unpublished_changes_enrichment]) }
+
+      it "is invalid" do
+        expect(subject).not_to be_valid
+      end
+    end
+
+    describe "withdrawn course" do
+      let(:course) { build(:course, enrichments: [withdrawn_enrichment]) }
+
+      it "is invalid" do
         expect(subject).not_to be_valid
       end
     end
