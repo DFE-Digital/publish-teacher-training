@@ -341,10 +341,6 @@ class Course < ApplicationRecord
     (content_status == :empty && rollover_conditions) || (content_status == :draft && rollover_conditions) || (content_status == :rolled_over && rollover_conditions)
   end
 
-  def show_rollover_link?
-    (content_status == :empty && rolled_over?) || (content_status == :draft && rolled_over?) || (content_status == :rolled_over && rolled_over?)
-  end
-
   def rolled_over?
     recruitment_cycle.next&.courses&.exists?(course_code:, provider: { provider_code: })
   end
