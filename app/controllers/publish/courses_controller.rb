@@ -13,7 +13,6 @@ module Publish
       fetch_course
 
       authorize @course
-
       @errors = flash[:error_summary]
       flash.delete(:error_summary)
     end

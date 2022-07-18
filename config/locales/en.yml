@@ -333,7 +333,7 @@ en:
     errors:
       models:
         publish/course_rollover_form:
-          course_is_draft: "Course must have draft status."
+          course_is_rollable: "Course must have draft, empty or rolled over status."
         publish/age_range_form:
           attributes:
             age_range_in_years:

@@ -333,6 +333,18 @@ class Course < ApplicationRecord
     is_published? || rollable_withdrawn?
   end
 
+  def rollover_conditions
+    !rolled_over? && recruitment_cycle.next && recruitment_cycle == RecruitmentCycle.current
+  end
+
+  def show_rollover_button?
+    (content_status == :empty && rollover_conditions) || (content_status == :draft && rollover_conditions) || (content_status == :rolled_over && rollover_conditions)
+  end
+
+  def show_rollover_link?
+    (content_status == :empty && rolled_over?) || (content_status == :draft && rolled_over?) || (content_status == :rolled_over && rolled_over?)
+  end
+
   def rolled_over?
     recruitment_cycle.next&.courses&.exists?(course_code:, provider: { provider_code: })
   end
