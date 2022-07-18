@@ -37,6 +37,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
+      and_i_should_not_see_the_rollover_button
     end
   end
 
@@ -47,6 +48,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_description_of_the_unpublished_changes_course
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
+      and_i_should_not_see_the_rollover_button
     end
   end
 
@@ -152,6 +154,12 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   def and_i_should_see_the_rollover_button
     provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_rollover_button
+    end
+  end
+
+  def and_i_should_not_see_the_rollover_button
+    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).not_to have_rollover_button
     end
   end
 
