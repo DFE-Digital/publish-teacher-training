@@ -41,7 +41,7 @@
 
           component.row do |row|
             row.key { "Date last signed in" }
-            row.value(text: @user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
+            row.value(text: @user.last_login_date_utc&.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
             row.action
           end
         end %>
