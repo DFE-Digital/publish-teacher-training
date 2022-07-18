@@ -51,7 +51,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   describe "with an initial draft course" do
-    scenario "i can view the unpublished partial" do
+    scenario "i can view the unpublished partial and rollover" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_course_page
@@ -69,22 +69,26 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   describe "rollover with an empty course" do
-    scenario "i can see the success message" do
+    scenario "i can see the success message and link" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_rollover_form_page
       when_i_click_the_rollover_course_button
       then_i_should_see_the_course_show_page_with_success_message
+      when_i_click_the_view_rollover_link
+      then_i_should_see_the_rolled_over_course_show_page
     end
   end
 
   describe "rollover with an rolled over course" do
-    scenario "i can see the success message" do
+    scenario "i can see the success message and link" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_rolled_over], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_rollover_form_page
       when_i_click_the_rollover_course_button
       then_i_should_see_the_course_show_page_with_success_message
+      when_i_click_the_view_rollover_link
+      then_i_should_see_the_rolled_over_course_show_page
     end
   end
 
