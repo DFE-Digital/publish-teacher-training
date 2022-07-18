@@ -122,6 +122,7 @@ en:
             edit: "Edit location details"
           users:
             show: "User overview"
+            delete: "Are you sure you want to remove this user?"
         users:
           index: "Users"
           show: "User overview"
@@ -469,6 +470,7 @@ en:
     value_saved: "Changes to %{value} saved"
     saved: "Your changes have been saved"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
+    user_removed: "User removed"
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"
   edit_options:

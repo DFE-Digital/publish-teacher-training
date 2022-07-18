@@ -233,7 +233,12 @@ Rails.application.routes.draw do
     get "/" => redirect("/support/providers")
 
     resources :providers, except: %i[destroy] do
-      resources :users, only: %i[index show], controller: "providers/users"
+      resources :users, only: %i[index show], controller: "providers/users" do
+        member do
+          get :delete
+          delete :delete, to: "providers/users#destroy"
+        end
+      end
       resources :courses, only: %i[index edit update]
       resources :locations
     end
