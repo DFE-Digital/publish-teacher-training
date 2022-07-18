@@ -69,12 +69,22 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   describe "rollover with an empty course" do
-    scenario "i can see the error message" do
+    scenario "i can see the success message" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [], funding_type: "salary"))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_rollover_form_page
       when_i_click_the_rollover_course_button
-      then_i_should_see_the_error_message
+      then_i_should_see_the_course_show_page_with_success_message
+    end
+  end
+
+  describe "rollover with an rolled over course" do
+    scenario "i can see the success message" do
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_rolled_over], funding_type: "salary"))
+      given_there_is_a_next_recruitment_cycle
+      when_i_visit_the_rollover_form_page
+      when_i_click_the_rollover_course_button
+      then_i_should_see_the_course_show_page_with_success_message
     end
   end
 
@@ -191,6 +201,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def course_enrichment_initial_draft
     @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
+  end
+
+  def course_enrichment_rolled_over
+    @course_enrichment_rolled_over ||= build(:course_enrichment, :rolled_over)
   end
 
   def course_enrichment_withdrawn
