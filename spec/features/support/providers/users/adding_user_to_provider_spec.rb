@@ -71,19 +71,19 @@ feature "Adding user to provider as an admin" do
   end
 
   def then_i_should_be_on_the_check_page
-    expect(page).to have_current_path("/support/providers/#{@provider.id}/users/check")
+    expect(support_users_check_page).to have_current_path("/support/providers/#{@provider.id}/users/check")
   end
 
   def then_i_should_see_the_users_name_listed
-    expect(page).to have_text("Aba Bernhard")
+    expect(support_users_check_page).to have_text("Aba Bernhard")
   end
 
   def and_i_should_see_the_users_email_listed
-    expect(page).to have_text("viola_fisher@boyle.io")
+    expect(support_users_check_page).to have_text("viola_fisher@boyle.io")
   end
 
   def and_the_user_i_want_to_add_has_not_already_been_added
-    expect(page).not_to have_text("viola_fisher@boyle.io")
+    expect(support_users_check_page).not_to have_text("viola_fisher@boyle.io")
   end
 
   def then_i_should_see_the_error_summary
