@@ -62,15 +62,11 @@ private
     expect(support_provider_user_show_page.first_name.text).to eq(@user.first_name)
     expect(support_provider_user_show_page.last_name.text).to eq(@user.last_name)
     expect(support_provider_user_show_page.email.text).to eq(@user.email)
-    expect(support_provider_user_show_page.organisations.text).to eq(@user.providers.map(&:provider_name).join)
+    expect(support_provider_user_show_page.organisations.text).to eq(@user.providers.pluck(:provider_name).join)
   end
 
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
     expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
-  end
-
-  def support_provider_user_show_page
-    @support_provider_user_show_page ||= PageObjects::Support::Provider::UserShow.new
   end
 end
