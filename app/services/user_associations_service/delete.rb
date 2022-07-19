@@ -9,18 +9,25 @@ module UserAssociationsService
     end
 
     def initialize(user:, providers:)
-      @providers = providers
+      @providers = Array(providers)
       @user = user
     end
 
     def call
       remove_access
       update_user_notification_preferences
+      send_remove_user_from_provider_email
     end
 
     private_class_method :new
 
   private
+
+    def send_remove_user_from_provider_email
+      providers.each do |provider|
+        RemoveUserFromOrganisationMailer.remove_user_from_provider_email(recipient: user, provider:).deliver_later
+      end
+    end
 
     def remove_access
       user.remove_access_to(providers)
