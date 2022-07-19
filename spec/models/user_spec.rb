@@ -113,6 +113,19 @@ describe User, type: :model do
       end
     end
 
+    describe "during rollover" do
+      let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle) }
+
+      before do
+        subject.providers = [provider, other_provider, rolled_over_provider]
+        subject.remove_access_to(rolled_over_provider)
+      end
+
+      it "removes the right provider" do
+        expect(subject.reload.providers).to eq([provider, other_provider])
+      end
+    end
+
     describe "#associated_with_accredited_body?" do
       context "user is associated with accredited body" do
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
