@@ -13,7 +13,7 @@ module Publish
   private
 
     def course_is_rollable?
-      return if (course.content_status == :draft) || (course.content_status == :empty) || (course.content_status == :rolled_over)
+      return if %i[draft empty rolled_over].include? course.content_status
 
       errors.add(:course_is_rollable?, message: I18n.t("activemodel.errors.models.publish/course_rollover_form.course_is_not_rollable"))
     end
