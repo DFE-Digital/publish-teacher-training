@@ -3,7 +3,7 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-inset-text app-inset-prompt govuk-!-margin-top-0">
       <p class="govuk-body">
-        <%= govuk_link_to "View rolled over course for #{next_recruitment_cycle_period_text} recruitment cycle", publish_provider_recruitment_cycle_course_path(
+        <%= govuk_link_to "View rolled over course for the #{next_recruitment_cycle_period_text} recruitment cycle", publish_provider_recruitment_cycle_course_path(
               @provider.provider_code,
               @course.recruitment_cycle_year.next,
               @course.course_code,
