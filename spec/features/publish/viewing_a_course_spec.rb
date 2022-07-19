@@ -108,7 +108,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_the_course_show_page_with_success_message
-    expect(page).to have_content "Your course has been rolled over."
+    expect(page).to have_content "Course rolled over"
   end
 
   def when_i_click_the_view_rollover_link
