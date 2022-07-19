@@ -22,6 +22,7 @@ module Support
 
       def new
         @user_form = UserForm.new(current_user, user)
+        @user_form.clear_stash
       end
 
       def create
