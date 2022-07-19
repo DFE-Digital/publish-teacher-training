@@ -333,12 +333,10 @@ class Course < ApplicationRecord
     is_published? || rollable_withdrawn?
   end
 
-  def rollover_conditions
-    !rolled_over? && recruitment_cycle.next && recruitment_cycle == RecruitmentCycle.current
-  end
+  def manually_rollable?
+    rollover_conditions = !rolled_over? && recruitment_cycle.next && recruitment_cycle == RecruitmentCycle.current
 
-  def show_rollover_button?
-    (content_status == :empty && rollover_conditions) || (content_status == :draft && rollover_conditions) || (content_status == :rolled_over && rollover_conditions)
+    rollover_conditions && %i[empty draft rolled_over].include?(content_status)
   end
 
   def rolled_over?
