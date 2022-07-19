@@ -3,10 +3,8 @@
 require "rails_helper"
 
 feature "Adding user to provider as an admin" do
-  let(:user) { create(:user, :admin) }
-
   before do
-    given_i_am_authenticated(user:)
+    given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider
   end
 
@@ -112,5 +110,9 @@ feature "Adding user to provider as an admin" do
 
   def and_i_enter_a_new_first_name
     support_users_new_page.first_name.set("Aba")
+  end
+
+  def given_i_am_authenticated_as_an_admin_user
+    given_i_am_authenticated(user: create(:user, :admin))
   end
 end
