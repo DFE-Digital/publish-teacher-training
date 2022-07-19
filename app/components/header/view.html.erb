@@ -8,6 +8,7 @@
 
   <% if current_user.present? %>
     <% if current_user.admin? %>
+      <% header.navigation_item(text: "Support console", href: support_path) %>
       <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
       <% if current_user.associated_with_accredited_body? %>

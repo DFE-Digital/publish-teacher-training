@@ -12,7 +12,11 @@ class User < ApplicationRecord
   has_many :providers_via_organisations, through: :organisations, source: :providers
 
   has_many :user_permissions
-  has_many :providers, through: :user_permissions
+  has_many :providers, through: :user_permissions do
+    def in_current_cycle
+      where(recruitment_cycle: RecruitmentCycle.current)
+    end
+  end
 
   has_many :access_requests,
     foreign_key: :requester_id,
