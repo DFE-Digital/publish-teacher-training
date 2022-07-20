@@ -28,15 +28,15 @@ module Support
       def create
         @user_form = UserForm.new(current_user, user, params: user_params)
         if @user_form.stash
-          redirect_to check_support_provider_users_path
+          redirect_to support_provider_check_user_path
         else
           render(:new)
         end
       end
 
-      def check
+      def update
         @user_form = UserForm.new(current_user, user)
-        if request.method == "POST" && @user_form.save!
+        if @user_form.save!
           UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
           redirect_to support_provider_users_path
           flash[:success] = "User added"
