@@ -57,6 +57,7 @@ module Publish
 
       it "is invalid" do
         expect(subject).not_to be_valid
+        expect(subject.errors[:course_is_rollable]).to include "Course must have draft, empty or rolled over status."
       end
     end
   end

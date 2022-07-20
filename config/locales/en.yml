@@ -341,7 +341,9 @@ en:
     errors:
       models:
         publish/course_rollover_form:
-          course_is_not_rollable: "Course must have draft, empty or rolled over status."
+          attributes:
+            course_is_rollable:
+              invalid: "Course must have draft, empty or rolled over status."
         publish/age_range_form:
           attributes:
             age_range_in_years:

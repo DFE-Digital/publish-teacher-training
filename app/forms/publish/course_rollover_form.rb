@@ -2,7 +2,7 @@ module Publish
   class CourseRolloverForm
     include ActiveModel::Model
 
-    attr_accessor :course
+    attr_accessor :course, :course_is_rollable
 
     def initialize(course)
       @course = course
@@ -15,7 +15,7 @@ module Publish
     def course_is_rollable?
       return if %i[draft empty rolled_over].include? course.content_status
 
-      errors.add(:course_is_rollable?, message: I18n.t("activemodel.errors.models.publish/course_rollover_form.course_is_not_rollable"))
+      errors.add(:course_is_rollable)
     end
   end
 end
