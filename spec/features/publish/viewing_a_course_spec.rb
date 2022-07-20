@@ -36,8 +36,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_course_button_panel
-      # and_i_should_see_the_published_partial
-      # and_i_should_not_see_the_rollover_button
+      and_i_should_see_the_published_partial
+      and_i_should_not_see_the_rollover_button
     end
   end
 
@@ -47,8 +47,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_unpublished_changes_course
       and_i_should_see_the_course_button_panel
-      # and_i_should_see_the_unpublished_with_changes_partial
-      # and_i_should_not_see_the_rollover_button
+      and_i_should_see_the_unpublished_with_changes_partial
+      and_i_should_not_see_the_rollover_button
     end
   end
 

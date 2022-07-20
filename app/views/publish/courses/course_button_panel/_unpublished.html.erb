@@ -1,3 +1,4 @@
+<div class="govuk-button-group">
 <%= govuk_button_to("Publish course", publish_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                     class: "govuk-!-margin-right-2",
                     data: { qa: "course__publish" }) %>
@@ -10,3 +11,4 @@
 <% end %>
 
 <%= govuk_link_to "Delete course", delete_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__delete-link" } %>
+</div>
