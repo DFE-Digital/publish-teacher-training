@@ -27,6 +27,13 @@ RSpec.describe UserAssociationsService::Delete do
     )
   end
 
+  let(:action_mailer) { double }
+
+  before do
+    allow(RemoveUserFromOrganisationMailer).to receive(:remove_user_from_provider_email).and_return(action_mailer)
+    allow(action_mailer).to receive(:deliver_later)
+  end
+
   describe "#call" do
     context "when removing access to a single provider" do
       subject do
@@ -45,6 +52,12 @@ RSpec.describe UserAssociationsService::Delete do
         before do
           user_notification1
           user_notification2
+        end
+
+        it "sends the email to the user" do
+          subject
+          expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body1))
+          expect(action_mailer).to have_received(:deliver_later)
         end
 
         it "removes user_permissions association" do
@@ -103,6 +116,13 @@ RSpec.describe UserAssociationsService::Delete do
           course_publish: true,
           course_update: true,
         )
+      end
+
+      it "sends the emails to the user" do
+        subject
+        expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body1))
+        expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body2))
+        expect(action_mailer).to have_received(:deliver_later).twice
       end
 
       context "when user have saved notification preferences" do

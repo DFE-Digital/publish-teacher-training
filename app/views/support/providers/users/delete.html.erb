@@ -1,0 +1,34 @@
+<%= render PageTitle::View.new(title: "support.providers.users.delete") %>
+
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: support_provider_user_path(@provider, @user),
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= "#{@user.full_name} - #{@provider.provider_name}" %></span>
+        <%= t("components.page_titles.support.providers.users.delete") %>
+    </h1>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        The user will be sent an email to tell them you removed them from <%= @provider.provider_name %>.
+      </strong>
+    </div>
+
+    <%= govuk_button_to "Remove user",
+        delete_support_provider_user_path(@provider, @user),
+        method: :delete,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to("Cancel", support_provider_user_path(@provider, @user)) %>
+    </p>
+  </div>
+</div>

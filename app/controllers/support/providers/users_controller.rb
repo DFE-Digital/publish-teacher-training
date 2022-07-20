@@ -10,6 +10,16 @@ module Support
         user
       end
 
+      def delete
+        user
+      end
+
+      def destroy
+        UserAssociationsService::Delete.call(user:, providers: provider)
+        flash[:success] = I18n.t("success.user_removed")
+        redirect_to support_provider_users_path(provider)
+      end
+
     private
 
       def provider

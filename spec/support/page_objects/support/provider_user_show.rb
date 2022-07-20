@@ -11,7 +11,7 @@ module PageObjects
       element :organisations, "#organisations"
       element :date_last_signed_in, "#date_last_signed_in"
 
-      element :delete_button, ".govuk-button", text: "Delete this user"
+      element :remove_user_link, ".govuk-link", text: "Remove user"
     end
   end
 end

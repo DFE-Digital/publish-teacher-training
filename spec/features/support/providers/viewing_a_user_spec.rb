@@ -68,5 +68,6 @@ private
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
     expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
+    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_provider_user_path(@user.providers.first, @user))
   end
 end
