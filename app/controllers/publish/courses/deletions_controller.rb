@@ -1,7 +1,7 @@
 module Publish
   module Courses
     class DeletionsController < PublishController
-      before_action :redirect_to_courses, if: -> { course.present? && course.is_published? }
+      before_action :redirect_to_courses, if: -> { course&.is_published? }
 
       def edit
         authorize(provider)
