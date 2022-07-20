@@ -1,0 +1,41 @@
+<% content_for :page_title, title_with_error_prefix("Are you sure you want to rollover #{@course.name_and_code})? into the next recruitment cycle?", @course_rollover_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+        publish_provider_recruitment_cycle_course_path(
+          @course.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
+      ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @course_rollover_form,
+      url: rollover_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+      method: :post,
+      data: { qa: "rollover-form" },
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+        Are you sure you want to roll over the course into the next recruitement cycle?
+      </h1>
+
+      <%= f.govuk_submit "Roll over course", class: "govuk-button", data: { qa: "course__rollover-course" } %>
+    <% end %>
+
+    <p class="govuk-body govuk-!-margin-top-5">
+      <%= govuk_link_to(
+        "Cancel",
+        publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
+        method: :get,
+        no_visited_state: true,
+      ) %>
+    </p>
+  </div>
+</div>

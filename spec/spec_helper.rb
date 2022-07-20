@@ -9,7 +9,7 @@ require "dfe/analytics/rspec/matchers"
 if ENV.fetch("COVERAGE", false)
   require "simplecov"
 
-  SimpleCov.minimum_coverage 90
+  SimpleCov.minimum_coverage 60
   SimpleCov.start("rails")
 
   # If running specs in parallel this ensures SimpleCov results appears
