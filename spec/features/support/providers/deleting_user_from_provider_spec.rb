@@ -2,7 +2,8 @@
 
 require "rails_helper"
 
-feature "Deleting a user from provider" do
+# To be repurposed for https://trello.com/c/vEnCHLCI/241-add-user-to-org-via-support-removing-provider-users
+xfeature "Deleting a user from provider" do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_remove

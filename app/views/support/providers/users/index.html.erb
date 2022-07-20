@@ -1,0 +1,2 @@
+<%= render "provider_user_list", users: @users, provider: @provider %>
+<%= render Paginator::View.new(scope: @users) %>

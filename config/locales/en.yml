@@ -9,7 +9,7 @@ en:
         urn_html: |-
           Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
   service_name: "Publish teacher training courses"
-  support_service_name: "Teacher Training API Admin"
+  support_service_name: "Publish support console"
   header:
     items:
       sign_out: "Sign out"
@@ -120,6 +120,8 @@ en:
             index: "Locations"
             new: "Add a location"
             edit: "Edit location details"
+          users:
+            show: "User overview"
         users:
           index: "Users"
           show: "User overview"
