@@ -134,7 +134,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
     )
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/rollover?")
-    expect(page).to have_content "Are you sure you want to roll over the course into the next recruitement cycle?"
+    expect(page).to have_content "Are you sure you want to roll over the course into the next recruitment cycle?"
   end
 
   alias_method :when_i_visit_the_rollover_form_page, :then_i_should_see_the_rollover_form_page
