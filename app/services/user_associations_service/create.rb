@@ -1,5 +1,7 @@
 module UserAssociationsService
   class Create
+    include RolloverHelper
+
     attr_reader :provider, :user, :all_providers
 
     class << self
@@ -33,7 +35,19 @@ module UserAssociationsService
     end
 
     def add_user_to_a_single_provider
+      add_user_to_provider_in_current_cycle
+
+      if rollover_active?
+        add_user_to_provider_in_next_cycle
+      end
+    end
+
+    def add_user_to_provider_in_current_cycle
       provider.users << user
+    end
+
+    def add_user_to_provider_in_next_cycle
+      RecruitmentCycle.next.providers.find_by(provider_code: provider.provider_code).users << user
     end
 
     def send_user_added_to_provider_email

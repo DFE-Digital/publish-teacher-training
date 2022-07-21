@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
+  include RolloverHelper
 
   has_many :organisation_users
 
@@ -58,6 +59,11 @@ class User < ApplicationRecord
 
   def remove_access_to(providers_to_remove)
     self.providers = providers - Array(providers_to_remove)
+
+    if rollover_active? && !RecruitmentCycle.next.nil?
+      next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.select { |provider| provider.provider_code == providers_to_remove.provider_code }
+      self.providers = providers - Array(next_cycle_providers)
+    end
   end
 
   def associated_with_accredited_body?
