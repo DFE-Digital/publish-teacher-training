@@ -71,7 +71,7 @@ feature "Adding user to provider as an admin" do
   end
 
   def then_i_should_be_on_the_check_page
-    expect(support_users_check_page).to have_current_path("/support/providers/#{@provider.id}/users/check")
+    expect(support_users_check_page).to be_displayed
   end
 
   def then_i_should_see_the_users_name_listed
