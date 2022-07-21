@@ -7,27 +7,51 @@ module Support
       end
 
       def show
-        user
+        provider_user
       end
 
       def delete
-        user
+        provider_user
       end
 
       def destroy
-        UserAssociationsService::Delete.call(user:, providers: provider)
+        UserAssociationsService::Delete.call(user: provider_user, providers: provider)
         flash[:success] = I18n.t("success.user_removed")
         redirect_to support_provider_users_path(provider)
       end
 
+      def new
+        provider
+        @user_form = UserForm.new(current_user, user)
+        @user_form.clear_stash
+      end
+
+      def create
+        provider
+        @user_form = UserForm.new(current_user, user, params: user_params)
+        if @user_form.stash
+          redirect_to support_provider_check_user_path
+        else
+          render(:new)
+        end
+      end
+
     private
+
+      def user
+        User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
+      end
+
+      def user_params
+        params.require(:support_user_form).permit(:first_name, :last_name, :email)
+      end
 
       def provider
         @provider ||= Provider.find(params[:provider_id])
       end
 
-      def user
-        @user ||= provider.users.find(params[:id])
+      def provider_user
+        @provider_user ||= provider.users.find(params[:id])
       end
     end
   end

@@ -11,37 +11,37 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @provider.provider_name %></span>
-      <%= @user.full_name %>
+      <%= @provider_user.full_name %>
     </h1>
 
     <%= render GovukComponent::SummaryListComponent.new do |component|
           component.row do |row|
             row.key { "First name" }
-            row.value(text: @user.first_name, html_attributes: { id: "first_name" })
+            row.value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
             row.action
           end
 
           component.row do |row|
             row.key { "Last name" }
-            row.value(text: @user.last_name, html_attributes: { id: "last_name" })
+            row.value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
             row.action
           end
 
           component.row do |row|
             row.key { "Email address" }
-            row.value(text: @user.email, html_attributes: { id: "email" })
+            row.value(text: @provider_user.email, html_attributes: { id: "email" })
             row.action
           end
 
           component.row do |row|
             row.key { "Organisations" }
-            row.value(text: sanitize(@user.providers.in_current_cycle.pluck(:provider_name).join(tag.br)), html_attributes: { id: "organisations" })
+            row.value(text: sanitize(@provider_user.providers.in_current_cycle.pluck(:provider_name).join(tag.br)), html_attributes: { id: "organisations" })
             row.action
           end
 
           component.row do |row|
             row.key { "Date last signed in" }
-            row.value(text: @user.last_login_date_utc&.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
+            row.value(text: @provider_user.last_login_date_utc&.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
             row.action
           end
         end %>

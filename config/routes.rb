@@ -236,7 +236,8 @@ Rails.application.routes.draw do
     get "/" => redirect("/support/providers")
 
     resources :providers, except: %i[destroy] do
-      resources :users, only: %i[index show], controller: "providers/users" do
+      resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
+      resources :users, only: %i[index show create new], controller: "providers/users" do
         member do
           get :delete
           delete :delete, to: "providers/users#destroy"
@@ -245,7 +246,6 @@ Rails.application.routes.draw do
       resources :courses, only: %i[index edit update]
       resources :locations
     end
-
     resources :users do
       scope module: :users do
         resource :providers, on: :member, only: %i[show]
