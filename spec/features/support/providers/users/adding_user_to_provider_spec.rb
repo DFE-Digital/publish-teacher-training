@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding user to provider as an admin" do
+feature "Adding user to provider as an admin", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider
@@ -71,7 +71,7 @@ feature "Adding user to provider as an admin" do
   end
 
   def then_i_should_be_on_the_check_page
-    expect(support_users_check_page).to be_displayed
+    expect(support_users_check_page).to be_displayed(provider_id: @provider.id)
   end
 
   def then_i_should_see_the_users_name_listed
