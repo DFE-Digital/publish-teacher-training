@@ -21,11 +21,13 @@ module Support
       end
 
       def new
+        provider
         @user_form = UserForm.new(current_user, user)
         @user_form.clear_stash
       end
 
       def create
+        provider
         @user_form = UserForm.new(current_user, user, params: user_params)
         if @user_form.stash
           redirect_to support_provider_check_user_path
@@ -37,7 +39,6 @@ module Support
     private
 
       def user
-        provider
         User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
       end
 

@@ -2,6 +2,7 @@ module Support
   module Providers
     class UsersCheckController < SupportController
       def show
+        provider
         @user_form = UserForm.new(current_user, user)
       end
 
@@ -17,7 +18,6 @@ module Support
     private
 
       def user
-        provider
         User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
       end
 
