@@ -7,15 +7,15 @@ module Support
       end
 
       def show
-        user
+        provider_user
       end
 
       def delete
-        user
+        provider_user
       end
 
       def destroy
-        UserAssociationsService::Delete.call(user:, providers: provider)
+        UserAssociationsService::Delete.call(user: provider_user, providers: provider)
         flash[:success] = I18n.t("success.user_removed")
         redirect_to support_provider_users_path(provider)
       end
@@ -34,15 +34,6 @@ module Support
         end
       end
 
-      def update
-        @user_form = UserForm.new(current_user, user)
-        if @user_form.save!
-          UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
-          redirect_to support_provider_users_path
-          flash[:success] = "User added"
-        end
-      end
-
     private
 
       def user
@@ -58,8 +49,8 @@ module Support
         @provider ||= Provider.find(params[:provider_id])
       end
 
-      def user
-        @user ||= provider.users.find(params[:id])
+      def provider_user
+        @provider_user ||= provider.users.find(params[:id])
       end
     end
   end

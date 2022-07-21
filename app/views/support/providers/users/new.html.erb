@@ -1,6 +1,10 @@
 <%= render PageTitle::View.new(title: t("support.providers.users.new")) %>
+
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(users_support_provider_path(params[:provider_id])) %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: t("back"),
+    href: support_provider_users_path,
+    ) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -22,6 +26,6 @@
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), users_support_provider_path(@provider)) %>
+    <%= govuk_link_to(t("cancel"), support_provider_users_path) %>
   </div>
 </div>
