@@ -34,7 +34,7 @@ feature "Adding user to provider as an admin" do
       given_i_visit_the_support_provider_users_new_page
       and_i_continue
 
-      then_i_should_see_the_error_summary
+      then_it_should_display_the_correct_error_messages
     end
   end
 
@@ -86,11 +86,7 @@ feature "Adding user to provider as an admin" do
     expect(support_users_check_page).not_to have_text("viola_fisher@boyle.io")
   end
 
-  def then_i_should_see_the_error_summary
-    expect(support_user_new_page.error_summary).to be_visible
-  end
-
-  def and_it_should_display_the_correct_error_messages
+  def then_it_should_display_the_correct_error_messages
     expect(support_user_new_page.error_summary).to have_text("Enter a first name")
     expect(support_user_new_page.error_summary).to have_text("Enter a last name")
     expect(support_user_new_page.error_summary).to have_text("Enter an email address")
