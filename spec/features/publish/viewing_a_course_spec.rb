@@ -99,7 +99,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
       when_i_visit_the_course_page
       then_i_should_see_the_course_button_panel
-      and_i_should_see_the_course_withdrawn_date
+      and_i_should_see_the_course_withdrawn_date_and_preview_link
     end
   end
 
@@ -173,6 +173,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   def and_i_should_see_the_unpublished_partial
     provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
+      expect(course_button_panel).to have_preview_link
       expect(course_button_panel).to have_delete_link
     end
   end
@@ -183,6 +184,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       expect(course_button_panel).to have_withdraw_link
       expect(course_button_panel).to have_vacancies_link
       expect(course_button_panel).to have_last_publish_date
+      expect(course_button_panel).not_to have_delete_link
     end
   end
 
@@ -198,9 +200,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
-  def and_i_should_see_the_course_withdrawn_date
+  def and_i_should_see_the_course_withdrawn_date_and_preview_link
     provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_withdrawn_date
+      expect(course_button_panel).to have_preview_link
     end
   end
 

@@ -1,3 +1,6 @@
 <span class="govuk-hint govuk-!-font-size-16" data-qa="course__withdrawn_date">
   Withdrawn on <%= l(course.withdrawn_at.to_datetime, format: :last_event) %>
 </span>
+<p class="govuk-body">
+<%= govuk_link_to "Preview course", preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), data: { qa: "course__preview-link" } %>
+</p>
