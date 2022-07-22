@@ -26,6 +26,23 @@ module Support
         @user_form.clear_stash
       end
 
+      def edit
+        provider
+        provider_user
+        @user_form = UserForm.new(current_user, provider_user)
+      end
+
+      def update
+        provider
+        @user_form = UserForm.new(current_user, provider_user, params: user_params)
+        if @user_form.save!
+          redirect_to support_provider_user_path(provider)
+          flash[:success] = "User updated"
+        else
+          render(:edit)
+        end
+      end
+
       def create
         provider
         @user_form = UserForm.new(current_user, user, params: user_params)
