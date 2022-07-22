@@ -7,6 +7,7 @@ module PageObjects
     class CourseButtonPanel < PageObjects::Sections::Base
       element :publish_button, '[data-qa="course__publish"]'
       element :rollover_button, '[data-qa="course__rollover"]'
+      element :preview_link, '[data-qa="course__preview-link"]'
       element :delete_link, '[data-qa="course__delete-link"]'
 
       element :view_on_find, '[data-qa="course__is_findable"]'
