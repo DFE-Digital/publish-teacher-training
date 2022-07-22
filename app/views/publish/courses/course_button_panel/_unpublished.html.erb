@@ -9,6 +9,6 @@
                     data: { qa: "course__rollover" },
                     method: :get) %>
 <% end %>
-<%= govuk_link_to "Preview course", preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), "data-qa": "course__preview-link" %>
+<%= govuk_link_to "Preview course", preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__preview-link" } %>
 <%= govuk_link_to "Delete course", delete_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive", data: { qa: "course__delete-link" } %>
 </div>
