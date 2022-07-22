@@ -156,6 +156,7 @@ jobs:
       run: |
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+        docker-compose exec -T web /bin/sh -c "yarn add jest"
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
 
