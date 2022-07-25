@@ -25,6 +25,7 @@ private
     @source_course = ::Courses::Fetch.by_code(
       provider_code: params[:provider_code],
       course_code: params[:copy_from],
+      recruitment_cycle_year: params[:recruitment_cycle_year],
     )
   end
 
