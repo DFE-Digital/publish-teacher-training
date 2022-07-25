@@ -22,12 +22,7 @@ You will need the following tools installed to successfully complete the process
 - [make](https://www.gnu.org/software/make/)
 - either [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) or [tfenv](https://github.com/tfutils/tfenv#installation)
 
-When testing against a review environment (e.g. ending `pr-1234`) add `APP_NAME=1234` to the end of any `make review...` commands comment the final line `echo ..` and add the following in to the review target in the Makefile as well:
-
-```
-	$(eval space=bat-qa)
-	$(eval paas_env=pr-$(APP_NAME))
-```
+When testing against a review environment (e.g. ending `pr-1234`) add `APP_NAME=1234` to the end of any `make review...` commands comment the final line `echo ..`.
 
 ### Maintenance mode
 
