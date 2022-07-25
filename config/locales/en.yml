@@ -196,6 +196,7 @@ en:
         last_name: "Last name"
         email: "Email address"
         new: "Add user"
+        edit: "Update user"
         check: "Check your answers"
     flash:
       created: "%{resource} successfully created"

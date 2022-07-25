@@ -237,7 +237,7 @@ Rails.application.routes.draw do
 
     resources :providers, except: %i[destroy] do
       resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
-      resources :users, only: %i[index show create new], controller: "providers/users" do
+      resources :users, controller: "providers/users" do
         member do
           get :delete
           delete :delete, to: "providers/users#destroy"
