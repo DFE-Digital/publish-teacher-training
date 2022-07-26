@@ -133,6 +133,10 @@ gem "sprockets-rails", require: "sprockets/railtie"
 # for sending analytics data to the analytics platform
 gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.2.1"
 
+group :production do
+  gem "cloudfront-rails"
+end
+
 group :development, :test do
   # Prettyprint in console
   gem "awesome_print"

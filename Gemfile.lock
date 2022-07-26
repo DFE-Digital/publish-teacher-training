@@ -163,6 +163,8 @@ GEM
     case_transform (0.2)
       activesupport
     choice (0.2.0)
+    cloudfront-rails (0.4.0)
+      railties (> 4.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
     config (4.0.0)
@@ -716,6 +718,7 @@ DEPENDENCIES
   byebug
   canonical-rails
   capybara (>= 2.15)
+  cloudfront-rails
   config
   cssbundling-rails (~> 1.1)
   custom_error_message!
