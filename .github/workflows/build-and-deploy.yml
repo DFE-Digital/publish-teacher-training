@@ -160,6 +160,9 @@ jobs:
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
 
+    - name: Run Javascript Linter
+      run: docker-compose exec -T web /bin/sh -c "yarn run standard $(git ls-files '**.js' | tr '\n' ' ')"
+
     - name: Run Ruby Linter
       run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
 
