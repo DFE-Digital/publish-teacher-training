@@ -302,7 +302,7 @@ GEM
       pagy (~> 5.10.1)
       railties (>= 6.1)
       view_component (~> 2.56.2)
-    govuk_design_system_formbuilder (3.1.0)
+    govuk_design_system_formbuilder (3.1.1)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -418,7 +418,7 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.7)
+    nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     notiffany (0.1.3)
