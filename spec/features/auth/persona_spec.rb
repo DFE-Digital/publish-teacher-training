@@ -27,7 +27,7 @@ feature "Authentication with Personas" do
   end
 
   def when_i_go_to_support
-    support_provider_index_page.load
+    support_provider_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_am_given_the_option_to_sign_in_with_a_persona

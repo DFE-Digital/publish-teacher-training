@@ -38,12 +38,10 @@ module Filters
     def reload_path
       # This will be removed once all the scope recruitment cycle to support params PR's have been merged
       case filter_model.to_s.downcase.pluralize
-      when "allocations"
-        send("support_#{filter_model.to_s.downcase.pluralize}_path".to_sym)
-      when "users"
-        send("support_recruitment_cycle_provider_#{filter_model.to_s.downcase.pluralize}_path".to_sym, { provider_id: 1, recruitment_cycle_year: 2022 })
-      else
+      when "providers"
         send("support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path".to_sym)
+      else
+        send("support_#{filter_model.to_s.downcase.pluralize}_path".to_sym)
       end
     end
   end

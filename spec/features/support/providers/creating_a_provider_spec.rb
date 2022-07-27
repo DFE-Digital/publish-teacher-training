@@ -28,7 +28,7 @@ feature "Creating a provider" do
 private
 
   def when_i_visit_the_new_provider_page
-    support_provider_new_page.load
+    support_provider_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def when_i_fill_in_a_valid_provider_details

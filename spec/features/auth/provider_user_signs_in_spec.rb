@@ -35,8 +35,8 @@ feature "Authentication" do
   end
 
   def and_i_cannot_access_the_support_interface
-    visit support_providers_path
-    expect(page).to have_current_path support_providers_path
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
     expect(page.status_code).to eq(403)
     expect(page.find("h1")).to have_content("You are not permitted to see this page")
   end

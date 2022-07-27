@@ -4,7 +4,7 @@ module PageObjects
   module Support
     module Provider
       class CourseEdit < PageObjects::Base
-        set_url "/support/providers/{provider_id}/courses/{course_id}/edit"
+        set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/courses/{course_id}/edit"
 
         element :course_code, "#support-edit-course-form-course-code-field"
         element :name, "#support-edit-course-form-name-field"

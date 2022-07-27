@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class ProviderEdit < PageObjects::Base
-      set_url "/support/providers/{id}/edit"
+      set_url "/support/{recruitment_cycle_year}/providers/{id}/edit"
 
       element :provider_name, "#provider-provider-name-field"
       element :provider_type, "#provider-provider-type-field"

@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class ProviderIndex < PageObjects::Base
-      set_url "/support/providers"
+      set_url "/support/{recruitment_cycle_year}/providers"
 
       # Filter elements
       element :apply_filters, "input.govuk-button"

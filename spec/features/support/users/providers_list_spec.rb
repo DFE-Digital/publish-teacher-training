@@ -20,7 +20,7 @@ feature "View providers" do
   end
 
   def when_i_visit_the_support_provider_index_page
-    support_provider_index_page.load
+    support_provider_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_see_the_providers

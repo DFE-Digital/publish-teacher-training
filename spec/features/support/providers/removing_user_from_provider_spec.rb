@@ -26,7 +26,7 @@ private
   end
 
   def and_i_visit_the_support_provider_user_show_page
-    support_provider_user_show_page.load(id: @user.id, provider_id: @provider.id)
+    support_provider_user_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.id, provider_id: @provider.id)
   end
 
   def and_i_click_the_remove_user_link
@@ -37,7 +37,7 @@ private
     expect(support_provider_user_delete_page).to be_displayed
     expect(support_provider_user_delete_page.heading).to have_content("#{@user.full_name} - #{@provider.provider_name}")
     expect(support_provider_user_delete_page.warning_text).to have_content("The user will be sent an email to tell them you removed them from #{@provider.provider_name}.")
-    expect(support_provider_user_delete_page.cancel_link["href"]).to eq(support_provider_user_path(@provider, @user))
+    expect(support_provider_user_delete_page.cancel_link["href"]).to eq(support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, @user))
   end
 
   def when_i_click_remove_user_button

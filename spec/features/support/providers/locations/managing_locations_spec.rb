@@ -43,7 +43,7 @@ feature "Managing a provider's locations" do
   end
 
   def when_i_visit_a_provider_locations_page
-    support_locations_index_page.load(provider_id: provider.id)
+    support_locations_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id)
   end
 
   def then_i_should_see_a_list_of_locations

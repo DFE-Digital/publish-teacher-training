@@ -5,7 +5,7 @@ module PageObjects
     module Provider
       module User
         class UsersNew < PageObjects::Base
-          set_url "/support/providers/{provider_id}/users/new"
+          set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/users/new/"
 
           element :first_name, "#support-user-form-first-name-field"
           element :last_name, "#support-user-form-last-name-field"

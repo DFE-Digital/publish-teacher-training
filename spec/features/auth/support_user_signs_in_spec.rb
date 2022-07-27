@@ -17,7 +17,7 @@ feature "Authentication" do
   end
 
   def when_i_visit_the_support_interface
-    visit support_providers_path
+    visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_am_expected_to_sign_in
@@ -29,6 +29,6 @@ feature "Authentication" do
   end
 
   def then_i_can_access_the_support_interface
-    expect(page).to have_current_path support_providers_path
+    expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 end

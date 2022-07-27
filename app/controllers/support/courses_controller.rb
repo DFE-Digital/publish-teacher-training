@@ -5,7 +5,7 @@ module Support
       render layout: "provider_record"
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = "Provider not found"
-      redirect_to support_providers_path
+      redirect_to support_recruitment_cycle_providers_path
     end
 
     def edit

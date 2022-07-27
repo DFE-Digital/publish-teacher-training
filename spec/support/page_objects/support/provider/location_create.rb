@@ -4,7 +4,7 @@ module PageObjects
   module Support
     module Provider
       class LocationCreate < PageObjects::Base
-        set_url "/support/providers/{provider_id}/locations/new"
+        set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/locations/new"
         element :error_summary, ".govuk-error-summary"
 
         section :location_form, Sections::LocationForm, ".location-form"

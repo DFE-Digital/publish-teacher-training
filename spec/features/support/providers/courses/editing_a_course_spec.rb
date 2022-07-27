@@ -81,7 +81,7 @@ private
   end
 
   def when_i_visit_the_support_courses_index_page
-    support_courses_index_page.load(provider_id: provider.id)
+    support_courses_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id)
   end
 
   def and_click_on_the_first_course_change_link
@@ -91,7 +91,7 @@ private
   alias_method :when_i_return_to_the_edit_page, :and_click_on_the_first_course_change_link
 
   def then_i_am_on_the_support_course_edit_page
-    support_course_edit_page.load(provider_id: provider.id, course_id: provider.courses.first.id)
+    support_course_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id, course_id: provider.courses.first.id)
   end
 
   def course_code

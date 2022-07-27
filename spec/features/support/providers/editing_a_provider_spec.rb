@@ -39,7 +39,7 @@ private
   end
 
   def when_i_visit_the_support_provider_show_page
-    support_provider_show_page.load(id: @provider.id)
+    support_provider_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @provider.id)
   end
 
   def then_i_can_view_provider_details
@@ -53,7 +53,7 @@ private
   end
 
   def then_i_am_on_the_support_provider_edit_page
-    support_provider_edit_page.load(id: @provider.id)
+    support_provider_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @provider.id)
   end
 
   def when_i_fill_in_a_valid_provider_name
