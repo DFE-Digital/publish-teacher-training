@@ -43,6 +43,13 @@ end
 
 Change `program_type` to the preferred value on the course record.
 
+```ruby
+course = RecruitmentCycle.current.providers.find_by(provider_code: "2A5").courses.find_by(course_code: "P843")
+course.update(program_type: :school_direct_salaried_training_programme)
+# Don't forget to clear out values for other fields
+course.enrichments.max_by(&:created_at).update(fee_details: nil, fee_uk_eu: nil, fee_international: nil, financial_support: nil)
+```
+
 ## Changing provider to a different type (eg scitt to sd)
 
 Change `provider_type` to the preferred value on the provider record.
