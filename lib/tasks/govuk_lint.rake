@@ -12,4 +12,10 @@ namespace :lint do
     puts "Linting erb files..."
     system("bundle exec erblint app") || exit($CHILD_STATUS.exitstatus)
   end
+
+  desc "Lint javascript files"
+  task js: :environment do
+    puts "Linting javascript files..."
+    system("yarn run standard:fix") || exit($CHILD_STATUS.exitstatus)
+  end
 end
