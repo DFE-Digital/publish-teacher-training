@@ -13,7 +13,7 @@ module Support
     def create
       @provider = Provider.new(create_provider_params)
       if @provider.save
-        redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: "Provider was successfully created" }
       else
         render :new
       end
@@ -30,7 +30,7 @@ module Support
 
     def update
       if provider.update(update_provider_params)
-        redirect_to support_provider_path(provider), flash: { success: t("support.flash.updated", resource: "Provider") }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Provider") }
       else
         render :edit
       end

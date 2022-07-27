@@ -1,5 +1,5 @@
 <%= render TabNavigation::View.new(items: [
-  { name: "Providers", url: support_providers_path },
+  { name: "Providers", url: support_recruitment_cycle_providers_path(params[:recruitment_cycle_year].to_i) },
   { name: "Users", url: support_users_path },
   { name: "PE Allocations", url: support_allocations_path },
 ]) %>

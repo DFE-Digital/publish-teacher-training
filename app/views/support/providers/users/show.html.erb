@@ -3,7 +3,7 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: "Back",
-    href: support_provider_users_path,
+    href: support_recruitment_cycle_provider_users_path,
   ) %>
 <% end %>
 
@@ -18,19 +18,19 @@
           component.row do |row|
             row.key { "First name" }
             row.value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
-            row.action(text: t("change"), href: edit_support_provider_user_path(@provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
+            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
           end
 
           component.row do |row|
             row.key { "Last name" }
             row.value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
-            row.action(text: t("change"), href: edit_support_provider_user_path(@provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
+            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
           end
 
           component.row do |row|
             row.key { "Email address" }
             row.value(text: @provider_user.email, html_attributes: { id: "email" })
-            row.action(text: t("change"), href: edit_support_provider_user_path(@provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
+            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
           end
 
           component.row do |row|
@@ -47,7 +47,7 @@
         end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Remove user", delete_support_provider_user_path, class: "app-link--destructive") %>
+      <%= govuk_link_to("Remove user", delete_support_recruitment_cycle_provider_user_path, class: "app-link--destructive") %>
     </p>
   </div>
 </div>

@@ -3,7 +3,7 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: "Back",
-    href: support_provider_user_path(@provider, @provider_user),
+    href: support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, @provider_user),
   ) %>
 <% end %>
 
@@ -23,12 +23,12 @@
     </div>
 
     <%= govuk_button_to "Remove user",
-        delete_support_provider_user_path(@provider, @provider_user),
+        delete_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, @provider_user),
         method: :delete,
         class: "govuk-button--warning" %>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Cancel", support_provider_user_path(@provider, @provider_user)) %>
+      <%= govuk_link_to("Cancel", support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, @provider_user)) %>
     </p>
   </div>
 </div>
