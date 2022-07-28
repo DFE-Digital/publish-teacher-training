@@ -6,13 +6,14 @@ module AllocationRecordCard
     delegate :provider, :accredited_body, to: :allocation
     delegate :provider_name, to: :provider
 
-    attr_reader :allocation, :heading_level
+    attr_reader :allocation, :heading_level, :recruitment_cycle_year
 
-    def initialize(heading_level = 3, allocation:, allocation_iteration:)
+    def initialize(heading_level = 3, allocation:, allocation_iteration:, recruitment_cycle_year:)
       super
       @allocation = allocation
       @heading_level = heading_level
       @iteration = allocation_iteration
+      @recruitment_cycle_year = recruitment_cycle_year
     end
 
     def provider_code
