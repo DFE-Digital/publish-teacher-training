@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Get values for current commit (Push)
       if: github.event_name == 'push'
@@ -143,7 +143,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set environment variables
       run: |
@@ -219,7 +219,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy App to Review
         id: deploy_review
@@ -258,7 +258,7 @@ jobs:
         environment: [qa,staging]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy App to ${{ matrix.environment }}
         id: deploy_app_before_production
@@ -280,7 +280,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy App to production
         id: deploy_app
@@ -302,7 +302,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy App to sandbox
         id: deploy_sandbox

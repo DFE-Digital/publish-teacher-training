@@ -48,7 +48,7 @@ runs:
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup Terraform v1.2.3
       uses: hashicorp/setup-terraform@v1.2.1
