@@ -25,7 +25,7 @@ private
   end
 
   def when_i_visit_the_support_allocation_uplift_new_page
-    support_allocation_uplift_new_page.load(allocation_id: @allocation.id)
+    support_allocation_uplift_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, allocation_id: @allocation.id)
   end
 
   def then_i_can_create_an_uplift
