@@ -23,7 +23,7 @@ jobs:
     concurrency: smoke-tests-${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Run Smoke Tests for ${{ github.event.inputs.environment }}
         uses: ./.github/actions/smoke-test/
