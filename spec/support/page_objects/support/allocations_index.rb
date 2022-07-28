@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class AllocationsIndex < PageObjects::Base
-      set_url "/support/allocations"
+      set_url "/support/{recruitment_cycle_year}/allocations"
 
       # Filter elements
       element :apply_filters, "input.govuk-button"

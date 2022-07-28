@@ -21,7 +21,7 @@ private
   end
 
   def when_i_visit_the_support_allocations_show_page
-    support_allocations_show_page.load(id: @allocation.id)
+    support_allocations_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @allocation.id)
   end
 
   def then_i_see_the_provider_and_their_allocations

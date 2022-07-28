@@ -21,7 +21,7 @@ feature "View allocations" do
   end
 
   def when_i_visit_the_support_allocations_index_page
-    support_allocations_index_page.load
+    support_allocations_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_see_the_providers_and_their_allocations
