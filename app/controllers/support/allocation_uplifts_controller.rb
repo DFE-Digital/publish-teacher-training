@@ -12,7 +12,7 @@ module Support
       @allocation_uplift = AllocationUplift.new(create_allocation_uplift_params)
       @allocation_uplift.allocation = allocation
       if @allocation_uplift.save
-        redirect_to support_allocation_path(@allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully created" }
+        redirect_to support_recruitment_cycle_allocation_path(params[:recruitment_cycle_year], @allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully created" }
       else
         render :new
       end
@@ -20,7 +20,7 @@ module Support
 
     def update
       if allocation_uplift.update(update_allocation_uplift_params)
-        redirect_to support_allocation_path(allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully updated" }
+        redirect_to support_recruitment_cycle_allocation_path(params[:recruitment_cycle_year], allocation_uplift.allocation), flash: { success: "Allocation Uplift was successfully updated" }
       else
         render :edit
       end
