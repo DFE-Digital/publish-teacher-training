@@ -61,7 +61,7 @@ module Support
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit).permit(:text_search, :page, :commit, user_type: [])
+      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:text_search, :page, :commit, user_type: [])
     end
   end
 end
