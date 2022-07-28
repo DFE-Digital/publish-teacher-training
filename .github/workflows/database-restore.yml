@@ -117,7 +117,7 @@ jobs:
          INSTALL_CONDUIT: true
 
       - name: Download Sanitised Backup
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: backup_sanitised
 
