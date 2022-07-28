@@ -33,7 +33,7 @@ private
   end
 
   def when_i_visit_the_support_user_edit_page
-    support_user_edit_page.load(id: @user.id)
+    support_user_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.id)
   end
 
   def and_i_fill_in_correct_details

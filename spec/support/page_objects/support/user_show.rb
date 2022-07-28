@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class UserShow < PageObjects::Base
-      set_url "/support/users/{id}"
+      set_url "/support/{recruitment_cycle_year}/users/{id}"
 
       element :delete_button, ".govuk-button", text: "Delete this user"
       element :first_name, "#first_name"

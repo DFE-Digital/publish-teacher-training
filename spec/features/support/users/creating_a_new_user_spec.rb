@@ -32,7 +32,7 @@ feature "Creating a new user" do
   end
 
   def when_i_visit_the_user_index_page
-    support_users_index_page.load
+    support_users_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def and_i_click_on_add_a_user
@@ -40,7 +40,7 @@ feature "Creating a new user" do
   end
 
   def then_i_am_taken_to_the_support_user_new_page
-    support_user_new_page.load
+    support_user_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def and_i_fill_in_first_name
@@ -60,7 +60,7 @@ feature "Creating a new user" do
   end
 
   def then_i_am_taken_to_the_user_index_page
-    support_users_index_page.load
+    support_users_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_should_see_the_error_summary
