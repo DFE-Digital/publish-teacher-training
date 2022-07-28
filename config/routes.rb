@@ -233,7 +233,7 @@ Rails.application.routes.draw do
   end
 
   namespace :support do
-    get "/" => redirect("/support/#{Settings.current_recruitment_cycle_year}/providers")
+    get "/", to: "recruitment_cycle#index"
 
     resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
       resources :providers, except: %i[destroy] do
