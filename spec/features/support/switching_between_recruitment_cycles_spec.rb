@@ -17,8 +17,24 @@ feature "Support index" do
     i_should_be_on_the_next_cycle_page
   end
 
+  scenario "viewing providers page when not in rollover" do
+    given_we_are_not_in_rollover
+    and_there_are_two_recruitment_cycles
+    and_i_am_authenticated_as_an_admin_user
+    when_i_visit_the_support_index_page
+    then_i_should_be_on_the_support_providers_page
+  end
+
+  def then_i_should_be_on_the_support_providers_page
+    expect(support_provider_index_page).to be_displayed
+  end
+
   def given_we_are_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+  end
+
+  def given_we_are_not_in_rollover
+    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
   end
 
   def and_there_are_two_recruitment_cycles
