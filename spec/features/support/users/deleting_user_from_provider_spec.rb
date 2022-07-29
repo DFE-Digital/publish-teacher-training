@@ -24,7 +24,7 @@ private
   end
 
   def when_i_visit_the_user_show_providers_page
-    support_user_show_providers_page.load(id: @user.id)
+    support_user_show_providers_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.id)
   end
 
   def when_i_click_the_remove_user_from_provider_button

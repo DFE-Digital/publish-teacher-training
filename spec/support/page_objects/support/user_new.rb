@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class UserNew < PageObjects::Base
-      set_url "/support/users/new"
+      set_url "/support/{recruitment_cycle_year}/users/new"
 
       element :first_name, "#user-first-name-field"
       element :last_name, "#user-last-name-field"

@@ -3,14 +3,14 @@
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: "User record",
-    href: support_user_path(@user),
+    href: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
   ) %>
 <% end %>
 
 <h1 class="govuk-heading-l">Edit user details</h1>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= form_with model: [:support, @user], local: true do |f| %>
+      <%= form_with model: @user, url: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), local: true do |f| %>
 
         <%= f.govuk_error_summary %>
 
@@ -26,7 +26,7 @@
       <% end %>
 
       <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), support_user_path) %>
+        <%= govuk_link_to(t("cancel"), support_recruitment_cycle_user_path(params[:recruitment_cycle_year])) %>
       </p>
     </div>
   </div>
