@@ -59,6 +59,9 @@
           <%= render PhaseBanner::View.new %>
         <% end %>
         <%= yield :navigation_bar %>
+        <% if params[:controller].start_with?("support") %>
+          <%= render SupportTitleBar::View.new %>
+        <% end %>
         <%= yield :breadcrumbs %>
       </div>
 

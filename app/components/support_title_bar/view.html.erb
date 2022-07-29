@@ -1,0 +1,22 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <div class="title-bar" aria-label="Organisation switcher">
+      <% if rollover_active? && !support_index_page %>
+        <div class="title-bar__title">
+          <%= title %>
+        </div>
+
+        <div class="title-bar__actions">
+            <ul class="title-bar__actions-list">
+              <% change_items.each do |item| item %>
+                <li class="title-bar__actions-list-item">
+                  <%= item %>
+              <% end %>
+              </li>
+            </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
