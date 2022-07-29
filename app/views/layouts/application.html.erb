@@ -59,6 +59,9 @@
           <%= render PhaseBanner::View.new %>
         <% end %>
         <%= yield :navigation_bar %>
+        <% if params[:controller].start_with?("support") %>
+          <%= render SupportTitleBar::View.new %>
+        <% end %>
         <%= yield :breadcrumbs %>
       </div>
 
@@ -67,10 +70,6 @@
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
            <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
           <% end %>
-        <% end %>
-
-        <% if params[:controller].start_with?("support") %>
-          <%= render SupportTitleBar::View.new %>
         <% end %>
       </div>
 
