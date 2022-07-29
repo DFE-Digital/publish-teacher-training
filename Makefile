@@ -80,8 +80,8 @@ production: ## Set DEPLOY_ENV to production
 .PHONY: loadtest
 loadtest: ## Set DEPLOY_ENV to loadtest
 	$(eval DEPLOY_ENV=loadtest)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
-	$(eval space=bat-qa)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
+	$(eval space=bat-prod)
 	$(eval paas_env=loadtest)
 
 .PHONY: ci

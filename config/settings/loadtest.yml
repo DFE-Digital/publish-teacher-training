@@ -1,18 +1,25 @@
 gcp_api_key: please_change_me
 publish_api_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
-publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
-find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+publish_url: https://publish-loadtest.london.cloudapps.digital
+find_url: https://find-loadtest.london.cloudapps.digital
 
-# URL of this app for the callback after sigining in
-base_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
+# URL of this app for the callback after signing in
+base_url: https://publish-loadtest.london.cloudapps.digital
 
-bg_jobs:
-  save_statistic:
-    cron: "0 0 * * *" # daily at midnight
-    class: "SaveStatisticJob"
-    queue: save_statistic
-skylight:
-  enable: true
+search_ui:
+  base_url: https://find-loadtest.london.cloudapps.digital
+
 environment:
   label: "Load test"
   name: "loadtest"
+
+features:
+  send_request_data_to_bigquery: false
+
+authentication:
+  mode: persona
+
+govuk_notify:
+  api_key: cafe-cafecafe-cafe-cafe-cafe-cafecafecafe-cafecafe-cafe-cafe-cafe-cafecafecafe
+
+system_authentication_token: "Ge32"
