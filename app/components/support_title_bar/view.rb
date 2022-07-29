@@ -47,6 +47,5 @@ module SupportTitleBar
     def support_index_page
       request.path == "/support"
     end
-
   end
 end
