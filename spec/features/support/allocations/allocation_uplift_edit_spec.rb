@@ -25,7 +25,7 @@ private
   end
 
   def when_i_visit_the_support_allocation_uplift_edit_page
-    support_allocation_uplift_edit_page.load(uplift_id: @allocation.allocation_uplift.id, allocation_id: @allocation.id)
+    support_allocation_uplift_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, uplift_id: @allocation.allocation_uplift.id, allocation_id: @allocation.id)
   end
 
   def then_i_can_edit_their_allocation_uplift_amount
@@ -38,7 +38,7 @@ private
   end
 
   def and_i_get_redirected_to_allocation_show_page
-    expect(support_allocations_show_page).to be_displayed(id: @allocation.id)
+    expect(support_allocations_show_page).to be_displayed(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @allocation.id)
   end
 
   def with_a_success_message

@@ -36,7 +36,7 @@ private
   end
 
   def when_i_visit_the_support_allocations_index_page
-    support_allocations_index_page.load
+    support_allocations_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def then_i_can_search_by_allocation_provider_name

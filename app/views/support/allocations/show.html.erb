@@ -3,7 +3,7 @@
 <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
       text: "All Allocation records",
-      href: support_allocations_path,
+      href: support_recruitment_cycle_allocations_path(params[:recruitment_cycle_year]),
     ) %>
 <% end %>
 
@@ -44,9 +44,9 @@
         row.key { "Allocation Uplifts" }
         row.value { @allocation.allocation_uplift&.uplifts.to_i.to_s }
         if @allocation.allocation_uplift.nil?
-          row.action(text: "Change", href: new_support_allocation_uplift_path(allocation_id: @allocation.id))
+          row.action(text: "Change", href: new_support_recruitment_cycle_allocation_uplift_path(params[:recruitment_cycle_year], allocation_id: @allocation.id))
         else
-          row.action(text: "Change", href: edit_support_allocation_uplift_path(allocation_id: @allocation.id, id: @allocation.allocation_uplift&.id))
+          row.action(text: "Change", href: edit_support_recruitment_cycle_allocation_uplift_path(params[:recruitment_cycle_year], allocation_id: @allocation.id, id: @allocation.allocation_uplift&.id))
         end
       end
     end %>

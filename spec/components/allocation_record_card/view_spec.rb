@@ -11,7 +11,7 @@ module AllocationRecordCard
     let(:accredited_body) { allocation.accredited_body }
 
     before do
-      render_inline(described_class.with_collection([allocation]))
+      render_inline(described_class.with_collection([allocation], recruitment_cycle_year: Settings.current_recruitment_cycle_year))
     end
 
     it "renders all the correct details" do

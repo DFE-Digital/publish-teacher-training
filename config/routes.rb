@@ -252,13 +252,13 @@ Rails.application.routes.draw do
           resource :providers, on: :member, only: %i[show]
         end
       end
+
+      resources :allocations, only: %i[index show] do
+        resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
+      end
     end
 
     resources :user_permissions, only: %i[destroy]
-
-    resources :allocations, only: %i[index show] do
-      resources :uplifts, only: %i[edit update create new], controller: :allocation_uplifts
-    end
 
     resources :data_exports, path: "data-exports", only: [:index] do
       member do
