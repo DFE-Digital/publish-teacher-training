@@ -3,13 +3,13 @@
 <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
       text: "All Provider records",
-      href: support_providers_path,
+      href: support_recruitment_cycle_providers_path,
     ) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: [:support, @provider], local: true do |f| %>
+    <%= form_with model: [:support_recruitment_cycle, @provider], local: true do |f| %>
 
       <% if @provider.errors.size > 0 %>
         <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary">
@@ -30,7 +30,7 @@
             <% @provider_errors.each do |provider_error| %>
               <% if @provider.errors.attribute_names.any? { |s| s[/^#{Regexp.quote(provider_error.to_s)}$/] } %>
                 <li>
-                  <%= link_to @provider.errors[provider_error][0], support_providers_path(anchor: "provider-#{provider_error.to_s.gsub('_', '-')}-field-error") %>
+                  <%= link_to @provider.errors[provider_error][0], support_recruitment_cycle_providers_path(anchor: "provider-#{provider_error.to_s.gsub('_', '-')}-field-error") %>
                 </li>
               <% end %>
             <% end %>
@@ -110,6 +110,6 @@
       <%= f.govuk_submit %>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), support_providers_path) %>
+    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_providers_path) %>
   </div>
 </div>

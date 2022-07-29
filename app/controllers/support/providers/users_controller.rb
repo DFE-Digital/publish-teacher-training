@@ -17,7 +17,7 @@ module Support
       def destroy
         UserAssociationsService::Delete.call(user: provider_user, providers: provider)
         flash[:success] = I18n.t("success.user_removed")
-        redirect_to support_provider_users_path(provider)
+        redirect_to support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       end
 
       def new
@@ -36,7 +36,7 @@ module Support
         provider
         @user_form = UserForm.new(current_user, provider_user, params: user_params)
         if @user_form.save!
-          redirect_to support_provider_user_path(provider)
+          redirect_to support_recruitment_cycle_provider_user_path(provider.recruitment_cycle_year, provider)
           flash[:success] = "User updated"
         else
           render(:edit)
@@ -47,7 +47,7 @@ module Support
         provider
         @user_form = UserForm.new(current_user, user, params: user_params)
         if @user_form.stash
-          redirect_to support_provider_check_user_path
+          redirect_to support_recruitment_cycle_provider_check_user_path
         else
           render(:new)
         end

@@ -3,13 +3,13 @@
 <% content_for :before_content do %>
   <%= render GovukComponent::BackLinkComponent.new(
     text: t("back"),
-    href: support_provider_users_path,
+    href: support_recruitment_cycle_provider_users_path,
   ) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= form_with(model: @user_form, url: support_provider_users_path, local: true) do |f| %>
+      <%= form_with(model: @user_form, url: support_recruitment_cycle_provider_users_path, local: true) do |f| %>
       <%= f.govuk_error_summary %>
 
       <fieldset class="govuk-fieldset">
@@ -26,6 +26,6 @@
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), support_provider_users_path) %>
+    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_users_path) %>
   </div>
 </div>

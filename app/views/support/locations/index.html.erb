@@ -1,6 +1,6 @@
 <%= render PageTitle::View.new(title: "support.providers.locations.index") %>
 
-<%= govuk_link_to("Add location", new_support_provider_location_path, class: "govuk-button govuk-!-margin-bottom-3") %>
+<%= govuk_link_to("Add location", new_support_recruitment_cycle_provider_location_path, class: "govuk-button govuk-!-margin-bottom-3") %>
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
@@ -17,7 +17,7 @@
         <tr class="govuk-table__row location-row">
           <td class="govuk-table__cell name">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= govuk_link_to site.location_name, edit_support_provider_location_path(@provider, site) %>
+              <%= govuk_link_to site.location_name, edit_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, site) %>
             </span>
           </td>
           <td class="govuk-table__cell code">

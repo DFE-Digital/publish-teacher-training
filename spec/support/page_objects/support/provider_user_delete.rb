@@ -3,7 +3,7 @@
 module PageObjects
   module Support
     class ProviderUserDelete < PageObjects::Base
-      set_url "/support/providers/{provider_id}/users/{id}/delete"
+      set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/users/{id}/delete"
 
       element :heading, "h1"
       element :warning_text, ".govuk-warning-text"

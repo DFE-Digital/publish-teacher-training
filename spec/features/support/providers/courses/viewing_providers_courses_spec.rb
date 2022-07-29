@@ -25,7 +25,7 @@ private
   end
 
   def when_i_visit_the_support_courses_index_page
-    support_courses_index_page.load(provider_id: provider.id)
+    support_courses_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: provider.id)
   end
 
   def then_i_am_redirected_to_the_providers_page

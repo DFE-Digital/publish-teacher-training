@@ -43,7 +43,7 @@ feature "Adding user to provider as an admin", { can_edit_current_and_next_cycle
   end
 
   def given_i_visit_the_support_provider_users_index_page
-    visit support_provider_users_path(provider_id: @provider.id)
+    support_provider_users_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
   end
 
   def and_i_continue
@@ -51,7 +51,7 @@ feature "Adding user to provider as an admin", { can_edit_current_and_next_cycle
   end
 
   def given_i_visit_the_support_provider_users_new_page
-    support_users_new_page.load(provider_id: @provider.id)
+    support_users_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
   end
 
   def and_i_fill_in_first_name

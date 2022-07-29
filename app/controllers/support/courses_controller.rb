@@ -5,7 +5,7 @@ module Support
       render layout: "provider_record"
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = "Provider not found"
-      redirect_to support_providers_path
+      redirect_to support_recruitment_cycle_providers_path
     end
 
     def edit
@@ -17,7 +17,7 @@ module Support
       @edit_course_form.assign_attributes(update_course_params)
 
       if @edit_course_form.save
-        redirect_to support_provider_courses_path(provider), flash: { success: t("support.flash.updated", resource: "Course") }
+        redirect_to support_recruitment_cycle_provider_courses_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Course") }
       else
         render :edit
       end

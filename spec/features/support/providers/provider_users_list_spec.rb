@@ -18,7 +18,7 @@ feature "View provider users" do
   end
 
   def when_i_visit_the_support_provider_show_page
-    support_provider_show_page.load(id: @provider.id)
+    support_provider_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @provider.id)
   end
 
   def and_click_on_the_users_tab

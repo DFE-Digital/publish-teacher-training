@@ -11,7 +11,7 @@
       <tr class="govuk-table__row user-row">
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= govuk_link_to(user.full_name, support_provider_user_path(@provider, user), class: "govuk-heading-s govuk-!-margin-bottom-0") %>
+              <%= govuk_link_to(user.full_name, support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, user), class: "govuk-heading-s govuk-!-margin-bottom-0") %>
           </span>
         </td>
 

@@ -1,11 +1,11 @@
 <%= render PageTitle::View.new(title: t("support.providers.users.check")) %>
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_support_provider_user_path) %>
+  <%= govuk_back_link_to(new_support_recruitment_cycle_provider_user_path) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @user_form, url: support_provider_check_user_path, method: :put, local: true) do |f| %>
+    <%= form_with(model: @user_form, url: support_recruitment_cycle_provider_check_user_path(@provider.recruitment_cycle_year, @provider), method: :put, local: true) do |f| %>
 
       <%= f.hidden_field(:email, value: @user_form.email) %>
 
@@ -17,19 +17,19 @@
           component.row do |row|
             row.key { t("support.providers.users.first_name") }
             row.value(text:  @user_form.first_name)
-            row.action(text: t("change"), href: new_support_provider_user_path(@provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
+            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
           end
 
           component.row do |row|
             row.key { t("support.providers.users.last_name") }
             row.value(text: @user_form.last_name)
-            row.action(text: t("change"), href: new_support_provider_user_path(@provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
+            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
           end
 
           component.row do |row|
             row.key { t("support.providers.users.email") }
             row.value(text: @user_form.email)
-            row.action(text: t("change"), href: new_support_provider_user_path(@provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
+            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
           end
         end %>
 
@@ -40,6 +40,6 @@
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), support_provider_users_path) %>
+    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_users_path) %>
   </div>
 </div>

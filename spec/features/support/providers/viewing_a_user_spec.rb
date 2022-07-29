@@ -30,7 +30,7 @@ feature "Viewing a user" do
 private
 
   def when_i_visit_the_support_provider_show_page
-    support_provider_show_page.load(id: @user.providers.first.id)
+    support_provider_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.providers.first.id)
   end
 
   def and_there_is_a_user(user = nil)
@@ -62,12 +62,12 @@ private
     expect(support_provider_user_show_page.first_name.text).to eq(@user.first_name)
     expect(support_provider_user_show_page.last_name.text).to eq(@user.last_name)
     expect(support_provider_user_show_page.email.text).to eq(@user.email)
-    expect(support_provider_user_show_page.organisations.text).to eq(@user.providers.pluck(:provider_name).join)
+    expect(support_provider_user_show_page.organisations.text).to eq(@user.providers.pluck(:provider_name).sort.join)
   end
 
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
     expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
-    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_provider_user_path(@user.providers.first, @user))
+    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_recruitment_cycle_provider_user_path(Settings.current_recruitment_cycle_year, @user.providers.first, @user))
   end
 end

@@ -13,7 +13,7 @@ module Support
     def create
       @provider = Provider.new(create_provider_params)
       if @provider.save
-        redirect_to support_provider_path(provider), flash: { success: "Provider was successfully created" }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: "Provider was successfully created" }
       else
         render :new
       end
@@ -30,7 +30,7 @@ module Support
 
     def update
       if provider.update(update_provider_params)
-        redirect_to support_provider_path(provider), flash: { success: t("support.flash.updated", resource: "Provider") }
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Provider") }
       else
         render :edit
       end
@@ -43,20 +43,24 @@ module Support
 
   private
 
+    def recruitment_cycle
+      @recruitment_cycle ||= RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
+    end
+
     def filtered_providers
       @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params:)
     end
 
     def find_providers
-      RecruitmentCycle.current.providers.order(:provider_name).includes(:courses, :users)
+      recruitment_cycle.providers.order(:provider_name).includes(:courses, :users)
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit).permit(:provider_search, :course_search, :page)
+      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:provider_search, :course_search, :page)
     end
 
     def provider
-      @provider ||= Provider.find(params[:id])
+      @provider ||= recruitment_cycle.providers.find(params[:id])
     end
 
     def update_provider_params
@@ -79,7 +83,7 @@ module Support
                                          address3
                                          address4
                                          postcode],
-        organisations_attributes: %i[name]).merge(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle)
+        organisations_attributes: %i[name]).merge(recruitment_cycle:)
     end
   end
 end

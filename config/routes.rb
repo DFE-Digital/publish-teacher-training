@@ -233,18 +233,20 @@ Rails.application.routes.draw do
   end
 
   namespace :support do
-    get "/" => redirect("/support/providers")
+    get "/" => redirect("/support/#{Settings.current_recruitment_cycle_year}/providers")
 
-    resources :providers, except: %i[destroy] do
-      resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
-      resources :users, controller: "providers/users" do
-        member do
-          get :delete
-          delete :delete, to: "providers/users#destroy"
+    resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
+      resources :providers, except: %i[destroy] do
+        resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
+        resources :users, controller: "providers/users" do
+          member do
+            get :delete
+            delete :delete, to: "providers/users#destroy"
+          end
         end
+        resources :courses, only: %i[index edit update]
+        resources :locations
       end
-      resources :courses, only: %i[index edit update]
-      resources :locations
     end
     resources :users do
       scope module: :users do

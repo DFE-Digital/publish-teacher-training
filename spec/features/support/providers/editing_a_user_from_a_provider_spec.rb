@@ -35,7 +35,7 @@ private
   end
 
   def and_i_visit_the_support_provider_user_show_page
-    support_provider_user_show_page.load(id: @user.id, provider_id: @provider.id)
+    support_provider_user_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.id, provider_id: @provider.id)
   end
 
   def when_i_click_the_change_firstname_link

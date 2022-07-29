@@ -4,10 +4,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= render partial: "form", locals: { site: @site, form_url: support_provider_locations_path } %>
+    <%= render partial: "form", locals: { site: @site, form_url: support_recruitment_cycle_provider_locations_path } %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_provider_locations_path) %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_locations_path) %>
     </p>
 
     <% if @site.persisted? %>
