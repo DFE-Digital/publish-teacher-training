@@ -581,3 +581,9 @@ en:
         You’ve <span class="decision">rejected</span> analytics cookies.
         You can %{cookie_preferences_link} at any time.
       button_text_html: Hide this <span class="govuk-visually-hidden">cookies</span> message
+  get_into_teaching:
+    tel: 0800 389 2500
+    opening_times: "Monday to Friday, 8.30am to 5.30pm"
+    url_get_an_advisor: https://adviser-getintoteaching.education.gov.uk
+    url_online_chat: https://getintoteaching.education.gov.uk/#talk-to-us
+    url_ways_to_train: https://getintoteaching.education.gov.uk/ways-to-train

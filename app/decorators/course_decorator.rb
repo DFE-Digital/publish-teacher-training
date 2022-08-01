@@ -179,7 +179,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def use_financial_support_placeholder?
-    course.recruitment_cycle.year.to_i == Settings.financial_support_placeholder_cycle
+    next_cycle?
   end
 
   def cycle_range
@@ -233,7 +233,7 @@ class CourseDecorator < ApplicationDecorator
     if is_further_education?
       "How teaching placements work"
     else
-      "How school placements work"
+      "School placements"
     end
   end
 

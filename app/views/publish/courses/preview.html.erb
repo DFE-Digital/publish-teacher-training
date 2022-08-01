@@ -59,16 +59,17 @@
       <li><%= govuk_link_to "Course summary", "#section-about" %></li>
       <li><%= govuk_link_to course.placements_heading, "#section-schools" %></li>
       <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
-      <li><%= govuk_link_to "About the training provider", "#section-about-provider" %></li>
       <% if course.salaried? %>
         <li><%= govuk_link_to "Salary", "#section-salary" %></li>
       <% end %>
-      <li><%= govuk_link_to "Fees and financial support", "#section-fees-and-financial-support" %></li>
+      <li><%= govuk_link_to "About the training provider", "#section-about-provider" %></li>
+      <li><%= govuk_link_to "Fees and financial support", "#section-financial-support" %></li>
       <% if course.interview_process.present? %>
         <li><%= govuk_link_to "Interview process", "#section-interviews" %></li>
       <% end %>
+      <li><%= govuk_link_to "International candidates", "#section-international-students" %></li>
       <li><%= govuk_link_to "Training with disabilities and other needs", "#section-train-with-disabilities" %></li>
-      <li><%= govuk_link_to "Contact details", "#section-contact" %></li>
+      <li><%= govuk_link_to "Contact this training provider", "#section-contact" %></li>
       <li><%= govuk_link_to "Support and advice", "#section-advice" %></li>
       <li><%= govuk_link_to "Apply", "#section-apply" %></li>
     </ul>
@@ -79,14 +80,12 @@
     <% if course.salaried? %>
       <%= render partial: "publish/courses/preview/salary" %>
     <% end %>
-    <%= render partial: "publish/courses/preview/fees_and_financial_support" %>
     <%= render partial: "publish/courses/preview/about_the_provider" %>
+    <%= render partial: "publish/courses/preview/fees_and_financial_support" %>
     <% if course.interview_process.present? %>
       <%= render partial: "publish/courses/preview/interview_process" %>
     <% end %>
-    <% if Providers::VisaSponsorshipService.new(@provider).visa_sponsorship_enabled? %>
-      <%= render partial: "publish/courses/preview/international_students" %>
-    <% end %>
+    <%= render InternationalStudentsPreview::View.new(course:) %>
     <%= render partial: "publish/courses/preview/train_with_disabilities" %>
     <%= render partial: "publish/courses/preview/contact_details" %>
     <%= render partial: "publish/courses/preview/advice" %>
