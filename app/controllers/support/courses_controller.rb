@@ -25,8 +25,12 @@ module Support
 
   private
 
+    def recruitment_cycle
+      @recruitment_cycle ||= RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
+    end
+
     def provider
-      @provider ||= RecruitmentCycle.current.providers.find(params[:provider_id])
+      @provider ||= recruitment_cycle.providers.find(params[:provider_id])
     end
 
     def course
