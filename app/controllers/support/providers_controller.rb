@@ -43,10 +43,6 @@ module Support
 
   private
 
-    def recruitment_cycle
-      @recruitment_cycle ||= RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
-    end
-
     def filtered_providers
       @filtered_providers ||= Support::Filter.call(model_data_scope: find_providers, filter_params:)
     end

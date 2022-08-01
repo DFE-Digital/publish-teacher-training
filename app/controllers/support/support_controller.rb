@@ -10,5 +10,9 @@ module Support
         render "errors/forbidden", status: :forbidden, formats: :html
       end
     end
+
+    def recruitment_cycle
+      @recruitment_cycle ||= RecruitmentCycle.find_by(year: params.fetch(:recruitment_cycle_year))
+    end
   end
 end
