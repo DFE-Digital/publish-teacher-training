@@ -191,6 +191,9 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
   gem "fakefs", require: "fakefs/safe"
   gem "faker"
+
+  # For benchmarking
+  gem "benchmark-ips"
 end
 
 group :development do

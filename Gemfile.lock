@@ -126,6 +126,7 @@ GEM
     audited (5.0.2)
       activerecord (>= 5.0, < 7.1)
     awesome_print (1.9.2)
+    benchmark-ips (2.10.0)
     better_errors (2.9.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -707,6 +708,7 @@ DEPENDENCIES
   amazing_print
   audited (~> 5.0)
   awesome_print
+  benchmark-ips
   better_errors
   binding_of_caller
   bootsnap (>= 1.1.0)
