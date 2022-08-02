@@ -110,6 +110,8 @@ en:
         new: "User not found"
         personas: Teacher Training API Personas
       support:
+        rollover:
+          index: "Recruitment Cycles"
         providers:
           index: "Providers"
           new: "Add a provider"
