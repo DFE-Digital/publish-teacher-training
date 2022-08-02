@@ -44,7 +44,7 @@ module Support
   private
 
     def provider
-      @provider ||= RecruitmentCycle.current.providers.find(params[:provider_id])
+      @provider ||= recruitment_cycle.providers.find(params[:provider_id])
     end
 
     def flash_resource
