@@ -1,6 +1,5 @@
 module UserAssociationsService
   class Create
-
     attr_reader :provider, :user, :all_providers
 
     class << self
