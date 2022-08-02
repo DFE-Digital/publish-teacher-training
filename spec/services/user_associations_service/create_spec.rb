@@ -83,17 +83,6 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
           expect(UserNotification.where(user_id: user.id).count).to eq(0)
         end
       end
-
-      context "during rollover", { can_edit_current_and_next_cycles: true } do
-        let!(:next_new_accredited_body) { create(:provider, :accredited_body, :next_recruitment_cycle, provider_code: "AAA") }
-
-        it "creates user_permissions association in both cycles" do
-          subject
-          expect(new_accredited_body.users).to eq([user])
-          expect(next_new_accredited_body.users).to eq([user])
-          expect(user.providers).to include(accredited_body, new_accredited_body, next_new_accredited_body)
-        end
-      end
     end
 
     context "when adding to all providers" do
