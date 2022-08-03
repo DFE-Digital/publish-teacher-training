@@ -21,12 +21,27 @@ private
   end
 
   def status_tags
+    object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
+  end
+
+  def status_tags_for_vacancies
     {
-      published: { text: "Published", colour: "green" },
+      published: { text: "Open", colour: "turquoise" },
       withdrawn: { text: "Withdrawn", colour: "red" },
       empty: { text: "Empty", colour: "grey" },
       draft: { text: "Draft", colour: "grey" },
-      published_with_unpublished_changes: { text: "Published&nbsp;*", colour: "green" },
+      published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "turquoise" },
+      rolled_over: { text: "Rolled over", colour: "yellow" },
+    }
+  end
+
+  def status_tags_for_no_vacancies
+    {
+      published: { text: "Closed", colour: "purple" },
+      withdrawn: { text: "Withdrawn", colour: "red" },
+      empty: { text: "Empty", colour: "grey" },
+      draft: { text: "Draft", colour: "grey" },
+      published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" },
       rolled_over: { text: "Rolled over", colour: "yellow" },
     }
   end
