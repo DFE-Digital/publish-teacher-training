@@ -1,7 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate, only: %i[
     accessibility
-    cookies
     performance_dashboard
     privacy
     terms
