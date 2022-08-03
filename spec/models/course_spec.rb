@@ -1308,6 +1308,7 @@ describe Course, type: :model do
     let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
     let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
     let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
+    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :with_no_vacancies, site:) }
     let(:site_statuses) { [] }
 
     subject { create(:course, provider:, site_statuses:) }
@@ -1445,157 +1446,29 @@ describe Course, type: :model do
       end
     end
 
-    describe "open_for_applications?" do
-      let(:site_statuses) { [] }
+    describe "#open_for_applications?" do
+      context "findable course with vacancies" do
+        let(:site_statuses) { [findable_with_vacancies] }
 
-      let(:applications_open_from) { Time.now.utc }
-
-      let(:course) do
-        create(:course,
-          site_statuses:,
-          applications_open_from:)
+        its(:open_for_applications?) { is_expected.to be true }
       end
 
-      subject { course }
+      context "non findable course with vacancies" do
+        let(:site_statuses) { [published_discontinued_with_any_vacancy] }
 
-      context "no site statuses" do
-        context "applications_open_from is in present or past" do
-          its(:open_for_applications?) { is_expected.to be false }
-        end
-
-        context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.day }
-
-          its(:open_for_applications?) { is_expected.to be false }
-        end
+        its(:open_for_applications?) { is_expected.to be false }
       end
 
-      context "with site statuses" do
-        context "with only a single findable site statuses" do
-          let(:site_statuses) { [findable] }
+      context "findable course with no vacancies" do
+        let(:site_statuses) { [findable_without_vacancies] }
 
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be true }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
-
-        context "with at least a single findable site statuses" do
-          let(:site_statuses) do
-            [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
-          end
-
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be true }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
-
-        context "with no findable site statuses" do
-          let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
-          end
-
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
-      end
-    end
-
-    describe "open_for_applications? (when site_statuses not loaded)" do
-      let(:site_statuses) { [] }
-
-      let(:applications_open_from) { Time.now.utc }
-
-      let(:course) do
-        create(:course,
-          site_statuses:,
-          applications_open_from:)
+        its(:open_for_applications?) { is_expected.to be false }
       end
 
-      subject {
-        course.reload
-      }
+      context "non findable course with no vacancies" do
+        let(:site_statuses) { [published_discontinued_with_no_vacancies] }
 
-      context "no site statuses" do
-        context "applications_open_from is in present or past" do
-          its(:open_for_applications?) { is_expected.to be false }
-        end
-
-        context "applications_open_from is in future" do
-          let(:applications_open_from) { Time.now.utc + 1.day }
-
-          its(:open_for_applications?) { is_expected.to be false }
-        end
-      end
-
-      context "with site statuses" do
-        context "with only a single findable site statuses" do
-          let(:site_statuses) { [findable] }
-
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be true }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
-
-        context "with at least a single findable site statuses" do
-          let(:site_statuses) do
-            [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
-          end
-
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be true }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
-
-        context "with no findable site statuses" do
-          let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
-          end
-
-          context "applications_open_from is in present or past" do
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-
-          context "applications_open_from is in future" do
-            let(:applications_open_from) { Time.now.utc + 1.day }
-
-            its(:open_for_applications?) { is_expected.to be false }
-          end
-        end
+        its(:open_for_applications?) { is_expected.to be false }
       end
     end
 

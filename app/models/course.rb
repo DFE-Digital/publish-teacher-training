@@ -402,7 +402,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.now.utc && findable?
+    has_vacancies? && findable?
   end
 
   def has_vacancies?
