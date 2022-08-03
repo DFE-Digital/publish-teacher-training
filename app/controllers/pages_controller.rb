@@ -12,8 +12,6 @@ class PagesController < ApplicationController
 
   def accessibility; end
 
-  def cookies; end
-
   def performance_dashboard
     @performance_data = PerformanceDashboardService.call
   end
