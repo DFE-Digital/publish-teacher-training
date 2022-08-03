@@ -631,7 +631,7 @@ describe CourseDecorator do
       let(:course) { build_stubbed(:course) }
 
       it "returns school placements" do
-        expect(decorated_course.placements_heading).to eq("How school placements work")
+        expect(decorated_course.placements_heading).to eq("School placements")
       end
     end
 
