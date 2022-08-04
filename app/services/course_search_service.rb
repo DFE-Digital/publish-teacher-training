@@ -1,4 +1,7 @@
 class CourseSearchService
+  include ServicePattern
+  include CourseSearchOptions
+
   def initialize(
     filter:,
     sort: nil,
@@ -6,13 +9,7 @@ class CourseSearchService
   )
     @filter = filter || {}
     @course_scope = course_scope
-    @sort = Set.new(sort&.split(","))
-  end
-
-  class << self
-    def call(...)
-      new(...).call
-    end
+    @sort = sort
   end
 
   def call
@@ -71,10 +68,6 @@ class CourseSearchService
   private_class_method :new
 
 private
-
-  def expand_university?
-    filter[:expand_university].to_s.downcase == "true"
-  end
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
@@ -156,89 +149,5 @@ private
     courses_table.join(distance_table).on(courses_table[:id].eq(distance_table[:course_id])).join_sources
   end
 
-  def locations_filter?
-    filter.key?(:latitude) &&
-      filter.key?(:longitude) &&
-      filter.key?(:radius)
-  end
-
-  def sort_by_provider_ascending?
-    sort == Set["name", "provider.provider_name"]
-  end
-
-  def sort_by_provider_descending?
-    sort == Set["-name", "-provider.provider_name"]
-  end
-
-  def sort_by_distance?
-    sort == Set["distance"]
-  end
-
-  def origin
-    [filter[:latitude], filter[:longitude]]
-  end
-
-  attr_reader :sort, :filter, :course_scope
-
-  def funding_filter_salary?
-    filter[:funding] == "salary"
-  end
-
-  def qualifications
-    return [] if filter[:qualification].blank?
-
-    filter[:qualification].split(",")
-  end
-
-  def has_vacancies?
-    filter[:has_vacancies].to_s.downcase == "true"
-  end
-
-  def findable?
-    filter[:findable].to_s.downcase == "true"
-  end
-
-  def study_types
-    return [] if filter[:study_type].blank?
-
-    filter[:study_type].split(",")
-  end
-
-  def funding_types
-    return [] if filter[:funding_type].blank?
-
-    filter[:funding_type].split(",")
-  end
-
-  def degree_grades
-    return [] if filter[:degree_grade].blank?
-    return [] unless filter[:degree_grade].is_a?(String)
-
-    filter[:degree_grade].split(",")
-  end
-
-  def subject_codes
-    return [] if filter[:subjects].blank?
-    return [] unless filter[:subjects].is_a?(String)
-
-    filter[:subjects].split(",")
-  end
-
-  def provider_name
-    return [] if filter[:"provider.provider_name"].blank?
-
-    filter[:"provider.provider_name"]
-  end
-
-  def send_courses_filter?
-    filter[:send_courses].to_s.downcase == "true"
-  end
-
-  def updated_since_filter?
-    filter[:updated_since].present?
-  end
-
-  def can_sponsor_visa_filter?
-    filter[:can_sponsor_visa].to_s.downcase == "true"
-  end
+  attr_reader :course_scope
 end
