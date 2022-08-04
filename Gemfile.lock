@@ -599,6 +599,9 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubypants (0.7.1)
+    scenic (1.6.0)
+      activerecord (>= 4.0.0)
+      railties (>= 4.0.0)
     schema_to_scaffold (0.8.2)
       activesupport (~> 7)
     semantic_logger (4.11.0)
@@ -780,6 +783,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   rubypants
+  scenic
   schema_to_scaffold
   sentry-rails
   sentry-ruby
