@@ -24,7 +24,6 @@ end
 
 RSpec.describe "DFE Analytics integration" do
   before do
-    allow(FeatureService).to receive(:enabled?).with(:google_analytics).and_return(false)
     allow(FeatureService).to receive(:enabled?).with(:send_request_data_to_bigquery).and_return(true)
 
     Rails.application.routes.draw do

@@ -1,7 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate, only: %i[
     accessibility
-    cookies
     performance_dashboard
     privacy
     terms
@@ -11,8 +10,6 @@ class PagesController < ApplicationController
   ]
 
   def accessibility; end
-
-  def cookies; end
 
   def performance_dashboard
     @performance_data = PerformanceDashboardService.call

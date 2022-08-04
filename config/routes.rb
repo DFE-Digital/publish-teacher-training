@@ -30,11 +30,7 @@ Rails.application.routes.draw do
   get "/how-to-use-this-service/course-summary-examples", to: "pages#course_summary_examples", as: :course_summary_examples
   get "/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses", to: "pages#writing_descriptions_for_publish_teacher_training_courses", as: :writing_descriptions_for_publish_teacher_training_courses
 
-  if FeatureService.enabled?(:google_analytics)
-    resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
-  else
-    get "/cookies", to: "pages#cookies", as: :cookies
-  end
+  resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 
   if AuthenticationService.magic_link?
     get "/sign-in/magic-link", to: "magic_links#new", as: :magic_links

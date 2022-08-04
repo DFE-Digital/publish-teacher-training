@@ -3,11 +3,6 @@
 require "rails_helper"
 
 feature "Updating cookie preferences" do
-  before do
-    enable_features(:google_analytics)
-    Rails.application.reload_routes!
-  end
-
   scenario "i can update my cookie preferences" do
     when_i_visit_the_cookie_preferences_page
     and_i_give_consent_and_submit
