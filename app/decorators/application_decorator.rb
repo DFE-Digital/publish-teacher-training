@@ -6,8 +6,6 @@ class ApplicationDecorator < Draper::Decorator
     tag.html_safe
   end
 
-private
-
   def status_text
     return status_tags[:withdrawn][:text] if object.ucas_status == "not_running"
 
@@ -24,6 +22,12 @@ private
     object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
   end
 
+  def unpublished_status_hint
+    h.tag.span("*&nbsp;Unpublished&nbsp;changes".html_safe, class: "govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1")
+  end
+
+private
+
   def status_tags_for_vacancies
     {
       published: { text: "Open", colour: "turquoise" },
@@ -36,17 +40,6 @@ private
   end
 
   def status_tags_for_no_vacancies
-    {
-      published: { text: "Closed", colour: "purple" },
-      withdrawn: { text: "Withdrawn", colour: "red" },
-      empty: { text: "Empty", colour: "grey" },
-      draft: { text: "Draft", colour: "grey" },
-      published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" },
-      rolled_over: { text: "Rolled over", colour: "yellow" },
-    }
-  end
-
-  def unpublished_status_hint
-    h.tag.span("*&nbsp;Unpublished&nbsp;changes".html_safe, class: "govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1")
+    status_tags_for_vacancies.merge(published: { text: "Closed", colour: "purple" }, published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" })
   end
 end
