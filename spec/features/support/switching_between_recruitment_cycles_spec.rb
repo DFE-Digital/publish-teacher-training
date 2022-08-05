@@ -11,10 +11,12 @@ feature "Support index" do
 
     when_i_click_on_the_current_cycle
     i_should_see_the_current_cycle_page
+    and_i_should_see_the_pe_allocations_tab # This method can be deleted after rollover 2022
 
     when_click_the_switch_cycle_link
     and_click_on_the_next_cycle
     i_should_be_on_the_next_cycle_page
+    and_i_should_not_see_the_pe_allocations_tab # This method can be deleted after rollover 2022
   end
 
   scenario "viewing providers page when not in rollover" do
@@ -77,5 +79,13 @@ feature "Support index" do
 
   def i_should_be_on_the_next_cycle_page
     expect(support_provider_index_page).to have_text "Recruitment cycle #{Settings.current_recruitment_cycle_year} to #{Settings.current_recruitment_cycle_year + 1}"
+  end
+
+  def and_i_should_see_the_pe_allocations_tab
+    expect(support_provider_index_page).to have_link "PE Allocations"
+  end
+
+  def and_i_should_not_see_the_pe_allocations_tab
+    expect(support_provider_index_page).not_to have_link "PE Allocations"
   end
 end
