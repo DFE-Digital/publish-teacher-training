@@ -341,9 +341,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_course_as(status_tag)
-    expect(provider_courses_show_page.content_status).to have_content(
-                                                           status_tag,
-                                                         )
+    expect(provider_courses_show_page.content_status).to have_content(status_tag)
   end
 
   def provider
