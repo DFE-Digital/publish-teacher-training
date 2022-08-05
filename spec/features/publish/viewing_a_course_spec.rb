@@ -25,7 +25,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     scenario "i can view a salary course" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_salary_course("Closed")
+      then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_course_as("Closed")
       and_i_should_see_the_course_button_panel
     end
   end
@@ -34,7 +35,8 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     scenario "i can view the published partial" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary", site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_salary_course("Open")
+      then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_course_as("Open")
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
       and_i_should_not_see_the_rollover_button
@@ -303,13 +305,9 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def then_i_should_see_the_description_of_the_salary_course(status_tag)
+  def then_i_should_see_the_description_of_the_salary_course
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
-    )
-
-    expect(provider_courses_show_page.content_status).to have_content(
-      status_tag,
     )
 
     expect(provider_courses_show_page.about_course).to have_content(
@@ -340,6 +338,12 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page.other_requirements).to have_content(
       course_enrichment.other_requirements,
     )
+  end
+
+  def and_i_should_see_the_course_as(status_tag)
+    expect(provider_courses_show_page.content_status).to have_content(
+                                                           status_tag,
+                                                         )
   end
 
   def provider
