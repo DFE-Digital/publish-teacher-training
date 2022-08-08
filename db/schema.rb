@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -30,11 +30,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "last_name"
     t.text "organisation"
     t.text "reason"
-    t.datetime "request_date_utc", null: false
+    t.datetime "request_date_utc", precision: nil, null: false
     t.integer "requester_id"
     t.integer "status", null: false
     t.text "requester_email"
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
@@ -43,8 +43,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.bigint "provider_id"
     t.bigint "accredited_body_id"
     t.integer "number_of_places"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "request_type", default: 0
     t.text "accredited_body_code"
     t.text "provider_code"
@@ -60,8 +60,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
   create_table "allocation_uplift", force: :cascade do |t|
     t.bigint "allocation_id", null: false
     t.integer "uplifts"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["allocation_id"], name: "index_allocation_uplift_on_allocation_id"
   end
 
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.string "comment"
     t.string "remote_address"
     t.string "request_uuid"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
     t.index ["created_at"], name: "index_audit_on_created_at"
@@ -93,8 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "name"
     t.text "email"
     t.text "telephone"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "permission_given", default: false
     t.index ["provider_id", "type"], name: "index_contact_on_provider_id_and_type", unique: true
     t.index ["provider_id"], name: "index_contact_on_provider_id"
@@ -106,18 +106,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "profpost_flag"
     t.text "program_type"
     t.integer "qualification", null: false
-    t.datetime "start_date"
+    t.datetime "start_date", precision: nil
     t.text "study_mode"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
     t.integer "maths"
     t.integer "science"
-    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "changed_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accredited_body_code"
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.string "age_range_in_years"
     t.date "applications_open_from"
     t.boolean "is_send", default: false
@@ -147,12 +147,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|
     t.integer "created_by_user_id"
-    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.jsonb "json_data"
-    t.datetime "last_published_timestamp_utc"
+    t.datetime "last_published_timestamp_utc", precision: nil
     t.integer "status", null: false
     t.integer "updated_by_user_id"
-    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
@@ -175,8 +175,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
   create_table "course_subject", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.integer "subject_id"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer "position"
     t.index ["course_id", "subject_id"], name: "index_course_subject_on_course_id_and_subject_id", unique: true
     t.index ["course_id"], name: "index_course_subject_on_course_id"
@@ -191,13 +191,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
@@ -206,8 +206,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.string "bursary_amount"
     t.string "early_career_payments"
     t.string "scholarship"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
@@ -216,8 +216,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.string "page", null: false
     t.bigint "recruitment_cycle_id", null: false
     t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["page", "recruitment_cycle_id", "user_id"], name: "interrupt_page_all_column_idx", unique: true
     t.index ["recruitment_cycle_id"], name: "index_interrupt_page_acknowledgement_on_recruitment_cycle_id"
     t.index ["user_id"], name: "index_interrupt_page_acknowledgement_on_user_id"
@@ -260,12 +260,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "email"
     t.text "telephone"
     t.integer "region_code"
-    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider"
-    t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "changed_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "recruitment_cycle_id", null: false
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.text "train_with_us"
     t.text "train_with_disability"
     t.jsonb "accrediting_provider_enrichments"
@@ -281,6 +281,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
+    t.index ["provider_name"], name: "index_providers_provider_name"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
@@ -290,8 +291,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "send_application_alerts"
     t.text "application_alert_email"
     t.text "gt12_response_destination"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
   end
 
@@ -299,13 +300,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.string "year"
     t.date "application_start_date", null: false
     t.date "application_end_date", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "session", id: :serial, force: :cascade do |t|
     t.text "access_token"
-    t.datetime "created_utc", null: false
+    t.datetime "created_utc", precision: nil, null: false
     t.integer "user_id", null: false
     t.index ["access_token", "created_utc"], name: "IX_session_access_token_created_utc"
     t.index ["user_id"], name: "IX_session_user_id"
@@ -321,13 +322,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "address1"
     t.integer "provider_id", default: 0, null: false
     t.integer "region_code"
-    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.float "latitude"
     t.float "longitude"
     t.string "urn"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
@@ -335,8 +336,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
 
   create_table "statistic", force: :cascade do |t|
     t.jsonb "json_data", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "subject", force: :cascade do |t|
@@ -351,8 +352,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
   create_table "subject_area", id: false, force: :cascade do |t|
     t.text "typename", null: false
     t.text "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["typename"], name: "index_subject_area_on_typename", unique: true
   end
 
@@ -360,17 +361,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.text "email"
     t.text "first_name", null: false
     t.text "last_name", null: false
-    t.datetime "first_login_date_utc"
-    t.datetime "last_login_date_utc"
+    t.datetime "first_login_date_utc", precision: nil
+    t.datetime "last_login_date_utc", precision: nil
     t.text "sign_in_user_id"
-    t.datetime "welcome_email_date_utc"
-    t.datetime "invite_date_utc"
-    t.datetime "accept_terms_date_utc"
+    t.datetime "welcome_email_date_utc", precision: nil
+    t.datetime "invite_date_utc", precision: nil
+    t.datetime "accept_terms_date_utc", precision: nil
     t.string "state"
     t.boolean "admin", default: false
-    t.datetime "discarded_at"
+    t.datetime "discarded_at", precision: nil
     t.string "magic_link_token"
-    t.datetime "magic_link_token_sent_at"
+    t.datetime "magic_link_token_sent_at", precision: nil
     t.index ["discarded_at"], name: "index_user_on_discarded_at"
     t.index ["email"], name: "IX_user_email", unique: true
   end
@@ -379,8 +380,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.integer "user_id", null: false
     t.string "provider_code", null: false
     t.boolean "course_update", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "course_publish", default: false
     t.index ["provider_code"], name: "index_user_notification_on_provider_code"
   end
@@ -388,8 +389,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
   create_table "user_permission", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "provider_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_user_permission_on_provider_id"
     t.index ["user_id", "provider_id"], name: "index_user_permission_on_user_id_and_provider_id", unique: true
     t.index ["user_id"], name: "index_user_permission_on_user_id"
@@ -421,4 +422,86 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
   add_foreign_key "user_notification", "\"user\"", column: "user_id"
   add_foreign_key "user_permission", "\"user\"", column: "user_id"
   add_foreign_key "user_permission", "provider"
+
+  create_view "course_searchable_details", materialized: true, sql_definition: <<-SQL
+      SELECT c.id,
+      c.id AS course_id,
+      c.name AS course_name,
+      c.course_code,
+      c.program_type,
+      c.qualification,
+      c.study_mode,
+      c.is_send,
+      c.degree_grade,
+      c.changed_at,
+      c.accredited_body_code,
+      p.id AS provider_id,
+      p.provider_name,
+      ab.provider_name AS accredited_body_provider_name,
+      p.recruitment_cycle_id,
+      rc.year AS recruitment_cycle_year,
+      subjects.subject_codes,
+      cc.is_salary,
+      cc.is_full_time,
+      cc.is_part_time,
+      cc.funding_type
+     FROM (((((course c
+       JOIN provider p ON ((p.id = c.provider_id)))
+       JOIN recruitment_cycle rc ON ((rc.id = p.recruitment_cycle_id)))
+       FULL JOIN provider ab ON (((ab.provider_code = c.accredited_body_code) AND (ab.recruitment_cycle_id = p.recruitment_cycle_id))))
+       FULL JOIN ( SELECT cs.course_id,
+              array_remove(array_agg(s.subject_code), NULL::text) AS subject_codes
+             FROM (course_subject cs
+               JOIN subject s ON ((s.id = cs.subject_id)))
+            GROUP BY cs.course_id) subjects ON ((subjects.course_id = c.id)))
+       JOIN ( SELECT _c.id,
+                  CASE
+                      WHEN (_c.program_type = ANY (ARRAY['SS'::text, 'TA'::text])) THEN true
+                      ELSE false
+                  END AS is_salary,
+                  CASE
+                      WHEN (_c.study_mode = ANY (ARRAY['F'::text, 'B'::text])) THEN true
+                      ELSE false
+                  END AS is_full_time,
+                  CASE
+                      WHEN (_c.study_mode = ANY (ARRAY['P'::text, 'B'::text])) THEN true
+                      ELSE false
+                  END AS is_part_time,
+                  CASE
+                      WHEN (_c.program_type = 'SS'::text) THEN 'salary'::text
+                      WHEN (_c.program_type = 'TA'::text) THEN 'apprenticeship'::text
+                      WHEN (_c.program_type = ANY (ARRAY['HE'::text, 'SC'::text, 'SD'::text])) THEN 'fee'::text
+                      ELSE 'unknown'::text
+                  END AS funding_type,
+                  CASE
+                      WHEN ((_p.can_sponsor_student_visa = true) AND (_c.program_type = ANY (ARRAY['HE'::text, 'SC'::text, 'SD'::text]))) THEN true
+                      WHEN ((_p.can_sponsor_skilled_worker_visa = true) AND (_c.program_type = ANY (ARRAY['SS'::text, 'TA'::text]))) THEN true
+                      ELSE false
+                  END AS provider_can_sponsor_visa
+             FROM (course _c
+               JOIN provider _p ON ((_p.id = _c.provider_id)))) cc ON ((cc.id = c.id)));
+  SQL
+  add_index "course_searchable_details", ["accredited_body_code"], name: "index_course_searchable_details_on_accredited_body_code", using: :gin
+  add_index "course_searchable_details", ["accredited_body_provider_name"], name: "index_csd_ab_provider_name", using: :gin
+  add_index "course_searchable_details", ["changed_at"], name: "index_course_searchable_details_on_changed_at"
+  add_index "course_searchable_details", ["course_code"], name: "index_course_searchable_details_on_course_code", using: :gin
+  add_index "course_searchable_details", ["course_id"], name: "index_course_searchable_details_on_course_id", unique: true
+  add_index "course_searchable_details", ["course_name"], name: "index_course_searchable_details_on_course_name", using: :gin
+  add_index "course_searchable_details", ["degree_grade"], name: "index_course_searchable_details_on_degree_grade"
+  add_index "course_searchable_details", ["funding_type"], name: "index_course_searchable_details_on_funding_type"
+  add_index "course_searchable_details", ["id"], name: "index_course_searchable_details_on_id", unique: true
+  add_index "course_searchable_details", ["is_full_time", "is_part_time"], name: "index_csd_on_is_full_time_and_is_part_time"
+  add_index "course_searchable_details", ["is_full_time"], name: "index_course_searchable_details_on_is_full_time"
+  add_index "course_searchable_details", ["is_part_time"], name: "index_course_searchable_details_on_is_part_time"
+  add_index "course_searchable_details", ["is_salary"], name: "index_course_searchable_details_on_is_salary"
+  add_index "course_searchable_details", ["is_send"], name: "index_course_searchable_details_on_is_send"
+  add_index "course_searchable_details", ["program_type"], name: "index_course_searchable_details_on_program_type"
+  add_index "course_searchable_details", ["provider_id"], name: "index_course_searchable_details_on_provider_id"
+  add_index "course_searchable_details", ["provider_name"], name: "index_course_searchable_details_on_provider_name", using: :gin
+  add_index "course_searchable_details", ["qualification"], name: "index_course_searchable_details_on_qualification"
+  add_index "course_searchable_details", ["recruitment_cycle_id"], name: "index_course_searchable_details_on_recruitment_cycle_id"
+  add_index "course_searchable_details", ["recruitment_cycle_year"], name: "index_course_searchable_details_on_recruitment_cycle_year"
+  add_index "course_searchable_details", ["study_mode"], name: "index_course_searchable_details_on_study_mode"
+  add_index "course_searchable_details", ["subject_codes"], name: "index_course_searchable_details_on_subject_codes"
+
 end

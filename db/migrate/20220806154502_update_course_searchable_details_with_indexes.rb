@@ -1,0 +1,26 @@
+class UpdateCourseSearchableDetailsWithIndexes < ActiveRecord::Migration[7.0]
+  def change
+    add_index(:course_searchable_details, :id, unique: true)
+    add_index(:course_searchable_details, :course_id, unique: true)
+    add_index(:course_searchable_details, :course_name, using: "gin")
+    add_index(:course_searchable_details, :course_code, using: "gin")
+    add_index(:course_searchable_details, :program_type)
+    add_index(:course_searchable_details, :qualification)
+    add_index(:course_searchable_details, :study_mode)
+    add_index(:course_searchable_details, :is_send)
+    add_index(:course_searchable_details, :degree_grade)
+    add_index(:course_searchable_details, :changed_at)
+    add_index(:course_searchable_details, :accredited_body_code, using: "gin")
+    add_index(:course_searchable_details, :provider_id)
+    add_index(:course_searchable_details, :provider_name, using: "gin")
+    add_index(:course_searchable_details, :accredited_body_provider_name, name: "index_csd_ab_provider_name", using: "gin")
+    add_index(:course_searchable_details, :recruitment_cycle_id)
+    add_index(:course_searchable_details, :recruitment_cycle_year)
+    add_index(:course_searchable_details, :subject_codes)
+    add_index(:course_searchable_details, :is_salary)
+    add_index(:course_searchable_details, :is_full_time)
+    add_index(:course_searchable_details, :is_part_time)
+    add_index(:course_searchable_details, :funding_type)
+    add_index(:course_searchable_details, %i[is_full_time is_part_time], name: "index_csd_on_is_full_time_and_is_part_time")
+  end
+end
