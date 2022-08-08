@@ -43,7 +43,7 @@ bin/fetch_config.rb
 # Ignore sanitised production data dump
 *.sql.tar.gz
 *.sql.gz
-*.sql
+/*.sql
 
 # Exclude api doc application node modules
 docs/node_modules
