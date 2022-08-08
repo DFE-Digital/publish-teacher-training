@@ -37,12 +37,16 @@ search_args = {
   filter_with_no_can_sponsor_visa: { filter: { can_sponsor_visa: false } },
 }
 
-Benchmark.ips do |x|
-  search_args.each do |key, args|
-    x.report("before: #{key}") do
+search_args.each do |key, args|
+  Benchmark.ips do |x|
+    x.report("before #{key}") do
       CourseSearchService.call(**args)
     end
-  end
 
-  x.compare!
+    x.report("after #{key}") do
+      CourseSearchResultsService.call(**args)
+    end
+
+    x.compare!
+  end
 end

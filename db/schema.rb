@@ -30,11 +30,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "last_name"
     t.text "organisation"
     t.text "reason"
-    t.datetime "request_date_utc", precision: nil, null: false
+    t.datetime "request_date_utc", null: false
     t.integer "requester_id"
     t.integer "status", null: false
     t.text "requester_email"
-    t.datetime "discarded_at", precision: nil
+    t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.string "comment"
     t.string "remote_address"
     t.string "request_uuid"
-    t.datetime "created_at", precision: nil
+    t.datetime "created_at"
     t.index ["associated_type", "associated_id"], name: "associated_index"
     t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index"
     t.index ["created_at"], name: "index_audit_on_created_at"
@@ -93,8 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "name"
     t.text "email"
     t.text "telephone"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "permission_given", default: false
     t.index ["provider_id", "type"], name: "index_contact_on_provider_id_and_type", unique: true
     t.index ["provider_id"], name: "index_contact_on_provider_id"
@@ -106,18 +106,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "profpost_flag"
     t.text "program_type"
     t.integer "qualification", null: false
-    t.datetime "start_date", precision: nil
+    t.datetime "start_date"
     t.text "study_mode"
     t.integer "provider_id", default: 0, null: false
     t.text "modular"
     t.integer "english"
     t.integer "maths"
     t.integer "science"
-    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "changed_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accredited_body_code"
-    t.datetime "discarded_at", precision: nil
+    t.datetime "discarded_at"
     t.string "age_range_in_years"
     t.date "applications_open_from"
     t.boolean "is_send", default: false
@@ -147,12 +147,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
 
   create_table "course_enrichment", id: :serial, force: :cascade do |t|
     t.integer "created_by_user_id"
-    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.jsonb "json_data"
-    t.datetime "last_published_timestamp_utc", precision: nil
+    t.datetime "last_published_timestamp_utc"
     t.integer "status", null: false
     t.integer "updated_by_user_id"
-    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "course_id", null: false
     t.index ["course_id"], name: "index_course_enrichment_on_course_id"
     t.index ["created_by_user_id"], name: "IX_course_enrichment_created_by_user_id"
@@ -191,13 +191,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
@@ -260,12 +260,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "email"
     t.text "telephone"
     t.integer "region_code"
-    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.text "accrediting_provider"
-    t.datetime "changed_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "changed_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.integer "recruitment_cycle_id", null: false
-    t.datetime "discarded_at", precision: nil
+    t.datetime "discarded_at"
     t.text "train_with_us"
     t.text "train_with_disability"
     t.jsonb "accrediting_provider_enrichments"
@@ -281,7 +281,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.index ["latitude", "longitude"], name: "index_provider_on_latitude_and_longitude"
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
-    t.index ["provider_name"], name: "index_providers_provider_name"
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
   end
 
@@ -291,8 +290,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "send_application_alerts"
     t.text "application_alert_email"
     t.text "gt12_response_destination"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_provider_ucas_preference_on_provider_id"
   end
 
@@ -300,13 +299,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.string "year"
     t.date "application_start_date", null: false
     t.date "application_end_date", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "session", id: :serial, force: :cascade do |t|
     t.text "access_token"
-    t.datetime "created_utc", precision: nil, null: false
+    t.datetime "created_utc", null: false
     t.integer "user_id", null: false
     t.index ["access_token", "created_utc"], name: "IX_session_access_token_created_utc"
     t.index ["user_id"], name: "IX_session_user_id"
@@ -322,13 +321,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "address1"
     t.integer "provider_id", default: 0, null: false
     t.integer "region_code"
-    t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
-    t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "created_at", default: -> { "timezone('utc'::text, now())" }, null: false
+    t.datetime "updated_at", default: -> { "timezone('utc'::text, now())" }, null: false
     t.float "latitude"
     t.float "longitude"
     t.string "urn"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
-    t.datetime "discarded_at", precision: nil
+    t.datetime "discarded_at"
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
@@ -361,17 +360,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_06_154502) do
     t.text "email"
     t.text "first_name", null: false
     t.text "last_name", null: false
-    t.datetime "first_login_date_utc", precision: nil
-    t.datetime "last_login_date_utc", precision: nil
+    t.datetime "first_login_date_utc"
+    t.datetime "last_login_date_utc"
     t.text "sign_in_user_id"
-    t.datetime "welcome_email_date_utc", precision: nil
-    t.datetime "invite_date_utc", precision: nil
-    t.datetime "accept_terms_date_utc", precision: nil
+    t.datetime "welcome_email_date_utc"
+    t.datetime "invite_date_utc"
+    t.datetime "accept_terms_date_utc"
     t.string "state"
     t.boolean "admin", default: false
-    t.datetime "discarded_at", precision: nil
+    t.datetime "discarded_at"
     t.string "magic_link_token"
-    t.datetime "magic_link_token_sent_at", precision: nil
+    t.datetime "magic_link_token_sent_at"
     t.index ["discarded_at"], name: "index_user_on_discarded_at"
     t.index ["email"], name: "IX_user_email", unique: true
   end
