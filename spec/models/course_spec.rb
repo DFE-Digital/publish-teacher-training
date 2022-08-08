@@ -1447,28 +1447,102 @@ describe Course, type: :model do
     end
 
     describe "#open_for_applications?" do
-      context "findable course with vacancies" do
-        let(:site_statuses) { [findable_with_vacancies] }
+      let(:site_statuses) { [] }
 
-        its(:open_for_applications?) { is_expected.to be true }
+      let(:applications_open_from) { Time.now.utc }
+
+      let(:course) do
+        create(:course,
+          site_statuses:,
+          applications_open_from:)
       end
 
-      context "non findable course with vacancies" do
-        let(:site_statuses) { [published_discontinued_with_any_vacancy] }
+      subject { course }
 
-        its(:open_for_applications?) { is_expected.to be false }
+      context "no site statuses" do
+        context "applications_open_from is in present or past" do
+          its(:open_for_applications?) { is_expected.to be false }
+        end
+
+        context "applications_open_from is in future" do
+          let(:applications_open_from) { Time.now.utc + 1.day }
+
+          its(:open_for_applications?) { is_expected.to be false }
+        end
       end
 
-      context "findable course with no vacancies" do
-        let(:site_statuses) { [findable_without_vacancies] }
+      context "with site statuses" do
+        context "with only a single findable site statuses" do
+          let(:site_statuses) { [findable] }
 
-        its(:open_for_applications?) { is_expected.to be false }
-      end
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be true }
+          end
 
-      context "non findable course with no vacancies" do
-        let(:site_statuses) { [published_discontinued_with_no_vacancies] }
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
 
-        its(:open_for_applications?) { is_expected.to be false }
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
+
+        context "with at least a single findable site statuses" do
+          let(:site_statuses) do
+            [default, findable, new_site_status,
+             site_status_with_no_vacancies, suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be true }
+          end
+
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
+
+        context "with no findable site statuses" do
+          let(:site_statuses) do
+            [default, new_site_status, site_status_with_no_vacancies,
+             suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "findable course with vacancies" do
+            let(:site_statuses) { [findable_with_vacancies] }
+
+            its(:open_for_applications?) { is_expected.to be true }
+          end
+
+          context "non findable course with vacancies" do
+            let(:site_statuses) { [published_discontinued_with_any_vacancy] }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "findable course with no vacancies" do
+            let(:site_statuses) { [findable_without_vacancies] }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "non findable course with no vacancies" do
+            let(:site_statuses) { [published_discontinued_with_no_vacancies] }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
       end
     end
 
