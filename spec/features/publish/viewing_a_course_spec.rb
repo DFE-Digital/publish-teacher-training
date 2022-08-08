@@ -43,6 +43,15 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  describe "in the next cycle" do
+    scenario "published courses have a 'Scheduled' status" do
+      given_there_is_a_next_recruitment_cycle
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      when_i_visit_the_next_cycle_courses_page
+      then_i_should_see_the_status_scheduled
+    end
+  end
+
   describe "with a published with unpublished changes course" do
     scenario "i can view the unpublished partial" do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: "salary"))
@@ -360,5 +369,27 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       funding_type: "fee",
       subjects: [build(:secondary_subject, bursary_amount: 10000)],
     )
+  end
+
+  def course_enrichments_published
+    build(:course_enrichment, :published)
+  end
+
+  def next_recruitment_cycle_year
+    Settings.current_recruitment_cycle_year + 1
+  end
+
+  def when_i_visit_the_next_cycle_courses_page
+    provider_courses_index_page.load(
+      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year,
+    )
+  end
+
+  def next_cycle_provider
+    create(:provider, :next_recruitment_cycle, courses: [build(:course, enrichments: [course_enrichments_published])])
+  end
+
+  def then_i_should_see_the_status_scheduled
+    expect(provider_courses_index_page).to have_scheduled
   end
 end

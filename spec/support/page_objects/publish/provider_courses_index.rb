@@ -21,6 +21,8 @@ module PageObjects
       element :success_summary, ".govuk-notification-banner--success"
 
       element :add_course, ".govuk-button", text: "Add course"
+
+      element :scheduled, ".govuk-tag--blue", text: "Scheduled"
     end
   end
 end

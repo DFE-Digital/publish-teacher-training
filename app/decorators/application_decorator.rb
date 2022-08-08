@@ -19,7 +19,11 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def status_tags
-    object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
+    if current_recruitment_cycle_year?
+      object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
+    else
+      status_tags_for_rolled_over_courses
+    end
   end
 
   def unpublished_status_hint
@@ -41,5 +45,13 @@ private
 
   def status_tags_for_no_vacancies
     status_tags_for_vacancies.merge(published: { text: "Closed", colour: "purple" }, published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" })
+  end
+
+  def status_tags_for_rolled_over_courses
+    status_tags_for_vacancies.merge(published: { text: "Scheduled", colour: "blue" }, published_with_unpublished_changes: { text: "Scheduled&nbsp;*", colour: "blue" })
+  end
+
+  def current_recruitment_cycle_year?
+    course.recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year
   end
 end
