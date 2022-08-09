@@ -48,9 +48,9 @@ describe Course, type: :model do
 
     it do
       expect(subject).to belong_to(:accrediting_provider)
-                  .with_foreign_key(:accredited_body_code)
-                  .with_primary_key(:provider_code)
-                  .optional
+                           .with_foreign_key(:accredited_body_code)
+                           .with_primary_key(:provider_code)
+                           .optional
     end
 
     it { is_expected.to have_many(:subjects).through(:course_subjects) }
@@ -309,14 +309,14 @@ describe Course, type: :model do
 
     it {
       expect(subject).to validate_presence_of(:level)
-        .on(:publish)
-        .with_message("^Select a course level")
+                           .on(:publish)
+                           .with_message("^Select a course level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
-                                  .scoped_to(:provider_id)
-                                  .on(%i[create update])
+                                   .scoped_to(:provider_id)
+                                   .on(%i[create update])
     end
 
     describe "valid?" do
@@ -1546,6 +1546,84 @@ describe Course, type: :model do
       end
     end
 
+    describe "open_for_applications? (when site_statuses not loaded)" do
+      let(:site_statuses) { [] }
+
+      let(:applications_open_from) { Time.now.utc }
+
+      let(:course) do
+        create(:course,
+          site_statuses:,
+          applications_open_from:)
+      end
+
+      subject {
+        course.reload
+      }
+
+      context "no site statuses" do
+        context "applications_open_from is in present or past" do
+          its(:open_for_applications?) { is_expected.to be false }
+        end
+
+        context "applications_open_from is in future" do
+          let(:applications_open_from) { Time.now.utc + 1.day }
+
+          its(:open_for_applications?) { is_expected.to be false }
+        end
+      end
+
+      context "with site statuses" do
+        context "with only a single findable site statuses" do
+          let(:site_statuses) { [findable] }
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be true }
+          end
+
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
+
+        context "with at least a single findable site statuses" do
+          let(:site_statuses) do
+            [default, findable, new_site_status,
+             site_status_with_no_vacancies, suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be true }
+          end
+
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
+
+        context "with no findable site statuses" do
+          let(:site_statuses) do
+            [default, new_site_status, site_status_with_no_vacancies,
+             suspended, with_any_vacancy]
+          end
+
+          context "applications_open_from is in present or past" do
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "applications_open_from is in future" do
+            let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+        end
+      end
+    end
+
     describe "ucas_status" do
       context "without any site statuses" do
         subject { create(:course) }
@@ -2173,8 +2251,8 @@ describe Course, type: :model do
           create(:site_status, :running, :published, site:, course:)
 
           expect { course.discard }.to raise_error(
-            "You cannot delete the running course #{course}",
-          )
+                                         "You cannot delete the running course #{course}",
+                                       )
         end
       end
     end
