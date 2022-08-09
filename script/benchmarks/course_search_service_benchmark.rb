@@ -43,8 +43,30 @@ search_args.each do |key, args|
       CourseSearchService.call(**args)
     end
 
-    x.report("after #{key}") do
+    x.report("After 1 #{key}") do
       CourseSearchResultsService.call(**args)
+    end
+
+    x.report("After 2 #{key}") do
+      ImprovedCourseSearchService.call(**args)
+    end
+
+    x.compare!
+  end
+end
+
+Benchmark.ips do |x|
+  search_args.each do |key, args|
+    x.report("before") do
+      CourseSearchService.call(**args)
+    end
+
+    x.report("After 1") do
+      CourseSearchResultsService.call(**args)
+    end
+
+    x.report("After 2") do
+      ImprovedCourseSearchService.call(**args)
     end
 
     x.compare!
