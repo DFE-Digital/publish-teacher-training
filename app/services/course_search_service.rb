@@ -24,42 +24,9 @@ class CourseSearchService
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
-
-    if findable?
-      scope = scope.joins("
-        FULL OUTER JOIN (
-          SELECT
-          course_id,
-          array_remove(array_agg(cs.status = 'R' AND cs.publish = 'Y'), NULL) AS findables
-          FROM course_site AS cs
-          GROUP BY cs.course_id) AS findable_site_statuses ON findable_site_statuses.course_id = course.id
-        "
-      )
-
-      scope = scope.where("? = ANY(findable_site_statuses.findables)", true)
-    end
-
+    scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
-
-    if subject_codes.any?
-      scope = scope.joins("
-        FULL OUTER JOIN (
-          SELECT
-          course_id,
-          array_remove(array_agg(s.subject_code), NULL) AS subject_codes
-          FROM course_subject AS cs
-          INNER JOIN subject AS s
-              ON s.id = cs.subject_id
-          GROUP BY cs.course_id) AS subjects ON subjects.course_id = course.id
-        "
-      )
-      first_subject_code, *rest_subject_codes = subject_codes
-      scope = scope.where("? = ANY(subjects.subject_codes)", first_subject_code)
-
-      rest_subject_codes.each do |subject_code|
-        scope = scope.or(scope.where("? = ANY(subjects.subject_codes)", subject_code))
-      end
-    end
+    scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin:) if locations_filter?
