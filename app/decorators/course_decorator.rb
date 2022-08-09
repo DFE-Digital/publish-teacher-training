@@ -22,7 +22,7 @@ class CourseDecorator < ApplicationDecorator
       if current_cycle_and_open?
         h.govuk_link_to("Yes - view online", h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
       else
-        "Yes - from #{Date::MONTHNAMES[Settings.next_cycle_open_date.to_date.month]}"
+        "No - live on #{l(Settings.next_cycle_open_date.to_date, format: :govuk_short)}"
       end
     else
       not_on_find
