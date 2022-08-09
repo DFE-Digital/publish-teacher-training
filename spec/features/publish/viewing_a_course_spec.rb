@@ -26,6 +26,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary"))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_course_as("Closed")
       and_i_should_see_the_course_button_panel
     end
   end
@@ -35,9 +36,19 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: "salary", site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
+      and_i_should_see_the_course_as("Open")
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_published_partial
       and_i_should_not_see_the_rollover_button
+    end
+  end
+
+  describe "in the next cycle" do
+    scenario "published courses have a 'Scheduled' status" do
+      given_there_is_a_next_recruitment_cycle
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      when_i_visit_the_next_cycle_courses_page
+      then_i_should_see_the_status_scheduled
     end
   end
 
@@ -308,10 +319,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       "#{course.name} (#{course.course_code})",
     )
 
-    expect(provider_courses_show_page.content_status).to have_content(
-      "Published",
-    )
-
     expect(provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course,
     )
@@ -342,6 +349,10 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     )
   end
 
+  def and_i_should_see_the_course_as(status_tag)
+    expect(provider_courses_show_page.content_status).to have_content(status_tag)
+  end
+
   def provider
     @current_user.providers.first
   end
@@ -358,5 +369,27 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       funding_type: "fee",
       subjects: [build(:secondary_subject, bursary_amount: 10000)],
     )
+  end
+
+  def course_enrichments_published
+    build(:course_enrichment, :published)
+  end
+
+  def next_recruitment_cycle_year
+    Settings.current_recruitment_cycle_year + 1
+  end
+
+  def when_i_visit_the_next_cycle_courses_page
+    provider_courses_index_page.load(
+      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year,
+    )
+  end
+
+  def next_cycle_provider
+    create(:provider, :next_recruitment_cycle, courses: [build(:course, enrichments: [course_enrichments_published])])
+  end
+
+  def then_i_should_see_the_status_scheduled
+    expect(provider_courses_index_page).to have_scheduled_tag
   end
 end

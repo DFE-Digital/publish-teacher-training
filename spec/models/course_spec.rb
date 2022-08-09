@@ -48,9 +48,9 @@ describe Course, type: :model do
 
     it do
       expect(subject).to belong_to(:accrediting_provider)
-                  .with_foreign_key(:accredited_body_code)
-                  .with_primary_key(:provider_code)
-                  .optional
+                           .with_foreign_key(:accredited_body_code)
+                           .with_primary_key(:provider_code)
+                           .optional
     end
 
     it { is_expected.to have_many(:subjects).through(:course_subjects) }
@@ -309,14 +309,14 @@ describe Course, type: :model do
 
     it {
       expect(subject).to validate_presence_of(:level)
-        .on(:publish)
-        .with_message("^Select a course level")
+                           .on(:publish)
+                           .with_message("^Select a course level")
     }
 
     it "validates scoped to provider_id and only on create and update" do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
-                                  .scoped_to(:provider_id)
-                                  .on(%i[create update])
+                                   .scoped_to(:provider_id)
+                                   .on(%i[create update])
     end
 
     describe "valid?" do
@@ -1308,6 +1308,7 @@ describe Course, type: :model do
     let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
     let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
     let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
+    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :with_no_vacancies, site:) }
     let(:site_statuses) { [] }
 
     subject { create(:course, provider:, site_statuses:) }
@@ -1445,7 +1446,7 @@ describe Course, type: :model do
       end
     end
 
-    describe "open_for_applications?" do
+    describe "#open_for_applications?" do
       let(:site_statuses) { [] }
 
       let(:applications_open_from) { Time.now.utc }
@@ -1514,6 +1515,30 @@ describe Course, type: :model do
 
           context "applications_open_from is in future" do
             let(:applications_open_from) { Time.now.utc + 1.day }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "findable course with vacancies" do
+            let(:site_statuses) { [findable_with_vacancies] }
+
+            its(:open_for_applications?) { is_expected.to be true }
+          end
+
+          context "non findable course with vacancies" do
+            let(:site_statuses) { [published_discontinued_with_any_vacancy] }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "findable course with no vacancies" do
+            let(:site_statuses) { [findable_without_vacancies] }
+
+            its(:open_for_applications?) { is_expected.to be false }
+          end
+
+          context "non findable course with no vacancies" do
+            let(:site_statuses) { [published_discontinued_with_no_vacancies] }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
@@ -2226,8 +2251,8 @@ describe Course, type: :model do
           create(:site_status, :running, :published, site:, course:)
 
           expect { course.discard }.to raise_error(
-            "You cannot delete the running course #{course}",
-          )
+                                         "You cannot delete the running course #{course}",
+                                       )
         end
       end
     end

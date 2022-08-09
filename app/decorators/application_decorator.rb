@@ -6,8 +6,6 @@ class ApplicationDecorator < Draper::Decorator
     tag.html_safe
   end
 
-private
-
   def status_text
     return status_tags[:withdrawn][:text] if object.ucas_status == "not_running"
 
@@ -21,17 +19,39 @@ private
   end
 
   def status_tags
-    {
-      published: { text: "Published", colour: "green" },
-      withdrawn: { text: "Withdrawn", colour: "red" },
-      empty: { text: "Empty", colour: "grey" },
-      draft: { text: "Draft", colour: "grey" },
-      published_with_unpublished_changes: { text: "Published&nbsp;*", colour: "green" },
-      rolled_over: { text: "Rolled over", colour: "yellow" },
-    }
+    if current_recruitment_cycle_year?
+      object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
+    else
+      status_tags_for_rolled_over_courses
+    end
   end
 
   def unpublished_status_hint
     h.tag.span("*&nbsp;Unpublished&nbsp;changes".html_safe, class: "govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1")
+  end
+
+private
+
+  def status_tags_for_vacancies
+    {
+      published: { text: "Open", colour: "turquoise" },
+      withdrawn: { text: "Withdrawn", colour: "red" },
+      empty: { text: "Empty", colour: "grey" },
+      draft: { text: "Draft", colour: "grey" },
+      published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "turquoise" },
+      rolled_over: { text: "Rolled over", colour: "yellow" },
+    }
+  end
+
+  def status_tags_for_no_vacancies
+    status_tags_for_vacancies.merge(published: { text: "Closed", colour: "purple" }, published_with_unpublished_changes: { text: "Closed&nbsp;*", colour: "purple" })
+  end
+
+  def status_tags_for_rolled_over_courses
+    status_tags_for_vacancies.merge(published: { text: "Scheduled", colour: "blue" }, published_with_unpublished_changes: { text: "Scheduled&nbsp;*", colour: "blue" })
+  end
+
+  def current_recruitment_cycle_year?
+    course.in_current_cycle?
   end
 end
