@@ -22,7 +22,7 @@ module PageObjects
 
       element :add_course, ".govuk-button", text: "Add course"
 
-      element :scheduled, ".govuk-tag--blue", text: "Scheduled"
+      element :scheduled_tag, ".govuk-tag--blue", text: "Scheduled"
     end
   end
 end

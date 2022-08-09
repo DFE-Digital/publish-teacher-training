@@ -52,6 +52,6 @@ private
   end
 
   def current_recruitment_cycle_year?
-    course.recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year
+    course.in_current_cycle?
   end
 end

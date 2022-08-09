@@ -390,6 +390,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_the_status_scheduled
-    expect(provider_courses_index_page).to have_scheduled
+    expect(provider_courses_index_page).to have_scheduled_tag
   end
 end
