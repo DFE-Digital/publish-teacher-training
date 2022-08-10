@@ -232,13 +232,8 @@ class Course < ApplicationRecord
             ON s.id = cs.subject_id
         GROUP BY cs.course_id) AS subjects ON subjects.course_id = course.id
       ")
-    first_subject_code, *rest = subject_codes
-    scope = scope.where("? = ANY(subjects.subject_codes)", first_subject_code)
-    rest.each do |subject_code|
-      scope = self.or(
-        where("? = ANY(subjects.subject_codes)", subject_code),
-      )
-    end
+
+    scope = scope.where("subjects.subject_codes && ARRAY[?]", subject_codes)
     scope
   }
 
