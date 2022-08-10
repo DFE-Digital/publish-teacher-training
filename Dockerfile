@@ -24,9 +24,6 @@ RUN apk add --update --no-cache tzdata && \
 RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses shared-mime-info
 
-# Remove once the base image ruby:3.1-alpine3.15 has been updated with latest zlib
-RUN apk add --no-cache zlib=1.2.12-r3
-
 ENV APP_HOME /app
 
 RUN mkdir $APP_HOME
