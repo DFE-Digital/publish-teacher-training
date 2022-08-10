@@ -1,0 +1,200 @@
+
+Warming up --------------------------------------
+              before   216.000  i/100ms
+             After 1   700.000  i/100ms
+             After 2     2.907k i/100ms
+              before   744.000  i/100ms
+             After 1   713.000  i/100ms
+             After 2     2.900k i/100ms
+              before   306.000  i/100ms
+             After 1   313.000  i/100ms
+             After 2   499.000  i/100ms
+              before   301.000  i/100ms
+             After 1   310.000  i/100ms
+             After 2   499.000  i/100ms
+              before   153.000  i/100ms
+             After 1   144.000  i/100ms
+             After 2   177.000  i/100ms
+              before    56.000  i/100ms
+             After 1   139.000  i/100ms
+             After 2    41.000  i/100ms
+              before   145.000  i/100ms
+             After 1   144.000  i/100ms
+             After 2   172.000  i/100ms
+              before   151.000  i/100ms
+             After 1   151.000  i/100ms
+             After 2   295.000  i/100ms
+              before   111.000  i/100ms
+             After 1   151.000  i/100ms
+             After 2   130.000  i/100ms
+              before   407.000  i/100ms
+             After 1    85.000  i/100ms
+             After 2   671.000  i/100ms
+              before   464.000  i/100ms
+             After 1   419.000  i/100ms
+             After 2   856.000  i/100ms
+              before   759.000  i/100ms
+             After 1   681.000  i/100ms
+             After 2     2.845k i/100ms
+              before   707.000  i/100ms
+             After 1   686.000  i/100ms
+             After 2     2.909k i/100ms
+              before   725.000  i/100ms
+             After 1   686.000  i/100ms
+             After 2     2.831k i/100ms
+              before   451.000  i/100ms
+             After 1   368.000  i/100ms
+             After 2   809.000  i/100ms
+              before   166.000  i/100ms
+             After 1   178.000  i/100ms
+             After 2   299.000  i/100ms
+              before   743.000  i/100ms
+             After 1   691.000  i/100ms
+             After 2     2.745k i/100ms
+              before   194.000  i/100ms
+             After 1   196.000  i/100ms
+             After 2   675.000  i/100ms
+              before   239.000  i/100ms
+             After 1   659.000  i/100ms
+             After 2     1.564k i/100ms
+              before   458.000  i/100ms
+             After 1   359.000  i/100ms
+             After 2   792.000  i/100ms
+              before   454.000  i/100ms
+             After 1   345.000  i/100ms
+             After 2   814.000  i/100ms
+              before   459.000  i/100ms
+             After 1   358.000  i/100ms
+             After 2   793.000  i/100ms
+              before   442.000  i/100ms
+             After 1   404.000  i/100ms
+             After 2   792.000  i/100ms
+              before   445.000  i/100ms
+             After 1   412.000  i/100ms
+             After 2   794.000  i/100ms
+              before   439.000  i/100ms
+             After 1   398.000  i/100ms
+             After 2   787.000  i/100ms
+              before   461.000  i/100ms
+             After 1   411.000  i/100ms
+             After 2   780.000  i/100ms
+              before   161.000  i/100ms
+             After 1   280.000  i/100ms
+             After 2     1.200k i/100ms
+              before   166.000  i/100ms
+             After 1   381.000  i/100ms
+             After 2   788.000  i/100ms
+              before   126.000  i/100ms
+             After 1    88.000  i/100ms
+             After 2   840.000  i/100ms
+              before   750.000  i/100ms
+             After 1   705.000  i/100ms
+             After 2     2.948k i/100ms
+              before   152.000  i/100ms
+             After 1   395.000  i/100ms
+             After 2   269.000  i/100ms
+              before   739.000  i/100ms
+             After 1   584.000  i/100ms
+             After 2     2.985k i/100ms
+Calculating -------------------------------------
+              before      7.349k (± 4.1%) i/s -     36.720k in   5.004821s
+             After 1      6.848k (± 3.7%) i/s -     34.300k in   5.015779s
+             After 2     30.209k (± 3.2%) i/s -    151.164k in   5.009078s
+              before      7.430k (± 3.3%) i/s -     37.200k in   5.012418s
+             After 1      6.657k (±10.0%) i/s -     32.798k in   5.007028s
+             After 2     22.598k (±36.4%) i/s -     98.600k in   5.114485s
+              before      1.413k (±70.1%) i/s -      4.896k in   5.048703s
+             After 1      2.837k (±18.1%) i/s -     12.833k in   5.039469s
+             After 2      4.978k (± 3.0%) i/s -     24.950k in   5.016861s
+              before      3.009k (± 6.5%) i/s -     15.050k in   5.029143s
+             After 1      2.969k (± 3.3%) i/s -     14.880k in   5.017525s
+             After 2      4.809k (± 2.9%) i/s -     24.451k in   5.088752s
+              before      1.364k (± 9.3%) i/s -      6.885k in   5.100688s
+             After 1      1.333k (± 7.3%) i/s -      6.768k in   5.108142s
+             After 2      1.668k (± 6.5%) i/s -      8.319k in   5.010725s
+              before      1.375k (±10.5%) i/s -      6.776k in   5.001499s
+             After 1      1.345k (± 7.3%) i/s -      6.811k in   5.095115s
+             After 2      1.690k (± 6.2%) i/s -      8.446k in   5.017783s
+              before    909.622  (±55.4%) i/s -      3.045k in   5.035374s
+             After 1      1.353k (± 6.8%) i/s -      6.768k in   5.028845s
+             After 2      1.627k (± 7.1%) i/s -      8.256k in   5.102794s
+              before      1.403k (± 9.2%) i/s -      6.946k in   5.000557s
+             After 1      1.398k (± 7.2%) i/s -      7.097k in   5.105761s
+             After 2      2.962k (± 6.1%) i/s -     14.750k in   5.002622s
+              before    975.086  (±28.5%) i/s -      4.107k in   5.092277s
+             After 1      1.212k (±36.1%) i/s -      4.681k in   5.032141s
+             After 2      1.170k (±18.8%) i/s -      5.460k in   5.005461s
+              before      3.779k (±12.2%) i/s -     18.722k in   5.092984s
+             After 1      3.130k (±36.8%) i/s -     11.220k in   5.017714s
+             After 2      3.334k (±55.0%) i/s -     14.091k in   5.298013s
+              before      4.269k (±22.9%) i/s -     18.096k in   5.003304s
+             After 1      4.249k (± 4.8%) i/s -     21.369k in   5.041918s
+             After 2      8.668k (± 4.3%) i/s -     43.656k in   5.046447s
+              before      7.372k (± 3.1%) i/s -     37.191k in   5.049748s
+             After 1      6.729k (± 2.9%) i/s -     34.050k in   5.064374s
+             After 2     29.443k (± 4.5%) i/s -    147.940k in   5.036547s
+              before      7.269k (± 3.7%) i/s -     36.764k in   5.064640s
+             After 1      6.569k (± 5.7%) i/s -     32.928k in   5.030933s
+             After 2     28.773k (± 4.3%) i/s -    145.450k in   5.064501s
+              before      7.225k (± 3.3%) i/s -     36.250k in   5.023400s
+             After 1      6.662k (± 5.9%) i/s -     33.614k in   5.067099s
+             After 2     19.420k (±42.5%) i/s -     82.099k in   5.059118s
+              before      4.242k (±16.9%) i/s -     20.295k in   5.080957s
+             After 1      3.803k (±18.1%) i/s -     18.032k in   5.118113s
+             After 2      7.780k (± 4.5%) i/s -     38.832k in   5.002624s
+              before      1.578k (±19.2%) i/s -      7.304k in   5.011574s
+             After 1      1.552k (±18.6%) i/s -      7.298k in   5.044462s
+             After 2      2.952k (± 4.6%) i/s -     14.950k in   5.075229s
+              before      7.054k (± 3.9%) i/s -     35.664k in   5.063497s
+             After 1      6.328k (±17.2%) i/s -     30.404k in   5.072515s
+             After 2     26.668k (±17.0%) i/s -    129.015k in   5.076072s
+              before      1.707k (±33.2%) i/s -      6.984k in   5.379099s
+             After 1    852.638  (±72.5%) i/s -      2.940k in   5.217217s
+             After 2     11.598k (±26.9%) i/s -     50.625k in   5.026538s
+              before      7.000k (±10.3%) i/s -     34.416k in   5.001122s
+             After 1      6.690k (± 3.5%) i/s -     33.609k in   5.030041s
+             After 2     28.923k (± 4.8%) i/s -    145.452k in   5.042089s
+              before      4.490k (± 3.7%) i/s -     22.442k in   5.005931s
+             After 1      3.499k (± 3.4%) i/s -     17.591k in   5.033343s
+             After 2      8.057k (± 3.9%) i/s -     40.392k in   5.020917s
+              before      4.504k (± 5.6%) i/s -     22.700k in   5.058671s
+             After 1      3.480k (± 4.5%) i/s -     17.595k in   5.067270s
+             After 2      8.214k (± 3.1%) i/s -     41.514k in   5.058967s
+              before      4.517k (± 4.9%) i/s -     22.950k in   5.094587s
+             After 1      2.335k (±55.4%) i/s -      7.518k in   5.041970s
+             After 2      8.013k (± 4.4%) i/s -     40.443k in   5.057511s
+              before      4.366k (± 3.9%) i/s -     22.100k in   5.070063s
+             After 1      4.051k (± 4.0%) i/s -     20.604k in   5.094622s
+             After 2      7.683k (± 2.3%) i/s -     38.808k in   5.053584s
+              before      4.444k (± 4.3%) i/s -     22.250k in   5.017271s
+             After 1      4.136k (± 4.1%) i/s -     21.012k in   5.089601s
+             After 2      7.801k (± 3.9%) i/s -     39.700k in   5.096747s
+              before      4.418k (± 4.4%) i/s -     22.389k in   5.078781s
+             After 1      4.128k (± 3.4%) i/s -     20.696k in   5.019491s
+             After 2      6.802k (±26.6%) i/s -     30.693k in   5.151873s
+              before      2.102k (±63.7%) i/s -      8.298k in   5.317441s
+             After 1      3.465k (±37.1%) i/s -     12.330k in   5.071823s
+             After 2      8.043k (± 3.8%) i/s -     40.560k in   5.050220s
+              before      1.566k (± 6.6%) i/s -      7.889k in   5.061268s
+             After 1      4.724k (± 5.3%) i/s -     23.800k in   5.054010s
+             After 2     12.494k (± 3.5%) i/s -     62.400k in   5.000748s
+              before      1.595k (± 5.6%) i/s -      7.968k in   5.013338s
+             After 1      2.873k (±38.6%) i/s -     11.049k in   5.079439s
+             After 2      7.233k (± 4.1%) i/s -     36.248k in   5.020290s
+              before      4.369k (±15.3%) i/s -     20.916k in   5.059892s
+             After 1      4.222k (± 7.4%) i/s -     21.032k in   5.015011s
+             After 2      8.357k (± 4.1%) i/s -     42.000k in   5.034263s
+              before      5.217k (±48.7%) i/s -     18.000k in   5.044677s
+             After 1      6.524k (±10.5%) i/s -     32.430k in   5.058293s
+             After 2     28.821k (± 4.2%) i/s -    144.452k in   5.020777s
+              before      1.597k (± 7.2%) i/s -      8.056k in   5.073275s
+             After 1      4.092k (± 5.4%) i/s -     20.540k in   5.036412s
+             After 2      2.510k (±11.2%) i/s -     12.374k in   5.000408s
+              before      6.843k (±13.8%) i/s -     33.994k in   5.087590s
+             After 1      3.882k (±44.2%) i/s -     16.352k in   5.340051s
+             After 2     27.338k (±20.3%) i/s -    125.370k in   5.031932s
+
+Comparison:
+             After 2:    27337.6 i/s
+              before:     6842.6 i/s - 4.00x  (± 0.00) slower
+             After 1:     3881.7 i/s - 7.04x  (± 0.00) slower

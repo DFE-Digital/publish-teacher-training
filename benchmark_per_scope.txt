@@ -1,0 +1,637 @@
+Warming up --------------------------------------
+before filter_with_nil
+                         1.000  i/100ms
+After 1 filter_with_nil
+                       668.000  i/100ms
+After 2 filter_with_nil
+                         2.845k i/100ms
+Calculating -------------------------------------
+before filter_with_nil
+                          7.206k (±11.8%) i/s -     34.912k in   4.957833s
+After 1 filter_with_nil
+                          6.637k (± 7.1%) i/s -     33.400k in   5.062811s
+After 2 filter_with_nil
+                         29.202k (± 3.9%) i/s -    147.940k in   5.073636s
+
+Comparison:
+After 2 filter_with_nil:    29202.4 i/s
+before filter_with_nil:     7205.8 i/s - 4.05x  (± 0.00) slower
+After 1 filter_with_nil:     6636.8 i/s - 4.40x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_blank
+                       761.000  i/100ms
+After 1 filter_with_blank
+                       657.000  i/100ms
+After 2 filter_with_blank
+                         2.800k i/100ms
+Calculating -------------------------------------
+before filter_with_blank
+                          7.307k (± 4.5%) i/s -     36.528k in   5.010276s
+After 1 filter_with_blank
+                          6.912k (± 3.8%) i/s -     34.821k in   5.045610s
+After 2 filter_with_blank
+                         29.756k (± 5.7%) i/s -    148.400k in   5.003842s
+
+Comparison:
+After 2 filter_with_blank:    29756.1 i/s
+before filter_with_blank:     7306.8 i/s - 4.07x  (± 0.00) slower
+After 1 filter_with_blank:     6911.6 i/s - 4.31x  (± 0.00) slower
+
+Warming up --------------------------------------
+before sort_ascending
+                       281.000  i/100ms
+After 1 sort_ascending
+                        64.000  i/100ms
+After 2 sort_ascending
+                       142.000  i/100ms
+Calculating -------------------------------------
+before sort_ascending
+                          3.097k (± 7.7%) i/s -     15.455k in   5.024666s
+After 1 sort_ascending
+                          3.014k (±11.1%) i/s -     14.848k in   5.017809s
+After 2 sort_ascending
+                          4.029k (±33.6%) i/s -     16.472k in   5.066164s
+
+Comparison:
+After 2 sort_ascending:     4028.7 i/s
+before sort_ascending:     3097.2 i/s - same-ish: difference falls within error
+After 1 sort_ascending:     3013.7 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before sort_descending
+                        71.000  i/100ms
+After 1 sort_descending
+                        71.000  i/100ms
+After 2 sort_descending
+                       155.000  i/100ms
+Calculating -------------------------------------
+before sort_descending
+                          3.044k (±10.5%) i/s -     14.981k in   5.003584s
+After 1 sort_descending
+                          2.652k (±23.1%) i/s -     11.928k in   5.037894s
+After 2 sort_descending
+                          4.965k (± 5.6%) i/s -     24.800k in   5.014457s
+
+Comparison:
+After 2 sort_descending:     4964.8 i/s
+before sort_descending:     3043.6 i/s - 1.63x  (± 0.00) slower
+After 1 sort_descending:     2651.5 i/s - 1.87x  (± 0.00) slower
+
+Warming up --------------------------------------
+before sort_by_distance_without_expand_university
+                       145.000  i/100ms
+After 1 sort_by_distance_without_expand_university
+                       152.000  i/100ms
+After 2 sort_by_distance_without_expand_university
+                       190.000  i/100ms
+Calculating -------------------------------------
+before sort_by_distance_without_expand_university
+                          1.328k (±21.2%) i/s -      5.945k in   5.032698s
+After 1 sort_by_distance_without_expand_university
+                        730.008  (±60.8%) i/s -      2.584k in   5.057411s
+After 2 sort_by_distance_without_expand_university
+                          1.064k (±53.6%) i/s -      3.610k in   5.015669s
+
+Comparison:
+before sort_by_distance_without_expand_university:     1327.6 i/s
+After 2 sort_by_distance_without_expand_university:     1064.0 i/s - same-ish: difference falls within error
+After 1 sort_by_distance_without_expand_university:      730.0 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before sort_by_distance_with_missing_expand_university
+                       146.000  i/100ms
+After 1 sort_by_distance_with_missing_expand_university
+                       133.000  i/100ms
+After 2 sort_by_distance_with_missing_expand_university
+                       179.000  i/100ms
+Calculating -------------------------------------
+before sort_by_distance_with_missing_expand_university
+                          1.433k (± 7.7%) i/s -      7.154k in   5.027392s
+After 1 sort_by_distance_with_missing_expand_university
+                          1.310k (±21.1%) i/s -      5.985k in   5.042613s
+After 2 sort_by_distance_with_missing_expand_university
+                          1.635k (±14.9%) i/s -      7.876k in   5.094230s
+
+Comparison:
+After 2 sort_by_distance_with_missing_expand_university:     1634.8 i/s
+before sort_by_distance_with_missing_expand_university:     1433.1 i/s - same-ish: difference falls within error
+After 1 sort_by_distance_with_missing_expand_university:     1310.1 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before sort_by_distance_with_expand_university
+                       147.000  i/100ms
+After 1 sort_by_distance_with_expand_university
+                       142.000  i/100ms
+After 2 sort_by_distance_with_expand_university
+                       183.000  i/100ms
+Calculating -------------------------------------
+before sort_by_distance_with_expand_university
+                          1.039k (±39.5%) i/s -      3.969k in   5.074940s
+After 1 sort_by_distance_with_expand_university
+                          1.281k (± 9.3%) i/s -      6.390k in   5.036621s
+After 2 sort_by_distance_with_expand_university
+                          1.656k (± 6.5%) i/s -      8.418k in   5.105066s
+
+Comparison:
+After 2 sort_by_distance_with_expand_university:     1656.1 i/s
+After 1 sort_by_distance_with_expand_university:     1281.3 i/s - 1.29x  (± 0.00) slower
+before sort_by_distance_with_expand_university:     1038.6 i/s - 1.59x  (± 0.00) slower
+
+Warming up --------------------------------------
+before sort_by_range   147.000  i/100ms
+After 1 sort_by_range
+                       146.000  i/100ms
+After 2 sort_by_range
+                       299.000  i/100ms
+Calculating -------------------------------------
+before sort_by_range      1.379k (±14.8%) i/s -      6.762k in   5.140549s
+After 1 sort_by_range
+                          1.066k (±40.1%) i/s -      3.942k in   5.047180s
+After 2 sort_by_range
+                          2.956k (± 6.3%) i/s -     14.950k in   5.078762s
+
+Comparison:
+After 2 sort_by_range:     2955.8 i/s
+before sort_by_range:     1379.3 i/s - 2.14x  (± 0.00) slower
+After 1 sort_by_range:     1066.1 i/s - 2.77x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_provider_name
+                       111.000  i/100ms
+After 1 filter_with_provider_name
+                       156.000  i/100ms
+After 2 filter_with_provider_name
+                       133.000  i/100ms
+Calculating -------------------------------------
+before filter_with_provider_name
+                          1.084k (±16.8%) i/s -      5.217k in   5.063791s
+After 1 filter_with_provider_name
+                          1.454k (±15.5%) i/s -      7.020k in   5.074787s
+After 2 filter_with_provider_name
+                          1.275k (± 6.3%) i/s -      6.384k in   5.030254s
+
+Comparison:
+After 1 filter_with_provider_name:     1453.6 i/s
+After 2 filter_with_provider_name:     1274.6 i/s - same-ish: difference falls within error
+before filter_with_provider_name:     1084.5 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before filter_with_updated_since
+                       371.000  i/100ms
+After 1 filter_with_updated_since
+                       356.000  i/100ms
+After 2 filter_with_updated_since
+                       765.000  i/100ms
+Calculating -------------------------------------
+before filter_with_updated_since
+                          3.928k (± 7.0%) i/s -     19.663k in   5.032415s
+After 1 filter_with_updated_since
+                          3.667k (± 7.1%) i/s -     18.512k in   5.075523s
+After 2 filter_with_updated_since
+                          6.666k (±21.9%) i/s -     30.600k in   5.016673s
+
+Comparison:
+After 2 filter_with_updated_since:     6666.2 i/s
+before filter_with_updated_since:     3928.4 i/s - 1.70x  (± 0.00) slower
+After 1 filter_with_updated_since:     3666.6 i/s - 1.82x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_funding_type_salary
+                       140.000  i/100ms
+After 1 filter_with_funding_type_salary
+                       112.000  i/100ms
+After 2 filter_with_funding_type_salary
+                       567.000  i/100ms
+Calculating -------------------------------------
+before filter_with_funding_type_salary
+                          3.569k (±37.3%) i/s -     13.720k in   5.012401s
+After 1 filter_with_funding_type_salary
+                          4.195k (± 8.9%) i/s -     20.832k in   5.011669s
+After 2 filter_with_funding_type_salary
+                          8.613k (± 4.6%) i/s -     43.092k in   5.014573s
+
+Comparison:
+After 2 filter_with_funding_type_salary:     8613.3 i/s
+After 1 filter_with_funding_type_salary:     4195.4 i/s - 2.05x  (± 0.00) slower
+before filter_with_funding_type_salary:     3569.5 i/s - 2.41x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_funding_type_all
+                       762.000  i/100ms
+After 1 filter_with_funding_type_all
+                       708.000  i/100ms
+After 2 filter_with_funding_type_all
+                         2.931k i/100ms
+Calculating -------------------------------------
+before filter_with_funding_type_all
+                          7.242k (± 5.8%) i/s -     36.576k in   5.068468s
+After 1 filter_with_funding_type_all
+                          6.810k (± 4.9%) i/s -     34.692k in   5.106976s
+After 2 filter_with_funding_type_all
+                         29.652k (± 4.1%) i/s -    149.481k in   5.049865s
+
+Comparison:
+After 2 filter_with_funding_type_all:    29652.2 i/s
+before filter_with_funding_type_all:     7242.2 i/s - 4.09x  (± 0.00) slower
+After 1 filter_with_funding_type_all:     6809.8 i/s - 4.35x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_funding_type_fee
+                       773.000  i/100ms
+After 1 filter_with_funding_type_fee
+                       691.000  i/100ms
+After 2 filter_with_funding_type_fee
+                         2.824k i/100ms
+Calculating -------------------------------------
+before filter_with_funding_type_fee
+                          3.066k (±53.2%) i/s -     13.141k in   5.070706s
+After 1 filter_with_funding_type_fee
+                          6.498k (± 9.9%) i/s -     32.477k in   5.056912s
+After 2 filter_with_funding_type_fee
+                         29.043k (±13.1%) i/s -    141.200k in   5.012291s
+
+Comparison:
+After 2 filter_with_funding_type_fee:    29042.7 i/s
+After 1 filter_with_funding_type_fee:     6497.7 i/s - 4.47x  (± 0.00) slower
+before filter_with_funding_type_fee:     3065.9 i/s - 9.47x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_funding_type_apprenticeship
+                       246.000  i/100ms
+After 1 filter_with_funding_type_apprenticeship
+                       695.000  i/100ms
+After 2 filter_with_funding_type_apprenticeship
+                         2.951k i/100ms
+Calculating -------------------------------------
+before filter_with_funding_type_apprenticeship
+                          7.183k (± 9.3%) i/s -     35.670k in   5.023898s
+After 1 filter_with_funding_type_apprenticeship
+                          6.781k (± 4.1%) i/s -     34.055k in   5.030273s
+After 2 filter_with_funding_type_apprenticeship
+                         29.434k (± 5.4%) i/s -    147.550k in   5.027835s
+
+Comparison:
+After 2 filter_with_funding_type_apprenticeship:    29433.9 i/s
+before filter_with_funding_type_apprenticeship:     7182.6 i/s - 4.10x  (± 0.00) slower
+After 1 filter_with_funding_type_apprenticeship:     6781.4 i/s - 4.34x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_qualification
+                       446.000  i/100ms
+After 1 filter_with_qualification
+                       390.000  i/100ms
+After 2 filter_with_qualification
+                       810.000  i/100ms
+Calculating -------------------------------------
+before filter_with_qualification
+                          4.527k (± 4.2%) i/s -     22.746k in   5.033589s
+After 1 filter_with_qualification
+                          4.163k (± 6.0%) i/s -     21.060k in   5.077837s
+After 2 filter_with_qualification
+                          7.956k (± 5.0%) i/s -     39.690k in   5.001898s
+
+Comparison:
+After 2 filter_with_qualification:     7956.1 i/s
+before filter_with_qualification:     4527.1 i/s - 1.76x  (± 0.00) slower
+After 1 filter_with_qualification:     4163.1 i/s - 1.91x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_vacancies
+                       156.000  i/100ms
+After 1 filter_with_vacancies
+                       156.000  i/100ms
+After 2 filter_with_vacancies
+                       299.000  i/100ms
+Calculating -------------------------------------
+before filter_with_vacancies
+                          1.348k (±40.3%) i/s -      4.992k in   5.048961s
+After 1 filter_with_vacancies
+                          1.088k (±50.7%) i/s -      3.900k in   5.251473s
+After 2 filter_with_vacancies
+                          2.426k (±36.0%) i/s -      9.269k in   5.029868s
+
+Comparison:
+After 2 filter_with_vacancies:     2426.3 i/s
+before filter_with_vacancies:     1347.6 i/s - same-ish: difference falls within error
+After 1 filter_with_vacancies:     1088.0 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before filter_with_no_vacancies
+                       742.000  i/100ms
+After 1 filter_with_no_vacancies
+                       714.000  i/100ms
+After 2 filter_with_no_vacancies
+                         2.280k i/100ms
+Calculating -------------------------------------
+before filter_with_no_vacancies
+                          7.302k (± 4.4%) i/s -     37.100k in   5.090788s
+After 1 filter_with_no_vacancies
+                          6.560k (±10.3%) i/s -     32.844k in   5.080636s
+After 2 filter_with_no_vacancies
+                         28.825k (± 7.2%) i/s -    143.640k in   5.014636s
+
+Comparison:
+After 2 filter_with_no_vacancies:    28825.5 i/s
+before filter_with_no_vacancies:     7302.4 i/s - 3.95x  (± 0.00) slower
+After 1 filter_with_no_vacancies:     6559.6 i/s - 4.39x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_findable
+                       202.000  i/100ms
+After 1 filter_with_findable
+                       200.000  i/100ms
+After 2 filter_with_findable
+                         1.325k i/100ms
+Calculating -------------------------------------
+before filter_with_findable
+                          1.910k (±10.4%) i/s -      9.494k in   5.034142s
+After 1 filter_with_findable
+                          1.924k (± 8.0%) i/s -      9.800k in   5.128919s
+After 2 filter_with_findable
+                         13.424k (± 4.4%) i/s -     67.575k in   5.044166s
+
+Comparison:
+After 2 filter_with_findable:    13423.9 i/s
+After 1 filter_with_findable:     1924.2 i/s - 6.98x  (± 0.00) slower
+before filter_with_findable:     1910.3 i/s - 7.03x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_no_findable
+                       776.000  i/100ms
+After 1 filter_with_no_findable
+                       676.000  i/100ms
+After 2 filter_with_no_findable
+                         2.947k i/100ms
+Calculating -------------------------------------
+before filter_with_no_findable
+                          6.238k (±30.3%) i/s -     26.384k in   5.115495s
+After 1 filter_with_no_findable
+                          5.781k (±28.1%) i/s -     23.660k in   5.038202s
+After 2 filter_with_no_findable
+                         29.278k (± 7.0%) i/s -    147.350k in   5.061293s
+
+Comparison:
+After 2 filter_with_no_findable:    29277.7 i/s
+before filter_with_no_findable:     6237.7 i/s - 4.69x  (± 0.00) slower
+After 1 filter_with_no_findable:     5781.1 i/s - 5.06x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_full_time
+                       269.000  i/100ms
+After 1 filter_with_full_time
+                       367.000  i/100ms
+After 2 filter_with_full_time
+                       818.000  i/100ms
+Calculating -------------------------------------
+before filter_with_full_time
+                          4.262k (±13.1%) i/s -     20.982k in   5.037361s
+After 1 filter_with_full_time
+                          3.155k (±16.7%) i/s -     15.414k in   5.058891s
+After 2 filter_with_full_time
+                          7.789k (±16.8%) i/s -     36.810k in   5.004477s
+
+Comparison:
+After 2 filter_with_full_time:     7788.8 i/s
+before filter_with_full_time:     4262.2 i/s - 1.83x  (± 0.00) slower
+After 1 filter_with_full_time:     3155.3 i/s - 2.47x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_part_time
+                       116.000  i/100ms
+After 1 filter_with_part_time
+                        84.000  i/100ms
+After 2 filter_with_part_time
+                       794.000  i/100ms
+Calculating -------------------------------------
+before filter_with_part_time
+                          4.475k (± 8.4%) i/s -     22.272k in   5.018621s
+After 1 filter_with_part_time
+                          3.373k (±15.0%) i/s -     16.296k in   5.008634s
+After 2 filter_with_part_time
+                          6.205k (±35.0%) i/s -     26.996k in   5.077252s
+
+Comparison:
+After 2 filter_with_part_time:     6204.8 i/s
+before filter_with_part_time:     4475.5 i/s - same-ish: difference falls within error
+After 1 filter_with_part_time:     3373.2 i/s - 1.84x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_part_time_and_full_time
+                       135.000  i/100ms
+After 1 filter_with_part_time_and_full_time
+                       333.000  i/100ms
+After 2 filter_with_part_time_and_full_time
+                       192.000  i/100ms
+Calculating -------------------------------------
+before filter_with_part_time_and_full_time
+                          3.688k (±24.4%) i/s -     16.335k in   5.022070s
+After 1 filter_with_part_time_and_full_time
+                          3.000k (±22.1%) i/s -     13.986k in   5.006350s
+After 2 filter_with_part_time_and_full_time
+                          7.129k (±26.5%) i/s -     30.912k in   5.011415s
+
+Comparison:
+After 2 filter_with_part_time_and_full_time:     7128.5 i/s
+before filter_with_part_time_and_full_time:     3687.5 i/s - 1.93x  (± 0.00) slower
+After 1 filter_with_part_time_and_full_time:     2999.7 i/s - 2.38x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_degree_type_two_two
+                       391.000  i/100ms
+After 1 filter_with_degree_type_two_two
+                       394.000  i/100ms
+After 2 filter_with_degree_type_two_two
+                       412.000  i/100ms
+Calculating -------------------------------------
+before filter_with_degree_type_two_two
+                          3.242k (±37.0%) i/s -     13.294k in   5.085376s
+After 1 filter_with_degree_type_two_two
+                          1.650k (±73.9%) i/s -      5.516k in   5.037274s
+After 2 filter_with_degree_type_two_two
+                          1.598k (±24.4%) i/s -      7.828k in   5.129557s
+
+Comparison:
+before filter_with_degree_type_two_two:     3242.5 i/s
+After 1 filter_with_degree_type_two_two:     1649.9 i/s - same-ish: difference falls within error
+After 2 filter_with_degree_type_two_two:     1598.3 i/s - 2.03x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_degree_type_third_class
+                       110.000  i/100ms
+After 1 filter_with_degree_type_third_class
+                       314.000  i/100ms
+After 2 filter_with_degree_type_third_class
+                       719.000  i/100ms
+Calculating -------------------------------------
+before filter_with_degree_type_third_class
+                          4.226k (± 9.0%) i/s -     20.900k in   5.001906s
+After 1 filter_with_degree_type_third_class
+                          3.966k (± 9.6%) i/s -     19.782k in   5.050144s
+After 2 filter_with_degree_type_third_class
+                          5.366k (±47.3%) i/s -     18.694k in   5.005642s
+
+Comparison:
+After 2 filter_with_degree_type_third_class:     5365.9 i/s
+before filter_with_degree_type_third_class:     4226.1 i/s - same-ish: difference falls within error
+After 1 filter_with_degree_type_third_class:     3965.8 i/s - same-ish: difference falls within error
+
+Warming up --------------------------------------
+before filter_with_degree_type_not_required
+                       427.000  i/100ms
+After 1 filter_with_degree_type_not_required
+                       397.000  i/100ms
+After 2 filter_with_degree_type_not_required
+                       781.000  i/100ms
+Calculating -------------------------------------
+before filter_with_degree_type_not_required
+                          4.243k (± 6.6%) i/s -     21.350k in   5.056895s
+After 1 filter_with_degree_type_not_required
+                          3.994k (± 4.7%) i/s -     20.247k in   5.080814s
+After 2 filter_with_degree_type_not_required
+                          7.694k (± 4.3%) i/s -     39.050k in   5.086044s
+
+Comparison:
+After 2 filter_with_degree_type_not_required:     7693.5 i/s
+before filter_with_degree_type_not_required:     4242.6 i/s - 1.81x  (± 0.00) slower
+After 1 filter_with_degree_type_not_required:     3994.0 i/s - 1.93x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_degree_type_all
+                       402.000  i/100ms
+After 1 filter_with_degree_type_all
+                       419.000  i/100ms
+After 2 filter_with_degree_type_all
+                       820.000  i/100ms
+Calculating -------------------------------------
+before filter_with_degree_type_all
+                          4.592k (± 3.6%) i/s -     23.316k in   5.084515s
+After 1 filter_with_degree_type_all
+                          4.227k (± 5.6%) i/s -     21.369k in   5.074282s
+After 2 filter_with_degree_type_all
+                          8.155k (± 2.9%) i/s -     41.000k in   5.032286s
+
+Comparison:
+After 2 filter_with_degree_type_all:     8154.7 i/s
+before filter_with_degree_type_all:     4591.8 i/s - 1.78x  (± 0.00) slower
+After 1 filter_with_degree_type_all:     4226.9 i/s - 1.93x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_single_subject
+                       156.000  i/100ms
+After 1 filter_with_single_subject
+                       504.000  i/100ms
+After 2 filter_with_single_subject
+                         1.196k i/100ms
+Calculating -------------------------------------
+before filter_with_single_subject
+                        405.478  (±20.2%) i/s -      2.028k in   5.144104s
+After 1 filter_with_single_subject
+                          3.132k (±53.5%) i/s -     10.080k in   5.051331s
+After 2 filter_with_single_subject
+                         12.029k (± 5.4%) i/s -     60.996k in   5.086628s
+
+Comparison:
+After 2 filter_with_single_subject:    12029.1 i/s
+After 1 filter_with_single_subject:     3131.9 i/s - 3.84x  (± 0.00) slower
+before filter_with_single_subject:      405.5 i/s - 29.67x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_mulitple_subject
+                       170.000  i/100ms
+After 1 filter_with_mulitple_subject
+                       390.000  i/100ms
+After 2 filter_with_mulitple_subject
+                       753.000  i/100ms
+Calculating -------------------------------------
+before filter_with_mulitple_subject
+                          1.588k (± 7.0%) i/s -      7.990k in   5.057910s
+After 1 filter_with_mulitple_subject
+                          3.577k (± 7.1%) i/s -     17.940k in   5.042634s
+After 2 filter_with_mulitple_subject
+                          7.113k (± 7.3%) i/s -     36.144k in   5.115174s
+
+Comparison:
+After 2 filter_with_mulitple_subject:     7112.5 i/s
+After 1 filter_with_mulitple_subject:     3577.4 i/s - 1.99x  (± 0.00) slower
+before filter_with_mulitple_subject:     1588.2 i/s - 4.48x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_send_courses
+                       439.000  i/100ms
+After 1 filter_with_send_courses
+                       383.000  i/100ms
+After 2 filter_with_send_courses
+                       726.000  i/100ms
+Calculating -------------------------------------
+before filter_with_send_courses
+                          4.349k (±15.9%) i/s -     21.072k in   5.092254s
+After 1 filter_with_send_courses
+                          1.173k (±49.8%) i/s -      5.362k in   5.098776s
+After 2 filter_with_send_courses
+                          3.823k (±52.7%) i/s -     14.520k in   5.029280s
+
+Comparison:
+before filter_with_send_courses:     4349.0 i/s
+After 2 filter_with_send_courses:     3822.6 i/s - same-ish: difference falls within error
+After 1 filter_with_send_courses:     1173.1 i/s - 3.71x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_no_send_courses
+                       180.000  i/100ms
+After 1 filter_with_no_send_courses
+                       359.000  i/100ms
+After 2 filter_with_no_send_courses
+                         3.006k i/100ms
+Calculating -------------------------------------
+before filter_with_no_send_courses
+                          3.727k (±63.9%) i/s -     13.140k in   5.018304s
+After 1 filter_with_no_send_courses
+                          6.057k (±17.0%) i/s -     28.720k in   5.024885s
+After 2 filter_with_no_send_courses
+                         28.334k (± 8.9%) i/s -    144.288k in   5.172680s
+
+Comparison:
+After 2 filter_with_no_send_courses:    28333.8 i/s
+After 1 filter_with_no_send_courses:     6057.1 i/s - 4.68x  (± 0.00) slower
+before filter_with_no_send_courses:     3727.4 i/s - 7.60x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_can_sponsor_visa
+                       171.000  i/100ms
+After 1 filter_with_can_sponsor_visa
+                       402.000  i/100ms
+After 2 filter_with_can_sponsor_visa
+                       258.000  i/100ms
+Calculating -------------------------------------
+before filter_with_can_sponsor_visa
+                          1.648k (± 5.3%) i/s -      8.379k in   5.099734s
+After 1 filter_with_can_sponsor_visa
+                          3.947k (±17.5%) i/s -     19.296k in   5.236622s
+After 2 filter_with_can_sponsor_visa
+                          2.482k (±17.5%) i/s -     11.868k in   5.077191s
+
+Comparison:
+After 1 filter_with_can_sponsor_visa:     3947.1 i/s
+After 2 filter_with_can_sponsor_visa:     2482.0 i/s - 1.59x  (± 0.00) slower
+before filter_with_can_sponsor_visa:     1647.9 i/s - 2.40x  (± 0.00) slower
+
+Warming up --------------------------------------
+before filter_with_no_can_sponsor_visa
+                       749.000  i/100ms
+After 1 filter_with_no_can_sponsor_visa
+                       731.000  i/100ms
+After 2 filter_with_no_can_sponsor_visa
+                         2.928k i/100ms
+Calculating -------------------------------------
+before filter_with_no_can_sponsor_visa
+                          7.152k (± 3.3%) i/s -     35.952k in   5.032776s
+After 1 filter_with_no_can_sponsor_visa
+                          5.961k (±24.6%) i/s -     27.047k in   5.147065s
+After 2 filter_with_no_can_sponsor_visa
+                         14.532k (±34.5%) i/s -     70.272k in   5.214630s
+
+Comparison:
+After 2 filter_with_no_can_sponsor_visa:    14532.0 i/s
+before filter_with_no_can_sponsor_visa:     7151.6 i/s - 2.03x  (± 0.00) slower
+After 1 filter_with_no_can_sponsor_visa:     5960.5 i/s - 2.44x  (± 0.00) slower
