@@ -2,6 +2,7 @@ gcp_api_key: please_change_me
 publish_api_url: https://publish-teacher-training-rollover.london.cloudapps.digital
 publish_url: https://publish-rollover.london.cloudapps.digital
 find_url: https://find-rollover.london.cloudapps.digital
+find_temp_url: https://find-rollover2.london.cloudapps.digital
 
 # URL of this app for the callback after sigining in
 base_url: https://publish-rollover.london.cloudapps.digital
