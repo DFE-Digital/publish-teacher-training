@@ -47,7 +47,7 @@
       <%= yield :header %>
     <% else %>
       <%= render Header::View.new(
-        service_name: I18n.t("service_name"),
+        service_name: I18n.t("service_name.publish"),
         current_user:,
       ) %>
     <% end %>

@@ -8,8 +8,10 @@ en:
       site:
         urn_html: |-
           Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
-  service_name: "Publish teacher training courses"
-  support_service_name: "Publish support console"
+  service_name:
+    publish: "Publish teacher training courses"
+    find: "Find postgraduate teacher training"
+    support: "Publish support console"
   header:
     items:
       sign_out: "Sign out"

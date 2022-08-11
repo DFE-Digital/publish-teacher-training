@@ -28,6 +28,6 @@ private
   end
 
   def build_service_name
-    title.present? ? " - #{I18n.t('service_name')}" : I18n.t("service_name")
+    title.present? ? " - #{I18n.t('service_name.publish')}" : I18n.t("service_name.publish")
   end
 end

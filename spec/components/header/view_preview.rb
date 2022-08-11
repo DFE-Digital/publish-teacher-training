@@ -7,11 +7,11 @@ module Header
     end
 
     def with_our_service_name
-      render(Header::View.new(service_name: I18n.t("service_name")))
+      render(Header::View.new(service_name: I18n.t("service_name.publish")))
     end
 
     def with_a_signed_in_user
-      render(Header::View.new(service_name: I18n.t("service_name"), current_user: mock_user))
+      render(Header::View.new(service_name: I18n.t("service_name.publish"), current_user: mock_user))
     end
 
   private
