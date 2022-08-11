@@ -49,6 +49,11 @@ variable "publish_gov_uk_host_names" {
   type = list
 }
 
+variable "find_gov_uk_host_names" {
+  default = []
+  type = list
+}
+
 variable statuscake_alerts {
   type    = map
   default = {}
