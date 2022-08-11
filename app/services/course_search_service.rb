@@ -14,13 +14,6 @@ class CourseSearchService
 
   def call
     scope = course_scope
-    scope = scope.includes(
-      :enrichments,
-      :financial_incentives,
-      course_subjects: [:subject],
-      site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences],
-    )
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -35,30 +28,39 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
+    # NOTE: This is still needed as there are still joins thats creates duplicates.
+    outer_scope = Course.includes(
+      :enrichments,
+      :financial_incentives,
+      course_subjects: [:subject],
+      site_statuses: [:site],
+      provider: %i[recruitment_cycle ucas_preferences],
+    ).where(id: scope.select(:id))
+
     if provider_name.present?
-      scope = scope
+      outer_scope = outer_scope
                       .accredited_body_order(provider_name)
                       .ascending_canonical_order
     elsif sort_by_provider_ascending?
-      scope = scope.ascending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.ascending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
-      scope = scope.descending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.descending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
-      scope = scope.joins(courses_with_distance_from_origin)
-      scope = scope.joins(:provider)
-      scope = scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+      outer_scope = outer_scope.joins(courses_with_distance_from_origin)
+      outer_scope = outer_scope.joins(:provider)
+      outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      scope =
+      outer_scope =
         if expand_university?
-          scope.order(:boosted_distance)
+          outer_scope.order(:boosted_distance)
         else
-          scope.order(:distance)
+          outer_scope.order(:distance)
         end
     end
 
-    scope
+    outer_scope
   end
 
   private_class_method :new
