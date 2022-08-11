@@ -26,15 +26,14 @@ class ImprovedCourseSearchService
     scope = scope.with_vacancies if has_vacancies?
 
     if findable?
-      scope = scope.joins("
-        FULL OUTER JOIN (
+      scope = scope.joins(Arel.sql("
+        INNER JOIN (
           SELECT
-          course_id,
-          array_remove(array_agg(cs.status = 'R' AND cs.publish = 'Y'), NULL) AS findables
+            course_id,
+            ARRAY_REMOVE(ARRAY_AGG(cs.status = 'R' AND cs.publish = 'Y'), NULL) AS findables
           FROM course_site AS cs
           GROUP BY cs.course_id) AS findable_site_statuses ON findable_site_statuses.course_id = course.id
-        "
-      )
+        "))
 
       scope = scope.where("? = ANY(findable_site_statuses.findables)", true)
     end
@@ -42,23 +41,18 @@ class ImprovedCourseSearchService
     scope = scope.with_study_modes(study_types) if study_types.any?
 
     if subject_codes.any?
-      scope = scope.joins("
-        FULL OUTER JOIN (
+      scope = scope.joins(Arel.sql("
+        INNER JOIN (
           SELECT
-          course_id,
-          array_remove(array_agg(s.subject_code), NULL) AS subject_codes
+            course_id,
+            ARRAY_REMOVE(ARRAY_AGG(s.subject_code), NULL) AS subject_codes
           FROM course_subject AS cs
           INNER JOIN subject AS s
               ON s.id = cs.subject_id
           GROUP BY cs.course_id) AS subjects ON subjects.course_id = course.id
-        "
-      )
-      first_subject_code, *rest_subject_codes = subject_codes
-      scope = scope.where("? = ANY(subjects.subject_codes)", first_subject_code)
+        "))
 
-      rest_subject_codes.each do |subject_code|
-        scope = scope.or(scope.where("? = ANY(subjects.subject_codes)", subject_code))
-      end
+      scope = scope.where("subjects.subject_codes && ARRAY[?]", subject_codes)
     end
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
@@ -68,30 +62,38 @@ class ImprovedCourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
+    outer_scope = Course.includes(
+      :enrichments,
+      :financial_incentives,
+      course_subjects: [:subject],
+      site_statuses: [:site],
+      provider: %i[recruitment_cycle ucas_preferences],
+    ).where(id: scope.select(:id))
+
     if provider_name.present?
-      scope = scope
+      outer_scope = outer_scope
                       .accredited_body_order(provider_name)
                       .ascending_canonical_order
     elsif sort_by_provider_ascending?
-      scope = scope.ascending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.ascending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
-      scope = scope.descending_canonical_order
-      scope = scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.descending_canonical_order
+      outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_distance?
-      scope = scope.joins(courses_with_distance_from_origin)
-      scope = scope.joins(:provider)
-      scope = scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
+      outer_scope = outer_scope.joins(courses_with_distance_from_origin)
+      outer_scope = outer_scope.joins(:provider)
+      outer_scope = outer_scope.select("course.*, distance, #{Course.sanitize_sql(distance_with_university_area_adjustment)}")
 
-      scope =
+      outer_scope =
         if expand_university?
-          scope.order(:boosted_distance)
+          outer_scope.order(:boosted_distance)
         else
-          scope.order(:distance)
+          outer_scope.order(:distance)
         end
     end
 
-    scope
+    outer_scope
   end
 
   private_class_method :new
