@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe PageTitle::View do
   before do
-    allow(I18n).to receive(:t).with("service_name").and_return("Cool Service")
+    allow(I18n).to receive(:t).with("service_name.publish").and_return("Cool Service")
   end
 
   context "given a string that is not in the format of an i18n path" do
