@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+<head>
+  <title><%= content_for(:page_title) %> <%= t("service_name.find") %> - GOV.UK</title>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-152x152.png", rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-167x167.png", rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
+  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-180x180.png", rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
+  <%= stylesheet_link_tag "accessible-autocomplete/dist/accessible-autocomplete.min" %>
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
+
+<body class="govuk-template__body ">
+
+<%= render FindInterface::Header::View.new(
+  service_name: t("service_name.find"),
+) %>
+
+<div class="govuk-width-container">
+  <%= render FindInterface::PhaseBanner::View.new %>
+  <main class="govuk-main-wrapper" id="main-content" role="main"></main>
+</div>
+
+<%= govuk_footer do |footer| %>
+  <%= footer.meta do %>
+    <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+      <h2 class="govuk-heading-m">Get help</h2>
+
+      <p class="govuk-body-s govuk-!-margin-bottom-1">Call <%= t("get_into_teaching.tel") %> or <%= link_to "chat online", t("get_into_teaching.url_online_chat"), class: "govuk-footer__link" %></p>
+
+      <p class="govuk-body-s govuk-!-margin-bottom-1"><%= t("get_into_teaching.opening_times") %></p>
+
+      <p class="govuk-body-s">Free of charge</p>
+
+      <h2 class="govuk-visually-hidden">Support links</h2>
+      <ul class="govuk-footer__inline-list govuk-!-margin-bottom-0">
+        <li class="govuk-footer__inline-list-item">
+          <%= link_to "Accessibility", find_path, class: "govuk-footer__link" %>
+        </li>
+        <li class="govuk-footer__inline-list-item">
+          <%= link_to "Cookies", find_path, class: "govuk-footer__link" %>
+        </li>
+        <li class="govuk-footer__inline-list-item">
+          <%= link_to "Privacy policy", find_path, class: "govuk-footer__link" %>
+        </li>
+        <li class="govuk-footer__inline-list-item">
+          <%= link_to "Terms and conditions", find_path, class: "govuk-footer__link" %>
+        </li>
+      </ul>
+    </div>
+    <div class="govuk-footer__meta-item">
+      <a class="govuk-footer__link govuk-footer__copyright-logo govuk-!-margin-bottom-1" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
+    </div>
+  <% end %>
+<% end %>
+</body>
+</html>
