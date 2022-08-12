@@ -6,6 +6,7 @@
   },
   "scripts": {
     "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules --quiet-deps",
+    "build:find:css": "sass ./app/assets/stylesheets/find_application.scss ./app/assets/builds/find_application.css --no-source-map --load-path=node_modules --quiet-deps",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
     "pretest": "rm -rf .jest-cache",
     "standard:fix": "standard --fix",
