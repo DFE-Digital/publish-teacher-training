@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: DFE-Digital/bat-infrastructure/actions/setup-cf-cli@main
+      - uses: DFE-Digital/github-actions/setup-cf-cli@master
         name: Setup cf cli
         with:
          CF_USERNAME: ${{ secrets.CF_USERNAME_PRODUCTION }}
