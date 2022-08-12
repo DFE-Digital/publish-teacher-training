@@ -1,7 +1,6 @@
 require "rails_helper"
 
 feature "View pages", type: :feature do
-
   scenario "Navigate to /cookies" do
     visit "/find/cookies"
     expect(page).to have_selector("h1", text: "Cookies")
