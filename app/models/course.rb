@@ -202,39 +202,14 @@ class Course < ApplicationRecord
   }
 
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: }) }
-  scope :findable, lambda {
-    scope = joins(Arel.sql("
-      INNER JOIN (
-        SELECT
-          course_id,
-          ARRAY_REMOVE(ARRAY_AGG(cs.status = 'R' AND cs.publish = 'Y'), NULL) AS findables
-        FROM course_site AS cs
-        GROUP BY cs.course_id) AS findable_site_statuses ON findable_site_statuses.course_id = course.id
-      "))
-
-    scope = scope.where("? = ANY(findable_site_statuses.findables)", true)
-    scope
-  }
-
+  scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
   scope :with_study_modes, lambda { |study_modes|
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
   }
   scope :with_subjects, lambda { |subject_codes|
-    scope = joins(Arel.sql("
-      INNER JOIN (
-        SELECT
-          course_id,
-          ARRAY_REMOVE(ARRAY_AGG(s.subject_code), NULL) AS subject_codes
-        FROM course_subject AS cs
-        INNER JOIN subject AS s
-            ON s.id = cs.subject_id
-        GROUP BY cs.course_id) AS subjects ON subjects.course_id = course.id
-      "))
-
-    scope = scope.where("subjects.subject_codes && ARRAY[?]", subject_codes)
-    scope
+    joins(:subjects).merge(Subject.with_subject_codes(subject_codes))
   }
 
   scope :with_qualifications, lambda { |qualifications|

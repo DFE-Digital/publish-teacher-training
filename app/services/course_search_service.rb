@@ -1,7 +1,4 @@
 class CourseSearchService
-  include ServicePattern
-  include CourseSearchOptions
-
   def initialize(
     filter:,
     sort: nil,
@@ -9,7 +6,13 @@ class CourseSearchService
   )
     @filter = filter || {}
     @course_scope = course_scope
-    @sort = sort
+    @sort = Set.new(sort&.split(","))
+  end
+
+  class << self
+    def call(...)
+      new(...).call
+    end
   end
 
   def call
@@ -28,7 +31,9 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
 
-    # NOTE: This is still needed as there are still joins thats creates duplicates.
+    # The 'where' scope will remove duplicates
+    # An outer query is required in the event the provider name is present.
+    # This prevents 'PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY expressions must appear in select list'
     outer_scope = Course.includes(
       :enrichments,
       :financial_incentives,
@@ -66,6 +71,10 @@ class CourseSearchService
   private_class_method :new
 
 private
+
+  def expand_university?
+    filter[:expand_university].to_s.downcase == "true"
+  end
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
@@ -147,5 +156,89 @@ private
     courses_table.join(distance_table).on(courses_table[:id].eq(distance_table[:course_id])).join_sources
   end
 
-  attr_reader :course_scope
+  def locations_filter?
+    filter.key?(:latitude) &&
+      filter.key?(:longitude) &&
+      filter.key?(:radius)
+  end
+
+  def sort_by_provider_ascending?
+    sort == Set["name", "provider.provider_name"]
+  end
+
+  def sort_by_provider_descending?
+    sort == Set["-name", "-provider.provider_name"]
+  end
+
+  def sort_by_distance?
+    sort == Set["distance"]
+  end
+
+  def origin
+    [filter[:latitude], filter[:longitude]]
+  end
+
+  attr_reader :sort, :filter, :course_scope
+
+  def funding_filter_salary?
+    filter[:funding] == "salary"
+  end
+
+  def qualifications
+    return [] if filter[:qualification].blank?
+
+    filter[:qualification].split(",")
+  end
+
+  def has_vacancies?
+    filter[:has_vacancies].to_s.downcase == "true"
+  end
+
+  def findable?
+    filter[:findable].to_s.downcase == "true"
+  end
+
+  def study_types
+    return [] if filter[:study_type].blank?
+
+    filter[:study_type].split(",")
+  end
+
+  def funding_types
+    return [] if filter[:funding_type].blank?
+
+    filter[:funding_type].split(",")
+  end
+
+  def degree_grades
+    return [] if filter[:degree_grade].blank?
+    return [] unless filter[:degree_grade].is_a?(String)
+
+    filter[:degree_grade].split(",")
+  end
+
+  def subject_codes
+    return [] if filter[:subjects].blank?
+    return [] unless filter[:subjects].is_a?(String)
+
+    filter[:subjects].split(",")
+  end
+
+  def provider_name
+    return [] if filter[:"provider.provider_name"].blank?
+
+    filter[:"provider.provider_name"]
+  end
+
+  def send_courses_filter?
+    filter[:send_courses].to_s.downcase == "true"
+  end
+
+  def updated_since_filter?
+    filter[:updated_since].present?
+  end
+
+  def can_sponsor_visa_filter?
+    filter[:can_sponsor_visa].to_s.downcase == "true"
+  end
 end
