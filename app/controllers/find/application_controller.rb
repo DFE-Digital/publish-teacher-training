@@ -1,3 +1,5 @@
-class Find::ApplicationController < ActionController::Base
-  layout "find_layout"
+module Find
+  class ApplicationController < ActionController::Base
+    layout "find_layout"
+  end
 end
