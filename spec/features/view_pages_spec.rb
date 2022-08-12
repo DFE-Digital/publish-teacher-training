@@ -42,4 +42,3 @@ feature "View pages", type: :feature do
     expect(page) .to have_selector("h1", text: "Accessibility statement for Publish teacher training courses")
   end
 end
-
