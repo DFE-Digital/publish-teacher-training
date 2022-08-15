@@ -2,6 +2,7 @@ gcp_api_key: please_change_me
 publish_api_url: https://publish-teacher-training-loadtest.london.cloudapps.digital
 publish_url: https://publish-loadtest.london.cloudapps.digital
 find_url: https://find-loadtest.london.cloudapps.digital
+find_temp_url: https://find-loadtest2.london.cloudapps.digital
 
 # URL of this app for the callback after signing in
 base_url: https://publish-loadtest.london.cloudapps.digital

@@ -31,6 +31,11 @@ variable "publish_gov_uk_host_names" {
   type = list
 }
 
+variable "find_gov_uk_host_names" {
+  default = []
+  type = list
+}
+
 variable "restore_from_db_guid" {}
 
 variable "db_backup_before_point_in_time" {}
@@ -76,6 +81,7 @@ locals {
   web_app_routes = flatten([
     values(cloudfoundry_route.web_app_cloudapps_digital_route),
     cloudfoundry_route.web_app_service_gov_uk_route,
-    values(cloudfoundry_route.web_app_publish_gov_uk_route)
+    values(cloudfoundry_route.web_app_publish_gov_uk_route),
+    values(cloudfoundry_route.web_app_find_gov_uk_route)
   ])
 }
