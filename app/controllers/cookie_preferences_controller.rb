@@ -23,4 +23,3 @@ private
     params.require(:publish_cookie_preferences_form).permit(:consent)
   end
 end
-
