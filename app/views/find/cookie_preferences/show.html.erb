@@ -27,8 +27,8 @@
         <tbody class="govuk-table__body">
           <tr scope="row" class="govuk-table__row">
             <td class="govuk-table__cell "><span class="break-word">_find_teacher_training_courses_session</span></td>
-            <td class="govuk-table__cell ">Remembers your identity when you are signed in</td>
-            <td class="govuk-table__cell ">After 6 hours or on signing out</td>
+            <td class="govuk-table__cell ">Stores encrypted session data</td>
+            <td class="govuk-table__cell ">When you close your browser</td>
           </tr>
           <tr scope="row" class="govuk-table__row">
             <td class="govuk-table__cell"><%= Settings.cookies.consent.name %></td>
@@ -38,7 +38,7 @@
         </tbody>
       </table>
 
-      <h2 class="govuk-heading-m">Measuring website usage (Google Analytics)</h2>
+      <h2 class="govuk-heading-m">Analytic cookies (optional)</h2>
 
       <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use Find. This information helps us improve our service.</p>
 
@@ -70,6 +70,11 @@
             <td class="govuk-table__cell">_gid</td>
             <td class="govuk-table__cell">Distinguishes anonymous users</td>
             <td class="govuk-table__cell">24 hours</td>
+          </tr>
+          <tr scope="row" class="govuk-table__row">
+            <td class="govuk-table__cell">_gat</td>
+            <td class="govuk-table__cell">Limits requests</td>
+            <td class="govuk-table__cell">10 minutes</td>
           </tr>
         </tbody>
       </table>
