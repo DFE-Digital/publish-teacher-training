@@ -20,8 +20,9 @@
 
 <div class="govuk-width-container">
   <%= render FindInterface::PhaseBanner::View.new %>
-  <%= yield %>
-  <main class="govuk-main-wrapper" id="main-content" role="main"></main>
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <%= yield %>
+  </main>
 </div>
 
 <%= render "layouts/find_footer" %>
