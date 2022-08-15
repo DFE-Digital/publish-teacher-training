@@ -1,0 +1,16 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @courses_by_location_or_training_provider_form, url: find_age_groups_path, method: :post do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset :find_courses_by_location_or_provider, legend: { text: "Find courses by location or by training provider", size: "l" } do %>
+        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "By city, town or postcode" }, link_errors: true %>
+        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "Across England" } %>
+        <div class="govuk-radios__divider">or</div>
+        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "By school, university or other training provider" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Continue" %>
+    <% end %>
+  </div>
+</div>
