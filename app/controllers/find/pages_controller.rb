@@ -1,14 +1,10 @@
-class Find::PagesController < ApplicationController
-  layout "find_layout"
-  skip_before_action :authenticate, only: %i[
-    accessibility
-    privacy
-    terms
-  ]
+module Find
+  class PagesController < ApplicationController
 
-  def accessibility; end
+    def accessibility; end
 
-  def privacy; end
+    def privacy; end
 
-  def terms; end
+    def terms; end
+  end
 end
