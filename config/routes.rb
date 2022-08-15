@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     match "/(*path)" => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
   end
 
+  draw(:find)
+
   root to: "publish/providers#index"
 
   mount OpenApi::Rswag::Ui::Engine => "/api-docs"
