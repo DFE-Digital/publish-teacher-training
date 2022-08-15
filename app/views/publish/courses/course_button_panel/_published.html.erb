@@ -10,7 +10,9 @@
   <% end %>
 
   <% unless course.has_unpublished_changes? %>
-    <%= govuk_link_to "View on Find", search_ui_course_page_url(provider_code: course.provider.provider_code, course_code: course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__is_findable" } %>
+    <%= govuk_link_to search_ui_course_page_url(provider_code: course.provider.provider_code, course_code: course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__is_findable" } do %>
+      View on Find <span class="govuk-visually-hidden">postgraduate teacher training</span>
+    <% end %>
   <% end %>
 
   <%= govuk_link_to "Change vacancies", vacancies_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle.year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__has_vacancies" } %>
