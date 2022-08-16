@@ -33,9 +33,7 @@
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <% end %>
 
-    <script>
-      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-    </script>
+    <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <% unless hide_cookie_banner? %>
       <%= render("layouts/cookie_banner") %>
