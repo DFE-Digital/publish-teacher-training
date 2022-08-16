@@ -40,5 +40,4 @@ def and_i_see_the_three_correct_radios
   expect(courses_by_location_or_training_provider_page).to have_by_city_town_or_postcode_radio
   expect(courses_by_location_or_training_provider_page).to have_across_england
   expect(courses_by_location_or_training_provider_page).to have_by_school_uni_or_provider
->>>>>>> 348d0fd9 (Add test with page object)
 end
