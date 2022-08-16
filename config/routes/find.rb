@@ -4,4 +4,6 @@ namespace :find, path: "/find" do
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
+
+  resources :age_groups, path: "/age-groups", controller: "search/age_groups"
 end

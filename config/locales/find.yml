@@ -1,0 +1,14 @@
+en:
+  find:
+    homepage:
+      title: Find courses by location or by training provider
+      radio_options:
+        by_city_town_postcode:
+          radio: By city, town or postcode
+          text_field: Postcode, town or city
+        across_england:
+          radio: Across England
+        by_school_uni_or_provider:
+          radio: By school, university or other training provider
+          text_field: School, university or other training provider
+          hint_text: Enter the name or provider code
