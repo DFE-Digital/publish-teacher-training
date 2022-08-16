@@ -18,6 +18,7 @@ en:
   cancel: "Cancel"
   change: "Change"
   back: "Back"
+  continue: "Continue"
   change_organisation: "Change organisation"
   page_titles:
     error_prefix: "Error: "

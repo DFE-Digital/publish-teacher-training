@@ -3,14 +3,14 @@
     <%= form_with model: @courses_by_location_or_training_provider_form, url: find_age_groups_path, method: :post do |f| %>
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_radio_buttons_fieldset :find_courses_by_location_or_provider, legend: { text: "Find courses by location or by training provider", size: "l" } do %>
-        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "By city, town or postcode" }, link_errors: true %>
-        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "Across England" } %>
-        <div class="govuk-radios__divider">or</div>
-        <%= f.govuk_radio_button :find_courses_by_location_or_provider, true, label: { text: "By school, university or other training provider" } %>
+      <%= f.govuk_radio_buttons_fieldset :find_courses, legend: { text: I18n.t("find.homepage.title"), size: "l" } do %>
+        <%= f.govuk_radio_button :find_courses, "by_city_town_postcode", label: { text: t("find.homepage.radio_options.by_city_town_postcode") }, link_errors: true %>
+        <%= f.govuk_radio_button :find_courses, "across_england", label: { text: t("find.homepage.radio_options.across_england") } %>
+        <%= f.govuk_radio_divider("or") %>
+        <%= f.govuk_radio_button :find_courses, "by_school_uni_or_provider", label: { text: t("find.homepage.radio_options.by_school_uni_or_provider") } %>
       <% end %>
 
-      <%= f.govuk_submit "Continue" %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
   </div>
 </div>
