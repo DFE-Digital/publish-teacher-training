@@ -36,7 +36,7 @@ private
     {
       published: { text: "Open", colour: "turquoise" },
       withdrawn: { text: "Withdrawn", colour: "red" },
-      empty: { text: "Empty", colour: "grey" },
+      empty: { text: "Draft", colour: "grey" },
       draft: { text: "Draft", colour: "grey" },
       published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "turquoise" },
       rolled_over: { text: "Rolled over", colour: "yellow" },
