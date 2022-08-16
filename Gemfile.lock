@@ -239,7 +239,7 @@ GEM
       rainbow
       rubocop
       smart_properties
-    erubi (1.10.0)
+    erubi (1.11.0)
     et-orbi (1.2.7)
       tzinfo
     factory_bot (6.2.1)
@@ -302,7 +302,7 @@ GEM
       pagy (~> 5.10.1)
       railties (>= 6.1)
       view_component (~> 2.56.2)
-    govuk_design_system_formbuilder (3.1.1)
+    govuk_design_system_formbuilder (3.1.2)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
