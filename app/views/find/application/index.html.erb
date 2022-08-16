@@ -4,10 +4,14 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_radio_buttons_fieldset :find_courses, legend: { text: I18n.t("find.homepage.title"), size: "l" } do %>
-        <%= f.govuk_radio_button :find_courses, "by_city_town_postcode", label: { text: t("find.homepage.radio_options.by_city_town_postcode") }, link_errors: true %>
-        <%= f.govuk_radio_button :find_courses, "across_england", label: { text: t("find.homepage.radio_options.across_england") } %>
+        <%= f.govuk_radio_button :find_courses, "by_city_town_postcode", label: { text: t("find.homepage.radio_options.by_city_town_postcode.radio") }, link_errors: true do %>
+          <%= f.govuk_text_field :find_courses, label: { text: t("find.homepage.radio_options.by_city_town_postcode.text_field") } %>
+        <% end %>
+        <%= f.govuk_radio_button :find_courses, "across_england", label: { text: t("find.homepage.radio_options.across_england.radio") } %>
         <%= f.govuk_radio_divider("or") %>
-        <%= f.govuk_radio_button :find_courses, "by_school_uni_or_provider", label: { text: t("find.homepage.radio_options.by_school_uni_or_provider") } %>
+        <%= f.govuk_radio_button :find_courses, "by_school_uni_or_provider", label: { text: t("find.homepage.radio_options.by_school_uni_or_provider.radio") } do %>
+          <%= f.govuk_text_field :find_courses, label: { text: t("find.homepage.radio_options.by_school_uni_or_provider.text_field") }, hint: { text: t("find.homepage.radio_options.by_school_uni_or_provider.hint_text") } %>
+        <% end %>
       <% end %>
 
       <%= f.govuk_submit t("continue") %>
