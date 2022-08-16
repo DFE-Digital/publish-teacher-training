@@ -501,6 +501,11 @@ en:
     user_removed: "User removed"
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"
+    ability_net: "https://mcmw.abilitynet.org.uk/"
+    equality_advisory_service: "https://www.equalityadvisoryservice.com/"
+    web_content_accessibility_guidelines: "https://www.w3.org/TR/WCAG21/"
+    gov_design_accessibility: "https://design-system.service.gov.uk/accessibility/"
+    ico_complaint: "https://ico.org.uk/make-a-complaint/"
   edit_options:
     qualifications:
       qts:
