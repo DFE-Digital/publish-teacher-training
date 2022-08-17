@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
-<head>
-  <title><%= content_for(:page_title) %> <%= t("service_name.find") %> - GOV.UK</title>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-152x152.png", rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-167x167.png", rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
-  <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-180x180.png", rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
-  <%= stylesheet_link_tag "find_application" %>
-  <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
-</head>
+  <head>
+    <title><%= content_for(:page_title) %> <%= t("service_name.find") %> - GOV.UK</title>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-152x152.png", rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-167x167.png", rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
+    <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-180x180.png", rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
+    <%= stylesheet_link_tag "find_application" %>
+    <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
+  </head>
 
-<body class="govuk-template__body ">
+  <body class="govuk-template__body ">
+    <%= render "layouts/add_js_enabled_class_to_body" %>
 
-<%= render FindInterface::Header::View.new(
-  service_name: t("service_name.find"),
-) %>
+    <%= render FindInterface::Header::View.new(
+      service_name: t("service_name.find"),
+    ) %>
 
-<div class="govuk-width-container">
-  <%= render FindInterface::PhaseBanner::View.new %>
-  <main class="govuk-main-wrapper" id="main-content" role="main">
-    <%= yield %>
-  </main>
-</div>
+    <div class="govuk-width-container">
+      <%= render FindInterface::PhaseBanner::View.new %>
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        <%= yield %>
+      </main>
+    </div>
 
-<%= render "layouts/find_footer" %>
-</body>
+    <%= render "layouts/find_footer" %>
+  </body>
 </html>
