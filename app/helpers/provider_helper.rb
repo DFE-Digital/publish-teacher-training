@@ -20,6 +20,13 @@ module ProviderHelper
       "Skilled Worker visas"
     end
   end
+  SelectProvider = Struct.new("SelectProvider", :id, :name)
+
+  def select_provider_options
+    providers = RecruitmentCycle.current.providers
+
+    [SelectProvider.new("", "Select a provider")] + providers.map { |provider| SelectProvider.new("#{provider.provider_name} (#{provider.provider_code})", "#{provider.provider_name} (#{provider.provider_code})") }
+  end
 
 private
 
