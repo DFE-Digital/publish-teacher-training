@@ -457,11 +457,9 @@
             "description": "The state of the course in the Publish teacher training courses system.",
             "example": "published",
             "enum": [
-              "empty",
               "rolled_over",
               "draft",
               "published",
-              "published_with_unpublished_changes",
               "withdrawn"
             ]
           },
@@ -569,17 +567,6 @@
               "fee"
             ]
           },
-          "degree_grade": {
-            "description": "Return courses based on their degree grade. This is a comma delimited string. If multiple degree grade types are provided then any course matching any one of the options provided will be returned, i.e. the OR operator is used.",
-            "type": "string",
-            "example": "two_two,third_class",
-            "enum": [
-              "two_one",
-              "two_two",
-              "third_class",
-              "not_required"
-            ]
-          },
           "qualification": {
             "description": "Search courses based on the award given on course completion. This is a comma delimited string. If multiple qualifications are given then any course matching any one of the qualifications provided will be returned, i.e. the OR operator is used.",
             "type": "string",
@@ -676,8 +663,19 @@
             "type": "string",
             "example": "2020-11-13T11:21:55Z"
           },
-          "can_sponsor_visa": {
-            "description": "Return courses where the provider can sponsor a visa.",
+          "degree_grade": {
+            "description": "Return courses based on their degree grade. This is a comma delimited string. If multiple degree grade types are provided then any course matching any one of the options provided will be returned, i.e. the OR operator is used.",
+            "type": "string",
+            "example": "two_two,third_class",
+            "enum": [
+              "two_one",
+              "two_two",
+              "third_class",
+              "not_required"
+            ]
+          },
+          "provider_can_sponsor_visa": {
+            "description": "Only return courses where the provider can sponsor either a skilled worker or student visa",
             "type": "boolean",
             "example": true
           }
@@ -1154,7 +1152,9 @@
             "enum": [
               "scitt",
               "lead_school",
-              "university"
+              "university",
+              "unknown",
+              "invalid_value"
             ]
           },
           "region_code": {
@@ -1837,7 +1837,9 @@
             "example": {
               "has_vacancies": true,
               "subjects": "00,01",
-              "updated_since": "2020-11-13T11:21:55Z"
+              "updated_since": "2020-11-13T11:21:55Z",
+              "degree_grade": "two_two",
+              "provider_can_sponsor_visa": true
             }
           },
           {
@@ -1972,7 +1974,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": 2021,
+            "example": 2022,
             "schema": {
               "type": "string"
             }
@@ -2074,7 +2076,9 @@
             "example": {
               "has_vacancies": true,
               "subjects": "00,01",
-              "updated_since": "2020-11-13T11:21:55Z"
+              "updated_since": "2020-11-13T11:21:55Z",
+              "degree_grade": "two_two",
+              "provider_can_sponsor_visa": true
             }
           },
           {
@@ -2229,7 +2233,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": 2021,
+            "example": 2022,
             "schema": {
               "type": "string"
             }

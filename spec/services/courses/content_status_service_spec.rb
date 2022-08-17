@@ -17,8 +17,8 @@ describe Courses::ContentStatusService do
     end
 
     context "and does not belong to the next recruitment cycle" do
-      it "returns empty" do
-        expect(execute_service).to eq :empty
+      it "returns draft" do
+        expect(execute_service).to eq :draft
       end
     end
   end
@@ -26,7 +26,7 @@ describe Courses::ContentStatusService do
   context "when the enrichment has been published" do
     let(:enrichment) { build(:course_enrichment, :published) }
 
-    it "returns rolled over" do
+    it "returns published" do
       expect(execute_service).to eq :published
     end
   end
@@ -34,7 +34,7 @@ describe Courses::ContentStatusService do
   context "when the enrichment has been withdrawn" do
     let(:enrichment) { build(:course_enrichment, :withdrawn) }
 
-    it "returns rolled over" do
+    it "returns withdrawn" do
       expect(execute_service).to eq :withdrawn
     end
   end
@@ -42,7 +42,7 @@ describe Courses::ContentStatusService do
   context "when the enrichment has been been published previously" do
     let(:enrichment) { build(:course_enrichment, :subsequent_draft) }
 
-    it "returns rolled over" do
+    it "returns published_with_unpublished_changes" do
       expect(execute_service).to eq :published_with_unpublished_changes
     end
   end
@@ -58,7 +58,7 @@ describe Courses::ContentStatusService do
   context "when the enrichment is a draft enrichment" do
     let(:enrichment) { build(:course_enrichment) }
 
-    it "returns rolled over" do
+    it "returns draft" do
       expect(execute_service).to eq :draft
     end
   end

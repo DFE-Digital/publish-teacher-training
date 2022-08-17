@@ -316,11 +316,9 @@ properties:
       The state of the course in the Publish teacher training courses system.
     example: published
     enum:
-      - empty
       - rolled_over
       - draft
       - published
-      - published_with_unpublished_changes
       - withdrawn
   study_mode:
     type: string
