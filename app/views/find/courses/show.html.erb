@@ -13,3 +13,5 @@
 </h1>
 
 <p class="govuk-body-l" data-qa='course__description'><%= course.description %></p>
+
+<%= render FindInterface::Courses::SummaryComponent::View.new(course) %>
