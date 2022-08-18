@@ -12,7 +12,7 @@
         <%= f.govuk_radio_button :find_courses, "across_england", label: { text: t("find.homepage.radio_options.across_england.radio") } %>
         <%= f.govuk_radio_divider("or") %>
         <%= f.govuk_radio_button :find_courses, "by_school_uni_or_provider", label: { text: t("find.homepage.radio_options.by_school_uni_or_provider.radio") } do %>
-          <%= f.govuk_collection_select :query, select_provider_options, :id, :name, label: { text: t("find.homepage.radio_options.by_school_uni_or_provider.text_field") }, hint: { text: t("find.homepage.radio_options.by_school_uni_or_provider.hint_text") } %>
+          <%= f.govuk_collection_select :query, select_provider_options(@providers), :id, :name, label: { text: t("find.homepage.radio_options.by_school_uni_or_provider.text_field") }, hint: { text: t("find.homepage.radio_options.by_school_uni_or_provider.hint_text") } %>
         <% end %>
       <% end %>
 
