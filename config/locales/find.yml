@@ -37,3 +37,6 @@ en:
               blank: "Enter a city, town or postcode"
             school_uni_or_provider_query:
               blank: "Enter a school, university or other training provider"
+    courses:
+      show:
+        back_to_search: Back to search results

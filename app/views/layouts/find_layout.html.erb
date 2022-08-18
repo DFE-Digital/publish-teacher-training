@@ -12,7 +12,7 @@
     <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body class="govuk-template__body ">
+  <body class="govuk-template__body">
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <%= render FindInterface::Header::View.new(
@@ -21,6 +21,8 @@
 
     <div class="govuk-width-container">
       <%= render FindInterface::PhaseBanner::View.new %>
+
+      <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <%= yield %>
       </main>
