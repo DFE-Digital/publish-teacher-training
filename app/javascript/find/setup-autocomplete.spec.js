@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { initCachedProvidersAutocomplete } from './cached-providers-autocomplete'
+import setupAutocomplete from './setup-autocomplete'
 
 describe('initACachedProvidersAutocomplete', () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('initACachedProvidersAutocomplete', () => {
          </div>
        `
 
-    initCachedProvidersAutocomplete()
+    setupAutocomplete('query')
   })
 
   it('should instantiate an autocomplete', () => {

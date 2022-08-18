@@ -1,7 +1,6 @@
 // Entry point for the build script in your package.json
 import { initAll } from 'govuk-frontend'
-import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
-import { initCachedProvidersAutocomplete } from 'cached-providers-autocomplete'
+import setupAutocomplete from './setup-autocomplete'
 
 initAll()
-initCachedProvidersAutocomplete()
+setupAutocomplete('find-courses-by-location-or-training-provider-form-query-field')
