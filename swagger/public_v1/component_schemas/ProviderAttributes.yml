@@ -83,8 +83,6 @@ properties:
       - scitt
       - lead_school
       - university
-      - unknown
-      - invalid_value
   region_code:
     type: string
     description: "The NUTS 1 region code for the provider's address."
