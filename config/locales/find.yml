@@ -1,5 +1,11 @@
 en:
   find:
+    qualifications:
+      qts: "QTS"
+      pgce: "PGCE"
+      pgce_with_qts: "PGCE with QTS"
+      pgde: "PGDE"
+      pgde_with_qts: "PGDE with QTS"
     homepage:
       title: Find courses by location or by training provider
       radio_options:

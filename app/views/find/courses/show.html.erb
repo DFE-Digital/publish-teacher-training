@@ -1,5 +1,5 @@
 <% provider = Provider.first %>
-<% course = Course.find_by(course_code: "C605") %>
+<% course = Course.find_by(course_code: "C605").decorate %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(url = find_path, body = t("find.courses.show.back_to_search")) %>
@@ -9,7 +9,7 @@
     <span class="govuk-heading-l govuk-!-margin-bottom-0" data-qa="course__provider_name">
       <%= provider.provider_name %>
     </span>
-  <%= course.decorate.name_and_code %>
+  <%= course.name_and_code %>
 </h1>
 
 <p class="govuk-body-l" data-qa='course__description'><%= course.description %></p>

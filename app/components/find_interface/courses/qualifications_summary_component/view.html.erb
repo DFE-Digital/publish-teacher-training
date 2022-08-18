@@ -1,0 +1,61 @@
+<dd data-qa="course__qualifications">
+  <% case find_outcome %>
+  <% when "QTS" %>
+    <%= govuk_details(summary_text: "QTS") do %>
+      <p class="govuk-body">
+        Qualified teacher status (QTS) allows you to teach in state schools in England and may also allow you to teach in other parts of the UK.
+      </p>
+      <p class="govuk-body">
+        It may also allow you to teach overseas, though you should always check what qualifications are needed in the country you’d like to teach in.
+      </p>
+    <% end %>
+<% when "PGCE with QTS" %>
+    <%= govuk_details(summary_text: "PGCE with QTS") do %>
+      <p class="govuk-body">
+        A postgraduate certificate in education (PGCE) with qualified teacher status (QTS) will allow you to teach in state schools in England and may allow you to teach in other parts of the UK.
+      </p>
+      <p class="govuk-body">
+        It may also allow you to teach overseas, though you should always check what qualifications are needed in the country you’d like to teach in.
+      </p>
+      <p class="govuk-body">
+        Many PGCE courses include credits that count toward a Master’s degree.
+      </p>
+    <% end %>
+  <% when "PGDE with QTS" %>
+    <%= govuk_details(summary_text: "PGDE with QTS") do %>
+      <p class="govuk-body">
+        A postgraduate diploma in education (PGDE) with qualified teacher status (QTS) will allow you to teach in state schools in England and may allow you to teach in other parts of the UK.
+      </p>
+      <p class="govuk-body">
+        It may also allow you to teach overseas, though you should always check what qualifications are needed in the country you’d like to teach in.
+      </p>
+      <p class="govuk-body">
+        Many PGDE courses include credits towards a Master’s degree.
+      </p>
+    <% end %>
+  <% when "PGCE" %>
+    <%= govuk_details(summary_text: "PGCE") do %>
+      <p class="govuk-body">
+        A postgraduate certificate in education (PGCE) is an academic qualification in education.
+      </p>
+      <p class="govuk-body">
+        It’s recognised internationally, though you should always check what qualifications are needed in the country you’d like to teach in.
+      </p>
+      <p class="govuk-body">
+        This course does not lead to qualified teacher status (QTS).
+      </p>
+    <% end %>
+  <% when "PGDE" %>
+    <%= govuk_details(summary_text: "PGDE") do %>
+      <p class="govuk-body">
+        A postgraduate diploma in education (PGDE) is equivalent to a postgraduate certificate in education (PGCE).
+      </p>
+      <p class="govuk-body">
+        It’s recognised internationally, though you should always check what qualifications are needed in the country you’d like to teach in.
+      </p>
+      <p class="govuk-body">
+        This course does not lead to qualified teacher status (QTS).
+      </p>
+    <% end %>
+  <% end %>
+</dd>

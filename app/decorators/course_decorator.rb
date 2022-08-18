@@ -37,6 +37,10 @@ class CourseDecorator < ApplicationDecorator
     I18n.t("edit_options.qualifications.#{object.qualification}.label")
   end
 
+  def find_outcome
+    I18n.t("find.qualifications.#{object.qualification}")
+  end
+
   def is_send?
     object.is_send? ? "Yes" : "No"
   end
