@@ -34,6 +34,8 @@ variable paas_db_backup_before_point_in_time {
   default = ""
 }
 
+variable "paas_enable_external_logging" { default = true }
+
 variable key_vault_name {}
 
 variable key_vault_resource_group {}

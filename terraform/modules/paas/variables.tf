@@ -40,6 +40,7 @@ variable "restore_from_db_guid" {}
 
 variable "db_backup_before_point_in_time" {}
 
+variable "enable_external_logging" {}
 locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
   web_app_name                 = "publish-teacher-training-${local.app_name_suffix}"
@@ -84,4 +85,6 @@ locals {
     values(cloudfoundry_route.web_app_publish_gov_uk_route),
     values(cloudfoundry_route.web_app_find_gov_uk_route)
   ])
+
+  logging_service_bindings = var.enable_external_logging ? [cloudfoundry_user_provided_service.logging.id] : []
 }
