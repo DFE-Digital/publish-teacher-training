@@ -12,7 +12,7 @@
   <%= course.name_and_code %>
 </h1>
 
-<p class="govuk-body-l" data-qa='course__description'><%= course.description %></p>
+<p class="govuk-body-l" data-qa="course__description"><%= course.description %></p>
 
 <%= render FindInterface::Courses::SummaryComponent::View.new(course) %>
 
@@ -25,5 +25,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render FindInterface::Courses::ContentsComponent::View.new(course) %>
+
+    <% if course.about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: } %>
+    <% end %>
   </div>
 </div>
