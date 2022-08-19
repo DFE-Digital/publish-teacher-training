@@ -8,3 +8,13 @@
 
 $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
+
+@import "govuk-frontend/govuk/all";
+@import "@ministryofjustice/frontend/moj/all";
+
+$moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
+$mobile-small-start: 400px;
+$mobile-small-end: 401px;
+$mobile-big-start: 500px;
+$mobile-big-end: 501px;
+$git-brand-colour: #159964;
