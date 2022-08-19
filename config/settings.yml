@@ -113,3 +113,6 @@ cookies:
   consent:
     name: _consented_to_analytics_cookies
     expire_after_days: 182
+
+find:
+  apply_base_url: https://www.apply-for-teacher-training.service.gov.uk

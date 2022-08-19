@@ -1,0 +1,36 @@
+<div class="govuk-!-margin-bottom-8" id="section-apply">
+  <% if CycleTimetable.mid_cycle? %>
+    <% if has_vacancies? %>
+      <p class="govuk-body">
+        <%= govuk_start_button(
+              text: "Apply for this course",
+              href: find_apply_path(provider_code: provider.provider_code, course_code: course.course_code),
+              html_attributes: {
+                data: { qa: "course__apply_link" },
+              },
+            ) %>
+      </p>
+    <% else %>
+      <%= govuk_warning_text(text: "You cannot apply for this course because it currently has no vacancies. To find courses with vacancies, change your search settings to ‘Only show courses with vacancies’.") %>
+    <% end %>
+  <% else %>
+    <div data-qa="course__end_of_cycle_notice">
+      <h1 class="govuk-heading-l">Apply</h1>
+      <p class="govuk-body">
+        Courses are currently closed but you can still
+        <%= govuk_link_to("start or continue an application", Settings.find.apply_base_url) %>
+        anyway.
+      </p>
+
+      <p class="govuk-body">You’ll be able to:</p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          find courses starting in the <%= CycleTimetable.next_cycle_year_range %>
+          academic year from <%= CycleTimetable.find_reopens.to_fs(:govuk_date_and_time) %>
+        </li>
+        <li>submit your application from <%= CycleTimetable.apply_reopens.to_fs(:govuk_date_and_time) %></li>
+      </ul>
+    </div>
+  <% end %>
+</div>

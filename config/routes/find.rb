@@ -7,6 +7,7 @@ namespace :find, path: "/find" do
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
   get "/course/:provider_code/:course_code", to: "courses#show", as: "course"
+  get "/course/:provider_code/:course_code/apply", to: "courses#apply", as: :apply
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
 
   scope module: :search do
