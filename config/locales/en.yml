@@ -12,6 +12,7 @@ en:
     publish: "Publish teacher training courses"
     find: "Find postgraduate teacher training"
     support: "Publish support console"
+    get_into_teaching: "Get Into Teaching"
   header:
     items:
       sign_out: "Sign out"
