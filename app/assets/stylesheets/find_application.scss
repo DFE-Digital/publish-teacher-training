@@ -1,22 +1,4 @@
 // Entry point for your Sass build
 @import "./govuk_style_setup";
-@import "govuk-frontend/govuk/all";
-@import "@ministryofjustice/frontend/moj/all";
-
-$moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
-$mobile-small-start: 400px;
-$mobile-small-end: 401px;
-$mobile-big-start: 500px;
-$mobile-big-end: 501px;
-$git-brand-colour: #159964;
-
 @import "components/all";
-
-body:not(.js-enabled) .app-js-only {
-  display: none;
-}
-
-// Display for no-js only
-.js-enabled .app-no-js-only {
-  display: none;
-}
+@import "js-enabled";
