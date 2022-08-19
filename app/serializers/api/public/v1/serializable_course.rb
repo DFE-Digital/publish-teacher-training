@@ -2,6 +2,10 @@ module API
   module Public
     module V1
       class SerializableCourse < JSONAPI::Serializable::Resource
+        COURSE_STATE_MAPPING = {
+          published_with_unpublished_changes: :published,
+        }.freeze
+
         class << self
           def enrichment_attribute(name, enrichment_name = name)
             attribute name do
@@ -112,7 +116,7 @@ module API
         end
 
         attribute :state do
-          @object.content_status
+          COURSE_STATE_MAPPING[@object.content_status] || @object.content_status
         end
 
         attribute :summary do

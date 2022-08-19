@@ -31,7 +31,7 @@ describe Course, type: :model do
     context "for a course without any enrichments" do
       let(:enrichments) { [] }
 
-      its(:content_status) { is_expected.to eq(:empty) }
+      its(:content_status) { is_expected.to eq(:draft) }
     end
 
     context "for a course an initial draft enrichments" do
