@@ -16,8 +16,6 @@
 
 <%= render FindInterface::Courses::SummaryComponent::View.new(course) %>
 
-<%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
-
 <!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
 
 <%= render FindInterface::Courses::ApplyComponent::View.new(course) if course.has_vacancies? || !CycleTimetable.mid_cycle? %>
@@ -29,5 +27,9 @@
     <% if course.about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: } %>
     <% end %>
+
+    <%= render FindInterface::Courses::AboutSchoolsComponent::View.new(course) %>
+
+    <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
