@@ -32,6 +32,10 @@
 
     <%= render FindInterface::Courses::EntryRequirementsComponent::View.new(course:) %>
 
+    <% if course.salaried? %>
+      <%= render partial: "find/courses/salary", locals: { course: } %>
+    <% end %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
