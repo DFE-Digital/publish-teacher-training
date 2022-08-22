@@ -46,3 +46,16 @@ en:
     courses:
       show:
         back_to_search: Back to search results
+    scholarships:
+      physics:
+        body: Institute of Physics
+        url: https://www.iop.org/about/support-grants/iop-teacher-training-scholarships
+      chemistry:
+        body: Royal Society of Chemistry
+        url: https://www.rsc.org/prizes-funding/funding/teacher-training-scholarships/
+      computing:
+        body: Chartered Institute for IT
+        url: https://www.bcs.org/qualifications-and-certifications/training-and-scholarships-for-teachers/bcs-computer-teacher-scholarships/
+      mathematics:
+        body: Institute of Mathematics and its Applications
+        url: http://teachingmathsscholars.org/about
