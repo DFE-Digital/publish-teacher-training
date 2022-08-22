@@ -1,3 +1,7 @@
+constraints(FindConstraint.new) do
+  get "/", to: "find/application#index"
+end
+
 namespace :find, path: "/find" do
   get "/", to: "application#index"
   get "/accessibility", to: "pages#accessibility", as: :accessibility
