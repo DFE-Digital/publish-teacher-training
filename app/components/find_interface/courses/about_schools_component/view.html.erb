@@ -11,7 +11,7 @@
           miles of the university, but sometimes they can cover a wider area, especially outside of cities.</p>
       <% end %>
     <% elsif course.program_type == "scitt_programme" && course.provider.provider_code != "E65" %>
-      <%= render Find::Interface::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
+      <%= render FindInterface::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
         <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools
           you want to be in, but your course will try to place you in schools you can commute to.</p>
       <% end %>
