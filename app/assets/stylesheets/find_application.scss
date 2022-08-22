@@ -2,3 +2,5 @@
 @import "./govuk_style_setup";
 @import "components/all";
 @import "js-enabled";
+@import "accessible-autocomplete/dist/accessible-autocomplete.min";
+@import "autocomplete";

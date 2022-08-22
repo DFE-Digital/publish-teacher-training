@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`setupAutocomplete should instantiate an autocomplete 1`] = `
+<div
+  id="outer-container"
+>
+  
+           
+  <label
+    for="query"
+  >
+    Enter something
+  </label>
+  
+           
+  <div>
+    <div
+      class="autocomplete__wrapper"
+    >
+      <div
+        style="border: 0px; height: 1px; margin-bottom: -1px; margin-right: -1px; overflow: hidden; padding: 0px; position: absolute; white-space: nowrap; width: 1px;"
+      >
+        <div
+          aria-atomic="true"
+          aria-live="polite"
+          id="query__status--A"
+          role="status"
+        >
+          
+        </div>
+        <div
+          aria-atomic="true"
+          aria-live="polite"
+          id="query__status--B"
+          role="status"
+        >
+          
+        </div>
+      </div>
+      
+      <input
+        aria-autocomplete="list"
+        aria-describedby="query__assistiveHint"
+        aria-expanded="false"
+        aria-owns="query__listbox"
+        autocomplete="off"
+        class="autocomplete__input autocomplete__input--default"
+        id="query"
+        name=""
+        placeholder=""
+        role="combobox"
+        type="text"
+      />
+      
+      <ul
+        class="autocomplete__menu autocomplete__menu--inline autocomplete__menu--hidden"
+        id="query__listbox"
+        role="listbox"
+      >
+        
+      </ul>
+      <span
+        id="query__assistiveHint"
+        style="display: none;"
+      >
+        When autocomplete results are available use up and down arrows to review and enter to select.  Touch device users, explore by touch or with swipe gestures.
+      </span>
+    </div>
+  </div>
+  <select
+    id="query-select"
+    style="display: none;"
+  >
+    
+             
+    <option
+      value=""
+    />
+    
+             
+    <option
+      value="A"
+    >
+      A
+    </option>
+    
+             
+    <option
+      value="B"
+    >
+      B
+    </option>
+    
+             
+    <option
+      value="C"
+    >
+      C
+    </option>
+    
+           
+  </select>
+  
+         
+</div>
+`;
