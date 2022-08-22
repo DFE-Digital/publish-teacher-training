@@ -4,7 +4,7 @@
 
 import setupAutocomplete from './setup-autocomplete'
 
-describe('initACachedProvidersAutocomplete', () => {
+describe('setupAutocomplete', () => {
   beforeEach(() => {
     document.body.innerHTML = `
          <div id="outer-container">

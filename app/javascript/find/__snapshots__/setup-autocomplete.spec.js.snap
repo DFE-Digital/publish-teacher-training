@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`initACachedProvidersAutocomplete should instantiate an autocomplete 1`] = `
+exports[`setupAutocomplete should instantiate an autocomplete 1`] = `
 <div
   id="outer-container"
 >
