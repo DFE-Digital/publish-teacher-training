@@ -1,13 +1,15 @@
 constraints(FindConstraint.new) do
-  get "/", to: "find/application#index"
+  get "/", to: "find/search/locations#index", as: :find
 end
 
 namespace :find, path: "/find" do
-  get "/", to: "application#index"
+  scope module: :search do
+    resources :age_groups, path: "/age-groups"
+    resources :locations, path: "/"
+  end
+
   get "/accessibility", to: "pages#accessibility", as: :accessibility
   get "/privacy-policy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
-
-  resources :age_groups, path: "/age-groups", controller: "search/age_groups"
 end
