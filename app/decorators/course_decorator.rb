@@ -159,9 +159,9 @@ class CourseDecorator < ApplicationDecorator
     elsif excluded_from_bursary?
       # Duplicate branch body detected
       "Student finance if you’re eligible"
-    elsif has_scholarship_and_bursary?
+    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
       "Scholarships or bursaries, as well as student finance, are available if you’re eligible"
-    elsif has_bursary?
+    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
       "Bursaries and student finance are available if you’re eligible"
     else
       # Duplicate branch body detected
@@ -407,5 +407,9 @@ private
     return false unless /with/.match?(object.name)
 
     exclusions.any? { |e| e.match?(object.name) }
+  end
+
+  def bursary_and_scholarship_flag_active_or_preview?
+    (Settings.find_features.bursaries_and_scholarships_announced == true) || !params[:controller].start_with?("find")
   end
 end

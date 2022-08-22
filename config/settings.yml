@@ -116,3 +116,6 @@ cookies:
 
 find:
   apply_base_url: https://www.apply-for-teacher-training.service.gov.uk
+
+find_features:
+  bursaries_and_scholarships_announced: true
