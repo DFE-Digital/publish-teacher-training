@@ -30,6 +30,8 @@
 
     <%= render FindInterface::Courses::AboutSchoolsComponent::View.new(course) %>
 
+    <%= render FindInterface::Courses::EntryRequirementsComponent::View.new(course:) %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
