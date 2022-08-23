@@ -48,6 +48,10 @@
 
     <%= render FindInterface::Courses::InternationalStudentsComponent::View.new(course:) %>
 
+    <% if course.provider.train_with_disability.present? %>
+      <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
+    <% end %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
