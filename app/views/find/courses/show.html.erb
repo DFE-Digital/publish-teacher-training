@@ -46,6 +46,8 @@
       <%= render partial: "find/courses/interview_process", locals: { course: } %>
     <% end %>
 
+    <%= render FindInterface::Courses::InternationalStudentsComponent::View.new(course:) %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
