@@ -42,6 +42,10 @@
       <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
     <% end %>
 
+    <% if course.interview_process.present? %>
+      <%= render partial: "find/courses/interview_process", locals: { course: } %>
+    <% end %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
