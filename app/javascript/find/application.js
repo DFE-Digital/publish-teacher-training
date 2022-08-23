@@ -3,4 +3,4 @@ import { initAll } from 'govuk-frontend'
 import setupAutocomplete from './setup-autocomplete'
 
 initAll()
-setupAutocomplete('find-courses-by-location-or-training-provider-form-query-field')
+setupAutocomplete('find-courses-by-location-or-training-provider-form-school-uni-or-provider-query-field')

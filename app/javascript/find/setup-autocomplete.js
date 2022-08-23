@@ -1,9 +1,14 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
 
-const getSelectElement = inputId => document.getElementById(inputId)
+const getSelectElement = elementId => document.getElementById(elementId)
 
 const setupAutocomplete = inputId => {
-  const selectElement = getSelectElement(inputId)
+  let elementId = inputId
+  let selectElement = getSelectElement(elementId)
+  if (selectElement === null) {
+    elementId += '-error'
+    selectElement = getSelectElement(elementId)
+  }
 
   try {
     selectElement.querySelector("[value='']").innerHTML = ''
@@ -15,7 +20,7 @@ const setupAutocomplete = inputId => {
       showNoOptionsFound: true
     })
   } catch (err) {
-    console.error(`Could not enhance ${inputId}`, err)
+    console.error(`Could not enhance ${elementId}`, err)
   }
 }
 
