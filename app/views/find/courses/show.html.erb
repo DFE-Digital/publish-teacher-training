@@ -38,6 +38,10 @@
 
     <%= render FindInterface::Courses::FeesAndFinancialSupportComponent::View.new(course) %>
 
+    <% if course.provider.train_with_us.present? ||  course.about_accrediting_body.present? %>
+      <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
+    <% end %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
