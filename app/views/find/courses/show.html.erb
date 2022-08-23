@@ -54,6 +54,8 @@
 
     <%= render FindInterface::Courses::ContactDetailsComponent::View.new(course) %>
 
+    <%= render partial: "find/courses/advice", locals: { course: } %>
+
     <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>
