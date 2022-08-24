@@ -12,6 +12,11 @@
     <dd data-qa="course__age_range"><%= age_range_in_years.humanize %></dd>
   <% end %>
 
+  <% if length.present? %>
+    <dt class="app-description-list__label">Course length</dt>
+    <dd data-qa="course__length"><%= length %></dd>
+  <% end %>
+
   <% if applications_open_from.present? %>
     <dt class="app-description-list__label">Date you can apply from</dt>
     <dd data-qa="course__applications_open"><%= l(applications_open_from&.to_date) %></dd>
