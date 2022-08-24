@@ -14,7 +14,8 @@ feature "course searches", type: :feature do
     when_i_select_the_provider_radio_button
 
     and_i_select_the_provider
-    then_i_click_continue
+    # TODO: currently there is no page to land on
+    # then_i_click_continue
   end
 
 private
