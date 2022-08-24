@@ -26,7 +26,7 @@ When testing against a review environment (e.g. ending `pr-1234`) add `APP_NAME=
 
 ### Maintenance mode
 
-If the database instance is lost then the API application will return a 500 response, however it may start to return responses before the restore process is complete.  If data is lost or corrupted the application may still return responses and accept new data.
+If the database instance is lost then the API application will return a 500 response, however it may start to return responses before the restore process is complete. If data is lost or corrupted the application may still return responses and accept new data.
 
 In either scenario it will probably be desirable to enable [Maintenance mode](maintenance-mode.md) to ensure that the database is only read from and written to when it is back in it's expected state.
 
