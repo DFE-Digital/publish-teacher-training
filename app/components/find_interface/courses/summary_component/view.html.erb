@@ -4,7 +4,7 @@
     <dd data-qa="course__accredited_body"><%= accrediting_provider.provider_name %></dd>
   <% end %>
   <dt class="app-description-list__label">Financial support</dt>
-  <dd data-qa="course__funding_option"><%= course.decorate.funding_option %></dd>
+  <dd data-qa="course__funding_option"><%= funding_option %></dd>
   <dt class="app-description-list__label">Qualification</dt>
   <%= render FindInterface::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
   <% if age_range_in_years.present? %>
