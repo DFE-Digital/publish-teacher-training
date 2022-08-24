@@ -5,7 +5,7 @@ const getSelectElement = elementId => document.getElementById(elementId)
 const setupAutocomplete = inputId => {
   let elementId = inputId
   let selectElement = getSelectElement(elementId)
-  if (selectElement === null) {
+  if (!selectElement) {
     elementId += '-error'
     selectElement = getSelectElement(elementId)
   }

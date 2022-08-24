@@ -2,7 +2,7 @@ module Find
   module Search
     class LocationsController < Find::ApplicationController
       def index
-        @providers = RecruitmentCycle.current.providers.by_name_ascending
+        providers
         @courses_by_location_or_training_provider_form = CoursesByLocationOrTrainingProviderForm.new
       end
 
@@ -12,12 +12,16 @@ module Find
         if @courses_by_location_or_training_provider_form.valid?
           redirect_to find_age_groups_path
         else
-          @providers = RecruitmentCycle.current.providers.by_name_ascending
+          providers
           render :index
         end
       end
 
     private
+
+      def providers
+        @providers ||= RecruitmentCycle.current.providers.by_name_ascending
+      end
 
       def find_courses_by_location_or_training_provider_form_params
         params[:find_courses_by_location_or_training_provider_form]
