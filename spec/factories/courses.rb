@@ -212,5 +212,9 @@ FactoryBot.define do
     trait :draft_enrichment do
       enrichments { [build(:course_enrichment, :initial_draft, course: nil)] }
     end
+
+    trait :published do
+      enrichments { [build(:course_enrichment, :published)] }
+    end
   end
 end
