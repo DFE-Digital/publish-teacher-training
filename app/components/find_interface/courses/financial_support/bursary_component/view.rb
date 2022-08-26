@@ -12,10 +12,6 @@ module FindInterface
           super
           @course = course
         end
-
-        def duplicate_requirement(requirement)
-          bursary_first_line_ending.sub!(/[.:]$/, "") == requirement
-        end
       end
     end
   end
