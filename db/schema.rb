@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_25_093437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -132,7 +132,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_072950) do
     t.boolean "accept_maths_gcse_equivalency"
     t.boolean "accept_science_gcse_equivalency"
     t.string "additional_gcse_equivalencies"
+    t.boolean "can_sponsor_skilled_worker_visa", default: false
+    t.boolean "can_sponsor_student_visa", default: false
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
+    t.index ["can_sponsor_skilled_worker_visa"], name: "index_course_on_can_sponsor_skilled_worker_visa"
+    t.index ["can_sponsor_student_visa"], name: "index_course_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["degree_grade"], name: "index_course_on_degree_grade"
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
