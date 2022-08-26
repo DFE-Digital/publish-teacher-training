@@ -54,7 +54,7 @@ describe FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponen
       it "renders link to scholarship body" do
         render_inline(described_class.new(course))
 
-        expect(rendered_component).to include("For a scholarship, you’ll need to apply through the Royal Society of Chemistry")
+        expect(page.has_text?("For a scholarship, you’ll need to apply through the Royal Society of Chemistry")).to be true
         expect(page.has_link?(
           "Check whether you’re eligible for a scholarship and find out how to apply",
           href: "https://www.rsc.org/prizes-funding/funding/teacher-training-scholarships/",

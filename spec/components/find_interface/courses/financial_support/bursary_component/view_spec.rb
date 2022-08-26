@@ -10,12 +10,12 @@ describe FindInterface::Courses::FinancialSupport::BursaryComponent::View, type:
     end
 
     it "renders bursary details" do
-      expect(rendered_component).to include("You could be eligible for a bursary of £3,000")
+      expect(page.has_text?("You could be eligible for a bursary of £3,000")).to be true
     end
 
     context "bursary requirements" do
       it "renders bursary requirements" do
-        expect(rendered_component).to include("To be eligible for a bursary you’ll need a 2:2 degree in any subject")
+        expect(page.has_text?("To be eligible for a bursary you’ll need a 2:2 degree in any subject")).to be true
       end
     end
   end
@@ -26,7 +26,7 @@ describe FindInterface::Courses::FinancialSupport::BursaryComponent::View, type:
 
       render_inline(described_class.new(course))
 
-      expect(rendered_component).not_to include("You could be eligible for a bursary of £3,000")
+      expect(page.has_text?("You could be eligible for a bursary of £3,000")).to be false
     end
   end
 end
