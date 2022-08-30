@@ -12,4 +12,20 @@ class ProviderDecorator < ApplicationDecorator
 
     object.website.start_with?("http") ? object.website : "http://#{object.website}"
   end
+
+  def full_address
+    address_lines.map { |line| ERB::Util.html_escape(line) }.join("<br> ").html_safe
+  end
+
+private
+
+  def address_lines
+    [
+      object.address1,
+      object.address2,
+      object.address3,
+      object.address4,
+      object.postcode,
+    ].compact_blank
+  end
 end
