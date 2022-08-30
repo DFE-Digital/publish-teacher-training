@@ -10,6 +10,7 @@ namespace :find, path: "/find" do
 
   scope module: :search do
     resources :age_groups, path: "/age-groups"
+    resources :subjects
     resources :locations, path: "/"
   end
 end
