@@ -27,7 +27,8 @@ module API
         :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency,
         :accept_science_gcse_equivalency, :additional_gcse_equivalencies,
         :degree_grade, :additional_degree_subject_requirements,
-        :degree_subject_requirements
+        :degree_subject_requirements, :can_sponsor_skilled_worker_visa,
+        :can_sponsor_student_visa
 
       attribute :start_date do
         written_month_year(@object.start_date) if @object.start_date

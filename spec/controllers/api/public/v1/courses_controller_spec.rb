@@ -288,7 +288,9 @@ RSpec.describe API::Public::V1::CoursesController do
                 interview_process
                 other_requirements
                 personal_qualities
-                salary_details]
+                salary_details
+                can_sponsor_skilled_worker_visa
+                can_sponsor_student_visa]
           end
 
           before do
