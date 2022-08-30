@@ -15,80 +15,48 @@
 
 <p class="govuk-body-l" data-qa="course__description"><%= course.description %></p>
 
-<dl class="app-description-list govuk-!-margin-bottom-8">
-  <% if course.accrediting_provider.present? %>
-    <dt class="app-description-list__label">Accredited body</dt>
-    <dd data-qa="course__accredited_body"><%= course.accrediting_provider.provider_name %></dd>
-  <% end %>
-  <dt class="app-description-list__label">Financial support</dt>
-  <dd data-qa="course__funding_option"><%= course.funding_option %></dd>
-  <dt class="app-description-list__label">Qualification</dt>
-  <dd data-qa="course__qualifications">
-    <%= render partial: "publish/courses/preview/qualification" %>
-  </dd>
+<%= render FindInterface::Courses::SummaryComponent::View.new(course) %>
 
-  <% if course.age_range_in_years.present? %>
-    <dt class="app-description-list__label">Age range</dt>
-    <dd data-qa="course__age_range_in_years"><%= course.age_range_in_years.humanize %></dd>
-  <% end %>
+<!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
 
-  <% if course.length.present? %>
-    <dt class="app-description-list__label">Course length</dt>
-    <dd data-qa="course__length"><%= course.length %></dd>
-  <% end %>
-  <% if course.applications_open_from.present? %>
-    <dt class="app-description-list__label">Date you can apply from</dt>
-    <dd data-qa="course__applications_open"><%= l(course.applications_open_from&.to_date) %></dd>
-  <% end %>
-  <% if course.start_date.present? %>
-    <dt class="app-description-list__label">Date course starts</dt>
-    <dd data-qa="course__start_date"><%= l(course.start_date&.to_date, format: :short) %></dd>
-  <% end %>
-  <% if @provider.website.present? %>
-    <dt class="app-description-list__label">Website</dt>
-    <dd data-qa="course__provider_website">
-      <%= govuk_link_to @provider.website, @provider.website %>
-    </dd>
-  <% end %>
-</dl>
+<%= render FindInterface::Courses::ApplyComponent::View.new(course) if course.has_vacancies? || !CycleTimetable.mid_cycle? %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">Contents</h2>
-    <ul class="govuk-list app-list--dash govuk-!-margin-bottom-8">
-      <li><%= govuk_link_to "Course summary", "#section-about" %></li>
-      <li><%= govuk_link_to course.placements_heading, "#section-schools" %></li>
-      <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
-      <% if course.salaried? %>
-        <li><%= govuk_link_to "Salary", "#section-salary" %></li>
-      <% end %>
-      <li><%= govuk_link_to "About the training provider", "#section-about-provider" %></li>
-      <li><%= govuk_link_to "Fees and financial support", "#section-financial-support" %></li>
-      <% if course.interview_process.present? %>
-        <li><%= govuk_link_to "Interview process", "#section-interviews" %></li>
-      <% end %>
-      <li><%= govuk_link_to "International candidates", "#section-international-students" %></li>
-      <li><%= govuk_link_to "Training with disabilities and other needs", "#section-train-with-disabilities" %></li>
-      <li><%= govuk_link_to "Contact this training provider", "#section-contact" %></li>
-      <li><%= govuk_link_to "Support and advice", "#section-advice" %></li>
-      <li><%= govuk_link_to "Apply", "#section-apply" %></li>
-    </ul>
+    <%= render FindInterface::Courses::ContentsComponent::View.new(course) %>
 
-    <%= render partial: "publish/courses/preview/about_course" %>
-    <%= render partial: "publish/courses/preview/about_schools" %>
-    <%= render partial: "publish/courses/preview/entry_requirements_qualifications" %>
+    <% if course.about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: } %>
+    <% end %>
+
+    <%= render FindInterface::Courses::AboutSchoolsComponent::View.new(course) %>
+
+    <%= render FindInterface::Courses::EntryRequirementsComponent::View.new(course:) %>
+
     <% if course.salaried? %>
-      <%= render partial: "publish/courses/preview/salary" %>
+      <%= render partial: "find/courses/salary", locals: { course: } %>
     <% end %>
-    <%= render partial: "publish/courses/preview/about_the_provider" %>
-    <%= render partial: "publish/courses/preview/fees_and_financial_support" %>
+
+    <%= render FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
+
+    <% if course.provider.train_with_us.present? ||  course.about_accrediting_body.present? %>
+      <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
+    <% end %>
+
     <% if course.interview_process.present? %>
-      <%= render partial: "publish/courses/preview/interview_process" %>
+      <%= render partial: "find/courses/interview_process", locals: { course: } %>
     <% end %>
-    <%= render InternationalStudentsPreview::View.new(course:) %>
-    <%= render partial: "publish/courses/preview/train_with_disabilities" %>
-    <%= render partial: "publish/courses/preview/contact_details" %>
-    <%= render partial: "publish/courses/preview/advice" %>
-    <%= render partial: "publish/courses/preview/apply" %>
+
+    <%= render FindInterface::Courses::InternationalStudentsComponent::View.new(course:) %>
+
+    <% if course.provider.train_with_disability.present? %>
+      <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
+    <% end %>
+
+    <%= render FindInterface::Courses::ContactDetailsComponent::View.new(course) %>
+
+    <%= render partial: "find/courses/advice", locals: { course: } %>
+
+    <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
   </div>
 </div>

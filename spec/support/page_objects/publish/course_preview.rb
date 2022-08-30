@@ -41,9 +41,8 @@ module PageObjects
       element :course_advice, "#section-advice"
       element :course_apply, "#section-apply"
       element :choose_a_training_location_table, "[data-qa=course__choose_a_training_location]"
-      element :locations_map, "[data-qa=course__locations_map]"
       element :salary_details, "[data-qa=course__salary_details]"
-      element :age_range_in_years, "[data-qa=course__age_range_in_years]"
+      element :age_range_in_years, "[data-qa=course__age_range]"
     end
   end
 end

@@ -170,8 +170,6 @@ private
         .to have_selector("tbody tr:nth-child(#{index}) td", text: has_vacancies_string)
     end
 
-    expect(course_preview_page).to have_locations_map
-
     expect(course_preview_page).to have_course_advice
   end
 
