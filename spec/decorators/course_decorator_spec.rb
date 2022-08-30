@@ -639,7 +639,7 @@ describe CourseDecorator do
       let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns teaching placements" do
-        expect(decorated_course.placements_heading).to eq("How teaching placements work")
+        expect(decorated_course.placements_heading).to eq("School placements")
       end
     end
   end

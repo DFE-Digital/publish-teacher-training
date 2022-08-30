@@ -234,11 +234,15 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def placements_heading
-    if is_further_education?
-      "How teaching placements work"
+    if further_education?
+      "Teaching placements"
     else
       "School placements"
     end
+  end
+
+  def further_education?
+    level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
   def listing_basic_details
