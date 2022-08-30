@@ -1,5 +1,5 @@
-<% provider = Provider.first %>
 <% course = RecruitmentCycle.current.courses.find_by(name: "Primary", course_code: "39T4").decorate %>
+<% provider = course.provider %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(url = find_path, body = t("find.courses.show.back_to_search")) %>
