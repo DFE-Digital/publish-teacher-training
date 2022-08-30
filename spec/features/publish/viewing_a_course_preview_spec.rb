@@ -147,8 +147,17 @@ private
     )
 
     expect(course_preview_page.contact_address).to have_content(
-      provider.full_address,
+      provider.address1,
     )
+    expect(course_preview_page.contact_address).to have_content(
+                                                     provider.address2,
+                                                   )
+    expect(course_preview_page.contact_address).to have_content(
+                                                     provider.address3,
+                                                   )
+    expect(course_preview_page.contact_address).to have_content(
+                                                     provider.address4,
+                                                   )
 
     expect(course_preview_page).to have_choose_a_training_location_table
     expect(course_preview_page.choose_a_training_location_table).not_to have_content(
