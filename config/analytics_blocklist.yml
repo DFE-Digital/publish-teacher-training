@@ -55,12 +55,6 @@
   :site:
   - uuid
   - discarded_at
-  :user_permission:
-  - id
-  - user_id
-  - provider_id
-  - created_at
-  - updated_at
   :provider_ucas_preference:
   - id
   - provider_id
@@ -76,3 +70,15 @@
   - last_name
   - sign_in_user_id
   - magic_link_token
+  :organisation_provider:
+  - id
+  - provider_id
+  - organisation_id
+  :organisation_user:
+  - id
+  - organisation_id
+  - user_id
+  :organisation:
+  - id
+  - name
+  - org_id
