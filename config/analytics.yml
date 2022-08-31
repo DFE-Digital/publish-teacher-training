@@ -98,18 +98,6 @@ shared:
     - user_id
     - created_at
     - updated_at
-  organisation:
-    - id
-    - name
-    - org_id
-  organisation_provider:
-    - id
-    - provider_id
-    - organisation_id
-  organisation_user:
-    - id
-    - organisation_id
-    - user_id
   provider:
     - id
     - address4
@@ -195,3 +183,9 @@ shared:
     - created_at
     - updated_at
     - course_publish
+  user_permission:
+    - id
+    - user_id
+    - provider_id
+    - created_at
+    - updated_at
