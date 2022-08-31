@@ -14,8 +14,8 @@ feature "course searches", type: :feature do
     when_i_select_the_provider_radio_button
 
     and_i_select_the_provider
-    # TODO: currently there is no page to land on
-    # then_i_click_continue
+    then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
+    and_i_am_on_the_age_groups_page
   end
 
 private
@@ -54,8 +54,18 @@ private
     courses_by_location_or_training_provider_page.provider_options.select(options.sample)
   end
 
-  def then_i_click_continue
-    courses_by_location_or_training_provider_page.continue.click
+  def then_i_click_continue_on_the(page)
+    page.continue.click
+  end
+
+  def and_i_am_on_the_age_groups_page
+    expect(age_groups_page).to be_displayed
+
+    expect(age_groups_page).to have_primary
+    expect(age_groups_page).to have_secondary
+    expect(age_groups_page).to have_further_education
+
+    expect(age_groups_page).to have_continue
   end
 
   alias_method :and_i_visit_the_search_page, :when_i_visit_the_search_page
