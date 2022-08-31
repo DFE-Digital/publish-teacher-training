@@ -71,6 +71,8 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:running).with_value(course.findable?) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
+  it { is_expected.to have_attribute(:can_sponsor_skilled_worker_visa) }
+  it { is_expected.to have_attribute(:can_sponsor_student_visa) }
 
   context "when bursary amount is present" do
     let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :classics)]) }

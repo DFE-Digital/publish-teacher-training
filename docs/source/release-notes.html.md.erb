@@ -5,6 +5,13 @@ weight: 2
 
 # Release Notes
 
+## 31 March 2022
+
+We have introduced two new fields to the `CourseAttributes` schema which provide a way to determine availability for visa sponsorships with regards to individual courses.
+
+- Add `can_sponsor_skilled_worker_visa` field to `CourseAttributes`. This is a boolean field which returns true if a skilled worker visa can be sponsored for a course.
+- Add `can_sponsor_student_visa` field to `CourseAttributes`. This is a boolean field which returns true if a student visa can be sponsored for a course.
+
 ## 5 March 2021
 
 - Add `subject_codes` field to `CourseAttributes`. This is an array of two-digit subject codes as strings, corresponding to subjects available on the `/subjects` endpoint.

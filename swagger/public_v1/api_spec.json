@@ -539,6 +539,16 @@
             "nullable": true,
             "description": "Details about equivalency tests the provider offers or accepts",
             "example": "We offer our own equivalency tests."
+          },
+          "can_sponsor_skilled_worker_visa": {
+            "type": "boolean",
+            "description": "Does this course provide sponsorship for a skilled worker visa?",
+            "example": true
+          },
+          "can_sponsor_student_visa": {
+            "type": "boolean",
+            "description": "Does this course provide sponsorship for a student visa?",
+            "example": false
           }
         }
       },

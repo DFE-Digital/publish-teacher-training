@@ -37,6 +37,8 @@ describe API::V3::SerializableCourse do
   it { is_expected.to have_attribute :age_range_in_years }
   it { is_expected.to have_attribute(:recruitment_cycle_year).with_value(course.recruitment_cycle.year) }
   it { is_expected.to have_attribute :program_type }
+  it { is_expected.to have_attribute :can_sponsor_skilled_worker_visa }
+  it { is_expected.to have_attribute :can_sponsor_student_visa }
 
   context "with a provider" do
     let(:provider) { course.provider }
