@@ -13,6 +13,8 @@ notify:
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
 
+apply_base_url: https://www.apply-for-teacher-training.service.gov.uk
+
 dfe_signin:
   # Our service name
   identifier: bats2
@@ -113,3 +115,6 @@ cookies:
   consent:
     name: _consented_to_analytics_cookies
     expire_after_days: 182
+
+find_features:
+  bursaries_and_scholarships_announced: true

@@ -12,6 +12,7 @@ en:
     publish: "Publish teacher training courses"
     find: "Find postgraduate teacher training"
     support: "Publish support console"
+    get_into_teaching: "Get Into Teaching"
   header:
     items:
       sign_out: "Sign out"
@@ -597,3 +598,4 @@ en:
     url_get_an_advisor: https://adviser-getintoteaching.education.gov.uk
     url_online_chat: https://getintoteaching.education.gov.uk/#talk-to-us
     url_ways_to_train: https://getintoteaching.education.gov.uk/ways-to-train
+    url: https://getintoteaching.education.gov.uk

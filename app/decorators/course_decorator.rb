@@ -37,6 +37,10 @@ class CourseDecorator < ApplicationDecorator
     I18n.t("edit_options.qualifications.#{object.qualification}.label")
   end
 
+  def find_outcome
+    I18n.t("find.qualifications.#{object.qualification}")
+  end
+
   def is_send?
     object.is_send? ? "Yes" : "No"
   end
@@ -155,9 +159,9 @@ class CourseDecorator < ApplicationDecorator
     elsif excluded_from_bursary?
       # Duplicate branch body detected
       "Student finance if you’re eligible"
-    elsif has_scholarship_and_bursary?
+    elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
       "Scholarships or bursaries, as well as student finance, are available if you’re eligible"
-    elsif has_bursary?
+    elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
       "Bursaries and student finance are available if you’re eligible"
     else
       # Duplicate branch body detected
@@ -230,11 +234,15 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def placements_heading
-    if is_further_education?
-      "How teaching placements work"
+    if further_education?
+      "Teaching placements"
     else
       "School placements"
     end
+  end
+
+  def further_education?
+    level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
   def listing_basic_details
@@ -403,5 +411,9 @@ private
     return false unless /with/.match?(object.name)
 
     exclusions.any? { |e| e.match?(object.name) }
+  end
+
+  def bursary_and_scholarship_flag_active_or_preview?
+    (Settings.find_features.bursaries_and_scholarships_announced == true) || !params[:controller].start_with?("find")
   end
 end

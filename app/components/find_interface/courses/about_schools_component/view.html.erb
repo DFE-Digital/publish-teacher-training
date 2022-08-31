@@ -1,0 +1,53 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-schools"><%= course.placements_heading %></h2>
+  <div data-qa="course__about_schools">
+    <% if course.program_type == "higher_education_programme" && course.provider.provider_code != "B31" %>
+      <%= render FindInterface::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
+        <p class="govuk-body">You’ll be placed in schools for most of your course. Your school placements will be within
+          commuting distance.</p>
+        <p class="govuk-body">You can’t pick which schools you want to be in, but your university will try to take your
+          journey time into consideration.</p>
+        <p class="govuk-body">Universities can work with over 100 potential placement schools. Most will be within 10
+          miles of the university, but sometimes they can cover a wider area, especially outside of cities.</p>
+      <% end %>
+    <% elsif course.program_type == "scitt_programme" && course.provider.provider_code != "E65" %>
+      <%= render FindInterface::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
+        <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools
+          you want to be in, but your course will try to place you in schools you can commute to.</p>
+      <% end %>
+    <% end %>
+
+    <% if course.how_school_placements_work.present? %>
+      <%= markdown(course.how_school_placements_work) %>
+    <% end %>
+
+    <% if course.site_statuses.map(&:site).uniq.many? %>
+      <h3 class="govuk-heading-m">Locations</h3>
+      <p class="govuk-body">You can select one of the following locations when you apply.</p>
+      <table class="govuk-table app-table--vertical-align-middle" data-qa="course__choose_a_training_location">
+        <caption class="govuk-visually-hidden">List of locations and vacancies</caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Location</th>
+          <th class="govuk-table__header" scope="col">Vacancies</th>
+        </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+        <% course.preview_site_statuses.each do |site_status| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <strong><%= smart_quotes(site_status.site.location_name) %></strong>
+              <br>
+              <%= smart_quotes(site_status.site.full_address) %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= site_status.has_vacancies? ? "Yes" : "No" %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

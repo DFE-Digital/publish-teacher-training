@@ -1,0 +1,26 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-financial-support">Fees and financial support</h2>
+
+  <% if has_fees? %>
+    <%= render FindInterface::Courses::FeesComponent::View.new(course) %>
+  <% end %>
+
+  <%= render FindInterface::Utility::AdviceComponent::View.new(title: "Financial support from the government") do %>
+    <% if salaried? %>
+      <%= render partial: "find/courses/financial_support/salaried" %>
+    <% elsif excluded_from_bursary? %>
+      <%= render partial: "find/courses/financial_support/loan" %>
+    <% elsif bursary_only? %>
+      <%= render FindInterface::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+    <% elsif has_scholarship_and_bursary? %>
+      <%= render FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+    <% else %>
+      <%= render partial: "find/courses/financial_support/loan" %>
+    <% end %>
+  <% end %>
+
+  <% if financial_support.present? %>
+    <h3 data-qa="course__financial_support_details" class="govuk-heading-m">Financial support from the training provider</h3>
+    <%= markdown(financial_support) %>
+  <% end %>
+</div>

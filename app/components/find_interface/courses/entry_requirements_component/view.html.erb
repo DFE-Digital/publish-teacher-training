@@ -1,0 +1,53 @@
+<div class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-entry">Entry requirements</h2>
+  <h3 class="govuk-heading-m">Qualifications needed</h3>
+  <div data-qa="course__required_qualifications">
+    <p class="govuk-body">
+      <%= degree_grade_content(course) %>
+    </p>
+
+    <% if course.degree_subject_requirements.present? %>
+      <p class="govuk-body">
+        <%= helpers.markdown(course.degree_subject_requirements) %>
+      </p>
+    <% end %>
+
+    <% if course.level == "secondary" %>
+      <p class="govuk-body">
+        <%= secondary_advisory(course) %>
+      </p>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= required_gcse_content(course) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= pending_gcse_content(course) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= gcse_equivalency_content(course) %>
+    </p>
+
+    <% if course.additional_gcse_equivalencies.present? %>
+      <p class="govuk-body">
+        <%= helpers.markdown(course.additional_gcse_equivalencies) %>
+      </p>
+    <% end %>
+  </div>
+
+  <% if course.personal_qualities.present? %>
+    <h3 class="govuk-heading-m">Personal qualities</h3>
+    <div data-qa="course__personal_qualities">
+      <%= helpers.markdown(course.personal_qualities) %>
+    </div>
+  <% end %>
+
+  <% if course.other_requirements.present? %>
+    <h3 class="govuk-heading-m">Other requirements</h3>
+    <div data-qa="course__other_requirements">
+      <%= helpers.markdown(course.other_requirements) %>
+    </div>
+  <% end %>
+</div>

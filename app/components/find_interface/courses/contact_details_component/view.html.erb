@@ -1,0 +1,45 @@
+<div id="contact_section" class="govuk-!-margin-bottom-8">
+  <h2 class="govuk-heading-l" id="section-contact">Contact this training provider</h2>
+
+  <div class="course-basicinfo">
+    <dl class="app-description-list">
+      <% if course.provider.email.present? %>
+        <dt class="app-description-list__label">Email</dt>
+        <dd data-qa="provider__email">
+          <%= govuk_mail_to course.provider.email, course.provider.email, title: "Send email to course contact", aria: { label: "Send email to course contact" } %>
+        </dd>
+      <% end %>
+
+      <% if course.provider.telephone.present? %>
+        <dt class="app-description-list__label">Telephone</dt>
+        <dd data-qa="provider__telephone">
+          <%= course.provider.telephone %>
+        </dd>
+      <% end %>
+
+      <% if course.provider.decorate.website.present? %>
+        <dt class="app-description-list__label">Website</dt>
+        <dd data-qa="provider__website">
+          <%= govuk_link_to course.provider.decorate.website, course.provider.decorate.website %>
+        </dd>
+      <% end %>
+
+      <% if course.provider.provider_code == "28T" && course.course_code == "X104" %>
+        <dt class="app-description-list__label">Address</dt>
+        <dd data-qa="provider__address">
+          LSJS
+          <br>
+          44A Albert Road
+          <br>
+          London
+          <br>
+          NW4 2SJ
+      <% elsif course.provider.decorate.full_address.present? %>
+        <dt class="app-description-list__label">Address</dt>
+        <dd data-qa="provider__address">
+          <%= course.provider.decorate.full_address %>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
+</div>

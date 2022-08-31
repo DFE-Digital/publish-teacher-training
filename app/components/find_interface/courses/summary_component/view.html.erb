@@ -1,0 +1,36 @@
+<dl class="app-description-list govuk-!-margin-bottom-8">
+  <% if accrediting_provider.present? && (accrediting_provider.provider_code != provider.provider_code) %>
+    <dt class="app-description-list__label">Accredited body</dt>
+    <dd data-qa="course__accredited_body"><%= accrediting_provider.provider_name %></dd>
+  <% end %>
+  <dt class="app-description-list__label">Financial support</dt>
+  <dd data-qa="course__funding_option"><%= funding_option %></dd>
+  <dt class="app-description-list__label">Qualification</dt>
+  <%= render FindInterface::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
+  <% if age_range_in_years.present? %>
+    <dt class="app-description-list__label">Age range</dt>
+    <dd data-qa="course__age_range"><%= age_range_in_years.humanize %></dd>
+  <% end %>
+
+  <% if length.present? %>
+    <dt class="app-description-list__label">Course length</dt>
+    <dd data-qa="course__length"><%= length %></dd>
+  <% end %>
+
+  <% if applications_open_from.present? %>
+    <dt class="app-description-list__label">Date you can apply from</dt>
+    <dd data-qa="course__applications_open"><%= l(applications_open_from&.to_date) %></dd>
+  <% end %>
+
+  <% if start_date.present? %>
+    <dt class="app-description-list__label">Date course starts</dt>
+    <dd data-qa="course__start_date"><%= l(start_date&.to_date, format: :short) %></dd>
+  <% end %>
+
+  <% if provider.decorate.website.present? %>
+    <dt class="app-description-list__label">Website</dt>
+    <dd data-qa="course__provider_website">
+      <%= govuk_link_to provider.decorate.website, provider.decorate.website %>
+    </dd>
+  <% end %>
+</dl>
