@@ -66,6 +66,7 @@ class CoursePolicy
       qualification
       start_date
       study_mode
+      can_sponsor_student_visa
     ]
   end
 

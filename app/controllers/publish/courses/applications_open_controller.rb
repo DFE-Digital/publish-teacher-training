@@ -38,6 +38,7 @@ module Publish
             :day,
             :month,
             :year,
+            :can_sponsor_student_visa,
           )
       end
 

@@ -22,6 +22,9 @@ en:
   continue: "Continue"
   change_organisation: "Change organisation"
   page_titles:
+    student_visas:
+      edit: "Student visas"
+      new: "Student visas"
     error_prefix: "Error: "
     rollover:
       show: "Recruitment cycles"
@@ -549,6 +552,11 @@ en:
         label: "Full time"
       full_time_or_part_time:
         label: "Full time or part time"
+    can_sponsor_student_visas:
+      true:
+        label: "Yes"
+      false:
+        label: "No"
     apprenticeship:
       pg_teaching_apprenticeship:
         label: "Yes"

@@ -107,6 +107,9 @@ namespace :publish, as: :publish do
           get "continue"
           get "search_new"
         end
+        resource :student_visa_sponsorship, on: :member, controller: "courses/student_visa_sponsorship", path: "student-visa-sponsorship" do
+          get "continue"
+        end
         resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
           get "continue"
         end
@@ -169,6 +172,9 @@ namespace :publish, as: :publish do
 
         get "/modern-languages", on: :member, to: "courses/modern_languages#edit"
         put "/modern-languages", on: :member, to: "courses/modern_languages#update"
+
+        get "/student-visa-sponsorship", on: :member, to: "courses/student_visa_sponsorship#edit"
+        put "/student-visa-sponsorship", on: :member, to: "courses/student_visa_sponsorship#update"
       end
 
       scope module: :providers do

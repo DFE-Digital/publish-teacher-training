@@ -139,6 +139,15 @@
           <% end %>
         <% end %>
 
+        <% summary_list.row(html_attributes: { data: { qa: "course__visa_sponsorship" } }) do |row| %>
+          <% row.key { "Visa sponsorship" } %>
+          <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
+          <% row.action(**{
+            href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+            visually_hidden_text: "visa sponsorship",
+          }) %>
+        <% end %>
+
         <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
           <% row.key { "Applications open" } %>
           <% row.value do %>

@@ -1,0 +1,27 @@
+<% content_for :page_title, title_with_error_prefix(t("page_titles.student_visas.new"), @errors && @errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(@back_link_path) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(
+          model: @course_student_visa_sponsorship_form,
+          url:continue_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(
+            @provider.provider_code,
+            @provider.recruitment_cycle_year,
+            ),
+          method: :get,
+          local: true,
+          )do |form| %>
+
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:can_sponsor_student_visa] do |fields| %>
+        <%= render "form_fields", form: fields %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

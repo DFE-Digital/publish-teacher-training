@@ -106,6 +106,7 @@ module Publish
         full_or_part_time
         location
         accredited_body
+        can_sponsor_student_visa
         applications_open
         start_date
         confirmation
