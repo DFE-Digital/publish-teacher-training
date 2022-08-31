@@ -28,21 +28,6 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
-  activemodel:
-    errors:
-      models:
-        find/age_groups_form:
-          attributes:
-            age_group:
-              blank: "Select an age group"
-        find/courses_by_location_or_training_provider_form:
-          attributes:
-            find_courses:
-              blank: "Select an option to find courses"
-            city_town_postcode_query:
-              blank: "Enter a city, town or postcode"
-            school_uni_or_provider_query:
-              blank: "Enter a school, university or other training provider"
     courses:
       show:
         back_to_search: Back to search results
@@ -59,3 +44,18 @@ en:
       mathematics:
         body: Institute of Mathematics and its Applications
         url: http://teachingmathsscholars.org/about
+  activemodel:
+    errors:
+      models:
+        find/age_groups_form:
+          attributes:
+            age_group:
+              blank: "Select an age group"
+        find/courses_by_location_or_training_provider_form:
+          attributes:
+            find_courses:
+              blank: "Select an option to find courses"
+            city_town_postcode_query:
+              blank: "Enter a city, town or postcode"
+            school_uni_or_provider_query:
+              blank: "Enter a school, university or other training provider"
