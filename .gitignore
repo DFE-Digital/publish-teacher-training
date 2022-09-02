@@ -81,3 +81,4 @@ yarn-debug.log*
 
 # redis related
 dump.rdb
+/db/data_schema.rb

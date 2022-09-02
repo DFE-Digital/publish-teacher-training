@@ -82,3 +82,7 @@
   - id
   - name
   - org_id
+  :schema_migrations:
+  - version
+  :data_migrations:
+  - version
