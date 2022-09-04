@@ -74,9 +74,9 @@
              student_visa_sponsorship_status(@provider),
              %w[can_sponsor_student_visa],
              truncate_value: false,
-             action_path: @provider.provider_type == 'university' ? student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
+             action_path: @provider.provider_type == "university" ? student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
              action_visually_hidden_text: "if candidates can get Student visa sponsorship",
-             ) %>
+           ) %>
 
         <% enrichment_summary(
              summary_list,
@@ -85,9 +85,9 @@
              skilled_worker_visa_sponsorship_status(@provider),
              %w[can_sponsor_skilled_worker_visa],
              truncate_value: false,
-             action_path: visas_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+             action_path: skilled_worker_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
              action_visually_hidden_text: "if candidates can get Skilled Worker visa sponsorship",
-             ) %>
+           ) %>
       <% end %>
     <% end %>
 

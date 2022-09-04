@@ -27,7 +27,7 @@
         <%= f.govuk_radio_button :can_sponsor_student_visa, false, label: { text: "No" } %>
       <% end %>
 
-      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.visa_warning")) %>
+      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.visa_partner_warning")) %>
       <%= f.govuk_submit "Update Student visas" %>
     <% end %>
 
