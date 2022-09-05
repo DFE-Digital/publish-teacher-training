@@ -20,6 +20,8 @@ module Courses
         new_course.applications_open_from = adjusted_applications_open_from_date(course, year_differential)
         new_course.start_date = course.start_date + year_differential.year
         new_course.subjects = course.subjects
+        new_course.can_sponsor_skilled_worker_visa = course.can_sponsor_skilled_worker_visa
+        new_course.can_sponsor_student_visa = course.can_sponsor_student_visa
         new_course.save!(validate: false)
 
         copy_latest_enrichment_to_course(course, new_course)

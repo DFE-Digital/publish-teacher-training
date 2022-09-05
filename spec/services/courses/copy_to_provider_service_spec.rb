@@ -47,6 +47,8 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.content_status).to eq :rolled_over
     expect(new_course.ucas_status).to eq :new
     expect(new_course.open_for_applications?).to be_falsey
+    expect(new_course.can_sponsor_skilled_worker_visa).to eq course.can_sponsor_skilled_worker_visa
+    expect(new_course.can_sponsor_student_visa).to eq course.can_sponsor_student_visa
   end
 
   context "applications open from date" do
