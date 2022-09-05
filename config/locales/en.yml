@@ -22,6 +22,9 @@ en:
   continue: "Continue"
   change_organisation: "Change organisation"
   page_titles:
+    skilled_worker_visas:
+      edit: "Skilled worker visas"
+      new: "Skilled worker visas"
     student_visas:
       edit: "Student visas"
       new: "Student visas"
@@ -552,6 +555,11 @@ en:
         label: "Full time"
       full_time_or_part_time:
         label: "Full time or part time"
+    can_sponsor_skilled_worker_visas:
+      true:
+        label: "Yes"
+      false:
+        label: "No"
     can_sponsor_student_visas:
       true:
         label: "Yes"

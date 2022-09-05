@@ -140,12 +140,23 @@
         <% end %>
 
         <% if course.funding_type == "fee" %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__visa_sponsorship" } }) do |row| %>
+          <% summary_list.row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
             <% row.key { "Visa sponsorship" } %>
             <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
             <% row.action(**{
               href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "visa sponsorship",
+              visually_hidden_text: "student visa sponsorship",
+            }) %>
+          <% end %>
+        <% end %>
+
+        <% if course.funding_type == "salary" %>
+          <% summary_list.row(html_attributes: { data: { qa: "course__skilled_worker_visa_sponsorship" } }) do |row| %>
+            <% row.key { "Skilled Worker visa" } %>
+            <% row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
+            <% row.action(**{
+              href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+              visually_hidden_text: "skilled worker visa sponsorship",
             }) %>
           <% end %>
         <% end %>

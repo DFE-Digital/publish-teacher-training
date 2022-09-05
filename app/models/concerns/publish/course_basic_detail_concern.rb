@@ -109,8 +109,10 @@ module Publish
     def continue_step
       if params[:goto_confirmation] && !%i[subjects fee_or_salary].include?(current_step)
         :confirmation
-      elsif [:fee_or_salary].include?(current_step)
+      elsif [:fee_or_salary].include?(current_step) && course.funding_type == "fee"
         :can_sponsor_student_visa
+      elsif [:fee_or_salary].include?(current_step) && course.funding_type == "salary"
+        :can_sponsor_skilled_worker_visa
       else
         CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
       end
@@ -189,6 +191,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_accredited_body_path(path_params)
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+      when :can_sponsor_skilled_worker_visa
+        new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range

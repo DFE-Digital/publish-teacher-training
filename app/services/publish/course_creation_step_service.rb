@@ -37,6 +37,8 @@ module Publish
     def school_direct_steps(course)
       if course.funding_type == "fee"
         new_school_direct_workflow_steps.insert(10, :can_sponsor_student_visa)
+      elsif course.funding_type == "salary"
+        new_school_direct_workflow_steps.insert(10, :can_sponsor_skilled_worker_visa)
       else
         new_school_direct_workflow_steps
       end

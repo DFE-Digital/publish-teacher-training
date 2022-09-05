@@ -67,6 +67,7 @@ class CoursePolicy
       start_date
       study_mode
       can_sponsor_student_visa
+      can_sponsor_skilled_worker_visa
     ]
   end
 
