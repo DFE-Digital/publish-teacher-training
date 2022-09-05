@@ -12,7 +12,7 @@ describe ViewHelper, type: :helper do
     end
 
     it "returns enrichment error URL for base error" do
-      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if visas can be sponsored")).to eq("/publish/organisations/A1/2022/visas")
+      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if student visas can be sponsored")).to eq("/publish/organisations/A1/2022/student-visa")
     end
   end
 
