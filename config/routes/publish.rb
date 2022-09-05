@@ -188,10 +188,8 @@ namespace :publish, as: :publish do
 
         get "/contact", on: :member, to: "contacts#edit"
         put "/contact", on: :member, to: "contacts#update"
-        get "/visas", on: :member, to: "visas#edit"
         get "/student-visa", on: :member, to: "visas#student_edit"
         get "/skilled-worker-visa", on: :member, to: "visas#skilled_worker_edit"
-        put "/visas", on: :member, to: "visas#update"
         put "/student-visa", on: :member, to: "visas#student_update"
         put "/skilled-worker-visa", on: :member, to: "visas#skilled_worker_update"
 
