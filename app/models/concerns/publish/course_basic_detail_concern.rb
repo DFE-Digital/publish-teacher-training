@@ -107,8 +107,10 @@ module Publish
     end
 
     def continue_step
-      if params[:goto_confirmation] && current_step != :subjects
+      if params[:goto_confirmation] && !%i[subjects fee_or_salary].include?(current_step)
         :confirmation
+      elsif [:fee_or_salary].include?(current_step)
+        :can_sponsor_student_visa
       else
         CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
       end
