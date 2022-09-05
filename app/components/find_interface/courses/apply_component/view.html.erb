@@ -4,7 +4,7 @@
       <p class="govuk-body">
         <%= govuk_start_button(
               text: "Apply for this course",
-              href: find_apply_path(provider_code: provider.provider_code, course_code: course.course_code),
+              href: "#", # The href should be "#" for preview but the real link for Find as the real link caused error messages on Sentry when the user clicked on it
               html_attributes: {
                 data: { qa: "course__apply_link" },
               },
