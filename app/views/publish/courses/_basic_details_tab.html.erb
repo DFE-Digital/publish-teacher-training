@@ -122,16 +122,18 @@
         <% end %>
       <% end %>
 
-      <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row| %>
-        <% row.key { "Student visa" } %>
-        <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
-        <% if course.is_published? %>
-          <% row.action %>
-        <% else %>
-          <% row.action(**{
-            href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-            visually_hidden_text: "can sponsor student visa",
-          }) %>
+      <% if course.funding_type == "fee" %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row| %>
+          <% row.key { "Student visa" } %>
+          <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
+          <% if course.is_published? %>
+            <% row.action %>
+          <% else %>
+            <% row.action(**{
+              href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+              visually_hidden_text: "can sponsor student visa",
+            }) %>
+          <% end %>
         <% end %>
       <% end %>
 
