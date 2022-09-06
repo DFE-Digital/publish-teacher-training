@@ -29,7 +29,7 @@ class CourseSearchService
     scope = scope.with_funding_types(funding_types) if funding_types.any?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
-    scope = scope.provider_can_sponsor_visa if can_sponsor_visa_filter?
+    scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
 
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.

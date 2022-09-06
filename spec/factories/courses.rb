@@ -216,5 +216,13 @@ FactoryBot.define do
     trait :published do
       enrichments { [build(:course_enrichment, :published)] }
     end
+
+    trait :can_sponsor_skilled_worker_visa do
+      can_sponsor_skilled_worker_visa { true }
+    end
+
+    trait :can_sponsor_student_visa do
+      can_sponsor_student_visa { true }
+    end
   end
 end

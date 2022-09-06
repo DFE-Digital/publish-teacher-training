@@ -263,17 +263,15 @@ class Course < ApplicationRecord
     where(degree_grade: degree_grades)
   }
 
-  scope :provider_can_sponsor_visa, lambda {
-    joins(:provider)
-    .where(
+  scope :can_sponsor_visa, lambda {
+    where(
       program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
-      provider: { can_sponsor_student_visa: true },
+      can_sponsor_student_visa: true,
     )
     .or(
-      joins(:provider)
-      .where(
+      where(
         program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
-        provider: { can_sponsor_skilled_worker_visa: true },
+        can_sponsor_skilled_worker_visa: true,
       ),
     )
   }
