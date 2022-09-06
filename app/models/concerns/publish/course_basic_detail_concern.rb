@@ -87,6 +87,7 @@ module Publish
             :course_age_range_in_years_other_from,
             :course_age_range_in_years_other_to,
             :goto_confirmation,
+            :goto_visa,
             :language_ids,
           ).permit(
             policy(Course.new).permitted_new_course_attributes,
@@ -103,16 +104,12 @@ module Publish
     end
 
     def build_meta_course_creation_params
-      @meta_course_creation_params = params.slice(:goto_confirmation)
+      @meta_course_creation_params = params.slice(:goto_confirmation, :goto_visa)
     end
 
     def continue_step
-      if params[:goto_confirmation] && !%i[subjects fee_or_salary].include?(current_step)
+      if params[:goto_confirmation] && current_step != :subjects
         :confirmation
-      elsif [:fee_or_salary].include?(current_step) && course.funding_type == "fee"
-        :can_sponsor_student_visa
-      elsif [:fee_or_salary].include?(current_step) && course.funding_type == "salary"
-        :can_sponsor_skilled_worker_visa
       else
         CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
       end

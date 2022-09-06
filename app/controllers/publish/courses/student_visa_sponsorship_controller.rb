@@ -3,6 +3,15 @@ module Publish
     class StudentVisaSponsorshipController < PublishController
       include CourseBasicDetailConcern
 
+      def new
+        authorize(@provider, :can_create_course?)
+        @course.can_sponsor_student_visa = @provider.can_sponsor_student_visa
+        @course_student_visa_sponsorship_form = CourseStudentVisaSponsorshipForm.new(@course)
+        return if course.is_fee_based?
+
+        redirect_to next_step
+      end
+
       def edit
         authorize(provider)
 

@@ -30,16 +30,6 @@ module Publish
       elsif course.is_uni_or_scitt?
         new_uni_or_scitt_workflow_steps
       elsif course.is_school_direct?
-        school_direct_steps(course)
-      end
-    end
-
-    def school_direct_steps(course)
-      if course.funding_type == "fee"
-        new_school_direct_workflow_steps.insert(10, :can_sponsor_student_visa)
-      elsif course.funding_type == "salary"
-        new_school_direct_workflow_steps.insert(10, :can_sponsor_skilled_worker_visa)
-      else
         new_school_direct_workflow_steps
       end
     end
@@ -116,6 +106,8 @@ module Publish
         full_or_part_time
         location
         accredited_body
+        can_sponsor_student_visa
+        can_sponsor_skilled_worker_visa
         applications_open
         start_date
         confirmation
