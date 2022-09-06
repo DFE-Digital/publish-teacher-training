@@ -94,7 +94,7 @@ jobs:
           PGPORT: 5432
 
       - name: Upload Sanitised Backup
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: backup_sanitised
           path: backup_sanitised.sql
