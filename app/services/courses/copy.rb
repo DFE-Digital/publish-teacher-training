@@ -43,7 +43,7 @@ module Courses
       ["Other requirements", "other_requirements"],
     ].freeze
 
-    # TODO This is to be utilised when we add these to a course form
+    # TODO: This is to be utilised when we add these to a course form
     VISA_FIELDS = [
       ["Can sponsor skilled worker visa", "can_sponsor_skilled_worker_visa"],
       ["Can sponsor student visa", "can_sponsor_student_visa"],
