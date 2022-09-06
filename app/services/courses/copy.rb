@@ -43,6 +43,12 @@ module Courses
       ["Other requirements", "other_requirements"],
     ].freeze
 
+    # TODO: This is to be utilised when we add these to a course form
+    VISA_FIELDS = [
+      ["Can sponsor skilled worker visa", "can_sponsor_skilled_worker_visa"],
+      ["Can sponsor student visa", "can_sponsor_student_visa"],
+    ].freeze
+
     def self.get_present_fields_in_source_course(fields, source_course, course)
       fields.filter_map do |name, field|
         source_value = source_course.enrichments.last[field]
