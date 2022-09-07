@@ -3,7 +3,7 @@
 module PageObjects
   module Publish
     module Courses
-      class SkilledWorkerVisaSponsorship < PageObjects::Base
+      class NewSkilledWorkerVisaSponsorship < PageObjects::Base
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/skilled-worker-visa-sponsorship/new{?query*}"
 
         element :continue, '[data-qa="course__save"]'

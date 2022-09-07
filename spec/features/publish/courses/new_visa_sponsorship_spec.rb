@@ -70,19 +70,19 @@ private
   end
 
   def then_i_should_see_the_student_visas_title
-    expect(student_visa_sponsorship_page.title).to have_text("Student visas")
+    expect(new_student_visa_sponsorship_page.title).to have_text("Student visas")
   end
 
   def then_i_should_see_the_skilled_worker_visas_title
-    expect(skilled_worker_visa_sponsorship_page.title).to have_text("Skilled worker visas")
+    expect(new_skilled_worker_visa_sponsorship_page.title).to have_text("Skilled worker visas")
   end
 
   def when_i_choose_yes_for_student_visa
-    student_visa_sponsorship_page.yes.click
+    new_student_visa_sponsorship_page.yes.click
   end
 
   def when_i_choose_yes_for_skilled_worker_visa
-    skilled_worker_visa_sponsorship_page.yes.click
+    new_skilled_worker_visa_sponsorship_page.yes.click
   end
 
   def then_i_should_be_back_on_the_course_confirmation_page
