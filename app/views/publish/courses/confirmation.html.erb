@@ -166,7 +166,7 @@
               <% row.key { "Skilled Worker visa" } %>
               <% row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
               <% row.action(**{
-                href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                href: new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
                 visually_hidden_text: "skilled worker visa sponsorship",
               }) %>
             <% end %>

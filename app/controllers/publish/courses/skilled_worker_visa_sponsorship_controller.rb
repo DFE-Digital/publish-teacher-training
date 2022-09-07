@@ -5,8 +5,7 @@ module Publish
 
       def new
         authorize(@provider, :can_create_course?)
-        @course.can_sponsor_skilled_worker_visa = @provider.can_sponsor_skilled_worker_visa
-        @course_skilled_worker_visa_sponsorship_form = CourseSkilledWorkerVisaSponsorshipForm.new(@course)
+        @course.can_sponsor_skilled_worker_visa = @provider.can_sponsor_skilled_worker_visa unless @course.can_sponsor_skilled_worker_visa
         return if course.school_direct_salaried_training_programme?
 
         redirect_to next_step

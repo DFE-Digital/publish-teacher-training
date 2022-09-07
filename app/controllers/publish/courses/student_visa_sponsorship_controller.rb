@@ -5,8 +5,7 @@ module Publish
 
       def new
         authorize(@provider, :can_create_course?)
-        @course.can_sponsor_student_visa = @provider.can_sponsor_student_visa
-        @course_student_visa_sponsorship_form = CourseStudentVisaSponsorshipForm.new(@course)
+        @course.can_sponsor_student_visa = @provider.can_sponsor_student_visa unless @course.can_sponsor_student_visa
         return if course.is_fee_based?
 
         redirect_to next_step
