@@ -15,7 +15,7 @@ feature "visa sponsorship for lead school (add course summary page)", { can_edit
 
     when_i_choose_yes_for_student_visa
     and_i_click_continue
-    # then_i_should_be_back_on_the_course_confirmation_page
+    then_i_should_be_back_on_the_course_confirmation_page
   end
 
   scenario "changing funding_type to salaried shows the skilled worker question" do
@@ -26,7 +26,7 @@ feature "visa sponsorship for lead school (add course summary page)", { can_edit
 
     when_i_choose_yes_for_skilled_worker_visa
     and_i_click_continue
-    # then_i_should_be_back_on_the_course_confirmation_page
+    then_i_should_be_back_on_the_course_confirmation_page
   end
 
 private
@@ -86,6 +86,6 @@ private
   end
 
   def then_i_should_be_back_on_the_course_confirmation_page
-    expect(course_confirmation_page).to be_displayed
+    expect(page).to have_text("Check your answers before confirming")
   end
 end
