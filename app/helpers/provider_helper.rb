@@ -1,4 +1,9 @@
 module ProviderHelper
+  def course_accredited_body_name(course)
+    # TODO: Handle rollover
+    RecruitmentCycle.current.providers.find_by(provider_code: course.accredited_body_code)&.provider_name
+  end
+
   def visa_sponsorship_status(provider)
     if !provider.declared_visa_sponsorship?
       visa_sponsorship_call_to_action(provider)

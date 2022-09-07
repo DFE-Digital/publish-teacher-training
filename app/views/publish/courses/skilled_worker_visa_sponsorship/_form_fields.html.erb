@@ -1,0 +1,28 @@
+<%= render "publish/shared/error_wrapper", error_keys: [:can_sponsor_skilled_worker_visa], data_qa: "course__can_sponsor_skilled_worker_visa" do %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading">
+        <%= t("page_titles.skilled_worker_visas.new") %>
+      </h1>
+    </legend>
+
+   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+     Can your organisation sponsor Skilled Worker visas for this course?
+   </legend>
+
+    <%= render "publish/shared/error_messages", error_keys: [:can_sponsor_skilled_worker_visa] %>
+    <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
+      <% course.edit_course_options["can_sponsor_skilled_worker_visas"].each do |value| %>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :can_sponsor_skilled_worker_visa,
+                                value,
+                                class: "govuk-radios__input" %>
+          <%= form.label :can_sponsor_student_visa,
+                         t("edit_options.can_sponsor_skilled_worker_visas.#{value}.label"),
+                         value:,
+                         class: "govuk-label govuk-radios__label" %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+<% end %>

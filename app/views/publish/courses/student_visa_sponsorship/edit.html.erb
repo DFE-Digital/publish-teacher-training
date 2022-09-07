@@ -1,0 +1,45 @@
+<% content_for :page_title, title_with_error_prefix("#{t('page_titles.student_visas.edit')} – #{course.name_and_code}", @course_student_visa_sponsorship_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+        details_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code,
+        ),
+      ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @course_student_visa_sponsorship_form,
+          url: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
+            course.provider_code,
+            course.recruitment_cycle_year,
+            course.course_code,
+          ),
+          method: :put,
+          local: true,
+        ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "l" }) do %>
+
+        <%= render "inset_text" %>
+
+        <% course.edit_course_options["can_sponsor_student_visas"].each_with_index do |can_sponsor_student_visa, index| %>
+          <%= f.govuk_radio_button(
+                :can_sponsor_student_visa,
+                can_sponsor_student_visa,
+                label: { text: t("edit_options.can_sponsor_student_visas.#{can_sponsor_student_visa}.label") },
+                link_errors: index.zero?,
+              ) %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
+    <% end %>
+  </div>
+</div>

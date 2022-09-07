@@ -87,6 +87,7 @@ module Publish
             :course_age_range_in_years_other_from,
             :course_age_range_in_years_other_to,
             :goto_confirmation,
+            :goto_visa,
             :language_ids,
           ).permit(
             policy(Course.new).permitted_new_course_attributes,
@@ -103,7 +104,7 @@ module Publish
     end
 
     def build_meta_course_creation_params
-      @meta_course_creation_params = params.slice(:goto_confirmation)
+      @meta_course_creation_params = params.slice(:goto_confirmation, :goto_visa)
     end
 
     def continue_step
@@ -185,6 +186,10 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
       when :accredited_body
         new_publish_provider_recruitment_cycle_courses_accredited_body_path(path_params)
+      when :can_sponsor_student_visa
+        new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+      when :can_sponsor_skilled_worker_visa
+        new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range

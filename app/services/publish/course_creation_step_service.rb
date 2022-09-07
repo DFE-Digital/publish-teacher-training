@@ -30,7 +30,11 @@ module Publish
       elsif course.is_uni_or_scitt?
         new_uni_or_scitt_workflow_steps
       elsif course.is_school_direct?
-        new_school_direct_workflow_steps
+        if FeatureService.enabled?(:visa_sponsorship_on_course)
+          new_school_direct_workflow_steps(course)
+        else
+          new_school_direct_workflow_steps_without_visa
+        end
       end
     end
 
@@ -94,7 +98,7 @@ module Publish
       ]
     end
 
-    def new_school_direct_workflow_steps
+    def new_school_direct_workflow_steps_without_visa
       %i[
         courses_list
         level
@@ -110,6 +114,30 @@ module Publish
         start_date
         confirmation
       ]
+    end
+
+    def new_school_direct_workflow_steps(course)
+      includes_visa_sponsorship = %i[
+        courses_list
+        level
+        subjects
+        modern_languages
+        age_range
+        outcome
+        fee_or_salary
+        full_or_part_time
+        location
+        accredited_body
+        can_sponsor_student_visa
+        can_sponsor_skilled_worker_visa
+        applications_open
+        start_date
+        confirmation
+      ]
+
+      includes_visa_sponsorship.delete(:can_sponsor_student_visa) unless course.is_fee_based?
+      includes_visa_sponsorship.delete(:can_sponsor_skilled_worker_visa) unless course.school_direct_salaried_training_programme?
+      includes_visa_sponsorship
     end
 
     def new_uni_or_scitt_workflow_steps
