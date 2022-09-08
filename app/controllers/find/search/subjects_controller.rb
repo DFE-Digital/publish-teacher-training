@@ -9,7 +9,7 @@ module Find
         @subjects_form = SubjectsForm.new(subject_codes: sanitised_subject_codes)
 
         if @subjects_form.valid?
-          redirect_to course_results_path # TODO:
+          redirect_to course_results_path # TODO: create this
         else
           render :index
         end
@@ -18,7 +18,7 @@ module Find
     private
 
       def sanitised_subject_codes
-        subjects_form_params['subject_codes'].compact_blank!
+        subjects_form_params["subject_codes"].compact_blank!
       end
 
       def subjects_form_params
