@@ -18,7 +18,7 @@ module Find
       end
 
       context "subject_codes are valid" do
-        let(:params) { { subject_codes: ["01", "02"] } }
+        let(:params) { { subject_codes: %w[01 02] } }
 
         it "validates subject_codes" do
           expect(subject.errors[:subject_codes]).to eq []
@@ -27,14 +27,14 @@ module Find
     end
 
     describe ".primary_subjects" do
-      let(:params) { { subject_codes: ["01", "02"] } }
+      let(:params) { { subject_codes: %w[01 02] } }
 
-      it 'is an instance method' do
+      it "is an instance method" do
         expect(subject).to respond_to(:primary_subjects)
       end
 
-      it 'returns an array of Structs' do
-        expect(subject.primary_subjects[0].is_a? Struct).to be true
+      it "returns an array of Structs" do
+        expect(subject.primary_subjects[0].is_a?(Struct)).to be true
         expect(subject.primary_subjects[0].code).to eq "00"
         expect(subject.primary_subjects[0].name).to eq "Primary"
       end

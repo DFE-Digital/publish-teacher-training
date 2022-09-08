@@ -7,7 +7,7 @@ module Find
     validates :subject_codes, presence: true
 
     def primary_subjects
-      primary_subjects = subject_areas.find { |sa| sa.id == 'PrimarySubject' }.subjects
+      primary_subjects = subject_areas.find { |sa| sa.id == "PrimarySubject" }.subjects
 
       primary_subjects.map do |subject|
         Struct.new(:code, :name).new(subject.subject_code, subject.subject_name)
