@@ -28,6 +28,9 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    subjects:
+      title: Select a subject
+      primary_title: Primary courses with subject specialisms
     courses:
       show:
         back_to_search: Back to search results
@@ -84,3 +87,8 @@ en:
               blank: "Enter a city, town or postcode"
             school_uni_or_provider_query:
               blank: "Enter a school, university or other training provider"
+        find/subjects_form:
+          attributes:
+            subject_codes:
+              blank: "Select at least one subject"
+

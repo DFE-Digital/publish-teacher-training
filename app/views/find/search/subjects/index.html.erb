@@ -1,0 +1,29 @@
+<% content_for :page_title, title_with_error_prefix(t("find.subjects_page.title"), @subjects_form.errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class='govuk-heading-l'>
+      <%= I18n.t('find.subjects.primary_title') %>
+    </h1>
+
+    <p class="govuk-body">
+      As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
+    </p>
+
+    <p class="govuk-body">
+      Some courses also enable you to develop your knowledge of a particular subject. When you’re a teacher, you could
+      take on a role to influence the way it’s taught in your school - for example, mentoring your teacher colleagues
+      to teach that subject better.
+    </p>
+
+  <%= form_with(model: @subjects_form, url: find_subjects_path, method: :post) do |f| %>
+    <%= f.govuk_error_summary %>
+
+    <%= f.govuk_collection_check_boxes :subject_codes, f.object.primary_subjects,
+      :code, :name, legend: { text: "Which courses would you like to find?" }
+    %>
+
+    <%= f.govuk_submit 'Find courses' %>
+  <% end %>
+  </div>
+</div>

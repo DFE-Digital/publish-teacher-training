@@ -9,7 +9,7 @@ module Find
         @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)
 
         if @age_groups_form.valid?
-          redirect_to find_subject_path
+          redirect_to find_subjects_path
         else
           render :index
         end
