@@ -2,8 +2,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class='govuk-heading-l'>
-      <%= I18n.t('find.subjects.primary_title') %>
+    <h1 class="govuk-heading-l">
+      <%= I18n.t("find.subjects.primary_title") %>
     </h1>
 
     <p class="govuk-body">
@@ -20,10 +20,9 @@
     <%= f.govuk_error_summary %>
 
     <%= f.govuk_collection_check_boxes :subject_codes, f.object.primary_subjects,
-      :code, :name, legend: { text: "Which courses would you like to find?" }
-    %>
+      :code, :name, legend: { text: "Which courses would you like to find?" } %>
 
-    <%= f.govuk_submit 'Find courses' %>
+    <%= f.govuk_submit "Find courses" %>
   <% end %>
   </div>
 </div>
