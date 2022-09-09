@@ -13,7 +13,19 @@ module Subjects
             bursary_amount: "27000",
             scholarship: "29000",
           },
-          ["French", "German", "Italian", "Japanese", "Mandarin", "Modern languages (other)", "Russian", "Spanish"] => {
+          [
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Mandarin",
+            "Modern languages (other)",
+            "Russian",
+            "Spanish",
+            "Latin",
+            "Ancient Greek",
+            "Ancient Hebrew",
+          ] => {
             bursary_amount: "25000",
             scholarship: "27000",
           },
