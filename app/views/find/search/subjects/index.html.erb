@@ -1,0 +1,7 @@
+<% content_for :page_title, title_with_error_prefix(t("find.subjects_page.title"), @subjects_form.errors.present?) %>
+
+<%= form_with(model: @subjects_form, url: find_subjects_path, method: :get) do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= render FindInterface::Search::SecondarySubjectSelectionComponent::View.new(f) %>
+<% end %>
