@@ -22,12 +22,16 @@ module Subjects
             "Modern languages (other)",
             "Russian",
             "Spanish",
+          ] => {
+            bursary_amount: "25000",
+            scholarship: "27000",
+          },
+          [
             "Latin",
             "Ancient Greek",
             "Ancient Hebrew",
           ] => {
             bursary_amount: "25000",
-            scholarship: "27000",
           },
           %w[Geography] => {
             bursary_amount: "25000",
