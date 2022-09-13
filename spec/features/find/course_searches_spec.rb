@@ -18,6 +18,20 @@ feature "course searches", type: :feature do
     and_i_am_on_the_age_groups_page
   end
 
+  scenario "Candidate searches for secondary courses across England" do
+    when_i_visit_the_search_page
+    and_i_select_the_across_england_radio_button
+    then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
+    and_i_am_on_the_age_groups_page
+    then_the_correct_age_group_form_page_url_and_query_params_are_present
+
+    when_i_choose_secondary
+    then_i_click_continue_on_the(age_groups_page)
+    then_i_should_see_the_subjects_form
+    and_i_should_not_see_hidden_subjects
+    then_the_correct_subjects_form_page_url_and_query_params_are_present
+  end
+
 private
 
   def providers
@@ -46,6 +60,10 @@ private
     courses_by_location_or_training_provider_page.by_school_uni_or_provider.choose
   end
 
+  def and_i_select_the_across_england_radio_button
+    courses_by_location_or_training_provider_page.across_england.choose
+  end
+
   def and_i_select_the_provider
     options = providers.map { |provider| "#{provider.provider_name} (#{provider.provider_code})" } .sort
 
@@ -66,6 +84,33 @@ private
     expect(age_groups_page).to have_further_education
 
     expect(age_groups_page).to have_continue
+  end
+
+  def when_i_choose_secondary
+    age_groups_page.secondary.choose
+  end
+
+  def then_the_correct_age_group_form_page_url_and_query_params_are_present
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/age-groups")
+    end
+  end
+
+  def then_i_should_see_the_subjects_form
+    expect(secondary_subjects_page).to have_content("Which secondary subjects do you want to teach?")
+  end
+
+  def and_i_should_not_see_hidden_subjects
+    expect(secondary_subjects_page).not_to have_content("Ancient Hebrew")
+    expect(secondary_subjects_page).not_to have_content("Philosophy")
+    expect(secondary_subjects_page).not_to have_content("Modern Languages")
+  end
+
+  def then_the_correct_subjects_form_page_url_and_query_params_are_present
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/subjects")
+      expect(uri.query).to eq("age_group=secondary")
+    end
   end
 
   alias_method :and_i_visit_the_search_page, :when_i_visit_the_search_page
