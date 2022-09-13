@@ -21,7 +21,7 @@ module Publish
         authorize(provider)
         @course_student_visa_sponsorship_form = CourseStudentVisaSponsorshipForm.new(@course, params: student_visa_sponsorship_params)
         if @course_student_visa_sponsorship_form.save!
-          course_description_success_message("student visa")
+          render_visa_sponsorship_success_message
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -38,7 +38,19 @@ module Publish
       def student_visa_sponsorship_params
         return { visa_sponsorship: nil } if params[:publish_course_student_visa_sponsorship_form].blank?
 
-        params.require(:publish_course_student_visa_sponsorship_form).permit(*CourseStudentVisaSponsorshipForm::FIELDS)
+        params.require(:publish_course_student_visa_sponsorship_form).except(:funding_type_updated).permit(*CourseStudentVisaSponsorshipForm::FIELDS)
+      end
+
+      def funding_type_updated?
+        params[:publish_course_student_visa_sponsorship_form][:funding_type_updated] == "true"
+      end
+
+      def render_visa_sponsorship_success_message
+        if funding_type_updated?
+          flash[:success] = t("visa_sponsorships.funding_and_visa_updated", visa_type: t("visa_sponsorships.student"))
+        else
+          flash[:success] = t("visa_sponsorships.visa_updated", visa_type: t("visa_sponsorships.student"))
+        end
       end
 
       def current_step

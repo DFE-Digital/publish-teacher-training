@@ -181,6 +181,9 @@ namespace :publish, as: :publish do
 
         get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
         put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
+
+        get "/fee-or-salary", on: :member, to: "courses/fee_or_salary#edit"
+        put "/fee-or-salary", on: :member, to: "courses/fee_or_salary#update"
       end
 
       scope module: :providers do

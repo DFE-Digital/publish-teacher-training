@@ -602,6 +602,10 @@ class Course < ApplicationRecord
       qualification_assignable(course_params)
   end
 
+  def draft_or_rolled_over?
+    content_status == :draft || content_status == :rolled_over
+  end
+
   def only_published?
     content_status == :published
   end

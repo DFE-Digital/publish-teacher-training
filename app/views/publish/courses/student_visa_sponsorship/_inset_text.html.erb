@@ -1,9 +1,9 @@
 <div class="govuk-inset-text">
-  <%= course_accredited_body_name(@course) %> can sponsor Student visas for some of their courses.
+  <% if @course.accrediting_provider.can_sponsor_student_visa? %>
+    <%= @course.accrediting_provider.provider_name %> can sponsor Student visas for some of their courses.
+  <% else %>
+    <p class="govuk-body"><%= @course.accrediting_provider.provider_name %> have said they cannot sponsor Student visas so we have defaulted your answer to ‘No’.</p>
 
-  <!--      Todo: Add the logic to render the above or the below depending on the condition-->
-
-  <!--      <p class="govuk-body"><%#= course_accredited_body_name(@course) %> have said they cannot sponsor Student visas so we have defaulted your answer to ‘No’.</p>-->
-
-  <!--      <p class="govuk-body">If your organisation would like to sponsor Student visas, contact <%#= course_accredited_body_name(@course) %>.</p>-->
+    <p class="govuk-body">If your organisation would like to sponsor Student visas, contact <%= @course.accrediting_provider.provider_name %>.</p>
+  <% end %>
 </div>

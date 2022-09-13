@@ -71,7 +71,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     # expect(course_details_page).to have_no_manage_provider_locations_link
     # expect(course_details_page).to have_no_apprenticeship
     expect(provider_courses_details_page.funding).to have_content(
-      "Teaching apprenticeship (with salary)",
+      "Teaching apprenticeship - with salary",
     )
     expect(provider_courses_details_page.accredited_body).to have_content(
       course.accrediting_provider.provider_name,
