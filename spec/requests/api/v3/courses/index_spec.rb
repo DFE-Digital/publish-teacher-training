@@ -797,12 +797,9 @@ describe "GET v3/courses" do
   describe "visa scoping" do
     context "with providers that can and cannot provide visas" do
       let(:request_path) { "/api/v3/courses?filter[can_sponsor_visa]=true" }
-      let(:provider_that_can_sponsor_student_visa) { build(:provider, can_sponsor_student_visa: true, can_sponsor_skilled_worker_visa: false) }
-      let(:provider_that_can_sponsor_skilled_worker_visa) { build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: true) }
-      let(:provider_that_cant_sponsor_visas) { build(:provider, can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false) }
-      let(:course1) { create(:course, :fee_type_based, provider: provider_that_can_sponsor_student_visa, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
-      let(:course2) { create(:course, :salary_type_based, provider: provider_that_can_sponsor_skilled_worker_visa, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
-      let(:course3) { create(:course, provider: provider_that_cant_sponsor_visas, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
+      let(:course1) { create(:course, :fee_type_based, :can_sponsor_student_visa, provider: build(:provider), site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
+      let(:course2) { create(:course, :salary_type_based, :can_sponsor_skilled_worker_visa, provider: build(:provider), site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
+      let(:course3) { create(:course, provider: build(:provider), site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)]) }
 
       before do
         course1

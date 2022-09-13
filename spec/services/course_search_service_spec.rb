@@ -641,8 +641,8 @@ RSpec.describe CourseSearchService do
         let(:filter) { { can_sponsor_visa: true } }
         let(:expected_scope) { double }
 
-        it "adds the provider_can_sponsor_visa scope" do
-          expect(scope).to receive(:provider_can_sponsor_visa).and_return(course_ids_scope)
+        it "adds the can_sponsor_visa scope" do
+          expect(scope).to receive(:can_sponsor_visa).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -652,8 +652,8 @@ RSpec.describe CourseSearchService do
       context "when false" do
         let(:filter) { { can_sponsor_visa: false } }
 
-        it "adds the provider_can_sponsor_visa scope" do
-          expect(scope).not_to receive(:provider_can_sponsor_visa)
+        it "adds the can_sponsor_visa scope" do
+          expect(scope).not_to receive(:can_sponsor_visa)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -663,8 +663,8 @@ RSpec.describe CourseSearchService do
       context "when absent" do
         let(:filter) { {} }
 
-        it "doesn't add the provider_can_sponsor_visa scope" do
-          expect(scope).not_to receive(:provider_can_sponsor_visa)
+        it "doesn't add the can_sponsor_visa scope" do
+          expect(scope).not_to receive(:can_sponsor_visa)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)

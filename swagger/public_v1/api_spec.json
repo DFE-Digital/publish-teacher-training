@@ -684,8 +684,8 @@
               "not_required"
             ]
           },
-          "provider_can_sponsor_visa": {
-            "description": "Only return courses where the provider can sponsor either a skilled worker or student visa",
+          "can_sponsor_visa": {
+            "description": "Only return courses where a skilled worker or student visa can be sponsored.",
             "type": "boolean",
             "example": true
           }
@@ -1847,7 +1847,7 @@
               "subjects": "00,01",
               "updated_since": "2020-11-13T11:21:55Z",
               "degree_grade": "two_two",
-              "provider_can_sponsor_visa": true
+              "can_sponsor_visa": true
             }
           },
           {
@@ -2086,7 +2086,7 @@
               "subjects": "00,01",
               "updated_since": "2020-11-13T11:21:55Z",
               "degree_grade": "two_two",
-              "provider_can_sponsor_visa": true
+              "can_sponsor_visa": true
             }
           },
           {
