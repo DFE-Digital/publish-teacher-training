@@ -506,6 +506,9 @@ en:
     value_saved: "Changes to %{value} saved"
     saved: "Your changes have been saved"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
+    visa_partner_warning: "Changing your answer will not change visa information for courses you or your training partners have already created."
+    visa_warning: "Changing your answer will not change visa information for courses you have already created."
+    visa_changes: "Visa sponsorship updated"
     user_removed: "User removed"
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"

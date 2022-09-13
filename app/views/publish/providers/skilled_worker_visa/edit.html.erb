@@ -1,0 +1,38 @@
+<% page_title = "Skilled Worker visas" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @provider_skilled_worker_visa_form.errors.present?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @provider_skilled_worker_visa_form,
+      url: skilled_worker_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+      local: true,
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">Visa sponsorship</span>
+        <%= page_title %>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_skilled_worker_visa,
+        legend: { text: "Can your organisation sponsor Skilled Worker visas for courses you run?" }) do %>
+        <%= f.govuk_radio_button :can_sponsor_skilled_worker_visa, true, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :can_sponsor_skilled_worker_visa, false, label: { text: "No" } %>
+      <% end %>
+
+      <%= render GovukComponent::InsetTextComponent.new(text: I18n.t("success.visa_warning")) %>
+      <%= f.govuk_submit "Update Skilled Worker visas" %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to "Cancel", details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) %>
+    </p>
+  </div>
+</div>

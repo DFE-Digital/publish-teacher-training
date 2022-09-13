@@ -62,17 +62,33 @@
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-disability",
         action_visually_hidden_text: "details about training with disabilities and other needs",
       ) %>
+    <% end %>
 
-      <% enrichment_summary(
-        summary_list,
-        :provider,
-        "Visa sponsorship",
-        visa_sponsorship_status(@provider),
-        %w[can_sponsor_student_visa can_sponsor_skilled_worker_visa],
-        truncate_value: false,
-        action_path: @provider.declared_visa_sponsorship? ? visas_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
-        action_visually_hidden_text: "if candidates can get visa sponsorship",
-      ) %>
+    <% unless @provider.provider_type == 'lead_school' %>
+      <h2 class="govuk-heading-m">Visa sponsorship</h2>
+      <%= govuk_summary_list do |summary_list| %>
+        <% enrichment_summary(
+             summary_list,
+             :provider,
+             "Student visas",
+             student_visa_sponsorship_status(@provider),
+             %w[can_sponsor_student_visa],
+             truncate_value: false,
+             action_path: @provider.university? ? student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
+             action_visually_hidden_text: "if candidates can get Student visa sponsorship",
+           ) %>
+
+        <% enrichment_summary(
+             summary_list,
+             :provider,
+             "Skilled Worker visas",
+             skilled_worker_visa_sponsorship_status(@provider),
+             %w[can_sponsor_skilled_worker_visa],
+             truncate_value: false,
+             action_path: skilled_worker_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+             action_visually_hidden_text: "if candidates can get Skilled Worker visa sponsorship",
+           ) %>
+      <% end %>
     <% end %>
 
     <h2 class="govuk-heading-m">Contact details</h2>
