@@ -672,33 +672,6 @@ describe CourseDecorator do
     end
   end
 
-  describe "#changing_basic_details" do
-    context "basic details when course is further education" do
-      let(:course) { build_stubbed :course, level: "further_education" }
-
-      it "returns the correct details under 'changing your basic details'" do
-        expect(decorated_course.listing_basic_details).to eq(["outcome",
-                                                              "full time or part time",
-                                                              "fee or salary",
-                                                              "application open date",
-                                                              "course start date"])
-      end
-    end
-
-    context "basic details when course is primary or secondary" do
-      let(:course) { build_stubbed :course }
-
-      it "returns the correct details under 'changing your basic details'" do
-        expect(decorated_course.listing_basic_details).to eq(["age range",
-                                                              "outcome",
-                                                              "full time or part time",
-                                                              "application open date",
-                                                              "course start date",
-                                                              "GCSE requirements"])
-      end
-    end
-  end
-
   describe "#subject_input_label" do
     let(:subject_input_label) { course.decorate.subject_input_label }
 
