@@ -8,6 +8,41 @@ module Subjects
 
     def subject_and_financial_incentives
       subject_and_financial_incentives = {
+        2023 => {
+          %w[Mathematics Physics Chemistry Computing] => {
+            bursary_amount: "27000",
+            scholarship: "29000",
+          },
+          [
+            "French",
+            "German",
+            "Italian",
+            "Japanese",
+            "Mandarin",
+            "Modern languages (other)",
+            "Russian",
+            "Spanish",
+          ] => {
+            bursary_amount: "25000",
+            scholarship: "27000",
+          },
+          [
+            "Latin",
+            "Ancient Greek",
+            "Ancient Hebrew",
+          ] => {
+            bursary_amount: "25000",
+          },
+          %w[Geography] => {
+            bursary_amount: "25000",
+          },
+          ["Biology", "Design and technology"] => {
+            bursary_amount: "20000",
+          },
+          %w[English] => {
+            bursary_amount: "15000",
+          },
+        },
         2022 => {
           ["Latin", "Ancient Greek", "Ancient Hebrew"] => {
             bursary_amount: "15000",
