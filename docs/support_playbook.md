@@ -66,6 +66,8 @@ p.courses.update(accredited_body_code: "1YK")
 ## Transfer courses to another provider
 
 ```ruby
+# This can be reviewed in QA before actioning in production
+
 # Find the provider
 provider = RecruitmentCycle.current.providers.find_by(provider_code: "XXX")
 
