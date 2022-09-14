@@ -3,7 +3,7 @@
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h1 class="govuk-fieldset__heading" data-qa="page-heading">
         <% if course.course_code %>
-          <span class="govuk-caption-l"><%= course.name_and_code %></span>
+          <%= render CaptionText::View.new(text: course.name_and_code) %>
         <% end %>
 
         <%= course.subject_page_title %>
