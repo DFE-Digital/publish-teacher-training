@@ -4,6 +4,8 @@
   <%= govuk_back_link_to(@back_link_path) %>
 <% end %>
 
+<%= render CaptionText::View.new(text: "Add course") %>
+
 <%= render "publish/shared/errors" %>
 
 <h1 class="govuk-heading-l">
