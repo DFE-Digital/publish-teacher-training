@@ -47,6 +47,10 @@
 
       <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
      <%= render(

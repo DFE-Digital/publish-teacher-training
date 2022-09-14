@@ -26,5 +26,9 @@
 
       <%= f.govuk_submit @course.is_primary? ? "Save" : "Continue", data: { qa: "start__save" } %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
   </div>
 </div>
