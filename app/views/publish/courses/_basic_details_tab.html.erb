@@ -64,14 +64,14 @@
         <% end %>
       <% else %>
         <% summary_list.row(html_attributes: { data: { qa: "course__funding" } }) do |row| %>
-          <% row.key { "Fee or salary" } %>
+          <% row.key { "Funding type" } %>
           <% row.value { course.funding } %>
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
             <% row.action(**{
-              href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? fee_or_salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-              visually_hidden_text: "if fee or salary",
+              href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+              visually_hidden_text: "if funding_type",
             }) %>
           <% end %>
         <% end %>
