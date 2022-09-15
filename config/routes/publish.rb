@@ -182,8 +182,8 @@ namespace :publish, as: :publish do
         get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
         put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
 
-        get "/fee-or-salary", on: :member, to: "courses/fee_or_salary#edit"
-        put "/fee-or-salary", on: :member, to: "courses/fee_or_salary#update"
+        get "/funding-type", on: :member, to: "courses/funding_type#edit"
+        put "/funding-type", on: :member, to: "courses/funding_type#update"
 
         get "/apprenticeship", on: :member, to: "courses/apprenticeship#edit"
         put "/apprenticeship", on: :member, to: "courses/apprenticeship#update"
