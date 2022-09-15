@@ -20,7 +20,7 @@
 <% end %>
 
 <h1 class="govuk-heading-l">
-  <span class="govuk-caption-l"><%= course.name_and_code %></span>
+  <%= render CaptionText::View.new(text: course.name_and_code) %>
   Select the locations for this course
 </h1>
 

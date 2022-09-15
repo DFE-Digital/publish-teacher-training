@@ -8,6 +8,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= render CaptionText::View.new(text: t("course.add_course")) %>
     <%= form_with url: continue_publish_provider_recruitment_cycle_courses_modern_languages_path(
                     @provider.provider_code,
                     @provider.recruitment_cycle_year,

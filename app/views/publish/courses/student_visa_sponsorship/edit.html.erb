@@ -28,6 +28,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
+        <%= render CaptionText::View.new(text: course.name_and_code) %>
         <%= t("page_titles.student_visas.edit") %>
       </h1>
 

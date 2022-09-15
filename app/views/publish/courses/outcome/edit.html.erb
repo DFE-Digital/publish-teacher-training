@@ -19,7 +19,7 @@
                   method: :put do |form| %>
 
       <% course_name_and_code = capture do %>
-        <span class="govuk-caption-l"><%= course.name_and_code %></span>
+        <%= render CaptionText::View.new(text: course.name_and_code) %>
       <% end %>
 
       <%= render "form_fields", form:, course_name_and_code: %>
