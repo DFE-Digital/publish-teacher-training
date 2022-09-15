@@ -28,13 +28,9 @@ module Publish
       if course.is_further_education?
         new_further_education_workflow_steps
       elsif course.is_uni_or_scitt?
-        new_uni_or_scitt_workflow_steps
+        new_uni_or_scitt_workflow_steps - visas_to_remove(course)
       elsif course.is_school_direct?
-        if FeatureService.enabled?(:visa_sponsorship_on_course)
-          new_school_direct_workflow_steps(course)
-        else
-          new_school_direct_workflow_steps_without_visa
-        end
+        new_school_direct_workflow_steps - visas_to_remove(course)
       end
     end
 
@@ -98,26 +94,8 @@ module Publish
       ]
     end
 
-    def new_school_direct_workflow_steps_without_visa
+    def new_school_direct_workflow_steps
       %i[
-        courses_list
-        level
-        subjects
-        modern_languages
-        age_range
-        outcome
-        fee_or_salary
-        full_or_part_time
-        location
-        accredited_body
-        applications_open
-        start_date
-        confirmation
-      ]
-    end
-
-    def new_school_direct_workflow_steps(course)
-      includes_visa_sponsorship = %i[
         courses_list
         level
         subjects
@@ -134,10 +112,6 @@ module Publish
         start_date
         confirmation
       ]
-
-      includes_visa_sponsorship.delete(:can_sponsor_student_visa) unless course.is_fee_based?
-      includes_visa_sponsorship.delete(:can_sponsor_skilled_worker_visa) unless course.school_direct_salaried_training_programme?
-      includes_visa_sponsorship
     end
 
     def new_uni_or_scitt_workflow_steps
@@ -151,10 +125,24 @@ module Publish
         apprenticeship
         full_or_part_time
         location
+        can_sponsor_student_visa
+        can_sponsor_skilled_worker_visa
         applications_open
         start_date
         confirmation
       ]
+    end
+
+    def visas_to_remove(course)
+      if FeatureService.enabled?(:visa_sponsorship_on_course) && course.funding_type.present?
+        if course.is_fee_based?
+          [:can_sponsor_skilled_worker_visa]
+        elsif course.school_direct_salaried_training_programme? || course.pg_teaching_apprenticeship?
+          [:can_sponsor_student_visa]
+        end
+      else
+        %i[can_sponsor_student_visa can_sponsor_skilled_worker_visa]
+      end
     end
 
     def new_further_education_workflow_steps
