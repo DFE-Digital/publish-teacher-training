@@ -9,7 +9,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= form_with model: course,
+<<<<<<< HEAD
                   url: fee_or_salary_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+=======
+                  url: funding_type_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+>>>>>>> f2b3bc0c (Update edit route)
                   method: :put do |form| %>
 
       <%= render "form_fields", form: %>
