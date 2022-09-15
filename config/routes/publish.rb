@@ -113,7 +113,7 @@ namespace :publish, as: :publish do
         resource :skilled_worker_visa_sponsorship, on: :member, controller: "courses/skilled_worker_visa_sponsorship", path: "skilled-worker-visa-sponsorship" do
           get "continue"
         end
-        resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
+        resource :funding_type, on: :member, only: %i[new], controller: "courses/funding_type", path: "funding-type" do
           get "continue"
         end
 

@@ -52,7 +52,7 @@ module Publish
         modern_languages
         age_range
         outcome
-        fee_or_salary
+        funding_type
         full_or_part_time
         location
         accredited_body
@@ -102,7 +102,7 @@ module Publish
         modern_languages
         age_range
         outcome
-        fee_or_salary
+        funding_type
         full_or_part_time
         location
         accredited_body
@@ -113,6 +113,7 @@ module Publish
         confirmation
       ]
     end
+
 
     def new_uni_or_scitt_workflow_steps
       %i[

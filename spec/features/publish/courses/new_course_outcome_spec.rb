@@ -9,19 +9,19 @@ feature "selecting a course outcome", { can_edit_current_and_next_cycles: false 
   scenario "selecting qts" do
     when_i_select_an_outcome(:qts)
     and_i_click_continue
-    then_i_am_met_with_the_fee_or_salary_page(:qts)
+    then_i_am_met_with_the_funding_type_page(:qts)
   end
 
   scenario "selecting pgce with qts" do
     when_i_select_an_outcome(:pgce_with_qts)
     and_i_click_continue
-    then_i_am_met_with_the_fee_or_salary_page(:pgce_with_qts)
+    then_i_am_met_with_the_funding_type_page(:pgce_with_qts)
   end
 
   scenario "selecting pgde with qts" do
     when_i_select_an_outcome(:pgde_with_qts)
     and_i_click_continue
-    then_i_am_met_with_the_fee_or_salary_page(:pgde_with_qts)
+    then_i_am_met_with_the_funding_type_page(:pgde_with_qts)
   end
 
   scenario "invalid entries" do
@@ -52,7 +52,7 @@ private
     @provider ||= @user.providers.first
   end
 
-  def then_i_am_met_with_the_fee_or_salary_page(outcome)
+  def then_i_am_met_with_the_funding_type_page(outcome)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/fee-or-salary/new#{selected_params(outcome)}")
     expect(page).to have_content("Funding type")
   end
