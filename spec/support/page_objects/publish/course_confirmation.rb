@@ -19,7 +19,7 @@ module PageObjects
         section :age_range, SummaryList, "[data-qa=course__age_range]"
         section :outcome, SummaryList, "[data-qa=course__outcome]"
         section :apprenticeship, SummaryList, "[data-qa=course__apprenticeship]"
-        section :fee_or_salary, SummaryList, "[data-qa=course__funding_type]"
+        section :funding_type, SummaryList, "[data-qa=course__funding_type]"
         section :study_mode, SummaryList, "[data-qa=course__study_mode]"
         section :locations, SummaryList, "[data-qa=course__locations]"
         element :single_location_help_text, "[data-qa=course__locations__help]"

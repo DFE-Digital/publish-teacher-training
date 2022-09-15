@@ -53,7 +53,7 @@ private
   end
 
   def then_i_am_met_with_the_funding_type_page(outcome)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/fee-or-salary/new#{selected_params(outcome)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/funding-type/new#{selected_params(outcome)}")
     expect(page).to have_content("Funding type")
   end
 

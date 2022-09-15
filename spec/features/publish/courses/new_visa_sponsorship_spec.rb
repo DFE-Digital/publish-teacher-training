@@ -12,7 +12,7 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
     end
 
     scenario "changing funding_type to fee shows the student question" do
-      when_i_change_fee_or_salary
+      when_i_change_funding_type
       and_i_choose_fee
       and_i_click_continue
       then_i_should_see_the_student_visas_title
@@ -23,7 +23,7 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
     end
 
     scenario "changing funding_type to salaried shows the skilled worker question" do
-      when_i_change_fee_or_salary
+      when_i_change_funding_type
       and_i_choose_salary
       and_i_click_continue
       then_i_should_see_the_skilled_worker_visas_title
@@ -108,16 +108,16 @@ private
     new_apprenticeship_page.no.click
   end
 
-  def when_i_change_fee_or_salary
-    course_confirmation_page.details.fee_or_salary.change_link.click
+  def when_i_change_funding_type
+    course_confirmation_page.details.funding_type.change_link.click
   end
 
   def and_i_choose_fee
-    new_fee_or_salary_page.funding_type_fields.fee.click
+    new_funding_type_page.funding_type_fields.fee.click
   end
 
   def and_i_choose_salary
-    new_fee_or_salary_page.funding_type_fields.salary.click
+    new_funding_type_page.funding_type_fields.salary.click
   end
 
   def and_i_click_continue
