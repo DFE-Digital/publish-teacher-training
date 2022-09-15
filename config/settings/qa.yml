@@ -29,4 +29,5 @@ basic_auth:
   enabled: true
 
 features:
+  visa_sponsorship_on_course: true
   send_request_data_to_bigquery: true

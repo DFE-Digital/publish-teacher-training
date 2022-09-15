@@ -21,10 +21,18 @@ en:
   back: "Back"
   continue: "Continue"
   change_organisation: "Change organisation"
+  visa_sponsorships:
+    student: "Student"
+    skilled_worker: "Skilled Worker"
+    updated_funding: "You’re being shown this page because you changed your answer to funding type."
+    funding_and_visa_updated: "Funding type and %{visa_type} visas updated"
+    visa_updated: "%{visa_type} visas updated"
   page_titles:
+    funding_type:
+      edit: "Funding type"
     skilled_worker_visas:
-      edit: "Skilled worker visas"
-      new: "Skilled worker visas"
+      edit: "Skilled Worker visas"
+      new: "Skilled Worker visas"
     student_visas:
       edit: "Student visas"
       new: "Student visas"

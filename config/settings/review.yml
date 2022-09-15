@@ -20,3 +20,4 @@ allocations_close_date: 2022-07-02
 features:
   allocations:
     state: confirmed
+  visa_sponsorship_on_course: true

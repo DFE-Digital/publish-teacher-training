@@ -74,7 +74,7 @@ private
   end
 
   def then_i_should_see_the_skilled_worker_visas_title
-    expect(new_skilled_worker_visa_sponsorship_page.title).to have_text("Skilled worker visas")
+    expect(new_skilled_worker_visa_sponsorship_page.title).to have_text("Skilled Worker visas")
   end
 
   def when_i_choose_yes_for_student_visa

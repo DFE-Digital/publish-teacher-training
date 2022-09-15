@@ -23,12 +23,21 @@
           local: true,
         ) do |f| %>
 
+       <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "l" }) do %>
+      <h1 class="govuk-heading-l">
+        <%= t("page_titles.student_visas.edit") %>
+      </h1>
 
-        <%= render "inset_text" %>
+      <% if funding_type_updated? %>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated_funding") %></p>
+      <% end %>
 
+      <%= render "inset_text" %>
+
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_student_visas"].each_with_index do |can_sponsor_student_visa, index| %>
           <%= f.govuk_radio_button(
                 :can_sponsor_student_visa,
@@ -39,7 +48,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit "Update Student visas" %>
     <% end %>
   </div>
 </div>
