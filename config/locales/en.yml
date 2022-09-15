@@ -178,6 +178,7 @@ en:
         bursary_and_scholarship: "Scholarships of %{scholarship} and bursaries of %{bursary_amount} are available"
         bursary: "Bursaries of %{amount} available"
   course:
+    add_course: "Add course"
     update_email:
       name: "title"
       age_range_in_years: "age range"

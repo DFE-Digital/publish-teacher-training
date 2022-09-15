@@ -4,11 +4,10 @@
   <%= govuk_back_link_to(@back_link_path) %>
 <% end %>
 
-<%= render CaptionText::View.new(text: "Add course") %>
-
 <%= render "publish/shared/errors" %>
 
 <h1 class="govuk-heading-l">
+  <%= render CaptionText::View.new(text: t("course.add_course")) %>
   What type of course?
 </h1>
 <div class="govuk-grid-row">
