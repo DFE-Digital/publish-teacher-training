@@ -57,8 +57,8 @@
             <% row.action %>
           <% else %>
             <% row.action(**{
-              # href: apprenticeship_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-              # visually_hidden_text: "if apprenticeship",
+              href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? apprenticeship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+              visually_hidden_text: "if apprenticeship",
             }) %>
           <% end %>
         <% end %>

@@ -184,6 +184,9 @@ namespace :publish, as: :publish do
 
         get "/fee-or-salary", on: :member, to: "courses/fee_or_salary#edit"
         put "/fee-or-salary", on: :member, to: "courses/fee_or_salary#update"
+
+        get "/apprenticeship", on: :member, to: "courses/apprenticeship#edit"
+        put "/apprenticeship", on: :member, to: "courses/apprenticeship#update"
       end
 
       scope module: :providers do
