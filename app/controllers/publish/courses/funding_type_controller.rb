@@ -64,6 +64,7 @@ module Publish
             course.recruitment_cycle_year,
             course.course_code,
             funding_type_updated: @funding_type_updated,
+            origin_step: current_step,
           )
         else
           redirect_to skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
@@ -71,6 +72,7 @@ module Publish
             course.recruitment_cycle_year,
             course.course_code,
             funding_type_updated: @funding_type_updated,
+            origin_step: current_step,
           )
         end
       end

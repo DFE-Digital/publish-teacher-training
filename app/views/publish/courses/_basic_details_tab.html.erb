@@ -123,7 +123,7 @@
       <% end %>
 
       <% if FeatureService.enabled?(:visa_sponsorship_on_course) %>
-        <% if course.is_fee_based? && @provider.lead_school? %>
+        <% if course.is_fee_based? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row| %>
             <% row.key { "Student visas" } %>
             <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
@@ -136,9 +136,7 @@
               }) %>
             <% end %>
           <% end %>
-        <% end %>
-
-        <% if course.funding_type == "salary" && @provider.lead_school? %>
+        <% else %>
           <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_skilled_worker_visa" } }) do |row| %>
             <% row.key { "Skilled Worker visas" } %>
             <% row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>

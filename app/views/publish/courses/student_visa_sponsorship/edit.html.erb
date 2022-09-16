@@ -23,7 +23,8 @@
           local: true,
         ) do |f| %>
 
-       <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+      <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+      <%= f.hidden_field :origin_step, value: origin_step %>
 
       <%= f.govuk_error_summary %>
 
@@ -33,10 +34,10 @@
       </h1>
 
       <% if funding_type_updated? %>
-        <p class="govuk-body"><%= t("visa_sponsorships.updated_funding") %></p>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated.#{origin_step}") %></p>
       <% end %>
 
-      <%= render "inset_text" %>
+      <%= render "inset_text" if @course.accrediting_provider.present? %>
 
       <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_student_visas"].each_with_index do |can_sponsor_student_visa, index| %>
