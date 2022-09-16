@@ -37,7 +37,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_am_authenticated_as_a_lead_school_provider_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider)]))
   end
 
   def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
