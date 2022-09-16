@@ -114,7 +114,6 @@ module Publish
       ]
     end
 
-
     def new_uni_or_scitt_workflow_steps
       %i[
         courses_list
