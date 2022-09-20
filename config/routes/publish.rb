@@ -181,6 +181,9 @@ namespace :publish, as: :publish do
 
         get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
         put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
+
+        get "/fee-or-salary", on: :member, to: "courses/fee_or_salary#edit"
+        put "/fee-or-salary", on: :member, to: "courses/fee_or_salary#update"
       end
 
       scope module: :providers do
@@ -188,8 +191,10 @@ namespace :publish, as: :publish do
 
         get "/contact", on: :member, to: "contacts#edit"
         put "/contact", on: :member, to: "contacts#update"
-        get "/visas", on: :member, to: "visas#edit"
-        put "/visas", on: :member, to: "visas#update"
+        get "/student-visa", on: :member, to: "student_visa#edit"
+        get "/skilled-worker-visa", on: :member, to: "skilled_worker_visa#edit"
+        put "/student-visa", on: :member, to: "student_visa#update"
+        put "/skilled-worker-visa", on: :member, to: "skilled_worker_visa#update"
 
         resources :allocations, only: %i[index], on: :member, param: :training_provider_code do
           collection do

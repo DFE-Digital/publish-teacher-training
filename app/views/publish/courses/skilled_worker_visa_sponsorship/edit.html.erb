@@ -23,14 +23,20 @@
           local: true,
         ) do |f| %>
 
+      <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_skilled_worker_visa, legend: { text: "Can your organisation sponsor Skilled Worker visas for this course?", tag: "h1", size: "l" }) do %>
+      <h1 class="govuk-heading-l">
+        <%= render CaptionText::View.new(text: course.name_and_code) %>
+        <%= t("page_titles.skilled_worker_visas.edit") %>
+      </h1>
 
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          Can your organisation sponsor Skilled Worker visas for this course?
-        </legend>
+      <% if funding_type_updated? %>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated_funding") %></p>
+      <% end %>
 
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_skilled_worker_visa, legend: { text: "Can your organisation sponsor Skilled Worker visas for this course?", tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_skilled_worker_visas"].each_with_index do |can_sponsor_skilled_worker_visa, index| %>
           <%= f.govuk_radio_button(
                 :can_sponsor_skilled_worker_visa,
@@ -41,7 +47,11 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit "Update Skilled Worker visas" %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
   </div>
 </div>

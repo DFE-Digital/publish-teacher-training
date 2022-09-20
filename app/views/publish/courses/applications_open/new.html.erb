@@ -8,6 +8,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= render CaptionText::View.new(text: t("course.add_course")) %>
     <%= form_with url: continue_publish_provider_recruitment_cycle_courses_applications_open_path(
                     @provider.provider_code,
                     @provider.recruitment_cycle_year,
@@ -18,5 +19,9 @@
         <%= render "form_fields", form: fields %>
       <% end %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
   </div>
 </div>

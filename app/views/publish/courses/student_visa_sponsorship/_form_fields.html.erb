@@ -1,14 +1,26 @@
 <%= render "publish/shared/error_wrapper", error_keys: [:can_sponsor_student_visa], data_qa: "course__can_sponsor_student_visa" do %>
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h1 class="govuk-fieldset__heading">
-        <%= t("page_titles.student_visas.new") %>
-      </h1>
-    </legend>
+  <h1 class="govuk-heading-l">
+    <%= t("page_titles.student_visas.new") %>
+  </h1>
 
-    <%= render "inset_text" %>
+  <fieldset class="govuk-fieldset">
+    <% if @course.is_uni_or_scitt? %>
+      <% if !@provider.can_sponsor_student_visa && !@provider.scitt? %>
+        <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
+      <% end %>
+
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        Can your organisation sponsor Student visas for this course?
+      </legend>
+    <% else %>
+      <%= render "inset_text" %>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        Is Student visa sponsorship available for this course?
+      </legend>
+    <% end %>
 
     <%= render "publish/shared/error_messages", error_keys: [:can_sponsor_student_visa] %>
+
     <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
       <% course.edit_course_options["can_sponsor_student_visas"].each do |value| %>
         <div class="govuk-radios__item">

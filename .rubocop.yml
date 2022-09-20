@@ -37,3 +37,7 @@ Style/HashSyntax:
 Naming/BlockForwarding:
   Exclude:
     - 'docs/lib/govuk_tech_docs/open_api/extension.rb'
+
+RSpec/NoExpectationExample:
+  Exclude:
+    - 'spec/features/**/*'

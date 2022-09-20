@@ -21,10 +21,18 @@ en:
   back: "Back"
   continue: "Continue"
   change_organisation: "Change organisation"
+  visa_sponsorships:
+    student: "Student"
+    skilled_worker: "Skilled Worker"
+    updated_funding: "You’re being shown this page because you changed your answer to funding type."
+    funding_and_visa_updated: "Funding type and %{visa_type} visas updated"
+    visa_updated: "%{visa_type} visas updated"
   page_titles:
+    funding_type:
+      edit: "Funding type"
     skilled_worker_visas:
-      edit: "Skilled worker visas"
-      new: "Skilled worker visas"
+      edit: "Skilled Worker visas"
+      new: "Skilled Worker visas"
     student_visas:
       edit: "Student visas"
       new: "Student visas"
@@ -170,6 +178,7 @@ en:
         bursary_and_scholarship: "Scholarships of %{scholarship} and bursaries of %{bursary_amount} are available"
         bursary: "Bursaries of %{amount} available"
   course:
+    add_course: "Add course"
     update_email:
       name: "title"
       age_range_in_years: "age range"
@@ -506,6 +515,9 @@ en:
     value_saved: "Changes to %{value} saved"
     saved: "Your changes have been saved"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
+    visa_partner_warning: "Changing your answer will not change visa information for courses you or your training partners have already created."
+    visa_warning: "Changing your answer will not change visa information for courses you have already created."
+    visa_changes: "Visa sponsorship updated"
     user_removed: "User removed"
   links:
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"

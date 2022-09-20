@@ -13,7 +13,7 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
       when_i_visit_the_course_student_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_student_sponsorship_question
-      and_i_continue
+      and_i_continue_for("Student")
       and_i_click_on_basic_details
       then_i_should_see_that_the_student_visa_can_be_sponsored
     end
@@ -24,7 +24,7 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
       when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_skilled_worker_sponsorship_question
-      and_i_continue
+      and_i_continue_for("Skilled Worker")
       and_i_click_on_basic_details
       then_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
     end
@@ -41,11 +41,11 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
   end
 
   def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-    given_a_course_exists(funding_type: "fee", can_sponsor_student_visa: false)
+    given_a_course_exists(funding_type: "fee", can_sponsor_student_visa: false, accrediting_provider:)
   end
 
   def given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-    given_a_course_exists(funding_type: "salary", can_sponsor_skilled_worker_visa: false)
+    given_a_course_exists(funding_type: "salary", can_sponsor_skilled_worker_visa: false, accrediting_provider:)
   end
 
   def and_i_click_on_basic_details
@@ -72,8 +72,8 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
     skilled_worker_visa_sponsorship_edit_page.yes.choose
   end
 
-  def and_i_continue
-    click_button "Save"
+  def and_i_continue_for(visa_type)
+    click_button "Update #{visa_type} visas"
   end
 
   def provider
@@ -81,10 +81,14 @@ feature "Editing visa sponsorship", { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_that_the_student_visa_can_be_sponsored
-    expect(page).to have_text "Student visaYes - can sponsor"
+    expect(page).to have_text "Student visasYes - can sponsor"
   end
 
   def then_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
-    expect(page).to have_text "Skilled worker visaYes - can sponsor"
+    expect(page).to have_text "Skilled Worker visasYes - can sponsor"
+  end
+
+  def accrediting_provider
+    @current_user.providers.first
   end
 end

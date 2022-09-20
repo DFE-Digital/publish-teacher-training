@@ -1138,20 +1138,19 @@ describe Course, type: :model do
       end
     end
 
-    describe ".provider_can_sponsor_visa" do
-      subject { described_class.provider_can_sponsor_visa }
+    describe ".can_sponsor_visa" do
+      subject { described_class.can_sponsor_visa }
 
-      let(:course) { create(:course, provider:) }
+      let(:provider) { create(:provider) }
+      let(:course) { create(:course, provider: create(:provider)) }
 
       before do
         course
       end
 
       context "when the provider can sponsor skilled worker visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: false) }
-
         context "and is a salaried course" do
-          let(:course) { create(:course, :salary_type_based, provider:) }
+          let(:course) { create(:course, :salary_type_based, :can_sponsor_skilled_worker_visa, provider:) }
 
           it "returns the course" do
             expect(subject).to eq [course]
@@ -1159,7 +1158,7 @@ describe Course, type: :model do
         end
 
         context "and is non-salaried course" do
-          let(:course) { create(:course, :fee_type_based, provider:) }
+          let(:course) { create(:course, :fee_type_based, :can_sponsor_skilled_worker_visa, provider:) }
 
           it "does not return the course" do
             expect(subject).to eq []
@@ -1168,10 +1167,8 @@ describe Course, type: :model do
       end
 
       context "when the provider can sponsor student visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: true) }
-
         context "and is non-salaried course" do
-          let(:course) { create(:course, :fee_type_based, provider:) }
+          let(:course) { create(:course, :fee_type_based, :can_sponsor_student_visa, provider:) }
 
           it "returns the course" do
             expect(subject).to eq [course]
@@ -1179,7 +1176,7 @@ describe Course, type: :model do
         end
 
         context "and is a salaried course" do
-          let(:course) { create(:course, :salary_type_based, provider:) }
+          let(:course) { create(:course, :salary_type_based, :can_sponsor_student_visa, provider:) }
 
           it "does not return the course" do
             expect(subject).to eq []
@@ -1188,8 +1185,6 @@ describe Course, type: :model do
       end
 
       context "when the provider cannot sponsor visas" do
-        let(:provider) { create(:provider, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false) }
-
         it "does not return the course" do
           expect(subject).to eq []
         end

@@ -7,6 +7,7 @@
 <%= render "publish/shared/errors" %>
 
 <h1 class="govuk-heading-l">
+  <%= render CaptionText::View.new(text: t("course.add_course")) %>
   What type of course?
 </h1>
 <div class="govuk-grid-row">
@@ -35,5 +36,9 @@
         <%= render "publish/courses/send/form_fields", form: fields %>
       <% end %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
   </div>
 </div>

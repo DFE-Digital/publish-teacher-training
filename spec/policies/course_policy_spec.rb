@@ -26,6 +26,24 @@ describe CoursePolicy do
     end
   end
 
+  permissions :can_update_funding_type? do
+    let(:course) { create(:course, :published) }
+
+    it { is_expected.not_to permit(user, course) }
+
+    context "with a draft course" do
+      let(:course) { create(:course, enrichments: [build(:course_enrichment, :initial_draft)]) }
+
+      it { is_expected.to permit(user, course) }
+    end
+
+    context "with a rolled over course" do
+      let(:course) { create(:course, enrichments: [build(:course_enrichment, :rolled_over)]) }
+
+      it { is_expected.to permit(user, course) }
+    end
+  end
+
   describe "#permitted_attributes" do
     subject { described_class.new(user, build(:course)) }
 

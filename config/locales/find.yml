@@ -28,6 +28,9 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    subjects_page:
+      title: Select a subject -
+      secondary_title: Which secondary subjects do you want to teach?
     courses:
       show:
         back_to_search: Back to search results
@@ -76,6 +79,8 @@ en:
           attributes:
             age_group:
               blank: "Select an age group"
+        find/subjects_form:
+          blank: "Select at least one subject"
         find/courses_by_location_or_training_provider_form:
           attributes:
             find_courses:

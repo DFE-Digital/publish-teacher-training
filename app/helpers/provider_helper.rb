@@ -14,6 +14,22 @@ module ProviderHelper
     end
   end
 
+  def student_visa_sponsorship_status(provider)
+    if provider.can_sponsor_student_visa
+      "Yes - can sponsor"
+    else
+      "No - cannot sponsor"
+    end
+  end
+
+  def skilled_worker_visa_sponsorship_status(provider)
+    if provider.can_sponsor_skilled_worker_visa
+      "Yes - can sponsor"
+    else
+      "No - cannot sponsor"
+    end
+  end
+
   def visa_sponsorship_short_status(provider)
     if !provider.declared_visa_sponsorship?
       visa_sponsorship_call_to_action(provider)

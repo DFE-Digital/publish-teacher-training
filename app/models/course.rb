@@ -263,17 +263,15 @@ class Course < ApplicationRecord
     where(degree_grade: degree_grades)
   }
 
-  scope :provider_can_sponsor_visa, lambda {
-    joins(:provider)
-    .where(
+  scope :can_sponsor_visa, lambda {
+    where(
       program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
-      provider: { can_sponsor_student_visa: true },
+      can_sponsor_student_visa: true,
     )
     .or(
-      joins(:provider)
-      .where(
+      where(
         program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
-        provider: { can_sponsor_skilled_worker_visa: true },
+        can_sponsor_skilled_worker_visa: true,
       ),
     )
   }
@@ -602,6 +600,10 @@ class Course < ApplicationRecord
     assignable_after_publish(course_params, is_admin) &&
       entry_requirements_assignable(course_params) &&
       qualification_assignable(course_params)
+  end
+
+  def draft_or_rolled_over?
+    content_status == :draft || content_status == :rolled_over
   end
 
   def only_published?

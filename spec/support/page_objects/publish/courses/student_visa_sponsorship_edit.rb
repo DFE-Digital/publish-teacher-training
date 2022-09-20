@@ -7,6 +7,8 @@ module PageObjects
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/student-visa-sponsorship"
 
         element :yes, "#publish-course-student-visa-sponsorship-form-can-sponsor-student-visa-true-field"
+
+        element :update, 'button.govuk-button[type="submit"]'
       end
     end
   end

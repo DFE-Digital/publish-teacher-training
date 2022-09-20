@@ -1,0 +1,8 @@
+<% content_for :page_title, title_with_error_prefix(t("find.subjects_page.title"), @subjects_form.errors.present?) %>
+
+<%= form_with(model: @subjects_form, url: find_subjects_path, method: :get) do |form| %>
+  <%= form.govuk_error_summary %>
+
+  <%= render(partial: "secondary_subjects", locals: { form: }) if @subjects_form.secondary? %>
+
+<% end %>

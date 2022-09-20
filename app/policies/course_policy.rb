@@ -2,7 +2,7 @@ class CoursePolicy
   attr_reader :user, :course
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :course, :scope
 
     def initialize(user, scope)
       @user = user
@@ -35,6 +35,10 @@ class CoursePolicy
 
   def send_vacancies_updated_notification?
     user.present?
+  end
+
+  def can_update_funding_type?
+    course.draft_or_rolled_over?
   end
 
   alias_method :preview?, :show?

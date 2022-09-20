@@ -63,6 +63,20 @@ To change the accrediting body of a course, you can do the following:
 p = RecruitmentCycle.current.providers.find_by(provider_code: "1YP")
 p.courses.update(accredited_body_code: "1YK")
 ```
+## Transfer courses to another provider
+
+```ruby
+# This can be run and tested in QA before actioning in production
+
+# Find the provider
+provider = RecruitmentCycle.current.providers.find_by(provider_code: "XXX")
+
+# Find the target provider to recieve the above providers courses
+transfer_to_provider = RecruitmentCycle.current.providers.find_by(provider_code: "YYY")
+
+# Move the courses to the target provider, after this action provider.courses.count = 0
+transfer_to_provider.courses << provider.courses
+```
 
 ## Adding a user to a provider
 

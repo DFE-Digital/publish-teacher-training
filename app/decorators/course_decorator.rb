@@ -47,9 +47,9 @@ class CourseDecorator < ApplicationDecorator
 
   def funding
     {
-      "salary" => "Salaried",
-      "apprenticeship" => "Teaching apprenticeship (with salary)",
-      "fee" => "Fee paying (no salary)",
+      "salary" => "Salary",
+      "apprenticeship" => "Teaching apprenticeship - with salary",
+      "fee" => "Fee paying - no salary",
     }[object.funding_type]
   end
 
