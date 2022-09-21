@@ -1,17 +1,19 @@
 module Find
   module Search
     class SubjectsController < Find::ApplicationController
-      def index
+      include FilterParameters
+
+      def new
         @subjects_form = SubjectsForm.new(subject_codes: params[:subject_codes], age_group: params[:age_group])
       end
 
       def create
-        @subjects_form = SubjectsForm.new(subject_codes: sanitised_subject_codes, age_group: params[:age_group])
-binding.pry
+        @subjects_form = SubjectsForm.new(subject_codes: sanitised_subject_codes, age_group: find_subjects_form_params[:age_group])
+
         if @subjects_form.valid?
           redirect_to course_results_path # TODO: create this
         else
-          render :index
+          render :new
         end
       end
 

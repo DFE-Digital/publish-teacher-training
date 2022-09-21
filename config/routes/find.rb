@@ -12,7 +12,9 @@ namespace :find, path: "/find" do
 
   scope module: :search do
     resources :age_groups, path: "/age-groups"
-    resources :subjects
+    #resources :subjects
+    get '/subjects' => 'subjects#new'
+    get '/subjects-submit' => 'subjects#create', as: :subjects_create
     resources :locations, path: "/"
   end
 end
