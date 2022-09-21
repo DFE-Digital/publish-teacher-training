@@ -38,18 +38,22 @@ module Publish
       def student_visa_sponsorship_params
         return { visa_sponsorship: nil } if params[:publish_course_student_visa_sponsorship_form].blank?
 
-        params.require(:publish_course_student_visa_sponsorship_form).except(:funding_type_updated).permit(*CourseStudentVisaSponsorshipForm::FIELDS)
+        params.require(:publish_course_student_visa_sponsorship_form).except(:funding_type_updated, :origin_step).permit(*CourseStudentVisaSponsorshipForm::FIELDS)
       end
 
       def funding_type_updated?
         params[:publish_course_student_visa_sponsorship_form][:funding_type_updated] == "true"
       end
 
+      def origin_step
+        params[:publish_course_student_visa_sponsorship_form][:origin_step]
+      end
+
       def render_visa_sponsorship_success_message
         if funding_type_updated?
-          flash[:success] = t("visa_sponsorships.funding_and_visa_updated", visa_type: t("visa_sponsorships.student"))
+          flash[:success] = t("visa_sponsorships.updated.#{origin_step}_and_visa", visa_type: t("visa_sponsorships.student"))
         else
-          flash[:success] = t("visa_sponsorships.visa_updated", visa_type: t("visa_sponsorships.student"))
+          flash[:success] = t("visa_sponsorships.updated.visa", visa_type: t("visa_sponsorships.student"))
         end
       end
 

@@ -24,9 +24,12 @@ en:
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"
-    updated_funding: "You’re being shown this page because you changed your answer to funding type."
-    funding_and_visa_updated: "Funding type and %{visa_type} visas updated"
-    visa_updated: "%{visa_type} visas updated"
+    updated:
+      fee_or_salary: "You’re being shown this page because you changed your answer to funding type."
+      apprenticeship: "You’re being shown this page because you changed your answer to whether this is a teaching apprenticeship."
+      fee_or_salary_and_visa: "Funding type and %{visa_type} visas updated"
+      apprenticeship_and_visa: "Teaching apprenticeship and %{visa_type} visas updated"
+      visa: "%{visa_type} visas updated"
   page_titles:
     funding_type:
       edit: "Funding type"

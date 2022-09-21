@@ -23,7 +23,8 @@
           local: true,
         ) do |f| %>
 
-       <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+      <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
+      <%= f.hidden_field :origin_step, value: origin_step %>
 
       <%= f.govuk_error_summary %>
 
@@ -33,12 +34,23 @@
       </h1>
 
       <% if funding_type_updated? %>
-        <p class="govuk-body"><%= t("visa_sponsorships.updated_funding") %></p>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated.#{origin_step}") %></p>
       <% end %>
 
-      <%= render "inset_text" %>
+      <% if @course.is_uni_or_scitt? %>
+        <% if !@provider.can_sponsor_student_visa && @provider.university? %>
+          <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
+        <% end %>
 
-      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "m" }) do %>
+        <% question = "Can your organisation sponsor Student visas for this course?" %>
+      <% else %>
+        <%= render "inset_text" if @course.accrediting_provider.present? %>
+        <% question = "Is Student visa sponsorship available for this course?" %>
+      <% end %>
+
+      <%= render "inset_text" if @course.accrediting_provider.present? %>
+
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: question, tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_student_visas"].each_with_index do |can_sponsor_student_visa, index| %>
           <%= f.govuk_radio_button(
                 :can_sponsor_student_visa,
