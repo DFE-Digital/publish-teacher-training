@@ -1,25 +1,25 @@
 require "rails_helper"
 
-feature "selecting a fee or salary", { can_edit_current_and_next_cycles: false } do
+feature "selecting funding type", { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_new_fee_or_salary_page
+    when_i_visit_the_new_funding_type_page
   end
 
   scenario "selecting fee paying" do
-    when_i_select_an_fee_or_salary(:fee)
+    when_i_select_funding_type(:fee)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:fee)
   end
 
   scenario "selecting salaried" do
-    when_i_select_an_fee_or_salary(:salary)
+    when_i_select_funding_type(:salary)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:salary)
   end
 
   scenario "selecting apprenticeship" do
-    when_i_select_an_fee_or_salary(:apprenticeship)
+    when_i_select_funding_type(:apprenticeship)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:apprenticeship)
   end
@@ -36,24 +36,24 @@ private
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_new_fee_or_salary_page
-    new_fee_or_salary_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: fee_or_salary_params)
+  def when_i_visit_the_new_funding_type_page
+    new_funding_type_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: funding_type_params)
   end
 
-  def when_i_select_an_fee_or_salary(funding_type)
-    new_fee_or_salary_page.funding_type_fields.send(funding_type).click
+  def when_i_select_funding_type(funding_type)
+    new_funding_type_page.funding_type_fields.send(funding_type).click
   end
 
   def and_i_click_continue
-    new_fee_or_salary_page.continue.click
+    new_funding_type_page.continue.click
   end
 
   def provider
     @provider ||= @user.providers.first
   end
 
-  def then_i_am_met_with_the_full_or_part_time_page(fee_or_salary)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/full-part-time/new#{selected_params(fee_or_salary)}")
+  def then_i_am_met_with_the_full_or_part_time_page(funding_type)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/full-part-time/new#{selected_params(funding_type)}")
     expect(page).to have_content("Full time or part time?")
   end
 

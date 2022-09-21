@@ -46,7 +46,7 @@ module Publish
     private
 
       def current_step
-        raise NotImplementedError
+        :funding_type
       end
 
       def error_keys

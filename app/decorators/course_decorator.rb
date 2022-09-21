@@ -245,23 +245,6 @@ class CourseDecorator < ApplicationDecorator
     level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
-  def listing_basic_details
-    if is_further_education?
-      ["outcome",
-       "full time or part time",
-       "fee or salary",
-       "application open date",
-       "course start date"]
-    else
-      ["age range",
-       "outcome",
-       "full time or part time",
-       "application open date",
-       "course start date",
-       "GCSE requirements"]
-    end
-  end
-
   def subject_page_title
     case level
     when "primary"

@@ -45,7 +45,7 @@ module FeatureHelpers
       }
     end
 
-    def fee_or_salary_params
+    def funding_type_params
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",

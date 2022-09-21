@@ -12,7 +12,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
     scenario "i am taken to the skilled worker visa step" do
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
       when_i_visit_the_funding_type_edit_page
-      when_i_select_an_fee_or_salary(:salary)
+      when_i_select_a_funding_type(:salary)
       and_i_continue
       then_i_should_be_on_the_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored
@@ -24,7 +24,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
     scenario "i am taken to the student visa step" do
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
       when_i_visit_the_funding_type_edit_page
-      when_i_select_an_fee_or_salary(:fee)
+      when_i_select_a_funding_type(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
@@ -76,7 +76,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
     @current_user.providers.first
   end
 
-  def when_i_select_an_fee_or_salary(funding_type)
+  def when_i_select_a_funding_type(funding_type)
     funding_type_edit_page.funding_type_fields.send(funding_type).click
   end
 
@@ -99,7 +99,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_a_success_message_for(visa_type)
-    expect(page).to have_content(I18n.t("visa_sponsorships.updated.fee_or_salary_and_visa", visa_type:))
+    expect(page).to have_content(I18n.t("visa_sponsorships.updated.funding_type_and_visa", visa_type:))
   end
 
   def accrediting_provider

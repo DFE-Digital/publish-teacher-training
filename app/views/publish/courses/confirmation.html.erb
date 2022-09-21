@@ -79,21 +79,21 @@
           <% end %>
         <% else %>
           <% if FeatureService.enabled?(:visa_sponsorship_on_course) %>
-            <% summary_list.row(html_attributes: { data: { qa: "course__fee_or_salary" } }) do |row| %>
-              <% row.key { "Fee or salary" } %>
+            <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+              <% row.key { "Funding type" } %>
               <% row.value { course.funding } %>
               <% row.action(**{
-                href: new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-                visually_hidden_text: "if fee or salary",
+                href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
+                visually_hidden_text: "if funding type",
               }) %>
             <% end %>
           <% else %>
-            <% summary_list.row(html_attributes: { data: { qa: "course__fee_or_salary" } }) do |row| %>
-              <% row.key { "Fee or salary" } %>
+            <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+              <% row.key { "Funding type" } %>
               <% row.value { course.funding } %>
               <% row.action(**{
-                href: new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-                visually_hidden_text: "if fee or salary",
+                href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                visually_hidden_text: "if funding type",
               }) %>
             <% end %>
           <% end %>

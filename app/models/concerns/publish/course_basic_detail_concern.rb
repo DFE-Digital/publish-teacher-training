@@ -196,8 +196,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_age_range_path(path_params)
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
-      when :fee_or_salary
-        new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(path_params)
+      when :funding_type
+        new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
