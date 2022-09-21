@@ -5,19 +5,19 @@
 
   <fieldset class="govuk-fieldset">
     <% if @course.is_uni_or_scitt? %>
-      <% if !@provider.can_sponsor_student_visa && !@provider.scitt? %>
+      <% if !@provider.can_sponsor_student_visa && @provider.university? %>
         <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
       <% end %>
 
+        <% question = "Can your organisation sponsor Student visas for this course?" %>
+      <% else %>
+        <%= render "inset_text" if @course.accrediting_provider.present? %>
+        <% question = "Is Student visa sponsorship available for this course?" %>
+      <% end %>
+
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        Can your organisation sponsor Student visas for this course?
+        <%= question %>
       </legend>
-    <% else %>
-      <%= render "inset_text" %>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        Is Student visa sponsorship available for this course?
-      </legend>
-    <% end %>
 
     <%= render "publish/shared/error_messages", error_keys: [:can_sponsor_student_visa] %>
 
