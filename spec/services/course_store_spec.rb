@@ -1,9 +1,9 @@
 require "rails_helper"
 
-describe Stores::UserStore do
-  let(:user) { create(:user) }
-  let(:store) { described_class.new(user) }
-  let(:form_store_key) { :user }
+describe Stores::CourseStore do
+  let(:course) { create(:course) }
+  let(:store) { described_class.new(course) }
+  let(:form_store_key) { :funding_types_and_visas }
   let(:redis) { double }
 
   before do
@@ -19,11 +19,11 @@ describe Stores::UserStore do
       let(:form_store_key) { nil }
 
       it "returns an error" do
-        expect { subject }.to raise_error(Stores::UserStore::InvalidKeyError)
+        expect { subject }.to raise_error(Stores::CourseStore::InvalidKeyError)
       end
     end
 
-    context "when form_store_key is user" do
+    context "when form_store_key is funding_types_and_visas" do
       let(:value) { nil }
 
       before do
@@ -42,7 +42,7 @@ describe Stores::UserStore do
       it "sets the redis value to nil" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:set).with("#{user.id}_#{form_store_key}", value.to_json)
+        expect(redis).to have_received(:set).with("Course_#{course.id}_#{form_store_key}", value.to_json)
       end
     end
   end
@@ -58,7 +58,7 @@ describe Stores::UserStore do
       let(:form_store_key) { nil }
 
       it "returns an error" do
-        expect { subject }.to raise_error(Stores::UserStore::InvalidKeyError)
+        expect { subject }.to raise_error(Stores::CourseStore::InvalidKeyError)
       end
     end
 
@@ -78,7 +78,7 @@ describe Stores::UserStore do
       it "sets the redis value to bob" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:set).with("#{user.id}_#{form_store_key}", value.to_json)
+        expect(redis).to have_received(:set).with("Course_#{course.id}_#{form_store_key}", value.to_json)
       end
     end
   end
@@ -103,7 +103,7 @@ describe Stores::UserStore do
       it "sets the redis value to nil" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:get).with("#{user.id}_#{form_store_key}")
+        expect(redis).to have_received(:get).with("Course_#{course.id}_#{form_store_key}")
       end
     end
   end
