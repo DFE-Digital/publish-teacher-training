@@ -99,7 +99,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_a_success_message_for(visa_type)
-    expect(page).to have_content(I18n.t("visa_sponsorships.updated.fee_or_salary_and_visa", visa_type:))
+    expect(page).to have_content(I18n.t("visa_sponsorships.updated.funding_type_and_visa", visa_type:))
   end
 
   def accrediting_provider
