@@ -6,6 +6,10 @@ module Find
 
     validates :subject_codes, presence: true
 
+    def primary?
+      age_group == "primary"
+    end
+
     def secondary?
       age_group == "secondary"
     end
