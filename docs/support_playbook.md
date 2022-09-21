@@ -26,7 +26,7 @@ course.site_statuses.each do |site_status|
 end
 ```
 
-## Unpubblishing a published course
+## Unpublishing a published course
 
 Sometimes providers will accidentally publish a course and would like to unpublish it.
 
@@ -71,7 +71,7 @@ p.courses.update(accredited_body_code: "1YK")
 # Find the provider
 provider = RecruitmentCycle.current.providers.find_by(provider_code: "XXX")
 
-# Find the target provider to recieve the above providers courses
+# Find the target provider to receive the above providers courses
 transfer_to_provider = RecruitmentCycle.current.providers.find_by(provider_code: "YYY")
 
 # Move the courses to the target provider, after this action provider.courses.count = 0
