@@ -1,6 +1,5 @@
 module Find
   module SubjectHelper
-
     def primary_subject_options(subjects = primary_subjects)
       subjects.map do |subject|
         PrimarySubjectInput.new(subject.subject_code, subject.subject_name)
