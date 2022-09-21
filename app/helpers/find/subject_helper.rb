@@ -27,6 +27,13 @@ module Find
 
   private
 
+    PrimarySubjectInput = Struct.new(:code, :name)
+
+    def primary_subjects
+      Subject.where(type: "PrimarySubject")
+             .order(:subject_name)
+    end
+
     # These subjects don’t currently match any courses, and so can be dropped.
     IGNORED_SUBJECTS = ["Philosophy", "Modern Languages", "Ancient Hebrew", "Ancient Greek"].freeze
     SecondarySubjectInput = Struct.new(:code, :name, :financial_info)
