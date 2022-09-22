@@ -179,7 +179,7 @@ en:
         bursary: "Bursaries of %{amount} available"
   course:
     add_course: "Add course"
-    value_not_provided: "Not entered"
+    value_not_entered: "Not entered"
     update_email:
       name: "title"
       age_range_in_years: "age range"
