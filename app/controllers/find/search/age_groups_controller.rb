@@ -1,6 +1,8 @@
 module Find
   module Search
     class AgeGroupsController < Find::ApplicationController
+      include FilterParameters
+
       def index
         @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)
       end
@@ -19,7 +21,7 @@ module Find
 
       def age_range_form_params
         params.reverse_merge({ find_age_groups_form: {} })[:find_age_groups_form]
-          .permit(:age_group)
+          .permit(:age_group, :city_town_postcode_query, :find_courses, :school_uni_or_provider_query)
       end
     end
   end

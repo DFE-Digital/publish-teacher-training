@@ -5,6 +5,12 @@
     <%= form_with model: @age_groups_form, url: find_age_groups_path, method: :post do |f| %>
       <%= f.govuk_error_summary %>
 
+      <%= render Find::HiddenFieldsComponent.new(
+        query_params: request.query_parameters,
+        form: f,
+        form_name: :find_age_groups_form,
+        exclude_keys: ['age_groups']) %>
+
       <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups_page.title"), size: "l", tag: "h1" } do %>
         <%= f.govuk_radio_button :age_group, "primary", label: { text: I18n.t("find.age_groups_page.radio_options.primary.radio") }, link_errors: true %>
         <%= f.govuk_radio_button :age_group, "secondary", label: { text: I18n.t("find.age_groups_page.radio_options.secondary.radio") } %>

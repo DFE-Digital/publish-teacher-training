@@ -14,7 +14,7 @@ module Find
         @courses_by_location_or_training_provider_form = CoursesByLocationOrTrainingProviderForm.new(params: find_courses_by_location_or_training_provider_form_params)
 
         if @courses_by_location_or_training_provider_form.valid?
-          redirect_to find_age_groups_path
+          redirect_to find_age_groups_path(find_courses_by_location_or_training_provider_form_params)
         else
           providers
           render :index
