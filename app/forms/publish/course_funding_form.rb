@@ -1,5 +1,7 @@
 module Publish
   class CourseFundingForm < Form
+    alias_method :course, :model
+
     FIELDS = %i[
       funding_type
     ].freeze
@@ -12,6 +14,14 @@ module Publish
       super(model, model, params:)
     end
 
+    def funding_type_updated?
+      course.funding_type != compute_fields[:funding_type]
+    end
+
+    def is_fee_based?
+      funding_type == "fee"
+    end
+
   private
 
     # def assign_attributes_to_model
@@ -19,9 +29,14 @@ module Publish
     #   model.can_sponsor_student_visa = can_sponsor_student_visa
     # end
 
-    # TODO: something is wrong here. The model doesn't have a funding type as a attribute.
+    def original_fields_values
+      {
+        funding_type: course.funding_type,
+      }
+    end
+
     def compute_fields
-      model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      original_fields_values.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end
 
     def form_store_key
