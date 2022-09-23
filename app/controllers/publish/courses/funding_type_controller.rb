@@ -21,7 +21,7 @@ module Publish
 
       def edit
         authorize(course, :can_update_funding_type?)
-        @funding_form = CourseFundingForm.new(@course)
+        @course_funding_form = CourseFundingForm.new(@course)
       end
 
       def update
@@ -29,16 +29,17 @@ module Publish
 
         track_funding_type_changes
 
-        @funding_form = CourseFundingForm.new(@course, params: course_params)
-        if @funding_form.valid?
+        @course_funding_form = CourseFundingForm.new(@course, params: course_params)
+
+        if @course_funding_form.valid?
           if @funding_type_updated
-            @funding_form.stash
+            @course_funding_form.stash
             redirect_to_visa_step
           else
             redirect_to_course_page
           end
         else
-          @errors = @funding_form.errors.messages
+          @errors = @course_funding_form.errors.messages
           render :edit
         end
       end
