@@ -1,8 +1,6 @@
 module Publish
   module Courses
-    class StudentVisaSponsorshipController < PublishController
-      include CourseBasicDetailConcern
-
+    class StudentVisaSponsorshipController < VisaSponsorshipController
       def new
         authorize(@provider, :can_create_course?)
         @course.can_sponsor_student_visa = @provider.can_sponsor_student_visa unless @course.can_sponsor_student_visa
@@ -35,26 +33,12 @@ module Publish
 
     private
 
-      def student_visa_sponsorship_params
-        return { visa_sponsorship: nil } if params[:publish_course_student_visa_sponsorship_form].blank?
-
-        params.require(:publish_course_student_visa_sponsorship_form).except(:funding_type_updated, :origin_step).permit(*CourseStudentVisaSponsorshipForm::FIELDS)
+      def visa_sponsorship_form
+        CourseStudentVisaSponsorshipForm
       end
 
-      def funding_type_updated?
-        params[:publish_course_student_visa_sponsorship_form][:funding_type_updated] == "true"
-      end
-
-      def origin_step
-        params[:publish_course_student_visa_sponsorship_form][:origin_step]
-      end
-
-      def render_visa_sponsorship_success_message
-        if funding_type_updated?
-          flash[:success] = t("visa_sponsorships.updated.#{origin_step}_and_visa", visa_type: t("visa_sponsorships.student"))
-        else
-          flash[:success] = t("visa_sponsorships.updated.visa", visa_type: t("visa_sponsorships.student"))
-        end
+      def visa_sponsorship_form_param_key
+        :publish_course_student_visa_sponsorship_form
       end
 
       def current_step
@@ -63,6 +47,10 @@ module Publish
 
       def error_keys
         [:can_sponsor_student_visa]
+      end
+
+      def visa_type
+        t("visa_sponsorships.student")
       end
     end
   end

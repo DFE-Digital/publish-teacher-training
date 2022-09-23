@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("#{t('page_titles.student_visas.edit')} – #{course.name_and_code}", @course_student_visa_sponsorship_form.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("#{t('page_titles.student_visas.edit')} – #{course.name_and_code}", @visa_sponsorship_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -13,7 +13,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-          model: @course_student_visa_sponsorship_form,
+          model: @visa_sponsorship_form,
           url: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
             course.provider_code,
             course.recruitment_cycle_year,
