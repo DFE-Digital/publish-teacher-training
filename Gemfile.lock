@@ -7,8 +7,8 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 8fffe1f87f8ed237d61563cbd87da196a9025a54
-  tag: v1.5.0
+  revision: 03e2d00a591bb01afee8a69cd2a4d0f162944c65
+  branch: recover-init-when-no-database
   specs:
     dfe-analytics (1.5.0)
       google-cloud-bigquery (~> 1.38)
@@ -266,9 +266,9 @@ GEM
       rails (>= 3.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-apis-bigquery_v2 (0.40.0)
-      google-apis-core (>= 0.7, < 2.a)
-    google-apis-core (0.7.0)
+    google-apis-bigquery_v2 (0.41.0)
+      google-apis-core (>= 0.9.0, < 2.a)
+    google-apis-core (0.9.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (>= 0.16.2, < 2.a)
       httpclient (>= 2.8.1, < 3.a)
