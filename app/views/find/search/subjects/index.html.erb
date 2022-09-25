@@ -9,7 +9,7 @@
   )) %>
 <% end %>
 
-<%= form_with(model: @subjects_form, url: find_subjects_create_path, method: :get) do |form| %>
+<%= form_with(model: @subjects_form, url: find_subjects_path, method: :post) do |form| %>
   <%= form.govuk_error_summary %>
 
   <%= render Find::HiddenFieldsComponent.new(
