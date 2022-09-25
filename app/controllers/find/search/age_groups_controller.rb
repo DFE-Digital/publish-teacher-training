@@ -4,7 +4,7 @@ module Find
       include FilterParameters
 
       def index
-        @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)# only age_range needed
+        @age_groups_form = AgeGroupsForm.new(params: age_range_form_params) # only age_range needed
       end
 
       def create
