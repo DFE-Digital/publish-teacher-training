@@ -25,7 +25,7 @@ module Find
 
       def find_subjects_form_params
         params.require(:find_subjects_form)
-          .permit(:age_group, :city_town_postcode_query, :find_courses, :school_uni_or_provider_query,subject_codes: [])
+          .permit(:age_group, :city_town_postcode_query, :find_courses, :school_uni_or_provider_query, subject_codes: [])
       end
     end
   end
