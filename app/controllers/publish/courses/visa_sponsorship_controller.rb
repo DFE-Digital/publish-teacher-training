@@ -11,15 +11,13 @@ module Publish
       def edit
         authorize(provider)
 
-        # TODO: Replace with `@funding_form`
-
-        @visa_sponsorship_form = visa_sponsorship_form.new(@course)
+        visa_sponsorship_form
       end
 
       def update
         authorize(provider)
-        @visa_sponsorship_form = visa_sponsorship_form.new(@course, params: visa_sponsorship_params)
-        if @visa_sponsorship_form.save!
+
+        if visa_sponsorship_form.save!
           render_visa_sponsorship_success_message
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
@@ -35,11 +33,11 @@ module Publish
     private
 
       def visa_sponsorship_form
-        raise NotImplementedError
+        @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)
       end
 
       def visa_sponsorship_form_param_key
-        raise NotImplementedError
+        :publish_course_visa_sponsorship_form
       end
 
       def current_step
@@ -55,17 +53,17 @@ module Publish
       end
 
       def visa_sponsorship_params
-        return { visa_sponsorship: nil } if params[visa_sponsorship_form_param_key].blank?
+        return {} if params[visa_sponsorship_form_param_key].blank?
 
-        params.require(visa_sponsorship_form_param_key).except(:funding_type_updated, :origin_step).permit(*visa_sponsorship_form::FIELDS)
+        params.require(visa_sponsorship_form_param_key).except(:funding_type_updated, :origin_step).permit(*visa_sponsorship_form.applicable_fields)
       end
 
       def funding_type_updated?
-        params[visa_sponsorship_form_param_key][:funding_type_updated] == "true"
+        visa_sponsorship_form.funding_type_updated?
       end
 
       def origin_step
-        params[visa_sponsorship_form_param_key][:origin_step]
+        visa_sponsorship_form.origin_step
       end
 
       def render_visa_sponsorship_success_message

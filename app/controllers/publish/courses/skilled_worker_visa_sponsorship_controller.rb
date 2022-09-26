@@ -33,14 +33,6 @@ module Publish
 
     private
 
-      def visa_sponsorship_form
-        CourseSkilledWorkerVisaSponsorshipForm
-      end
-
-      def visa_sponsorship_form_param_key
-        :publish_course_skilled_worker_visa_sponsorship_form
-      end
-
       def current_step
         :can_sponsor_skilled_worker_visa
       end
