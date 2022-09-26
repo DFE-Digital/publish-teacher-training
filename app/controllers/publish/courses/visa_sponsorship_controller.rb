@@ -7,7 +7,6 @@ module Publish
         raise NotImplementedError
       end
 
-      ## TODO: refactor all below as it same as other controller
       def edit
         authorize(provider)
 
@@ -47,7 +46,7 @@ module Publish
       def visa_sponsorship_params
         return {} if params[:publish_course_visa_sponsorship_form].blank?
 
-        params.require(:publish_course_visa_sponsorship_form).except(:funding_type_updated, :origin_step).permit(*visa_sponsorship_form.applicable_fields)
+        params.require(:publish_course_visa_sponsorship_form).permit(*visa_sponsorship_form.applicable_fields)
       end
 
       def funding_type_updated?
