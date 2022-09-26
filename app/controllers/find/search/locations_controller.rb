@@ -1,9 +1,6 @@
 module Find
   module Search
     class LocationsController < Find::ApplicationController
-      include FilterParameters
-
-      before_action :build_results_filter_query_parameters
 
       def index
         providers
@@ -32,12 +29,6 @@ module Find
           .permit(:find_courses,
             :city_town_postcode_query,
             :school_uni_or_provider_query)
-      end
-
-      def build_results_filter_query_parameters
-        @results_filter_query_parameters = merge_previous_parameters(
-          ResultsView.new(query_parameters: request.query_parameters).query_parameters_with_defaults,
-        )
       end
     end
   end
