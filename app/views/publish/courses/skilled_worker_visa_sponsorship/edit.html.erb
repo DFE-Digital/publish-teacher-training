@@ -37,6 +37,10 @@
         <p class="govuk-body"><%= t("visa_sponsorships.updated.#{origin_step}") %></p>
       <% end %>
 
+      <% if @course.pg_teaching_apprenticeship? && !@provider.can_sponsor_skilled_worker_visa %>
+        <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
+      <% end %>
+
       <%= f.govuk_radio_buttons_fieldset(:can_sponsor_skilled_worker_visa, legend: { text: "Can your organisation sponsor Skilled Worker visas for this course?", tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_skilled_worker_visas"].each_with_index do |can_sponsor_skilled_worker_visa, index| %>
           <%= f.govuk_radio_button(
