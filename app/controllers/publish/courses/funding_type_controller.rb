@@ -27,7 +27,7 @@ module Publish
       def update
         authorize(course, :can_update_funding_type?)
 
-        @course_funding_form = CourseFundingForm.new(@course, params: course_params)
+        @course_funding_form = CourseFundingForm.new(@course, params: funding_type_params)
 
         if @course_funding_form.valid?
           redirect_to(next_path)
@@ -38,6 +38,12 @@ module Publish
       end
 
     private
+
+      def funding_type_params
+        return {} if params[:publish_course_funding_form].blank?
+
+        params.require(:publish_course_funding_form).permit(:funding_type)
+      end
 
       def next_path
         if funding_type_updated?
@@ -60,33 +66,26 @@ module Publish
         @course_funding_form.funding_type_updated?
       end
 
-      def course_page_path_values
+      def course_values
         {
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
           course_code: course.course_code,
         }
       end
-
-      def visa_page_path_values
-        course_page_path_values.merge({
-          funding_type_updated: funding_type_updated?,
-          origin_step: current_step,
-        })
-      end
-
+      
       def visa_page_path
         if @course_funding_form.student_visa?
-          student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(visa_page_path_values)
+          student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            visa_page_path_values,
+            course_values,
           )
         end
       end
 
       def course_page_path
-        details_publish_provider_recruitment_cycle_course_path(course_page_path_values)
+        details_publish_provider_recruitment_cycle_course_path(course_values)
       end
     end
   end

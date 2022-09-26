@@ -11,8 +11,8 @@ module Publish
     attr_accessor(*FIELDS)
 
     validates :funding_type, presence: true
-    validates :can_sponsor_skilled_worker_visa, presence: true, if: -> { skilled_worker_visa? }
-    validates :can_sponsor_student_visa, presence: true, if: -> { student_visa? }
+    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false] }, if: -> { skilled_worker_visa? }
+    validates :can_sponsor_student_visa, inclusion: { in: [true, false] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)

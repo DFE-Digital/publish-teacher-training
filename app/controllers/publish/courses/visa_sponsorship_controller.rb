@@ -36,10 +36,6 @@ module Publish
         @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)
       end
 
-      def visa_sponsorship_form_param_key
-        :publish_course_visa_sponsorship_form
-      end
-
       def current_step
         raise NotImplementedError
       end
@@ -49,9 +45,9 @@ module Publish
       end
 
       def visa_sponsorship_params
-        return {} if params[visa_sponsorship_form_param_key].blank?
+        return {} if params[:publish_course_visa_sponsorship_form].blank?
 
-        params.require(visa_sponsorship_form_param_key).except(:funding_type_updated, :origin_step).permit(*visa_sponsorship_form.applicable_fields)
+        params.require(:publish_course_visa_sponsorship_form).except(:funding_type_updated, :origin_step).permit(*visa_sponsorship_form.applicable_fields)
       end
 
       def funding_type_updated?
