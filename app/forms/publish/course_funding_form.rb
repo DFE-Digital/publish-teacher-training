@@ -10,7 +10,9 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    # validates :funding_type, presence: true
+    validates :funding_type, presence: true
+    validates :can_sponsor_skilled_worker_visa, presence: true, if: -> { skilled_worker_visa? }
+    validates :can_sponsor_student_visa, presence: true, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
@@ -42,6 +44,10 @@ module Publish
 
     def student_visa?
       visa_type == :student
+    end
+
+    def skilled_worker_visa?
+      visa_type == :skilled_worker
     end
 
     def applicable_fields
