@@ -16,8 +16,8 @@
     query_params: request.query_parameters,
     form:,
     form_name: :find_subjects_form,
-    exclude_keys: ["subject_codes"]
-    ) %>
+    exclude_keys: ["subject_codes"],
+  ) %>
 
   <%= render(partial: "primary_subjects", locals: { form: }) if @subjects_form.primary? %>
   <%= render(partial: "secondary_subjects", locals: { form: }) if @subjects_form.secondary? %>

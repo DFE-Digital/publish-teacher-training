@@ -17,8 +17,8 @@
         query_params: request.query_parameters,
         form: f,
         form_name: :find_age_groups_form,
-        exclude_keys: ["age_group"]
-        ) %>
+        exclude_keys: ["age_group"],
+      ) %>
 
       <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups_page.title"), size: "l", tag: "h1" } do %>
         <%= f.govuk_radio_button :age_group, "primary",
