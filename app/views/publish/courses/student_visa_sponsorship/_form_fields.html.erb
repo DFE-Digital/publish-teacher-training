@@ -3,21 +3,21 @@
     <%= t("page_titles.student_visas.new") %>
   </h1>
 
+  <% if @course.is_uni_or_scitt? && !@provider.can_sponsor_student_visa %>
+    <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
+  <% end %>
+
   <fieldset class="govuk-fieldset">
     <% if @course.is_uni_or_scitt? %>
-      <% if !@provider.can_sponsor_student_visa && @provider.university? %>
-        <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
-      <% end %>
+      <% question = "Can your organisation sponsor Student visas for this course?" %>
+    <% else %>
+      <%= render "inset_text" if @course.accrediting_provider.present? %>
+      <% question = "Is Student visa sponsorship available for this course?" %>
+    <% end %>
 
-        <% question = "Can your organisation sponsor Student visas for this course?" %>
-      <% else %>
-        <%= render "inset_text" if @course.accrediting_provider.present? %>
-        <% question = "Is Student visa sponsorship available for this course?" %>
-      <% end %>
-
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <%= question %>
-      </legend>
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+      <%= question %>
+    </legend>
 
     <%= render "publish/shared/error_messages", error_keys: [:can_sponsor_student_visa] %>
 
