@@ -4,7 +4,7 @@
   <%= govuk_back_link_to(find_locations_path(
     city_town_postcode_query: params[:city_town_postcode_query],
     find_courses: params[:find_courses],
-    school_uni_or_provider_query: params[:school_uni_or_provider_query]
+    school_uni_or_provider_query: params[:school_uni_or_provider_query],
   )) %>
 <% end %>
 
@@ -17,13 +17,16 @@
         query_params: request.query_parameters,
         form: f,
         form_name: :find_age_groups_form,
-        exclude_keys: ['age_group']) %>
+        exclude_keys: ['age_group']
+        ) %>
 
       <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups_page.title"), size: "l", tag: "h1" } do %>
-        <%= f.govuk_radio_button :age_group, "primary", label: { text: I18n.t("find.age_groups_page.radio_options.primary.radio") },
+        <%= f.govuk_radio_button :age_group, "primary",
+        label: { text: I18n.t("find.age_groups_page.radio_options.primary.radio") },
         link_errors: true,
         checked: params[:age_group] == "primary" %>
-        <%= f.govuk_radio_button :age_group, "secondary", label: { text: I18n.t("find.age_groups_page.radio_options.secondary.radio") },
+        <%= f.govuk_radio_button :age_group, "secondary",
+        label: { text: I18n.t("find.age_groups_page.radio_options.secondary.radio") },
         checked: params[:age_group] == "secondary" %>
         <%= f.govuk_radio_divider %>
         <%= f.govuk_radio_button :age_group, "further_education", label: { text: I18n.t("find.age_groups_page.radio_options.further_education.radio") }, hint: { text: I18n.t("find.age_groups_page.radio_options.further_education.hint_text") } %>

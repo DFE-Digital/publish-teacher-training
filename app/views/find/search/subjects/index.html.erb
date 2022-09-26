@@ -5,7 +5,7 @@
     age_group: params[:age_group],
     city_town_postcode_query: params[:city_town_postcode_query],
     find_courses: params[:find_courses],
-    school_uni_or_provider_query: params[:school_uni_or_provider_query]
+    school_uni_or_provider_query: params[:school_uni_or_provider_query],
   )) %>
 <% end %>
 
@@ -14,10 +14,10 @@
 
   <%= render Find::HiddenFieldsComponent.new(
     query_params: request.query_parameters,
-    form: form,
+    form:,
     form_name: :find_subjects_form,
-    exclude_keys: ['subject_codes']) %>
-
+    exclude_keys: ['subject_codes']
+    ) %>
 
   <%= render(partial: "primary_subjects", locals: { form: }) if @subjects_form.primary? %>
   <%= render(partial: "secondary_subjects", locals: { form: }) if @subjects_form.secondary? %>
