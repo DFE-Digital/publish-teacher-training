@@ -1,7 +1,6 @@
 module Find
   module Search
     class AgeGroupsController < Find::ApplicationController
-
       def index
         @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)
       end

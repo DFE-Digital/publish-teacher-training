@@ -1,7 +1,6 @@
 module Find
   module Search
     class LocationsController < Find::ApplicationController
-
       def index
         providers
         @courses_by_location_or_training_provider_form = CoursesByLocationOrTrainingProviderForm.new
