@@ -36,16 +36,19 @@ module Publish
       funding_type == "fee"
     end
 
+    def visa_type
+      is_fee_based? ? :student : :skilled_worker
+    end
+
+    def student_visa?
+      visa_type == :student
+    end
+
     def applicable_fields
-      ["can_sponsor_#{visa_type}".to_sym]
+      ["can_sponsor_#{visa_type}_visa".to_sym]
     end
 
   private
-
-    # def assign_attributes_to_model
-    #   model.funding_type = funding_type
-    #   model.can_sponsor_student_visa = can_sponsor_student_visa
-    # end
 
     def original_fields_values
       {

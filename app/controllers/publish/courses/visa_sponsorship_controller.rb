@@ -18,7 +18,7 @@ module Publish
         authorize(provider)
 
         if visa_sponsorship_form.save!
-          render_visa_sponsorship_success_message
+          flash[:success] = success_message
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -48,10 +48,6 @@ module Publish
         raise NotImplementedError
       end
 
-      def visa_type
-        raise NotImplementedError
-      end
-
       def visa_sponsorship_params
         return {} if params[visa_sponsorship_form_param_key].blank?
 
@@ -66,12 +62,12 @@ module Publish
         visa_sponsorship_form.origin_step
       end
 
-      def render_visa_sponsorship_success_message
-        if funding_type_updated?
-          flash[:success] = t("visa_sponsorships.updated.#{origin_step}_and_visa", visa_type:)
-        else
-          flash[:success] = t("visa_sponsorships.updated.visa", visa_type:)
-        end
+      def success_message
+        visa_type = t("visa_sponsorships.#{visa_sponsorship_form.visa_type}")
+
+        success_message_key = funding_type_updated? ? "visa_sponsorships.updated.#{origin_step}_and_visa" : "visa_sponsorships.updated.visa"
+
+        t(success_message_key, visa_type:)
       end
     end
   end

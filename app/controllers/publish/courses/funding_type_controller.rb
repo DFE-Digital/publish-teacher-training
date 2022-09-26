@@ -76,7 +76,7 @@ module Publish
       end
 
       def visa_page_path
-        if @course_funding_form.is_fee_based?
+        if @course_funding_form.student_visa?
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(visa_page_path_values)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(

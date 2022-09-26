@@ -40,10 +40,6 @@ module Publish
       def error_keys
         [:can_sponsor_student_visa]
       end
-
-      def visa_type
-        t("visa_sponsorships.student")
-      end
     end
   end
 end
