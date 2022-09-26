@@ -21,7 +21,8 @@ private
     course_creation_params = select_outcome(course_creation_params, qualification: "qts", qualification_selection: new_outcome_page.qualification_fields.qts, next_page: new_apprenticeship_page)
     course_creation_params = select_apprenticeship(course_creation_params, next_page: new_study_mode_page)
     course_creation_params = select_study_mode(course_creation_params, next_page: new_locations_page)
-    course_creation_params = select_location(course_creation_params, next_page: new_applications_open_page)
+    course_creation_params = select_location(course_creation_params, next_page: new_student_visa_sponsorship_page)
+    course_creation_params = select_visa_settings(course_creation_params, next_page: new_applications_open_page)
     course_creation_params = select_applications_open_from(course_creation_params, next_page: new_start_date_page)
     select_start_date(course_creation_params)
 
@@ -172,6 +173,20 @@ private
 
     new_study_mode_page.study_mode_fields.full_time.click
     new_study_mode_page.continue.click
+
+    expect_page_to_be_displayed_with_query(
+      page: next_page,
+      expected_query_params: course_creation_params,
+    )
+
+    course_creation_params
+  end
+
+  def select_visa_settings(course_creation_params, next_page:)
+    course_creation_params[:can_sponsor_student_visa] = "true"
+
+    new_student_visa_sponsorship_page.yes.click
+    new_student_visa_sponsorship_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
