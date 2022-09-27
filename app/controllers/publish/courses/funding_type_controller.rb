@@ -73,7 +73,7 @@ module Publish
           course_code: course.course_code,
         }
       end
-      
+
       def visa_page_path
         if @course_funding_form.student_visa?
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
