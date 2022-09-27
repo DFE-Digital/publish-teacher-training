@@ -44,9 +44,9 @@ module Publish
       end
 
       def visa_sponsorship_params
-        return {} if params[:publish_course_visa_sponsorship_form].blank?
+        return {} if params[:publish_course_funding_form].blank?
 
-        params.require(:publish_course_visa_sponsorship_form).permit(*visa_sponsorship_form.applicable_fields)
+        params.require(:publish_course_funding_form).permit(CourseFundingForm::FIELDS)
       end
 
       def funding_type_updated?
