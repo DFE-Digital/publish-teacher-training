@@ -22,6 +22,7 @@ module Publish
       def edit
         authorize(course, :can_update_funding_type?)
         @course_funding_form = CourseFundingForm.new(@course)
+        @course_funding_form.clear_stash
       end
 
       def update
