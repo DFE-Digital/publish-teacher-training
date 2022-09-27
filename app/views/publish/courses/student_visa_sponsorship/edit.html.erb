@@ -23,9 +23,6 @@
           local: true,
         ) do |f| %>
 
-      <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
-      <%= f.hidden_field :origin_step, value: origin_step %>
-
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
@@ -33,8 +30,8 @@
         <%= t("page_titles.student_visas.edit") %>
       </h1>
 
-      <% if funding_type_updated? %>
-        <p class="govuk-body"><%= t("visa_sponsorships.updated.#{origin_step}") %></p>
+      <% if @visa_sponsorship_form.funding_type_updated? %>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated.#{@visa_sponsorship_form.origin_step}") %></p>
       <% end %>
 
       <% if @course.is_uni_or_scitt? && !@provider.can_sponsor_student_visa %>
