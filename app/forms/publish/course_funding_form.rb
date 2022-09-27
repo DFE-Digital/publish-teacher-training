@@ -50,10 +50,6 @@ module Publish
       visa_type == :skilled_worker
     end
 
-    def applicable_fields
-      ["can_sponsor_#{visa_type}_visa".to_sym]
-    end
-
   private
 
     def original_fields_values
