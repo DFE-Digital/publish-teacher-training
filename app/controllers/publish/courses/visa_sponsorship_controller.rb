@@ -49,19 +49,10 @@ module Publish
         params.require(:publish_course_funding_form).permit(CourseFundingForm::FIELDS)
       end
 
-      def funding_type_updated?
-        visa_sponsorship_form.funding_type_updated?
-      end
-
-      def origin_step
-        visa_sponsorship_form.origin_step
-      end
-
       def success_message
+        success_message_key = visa_sponsorship_form.funding_type_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : "visa_sponsorships.updated.visa"
+
         visa_type = t("visa_sponsorships.#{visa_sponsorship_form.visa_type}")
-
-        success_message_key = funding_type_updated? ? "visa_sponsorships.updated.#{origin_step}_and_visa" : "visa_sponsorships.updated.visa"
-
         t(success_message_key, visa_type:)
       end
     end

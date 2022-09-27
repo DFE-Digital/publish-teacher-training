@@ -47,7 +47,7 @@ module Publish
       end
 
       def next_path
-        if funding_type_updated?
+        if @course_funding_form.funding_type_updated?
           @course_funding_form.stash
           visa_page_path
         else
@@ -61,10 +61,6 @@ module Publish
 
       def error_keys
         %i[funding_type program_type]
-      end
-
-      def funding_type_updated?
-        @course_funding_form.funding_type_updated?
       end
 
       def course_values
