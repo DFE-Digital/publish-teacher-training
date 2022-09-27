@@ -392,6 +392,14 @@ en:
               greater_than_or_equal_to: "From age must be between 0 and 46"
               less_than_or_equal_to: "From age must be between 0 and 46"
               invalid: "Enter a valid age in From"
+        publish/course_funding_form:
+          attributes:
+            funding_type:
+              blank: "Select a funding type"
+            can_sponsor_student_visa:
+              inclusion: "Select an option"
+            can_sponsor_skilled_worker_visa:
+              inclusion: "Select an option"
             course_age_range_in_years_other_to:
               blank: "Enter an age in To"
               not_a_number: "Enter a valid age in To"
