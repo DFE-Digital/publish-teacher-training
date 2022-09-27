@@ -42,7 +42,7 @@ describe Stores::CourseStore do
       it "sets the redis value to nil" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:set).with("Course_#{course.id}_#{form_store_key}", value.to_json)
+        expect(redis).to have_received(:set).with("Stores::CourseStore_#{course.id}_#{form_store_key}", value.to_json)
       end
     end
   end
@@ -78,7 +78,7 @@ describe Stores::CourseStore do
       it "sets the redis value to bob" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:set).with("Course_#{course.id}_#{form_store_key}", value.to_json)
+        expect(redis).to have_received(:set).with("Stores::CourseStore_#{course.id}_#{form_store_key}", value.to_json)
       end
     end
   end
@@ -103,7 +103,7 @@ describe Stores::CourseStore do
       it "sets the redis value to nil" do
         subject
         expect(RedisClient).to have_received(:current)
-        expect(redis).to have_received(:get).with("Course_#{course.id}_#{form_store_key}")
+        expect(redis).to have_received(:get).with("Stores::CourseStore_#{course.id}_#{form_store_key}")
       end
     end
   end
