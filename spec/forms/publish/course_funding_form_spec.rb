@@ -153,23 +153,93 @@ describe Publish::CourseFundingForm, type: :model do
     end
 
     describe "save!" do
-      context "when changing funding type to apprenticeship and can sponsor skilled worker visa" do
-        let(:params) { { funding_type: "apprenticeship", can_sponsor_skilled_worker_visa: true } }
+      context "when the course is a fee based" do
+        let(:course) { create(:course, :fee_type_based, :draft_enrichment) }
 
-        it "updates the course with the new details" do
-          expect { subject.save! }
-            .to change { course.funding_type }.to("apprenticeship")
-                                           .and change { course.can_sponsor_skilled_worker_visa }.to(true)
+        context "when changing funding type to apprenticeship and can sponsor skilled worker visa" do
+          let(:params) { { funding_type: "apprenticeship", can_sponsor_skilled_worker_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("fee").to("apprenticeship")
+              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .and change { course.enrichments.last.fee_details }.to(nil)
+              .and change { course.enrichments.last.fee_international }.to(nil)
+              .and change { course.enrichments.last.fee_uk_eu }.to(nil)
+              .and change { course.enrichments.last.financial_support }.to(nil)
+          end
+        end
+
+        context "when changing funding type to salary and can sponsor skilled worker visa" do
+          let(:params) { { funding_type: "salary", can_sponsor_skilled_worker_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("fee").to("salary")
+              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .and change { course.enrichments.last.fee_details }.to(nil)
+              .and change { course.enrichments.last.fee_international }.to(nil)
+              .and change { course.enrichments.last.fee_uk_eu }.to(nil)
+              .and change { course.enrichments.last.financial_support }.to(nil)
+          end
         end
       end
 
-      context "when changing funding type to salary and can sponsor skilled worker visa" do
-        let(:params) { { funding_type: "salary", can_sponsor_skilled_worker_visa: true } }
+      context "when the course is with salary" do
+        let(:course) { create(:course, :with_salary, :draft_enrichment) }
 
-        it "updates the course with the new details" do
-          expect { subject.save! }
-            .to change { course.funding_type }.to("salary")
-                                              .and change { course.can_sponsor_skilled_worker_visa }.to(true)
+        context "when changing funding type to apprenticeship and can sponsor skilled worker visa" do
+          let(:params) { { funding_type: "apprenticeship", can_sponsor_skilled_worker_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("salary").to("apprenticeship")
+              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .and change { course.enrichments.last.fee_details }.to(nil)
+              .and change { course.enrichments.last.fee_international }.to(nil)
+              .and change { course.enrichments.last.fee_uk_eu }.to(nil)
+              .and change { course.enrichments.last.financial_support }.to(nil)
+          end
+        end
+
+        context "when changing funding type to fee and can sponsor student visa" do
+          let(:params) { { funding_type: "fee", can_sponsor_student_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("salary").to("fee")
+              .and change { course.can_sponsor_student_visa }.from(false).to(true)
+              .and change { course.enrichments.last.salary_details }.to(nil)
+          end
+        end
+      end
+
+      context "when the course is with apprenticeship" do
+        let(:course) { create(:course, :with_apprenticeship, :draft_enrichment) }
+
+        context "when changing funding type to salary and can sponsor skilled worker visa" do
+          let(:params) { { funding_type: "salary", can_sponsor_skilled_worker_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("apprenticeship").to("salary")
+              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .and change { course.enrichments.last.fee_details }.to(nil)
+              .and change { course.enrichments.last.fee_international }.to(nil)
+              .and change { course.enrichments.last.fee_uk_eu }.to(nil)
+              .and change { course.enrichments.last.financial_support }.to(nil)
+          end
+        end
+
+        context "when changing funding type to fee and can sponsor student visa" do
+          let(:params) { { funding_type: "fee", can_sponsor_student_visa: true } }
+
+          it "updates the course with the new details" do
+            expect { subject.save! }
+              .to change { course.funding_type }.from("apprenticeship").to("fee")
+              .and change { course.can_sponsor_student_visa }.from(false).to(true)
+              .and change { course.enrichments.last.salary_details }.to(nil)
+          end
         end
       end
 

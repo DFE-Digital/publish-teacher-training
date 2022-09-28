@@ -52,6 +52,32 @@ module Publish
 
   private
 
+    def reset_attributes
+      {
+        skilled_worker: {
+          fee_details: nil,
+          fee_international: nil,
+          fee_uk_eu: nil,
+          financial_support: nil,
+        },
+        student: {
+          salary_details: nil,
+        },
+      }[visa_type]
+    end
+
+    def after_save
+      if funding_type_updated?
+        enrichment = course.enrichments.find_or_initialize_draft
+
+        if enrichment.persisted?
+          enrichment.assign_attributes(reset_attributes)
+
+          enrichment.save!
+        end
+      end
+    end
+
     def original_fields_values
       {
         funding_type: course.funding_type,

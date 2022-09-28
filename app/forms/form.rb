@@ -19,6 +19,7 @@ class Form
     if valid?
       assign_attributes_to_model # TODO: override this method on course_funding_form.rb
       model.save!
+      after_save
       clear_stash
     else
       false
@@ -34,6 +35,8 @@ class Form
   end
 
 private
+
+  def after_save; end
 
   def store
     @store ||= identifier_store.new(identifier_model)
