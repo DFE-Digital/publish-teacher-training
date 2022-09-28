@@ -606,8 +606,16 @@ class Course < ApplicationRecord
     content_status == :draft || content_status == :rolled_over
   end
 
+  def changeable?
+    draft_or_rolled_over? || scheduled?
+  end
+
   def only_published?
     content_status == :published
+  end
+
+  def scheduled?
+    content_status == :published && next_recruitment_cycle?
   end
 
   def is_published?

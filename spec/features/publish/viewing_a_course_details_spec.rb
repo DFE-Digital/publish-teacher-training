@@ -2,25 +2,56 @@
 
 require "rails_helper"
 
-feature "Course show", { can_edit_current_and_next_cycles: false } do
-  before do
-    given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_course_details_page
-  end
-
+feature "Course show" do
   scenario "i can view the course basic details" do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_published_course
+    when_i_visit_the_course_details_page
     then_i_see_the_course_basic_details
   end
 
+  context "when cycle is current" do
+    scenario "i can see the correct change links" do
+      given_we_are_not_in_rollover
+      and_i_am_authenticated_as_a_provider_user
+      and_there_is_a_published_course
+      when_i_visit_the_course_details_page
+      then_i_see_the_correct_change_links
+    end
+  end
+
+  context "when cycle is next" do
+    scenario "i can see the correct change links" do
+      given_we_are_in_rollover
+      and_i_am_authenticated_as_a_provider_user_for_next_cycle
+      and_there_is_a_published_course
+      when_i_visit_the_course_details_page
+      then_i_see_the_correct_change_links_for_the_next_cycle
+    end
+  end
+
+private
+
+  def given_we_are_not_in_rollover
+    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
+  end
+
+  def given_we_are_in_rollover
+    allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+  end
+
   def given_i_am_authenticated_as_a_provider_user
-    given_i_am_authenticated(
-      user: create(
-        :user,
-        providers: [
-          create(:provider, courses: [build(:course, :with_accrediting_provider, start_date: Date.parse("2022 January"))]),
-        ],
-      ),
-    )
+    given_i_am_authenticated(user: create(:user, :with_provider))
+  end
+  alias and_i_am_authenticated_as_a_provider_user given_i_am_authenticated_as_a_provider_user
+
+  def and_i_am_authenticated_as_a_provider_user_for_next_cycle
+    given_i_am_authenticated(user: create(:user, :with_provider_for_next_cycle))
+  end
+
+  def and_there_is_a_published_course
+    given_a_course_exists(:with_accrediting_provider, start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)])
+    given_a_site_exists(:full_time_vacancies, :findable)
   end
 
   def when_i_visit_the_course_details_page
@@ -65,7 +96,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       course.course_code,
     )
     expect(provider_courses_details_page.locations).to have_content(
-      "None",
+      course.sites.first.location_name,
     )
 
     # expect(course_details_page).to have_no_manage_provider_locations_link
@@ -84,11 +115,19 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def provider
-    @current_user.providers.first
+  def then_i_see_the_correct_change_links
+    expect(provider_courses_details_page.change_link_texts).to match_array([
+      "subjects", "age range", "outcome", "if full or part time", "locations"
+    ])
   end
 
-  def course
-    provider.courses.first
+  def then_i_see_the_correct_change_links_for_the_next_cycle
+    expect(provider_courses_details_page.change_link_texts).to match_array([
+      "subjects", "age range", "outcome", "if full or part time", "locations", "can sponsor skilled_worker visa"
+    ])
+  end
+
+  def provider
+    @current_user.providers.first
   end
 end

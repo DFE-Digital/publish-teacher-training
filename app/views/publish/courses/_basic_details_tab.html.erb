@@ -71,7 +71,7 @@
           <% else %>
             <% row.action(**{
               href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-              visually_hidden_text: "if funding_type",
+              visually_hidden_text: "funding type",
             }) %>
           <% end %>
         <% end %>
@@ -127,11 +127,11 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row| %>
             <% row.key { "Student visas" } %>
             <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
-            <% if course.is_published? %>
+            <% if !course.changeable? %>
               <% row.action %>
             <% else %>
               <% row.action(**{
-                href: course.draft_or_rolled_over? ? student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+                href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                 visually_hidden_text: "can sponsor student visa",
               }) %>
             <% end %>
@@ -140,11 +140,11 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_skilled_worker_visa" } }) do |row| %>
             <% row.key { "Skilled Worker visas" } %>
             <% row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
-            <% if course.is_published? %>
+            <% if !course.changeable? %>
               <% row.action %>
             <% else %>
               <% row.action(**{
-                href: course.draft_or_rolled_over? ? skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+                href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                 visually_hidden_text: "can sponsor skilled_worker visa",
               }) %>
             <% end %>
