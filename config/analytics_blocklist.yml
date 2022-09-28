@@ -85,3 +85,5 @@
   - version
   :data_migrations:
   - version
+  :course:
+  - campaign_name

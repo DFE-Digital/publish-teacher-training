@@ -48,6 +48,11 @@ class Course < ApplicationRecord
     not_required: 9,
   }
 
+  enum :campaign_name,
+    {
+      engineers_teach_physics: 0, # should this be a string?
+    }
+
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
     expect_to_achieve_before_training_begins: 2,

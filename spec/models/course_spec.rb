@@ -20,6 +20,18 @@ describe Course, type: :model do
   its(:to_s) { is_expected.to eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { is_expected.to eq("") }
 
+  describe "#campaign_name" do
+    it "defaults to nil" do
+      expect(course.campaign_name).to be nil
+    end
+
+    it "assigns the campaign" do
+      course.engineers_teach_physics!
+      expect(course.campaign_name).to eq "engineers_teach_physics"
+      expect(course.engineers_teach_physics?).to be true
+    end
+  end
+
   describe "auditing" do
     it { is_expected.to be_audited }
     it { is_expected.to have_associated_audits }
