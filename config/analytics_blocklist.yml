@@ -68,7 +68,6 @@
   - email
   - first_name
   - last_name
-  - sign_in_user_id
   - magic_link_token
   :organisation_provider:
   - id
