@@ -66,7 +66,6 @@ module Publish
       }[visa_type]
     end
 
-
     def reset_course_attributes
       {
         skilled_worker: {
