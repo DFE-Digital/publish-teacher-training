@@ -7,6 +7,7 @@ module Support
       end
 
       def show
+        recruitment_cycle
         provider_user
       end
 

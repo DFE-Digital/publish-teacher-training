@@ -611,6 +611,22 @@ describe Provider, type: :model do
     end
   end
 
+  describe "in_cycle" do
+    let(:provider_in_current_cycle) { create(:provider) }
+    let(:provider_in_previous_cycle) { create(:provider, :previous_recruitment_cycle) }
+
+    before do
+      provider_in_current_cycle
+      provider_in_previous_cycle
+    end
+
+    subject { described_class.in_cycle(provider_in_current_cycle.recruitment_cycle) }
+
+    it "includes providers specified via the cycle provided" do
+      expect(subject).to contain_exactly(provider_in_current_cycle)
+    end
+  end
+
   describe "geolocation" do
     include ActiveJob::TestHelper
 

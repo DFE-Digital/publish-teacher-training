@@ -22,7 +22,7 @@
         </td>
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= user.providers.in_current_cycle.count %>
+            <%= user.providers.in_cycle(@recruitment_cycle).count %>
           </span>
         </td>
       </tr>

@@ -35,7 +35,7 @@
 
           component.row do |row|
             row.key { "Organisations" }
-            row.value(text: sanitize(@provider_user.providers.in_current_cycle.pluck(:provider_name).sort.join(tag.br)), html_attributes: { id: "organisations" })
+            row.value(text: sanitize(@provider_user.providers.in_cycle(@recruitment_cycle).pluck(:provider_name).sort.join(tag.br)), html_attributes: { id: "organisations" })
             row.action
           end
 
