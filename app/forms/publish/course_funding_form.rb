@@ -52,7 +52,7 @@ module Publish
 
   private
 
-    def reset_attributes
+    def reset_enrichement_attributes
       {
         skilled_worker: {
           fee_details: nil,
@@ -66,15 +66,30 @@ module Publish
       }[visa_type]
     end
 
+
+    def reset_course_attributes
+      {
+        skilled_worker: {
+          can_sponsor_student_visa: false,
+        },
+        student: {
+          can_sponsor_skilled_worker_visa: false,
+        },
+      }[visa_type]
+    end
+
     def after_save
       if funding_type_updated?
         enrichment = course.enrichments.find_or_initialize_draft
 
         if enrichment.persisted?
-          enrichment.assign_attributes(reset_attributes)
+          enrichment.assign_attributes(reset_enrichement_attributes)
 
           enrichment.save!
         end
+
+        course.assign_attributes(reset_course_attributes)
+        course.save!
       end
     end
 
