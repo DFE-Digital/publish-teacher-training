@@ -9,28 +9,6 @@ module Publish
         redirect_to next_step
       end
 
-      def edit
-        authorize(provider)
-
-        @course_student_visa_sponsorship_form = CourseStudentVisaSponsorshipForm.new(@course)
-      end
-
-      def update
-        authorize(provider)
-        @course_student_visa_sponsorship_form = CourseStudentVisaSponsorshipForm.new(@course, params: student_visa_sponsorship_params)
-        if @course_student_visa_sponsorship_form.save!
-          render_visa_sponsorship_success_message
-
-          redirect_to details_publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code,
-          )
-        else
-          render :edit
-        end
-      end
-
     private
 
       def current_step
