@@ -52,7 +52,7 @@ module Publish
 
   private
 
-    def reset_enrichement_attributes
+    def reset_enrichment_attributes
       {
         skilled_worker: {
           fee_details: nil,
@@ -82,7 +82,7 @@ module Publish
         enrichment = course.enrichments.find_or_initialize_draft
 
         if enrichment.persisted?
-          enrichment.assign_attributes(reset_enrichement_attributes)
+          enrichment.assign_attributes(reset_enrichment_attributes)
 
           enrichment.save!
         end
