@@ -22,6 +22,10 @@ FactoryBot.define do
       providers { [create(:provider)] }
     end
 
+    trait :with_provider_for_next_cycle do
+      providers { [create(:provider, :next_recruitment_cycle)] }
+    end
+
     trait :with_accredited_provider do
       providers { [create(:provider, :accredited_body)] }
     end

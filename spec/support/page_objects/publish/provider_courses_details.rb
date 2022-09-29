@@ -29,6 +29,10 @@ module PageObjects
       section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'
 
       element :description_link, "a.govuk-link.govuk-tabs__tab", text: "Description"
+
+      def change_link_texts
+        all(".govuk-summary-list__actions .govuk-link .govuk-visually-hidden").map(&:text)
+      end
     end
   end
 end
