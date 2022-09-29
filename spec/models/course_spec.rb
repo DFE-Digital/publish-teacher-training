@@ -22,7 +22,7 @@ describe Course, type: :model do
 
   describe "#campaign_name" do
     it "defaults to nil" do
-      expect(course.campaign_name).to be nil
+      expect(course.campaign_name).to be_nil
     end
 
     it "assigns the campaign" do
