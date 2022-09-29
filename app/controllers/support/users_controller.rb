@@ -1,6 +1,7 @@
 module Support
   class UsersController < SupportController
     def index
+      recruitment_cycle
       @users = filtered_users.page(params[:page] || 1)
     end
 

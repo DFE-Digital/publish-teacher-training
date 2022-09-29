@@ -32,22 +32,6 @@ describe User, type: :model do
     end
   end
 
-  describe "#providers" do
-    describe "#in_current_cycle" do
-      let(:provider_in_current_cycle) { create(:provider) }
-      let(:provider_in_previous_cycle) { create(:provider, :previous_recruitment_cycle) }
-
-      before do
-        subject.providers << provider_in_current_cycle
-        subject.providers << provider_in_previous_cycle
-      end
-
-      it "returns the providers in the current cycle" do
-        expect(subject.providers.in_current_cycle).to eq([provider_in_current_cycle])
-      end
-    end
-  end
-
   describe "auditing" do
     it { is_expected.to be_audited }
   end
