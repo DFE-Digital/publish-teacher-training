@@ -100,5 +100,28 @@ You'll need to run the `rollover:provider` rake task, and to do this you need th
 
 When in the appropriate environment, run the following from the command line in the `app` directory:
 
-```
+```bash
 $ /usr/local/bin/bundle exec rails rollover:provider[provider_code,'course_code1 course_code2',true]
+```
+
+## Copying courses from one provider to another
+
+The example below copies scheduled courses during rollover from one provider to another. It may need tweaking depending on the scenario but the structure and format of what to run should help.
+
+```ruby
+# Find provider to copy courses from
+provider = RecruitmentCycle.current.next.providers.find_by(provider_code: "1TZ")
+
+# Find the target provider to copy courses to
+provider_to_copy_to = RecruitmentCycle.current.next.providers.find_by(provider_code: "2A6")
+
+copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToCourseService.new, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
+
+# Handles edge case where .published returns withdrawn
+provider.courses.published.filter { |c| c.content_status != :withdrawn }.each do |course|
+  new_course = copier.execute(course:, new_provider: provider_to_copy_to)
+  
+  # Set the accredited body if needed
+  new_course.update(accredited_body_code: "2N2")
+end
+```
