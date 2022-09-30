@@ -15,35 +15,45 @@ module Publish
             redirect_to new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
           end
         else
-          redirect_to next_step
+          redirect_to(next_step)
         end
       end
 
       def edit
         authorize(course, :can_update_funding_type?)
+        @course_funding_form = CourseFundingForm.new(@course)
+        @course_funding_form.clear_stash
       end
 
       def update
         authorize(course, :can_update_funding_type?)
 
-        @errors = errors
-        return render :edit if @errors.present?
+        @course_funding_form = CourseFundingForm.new(@course, params: funding_type_params)
 
-        track_funding_type_changes
-
-        if @course.update(course_params)
-          if @funding_type_updated
-            redirect_to_visa_step
-          else
-            redirect_to_course_page
-          end
+        if @course_funding_form.valid?
+          redirect_to(next_path)
         else
-          @errors = @course.errors.messages
+          @errors = @course_funding_form.errors.messages
           render :edit
         end
       end
 
     private
+
+      def funding_type_params
+        return {} if params[:publish_course_funding_form].blank?
+
+        params.require(:publish_course_funding_form).permit(:funding_type)
+      end
+
+      def next_path
+        if @course_funding_form.funding_type_updated?
+          @course_funding_form.stash
+          visa_page_path
+        else
+          course_page_path
+        end
+      end
 
       def current_step
         :funding_type
@@ -53,38 +63,26 @@ module Publish
         %i[funding_type program_type]
       end
 
-      def track_funding_type_changes
-        @funding_type_updated = params[:course][:funding_type] != @course.funding_type
+      def course_values
+        {
+          provider_code: course.provider_code,
+          recruitment_cycle_year: course.recruitment_cycle_year,
+          course_code: course.course_code,
+        }
       end
 
-      def redirect_to_visa_step
-        if course.is_fee_based?
-          redirect_to student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code,
-            funding_type_updated: @funding_type_updated,
-            origin_step: current_step,
-          )
+      def visa_page_path
+        if @course_funding_form.student_visa?
+          student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         else
-          redirect_to skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code,
-            funding_type_updated: @funding_type_updated,
-            origin_step: current_step,
+          skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
+            course_values,
           )
         end
       end
 
-      def redirect_to_course_page
-        redirect_to(
-          details_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code,
-          ),
-        )
+      def course_page_path
+        details_publish_provider_recruitment_cycle_course_path(course_values)
       end
     end
   end

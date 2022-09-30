@@ -8,7 +8,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= form_with model: course,
+    <%= form_with model: @course_funding_form,
                   url: funding_type_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                   method: :put do |form| %>
 

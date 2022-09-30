@@ -5,7 +5,7 @@ require "rails_helper"
 describe Support::UserForm, type: :model do
   let(:user) { create(:user) }
   let(:model) { create(:user) }
-  let(:user_store) { double(UserStore) }
+  let(:user_store) { double(Stores::UserStore) }
   let(:params) { { email: "foo@bar.com", first_name: "Foo", last_name: "Bar" } }
 
   subject { described_class.new(user, model, params:) }
