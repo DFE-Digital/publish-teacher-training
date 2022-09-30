@@ -56,6 +56,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
+        sites: "#{base}/locations?display_errors=true",
       }.with_indifferent_access[field]
     end
   end
