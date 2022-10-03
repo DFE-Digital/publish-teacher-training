@@ -55,7 +55,7 @@ feature "Providers index" do
   end
 
   def i_should_see_the_recruitment_cycle_text
-    expect(title_bar_page).to have_recruitment_cycle_text
+    expect(title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
   end
 
   def when_i_click_on_users
@@ -67,7 +67,7 @@ feature "Providers index" do
   end
 
   def when_i_click_on_the_current_cycle_link
-    click_link "2021 to 2022 - current"
+    click_link "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
   end
 
   def and_there_is_a_previous_recruitment_cycle
@@ -111,7 +111,7 @@ feature "Providers index" do
     providers_index_page.search_input.set "Really big school (A01)"
     providers_index_page.search_button.click
     expect(provider_courses_index_page).to be_displayed
-    expect(provider_courses_index_page.current_url).to end_with("A01/2022/courses")
+    expect(provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
   end
 
   def i_should_see_the_pagination_link

@@ -3,7 +3,7 @@
 module GcseRowContentComponent
   class ViewPreview < ViewComponent::Preview
     def incomplete
-      course = Course.new(course_code: "C0D3", provider: Provider.new(provider_code: "E2E", recruitment_cycle: RecruitmentCycle.new(year: "2022")))
+      course = Course.new(course_code: "C0D3", provider: Provider.new(provider_code: "E2E", recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year)))
 
       render(GcseRowContentComponent::View.new(course: course.decorate))
     end
