@@ -131,11 +131,11 @@ private
   end
 
   def valid_date_year
-    @valid_date_year ||= "#{Settings.current_recruitment_cycle_year.to_i - 1}"
+    @valid_date_year ||= (Settings.current_recruitment_cycle_year.to_i - 1).to_s
   end
 
   def invalid_date_year
-    @invalid_date_year ||= "#{Settings.current_recruitment_cycle_year.to_i + 3}"
+    @invalid_date_year ||= (Settings.current_recruitment_cycle_year.to_i + 3).to_s
   end
 
   def blank_value

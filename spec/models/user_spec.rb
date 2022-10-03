@@ -98,10 +98,10 @@ describe User, type: :model do
     end
 
     context "can_edit_current_and_next_cycles is set to true" do
-
       before do
         allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
       end
+
       describe "during rollover" do
         let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
         let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
