@@ -83,10 +83,10 @@ jobs:
         tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         push: true
         target: middleman
+        cache-to: type=inline
         cache-from: |
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-        build-args: BUILDKIT_INLINE_CACHE=1
 
     - name: Build Publish-Teacher-Training
       uses: docker/build-push-action@v3
@@ -96,18 +96,30 @@ jobs:
           ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
         push: false
         load: true
+        cache-to: type=inline
         cache-from: |
           type=registry,ref=${{ env.DOCKER_IMAGE}}:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
           type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
         build-args: |
-          BUILDKIT_INLINE_CACHE=1
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Push ${{ env.DOCKER_IMAGE }} images for review
+#      run 4
+#    - name: Push images for review
+#      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+#      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+    - name: Push images for review
       if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+      uses: docker/build-push-action@v3
+      with:
+        tags: |
+          ${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+          ${{env.DOCKER_IMAGE}}:${{env.DOCKER_IMAGE_TAG}}
+        push: true
+        cache-to: type=inline
+        build-args: COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Run Snyk to check Docker image for vulnerabilities
       if: github.actor != 'dependabot[bot]'
@@ -118,9 +130,20 @@ jobs:
         image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
         args: --file=Dockerfile --severity-threshold=high
 
-    - name: Push ${{ env.DOCKER_IMAGE }} images
+#    - name: Push ${{ env.DOCKER_IMAGE }} images
+#      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
+#      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+
+    - name: Push images
       if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
-      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+      uses: docker/build-push-action@v3
+      with:
+        tags: |
+          ${{env.DOCKER_IMAGE}}:${{env.BRANCH_TAG}}
+          ${{env.DOCKER_IMAGE}}:${{env.DOCKER_IMAGE_TAG}}
+        push: true
+        cache-to: type=inline
+        build-args: COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Alert Build Failures
       if: ${{ failure() && github.ref == 'refs/heads/main' }}
