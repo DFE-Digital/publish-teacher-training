@@ -5,6 +5,7 @@ module Publish
     layout "publish"
 
     before_action :check_interrupt_redirects
+    before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") }
 
     after_action :verify_authorized
 
@@ -40,6 +41,12 @@ module Publish
     def show_rollover_recruitment_page?
       FeatureService.enabled?("rollover.show_next_cycle_allocation_recruitment_page") &&
         current_user.current_rollover_recruitment_acceptance.blank?
+    end
+
+    def clear_previous_cycle_year_in_session
+      return if session[:cycle_year].to_i == Settings.current_recruitment_cycle_year
+
+      session[:cycle_year] = nil
     end
   end
 end
