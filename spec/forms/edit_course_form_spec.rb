@@ -2,9 +2,9 @@ require "rails_helper"
 
 module Support
   describe EditCourseForm do
-    let(:course) { create(:course, course_code: "T92", name: "Universitry of Oxfords", start_date: Date.new(Settings.current_recruitment_cycle_year, 9, 1)) }
-    let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: Settings.current_recruitment_cycle_year, applications_open_from_day: "5", applications_open_from_month: "7", applications_open_from_year: Settings.current_recruitment_cycle_year, is_send: "true" } }
-    let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: Settings.current_recruitment_cycle_year, applications_open_from_day: "500x", applications_open_from_month: "7", applications_open_from_year: "2022" } }
+    let(:course) { create(:course, course_code: "T92", name: "Universitry of Oxfords", start_date: Date.new(2022, 9, 1)) }
+    let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2022", applications_open_from_day: "5", applications_open_from_month: "7", applications_open_from_year: "2022", is_send: "true" } }
+    let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: "2022", applications_open_from_day: "500x", applications_open_from_month: "7", applications_open_from_year: "2022" } }
     let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "2000" } }
     let(:blank_attributes) { { course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "", applications_open_from_day: "", applications_open_from_month: "", applications_open_from_year: "" } }
 
@@ -90,8 +90,8 @@ module Support
           subject.valid?
 
           expect(subject.errors.messages.count).to eq(2)
-          expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the #{Settings.current_recruitment_cycle_year} cycle")
-          expect(subject.errors.messages[:applications_open_from]).to include("04/08/2000 is not valid for the #{Settings.current_recruitment_cycle_year} cycle. A valid date must be between 01/10/#{Settings.current_recruitment_cycle_year.to_i - 1} and 30/09/#{Settings.current_recruitment_cycle_year}")
+          expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the 2022 cycle")
+          expect(subject.errors.messages[:applications_open_from]).to include("04/08/2000 is not valid for the 2022 cycle. A valid date must be between 01/10/2021 and 30/09/2022")
         end
       end
     end
@@ -100,7 +100,7 @@ module Support
       context "form is assigned valid date args" do
         it "returns a date object" do
           subject.assign_attributes(valid_attributes)
-          expect(subject.start_date).to eq(Date.new(Settings.current_recruitment_cycle_year.to_i, 9, 2))
+          expect(subject.start_date).to eq(Date.new(2022, 9, 2))
         end
       end
 
@@ -118,7 +118,7 @@ module Support
           expect(output).not_to be_instance_of(Date)
           expect(output.day).to eq("222")
           expect(output.month).to eq("90")
-          expect(output.year).to eq(Settings.current_recruitment_cycle_year)
+          expect(output.year).to eq("2022")
         end
       end
 

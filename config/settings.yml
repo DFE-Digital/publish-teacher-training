@@ -45,8 +45,8 @@ cookies:
     name: _consented_to_analytics_cookies
     expire_after_days: 182
 
-current_recruitment_cycle_year: 2023
-next_cycle_open_date: 2023-10-4
+current_recruitment_cycle_year: 2022
+next_cycle_open_date: 2022-10-4
 
 allocation_cycle_year: 2021
 allocations_close_date: 2021-07-02
@@ -104,7 +104,7 @@ features:
     # actually starting when it would be set to false
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: false
+    can_edit_current_and_next_cycles: true
     show_next_cycle_allocation_recruitment_page: false
   allocations:
     # state: open # Users can make requests for allocations

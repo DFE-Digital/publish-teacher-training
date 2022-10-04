@@ -97,23 +97,17 @@ describe User, type: :model do
       end
     end
 
-    context "can_edit_current_and_next_cycles is set to true" do
+    describe "during rollover" do
+      let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
+      let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
+
       before do
-        allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+        subject.providers = [provider, other_provider, rolled_over_provider, rolled_over_other_provider]
+        subject.remove_access_to([provider, rolled_over_other_provider])
       end
 
-      describe "during rollover" do
-        let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
-        let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
-
-        before do
-          subject.providers = [provider, other_provider, rolled_over_provider, rolled_over_other_provider]
-          subject.remove_access_to([provider, rolled_over_other_provider])
-        end
-
-        it "removes the right provider" do
-          expect(subject.reload.providers).to eq([other_provider])
-        end
+      it "removes the right provider" do
+        expect(subject.reload.providers).to eq([other_provider])
       end
     end
 
