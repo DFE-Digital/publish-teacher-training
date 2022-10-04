@@ -32,7 +32,7 @@ class FindResultsPage
   end
 end
 
-describe "Find Service Smoke Tests", :aggregate_failures, smoke: true do
+describe "Find Service Smoke Tests", :aggregate_failures, smoke: true, skip: true do
   let(:base_url) { FindResultsPage.base_uri }
   let(:courses) { FindResultsPage.call }
   let(:url) { "#{base_url}/#{courses.first.url}" }
