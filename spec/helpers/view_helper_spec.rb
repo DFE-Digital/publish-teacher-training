@@ -4,7 +4,7 @@ require "rails_helper"
 
 describe ViewHelper, type: :helper do
   describe "#enrichment_error_url" do
-    let(:provider) { build(:provider, recruitment_cycle: build(:recruitment_cycle, year: 2022)) }
+    let(:provider) { build(:provider, recruitment_cycle: build(:recruitment_cycle)) }
     let(:course) { build(:course, provider:) }
 
     it "returns enrichment error URL" do
@@ -12,7 +12,7 @@ describe ViewHelper, type: :helper do
     end
 
     it "returns enrichment error URL for base error" do
-      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if student visas can be sponsored")).to eq("/publish/organisations/A1/2022/student-visa")
+      expect(enrichment_error_url(provider_code: "A1", course:, field: "base", message: "Select if student visas can be sponsored")).to eq("/publish/organisations/A1/#{Settings.current_recruitment_cycle_year}/student-visa")
     end
   end
 
