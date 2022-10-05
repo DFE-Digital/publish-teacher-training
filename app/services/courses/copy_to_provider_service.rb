@@ -51,6 +51,8 @@ module Courses
     end
 
     def adjusted_applications_open_from_date(course, year_differential)
+      return current_cycle.application_start_date if course.applications_open_from.blank? && next_cycle.blank?
+      
       return course.applications_open_from if next_cycle.blank?
 
       if course.applications_open_from + year_differential.year >= next_cycle.application_start_date
