@@ -52,7 +52,7 @@ module Courses
 
     def adjusted_applications_open_from_date(course, year_differential)
       return current_cycle.application_start_date if course.applications_open_from.blank? && next_cycle.blank?
-      
+
       return course.applications_open_from if next_cycle.blank?
 
       if course.applications_open_from + year_differential.year >= next_cycle.application_start_date
@@ -64,6 +64,10 @@ module Courses
 
     def next_cycle
       @next_cycle ||= RecruitmentCycle.next_recruitment_cycle
+    end
+
+    def current_cycle
+      @current_cycle ||= RecruitmentCycle.current_recruitment_cycle
     end
   end
 end
