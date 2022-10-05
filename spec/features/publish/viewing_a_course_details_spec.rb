@@ -7,7 +7,18 @@ feature "Course show" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_published_course
     when_i_visit_the_course_details_page
-    then_i_see_the_course_basic_details
+    then_i_see_the_primary_course_basic_details
+    and_i_do_not_see_engineers_teach_physics_row
+  end
+
+  context "Engineers Teach Physics course" do
+    scenario "i can view the course basic details" do
+      given_i_am_authenticated_as_a_provider_user
+      and_there_is_a_published_physics_course
+      when_i_visit_the_course_details_page
+      then_i_see_the_secondary_course_basic_details
+      and_i_see_engineers_teach_physics_row
+    end
   end
 
   context "when cycle is current" do
@@ -49,6 +60,11 @@ private
     given_i_am_authenticated(user: create(:user, :with_provider_for_next_cycle))
   end
 
+  def and_there_is_a_published_physics_course
+    given_a_course_exists(:with_accrediting_provider, :secondary, start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
+    given_a_site_exists(:full_time_vacancies, :findable)
+  end
+
   def and_there_is_a_published_course
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)])
     given_a_site_exists(:full_time_vacancies, :findable)
@@ -60,7 +76,17 @@ private
     )
   end
 
-  def then_i_see_the_course_basic_details
+  def and_i_do_not_see_engineers_teach_physics_row
+    expect(provider_courses_details_page).not_to have_engineers_teach_physics
+  end
+
+  def and_i_see_engineers_teach_physics_row
+    expect(provider_courses_details_page).to have_engineers_teach_physics
+    expect(provider_courses_details_page.engineers_teach_physics.key).to have_content("Engineers Teach Physics")
+    expect(provider_courses_details_page.engineers_teach_physics.value).to have_content("No")
+  end
+
+  def and_i_see_the_common_course_basic_details
     expect(provider_courses_details_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
@@ -70,10 +96,6 @@ private
     expect(provider_courses_details_page.subjects).to have_content(
       course.subjects.sort.join,
     )
-    expect(provider_courses_details_page.age_range).to have_content(
-      "3 to 7",
-    )
-
     expect(provider_courses_details_page.outcome).to have_content(
       "PGCE with QTS",
     )
@@ -99,8 +121,6 @@ private
       course.sites.first.location_name,
     )
 
-    # expect(course_details_page).to have_no_manage_provider_locations_link
-    # expect(course_details_page).to have_no_apprenticeship
     expect(provider_courses_details_page.funding).to have_content(
       "Teaching apprenticeship - with salary",
     )
@@ -110,9 +130,28 @@ private
     expect(provider_courses_details_page.is_send).to have_content(
       "No",
     )
+  end
+
+  def then_i_see_the_secondary_course_basic_details
+    expect(provider_courses_details_page.age_range).to have_content(
+      "11 to 18",
+    )
+
+    expect(provider_courses_details_page.level).to have_content(
+      "Secondary",
+    )
+    and_i_see_the_common_course_basic_details
+  end
+
+  def then_i_see_the_primary_course_basic_details
+    expect(provider_courses_details_page.age_range).to have_content(
+      "3 to 7",
+    )
+
     expect(provider_courses_details_page.level).to have_content(
       "Primary",
     )
+    and_i_see_the_common_course_basic_details
   end
 
   def then_i_see_the_correct_change_links
