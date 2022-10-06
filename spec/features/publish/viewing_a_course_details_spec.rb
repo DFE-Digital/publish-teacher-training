@@ -12,12 +12,23 @@ feature "Course show" do
   end
 
   context "Engineers Teach Physics course" do
+    context "the engineers teach physics on course feature flag is active" do
+      scenario "i can view the course basic details" do
+        given_the_engineers_teach_physics_on_course_feature_flag_is_active
+        given_i_am_authenticated_as_a_provider_user
+        and_there_is_a_published_physics_course
+        when_i_visit_the_course_details_page
+        then_i_see_the_secondary_course_basic_details
+        and_i_see_engineers_teach_physics_row
+      end
+    end
+
     scenario "i can view the course basic details" do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_published_physics_course
       when_i_visit_the_course_details_page
       then_i_see_the_secondary_course_basic_details
-      and_i_see_engineers_teach_physics_row
+      and_i_do_not_see_engineers_teach_physics_row
     end
   end
 
@@ -42,6 +53,10 @@ feature "Course show" do
   end
 
 private
+
+  def given_the_engineers_teach_physics_on_course_feature_flag_is_active
+    allow(Settings.features).to receive(:engineers_teach_physics_on_course).and_return(true)
+  end
 
   def given_we_are_not_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)

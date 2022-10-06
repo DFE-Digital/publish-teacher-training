@@ -111,6 +111,7 @@ features:
     # state: closed # Readonly - Users can see if they have or have not made request (does not show number of places)
     state: confirmed # final allocation places are displayed to users in a readonly state
   visa_sponsorship_on_course: true
+  engineers_teach_physics_on_course: false
 
 cookies:
   consent:
