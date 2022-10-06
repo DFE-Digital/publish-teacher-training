@@ -118,4 +118,4 @@ cookies:
     expire_after_days: 182
 
 find_features:
-  bursaries_and_scholarships_announced: true
+  bursaries_and_scholarships_announced: false
