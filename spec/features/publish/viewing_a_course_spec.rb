@@ -13,11 +13,32 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   describe "with a fee paying course" do
-    scenario "i can view a fee course" do
-      given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
-      when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_fee_course
-      and_i_should_see_the_course_button_panel
+    context "bursaries and scholarships is announced" do
+      before do
+        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      end
+
+      scenario "i can view a fee course" do
+        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
+        when_i_visit_the_course_page
+        then_i_should_see_the_description_of_the_fee_course
+        and_i_should_see_the_course_financial_incentives
+        and_i_should_see_the_course_button_panel
+      end
+    end
+
+    context "bursaries and scholarships is not announced" do
+      before do
+        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
+      end
+
+      scenario "i can view a fee course" do
+        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
+        when_i_visit_the_course_page
+        then_i_should_see_the_description_of_the_fee_course
+        and_i_should_see_the_course_has_no_financial_incentives_information
+        and_i_should_see_the_course_button_panel
+      end
     end
   end
 
@@ -275,6 +296,14 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     )
   end
 
+  def and_i_should_see_the_course_financial_incentives
+    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10000))
+  end
+
+  def and_i_should_see_the_course_has_no_financial_incentives_information
+    expect(provider_courses_show_page.financial_incentives).to have_content("Information not yet available")
+  end
+
   def then_i_should_see_the_description_of_the_fee_course
     expect(provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
@@ -300,7 +329,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page.fee_details).to have_content(
       course_enrichment.fee_details,
     )
-    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10000))
+
     expect(provider_courses_show_page).not_to have_salary_details
 
     expect(provider_courses_show_page).to have_degree
