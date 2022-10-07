@@ -4,6 +4,11 @@ module Publish
       include CourseBasicDetailConcern
       decorates_assigned :course
 
+      def new
+        #binding.pry
+        super
+      end
+
       def edit
         if params[:display_errors] == "true"
           form_object.valid?

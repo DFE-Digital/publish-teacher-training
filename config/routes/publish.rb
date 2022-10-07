@@ -98,6 +98,7 @@ namespace :publish, as: :publish do
         end
         resource :engineers_teach_physics, on: :member, only: %i[new], controller: "courses/engineers_teach_physics", path: "engineers-teach-physics" do
           get "continue"
+          get "back"
         end
         resource :modern_languages, on: :member, only: %i[new], controller: "courses/modern_languages", path: "modern-languages" do
           get "back"

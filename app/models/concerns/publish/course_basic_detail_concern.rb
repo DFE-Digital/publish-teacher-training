@@ -161,6 +161,8 @@ module Publish
         back_publish_provider_recruitment_cycle_courses_locations_path(path_params)
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+      when :engineers_teach_physics
+        back_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       else
         course_creation_path_for(page)
       end
@@ -172,10 +174,10 @@ module Publish
         publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)
       when :level
         new_publish_provider_recruitment_cycle_courses_level_path(path_params)
-      when :engineers_teach_physics
-        new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       when :modern_languages
         new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+      when :engineers_teach_physics
+        new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       when :apprenticeship
         new_publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
       when :location
