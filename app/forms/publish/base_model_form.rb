@@ -18,6 +18,7 @@ module Publish
     def save!
       if valid?
         assign_attributes_to_model
+        valid_before_save
         model.save!
       else
         false
@@ -25,6 +26,8 @@ module Publish
     end
 
   private
+
+    def valid_before_save; end
 
     def assign_attributes_to_model
       model.assign_attributes(fields.except(*fields_to_ignore_before_save))
