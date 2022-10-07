@@ -12,8 +12,11 @@ module Publish
         redirect_to next_step
       end
 
+      def edit; end
+
+      def update; end
+
       def back
-        binding.pry
         authorize(@provider, :edit?)
         if has_physics_subject?
           redirect_to new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
@@ -22,14 +25,17 @@ module Publish
         end
       end
 
-     private
+      def continue
+        super
+      end
+
+    private
 
       def build_course_params
         params[:course][:engineers_teach_physics_query] = params[:engineers_teach_physics_query]
       end
 
       def has_physics_subject?
-        # binding.pry
         @course.name.split.first == "Physics"
       end
 
@@ -40,7 +46,6 @@ module Publish
       def error_keys
         [:engineers_teach_physics_query]
       end
-
     end
   end
 end

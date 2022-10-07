@@ -126,10 +126,8 @@ module Publish
     end
 
     def path_params
-      # binding.pry
       path_params = { course: course_params }
       path_params[:goto_confirmation] = params[:goto_confirmation] if params[:goto_confirmation]
-      # path_params[:engineers_teach_physics_query] = params[:engineers_teach_physics_query] if params[:engineers_teach_physics_query]
       path_params
     end
 
