@@ -32,7 +32,7 @@ module Publish
       end
 
       def has_physics_subject?
-        @course.name.split.first == "Physics"
+        @course.name.split.first == "Physics" || @course.name.split.first == "Engineers"
       end
 
       def current_step
