@@ -25,10 +25,6 @@ module Publish
         end
       end
 
-      def continue
-        super
-      end
-
     private
 
       def build_course_params
