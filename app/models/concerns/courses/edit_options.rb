@@ -11,6 +11,7 @@ module Courses
     include SubjectsConcern
     include CanSponsorStudentVisaConcern
     include CanSponsorSkilledWorkerVisaConcern
+    include EngineersTeachPhysicsConcern
 
     included do
       # When changing edit options here be sure to update the edit_options in the
@@ -24,6 +25,7 @@ module Courses
           age_range_in_years: age_range_options,
           start_dates: start_date_options,
           study_modes: study_mode_options,
+          engineers_teach_physics: engineers_teach_physics_options,
           can_sponsor_student_visas: can_sponsor_student_visa_options,
           can_sponsor_skilled_worker_visas: can_sponsor_skilled_worker_visa_options,
           show_is_send: show_is_send?,

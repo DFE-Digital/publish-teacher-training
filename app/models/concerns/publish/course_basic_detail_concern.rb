@@ -126,8 +126,10 @@ module Publish
     end
 
     def path_params
+      # binding.pry
       path_params = { course: course_params }
       path_params[:goto_confirmation] = params[:goto_confirmation] if params[:goto_confirmation]
+      # path_params[:engineers_teach_physics_query] = params[:engineers_teach_physics_query] if params[:engineers_teach_physics_query]
       path_params
     end
 
@@ -170,6 +172,8 @@ module Publish
         publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)
       when :level
         new_publish_provider_recruitment_cycle_courses_level_path(path_params)
+      when :engineers_teach_physics
+        new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       when :modern_languages
         new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :apprenticeship

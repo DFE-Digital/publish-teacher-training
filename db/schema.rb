@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_28_150349) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_06_132556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -135,12 +135,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_150349) do
     t.boolean "can_sponsor_skilled_worker_visa", default: false
     t.boolean "can_sponsor_student_visa", default: false
     t.integer "campaign_name"
+    t.boolean "engineers_teach_physics_query", default: false
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["can_sponsor_skilled_worker_visa"], name: "index_course_on_can_sponsor_skilled_worker_visa"
     t.index ["can_sponsor_student_visa"], name: "index_course_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_course_on_changed_at", unique: true
     t.index ["degree_grade"], name: "index_course_on_degree_grade"
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
+    t.index ["engineers_teach_physics_query"], name: "index_course_on_engineers_teach_physics_query"
     t.index ["is_send"], name: "index_course_on_is_send"
     t.index ["program_type"], name: "index_course_on_program_type"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true

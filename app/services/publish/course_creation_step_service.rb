@@ -99,6 +99,7 @@ module Publish
         courses_list
         level
         subjects
+        engineers_teach_physics
         modern_languages
         age_range
         outcome
@@ -119,6 +120,7 @@ module Publish
         courses_list
         level
         subjects
+        engineers_teach_physics
         modern_languages
         age_range
         outcome

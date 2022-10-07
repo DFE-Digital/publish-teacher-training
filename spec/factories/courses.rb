@@ -224,5 +224,9 @@ FactoryBot.define do
     trait :can_sponsor_student_visa do
       can_sponsor_student_visa { true }
     end
+
+    trait :engineers_teach_physics do
+      engineers_teach_physics_query { true }
+    end
   end
 end
