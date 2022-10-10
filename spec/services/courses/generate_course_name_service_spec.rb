@@ -5,7 +5,8 @@ describe Courses::GenerateCourseNameService do
   let(:subjects) { [] }
   let(:is_send) { false }
   let(:level) { "primary" }
-  let(:course) { Course.new(level:, subjects:, is_send:) }
+  let(:campaign_name) { "no_campaign" }
+  let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
   let(:generated_title) { service.execute(course:) }
 
@@ -21,6 +22,40 @@ describe Courses::GenerateCourseNameService do
       it "Appends SEND information to the title" do
         expect(generated_title).to end_with(" (SEND)")
       end
+    end
+  end
+
+  describe "Engineers Teach Physics" do
+    context "With no campaign" do
+      let(:subjects) { [Subject.new(subject_name: "Physics")] }
+
+      it "returns Physics" do
+        expect(generated_title).to eq("Physics")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "With engineers_teach_physics campaign" do
+      let(:campaign_name) { "engineers_teach_physics" }
+      let(:subjects) { [Subject.new(subject_name: "Physics")] }
+
+      it "returns Engineers Teach Physics" do
+        expect(generated_title).to eq("Engineers Teach Physics")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "With campaign and second subject" do
+      let(:campaign_name) { "engineers_teach_physics" }
+      let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
+
+      it "returns Engineers Teach Physics" do
+        expect(generated_title).to eq("Engineers Teach Physics with English")
+      end
+
+      include_examples "with SEND"
     end
   end
 

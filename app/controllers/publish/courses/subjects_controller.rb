@@ -79,7 +79,7 @@ module Publish
 
         params[:course][:subjects_ids] = selected_subject_ids
 
-        params[:course].delete(:master_subject_id)
+        # params[:course].delete(:master_subject_id)
         params[:course].delete(:subordinate_subject_id)
 
         build_new_course # to get languages edit_options

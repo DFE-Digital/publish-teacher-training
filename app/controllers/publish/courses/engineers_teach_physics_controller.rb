@@ -27,7 +27,7 @@ module Publish
     private
 
       def has_physics_subject?
-        @course.name.split.first == "Physics" || @course.name.split.first == "Engineers"
+        @course.master_subject_id == 29
       end
 
       def current_step
