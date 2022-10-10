@@ -320,6 +320,7 @@ class Course < ApplicationRecord
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
   validates :campaign_name, inclusion: { in: campaign_names.keys }
+  # TODO: validates :master_subject_id ?
 
   def academic_year
     if start_date.month >= 9

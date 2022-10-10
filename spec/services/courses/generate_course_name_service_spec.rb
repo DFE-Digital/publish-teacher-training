@@ -51,7 +51,7 @@ describe Courses::GenerateCourseNameService do
       let(:campaign_name) { "engineers_teach_physics" }
       let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
 
-      it "returns Engineers Teach Physics" do
+      it "returns Engineers Teach Physics with subject" do
         expect(generated_title).to eq("Engineers Teach Physics with English")
       end
 

@@ -1,7 +1,6 @@
 module Courses
   class GenerateCourseNameService
     def execute(course:)
-     # binding.pry
       subjects = course.subjects
 
       title = if course.further_education_course?
@@ -26,9 +25,6 @@ module Courses
 
     def engineers_teach_physics_title(subjects)
       title = engineers_title
-
-      return title if subjects.empty?
-
       subjects = subjects.map { |s| format_subject_name(s) }
 
       if subjects.length == 1
