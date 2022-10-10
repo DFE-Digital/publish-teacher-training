@@ -2,7 +2,6 @@ module Publish
   module Courses
     class EngineersTeachPhysicsController < PublishController
       decorates_assigned :course
-      # before_action :build_course_params, only: [:continue]
       include CourseBasicDetailConcern
 
       def new
@@ -26,10 +25,6 @@ module Publish
       end
 
     private
-
-      def build_course_params
-        params[:course][:campaign_name] = params[:campaign_name]
-      end
 
       def has_physics_subject?
         @course.name.split.first == "Physics" || @course.name.split.first == "Engineers"
