@@ -48,7 +48,10 @@ class Course < ApplicationRecord
     not_required: 9,
   }
 
-  enum :campaign_name, COURSE_CAMPAIGNS
+  enum :campaign_name, {
+    no_campaign: "no_campaign",
+    engineers_teach_physics: "engineers_teach_physics",
+  }
 
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
@@ -316,7 +319,7 @@ class Course < ApplicationRecord
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
-  validates :engineers_teach_physics_query, inclusion: { in: [true, false] }
+  validates :campaign_name, inclusion: { in: campaign_names.keys }
 
   def academic_year
     if start_date.month >= 9

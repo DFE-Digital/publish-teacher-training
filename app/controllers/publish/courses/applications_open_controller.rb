@@ -31,7 +31,7 @@ module Publish
             :subjects_ids,
             :goto_confirmation,
             :accredited_body_code,
-            :engineers_teach_physics_query,
+            :campaign_name
           )
           .permit(
             :start_date,

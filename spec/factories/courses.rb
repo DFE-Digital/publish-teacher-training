@@ -226,7 +226,7 @@ FactoryBot.define do
     end
 
     trait :engineers_teach_physics do
-      engineers_teach_physics_query { true }
+      campaign_name { :engineers_teach_physics }
     end
   end
 end

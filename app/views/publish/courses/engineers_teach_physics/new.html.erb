@@ -16,10 +16,10 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:engineers_teach_physics_query] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:campaign_name] do |fields| %>
 
         <%#= render "form_fields", form: fields %>
-        <%= render "publish/shared/error_wrapper", error_keys: [:engineers_teach_physics_query], data_qa: "course__engineers_teach_physics" do %>
+        <%= render "publish/shared/error_wrapper", error_keys: [:campaign_name], data_qa: "course__engineers_teach_physics" do %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
               <h1 class="govuk-fieldset__heading">
@@ -32,23 +32,27 @@
             <p class="govuk-body">
               For more information, email <%= govuk_mail_to("itt.engagement@education.gov.uk", subject: "Engineers Teach Physics") %>
             </p>
-            <%= render "publish/shared/error_messages", error_keys: [:engineers_teach_physics_query] %>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h1 class="govuk-fieldset__heading">
+                Is this course part of the Engineers Teach Physics programme?
+              </h1>
+            </legend>
+            <%= render "publish/shared/error_messages", error_keys: [:campaign_name] %>
 
             <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
               <% course.edit_course_options["engineers_teach_physics"].each do |value| %>
                 <div class="govuk-radios__item">
-                  <%= form.radio_button :engineers_teach_physics_query,
+                  <%= form.radio_button :campaign_name,
                                         value,
-                                        checked: (@course.engineers_teach_physics_query == value),
+                                        # checked: (@course.campaign_name == value),
                                         class: "govuk-radios__input" %>
-                  <%= form.label :engineers_teach_physics_query,
-                                t("edit_options.engineers_teach_physics.#{value}.label"),
+                  <%= form.label :campaign_name,
+                                value != "" ? t("edit_options.engineers_teach_physics.#{value}.label") : "No",
                                 value:,
                                 class: "govuk-label govuk-radios__label" %>
                 </div>
               <% end %>
             </div>
-
           </fieldset>
         <% end %>
       <% end %>

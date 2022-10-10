@@ -28,7 +28,7 @@ module Publish
     private
 
       def build_course_params
-        params[:course][:engineers_teach_physics_query] = params[:engineers_teach_physics_query]
+        params[:course][:campaign_name] = params[:campaign_name]
       end
 
       def has_physics_subject?
@@ -40,7 +40,7 @@ module Publish
       end
 
       def error_keys
-        [:engineers_teach_physics_query]
+        [:campaign_name]
       end
     end
   end

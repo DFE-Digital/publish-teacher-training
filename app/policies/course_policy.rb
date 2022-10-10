@@ -72,7 +72,7 @@ class CoursePolicy
       study_mode
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
-      engineers_teach_physics_query
+      campaign_name
     ]
   end
 

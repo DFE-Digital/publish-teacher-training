@@ -590,9 +590,9 @@ en:
       false:
         label: "No"
     engineers_teach_physics:
-      true:
+      engineers_teach_physics:
         label: "Yes"
-      false:
+      no_campaign:
         label: "No"
     apprenticeship:
       pg_teaching_apprenticeship:

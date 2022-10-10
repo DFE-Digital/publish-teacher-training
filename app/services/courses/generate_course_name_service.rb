@@ -5,7 +5,7 @@ module Courses
 
       title = if course.further_education_course?
                 further_education_title
-              elsif course.engineers_teach_physics_query?
+              elsif course.engineers_teach_physics?
                 engineers_teach_physics_title
               elsif is_modern_lanuage_course?(subjects)
                 modern_language_title(subjects)
@@ -18,10 +18,6 @@ module Courses
     end
 
   private
-
-    def is_physics_course?
-      @course.name.split.first == "Physics" || @course.name.split.first == "Engineers"
-    end
 
     def engineers_teach_physics_title
       "Engineers Teach Physics"

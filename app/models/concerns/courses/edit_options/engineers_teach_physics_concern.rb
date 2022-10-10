@@ -8,7 +8,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
         def engineers_teach_physics_options
-          [true, false]
+          ["engineers_teach_physics", "no_campaign"]
         end
       end
     end
