@@ -2,6 +2,7 @@ environment:
   name: "beta"
   label: "Beta"
 support_email: becomingateacher@digital.education.gov.uk
+campaign_email: itt.engagement@education.gov.uk
 
 search_ui:
   base_url: https://localhost:5000
