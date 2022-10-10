@@ -31,7 +31,7 @@ module Publish
             :subjects_ids,
             :goto_confirmation,
             :accredited_body_code,
-            :campaign_name
+            :campaign_name,
           )
           .permit(
             :start_date,

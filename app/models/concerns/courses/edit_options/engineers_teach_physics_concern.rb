@@ -4,7 +4,7 @@ module Courses
       extend ActiveSupport::Concern
       included do
         def engineers_teach_physics_options
-          ["engineers_teach_physics", "no_campaign"]
+          %w[engineers_teach_physics no_campaign]
         end
       end
     end
