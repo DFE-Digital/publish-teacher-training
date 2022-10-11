@@ -39,11 +39,8 @@ module Publish
     end
 
     def update_site_statuses
-      model.site_statuses.each do |site_status|
-        site_status.update!(
-          publish: :published,
-          status: :running,
-        )
+      course.site_statuses.each do |site_status|
+        site_status.update!(site_status_attributes)
       end
     end
 
@@ -55,6 +52,13 @@ module Publish
       return if params[:site_ids].present?
 
       errors.add(:site_ids, :no_locations)
+    end
+
+    def site_status_attributes
+      {
+        publish: (course.findable? ? :published : :unpublished),
+        status: (course.findable? ? :running : :new_status),
+      }
     end
   end
 end
