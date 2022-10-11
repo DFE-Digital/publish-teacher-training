@@ -326,6 +326,10 @@ class Course < ApplicationRecord
   validates :campaign_name, inclusion: { in: campaign_names.keys }
   # TODO: validates :master_subject_id ?
 
+  def is_engineers_teach_physics?
+    master_subject_id == 29 && engineers_teach_physics?
+  end
+
   def academic_year
     if start_date.month >= 9
       "#{start_date.year} to #{start_date.year.to_i + 1}"

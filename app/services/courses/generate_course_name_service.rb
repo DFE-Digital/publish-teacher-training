@@ -5,7 +5,7 @@ module Courses
 
       title = if course.further_education_course?
                 further_education_title
-              elsif course.engineers_teach_physics?
+              elsif course.is_engineers_teach_physics?
                 engineers_teach_physics_title(subjects)
               elsif is_modern_lanuage_course?(subjects)
                 modern_language_title(subjects)

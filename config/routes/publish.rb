@@ -127,6 +127,9 @@ namespace :publish, as: :publish do
       resources :courses, param: :code, only: %i[index new create show] do
         get "/details", on: :member, to: "courses#details"
 
+        get "/engineers_teach_physics", on: :member, to: "courses/engineers_teach_physics#edit"
+        put "/engineers_teach_physics", on: :member, to: "courses/engineers_teach_physics#update"
+
         get "/age_range", on: :member, to: "courses/age_range#edit"
         put "/age_range", on: :member, to: "courses/age_range#update"
 
