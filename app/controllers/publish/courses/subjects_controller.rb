@@ -31,6 +31,8 @@ module Publish
           value = @course.is_primary? ? "primary subject" : "secondary subject"
           course_details_success_message(value)
 
+          course.update(name: course.generate_name)
+
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,

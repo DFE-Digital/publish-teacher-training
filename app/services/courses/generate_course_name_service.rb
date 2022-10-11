@@ -2,7 +2,7 @@ module Courses
   class GenerateCourseNameService
     def execute(course:)
       subjects = course.subjects
-
+# binding.pry
       title = if course.further_education_course?
                 further_education_title
               elsif course.is_engineers_teach_physics?

@@ -11,9 +11,27 @@ module Publish
         redirect_to next_step
       end
 
-      def edit; end
+      def edit
+        authorize(@provider)
+        @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course)
+       end
 
-      def update; end
+      def update
+        authorize(@provider)
+        @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
+
+        if @engineers_teach_physics_form.save!
+          course.update(name: course.generate_name)
+
+          redirect_to details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            course.course_code,
+          )
+        else
+          render :edit
+        end
+      end
 
       def back
         authorize(@provider, :edit?)
@@ -36,6 +54,14 @@ module Publish
 
       def error_keys
         [:campaign_name]
+      end
+
+      def form_params
+        params
+          .require(:publish_engineers_teach_physics_form)
+          .permit(
+            EngineersTeachPhysicsForm::FIELDS,
+          )
       end
     end
   end
