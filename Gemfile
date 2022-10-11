@@ -131,7 +131,7 @@ gem "jsbundling-rails", "~> 1.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 
 # for sending analytics data to the analytics platform
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.1"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 
 # For running data migrations
 gem "data_migrate"
@@ -178,7 +178,7 @@ group :development, :test do
   gem "rspec-its"
 
   # Test framework
-  gem "rspec-rails", "6.0.0.rc1"
+  gem "rspec-rails", "6.0.0"
 
   # A Ruby static code analyzer and formatter
   gem "rubocop", require: false

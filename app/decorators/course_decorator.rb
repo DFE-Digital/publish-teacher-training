@@ -320,7 +320,7 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year
+    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || (Settings.find_features.bursaries_and_scholarships_announced == false)
     return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
 
     if bursary_amount.present? && scholarship.present?
@@ -397,6 +397,6 @@ private
   end
 
   def bursary_and_scholarship_flag_active_or_preview?
-    (Settings.find_features.bursaries_and_scholarships_announced == true) || !params[:controller].start_with?("find")
+    (Settings.find_features.bursaries_and_scholarships_announced == true)
   end
 end
