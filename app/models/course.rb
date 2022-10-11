@@ -93,6 +93,10 @@ class Course < ApplicationRecord
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
+  def applicable_for_engineers_teach_physics?
+    secondary_course? && course_subjects.exists?(position: 0, subject: SecondarySubject.physics)
+  end
+
   def set_subject_position(course_subject)
     return unless course_subject.subject.secondary_subject?
 
@@ -570,7 +574,7 @@ class Course < ApplicationRecord
   end
 
   def is_further_education?
-    level == "further_education"
+    further_education_course?
   end
 
   def degree_section_complete?
@@ -578,7 +582,7 @@ class Course < ApplicationRecord
   end
 
   def is_primary?
-    level == "primary"
+    primary_course?
   end
 
   def is_uni_or_scitt?
