@@ -30,7 +30,8 @@ module Publish
         elsif course_subjects_form.save!
           value = @course.is_primary? ? "primary subject" : "secondary subject"
           course_details_success_message(value)
-
+          # TODO: move this to the form?
+          course.update(master_subject_id: params[:course][:master_subject_id])
           course.update(name: course.generate_name)
 
           redirect_to(

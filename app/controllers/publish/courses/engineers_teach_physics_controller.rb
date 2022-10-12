@@ -14,7 +14,7 @@ module Publish
       def edit
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course)
-       end
+      end
 
       def update
         authorize(@provider)
