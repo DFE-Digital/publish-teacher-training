@@ -164,7 +164,7 @@ describe Course, type: :model do
   end
 
   describe "#applicable_for_engineers_teach_physics?" do
-    subject { course. applicable_for_engineers_teach_physics? }
+    subject { course.applicable_for_engineers_teach_physics? }
 
     context "primary course" do
       let(:course) { build(:course, :primary) }
