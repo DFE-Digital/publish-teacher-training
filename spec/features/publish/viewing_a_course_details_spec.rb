@@ -11,7 +11,7 @@ feature "Course show" do
     and_i_do_not_see_engineers_teach_physics_row
   end
 
- # context "Engineers Teach Physics course" do
+  context "Engineers Teach Physics course" do
  #   context "the engineers teach physics on course feature flag is active" do
  #     scenario "i can view the course basic details" do
  #       given_the_engineers_teach_physics_on_course_feature_flag_is_active
