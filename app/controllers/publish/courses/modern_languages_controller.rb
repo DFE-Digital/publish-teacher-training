@@ -36,6 +36,7 @@ module Publish
 
         if course_subjects_form.save!
           flash[:success] = I18n.t("success.saved")
+          binding.pry
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,

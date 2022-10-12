@@ -19,7 +19,7 @@ module Publish
 
     def details
       fetch_course
-
+# binding.pry
       authorize @course
     end
 
