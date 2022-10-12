@@ -45,7 +45,7 @@ module Publish
     private
 
       def has_physics_subject?
-        @course.master_subject_id == 29
+        @course.master_subject_id == SecondarySubject.physics.id
       end
 
       def current_step

@@ -35,7 +35,11 @@
             <% row.key { "Engineers Teach Physics" } %>
             <% row.value { course.engineers_teach_physics? ? "Yes" : "No" } %>
             <% row.action(**{
-              href:  engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+              href:  engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+                @provider.provider_code,
+                course.recruitment_cycle_year,
+                course.course_code,
+                ),
               visually_hidden_text: "Engineers Teach Physics",
             }) %>
           <% end %>

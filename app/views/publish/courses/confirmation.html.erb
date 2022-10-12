@@ -50,12 +50,16 @@
           <% end %>
 
           <%# if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
-            <% if course.master_subject_id == 29 %>
+            <% if course.master_subject_id == SecondarySubject.physics.id %>
               <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
                 <% row.key { "Engineers Teach Physics" } %>
                 <% row.value { course.engineers_teach_physics? ? "Yes" : "No" } %>
                 <% row.action(**{
-                  href:   new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                  href:   new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(
+                    course.provider.provider_code,
+                    course.recruitment_cycle.year,
+                    params.to_unsafe_h.merge(goto_confirmation: true)
+                  ),
                   visually_hidden_text: "Engineers Teach Physics",
                 }) %>
               <% end %>

@@ -10,7 +10,11 @@
   <div class="govuk-grid-column-two-thirds">
 
     <%= form_with model: @engineers_teach_physics_form,
-        url: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+        url: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+          @course.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code,
+        ),
         method: :put do |form| %>
 
         <%= render "form_fields", form: %>

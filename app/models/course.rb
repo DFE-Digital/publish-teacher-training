@@ -94,8 +94,7 @@ class Course < ApplicationRecord
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def applicable_for_engineers_teach_physics?
-    master_subject_id == 29 && !subject_ids.include?(33)
-    # secondary_course? && course_subjects.exists?(position: 0, subject: SecondarySubject.physics)
+    master_subject_id == SecondarySubject.physics.id && !subject_ids.include?(SecondarySubject.modern_languages.id)
   end
 
   def set_subject_position(course_subject)
