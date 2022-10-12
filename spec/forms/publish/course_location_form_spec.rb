@@ -7,7 +7,8 @@ module Publish
     let(:params) { {} }
     let(:site1) { build(:site, location_name: "location 1") }
     let(:site2) { build(:site, location_name: "location 2") }
-    let(:site_status) { build(:site_status, :running, site: site1) }
+    let(:site_status) { build(:site_status, :new_status, :unpublished, site: site1) }
+
     let(:provider) { build(:provider, sites: [site1, site2]) }
     let(:course) { create(:course, provider:, site_statuses: [site_status]) }
 
@@ -33,6 +34,23 @@ module Publish
           expect(NotificationService::CourseSitesUpdated).to receive(:call)
           .with(course:, previous_site_names:, updated_site_names:)
           subject.save!
+        end
+
+        context "course is not published" do
+          it "sets all site_statuses status to be new_status" do
+            subject.save!
+            expect(course.reload.site_statuses.pluck(:status)).to match(%w[new_status new_status])
+          end
+        end
+
+        context "course is published" do
+          let(:course) { create(:course, :published, provider:, site_statuses: [site_status]) }
+          let(:site_status) { build(:site_status, :running, :published, site: site1) }
+
+          it "sets all site_statuses status to be new_status" do
+            subject.save!
+            expect(course.reload.site_statuses.pluck(:status)).to match(%w[running running])
+          end
         end
       end
 
