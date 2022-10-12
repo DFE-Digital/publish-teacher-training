@@ -55,10 +55,9 @@ module Publish
     end
 
     def site_status_attributes
-      {
-        publish: (course.findable? ? :published : :unpublished),
-        status: (course.findable? ? :running : :new_status),
-      }
+      return { publish: :published, status: :running } if course.findable?
+
+      { publish: :unpublished, status: :new_status }
     end
   end
 end
