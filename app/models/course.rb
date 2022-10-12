@@ -327,7 +327,7 @@ class Course < ApplicationRecord
   # TODO: validates :master_subject_id ?
 
   def is_engineers_teach_physics?
-    subjects&.first&.id == 29 && engineers_teach_physics?
+    subjects&.first == SecondarySubject.physics && engineers_teach_physics?
   end
 
   def academic_year
