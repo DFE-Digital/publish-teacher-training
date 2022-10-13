@@ -5,6 +5,8 @@ module Courses
 
       title = if course.further_education_course?
                 further_education_title
+              elsif course.is_engineers_teach_physics?
+                engineers_teach_physics_title(subjects)
               elsif is_modern_lanuage_course?(subjects)
                 modern_language_title(subjects)
               else
@@ -16,6 +18,21 @@ module Courses
     end
 
   private
+
+    def engineers_title
+      "Engineers Teach Physics"
+    end
+
+    def engineers_teach_physics_title(subjects)
+      title = engineers_title
+      subjects = subjects.map { |s| format_subject_name(s) }
+
+      if subjects.length == 1
+        title
+      else
+        "#{title} with #{subjects[1]}"
+      end
+    end
 
     def is_modern_lanuage_course?(subjects)
       subjects.any? { |s| s == SecondarySubject.modern_languages }

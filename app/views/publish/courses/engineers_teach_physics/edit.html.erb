@@ -1,0 +1,24 @@
+<% content_for :page_title, title_with_error_prefix("Engineers Teach Physics", @errors && @errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with model: @engineers_teach_physics_form, url: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code), method: :put do |form| %>
+
+        <%= render "form_fields", form: %>
+
+        <%= form.submit course.is_published? ? "Save and publish" : "Save",
+                      class: "govuk-button", data: { qa: "course__save" } %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
+  </div>
+</div>

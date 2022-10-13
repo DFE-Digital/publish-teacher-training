@@ -267,6 +267,8 @@ en:
               blank: "Enter a postcode"
         course:
           attributes:
+            campaign_name:
+              inclusion: "Select Yes or No"
             course_code:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"
@@ -588,6 +590,11 @@ en:
       true:
         label: "Yes"
       false:
+        label: "No"
+    campaign_name:
+      engineers_teach_physics:
+        label: "Yes"
+      no_campaign:
         label: "No"
     apprenticeship:
       pg_teaching_apprenticeship:

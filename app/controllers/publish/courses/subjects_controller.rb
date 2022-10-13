@@ -30,6 +30,9 @@ module Publish
         elsif course_subjects_form.save!
           value = @course.is_primary? ? "primary subject" : "secondary subject"
           course_details_success_message(value)
+          # TODO: move this to the form?
+          course.update(master_subject_id: params[:course][:master_subject_id])
+          course.update(name: course.generate_name)
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -78,8 +81,6 @@ module Publish
         previous_subject_selections = params[:course][:subjects_ids]
 
         params[:course][:subjects_ids] = selected_subject_ids
-
-        params[:course].delete(:master_subject_id)
         params[:course].delete(:subordinate_subject_id)
 
         build_new_course # to get languages edit_options

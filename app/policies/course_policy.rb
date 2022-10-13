@@ -72,6 +72,8 @@ class CoursePolicy
       study_mode
       can_sponsor_student_visa
       can_sponsor_skilled_worker_visa
+      campaign_name
+      master_subject_id
     ]
   end
 

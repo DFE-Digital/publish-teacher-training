@@ -21,8 +21,8 @@ describe Course, type: :model do
   its(:modular) { is_expected.to eq("") }
 
   describe "#campaign_name" do
-    it "defaults to nil" do
-      expect(course.campaign_name).to be_nil
+    it "defaults to no_campaign" do
+      expect(course.campaign_name).to eq("no_campaign")
     end
 
     it "assigns the campaign" do
@@ -159,6 +159,66 @@ describe Course, type: :model do
 
         expect(subjects.first).to eq(maths)
         expect(subjects.second).to eq(english)
+      end
+    end
+  end
+
+  describe "#applicable_for_engineers_teach_physics?" do
+    subject { course.applicable_for_engineers_teach_physics? }
+
+    context "primary course" do
+      let(:course) { build(:course, :primary) }
+
+      it "return false" do
+        expect(subject).to be(false)
+      end
+    end
+
+    context "further education course" do
+      let(:course) { build(:course, :further_education) }
+
+      it "return false" do
+        expect(subject).to be(false)
+      end
+    end
+
+    context "secondary course" do
+      context "without physics" do
+        let(:course) { build(:course, :secondary) }
+
+        it "return false" do
+          expect(subject).to be(false)
+        end
+      end
+
+      context "with physics" do
+        let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+        let(:course) { create(:course, :secondary, subjects: [physics]) }
+
+        it "return true" do
+          expect(subject).to be(true)
+        end
+
+        context "with another subject" do
+          let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+
+          context "on position 0" do
+            let(:course) { create(:course, :secondary, subjects: [physics, maths]) }
+
+            it "return true" do
+              expect(subject).to be(true)
+            end
+          end
+
+          context "on position 1" do
+            let(:course) { create(:course, :secondary, subjects: [maths, physics]) }
+
+            it "return true" do
+              expect(subject).to be(false)
+            end
+          end
+        end
       end
     end
   end
