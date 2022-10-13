@@ -27,7 +27,6 @@
         <div class="govuk-radios__item">
           <%= form.radio_button :campaign_name,
                                 value,
-                                checked: @course.campaign_name == value,
                                 class: "govuk-radios__input" %>
           <%= form.label :campaign_name,
                         t("edit_options.campaign_name.#{value}.label"),
