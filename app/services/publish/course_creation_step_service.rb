@@ -99,8 +99,8 @@ module Publish
         courses_list
         level
         subjects
-        modern_languages
         engineers_teach_physics
+        modern_languages
         age_range
         outcome
         funding_type
@@ -120,8 +120,8 @@ module Publish
         courses_list
         level
         subjects
-        modern_languages
         engineers_teach_physics
+        modern_languages
         age_range
         outcome
         apprenticeship
