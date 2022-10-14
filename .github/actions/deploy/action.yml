@@ -51,7 +51,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: Setup Terraform v1.2.3
-      uses: hashicorp/setup-terraform@v1.2.1
+      uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: 1.2.3
 
