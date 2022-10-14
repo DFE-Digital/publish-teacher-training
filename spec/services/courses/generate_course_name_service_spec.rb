@@ -28,8 +28,10 @@ describe Courses::GenerateCourseNameService do
   describe "Engineers Teach Physics" do
     context "With no campaign" do
       let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
-
+      let(:course) { create(:course, master_subject_id: 29) }
+# create course with assoc subject
       it "returns Physics" do
+        binding.pry
         expect(generated_title).to eq("Physics")
       end
 
@@ -39,8 +41,10 @@ describe Courses::GenerateCourseNameService do
     context "With engineers_teach_physics campaign" do
       let(:campaign_name) { "engineers_teach_physics" }
       let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
+      let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
 
       it "returns Engineers Teach Physics" do
+        binding.pry
         expect(generated_title).to eq("Engineers Teach Physics")
       end
 
@@ -50,6 +54,7 @@ describe Courses::GenerateCourseNameService do
     context "With campaign and second subject" do
       let(:campaign_name) { "engineers_teach_physics" }
       let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
+      let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
 
       it "returns Engineers Teach Physics with subject" do
         expect(generated_title).to eq("Engineers Teach Physics with English")

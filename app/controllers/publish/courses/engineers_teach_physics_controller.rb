@@ -19,8 +19,19 @@ module Publish
       def update
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
+        course.update(campaign_name: form_params[:campaign_name])
+ # binding.pry
 
-        if @engineers_teach_physics_form.save!
+        if form_params[:subjects_ids]&.include?(modern_languages_id)
+          redirect_to(
+            modern_languages_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+              course: { subjects_ids: form_params[:subjects_ids] },
+            ),
+          )
+        elsif @engineers_teach_physics_form.save!
           course.update(name: course.generate_name)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
@@ -28,6 +39,7 @@ module Publish
             recruitment_cycle.year,
             course.course_code,
           )
+
         else
           render :edit
         end
@@ -42,7 +54,24 @@ module Publish
         end
       end
 
+      def continue
+        authorize(@provider, :can_create_course?)
+        @errors = errors
+
+        if @errors.any?
+          render :new
+        elsif params[:course][:subjects_ids].include?(modern_languages_id)
+          redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+        else
+          redirect_to next_step
+        end
+      end
+
     private
+
+      def modern_languages_id
+        SecondarySubject.modern_languages.id.to_s
+      end
 
       def has_physics_subject?
         @course.master_subject_id == SecondarySubject.physics.id
@@ -60,7 +89,8 @@ module Publish
         params
           .require(:publish_engineers_teach_physics_form)
           .permit(
-            EngineersTeachPhysicsForm::FIELDS,
+            :campaign_name,
+            subjects_ids: [],
           )
       end
     end

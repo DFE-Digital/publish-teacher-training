@@ -34,6 +34,12 @@
         </div>
       <% end %>
     </div>
-    <%#= form.hidden_field :subjects_ids, multiple: true, value: params[:course][:subjects_ids] if params[:course] %>
+
+    <% if params[:course] %>
+      <% params[:course][:subjects_ids].each do |field_value| %>
+        <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
+      <% end %>
+    <% end %>
+
   </fieldset>
 <% end %>

@@ -11,7 +11,7 @@
 
     <%= form_with model: @engineers_teach_physics_form, url: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code), method: :put do |form| %>
 
-        <%= render "form_fields", form: %>
+        <%= render "edit_form_fields", form: %>
 
         <%= form.submit course.is_published? ? "Save and publish" : "Save",
                       class: "govuk-button", data: { qa: "course__save" } %>

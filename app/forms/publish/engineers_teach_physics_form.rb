@@ -1,8 +1,8 @@
 module Publish
-  class EngineersTeachPhysicsForm < BaseModelForm
+  class EngineersTeachPhysicsForm < BaseCourseForm
     alias_method :course, :model
 
-    FIELDS = %i[campaign_name].freeze
+    FIELDS = %i[campaign_name subjects_ids].freeze
 
     attr_accessor(*FIELDS)
 
@@ -12,6 +12,25 @@ module Publish
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+    end
+
+    def fields_to_ignore_before_save
+      "subjects_ids"
+    end
+
+    def assign_subjects_service
+      @assign_subjects_service ||= ::Courses::AssignSubjectsService.call(course:, subject_ids: params[:subjects_ids])
+    end
+
+    def save_action
+      # binding.pry
+      assign_attributes_to_model
+      if assign_subjects_service.save && model.save!
+        after_successful_save_action
+        true
+      else
+        false
+      end
     end
   end
 end

@@ -22,7 +22,7 @@ module Courses
 
     def build_new_course
       course = provider.courses.new
-      course.assign_attributes(course_attributes)
+      course.assign_attributes(course_attributes.except(:subjects_ids))
 
       update_sites(course)
 
