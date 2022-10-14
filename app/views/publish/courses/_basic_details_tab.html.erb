@@ -18,7 +18,7 @@
         <% end %>
       <% end %>
 
-      <% unless course.is_further_education? %>
+      <% unless course.further_education_course? %>
         <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
           <% row.key { "Subject".pluralize(course.subjects.count) } %>
           <% row.value { course.sorted_subjects } %>
@@ -29,7 +29,19 @@
         <% end %>
       <% end %>
 
-      <% unless course.level == "further_education" %>
+      <% if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
+        <% if course.applicable_for_engineers_teach_physics? %>
+          <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
+            <% row.key { "Engineers Teach Physics" } %>
+            <% row.value { course.engineers_teach_physics? ? "Yes" : "No" } %>
+            <% row.action(**{
+              visually_hidden_text: "Engineers Teach Physics",
+            }) %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% unless course.further_education_course? %>
         <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
           <% row.key { "Age range" } %>
           <% row.value { course.age_range } %>

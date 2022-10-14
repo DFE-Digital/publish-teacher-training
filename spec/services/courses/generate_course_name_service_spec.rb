@@ -10,7 +10,7 @@ describe Courses::GenerateCourseNameService do
   let(:generated_title) { service.execute(course:) }
 
   before do
-    SecondarySubject.clear_modern_languages_cache
+    SecondarySubject.clear_cache
     modern_languages
   end
 
