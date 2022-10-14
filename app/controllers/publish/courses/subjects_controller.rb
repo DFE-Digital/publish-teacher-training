@@ -16,7 +16,7 @@ module Publish
 
       def update
         authorize(provider)
-# binding.pry
+        # binding.pry
         if params[:course][:master_subject_id] == "29"
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(

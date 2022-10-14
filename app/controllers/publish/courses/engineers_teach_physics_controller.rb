@@ -20,7 +20,7 @@ module Publish
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
         course.update(campaign_name: form_params[:campaign_name])
- # binding.pry
+        # binding.pry
 
         if form_params[:subjects_ids]&.include?(modern_languages_id)
           redirect_to(

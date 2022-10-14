@@ -2,7 +2,7 @@ module Courses
   class GenerateCourseNameService
     def execute(course:)
       subjects = course.subjects
-      master_subject = course.subjects.find(course.master_subject_id)
+      master_subject = subjects.select { |s| s.id == course.master_subject_id } if course.subjects.present?
 
       title = if course.further_education_course?
                 further_education_title
@@ -11,7 +11,7 @@ module Courses
               elsif is_modern_lanuage_course?(subjects)
                 modern_language_title(subjects)
               else
-                generated_title(subjects: subjects, master_subject: master_subject)
+                generated_title(subjects:, master_subject:)
               end
 
       title += " (SEND)" if course.is_send?
