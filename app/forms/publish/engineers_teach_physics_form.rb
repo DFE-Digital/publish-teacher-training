@@ -15,7 +15,7 @@ module Publish
     end
 
     def fields_to_ignore_before_save
-      ["subjects_ids", "skip_languages_goto_confirmation"]
+      %w[subjects_ids skip_languages_goto_confirmation]
     end
 
     def assign_subjects_service

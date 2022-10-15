@@ -1,9 +1,7 @@
 module Courses
   class GenerateCourseNameService
     def execute(course:)
-      # binding.pry
       subjects = course.subjects
-      master_subject = subjects.select { |s| s.id == course.master_subject_id } if course.subjects.present?
 
       title = if course.further_education_course?
                 further_education_title
@@ -62,10 +60,7 @@ module Courses
 
     def generated_title(subjects)
       return "" if subjects.empty?
-# binding.pry
       subjects = subjects.map { |s| format_subject_name(s) }
-      #master_name = format_subject_name(master_subject)
-      #subject_names.delete(master_name)
 
       if subjects.length == 1
         subjects[0]
