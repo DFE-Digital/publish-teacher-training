@@ -5,6 +5,7 @@ module Publish
       include CourseBasicDetailConcern
 
       def new
+        # binding.pry
         authorize(@provider, :can_create_course?)
         return if has_physics_subject?
 
@@ -19,10 +20,25 @@ module Publish
       def update
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
-        course.update(campaign_name: form_params[:campaign_name])
+        # course.update(campaign_name: form_params[:campaign_name])
         # binding.pry
 
-        if form_params[:subjects_ids]&.include?(modern_languages_id)
+        if form_params[:skip_languages_goto_confirmation].present?
+
+          if @engineers_teach_physics_form.save!
+            course.update(name: course.generate_name)
+            redirect_to(
+              details_publish_provider_recruitment_cycle_course_path(
+                provider.provider_code,
+                recruitment_cycle.year,
+                course.course_code,
+              ),
+            )
+          else
+            render :edit
+          end
+
+        elsif form_params[:subjects_ids]&.include?(modern_languages_id)
           redirect_to(
             modern_languages_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
@@ -39,7 +55,6 @@ module Publish
             recruitment_cycle.year,
             course.course_code,
           )
-
         else
           render :edit
         end
@@ -57,9 +72,11 @@ module Publish
       def continue
         authorize(@provider, :can_create_course?)
         @errors = errors
-
+        # binding.pry
         if @errors.any?
           render :new
+        elsif params[:skip_languages_goto_confirmation].present?
+          redirect_to confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
         elsif params[:course][:subjects_ids].include?(modern_languages_id)
           redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
         else
@@ -90,6 +107,7 @@ module Publish
           .require(:publish_engineers_teach_physics_form)
           .permit(
             :campaign_name,
+            :skip_languages_goto_confirmation,
             subjects_ids: [],
           )
       end

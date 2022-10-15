@@ -2,7 +2,7 @@ module Publish
   class EngineersTeachPhysicsForm < BaseCourseForm
     alias_method :course, :model
 
-    FIELDS = %i[campaign_name subjects_ids].freeze
+    FIELDS = %i[campaign_name subjects_ids skip_languages_goto_confirmation].freeze
 
     attr_accessor(*FIELDS)
 
@@ -15,7 +15,7 @@ module Publish
     end
 
     def fields_to_ignore_before_save
-      "subjects_ids"
+      ["subjects_ids", "skip_languages_goto_confirmation"]
     end
 
     def assign_subjects_service

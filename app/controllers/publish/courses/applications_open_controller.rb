@@ -30,6 +30,7 @@ module Publish
             :sites_ids,
             :subjects_ids,
             :goto_confirmation,
+            :skip_languages_goto_confirmation,
             :accredited_body_code,
             :campaign_name,
             :master_subject_id,

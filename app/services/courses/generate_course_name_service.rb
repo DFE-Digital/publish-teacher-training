@@ -1,6 +1,7 @@
 module Courses
   class GenerateCourseNameService
     def execute(course:)
+      # binding.pry
       subjects = course.subjects
       master_subject = subjects.select { |s| s.id == course.master_subject_id } if course.subjects.present?
 
@@ -11,7 +12,7 @@ module Courses
               elsif is_modern_lanuage_course?(subjects)
                 modern_language_title(subjects)
               else
-                generated_title(subjects:, master_subject:)
+                generated_title(subjects)
               end
 
       title += " (SEND)" if course.is_send?
@@ -59,17 +60,17 @@ module Courses
       end
     end
 
-    def generated_title(subjects:, master_subject:)
+    def generated_title(subjects)
       return "" if subjects.empty?
+# binding.pry
+      subjects = subjects.map { |s| format_subject_name(s) }
+      #master_name = format_subject_name(master_subject)
+      #subject_names.delete(master_name)
 
-      subject_names = subjects.map { |s| format_subject_name(s) }
-      master_name = format_subject_name(master_subject)
-      subject_names.delete(master_name)
-
-      if subject_names.blank?
-        master_name
+      if subjects.length == 1
+        subjects[0]
       else
-        "#{master_name} with #{subject_names[0]}"
+        "#{subjects[0]} with #{subjects[1]}"
       end
     end
 

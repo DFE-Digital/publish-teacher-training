@@ -87,6 +87,7 @@ module Publish
             :course_age_range_in_years_other_from,
             :course_age_range_in_years_other_to,
             :goto_confirmation,
+            :skip_languages_goto_confirmation,
             :goto_visa,
             :language_ids,
           ).permit(
@@ -104,7 +105,7 @@ module Publish
     end
 
     def build_meta_course_creation_params
-      @meta_course_creation_params = params.slice(:goto_confirmation, :goto_visa)
+      @meta_course_creation_params = params.slice(:skip_languages_goto_confirmation, :goto_confirmation, :goto_visa)
     end
 
     def continue_step
