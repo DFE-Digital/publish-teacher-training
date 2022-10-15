@@ -25,7 +25,7 @@ describe SecondarySubject, type: :model do
       find_or_create(:secondary_subject, :physics)
     end
 
-    it "returns the modern language subject" do
+    it "returns the physics subject" do
       expect(SecondarySubject.physics).to eq(physics)
     end
 
