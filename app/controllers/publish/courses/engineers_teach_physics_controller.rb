@@ -3,6 +3,8 @@ module Publish
     class EngineersTeachPhysicsController < PublishController
       decorates_assigned :course
       include CourseBasicDetailConcern
+      before_action :feature_check, only: [:new]
+      before_action :edit_feature_check, only: [:edit]
 
       def new
         # binding.pry
@@ -85,6 +87,26 @@ module Publish
       end
 
     private
+
+      def feature_check
+        binding.pry
+        unless FeatureService.enabled?(:engineers_teach_physics_on_course)
+          redirect_to next_step
+        end
+      end
+
+      def edit_feature_check
+        # binding.pry
+        unless FeatureService.enabled?(:engineers_teach_physics_on_course)
+          course.update(name: course.generate_name)
+
+          redirect_to details_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            course.course_code,
+          )
+        end
+      end
 
       def modern_languages_id
         SecondarySubject.modern_languages.id.to_s

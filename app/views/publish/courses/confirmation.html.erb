@@ -49,7 +49,7 @@
             }) %>
           <% end %>
 
-          <%# if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
+          <% if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
             <% if course.master_subject_id == SecondarySubject.physics.id %>
               <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
                 <% row.key { "Engineers Teach Physics" } %>
@@ -60,7 +60,7 @@
                 }) %>
               <% end %>
             <% end %>
-          <%# end %>
+          <% end %>
 
           <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
             <% row.key { "Age range" } %>
