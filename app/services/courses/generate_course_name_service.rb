@@ -60,6 +60,7 @@ module Courses
 
     def generated_title(subjects)
       return "" if subjects.empty?
+
       subjects = subjects.map { |s| format_subject_name(s) }
 
       if subjects.length == 1
