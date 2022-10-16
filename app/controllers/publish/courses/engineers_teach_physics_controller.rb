@@ -89,14 +89,12 @@ module Publish
     private
 
       def feature_check
-        binding.pry
         unless FeatureService.enabled?(:engineers_teach_physics_on_course)
           redirect_to next_step
         end
       end
 
       def edit_feature_check
-        # binding.pry
         unless FeatureService.enabled?(:engineers_teach_physics_on_course)
           course.update(name: course.generate_name)
 
