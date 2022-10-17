@@ -16,6 +16,7 @@ module PageObjects
         section :level, SummaryList, "[data-qa=course__level]"
         section :is_send, SummaryList, "[data-qa=course__is_send]"
         section :subjects, SummaryList, "[data-qa=course__subjects]"
+        section :engineers_teach_physics, SummaryList, "[data=qa=course__engineers_teach_physics]"
         section :age_range, SummaryList, "[data-qa=course__age_range]"
         section :outcome, SummaryList, "[data-qa=course__outcome]"
         section :apprenticeship, SummaryList, "[data-qa=course__apprenticeship]"
