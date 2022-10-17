@@ -18,7 +18,7 @@ module Publish
       end
 
       it "is valid when campaign_names are included" do
-        Course.campaign_names.keys.each do |campaign|
+        Course.campaign_names.each_key do |campaign|
           form = described_class.new(course, params: { campaign_name: campaign })
           expect(form.valid?).to be(true)
         end
