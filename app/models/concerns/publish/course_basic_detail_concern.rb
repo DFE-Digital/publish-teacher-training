@@ -87,6 +87,7 @@ module Publish
             :course_age_range_in_years_other_from,
             :course_age_range_in_years_other_to,
             :goto_confirmation,
+            :skip_languages_goto_confirmation,
             :goto_visa,
             :language_ids,
           ).permit(
@@ -104,7 +105,7 @@ module Publish
     end
 
     def build_meta_course_creation_params
-      @meta_course_creation_params = params.slice(:goto_confirmation, :goto_visa)
+      @meta_course_creation_params = params.slice(:skip_languages_goto_confirmation, :goto_confirmation, :goto_visa)
     end
 
     def continue_step
@@ -159,6 +160,8 @@ module Publish
         back_publish_provider_recruitment_cycle_courses_locations_path(path_params)
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+      when :engineers_teach_physics
+        back_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       else
         course_creation_path_for(page)
       end
@@ -172,6 +175,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_level_path(path_params)
       when :modern_languages
         new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+      when :engineers_teach_physics
+        new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       when :apprenticeship
         new_publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
       when :location

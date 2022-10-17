@@ -106,6 +106,10 @@ FactoryBot.define do
         course.name = course.generate_name
       end
 
+      if course.subjects.any? && course.master_subject_id.nil?
+        course.master_subject_id = course.subjects.first.id
+      end
+
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
       course.provider.reload
@@ -223,6 +227,10 @@ FactoryBot.define do
 
     trait :can_sponsor_student_visa do
       can_sponsor_student_visa { true }
+    end
+
+    trait :engineers_teach_physics do
+      campaign_name { :engineers_teach_physics }
     end
   end
 end

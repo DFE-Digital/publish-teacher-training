@@ -24,6 +24,7 @@ feature "Course show" do
     end
 
     scenario "i can view the course basic details" do
+      given_the_engineers_teach_physics_on_course_feature_flag_is_not_active
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_published_physics_course
       when_i_visit_the_course_details_page
@@ -58,6 +59,10 @@ private
     allow(Settings.features).to receive(:engineers_teach_physics_on_course).and_return(true)
   end
 
+  def given_the_engineers_teach_physics_on_course_feature_flag_is_not_active
+    allow(Settings.features).to receive(:engineers_teach_physics_on_course).and_return(false)
+  end
+
   def given_we_are_not_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
   end
@@ -76,7 +81,7 @@ private
   end
 
   def and_there_is_a_published_physics_course
-    given_a_course_exists(:with_accrediting_provider, :secondary, start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
+    given_a_course_exists(:with_accrediting_provider, :secondary, master_subject_id: 29, campaign_name: "engineers_teach_physics", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
 
@@ -98,7 +103,7 @@ private
   def and_i_see_engineers_teach_physics_row
     expect(provider_courses_details_page).to have_engineers_teach_physics
     expect(provider_courses_details_page.engineers_teach_physics.key).to have_content("Engineers Teach Physics")
-    expect(provider_courses_details_page.engineers_teach_physics.value).to have_content("No")
+    expect(provider_courses_details_page.engineers_teach_physics.value).to have_content("Yes")
   end
 
   def and_i_see_the_common_course_basic_details

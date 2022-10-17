@@ -16,8 +16,19 @@ module Publish
 
       def update
         authorize(provider)
+        if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s && FeatureService.enabled?(:engineers_teach_physics_on_course)
+          course.update(master_subject_id: params[:course][:master_subject_id])
+          redirect_to(
+            engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code,
+              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids },
+            ),
+          )
 
-        if selected_subject_ids.include?(modern_languages_subject_id.to_s)
+        elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
+          course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(
             modern_languages_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
@@ -30,6 +41,9 @@ module Publish
         elsif course_subjects_form.save!
           value = @course.is_primary? ? "primary subject" : "secondary subject"
           course_details_success_message(value)
+          # TODO: move this to the form?
+          course.update(master_subject_id: params[:course][:master_subject_id])
+          course.update(name: course.generate_name)
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -78,8 +92,6 @@ module Publish
         previous_subject_selections = params[:course][:subjects_ids]
 
         params[:course][:subjects_ids] = selected_subject_ids
-
-        params[:course].delete(:master_subject_id)
         params[:course].delete(:subordinate_subject_id)
 
         build_new_course # to get languages edit_options

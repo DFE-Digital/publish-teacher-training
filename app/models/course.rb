@@ -48,7 +48,10 @@ class Course < ApplicationRecord
     not_required: 9,
   }
 
-  enum :campaign_name, COURSE_CAMPAIGNS
+  enum :campaign_name, {
+    no_campaign: "no_campaign",
+    engineers_teach_physics: "engineers_teach_physics",
+  }
 
   ENTRY_REQUIREMENT_OPTIONS = {
     must_have_qualification_at_application_time: 1,
@@ -91,7 +94,7 @@ class Course < ApplicationRecord
   delegate :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def applicable_for_engineers_teach_physics?
-    secondary_course? && course_subjects.exists?(position: 0, subject: SecondarySubject.physics)
+    master_subject_id == SecondarySubject.physics.id
   end
 
   def set_subject_position(course_subject)
@@ -320,6 +323,12 @@ class Course < ApplicationRecord
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
+  validates :campaign_name, inclusion: { in: campaign_names.keys }
+  # TODO: validates :master_subject_id ?
+
+  def is_engineers_teach_physics?
+    master_subject_id == SecondarySubject.physics.id && engineers_teach_physics?
+  end
 
   def academic_year
     if start_date.month >= 9

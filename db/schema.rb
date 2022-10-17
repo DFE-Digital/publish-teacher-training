@@ -134,7 +134,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094644) do
     t.string "additional_gcse_equivalencies"
     t.boolean "can_sponsor_skilled_worker_visa", default: false
     t.boolean "can_sponsor_student_visa", default: false
-    t.integer "campaign_name"
+    t.string "campaign_name", default: "no_campaign"
+    t.integer "master_subject_id"
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["can_sponsor_skilled_worker_visa"], name: "index_course_on_can_sponsor_skilled_worker_visa"
     t.index ["can_sponsor_student_visa"], name: "index_course_on_can_sponsor_student_visa"
@@ -142,6 +143,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094644) do
     t.index ["degree_grade"], name: "index_course_on_degree_grade"
     t.index ["discarded_at"], name: "index_course_on_discarded_at"
     t.index ["is_send"], name: "index_course_on_is_send"
+    t.index ["master_subject_id"], name: "index_course_on_master_subject_id"
     t.index ["program_type"], name: "index_course_on_program_type"
     t.index ["provider_id", "course_code"], name: "IX_course_provider_id_course_code", unique: true
     t.index ["provider_id"], name: "index_course_on_provider_id"
