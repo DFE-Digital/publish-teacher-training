@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Terraform v1.2.3
-        uses: hashicorp/setup-terraform@v2.0.2
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.2.3
 
@@ -75,7 +75,7 @@ jobs:
       - name: Update ${{ matrix.environment }} status
         id: deactivate-env
         if:   ${{ always() && env.TF_STATE_EXISTS == 'true' }}
-        uses: bobheadxi/deployments@v1.3.0
+        uses: bobheadxi/deployments@v1
         with:
           step:   deactivate-env
           token:  ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
 
       - name: Delete review-${{ env.PR_NUMBER }} environment
         if:   always() && (steps.deactivate-env.outcome == 'success')
-        uses: bobheadxi/deployments@v1.3.0
+        uses: bobheadxi/deployments@v1
         with:
           step:   delete-env
           token:  ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
