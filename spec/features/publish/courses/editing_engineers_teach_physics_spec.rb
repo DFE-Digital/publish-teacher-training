@@ -125,11 +125,3 @@ private
     "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
   end
 end
-
-# /publish/organisations/A02/2023/courses/C251/engineers_teach_physics?course%5Bmaster_subject_id%5D=29&course%5Bsubjects_ids%5D%5B%5D=29&course%5Bsubjects_ids%5D%5B%5D=33
-
-# /publish/organisations/A02/2023/courses/C251/modern-languages?course%5Bmaster_subject_id%5D=29&course%5Bsubjects_ids%5D%5B%5D=29
-
-# /publish/organisations/A02/2023/courses/C276/engineers_teach_physics?course%5Bmaster_subject_id%5D=29&course%5Bsubjects_ids%5D%5B%5D=29&course%5Bsubjects_ids%5D%5B%5D=33
-
-# publish/organisations/A02/2023/courses/C276/modern-languages?course%5Bmaster_subject_id%5D=29&course%5Bsubjects_ids%5D%5B%5D=29&course%5Bsubjects_ids%5D%5B%5D=33

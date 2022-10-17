@@ -16,14 +16,14 @@ module Publish
 
       def update
         authorize(provider)
-        if params[:course][:master_subject_id] == "29" && FeatureService.enabled?(:engineers_teach_physics_on_course)
+        if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s && FeatureService.enabled?(:engineers_teach_physics_on_course)
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(
             engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { master_subject_id: "29", subjects_ids: selected_subject_ids },
+              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids },
             ),
           )
 
