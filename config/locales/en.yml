@@ -379,6 +379,10 @@ en:
   activemodel:
     errors:
       models:
+        publish/engineers_teach_physics_form:
+          attributes:
+            campaign_name:
+              inclusion: "Select an option"
         publish/course_rollover_form:
           attributes:
             course_is_rollable:

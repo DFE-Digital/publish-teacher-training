@@ -50,7 +50,7 @@
           <% end %>
 
           <% if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
-            <% if course.master_subject_id == SecondarySubject.physics.id %>
+            <% if course.applicable_for_engineers_teach_physics? %>
               <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
                 <% row.key { "Engineers Teach Physics" } %>
                 <% row.value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
