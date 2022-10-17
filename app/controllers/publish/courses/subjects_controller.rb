@@ -16,7 +16,6 @@ module Publish
 
       def update
         authorize(provider)
-        # binding.pry
         if params[:course][:master_subject_id] == "29" && FeatureService.enabled?(:engineers_teach_physics_on_course)
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(

@@ -23,7 +23,6 @@ module Publish
     end
 
     def save_action
-      # binding.pry
       assign_attributes_to_model
       if assign_subjects_service.save && model.save!
         after_successful_save_action

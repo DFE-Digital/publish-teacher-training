@@ -268,7 +268,7 @@ en:
         course:
           attributes:
             campaign_name:
-              inclusion: "Select Yes or No"
+              inclusion: "Select an Option"
             course_code:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"

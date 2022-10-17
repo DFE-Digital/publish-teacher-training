@@ -7,7 +7,6 @@ module Publish
       before_action :edit_feature_check, only: [:edit]
 
       def new
-        # binding.pry
         authorize(@provider, :can_create_course?)
         return if has_physics_subject?
 
@@ -22,8 +21,6 @@ module Publish
       def update
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
-        # course.update(campaign_name: form_params[:campaign_name])
-        # binding.pry
 
         if form_params[:skip_languages_goto_confirmation].present?
 
@@ -74,7 +71,6 @@ module Publish
       def continue
         authorize(@provider, :can_create_course?)
         @errors = errors
-        # binding.pry
         if @errors.any?
           render :new
         elsif params[:skip_languages_goto_confirmation].present?
