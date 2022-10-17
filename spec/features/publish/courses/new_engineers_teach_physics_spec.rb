@@ -5,7 +5,7 @@ feature "selecting a physics subject", { can_edit_current_and_next_cycles: false
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "selecting physics only subject" do
+  scenario "selecting physics only" do
     when_i_visit_the_new_course_subject_page(:secondary)
     when_i_select_a_subject(:physics)
     and_i_click_continue

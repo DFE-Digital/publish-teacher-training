@@ -21,12 +21,13 @@
     </legend>
     <%= render "publish/shared/error_messages", error_keys: [:campaign_name] %>
 
-    <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
+    <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__engineers_teach_physics_radio_group">
       <% course.edit_course_options["engineers_teach_physics"].each do |value| %>
         <div class="govuk-radios__item">
           <%= form.radio_button :campaign_name,
                                 value,
-                                class: "govuk-radios__input" %>
+                                class: "govuk-radios__input",
+                                data: { qa: "course__campaign_name_#{value}_radio"} %>
           <%= form.label :campaign_name,
                         t("edit_options.campaign_name.#{value}.label"),
                         value:,
