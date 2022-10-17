@@ -2,7 +2,7 @@ require "rails_helper"
 
 module Publish
   describe EngineersTeachPhysicsForm do
-    let(:params) { { :campaign_name => "" } }
+    let(:params) { { campaign_name: "" } }
     let(:subject_ids) { [biology_secondary_subject.id] }
     let(:course) { create(:course, :secondary, subjects: [physics_secondary_subject]) }
     let(:physics_secondary_subject) { find_or_create(:secondary_subject, :physics) }
@@ -11,7 +11,7 @@ module Publish
 
     describe "validation" do
       it "is not valid when campaign_name is not included" do
-        form  =  described_class.new(course, params:)
+        form = described_class.new(course, params:)
         expect(form.valid?).to be(false)
         expect(form.errors[:campaign_name])
             .to include("Select an option")
