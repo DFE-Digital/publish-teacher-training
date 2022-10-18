@@ -11,11 +11,11 @@ module Publish
   private
 
     def compute_fields
-      course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes).symbolize_keys
     end
 
     def fields_to_ignore_before_save
-      %w[subjects_ids skip_languages_goto_confirmation]
+      %i[subjects_ids skip_languages_goto_confirmation]
     end
 
     def assign_subjects_service

@@ -134,7 +134,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_11_094644) do
     t.string "additional_gcse_equivalencies"
     t.boolean "can_sponsor_skilled_worker_visa", default: false
     t.boolean "can_sponsor_student_visa", default: false
-    t.string "campaign_name", default: "no_campaign"
+    t.integer "campaign_name"
     t.integer "master_subject_id"
     t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
     t.index ["can_sponsor_skilled_worker_visa"], name: "index_course_on_can_sponsor_skilled_worker_visa"
