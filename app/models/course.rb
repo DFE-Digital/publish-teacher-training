@@ -49,8 +49,8 @@ class Course < ApplicationRecord
   }
 
   enum :campaign_name, {
-    no_campaign: "no_campaign",
-    engineers_teach_physics: "engineers_teach_physics",
+    no_campaign: 0,
+    engineers_teach_physics: 1,
   }
 
   ENTRY_REQUIREMENT_OPTIONS = {
@@ -323,7 +323,6 @@ class Course < ApplicationRecord
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
-  validates :campaign_name, inclusion: { in: campaign_names.keys }
   # TODO: validates :master_subject_id ?
 
   def is_engineers_teach_physics?

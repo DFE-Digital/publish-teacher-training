@@ -21,10 +21,6 @@ describe Course, type: :model do
   its(:modular) { is_expected.to eq("") }
 
   describe "#campaign_name" do
-    it "defaults to no_campaign" do
-      expect(course.campaign_name).to eq("no_campaign")
-    end
-
     it "assigns the campaign" do
       course.engineers_teach_physics!
       expect(course.campaign_name).to eq "engineers_teach_physics"
