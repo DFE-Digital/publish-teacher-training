@@ -41,6 +41,11 @@
         <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
       <% end %>
     <% end %>
+    <% if params[:publish_engineers_teach_physics_form]&.dig(:subjects_ids) %>
+      <% params[:publish_engineers_teach_physics_form][:subjects_ids].each do |field_value| %>
+        <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
+      <% end %>
+    <% end %>
     <%= form.hidden_field(:skip_languages_goto_confirmation, value: params[:skip_languages_goto_confirmation]) %>
   </fieldset>
 <% end %>

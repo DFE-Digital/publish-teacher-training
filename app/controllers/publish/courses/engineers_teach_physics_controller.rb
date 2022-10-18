@@ -21,7 +21,6 @@ module Publish
       def update
         authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
-
         if form_params[:skip_languages_goto_confirmation].present?
 
           if @engineers_teach_physics_form.save!
@@ -55,6 +54,7 @@ module Publish
             course.course_code,
           )
         else
+          @errors = @engineers_teach_physics_form.errors.messages
           render :edit
         end
       end
