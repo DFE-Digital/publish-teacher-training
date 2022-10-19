@@ -36,7 +36,6 @@
       <% end %>
     </div>
 
-
     <% params.dig(:course, :subjects_ids)&.each do |field_value| %>
       <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
     <% end %>
