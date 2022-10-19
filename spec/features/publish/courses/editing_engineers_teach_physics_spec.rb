@@ -13,6 +13,8 @@ feature "updating engineers teach physics", { can_edit_current_and_next_cycles: 
     when_i_select_a_subject(:physics)
     and_i_click_continue
     then_i_am_met_with_the_edit_engineers_teach_physics_page
+    and_i_click_continue
+    then_i_see_an_error_message
     and_i_select_an_option
     and_i_click_continue
     then_i_am_met_with_course_details_page
@@ -34,6 +36,10 @@ feature "updating engineers teach physics", { can_edit_current_and_next_cycles: 
   end
 
 private
+
+  def then_i_see_an_error_message
+    expect(page).to have_content("Select an option")
+  end
 
   def and_i_select_an_option
     new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
