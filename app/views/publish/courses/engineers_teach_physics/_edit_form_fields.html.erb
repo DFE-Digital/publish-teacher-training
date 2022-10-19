@@ -42,7 +42,7 @@
     <% end %>
 
     <% params.dig(:publish_engineers_teach_physics_form, :subjects_ids)&.each do |field_value| %>
-        <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
+      <%= form.hidden_field(:subjects_ids, multiple: true, value: field_value) %>
     <% end %>
 
     <%= form.hidden_field(:skip_languages_goto_confirmation, value: params[:skip_languages_goto_confirmation]) %>
