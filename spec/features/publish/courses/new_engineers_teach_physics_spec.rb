@@ -10,6 +10,8 @@ feature "selecting a physics subject", { can_edit_current_and_next_cycles: false
     when_i_select_a_subject(:physics)
     and_i_click_continue
     then_i_am_met_with_the_engineers_teach_physics_page(:secondary, :physics)
+    and_i_click_continue
+    then_i_see_an_error_message
     and_i_select_an_option
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:secondary, :physics)
@@ -48,6 +50,10 @@ private
 
   def and_i_select_an_option
     new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
+  end
+
+  def then_i_see_an_error_message
+    expect(page).to have_content("Select an option")
   end
 
   def and_i_open_second_subject

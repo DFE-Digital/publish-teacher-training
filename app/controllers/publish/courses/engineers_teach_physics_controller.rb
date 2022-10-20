@@ -70,8 +70,10 @@ module Publish
 
       def continue
         authorize(@provider, :can_create_course?)
-        @errors = errors
-        if @errors.any?
+        if params[:course][:campaign_name].blank?
+          @errors = {:campaign_name=>["Select an option"]}
+        end
+        if @errors.present?
           render :new
         elsif params[:skip_languages_goto_confirmation].present?
           redirect_to confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
