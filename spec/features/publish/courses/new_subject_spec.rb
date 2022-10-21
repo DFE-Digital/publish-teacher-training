@@ -83,6 +83,6 @@ private
 
   def params_with_subject(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    "course%5Bcampaign_name%5D=&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
   end
 end
