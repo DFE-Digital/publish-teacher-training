@@ -4,6 +4,7 @@ module Publish
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: [:continue]
+      before_action :campaign_name_check, only: [:continue]
       include CourseBasicDetailConcern
 
       def edit
@@ -44,6 +45,7 @@ module Publish
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
           course.update(name: course.generate_name)
+          course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -59,6 +61,10 @@ module Publish
       end
 
     private
+
+      def campaign_name_check
+        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics
+      end
 
       def course_subjects_form
         @course_subjects_form ||= CourseSubjectsForm.new(@course, params: selected_subject_ids)
