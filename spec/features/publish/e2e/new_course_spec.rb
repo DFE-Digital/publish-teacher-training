@@ -115,6 +115,7 @@ private
     course_subject = course_subject(level)
     course_creation_params[:subjects_ids] = [course_subject.id.to_s]
     course_creation_params[:master_subject_id] = course_subject.id.to_s
+    course_creation_params[:campaign_name] = ""
 
     new_subjects_page.subjects_fields.select(course_subject.subject_name)
     new_subjects_page.continue.click
