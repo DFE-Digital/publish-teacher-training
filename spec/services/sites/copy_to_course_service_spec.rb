@@ -5,10 +5,10 @@ describe Sites::CopyToCourseService do
   let(:course) { create(:course, provider: new_provider) }
   let(:service) { described_class.new }
   let(:new_provider) {
-    create :provider,
-      recruitment_cycle: new_recruitment_cycle
+    create(:provider,
+      recruitment_cycle: new_recruitment_cycle)
   }
-  let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+  let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
 
   before do
     service.execute(new_site: site, new_course: course)

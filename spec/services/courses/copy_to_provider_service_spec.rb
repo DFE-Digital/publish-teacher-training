@@ -1,22 +1,22 @@
 require "rails_helper"
 
 RSpec.describe Courses::CopyToProviderService do
-  let(:accrediting_provider) { create :provider, :accredited_body }
-  let(:provider) { create :provider, courses: [course] }
-  let(:published_course_enrichment) { build :course_enrichment, :published }
-  let(:maths) { create :secondary_subject, :mathematics }
+  let(:accrediting_provider) { create(:provider, :accredited_body) }
+  let(:provider) { create(:provider, courses: [course]) }
+  let(:published_course_enrichment) { build(:course_enrichment, :published) }
+  let(:maths) { create(:secondary_subject, :mathematics) }
   let(:course) {
-    build :course,
+    build(:course,
       enrichments: [published_course_enrichment],
       accrediting_provider:,
-      subjects: [maths], level: "secondary"
+      subjects: [maths], level: "secondary")
   }
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-  let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+  let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
   let(:new_provider) {
-    create :provider,
+    create(:provider,
       provider_code: provider.provider_code,
-      recruitment_cycle: new_recruitment_cycle
+      recruitment_cycle: new_recruitment_cycle)
   }
   let(:new_course) {
     new_provider.reload.courses.find_by(course_code: course.course_code)
@@ -96,10 +96,10 @@ RSpec.describe Courses::CopyToProviderService do
 
   context "when a published enrichment exists" do
     let!(:old_published_enrichment) do
-      create :course_enrichment, :published, last_published_timestamp_utc: 10.days.ago, course:
+      create(:course_enrichment, :published, last_published_timestamp_utc: 10.days.ago, course:)
     end
     let!(:published_enrichment) do
-      create :course_enrichment, :published, course:
+      create(:course_enrichment, :published, course:)
     end
 
     it "copies the latest published enrichment" do
@@ -113,10 +113,10 @@ RSpec.describe Courses::CopyToProviderService do
 
   context "course has a published and a draft enrichment" do
     let!(:published_enrichment) do
-      create :course_enrichment, :published, course:
+      create(:course_enrichment, :published, course:)
     end
     let!(:draft_enrichment) do
-      create :course_enrichment, course:
+      create(:course_enrichment, course:)
     end
 
     it "copies the draft enrichment" do
@@ -130,9 +130,9 @@ RSpec.describe Courses::CopyToProviderService do
 
   context "the course already exists in the new provider" do
     let!(:new_course) {
-      create :course,
+      create(:course,
         course_code: course.course_code,
-        provider: new_provider
+        provider: new_provider)
     }
 
     it "returns nil" do
@@ -154,10 +154,10 @@ RSpec.describe Courses::CopyToProviderService do
 
   context "the course has been deleted in the new provider" do
     let!(:new_course) do
-      create :course,
+      create(:course,
         :deleted,
         course_code: course.course_code,
-        provider: new_provider
+        provider: new_provider)
     end
 
     it "returns nil" do
@@ -178,13 +178,13 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "the original course has sites" do
-    let(:site) { create :site, provider: }
-    let!(:new_site) { create :site, provider: new_provider, code: site.code }
+    let(:site) { create(:site, provider:) }
+    let!(:new_site) { create(:site, provider: new_provider, code: site.code) }
     let!(:site_status) {
-      create :site_status,
+      create(:site_status,
         :with_no_vacancies,
         course:,
-        site:
+        site:)
     }
 
     before do
@@ -208,8 +208,8 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "when the course is not rollable" do
-    let(:site) { create :site, provider: }
-    let!(:new_site) { create :site, provider: new_provider, code: site.code }
+    let(:site) { create(:site, provider:) }
+    let!(:new_site) { create(:site, provider: new_provider, code: site.code) }
     let(:force) { true }
 
     before do

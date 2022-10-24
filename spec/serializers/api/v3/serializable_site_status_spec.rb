@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::V3::SerializableSiteStatus do
-  let(:site_status) { create :site_status }
+  let(:site_status) { create(:site_status) }
   let(:resource) { API::V3::SerializableSiteStatus.new object: site_status }
 
   it "sets type to site_statuses" do
