@@ -44,7 +44,7 @@ module Publish
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
           course.update(name: course.generate_name)
-          course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics
+          course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
 
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
@@ -62,7 +62,7 @@ module Publish
     private
 
       def campaign_name_check
-        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics
+        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics.id
       end
 
       def course_subjects_form

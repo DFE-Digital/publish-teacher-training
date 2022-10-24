@@ -84,6 +84,11 @@ private
     expect(page).to have_content("Pick all the languages for this course")
   end
 
+  def then_i_am_met_with_the_modern_languages_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
+    expect(page).to have_content("Pick all the languages for this course")
+  end
+
   def provider
     @provider ||= @user.providers.first
   end
@@ -92,6 +97,8 @@ private
     case subject_type
     when :physics
       find_or_create(:secondary_subject, :physics)
+    when :latin
+      find_or_create(:secondary_subject, :latin)
     when :modern_languages
       find_or_create(:secondary_subject, :modern_languages)
     end
@@ -99,13 +106,13 @@ private
 
   def params_with_subject(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    "course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
   end
 
   def modern_language_params_with_subject(level, subject_type)
     subordinate_subject = course_subject(:modern_languages)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
+    "course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
   end
 
   def form_params_with_subject(level, subject_type)
