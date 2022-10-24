@@ -3,8 +3,7 @@ module Publish
     class SubjectsController < PublishController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
-      before_action :build_course_params, only: [:continue]
-      before_action :campaign_name_check, only: [:continue]
+      before_action :build_course_params, :campaign_name_check, only: [:continue]
       include CourseBasicDetailConcern
 
       def edit
