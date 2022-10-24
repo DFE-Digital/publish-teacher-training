@@ -12,6 +12,11 @@ module Support
       @site = provider.sites.build
     end
 
+    def edit
+      provider
+      site
+    end
+
     def create
       @site = provider.sites.build(site_params)
 
@@ -20,11 +25,6 @@ module Support
       else
         render :new
       end
-    end
-
-    def edit
-      provider
-      site
     end
 
     def update

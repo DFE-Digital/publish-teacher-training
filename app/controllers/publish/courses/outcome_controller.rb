@@ -4,6 +4,10 @@ module Publish
       include CourseBasicDetailConcern
       before_action :order_edit_options, only: %i[edit new]
 
+      def new
+        super
+      end
+
       def edit
         super
       end
@@ -28,10 +32,6 @@ module Publish
           @errors = @course.errors.messages
           render :edit
         end
-      end
-
-      def new
-        super
       end
 
     private
