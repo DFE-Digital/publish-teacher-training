@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe MagicLinkEmailMailer, type: :mailer do
+describe MagicLinkEmailMailer do
   let(:user) { create(:user) }
   let(:mail) { described_class.magic_link_email(user) }
 

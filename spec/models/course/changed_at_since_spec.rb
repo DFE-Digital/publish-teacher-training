@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Course, type: :model do
+RSpec.describe Course do
   describe ".changed_at_since" do
     context "30 days ago" do
       let!(:over_30_course) { create(:course, changed_at: 30.days.ago) }

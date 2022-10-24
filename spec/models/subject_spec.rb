@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Subject, type: :model do
+describe Subject do
   subject { find_or_create(:modern_languages_subject, subject_name: "Modern languages (other)", subject_code: "101") }
 
   it { is_expected.to have_many(:courses).through(:course_subjects) }

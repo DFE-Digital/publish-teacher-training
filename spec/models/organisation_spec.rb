@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Organisation, type: :model do
+describe Organisation do
   subject { create(:organisation) }
 
   describe "associations" do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "course searches", type: :feature do
+feature "course searches" do
   scenario "Navigate to /find" do
     when_i_visit_the_search_page
     then_i_should_see_the_page_title

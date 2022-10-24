@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe RequiredQualificationsSummary, type: :model do
+describe RequiredQualificationsSummary do
   describe "#extract" do
     context "when a published required_qualifications enrichment attribute is present" do
       let(:enrichment) { build(:course_enrichment, :published, required_qualifications: "GCSE Computer Science") }

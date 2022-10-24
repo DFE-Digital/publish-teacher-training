@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Find::SubjectHelper, type: :helper do
+describe Find::SubjectHelper do
   describe "#secondary_subject_options" do
     let(:subjects) { [find_or_create(:secondary_subject, :english)] }
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Course, type: :model do
+describe Course do
   let(:course) { create(:course, level: "primary", subjects: [subjects]) }
   let(:subjects) { find(:primary_subject, :primary) }
 

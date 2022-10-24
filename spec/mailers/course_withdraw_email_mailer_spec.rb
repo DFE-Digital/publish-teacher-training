@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CourseWithdrawEmailMailer, type: :mailer do
+describe CourseWithdrawEmailMailer do
   let(:course) { create(:course, :with_accrediting_provider) }
   let(:user) { create(:user) }
   let(:mail) { described_class.course_withdraw_email(course, user, DateTime.new(2001, 2, 3, 4, 5, 6)) }

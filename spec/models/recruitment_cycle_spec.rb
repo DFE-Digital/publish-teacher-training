@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe RecruitmentCycle, type: :model do
+describe RecruitmentCycle do
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
@@ -19,8 +19,8 @@ describe RecruitmentCycle, type: :model do
       it { is_expected.to have_many(:courses).through(:providers) }
 
       context "with discarded providers" do
-        let(:provider)           { create :provider, recruitment_cycle: subject }
-        let(:discarded_provider) { create :provider, :discarded, recruitment_cycle: subject }
+        let(:provider)           { create(:provider, recruitment_cycle: subject) }
+        let(:discarded_provider) { create(:provider, :discarded, recruitment_cycle: subject) }
 
         it "does not include the discarded providers" do
           provider

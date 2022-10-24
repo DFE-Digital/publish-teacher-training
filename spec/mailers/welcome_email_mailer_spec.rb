@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe WelcomeEmailMailer, type: :mailer do
+describe WelcomeEmailMailer do
   context "Sending an email to a user" do
     let(:mail) { described_class.send_welcome_email(first_name: "meow", email: "cat@meow.cat") }
 

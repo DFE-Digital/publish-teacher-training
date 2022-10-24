@@ -1,7 +1,7 @@
 require "rails_helper"
 
-describe CourseEnrichment, type: :model do
-  subject { build :course_enrichment }
+describe CourseEnrichment do
+  subject { build(:course_enrichment) }
 
   describe "associations" do
     it { is_expected.to belong_to(:course) }
@@ -69,7 +69,7 @@ describe CourseEnrichment, type: :model do
   describe "about_course attribute" do
     let(:about_course_text) { "this course is great" }
 
-    subject { build :course_enrichment, about_course: about_course_text }
+    subject { build(:course_enrichment, about_course: about_course_text) }
 
     context "with over 400 words" do
       let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
@@ -91,7 +91,7 @@ describe CourseEnrichment, type: :model do
   describe "course_length attribute" do
     let(:course_length_text) { "this course is great" }
 
-    subject { build :course_enrichment, course_length: course_length_text }
+    subject { build(:course_enrichment, course_length: course_length_text) }
 
     context "when nil" do
       let(:course_length_text) { nil }
@@ -107,7 +107,7 @@ describe CourseEnrichment, type: :model do
   describe "how_school_placements_work attribute" do
     let(:how_school_placements_work_text) { "this course is great" }
 
-    subject { build :course_enrichment, how_school_placements_work: how_school_placements_work_text }
+    subject { build(:course_enrichment, how_school_placements_work: how_school_placements_work_text) }
 
     context "with over 400 words" do
       let(:how_school_placements_work_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
@@ -129,7 +129,7 @@ describe CourseEnrichment, type: :model do
   describe "interview_process attribute" do
     let(:interview_process_text) { "this course is great" }
 
-    subject { build :course_enrichment, interview_process: interview_process_text }
+    subject { build(:course_enrichment, interview_process: interview_process_text) }
 
     context "with over 250 words" do
       let(:interview_process_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
@@ -144,7 +144,7 @@ describe CourseEnrichment, type: :model do
     let(:provider) { build(:provider, recruitment_cycle:) }
     let(:course) { build(:course, provider:) }
 
-    subject { build :course_enrichment, required_qualifications: required_qualifications_text, course: }
+    subject { build(:course_enrichment, required_qualifications: required_qualifications_text, course:) }
 
     context "with over 100 words" do
       let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -174,7 +174,7 @@ describe CourseEnrichment, type: :model do
   describe "personal_qualities attribute" do
     let(:personal_qualities_text) { "this course is great" }
 
-    subject { build :course_enrichment, personal_qualities: personal_qualities_text }
+    subject { build(:course_enrichment, personal_qualities: personal_qualities_text) }
 
     context "with over 100 words" do
       let(:personal_qualities_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -186,7 +186,7 @@ describe CourseEnrichment, type: :model do
   describe "other_requirements attribute" do
     let(:other_requirements_text) { "this course is great" }
 
-    subject { build :course_enrichment, other_requirements: other_requirements_text }
+    subject { build(:course_enrichment, other_requirements: other_requirements_text) }
 
     context "with over 100 words" do
       let(:other_requirements_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -198,9 +198,9 @@ describe CourseEnrichment, type: :model do
   describe "salary_details attribute" do
     let(:salary_details_text) { "this course is great" }
 
-    let(:salaried_course) { build :course, :with_salary }
+    let(:salaried_course) { build(:course, :with_salary) }
 
-    subject { build :course_enrichment, salary_details: salary_details_text, course: salaried_course }
+    subject { build(:course_enrichment, salary_details: salary_details_text, course: salaried_course) }
 
     context "with over 250 words" do
       let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }

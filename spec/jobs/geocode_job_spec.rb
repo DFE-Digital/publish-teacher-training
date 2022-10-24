@@ -1,5 +1,5 @@
 require "rails_helper"
-describe GeocodeJob, type: :job do
+describe GeocodeJob do
   include ActiveJob::TestHelper
 
   after do

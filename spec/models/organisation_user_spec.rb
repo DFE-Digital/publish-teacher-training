@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe OrganisationUser, type: :model do
+describe OrganisationUser do
   subject { described_class.new }
 
   describe "associations" do

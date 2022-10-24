@@ -1,5 +1,5 @@
 require "rails_helper"
-describe SaveStatisticJob, type: :job do
+describe SaveStatisticJob do
   include ActiveJob::TestHelper
 
   after do

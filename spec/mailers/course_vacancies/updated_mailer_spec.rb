@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module CourseVacancies
-  describe UpdatedMailer, type: :mailer do
+  describe UpdatedMailer do
     let(:course) { create(:course, :with_accrediting_provider) }
     let(:user) { create(:user) }
     let(:vacancies_filled) { true }

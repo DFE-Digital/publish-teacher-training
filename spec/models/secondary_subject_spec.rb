@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe SecondarySubject, type: :model do
+describe SecondarySubject do
   describe "#modern_languages" do
     let!(:modern_languages) do
       find_or_create(:secondary_subject, :modern_languages)

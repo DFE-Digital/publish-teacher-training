@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Course, type: :model do
+describe Course do
   let(:recruitment_cycle) { course.recruitment_cycle }
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
@@ -665,7 +665,7 @@ describe Course, type: :model do
       end
 
       describe "validate_degree_requirements_publishable" do
-        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
         let(:course_with_degree_grade) { create(:course, provider:) }
         let(:course_without_degree_grade) { create(:course, provider:, degree_grade: nil) }
@@ -687,7 +687,7 @@ describe Course, type: :model do
       end
 
       describe "validate_gcse_requirements_publishable" do
-        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
         let(:publishable_course) { create(:course, provider:, accept_pending_gcse: true, accept_gcse_equivalency: false) }
         let(:unpublishable_course) { create(:course, provider:, accept_pending_gcse: nil) }
@@ -1862,7 +1862,7 @@ describe Course, type: :model do
   end
 
   describe "content_status" do
-    let(:course) { create :course, enrichments: [enrichment1, enrichment2] }
+    let(:course) { create(:course, enrichments: [enrichment1, enrichment2]) }
     let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
     let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
     let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
@@ -2257,9 +2257,9 @@ describe Course, type: :model do
     end
 
     context "course is in the next recruitment cycle" do
-      let(:recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:provider)          { create :provider, recruitment_cycle: }
-      let(:course) { create :course, provider: }
+      let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
+      let(:provider)          { create(:provider, recruitment_cycle:) }
+      let(:course) { create(:course, provider:) }
 
       it { is_expected.to be_truthy }
     end
@@ -2331,10 +2331,10 @@ describe Course, type: :model do
     end
 
     context "a new course within a recruitment cycle" do
-      let(:recruitment_cycle) { build :recruitment_cycle, :next }
-      let(:provider)          { build :provider, recruitment_cycle: }
+      let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+      let(:provider)          { build(:provider, recruitment_cycle:) }
 
-      subject { create :course, :applications_open_from_not_set, provider: }
+      subject { create(:course, :applications_open_from_not_set, provider:) }
 
       its(:applications_open_from) { is_expected.to eq recruitment_cycle.application_start_date }
     end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-feature "View pages", type: :feature do
+feature "View pages" do
   scenario "Environment label and class are read from settings" do
     visit "/cookies"
     expect(page).to have_selector(".govuk-phase-banner__content__tag", text: Settings.environment.label)

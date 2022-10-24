@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Course, type: :model do
+describe Course do
   describe "#enrichments" do
     let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
     let(:another_course) do

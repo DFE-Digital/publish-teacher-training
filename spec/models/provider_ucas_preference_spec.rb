@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ProviderUCASPreference, type: :model do
+describe ProviderUCASPreference do
   it { is_expected.to belong_to(:provider) }
 
   describe "type_of_gt12" do
