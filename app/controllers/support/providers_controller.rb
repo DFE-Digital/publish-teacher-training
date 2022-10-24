@@ -4,10 +4,19 @@ module Support
       @providers = filtered_providers
     end
 
+    def show
+      provider
+      render layout: "provider_record"
+    end
+
     def new
       @provider = Provider.new
       @provider.sites.build
       @provider.organisations.build
+    end
+
+    def edit
+      provider
     end
 
     def create
@@ -17,15 +26,6 @@ module Support
       else
         render :new
       end
-    end
-
-    def show
-      provider
-      render layout: "provider_record"
-    end
-
-    def edit
-      provider
     end
 
     def update

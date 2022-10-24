@@ -16,6 +16,14 @@ module Publish
         @allocation = RepeatRequestForm.new
       end
 
+      def show
+        @allocation = Allocation.find(params[:id])
+        provider
+        training_provider
+
+        authorize @allocation
+      end
+
       def edit
         @allocation = Allocation.includes(:provider, :accredited_body)
         .find(params[:id])
@@ -49,14 +57,6 @@ module Publish
         @allocation.save if @allocation.changed?
 
         redirect_to publish_provider_recruitment_cycle_allocation_path(id: @allocation.id)
-      end
-
-      def show
-        @allocation = Allocation.find(params[:id])
-        provider
-        training_provider
-
-        authorize @allocation
       end
 
       def initial_request

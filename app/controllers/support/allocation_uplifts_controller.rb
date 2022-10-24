@@ -1,11 +1,11 @@
 module Support
   class AllocationUpliftsController < SupportController
-    def edit
-      allocation_uplift
-    end
-
     def new
       @allocation_uplift = AllocationUplift.new(allocation:)
+    end
+
+    def edit
+      allocation_uplift
     end
 
     def create
