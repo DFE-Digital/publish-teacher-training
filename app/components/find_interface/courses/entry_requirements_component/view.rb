@@ -31,7 +31,7 @@ module FindInterface
       end
 
       def secondary_advisory(course)
-        "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way."
+        "Your degree subject should be in #{course.subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way."
       end
 
       def pending_gcse_content(course)

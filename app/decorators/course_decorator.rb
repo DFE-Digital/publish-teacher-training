@@ -61,6 +61,17 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
+  def subject_name_or_names
+    case object.subjects.size
+    when 1
+      object.subjects.first.subject_name
+    when 2
+      "#{object.subjects.first.subject_name} with #{object.subjects.second.subject_name}"
+    else
+      object.name
+    end
+  end
+
   def has_scholarship_and_bursary?
     object.has_bursary? && object.has_scholarship?
   end

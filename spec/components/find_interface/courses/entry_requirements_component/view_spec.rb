@@ -49,18 +49,21 @@ describe FindInterface::Courses::EntryRequirementsComponent::View, type: :compon
 
   context "when the provider requires grade 5 and the course is secondary" do
     it "renders correct message" do
-      course = build(
+      raw_course = build(
         :course,
         provider: build(:provider, provider_code: "U80"),
         level: "secondary",
       )
+
+      course = raw_course.decorate
+
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
                                "Grade 5 (C) or above in English and maths, or equivalent qualification.",
                              )
       expect(result.text).to include(
-                               "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
+                               "Your degree subject should be in #{course.subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
                              )
     end
 
