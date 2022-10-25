@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AllocationUplift, type: :model do
+RSpec.describe AllocationUplift do
   let(:provider) { create(:provider, :accredited_body) }
   let(:recruitment_cycle) { create(:recruitment_cycle) }
   let(:allocation) { create(:allocation, number_of_places: 1, provider:, recruitment_cycle:) }

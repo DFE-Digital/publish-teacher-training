@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Course, type: :model do
+RSpec.describe Course do
   describe "#is_fee_based?" do
     context "salary based course" do
       subject { create(:course, :salary_type_based) }

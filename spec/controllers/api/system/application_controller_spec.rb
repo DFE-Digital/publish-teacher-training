@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe API::System::ApplicationController, type: :controller do
+describe API::System::ApplicationController do
   let(:credentials) do
     ActionController::HttpAuthentication::Token
       .encode_credentials("Ge32")

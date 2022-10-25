@@ -23,7 +23,7 @@ RSpec.describe API::Public::V1::CoursesController do
       end
 
       context "with no recruitment cycle provided" do
-        let(:next_cycle) { create :recruitment_cycle, :next }
+        let(:next_cycle) { create(:recruitment_cycle, :next) }
 
         before do
           next_cycle

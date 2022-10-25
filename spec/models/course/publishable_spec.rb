@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Course, type: :model do
+describe Course do
   describe "#publishable?" do
     let(:course) { create(:course) }
     let(:site) { create(:site) }

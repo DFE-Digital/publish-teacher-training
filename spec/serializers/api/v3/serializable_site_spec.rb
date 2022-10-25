@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::V3::SerializableSite do
-  let(:site)     { create :site }
+  let(:site)     { create(:site) }
   let(:resource) { API::V3::SerializableSite.new object: site }
 
   it "sets type to sites" do

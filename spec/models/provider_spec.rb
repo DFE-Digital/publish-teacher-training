@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Provider, type: :model do
+describe Provider do
   let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
@@ -336,11 +336,11 @@ describe Provider, type: :model do
   end
 
   describe "accrediting_providers" do
-    let(:provider) { create :provider, accrediting_provider: "N" }
+    let(:provider) { create(:provider, accrediting_provider: "N") }
 
-    let(:accrediting_provider) { create :provider, accrediting_provider: "Y" }
-    let!(:course1) { create :course, accrediting_provider:, provider: }
-    let!(:course2) { create :course, accrediting_provider:, provider: }
+    let(:accrediting_provider) { create(:provider, accrediting_provider: "Y") }
+    let!(:course1) { create(:course, accrediting_provider:, provider:) }
+    let!(:course2) { create(:course, accrediting_provider:, provider:) }
 
     it "returns the course's accrediting provider" do
       expect(provider.accrediting_providers.first).to eq(accrediting_provider)
@@ -366,7 +366,7 @@ describe Provider, type: :model do
 
   describe "#before_create" do
     describe "#set_defaults" do
-      let(:provider) { build :provider }
+      let(:provider) { build(:provider) }
 
       it "sets the year_code from the recruitment_cycle" do
         expect(provider.year_code).to be_nil
@@ -486,22 +486,22 @@ describe Provider, type: :model do
   describe "#accredited_courses" do
     subject { provider.accredited_courses }
 
-    let(:provider) { create :provider, :accredited_body }
+    let(:provider) { create(:provider, :accredited_body) }
     let!(:findable_course) do
-      create :course, name: "findable-course",
+      create(:course, name: "findable-course",
         accrediting_provider: provider,
-        site_statuses: [build(:site_status, :findable)]
+        site_statuses: [build(:site_status, :findable)])
     end
     let!(:discarded_course) do
-      create :course, :deleted,
+      create(:course, :deleted,
         name: "deleted-course",
-        accrediting_provider: provider
+        accrediting_provider: provider)
     end
     let!(:discontinued_course) do
-      create :course,
+      create(:course,
         name: "discontinued-course",
         accrediting_provider: provider,
-        site_statuses: [build(:site_status, :discontinued)]
+        site_statuses: [build(:site_status, :discontinued)])
     end
 
     it { is_expected.to include findable_course }
@@ -513,14 +513,14 @@ describe Provider, type: :model do
 
       let(:last_years_provider) do
         # make provider_codes the same to simulate a rolled over provider
-        create :provider, :previous_recruitment_cycle, provider_code: provider.provider_code
+        create(:provider, :previous_recruitment_cycle, provider_code: provider.provider_code)
       end
       let!(:last_years_course) do
-        create :course,
+        create(:course,
           name: "last-years-course",
           provider: last_years_provider,
           accrediting_provider: provider,
-          site_statuses: [build(:site_status, :discontinued)]
+          site_statuses: [build(:site_status, :discontinued)])
       end
 
       it { is_expected.not_to include last_years_course }

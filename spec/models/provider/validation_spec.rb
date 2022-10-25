@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Provider, type: :model do
+describe Provider do
   let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
@@ -77,7 +77,7 @@ describe Provider, type: :model do
       let(:word_count) { 250 }
       let(:train_with_us) { Faker::Lorem.sentence(word_count:) }
 
-      subject { build :provider, train_with_us: }
+      subject { build(:provider, train_with_us:) }
 
       context "word count within limit" do
         it { is_expected.to be_valid }
@@ -94,7 +94,7 @@ describe Provider, type: :model do
       let(:word_count) { 250 }
       let(:train_with_disability) { Faker::Lorem.sentence(word_count:) }
 
-      subject { build :provider, train_with_disability: }
+      subject { build(:provider, train_with_disability:) }
 
       context "word count within limit" do
         it { is_expected.to be_valid }
@@ -124,7 +124,7 @@ describe Provider, type: :model do
         }
 
         let(:provider) do
-          create :provider
+          create(:provider)
         end
 
         subject {
@@ -171,12 +171,12 @@ describe Provider, type: :model do
 
         let(:courses) do
           accrediting_providers.map do |ap|
-            build :course, accrediting_provider: ap
+            build(:course, accrediting_provider: ap)
           end
         end
 
         let(:provider) do
-          create :provider, courses:
+          create(:provider, courses:)
         end
 
         subject {

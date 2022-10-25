@@ -2,10 +2,10 @@ require "rails_helper"
 
 describe Providers::CopyToRecruitmentCycleService do
   describe "#execute" do
-    let(:site) { build :site }
-    let(:published_course_enrichment) { build :course_enrichment, :published }
+    let(:site) { build(:site) }
+    let(:published_course_enrichment) { build(:course_enrichment, :published) }
     let(:course_enrichments) { [published_course_enrichment] }
-    let(:course) { create :course, enrichments: course_enrichments, provider: }
+    let(:course) { create(:course, enrichments: course_enrichments, provider:) }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) {
       [
@@ -17,14 +17,14 @@ describe Providers::CopyToRecruitmentCycleService do
       ]
     }
     let(:provider) {
-      create :provider,
+      create(:provider,
         :with_users,
         sites: [site],
         ucas_preferences:,
-        contacts:
+        contacts:)
     }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-    let(:new_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:new_provider) do
       new_recruitment_cycle.reload.providers.find_by(
         provider_code: provider.provider_code,
@@ -77,13 +77,13 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "the provider already exists in the new recruitment cycle" do
-      let(:old_recruitment_cycle) { create :recruitment_cycle, :previous }
+      let(:old_recruitment_cycle) { create(:recruitment_cycle, :previous) }
       let(:new_provider) {
-        create :provider, recruitment_cycle: old_recruitment_cycle, provider_code: provider.provider_code
+        create(:provider, recruitment_cycle: old_recruitment_cycle, provider_code: provider.provider_code)
       }
       let(:new_recruitment_cycle) {
-        create :recruitment_cycle, :next,
-          providers: [new_provider]
+        create(:recruitment_cycle, :next,
+          providers: [new_provider])
       }
 
       it "does not make a copy of the provider" do
@@ -164,13 +164,13 @@ describe Providers::CopyToRecruitmentCycleService do
 
     context "provider is not rollable?" do
       let(:provider) {
-        create :provider,
+        create(:provider,
           :with_users,
           sites: [site],
           ucas_preferences:,
-          contacts:
+          contacts:)
       }
-      let(:draft_course_enrichment) { build :course_enrichment }
+      let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }
 
       it "is not rollable" do

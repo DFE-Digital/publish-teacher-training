@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe CourseDecorator do
-  let(:current_recruitment_cycle) { build_stubbed :recruitment_cycle }
-  let(:next_recruitment_cycle) { build_stubbed :recruitment_cycle, :next }
+  let(:current_recruitment_cycle) { build_stubbed(:recruitment_cycle) }
+  let(:next_recruitment_cycle) { build_stubbed(:recruitment_cycle, :next) }
   let(:provider) { build_stubbed(:provider, recruitment_cycle: current_recruitment_cycle) }
   let(:english) { build_stubbed(:secondary_subject, :english) }
   let(:biology) { build_stubbed(:secondary_subject, :biology) }
@@ -311,7 +311,7 @@ describe CourseDecorator do
 
     context "course has one subject" do
       let(:course_subject) { find_or_create :secondary_subject, :computing }
-      let(:course) { build_stubbed :course, subjects: [course_subject] }
+      let(:course) { build_stubbed(:course, subjects: [course_subject]) }
 
       it "return the subject name" do
         expect(decorated_course.subject_name).to eq("Computing")
@@ -648,7 +648,7 @@ describe CourseDecorator do
     let(:subject_page_title) { course.decorate.subject_page_title }
 
     context "a primary course" do
-      let(:course) { build_stubbed :course, level: "primary" }
+      let(:course) { build_stubbed(:course, level: "primary") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a primary subject")
@@ -656,7 +656,7 @@ describe CourseDecorator do
     end
 
     context "a secondary course" do
-      let(:course) { build_stubbed :course, level: "secondary" }
+      let(:course) { build_stubbed(:course, level: "secondary") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a secondary subject")
@@ -664,7 +664,7 @@ describe CourseDecorator do
     end
 
     context "a further education course" do
-      let(:course) { build_stubbed :course, level: "further_education" }
+      let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a subject")
@@ -676,7 +676,7 @@ describe CourseDecorator do
     let(:subject_input_label) { course.decorate.subject_input_label }
 
     context "a primary course" do
-      let(:course) { build_stubbed :course, level: "primary" }
+      let(:course) { build_stubbed(:course, level: "primary") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Primary subject")
@@ -684,7 +684,7 @@ describe CourseDecorator do
     end
 
     context "a secondary course" do
-      let(:course) { build_stubbed :course, level: "secondary" }
+      let(:course) { build_stubbed(:course, level: "secondary") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Secondary subject")
@@ -692,7 +692,7 @@ describe CourseDecorator do
     end
 
     context "a further education course" do
-      let(:course) { build_stubbed :course, level: "further_education" }
+      let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Pick a subject")

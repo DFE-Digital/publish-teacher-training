@@ -48,12 +48,12 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
 
         context "with next recruitment cycle specified" do
-          let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+          let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
           let(:next_provider) do
-            create :provider,
+            create(:provider,
               organisations: [organisation],
               provider_code: provider.provider_code,
-              recruitment_cycle: next_recruitment_cycle
+              recruitment_cycle: next_recruitment_cycle)
           end
 
           before do

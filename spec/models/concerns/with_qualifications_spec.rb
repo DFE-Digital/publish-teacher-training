@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe WithQualifications, type: :model do
+describe WithQualifications do
   specs = [
     qts: { values: [:qts], description: "QTS" },
     pgce: { values: [:pgce], description: "PGCE" },

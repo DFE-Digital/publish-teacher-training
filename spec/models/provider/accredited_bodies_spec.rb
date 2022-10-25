@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Provider, type: :model do
+describe Provider do
   let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
@@ -42,7 +42,7 @@ describe Provider, type: :model do
     end
 
     context "with an accrediting provider (via courses)" do
-      let(:accrediting_provider) { build :provider, provider_code: "AP1" }
+      let(:accrediting_provider) { build(:provider, provider_code: "AP1") }
       let(:courses) { [build(:course, course_code: "P33P", accrediting_provider:)] }
 
       its(:length) { is_expected.to be(1) }

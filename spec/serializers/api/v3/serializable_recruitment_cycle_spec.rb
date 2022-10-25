@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::V3::SerializableRecruitmentCycle do
-  let(:recruitment_cycle) { create :recruitment_cycle }
+  let(:recruitment_cycle) { create(:recruitment_cycle) }
   let(:resource) { described_class.new object: recruitment_cycle }
 
   it "sets type to recruitment_cycles" do

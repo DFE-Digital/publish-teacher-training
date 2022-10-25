@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module Find
-  describe "/find/sitemap.xml", type: :request do
+  describe "/find/sitemap.xml" do
     let(:provider_code) { "T92" }
     let(:provider) { build(:provider, provider_code:) }
     let(:changed_at) { Time.zone.now }

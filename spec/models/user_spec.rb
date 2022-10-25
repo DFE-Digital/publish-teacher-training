@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe User, type: :model do
+describe User do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
   describe "associations" do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe SessionsController, type: :controller do
+describe SessionsController do
   include DfESignInUserHelper
   let(:user) { create(:user) }
 

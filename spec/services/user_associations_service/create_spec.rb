@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycles: false } do
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
   describe "#call" do
     context "when adding to a single organisation" do

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe ErrorHandlers::Base, type: :controller do
+describe ErrorHandlers::Base do
   controller(ActionController::Base) do
     include ErrorHandlers::Base
 

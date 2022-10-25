@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe Find::ProviderHelper, type: :helper do
+describe Find::ProviderHelper do
   describe "#select_provider_options" do
     let(:providers) { build_list(:provider, 3) }
 

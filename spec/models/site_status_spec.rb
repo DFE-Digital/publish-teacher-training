@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe SiteStatus, type: :model do
+RSpec.describe SiteStatus do
   it_behaves_like "Touch course", :site_status
 
   RSpec::Matchers.define :have_vacancies do

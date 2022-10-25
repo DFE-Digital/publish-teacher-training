@@ -16,8 +16,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       "Description" => description,
     }]
   end
-  let(:accrediting_provider) { create :provider }
-  let(:course) { create :course, accrediting_provider: }
+  let(:accrediting_provider) { create(:provider) }
+  let(:course) { create(:course, accrediting_provider:) }
   let(:courses) { [course] }
   let!(:provider) do
     create(:provider,
@@ -112,12 +112,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   context "with two recruitment cycles" do
-    let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:next_provider) {
-      create :provider,
+      create(:provider,
         users: [user],
         provider_code: provider.provider_code,
-        recruitment_cycle: next_recruitment_cycle
+        recruitment_cycle: next_recruitment_cycle)
     }
 
     describe "making a request without specifying a recruitment cycle" do

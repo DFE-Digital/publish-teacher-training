@@ -13,7 +13,7 @@ RSpec.describe CSVImports::FakeProvidersImport do
       "name,code,type,accredited_body\n\"Provider A\",ABC,scitt,false"
     end
 
-    it "works" do
+    it "works correctly" do
       described_class.new("csv_file.csv").execute
       created_provider = Provider.last
 

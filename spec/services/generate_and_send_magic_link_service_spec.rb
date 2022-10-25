@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe GenerateAndSendMagicLinkService do
-  let(:user) { create :user }
+  let(:user) { create(:user) }
   let(:uuid) { "not-a-random-uuid" }
 
   it "creates and saves magic link token for the user" do

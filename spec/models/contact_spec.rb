@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Contact, type: :model do
+describe Contact do
   it { is_expected.to belong_to(:provider) }
 
   describe "type" do

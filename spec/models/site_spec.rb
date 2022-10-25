@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Site, type: :model do
+describe Site do
   include ActiveJob::TestHelper
 
   let(:provider) { create(:provider) }
