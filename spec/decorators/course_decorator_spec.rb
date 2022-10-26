@@ -319,6 +319,23 @@ describe CourseDecorator do
     end
   end
 
+  describe "#subject_name_or_names" do
+    context "course has more than one subject" do
+      it "returns both subjects names seperated by a 'with'" do
+        expect(decorated_course.subject_name_or_names).to eq("English with Mathematics")
+      end
+    end
+
+    context "course has one subject" do
+      let(:course_subject) { find_or_create :secondary_subject, :computing }
+      let(:course) { build_stubbed(:course, subjects: [course_subject]) }
+
+      it "return the subject name" do
+        expect(decorated_course.subject_name_or_names).to eq("Computing")
+      end
+    end
+  end
+
   #   describe "#bursary_requirements" do
   #     let(:subject) { decorated_course.bursary_requirements }
 

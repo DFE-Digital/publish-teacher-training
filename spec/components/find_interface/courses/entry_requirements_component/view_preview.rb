@@ -32,12 +32,13 @@ module FindInterface::Courses::EntryRequirementsComponent
         accept_science_gcse_equivalency: true,
         additional_gcse_equivalencies: "much much more",
         personal_qualities: "Personal Qualities Text Goes Here",
-        other_requirements: "Other Requirements Text Goes Here")
+        other_requirements: "Other Requirements Text Goes Here",
+        subject_name_or_names: "Biology")
     end
 
     class FakeCourse
       include ActiveModel::Model
-      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements)
+      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :subject_name_or_names)
 
       def enrichment_attribute(params)
         send(params)
