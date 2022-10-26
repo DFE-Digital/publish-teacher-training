@@ -50,7 +50,7 @@
   }
 
   &::before {
-    background-image: url("../images/icon-cross.svg");
+    background-image: url('icon-cross.svg');
     content: "";
     display: inline-block;
     height: 14px;

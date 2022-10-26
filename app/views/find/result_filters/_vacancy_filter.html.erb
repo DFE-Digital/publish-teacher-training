@@ -5,13 +5,13 @@
       <%= form.check_box(
         :hasvacancies, {
           checked: @filters_view.has_vacancies_checked? || @filters_view.default_with_vacancies_to_true,
-          data: { qa: 'with_vacancies' },
-          class: 'govuk-checkboxes__input',
+          data: { qa: "with_vacancies" },
+          class: "govuk-checkboxes__input",
         },
-        'true',
-        'false'
+        "true",
+        "false"
       ) %>
-      <%= form.label(:hasvacancies_true, { for: 'hasvacancies' }, class: 'govuk-label govuk-checkboxes__label') do %>
+      <%= form.label(:hasvacancies_true, { for: "hasvacancies" }, class: "govuk-label govuk-checkboxes__label") do %>
         Only show courses with vacancies
       <% end %>
     </div>

@@ -4,11 +4,11 @@
     <div class="govuk-checkboxes__item">
       <%= form.check_box(
             :can_sponsor_visa,
-            { checked: @filters_view.visa_checked?, class: 'govuk-checkboxes__input' },
-            'true',
+            { checked: @filters_view.visa_checked?, class: "govuk-checkboxes__input" },
+            "true",
             nil,
           ) %>
-      <%= form.label(:can_sponsor_visa, class: 'govuk-label govuk-checkboxes__label') do %>
+      <%= form.label(:can_sponsor_visa, class: "govuk-label govuk-checkboxes__label") do %>
         Only show courses with visa sponsorship
       <% end %>
     </div>

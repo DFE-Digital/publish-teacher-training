@@ -1,4 +1,4 @@
-<%= render FindInterface::LocationSubjectFilterComponent.new(results: results) %>
+<%= render FindInterface::LocationSubjectFilterComponent.new(results:) %>
 
 <h1 class="govuk-heading-xl" data-qa="heading">
   <%= "#{results.number_of_courses_string} found" %>
@@ -8,25 +8,24 @@
 
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <%= render FindInterface::Results::FilterComponent.new(results: results) %>
+    <%= render FindInterface::Results::FilterComponent.new(results:) %>
   </div>
   <div class="app-filter-layout__content">
 
     <div class="app-promoted-link">
-      <%= govuk_link_to 'Talk to teacher training providers at an event near you',
-                        t('get_into_teaching.url_teacher_training_events')
-      %>.
+      <%= govuk_link_to "Talk to teacher training providers at an event near you",
+                        t("find.get_into_teaching.url_teacher_training_events") %>.
     </div>
 
-    <%= render FindInterface::Results::NoResultsComponent.new(results: results) %>
-    <%= render FindInterface::Results::SortByComponent.new(results: results) %>
-    <%= render FindInterface::Results::SuggestedSearchesComponent.new(results: results) %>
+    <%= render FindInterface::Results::NoResultsComponent.new(results:) %>
+    <%= render FindInterface::Results::SortByComponent.new(results:) %>
+    <%= render FindInterface::Results::SuggestedSearchesComponent.new(results:) %>
 
     <% if results.has_results? %>
       <ul class="app-search-results">
         <% courses.each do |course| %>
           <%= render FindInterface::Results::SearchResultComponent.new(
-            course: course,
+            course:,
             has_sites: results.has_sites?(course),
             filtered_by_location: results.location_filter?,
           ) %>

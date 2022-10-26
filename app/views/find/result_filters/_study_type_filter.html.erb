@@ -4,11 +4,11 @@
     <div class="govuk-checkboxes__item">
       <%= form.check_box(
         :fulltime,
-        { checked: @filters_view.full_time_checked? || @filters_view.default_study_types_to_true, class: 'govuk-checkboxes__input' },
-        'true',
+        { checked: @filters_view.full_time_checked? || @filters_view.default_study_types_to_true, class: "govuk-checkboxes__input" },
+        "true",
         nil,
       ) %>
-      <%= form.label :fulltime, class: 'govuk-label govuk-checkboxes__label' do %>
+      <%= form.label :fulltime, class: "govuk-label govuk-checkboxes__label" do %>
         Full time (12 months)
       <% end %>
     </div>
@@ -16,11 +16,11 @@
     <div class="govuk-checkboxes__item">
       <%= form.check_box(
         :parttime,
-        { checked: @filters_view.part_time_checked? || @filters_view.default_study_types_to_true, class: 'govuk-checkboxes__input' },
-        'true',
+        { checked: @filters_view.part_time_checked? || @filters_view.default_study_types_to_true, class: "govuk-checkboxes__input" },
+        "true",
         nil,
       ) %>
-      <%= form.label :parttime, class: 'govuk-label govuk-checkboxes__label' do %>
+      <%= form.label :parttime, class: "govuk-label govuk-checkboxes__label" do %>
         Part time (18 to 24 months)
       <% end %>
     </div>

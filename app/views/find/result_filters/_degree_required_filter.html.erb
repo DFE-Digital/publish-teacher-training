@@ -3,29 +3,24 @@
 
   <div class="govuk-radios govuk-radios--small">
     <%= form.govuk_radio_button :degree_required,
-      'show_all_courses',
-      label: { text: '2:1 or First' },
-      data: { qa: 'show_all_courses' },
-      checked: @filters_view.all_courses_radio_chosen? || @filters_view.default_all_courses_radio_to_true
-    %>
+      "show_all_courses",
+      label: { text: "2:1 or First" },
+      data: { qa: "show_all_courses" },
+      checked: @filters_view.all_courses_radio_chosen? || @filters_view.default_all_courses_radio_to_true %>
     <%= form.govuk_radio_button :degree_required,
-      'two_two',
-      label: { text: '2:2' },
-      data: { qa: 'two_two' },
-      checked: @filters_view.two_two_radio_chosen?
-    %>
+      "two_two",
+      label: { text: "2:2" },
+      data: { qa: "two_two" },
+      checked: @filters_view.two_two_radio_chosen? %>
     <%= form.govuk_radio_button :degree_required,
-      'third_class',
-      label: { text: 'Third' },
-      data: { qa: 'third_class' },
-      checked: @filters_view.third_class_radio_chosen?
-    %>
+      "third_class",
+      label: { text: "Third" },
+      data: { qa: "third_class" },
+      checked: @filters_view.third_class_radio_chosen? %>
     <%= form.govuk_radio_button :degree_required,
-      'not_required',
-      label: { text: 'Pass (Ordinary degree)' },
-      data: { qa: 'not_required' },
-      checked: @filters_view.any_degree_grade_radio_chosen?
-    %>
+      "not_required",
+      label: { text: "Pass (Ordinary degree)" },
+      data: { qa: "not_required" },
+      checked: @filters_view.any_degree_grade_radio_chosen? %>
   </div>
 </fieldset>
-

@@ -1,9 +1,9 @@
-<%= content_for :page_title, 'Pick a provider' %>
+<%= content_for :page_title, "Pick a provider" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l" data-qa="heading">Pick a provider</h1>
-    <p class="govuk-body">You searched for ‘<%= params['query'] %>’</p>
+    <p class="govuk-body">You searched for ‘<%= params["query"] %>’</p>
     <p class="govuk-body">We found these providers which matched your search:</p>
     <ul class="govuk-list govuk-list--bullet">
       <% @provider_suggestions.each do |provider| %>
@@ -11,7 +11,7 @@
           <%= govuk_link_to(
             "#{provider.provider_name} (#{provider.provider_code})",
             start_subject_path(filter_params_without_previous_parameters.merge(query: provider.provider_name)),
-            { data: { qa: 'provider_suggestion__link' } },
+            { data: { qa: "provider_suggestion__link" } },
           ) %>
         </li>
       <% end %>
@@ -20,18 +20,18 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <div>
-      <%= govuk_details(summary_text: 'Try another provider') do %>
-        <%= form_with url: provider_path, method: :get, data: { 'ga-event-form' => 'Provider' } do |form| %>
+      <%= govuk_details(summary_text: "Try another provider") do %>
+        <%= form_with url: provider_path, method: :get, data: { "ga-event-form" => "Provider" } do |form| %>
           <fieldset class="govuk-fieldset">
             <div class="govuk-form-group">
-              <%= form.label :query, class: 'govuk-label' do %>
+              <%= form.label :query, class: "govuk-label" do %>
                 <strong>School, university or other training provider</strong>
                 <div class="govuk-hint govuk-!-margin-bottom-0">Enter the name or provider code</div>
               <% end %>
-              <%= form.text_field :query, class: 'govuk-input' %>
+              <%= form.text_field :query, class: "govuk-input" %>
             </div>
 
-            <%= form.submit 'Search again', name: nil, class: 'govuk-button' %>
+            <%= form.submit "Search again", name: nil, class: "govuk-button" %>
           </fieldset>
         <% end %>
       <% end %>

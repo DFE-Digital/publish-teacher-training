@@ -6,15 +6,15 @@
       <%= form.check_box(
         :qualifications,
         {
-          class: 'govuk-checkboxes__input',
+          class: "govuk-checkboxes__input",
           multiple: true,
-          data: { qa: 'qts_only' },
+          data: { qa: "qts_only" },
           checked: @filters_view.qts_only_checked? || @filters_view.qualification_params_nil?,
         },
-        'QtsOnly',
+        "QtsOnly",
         false,
       ) %>
-      <%= form.label :qualifications, value: 'QtsOnly', class: 'govuk-label govuk-checkboxes__label' do %>
+      <%= form.label :qualifications, value: "QtsOnly", class: "govuk-label govuk-checkboxes__label" do %>
         QTS only
       <% end %>
     </div>
@@ -23,15 +23,15 @@
       <%= form.check_box(
         :qualifications,
         {
-          class: 'govuk-checkboxes__input',
+          class: "govuk-checkboxes__input",
           multiple: true,
-          data: { qa: 'pgde_pgce_with_qts' },
+          data: { qa: "pgde_pgce_with_qts" },
           checked: @filters_view.pgde_pgce_with_qts_checked? || @filters_view.qualification_params_nil?,
         },
-        'PgdePgceWithQts',
+        "PgdePgceWithQts",
         false,
       ) %>
-      <%= form.label :qualifications, value: 'PgdePgceWithQts', class: 'govuk-label govuk-checkboxes__label' do %>
+      <%= form.label :qualifications, value: "PgdePgceWithQts", class: "govuk-label govuk-checkboxes__label" do %>
         PGCE (or PGDE) with QTS
       <% end %>
     </div>
@@ -40,15 +40,15 @@
       <%= form.check_box(
         :qualifications,
         {
-          class: 'govuk-checkboxes__input',
+          class: "govuk-checkboxes__input",
           multiple: true,
-          data: { qa: 'other' },
+          data: { qa: "other" },
           checked: @filters_view.other_checked? || @filters_view.qualification_params_nil?,
         },
-        'Other',
+        "Other",
         false,
       ) %>
-      <%= form.label :qualifications, value: 'Other', class: 'govuk-label govuk-checkboxes__label' do %>
+      <%= form.label :qualifications, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
         Further education (PGCE or PGDE without QTS)
       <% end %>
     </div>

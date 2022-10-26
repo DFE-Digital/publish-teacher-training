@@ -4,7 +4,7 @@
   <ul class="govuk-list govuk-list--bullet">
     <% results.suggested_search_links.each do |link| %>
       <li data-qa="suggested_search_link">
-        <%= govuk_link_to link.text, link.url, data: { qa: 'link' } %><%= link.suffix %>
+        <%= govuk_link_to link.text, link.url, data: { qa: "link" } %><%= link.suffix %>
       </li>
     <% end %>
   </ul>

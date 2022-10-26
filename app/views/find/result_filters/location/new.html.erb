@@ -1,11 +1,11 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(**{
-    text: 'Back to search results',
+    text: "Back to search results",
     href: results_path(@results_filter_query_parameters),
     html_attributes: {
-      data: { qa: 'page-back' },
+      data: { qa: "page-back" },
     },
   }) %>
 <% end %>
 
-<%= render 'result_filters/location/form', submit_button_text: 'Find courses' %>
+<%= render "result_filters/location/form", submit_button_text: "Find courses" %>

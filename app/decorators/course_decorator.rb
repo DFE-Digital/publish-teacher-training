@@ -106,11 +106,6 @@ class CourseDecorator < ApplicationDecorator
       has_excluded_course_name?
   end
 
-  def has_early_career_payments?
-    object.subjects.present? &&
-      object.subjects.any? { |subject| subject.attributes["early_career_payments"].present? }
-  end
-
   def bursary_amount
     find_max_funding_for("bursary_amount")
   end

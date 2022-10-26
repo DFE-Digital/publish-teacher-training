@@ -5,7 +5,7 @@
 <% end %>
 
 <% if params["subject_codes"].present? %>
-  <% request.params['subject_codes'].each do |subject_code| %>
+  <% request.params["subject_codes"].each do |subject_code| %>
     <%= form.hidden_field(:subject_codes, multiple: true, value: subject_code) %>
   <% end %>
 <% end %>

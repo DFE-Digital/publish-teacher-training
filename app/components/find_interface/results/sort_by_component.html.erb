@@ -2,21 +2,21 @@
   <% if results.location_filter? %>
     <p class="govuk-body">Sorted by distance</p>
   <% else %>
-    <%= form_with(url: find_results_path, method: 'get', skip_enforcing_utf8: true, class: 'app-search-results-header__sort', data: { qa: 'sort-form' }) do |form| %>
-      <%= render 'find/shared/hidden_fields', form: form, exclude_keys: %w[sortby] %>
-      <%= form.label(:sortby, 'Sorted by', class: 'govuk-label govuk-!-display-inline-block') %>
+    <%= form_with(url: find_results_path, method: "get", skip_enforcing_utf8: true, class: "app-search-results-header__sort", data: { qa: "sort-form" }) do |form| %>
+      <%= render "find/shared/hidden_fields", form:, exclude_keys: %w[sortby] %>
+      <%= form.label(:sortby, "Sorted by", class: "govuk-label govuk-!-display-inline-block") %>
       <%= form.select(
         :sortby,
-        options_for_select(results.sort_options, selected: params['sortby'].to_i || 0),
+        options_for_select(results.sort_options, selected: params["sortby"].to_i || 0),
         {},
         {
-          class: 'govuk-select',
-          onchange: 'this.form.submit()',
-          role: 'listbox',
-          data: { qa: 'sort-form__options' },
+          class: "govuk-select",
+          onchange: "this.form.submit()",
+          role: "listbox",
+          data: { qa: "sort-form__options" },
         },
       ) %>
-      <%= form.submit('Update', name: nil, class: 'govuk-button', data: { qa: 'sort-form__submit' }) %>
+      <%= form.submit("Update", name: nil, class: "govuk-button", data: { qa: "sort-form__submit" }) %>
     <% end %>
   <% end %>
 </div>

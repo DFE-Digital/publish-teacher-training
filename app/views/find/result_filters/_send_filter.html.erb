@@ -4,11 +4,11 @@
     <div class="govuk-checkboxes__item" data-qa="subject">
       <%= form.check_box(
         :senCourses,
-        { checked: @filters_view.send_checked?, data: { qa: 'send_filter__checkbox' }, class: 'govuk-checkboxes__input' },
-        'true',
+        { checked: @filters_view.send_checked?, data: { qa: "send_filter__checkbox" }, class: "govuk-checkboxes__input" },
+        "true",
         nil,
       ) %>
-      <%= form.label(:subjects, { for: 'senCourses', data: { qa: 'subject__name' } }, class: 'govuk-label govuk-checkboxes__label') do %>
+      <%= form.label(:subjects, { for: "senCourses", data: { qa: "subject__name" } }, class: "govuk-label govuk-checkboxes__label") do %>
         Only show courses with a SEND specialism
       <% end %>
     </div>

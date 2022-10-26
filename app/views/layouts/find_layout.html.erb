@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
   <head>
-    <title><%= content_for(:page_title) %> <%= t("service_name.find") %> - GOV.UK</title>
+    <title><%= yield :page_title %> - <%= t("service_name.find") %> - GOV.UK</title>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>

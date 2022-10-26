@@ -5,11 +5,11 @@
     <div class="govuk-checkboxes__item" data-qa="subject">
       <%= form.check_box(
         :funding,
-        { checked: @filters_view.funding_checked?, class: 'govuk-checkboxes__input' },
-        '8',
+        { checked: @filters_view.funding_checked?, class: "govuk-checkboxes__input" },
+        "8",
         nil,
       ) %>
-      <%= form.label(:funding, { for: 'funding' }, class: 'govuk-label govuk-checkboxes__label') do %>
+      <%= form.label(:funding, { for: "funding" }, class: "govuk-label govuk-checkboxes__label") do %>
         Only show courses that come with a salary
       <% end %>
     </div>
