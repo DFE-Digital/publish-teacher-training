@@ -24,6 +24,9 @@ RUN apk add --update --no-cache tzdata && \
 RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses shared-mime-info
 
+# Remove once base image ruby:3.1-alpine3.15 has been updated with latest expat
+RUN apk add --no-cache expat=2.5.0-r0
+
 ENV APP_HOME /app
 
 RUN mkdir $APP_HOME
