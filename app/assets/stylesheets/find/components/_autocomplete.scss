@@ -1,0 +1,20 @@
+.autocomplete__wrapper,
+.autocomplete__input,
+.autocomplete__hint {
+  font-family: $govuk-font-family;
+}
+
+.govuk-form-group--error {
+  .autocomplete__input {
+    border-color: $govuk-error-colour;
+  }
+
+  .autocomplete__input--focused {
+    border-color: $govuk-input-border-colour;
+  }
+}
+
+.autocomplete__dropdown-arrow-down {
+  pointer-events: none;
+  z-index: 0;
+}

@@ -1,6 +1,7 @@
 // Entry point for your Sass build
 @import "./govuk_style_setup";
-@import "components/all";
+@import "find/components/all";
+@import "find/patterns/filters";
 @import "js-enabled";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
 @import "autocomplete";

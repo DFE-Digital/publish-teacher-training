@@ -1,0 +1,9 @@
+body:not(.js-enabled) {
+  .govuk-accordion__section-header {
+    padding-top: govuk-spacing(3);
+  }
+
+  .govuk-checkboxes {
+    margin-bottom: govuk-spacing(3);
+  }
+}

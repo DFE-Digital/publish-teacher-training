@@ -1,0 +1,86 @@
+.app-search-results {
+  @include govuk-responsive-padding(4, "top");
+  margin: 0;
+  padding-left: 0;
+  border-top: 1px solid $govuk-border-colour;
+}
+
+.app-search-results__item {
+  @include govuk-responsive-margin(4, "bottom");
+  border-bottom: 1px solid $govuk-border-colour;
+  display: block;
+}
+
+.app-search-result__item-title {
+  @include govuk-font($size: 24, $weight: bold);
+  @include govuk-responsive-margin(4, "bottom");
+  margin-top: 0;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.app-search-result__provider-name {
+  @include govuk-font($size: 19, $weight: "bold");
+}
+
+.app-search-result__course-name {
+  display: block;
+  text-decoration: underline;
+}
+
+.app-search-results-header {
+  border-top: 1px solid $govuk-border-colour;
+
+  @include govuk-media-query($from: "desktop") {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: govuk-spacing(2) 0;
+  }
+
+  .govuk-body {
+    margin: govuk-spacing(2) 0;
+  }
+}
+
+.app-search-results-header__sort {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .govuk-label {
+    padding: govuk-spacing(2) 0;
+    margin: 0 govuk-spacing(2) 0 0;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .govuk-select {
+    flex: 1 1 auto;
+    margin: govuk-spacing(2);
+    margin-left: 0;
+
+    @include govuk-media-query($from: "desktop") {
+      flex: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .govuk-button {
+    flex: 1 0 0;
+    margin: 0 govuk-spacing(2) 0 0;
+    width: auto;
+
+    @include govuk-media-query($from: "desktop") {
+      flex: 0;
+    }
+
+    .js-enabled & {
+      display: none;
+    }
+  }
+}

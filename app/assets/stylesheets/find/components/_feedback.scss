@@ -1,0 +1,10 @@
+.app-feedback {
+  @include govuk-clearfix;
+  align-items: center;
+  background-color: govuk-colour("light-grey");
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  outline: 0;
+  padding: govuk-spacing(2) govuk-spacing(5);
+  min-height: 80px;
+}

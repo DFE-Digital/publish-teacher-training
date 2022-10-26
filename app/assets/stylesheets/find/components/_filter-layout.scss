@@ -1,0 +1,41 @@
+.app-filter-layout {
+  @include govuk-clearfix;
+}
+
+.app-filter-layout__filter {
+  @include govuk-media-query(desktop) {
+    float: left;
+    margin-right: govuk-spacing(6);
+    max-width: govuk-grid-width("one-third");
+  }
+}
+
+.js-enabled .app-filter-layout__filter {
+  outline: 0 none;
+
+  @include govuk-media-query($until: desktop) {
+    background-color: govuk-colour("light-grey");
+    bottom: govuk-spacing(1);
+    border: 1px solid govuk-colour("mid-grey");
+    max-width: 310px;
+    min-width: 260px;
+    width: 100%;
+    overflow-y: scroll;
+    position: fixed;
+    right: govuk-spacing(1);
+    top: govuk-spacing(1);
+    z-index: 100;
+
+    &:focus {
+      outline: $govuk-focus-width solid $govuk-focus-colour;
+    }
+  }
+}
+
+.app-filter-layout__content {
+  @include govuk-media-query(desktop) {
+    float: right;
+    max-width: calc(#{govuk-grid-width("two-thirds")} - #{govuk-spacing(6)});
+    width: 100%;
+  }
+}

@@ -1,0 +1,45 @@
+.app-toggle__link {
+  @include govuk-font($size: 19, $weight: bold);
+  @include govuk-responsive-margin(6, "bottom");
+  background-color: govuk-colour("light-grey");
+  background-image: url("../images/option-select-toggle-sprite.png");
+  background-position: right -75px;
+  background-repeat: no-repeat;
+  border: none;
+  color: $govuk-text-colour;
+  display: none;
+  padding: 8px;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+
+  &.app-toggle__link--open {
+    background-position: right 5px;
+  }
+
+  .js-enabled & {
+    display: block;
+
+    // hide for desktop only
+    @include govuk-media-query($from: tablet) {
+      display: none;
+    }
+  }
+}
+
+.app-toggle__target {
+  display: block;
+
+  .js-enabled & {
+    display: none;
+
+    // always show for desktop
+    @include govuk-media-query($from: tablet) {
+      display: block;
+    }
+
+    &.app-toggle__target--open {
+      display: block;
+    }
+  }
+}

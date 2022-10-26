@@ -1,0 +1,16 @@
+<fieldset class="govuk-fieldset app-filter__group" data-qa="filters__visa">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Visa sponsorship</legend>
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+    <div class="govuk-checkboxes__item">
+      <%= form.check_box(
+            :can_sponsor_visa,
+            { checked: @filters_view.visa_checked?, class: 'govuk-checkboxes__input' },
+            'true',
+            nil,
+          ) %>
+      <%= form.label(:can_sponsor_visa, class: 'govuk-label govuk-checkboxes__label') do %>
+        Only show courses with visa sponsorship
+      <% end %>
+    </div>
+  </div>
+</fieldset>

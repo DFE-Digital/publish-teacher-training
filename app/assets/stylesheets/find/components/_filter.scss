@@ -1,0 +1,96 @@
+.app-filter {
+  background-color: govuk-colour("light-grey");
+}
+
+.app-filter__header {
+  background-color: govuk-colour("light-grey");
+  display: flex;
+  justify-content: space-between;
+  padding: govuk-spacing(2) govuk-spacing(3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  @include govuk-media-query($from: desktop) {
+    position: static;
+  }
+
+  [class^=govuk-heading-] {
+    margin-bottom: 0;
+  }
+}
+
+.app-filter__content {
+  padding: govuk-spacing(4) govuk-spacing(3);
+}
+
+.app-filter__close {
+  @include govuk-font(19);
+
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  color: $govuk-text-colour;
+  cursor: pointer;
+  margin: #{govuk-spacing(1) * -1};
+  padding: govuk-spacing(1);
+
+  &:focus {
+    background-color: $govuk-focus-colour;
+    color: $govuk-focus-text-colour;
+    box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+    outline: none;
+  }
+
+  // Fix unwanted button padding in Firefox
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &::before {
+    background-image: url("../images/icon-cross.svg");
+    content: "";
+    display: inline-block;
+    height: 14px;
+    margin-right: govuk-spacing(1);
+    position: relative;
+    top: -2px; // Alignment tweak
+    vertical-align: middle;
+    width: 14px;
+  }
+}
+
+.app-filter__group {
+  border-bottom: 1px solid $govuk-border-colour;
+  margin-bottom: govuk-spacing(3);
+  padding-bottom: govuk-spacing(2);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .govuk-fieldset__legend {
+    margin-bottom: govuk-spacing(1);
+  }
+
+  .govuk-form-group {
+    margin-bottom: 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .govuk-checkboxes__label,
+  .govuk-radios__label {
+    @include govuk-font(16);
+
+    &::before {
+      background-color: govuk-colour("white");
+    }
+  }
+}

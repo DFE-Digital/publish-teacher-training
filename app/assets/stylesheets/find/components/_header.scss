@@ -1,0 +1,9 @@
+.govuk-header__container {
+  .app-header--development & {
+    border-bottom-color: govuk-colour("dark-grey");
+  }
+
+  .app-header--sandbox & {
+    border-bottom-color: govuk-colour("purple");
+  }
+}
