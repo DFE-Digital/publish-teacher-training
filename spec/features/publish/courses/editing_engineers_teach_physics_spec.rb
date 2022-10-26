@@ -35,6 +35,27 @@ feature "updating engineers teach physics", { can_edit_current_and_next_cycles: 
     # TODO: success message?
   end
 
+  scenario "updating subject from physics to another subject resets campaign_name" do
+    and_there_is_a_secondary_course_i_want_to_edit
+    when_i_visit_the_edit_course_subject_page
+    when_i_select_a_subject(:physics)
+    and_i_click_continue
+    then_i_am_met_with_the_edit_engineers_teach_physics_page
+    and_i_select_an_option
+    and_i_click_continue
+    then_i_am_met_with_course_details_page
+    when_i_visit_the_edit_course_subject_page
+    when_i_select_a_subject(:latin)
+    and_i_click_continue
+    then_i_am_met_with_course_details_page
+    when_i_visit_the_edit_course_subject_page
+    when_i_select_a_subject(:physics)
+    and_i_click_continue
+    then_i_am_met_with_the_edit_engineers_teach_physics_page
+    and_i_click_continue
+    then_i_see_an_error_message
+  end
+
 private
 
   def then_i_see_an_error_message
@@ -109,6 +130,8 @@ private
     case subject_type
     when :physics
       find_or_create(:secondary_subject, :physics)
+    when :latin
+      find_or_create(:secondary_subject, :latin)
     when :modern_languages
       find_or_create(:secondary_subject, :modern_languages)
     end
