@@ -255,6 +255,9 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.0)
+    faraday-net_http_persistent (2.1.0)
+      faraday (~> 2.5)
+      net-http-persistent (~> 4.0)
     ffi (1.15.5)
     formatador (1.1.0)
     fugit (1.7.1)
@@ -402,6 +405,8 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     nenv (0.3.0)
+    net-http-persistent (4.0.1)
+      connection_pool (~> 2.2)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -738,6 +743,7 @@ DEPENDENCIES
   fakefs
   faker
   faraday
+  faraday-net_http_persistent (~> 2.0)
   geokit-rails
   google-cloud-bigquery
   govuk-components
