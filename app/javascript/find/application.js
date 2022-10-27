@@ -5,12 +5,19 @@ import { initAll } from 'govuk-frontend'
 
 import setupAutocomplete from './setup-autocomplete'
 import { FilterToggleButton } from './filter-toggle-button'
+import initAutocomplete from './autocomplete'
 
 window.jQuery = jQuery
 window.$ = jQuery
 
 initAll()
 setupAutocomplete('find-courses-by-location-or-training-provider-form-school-uni-or-provider-query-field')
+
+initAutocomplete({
+  element: 'location-autocomplete',
+  input: 'find-courses-by-location-or-training-provider-form-city-town-postcode-query-field',
+  path: '/find/location-suggestions'
+})
 
 const filterToggleButton = new FilterToggleButton({
   bigModeMediaQuery: '(min-width: 48.063em)',
