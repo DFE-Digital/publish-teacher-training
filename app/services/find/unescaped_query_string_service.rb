@@ -1,14 +1,10 @@
 module Find
   class UnescapedQueryStringService
+    include ServicePattern
+
     def initialize(base_path:, parameters:)
       @base_path = base_path
       @parameters = parameters
-    end
-
-    class << self
-      def call(...)
-        new(...).call
-      end
     end
 
     def call
