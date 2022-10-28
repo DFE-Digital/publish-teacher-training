@@ -42,7 +42,7 @@ module FindInterface
       end
 
       context "Wales" do
-        it "renders Scottish teacher training website" do
+        it "renders Welsh teacher training website" do
           results_view = instance_double(
             Find::ResultsView,
             country: "Wales",
