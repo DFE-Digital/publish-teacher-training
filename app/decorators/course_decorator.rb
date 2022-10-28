@@ -84,16 +84,16 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def bursary_requirements
-  #     requirements = ["a degree of 2:2 or above in any subject"]
+  def bursary_requirements
+    requirements = ["a degree of 2:2 or above in any subject"]
 
-  #     if object.subjects.any? { |subject| subject.subject_name.downcase == "primary with mathematics" }
-  #       mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-  #       requirements.push(mathematics_requirement)
-  #     end
+    if object.subjects.any? { |subject| subject.subject_name.downcase == "primary with mathematics" }
+      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
+      requirements.push(mathematics_requirement)
+    end
 
-  #     requirements
-  #   end
+    requirements
+  end
 
   def bursary_only?
     object.has_bursary? && !object.has_scholarship?
@@ -106,18 +106,13 @@ class CourseDecorator < ApplicationDecorator
       has_excluded_course_name?
   end
 
-  #   def has_early_career_payments?
-  #     object.subjects.present? &&
-  #       object.subjects.any? { |subject| subject.attributes["early_career_payments"].present? }
-  #   end
+  def bursary_amount
+    find_max_funding_for("bursary_amount")
+  end
 
-  #   def bursary_amount
-  #     find_max("bursary_amount")
-  #   end
-
-  #   def scholarship_amount
-  #     find_max("scholarship")
-  #   end
+  def scholarship_amount
+    find_max_funding_for("scholarship")
+  end
 
   def salaried?
     object.funding_type == "salary" || object.funding_type == "apprenticeship"
@@ -200,6 +195,7 @@ class CourseDecorator < ApplicationDecorator
   def cycle_range
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
+  alias_method :year_range, :cycle_range
 
   def age_range
     if object.age_range_in_years.present?
@@ -278,9 +274,9 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def accept_gcse_equivalency?
-  #     object.accept_gcse_equivalency
-  #   end
+  def accept_gcse_equivalency?
+    object.accept_gcse_equivalency
+  end
 
   def has_fees?
     object.funding_type.match?(/fee/)
@@ -383,15 +379,15 @@ private
     end
   end
 
-  # def find_max(attribute)
-  #   subject_attributes = object.subjects.map do |s|
-  #     if s.attributes[attribute].present?
-  #       s.__send__(attribute).to_i
-  #     end
-  #   end
+  def find_max_funding_for(attribute)
+    subject_funding_amounts = object.subjects.map do |s|
+      if s.financial_incentive.attributes[attribute].present?
+        s.financial_incentive.public_send(attribute.to_sym).to_i
+      end
+    end
 
-  #   subject_attributes.compact.max.to_s
-  # end
+    subject_funding_amounts.compact.max.to_s
+  end
 
   def has_excluded_course_name?
     exclusions = [

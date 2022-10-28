@@ -1,9 +1,26 @@
 // Entry point for your Sass build
 @import "./govuk_style_setup";
-@import "components/all";
-@import "js-enabled";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min";
-@import "autocomplete";
-@import "description-list";
-@import "advice";
-@import "list";
+
+@import "components/shared/advice";
+@import "components/shared/autocomplete";
+@import "components/shared/filters";
+@import "components/shared/header";
+@import "components/shared/js-enabled";
+@import "components/shared/list";
+@import "components/shared/pagination";
+@import "components/shared/phase-banner";
+
+@import "components/find/accordion";
+@import "components/find/description-list";
+@import "components/find/feedback";
+@import "components/find/filter-layout";
+@import "components/find/filter";
+@import "components/find/filters";
+@import "components/find/map";
+
+@import "components/find/promoted-link";
+@import "components/find/search-results";
+@import "components/find/summary-card";
+@import "components/find/text-ellipsis";
+@import "components/find/toggle";

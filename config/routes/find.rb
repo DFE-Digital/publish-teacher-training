@@ -18,4 +18,8 @@ namespace :find, path: "/find" do
     resources :subjects
     resources :locations, path: "/"
   end
+
+  scope module: :result_filters, path: "/results/filter" do
+    get "provider", to: "provider#new"
+  end
 end

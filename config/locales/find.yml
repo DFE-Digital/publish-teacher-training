@@ -72,6 +72,16 @@ en:
             <p class="govuk-body">If you do not already have the right to study in the UK for the duration of this course, you may need to apply for a Student visa.</p>
             <p class="govuk-body">To do this, you’ll need to be sponsored by your training provider.</p>
             <p class="govuk-body">Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
+    get_into_teaching:
+      tel: 0800 389 2500
+      opening_times: "Monday to Friday, 8.30am to 5.30pm"
+      url_get_an_advisor: https://adviser-getintoteaching.education.gov.uk
+      url_online_chat: https://getintoteaching.education.gov.uk/#talk-to-us
+      url_ways_to_train: https://getintoteaching.education.gov.uk/ways-to-train
+      url_funding_your_training: https://getintoteaching.education.gov.uk/funding-your-training
+      url_bursaries_and_scholarships: https://getintoteaching.education.gov.uk/funding-your-training#bursaries-and-scholarships
+      url_improve_your_subject_knowledge: https://getintoteaching.education.gov.uk/improve-your-subject-knowledge
+      url_teacher_training_events: https://getintoteaching.education.gov.uk/events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_banner
   activemodel:
     errors:
       models:

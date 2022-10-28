@@ -1,20 +1,30 @@
 // Entry point for your Sass build
 @import "./govuk_style_setup";
-@import "components/all";
-@import "advice";
-@import "card";
-@import "description-list";
-@import "inset-text";
-@import "link";
-@import "list";
-@import "status-box";
-@import "summary-list";
-@import "table";
-@import "tabs";
-@import "pagination";
-@import "autocomplete";
-@import "cookie_banner";
-@import "js-enabled";
+
+@import "components/shared/advice";
+@import "components/shared/autocomplete";
+@import "components/shared/filters";
+@import "components/shared/header";
+@import "components/shared/js-enabled";
+@import "components/shared/list";
+@import "components/shared/pagination";
+@import "components/shared/phase-banner";
+
+
+@import "components/publish/allocation-record-card";
+@import "components/publish/card";
+@import "components/publish/cookie_banner";
+@import "components/publish/description-list";
+@import "components/publish/inset-text";
+@import "components/publish/link";
+@import "components/publish/navigation-bar";
+@import "components/publish/paginator";
+@import "components/publish/status-box";
+@import "components/publish/summary-list";
+@import "components/publish/tab-navigation";
+@import "components/publish/table";
+@import "components/publish/tabs";
+@import "components/publish/title-bar";
 
 .app-list--dash {
   padding-left: govuk-spacing(3);

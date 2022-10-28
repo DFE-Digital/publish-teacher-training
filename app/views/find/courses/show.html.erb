@@ -1,61 +1,58 @@
-<% course = RecruitmentCycle.current.courses.find_by(name: "Primary", course_code: "39T4").decorate %>
-<% provider = course.provider %>
-
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(url = find_path, body = t("find.courses.show.back_to_search")) %>
+  <%= govuk_back_link_to(url = find_results_path, body = t("find.courses.show.back_to_search")) %>
 <% end %>
 
 <h1 class="govuk-heading-xl">
     <span class="govuk-heading-l govuk-!-margin-bottom-0" data-qa="course__provider_name">
-      <%= provider.provider_name %>
+      <%= @provider.provider_name %>
     </span>
-  <%= course.name_and_code %>
+  <%= @course.name_and_code %>
 </h1>
 
-<p class="govuk-body-l" data-qa="course__description"><%= course.description %></p>
+<p class="govuk-body-l" data-qa="course__description"><%= @course.description %></p>
 
-<%= render FindInterface::Courses::SummaryComponent::View.new(course) %>
+<%= render FindInterface::Courses::SummaryComponent::View.new(@course) %>
 
-<!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
+<!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom. Uncomment once CycleTimetable moved over-->
 
-<%= render FindInterface::Courses::ApplyComponent::View.new(course) if course.has_vacancies? || !CycleTimetable.mid_cycle? %>
+<%# <%= render FindInterface::Courses::ApplyComponent::View.new(@course) if @course.has_vacancies? || !CycleTimetable.mid_cycle? %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render FindInterface::Courses::ContentsComponent::View.new(course) %>
+    <%= render FindInterface::Courses::ContentsComponent::View.new(@course) %>
 
-    <% if course.about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: } %>
+    <% if @course.about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
-    <%= render FindInterface::Courses::AboutSchoolsComponent::View.new(course) %>
+    <%= render FindInterface::Courses::AboutSchoolsComponent::View.new(@course) %>
 
-    <%= render FindInterface::Courses::EntryRequirementsComponent::View.new(course:) %>
+    <%= render FindInterface::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <% if course.salaried? %>
-      <%= render partial: "find/courses/salary", locals: { course: } %>
+    <% if @course.salaried? %>
+      <%= render partial: "find/courses/salary", locals: { course: @course } %>
     <% end %>
 
-    <%= render FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
+    <%= render FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if course.provider.train_with_us.present? ||  course.about_accrediting_body.present? %>
-      <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
+    <% if @provider.train_with_us.present? || @course.about_accrediting_body.present? %>
+      <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
     <% end %>
 
-    <% if course.interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: } %>
+    <% if @course.interview_process.present? %>
+      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
 
-    <%= render FindInterface::Courses::InternationalStudentsComponent::View.new(course:) %>
+    <%= render FindInterface::Courses::InternationalStudentsComponent::View.new(course: @course) %>
 
-    <% if course.provider.train_with_disability.present? %>
-      <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
+    <% if @provider.train_with_disability.present? %>
+      <%= render partial: "find/courses/train_with_disabilities", locals: { course: @course } %>
     <% end %>
 
-    <%= render FindInterface::Courses::ContactDetailsComponent::View.new(course) %>
+    <%= render FindInterface::Courses::ContactDetailsComponent::View.new(@course) %>
 
-    <%= render partial: "find/courses/advice", locals: { course: } %>
+    <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
-    <%= render FindInterface::Courses::ApplyComponent::View.new(course) unless course.has_vacancies? %>
+    <%= render FindInterface::Courses::ApplyComponent::View.new(@course) unless @course.has_vacancies? %>
   </div>
 </div>
