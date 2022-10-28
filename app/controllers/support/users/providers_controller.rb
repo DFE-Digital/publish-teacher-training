@@ -14,7 +14,7 @@ module Support
       end
 
       def providers
-        RecruitmentCycle.current.providers.where(id: user.providers)
+        recruitment_cycle.providers.where(id: user.providers)
       end
     end
   end

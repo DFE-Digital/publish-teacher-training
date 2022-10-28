@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe CourseDecorator do
-  let(:current_recruitment_cycle) { build_stubbed :recruitment_cycle }
-  let(:next_recruitment_cycle) { build_stubbed :recruitment_cycle, :next }
+  let(:current_recruitment_cycle) { build_stubbed(:recruitment_cycle) }
+  let(:next_recruitment_cycle) { build_stubbed(:recruitment_cycle, :next) }
   let(:provider) { build_stubbed(:provider, recruitment_cycle: current_recruitment_cycle) }
   let(:english) { build_stubbed(:secondary_subject, :english) }
   let(:biology) { build_stubbed(:secondary_subject, :biology) }
@@ -311,7 +311,7 @@ describe CourseDecorator do
 
     context "course has one subject" do
       let(:course_subject) { find_or_create :secondary_subject, :computing }
-      let(:course) { build_stubbed :course, subjects: [course_subject] }
+      let(:course) { build_stubbed(:course, subjects: [course_subject]) }
 
       it "return the subject name" do
         expect(decorated_course.subject_name).to eq("Computing")
@@ -319,33 +319,50 @@ describe CourseDecorator do
     end
   end
 
-  #   describe "#bursary_requirements" do
-  #     let(:subject) { decorated_course.bursary_requirements }
+  describe "#subject_name_or_names" do
+    context "course has more than one subject" do
+      it "returns both subjects names seperated by a 'with'" do
+        expect(decorated_course.subject_name_or_names).to eq("English with Mathematics")
+      end
+    end
 
-  #     context "Course with mathematics as a subject" do
-  #       let(:mathematics) { build_stubbed :subject, :mathematics, subject_name: "Primary with Mathematics" }
-  #       let(:english) { build_stubbed :subject, :english }
-  #       let(:subjects) { [mathematics, english] }
+    context "course has one subject" do
+      let(:course_subject) { find_or_create :secondary_subject, :computing }
+      let(:course) { build_stubbed(:course, subjects: [course_subject]) }
 
-  #       expected_requirements = [
-  #         "a degree of 2:2 or above in any subject",
-  #         "at least grade B in maths A-level (or an equivalent)",
-  #       ]
+      it "return the subject name" do
+        expect(decorated_course.subject_name_or_names).to eq("Computing")
+      end
+    end
+  end
 
-  #       it { is_expected.to eq(expected_requirements) }
-  #     end
+  describe "#bursary_requirements" do
+    subject { decorated_course.bursary_requirements }
 
-  #     context "Course without mathematics as a subject" do
-  #       let(:english) { build_stubbed :subject, :english }
-  #       let(:subjects) { [biology, english] }
+    context "Course with mathematics as a subject" do
+      let(:mathematics) { build_stubbed(:secondary_subject, :mathematics, subject_name: "Primary with Mathematics") }
+      let(:english) { build_stubbed(:secondary_subject, :english) }
+      let(:subjects) { [mathematics, english] }
 
-  #       expected_requirements = [
-  #         "a degree of 2:2 or above in any subject",
-  #       ]
+      expected_requirements = [
+        "a degree of 2:2 or above in any subject",
+        "at least grade B in maths A-level (or an equivalent)",
+      ]
 
-  #       it { is_expected.to eq(expected_requirements) }
-  #     end
-  #   end
+      it { is_expected.to eq(expected_requirements) }
+    end
+
+    context "Course without mathematics as a subject" do
+      let(:english) { build_stubbed(:secondary_subject, :english) }
+      let(:subjects) { [biology, english] }
+
+      expected_requirements = [
+        "a degree of 2:2 or above in any subject",
+      ]
+
+      it { is_expected.to eq(expected_requirements) }
+    end
+  end
 
   #   describe "#bursary_first_line_ending" do
   #     let(:subject) { decorated_course.bursary_first_line_ending }
@@ -408,131 +425,139 @@ describe CourseDecorator do
   #     end
   #   end
 
-  #   describe "#bursary_amount" do
-  #     context "course has bursary" do
-  #       let(:mathematics) { build_stubbed :subject, bursary_amount: "2000" }
-  #       let(:english) { build_stubbed :subject, bursary_amount: "4000" }
-  #       let(:subjects) { [biology, mathematics, english] }
+  describe "#bursary_amount" do
+    context "course has bursary" do
+      let(:mathematics) { build(:secondary_subject, bursary_amount: "2000") }
+      let(:english) { build(:secondary_subject, bursary_amount: "4000") }
+      let(:subjects) { [mathematics, english] }
 
-  #       it "returns the maximum bursary amount" do
-  #         expect(decorated_course.bursary_amount).to eq("4000")
-  #       end
-  #     end
-  #   end
+      let(:course) { build(:course, :secondary, subjects:) }
 
-  #   describe "#excluded_from_bursary?" do
-  #     let(:subject) { decorated_course }
+      it "returns the maximum bursary amount" do
+        expect(decorated_course.bursary_amount).to eq("4000")
+      end
+    end
+  end
 
-  #     context "course name does not qualify for exclusion" do
-  #       let(:course) { build_stubbed(:course, name: "Mathematics") }
+  describe "#excluded_from_bursary?" do
+    subject { decorated_course }
 
-  #       it { is_expected.to_not be_excluded_from_bursary }
-  #     end
+    before do
+      allow(course).to receive(:subjects).and_return(subjects)
+    end
 
-  #     context "course name contains 'with'" do
-  #       context "Drama" do
-  #         let(:english) { build_stubbed :subject, bursary_amount: "30000" }
-  #         let(:drama) { build_stubbed :subject, subject_name: "Drama" }
-  #         let(:subjects) { [english, drama] }
+    context "course name does not qualify for exclusion" do
+      let(:course) { build_stubbed(:course, name: "Mathematics") }
 
-  #         context "Drama with English" do
-  #           let(:course) { build_stubbed(:course, name: "Drama with English", subjects: subjects) }
+      it { is_expected.not_to be_excluded_from_bursary }
+    end
 
-  #           it { is_expected.to be_excluded_from_bursary }
-  #         end
+    context "course name contains 'with'" do
+      context "Drama" do
+        let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
+        let(:drama) { build_stubbed(:secondary_subject, subject_name: "Drama") }
+        let(:subjects) { [english, drama] }
 
-  #         context "English with Drama" do
-  #           let(:course) { build_stubbed(:course, name: "English with Drama", subjects: subjects) }
+        context "Drama with English" do
+          let(:course) { build_stubbed(:course, name: "Drama with English", subjects:) }
 
-  #           it { is_expected.to_not be_excluded_from_bursary }
-  #         end
-  #       end
+          it { is_expected.to be_excluded_from_bursary }
+        end
 
-  #       context "PE" do
-  #         let(:english) { build_stubbed :subject, bursary_amount: "30000" }
-  #         let(:pe) { build_stubbed :subject, subject_name: "PE" }
-  #         let(:subjects) { [english, pe] }
+        context "English with Drama" do
+          let(:course) { build_stubbed(:course, name: "English with Drama", subjects:) }
 
-  #         context "PE with English" do
-  #           let(:course) { build_stubbed(:course, name: "PE with English", subjects: subjects) }
+          it { is_expected.not_to be_excluded_from_bursary }
+        end
+      end
 
-  #           it { is_expected.to be_excluded_from_bursary }
-  #         end
+      context "PE" do
+        let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
+        let(:pe) { build_stubbed(:secondary_subject, subject_name: "PE") }
+        let(:subjects) { [english, pe] }
 
-  #         context "English with PE" do
-  #           let(:course) { build_stubbed(:course, name: "English with PE", subjects: subjects) }
+        context "PE with English" do
+          let(:course) { build_stubbed(:course, name: "PE with English", subjects:) }
 
-  #           it { is_expected.to_not be_excluded_from_bursary }
-  #         end
-  #       end
+          it { is_expected.to be_excluded_from_bursary }
+        end
 
-  #       context "Physical Education" do
-  #         let(:english) { build_stubbed :subject, bursary_amount: "30000" }
-  #         let(:physical_education) { build_stubbed :subject, subject_name: "Physical Education" }
-  #         let(:subjects) { [english, physical_education] }
+        context "English with PE" do
+          let(:course) { build_stubbed(:course, name: "English with PE", subjects:) }
 
-  #         context "Physical Education with English" do
-  #           let(:course) { build_stubbed(:course, name: "Physical Education with English", subjects: subjects) }
+          it { is_expected.not_to be_excluded_from_bursary }
+        end
+      end
 
-  #           it { is_expected.to be_excluded_from_bursary }
-  #         end
+      context "Physical Education" do
+        let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
+        let(:physical_education) { build_stubbed(:secondary_subject, subject_name: "Physical Education") }
+        let(:subjects) { [english, physical_education] }
 
-  #         context "English with Physical Education" do
-  #           let(:course) { build_stubbed(:course, name: "English with Physical Education", subjects: subjects) }
+        context "Physical Education with English" do
+          let(:course) { build_stubbed(:course, name: "Physical Education with English", subjects:) }
 
-  #           it { is_expected.to_not be_excluded_from_bursary }
-  #         end
-  #       end
+          it { is_expected.to be_excluded_from_bursary }
+        end
 
-  #       context "Media Studies" do
-  #         let(:english) { build_stubbed :subject, bursary_amount: "30000" }
-  #         let(:media_studies) { build_stubbed :subject, subject_name: "Media Studies" }
-  #         let(:subjects) { [english, media_studies] }
+        context "English with Physical Education" do
+          let(:course) { build_stubbed(:course, name: "English with Physical Education", subjects:) }
 
-  #         context "Media Studies with English" do
-  #           let(:course) { build_stubbed(:course, name: "Media Studies with English", subjects: subjects) }
+          it { is_expected.not_to be_excluded_from_bursary }
+        end
+      end
 
-  #           it { is_expected.to be_excluded_from_bursary }
-  #         end
+      context "Media Studies" do
+        let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
+        let(:media_studies) { build_stubbed(:secondary_subject, subject_name: "Media Studies") }
+        let(:subjects) { [english, media_studies] }
 
-  #         context "English with Media Studies" do
-  #           let(:course) { build_stubbed(:course, name: "English with Media Studies", subjects: subjects) }
+        context "Media Studies with English" do
+          let(:course) { build_stubbed(:course, name: "Media Studies with English", subjects:) }
 
-  #           it { is_expected.to_not be_excluded_from_bursary }
-  #         end
-  #       end
-  #     end
+          it { is_expected.to be_excluded_from_bursary }
+        end
 
-  #     context "course name contains 'and'" do
-  #       let(:english) { build_stubbed :subject, bursary_amount: "30000" }
-  #       let(:drama) { build_stubbed :subject, subject_name: "Drama" }
-  #       let(:subjects) { [english, drama] }
+        context "English with Media Studies" do
+          let(:course) { build_stubbed(:course, name: "English with Media Studies", subjects:) }
 
-  #       context "Drama and English" do
-  #         let(:course) { build_stubbed(:course, name: "Drama and English", subjects: subjects) }
+          it { is_expected.not_to be_excluded_from_bursary }
+        end
+      end
+    end
 
-  #         it { is_expected.to_not be_excluded_from_bursary }
-  #       end
+    context "course name contains 'and'" do
+      let(:english) { build_stubbed(:secondary_subject, bursary_amount: "30000") }
+      let(:drama) { build_stubbed(:secondary_subject, subject_name: "Drama") }
+      let(:subjects) { [english, drama] }
 
-  #       context "English and Drama" do
-  #         let(:course) { build_stubbed(:course, name: "English and Drama", subjects: subjects) }
+      context "Drama and English" do
+        let(:course) { build_stubbed(:course, name: "Drama and English", subjects:) }
 
-  #         it { is_expected.to_not be_excluded_from_bursary }
-  #       end
-  #     end
-  #   end
+        it { is_expected.not_to be_excluded_from_bursary }
+      end
 
-  #   describe "#scholarship_amount" do
-  #     context "course has scholarship" do
-  #       let(:mathematics) { build_stubbed :subject, scholarship: "2000" }
-  #       let(:english) { build_stubbed :subject, scholarship: "4000" }
-  #       let(:subjects) { [biology, mathematics, english] }
+      context "English and Drama" do
+        let(:course) { build_stubbed(:course, name: "English and Drama", subjects:) }
 
-  #       it "returns the maximum scholarship amount" do
-  #         expect(decorated_course.scholarship_amount).to eq("4000")
-  #       end
-  #     end
-  #   end
+        it { is_expected.not_to be_excluded_from_bursary }
+      end
+    end
+  end
+
+  describe "#scholarship_amount" do
+    context "course has scholarship" do
+      let(:mathematics) { build(:secondary_subject, scholarship: "2000") }
+      let(:english) { build(:secondary_subject, scholarship: "4000") }
+      let(:subjects) { [mathematics, english] }
+
+      let(:course) { build(:course, :secondary, subjects:) }
+
+      it "returns the maximum scholarship amount" do
+        expect(decorated_course.scholarship_amount).to eq("4000")
+      end
+    end
+  end
 
   #   context "#has_scholarship?" do
   #     context "course has no scholarship" do
@@ -648,7 +673,7 @@ describe CourseDecorator do
     let(:subject_page_title) { course.decorate.subject_page_title }
 
     context "a primary course" do
-      let(:course) { build_stubbed :course, level: "primary" }
+      let(:course) { build_stubbed(:course, level: "primary") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a primary subject")
@@ -656,7 +681,7 @@ describe CourseDecorator do
     end
 
     context "a secondary course" do
-      let(:course) { build_stubbed :course, level: "secondary" }
+      let(:course) { build_stubbed(:course, level: "secondary") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a secondary subject")
@@ -664,37 +689,10 @@ describe CourseDecorator do
     end
 
     context "a further education course" do
-      let(:course) { build_stubbed :course, level: "further_education" }
+      let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns the correct page title" do
         expect(subject_page_title).to eq("Pick a subject")
-      end
-    end
-  end
-
-  describe "#changing_basic_details" do
-    context "basic details when course is further education" do
-      let(:course) { build_stubbed :course, level: "further_education" }
-
-      it "returns the correct details under 'changing your basic details'" do
-        expect(decorated_course.listing_basic_details).to eq(["outcome",
-                                                              "full time or part time",
-                                                              "fee or salary",
-                                                              "application open date",
-                                                              "course start date"])
-      end
-    end
-
-    context "basic details when course is primary or secondary" do
-      let(:course) { build_stubbed :course }
-
-      it "returns the correct details under 'changing your basic details'" do
-        expect(decorated_course.listing_basic_details).to eq(["age range",
-                                                              "outcome",
-                                                              "full time or part time",
-                                                              "application open date",
-                                                              "course start date",
-                                                              "GCSE requirements"])
       end
     end
   end
@@ -703,7 +701,7 @@ describe CourseDecorator do
     let(:subject_input_label) { course.decorate.subject_input_label }
 
     context "a primary course" do
-      let(:course) { build_stubbed :course, level: "primary" }
+      let(:course) { build_stubbed(:course, level: "primary") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Primary subject")
@@ -711,7 +709,7 @@ describe CourseDecorator do
     end
 
     context "a secondary course" do
-      let(:course) { build_stubbed :course, level: "secondary" }
+      let(:course) { build_stubbed(:course, level: "secondary") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Secondary subject")
@@ -719,7 +717,7 @@ describe CourseDecorator do
     end
 
     context "a further education course" do
-      let(:course) { build_stubbed :course, level: "further_education" }
+      let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns the correct input label" do
         expect(subject_input_label).to eq("Pick a subject")
@@ -818,37 +816,53 @@ describe CourseDecorator do
   describe "#financial_incentive_details" do
     subject { course.decorate.financial_incentive_details }
 
-    context "course has no financial incentive" do
-      it "returns the correct details under 'financial_incentive_details'" do
-        expect(subject).to eq("None available")
-      end
-    end
-
-    context "course has financial incentive" do
+    context "bursaries and scholarships is announced" do
       before do
-        allow(course).to receive(:financial_incentives).and_return([financial_incentive])
+        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
       end
 
-      context "course has both bursary and scholarship available" do
-        let(:financial_incentive) { build_stubbed(:financial_incentive, scholarship: "2000", bursary_amount: "3000") }
-
+      context "course has no financial incentive" do
         it "returns the correct details under 'financial_incentive_details'" do
-          expect(subject).to eq("Scholarships of £2,000 and bursaries of £3,000 are available")
+          expect(subject).to eq("None available")
         end
       end
 
-      context "course only has bursary available" do
-        let(:financial_incentive) { build_stubbed(:financial_incentive, bursary_amount: "3000") }
+      context "course has financial incentive" do
+        before do
+          allow(course).to receive(:financial_incentives).and_return([financial_incentive])
+        end
+
+        context "course has both bursary and scholarship available" do
+          let(:financial_incentive) { build_stubbed(:financial_incentive, scholarship: "2000", bursary_amount: "3000") }
+
+          it "returns the correct details under 'financial_incentive_details'" do
+            expect(subject).to eq("Scholarships of £2,000 and bursaries of £3,000 are available")
+          end
+        end
+
+        context "course only has bursary available" do
+          let(:financial_incentive) { build_stubbed(:financial_incentive, bursary_amount: "3000") }
+
+          it "returns the correct details under 'financial_incentive_details'" do
+            expect(subject).to eq("Bursaries of £3,000 available")
+          end
+        end
+      end
+
+      context "course is in the next cycle" do
+        before do
+          allow(course).to receive(:recruitment_cycle_year).and_return(current_recruitment_cycle.year.to_i + 1)
+        end
 
         it "returns the correct details under 'financial_incentive_details'" do
-          expect(subject).to eq("Bursaries of £3,000 available")
+          expect(subject).to eq("Information not yet available")
         end
       end
     end
 
-    context "course is in the next cycle" do
+    context "bursaries and scholarships is not announced" do
       before do
-        allow(course).to receive(:recruitment_cycle_year).and_return(current_recruitment_cycle.year.to_i + 1)
+        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
       end
 
       it "returns the correct details under 'financial_incentive_details'" do

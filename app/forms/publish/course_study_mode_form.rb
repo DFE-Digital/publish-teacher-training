@@ -12,6 +12,10 @@ module Publish
 
   private
 
+    def valid_before_save
+      course.ensure_site_statuses_match_study_mode if course.changed?
+    end
+
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end

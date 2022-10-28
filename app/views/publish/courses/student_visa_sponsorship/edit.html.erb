@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("#{t('page_titles.student_visas.edit')} – #{course.name_and_code}", @course_student_visa_sponsorship_form.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("#{t('page_titles.student_visas.edit')} – #{course.name_and_code}", @visa_sponsorship_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -13,7 +13,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-          model: @course_student_visa_sponsorship_form,
+          model: @visa_sponsorship_form,
           url: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
             course.provider_code,
             course.recruitment_cycle_year,
@@ -23,8 +23,6 @@
           local: true,
         ) do |f| %>
 
-       <%= f.hidden_field :funding_type_updated, value: funding_type_updated? %>
-
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
@@ -32,13 +30,22 @@
         <%= t("page_titles.student_visas.edit") %>
       </h1>
 
-      <% if funding_type_updated? %>
-        <p class="govuk-body"><%= t("visa_sponsorships.updated_funding") %></p>
+      <% if @visa_sponsorship_form.funding_type_updated? %>
+        <p class="govuk-body"><%= t("visa_sponsorships.updated.#{@visa_sponsorship_form.origin_step}") %></p>
       <% end %>
 
-      <%= render "inset_text" %>
+      <% if @course.is_uni_or_scitt? && !@provider.can_sponsor_student_visa %>
+        <p class="govuk-body">Learn more about <%= govuk_link_to "recruiting trainee teachers from overseas", "https://www.gov.uk/guidance/recruit-trainee-teachers-from-overseas-accredited-itt-providers" %>.</p>
+      <% end %>
 
-      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: "Is Student visa sponsorship available for this course?", tag: "h1", size: "m" }) do %>
+      <% if @course.is_uni_or_scitt? %>
+        <% question = "Can your organisation sponsor Student visas for this course?" %>
+      <% else %>
+        <%= render "inset_text" if @course.accrediting_provider.present? %>
+        <% question = "Is Student visa sponsorship available for this course?" %>
+      <% end %>
+
+      <%= f.govuk_radio_buttons_fieldset(:can_sponsor_student_visa, legend: { text: question, tag: "h1", size: "m" }) do %>
         <% course.edit_course_options["can_sponsor_student_visas"].each_with_index do |can_sponsor_student_visa, index| %>
           <%= f.govuk_radio_button(
                 :can_sponsor_student_visa,

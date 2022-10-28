@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe SignInController, type: :controller do
+describe SignInController do
   describe "#index" do
     it "renders the index page" do
       get :index

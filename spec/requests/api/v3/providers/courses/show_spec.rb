@@ -6,7 +6,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:current_year)  { current_cycle.year.to_i }
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
-  let(:provider) { create :provider, recruitment_cycle: current_cycle }
+  let(:provider) { create(:provider, recruitment_cycle: current_cycle) }
   let(:courses_site_status) {
     build(:site_status,
       :findable,
@@ -31,12 +31,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       "/courses/#{course.course_code}"
   }
   let(:course) {
-    create :course,
+    create(:course,
       :with_gcse_equivalency,
       provider:,
       enrichments:,
       site_statuses: [courses_site_status],
-      applications_open_from: Time.now.utc
+      applications_open_from: Time.now.utc)
   }
 
   context "with a published course" do

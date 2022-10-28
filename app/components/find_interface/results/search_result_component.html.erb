@@ -1,0 +1,38 @@
+<li class="app-search-results__item" data-qa="course">
+  <h2 class="app-search-result__item-title">
+    <%= govuk_link_to find_course_path(provider_code: course.provider_code, course_code: course.course_code), data: { qa: "course__link" } do %>
+      <span class="app-search-result__provider-name" data-qa="course__provider_name"><%= helpers.smart_quotes(course.provider.provider_name) %></span>
+      <span class="app-search-result__course-name" data-qa="course__name"><%= course.name_and_code %></span>
+    <% end %>
+  </h2>
+  <dl class="app-description-list app-description-list--search-result">
+    <dt class="app-description-list__label">Study type</dt>
+    <dd data-qa="course__study_mode"><%= course.study_mode.humanize %></dd>
+    <dt class="app-description-list__label">Qualification</dt>
+    <dd data-qa="course__qualification">
+      <% if accredited_body %>
+        <p class="govuk-body"><%= course.find_outcome %></p>
+        <p class="govuk-hint"><%= accredited_body %></p>
+      <% else %>
+        <%= course.find_outcome %>
+      <% end %>
+    </dd>
+
+    <% if filtered_by_location? && has_sites? %>
+      <% if course.university_based? %>
+        <%= render partial: "results/university", locals: { course: } %>
+      <% else %>
+        <%= render partial: "results/non_university", locals: { course: } %>
+      <% end %>
+    <% end %>
+
+    <dt class="app-description-list__label">Financial support</dt>
+    <dd data-qa="course__funding_options"><%= course.funding_option %></dd>
+
+    <dt class="app-description-list__label">Degree required</dt>
+    <dd data-qa="course__degree_required"><%= degree_required_status %></dd>
+
+    <dt class="app-description-list__label">Visa sponsorship</dt>
+    <dd data-qa="course__visa_sponsorship"><%= visa_sponsorship_status %></dd>
+  </dl>
+</li>

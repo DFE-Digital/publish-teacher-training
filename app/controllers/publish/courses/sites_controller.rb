@@ -21,6 +21,7 @@ module Publish
         authorize(provider)
 
         @course_location_form = CourseLocationForm.new(@course)
+        @course_location_form.valid? if show_errors_on_publish?
       end
 
       def update

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UserNotification, type: :model do
+describe UserNotification do
   describe "validations" do
     before do
       subject.valid?

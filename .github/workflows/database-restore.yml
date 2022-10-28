@@ -29,15 +29,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Set KV environment variables
+        run: |
+          tf_vars_file=terraform/workspace_variables/production.tfvars.json
+          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "paas_space_name=$(jq -r '.cf_space' ${tf_vars_file})" >> $GITHUB_ENV
+
+      - uses: azure/login@v1
         with:
-          fetch-depth: 0
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+
+      - uses: DFE-Digital/keyvault-yaml-secret@v1
+        id: get-secrets
+        with:
+          keyvault: ${{ env.key_vault_name }}
+          secret: ${{ env.key_vault_infra_secret_name }}
+          key: CF_USER,CF_PASSWORD
 
       - uses: DFE-Digital/github-actions/setup-cf-cli@master
         name: Setup cf cli
         with:
-         CF_USERNAME: ${{ secrets.CF_USERNAME_PRODUCTION }}
-         CF_PASSWORD: ${{ secrets.CF_PASSWORD_PRODUCTION }}
-         CF_SPACE_NAME: bat-prod
+         CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
+         CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD }}
+         CF_SPACE_NAME: ${{ env.paas_space_name }}
          INSTALL_CONDUIT: true
 
       - name: Backup Publish Teacher Training Prod Database
@@ -48,23 +64,17 @@ jobs:
           tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
           echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
-
-      - name: Get storageAccount connection string from keyvault
-        uses: Azure/get-keyvault-secrets@v1
-        with:
-          keyvault: s121p01-shared-kv-01
-          secrets: PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION
-        id: GetSecretAction
+      - name: Set Connection String
+        run: |
+          STORAGE_CONN_STR="$(az keyvault secret show --name PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION --vault-name ${{ env.key_vault_name }} | jq -r .value)"
+          echo "::add-mask::$STORAGE_CONN_STR"
+          echo "STORAGE_CONN_STR=$STORAGE_CONN_STR" >> $GITHUB_ENV
 
       - name: Upload Backup to Azure Storage
         run: |
           az storage blob upload --container-name prod-db-backup \
           --file ${PROD_BACKUP}.tar.gz --name ${PROD_BACKUP}.tar.gz \
-          --connection-string '${{ env.PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION }}'
+          --connection-string '${{ env.STORAGE_CONN_STR }}'
 
       - name: Sanitise the Database backup
         run: |
@@ -108,12 +118,33 @@ jobs:
      matrix:
        environment: [qa, staging]
    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set KV environment variables
+        run: |
+          tf_vars_file=terraform/workspace_variables/${{ matrix.environment }}.tfvars.json
+          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "paas_space_name=$(jq -r '.cf_space' ${tf_vars_file})" >> $GITHUB_ENV
+
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+
+      - uses: DFE-Digital/keyvault-yaml-secret@v1
+        id: get-secrets
+        with:
+          keyvault: ${{ env.key_vault_name }}
+          secret: ${{ env.key_vault_infra_secret_name }}
+          key: CF_USER,CF_PASSWORD
+
       - uses: DFE-Digital/github-actions/setup-cf-cli@master
         name: Setup cf cli
         with:
-         CF_USERNAME: ${{ secrets[format('CF_USERNAME_{0}', matrix.environment)] }}
-         CF_PASSWORD: ${{ secrets[format('CF_PASSWORD_{0}', matrix.environment)] }}
-         CF_SPACE_NAME: bat-${{ matrix.environment }}
+         CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
+         CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD  }}
+         CF_SPACE_NAME: ${{ env.paas_space_name }}
          INSTALL_CONDUIT: true
 
       - name: Download Sanitised Backup

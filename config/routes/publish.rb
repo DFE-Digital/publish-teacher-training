@@ -96,6 +96,10 @@ namespace :publish, as: :publish do
         resource :subjects, on: :member, only: %i[new], controller: "courses/subjects", path: "subjects" do
           get "continue"
         end
+        resource :engineers_teach_physics, on: :member, only: %i[new], controller: "courses/engineers_teach_physics", path: "engineers-teach-physics" do
+          get "continue"
+          get "back"
+        end
         resource :modern_languages, on: :member, only: %i[new], controller: "courses/modern_languages", path: "modern-languages" do
           get "back"
           get "continue"
@@ -113,7 +117,7 @@ namespace :publish, as: :publish do
         resource :skilled_worker_visa_sponsorship, on: :member, controller: "courses/skilled_worker_visa_sponsorship", path: "skilled-worker-visa-sponsorship" do
           get "continue"
         end
-        resource :fee_or_salary, on: :member, only: %i[new], controller: "courses/fee_or_salary", path: "fee-or-salary" do
+        resource :funding_type, on: :member, only: %i[new], controller: "courses/funding_type", path: "funding-type" do
           get "continue"
         end
 
@@ -122,6 +126,9 @@ namespace :publish, as: :publish do
 
       resources :courses, param: :code, only: %i[index new create show] do
         get "/details", on: :member, to: "courses#details"
+
+        get "/engineers_teach_physics", on: :member, to: "courses/engineers_teach_physics#edit"
+        put "/engineers_teach_physics", on: :member, to: "courses/engineers_teach_physics#update"
 
         get "/age_range", on: :member, to: "courses/age_range#edit"
         put "/age_range", on: :member, to: "courses/age_range#update"
@@ -182,8 +189,11 @@ namespace :publish, as: :publish do
         get "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#edit"
         put "/skilled-worker-visa-sponsorship", on: :member, to: "courses/skilled_worker_visa_sponsorship#update"
 
-        get "/fee-or-salary", on: :member, to: "courses/fee_or_salary#edit"
-        put "/fee-or-salary", on: :member, to: "courses/fee_or_salary#update"
+        get "/funding-type", on: :member, to: "courses/funding_type#edit"
+        put "/funding-type", on: :member, to: "courses/funding_type#update"
+
+        get "/apprenticeship", on: :member, to: "courses/apprenticeship#edit"
+        put "/apprenticeship", on: :member, to: "courses/apprenticeship#update"
       end
 
       scope module: :providers do

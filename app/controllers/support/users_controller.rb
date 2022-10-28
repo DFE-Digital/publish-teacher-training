@@ -1,6 +1,7 @@
 module Support
   class UsersController < SupportController
     def index
+      recruitment_cycle
       @users = filtered_users.page(params[:page] || 1)
     end
 
@@ -13,6 +14,10 @@ module Support
       @user = User.new
     end
 
+    def edit
+      user
+    end
+
     def create
       @user = User.new(user_params)
       if @user.save
@@ -20,10 +25,6 @@ module Support
       else
         render :new
       end
-    end
-
-    def edit
-      user
     end
 
     def update

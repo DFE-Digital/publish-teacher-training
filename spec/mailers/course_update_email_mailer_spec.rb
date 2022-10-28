@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CourseUpdateEmailMailer, type: :mailer do
+describe CourseUpdateEmailMailer do
   let(:course) { create(:course, :with_accrediting_provider, updated_at: DateTime.new(2001, 2, 3, 4, 5, 6)) }
   let(:user) { create(:user) }
 

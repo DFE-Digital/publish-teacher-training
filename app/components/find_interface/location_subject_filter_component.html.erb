@@ -1,0 +1,19 @@
+<p id="filter-line" class="govuk-body">
+  <%= subjects_line %>
+
+  <% if @results.location_filter? %>
+    courses in <b><%= @results.location_search %></b>
+  <% elsif @results.england_filter? %>
+    courses in <b>England</b>
+  <% elsif @results.provider_filter? %>
+    courses from <b><%= @results.provider %></b>
+  <% end %>
+
+  <%= govuk_link_to(
+        @results.filter_params_for(find_path),
+        class: "govuk-link--no-visited-state govuk-!-margin-left-4",
+        data: { qa: "link" },
+      ) do %>
+    Change <span class="govuk-visually-hidden"><%= @results.provider_filter? ? "subject or provider" : "subject or location" %></span>
+  <% end %>
+</p>

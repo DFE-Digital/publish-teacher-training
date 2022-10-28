@@ -61,6 +61,17 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
+  def subject_name_or_names
+    case object.subjects.size
+    when 1
+      object.subjects.first.subject_name
+    when 2
+      "#{object.subjects.first.subject_name} with #{object.subjects.second.subject_name}"
+    else
+      object.name
+    end
+  end
+
   def has_scholarship_and_bursary?
     object.has_bursary? && object.has_scholarship?
   end
@@ -73,16 +84,16 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def bursary_requirements
-  #     requirements = ["a degree of 2:2 or above in any subject"]
+  def bursary_requirements
+    requirements = ["a degree of 2:2 or above in any subject"]
 
-  #     if object.subjects.any? { |subject| subject.subject_name.downcase == "primary with mathematics" }
-  #       mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
-  #       requirements.push(mathematics_requirement)
-  #     end
+    if object.subjects.any? { |subject| subject.subject_name.downcase == "primary with mathematics" }
+      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
+      requirements.push(mathematics_requirement)
+    end
 
-  #     requirements
-  #   end
+    requirements
+  end
 
   def bursary_only?
     object.has_bursary? && !object.has_scholarship?
@@ -95,18 +106,13 @@ class CourseDecorator < ApplicationDecorator
       has_excluded_course_name?
   end
 
-  #   def has_early_career_payments?
-  #     object.subjects.present? &&
-  #       object.subjects.any? { |subject| subject.attributes["early_career_payments"].present? }
-  #   end
+  def bursary_amount
+    find_max_funding_for("bursary_amount")
+  end
 
-  #   def bursary_amount
-  #     find_max("bursary_amount")
-  #   end
-
-  #   def scholarship_amount
-  #     find_max("scholarship")
-  #   end
+  def scholarship_amount
+    find_max_funding_for("scholarship")
+  end
 
   def salaried?
     object.funding_type == "salary" || object.funding_type == "apprenticeship"
@@ -189,6 +195,7 @@ class CourseDecorator < ApplicationDecorator
   def cycle_range
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
+  alias_method :year_range, :cycle_range
 
   def age_range
     if object.age_range_in_years.present?
@@ -245,23 +252,6 @@ class CourseDecorator < ApplicationDecorator
     level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
-  def listing_basic_details
-    if is_further_education?
-      ["outcome",
-       "full time or part time",
-       "fee or salary",
-       "application open date",
-       "course start date"]
-    else
-      ["age range",
-       "outcome",
-       "full time or part time",
-       "application open date",
-       "course start date",
-       "GCSE requirements"]
-    end
-  end
-
   def subject_page_title
     case level
     when "primary"
@@ -284,9 +274,9 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  #   def accept_gcse_equivalency?
-  #     object.accept_gcse_equivalency
-  #   end
+  def accept_gcse_equivalency?
+    object.accept_gcse_equivalency
+  end
 
   def has_fees?
     object.funding_type.match?(/fee/)
@@ -337,7 +327,7 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year
+    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || (Settings.find_features.bursaries_and_scholarships_announced == false)
     return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
 
     if bursary_amount.present? && scholarship.present?
@@ -389,15 +379,15 @@ private
     end
   end
 
-  # def find_max(attribute)
-  #   subject_attributes = object.subjects.map do |s|
-  #     if s.attributes[attribute].present?
-  #       s.__send__(attribute).to_i
-  #     end
-  #   end
+  def find_max_funding_for(attribute)
+    subject_funding_amounts = object.subjects.map do |s|
+      if s.financial_incentive.attributes[attribute].present?
+        s.financial_incentive.public_send(attribute.to_sym).to_i
+      end
+    end
 
-  #   subject_attributes.compact.max.to_s
-  # end
+    subject_funding_amounts.compact.max.to_s
+  end
 
   def has_excluded_course_name?
     exclusions = [
@@ -414,6 +404,6 @@ private
   end
 
   def bursary_and_scholarship_flag_active_or_preview?
-    (Settings.find_features.bursaries_and_scholarships_announced == true) || !params[:controller].start_with?("find")
+    (Settings.find_features.bursaries_and_scholarships_announced == true)
   end
 end

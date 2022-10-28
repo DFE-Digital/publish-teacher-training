@@ -1,0 +1,23 @@
+<div class="app-search-results">
+  <% if devolved_nation? %>
+    <h2 class="govuk-heading-m">This service is for courses in England</h2>
+  <% end %>
+
+  <% case country when "Scotland" %>
+    <p class="govuk-body">
+      <%= govuk_link_to "Learn more about teacher training in Scotland", "https://teachinscotland.scot/" %>
+    </p>
+  <% when "Wales" %>
+    <p class="govuk-body">
+      <%= govuk_link_to "Learn more about teacher training in Wales", "https://educators.wales/teachers" %>
+    </p>
+  <% when "Northern Ireland" %>
+    <p class="govuk-body">
+      <%= govuk_link_to "Learn more about teacher training in Northern Ireland", "https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland" %>
+    </p>
+  <% else %>
+    <p class="govuk-body">
+      You can try another search, for example by changing <%= "subject".pluralize(subjects.count) %> or location <% if results.with_salaries? %>or searching for courses that do not offer a salary<% end %>.
+    </p>
+  <% end %>
+</div>

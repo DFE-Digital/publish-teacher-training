@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Course, type: :model do
+describe Course do
   let(:recruitment_cycle) { course.recruitment_cycle }
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
@@ -19,6 +19,14 @@ describe Course, type: :model do
 
   its(:to_s) { is_expected.to eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { is_expected.to eq("") }
+
+  describe "#campaign_name" do
+    it "assigns the campaign" do
+      course.engineers_teach_physics!
+      expect(course.campaign_name).to eq "engineers_teach_physics"
+      expect(course.engineers_teach_physics?).to be true
+    end
+  end
 
   describe "auditing" do
     it { is_expected.to be_audited }
@@ -147,6 +155,66 @@ describe Course, type: :model do
 
         expect(subjects.first).to eq(maths)
         expect(subjects.second).to eq(english)
+      end
+    end
+  end
+
+  describe "#applicable_for_engineers_teach_physics?" do
+    subject { course.applicable_for_engineers_teach_physics? }
+
+    context "primary course" do
+      let(:course) { build(:course, :primary) }
+
+      it "return false" do
+        expect(subject).to be(false)
+      end
+    end
+
+    context "further education course" do
+      let(:course) { build(:course, :further_education) }
+
+      it "return false" do
+        expect(subject).to be(false)
+      end
+    end
+
+    context "secondary course" do
+      context "without physics" do
+        let(:course) { build(:course, :secondary) }
+
+        it "return false" do
+          expect(subject).to be(false)
+        end
+      end
+
+      context "with physics" do
+        let(:physics) { find_or_create(:secondary_subject, :physics) }
+
+        let(:course) { create(:course, :secondary, subjects: [physics]) }
+
+        it "return true" do
+          expect(subject).to be(true)
+        end
+
+        context "with another subject" do
+          let(:maths) { find_or_create(:secondary_subject, :mathematics) }
+
+          context "on position 0" do
+            let(:course) { create(:course, :secondary, subjects: [physics, maths]) }
+
+            it "return true" do
+              expect(subject).to be(true)
+            end
+          end
+
+          context "on position 1" do
+            let(:course) { create(:course, :secondary, subjects: [maths, physics]) }
+
+            it "return true" do
+              expect(subject).to be(false)
+            end
+          end
+        end
       end
     end
   end
@@ -597,7 +665,7 @@ describe Course, type: :model do
       end
 
       describe "validate_degree_requirements_publishable" do
-        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
         let(:course_with_degree_grade) { create(:course, provider:) }
         let(:course_without_degree_grade) { create(:course, provider:, degree_grade: nil) }
@@ -619,7 +687,7 @@ describe Course, type: :model do
       end
 
       describe "validate_gcse_requirements_publishable" do
-        let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+        let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
         let(:provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
         let(:publishable_course) { create(:course, provider:, accept_pending_gcse: true, accept_gcse_equivalency: false) }
         let(:unpublishable_course) { create(:course, provider:, accept_pending_gcse: nil) }
@@ -1794,7 +1862,7 @@ describe Course, type: :model do
   end
 
   describe "content_status" do
-    let(:course) { create :course, enrichments: [enrichment1, enrichment2] }
+    let(:course) { create(:course, enrichments: [enrichment1, enrichment2]) }
     let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
     let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
     let(:service_spy) { spy(execute: :published_with_unpublished_changes) }
@@ -2189,9 +2257,9 @@ describe Course, type: :model do
     end
 
     context "course is in the next recruitment cycle" do
-      let(:recruitment_cycle) { create :recruitment_cycle, :next }
-      let(:provider)          { create :provider, recruitment_cycle: }
-      let(:course) { create :course, provider: }
+      let(:recruitment_cycle) { create(:recruitment_cycle, :next) }
+      let(:provider)          { create(:provider, recruitment_cycle:) }
+      let(:course) { create(:course, provider:) }
 
       it { is_expected.to be_truthy }
     end
@@ -2263,10 +2331,10 @@ describe Course, type: :model do
     end
 
     context "a new course within a recruitment cycle" do
-      let(:recruitment_cycle) { build :recruitment_cycle, :next }
-      let(:provider)          { build :provider, recruitment_cycle: }
+      let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+      let(:provider)          { build(:provider, recruitment_cycle:) }
 
-      subject { create :course, :applications_open_from_not_set, provider: }
+      subject { create(:course, :applications_open_from_not_set, provider:) }
 
       its(:applications_open_from) { is_expected.to eq recruitment_cycle.application_start_date }
     end

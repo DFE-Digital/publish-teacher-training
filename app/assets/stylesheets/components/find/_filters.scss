@@ -1,0 +1,53 @@
+.filter-form {
+  @include govuk-font($size: 19);
+  @include govuk-responsive-margin(4, "bottom");
+  background-color: govuk-colour("light-grey");
+  padding: 8px;
+
+  &__title {
+    margin-bottom: 8px;
+  }
+
+  &__value {
+    background-color: govuk-colour("white");
+    margin-bottom: 8px;
+    padding: 8px;
+    padding-bottom: 5px;
+  }
+
+  &__value--list {
+    @extend %govuk-list;
+    margin-bottom: 8px;
+
+    li {
+      background-color: govuk-colour("white");
+      border-bottom: 2px solid govuk-colour("light-grey");
+      margin: 0;
+      padding: 8px;
+      // New transport baseline is slightly higher, compensate with smaller padding
+      // to centre correctly
+      padding-bottom: 5px;
+
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  &__map {
+    width: 100%;
+  }
+
+  .govuk-input {
+    background: govuk-colour("white");
+    margin-bottom: 8px;
+  }
+
+  .govuk-button {
+    margin-bottom: 3px;
+  }
+
+  .govuk-list li:last-child {
+    margin-bottom: 0;
+  }
+}

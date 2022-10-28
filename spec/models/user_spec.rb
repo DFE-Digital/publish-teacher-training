@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe User, type: :model do
+describe User do
   subject { create(:user, first_name: "Jane", last_name: "Smith", email: "jsmith@scitt.org") }
 
   describe "associations" do
@@ -29,22 +29,6 @@ describe User, type: :model do
       it { is_expected.not_to allow_value("some.provider@devon.gov.uk").for(:email) }
       it { is_expected.to allow_value("bobs.your.uncle@digital.education.gov.uk").for(:email) }
       it { is_expected.to allow_value("right.malarky@education.gov.uk").for(:email) }
-    end
-  end
-
-  describe "#providers" do
-    describe "#in_current_cycle" do
-      let(:provider_in_current_cycle) { create(:provider) }
-      let(:provider_in_previous_cycle) { create(:provider, :previous_recruitment_cycle) }
-
-      before do
-        subject.providers << provider_in_current_cycle
-        subject.providers << provider_in_previous_cycle
-      end
-
-      it "returns the providers in the current cycle" do
-        expect(subject.providers.in_current_cycle).to eq([provider_in_current_cycle])
-      end
     end
   end
 
@@ -113,17 +97,23 @@ describe User, type: :model do
       end
     end
 
-    describe "during rollover" do
-      let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
-      let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
-
+    context "can_edit_current_and_next_cycles is set to true" do
       before do
-        subject.providers = [provider, other_provider, rolled_over_provider, rolled_over_other_provider]
-        subject.remove_access_to([provider, rolled_over_other_provider])
+        allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
       end
 
-      it "removes the right provider" do
-        expect(subject.reload.providers).to eq([other_provider])
+      describe "during rollover" do
+        let(:rolled_over_provider) { create(:provider, :next_recruitment_cycle, provider_code: provider.provider_code) }
+        let(:rolled_over_other_provider) { create(:provider, :next_recruitment_cycle, provider_code: other_provider.provider_code) }
+
+        before do
+          subject.providers = [provider, other_provider, rolled_over_provider, rolled_over_other_provider]
+          subject.remove_access_to([provider, rolled_over_other_provider])
+        end
+
+        it "removes the right provider" do
+          expect(subject.reload.providers).to eq([other_provider])
+        end
       end
     end
 

@@ -3,10 +3,30 @@
 require "rails_helper"
 
 feature "Course show", { can_edit_current_and_next_cycles: false } do
-  scenario "i can view the course basic details" do
-    given_i_am_authenticated(user: user_with_fee_based_course)
-    when_i_visit_the_course_preview_page
-    then_i_see_the_course_preview_details
+  context "bursaries and scholarships is announced" do
+    before do
+      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+    end
+
+    scenario "i can view the course basic details" do
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      when_i_visit_the_course_preview_page
+      then_i_see_the_course_preview_details
+      and_i_see_financial_support
+    end
+  end
+
+  context "bursaries and scholarships is not announced" do
+    before do
+      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
+    end
+
+    scenario "i can view the course basic details" do
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      when_i_visit_the_course_preview_page
+      then_i_see_the_course_preview_details
+      and_i_do_not_see_financial_support
+    end
   end
 
   context "contact details for London School of Jewish Studies and the course code is X104" do
@@ -29,8 +49,6 @@ private
   end
 
   def then_i_see_the_course_preview_details
-    expect_financial_support
-
     expect(course_preview_page.title).to have_content(
       "#{course.name} (#{course.course_code})",
     )
@@ -270,33 +288,17 @@ private
     @accrediting_provider ||= course.accrediting_provider
   end
 
-  def expect_financial_support
-    # NOTE: There is a period at the beginning of the new/current
-    #       recruitment cycle whereby the financial incentives
-    #       announcement is still pending.
-
-    financial_incentives_been_announced = true
-
-    if financial_incentives_been_announced
-      expect_financial_incentives
-    else
-      expect_financial_support_placeholder
-    end
-  end
-
-  def expect_financial_support_placeholder
-    expect(decorated_course.use_financial_support_placeholder?).to be_truthy
-
-    expect(course_preview_page.find(".govuk-inset-text"))
-      .to have_text("Financial support for 2021 to 2022 will be announced soon. Further information is available on Get Into Teaching.")
-    expect(course_preview_page).not_to have_scholarship_amount
-    expect(course_preview_page).not_to have_bursary_amount
-  end
-
-  def expect_financial_incentives
+  def and_i_see_financial_support
     expect(decorated_course.use_financial_support_placeholder?).to be_falsey
 
     expect(course_preview_page.scholarship_amount).to have_content("a scholarship of £26,000")
     expect(course_preview_page.bursary_amount).to have_content("a bursary of £24,000")
+
+    expect(course_preview_page).not_to have_content("Information not yet available")
+  end
+
+  def and_i_do_not_see_financial_support
+    expect(course_preview_page).not_to have_scholarship_amount
+    expect(course_preview_page).not_to have_bursary_amount
   end
 end

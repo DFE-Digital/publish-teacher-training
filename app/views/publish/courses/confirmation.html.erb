@@ -49,6 +49,19 @@
             }) %>
           <% end %>
 
+          <% if FeatureService.enabled?(:engineers_teach_physics_on_course) %>
+            <% if course.applicable_for_engineers_teach_physics? %>
+              <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
+                <% row.key { "Engineers Teach Physics" } %>
+                <% row.value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
+                <% row.action(**{
+                  href: new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(skip_languages_goto_confirmation: true)),
+                  visually_hidden_text: "Engineers Teach Physics",
+                }) %>
+              <% end %>
+            <% end %>
+          <% end %>
+
           <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
             <% row.key { "Age range" } %>
             <% row.value { course.age_range } %>
@@ -79,21 +92,21 @@
           <% end %>
         <% else %>
           <% if FeatureService.enabled?(:visa_sponsorship_on_course) %>
-            <% summary_list.row(html_attributes: { data: { qa: "course__fee_or_salary" } }) do |row| %>
-              <% row.key { "Fee or salary" } %>
+            <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+              <% row.key { "Funding type" } %>
               <% row.value { course.funding } %>
               <% row.action(**{
-                href: new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-                visually_hidden_text: "if fee or salary",
+                href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
+                visually_hidden_text: "if funding type",
               }) %>
             <% end %>
           <% else %>
-            <% summary_list.row(html_attributes: { data: { qa: "course__fee_or_salary" } }) do |row| %>
-              <% row.key { "Fee or salary" } %>
+            <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+              <% row.key { "Funding type" } %>
               <% row.value { course.funding } %>
               <% row.action(**{
-                href: new_publish_provider_recruitment_cycle_courses_fee_or_salary_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-                visually_hidden_text: "if fee or salary",
+                href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                visually_hidden_text: "if funding type",
               }) %>
             <% end %>
           <% end %>
@@ -258,7 +271,7 @@
         <% end %>
       </div>
 
-      <%= f.govuk_submit "Save new course", data: { qa: "course__save" } %>
+      <%= f.govuk_submit "Add course", data: { qa: "course__save" } %>
       <p class="govuk-body">Saving this course will not publish it.</p>
     <% end %>
   </div>

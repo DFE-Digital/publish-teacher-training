@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Course, type: :model do
+RSpec.describe Course do
   describe "#funding_type=" do
     before do
       subject.funding_type = funding_type

@@ -5,10 +5,10 @@ class Form
   include ActiveModel::AttributeAssignment
   include ActiveModel::Validations::Callbacks
 
-  attr_accessor :user, :model, :params, :fields
+  attr_accessor :identifier_model, :model, :params, :fields
 
-  def initialize(user, model, params: {})
-    @user = user
+  def initialize(identifier_model, model, params: {})
+    @identifier_model = identifier_model
     @model = model
     @params = params
     @fields = compute_fields
@@ -17,8 +17,9 @@ class Form
 
   def save!
     if valid?
-      assign_attributes_to_model
+      assign_attributes_to_model # TODO: override this method on course_funding_form.rb
       model.save!
+      after_save
       clear_stash
     else
       false
@@ -35,8 +36,18 @@ class Form
 
 private
 
+  def after_save; end
+
   def store
-    @store ||= UserStore.new(user)
+    @store ||= identifier_store.new(identifier_model)
+  end
+
+  def identifier_store
+    if identifier_model.instance_of?(User)
+      Stores::UserStore
+    elsif identifier_model.instance_of?(Course) || identifier_model.instance_of?(CourseDecorator)
+      Stores::CourseStore
+    end
   end
 
   def assign_attributes_to_model

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CourseSubject, type: :model do
+describe CourseSubject do
   describe "associations" do
     it { is_expected.to belong_to(:course) }
   end

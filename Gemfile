@@ -13,7 +13,7 @@ gem "pg"
 gem "pundit"
 
 # Use Puma as the app server
-gem "puma", "~> 5.6"
+gem "puma", "~> 6.0"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -131,7 +131,7 @@ gem "jsbundling-rails", "~> 1.0"
 gem "sprockets-rails", require: "sprockets/railtie"
 
 # for sending analytics data to the analytics platform
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.3.2"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 
 # For running data migrations
 gem "data_migrate"
@@ -178,7 +178,7 @@ group :development, :test do
   gem "rspec-its"
 
   # Test framework
-  gem "rspec-rails", "6.0.0.rc1"
+  gem "rspec-rails", "6.0.1"
 
   # A Ruby static code analyzer and formatter
   gem "rubocop", require: false
@@ -212,7 +212,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen", "~> 2.0.0"
+  gem "spring-watcher-listen", "~> 2.1.0"
 
   # Make HTTP requests fun again
   gem "httparty"
@@ -227,7 +227,7 @@ group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
   gem "rspec_junit_formatter"
-  gem "shoulda-matchers", "~> 5.1"
+  gem "shoulda-matchers", "~> 5.2"
   gem "simplecov", "< 0.22", require: false
 
   # Page objects

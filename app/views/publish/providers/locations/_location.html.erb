@@ -7,7 +7,7 @@
   </td>
   <% if urn_required?(@recruitment_cycle.year.to_i) %>
     <td class="govuk-table__cell urn">
-      <%= location.urn.presence || "<strong class='govuk-error-message govuk-\!-display-inline'>(Missing)</strong>".html_safe %>
+      <%= location.urn.presence || "<strong class='govuk-error-message govuk-!-display-inline'>(Missing)</strong>".html_safe %>
     </td>
   <% end %>
 </tr>

@@ -2,8 +2,8 @@ require "rails_helper"
 
 describe API::V3::SerializableCourse do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-  let(:draft_enrichment) { build :course_enrichment }
-  let(:published_enrichment) { build :course_enrichment, :published }
+  let(:draft_enrichment) { build(:course_enrichment) }
+  let(:published_enrichment) { build(:course_enrichment, :published) }
   let(:date_today) { Time.zone.today }
   let(:time_now) { Time.now.utc }
   let(:course) do
@@ -191,7 +191,7 @@ describe API::V3::SerializableCourse do
   end
 
   context "a new course" do
-    let(:provider) { create :provider }
+    let(:provider) { create(:provider) }
     let(:course) { Course.new(provider:) }
 
     subject { parsed_json["data"] }

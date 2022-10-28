@@ -4,10 +4,19 @@ module Support
       @providers = filtered_providers
     end
 
+    def show
+      provider
+      render layout: "provider_record"
+    end
+
     def new
       @provider = Provider.new
       @provider.sites.build
       @provider.organisations.build
+    end
+
+    def edit
+      provider
     end
 
     def create
@@ -17,15 +26,6 @@ module Support
       else
         render :new
       end
-    end
-
-    def show
-      provider
-      render layout: "provider_record"
-    end
-
-    def edit
-      provider
     end
 
     def update
@@ -48,7 +48,7 @@ module Support
     end
 
     def find_providers
-      recruitment_cycle.providers.order(:provider_name).includes(:courses, :users)
+      recruitment_cycle.providers.order(:provider_name).includes(:recruitment_cycle, :courses, :users)
     end
 
     def filter_params

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe API::Public::V1::SerializableProvider do
-  let(:provider) { create :provider }
+  let(:provider) { create(:provider) }
   let(:resource) { described_class.new object: provider }
 
   it "sets type to providers" do

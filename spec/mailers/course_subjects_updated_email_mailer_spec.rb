@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe CourseSubjectsUpdatedEmailMailer, type: :mailer do
+describe CourseSubjectsUpdatedEmailMailer do
   let(:previous_subject) { build(:primary_subject, :primary_with_english) }
   let(:updated_course_name) { "Primary with Mathematics" }
   let(:updated_subject) { build(:primary_subject, :primary_with_mathematics) }

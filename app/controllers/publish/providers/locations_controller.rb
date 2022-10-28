@@ -12,6 +12,11 @@ module Publish
         @location_form = LocationForm.new(provider.sites.new)
       end
 
+      def edit
+        authorize site, :update?
+        @location_form = LocationForm.new(site)
+      end
+
       def create
         authorize provider, :can_create_sites?
 
@@ -24,11 +29,6 @@ module Publish
         else
           render :new
         end
-      end
-
-      def edit
-        authorize site, :update?
-        @location_form = LocationForm.new(site)
       end
 
       def update

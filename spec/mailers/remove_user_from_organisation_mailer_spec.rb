@@ -1,9 +1,9 @@
 require "rails_helper"
 
-describe RemoveUserFromOrganisationMailer, type: :mailer do
+describe RemoveUserFromOrganisationMailer do
   context "Sending an email to a user" do
-    let(:user) { create :user }
-    let(:provider) { create :provider }
+    let(:user) { create(:user) }
+    let(:provider) { create(:provider) }
 
     let(:mail) { described_class.remove_user_from_provider_email(recipient: user, provider:) }
 

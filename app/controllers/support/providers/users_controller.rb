@@ -7,17 +7,12 @@ module Support
       end
 
       def show
+        recruitment_cycle
         provider_user
       end
 
       def delete
         provider_user
-      end
-
-      def destroy
-        UserAssociationsService::Delete.call(user: provider_user, providers: provider)
-        flash[:success] = I18n.t("success.user_removed")
-        redirect_to support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       end
 
       def new
@@ -32,6 +27,16 @@ module Support
         @user_form = UserForm.new(current_user, provider_user)
       end
 
+      def create
+        provider
+        @user_form = UserForm.new(current_user, user, params: user_params)
+        if @user_form.stash
+          redirect_to support_recruitment_cycle_provider_check_user_path
+        else
+          render(:new)
+        end
+      end
+
       def update
         provider
         @user_form = UserForm.new(current_user, provider_user, params: user_params)
@@ -43,14 +48,10 @@ module Support
         end
       end
 
-      def create
-        provider
-        @user_form = UserForm.new(current_user, user, params: user_params)
-        if @user_form.stash
-          redirect_to support_recruitment_cycle_provider_check_user_path
-        else
-          render(:new)
-        end
+      def destroy
+        UserAssociationsService::Delete.call(user: provider_user, providers: provider)
+        flash[:success] = I18n.t("success.user_removed")
+        redirect_to support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       end
 
     private

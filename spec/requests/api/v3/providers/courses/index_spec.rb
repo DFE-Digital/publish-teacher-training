@@ -36,8 +36,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       site: create(:site, provider:))
   end
 
-  let(:enrichment)     { build :course_enrichment, :published }
-  let(:provider)       { create :provider }
+  let(:enrichment)     { build(:course_enrichment, :published) }
+  let(:provider)       { create(:provider) }
 
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
@@ -172,17 +172,17 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     end
 
     context "with two recruitment cycles" do
-      let(:next_cycle) { create :recruitment_cycle, :next }
+      let(:next_cycle) { create(:recruitment_cycle, :next) }
       let(:next_provider) {
-        create :provider,
+        create(:provider,
           provider_code: provider.provider_code,
-          recruitment_cycle: next_cycle
+          recruitment_cycle: next_cycle)
       }
       let(:next_course) {
-        create :course,
+        create(:course,
           provider: next_provider,
           course_code: findable_open_course.course_code,
-          site_statuses: [build(:site_status, :findable)]
+          site_statuses: [build(:site_status, :findable)])
       }
 
       describe "making a request without specifying a recruitment cycle" do

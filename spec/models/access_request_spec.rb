@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe AccessRequest, type: :model do
+describe AccessRequest do
   describe "associations" do
     it { is_expected.to belong_to(:requester) }
   end

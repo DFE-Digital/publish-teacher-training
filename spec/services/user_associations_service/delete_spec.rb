@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycles: false } do
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
   let(:accredited_body1) { create(:provider, :accredited_body, users: [user]) }
 

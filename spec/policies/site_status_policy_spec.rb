@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe SiteStatusPolicy do
   let(:provider) { site_status.course.provider }
-  let(:site_status) { create :site_status }
+  let(:site_status) { create(:site_status) }
 
   subject { described_class }
 

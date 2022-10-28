@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe APIErrorController, type: :controller do
+RSpec.describe APIErrorController do
   describe "GET error500" do
     it "throws an error" do
       expect {

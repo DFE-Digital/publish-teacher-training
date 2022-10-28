@@ -1,21 +1,26 @@
-<% content_for :page_title, title_with_error_prefix("Edit Apprenticeship – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Teaching apprenticeship  – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
 <% end %>
 
 <%= render "publish/shared/errors" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <%= form_with model: course,
-                  url: apprenticeship_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+    <%= render CaptionText::View.new(text: course.name_and_code) %>
+    <%= form_with model: @course_funding_form,
+                  url: apprenticeship_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                   method: :put do |form| %>
 
       <%= render "form_fields", form: %>
 
-      <%= form.submit course.is_running? ? "Save and publish changes" : "Save",
+      <%= form.submit "Update teaching apprenticeship",
         class: "govuk-button", data: { qa: "course__save" } %>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
   </div>
 </div>

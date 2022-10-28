@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UserStore do
+describe Stores::UserStore do
   let(:user) { create(:user) }
   let(:store) { described_class.new(user) }
   let(:form_store_key) { :user }
@@ -19,7 +19,7 @@ describe UserStore do
       let(:form_store_key) { nil }
 
       it "returns an error" do
-        expect { subject }.to raise_error(UserStore::InvalidKeyError)
+        expect { subject }.to raise_error(Stores::UserStore::InvalidKeyError)
       end
     end
 
@@ -58,7 +58,7 @@ describe UserStore do
       let(:form_store_key) { nil }
 
       it "returns an error" do
-        expect { subject }.to raise_error(UserStore::InvalidKeyError)
+        expect { subject }.to raise_error(Stores::UserStore::InvalidKeyError)
       end
     end
 

@@ -52,7 +52,7 @@ module Publish
         modern_languages
         age_range
         outcome
-        fee_or_salary
+        funding_type
         full_or_part_time
         location
         accredited_body
@@ -99,10 +99,11 @@ module Publish
         courses_list
         level
         subjects
+        engineers_teach_physics
         modern_languages
         age_range
         outcome
-        fee_or_salary
+        funding_type
         full_or_part_time
         location
         accredited_body
@@ -119,6 +120,7 @@ module Publish
         courses_list
         level
         subjects
+        engineers_teach_physics
         modern_languages
         age_range
         outcome

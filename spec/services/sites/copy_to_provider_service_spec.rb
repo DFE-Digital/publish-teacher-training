@@ -2,15 +2,15 @@ require "rails_helper"
 
 describe Sites::CopyToProviderService do
   describe "#copy_to_provider" do
-    let(:site) { build :site }
-    let(:provider) { create :provider, sites: [site] }
+    let(:site) { build(:site) }
+    let(:provider) { create(:provider, sites: [site]) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
-    let(:next_recruitment_cycle) { create :recruitment_cycle, :next }
+    let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:next_provider) {
-      create :provider,
+      create(:provider,
         sites: [],
         provider_code: provider.provider_code,
-        recruitment_cycle: next_recruitment_cycle
+        recruitment_cycle: next_recruitment_cycle)
     }
 
     let(:service) { described_class.new }
@@ -30,9 +30,9 @@ describe Sites::CopyToProviderService do
 
     context "the site already exists in the new provider" do
       let!(:next_site) {
-        create :site,
+        create(:site,
           code: site.code,
-          provider: next_provider
+          provider: next_provider)
       }
 
       it "does not make a copy of the site" do

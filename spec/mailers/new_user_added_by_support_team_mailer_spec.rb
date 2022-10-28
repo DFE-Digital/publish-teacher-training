@@ -1,8 +1,8 @@
 require "rails_helper"
 
-describe NewUserAddedBySupportTeamMailer, type: :mailer do
+describe NewUserAddedBySupportTeamMailer do
   context "Sending an email to a user" do
-    let(:user) { create :user }
+    let(:user) { create(:user) }
 
     let(:mail) { described_class.user_added_to_provider_email(recipient: user) }
 
