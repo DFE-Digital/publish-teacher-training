@@ -106,7 +106,7 @@ module Find
     end
 
     def all_subjects
-      @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
+      @all_subjects ||= Subject.active.where.not(subject_code: nil).select(:subject_name, :subject_code).order(:subject_name).all
     end
 
     def filtered_subjects
