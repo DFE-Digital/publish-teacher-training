@@ -64,9 +64,9 @@ Which will fire off the Rails server, watchers for JS/CSS changes and Sidekiq. Y
 You don't have to use either of those tools. The script just wraps up the following commands:
 
 ```bash
-bin/rails server -p 3001
 yarn build --watch
 yarn build:css --watch
+bin/rails server -p 3001
 bundle exec sidekiq -t 25 -C config/sidekiq.yml
 ```
 ### Docker
