@@ -1,0 +1,15 @@
+<h1 class="govuk-heading-l">Find and Publish Components</h1>
+
+<p class="govuk-body">
+  Below are view components used in Find and Publish.
+  These act as larger building blocks used to build pages specific to the Find and Publish services leveraging the <%= govuk_link_to("GOV.UK Design System", "https://design-system.service.gov.uk/") %> and the <%= govuk_link_to("GOV.UK components gem", "https://github.com/DFE-Digital/govuk-components") %>
+</p>
+
+<% @previews.each do |preview| %>
+  <h3 class="govuk-heading-m"><%= link_to preview.preview_name.titleize, preview_view_component_path(preview.preview_name) %></h3>
+  <ul class="govuk-list">
+    <% preview.examples.each do |preview_example| %>
+      <li><%= govuk_link_to preview_example, preview_view_component_path("#{preview.preview_name}/#{preview_example}") %></li>
+    <% end %>
+  </ul>
+<% end %>

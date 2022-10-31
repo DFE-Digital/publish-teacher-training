@@ -3,6 +3,10 @@ module Find
     layout "find_layout"
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
+    def render_feedback_component
+      @render_feedback_component = true
+    end
+
   private
 
     def provider
