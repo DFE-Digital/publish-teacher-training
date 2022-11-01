@@ -35,8 +35,5 @@ production:
 sandbox:
   <<: *default
 
-rollover:
-  <<: *default
-
 loadtest:
   <<: *default
