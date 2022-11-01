@@ -31,13 +31,13 @@ runs:
       run: |
         if [ -n "${{ inputs.pr-number }}" ]; then
           echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
-          echo "::set-output name=deploy_url::https://publish-teacher-training-pr-${{ inputs.pr-number }}.london.cloudapps.digital"
+          echo "deploy_url=https://publish-teacher-training-pr-${{ inputs.pr-number }}.london.cloudapps.digital" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
           if [ ${{ inputs.environment }} == "production" ]; then
-            echo "::set-output name=deploy_url::https://api.publish-teacher-training-courses.service.gov.uk"
+            echo "deploy_url=https://api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=deploy_url::https://${{ inputs.environment }}.api.publish-teacher-training-courses.service.gov.uk"
+            echo "deploy_url=https://${{ inputs.environment }}.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           fi
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
         fi;
