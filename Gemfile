@@ -102,6 +102,9 @@ gem "dry-container"
 # For geocoding and geographic logic (e.g: filtering sites by ranges)
 gem "geokit-rails"
 
+# Geocoding
+gem 'geocoder'
+
 gem "open_api-rswag-api"
 gem "open_api-rswag-ui"
 

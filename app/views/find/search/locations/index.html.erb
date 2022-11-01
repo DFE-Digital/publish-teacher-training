@@ -5,6 +5,9 @@
     <%= form_with model: @courses_by_location_or_training_provider_form, url: find_locations_path, method: :post do |f| %>
       <%= f.govuk_error_summary %>
 
+      <%= render 'find/shared/hidden_fields', exclude_keys: %w[l query rad], form: f %>
+      <%= render 'find/shared/hidden_previous_fields', form: f %>
+
       <%= f.govuk_radio_buttons_fieldset :find_courses, legend: { text: t("find.homepage.title"), size: "l", tag: "h1" } do %>
         <%= f.govuk_radio_button :find_courses, :by_city_town_postcode,
         label: { text: t("find.homepage.radio_options.by_city_town_postcode.radio") },

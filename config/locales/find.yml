@@ -6,6 +6,16 @@ en:
       pgce_with_qts: "PGCE with QTS"
       pgde: "PGDE"
       pgde_with_qts: "PGDE with QTS"
+    location_filter:
+      errors:
+        no_option: Select an option to find courses
+        unknown_location: Enter a real city, town or postcode
+        missing_location: Enter a city, town or postcode
+        missing_provider: Enter a real school, university or training provider
+        blank_provider: Enter a school, university or other training provider
+    fields:
+      location: "Postcode, town or city"
+      provider: "Training provider"
     homepage:
       title: Find courses by location or by training provider
       radio_options:

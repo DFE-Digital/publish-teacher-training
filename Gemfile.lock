@@ -260,6 +260,7 @@ GEM
     fugit (1.7.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    geocoder (1.8.1)
     geokit (1.13.1)
     geokit-rails (2.3.2)
       geokit (~> 1.5)
@@ -738,6 +739,7 @@ DEPENDENCIES
   fakefs
   faker
   faraday
+  geocoder
   geokit-rails
   google-cloud-bigquery
   govuk-components

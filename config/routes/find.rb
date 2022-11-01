@@ -1,5 +1,5 @@
 constraints(FindConstraint.new) do
-  get "/", to: "find/search/locations#index", as: :find
+  get "/", to: "find/search/locations#start", as: :find
 end
 
 namespace :find, path: "/find" do
@@ -14,6 +14,7 @@ namespace :find, path: "/find" do
   resource :sitemap, only: :show
 
   scope module: :search do
+    root to: 'locations#start'
     resources :age_groups, path: "/age-groups"
     resources :subjects
     resources :locations, path: "/"
