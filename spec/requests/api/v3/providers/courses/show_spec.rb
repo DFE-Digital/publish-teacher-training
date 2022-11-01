@@ -158,6 +158,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "degree_subject_requirements" => course.degree_subject_requirements,
             "can_sponsor_skilled_worker_visa" => course.can_sponsor_skilled_worker_visa,
             "can_sponsor_student_visa" => course.can_sponsor_student_visa,
+            "campaign_name" => course.campaign_name,
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },

@@ -41,6 +41,7 @@ module API
         additional_gcse_equivalencies
         can_sponsor_skilled_worker_visa
         can_sponsor_student_visa
+        campaign_name
       ].freeze
 
       attributes(*COURSE_ATTRIBUTES)
