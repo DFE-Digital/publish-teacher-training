@@ -1206,6 +1206,26 @@ describe Course do
       end
     end
 
+    describe ".engineers_teach_physics" do
+      subject { described_class.engineers_teach_physics }
+
+      context "when the course has the campaign 'engineers_teach_physics'" do
+        let(:course) { create(:course, :engineers_teach_physics) }
+
+        it "returns the course" do
+          expect(subject).to eq [course]
+        end
+      end
+
+      context "when the course has no campaign" do
+        let(:course) { create(:course, provider:) }
+
+        it "does not return the course" do
+          expect(subject).to eq []
+        end
+      end
+    end
+
     describe ".can_sponsor_visa" do
       subject { described_class.can_sponsor_visa }
 

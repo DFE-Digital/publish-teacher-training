@@ -29,6 +29,7 @@
     "core-js": "^3.9.1",
     "govuk-frontend": "^3.9.1",
     "jquery": "^3.6.0",
+    "lodash.throttle": "^4.1.1",
     "set-value": "^4.0.1"
   },
   "devDependencies": {

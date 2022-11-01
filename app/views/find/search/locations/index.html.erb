@@ -14,6 +14,7 @@
         link_errors: true,
         checked: params[:find_courses] == "by_city_town_postcode" do %>
           <%= f.govuk_text_field :city_town_postcode_query, label: { text: t("find.homepage.radio_options.by_city_town_postcode.text_field") } %>
+              <div id="location-autocomplete" class="govuk-body"></div>
         <% end %>
 
         <%= f.govuk_radio_button :find_courses, :across_england, label: { text: t("find.homepage.radio_options.across_england.radio") }, checked: params[:find_courses] == "across_england" %>
