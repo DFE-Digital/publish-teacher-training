@@ -19,7 +19,8 @@ module Find
       def create
         # if searching for specific provider go to results page
         if provider_option_selected?
-          redirect_to(provider_path(get_params_for_selected_option({})))
+          # TODO: check this is going to correct path
+          redirect_to(find_provider_path(get_params_for_selected_option({})))
           return
         end
 
@@ -33,17 +34,6 @@ module Find
           flash[:error] = form_object.errors
           back_to_current_page_if_error(merge_previous_parameters(form_params))
         end
-       # @courses_by_location_or_training_provider_form = CoursesByLocationOrTrainingProviderForm.new(params: find_courses_by_location_or_training_provider_form_params)
-
-       # if @courses_by_location_or_training_provider_form.valid?
-
-       #   parameters_with_geocode_added_and_previous_removed = remove_previous_parameters(find_courses_by_location_or_training_provider_form_params.merge(@courses_by_location_or_training_provider_form.params))
-
-       #   redirect_to find_age_groups_path(parameters_with_geocode_added_and_previous_removed)
-       # else
-       #   providers
-       #   render :index
-       # end
       end
 
     private
@@ -54,10 +44,7 @@ module Find
 
       def find_courses_by_location_or_training_provider_form_params
         params[:find_courses_by_location_or_training_provider_form]
-          .permit(:find_courses,
-            :city_town_postcode_query,
-            :school_uni_or_provider_query,
-            :prev_l, :prev_loc, :prev_lng, :prev_lat, :prev_rad, :prev_query, :prev_lq)
+          .permit(:prev_l, :prev_loc, :prev_lng, :prev_lat, :prev_rad, :prev_query, :prev_lq)
       end
 
       def build_results_filter_query_parameters

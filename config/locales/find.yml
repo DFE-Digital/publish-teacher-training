@@ -28,8 +28,10 @@ en:
           radio: By school, university or other training provider
           text_field: School, university or other training provider
           hint_text: Enter the name or provider code
-    age_groups_page:
+    age_groups:
       title: Which age group do you want to teach?
+      further_education:
+        hint: For example, teaching A levels or vocational courses
       radio_options:
         primary:
           radio: Primary

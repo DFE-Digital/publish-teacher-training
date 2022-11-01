@@ -15,7 +15,8 @@ namespace :find, path: "/find" do
 
   scope module: :search do
     root to: 'locations#start'
-    resources :age_groups, path: "/age-groups"
+    get '/age-groups' => 'age_groups#new'
+    get '/age-groups-submit' => 'age_groups#create', as: :age_groups_create
     resources :subjects
     resources :locations, path: "/"
   end

@@ -1,25 +1,43 @@
 module Find
   module Search
     class AgeGroupsController < Find::ApplicationController
-      def index
-        @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)
+
+      before_action :build_backlink_query_parameters
+
+      def new
+        @age_groups_form = AgeGroupsForm.new(age_group: params[:age_group])
       end
 
       def create
-        @age_groups_form = AgeGroupsForm.new(params: age_range_form_params)
+        @age_groups_form = AgeGroupsForm.new(age_group: form_params[:age_group])
 
         if @age_groups_form.valid?
-          redirect_to find_subjects_path(age_range_form_params)
+          if form_params[:age_group] == 'further_education'
+            redirect_to results_path(further_education_params)
+          else
+            redirect_to subjects_path(filter_params[:search_age_groups_form])
+          end
         else
-          render :index
+          render :new
         end
       end
 
     private
 
-      def age_range_form_params
-        params.reverse_merge({ find_age_groups_form: {} })[:find_age_groups_form]
-          .permit(:age_group, :city_town_postcode_query, :find_courses, :school_uni_or_provider_query)
+      def further_education_params
+        filter_params[:find_age_groups_form].merge(age_group: @age_groups_form.age_group, subject_codes: ['41'])
+      end
+
+      def form_params
+        params
+          .require(:find_age_groups_form)
+          .permit(:age_group)
+      end
+
+      def build_backlink_query_parameters
+        @backlink_query_parameters = ResultsView.new(query_parameters: request.query_parameters)
+                                                .query_parameters_with_defaults
+                                                .except(:search_age_groups_form)
       end
     end
   end
