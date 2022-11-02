@@ -130,14 +130,14 @@ private
   def then_the_correct_subjects_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/subjects")
-      expect(uri.query).to eq("age_group=secondary&city_town_postcode_query=&find_courses=across_england&school_uni_or_provider_query=")
+      expect(uri.query).to eq("age_group=secondary&l=2")
     end
   end
 
   def then_the_correct_primary_subjects_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/subjects")
-      expect(uri.query).to eq("age_group=primary&city_town_postcode_query=&find_courses=across_england&school_uni_or_provider_query=")
+      expect(uri.query).to eq("age_group=primary&l=2")
     end
   end
 
