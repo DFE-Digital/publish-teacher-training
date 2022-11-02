@@ -3,6 +3,8 @@ module FindInterface
     class InternationalStudentsComponent::View < ViewComponent::Base
       attr_reader :course
 
+      delegate :apprenticeship?, to: :course
+
       def initialize(course:)
         super
         @course = course
