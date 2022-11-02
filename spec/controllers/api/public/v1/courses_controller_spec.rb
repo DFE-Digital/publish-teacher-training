@@ -290,7 +290,8 @@ RSpec.describe API::Public::V1::CoursesController do
                 personal_qualities
                 salary_details
                 can_sponsor_skilled_worker_visa
-                can_sponsor_student_visa]
+                can_sponsor_student_visa
+                campaign_name]
           end
 
           before do
