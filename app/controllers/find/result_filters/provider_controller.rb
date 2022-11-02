@@ -16,14 +16,14 @@ module Find
 
         @provider_suggestions = Provider
           .select(:provider_code, :provider_name)
-          .where(recruitment_cycle_year: RecruitmentCycle.current.year)
-          .with_params(search: params[:query])
+          .where(recruitment_cycle_id: RecruitmentCycle.current.id)
+          #.with_params(search: params[:query])
           .all
 
-        if @provider_suggestions.count.zero?
+        if @provider_suggestions.size.zero?
           flash[:error] = [I18n.t('location_filter.fields.provider'), I18n.t('location_filter.errors.missing_provider')]
           redirect_back
-        elsif @provider_suggestions.count == 1
+        elsif @provider_suggestions.size == 1
           params = filter_params_without_previous_parameters.merge(query: @provider_suggestions.first.provider_name)
           redirect_to age_groups_path(params)
         end

@@ -6,7 +6,6 @@ module Find
       before_action :build_backlink_query_parameters
 
       def new
-        #binding.pry
         @age_groups_form = AgeGroupsForm.new(age_group: params[:age_group])
       end
 
@@ -33,7 +32,7 @@ module Find
       def form_params
         params
           .require(:find_age_groups_form)
-          .permit(:age_group, :c, :fulltime, :hasvacancies, :l, :lat, :lng, :loc, :lq, :parttime, :rad, :senCourses, :sortby, qualifications: [])
+          .permit(:age_group, :c, :fulltime, :hasvacancies, :l, :lat, :lng, :loc, :lq, :parttime, :rad, :senCourses, :sortby, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, :query, qualifications: [])
       end
 
       def build_backlink_query_parameters

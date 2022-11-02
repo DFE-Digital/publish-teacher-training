@@ -18,11 +18,11 @@ module Find
 
       def create
         # if searching for specific provider go to results page
-        if provider_option_selected?
+        #if provider_option_selected?
           # TODO: check this is going to correct path
-          redirect_to(find_provider_path(get_params_for_selected_option({})))
-          return
-        end
+         # redirect_to(find_provider_path(get_params_for_selected_option({})))
+         # return
+        #end
 
         form_params = strip(filter_params.clone).merge(sortby: ResultsView::DISTANCE)
         form_object = LocationFilterForm.new(form_params)
@@ -84,20 +84,9 @@ module Find
       end
 
       def back_to_current_page_if_error(form_params)
-        if flash[:start_wizard] && CycleTimetable.preview_mode?
-          # In this scenario we do not want to redirect to 'root_path'
-          # because root_path is '/cycle-ending-soon' and the
-          # validation errors will be lost
-          redirect_to start_location_path(form_params)
-        elsif flash[:start_wizard] && !CycleTimetable.preview_mode?
-          redirect_to root_path(form_params)
-        else
-          redirect_to find_locations_path(form_params)
-        end
+        redirect_to find_locations_path(form_params.merge(l: params[:l]))
       end
 
     end
   end
 end
-
-

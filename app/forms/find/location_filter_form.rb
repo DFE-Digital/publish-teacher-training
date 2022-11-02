@@ -2,6 +2,7 @@ module Find
   class LocationFilterForm
     NO_OPTION = nil
     LOCATION_OPTION = '1'.freeze
+    PROVIDER_OPTION = '3'.freeze
 
     attr_reader :params, :errors
 
@@ -26,6 +27,10 @@ module Find
           @errors = [I18n.t('find.location_filter.fields.location'), I18n.t('find.location_filter.errors.missing_location')]
         else
           handle_location_option
+        end
+      when PROVIDER_OPTION
+        if provider_query.blank? || provider_query == "Select a provider"
+          @errors = [I18n.t('find.location_filter.errors.blank_provider')]
         end
       end
     end
@@ -59,6 +64,10 @@ module Find
 
     def location_query
       @params[:lq]
+    end
+
+    def provider_query
+      @params[:query]
     end
 
     def search_radius
