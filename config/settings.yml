@@ -86,6 +86,9 @@ basic_auth:
 
 google:
   maps_api_key: replace_me
+  gcp_api_key: replace_me
+  places_api_host: "https://maps.googleapis.com"
+  places_api_path: "/maps/api/place/autocomplete/json"
   bigquery:
     project_id: replaceme
     dataset: replaceme

@@ -47,7 +47,8 @@ module API
           :accept_science_gcse_equivalency,
           :additional_gcse_equivalencies,
           :can_sponsor_skilled_worker_visa,
-          :can_sponsor_student_visa
+          :can_sponsor_student_visa,
+          :campaign_name
 
         attribute :about_accredited_body do
           @object.accrediting_provider_description

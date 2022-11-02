@@ -1,0 +1,163 @@
+{
+  "predictions": [
+    {
+      "description": "London, UK",
+      "id": "b1a8b96daab5065cf4a08f953e577c34cdf769c0",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+      "reference": "ChIJdd4hrwug2EcRmSrV3Vo6llI",
+      "structured_formatting": {
+        "main_text": "London",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "London"
+        },
+        {
+          "offset": 8,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "locality",
+        "political",
+        "geocode"
+      ]
+    },
+    {
+      "description": "London Bridge Station, London, UK",
+      "id": "e186a3a32c7bb65a52a3ff926ac2f4745413f374",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJZQtYnFADdkgRkj1_diDEvLY",
+      "reference": "ChIJZQtYnFADdkgRkj1_diDEvLY",
+      "structured_formatting": {
+        "main_text": "London Bridge Station",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "London, UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "London Bridge Station"
+        },
+        {
+          "offset": 23,
+          "value": "London"
+        },
+        {
+          "offset": 31,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "premise",
+        "geocode"
+      ]
+    },
+    {
+      "description": "Londonderry, UK",
+      "id": "aede3ce2eed4c02e3eaaa4fb737ceccedc654fc6",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJY5PQNOTdX0gRL_NVxyr6Ib0",
+      "reference": "ChIJY5PQNOTdX0gRL_NVxyr6Ib0",
+      "structured_formatting": {
+        "main_text": "Londonderry",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Londonderry"
+        },
+        {
+          "offset": 13,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "locality",
+        "political",
+        "geocode"
+      ]
+    },
+    {
+      "description": "London Heathrow Terminal 2 - The Queen's Terminal, Inner Ring East, Hounslow, UK",
+      "id": "ae0ee93f39c36d61bcf9ee1c4040cfc62bbc91cd",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJAc88dMtzdkgR4YgFxhmidOo",
+      "reference": "ChIJAc88dMtzdkgR4YgFxhmidOo",
+      "structured_formatting": {
+        "main_text": "London Heathrow Terminal 2 - The Queen's Terminal",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Inner Ring East, Hounslow, UK"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "London Heathrow Terminal 2 - The Queen's Terminal"
+        },
+        {
+          "offset": 51,
+          "value": "Inner Ring East"
+        },
+        {
+          "offset": 68,
+          "value": "Hounslow"
+        },
+        {
+          "offset": 78,
+          "value": "UK"
+        }
+      ],
+      "types": [
+        "premise",
+        "geocode"
+      ]
+    }
+  ],
+  "status": "OK"
+}

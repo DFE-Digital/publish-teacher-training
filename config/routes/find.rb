@@ -9,6 +9,7 @@ namespace :find, path: "/find" do
   get "/course/:provider_code/:course_code", to: "courses#show", as: "course"
   get "/course/:provider_code/:course_code/apply", to: "courses#apply", as: :apply
   get "/results", to: "results#index", as: "results"
+  get "/location-suggestions", to: "location_suggestions#index"
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show
