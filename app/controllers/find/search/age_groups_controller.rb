@@ -1,10 +1,12 @@
 module Find
   module Search
     class AgeGroupsController < Find::ApplicationController
+      include FilterParameters
 
       before_action :build_backlink_query_parameters
 
       def new
+        #binding.pry
         @age_groups_form = AgeGroupsForm.new(age_group: params[:age_group])
       end
 
@@ -13,9 +15,9 @@ module Find
 
         if @age_groups_form.valid?
           if form_params[:age_group] == 'further_education'
-            redirect_to results_path(further_education_params)
+            redirect_to find_results_path(further_education_params)
           else
-            redirect_to subjects_path(filter_params[:search_age_groups_form])
+            redirect_to find_subjects_path(filter_params[:find_age_groups_form])
           end
         else
           render :new
@@ -31,13 +33,13 @@ module Find
       def form_params
         params
           .require(:find_age_groups_form)
-          .permit(:age_group)
+          .permit(:age_group, :c, :fulltime, :hasvacancies, :l, :lat, :lng, :loc, :lq, :parttime, :rad, :senCourses, :sortby, qualifications: [])
       end
 
       def build_backlink_query_parameters
         @backlink_query_parameters = ResultsView.new(query_parameters: request.query_parameters)
                                                 .query_parameters_with_defaults
-                                                .except(:search_age_groups_form)
+                                                .except(:find_age_groups_form)
       end
     end
   end

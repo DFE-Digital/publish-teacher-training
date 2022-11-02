@@ -17,7 +17,8 @@ namespace :find, path: "/find" do
     root to: 'locations#start'
     get '/age-groups' => 'age_groups#new'
     get '/age-groups-submit' => 'age_groups#create', as: :age_groups_create
-    resources :subjects
+    get '/subjects' => 'subjects#new'
+    get '/subjects-submit' => 'subjects#create', as: :subjects_create
     resources :locations, path: "/"
   end
 

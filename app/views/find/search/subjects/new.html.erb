@@ -1,0 +1,23 @@
+<%= content_for :page_title, title_with_error_prefix(I18n.t('subjects.title'), @subjects_form.errors.any?) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(**{
+    text: 'Back',
+    href: find_age_groups_path(@backlink_query_parameters),
+    html_attributes: {
+      data: { qa: 'page-back' },
+    },
+  }) %>
+<% end %>
+
+<%= form_with(model: @subjects_form, url: find_subjects_create_path, method: :get) do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= render Find::HiddenFieldsComponent.new(
+    query_params: request.query_parameters,
+    form: f,
+    form_name: :find_subjects_form,
+    exclude_keys: ['subject_codes']) %>
+
+  <%= render(partial: "primary_subjects", locals: { f: }) if @subjects_form.primary? %>
+  <%= render(partial: "secondary_subjects", locals: { f: }) if @subjects_form.secondary? %>
+<% end %>
