@@ -5,8 +5,7 @@ require "rails_helper"
 module Find
   describe AgeGroupsForm do
     describe "validation" do
-      subject { described_class.new(**args) }
-      let(:args) { { params: } }
+      subject { described_class.new(params) }
 
       context "when no option is selected" do
         let(:params) { {} }
