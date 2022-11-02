@@ -13,7 +13,7 @@ module Find
         @age_groups_form = AgeGroupsForm.new(age_group: form_params[:age_group])
 
         if @age_groups_form.valid?
-          if form_params[:age_group] == 'further_education'
+          if form_params[:age_group] == "further_education"
             redirect_to find_results_path(further_education_params)
           else
             redirect_to find_subjects_path(filter_params[:find_age_groups_form])
@@ -26,7 +26,7 @@ module Find
     private
 
       def further_education_params
-        filter_params[:find_age_groups_form].merge(age_group: @age_groups_form.age_group, subject_codes: ['41'])
+        filter_params[:find_age_groups_form].merge(age_group: @age_groups_form.age_group, subject_codes: ["41"])
       end
 
       def form_params

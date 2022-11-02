@@ -15,11 +15,11 @@ namespace :find, path: "/find" do
   resource :sitemap, only: :show
 
   scope module: :search do
-    root to: 'locations#start'
-    get '/age-groups' => 'age_groups#new'
-    get '/age-groups-submit' => 'age_groups#create', as: :age_groups_create
-    get '/subjects' => 'subjects#new'
-    get '/subjects-submit' => 'subjects#create', as: :subjects_create
+    root to: "locations#start"
+    get "/age-groups" => "age_groups#new"
+    get "/age-groups-submit" => "age_groups#create", as: :age_groups_create
+    get "/subjects" => "subjects#new"
+    get "/subjects-submit" => "subjects#create", as: :subjects_create
     resources :locations, path: "/"
   end
 

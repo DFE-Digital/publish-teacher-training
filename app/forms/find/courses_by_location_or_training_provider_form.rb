@@ -3,7 +3,7 @@ module Find
     include ActiveModel::Model
 
     NO_OPTION = nil
-    LOCATION_OPTION = '1'.freeze
+    LOCATION_OPTION = "1".freeze
 
     attr_accessor :params, :find_courses, :city_town_postcode_query, :school_uni_or_provider_query, :prev_l, :prev_loc, :prev_lng, :prev_lat, :prev_rad, :prev_query, :prev_lq
 
@@ -26,7 +26,6 @@ module Find
       end
     end
 
-
     def selected_option
       @params[:l]
     end
@@ -41,7 +40,7 @@ module Find
 
     def country(results)
       flattened_results = results.address_components.map(&:values).flatten
-      countries = [DEVOLVED_NATIONS, 'England'].flatten
+      countries = [DEVOLVED_NATIONS, "England"].flatten
 
       countries.each { |country| return country if flattened_results.include?(country) }
     end

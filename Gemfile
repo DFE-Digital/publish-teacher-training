@@ -104,7 +104,7 @@ gem "dry-container"
 gem "geokit-rails"
 
 # Geocoding
-gem 'geocoder'
+gem "geocoder"
 
 gem "open_api-rswag-api"
 gem "open_api-rswag-ui"

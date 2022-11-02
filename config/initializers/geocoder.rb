@@ -1,13 +1,13 @@
 Geocoder.configure(
   # Geocoding options
-  timeout: 3,                 # geocoding service timeout (secs)
-  lookup: :google,         # name of geocoding service (symbol)
+  timeout: 3, # geocoding service timeout (secs)
+  lookup: :google, # name of geocoding service (symbol)
   # ip_lookup: :ipinfo_io,      # name of IP address geocoding service (symbol)
   # language: :en,              # ISO-639 language code
-  use_https: true,           # use HTTPS for lookup requests? (if supported)
+  use_https: true, # use HTTPS for lookup requests? (if supported)
   # http_proxy: nil,            # HTTP proxy server (user:pass@host:port)
   # https_proxy: nil,           # HTTPS proxy server (user:pass@host:port)
-  api_key: Settings.google.gcp_api_key,               # API key for geocoding service
+  api_key: Settings.google.gcp_api_key, # API key for geocoding service
   # cache: nil,                 # cache object (must respond to #[], #[]=, and #del)
 
   # Exceptions that should not be rescued by default
@@ -16,7 +16,7 @@ Geocoder.configure(
   always_raise: [Geocoder::InvalidApiKey, Geocoder::OverQueryLimitError],
 
   # Calculation options
-  units: :mi,                 # :km for kilometers or :mi for miles
+  units: :mi, # :km for kilometers or :mi for miles
   # distances: :linear          # :spherical or :linear
 
   # Cache configuration
