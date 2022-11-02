@@ -20,14 +20,12 @@ module Find
 
   private
 
-    # These subjects don’t currently match any courses, and so can be dropped.
-    IGNORED_SUBJECTS = ["Philosophy", "Modern Languages", "Ancient Hebrew", "Ancient Greek"].freeze
     SecondarySubjectInput = Struct.new(:code, :name, :financial_info)
 
     def secondary_subjects
       Subject.includes(:financial_incentive)
              .where(type: %w[SecondarySubject ModernLanguagesSubject])
-             .where.not(subject_name: IGNORED_SUBJECTS)
+             .where.not(subject_name: ["Modern Languages"])
              .order(:subject_name)
     end
   end
