@@ -744,11 +744,8 @@ DEPENDENCIES
   fakefs
   faker
   faraday
-<<<<<<< HEAD
   geocoder
-=======
   faraday-net_http_persistent (~> 2.0)
->>>>>>> main
   geokit-rails
   google-cloud-bigquery
   govuk-components
