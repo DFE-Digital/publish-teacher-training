@@ -23,8 +23,8 @@ module Find
       when NO_OPTION
         @errors = [I18n.t("find.location_filter.errors.no_option")]
       when LOCATION_OPTION
-        if location_query.nil?
-          @errors = [I18n.t("find.location_filter.fields.location"), I18n.t("find.location_filter.errors.missing_location")]
+        if location_query.blank?
+          @errors = [I18n.t("find.fields.location"), I18n.t("find.location_filter.errors.missing_location")]
         else
           handle_location_option
         end
