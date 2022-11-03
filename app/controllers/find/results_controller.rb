@@ -1,7 +1,6 @@
 module Find
   class ResultsController < ApplicationController
-    # FIND:TODO add this
-    # before_action :render_feedback_component
+    before_action :render_feedback_component
 
     def index
       @results_view = ResultsView.new(query_parameters: request.query_parameters)
