@@ -28,7 +28,7 @@ feature "course searches" do
     when_i_choose_secondary
     then_i_click_continue_on_the(age_groups_page)
     then_i_should_see_the_subjects_form
-    and_i_should_not_see_hidden_subjects
+    and_i_should_not_see_modern_languages
     then_the_correct_subjects_form_page_url_and_query_params_are_present
   end
 
@@ -100,9 +100,7 @@ private
     expect(secondary_subjects_page).to have_content("Which secondary subjects do you want to teach?")
   end
 
-  def and_i_should_not_see_hidden_subjects
-    expect(secondary_subjects_page).not_to have_content("Ancient Hebrew")
-    expect(secondary_subjects_page).not_to have_content("Philosophy")
+  def and_i_should_not_see_modern_languages
     expect(secondary_subjects_page).not_to have_content("Modern Languages")
   end
 
