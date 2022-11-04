@@ -222,6 +222,9 @@ group :development do
   gem "guard"
   gem "guard-rspec", require: false
   gem "guard-rubocop", require: false
+
+  # For Ruby LSP & vscode
+  gem "ruby-lsp", require: false
 end
 
 group :test do
