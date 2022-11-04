@@ -138,6 +138,27 @@ class CourseDecorator < ApplicationDecorator
     object.subjects.map(&:subject_name).sort.join("<br>").html_safe
   end
 
+  def chosen_subjects(params, course)
+    if params[:course][:master_subject_id].nil?
+      sorted_subjects
+    else
+      main_subject_id = params[:course][:master_subject_id]
+      main_subject = Subject.find(main_subject_id)
+      raw_additional_subjects = course.subjects.map { |subject| subject unless subject.id.to_s == main_subject_id }
+      additional_subjects = raw_additional_subjects.compact
+
+      # The below is to ensure modern language subjects chosen appear above the second main subject chosen
+
+      if main_subject_id == 33.to_s
+        ordered_subjects = additional_subjects.push(main_subject).reverse
+      else
+        ordered_subjects = additional_subjects.unshift(main_subject)
+      end
+
+      ordered_subjects.map(&:subject_name).join("<br>").html_safe
+    end
+  end
+
   def length
     case course_length.to_s
     when "OneYear"
