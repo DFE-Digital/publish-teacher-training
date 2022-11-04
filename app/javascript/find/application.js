@@ -15,7 +15,7 @@ setupAutocomplete('query-field')
 
 initAutocomplete({
   element: 'location-autocomplete',
-  input: 'locations',
+  input: 'location',
   path: '/find/location-suggestions'
 })
 
