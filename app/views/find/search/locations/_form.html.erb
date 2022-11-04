@@ -106,7 +106,8 @@
                   <% end %>
                   <% aria_described_by = "provider-hint" %>
                   <% aria_described_by += " provider-error" if provider_error? %>
-                  <%= form.collection_select("query", select_provider_options(@providers), :id, :name, {}, { class: "govuk-input", "aria-describedby" => aria_described_by, data: { qa: "provider-search" } }) %>
+                  <%#= form.collection_select("query", select_provider_options(@providers), :id, :name, {}, { class: "govuk-input", "aria-describedby" => aria_described_by, data: { qa: "provider-search" } }) %>
+                   <%= form.govuk_collection_select :query, select_provider_options(@providers), :id, :name, label: { text: "School, university or other training provider" }, hint: { text: "Enter the name or provider code" }  %>
                 <% else %>
                   <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
                     School, university or other training provider

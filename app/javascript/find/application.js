@@ -11,11 +11,11 @@ window.jQuery = jQuery
 window.$ = jQuery
 
 initAll()
-setupAutocomplete('find-courses-by-location-or-training-provider-form-school-uni-or-provider-query-field')
+setupAutocomplete('query-field')
 
 initAutocomplete({
   element: 'location-autocomplete',
-  input: 'find-courses-by-location-or-training-provider-form-city-town-postcode-query-field',
+  input: 'locations',
   path: '/find/location-suggestions'
 })
 
