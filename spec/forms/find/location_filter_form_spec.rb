@@ -42,7 +42,7 @@ module Find
           end
 
           it "validates find_courses" do
-            expect(subject.errors[:school_uni_or_provider_query]).to include("Enter a school, university or other training provider")
+            expect(subject.errors).to include("Enter a school, university or other training provider")
           end
         end
       end
