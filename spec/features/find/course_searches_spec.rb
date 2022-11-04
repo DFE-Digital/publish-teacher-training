@@ -121,9 +121,7 @@ private
     expect(primary_subjects_page).to have_content("Which courses would you like to find?")
   end
 
-  def and_i_should_not_see_hidden_subjects
-    expect(secondary_subjects_page).not_to have_content("Ancient Hebrew")
-    expect(secondary_subjects_page).not_to have_content("Philosophy")
+  def and_i_should_not_see_modern_languages
     expect(secondary_subjects_page).not_to have_content("Modern Languages")
   end
 

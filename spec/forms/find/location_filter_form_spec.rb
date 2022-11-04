@@ -22,7 +22,7 @@ module Find
           let(:params) do
             {
               l: "1",
-              lq: ""
+              lq: "",
             }
           end
 
@@ -46,7 +46,6 @@ module Find
           end
         end
       end
-
     end
   end
 end

@@ -10,7 +10,7 @@ module PageObjects
       element :by_city_town_or_postcode_radio, "#l_1"
       element :across_england, "#l_2"
       element :by_school_uni_or_provider, "#l_3"
-      element :provider_options, "#query"
+      element :provider_options, "#query-field"
       element :continue, ".govuk-button"
     end
   end
