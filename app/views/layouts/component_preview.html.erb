@@ -1,42 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template">
+<html>
   <head>
-    <title><%= yield :page_title %> - <%= t("service_name.find") %> - GOV.UK</title>
+    <title>Component Preview</title>
+    <title>Component Preview - Find and Publish Components - GOV.UK</title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-152x152.png", rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-167x167.png", rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-180x180.png", rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
+    <%= stylesheet_link_tag "accessible-autocomplete/dist/accessible-autocomplete.min" %>
     <%= stylesheet_link_tag "find_application" %>
+    <%= stylesheet_link_tag "publish_application" %>
     <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "publish/application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="govuk-template__body">
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <%= render FindInterface::Header::View.new(
-      service_name: t("service_name.find"),
+      service_name: "Find and Publish Components",
     ) %>
 
     <div class="govuk-width-container">
-      <%= render FindInterface::PhaseBanner::View.new %>
-
-      <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <%= yield %>
       </main>
     </div>
-
-    <% if @render_feedback_component %>
-      <%= render(
-        FindInterface::FeedbackComponent.new(
-          path: request.env["PATH_INFO"],
-          controller: params[:controller],
-        ),
-      ) %>
-    <% end %>
-
-    <%= render "layouts/find_footer" %>
   </body>
 </html>

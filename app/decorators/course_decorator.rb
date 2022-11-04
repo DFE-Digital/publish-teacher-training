@@ -119,6 +119,10 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def apprenticeship?
+    object.funding_type == "apprenticeship"
+  end
+
+  def apprenticeship
     object.funding_type.to_s == "apprenticeship" ? "Yes" : "No"
   end
 

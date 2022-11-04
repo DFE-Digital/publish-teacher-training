@@ -1,0 +1,7 @@
+<h2 class="govuk-heading-m"><%= @preview.preview_name.titleize %></h2>
+
+<ul class="govuk-list">
+  <% @preview.examples.each do |example| %>
+    <li><%= govuk_link_to example, preview_view_component_path("#{@preview.preview_name}/#{example}") %></li>
+  <% end %>
+</ul>

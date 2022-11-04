@@ -1,0 +1,14 @@
+<div class="govuk-width-container">
+  <div class="app-feedback">
+    <p class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+      <%= govuk_link_to(
+        "How can we improve this page? (Opens in a new tab)",
+        "#{Settings.apply_base_url}/candidate/find-feedback?path=#{@path}&find_controller=#{@controller}",
+        class: "govuk-!-margin-top-4",
+        data: { qa: "feedback-link" },
+        target: "_blank",
+        rel: "noopener",
+      ) %>
+    </p>
+  </div>
+</div>

@@ -65,7 +65,7 @@
       <% if @provider.accredited_body? %>
         <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
           <% row.key { "Apprenticeship" } %>
-          <% row.value { course.apprenticeship? } %>
+          <% row.value { course.apprenticeship } %>
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
