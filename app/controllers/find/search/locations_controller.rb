@@ -6,23 +6,11 @@ module Find
       before_action :providers
       before_action :build_results_filter_query_parameters
 
-      def index
-        providers
-        @courses_by_location_or_training_provider_form = CoursesByLocationOrTrainingProviderForm.new
-      end
-
       def start; end
 
       def new; end
 
       def create
-        # if searching for specific provider go to results page
-        # if provider_option_selected?
-        # TODO: check this is going to correct path
-        # redirect_to(find_provider_path(get_params_for_selected_option({})))
-        # return
-        # end
-
         form_params = strip(filter_params.clone).merge(sortby: ResultsView::DISTANCE)
         form_object = LocationFilterForm.new(form_params)
 
