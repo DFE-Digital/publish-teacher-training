@@ -11,6 +11,11 @@ namespace :find, path: "/find" do
   get "/results", to: "results#index", as: "results"
   get "/location-suggestions", to: "location_suggestions#index"
 
+  get "/feature-flags", to: "feature_flags#index"
+  post "/feature-flags" => "feature_flags#update"
+  get "/confirm-environment" => "confirm_environment#new"
+  post "/confirm-environment" => "confirm_environment#create"
+
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show
 

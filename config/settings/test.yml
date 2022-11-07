@@ -12,3 +12,9 @@ bg_jobs:
 environment:
   label: "Test"
   name: "test"
+
+basic_auth:
+  username: admin
+  password: password
+
+STATE_CHANGE_SLACK_URL: https://example.com/webhook

@@ -137,6 +137,9 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 # For running data migrations
 gem "data_migrate"
 
+# For outgoing http requests
+gem "http"
+
 group :production, :qa, :sandbox, :staging do
   gem "cloudfront-rails"
 end
@@ -230,6 +233,7 @@ end
 group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
+  gem "mock_redis"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 5.2"
   gem "simplecov", "< 0.22", require: false

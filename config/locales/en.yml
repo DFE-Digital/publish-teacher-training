@@ -513,6 +513,11 @@ en:
           attributes:
             consent:
               blank: Select yes if you want to accept Google Analytics cookies
+        find/confirm_environment:
+          attributes:
+            environment:
+              blank: Enter the environment to proceed
+              invalid_environment: "That's not %{environment}"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
