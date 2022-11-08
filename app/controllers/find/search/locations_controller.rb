@@ -35,11 +35,6 @@ module Find
         @providers ||= RecruitmentCycle.current.providers.by_name_ascending
       end
 
-      def find_courses_by_location_or_training_provider_form_params
-        params[:find_courses_by_location_or_training_provider_form]
-          .permit(:prev_l, :prev_loc, :prev_lng, :prev_lat, :prev_rad, :prev_query, :prev_lq)
-      end
-
       def build_results_filter_query_parameters
         @results_filter_query_parameters = merge_previous_parameters(
           ResultsView.new(query_parameters: request.query_parameters).query_parameters_with_defaults,
