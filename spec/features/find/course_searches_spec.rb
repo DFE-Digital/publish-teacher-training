@@ -17,7 +17,6 @@ feature "course searches" do
     given_there_are_providers
     and_i_visit_the_search_page
     when_i_select_the_provider_radio_button
-
     and_i_select_the_provider
     then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
     and_i_am_on_the_age_groups_page
@@ -32,14 +31,12 @@ feature "course searches" do
     when_i_select_the_location_radio_button
     then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
     then_i_should_see_a_missing_location_validation_error
-
     and_i_enter_a_location
     then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
     and_i_am_on_the_age_groups_page
     then_the_correct_page_url_and_location_query_params_are_present
     when_i_go_back
     the_location_radio_button_is_selected
-
   end
 
   scenario "Candidate searches for secondary courses across England" do
