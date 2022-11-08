@@ -33,9 +33,6 @@ module Find
              .order(:subject_name)
     end
 
-    # These subjects don’t currently match any courses, and so can be dropped.
-    IGNORED_SUBJECTS = ["Philosophy", "Modern Languages", "Ancient Hebrew", "Ancient Greek"].freeze
-
     SecondarySubjectInput = Struct.new(:code, :name, :financial_info)
 
     def secondary_subjects
