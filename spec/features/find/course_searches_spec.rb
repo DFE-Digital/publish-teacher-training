@@ -26,7 +26,6 @@ feature "course searches" do
   end
 
   scenario "Candidate searches by location", :geocode do
-
     when_i_visit_the_search_page
     when_i_select_the_location_radio_button
     then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
@@ -187,7 +186,7 @@ private
   end
 
   def then_i_should_see_a_missing_location_validation_error
-    expect(page).to have_content('Enter a city, town or postcode')
+    expect(page).to have_content("Enter a city, town or postcode")
   end
 
   def the_location_radio_button_is_selected
