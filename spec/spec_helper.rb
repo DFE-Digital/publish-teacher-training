@@ -67,6 +67,7 @@ RSpec.configure do |config|
     stub_const("Geokit::Geocoders::GoogleGeocoder", GeocoderStub.new)
   end
 
+
   config.include SerializerSpecHelper, type: :serializer
 
   %i[controller request].each do |type|
