@@ -42,6 +42,7 @@ en:
           hint_text: For example, teaching A levels or vocational courses
     subjects_page:
       title: Select a subject -
+      primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
       show:

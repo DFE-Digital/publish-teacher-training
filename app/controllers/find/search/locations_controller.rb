@@ -11,6 +11,12 @@ module Find
       def new; end
 
       def create
+        # if searching by specific provider we have to filter params
+        if provider_option_selected?
+          redirect_to next_step(params)
+          return
+        end
+
         form_params = strip(filter_params.clone).merge(sortby: ResultsView::DISTANCE)
         form_object = LocationFilterForm.new(form_params)
 
@@ -66,7 +72,8 @@ module Find
         elsif across_england_option_selected?
           all_params.except(:lat, :lng, :rad, :loc, :lq, :query, :sortby)
         elsif provider_option_selected?
-          filter_params.except(:lat, :lng, :rad, :loc, :lq)
+          p = filter_params.except(:lat, :lng, :rad, :loc, :lq)
+          remove_previous_parameters(p)
         end
       end
 

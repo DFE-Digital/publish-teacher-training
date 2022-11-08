@@ -12,7 +12,8 @@ module Find
         @subjects_form = SubjectsForm.new(subject_codes: sanitised_subject_codes, age_group: form_params[:age_group])
 
         if @subjects_form.valid?
-          redirect_to find_results_path
+          # we will have to sanitize the subject_codes here
+          redirect_to find_results_path(form_params)
         else
           render :new
         end
