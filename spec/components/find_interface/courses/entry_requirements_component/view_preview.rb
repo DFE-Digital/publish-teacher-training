@@ -17,10 +17,22 @@ module FindInterface::Courses::EntryRequirementsComponent
       render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_course)
     end
 
+    def fully_etp_populated
+      render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_etp_course)
+    end
+
   private
 
-    def mock_course
-      FakeCourse.new(degree_grade: 1,
+    def mock_etp_course
+      FakeCourse.new(**mock_etp_course_attributes)
+    end
+
+    def mock_etp_course_attributes
+      mock_course_attributes.merge({ campaign_name: :engineers_teach_physics })
+    end
+
+    def mock_course_attributes
+      { degree_grade: 1,
         degree_subject_requirements: "Degree Subject Requirements Text Goes Here",
         level: "secondary",
         name: "Super Awesome Course",
@@ -33,12 +45,16 @@ module FindInterface::Courses::EntryRequirementsComponent
         additional_gcse_equivalencies: "much much more",
         personal_qualities: "Personal Qualities Text Goes Here",
         other_requirements: "Other Requirements Text Goes Here",
-        subject_name_or_names: "Biology")
+        subject_name_or_names: "Biology" }
+    end
+
+    def mock_course
+      FakeCourse.new(**mock_course_attributes)
     end
 
     class FakeCourse
       include ActiveModel::Model
-      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :subject_name_or_names)
+      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :subject_name_or_names, :campaign_name)
 
       def enrichment_attribute(params)
         send(params)
@@ -46,6 +62,14 @@ module FindInterface::Courses::EntryRequirementsComponent
 
       def accept_gcse_equivalency?
         accept_gcse_equivalency
+      end
+
+      def secondary_course?
+        level == "secondary"
+      end
+
+      def engineers_teach_physics?
+        campaign_name&.to_sym == :engineers_teach_physics
       end
     end
   end
