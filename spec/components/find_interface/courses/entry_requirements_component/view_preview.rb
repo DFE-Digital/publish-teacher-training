@@ -17,7 +17,7 @@ module FindInterface::Courses::EntryRequirementsComponent
       render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_course)
     end
 
-    def fully_etp_populated
+    def fully_populated_with_etp_course
       render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_etp_course)
     end
 
