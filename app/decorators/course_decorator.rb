@@ -149,7 +149,7 @@ class CourseDecorator < ApplicationDecorator
 
       # The below is to ensure modern language subjects chosen appear above the second main subject chosen
 
-      if main_subject_id == 33
+      if main_subject_id == SecondarySubject.modern_languages.id
         ordered_subjects = additional_subjects.push(main_subject).reverse
       else
         ordered_subjects = additional_subjects.unshift(main_subject)
