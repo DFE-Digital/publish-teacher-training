@@ -26,13 +26,42 @@ module Find
         .merge(subject_parameters)
     end
 
+   # def courses
+   #   @courses ||= RecruitmentCycle.current.courses.includes(
+   #     :enrichments,
+   #     subjects: [:financial_incentive],
+   #     site_statuses: [:site],
+   #     provider: %i[recruitment_cycle ucas_preferences],
+   #   ).findable.page(query_parameters[:page] || 1)
+   # end
+
+#    def courses
+#      @courses ||= begin
+#        base_query = course_query(include_location: location_filter?)
+#
+#        base_query = if sort_by_distance?
+#                      base_query.order(:distance)
+#                    else
+#                      base_query
+#                        .order('provider.provider_name': results_order)
+#                        .order(name: results_order)
+#                    end
+#
+#        base_query
+#          .page(query_parameters[:page] || 1)
+#          .per(results_per_page)
+#      end
+#    end
     def courses
-      @courses ||= RecruitmentCycle.current.courses.includes(
-        :enrichments,
-        subjects: [:financial_incentive],
-        site_statuses: [:site],
-        provider: %i[recruitment_cycle ucas_preferences],
-      ).findable.page(query_parameters[:page] || 1)
+      @courses ||= Find::CourseSearchService.call(
+        filter: query_parameters,
+        sort: query_parameters[:sortby],
+        course_scope: recruitment_cycle.courses,
+      )
+    end
+
+    def recruitment_cycle
+      @recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
     end
 
     def number_of_courses_string
@@ -202,10 +231,225 @@ module Find
       @suggested_search_links ||= filter_links(all_links)
     end
 
+    def sites_count(course)
+      new_or_running_sites_with_vacancies_for(course).count
+    end
+
+    def nearest_address(course)
+      nearest_address = nearest_location(course)
+
+      [
+        nearest_address.address1,
+        nearest_address.address2,
+        nearest_address.address3,
+        nearest_address.address4,
+        nearest_address.postcode,
+      ].select(&:present?).join(', ').html_safe
+    end
+
+    def nearest_location_name(course)
+      nearest_location(course).location_name
+    end
+
+    def site_distance(course)
+      distances = new_or_running_sites_with_vacancies_for(course).map do |site|
+        lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
+      end
+
+      min_distance = distances.min
+
+      if min_distance && min_distance < 0.05
+        min_distance.ceil(1)
+      elsif min_distance && min_distance < 1
+        min_distance.round(1)
+      else
+        min_distance.round(0)
+      end
+    end
+
+    def radius
+      MILES
+    end
+
+    def degree_required?
+      query_parameters['degree_required'].present? && query_parameters['degree_required'] != 'show_all_courses'
+    end
+
+    def visa_courses?
+      query_parameters['can_sponsor_visa'].present? && query_parameters['can_sponsor_visa'].downcase == 'true'
+    end
+
+    def all_qualifications?
+      qts_only? && pgce_or_pgde_with_qts? && other_qualifications?
+    end
+
+    def qts_only?
+      qualifications.include?('QtsOnly')
+    end
+
+    def pgce_or_pgde_with_qts?
+      qualifications.include?('PgdePgceWithQts')
+    end
+
+    def other_qualifications?
+      qualifications.include?('Other')
+    end
+
+    def all_qualifications?
+      qts_only? && pgce_or_pgde_with_qts? && other_qualifications?
+    end
+
+    def with_salaries?
+      query_parameters['funding'] == '8'
+    end
+
+    def send_courses?
+      query_parameters['senCourses'].present? && query_parameters['senCourses'].downcase == 'true'
+    end
+
+    def sort_by_distance?
+      sort_by == DISTANCE
+    end
+
+    def sort_by
+      query_parameters['sortby']
+    end
+
+    def placement_schools_summary(course)
+      site_distance = site_distance(course)
+
+      if site_distance < 11
+        'Placement schools are near you'
+      elsif site_distance < 21
+        'Placement schools might be near you'
+      else
+        'Placement schools might be in commuting distance'
+      end
+    end
+
   private
+
+    def filter_links(links)
+      links
+        .uniq(&:count)
+        .reject { |link| link.count <= course_count }
+        .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
+    end
+
+    def qualification
+      qualification = []
+      qualification |= %w[qts] if qts_only?
+      qualification |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
+      qualification |= %w[pgce pgde] if other_qualifications?
+
+      qualification
+    end
+
+    def course_counter(radius_to_check: nil, include_salary: true)
+      course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
+      course_query = course_query.order(:distance) if sort_by_distance?
+
+      course_query.all.meta['count']
+    end
+
+    def radii_for_suggestions
+      radius_for_all_england = nil
+      [50].reject { |rad| rad <= radius.to_i } << radius_for_all_england
+    end
+
+    def qualifications
+      query_parameters['qualifications'] || %w[QtsOnly PgdePgceWithQts Other]
+    end
+
+    def study_type
+      return 'full_time,part_time' if fulltime? && parttime?
+      return 'full_time' if fulltime?
+      return 'part_time' if parttime?
+    end
+
+    def course_query(include_location:, radius_to_query: radius, include_salary: true)
+      base_query = Course
+        .includes(site_statuses: [:site])
+        .includes(:subjects)
+        .includes(:provider)
+        .select(
+          :name,
+          :course_code,
+          :provider_code,
+          :study_mode,
+          :qualification,
+          :funding_type,
+          :provider_type,
+          :level,
+          :provider,
+          :site_statuses,
+          :subjects,
+          :recruitment_cycle_year,
+          :degree_grade,
+          :can_sponsor_student_visa,
+          :can_sponsor_skilled_worker_visa,
+          providers: %i[
+            provider_name
+            address1
+            address2
+            address3
+            address4
+            postcode
+          ],
+          site_statuses: %i[
+            status
+            has_vacancies?
+            site
+          ],
+          subjects: %i[
+            subject_name
+            subject_code
+            bursary_amount
+            scholarship
+          ],
+        )
+
+      base_query = base_query.with_recruitment_cycle(RecruitmentCycle.current.year)
+      base_query = base_query.where(funding: 'salary') if include_salary && with_salaries?
+      base_query = base_query.with_vacancies if hasvacancies?
+      base_query = base_query.where(study_type:) if study_type.present?
+      base_query = base_query.where(degree_grade: degree_grade_types) if degree_required?
+      base_query = base_query.where(can_sponsor_visa: true) if visa_courses?
+      base_query = base_query.where(qualification: qualification.join(',')) unless all_qualifications?
+      base_query = base_query.joins(:subjects).merge(Subject.with_subject_codes(subject_codes)) if subject_codes.any?
+      base_query = base_query.where(send_courses: true) if send_courses?
+
+      if include_location
+        base_query = base_query.where('latitude' => latitude)
+        base_query = base_query.where('longitude' => longitude)
+        base_query = base_query.where('radius' => radius_to_query)
+        base_query = base_query.where(expand_university: Settings.expand_university)
+      end
+
+      base_query = base_query.where('provider.provider_name' => provider) if provider.present?
+      base_query
+    end
+
+    def latitude
+      query_parameters['lat']
+    end
+
+    def longitude
+      query_parameters['lng']
+    end
+
+    def lat_long
+      Geokit::LatLng.new(latitude.to_f, longitude.to_f)
+    end
 
     def results_per_page
       RESULTS_PER_PAGE
+    end
+
+    def nearest_location(course)
+      new_or_running_sites_with_vacancies_for(course).min_by do |site|
+        lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
+      end
     end
 
     def stripped_devolved_nation_params(path)

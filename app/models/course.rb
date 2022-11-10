@@ -217,6 +217,7 @@ class Course < ApplicationRecord
   scope :with_study_modes, lambda { |study_modes|
     where(study_mode: Array(study_modes) << "full_time_or_part_time")
   }
+
   scope :with_subjects, lambda { |subject_codes|
     joins(:subjects).merge(Subject.with_subject_codes(subject_codes))
   }
@@ -327,6 +328,10 @@ class Course < ApplicationRecord
 
   def is_engineers_teach_physics?
     master_subject_id == SecondarySubject.physics.id && engineers_teach_physics?
+  end
+
+  def university_based?
+    provider.provider_type == "university"
   end
 
   def academic_year

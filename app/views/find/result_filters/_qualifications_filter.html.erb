@@ -11,7 +11,7 @@
           data: { qa: "qts_only" },
           checked: @filters_view.qts_only_checked? || @filters_view.qualification_params_nil?,
         },
-        "QtsOnly",
+        "qts",
         false,
       ) %>
       <%= form.label :qualifications, value: "QtsOnly", class: "govuk-label govuk-checkboxes__label" do %>
@@ -28,7 +28,7 @@
           data: { qa: "pgde_pgce_with_qts" },
           checked: @filters_view.pgde_pgce_with_qts_checked? || @filters_view.qualification_params_nil?,
         },
-        "PgdePgceWithQts",
+        "pgce_with_qts",
         false,
       ) %>
       <%= form.label :qualifications, value: "PgdePgceWithQts", class: "govuk-label govuk-checkboxes__label" do %>
@@ -45,7 +45,7 @@
           data: { qa: "other" },
           checked: @filters_view.other_checked? || @filters_view.qualification_params_nil?,
         },
-        "Other",
+        "other",
         false,
       ) %>
       <%= form.label :qualifications, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>

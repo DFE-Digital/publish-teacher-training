@@ -6,15 +6,15 @@ module Find
       end
 
       def qts_only_checked?
-        checked?("QtsOnly")
+        checked?("qts")
       end
 
       def pgde_pgce_with_qts_checked?
-        checked?("PgdePgceWithQts")
+        checked?("pgce_with_qts")
       end
 
       def other_checked?
-        checked?("Other")
+        checked?("other")
       end
 
       def qualification_selected?
@@ -40,7 +40,7 @@ module Find
       end
 
       def funding_checked?
-        params[:funding] == "8"
+        params[:funding] == "salary"
       end
 
       def send_checked?

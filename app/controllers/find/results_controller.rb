@@ -5,7 +5,7 @@ module Find
     def index
       @results_view = ResultsView.new(query_parameters: request.query_parameters)
       @filters_view = ResultFilters::FiltersView.new(params:)
-      @courses = @results_view.courses
+      @courses = @results_view.courses.page params[:page]
       @number_of_courses_string = @results_view.number_of_courses_string
     end
   end
