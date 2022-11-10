@@ -15,6 +15,7 @@ namespace :find, path: "/find" do
   post "/feature-flags" => "feature_flags#update"
   get "/confirm-environment" => "confirm_environment#new"
   post "/confirm-environment" => "confirm_environment#create"
+  get "/maintenance", to: "pages#maintenance", as: "maintenance"
 
   resource :cookie_preferences, only: %i[show update], path: "/cookies", as: :cookies
   resource :sitemap, only: :show

@@ -16,7 +16,7 @@ module Find
     end
 
     def redirect_to_maintenance_page_if_flag_is_active
-      redirect_to maintainance_path if FeatureFlag.active?(:maintenance_mode)
+      redirect_to find_maintenance_path if FeatureFlag.active?(:maintenance_mode)
     end
   end
 end
