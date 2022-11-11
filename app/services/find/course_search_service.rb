@@ -203,7 +203,7 @@ module Find
     def study_types
       study_types_array = []
       if filter[:fulltime] == "true" && filter[:parttime] == "true"
-        return study_types_array << "full_time_or_part_time"
+        study_types_array << "full_time_or_part_time"
       elsif filter[:fulltime] == "true"
         study_types_array << "full_time"
       elsif filter[:parttime] == "true"

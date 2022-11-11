@@ -26,32 +26,32 @@ module Find
         .merge(subject_parameters)
     end
 
-   # def courses
-   #   @courses ||= RecruitmentCycle.current.courses.includes(
-   #     :enrichments,
-   #     subjects: [:financial_incentive],
-   #     site_statuses: [:site],
-   #     provider: %i[recruitment_cycle ucas_preferences],
-   #   ).findable.page(query_parameters[:page] || 1)
-   # end
+    # def courses
+    #   @courses ||= RecruitmentCycle.current.courses.includes(
+    #     :enrichments,
+    #     subjects: [:financial_incentive],
+    #     site_statuses: [:site],
+    #     provider: %i[recruitment_cycle ucas_preferences],
+    #   ).findable.page(query_parameters[:page] || 1)
+    # end
 
-#    def courses
-#      @courses ||= begin
-#        base_query = course_query(include_location: location_filter?)
-#
-#        base_query = if sort_by_distance?
-#                      base_query.order(:distance)
-#                    else
-#                      base_query
-#                        .order('provider.provider_name': results_order)
-#                        .order(name: results_order)
-#                    end
-#
-#        base_query
-#          .page(query_parameters[:page] || 1)
-#          .per(results_per_page)
-#      end
-#    end
+    #    def courses
+    #      @courses ||= begin
+    #        base_query = course_query(include_location: location_filter?)
+    #
+    #        base_query = if sort_by_distance?
+    #                      base_query.order(:distance)
+    #                    else
+    #                      base_query
+    #                        .order('provider.provider_name': results_order)
+    #                        .order(name: results_order)
+    #                    end
+    #
+    #        base_query
+    #          .page(query_parameters[:page] || 1)
+    #          .per(results_per_page)
+    #      end
+    #    end
     def courses
       @courses ||= Find::CourseSearchService.call(
         filter: query_parameters,
@@ -186,10 +186,6 @@ module Find
       course_count.positive?
     end
 
-    def with_salaries?
-      query_parameters["funding"] == "8"
-    end
-
     def sort_options
       [
         ["Training provider (A-Z)", 0, { "data-qa": "sort-form__options__ascending" }],
@@ -244,7 +240,7 @@ module Find
         nearest_address.address3,
         nearest_address.address4,
         nearest_address.postcode,
-      ].select(&:present?).join(', ').html_safe
+      ].select(&:present?).join(", ").html_safe
     end
 
     def nearest_location_name(course)
@@ -272,27 +268,23 @@ module Find
     end
 
     def degree_required?
-      query_parameters['degree_required'].present? && query_parameters['degree_required'] != 'show_all_courses'
+      query_parameters["degree_required"].present? && query_parameters["degree_required"] != "show_all_courses"
     end
 
     def visa_courses?
-      query_parameters['can_sponsor_visa'].present? && query_parameters['can_sponsor_visa'].downcase == 'true'
-    end
-
-    def all_qualifications?
-      qts_only? && pgce_or_pgde_with_qts? && other_qualifications?
+      query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
     end
 
     def qts_only?
-      qualifications.include?('QtsOnly')
+      qualifications.include?("QtsOnly")
     end
 
     def pgce_or_pgde_with_qts?
-      qualifications.include?('PgdePgceWithQts')
+      qualifications.include?("PgdePgceWithQts")
     end
 
     def other_qualifications?
-      qualifications.include?('Other')
+      qualifications.include?("Other")
     end
 
     def all_qualifications?
@@ -300,11 +292,11 @@ module Find
     end
 
     def with_salaries?
-      query_parameters['funding'] == '8'
+      query_parameters["funding"] == "8"
     end
 
     def send_courses?
-      query_parameters['senCourses'].present? && query_parameters['senCourses'].downcase == 'true'
+      query_parameters["senCourses"].present? && query_parameters["senCourses"].downcase == "true"
     end
 
     def sort_by_distance?
@@ -312,18 +304,18 @@ module Find
     end
 
     def sort_by
-      query_parameters['sortby']
+      query_parameters["sortby"]
     end
 
     def placement_schools_summary(course)
       site_distance = site_distance(course)
 
       if site_distance < 11
-        'Placement schools are near you'
+        "Placement schools are near you"
       elsif site_distance < 21
-        'Placement schools might be near you'
+        "Placement schools might be near you"
       else
-        'Placement schools might be in commuting distance'
+        "Placement schools might be in commuting distance"
       end
     end
 
@@ -349,7 +341,7 @@ module Find
       course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
       course_query = course_query.order(:distance) if sort_by_distance?
 
-      course_query.all.meta['count']
+      course_query.all.meta["count"]
     end
 
     def radii_for_suggestions
@@ -358,13 +350,13 @@ module Find
     end
 
     def qualifications
-      query_parameters['qualifications'] || %w[QtsOnly PgdePgceWithQts Other]
+      query_parameters["qualifications"] || %w[QtsOnly PgdePgceWithQts Other]
     end
 
     def study_type
-      return 'full_time,part_time' if fulltime? && parttime?
-      return 'full_time' if fulltime?
-      return 'part_time' if parttime?
+      return "full_time,part_time" if fulltime? && parttime?
+      return "full_time" if fulltime?
+      return "part_time" if parttime?
     end
 
     def course_query(include_location:, radius_to_query: radius, include_salary: true)
@@ -410,32 +402,32 @@ module Find
         )
 
       base_query = base_query.with_recruitment_cycle(RecruitmentCycle.current.year)
-      base_query = base_query.where(funding: 'salary') if include_salary && with_salaries?
+      base_query = base_query.where(funding: "salary") if include_salary && with_salaries?
       base_query = base_query.with_vacancies if hasvacancies?
       base_query = base_query.where(study_type:) if study_type.present?
       base_query = base_query.where(degree_grade: degree_grade_types) if degree_required?
       base_query = base_query.where(can_sponsor_visa: true) if visa_courses?
-      base_query = base_query.where(qualification: qualification.join(',')) unless all_qualifications?
+      base_query = base_query.where(qualification: qualification.join(",")) unless all_qualifications?
       base_query = base_query.joins(:subjects).merge(Subject.with_subject_codes(subject_codes)) if subject_codes.any?
       base_query = base_query.where(send_courses: true) if send_courses?
 
       if include_location
-        base_query = base_query.where('latitude' => latitude)
-        base_query = base_query.where('longitude' => longitude)
-        base_query = base_query.where('radius' => radius_to_query)
+        base_query = base_query.where("latitude" => latitude)
+        base_query = base_query.where("longitude" => longitude)
+        base_query = base_query.where("radius" => radius_to_query)
         base_query = base_query.where(expand_university: Settings.expand_university)
       end
 
-      base_query = base_query.where('provider.provider_name' => provider) if provider.present?
+      base_query = base_query.where("provider.provider_name" => provider) if provider.present?
       base_query
     end
 
     def latitude
-      query_parameters['lat']
+      query_parameters["lat"]
     end
 
     def longitude
-      query_parameters['lng']
+      query_parameters["lng"]
     end
 
     def lat_long
