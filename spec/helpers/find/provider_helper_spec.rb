@@ -9,7 +9,7 @@ describe Find::ProviderHelper do
     subject { select_provider_options(providers) }
 
     it "returns select provider options ids" do
-      expect(subject.map(&:id)).to eql([""] + providers.map { |p| "#{p.provider_name} (#{p.provider_code})" })
+      expect(subject.map(&:id)).to eql([""] + providers.map { |p| p.provider_name })
     end
 
     it "returns select provider options names" do
