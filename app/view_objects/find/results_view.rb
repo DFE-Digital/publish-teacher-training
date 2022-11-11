@@ -76,7 +76,7 @@ module Find
     end
 
     def course_count
-      courses.count
+      courses.count(:all)
     end
 
     def subjects

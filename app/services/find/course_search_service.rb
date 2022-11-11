@@ -26,7 +26,7 @@ module Find
       scope = scope.with_subjects(subject_codes) if subject_codes.any?
       scope = scope.with_provider_name(provider_name) if filter[:query].present?
       scope = scope.with_send if send_courses_filter?
-      scope = scope.within(filter[:radius], origin:) if locations_filter?
+      scope = scope.within(filter[:rad], origin:) if locations_filter?
       scope = scope.with_funding_types(funding_types) if funding_types.any?
       scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
       scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
@@ -159,9 +159,9 @@ module Find
     end
 
     def locations_filter?
-      filter.key?(:latitude) &&
-        filter.key?(:longitude) &&
-        filter.key?(:radius)
+      filter.key?(:lat) &&
+        filter.key?(:lng) &&
+        filter.key?(:rad)
     end
 
     def sort_by_provider_ascending?
@@ -173,11 +173,11 @@ module Find
     end
 
     def sort_by_distance?
-      sort == Set["distance"]
+      sort == Set["2"]
     end
 
     def origin
-      [filter[:latitude], filter[:longitude]]
+      [filter[:lat], filter[:lng]]
     end
 
     attr_reader :sort, :filter, :course_scope
@@ -187,15 +187,13 @@ module Find
     end
 
     def qualifications
-      # return [] if filter[:qualification].blank?
       return [] if filter[:qualifications].blank?
 
-      # filter[:qualification].split(",")
       filter[:qualifications].split(",")
     end
 
     def has_vacancies?
-      filter[:has_vacancies].to_s.downcase == "true"
+      filter[:hasvacancies].to_s.downcase == "true"
     end
 
     def findable?
@@ -240,7 +238,7 @@ module Find
     end
 
     def send_courses_filter?
-      filter[:send_courses].to_s.downcase == "true"
+      filter[:senCourses] == "true"
     end
 
     def updated_since_filter?
