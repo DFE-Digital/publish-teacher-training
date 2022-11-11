@@ -139,24 +139,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def chosen_subjects(course)
-    if course.master_subject_id.nil?
-      sorted_subjects
-    else
-      main_subject_id = course.master_subject_id
-      main_subject = Subject.find(main_subject_id)
-      raw_additional_subjects = course.subjects.map { |subject| subject unless subject.id == main_subject_id }
-      additional_subjects = raw_additional_subjects.compact
+    return sorted_subjects if course.master_subject_id.nil?
 
-      # The below is to ensure modern language subjects chosen appear above the second main subject chosen
+    return format_name(additional_subjects.push(main_subject).reverse) if main_subject_is_modern_languages?
 
-      if main_subject_id == SecondarySubject.modern_languages.id
-        ordered_subjects = additional_subjects.push(main_subject).reverse
-      else
-        ordered_subjects = additional_subjects.unshift(main_subject)
-      end
-
-      ordered_subjects.map(&:subject_name).join("<br>").html_safe
-    end
+    format_name(additional_subjects.unshift(main_subject))
   end
 
   def length
@@ -454,5 +441,21 @@ private
 
   def main_subject_is_modern_languages?
     main_subject.id == SecondarySubject.modern_languages.id
+  end
+
+  def additional_subjects
+    course.subjects.reject { |subject| subject.id == main_subject.id }
+  end
+
+  def main_subject
+    Subject.find(course.master_subject_id)
+  end
+
+  def main_subject_is_modern_languages?
+    main_subject.id == SecondarySubject.modern_languages.id
+  end
+
+  def format_name(subjects)
+    subjects.map(&:subject_name).join("<br>").html_safe
   end
 end
