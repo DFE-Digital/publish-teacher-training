@@ -124,3 +124,5 @@ cookies:
 
 find_features:
   bursaries_and_scholarships_announced: true
+
+STATE_CHANGE_SLACK_URL: replace_me

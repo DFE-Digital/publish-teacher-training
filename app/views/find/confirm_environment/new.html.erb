@@ -1,0 +1,12 @@
+<% content_for :title, "Confirm you want to make changes to #{Rails.env}" %>
+
+<div class="govuk-grid-row-two-thirds">
+  <h1 class="govuk-heading-xl">Confirm you want to make changes to this environment</h1>
+  <p class="govuk-body">This is the <strong><%= Rails.env %></strong> environment.</p>
+
+  <%= form_with(url: find_confirm_environment_path, model: @confirmation) do |f| %>
+    <%= f.hidden_field :from %>
+    <%= f.govuk_text_field :environment, label: { text: "Type ‘#{Rails.env}’ to confirm that you want to proceed", size: 's' }, width: 20 %>
+    <%= f.govuk_submit t('continue') %>
+  <% end %>
+</div>
