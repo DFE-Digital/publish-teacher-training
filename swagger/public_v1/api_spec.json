@@ -698,6 +698,11 @@
             "description": "Only return courses where a skilled worker or student visa can be sponsored.",
             "type": "boolean",
             "example": true
+          },
+          "campaign_name": {
+            "description": "Return courses which are part of a campaign.",
+            "type": "string",
+            "example": "engineers_teach_physics"
           }
         }
       },
