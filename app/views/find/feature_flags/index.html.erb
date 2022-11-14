@@ -1,34 +1,34 @@
-<%= content_for :page_title, 'Feature flags' %>
+<%= content_for :page_title, "Feature flags" %>
 
 <h2 class="govuk-heading-xl">Feature flags</h2>
 
 <% FeatureFlag.features.each do |feature_name, feature_flag| %>
   <%= render FindInterface::Utility::SummaryCardComponent.new(editable: true, border: true, rows: [
     {
-      key: 'Description',
+      key: "Description",
       value: feature_flag.description,
     },
     {
-      key: 'Status',
+      key: "Status",
       value: govuk_tag(
-        text: FeatureFlag.active?(feature_name) ? 'Active' : 'Inactive',
-        colour: FeatureFlag.active?(feature_name) ? 'green' : 'grey',
+        text: FeatureFlag.active?(feature_name) ? "Active" : "Inactive",
+        colour: FeatureFlag.active?(feature_name) ? "green" : "grey",
       ),
     },
     {
-      key: 'Owner',
+      key: "Owner",
       value: feature_flag.owner,
     },
     {
-      key: 'History',
+      key: "History",
       value: render(
         FindInterface::FeatureHistoryComponent.new(feature_name),
-      )
+      ),
     },
   ].compact) do %>
     <%= render FindInterface::Utility::SummaryCardHeaderComponent.new(title: feature_name.to_s.humanize, heading_level: 2) do %>
       <% protect_against_mistakes do %>
-        <%= render FindInterface::FeatureToggleComponent.new(feature_name: feature_name) %>
+        <%= render FindInterface::FeatureToggleComponent.new(feature_name:) %>
       <% end %>
     <% end %>
   <% end %>

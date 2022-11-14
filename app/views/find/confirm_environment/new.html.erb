@@ -6,7 +6,7 @@
 
   <%= form_with(url: find_confirm_environment_path, model: @confirmation) do |f| %>
     <%= f.hidden_field :from %>
-    <%= f.govuk_text_field :environment, label: { text: "Type ‘#{Rails.env}’ to confirm that you want to proceed", size: 's' }, width: 20 %>
-    <%= f.govuk_submit t('continue') %>
+    <%= f.govuk_text_field :environment, label: { text: "Type ‘#{Rails.env}’ to confirm that you want to proceed", size: "s" }, width: 20 %>
+    <%= f.govuk_submit t("continue") %>
   <% end %>
 </div>
