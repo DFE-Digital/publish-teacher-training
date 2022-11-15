@@ -11,6 +11,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:subjects) { [course_subject_mathematics] }
 
   let(:applications_open_from) { Time.now.utc }
+  let(:campaign_name) { nil }
   let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship, :with_gcse_equivalency,
       level: "primary",
@@ -26,7 +27,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       english: :must_have_qualification_at_application_time,
       science: :must_have_qualification_at_application_time,
       age_range_in_years: "3_to_7",
-      applications_open_from:)
+      applications_open_from:,
+      campaign_name:)
   end
 
   let(:courses_site_status) do
@@ -141,6 +143,19 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "version" => "1.0",
             },
           )
+        end
+
+        context "with a engineers_teach_physics campaign course" do
+          let(:campaign_name) { "engineers_teach_physics" }
+
+          it "has the campaign_name 'engineers_teach_physics'" do
+            findable_open_course
+
+            perform_request
+            json_response = JSON.parse response.body
+            expect(json_response["data"].first)
+            .to have_attribute("campaign_name").with_value("engineers_teach_physics")
+          end
         end
       end
     end
