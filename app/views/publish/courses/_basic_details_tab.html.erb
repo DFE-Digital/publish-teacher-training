@@ -21,7 +21,7 @@
       <% unless course.further_education_course? %>
         <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
           <% row.key { "Subject".pluralize(course.subjects.count) } %>
-          <% row.value { course.chosen_subjects(course) } %>
+          <% row.value { course.chosen_subjects } %>
           <% row.action(**{
             href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "subjects",

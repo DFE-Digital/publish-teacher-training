@@ -138,12 +138,16 @@ class CourseDecorator < ApplicationDecorator
     object.subjects.map(&:subject_name).sort.join("<br>").html_safe
   end
 
-  def chosen_subjects(course)
-    return sorted_subjects if course.master_subject_id.nil?
+  def chosen_subjects
+    return sorted_subjects if master_subject_nil?
 
-    return format_name(additional_subjects.push(main_subject).reverse) if main_subject_is_modern_languages?
-
-    format_name(additional_subjects.unshift(main_subject))
+    if main_subject_is_modern_languages?
+      format_name(select_modern_language_subjects.push(additional_subjects).flatten.uniq.unshift(main_subject))
+    elsif !main_subject_is_modern_languages? && has_any_modern_language_subject_type?
+      format_name(additional_subjects.push(select_modern_language_subjects).flatten.uniq.unshift(main_subject))
+    else
+      format_name(additional_subjects.unshift(main_subject))
+    end
   end
 
   def length
@@ -443,12 +447,12 @@ private
     main_subject.id == SecondarySubject.modern_languages.id
   end
 
-  def additional_subjects
-    course.subjects.reject { |subject| subject.id == main_subject.id }
-  end
-
   def main_subject
     Subject.find(course.master_subject_id)
+  end
+
+  def additional_subjects
+    object.subjects.reject { |subject| subject.id == main_subject.id }
   end
 
   def main_subject_is_modern_languages?

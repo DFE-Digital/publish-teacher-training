@@ -751,6 +751,18 @@ class Course < ApplicationRecord
     end
   end
 
+  def select_modern_language_subjects
+    subjects.select { |subject| subject.type == "ModernLanguagesSubject" }
+  end
+
+  def master_subject_nil?
+    master_subject_id.nil?
+  end
+
+  def has_any_modern_language_subject_type?
+    subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
+  end
+
 private
 
   def add_site!(site:)
@@ -915,10 +927,6 @@ private
     unless findable?
       errors.add(:site_statuses, "must be findable")
     end
-  end
-
-  def has_any_modern_language_subject_type?
-    subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
   end
 
   def has_the_modern_languages_secondary_subject_type?

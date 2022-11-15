@@ -251,7 +251,7 @@ describe CourseDecorator do
       let(:decorated_course) { course.decorate }
 
       it "displays physics above the second subject chosen" do
-        expect(decorated_course.chosen_subjects(decorated_course)).to eq("Physics<br>Chemistry")
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Chemistry")
       end
     end
 
@@ -271,7 +271,7 @@ describe CourseDecorator do
       let(:decorated_course) { course.decorate }
 
       it "displays modern languages before the modern languages subjects" do
-        expect(decorated_course.chosen_subjects(decorated_course)).to eq("Modern Languages<br>German<br>French")
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German")
       end
     end
 
@@ -292,7 +292,7 @@ describe CourseDecorator do
       let(:decorated_course) { course.decorate }
 
       it "displays physics before the modern languages subjects" do
-        expect(decorated_course.chosen_subjects(decorated_course)).to eq("Physics<br>Modern Languages<br>French<br>German")
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Modern Languages<br>French<br>German")
       end
     end
 
@@ -313,7 +313,7 @@ describe CourseDecorator do
       let(:decorated_course) { course.decorate }
 
       it "displays modern languages and the specific languages before the latin subject" do
-        expect(decorated_course.chosen_subjects(decorated_course)).to eq("Modern Languages<br>German<br>French<br>Latin")
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German<br>Latin")
       end
     end
   end
