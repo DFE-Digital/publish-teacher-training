@@ -134,9 +134,10 @@ module Find
       query_parameters["subject_codes"] || []
     end
 
-    def all_subjects
-      @all_subjects ||= Subject.active.where.not(subject_code: nil).select(:subject_name, :subject_code).order(:subject_name).all
-    end
+    # which method is best?
+    # def all_subjects
+      # @all_subjects ||= Subject.active.where.not(subject_code: nil).select(:subject_name, :subject_code).order(:subject_name).all
+    # end
 
     def filtered_subjects
       all_subjects.select { |subject| subject_codes.include?(subject.subject_code) }
@@ -147,7 +148,7 @@ module Find
     end
 
     def location
-      query_parameters['loc'] || 'Across England'
+      query_parameters["loc"] || "Across England"
     end
 
     def location_filter?
@@ -348,7 +349,7 @@ module Find
     end
 
     def subject_parameters_array
-      query_parameters['subject_codes'] || []
+      query_parameters["subject_codes"] || []
     end
 
     def filter_links(links)
