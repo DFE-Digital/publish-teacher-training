@@ -818,7 +818,7 @@ describe CourseDecorator do
 
     context "bursaries and scholarships is announced" do
       before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+        FeatureFlag.activate(:bursaries_and_scholarships_announced)
       end
 
       context "course has no financial incentive" do
@@ -861,10 +861,6 @@ describe CourseDecorator do
     end
 
     context "bursaries and scholarships is not announced" do
-      before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-      end
-
       it "returns the correct details under 'financial_incentive_details'" do
         expect(subject).to eq("Information not yet available")
       end

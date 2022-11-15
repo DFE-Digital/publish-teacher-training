@@ -22,7 +22,7 @@ describe Find::SubjectHelper do
 
     context "bursaries and scholarships is announced" do
       before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+        FeatureFlag.activate(:bursaries_and_scholarships_announced)
       end
 
       context "with bursary only" do
@@ -51,7 +51,7 @@ describe Find::SubjectHelper do
 
       context "bursaries and scholarships is not announced" do
         before do
-          allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
+          FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
         end
 
         context "with bursary only" do

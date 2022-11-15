@@ -32,7 +32,7 @@ describe FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportCompon
 
   context "Courses with bursary" do
     it "renders the bursary section if the course has a bursary" do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
 
       course = build(:course, funding_type: "fee", name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000"), build(:secondary_subject)]).decorate
 
@@ -44,7 +44,7 @@ describe FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportCompon
 
   context "Courses with scholarship and bursary" do
     it "renders the scholarships and bursary section" do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
 
       course = build(:course, funding_type: "fee", name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000", financial_incentive: FinancialIncentive.new(scholarship: "1000")), build(:secondary_subject)]).decorate
 
