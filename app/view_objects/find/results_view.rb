@@ -146,6 +146,10 @@ module Find
       query_parameters["query"]
     end
 
+    def location
+      query_parameters['loc'] || 'Across England'
+    end
+
     def location_filter?
       query_parameters["l"] == "1"
     end
@@ -333,6 +337,10 @@ module Find
       @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
     end
 
+    def show_map?
+      latitude.present? && longitude.present?
+    end
+
   private
 
     def number_of_subjects_selected
@@ -363,7 +371,7 @@ module Find
       course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
       course_query = course_query.order(:distance) if sort_by_distance?
 
-      course_query.all.meta["count"]
+      course_query.count(:all)
     end
 
     def radii_for_suggestions
@@ -462,7 +470,7 @@ module Find
 
     def nearest_location(course)
       new_or_running_sites_with_vacancies_for(course).min_by do |site|
-        lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
+        lat_long.distance_to("#{site.latitude},#{site.longitude}")
       end
     end
 
