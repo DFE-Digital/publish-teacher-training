@@ -3,7 +3,7 @@
 <% nearest_location_name = @results_view.nearest_location_name(course) %>
 
 <dt class="app-description-list__label">
-  <%= number_of_sites > 1 ? 'Nearest location' : 'Location' %>
+  <%= number_of_sites > 1 ? "Nearest location" : "Location" %>
 </dt>
 <dd>
   <%= "#{pluralize(@results_view.site_distance(course), 'mile')} from you" %>

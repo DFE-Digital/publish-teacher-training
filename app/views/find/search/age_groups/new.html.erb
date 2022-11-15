@@ -2,10 +2,10 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(**{
-    text: 'Back',
+    text: "Back",
     href: find_root_path(@backlink_query_parameters),
     html_attributes: {
-      data: { qa: 'page-back' },
+      data: { qa: "page-back" },
     },
   }) %>
 <% end %>
@@ -19,16 +19,16 @@
         query_params: request.query_parameters,
         form: f,
         form_name: :find_age_groups_form,
-        exclude_keys: ['age_group']) %>
+        exclude_keys: ["age_group"]) %>
 
-      <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t('find.age_groups.title'), size: 'l', tag: 'h1' } do %>
-        <%= f.govuk_radio_button :age_group, 'primary', label: { text: 'Primary' }, link_errors: true %>
-        <%= f.govuk_radio_button :age_group, 'secondary', label: { text: 'Secondary' } %>
+      <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups.title"), size: 'l', tag: 'h1' } do %>
+        <%= f.govuk_radio_button :age_group, "primary", label: { text: "Primary" }, link_errors: true %>
+        <%= f.govuk_radio_button :age_group, "secondary", label: { text: "Secondary" } %>
         <%= f.govuk_radio_divider %>
-        <%= f.govuk_radio_button :age_group, 'further_education', label: { text: 'Further education' }, hint:  { text: I18n.t('find.age_groups.further_education.hint') } %>
+        <%= f.govuk_radio_button :age_group, "further_education", label: { text: "Further education" }, hint:  { text: I18n.t("find.age_groups.further_education.hint") } %>
       <% end %>
 
-      <%= f.govuk_submit 'Continue' %>
+      <%= f.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
