@@ -1,4 +1,4 @@
-<%= content_for :page_title, title_with_error_prefix(I18n.t('find.age_groups.title'), @age_groups_form.errors.any?) %>
+<%= content_for :page_title, title_with_error_prefix(I18n.t("find.age_groups.title"), @age_groups_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(**{
@@ -19,9 +19,10 @@
         query_params: request.query_parameters,
         form: f,
         form_name: :find_age_groups_form,
-        exclude_keys: ["age_group"]) %>
+        exclude_keys: ["age_group"]
+      ) %>
 
-      <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups.title"), size: 'l', tag: 'h1' } do %>
+      <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups.title"), size: "l", tag: "h1" } do %>
         <%= f.govuk_radio_button :age_group, "primary", label: { text: "Primary" }, link_errors: true %>
         <%= f.govuk_radio_button :age_group, "secondary", label: { text: "Secondary" } %>
         <%= f.govuk_radio_divider %>
