@@ -84,7 +84,7 @@ module Find
     end
 
     def qualifications_parameters
-      { "qualifications" => query_parameters["qualifications"].presence || %w[QtsOnly PgdePgceWithQts Other] }
+      { "qualifications" => query_parameters["qualifications"].presence || %w[qts pgce_with_qts other] }
     end
 
     def fulltime_parameters
@@ -275,20 +275,20 @@ module Find
       query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
     end
 
-    def qts_only?
-      qualifications.include?("QtsOnly")
+    def qts?
+      qualifications.include?("qts")
     end
 
     def pgce_or_pgde_with_qts?
-      qualifications.include?("PgdePgceWithQts")
+      qualifications.include?("pgce_with_qts")
     end
 
     def other_qualifications?
-      qualifications.include?("Other")
+      qualifications.include?("other")
     end
 
     def all_qualifications?
-      qts_only? && pgce_or_pgde_with_qts? && other_qualifications?
+      qts? && pgce_or_pgde_with_qts? && other_qualifications?
     end
 
     def with_salaries?
@@ -319,7 +319,29 @@ module Find
       end
     end
 
+    def filter_params_with_unescaped_commas(base_path, parameters: query_parameters_with_defaults)
+      Find::UnescapedQueryStringService.call(base_path:, parameters:)
+    end
+
+    def number_of_extra_subjects
+      return 37 if number_of_subjects_selected == MAXIMUM_NUMBER_OF_SUBJECTS
+
+      number_of_subjects_selected
+    end
+
+    def all_subjects
+      @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
+    end
+
   private
+
+    def number_of_subjects_selected
+      subject_parameters_array.any? ? subject_parameters_array.length : all_subjects.count(:all)
+    end
+
+    def subject_parameters_array
+      query_parameters['subject_codes'] || []
+    end
 
     def filter_links(links)
       links
@@ -330,7 +352,7 @@ module Find
 
     def qualification
       qualification = []
-      qualification |= %w[qts] if qts_only?
+      qualification |= %w[qts] if qts?
       qualification |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
       qualification |= %w[pgce pgde] if other_qualifications?
 
@@ -447,10 +469,6 @@ module Find
     def stripped_devolved_nation_params(path)
       parameters = query_parameters_with_defaults.except("c", "lat", "long", "loc", "lq", "l")
       filter_params_with_unescaped_commas(path, parameters:)
-    end
-
-    def filter_params_with_unescaped_commas(base_path, parameters: query_parameters_with_defaults)
-      Find::UnescapedQueryStringService.call(base_path:, parameters:)
     end
 
     def new_or_running_sites_with_vacancies_for(course)
