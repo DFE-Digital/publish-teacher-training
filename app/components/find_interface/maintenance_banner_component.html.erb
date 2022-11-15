@@ -1,0 +1,4 @@
+<%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
+  <% notification_banner.heading(text: "This service will be unavailable on Monday 11 October for a short period between 8pm and 9pm, while we carry out maintenance") %>
+  <p class="govuk-body">If you have any questions, contact us at <%= govuk_mail_to bat_contact_email_address %>.</p>
+<% end %>

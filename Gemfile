@@ -140,6 +140,9 @@ gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
 # For running data migrations
 gem "data_migrate"
 
+# For outgoing http requests
+gem "http"
+
 group :production, :qa, :sandbox, :staging do
   gem "cloudfront-rails"
 end
@@ -153,9 +156,6 @@ group :development, :test do
 
   # Help eliminate N+1 queries
   gem "bullet"
-
-  # This is the new way to debug!
-  gem "debug"
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
@@ -225,11 +225,15 @@ group :development do
   gem "guard"
   gem "guard-rspec", require: false
   gem "guard-rubocop", require: false
+
+  # For Ruby LSP & IDE
+  gem "ruby-lsp", require: false
 end
 
 group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
+  gem "mock_redis"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 5.2"
   gem "simplecov", "< 0.22", require: false

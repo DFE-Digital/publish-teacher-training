@@ -24,6 +24,19 @@
 
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
+        <% if flash[:success] %>
+          <%= govuk_notification_banner(
+            title_text: "Success",
+            success: true,
+            title_id: "success-message",
+            html_attributes: { role: "alert" },
+          ) do |notification_banner| %>
+            <% notification_banner.heading(text: flash[:success]) %>
+          <% end %>
+        <% end %>
+
+        <%= render FindInterface::MaintenanceBannerComponent.new %>
+
         <%= yield %>
       </main>
     </div>
