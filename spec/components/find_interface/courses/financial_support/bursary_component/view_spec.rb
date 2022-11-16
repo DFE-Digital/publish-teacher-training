@@ -5,7 +5,7 @@ describe FindInterface::Courses::FinancialSupport::BursaryComponent::View, type:
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
       render_inline(described_class.new(course))
     end
 
@@ -22,8 +22,6 @@ describe FindInterface::Courses::FinancialSupport::BursaryComponent::View, type:
 
   context "bursaries_and_scholarships_announced feature flag is off" do
     it "does not render bursary details" do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-
       render_inline(described_class.new(course))
 
       expect(page.has_text?("You could be eligible for a bursary of £3,000")).to be false

@@ -15,7 +15,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   describe "with a fee paying course" do
     context "bursaries and scholarships is announced" do
       before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+        FeatureFlag.activate(:bursaries_and_scholarships_announced)
       end
 
       scenario "i can view a fee course" do
@@ -28,10 +28,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     end
 
     context "bursaries and scholarships is not announced" do
-      before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-      end
-
       scenario "i can view a fee course" do
         given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
         when_i_visit_the_course_page

@@ -1,5 +1,5 @@
 <div data-qa="course__bursary_details">
-  <% if Settings.find_features.bursaries_and_scholarships_announced == true %>
+  <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
     <p class="govuk-body">
       You could be eligible for a bursary of <%= number_to_currency(bursary_amount) %>.
     </p>

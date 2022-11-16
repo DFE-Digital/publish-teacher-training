@@ -4,7 +4,7 @@ module Find
       subjects.map do |subject|
         financial_incentive = subject.financial_incentive
         financial_info = nil
-        if Settings.find_features.bursaries_and_scholarships_announced == true && financial_incentive.present?
+        if FeatureFlag.active?(:bursaries_and_scholarships_announced) && financial_incentive.present?
           if financial_incentive.scholarship.present? && financial_incentive.bursary_amount.present?
             financial_info = "Scholarships of £#{number_with_delimiter(financial_incentive.scholarship, delimiter: ',')} and bursaries of £#{number_with_delimiter(financial_incentive.bursary_amount, delimiter: ',')} are available"
           elsif financial_incentive.scholarship.present?
