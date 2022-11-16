@@ -2,9 +2,6 @@ require "rails_helper"
 
 module Find
   describe ResultsView do
-    # include StubbedRequests::Courses
-    # include StubbedRequests::Subjects
-
     let(:query_parameters) { ActionController::Parameters.new(parameter_hash) }
 
     let(:default_output_parameters) do
@@ -16,10 +13,6 @@ module Find
         "senCourses" => false,
       }
     end
-
-    # before do
-    #  stub_subjects
-    # end
 
     describe "#query_parameters_with_defaults" do
       subject(:results_view) { described_class.new(query_parameters:).query_parameters_with_defaults }
@@ -852,7 +845,7 @@ module Find
           create_list(:course, 30)
         end
 
-        it "returns 1 page" do
+        it "returns 3 pages" do
           expect(results_view.total_pages).to be(3)
         end
       end
@@ -862,7 +855,7 @@ module Find
           create_list(:course, 60)
         end
 
-        it "returns 2 pages" do
+        it "returns 6 pages" do
           expect(results_view.total_pages).to be(6)
         end
       end

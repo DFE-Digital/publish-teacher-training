@@ -17,7 +17,7 @@
     </p>
   <% else %>
     <p class="govuk-body">
-      You can try another search, for example by changing <%= "subject".pluralize(subjects.count) %> or location <% if results.with_salaries? %>or searching for courses that do not offer a salary<% end %>.
+      You can try another search, for example by changing <%= "subject".pluralize(subjects.size) %> or location <% if results.with_salaries? %>or searching for courses that do not offer a salary<% end %>.
     </p>
   <% end %>
 </div>
