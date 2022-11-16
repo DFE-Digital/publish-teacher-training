@@ -1,41 +1,43 @@
-<% content_for :page_title, "Privacy policy" %>
+<% content_for :page_title, "Privacy notice" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Privacy policy</h1>
+    <h1 class="govuk-heading-xl">Privacy notice</h1>
 
     <h2 class="govuk-heading-l">Who we are</h2>
-    <p class="govuk-body">This work is being carried out by Department for Education (DfE) Digital, which is a part of DfE. For the purpose of data protection legislation, the DfE is the data controller for the personal data processed as part of &#8216;Publish teacher training courses&#8217;.</p>
+    <p class="govuk-body">
+      This work is being carried out by Department for Education (DfE) Digital, which is a part of DfE. For the purpose of data protection legislation, the DfE is the data controller for the personal data processed as part of Publish teacher training courses (&#8216;Publish&#8217;).
+    </p>
 
-    <h2 class="govuk-heading-l">What personal information we will&nbsp;store</h2>
+    <h2 class="govuk-heading-l">Why our use of your personal data is lawful</h2>
+    <p class="govuk-body">
+      In order for our use of your personal data to be lawful, we need to meet one (or more) conditions in the data protection legislation. For the purpose of this service, this processing is necessary to complete a task in the public interest as stated under GDPR Article 6 (1)(e).
+    </p>
+
+    <h2 class="govuk-heading-l">What personal information we will store</h2>
     <p class="govuk-body">For all users, we will store:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>part of your IP address to track user journeys. We do not collect IP addresses in their entirety to avoid the personal identification of users</li>
-      <li>email addresses that are shared with us by you</li>
-      <li>telephone numbers that are shared with us by you</li>
+      <li>your pseudonymised Internet Protocol (IP) address</li>
+      <li>email addresses you share with us</li>
+      <li>telephone numbers you share with us</li>
     </ul>
 
     <p class="govuk-body">When we create an account for you, we will store:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>name</li>
-      <li>email address</li>
-      <li>personal information such as the name and email of a contact person at your training provider or school, if you choose to share this in a course listing you post to &#8216;Publish teacher training courses&#8217;</li>
+      <li>your name</li>
+      <li>your email address</li>
+      <li>personal information, such as the name and email address of a contact person at your training provider or school, if you choose to share this in a course listing you post to Publish</li>
     </ul>
 
     <h2 class="govuk-heading-l">How we will use your information</h2>
     <p class="govuk-body">
-      We process your anonymised Internet Protocol (IP) address in order to track traffic to the service and continuously improve our service to better meet users needs.
+      We store your IP address in order to track traffic to the service and continuously improve our service to better meet users&#8217; needs. If you use other digital services for which the data controller is also the DfE (for example, Manage postgraduate teacher training applications), we may also use your IP address to understand how you are using these services. This allows us to ensure that public funds are being spent effectively.
     </p>
     <p class="govuk-body">
-      Personally identifiable contact information that is published in course listings may be passed on to a third party that will use our course listing data (UCAS) via an application programming interface (API), as described in our Terms and Conditions, in order to feed their postgraduate teacher training application system. Any personal information provided in a course listing will be subject to the third party&#8217;s (UCAS) data handling obligations. We are not responsible for how a third party handles any personal information you choose to include in a course listing.
+      Personally identifiable contact information that is published in course listings is available in the public domain via an application programming interface (API). We are not responsible for how a third party handles any personal information you choose to include in a course listing.
     </p>
 
-    <h2 class="govuk-heading-l">Why our use of your personal data is&nbsp;lawful</h2>
-    <p class="govuk-body">
-      In order for our use of your personal data to be lawful, we need to meet one (or more) conditions in the data protection legislation. For the purpose of this project, this processing is necessary to complete a task in the public interest as stated under GDPR Article 6 (1)(e).
-    </p>
-
-    <h2 class="govuk-heading-l">Who we will make your personal data available&nbsp;to</h2>
+    <h2 class="govuk-heading-l">Sharing your personal data with other organisations</h2>
     <p class="govuk-body">
       We sometimes need to make personal data available to other organisations. These might include contracted partners (who we have employed to process your personal data on our behalf) and/or other organisations (with whom we need to share your personal data for specific purposes).
     </p>
@@ -51,13 +53,24 @@
       </li>
       <li>to enable users to use the service and receive updates: our contracted suppliers collect the names and emails of those publishing course listings on &#8216;Publish teacher training courses&#8217;</li>
     </ul>
-
-    <h2 class="govuk-heading-l">How long we will keep your personal&nbsp;data</h2>
+    <h3 class="govuk-heading-m">Customer service management systems</h3>
     <p class="govuk-body">
-      Neither DfE nor its contracted suppliers will keep your personal data longer than we need it for the purpose(s) of research, security and/or delivery of the service, and in any case not longer than 7 years. Your data will be securely deleted when DfE and its contracted suppliers no longer need it for these purposes, or when 7 years have passed, whichever comes first.
+      We use Zendesk to manage and respond to your queries.
     </p>
     <p class="govuk-body">
-      Anonymised IP addresses will be deleted after 26 months.
+      <%= govuk_link_to "Visit the Zendesk website to find out how they use and look after your data (“service data”)", "https://www.zendesk.co.uk/company/privacy-and-data-protection/#faq-general-1" %>
+    </p>
+    <h3 class="govuk-heading-m">Website hosting services</h3>
+    <p class="govuk-body">
+      We use GOV.UK PaaS to enable us to run the service.
+    </p>
+    <p class="govuk-body">
+      <%= govuk_link_to "Visit the GOV.UK PaaS website to find out how they use and look after your data (“end user data”)", "https://www.cloud.service.gov.uk/privacy-notice/#what-data-we-collect-from-end-users" %>
+    </p>
+
+    <h2 class="govuk-heading-l">How long we will keep your personal data</h2>
+    <p class="govuk-body">
+      Neither DfE nor its contracted suppliers will keep your personal data longer than we need it for the purpose(s) of research, security and/or delivery of the service, and in any case not longer than 7 years. Your data will be securely deleted when DfE and its contracted suppliers no longer need it for these purposes, or when 7 years have passed, whichever comes first.
     </p>
     <p class="govuk-body">
       If you share personal information in a course listing we will retain this while the course is live and for one year after it has expired.
@@ -74,26 +87,26 @@
       <li>not to be subject to decisions based purely on automated processing where it produces a legal or similarly significant effect on you</li>
     </ul>
     <p class="govuk-body">
-      If you need to contact us regarding any of the above, please do so via the DfE site at: <%= govuk_link_to "https://www.gov.uk/contact-dfe", "https://www.gov.uk/contact-dfe" %>.
-    </p>
-    <p class="govuk-body">
-      You can <%= govuk_link_to "find out more about your data protection rights", "https://ico.org.uk/for-organisations/guide-to-data-protection/principle-6-rights" %> on the Information Commissioner&#8217;s website.
+      You can find more information about how we handle personal data in our <%= govuk_link_to "personal information charter", "https://www.gov.uk/government/organisations/department-for-education/about/personal-information-charter" %>.
     </p>
 
-    <h2 class="govuk-heading-l">The right to lodge a complaint</h2>
+    <h2 class="govuk-heading-l">Getting help and raising a concern</h2>
     <p class="govuk-body">
-      You have the right to raise any concerns with the Information Commissioner&#8217;s Office (ICO) via their website at <%= govuk_link_to "https://ico.org.uk/make-a-complaint/", "https://ico.org.uk/make-a-complaint/" %></a>.
+      If you would like to exercise any of your rights, you can email us at <%= bat_contact_mail_to %>.
+    </p>
+    <p class="govuk-body">
+      You can also use our <%= govuk_link_to "contact form ", "https://form.education.gov.uk/en/AchieveForms/?form_uri=sandbox-publish://AF-Process-f1453496-7d8a-463f-9f33-1da2ac47ed76/AF-Stage-1e64d4cc-25fb-499a-a8d7-74e98203ac00/definition.json&redirectlink=%2Fen&cancelRedirectLink=%2Fen" %> to get in touch with our Data Protection Officer.
+    </p>
+    <p class="govuk-body">
+      If we cannot resolve your issue, you have the right to raise it with the Information Commissioner's Office (ICO) at <%= govuk_link_to "https://ico.org.uk/make-a-complaint/", "https://ico.org.uk/make-a-complaint/" %>.
     </p>
 
-    <h2 class="govuk-heading-l">Contact information</h2>
+    <h2 class="govuk-heading-l">Keeping our privacy notice up to date</h2>
     <p class="govuk-body">
-      If you have any questions about how your personal information will be used, please contact us at <%= bat_contact_mail_to %> and enter data privacy as a reference. For the Data Protection Officer (DPO) please contact us via gov.uk and mark it for the attention of the &#8216;DPO&#8217;.
+      We&#8217;ll update this privacy notice when required. You should regularly review the notice.
     </p>
-
-    <h2 class="govuk-heading-l">Last updated</h2>
     <p class="govuk-body">
-      We may need to update this privacy notice periodically so we recommend that you revisit this information from time to time.
-      This version was last updated on 29 June 2018.
+      This version was last updated on 14 November 2022.
     </p>
   </div>
 </div>
