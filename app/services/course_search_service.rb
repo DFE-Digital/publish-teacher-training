@@ -168,7 +168,7 @@ private
   end
 
   def sort_by_provider_descending?
-    sort == Set["-name", "-provider.provider_name"]
+    sort == Set["name", "-provider.provider_name"]
   end
 
   def sort_by_distance?
