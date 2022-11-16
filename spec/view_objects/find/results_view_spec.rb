@@ -841,15 +841,6 @@ module Find
 
       let(:parameter_hash) { {} }
 
-      def stub_request_with_meta_count(count)
-        stub_request(:get, courses_url)
-          .with(query: results_page_parameters)
-          .to_return(
-            body: { meta: { count: } }.to_json,
-            headers: { "Content-Type": "application/vnd.api+json; charset=utf-8" },
-          )
-      end
-
       context "where there are no results" do
         it "returns 0 pages" do
           expect(results_view.total_pages).to be(0)
