@@ -554,11 +554,7 @@
             "type": "string",
             "nullable": true,
             "description": "The course’s campaign code, corresponding to campaigns to help improve recruitment.",
-            "example": "engineers_teach_physics",
-            "enum": [
-              "engineers_teach_physics",
-              "no_campaign"
-            ]
+            "example": "engineers_teach_physics"
           }
         }
       },
@@ -699,10 +695,10 @@
             "type": "boolean",
             "example": true
           },
-          "campaign_name": {
-            "description": "Return courses which are part of a campaign.",
-            "type": "string",
-            "example": "engineers_teach_physics"
+          "engineers_teach_physics": {
+            "description": "Only return courses that are part of the engineers teach physics campaign.",
+            "type": "boolean",
+            "example": true
           }
         }
       },
