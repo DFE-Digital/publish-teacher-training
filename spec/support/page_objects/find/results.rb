@@ -13,7 +13,7 @@ module PageObjects
         element :qualification, '[data-qa="course__qualification"]'
         element :funding_options, '[data-qa="course__funding_options"]'
         element :degree_required, '[data-qa="course__degree_required"]'
-        element :visa_sponsorship,'[data-qa="course__visa_sponsorship"]'
+        element :visa_sponsorship, '[data-qa="course__visa_sponsorship"]'
       end
 
       class Send < SitePrism::Section
@@ -58,7 +58,6 @@ module PageObjects
       section :degree_grade, DegreeGrade, '[data-qa="filters__degree_required"]'
       section :visa, Visa, '[data-qa="filters__visa"]'
       section :funding, Funding, '[data-qa="filters__funding"]'
-
     end
   end
 end
