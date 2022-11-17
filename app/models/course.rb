@@ -752,7 +752,7 @@ class Course < ApplicationRecord
   end
 
   def modern_language_subjects
-    subjects.select { |subject| subject.type == "ModernLanguagesSubject" }
+    subjects.where(type: "ModernLanguagesSubject").to_a
   end
 
   def master_subject_nil?

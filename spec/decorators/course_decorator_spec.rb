@@ -300,7 +300,7 @@ describe CourseDecorator do
       let(:french) { build_stubbed(:modern_languages_subject, :french) }
       let(:german) { build_stubbed(:modern_languages_subject, :german) }
       let(:latin) { build_stubbed(:secondary_subject, :latin) }
-      let(:subjects) { [latin, french, german] }
+      let(:subjects) { [french, german, latin] }
       let(:course) {
         build_stubbed(
           :course,
