@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.feature 'Qualifications filter' do
+RSpec.feature "Qualifications filter" do
   include FiltersFeatureSpecsHelper
 
-  scenario 'Candidate applies qualifications filters on results page' do
+  scenario "Candidate applies qualifications filters on results page" do
     when_i_visit_the_results_page
     then_i_see_all_qualifications_checkboxes_are_selected
 
@@ -112,5 +112,4 @@ RSpec.feature 'Qualifications filter' do
     expect(results_page.qualifications.qts).not_to be_checked
     expect(results_page.qualifications.other).not_to be_checked
   end
-
 end
