@@ -26,32 +26,6 @@ module Find
         .merge(subject_parameters)
     end
 
-    # def courses
-    #   @courses ||= RecruitmentCycle.current.courses.includes(
-    #     :enrichments,
-    #     subjects: [:financial_incentive],
-    #     site_statuses: [:site],
-    #     provider: %i[recruitment_cycle ucas_preferences],
-    #   ).findable.page(query_parameters[:page] || 1)
-    # end
-
-    #    def courses
-    #      @courses ||= begin
-    #        base_query = course_query(include_location: location_filter?)
-    #
-    #        base_query = if sort_by_distance?
-    #                      base_query.order(:distance)
-    #                    else
-    #                      base_query
-    #                        .order('provider.provider_name': results_order)
-    #                        .order(name: results_order)
-    #                    end
-    #
-    #        base_query
-    #          .page(query_parameters[:page] || 1)
-    #          .per(results_per_page)
-    #      end
-    #    end
     def courses
       @courses ||= Find::CourseSearchService.call(
         filter: query_parameters,
