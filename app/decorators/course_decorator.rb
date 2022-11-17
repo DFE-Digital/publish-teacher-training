@@ -143,7 +143,7 @@ class CourseDecorator < ApplicationDecorator
 
     if main_subject_is_modern_languages?
       format_name(modern_language_subjects.push(additional_subjects).flatten.uniq.unshift(main_subject))
-    elsif !main_subject_is_modern_languages? && has_any_modern_language_subject_type?
+    elsif !main_subject_is_modern_languages? && modern_languages_subjects.present?
       format_name(additional_subjects.push(modern_language_subjects).flatten.uniq.unshift(main_subject))
     else
       format_name(additional_subjects.unshift(main_subject))
