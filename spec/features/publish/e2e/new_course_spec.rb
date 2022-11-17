@@ -70,17 +70,6 @@ private
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/level/new")
   end
 
-  def expect_page_to_be_displayed_with_query(page:, expected_query_params:)
-    current_query_string = current_url.match('\?(.*)$').captures.first
-    url_params = { course: expected_query_params }
-
-    expect(page).to be_displayed
-
-    query = Rack::Utils.parse_nested_query(current_query_string).deep_symbolize_keys
-
-    expect(query).to match(url_params)
-  end
-
   def select_level(course_creation_params, level:, level_selection:, next_page:)
     course_creation_params[:level] = level
     course_creation_params[:is_send] = "0"

@@ -10,5 +10,6 @@ RSpec.configure do |config|
   config.include FeatureHelpers::GovukComponents, type: :feature
   config.include FeatureHelpers::PageObjectMethodCreator, type: :feature
   config.include FeatureHelpers::CourseSteps, type: :feature
+  config.include FeatureHelpers::PageWithQuery, type: :feature
   config.include DfESignInUserHelper, type: :feature
 end

@@ -54,10 +54,12 @@ module PageObjects
       section :send, Send, '[data-qa="filters__send"]'
       section :vacancies, Vacancies, '[data-qa="filters__vacancies"]'
       section :study_type, StudyType, '[data-qa="filters__study_type"]'
-      section :study_type, Qualifications, '[data-qa="filters__qualifications"]'
+      section :qualifications, Qualifications, '[data-qa="filters__qualifications"]'
       section :degree_grade, DegreeGrade, '[data-qa="filters__degree_required"]'
       section :visa, Visa, '[data-qa="filters__visa"]'
       section :funding, Funding, '[data-qa="filters__funding"]'
+
+      element :apply_filters_button, '[data-qa="apply-filters"]'
     end
   end
 end
