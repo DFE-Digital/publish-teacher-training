@@ -382,6 +382,7 @@ module Find
     end
 
     describe "#course_count" do
+      Course.destroy_all # for flakey test fail
       subject { described_class.new(query_parameters: parameter_hash).course_count }
       let(:parameter_hash) do
         {
@@ -789,6 +790,7 @@ module Find
     end
 
     describe "#no_results_found?" do
+      Course.destroy_all # for flakey test fail
       subject { described_class.new(query_parameters: {}).no_results_found? }
 
       context "there are more than three results" do
@@ -805,6 +807,7 @@ module Find
     end
 
     describe "#number_of_courses_string" do
+      Course.destroy_all # for flakey test fail
       subject { described_class.new(query_parameters: {}).number_of_courses_string }
 
       context "there are two results" do
@@ -830,6 +833,7 @@ module Find
 
     # TODO: Set pagination to 10?
     describe "#total_pages" do
+      Course.destroy_all # for flakey test fail
       subject(:results_view) { described_class.new(query_parameters:) }
 
       let(:parameter_hash) { {} }
