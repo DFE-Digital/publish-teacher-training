@@ -12,6 +12,20 @@ RSpec.feature 'Qualifications filter' do
     then_i_see_that_the_pgce_and_further_education_qualification_checkboxes_are_still_unselected
     and_the_qts_checkbox_is_selected
     and_the_qts_qualification_query_parameters_are_retained
+
+    when_i_select_the_pgce_checkbox
+    and_i_deselect_the_qts_checkbox
+    and_apply_the_filters
+    then_i_see_that_the_qts_and_further_education_checkboxes_are_still_unselected
+    and_the_pgce_checkbox_is_selected
+    and_the_pgce_qualification_query_parameters_are_retained
+
+    when_i_select_the_further_education_checkbox
+    and_i_deselect_the_pgce_checkbox
+    and_apply_the_filters
+    then_i_see_that_the_pgce_and_qts_checkboxes_are_still_unselected
+    and_the_further_education_checkbox_is_selected
+    and_the_further_education_qualification_query_parameters_are_retained
   end
 
   def then_i_see_all_qualifications_checkboxes_are_selected
@@ -29,6 +43,14 @@ RSpec.feature 'Qualifications filter' do
     expect(results_page.qualifications.qts).to be_checked
   end
 
+  def and_the_pgce_checkbox_is_selected
+    expect(results_page.qualifications.pgce_with_qts).to be_checked
+  end
+
+  def and_the_further_education_checkbox_is_selected
+    expect(results_page.qualifications.other).to be_checked
+  end
+
   def then_i_see_that_the_qts_and_further_education_checkboxes_are_still_unselected
     expect(results_page.qualifications.qts_checkbox).to be_checked
     expect(results_page.qualifications.further_education_checkbox).to be_checked
@@ -39,17 +61,56 @@ RSpec.feature 'Qualifications filter' do
     expect(results_page.qualifications.other).not_to be_checked
   end
 
+  def then_i_see_that_the_pgce_and_qts_checkboxes_are_still_unselected
+    expect(results_page.qualifications.pgce_with_qts).not_to be_checked
+    expect(results_page.qualifications.qts).not_to be_checked
+  end
+
   def and_the_qts_qualification_query_parameters_are_retained
-    expect_page_to_be_displayed_with_query(
-      page: results_page,
-      expected_query_params: {
-        'fulltime' => 'true',
-        'parttime' => 'true',
-        'hasvacancies' => 'true',
-        'degree_required' => 'show_all_courses',
-        'qualifications' => %w[QtsOnly],
-      },
-    )
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualifications[]=qts&degree_required=show_all_courses")
+    end
+  end
+
+  def and_the_pgce_qualification_query_parameters_are_retained
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualifications[]=pgce_with_qts&degree_required=show_all_courses")
+    end
+  end
+
+  def and_the_further_education_qualification_query_parameters_are_retained
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualifications[]=other&degree_required=show_all_courses")
+    end
+  end
+
+  def when_i_select_the_pgce_checkbox
+    results_page.qualifications.pgce_with_qts.check
+  end
+
+  def when_i_select_the_further_education_checkbox
+    results_page.qualifications.other.check
+  end
+
+  def and_i_deselect_the_qts_checkbox
+    results_page.qualifications.qts.uncheck
+  end
+
+  def and_i_deselect_the_pgce_checkbox
+    results_page.qualifications.pgce_with_qts.uncheck
+  end
+
+  def then_i_see_that_the_qts_and_further_education_checkboxes_are_still_unselected
+    expect(results_page.qualifications.qts).not_to be_checked
+    expect(results_page.qualifications.other).not_to be_checked
+  end
+
+  def then_i_see_that_the_qts_and_further_education_checkboxes_are_still_unselected
+    expect(results_page.qualifications.qts).not_to be_checked
+    expect(results_page.qualifications.other).not_to be_checked
   end
 
 end

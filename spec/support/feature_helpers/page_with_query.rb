@@ -8,11 +8,8 @@ module FeatureHelpers
       url_params = { course: expected_query_params }
 
       expect(page).to be_displayed
-
       query = Rack::Utils.parse_nested_query(current_query_string).deep_symbolize_keys
-
       expect(query).to match(url_params)
     end
-
   end
 end
