@@ -525,11 +525,6 @@ module Find
         end
 
         context "there are less than three results and there are no suggested courses found" do
-          before do
-            #stub_courses(query: results_page_parameters, course_count: 2)
-            #stub_courses(query: suggested_search_count_parameters, course_count: 0)
-          end
-
           it { is_expected.to be(false) }
         end
       end
@@ -537,11 +532,6 @@ module Find
       context "searching for courses in a devolved nation" do
         context "there are less than three results and there are suggested courses found" do
           subject { described_class.new(query_parameters: { "c" => "Scotland", "lat" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
-
-          before do
-            #stub_courses(query: results_page_parameters, course_count: 2)
-            #stub_courses(query: suggested_search_count_parameters, course_count: 10)
-          end
 
           it { is_expected.to be(false) }
         end
@@ -790,7 +780,6 @@ module Find
     end
 
     describe "#no_results_found?" do
-
       subject { described_class.new(query_parameters: {}).no_results_found? }
 
       context "there are more than three results" do

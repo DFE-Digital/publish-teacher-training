@@ -133,7 +133,7 @@ private
   end
 
   def providers
-    @providers ||= create_list(:provider, 2, :with_name)
+    @providers ||= create_list(:provider, 3, :with_name)
   end
 
   def when_i_go_back
