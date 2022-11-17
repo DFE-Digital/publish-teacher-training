@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Degree required filter" do
   include FiltersFeatureSpecsHelper
 
-  scenario 'Candidate applies required degree filters on results page' do
+  scenario "Candidate applies required degree filters on results page" do
     when_i_visit_the_results_page
     then_i_see_the_two_one_degree_radio_checked
 
