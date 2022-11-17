@@ -752,7 +752,7 @@ class Course < ApplicationRecord
   end
 
   def modern_language_subjects
-    subjects.where(type: "ModernLanguagesSubject").to_a
+    subjects.where(type: "ModernLanguagesSubject")
   end
 
   def master_subject_nil?
