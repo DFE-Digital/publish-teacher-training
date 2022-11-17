@@ -39,7 +39,7 @@ export const FilterToggleButton = class {
           ${this.options.closeButton.text}
           <span class="govuk-visually-hidden"> filter menu</span>
         </button>
-      `);
+      `)
       this.closeButton.on('click', $.proxy(this, 'onCloseClick'))
       this.options.closeButton.container.append(this.closeButton)
     }
