@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.feature 'Funding filter' do
+RSpec.feature "Funding filter" do
   include FiltersFeatureSpecsHelper
 
-  scenario 'Candidate applies salary filter' do
+  scenario "Candidate applies salary filter" do
     when_i_visit_the_results_page
     then_i_see_that_the_salary_checkbox_is_not_selected
 

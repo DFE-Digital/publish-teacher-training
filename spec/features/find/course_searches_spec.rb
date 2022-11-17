@@ -23,6 +23,16 @@ feature "course searches" do
     then_the_correct_page_url_and_provider_query_params_are_present
     when_i_go_back
     the_provider_radio_button_is_selected
+
+    and_i_select_the_provider
+    then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
+
+    when_i_choose_primary
+    then_i_click_continue_on_the(age_groups_page)
+
+    then_i_choose_primary_with_english
+    then_i_click_continue_on_the(primary_subjects_page)
+    and_i_am_on_the_results_page_with_provider_and_backfilled_params
   end
 
   scenario "Candidate searches by location", :geocode do
@@ -36,6 +46,17 @@ feature "course searches" do
     then_the_correct_page_url_and_location_query_params_are_present
     when_i_go_back
     the_location_radio_button_is_selected
+
+    # Location is retained in input field
+    then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
+    and_i_am_on_the_age_groups_page
+
+    when_i_choose_secondary
+    then_i_click_continue_on_the(age_groups_page)
+
+    then_i_choose_music
+    then_i_click_continue_on_the(secondary_subjects_page)
+    and_i_am_on_the_results_page_with_location_and_backfilled_params
   end
 
   scenario "Candidate searches for secondary courses across England" do
@@ -50,6 +71,10 @@ feature "course searches" do
     then_i_should_see_the_subjects_form
     and_i_should_not_see_modern_languages
     then_the_correct_subjects_form_page_url_and_query_params_are_present
+
+    then_i_choose_music
+    then_i_click_continue_on_the(secondary_subjects_page)
+    and_i_am_on_the_results_page_with_secondary_params
   end
 
   scenario "Candidate searches for primary courses across England" do
@@ -63,12 +88,52 @@ feature "course searches" do
     then_i_click_continue_on_the(age_groups_page)
     then_i_should_see_the_primary_subjects_form
     then_the_correct_primary_subjects_form_page_url_and_query_params_are_present
+
+    then_i_choose_primary_with_english
+    then_i_click_continue_on_the(primary_subjects_page)
+    and_i_am_on_the_results_page_with_primary_params
   end
 
 private
 
+  def then_i_choose_primary_with_english
+    primary_subjects_page.primary_with_english.check
+  end
+
+  def and_i_am_on_the_results_page_with_provider_and_backfilled_params
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("age_group=primary&fulltime=false&hasvacancies=true&l=3&parttime=false&qualifications%5B%5D=qts&qualifications%5B%5D=pgce_with_qts&qualifications%5B%5D=other&query=Test+Name&senCourses=false&subject_codes%5B%5D=01")
+    end
+  end
+
+  def and_i_am_on_the_results_page_with_location_and_backfilled_params
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("age_group=secondary&c=England&fulltime=false&hasvacancies=true&l=1&lat=51.4524877&lng=-0.1204749&loc=AA+Teamworks+W+Yorks+SCITT%2C+School+Street%2C+Greetland%2C+Halifax%2C+West+Yorkshire+HX4+8JB&lq=Yorkshire&parttime=false&qualifications%5B%5D=qts&qualifications%5B%5D=pgce_with_qts&qualifications%5B%5D=other&rad=50&senCourses=false&sortby=2&subject_codes%5B%5D=W3")
+    end
+  end
+
+  def and_i_am_on_the_results_page_with_primary_params
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("age_group=primary&l=2&subject_codes%5B%5D=01")
+    end
+  end
+
+  def and_i_am_on_the_results_page_with_secondary_params
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/find/results")
+      expect(uri.query).to eq("age_group=secondary&l=2&subject_codes%5B%5D=W3")
+    end
+  end
+
+  def then_i_choose_music
+    secondary_subjects_page.music.check
+  end
+
   def providers
-    @providers ||= create_list(:provider, 3)
+    @providers ||= create_list(:provider, 2, :with_name)
   end
 
   def when_i_go_back
@@ -142,7 +207,7 @@ private
   def then_the_correct_page_url_and_provider_query_params_are_present
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/age-groups")
-      expect(uri.query).to include("l=3&query=ACME+SCITT")
+      expect(uri.query).to eq("l=3&query=Test+Name")
     end
   end
 
