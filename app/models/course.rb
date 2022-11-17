@@ -751,7 +751,7 @@ class Course < ApplicationRecord
     end
   end
 
-  def select_modern_language_subjects
+  def modern_language_subjects
     subjects.select { |subject| subject.type == "ModernLanguagesSubject" }
   end
 

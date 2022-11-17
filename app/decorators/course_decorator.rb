@@ -142,9 +142,9 @@ class CourseDecorator < ApplicationDecorator
     return sorted_subjects if master_subject_nil?
 
     if main_subject_is_modern_languages?
-      format_name(select_modern_language_subjects.push(additional_subjects).flatten.uniq.unshift(main_subject))
+      format_name(modern_language_subjects.push(additional_subjects).flatten.uniq.unshift(main_subject))
     elsif !main_subject_is_modern_languages? && has_any_modern_language_subject_type?
-      format_name(additional_subjects.push(select_modern_language_subjects).flatten.uniq.unshift(main_subject))
+      format_name(additional_subjects.push(modern_language_subjects).flatten.uniq.unshift(main_subject))
     else
       format_name(additional_subjects.unshift(main_subject))
     end
