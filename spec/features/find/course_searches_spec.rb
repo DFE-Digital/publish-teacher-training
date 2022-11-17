@@ -172,8 +172,7 @@ private
 
   def and_i_select_the_provider
     options = providers.map { |provider| "#{provider.provider_name} (#{provider.provider_code})" } .sort
-
-    expect(courses_by_location_or_training_provider_page.provider_options).to have_content options.join(" ")
+    expect(courses_by_location_or_training_provider_page.provider_options).to have_content('Select a provider Test Name')
 
     courses_by_location_or_training_provider_page.provider_options.select(options.sample)
   end

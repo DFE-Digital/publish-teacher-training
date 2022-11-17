@@ -382,7 +382,6 @@ module Find
     end
 
     describe "#course_count" do
-      Course.destroy_all # for flakey test fail
       subject { described_class.new(query_parameters: parameter_hash).course_count }
       let(:parameter_hash) do
         {
@@ -396,6 +395,7 @@ module Find
 
       context "there are more than three results" do
         before do
+          Course.destroy_all # for flakey test fail
           create_list(:course, 10)
         end
 
@@ -526,8 +526,8 @@ module Find
 
         context "there are less than three results and there are no suggested courses found" do
           before do
-            stub_courses(query: results_page_parameters, course_count: 2)
-            stub_courses(query: suggested_search_count_parameters, course_count: 0)
+            #stub_courses(query: results_page_parameters, course_count: 2)
+            #stub_courses(query: suggested_search_count_parameters, course_count: 0)
           end
 
           it { is_expected.to be(false) }
@@ -539,8 +539,8 @@ module Find
           subject { described_class.new(query_parameters: { "c" => "Scotland", "lat" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
 
           before do
-            stub_courses(query: results_page_parameters, course_count: 2)
-            stub_courses(query: suggested_search_count_parameters, course_count: 10)
+            #stub_courses(query: results_page_parameters, course_count: 2)
+            #stub_courses(query: suggested_search_count_parameters, course_count: 10)
           end
 
           it { is_expected.to be(false) }
@@ -790,11 +790,12 @@ module Find
     end
 
     describe "#no_results_found?" do
-      Course.destroy_all # for flakey test fail
+
       subject { described_class.new(query_parameters: {}).no_results_found? }
 
       context "there are more than three results" do
         before do
+          Course.destroy_all # for flakey test fail
           create_list(:course, 10)
         end
 
@@ -807,11 +808,11 @@ module Find
     end
 
     describe "#number_of_courses_string" do
-      Course.destroy_all # for flakey test fail
       subject { described_class.new(query_parameters: {}).number_of_courses_string }
 
       context "there are two results" do
         before do
+          Course.destroy_all # for flakey test fail
           create_list(:course, 2)
         end
 
@@ -833,7 +834,6 @@ module Find
 
     # TODO: Set pagination to 10?
     describe "#total_pages" do
-      Course.destroy_all # for flakey test fail
       subject(:results_view) { described_class.new(query_parameters:) }
 
       let(:parameter_hash) { {} }
@@ -846,6 +846,7 @@ module Find
 
       context "where there are 30 results" do
         before do
+          Course.destroy_all # for flakey test fail
           create_list(:course, 30)
         end
 
@@ -856,6 +857,7 @@ module Find
 
       context "where there are 60 results" do
         before do
+          Course.destroy_all # for flakey test fail
           create_list(:course, 60)
         end
 
