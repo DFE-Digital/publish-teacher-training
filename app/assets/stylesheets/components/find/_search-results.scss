@@ -73,15 +73,12 @@
 
   .govuk-button {
     flex: 1 0 0;
-    margin: 0 govuk-spacing(2) 0 0;
+    margin: govuk-spacing(2);
+    margin-left: 0;
     width: auto;
 
     @include govuk-media-query($from: "desktop") {
       flex: 0;
-    }
-
-    .js-enabled & {
-      display: none;
     }
   }
 }
