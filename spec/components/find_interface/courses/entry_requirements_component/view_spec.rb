@@ -63,7 +63,7 @@ describe FindInterface::Courses::EntryRequirementsComponent::View, type: :compon
                                "Grade 5 (C) or above in English and maths, or equivalent qualification.",
                              )
       expect(result.text).to include(
-                               "Your degree subject should be in #{course.subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
+                               "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
                              )
     end
 

@@ -4,6 +4,7 @@ module FindInterface::Courses::EntryRequirementsComponent
   class ViewPreview < ViewComponent::Preview
     def qualifications_needed_only
       course = Course.new(course_code: "FIND",
+        name: "Super cool awesome course",
         provider: Provider.new(provider_code: "DFE"),
         additional_degree_subject_requirements: true,
         degree_subject_requirements: "Degree Subject Requirements Text",
@@ -45,7 +46,7 @@ module FindInterface::Courses::EntryRequirementsComponent
         additional_gcse_equivalencies: "much much more",
         personal_qualities: "Personal Qualities Text Goes Here",
         other_requirements: "Other Requirements Text Goes Here",
-        subject_name_or_names: "Biology" }
+        computed_subject_name_or_names: "Biology" }
     end
 
     def mock_course
@@ -54,7 +55,7 @@ module FindInterface::Courses::EntryRequirementsComponent
 
     class FakeCourse
       include ActiveModel::Model
-      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :subject_name_or_names, :campaign_name)
+      attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :computed_subject_name_or_names, :campaign_name)
 
       def enrichment_attribute(params)
         send(params)

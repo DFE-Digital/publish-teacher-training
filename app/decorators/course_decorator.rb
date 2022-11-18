@@ -3,8 +3,14 @@ class CourseDecorator < ApplicationDecorator
 
   delegate_all
 
+  LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
+
   def name_and_code
     "#{object.name} (#{object.course_code})"
+  end
+
+  def modern_languages_other_id
+    "24"
   end
 
   def vacancies
@@ -61,14 +67,16 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def subject_name_or_names
-    case object.subjects.size
-    when 1
-      object.subjects.first.subject_name
-    when 2
-      "#{object.subjects.first.subject_name} with #{object.subjects.second.subject_name}"
+  def computed_subject_name_or_names
+    if (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.include?(subjects.first.subject_code)
+      first_subject_name
+    elsif (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.exclude?(subjects.first.subject_code)
+      first_subject_name.downcase
+    elsif number_of_subjects == 2
+      transformed_subjects = subjects.map { |subject| LANGUAGE_SUBJECT_CODES.include?(subject.subject_code) ? subject.subject_name : subject.subject_name.downcase }
+      "#{transformed_subjects.first} with #{transformed_subjects.second}"
     else
-      object.name
+      object.name.gsub("Modern Languages", "modern languages")
     end
   end
 
@@ -409,5 +417,21 @@ private
 
   def bursary_and_scholarship_flag_active_or_preview?
     FeatureFlag.active?(:bursaries_and_scholarships_announced)
+  end
+
+  def number_of_subjects
+    subjects.size
+  end
+
+  def first_subject_name
+    subjects.first.subject_name
+  end
+
+  def modern_languages_other?
+    subjects.any? { |subject| subject.subject_code == modern_languages_other_id }
+  end
+
+  def main_subject_is_modern_languages?
+    main_subject.id == SecondarySubject.modern_languages.id
   end
 end
