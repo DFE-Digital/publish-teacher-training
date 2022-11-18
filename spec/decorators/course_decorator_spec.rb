@@ -234,6 +234,90 @@ describe CourseDecorator do
     end
   end
 
+  describe "#chosen_subjects" do
+    context "when physics is the main subject" do
+      let(:physics) { build_stubbed(:secondary_subject, :physics, id: 29) }
+      let(:chemistry) { build_stubbed(:secondary_subject, :chemistry, id: 12) }
+      let(:subjects) { [physics, chemistry] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Physics",
+          subjects:,
+          master_subject_id: 29,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays physics above the second subject chosen" do
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Chemistry")
+      end
+    end
+
+    context "when modern languages only is chosen" do
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:subjects) { [french, german] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Modern languages",
+          subjects:,
+          master_subject_id: 33,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays modern languages before the modern languages subjects" do
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German")
+      end
+    end
+
+    context "when physics is chosen as the main subject and modern languages as the second" do
+      let(:modern_languages) { build_stubbed(:secondary_subject, :modern_languages) }
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:subjects) { [modern_languages, french, german] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Physics",
+          subjects:,
+          master_subject_id: 29,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays physics before the modern languages subjects" do
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Modern Languages<br>French<br>German")
+      end
+    end
+
+    context "when modern languages is chosen as the main subject and latin as the second" do
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:latin) { build_stubbed(:secondary_subject, :latin) }
+      let(:subjects) { [french, german, latin] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Modern languages",
+          subjects:,
+          master_subject_id: 33,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays modern languages and the specific languages before the latin subject" do
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German<br>Latin")
+      end
+    end
+  end
+
   # context "financial incentives" do
   #   describe "#salaried?" do
   #     let(:subject) { decorated_course }
