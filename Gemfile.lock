@@ -140,7 +140,7 @@ GEM
     bindata (2.4.10)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.13.0)
+    bootsnap (1.14.0)
       msgpack (~> 1.2)
     brakeman (5.3.1)
     builder (3.2.4)
@@ -414,7 +414,7 @@ GEM
     minitest (5.16.3)
     mock_redis (0.34.0)
       ruby2_keywords
-    msgpack (1.5.4)
+    msgpack (1.6.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     nenv (0.3.0)
