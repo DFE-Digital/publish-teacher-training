@@ -18,13 +18,13 @@ module Find
       end
 
       def qualification_selected?
-        return false if params[:qualifications].nil?
+        return false if params[:qualification].nil?
 
-        params[:qualifications].any?
+        params[:qualification].any?
       end
 
       def qualification_params_nil?
-        params[:qualifications].nil?
+        params[:qualification].nil?
       end
 
       def location_query?
@@ -110,9 +110,9 @@ module Find
       attr_reader :params
 
       def checked?(param_value)
-        return false if params[:qualifications].nil?
+        return false if params[:qualification].nil?
 
-        param_value.in?(params[:qualifications])
+        param_value.in?(params[:qualification])
       end
     end
   end

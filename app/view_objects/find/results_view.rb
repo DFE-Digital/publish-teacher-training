@@ -27,11 +27,11 @@ module Find
     end
 
     def courses
-      @courses ||= Find::CourseSearchService.call(
+      @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
         sort: query_parameters[:sortby],
         course_scope: recruitment_cycle.courses,
-      )
+      ).findable
     end
 
     def recruitment_cycle
@@ -58,7 +58,7 @@ module Find
     end
 
     def qualifications_parameters
-      { "qualifications" => query_parameters["qualifications"].presence || %w[qts pgce_with_qts other] }
+      { "qualification" => query_parameters["qualification"].presence || %w[qts pgce_with_qts other] }
     end
 
     def fulltime_parameters
@@ -355,7 +355,7 @@ module Find
     end
 
     def qualifications
-      query_parameters["qualifications"] || %w[QtsOnly PgdePgceWithQts Other]
+      query_parameters["qualification"] || %w[QtsOnly PgdePgceWithQts Other]
     end
 
     def study_type

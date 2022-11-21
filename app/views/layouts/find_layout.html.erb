@@ -40,7 +40,7 @@
         <%= yield %>
       </main>
     </div>
-
+<%= debug params %>
     <% if @render_feedback_component %>
       <%= render(
         FindInterface::FeedbackComponent.new(
