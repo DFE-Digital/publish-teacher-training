@@ -159,6 +159,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "can_sponsor_skilled_worker_visa" => course.can_sponsor_skilled_worker_visa,
             "can_sponsor_student_visa" => course.can_sponsor_student_visa,
             "campaign_name" => course.campaign_name,
+            "extended_qualification_descriptions" => "Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)",
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },
