@@ -21,7 +21,7 @@ module Find
         .merge(qualifications_parameters)
         .merge(fulltime_parameters)
         .merge(parttime_parameters)
-        .merge(hasvacancies_parameters)
+        .merge(has_vacanvies_parameters)
         .merge(sen_courses_parameters)
         .merge(subject_parameters)
     end
@@ -69,8 +69,8 @@ module Find
       { "parttime" => parttime? }
     end
 
-    def hasvacancies_parameters
-      { "hasvacancies" => hasvacancies? }
+    def has_vacanvies_parameters
+      { "has_vacanvies" => has_vacanvies? }
     end
 
     def sen_courses_parameters
@@ -89,10 +89,10 @@ module Find
       query_parameters["parttime"] == "true"
     end
 
-    def hasvacancies?
-      return true if query_parameters["hasvacancies"].nil?
+    def has_vacanvies?
+      return true if query_parameters["has_vacanvies"].nil?
 
-      query_parameters["hasvacancies"] == "true"
+      query_parameters["has_vacanvies"] == "true"
     end
 
     def sen_courses?

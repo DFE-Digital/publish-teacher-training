@@ -28,7 +28,7 @@ RSpec.feature "Results page new vacancies filter" do
   def and_the_vacancies_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/results")
-      expect(uri.query).to eq("hasvacancies=false&fulltime=true&parttime=true&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=other&degree_required=show_all_courses")
+      expect(uri.query).to eq("has_vacancies=false&fulltime=true&parttime=true&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=other&degree_required=show_all_courses")
     end
   end
 end

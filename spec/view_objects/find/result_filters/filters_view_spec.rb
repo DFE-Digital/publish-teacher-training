@@ -209,7 +209,7 @@ module Find
         subject { described_class.new(params:).has_vacancies_checked? }
 
         context "when parameter is present" do
-          let(:params) { { hasvacancies: "true" } }
+          let(:params) { { has_vacancies: "true" } }
 
           it { is_expected.to be(true) }
         end

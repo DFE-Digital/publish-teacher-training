@@ -69,21 +69,21 @@ RSpec.feature "Qualifications filter" do
   def and_the_qts_qualification_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/results")
-      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualification[]=qts&degree_required=show_all_courses")
+      expect(uri.query).to eq("has_vacancies=true&fulltime=true&parttime=true&qualification[]=qts&degree_required=show_all_courses")
     end
   end
 
   def and_the_pgce_qualification_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/results")
-      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualification[]=pgce_with_qts&degree_required=show_all_courses")
+      expect(uri.query).to eq("has_vacancies=true&fulltime=true&parttime=true&qualification[]=pgce_with_qts&degree_required=show_all_courses")
     end
   end
 
   def and_the_further_education_qualification_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq("/find/results")
-      expect(uri.query).to eq("hasvacancies=true&fulltime=true&parttime=true&qualification[]=other&degree_required=show_all_courses")
+      expect(uri.query).to eq("has_vacancies=true&fulltime=true&parttime=true&qualification[]=other&degree_required=show_all_courses")
     end
   end
 

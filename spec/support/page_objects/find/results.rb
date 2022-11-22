@@ -21,7 +21,7 @@ module PageObjects
       end
 
       class Vacancies < SitePrism::Section
-        element :checkbox, 'input[name="hasvacancies"]'
+        element :checkbox, 'input[name="has_vacancies"]'
       end
 
       class StudyType < SitePrism::Section

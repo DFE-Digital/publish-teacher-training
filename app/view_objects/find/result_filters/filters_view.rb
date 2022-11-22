@@ -52,7 +52,7 @@ module Find
       end
 
       def has_vacancies_checked?
-        params[:hasvacancies] == "true"
+        params[:has_vacancies] == "true"
       end
 
       def full_time_checked?
@@ -68,7 +68,7 @@ module Find
       end
 
       def default_with_vacancies_to_true
-        params[:hasvacancies].nil?
+        params[:has_vacancies].nil?
       end
 
       def all_courses_radio_chosen?
