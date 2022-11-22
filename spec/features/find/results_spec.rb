@@ -21,11 +21,16 @@ feature "results" do
   end
 
   def given_there_are_courses
-    create_list(:course, 5, name: "Hello there")
+    site1 = build(:site, location_name: "site1")
+    site2 = build(:site, location_name: "site2")
+    site_status1 = build(:site_status, :findable, site: site1)
+    site_status2 = build(:site_status, :findable, site: site2)
+    create(:course, name: "Hello there", site_statuses: [site_status1])
+    create(:course, name: "Goodbye", site_statuses: [site_status2])
   end
 
   def i_see_the_courses
-    expect(results_page.courses.count).to eq(5)
+    expect(results_page.courses.count).to eq(2)
     results_page.courses.first.then do |first_course|
       expect(first_course.course_name.text).to include("Hello there")
       expect(first_course.provider_name.text).to be_present
