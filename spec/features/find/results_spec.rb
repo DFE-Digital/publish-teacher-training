@@ -26,12 +26,13 @@ feature "results" do
     site_status1 = build(:site_status, :findable, site: site1)
     site_status2 = build(:site_status, :findable, site: site2)
     create(:course, name: "Hello there", site_statuses: [site_status1])
-    create(:course, name: "Goodbye", site_statuses: [site_status2])
+    create(:course, name: "Hello there", site_statuses: [site_status2])
   end
 
   def i_see_the_courses
     expect(results_page.courses.count).to eq(2)
     results_page.courses.first.then do |first_course|
+      # list by provider?
       expect(first_course.course_name.text).to include("Hello there")
       expect(first_course.provider_name.text).to be_present
       expect(first_course.qualification.text).to include("PGCE with QTS")
