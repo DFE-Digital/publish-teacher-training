@@ -6,11 +6,11 @@
     <div class="govuk-checkboxes__item">
       <%= form.check_box(
         :study_type,
-        { 
+        {
           class: "govuk-checkboxes__input",
           multiple: true,
           data: { qa: "full_time" },
-          checked: @filters_view.full_time_checked? || @filters_view.default_study_types_to_true
+          checked: @filters_view.full_time_checked? || @filters_view.default_study_types_to_true,
         },
         "full_time",
         nil,
@@ -23,11 +23,12 @@
     <div class="govuk-checkboxes__item">
       <%= form.check_box(
         :study_type,
-        { 
+        {
           class: "govuk-checkboxes__input",
           multiple: true,
           data: { qa: "part_time" },
-          checked: @filters_view.part_time_checked? || @filters_view.default_study_types_to_true },
+          checked: @filters_view.part_time_checked? || @filters_view.default_study_types_to_true,
+        },
         "part_time",
         nil,
       ) %>
