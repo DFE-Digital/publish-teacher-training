@@ -1,14 +1,13 @@
 require "rails_helper"
 
 describe Courses::GenerateCourseNameService do
-  let(:service) { described_class.new }
   let(:subjects) { [] }
   let(:is_send) { false }
   let(:level) { "primary" }
   let(:campaign_name) { "no_campaign" }
   let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
-  let(:generated_title) { service.execute(course:) }
+  let(:generated_title) { described_class.call(course:) }
 
   before do
     SecondarySubject.clear_cache
@@ -25,50 +24,13 @@ describe Courses::GenerateCourseNameService do
     end
   end
 
-  describe "Engineers Teach Physics" do
-    context "With no campaign" do
-      let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
-      let(:course) { Course.new(level: :secondary, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
-
-      it "returns Physics" do
-        expect(generated_title).to eq("Physics")
-      end
-
-      include_examples "with SEND"
-    end
-
-    context "With engineers_teach_physics campaign" do
-      let(:campaign_name) { "engineers_teach_physics" }
-      let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
-      let(:course) { Course.new(level: :secondary, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
-
-      it "returns Engineers Teach Physics" do
-        expect(generated_title).to eq("Engineers Teach Physics")
-      end
-
-      include_examples "with SEND"
-    end
-
-    context "With campaign and second subject" do
-      let(:campaign_name) { "engineers_teach_physics" }
-      let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
-      let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
-
-      it "returns Engineers Teach Physics with subject" do
-        expect(generated_title).to eq("Engineers Teach Physics with English")
-      end
-
-      include_examples "with SEND"
-    end
-  end
-
   context "With no subjects" do
     it "Returns an empty string" do
       expect(generated_title).to eq("")
     end
   end
 
-  context "Generating a title for a further education course" do
+  describe "Generating a title for a further education course" do
     let(:level) { "further_education" }
 
     it "returns 'Further education'" do
@@ -78,8 +40,12 @@ describe Courses::GenerateCourseNameService do
     include_examples "with SEND"
   end
 
-  context "Generating a title for non-further education course" do
+  describe "Generating a title for non-further education course" do
     let(:level) { "primary" }
+
+    before do
+      set_course_subjects_and_master_id
+    end
 
     context "With a single subject" do
       let(:subjects) { [Subject.new(subject_name: "Physical education")] }
@@ -99,69 +65,6 @@ describe Courses::GenerateCourseNameService do
       end
 
       include_examples "with SEND"
-    end
-
-    context "With modern languages" do
-      context "with one language" do
-        let(:subjects) { [modern_languages, find_or_create(:modern_languages_subject, :french)] }
-
-        it "Returns a name modern language with language" do
-          expect(generated_title).to eq("Modern Languages (French)")
-        end
-
-        include_examples "with SEND"
-      end
-
-      context "with two languages" do
-        let(:subjects) do
-          [
-            modern_languages,
-            find_or_create(:modern_languages_subject, :french),
-            find_or_create(:modern_languages_subject, :german),
-          ]
-        end
-
-        it "Returns a name modern language with both languages" do
-          expect(generated_title).to eq("Modern Languages (French and German)")
-        end
-
-        include_examples "with SEND"
-      end
-
-      context "with three languages" do
-        let(:subjects) do
-          [
-            modern_languages,
-            find_or_create(:modern_languages_subject, :french),
-            find_or_create(:modern_languages_subject, :german),
-            find_or_create(:modern_languages_subject, :japanese),
-          ]
-        end
-
-        it "Returns a name modern language with three languages" do
-          expect(generated_title).to eq("Modern Languages (French, German, Japanese)")
-        end
-
-        include_examples "with SEND"
-      end
-
-      context "with four or more languages" do
-        let(:subjects) do
-          [
-            modern_languages,
-            find_or_create(:modern_languages_subject, :french),
-            find_or_create(:modern_languages_subject, :german),
-            find_or_create(:modern_languages_subject, :japanese),
-            find_or_create(:modern_languages_subject, :spanish),
-          ]
-        end
-
-        it "Returns just modern languages" do
-          expect(generated_title).to eq("Modern Languages")
-        end
-
-        include_examples "with SEND"
-      end
     end
 
     context "Names which require altering" do
@@ -272,5 +175,161 @@ describe Courses::GenerateCourseNameService do
         end
       end
     end
+  end
+
+  describe "Generating a title for an ETP course" do
+    let(:level) { "primary" }
+
+    before do
+      set_course_subjects_and_master_id
+    end
+
+    context "With no campaign" do
+      let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
+      let(:course) { Course.new(level: :secondary, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
+
+      it "returns Physics" do
+        expect(generated_title).to eq("Physics")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "With engineers_teach_physics campaign" do
+      let(:campaign_name) { "engineers_teach_physics" }
+      let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
+      let(:course) { Course.new(level: :secondary, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
+
+      it "returns Engineers Teach Physics" do
+        expect(generated_title).to eq("Engineers Teach Physics")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "With campaign and second subject" do
+      let(:campaign_name) { "engineers_teach_physics" }
+      let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
+      let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
+
+      it "returns Engineers Teach Physics with subject" do
+        expect(generated_title).to eq("Engineers Teach Physics with English")
+      end
+
+      include_examples "with SEND"
+    end
+  end
+
+  describe "Generating a title for a Modern Languages course" do
+    let(:level) { "primary" }
+
+    before do
+      set_course_subjects_and_master_id
+    end
+
+    context "with one language" do
+      let(:subjects) { [modern_languages, find_or_create(:modern_languages_subject, :french)] }
+
+      it "Returns a name modern language with language" do
+        expect(generated_title).to eq("Modern Languages (French)")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "with two languages" do
+      let(:subjects) do
+        [
+          modern_languages,
+          find_or_create(:modern_languages_subject, :french),
+          find_or_create(:modern_languages_subject, :german),
+        ]
+      end
+
+      it "Returns a name modern language with both languages" do
+        expect(generated_title).to eq("Modern Languages (French and German)")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "with three languages" do
+      let(:subjects) do
+        [
+          modern_languages,
+          find_or_create(:modern_languages_subject, :french),
+          find_or_create(:modern_languages_subject, :german),
+          find_or_create(:modern_languages_subject, :japanese),
+        ]
+      end
+
+      it "Returns a name modern language with three languages" do
+        expect(generated_title).to eq("Modern Languages (French, German, Japanese)")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "with four or more languages" do
+      let(:subjects) do
+        [
+          modern_languages,
+          find_or_create(:modern_languages_subject, :french),
+          find_or_create(:modern_languages_subject, :german),
+          find_or_create(:modern_languages_subject, :japanese),
+          find_or_create(:modern_languages_subject, :spanish),
+        ]
+      end
+
+      it "Returns just modern languages" do
+        expect(generated_title).to eq("Modern Languages")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "when modern language is first subject" do
+      let(:subjects) do
+        [
+          modern_languages,
+          find_or_create(:modern_languages_subject, :french),
+          find_or_create(:modern_languages_subject, :spanish),
+          find_or_create(:secondary_subject, :mathematics),
+        ]
+      end
+
+      it "Returns a name modern language with both languages and the additional subject" do
+        expect(generated_title).to eq("Modern Languages (French and Spanish) with Mathematics")
+      end
+
+      include_examples "with SEND"
+    end
+
+    context "when modern language is additional subject" do
+      let(:subjects) do
+        [
+          find_or_create(:secondary_subject, :mathematics),
+          modern_languages,
+          find_or_create(:modern_languages_subject, :french),
+          find_or_create(:modern_languages_subject, :spanish),
+        ]
+      end
+
+      it "Returns the main subject with the additional language subjects" do
+        expect(generated_title).to eq("Mathematics with French and Spanish")
+      end
+
+      include_examples "with SEND"
+    end
+  end
+
+private
+
+  def set_course_subjects_and_master_id
+    course.course_subjects = subjects.map.with_index do |subject, index|
+      CourseSubject.new(subject:, position: index)
+    end
+
+    course.master_subject_id = course.course_subjects.first.subject_id
   end
 end

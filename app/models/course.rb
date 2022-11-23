@@ -366,7 +366,7 @@ class Course < ApplicationRecord
   end
 
   def generate_name
-    services[:generate_course_name].execute(course: self)
+    Courses::GenerateCourseNameService.call(course: self)
   end
 
   def accrediting_provider_description
@@ -995,9 +995,6 @@ private
     return @services if @services.present?
 
     @services = Dry::Container.new
-    @services.register(:generate_course_name) do
-      Courses::GenerateCourseNameService.new
-    end
     @services.register(:assignable_master_subjects) do
       Courses::AssignableMasterSubjectService.new
     end
