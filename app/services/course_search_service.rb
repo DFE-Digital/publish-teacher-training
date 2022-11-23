@@ -21,6 +21,7 @@ class CourseSearchService
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
     scope = scope.findable if findable?
+    # binding.pry
     scope = scope.with_study_modes(study_types) if study_types.any?
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
@@ -200,7 +201,9 @@ private
   end
 
   def study_types
+    # this passes for strings and arrays
     return [] if filter[:study_type].blank?
+    return filter[:study_type] if filter[:study_type].is_a? Array
 
     filter[:study_type].split(",")
   end

@@ -25,8 +25,8 @@ module PageObjects
       end
 
       class StudyType < SitePrism::Section
-        element :full_time, 'input[name="fulltime"]'
-        element :part_time, 'input[name="parttime"]'
+        element :full_time, '[data-qa="full_time"]'
+        element :part_time, '[data-qa="part_time"]'
       end
 
       class Qualifications < SitePrism::Section

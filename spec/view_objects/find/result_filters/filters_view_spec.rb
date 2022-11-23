@@ -225,7 +225,7 @@ module Find
         subject { described_class.new(params:).full_time_checked? }
 
         context "when parameter is present" do
-          let(:params) { { fulltime: "true" } }
+          let(:params) { { study_type: ["full_time"] } }
 
           it { is_expected.to be(true) }
         end
@@ -241,7 +241,7 @@ module Find
         subject { described_class.new(params:).part_time_checked? }
 
         context "when parameter is present" do
-          let(:params) { { parttime: "true" } }
+          let(:params) { { study_type: ["part_time"] } }
 
           it { is_expected.to be(true) }
         end
@@ -263,12 +263,7 @@ module Find
         end
 
         context "when parameters are present" do
-          let(:params) do
-            {
-              parttime: "true",
-              fulltime: "false",
-            }
-          end
+          let(:params) { { study_type: ["full_time_or_part_time"] } }
 
           it { is_expected.to be(false) }
         end

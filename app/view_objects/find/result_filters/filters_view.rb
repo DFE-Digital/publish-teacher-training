@@ -56,15 +56,22 @@ module Find
       end
 
       def full_time_checked?
-        params[:fulltime] == "true"
+        return false if params[:study_type].nil?
+
+        params[:study_type].include?("full_time")
       end
 
       def part_time_checked?
-        params[:parttime] == "true"
+        return false if params[:study_type].nil?
+
+        params[:study_type].include?("part_time")
       end
 
       def default_study_types_to_true
-        params[:fulltime] != "true" && params[:parttime] != "true"
+        return true if params[:study_type].nil?
+
+        params[:study_type] == "full_time_or_part_time"
+        # params[:fulltime] != "true" && params[:parttime] != "true"
       end
 
       def default_with_vacancies_to_true

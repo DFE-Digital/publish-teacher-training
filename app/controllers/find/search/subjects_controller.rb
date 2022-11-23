@@ -26,7 +26,7 @@ module Find
 
       def form_params
         params.require(:find_subjects_form)
-          .permit(:c, :lat, :lng, :loc, :lq, :rad, :sortby, :age_group, :fulltime, :has_vacancies, :l, :parttime, :senCourses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, :query, :degree_required, :can_sponsor_visa, :funding, qualification: [], subject_codes: [])
+          .permit(:c, :lat, :lng, :loc, :lq, :rad, :sortby, :age_group, :has_vacancies, :l, :senCourses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, :query, :degree_required, :can_sponsor_visa, :funding, qualification: [], subject_codes: [], study_type: [])
       end
 
       def build_backlink_query_parameters

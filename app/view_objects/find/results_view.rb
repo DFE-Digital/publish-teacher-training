@@ -19,8 +19,9 @@ module Find
     def query_parameters_with_defaults
       query_parameters.except("utf8", "authenticity_token")
         .merge(qualifications_parameters)
-        .merge(fulltime_parameters)
-        .merge(parttime_parameters)
+        # .merge(fulltime_parameters)
+        # .merge(parttime_parameters)
+        .merge(study_type_parameters)
         .merge(has_vacancies_parameters)
         .merge(sen_courses_parameters)
         .merge(subject_parameters)
@@ -61,13 +62,17 @@ module Find
       { "qualification" => query_parameters["qualification"].presence || %w[qts pgce_with_qts other] }
     end
 
-    def fulltime_parameters
-      { "fulltime" => fulltime? }
+    def study_type_parameters
+      { "study_type" => query_parameters["study_type"].presence || %w[full_time part_time] }
     end
 
-    def parttime_parameters
-      { "parttime" => parttime? }
-    end
+    # def fulltime_parameters
+    #   { "fulltime" => fulltime? }
+    # end
+
+    # def parttime_parameters
+    #   { "parttime" => parttime? }
+    # end
 
     def has_vacancies_parameters
       { "has_vacancies" => has_vacancies? }
