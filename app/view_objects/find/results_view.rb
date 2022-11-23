@@ -106,11 +106,11 @@ module Find
 
     # FIND:TODO double check
     def subject_parameters
-      query_parameters["subject_codes"].present? ? { "subject_codes" => query_parameters["subject_codes"].presence } : {}
+      query_parameters["subjects"].present? ? { "subjects" => query_parameters["subjects"].presence } : {}
     end
 
     def subject_codes
-      query_parameters["subject_codes"] || []
+      query_parameters["subjects"] || []
     end
 
     # which method is best?
@@ -328,7 +328,7 @@ module Find
     end
 
     def subject_parameters_array
-      query_parameters["subject_codes"] || []
+      query_parameters["subjects"] || []
     end
 
     def filter_links(links)

@@ -2,9 +2,9 @@ module Find
   class SubjectsForm
     include ActiveModel::Model
 
-    attr_accessor :subject_codes, :age_group
+    attr_accessor :subjects, :age_group
 
-    validates :subject_codes, presence: true
+    validates :subjects, presence: true
 
     def primary?
       age_group == "primary"

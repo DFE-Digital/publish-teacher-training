@@ -10,7 +10,7 @@ module Find
       end
 
       it "is valid when subject codes are present" do
-        form = described_class.new(subject_codes: %w[01 02])
+        form = described_class.new(subjects: %w[01 02])
 
         expect(form.valid?).to be(true)
       end

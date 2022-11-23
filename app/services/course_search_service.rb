@@ -223,7 +223,8 @@ private
 
   def subject_codes
     return [] if filter[:subjects].blank?
-    return [] unless filter[:subjects].is_a?(String)
+    # return [] unless filter[:subjects].is_a?(String)
+    return filter[:subjects] if filter[:subjects].is_a? Array
 
     filter[:subjects].split(",")
   end

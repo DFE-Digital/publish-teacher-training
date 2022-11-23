@@ -209,7 +209,7 @@ module Find
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
 
       context "The maximum number of subjects are selected" do
-        let(:parameter_hash) { { "subject_codes" => (1..43).to_a } }
+        let(:parameter_hash) { { "subjects" => (1..43).to_a } }
 
         it "Returns the number of extra subjects - 2" do
           expect(results_view.number_of_extra_subjects).to eq(37)
@@ -217,7 +217,7 @@ module Find
       end
 
       context "more than NUMBER_OF_SUBJECTS_DISPLAYED subjects are selected" do
-        let(:parameter_hash) { { "subject_codes" => %w[00 01 F1 Q8 P3] } }
+        let(:parameter_hash) { { "subjects" => %w[00 01 F1 Q8 P3] } }
 
         it "returns the number of the extra subjects" do
           expect(results_view.number_of_extra_subjects).to eq(5)
@@ -466,7 +466,7 @@ module Find
         context "when subject parameters are passed" do
           let(:results_view) do
             described_class.new(query_parameters: {
-              "subject_codes" => [
+              "subjects" => [
                 french_subject_code,
                 russian_subject_code,
                 primary_subject_code,
