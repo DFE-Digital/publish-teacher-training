@@ -12,8 +12,8 @@ feature "View pages" do
   end
 
   scenario "Navigate to /privacy-policy" do
-    visit "find/privacy-policy"
-    expect(page) .to have_selector("h1", text: "Privacy policy")
+    visit "find/privacy"
+    expect(page) .to have_selector("h1", text: "Find postgraduate teacher training privacy notice")
   end
 
   scenario "Navigate to /accessibility" do

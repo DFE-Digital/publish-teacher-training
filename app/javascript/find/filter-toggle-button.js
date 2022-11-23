@@ -34,7 +34,12 @@ export const FilterToggleButton = class {
 
   addCloseButton () {
     if (this.options.closeButton) {
-      this.closeButton = $(`<button class="app-filter__close" type="button">${this.options.closeButton.text}</button>`)
+      this.closeButton = $(`
+        <button class="app-filter__close" type="button">
+          ${this.options.closeButton.text}
+          <span class="govuk-visually-hidden"> filter menu</span>
+        </button>
+      `)
       this.closeButton.on('click', $.proxy(this, 'onCloseClick'))
       this.options.closeButton.container.append(this.closeButton)
     }

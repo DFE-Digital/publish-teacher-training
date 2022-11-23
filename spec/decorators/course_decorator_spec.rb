@@ -234,6 +234,90 @@ describe CourseDecorator do
     end
   end
 
+  describe "#chosen_subjects" do
+    context "when physics is the main subject" do
+      let(:physics) { build_stubbed(:secondary_subject, :physics, id: 29) }
+      let(:chemistry) { build_stubbed(:secondary_subject, :chemistry, id: 12) }
+      let(:subjects) { [physics, chemistry] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Physics",
+          subjects:,
+          master_subject_id: 29,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays physics above the second subject chosen" do
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Chemistry")
+      end
+    end
+
+    context "when modern languages only is chosen" do
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:subjects) { [french, german] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Modern languages",
+          subjects:,
+          master_subject_id: 33,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays modern languages before the modern languages subjects" do
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German")
+      end
+    end
+
+    context "when physics is chosen as the main subject and modern languages as the second" do
+      let(:modern_languages) { build_stubbed(:secondary_subject, :modern_languages) }
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:subjects) { [modern_languages, french, german] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Physics",
+          subjects:,
+          master_subject_id: 29,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays physics before the modern languages subjects" do
+        expect(decorated_course.chosen_subjects).to eq("Physics<br>Modern Languages<br>French<br>German")
+      end
+    end
+
+    context "when modern languages is chosen as the main subject and latin as the second" do
+      let(:french) { build_stubbed(:modern_languages_subject, :french) }
+      let(:german) { build_stubbed(:modern_languages_subject, :german) }
+      let(:latin) { build_stubbed(:secondary_subject, :latin) }
+      let(:subjects) { [french, german, latin] }
+      let(:course) {
+        build_stubbed(
+          :course,
+          name: "Modern languages",
+          subjects:,
+          master_subject_id: 33,
+        )
+      }
+
+      let(:decorated_course) { course.decorate }
+
+      it "displays modern languages and the specific languages before the latin subject" do
+        expect(decorated_course.chosen_subjects).to eq("Modern Languages<br>French<br>German<br>Latin")
+      end
+    end
+  end
+
   # context "financial incentives" do
   #   describe "#salaried?" do
   #     let(:subject) { decorated_course }
@@ -319,10 +403,10 @@ describe CourseDecorator do
     end
   end
 
-  describe "#subject_name_or_names" do
+  describe "#computed_subject_name_or_names" do
     context "course has more than one subject" do
       it "returns both subjects names seperated by a 'with'" do
-        expect(decorated_course.subject_name_or_names).to eq("English with Mathematics")
+        expect(decorated_course.computed_subject_name_or_names).to eq("English with mathematics")
       end
     end
 
@@ -331,7 +415,34 @@ describe CourseDecorator do
       let(:course) { build_stubbed(:course, subjects: [course_subject]) }
 
       it "return the subject name" do
-        expect(decorated_course.subject_name_or_names).to eq("Computing")
+        expect(decorated_course.computed_subject_name_or_names).to eq("computing")
+      end
+    end
+
+    context "course has a language subject" do
+      let(:course_subject) { find_or_create :secondary_subject, :english }
+      let(:course) { build(:course, subjects: [course_subject]) }
+
+      it "return the capitalised subject name" do
+        expect(decorated_course.computed_subject_name_or_names).to eq("English")
+      end
+    end
+
+    context "course is modern languages" do
+      let(:course_subject) { find_or_create :secondary_subject, :modern_languages }
+      let(:course) { build(:course, subjects: [course_subject, build(:modern_languages_subject, :french)]) }
+
+      it "return lowercase modern languages and capitalised language" do
+        expect(decorated_course.computed_subject_name_or_names).to eq("modern languages with French")
+      end
+    end
+
+    context "course is modern languages (other)" do
+      let(:course_subject) { find_or_create :secondary_subject, :modern_languages }
+      let(:course) { build(:course, subjects: [course_subject, build(:modern_languages_subject, :modern_languages_other)]) }
+
+      it "returns one modern languages" do
+        expect(decorated_course.computed_subject_name_or_names).to eq("modern languages")
       end
     end
   end
@@ -818,7 +929,7 @@ describe CourseDecorator do
 
     context "bursaries and scholarships is announced" do
       before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+        FeatureFlag.activate(:bursaries_and_scholarships_announced)
       end
 
       context "course has no financial incentive" do
@@ -861,10 +972,6 @@ describe CourseDecorator do
     end
 
     context "bursaries and scholarships is not announced" do
-      before do
-        allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-      end
-
       it "returns the correct details under 'financial_incentive_details'" do
         expect(subject).to eq("Information not yet available")
       end

@@ -3,8 +3,14 @@ class CourseDecorator < ApplicationDecorator
 
   delegate_all
 
+  LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
+
   def name_and_code
     "#{object.name} (#{object.course_code})"
+  end
+
+  def modern_languages_other_id
+    "24"
   end
 
   def vacancies
@@ -61,14 +67,16 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def subject_name_or_names
-    case object.subjects.size
-    when 1
-      object.subjects.first.subject_name
-    when 2
-      "#{object.subjects.first.subject_name} with #{object.subjects.second.subject_name}"
+  def computed_subject_name_or_names
+    if (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.include?(subjects.first.subject_code)
+      first_subject_name
+    elsif (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.exclude?(subjects.first.subject_code)
+      first_subject_name.downcase
+    elsif number_of_subjects == 2
+      transformed_subjects = subjects.map { |subject| LANGUAGE_SUBJECT_CODES.include?(subject.subject_code) ? subject.subject_name : subject.subject_name.downcase }
+      "#{transformed_subjects.first} with #{transformed_subjects.second}"
     else
-      object.name
+      object.name.gsub("Modern Languages", "modern languages")
     end
   end
 
@@ -128,6 +136,18 @@ class CourseDecorator < ApplicationDecorator
 
   def sorted_subjects
     object.subjects.map(&:subject_name).sort.join("<br>").html_safe
+  end
+
+  def chosen_subjects
+    return sorted_subjects if master_subject_nil?
+
+    if main_subject_is_modern_languages?
+      format_name(modern_language_subjects.to_a.push(additional_subjects).flatten.uniq.unshift(main_subject))
+    elsif !main_subject_is_modern_languages? && modern_languages_subjects.present?
+      format_name(additional_subjects.push(modern_language_subjects.to_a).flatten.uniq.unshift(main_subject))
+    else
+      format_name(additional_subjects.unshift(main_subject))
+    end
   end
 
   def length
@@ -331,7 +351,7 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || (Settings.find_features.bursaries_and_scholarships_announced == false)
+    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
     return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
 
     if bursary_amount.present? && scholarship.present?
@@ -408,6 +428,34 @@ private
   end
 
   def bursary_and_scholarship_flag_active_or_preview?
-    (Settings.find_features.bursaries_and_scholarships_announced == true)
+    FeatureFlag.active?(:bursaries_and_scholarships_announced)
+  end
+
+  def number_of_subjects
+    subjects.size
+  end
+
+  def first_subject_name
+    subjects.first.subject_name
+  end
+
+  def modern_languages_other?
+    subjects.any? { |subject| subject.subject_code == modern_languages_other_id }
+  end
+
+  def main_subject_is_modern_languages?
+    main_subject.id == SecondarySubject.modern_languages.id
+  end
+
+  def main_subject
+    Subject.find(course.master_subject_id)
+  end
+
+  def additional_subjects
+    object.subjects.reject { |subject| subject.id == main_subject.id }
+  end
+
+  def format_name(subjects)
+    subjects.map(&:subject_name).join("<br>").html_safe
   end
 end

@@ -169,11 +169,11 @@ class Course < ApplicationRecord
   }
 
   scope :ascending_canonical_order, lambda {
-    joins(:provider).merge(Provider.by_name_ascending).order("name asc, course_code asc")
+    joins(:provider).merge(Provider.by_name_ascending).order(name: :asc, course_code: :asc)
   }
 
   scope :descending_canonical_order, lambda {
-    joins(:provider).merge(Provider.by_name_descending).order("name desc, course_code desc")
+    joins(:provider).merge(Provider.by_name_descending).order(name: :asc, course_code: :asc)
   }
 
   scope :accredited_body_order, lambda { |provider_name|
@@ -756,6 +756,18 @@ class Course < ApplicationRecord
     end
   end
 
+  def modern_language_subjects
+    subjects.where(type: "ModernLanguagesSubject")
+  end
+
+  def master_subject_nil?
+    master_subject_id.nil?
+  end
+
+  def has_any_modern_language_subject_type?
+    subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
+  end
+
 private
 
   def add_site!(site:)
@@ -920,10 +932,6 @@ private
     unless findable?
       errors.add(:site_statuses, "must be findable")
     end
-  end
-
-  def has_any_modern_language_subject_type?
-    subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
   end
 
   def has_the_modern_languages_secondary_subject_type?

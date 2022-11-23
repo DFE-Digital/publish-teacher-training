@@ -5,7 +5,7 @@ require "rails_helper"
 feature "Course show", { can_edit_current_and_next_cycles: false } do
   context "bursaries and scholarships is announced" do
     before do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
     end
 
     scenario "i can view the course basic details" do
@@ -17,10 +17,6 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   context "bursaries and scholarships is not announced" do
-    before do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-    end
-
     scenario "i can view the course basic details" do
       given_i_am_authenticated(user: user_with_fee_based_course)
       when_i_visit_the_course_preview_page

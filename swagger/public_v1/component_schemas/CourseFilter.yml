@@ -113,10 +113,10 @@ properties:
       - third_class
       - not_required
   can_sponsor_visa:
-      description: "Only return courses where a skilled worker or student visa can be sponsored."
-      type: boolean
-      example: true
-  campaign_name:
-      description: "Return courses which are part of a campaign."
-      type: string
-      example: "campaign_name"
+    description: "Only return courses where a skilled worker or student visa can be sponsored."
+    type: boolean
+    example: true
+  engineers_teach_physics:
+    description: "Only return courses that are part of the engineers teach physics campaign."
+    type: boolean
+    example: true

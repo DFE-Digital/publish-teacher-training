@@ -14,7 +14,7 @@ describe FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponen
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(true)
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
     end
 
     it "renders scholarship and bursary details" do
@@ -83,10 +83,6 @@ describe FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponen
   end
 
   context "bursaries_and_scholarships_announced feature flag is off" do
-    before do
-      allow(Settings.find_features).to receive(:bursaries_and_scholarships_announced).and_return(false)
-    end
-
     it "does not render scholarship and bursary details" do
       result = render_inline(described_class.new(course))
 

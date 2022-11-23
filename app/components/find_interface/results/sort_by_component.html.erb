@@ -2,7 +2,7 @@
   <% if results.location_filter? %>
     <p class="govuk-body">Sorted by distance</p>
   <% else %>
-    <%= form_with(url: find_results_path, class: "app-search-results-header__sort", data: { qa: "sort-form" }) do |form| %>
+    <%= form_with(url: find_results_path, method: "get", class: "app-search-results-header__sort", data: { qa: "sort-form" }) do |form| %>
       <%= render "find/shared/hidden_fields", form:, exclude_keys: %w[sortby] %>
       <%= form.label(:sortby, "Sorted by", class: "govuk-label govuk-!-display-inline-block") %>
       <%= form.select(
@@ -11,12 +11,11 @@
         {},
         {
           class: "govuk-select",
-          onchange: "this.form.submit()",
           role: "listbox",
           data: { qa: "sort-form__options" },
         },
       ) %>
-      <%= form.submit("Update", class: "govuk-button", data: { qa: "sort-form__submit" }) %>
+      <%= form.submit("Sort", name: nil, class: "govuk-button", data: { qa: "sort-form__submit" }) %>
     <% end %>
   <% end %>
 </div>

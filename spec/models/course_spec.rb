@@ -288,14 +288,14 @@ describe Course do
         subject { described_class.descending_canonical_order }
 
         it "sorts in descending order of provider name" do
-          expect(subject).to eq([course_d, course_c, course_b, course_a])
+          expect(subject).to eq([course_c, course_d, course_a, another_course_a, course_b])
         end
 
         context "when there are multiple courses with the same name" do
           before { another_course_a }
 
           it "sorts by course_code" do
-            expect(subject).to eq([course_d, course_c, course_b, another_course_a, course_a])
+            expect(subject).to eq([course_c, course_d, course_a, another_course_a, course_b])
           end
         end
       end
