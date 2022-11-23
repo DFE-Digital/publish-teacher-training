@@ -7,8 +7,7 @@ module Find
     let(:default_output_parameters) do
       {
         "qualification" => %w[qts pgce_with_qts other],
-        "fulltime" => false,
-        "parttime" => false,
+        "study_type" => %w[full_time part_time],
         "has_vacancies" => true,
         "senCourses" => false,
       }
@@ -30,15 +29,15 @@ module Find
       end
 
       context "query_parameters have fulltime set" do
-        let(:parameter_hash) { { "fulltime" => "true" } }
+        let(:parameter_hash) { { "study_type" => ["full_time"] } }
 
-        it { is_expected.to eq(default_output_parameters.merge("fulltime" => true)) }
+        it { is_expected.to eq(default_output_parameters.merge("study_type" => ["full_time"])) }
       end
 
       context "query_parameters have parttime set" do
-        let(:parameter_hash) { { "parttime" => "true" } }
+        let(:parameter_hash) { { "study_type" => ["part_time"] } }
 
-        it { is_expected.to eq(default_output_parameters.merge("parttime" => true)) }
+        it { is_expected.to eq(default_output_parameters.merge("study_type" => ["part_time"])) }
       end
 
       context "query_parameters have has_vacancies set" do
@@ -88,8 +87,7 @@ module Find
       let(:default_query_parameters) do
         {
           "qualification" => %w[qts pgce_with_qts other],
-          "fulltime" => "false",
-          "parttime" => "false",
+          "study_type" => %w[full_time part_time],
           "has_vacancies" => "true",
           "senCourses" => "false",
         }
@@ -908,7 +906,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?fulltime=false&has_vacancies=true&parttime=false&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false"
+          expect(results_view.filter_params_for("/")).to eq "/?has_vacancies=true&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
 
@@ -927,7 +925,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?c=England&fulltime=false&has_vacancies=true&l=1&lat=1.23456&loc=Brixton&long=0.54321&lq=Brixton&parttime=false&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false"
+          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&lat=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
     end
