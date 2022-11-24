@@ -40,7 +40,7 @@ module Find
       return parameters.merge("rad" => radius) if radius.present?
 
       parameters
-        .except("lat", "lng", "rad", "loc", "lq")
+        .except("latitude", "lng", "rad", "loc", "lq")
         .merge("l" => 2)
     end
 

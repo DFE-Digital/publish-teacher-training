@@ -59,7 +59,7 @@ module Find
       end
 
       context "parameters without default present in query_parameters" do
-        let(:parameter_hash) { { "lat" => "52.3812321", "lng" => "-3.9440235" } }
+        let(:parameter_hash) { { "latitude" => "52.3812321", "lng" => "-3.9440235" } }
 
         it { is_expected.to eq(default_output_parameters.merge(parameter_hash)) }
       end
@@ -261,8 +261,8 @@ module Find
     describe "#show_map?" do
       subject { described_class.new(query_parameters: parameter_hash).show_map? }
 
-      context "when lng, lat and rad are passed" do
-        let(:parameter_hash) { { "lng" => "0.3", "lat" => "0.2", "rad" => "10" } }
+      context "when lng, latitude and rad are passed" do
+        let(:parameter_hash) { { "lng" => "0.3", "latitude" => "0.2", "rad" => "10" } }
 
         it { is_expected.to be(true) }
       end
@@ -273,8 +273,8 @@ module Find
         it { is_expected.to be(false) }
       end
 
-      context "when only lat is passed" do
-        let(:parameter_hash) { { "lat" => "0.10" } }
+      context "when only latitude is passed" do
+        let(:parameter_hash) { { "latitude" => "0.10" } }
 
         it { is_expected.to be(false) }
       end
@@ -309,7 +309,7 @@ module Find
           "loc" => "Hogwarts, Reading, UK",
           "rad" => "10",
           "lng" => "-27.1504002",
-          "lat" => "-109.3042697",
+          "latitude" => "-109.3042697",
         }
       end
 
@@ -504,7 +504,7 @@ module Find
       end
 
       context "searching for courses within England" do
-        subject { described_class.new(query_parameters: { "c" => "England", "lat" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
+        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
 
         context "there are more than three results" do
           before do
@@ -529,7 +529,7 @@ module Find
 
       context "searching for courses in a devolved nation" do
         context "there are less than three results and there are suggested courses found" do
-          subject { described_class.new(query_parameters: { "c" => "Scotland", "lat" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
+          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
 
           it { is_expected.to be(false) }
         end
@@ -559,7 +559,7 @@ module Find
       context "site_distance less than 11 miles" do
         let(:parameter_hash) do
           {
-            "lat" => "51.5079",
+            "latitude" => "51.5079",
             "lng" => "0.0877",
           }
         end
@@ -570,7 +570,7 @@ module Find
       context "site_distance less than 21 miles" do
         let(:parameter_hash) do
           {
-            "lat" => "51.6985",
+            "latitude" => "51.6985",
             "lng" => "0.1367",
           }
         end
@@ -581,7 +581,7 @@ module Find
       context "site_distance more than 21 miles" do
         let(:parameter_hash) do
           {
-            "lat" => "52",
+            "latitude" => "52",
             "lng" => "0.1367",
           }
         end
@@ -594,7 +594,7 @@ module Find
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
 
       context "closest site distance is greater than 1 mile" do
-        let(:parameter_hash) { { "lat" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding to one decimal place" do
           site1 = build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -613,7 +613,7 @@ module Find
       end
 
       context "closest site distance is less than 1 mile" do
-        let(:parameter_hash) { { "lat" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding to one decimal place" do
           site1 = build(:site, latitude: 51.4985, longitude: 0.1367, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -632,7 +632,7 @@ module Find
       end
 
       context "closest site distance is less than 0.05 miles" do
-        let(:parameter_hash) { { "lat" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding up to prevent 0.0 miles displaying" do
           site1 = build(:site, latitude: 51.4970, longitude: 0.1358, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -651,7 +651,7 @@ module Find
 
     context "locations" do
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-      let(:parameter_hash) { { "lat" => "51.4975", "lng" => "0.1357" } }
+      let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
       let(:geocoder) { instance_double(Geokit::LatLng) }
 
       let(:site1) do
@@ -680,7 +680,7 @@ module Find
           address3: "Essex",
           address4: "UK",
           postcode: "CM8 2SD",
-          location_name: "no lat long",
+          location_name: "no latitude long",
         )
       end
       let(:site4) do
@@ -895,7 +895,7 @@ module Find
         let(:query_parameters) do
           {
             "c" => "Wales",
-            "lat" => "1.23456",
+            "latitude" => "1.23456",
             "long" => "0.54321",
             "loc" => "Cardiff",
             "lq" => "Cardiff",
@@ -914,7 +914,7 @@ module Find
         let(:query_parameters) do
           {
             "c" => "England",
-            "lat" => "1.23456",
+            "latitude" => "1.23456",
             "long" => "0.54321",
             "loc" => "Brixton",
             "lq" => "Brixton",
@@ -925,7 +925,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&lat=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
+          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&latitude=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
     end

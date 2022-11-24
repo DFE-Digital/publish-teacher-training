@@ -65,9 +65,9 @@ module Find
         if location_option_selected?
           all_params.except("provider.provider_name").merge(rad: ResultsView::MILES)
         elsif across_england_option_selected?
-          all_params.except(:lat, :lng, :rad, :loc, :lq, "provider.provider_name", :sortby)
+          all_params.except(:latitude, :lng, :rad, :loc, :lq, "provider.provider_name", :sortby)
         elsif provider_option_selected?
-          p = filter_params.except(:lat, :lng, :rad, :loc, :lq)
+          p = filter_params.except(:latitude, :lng, :rad, :loc, :lq)
           remove_previous_parameters(p)
         end
       end

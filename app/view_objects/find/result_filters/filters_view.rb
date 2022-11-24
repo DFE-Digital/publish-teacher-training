@@ -103,7 +103,7 @@ module Find
           c: params[:c],
           l: params[:l],
           lq: params[:lq],
-          lat: params[:lat],
+          latitude: params[:latitude],
           loc: params[:loc],
           lng: params[:lng],
           query: params["provider.provider_name"],

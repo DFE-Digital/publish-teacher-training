@@ -433,7 +433,7 @@ module Find
     end
 
     def latitude
-      query_parameters["lat"]
+      query_parameters["latitude"]
     end
 
     def longitude
@@ -455,7 +455,7 @@ module Find
     end
 
     def stripped_devolved_nation_params(path)
-      parameters = query_parameters_with_defaults.except("c", "lat", "long", "loc", "lq", "l")
+      parameters = query_parameters_with_defaults.except("c", "latitude", "long", "loc", "lq", "l")
       filter_params_with_unescaped_commas(path, parameters:)
     end
 

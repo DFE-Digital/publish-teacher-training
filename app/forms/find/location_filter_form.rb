@@ -49,7 +49,7 @@ module Find
       results = Geocoder.search(query, components: "country:UK").first
       if results
         {
-          lat: results.latitude,
+          latitude: results.latitude,
           lng: results.longitude,
           loc: results.address,
           lq: location_query,
