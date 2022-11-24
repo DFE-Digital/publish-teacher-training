@@ -14,7 +14,7 @@
     } %>
     <%= form_with url: find_locations_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
 
-      <%= render "find/shared/hidden_fields", exclude_keys: %w[l query rad], form: %>
+      <%= render "find/shared/hidden_fields", exclude_keys: %w[l provider.provider_name rad], form: %>
       <%= render "find/shared/hidden_previous_fields", form: %>
 
       <fieldset class="govuk-fieldset" role="radiogroup" aria-required="true" class="govuk-fieldset">
@@ -102,9 +102,9 @@
                   <% end %>
                   <% aria_described_by = "provider-hint" %>
                   <% aria_described_by += " provider-error" if provider_error? %>
-                   <%= form.govuk_collection_select :query, select_provider_options(@providers), :id, :name, label: { text: "School, university or other training provider" }, hint: { text: "Enter the name or provider code" } %>
+                   <%= form.govuk_collection_select "provider.provider_name", select_provider_options(@providers), :id, :name, label: { text: "School, university or other training provider" }, hint: { text: "Enter the name or provider code" } %>
                 <% else %>
-                  <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
+                  <%= form.label "provider.provider_name", { class: "govuk-label", for: "provider" } do %>
                     School, university or other training provider
                     <div class="govuk-hint">Enter the name or provider code</div>
                     <% if provider_error? %>
@@ -113,9 +113,9 @@
                   </p>
                     <% end %>
                   <% end %>
-                  <%= form.text_field :query,
+                  <%= form.text_field "provider.provider_name",
                     id: "provider",
-                    value: params[:query],
+                    value: params["provider.provider_name"],
                     class: "govuk-input",
                     data: { qa: "provider-search" } %>
                 <% end %>

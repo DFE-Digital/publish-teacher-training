@@ -37,7 +37,7 @@ module Find
           let(:params) do
             {
               l: "3",
-              query: "",
+              "provider.provider_name" => "",
             }
           end
 

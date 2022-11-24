@@ -11,7 +11,7 @@ window.jQuery = jQuery
 window.$ = jQuery
 
 initAll()
-setupAutocomplete('query-field')
+setupAutocomplete('provider-provider-name-field')
 
 initAutocomplete({
   element: 'location-autocomplete',

@@ -123,7 +123,7 @@ module Find
     end
 
     def provider
-      query_parameters["query"]
+      query_parameters["provider.provider_name"]
     end
 
     def location

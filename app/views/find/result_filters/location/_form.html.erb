@@ -13,7 +13,7 @@
         end,
     } %>
     <%= form_with url: location_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
-      <%= render "shared/hidden_fields", exclude_keys: %w[l query rad], form: %>
+      <%= render "shared/hidden_fields", exclude_keys: %w[l provider.provider_name rad], form: %>
       <%= render "shared/hidden_previous_fields", form: %>
       <fieldset class="govuk-fieldset" role="radiogroup" aria-required="true" class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -94,7 +94,7 @@
               <div class="govuk-form-group <%= "govuk-form-group--error" if provider_error? %>" data-module="track-no-provider-results">
                 <!-- if cached providers are present render autocomplete else render sans-js provider search -->
                 <% if select_provider_options %>
-                  <%= form.label :query, { class: "govuk-label", data_qa: "cached-providers-autocomplete", for: "query" } do %>
+                  <%= form.label "provider.provider_name", { class: "govuk-label", data_qa: "cached-providers-autocomplete", for: "provider.provider_name" } do %>
                     School, university or other training provider
                   <% end %>
                   <div class="govuk-hint">Enter the name or provider code</div>
@@ -104,9 +104,9 @@
                   <% end %>
                   <% aria_described_by = "provider-hint" %>
                   <% aria_described_by += " provider-error" if provider_error? %>
-                  <%= form.collection_select("query", select_provider_options, :id, :name, {}, { class: "govuk-input", "aria-describedby" => aria_described_by, data: { qa: "provider-search" } }) %>
+                  <%= form.collection_select("provider.provider_name", select_provider_options, :id, :name, {}, { class: "govuk-input", "aria-describedby" => aria_described_by, data: { qa: "provider-search" } }) %>
                 <% else %>
-                  <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
+                  <%= form.label "provider.provider_name", { class: "govuk-label", for: "provider" } do %>
                     School, university or other training provider
                     <div class="govuk-hint">Enter the name or provider code</div>
                     <% if provider_error? %>
@@ -115,9 +115,9 @@
                   </p>
                     <% end %>
                   <% end %>
-                  <%= form.text_field :query,
+                  <%= form.text_field "provider.provider_name",
                     id: "provider",
-                    value: params[:query],
+                    value: params["provider.provider_name"],
                     class: "govuk-input",
                     data: { qa: "provider-search" } %>
                 <% end %>

@@ -67,7 +67,7 @@ module Find
     end
 
     def provider_query
-      @params[:query]
+      @params["provider.provider_name"]
     end
 
     def search_radius

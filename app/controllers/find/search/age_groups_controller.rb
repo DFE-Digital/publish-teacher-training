@@ -32,7 +32,7 @@ module Find
       def form_params
         params
           .require(:find_age_groups_form)
-          .permit(:age_group, :c, :has_vacancies, :l, :lat, :lng, :loc, :lq, :rad, :senCourses, :sortby, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, :query, :degree_required, :can_sponsor_visa, :funding, subjects: [], qualification: [], study_type: [])
+          .permit(:age_group, :c, :has_vacancies, :l, :lat, :lng, :loc, :lq, :rad, :senCourses, :sortby, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, "provider.provider_name", :degree_required, :can_sponsor_visa, :funding, subjects: [], qualification: [], study_type: [])
       end
 
       def build_backlink_query_parameters
