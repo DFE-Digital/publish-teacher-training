@@ -44,7 +44,7 @@ module Find
       end
 
       def send_checked?
-        params[:senCourses] == "true"
+        params[:send_courses] == "true"
       end
 
       def visa_checked?

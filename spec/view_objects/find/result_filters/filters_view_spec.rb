@@ -177,7 +177,7 @@ module Find
         subject { described_class.new(params:).send_checked? }
 
         context "when parameter is present" do
-          let(:params) { { senCourses: "true" } }
+          let(:params) { { send_courses: "true" } }
 
           it { is_expected.to be(true) }
         end

@@ -17,7 +17,7 @@ module PageObjects
       end
 
       class Send < SitePrism::Section
-        element :checkbox, 'input[name="senCourses"]'
+        element :checkbox, 'input[name="send_courses"]'
       end
 
       class Vacancies < SitePrism::Section

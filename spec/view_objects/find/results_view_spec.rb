@@ -9,7 +9,7 @@ module Find
         "qualification" => %w[qts pgce_with_qts other],
         "study_type" => %w[full_time part_time],
         "has_vacancies" => true,
-        "senCourses" => false,
+        "send_courses" => false,
       }
     end
 
@@ -46,10 +46,10 @@ module Find
         it { is_expected.to eq(default_output_parameters.merge("has_vacancies" => true)) }
       end
 
-      context "query_parameters have senCourses set" do
-        let(:parameter_hash) { { "senCourses" => "false" } }
+      context "query_parameters have send_courses set" do
+        let(:parameter_hash) { { "send_courses" => "false" } }
 
-        it { is_expected.to eq(default_output_parameters.merge("senCourses" => false)) }
+        it { is_expected.to eq(default_output_parameters.merge("send_courses" => false)) }
       end
 
       context "query_parameters not lose track of 'l' used by C# radio buttons" do
@@ -89,7 +89,7 @@ module Find
           "qualification" => %w[qts pgce_with_qts other],
           "study_type" => %w[full_time part_time],
           "has_vacancies" => "true",
-          "senCourses" => "false",
+          "send_courses" => "false",
         }
       end
 
@@ -188,15 +188,15 @@ module Find
     describe "#send_courses?" do
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
 
-      context "when the senCourses is True" do
-        let(:parameter_hash) { { "senCourses" => "True" } }
+      context "when the send_courses is True" do
+        let(:parameter_hash) { { "send_courses" => "True" } }
 
         it "returns true" do
           expect(results_view.send_courses?).to be_truthy
         end
       end
 
-      context "when the senCourses is nil" do
+      context "when the send_courses is nil" do
         let(:parameter_hash) { {} }
 
         it "returns false" do
@@ -387,7 +387,7 @@ module Find
           "fulltime" => "true",
           "parttime" => "true",
           "has_vacancies" => "true",
-          "senCourses" => "false",
+          "send_courses" => "false",
         }
       end
 
@@ -906,7 +906,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?has_vacancies=true&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
+          expect(results_view.filter_params_for("/")).to eq "/?has_vacancies=true&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
 
@@ -925,7 +925,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&lat=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&senCourses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
+          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&lat=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
     end

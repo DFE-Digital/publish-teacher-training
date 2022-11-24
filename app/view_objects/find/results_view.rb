@@ -79,7 +79,7 @@ module Find
     end
 
     def sen_courses_parameters
-      { "senCourses" => sen_courses? }
+      { "send_courses" => sen_courses? }
     end
 
     def fulltime?
@@ -101,7 +101,7 @@ module Find
     end
 
     def sen_courses?
-      query_parameters["senCourses"] == "true"
+      query_parameters["send_courses"] == "true"
     end
 
     # FIND:TODO double check
@@ -280,7 +280,7 @@ module Find
     end
 
     def send_courses?
-      query_parameters["senCourses"].present? && query_parameters["senCourses"].downcase == "true"
+      query_parameters["send_courses"].present? && query_parameters["send_courses"].downcase == "true"
     end
 
     def sort_by_distance?

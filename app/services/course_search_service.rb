@@ -23,8 +23,8 @@ class CourseSearchService
     scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
-    # binding.pry
     scope = scope.with_provider_name(provider_name) if provider_name.present?
+    # binding.pry
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin:) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
