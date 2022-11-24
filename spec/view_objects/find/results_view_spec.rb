@@ -325,7 +325,7 @@ module Find
       subject { described_class.new(query_parameters: parameter_hash).provider }
 
       context "when query is passed" do
-        let(:parameter_hash) { { "query" => "Kamino" } }
+        let(:parameter_hash) { { "provider.provider_name" => "Kamino" } }
 
         it { is_expected.to eq("Kamino") }
       end
