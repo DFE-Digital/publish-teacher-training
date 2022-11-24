@@ -215,7 +215,11 @@ class Course < ApplicationRecord
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
   scope :with_study_modes, lambda { |study_modes|
-    where(study_mode: Array(study_modes) << "full_time_or_part_time")
+    if study_modes.include? "full_time_or_part_time"
+      where(study_mode: study_modes)
+    else
+      where(study_mode: Array(study_modes) << "full_time_or_part_time")
+    end
   }
 
   scope :with_subjects, lambda { |subject_codes|
