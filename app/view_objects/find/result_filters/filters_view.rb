@@ -107,7 +107,7 @@ module Find
           loc: params[:loc],
           longitude: params[:longitude],
           query: params["provider.provider_name"],
-          rad: params[:rad],
+          radius: params[:radius],
           sortby: params[:sortby],
         }
       end

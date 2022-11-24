@@ -356,7 +356,7 @@ module Find
 
     def radii_for_suggestions
       radius_for_all_england = nil
-      [50].reject { |rad| rad <= radius.to_i } << radius_for_all_england
+      [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
     end
 
     def qualifications

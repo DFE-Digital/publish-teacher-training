@@ -71,7 +71,7 @@ module Find
     end
 
     def search_radius
-      @params[:rad]
+      @params[:radius]
     end
 
     def country(results)

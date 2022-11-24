@@ -5,7 +5,7 @@ module Find
     context "radius is nil" do
       subject { described_class.new(radius: nil, count: "5", parameters:) }
 
-      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "rad" => "10", "loc" => "Shetlands", "lq" => "2" } }
+      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "radius" => "10", "loc" => "Shetlands", "lq" => "2" } }
 
       describe "#text" do
         subject { super().text }
@@ -29,7 +29,7 @@ module Find
     context "radius is 10" do
       subject(:suggested_search_link) { described_class.new(radius: "10", count: "5", parameters:) }
 
-      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "rad" => "5", "loc" => "Shetlands", "lq" => "2" } }
+      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "radius" => "5", "loc" => "Shetlands", "lq" => "2" } }
 
       describe "#text" do
         subject { super().text }
@@ -50,7 +50,7 @@ module Find
           expect(Rack::Utils.parse_nested_query(uri.query)).to eq({
             "latitude" => "5",
             "longitude" => "-5",
-            "rad" => "10",
+            "radius" => "10",
             "loc" => "Shetlands",
             "lq" => "2",
           })
@@ -61,7 +61,7 @@ module Find
     context "including_non_salaried is true" do
       subject { described_class.new(radius: nil, count: "5", parameters:, including_non_salaried: true) }
 
-      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "rad" => "10", "loc" => "Shetlands", "lq" => "2" } }
+      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "radius" => "10", "loc" => "Shetlands", "lq" => "2" } }
 
       describe "#text" do
         subject { super().text }
@@ -77,7 +77,7 @@ module Find
     end
 
     context "explicit_salary_filter is true" do
-      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "rad" => "10", "loc" => "Shetlands", "lq" => "2" } }
+      let(:parameters) { { "latitude" => "5", "longitude" => "-5", "radius" => "10", "loc" => "Shetlands", "lq" => "2" } }
 
       describe "#text" do
         subject { described_class.new(radius: nil, count: "5", parameters:, explicit_salary_filter: true).text }

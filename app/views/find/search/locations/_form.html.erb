@@ -14,7 +14,7 @@
     } %>
     <%= form_with url: find_locations_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
 
-      <%= render "find/shared/hidden_fields", exclude_keys: %w[l provider.provider_name rad], form: %>
+      <%= render "find/shared/hidden_fields", exclude_keys: %w[l provider.provider_name radius], form: %>
       <%= render "find/shared/hidden_previous_fields", form: %>
 
       <fieldset class="govuk-fieldset" role="radiogroup" aria-required="true" class="govuk-fieldset">

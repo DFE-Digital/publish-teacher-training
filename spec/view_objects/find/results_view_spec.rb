@@ -261,14 +261,14 @@ module Find
     describe "#show_map?" do
       subject { described_class.new(query_parameters: parameter_hash).show_map? }
 
-      context "when longitude, latitude and rad are passed" do
-        let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "rad" => "10" } }
+      context "when longitude, latitude and radius are passed" do
+        let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "radius" => "10" } }
 
         it { is_expected.to be(true) }
       end
 
-      context "when only rad is passed" do
-        let(:parameter_hash) { { "rad" => "10" } }
+      context "when only radius is passed" do
+        let(:parameter_hash) { { "radius" => "10" } }
 
         it { is_expected.to be(false) }
       end
@@ -307,7 +307,7 @@ module Find
       let(:parameter_hash) do
         {
           "loc" => "Hogwarts, Reading, UK",
-          "rad" => "10",
+          "radius" => "10",
           "longitude" => "-27.1504002",
           "latitude" => "-109.3042697",
         }
@@ -504,7 +504,7 @@ module Find
       end
 
       context "searching for courses within England" do
-        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "longitude" => "2.4", "rad" => "50" }).suggested_search_visible? }
+        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "longitude" => "2.4", "radius" => "50" }).suggested_search_visible? }
 
         context "there are more than three results" do
           before do
@@ -529,7 +529,7 @@ module Find
 
       context "searching for courses in a devolved nation" do
         context "there are less than three results and there are suggested courses found" do
-          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "longitude" => "2.4", "rad" => "50" }).suggested_search_visible? }
+          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "longitude" => "2.4", "radius" => "50" }).suggested_search_visible? }
 
           it { is_expected.to be(false) }
         end
