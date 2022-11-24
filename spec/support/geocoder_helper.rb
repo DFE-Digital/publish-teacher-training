@@ -4,7 +4,7 @@ module GeocoderHelper
       case address
       when "Fun Academy, Long Lane, Holbury, Southampton, UK, SO45 2PA"
         Geokit::GeoLoc.new(
-          latitude: 50.8312522,
+          lat: 50.8312522,
           lng: -1.3792036,
           full_address: "Long Lane, Holbury, Southampton, UK, SO45 2PA",
           zip: "SO45 2PA",
@@ -23,7 +23,7 @@ module GeocoderHelper
         end
       else
         Geokit::GeoLoc.new(
-          latitude: 51.4524877,
+          lat: 51.4524877,
           lng: -0.1204749,
           full_address: "Academies Enterprise Trust: Aylward Academy, Windmill Road, London, N18 1NB",
           zip: "N18 1NB",

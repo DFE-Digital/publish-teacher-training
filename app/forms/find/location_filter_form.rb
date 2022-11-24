@@ -50,7 +50,7 @@ module Find
       if results
         {
           latitude: results.latitude,
-          lng: results.longitude,
+          longitude: results.longitude,
           loc: results.address,
           lq: location_query,
           c: country(results),

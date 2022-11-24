@@ -59,7 +59,7 @@ module Find
       end
 
       context "parameters without default present in query_parameters" do
-        let(:parameter_hash) { { "latitude" => "52.3812321", "lng" => "-3.9440235" } }
+        let(:parameter_hash) { { "latitude" => "52.3812321", "longitude" => "-3.9440235" } }
 
         it { is_expected.to eq(default_output_parameters.merge(parameter_hash)) }
       end
@@ -261,8 +261,8 @@ module Find
     describe "#show_map?" do
       subject { described_class.new(query_parameters: parameter_hash).show_map? }
 
-      context "when lng, latitude and rad are passed" do
-        let(:parameter_hash) { { "lng" => "0.3", "latitude" => "0.2", "rad" => "10" } }
+      context "when longitude, latitude and rad are passed" do
+        let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "rad" => "10" } }
 
         it { is_expected.to be(true) }
       end
@@ -279,8 +279,8 @@ module Find
         it { is_expected.to be(false) }
       end
 
-      context "when only lng is passed" do
-        let(:parameter_hash) { { "lng" => "1.0" } }
+      context "when only longitude is passed" do
+        let(:parameter_hash) { { "longitude" => "1.0" } }
 
         it { is_expected.to be(false) }
       end
@@ -308,7 +308,7 @@ module Find
         {
           "loc" => "Hogwarts, Reading, UK",
           "rad" => "10",
-          "lng" => "-27.1504002",
+          "longitude" => "-27.1504002",
           "latitude" => "-109.3042697",
         }
       end
@@ -504,7 +504,7 @@ module Find
       end
 
       context "searching for courses within England" do
-        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
+        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "longitude" => "2.4", "rad" => "50" }).suggested_search_visible? }
 
         context "there are more than three results" do
           before do
@@ -529,7 +529,7 @@ module Find
 
       context "searching for courses in a devolved nation" do
         context "there are less than three results and there are suggested courses found" do
-          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "lng" => "2.4", "rad" => "50" }).suggested_search_visible? }
+          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "longitude" => "2.4", "rad" => "50" }).suggested_search_visible? }
 
           it { is_expected.to be(false) }
         end
@@ -560,7 +560,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "51.5079",
-            "lng" => "0.0877",
+            "longitude" => "0.0877",
           }
         end
 
@@ -571,7 +571,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "51.6985",
-            "lng" => "0.1367",
+            "longitude" => "0.1367",
           }
         end
 
@@ -582,7 +582,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "52",
-            "lng" => "0.1367",
+            "longitude" => "0.1367",
           }
         end
 
@@ -594,7 +594,7 @@ module Find
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
 
       context "closest site distance is greater than 1 mile" do
-        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "longitude" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding to one decimal place" do
           site1 = build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -613,7 +613,7 @@ module Find
       end
 
       context "closest site distance is less than 1 mile" do
-        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "longitude" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding to one decimal place" do
           site1 = build(:site, latitude: 51.4985, longitude: 0.1367, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -632,7 +632,7 @@ module Find
       end
 
       context "closest site distance is less than 0.05 miles" do
-        let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
+        let(:parameter_hash) { { "latitude" => "51.4975", "longitude" => "0.1357" } }
 
         it "calculates the distance to the closest site, rounding up to prevent 0.0 miles displaying" do
           site1 = build(:site, latitude: 51.4970, longitude: 0.1358, address1: "1 Foo Street", postcode: "BAA0NE")
@@ -651,7 +651,7 @@ module Find
 
     context "locations" do
       let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-      let(:parameter_hash) { { "latitude" => "51.4975", "lng" => "0.1357" } }
+      let(:parameter_hash) { { "latitude" => "51.4975", "longitude" => "0.1357" } }
       let(:geocoder) { instance_double(Geokit::LatLng) }
 
       let(:site1) do

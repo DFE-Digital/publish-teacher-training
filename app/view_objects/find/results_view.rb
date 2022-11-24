@@ -437,7 +437,7 @@ module Find
     end
 
     def longitude
-      query_parameters["lng"]
+      query_parameters["longitude"]
     end
 
     def lat_long
