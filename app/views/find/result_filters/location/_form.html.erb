@@ -22,6 +22,7 @@
         <div class="govuk-form-group" id="search-options">
           <% if flash[:error] and location_error? === false and provider_error? === false %>
             <p class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error: </span>
               <% if flash[:error].kind_of?(Array) %>
                 <%= flash[:error].last %>
               <% else %>
