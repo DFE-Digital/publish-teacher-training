@@ -62,11 +62,11 @@ module WithQualifications
 
     def full_qualifications
       case qualification
-      when "qts" then ["Qualified teacher status (QTS)"]
-      when "pgce_with_qts" then ["Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)"]
-      when "pgde_with_qts" then ["Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)"]
-      when "pgce" then ["Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)"]
-      when "pgde" then ["Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)"]
+      when "qts" then "Qualified teacher status (QTS)"
+      when "pgce_with_qts" then "Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)"
+      when "pgde_with_qts" then "Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)"
+      when "pgce" then "Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)"
+      when "pgde" then "Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)"
       end
     end
 
@@ -79,7 +79,7 @@ module WithQualifications
     def full_qualification_descriptions
       return "" unless full_qualifications
 
-      full_qualifications[0]
+      full_qualifications
     end
 
     def qualification=(value)
