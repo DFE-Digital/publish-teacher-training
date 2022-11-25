@@ -25,8 +25,8 @@ class CourseSearchService
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
-    # binding.pry
     scope = scope.within(filter[:radius], origin:) if locations_filter?
+    # binding.pry
     scope = scope.with_funding_types(funding_types) if funding_types.any?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?

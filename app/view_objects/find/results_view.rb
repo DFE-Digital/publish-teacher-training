@@ -6,7 +6,7 @@ module Find
     include ActionView::Helpers::NumberHelper
 
     MAXIMUM_NUMBER_OF_SUBJECTS = 43
-    DISTANCE = "2".freeze
+    DISTANCE = "distance".freeze
     SUGGESTED_SEARCH_THRESHOLD = 3
     MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
     RESULTS_PER_PAGE = 10
