@@ -26,8 +26,9 @@ class CourseSearchService
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin:) if locations_filter?
-    # binding.pry
     scope = scope.with_funding_types(funding_types) if funding_types.any?
+    # binding.pry
+    scope = scope.with_degree_grades(degree_grades_accepted) if degrees_accepted?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
@@ -212,6 +213,25 @@ private
     return [] if filter[:funding_type].blank?
 
     filter[:funding_type].split(",")
+  end
+
+  def degrees_accepted?
+    filter[:degree_required].present?
+  end
+
+  def degree_grades_accepted
+    return [] if !degrees_accepted?
+
+    degree_required_parameter = filter[:degree_required].to_sym
+
+    accepted_degrees = {
+      show_all_courses: "two_one,two_two,third_class,not_required",
+      two_two: "two_two,third_class,not_required",
+      third_class: "third_class,not_required",
+      not_required: "not_required",
+    }
+
+    accepted_degrees[degree_required_parameter].split(",")
   end
 
   def degree_grades
