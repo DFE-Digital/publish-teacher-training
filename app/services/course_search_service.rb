@@ -16,7 +16,6 @@ class CourseSearchService
   end
 
   def call
-    binding.pry
     scope = course_scope
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
