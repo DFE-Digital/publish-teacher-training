@@ -129,6 +129,8 @@ class Provider < ApplicationRecord
 
   scope :with_provider_types, ->(provider_types) { where(provider_type: provider_types) }
 
+  scope :with_region_codes, ->(region_codes) { where(region_code: region_codes) }
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }

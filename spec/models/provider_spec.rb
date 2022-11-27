@@ -622,6 +622,21 @@ describe Provider do
       end
     end
 
+    describe "#with_region_codes" do
+      let(:region_codes) { ["london"] }
+
+      let(:provider) { create(:provider) }
+
+      before do
+        provider
+      end
+
+      subject { described_class.with_region_codes(region_codes) }
+
+      it "returns the providers with the region codes" do
+        expect(subject).to contain_exactly(provider)
+      end
+    end
   end
 
   describe "in_cycle" do

@@ -32,11 +32,19 @@ module API
 
           params.dig(:filter, :provider_types).split(",")
         end
+
+        def region_codes
+          return [] if params.dig(:filter, :region_codes).blank?
+          return [] unless params.dig(:filter, :region_codes).is_a?(String)
+
+          params.dig(:filter, :region_codes).split(",")
+        end
         def providers
           @providers = recruitment_cycle.providers
 
           @providers = @providers.changed_since(updated_since) if updated_since.present?
           @providers = @providers.with_provider_types(provider_types) if provider_types.present?
+          @providers = @providers.with_region_codes(region_codes) if region_codes.present?
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending
                        else

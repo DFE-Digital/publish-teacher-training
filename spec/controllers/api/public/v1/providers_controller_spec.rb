@@ -361,6 +361,14 @@ RSpec.describe API::Public::V1::ProvidersController do
             expect(provider_names_in_response).to eq([provider2.provider_name])
           end
         end
+
+        context "passing in region_codes param" do
+          let(:filter) { { region_codes: ["yorkshire_and_the_humber"] } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
       end
     end
   end
