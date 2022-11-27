@@ -41,7 +41,6 @@
         <%= yield %>
       </main>
     </div>
-    
     <% if @render_feedback_component %>
       <%= render(
         FindInterface::FeedbackComponent.new(
