@@ -609,6 +609,19 @@ describe Provider do
         expect(subject).to contain_exactly(current_provider)
       end
     end
+
+    describe "#with_provider_types" do
+      let(:provider_types) { ["lead_school"] }
+
+      let(:provider) { create(:provider) }
+
+      subject { described_class.with_provider_types(provider_types) }
+
+      it "returns the correct providers" do
+        expect(subject).to contain_exactly(provider)
+      end
+    end
+
   end
 
   describe "in_cycle" do

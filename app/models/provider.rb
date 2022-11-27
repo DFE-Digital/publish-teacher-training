@@ -127,6 +127,8 @@ class Provider < ApplicationRecord
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
 
+  scope :with_provider_types, ->(provider_types) { where(provider_type: provider_types) }
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }

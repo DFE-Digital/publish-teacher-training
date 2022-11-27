@@ -26,17 +26,22 @@ module API
           @updated_since ||= params.dig(:filter, :updated_since)
         end
 
+        def provider_types
+          return [] if params.dig(:filter, :provider_types).blank?
+          return [] unless params.dig(:filter, :provider_types).is_a?(String)
+
+          params.dig(:filter, :provider_types).split(",")
+        end
         def providers
           @providers = recruitment_cycle.providers
+
+          @providers = @providers.changed_since(updated_since) if updated_since.present?
+          @providers = @providers.with_provider_types(provider_types) if provider_types.present?
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending
                        else
                          @providers.by_name_descending
                        end
-
-          if updated_since.present?
-            @providers = @providers.changed_since(updated_since)
-          end
 
           @providers
         end

@@ -2,6 +2,14 @@ type: object
 example: ""
 description: "This schema is used to search within collections to return more specific results."
 properties:
+  provider_types:
+    description: "Return providers based on their provider type. This is a comma delimited string. If multiple provider types are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used."
+    type: string
+    example: "scitt,lead_school"
+    enum:
+      - scitt
+      - lead_school
+      - university
   updated_since:
     description: "Return providers that have been updated since the date (ISO 8601 date format)"
     type: string
