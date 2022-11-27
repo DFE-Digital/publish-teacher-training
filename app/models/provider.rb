@@ -131,6 +131,7 @@ class Provider < ApplicationRecord
 
   scope :with_region_codes, ->(region_codes) { where(region_code: region_codes) }
 
+  scope :with_can_sponsor_skilled_worker_visa, ->(can_sponsor_skilled_worker_visa) { where(can_sponsor_skilled_worker_visa:) }
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }

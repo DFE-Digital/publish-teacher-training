@@ -1240,6 +1240,11 @@
         "example": "",
         "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
+          "can_sponsor_skilled_worker_visa": {
+            "description": "Only return providers that can sponsor skilled worker visa.",
+            "type": "boolean",
+            "example": true
+          },
           "provider_types": {
             "description": "Return providers based on their provider type. This is a comma delimited string. If multiple provider types are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used.",
             "type": "string",

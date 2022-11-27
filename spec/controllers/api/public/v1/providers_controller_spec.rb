@@ -362,6 +362,13 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
+        context "passing in can_sponsor_skilled_worker_visa param" do
+          let(:filter) { { can_sponsor_skilled_worker_visa: true } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
         context "passing in region_codes param" do
           let(:filter) { { region_codes: ["yorkshire_and_the_humber"] } }
 
