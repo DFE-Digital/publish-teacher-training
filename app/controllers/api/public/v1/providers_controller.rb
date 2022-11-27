@@ -44,6 +44,10 @@ module API
           @can_sponsor_skilled_worker_visa ||= params.dig(:filter, :can_sponsor_skilled_worker_visa)&.to_s&.downcase == "true"
         end
 
+        def can_sponsor_student_visa?
+          @can_sponsor_student_visa ||= params.dig(:filter, :can_sponsor_student_visa)&.to_s&.downcase == "true"
+        end
+
         def providers
           @providers = recruitment_cycle.providers
 
@@ -51,6 +55,8 @@ module API
           @providers = @providers.with_provider_types(provider_types) if provider_types.present?
           @providers = @providers.with_region_codes(region_codes) if region_codes.present?
           @providers = @providers.with_can_sponsor_skilled_worker_visa(true) if can_sponsor_skilled_worker_visa?
+          @providers = @providers.with_can_sponsor_student_visa(true) if can_sponsor_student_visa?
+
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending
                        else
