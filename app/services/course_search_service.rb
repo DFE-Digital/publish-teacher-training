@@ -16,6 +16,7 @@ class CourseSearchService
   end
 
   def call
+    binding.pry
     scope = course_scope
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
@@ -27,7 +28,6 @@ class CourseSearchService
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin:) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
-    # binding.pry
     scope = scope.with_degree_grades(degree_grades_accepted) if degrees_accepted?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?

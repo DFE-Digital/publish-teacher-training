@@ -31,13 +31,25 @@ module Find
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
         sort: query_parameters[:sortby],
-        course_scope: recruitment_cycle.courses,
+        course_scope: build_courses,
+      )
+    end
+
+    def build_courses
+      courses_base = RecruitmentCycle.current.courses
+
+      @courses = courses_base.includes(
+        :enrichments,
+        subjects: [:financial_incentive],
+        site_statuses: [:site],
+        provider: %i[recruitment_cycle ucas_preferences],
       ).findable
     end
 
-    def recruitment_cycle
-      @recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
-    end
+    # dont think we need this
+    # def recruitment_cycle
+    #   @recruitment_cycle = RecruitmentCycle.current
+    # end
 
     def number_of_courses_string
       case course_count
@@ -82,17 +94,17 @@ module Find
       { "send_courses" => sen_courses? }
     end
 
-    def fulltime?
-      return false if query_parameters["fulltime"].nil?
+    # def fulltime?
+    #   return false if query_parameters["fulltime"].nil?
 
-      query_parameters["fulltime"] == "true"
-    end
+    #   query_parameters["fulltime"] == "true"
+    # end
 
-    def parttime?
-      return false if query_parameters["parttime"].nil?
+    # def parttime?
+    #   return false if query_parameters["parttime"].nil?
 
-      query_parameters["parttime"] == "true"
-    end
+    #   query_parameters["parttime"] == "true"
+    # end
 
     def has_vacancies?
       return true if query_parameters["has_vacancies"].nil?
