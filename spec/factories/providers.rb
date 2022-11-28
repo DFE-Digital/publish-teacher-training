@@ -32,6 +32,10 @@ FactoryBot.define do
     can_sponsor_student_visa { [true, false].sample }
     can_sponsor_skilled_worker_visa { [true, false].sample }
 
+    trait :with_name do
+      provider_name { "Test Name" }
+    end
+
     trait :university do
       provider_type { :university }
       accrediting_provider { "Y" }

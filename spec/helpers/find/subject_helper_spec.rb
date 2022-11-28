@@ -80,4 +80,18 @@ describe Find::SubjectHelper do
       end
     end
   end
+
+  describe "#primary_subject_options" do
+    let(:subjects) { [find_or_create(:primary_subject, :primary_with_english)] }
+
+    subject { primary_subject_options(subjects) }
+
+    it "returns primary subject code" do
+      expect(subject.first.code).to eq subjects.first.subject_code
+    end
+
+    it "returns secondary subject name" do
+      expect(subject.first.name).to eq subjects.first.subject_name
+    end
+  end
 end

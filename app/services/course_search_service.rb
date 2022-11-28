@@ -17,6 +17,7 @@ class CourseSearchService
 
   def call
     scope = course_scope
+    # TODO: level query for further_education ?
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -27,6 +28,7 @@ class CourseSearchService
     scope = scope.with_send if send_courses_filter?
     scope = scope.within(filter[:radius], origin:) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
+    scope = scope.with_degree_grades(degree_grades_accepted) if degrees_accepted?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
@@ -200,7 +202,9 @@ private
   end
 
   def study_types
+    # this passes for strings and arrays
     return [] if filter[:study_type].blank?
+    return filter[:study_type] if filter[:study_type].is_a? Array
 
     filter[:study_type].split(",")
   end
@@ -209,6 +213,25 @@ private
     return [] if filter[:funding_type].blank?
 
     filter[:funding_type].split(",")
+  end
+
+  def degrees_accepted?
+    filter[:degree_required].present?
+  end
+
+  def degree_grades_accepted
+    return [] if !degrees_accepted?
+
+    degree_required_parameter = filter[:degree_required].to_sym
+
+    accepted_degrees = {
+      show_all_courses: "two_one,two_two,third_class,not_required",
+      two_two: "two_two,third_class,not_required",
+      third_class: "third_class,not_required",
+      not_required: "not_required",
+    }
+
+    accepted_degrees[degree_required_parameter].split(",")
   end
 
   def degree_grades
@@ -220,7 +243,7 @@ private
 
   def subject_codes
     return [] if filter[:subjects].blank?
-    return [] unless filter[:subjects].is_a?(String)
+    return filter[:subjects] if filter[:subjects].is_a? Array
 
     filter[:subjects].split(",")
   end

@@ -6,20 +6,20 @@ module Find
       describe "#qts_only_checked?" do
         subject { described_class.new(params:).qts_only_checked? }
 
-        context "when QtsOnly param not present" do
-          let(:params) { { qualifications: %w[Other PgdePgceWithQts] } }
+        context "when qts param not present" do
+          let(:params) { { qualification: %w[other pgce_with_qts] } }
 
           it { is_expected.to be(false) }
         end
 
-        context "when QtsOnly param is present" do
-          let(:params) { { qualifications: %w[QtsOnly PgdePgceWithQts] } }
+        context "when qts param is present" do
+          let(:params) { { qualification: %w[qts pgce_with_qts] } }
 
           it { is_expected.to be(true) }
         end
 
         context "when qualifications is empty" do
-          let(:params) { { qualifications: [] } }
+          let(:params) { { qualification: [] } }
 
           it { is_expected.to be(false) }
         end
@@ -35,19 +35,19 @@ module Find
         subject { described_class.new(params:).pgde_pgce_with_qts_checked? }
 
         context "when PgdePgceWithQts param not present" do
-          let(:params) { { qualifications: %w[Other QtsOnly] } }
+          let(:params) { { qualification: %w[other qts] } }
 
           it { is_expected.to be(false) }
         end
 
         context "when PgdePgceWithQts param is present" do
-          let(:params) { { qualifications: %w[QtsOnly PgdePgceWithQts] } }
+          let(:params) { { qualification: %w[qts pgce_with_qts] } }
 
           it { is_expected.to be(true) }
         end
 
         context "when qualifications is empty" do
-          let(:params) { { qualifications: [] } }
+          let(:params) { { qualification: [] } }
 
           it { is_expected.to be(false) }
         end
@@ -63,19 +63,19 @@ module Find
         subject { described_class.new(params:).other_checked? }
 
         context "when Other param not present" do
-          let(:params) { { qualifications: %w[QtsOnly PgdePgceWithQts] } }
+          let(:params) { { qualification: %w[qts pgce_with_qts] } }
 
           it { is_expected.to be(false) }
         end
 
         context "when Other param is present" do
-          let(:params) { { qualifications: %w[QtsOnly Other] } }
+          let(:params) { { qualification: %w[qts other] } }
 
           it { is_expected.to be(true) }
         end
 
         context "when qualifications is empty" do
-          let(:params) { { qualifications: [] } }
+          let(:params) { { qualification: [] } }
 
           it { is_expected.to be(false) }
         end
@@ -91,13 +91,13 @@ module Find
         subject { described_class.new(params:).qualification_selected? }
 
         context "when a parameter is selected" do
-          let(:params) { { qualifications: %w[Other] } }
+          let(:params) { { qualification: %w[other] } }
 
           it { is_expected.to be(true) }
         end
 
         context "when multiple parameters are selected" do
-          let(:params) { { qualifications: %w[Other QtsOnly] } }
+          let(:params) { { qualification: %w[other qts] } }
 
           it { is_expected.to be(true) }
         end
@@ -161,7 +161,7 @@ module Find
         subject { described_class.new(params:).funding_checked? }
 
         context "when parameter is present" do
-          let(:params) { { funding: "8" } }
+          let(:params) { { funding: "salary" } }
 
           it { is_expected.to be(true) }
         end
@@ -177,7 +177,7 @@ module Find
         subject { described_class.new(params:).send_checked? }
 
         context "when parameter is present" do
-          let(:params) { { senCourses: "true" } }
+          let(:params) { { send_courses: "true" } }
 
           it { is_expected.to be(true) }
         end
@@ -209,7 +209,7 @@ module Find
         subject { described_class.new(params:).has_vacancies_checked? }
 
         context "when parameter is present" do
-          let(:params) { { hasvacancies: "true" } }
+          let(:params) { { has_vacancies: "true" } }
 
           it { is_expected.to be(true) }
         end
@@ -225,7 +225,7 @@ module Find
         subject { described_class.new(params:).full_time_checked? }
 
         context "when parameter is present" do
-          let(:params) { { fulltime: "true" } }
+          let(:params) { { study_type: ["full_time"] } }
 
           it { is_expected.to be(true) }
         end
@@ -241,7 +241,7 @@ module Find
         subject { described_class.new(params:).part_time_checked? }
 
         context "when parameter is present" do
-          let(:params) { { parttime: "true" } }
+          let(:params) { { study_type: ["part_time"] } }
 
           it { is_expected.to be(true) }
         end
@@ -263,12 +263,7 @@ module Find
         end
 
         context "when parameters are present" do
-          let(:params) do
-            {
-              parttime: "true",
-              fulltime: "false",
-            }
-          end
+          let(:params) { { study_type: ["full_time_or_part_time"] } }
 
           it { is_expected.to be(false) }
         end

@@ -20,9 +20,9 @@
 
     <% if filtered_by_location? && has_sites? %>
       <% if course.university_based? %>
-        <%= render partial: "results/university", locals: { course: } %>
+        <%= render partial: "find/results/university", locals: { course: } %>
       <% else %>
-        <%= render partial: "results/non_university", locals: { course: } %>
+        <%= render partial: "find/results/non_university", locals: { course: } %>
       <% end %>
     <% end %>
 

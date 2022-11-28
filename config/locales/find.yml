@@ -6,6 +6,16 @@ en:
       pgce_with_qts: "PGCE with QTS"
       pgde: "PGDE"
       pgde_with_qts: "PGDE with QTS"
+    location_filter:
+      errors:
+        no_option: Select an option to find courses
+        unknown_location: Enter a real city, town or postcode
+        missing_location: Enter a city, town or postcode
+        missing_provider: Enter a real school, university or training provider
+        blank_provider: Enter a school, university or other training provider
+    fields:
+      location: "Postcode, town or city"
+      provider: "Training provider"
     homepage:
       title: Find courses by location or by training provider
       radio_options:
@@ -18,8 +28,10 @@ en:
           radio: By school, university or other training provider
           text_field: School, university or other training provider
           hint_text: Enter the name or provider code
-    age_groups_page:
+    age_groups:
       title: Which age group do you want to teach?
+      further_education:
+        hint: For example, teaching A levels or vocational courses
       radio_options:
         primary:
           radio: Primary
@@ -29,6 +41,7 @@ en:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
     subjects_page:
+      title: Select a subject -
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
@@ -91,11 +104,3 @@ en:
               blank: "Select an age group"
         find/subjects_form:
           blank: "Select at least one subject"
-        find/courses_by_location_or_training_provider_form:
-          attributes:
-            find_courses:
-              blank: "Select an option to find courses"
-            city_town_postcode_query:
-              blank: "Enter a city, town or postcode"
-            school_uni_or_provider_query:
-              blank: "Enter a school, university or other training provider"

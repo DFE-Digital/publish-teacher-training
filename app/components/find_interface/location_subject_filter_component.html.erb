@@ -10,7 +10,7 @@
   <% end %>
 
   <%= govuk_link_to(
-        @results.filter_params_for(find_path),
+        @results.filter_params_for(find_root_path),
         class: "govuk-link--no-visited-state govuk-!-margin-left-4",
         data: { qa: "link" },
       ) do %>

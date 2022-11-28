@@ -6,25 +6,25 @@ module Find
       end
 
       def qts_only_checked?
-        checked?("QtsOnly")
+        checked?("qts")
       end
 
       def pgde_pgce_with_qts_checked?
-        checked?("PgdePgceWithQts")
+        checked?("pgce_with_qts")
       end
 
       def other_checked?
-        checked?("Other")
+        checked?("other")
       end
 
       def qualification_selected?
-        return false if params[:qualifications].nil?
+        return false if params[:qualification].nil?
 
-        params[:qualifications].any?
+        params[:qualification].any?
       end
 
       def qualification_params_nil?
-        params[:qualifications].nil?
+        params[:qualification].nil?
       end
 
       def location_query?
@@ -40,11 +40,11 @@ module Find
       end
 
       def funding_checked?
-        params[:funding] == "8"
+        params[:funding] == "salary"
       end
 
       def send_checked?
-        params[:senCourses] == "true"
+        params[:send_courses] == "true"
       end
 
       def visa_checked?
@@ -52,23 +52,29 @@ module Find
       end
 
       def has_vacancies_checked?
-        params[:hasvacancies] == "true"
+        params[:has_vacancies] == "true"
       end
 
       def full_time_checked?
-        params[:fulltime] == "true"
+        return false if params[:study_type].nil?
+
+        params[:study_type].include?("full_time")
       end
 
       def part_time_checked?
-        params[:parttime] == "true"
+        return false if params[:study_type].nil?
+
+        params[:study_type].include?("part_time")
       end
 
       def default_study_types_to_true
-        params[:fulltime] != "true" && params[:parttime] != "true"
+        return true if params[:study_type].nil?
+
+        params[:study_type] == "full_time_or_part_time"
       end
 
       def default_with_vacancies_to_true
-        params[:hasvacancies].nil?
+        params[:has_vacancies].nil?
       end
 
       def all_courses_radio_chosen?
@@ -96,11 +102,11 @@ module Find
           c: params[:c],
           l: params[:l],
           lq: params[:lq],
-          lat: params[:lat],
+          latitude: params[:latitude],
           loc: params[:loc],
-          lng: params[:lng],
-          query: params[:query],
-          rad: params[:rad],
+          longitude: params[:longitude],
+          query: params["provider.provider_name"],
+          radius: params[:radius],
           sortby: params[:sortby],
         }
       end
@@ -110,9 +116,9 @@ module Find
       attr_reader :params
 
       def checked?(param_value)
-        return false if params[:qualifications].nil?
+        return false if params[:qualification].nil?
 
-        param_value.in?(params[:qualifications])
+        param_value.in?(params[:qualification])
       end
     end
   end

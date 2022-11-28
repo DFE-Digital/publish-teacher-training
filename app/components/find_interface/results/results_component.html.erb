@@ -19,7 +19,8 @@
 
     <%= render FindInterface::Results::NoResultsComponent.new(results:) %>
     <%= render FindInterface::Results::SortByComponent.new(results:) %>
-    <%= render FindInterface::Results::SuggestedSearchesComponent.new(results:) %>
+    <!-- TODO suggestions -->
+    <%#= render FindInterface::Results::SuggestedSearchesComponent.new(results:) %>
 
     <% if results.has_results? %>
       <ul class="app-search-results">
@@ -33,6 +34,6 @@
       </ul>
     <% end %>
 
-    <%= paginate(courses, total_pages: results.total_pages) %>
+    <%= paginate(courses) %>
   </div>
 </div>

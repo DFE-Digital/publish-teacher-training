@@ -37,10 +37,10 @@ module Find
     end
 
     def suggested_search_link_parameters(radius:)
-      return parameters.merge("rad" => radius) if radius.present?
+      return parameters.merge("radius" => radius) if radius.present?
 
       parameters
-        .except("lat", "lng", "rad", "loc", "lq")
+        .except("latitude", "longitude", "radius", "loc", "lq")
         .merge("l" => 2)
     end
 

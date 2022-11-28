@@ -515,25 +515,75 @@ RSpec.describe CourseSearchService do
         end
       end
 
-      context "when absent" do
-        let(:filter) { {} }
+      describe "filter[degree_required]" do
+        context "when two_two" do
+          let(:filter) { { degree_required: "two_two" } }
+          let(:expected_scope) { double }
 
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_degree_grades)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+          it "adds the with_degree_grades scope" do
+            expect(scope).to receive(:with_degree_grades).with(%w[two_two third_class not_required]).and_return(course_ids_scope)
+            expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
         end
-      end
 
-      context "when not a string" do
-        let(:filter) { { "hello" => "there" } }
+        context "when third_class" do
+          let(:filter) { { degree_required: "third_class" } }
+          let(:expected_scope) { double }
 
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_degree_grades)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
+          it "adds the with_degree_grades scope" do
+            expect(scope).to receive(:with_degree_grades).with(%w[third_class not_required]).and_return(course_ids_scope)
+            expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
+        end
+
+        context "when not_required" do
+          let(:filter) { { degree_required: "not_required" } }
+          let(:expected_scope) { double }
+
+          it "adds the with_degree_grades scope" do
+            expect(scope).to receive(:with_degree_grades).with(%w[not_required]).and_return(course_ids_scope)
+            expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
+        end
+
+        context "when show_all_courses" do
+          let(:filter) { { degree_required: "show_all_courses" } }
+          let(:expected_scope) { double }
+
+          it "adds the with_degree_grades scope" do
+            expect(scope).to receive(:with_degree_grades).with(%w[two_one two_two third_class not_required]).and_return(course_ids_scope)
+            expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
+        end
+
+        context "when absent" do
+          let(:filter) { {} }
+
+          it "doesn't add the scope" do
+            expect(scope).not_to receive(:with_degree_grades)
+            expect(scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
+        end
+
+        context "when not a string" do
+          let(:filter) { { "hello" => "there" } }
+
+          it "doesn't add the scope" do
+            expect(scope).not_to receive(:with_degree_grades)
+            expect(scope).to receive(:select).and_return(inner_query_scope)
+            expect(course_with_includes).to receive(:where).and_return(expected_scope)
+            expect(subject).to eq(expected_scope)
+          end
         end
       end
     end

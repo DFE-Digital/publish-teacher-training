@@ -10,7 +10,7 @@
         <li data-qa="provider_suggestion">
           <%= govuk_link_to(
             "#{provider.provider_name} (#{provider.provider_code})",
-            start_subject_path(filter_params_without_previous_parameters.merge(query: provider.provider_name)),
+            find_subject_path(filter_params_without_previous_parameters.merge(query: provider.provider_name)),
             { data: { qa: "provider_suggestion__link" } },
           ) %>
         </li>
