@@ -1255,8 +1255,8 @@
             "type": "string",
             "example": "scitt,lead_school",
             "enum": [
-                "scitt",
                 "lead_school",
+                "scitt",
                 "university"
             ]
           },
@@ -1265,18 +1265,18 @@
             "type": "string",
             "example": "london,yorkshire_and_the_humber",
             "enum": [
-                "no_region",
+                "east_midlands",
+                "eastern",
                 "london",
+                "no_region",
+                "north_east",
+                "north_west",
+                "scotland",
                 "south_east",
                 "south_west",
                 "wales",
                 "west_midlands",
-                "east_midlands",
-                "eastern",
-                "north_west",
-                "yorkshire_and_the_humber",
-                "north_east",
-                "scotland"
+                "yorkshire_and_the_humber"
             ]
           },
           "updated_since": {
