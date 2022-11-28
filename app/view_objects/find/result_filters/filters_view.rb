@@ -71,7 +71,6 @@ module Find
         return true if params[:study_type].nil?
 
         params[:study_type] == "full_time_or_part_time"
-        # params[:fulltime] != "true" && params[:parttime] != "true"
       end
 
       def default_with_vacancies_to_true

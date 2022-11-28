@@ -19,6 +19,7 @@
 
     <%= render FindInterface::Results::NoResultsComponent.new(results:) %>
     <%= render FindInterface::Results::SortByComponent.new(results:) %>
+    <!-- TODO suggestions -->
     <%#= render FindInterface::Results::SuggestedSearchesComponent.new(results:) %>
 
     <% if results.has_results? %>

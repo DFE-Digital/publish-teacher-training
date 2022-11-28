@@ -1,5 +1,5 @@
 module Find
-  # FIND:TODO Will be fleshed out in an upcoming ticket
+  # FIND:TODO need to prune unused methods etc.
   class ResultsView
     attr_reader :query_parameters
 
@@ -19,8 +19,6 @@ module Find
     def query_parameters_with_defaults
       query_parameters.except("utf8", "authenticity_token")
         .merge(qualifications_parameters)
-        # .merge(fulltime_parameters)
-        # .merge(parttime_parameters)
         .merge(study_type_parameters)
         .merge(has_vacancies_parameters)
         .merge(sen_courses_parameters)
@@ -45,11 +43,6 @@ module Find
         provider: %i[recruitment_cycle ucas_preferences],
       ).findable
     end
-
-    # dont think we need this
-    # def recruitment_cycle
-    #   @recruitment_cycle = RecruitmentCycle.current
-    # end
 
     def number_of_courses_string
       case course_count
@@ -78,14 +71,6 @@ module Find
       { "study_type" => query_parameters["study_type"].presence || %w[full_time part_time] }
     end
 
-    # def fulltime_parameters
-    #   { "fulltime" => fulltime? }
-    # end
-
-    # def parttime_parameters
-    #   { "parttime" => parttime? }
-    # end
-
     def has_vacancies_parameters
       { "has_vacancies" => has_vacancies? }
     end
@@ -93,18 +78,6 @@ module Find
     def sen_courses_parameters
       { "send_courses" => sen_courses? }
     end
-
-    # def fulltime?
-    #   return false if query_parameters["fulltime"].nil?
-
-    #   query_parameters["fulltime"] == "true"
-    # end
-
-    # def parttime?
-    #   return false if query_parameters["parttime"].nil?
-
-    #   query_parameters["parttime"] == "true"
-    # end
 
     def has_vacancies?
       return true if query_parameters["has_vacancies"].nil?
@@ -124,11 +97,6 @@ module Find
     def subject_codes
       query_parameters["subjects"] || []
     end
-
-    # which method is best?
-    # def all_subjects
-    # @all_subjects ||= Subject.active.where.not(subject_code: nil).select(:subject_name, :subject_code).order(:subject_name).all
-    # end
 
     def filtered_subjects
       all_subjects.select { |subject| subject_codes.include?(subject.subject_code) }

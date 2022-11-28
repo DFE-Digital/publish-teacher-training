@@ -17,6 +17,7 @@ class CourseSearchService
 
   def call
     scope = course_scope
+    # TODO: level query for further_education ?
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -242,7 +243,6 @@ private
 
   def subject_codes
     return [] if filter[:subjects].blank?
-    # return [] unless filter[:subjects].is_a?(String)
     return filter[:subjects] if filter[:subjects].is_a? Array
 
     filter[:subjects].split(",")

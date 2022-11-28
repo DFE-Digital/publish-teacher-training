@@ -2,6 +2,7 @@ module Find
   module Search
     class SubjectsController < Find::ApplicationController
       include FilterParameters
+      include DefaultVacancies
       before_action :build_backlink_query_parameters
 
       def new
@@ -25,10 +26,6 @@ module Find
 
       def sanitised_subject_codes
         form_params["subjects"].compact_blank!
-      end
-
-      def default_vacancies
-        form_params["has_vacancies"].nil? ? "true" : form_params["has_vacancies"]
       end
 
       def form_params
