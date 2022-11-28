@@ -12,7 +12,10 @@ module Find
         @subjects_form = SubjectsForm.new(subjects: sanitised_subject_codes, age_group: form_params[:age_group])
 
         if @subjects_form.valid?
-          redirect_to find_results_path(form_params.merge(subjects: sanitised_subject_codes))
+          redirect_to find_results_path(form_params.merge(
+            subjects: sanitised_subject_codes,
+            has_vacancies: default_vacancies,
+          ))
         else
           render :new
         end
@@ -22,6 +25,10 @@ module Find
 
       def sanitised_subject_codes
         form_params["subjects"].compact_blank!
+      end
+
+      def default_vacancies
+        form_params["has_vacancies"].nil? ? "true" : form_params["has_vacancies"]
       end
 
       def form_params
