@@ -459,6 +459,10 @@ class Course < ApplicationRecord
     qualifications_description + study_mode_string + program_type_description
   end
 
+  def extended_qualification_descriptions
+    full_qualification_descriptions
+  end
+
   def content_status
     services[:content_status].execute(enrichment: latest_enrichment, recruitment_cycle:)
   end
