@@ -27,17 +27,17 @@ module API
         end
 
         def provider_types
-          return [] if params.dig(:filter, :provider_types).blank?
-          return [] unless params.dig(:filter, :provider_types).is_a?(String)
+          return [] if params.dig(:filter, :provider_type).blank?
+          return [] unless params.dig(:filter, :provider_type).is_a?(String)
 
-          params.dig(:filter, :provider_types).split(",")
+          params.dig(:filter, :provider_type).split(",")
         end
 
         def region_codes
-          return [] if params.dig(:filter, :region_codes).blank?
-          return [] unless params.dig(:filter, :region_codes).is_a?(String)
+          return [] if params.dig(:filter, :region_code).blank?
+          return [] unless params.dig(:filter, :region_code).is_a?(String)
 
-          params.dig(:filter, :region_codes).split(",")
+          params.dig(:filter, :region_code).split(",")
         end
 
         def can_sponsor_skilled_worker_visa?

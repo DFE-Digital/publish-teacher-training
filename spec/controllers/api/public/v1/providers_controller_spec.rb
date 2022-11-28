@@ -354,8 +354,8 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
-        context "passing in provider_types param" do
-          let(:filter) { { provider_types: "university" } }
+        context "passing in provider_type param" do
+          let(:filter) { { provider_type: "university" } }
 
           it "returns 'Second' provider only" do
             expect(provider_names_in_response).to eq([provider2.provider_name])
@@ -378,8 +378,8 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
-        context "passing in region_codes param" do
-          let(:filter) { { region_codes: "yorkshire_and_the_humber" } }
+        context "passing in region_code param" do
+          let(:filter) { { region_code: "yorkshire_and_the_humber" } }
 
           it "returns 'Second' provider only" do
             expect(provider_names_in_response).to eq([provider2.provider_name])
