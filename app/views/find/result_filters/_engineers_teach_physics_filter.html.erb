@@ -5,11 +5,11 @@
       <div class="govuk-checkboxes__item" data-qa="subject">
         <%= form.check_box(
               :engineers_teach_physics,
-              { checked: @filters_view.engineers_teach_physics_checked?, data: { qa: 'engineers_teach_physics__checkbox' }, class: 'govuk-checkboxes__input' },
-              'true',
+              { checked: @filters_view.engineers_teach_physics_checked?, data: { qa: "engineers_teach_physics__checkbox" }, class: "govuk-checkboxes__input" },
+              "true",
               nil,
-              ) %>
-        <%= form.label(:subjects, { for: "engineers_teach_physics",  data: { qa: "subject__name" } }, class: "govuk-label govuk-checkboxes__label") do %>
+            ) %>
+        <%= form.label(:subjects, { for: "engineers_teach_physics", data: { qa: "subject__name" } }, class: "govuk-label govuk-checkboxes__label") do %>
           Only show Engineers teach physics courses
         <% end %>
       </div>
