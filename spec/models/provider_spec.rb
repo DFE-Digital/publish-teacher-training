@@ -609,6 +609,98 @@ describe Provider do
         expect(subject).to contain_exactly(current_provider)
       end
     end
+
+    describe "#with_provider_types" do
+      let(:provider_types) { ["lead_school"] }
+
+      let(:provider) { create(:provider) }
+
+      subject { described_class.with_provider_types(provider_types) }
+
+      it "returns the correct providers" do
+        expect(subject).to contain_exactly(provider)
+      end
+    end
+
+    describe "#with_region_codes" do
+      let(:region_codes) { ["london"] }
+
+      let(:provider) { create(:provider) }
+
+      before do
+        provider
+      end
+
+      subject { described_class.with_region_codes(region_codes) }
+
+      it "returns the providers with the region codes" do
+        expect(subject).to contain_exactly(provider)
+      end
+    end
+
+    describe "#with_can_sponsor_skilled_worker_visa" do
+      subject { described_class.with_can_sponsor_skilled_worker_visa(can_sponsor_skilled_worker_visa) }
+
+      let(:can_sponsor_skilled_worker_visa_provider) do
+        create(:provider, can_sponsor_skilled_worker_visa: true)
+      end
+      let(:cannot_sponsor_skilled_worker_visa_provider) do
+        create(:provider, can_sponsor_skilled_worker_visa: false)
+      end
+
+      before do
+        can_sponsor_skilled_worker_visa_provider
+        cannot_sponsor_skilled_worker_visa_provider
+      end
+
+      context "when can_sponsor_skilled_worker_visa is false" do
+        let(:can_sponsor_skilled_worker_visa) { false }
+
+        it "returns the providers that cannot sponsor skilled worker visa" do
+          expect(subject).to contain_exactly(cannot_sponsor_skilled_worker_visa_provider)
+        end
+      end
+
+      context "when can_sponsor_skilled_worker_visa is true" do
+        let(:can_sponsor_skilled_worker_visa) { true }
+
+        it "returns the providers that can sponsor skilled worker visa" do
+          expect(subject).to contain_exactly(can_sponsor_skilled_worker_visa_provider)
+        end
+      end
+    end
+
+    describe "#with_can_sponsor_student_visa" do
+      subject { described_class.with_can_sponsor_student_visa(can_sponsor_student_visa) }
+
+      let(:can_sponsor_student_visa_provider) do
+        create(:provider, can_sponsor_student_visa: true)
+      end
+      let(:cannot_sponsor_student_visa_provider) do
+        create(:provider, can_sponsor_student_visa: false)
+      end
+
+      before do
+        can_sponsor_student_visa_provider
+        cannot_sponsor_student_visa_provider
+      end
+
+      context "when can_sponsor_student_visa is false" do
+        let(:can_sponsor_student_visa) { false }
+
+        it "returns the providers that cannot sponsor student visa" do
+          expect(subject).to contain_exactly(cannot_sponsor_student_visa_provider)
+        end
+      end
+
+      context "when can_sponsor_student_visa is true" do
+        let(:can_sponsor_student_visa) { true }
+
+        it "returns the providers that can sponsor student visa" do
+          expect(subject).to contain_exactly(can_sponsor_student_visa_provider)
+        end
+      end
+    end
   end
 
   describe "in_cycle" do

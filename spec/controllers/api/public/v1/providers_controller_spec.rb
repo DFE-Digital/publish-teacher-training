@@ -25,7 +25,9 @@ RSpec.describe API::Public::V1::ProvidersController do
           provider_code: "1AT",
           provider_name: "First",
           organisations: [organisation],
-          contacts: [contact])
+          contacts: [contact],
+          can_sponsor_skilled_worker_visa: false,
+          can_sponsor_student_visa: false)
       end
 
       before do
@@ -318,10 +320,14 @@ RSpec.describe API::Public::V1::ProvidersController do
         let(:provider2) do
           Timecop.freeze(Time.zone.today + 1) do
             create(:provider,
+              :university,
               provider_code: "2AT",
               provider_name: "Second",
               organisations: [organisation],
-              contacts: [contact])
+              contacts: [contact],
+              can_sponsor_skilled_worker_visa: true,
+              can_sponsor_student_visa: true,
+              region_code: :yorkshire_and_the_humber)
           end
         end
 
@@ -333,17 +339,47 @@ RSpec.describe API::Public::V1::ProvidersController do
 
         before do
           provider2
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+            filter:,
+          }
         end
 
         context "passing in updated_since param" do
           let(:filter) { { updated_since: (provider2.changed_at - 1.second).iso8601 } }
 
-          before do
-            get :index, params: {
-              recruitment_cycle_year: recruitment_cycle.year,
-              filter:,
-            }
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
           end
+        end
+
+        context "passing in provider_type param" do
+          let(:filter) { { provider_type: "university" } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
+
+        context "passing in can_sponsor_skilled_worker_visa param" do
+          let(:filter) { { can_sponsor_skilled_worker_visa: true } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
+
+        context "passing in can_sponsor_student_visa param" do
+          let(:filter) { { can_sponsor_student_visa: true } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
+
+        context "passing in region_code param" do
+          let(:filter) { { region_code: "yorkshire_and_the_humber" } }
 
           it "returns 'Second' provider only" do
             expect(provider_names_in_response).to eq([provider2.provider_name])

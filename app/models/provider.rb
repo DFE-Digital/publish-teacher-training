@@ -127,6 +127,14 @@ class Provider < ApplicationRecord
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
 
+  scope :with_provider_types, ->(provider_types) { where(provider_type: provider_types) }
+
+  scope :with_region_codes, ->(region_codes) { where(region_code: region_codes) }
+
+  scope :with_can_sponsor_skilled_worker_visa, ->(can_sponsor_skilled_worker_visa) { where(can_sponsor_skilled_worker_visa:) }
+
+  scope :with_can_sponsor_student_visa, ->(can_sponsor_student_visa) { where(can_sponsor_student_visa:) }
+
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
   validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }

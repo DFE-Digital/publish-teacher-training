@@ -1240,6 +1240,45 @@
         "example": "",
         "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
+          "can_sponsor_skilled_worker_visa": {
+            "description": "Only return providers that can sponsor a Skilled Worker visa.",
+            "type": "boolean",
+            "example": true
+          },
+          "can_sponsor_student_visa": {
+            "description": "Only return providers that can sponsor a Student visa.",
+            "type": "boolean",
+            "example": true
+          },
+          "provider_type": {
+            "description": "Return providers based on their provider type. This is a comma delimited string. If multiple provider types are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used.",
+            "type": "string",
+            "example": "scitt,lead_school",
+            "enum": [
+                "lead_school",
+                "scitt",
+                "university"
+            ]
+          },
+          "region_code": {
+            "description": "Return providers based on their region code. This is a comma delimited string. If multiple region codes are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used.",
+            "type": "string",
+            "example": "london,yorkshire_and_the_humber",
+            "enum": [
+                "no_region",
+                "north_east",
+                "north_west",
+                "yorkshire_and_the_humber",
+                "east_midlands",
+                "west_midlands",
+                "eastern",
+                "london",
+                "south_east",
+                "south_west",
+                "scotland",
+                "wales"
+            ]
+          },
           "updated_since": {
             "description": "Return providers that have been updated since the date (ISO 8601 date format)",
             "type": "string",
