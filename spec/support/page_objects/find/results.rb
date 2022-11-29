@@ -46,6 +46,11 @@ module PageObjects
         element :checkbox, 'input[name="can_sponsor_visa"]'
       end
 
+      class EngineersTeachPhysics < SitePrism::Section
+        element :legend, "legend"
+        element :checkbox, 'input[name="engineers_teach_physics"]'
+      end
+
       class Funding < SitePrism::Section
         element :checkbox, 'input[name="funding"]'
       end
@@ -57,6 +62,7 @@ module PageObjects
       section :qualifications, Qualifications, '[data-qa="filters__qualifications"]'
       section :degree_grade, DegreeGrade, '[data-qa="filters__degree_required"]'
       section :visa, Visa, '[data-qa="filters__visa"]'
+      section :engineers_teach_physics_filter, EngineersTeachPhysics, '[data-qa="filters__engineers_teach_physics"]'
       section :funding, Funding, '[data-qa="filters__funding"]'
 
       element :apply_filters_button, '[data-qa="apply-filters"]'

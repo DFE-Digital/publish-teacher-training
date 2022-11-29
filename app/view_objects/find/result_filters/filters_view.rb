@@ -43,6 +43,10 @@ module Find
         params[:funding] == "salary"
       end
 
+      def engineers_teach_physics_checked?
+        params[:engineers_teach_physics] == "true"
+      end
+
       def send_checked?
         params[:send_courses] == "true"
       end
