@@ -116,6 +116,7 @@ features:
     state: confirmed # final allocation places are displayed to users in a readonly state
   visa_sponsorship_on_course: true
   engineers_teach_physics_on_course: true
+  user_self_management: false
 
 cookies:
   consent:

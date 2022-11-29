@@ -1,22 +1,46 @@
-<% page_title = "Users" %>
+<% page_title = t("page_titles.users.index") %>
 <%= content_for :page_title, page_title %>
 <%= content_for :before_content, render_breadcrumbs(:users) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Users</h1>
-    <p class="govuk-body">
-      These users currently have access to this organisation. They can manage all your course and organisation details, including publishing, closing and withdrawing courses.
-    </p>
-    <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_path(code: @provider.provider_code) %>
-    <% @users.each do |user| %>
-      <div>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-1" data-qa="provider_user">
-          <%= "#{user.first_name} #{user.last_name}" %>
-        </h2>
-        <p class="govuk-body govuk-!-margin-bottom-0"><%= user.email %></p>
-      </div>
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <h1 class="govuk-heading-l"><%= t("page_titles.users.index") %></h1>
+    <% if FeatureService.enabled?(:user_self_management) %>
+      <%= govuk_button_link_to "Add user", request_access_publish_provider_path(code: @provider.provider_code) %>
+      <table class="govuk-table app-table--vertical-align-middle">
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-!-width-one-third">Name</th>
+          <th class="govuk-table__header">Email</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        <% @users.each do |user| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell app-table--courses__course-name">
+              <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", root_path) %></a>
+            </td>
+            <td class="govuk-table__cell">
+              <%= user.email %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <p class="govuk-body">
+        These users currently have access to this organisation. They can manage all your course and organisation details, including publishing, closing and withdrawing courses.
+      </p>
+      <%= govuk_button_link_to "Request access for someone else", request_access_publish_provider_path(code: @provider.provider_code) %>
+      <% @users.each do |user| %>
+        <div>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-1" data-qa="provider_user">
+            <%= "#{user.first_name} #{user.last_name}" %>
+          </h2>
+          <p class="govuk-body govuk-!-margin-bottom-0"><%= user.email %></p>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+      <% end %>
     <% end %>
   </div>
 </div>
