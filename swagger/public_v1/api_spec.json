@@ -1265,18 +1265,18 @@
             "type": "string",
             "example": "london,yorkshire_and_the_humber",
             "enum": [
-                "east_midlands",
-                "eastern",
-                "london",
                 "no_region",
                 "north_east",
                 "north_west",
-                "scotland",
+                "yorkshire_and_the_humber",
+                "east_midlands",
+                "west_midlands",
+                "eastern",
+                "london",
                 "south_east",
                 "south_west",
-                "wales",
-                "west_midlands",
-                "yorkshire_and_the_humber"
+                "scotland",
+                "wales"
             ]
           },
           "updated_since": {
