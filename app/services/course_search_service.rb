@@ -11,6 +11,16 @@ class CourseSearchService
     @sort = Set.new(sort&.split(","))
   end
 
+  class << self
+    def provider_ascending
+      Set["name", "provider.provider_name"].freeze
+    end
+
+    def provider_descending
+      Set["name", "-provider.provider_name"].freeze
+    end
+  end
+
   def call
     scope = course_scope
     # TODO: level query for further_education ?
@@ -162,11 +172,11 @@ private
   end
 
   def sort_by_provider_ascending?
-    sort == Set["name", "provider.provider_name"]
+    sort == CourseSearchService.provider_ascending
   end
 
   def sort_by_provider_descending?
-    sort == Set["name", "-provider.provider_name"]
+    sort == CourseSearchService.provider_descending
   end
 
   def sort_by_distance?
