@@ -244,15 +244,15 @@ module Find
     end
 
     def qts?
-      qualifications.include?("qts")
+      qualification_params.include?("qts")
     end
 
     def pgce_or_pgde_with_qts?
-      qualifications.include?("pgce_with_qts")
+      qualification_params.include?("pgce_with_qts")
     end
 
     def other_qualifications?
-      qualifications.include?("other")
+      qualification_params.include?("other")
     end
 
     def all_qualifications?
@@ -343,8 +343,17 @@ module Find
       [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
     end
 
-    def qualifications
+    def qualification_params
       query_parameters["qualification"] || %w[QtsOnly PgdePgceWithQts Other]
+    end
+
+    def qualifications
+      qualifications = []
+      qualifications |= %w[qts] if qts?
+      qualifications |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
+      qualifications |= %w[pgce pgde] if other_qualifications?
+
+      qualifications
     end
 
     def study_type

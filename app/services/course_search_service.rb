@@ -17,7 +17,6 @@ class CourseSearchService
 
   def call
     scope = course_scope
-    # TODO: level query for further_education ?
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -189,6 +188,11 @@ private
 
   def qualifications
     return [] if filter[:qualification].blank?
+
+    if filter[:qualification].include?("pgce pgde")
+      filter[:qualification] -= ["pgce pgde"]
+      filter[:qualification] |= %w[pgce pgde]
+    end
 
     filter[:qualification].split(",")
   end

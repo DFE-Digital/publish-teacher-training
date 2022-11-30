@@ -14,7 +14,7 @@ module Find
       end
 
       def other_checked?
-        checked?("other")
+        checked?("pgce pgde")
       end
 
       def qualification_selected?
