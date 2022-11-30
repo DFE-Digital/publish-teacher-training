@@ -255,9 +255,9 @@ module Find
     #  qualification_params.include?("other")
     # end
 
-    def all_qualifications?
-      qts? && pgce_or_pgde_with_qts? && other_qualifications?
-    end
+    # def all_qualifications?
+    #  qts? && pgce_or_pgde_with_qts? && other_qualifications?
+    # end
 
     def with_salaries?
       query_parameters["funding"] == "8"
