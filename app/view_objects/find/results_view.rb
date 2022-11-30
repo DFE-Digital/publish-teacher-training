@@ -243,22 +243,6 @@ module Find
       query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
     end
 
-    # def qts?
-    #  qualification_params.include?("qts")
-    # end
-
-    # def pgce_or_pgde_with_qts?
-    #  qualification_params.include?("pgce_with_qts")
-    # end
-
-    # def other_qualifications?
-    #  qualification_params.include?("other")
-    # end
-
-    # def all_qualifications?
-    #  qts? && pgce_or_pgde_with_qts? && other_qualifications?
-    # end
-
     def with_salaries?
       query_parameters["funding"] == "8"
     end
@@ -322,15 +306,6 @@ module Find
         .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
     end
 
-    # def qualification
-    #  qualification = []
-    #  qualification |= %w[qts] if qts?
-    #  qualification |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
-    #  qualification |= %w[pgce pgde] if other_qualifications?
-
-    #  qualification
-    # end
-
     def course_counter(radius_to_check: nil, include_salary: true)
       course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
       course_query = course_query.order(:distance) if sort_by_distance?
@@ -342,19 +317,6 @@ module Find
       radius_for_all_england = nil
       [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
     end
-
-    # def qualification_params
-    #  query_parameters["qualification"] || %w[QtsOnly PgdePgceWithQts Other]
-    # end
-
-    # def qualifications
-    #   qualifications = []
-    #   qualifications |= %w[qts] if qts?
-    #   qualifications |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
-    #   qualifications |= %w[pgce pgde] if other_qualifications?
-
-    #   qualifications
-    # end
 
     def study_type
       return "full_time,part_time" if fulltime? && parttime?
