@@ -6,7 +6,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t("page_titles.users.index") %></h1>
     <% if FeatureService.enabled?(:user_management) %>
-      <%= govuk_button_link_to "Add user", request_access_publish_provider_path(code: @provider.provider_code) %>
+      <%= govuk_button_link_to "Add user", new_publish_provider_user_path(provider_code: @provider.provider_code) %>
       <table class="govuk-table app-table--vertical-align-middle">
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
