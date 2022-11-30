@@ -29,19 +29,8 @@ module Find
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
         sort: query_parameters[:sortby],
-        course_scope: build_courses,
+        course_scope:,
       )
-    end
-
-    def build_courses
-      courses_base = RecruitmentCycle.current.courses
-
-      @courses = courses_base.includes(
-        :enrichments,
-        subjects: [:financial_incentive],
-        site_statuses: [:site],
-        provider: %i[recruitment_cycle ucas_preferences],
-      ).findable
     end
 
     def number_of_courses_string
@@ -482,6 +471,10 @@ module Find
       end
 
       suggested_search_link
+    end
+
+    def course_scope
+      @course_scope ||= RecruitmentCycle.current.courses.findable
     end
   end
 end
