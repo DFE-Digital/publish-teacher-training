@@ -171,6 +171,7 @@ en:
       users:
         index: "Users"
         new: "Personal details"
+        show: "Check your answers"
     filter:
       providers:
         provider_search: "Provider name or code"
@@ -218,6 +219,12 @@ en:
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
+  users:
+    first_name: "First name"
+    last_name: "Last name"
+    email: "Email address"
+    new: "Add user"
+    check: "Check your answers"
   support:
     data_exports:
       index:
