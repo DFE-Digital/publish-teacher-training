@@ -200,8 +200,8 @@ describe Courses::GenerateCourseNameService do
       let(:subjects) { [SecondarySubject.find_by(subject_name: "Physics")] }
       let(:course) { Course.new(level: :secondary, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
 
-      it "returns Engineers Teach Physics" do
-        expect(generated_title).to eq("Engineers Teach Physics")
+      it "returns Engineers teach physics" do
+        expect(generated_title).to eq("Engineers teach physics")
       end
 
       include_examples "with SEND"
@@ -212,8 +212,8 @@ describe Courses::GenerateCourseNameService do
       let(:subjects) { [find_or_create(:secondary_subject, :physics), find_or_create(:secondary_subject, :english)] }
       let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:, master_subject_id: 29) }
 
-      it "returns Engineers Teach Physics with subject" do
-        expect(generated_title).to eq("Engineers Teach Physics with English")
+      it "returns Engineers teach physics with subject" do
+        expect(generated_title).to eq("Engineers teach physics with English")
       end
 
       include_examples "with SEND"
