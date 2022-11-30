@@ -28,7 +28,7 @@ module Find
     def courses
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
-        sort: query_parameters[:sortby],
+        sort:,
         course_scope:,
       )
     end
@@ -471,6 +471,14 @@ module Find
       end
 
       suggested_search_link
+    end
+
+    def sort_by_provider
+      query_parameters&.dig(:sortby) == "1" ? :provider_descending : :provider_ascending
+    end
+
+    def sort
+      ::CourseSearchService.public_send(sort_by_provider).join(",")
     end
 
     def course_scope
