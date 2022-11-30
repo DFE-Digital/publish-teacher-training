@@ -47,7 +47,7 @@
           data: { qa: "other" },
           checked: @filters_view.other_checked? || @filters_view.qualification_params_nil?,
         },
-        ["pgce", "pgde"],
+        %w[pgce\ pgde],
         false,
       ) %>
       <%= form.label :qualification, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
