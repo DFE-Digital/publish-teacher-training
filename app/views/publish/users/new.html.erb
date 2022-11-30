@@ -23,6 +23,8 @@
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), users_publish_provider_path(params[:provider_code])) %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), users_publish_provider_path(params[:provider_code])) %>
+    </p>
   </div>
 </div>
