@@ -6,6 +6,10 @@ module Publish
       @users = provider.users
     end
 
+    def new
+      authorize(provider)
+    end
+
     def cycle_year
       session[:cycle_year] || params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year
     end

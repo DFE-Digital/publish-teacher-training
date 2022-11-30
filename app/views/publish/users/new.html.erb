@@ -1,0 +1,5 @@
+<%= render PageTitle::View.new(title: "users.new") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(users_publish_provider_path(params[:provider_code])) %>
+<% end %>

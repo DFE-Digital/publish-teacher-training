@@ -27,6 +27,10 @@ class ProviderPolicy
     user.present?
   end
 
+  def new?
+    user.present?
+  end
+
   def search?
     user.admin?
   end

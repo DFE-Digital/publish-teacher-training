@@ -168,6 +168,9 @@ en:
           edit: "Edit Allocation Uplift"
         data_exports:
           index: "Data exports"
+      users:
+        index: "Users"
+        new: "Personal details"
     filter:
       providers:
         provider_search: "Provider name or code"
