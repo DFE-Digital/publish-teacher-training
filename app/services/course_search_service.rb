@@ -1,4 +1,6 @@
 class CourseSearchService
+  include ServicePattern
+
   def initialize(
     filter:,
     sort: nil,
@@ -7,12 +9,6 @@ class CourseSearchService
     @filter = filter || {}
     @course_scope = course_scope
     @sort = Set.new(sort&.split(","))
-  end
-
-  class << self
-    def call(...)
-      new(...).call
-    end
   end
 
   def call
