@@ -22,4 +22,4 @@ features:
   allocations:
     state: confirmed
   engineers_teach_physics_on_course: true
-  user_self_management: true
+  user_management: true
