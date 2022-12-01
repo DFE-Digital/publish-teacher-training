@@ -19,7 +19,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
     context "when a provider has locations" do
       before do
-        provider.sites << build_list(:site, 2, provider:)
+        provider.sites << build_list(:site, 5, provider:)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -28,7 +28,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
       end
 
       it "returns the correct number of locations" do
-        expect(json_response["data"].size).to be(2)
+        expect(json_response["data"].size).to be(5)
       end
 
       context "with includes" do
@@ -52,6 +52,15 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
           expect(provider_id).to eq(provider.id)
+        end
+      end
+
+      context "location count" do
+        it "returns the location count in a meta object" do
+          json_response = JSON.parse(response.body)
+          meta = json_response["meta"]
+
+          expect(meta["count"]).to be(5)
         end
       end
     end

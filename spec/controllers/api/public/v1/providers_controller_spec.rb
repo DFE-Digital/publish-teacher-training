@@ -387,6 +387,22 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
       end
     end
+
+    context "provider count" do
+      before do
+        create_list(:provider, 4)
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+        }
+      end
+
+      it "returns the provider count in a meta object" do
+        json_response = JSON.parse(response.body)
+        meta = json_response["meta"]
+
+        expect(meta["count"]).to be(4)
+      end
+    end
   end
 
   describe "#show" do
