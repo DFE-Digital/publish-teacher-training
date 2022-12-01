@@ -21,6 +21,10 @@ en:
   back: "Back"
   continue: "Continue"
   change_organisation: "Change organisation"
+  courses:
+    generate_course_name_service:
+      further_education_title: "Further education"
+      etp_title: "Engineers teach physics"
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"

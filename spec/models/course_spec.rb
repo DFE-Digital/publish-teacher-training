@@ -2542,14 +2542,8 @@ describe Course do
 
   describe "#generate_name" do
     it "Generates a name using the correct service" do
-      expect(course).to(
-        delegate_method_to_service(
-          :generate_name,
-          "Courses::GenerateCourseNameService",
-        ).with_arguments(
-          course:,
-        ),
-      )
+      expect(Courses::GenerateCourseNameService).to receive(:call).with(course:)
+      course.generate_name
     end
   end
 
