@@ -1,4 +1,6 @@
 class CourseSearchService
+  include ServicePattern
+
   def initialize(
     filter:,
     sort: nil,
@@ -9,11 +11,9 @@ class CourseSearchService
     @sort = Set.new(sort&.split(","))
   end
 
-  class << self
-    def call(...)
-      new(...).call
-    end
-  end
+  PROVIDER_ASCENDING = Set["name", "provider.provider_name"].freeze
+
+  PROVIDER_DESCENDING = Set["name", "-provider.provider_name"].freeze
 
   def call
     scope = course_scope
@@ -165,11 +165,11 @@ private
   end
 
   def sort_by_provider_ascending?
-    sort == Set["name", "provider.provider_name"]
+    sort == CourseSearchService::PROVIDER_ASCENDING
   end
 
   def sort_by_provider_descending?
-    sort == Set["name", "-provider.provider_name"]
+    sort == CourseSearchService::PROVIDER_DESCENDING
   end
 
   def sort_by_distance?

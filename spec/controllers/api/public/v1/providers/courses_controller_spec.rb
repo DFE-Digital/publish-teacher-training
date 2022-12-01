@@ -20,8 +20,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
     context "when there are courses" do
       before do
-        create(:course, provider:)
-        create(:course, provider:)
+        create_list(:course, 3, provider:)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -30,7 +29,16 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it "returns correct number of courses" do
-        expect(JSON.parse(response.body)["data"].size).to be(2)
+        expect(JSON.parse(response.body)["data"].size).to be(3)
+      end
+
+      context "course count" do
+        it "returns the course count in a meta object" do
+          json_response = JSON.parse(response.body)
+          meta = json_response["meta"]
+
+          expect(meta["count"]).to be(3)
+        end
       end
     end
 

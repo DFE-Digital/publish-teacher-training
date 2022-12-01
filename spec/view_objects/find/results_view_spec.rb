@@ -213,10 +213,58 @@ module Find
     end
 
     describe "#courses" do
-      let(:results_view) { described_class.new(query_parameters: {}) }
+      let(:query_parameters) { {} }
+
+      let(:provider_ascending) { "name,provider.provider_name" }
+      let(:provider_descending)  { "name,-provider.provider_name" }
+
+      subject { described_class.new(query_parameters:).courses }
 
       it "returns a Course ActiveRecord::Relation" do
-        expect(results_view.courses).to be_a(ActiveRecord::Relation)
+        expect(subject).to be_a(ActiveRecord::Relation)
+      end
+
+      context "sortby is not set in query_parameters" do
+        before do
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+        end
+
+        it "delegates to the CourseSearchService with sort set to provider_ascending" do
+          subject
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: query_parameters, sort: provider_ascending),
+          )
+        end
+      end
+
+      context "sortby is set to 0 in query_parameters" do
+        let(:query_parameters) { { sortby: "0" } }
+
+        before do
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+        end
+
+        it "delegates to the CourseSearchService with sort set to provider_ascending" do
+          subject
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: query_parameters, sort: provider_ascending),
+          )
+        end
+      end
+
+      context "sortby is set to 1 in query_parameters" do
+        let(:query_parameters) { { sortby: "1" } }
+
+        before do
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+        end
+
+        it "delegates to the CourseSearchService with sort set to provider_descending" do
+          subject
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: query_parameters, sort: provider_descending),
+          )
+        end
       end
     end
 
