@@ -474,11 +474,11 @@ module Find
     end
 
     def sort_by_provider
-      query_parameters&.dig(:sortby) == "1" ? :provider_descending : :provider_ascending
+      query_parameters&.dig(:sortby) == "1" ? :PROVIDER_DESCENDING : :PROVIDER_ASCENDING
     end
 
     def sort
-      ::CourseSearchService.public_send(sort_by_provider).join(",")
+      ::CourseSearchService.const_get("::CourseSearchService::#{sort_by_provider}").join(",")
     end
 
     def course_scope
