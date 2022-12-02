@@ -64,4 +64,8 @@ private
   def is_current_cycle(cycle_year)
     Settings.current_recruitment_cycle_year == cycle_year.to_i
   end
+
+  def provider_code_or_code(params)
+    params[:code] || params[:provider_code]
+  end
 end

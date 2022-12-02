@@ -19,7 +19,7 @@ module Publish
       if @user_form.stash
         redirect_to publish_provider_check_user_path(provider_code: params[:code])
       else
-        redirect_to new_publish_provider_user_path(provider_code: params[:code])
+        render(:new)
       end
     end
 
@@ -32,7 +32,7 @@ module Publish
     end
 
     def user_params
-      params.permit(:first_name, :last_name, :email, :code, :authenticity_token)
+      params.require(:publish_user_form).permit(:first_name, :last_name, :email, :code, :authenticity_token)
     end
   end
 end
