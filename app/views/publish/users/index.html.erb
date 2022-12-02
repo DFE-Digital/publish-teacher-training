@@ -17,7 +17,7 @@
         <tbody class="govuk-table__body">
         <% @users.each do |user| %>
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell app-table--courses__course-name">
+            <td class="govuk-table__cell">
               <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", root_path) %></a>
             </td>
             <td class="govuk-table__cell">
