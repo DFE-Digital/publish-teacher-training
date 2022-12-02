@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../sections/errorlink"
+require_relative "../sections/error_link"
 require_relative "../sections/vacancy"
 
 module PageObjects
