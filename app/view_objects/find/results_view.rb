@@ -445,7 +445,11 @@ module Find
     end
 
     def sort_by_provider
-      query_parameters&.dig(:sortby) == "1" ? :PROVIDER_DESCENDING : :PROVIDER_ASCENDING
+      order = {
+        "0" => :PROVIDER_ASCENDING,
+        "1" => :PROVIDER_DESCENDING,
+      }
+      order[query_parameters&.dig(:sortby)]
     end
 
     def sort

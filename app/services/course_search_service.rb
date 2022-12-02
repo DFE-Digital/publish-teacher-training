@@ -11,9 +11,9 @@ class CourseSearchService
     @sort = Set.new(sort&.split(","))
   end
 
-  PROVIDER_ASCENDING = Set["0"].freeze
+  PROVIDER_ASCENDING = Set["name", "provider.provider_name"].freeze
 
-  PROVIDER_DESCENDING = Set["1"].freeze
+  PROVIDER_DESCENDING = Set["name", "-provider.provider_name"].freeze
 
   def call
     scope = course_scope
@@ -165,11 +165,11 @@ private
   end
 
   def sort_by_provider_ascending?
-    sort == CourseSearchService::PROVIDER_ASCENDING
+    sort == Set["0"] || sort == Set["name", "provider.provider_name"]
   end
 
   def sort_by_provider_descending?
-    sort == CourseSearchService::PROVIDER_DESCENDING
+    sort == Set["1"] || sort == Set["name", "-provider.provider_name"]
   end
 
   def sort_by_distance?
