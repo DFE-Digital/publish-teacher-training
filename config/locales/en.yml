@@ -441,6 +441,15 @@ en:
               blank: "Enter their organisation"
             reason:
               blank: "Enter why they need access"
+        publish/user_form:
+          attributes:
+            email:
+              blank: "Enter an email address"
+              lowercase: "Enter an email address that is lowercase, like name@example.com"
+            first_name:
+              blank: "Enter a first name"
+            last_name:
+              blank: "Enter a last name"
         support/user_form:
           attributes:
             email:
