@@ -28,7 +28,7 @@ module Find
     def courses
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
-        sort: query_parameters[:sortby],
+        sort: query_parameters[:sortby] || "0",
         course_scope:,
       )
     end

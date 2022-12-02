@@ -11,9 +11,9 @@ class CourseSearchService
     @sort = Set.new(sort&.split(","))
   end
 
-  PROVIDER_ASCENDING = Set["name", "provider.provider_name"].freeze
+  PROVIDER_ASCENDING = Set["0"].freeze
 
-  PROVIDER_DESCENDING = Set["name", "-provider.provider_name"].freeze
+  PROVIDER_DESCENDING = Set["1"].freeze
 
   def call
     scope = course_scope

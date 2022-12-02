@@ -215,8 +215,8 @@ module Find
     describe "#courses" do
       let(:query_parameters) { {} }
 
-      let(:provider_ascending) { "name,provider.provider_name" }
-      let(:provider_descending)  { "name,-provider.provider_name" }
+      let(:provider_ascending) { "0" }
+      let(:provider_descending)  { "1" }
 
       subject { described_class.new(query_parameters:).courses }
 
