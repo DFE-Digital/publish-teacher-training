@@ -2,7 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @access_request.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(users_publish_provider_path(params[:code])) %>
+  <%= govuk_back_link_to(publish_provider_users_path(params[:code])) %>
 <% end %>
 
 <div class="govuk-grid-row">

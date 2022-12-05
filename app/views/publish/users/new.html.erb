@@ -1,12 +1,12 @@
 <%= render PageTitle::View.new(title: "users.new") %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(users_publish_provider_path(provider_code_or_code(params))) %>
+  <%= govuk_back_link_to(publish_provider_users_path(provider_code_or_code(params))) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @user_form, url: new_publish_provider_user_path(provider_code_or_code(params)), local: true) do |f| %>
+    <%= form_with(model: @user_form, url: publish_provider_users_path(provider_code_or_code(params)), local: true) do |f| %>
       <%= f.govuk_error_summary %>
       <span class="govuk-caption-l">Add user</span>
       <fieldset class="govuk-fieldset">
@@ -23,7 +23,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), users_publish_provider_path(provider_code_or_code(params))) %>
+      <%= govuk_link_to(t("cancel"), publish_provider_users_path(provider_code_or_code(params))) %>
     </p>
   </div>
 </div>
