@@ -1,5 +1,4 @@
-Support Playbook
-================
+# Support Playbook
 
 ## Removing an organisation
 
@@ -63,6 +62,7 @@ To change the accrediting body of a course, you can do the following:
 p = RecruitmentCycle.current.providers.find_by(provider_code: "1YP")
 p.courses.update(accredited_body_code: "1YK")
 ```
+
 ## Transfer courses to another provider
 
 ```ruby
@@ -120,8 +120,19 @@ copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToC
 # Handles edge case where .published returns withdrawn
 provider.courses.published.filter { |c| c.content_status != :withdrawn }.each do |course|
   new_course = copier.execute(course:, new_provider: provider_to_copy_to)
-  
+
   # Set the accredited body if needed
   new_course.update(accredited_body_code: "2N2")
 end
+```
+
+## Visa sponsorship issue
+
+If providers encounter an error message 'Select if visas can be sponsored' when publishing a course after correctly filling the visa option on basic details page, they need to have the provider sponsorship attributes updated from nil, as we are validating on the provider rather than the course at present.
+
+```ruby
+# Find provider to update
+provider = RecruitmentCycle.current.providers.find_by(provider_code: "1TZ")
+
+provider.update(can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: true)
 ```
