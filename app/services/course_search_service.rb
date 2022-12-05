@@ -165,11 +165,11 @@ private
   end
 
   def sort_by_provider_ascending?
-    sort == Set["0"] || sort == Set["name", "provider.provider_name"]
+    sort == Set["0"] || CourseSearchService::PROVIDER_ASCENDING
   end
 
   def sort_by_provider_descending?
-    sort == Set["1"] || sort == Set["name", "-provider.provider_name"]
+    sort == Set["1"] || CourseSearchService::PROVIDER_DESCENDING
   end
 
   def sort_by_distance?
