@@ -78,10 +78,6 @@ RSpec.configure do |config|
     metadata[:type] = :serializer
   end
 
-  config.define_derived_metadata(file_path: Regexp.new("/spec/serializers")) do |metadata|
-    metadata[:type] = :serializer
-  end
-
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
   config.mock_with :rspec do |mocks|
