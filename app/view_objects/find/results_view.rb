@@ -28,7 +28,7 @@ module Find
     def courses
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
-        sort:,
+        sort: query_parameters[:sortby] || "0",
         course_scope:,
       )
     end
@@ -53,7 +53,7 @@ module Find
     end
 
     def qualifications_parameters
-      { "qualification" => query_parameters["qualification"].presence || %w[qts pgce_with_qts other] }
+      { "qualification" => query_parameters["qualification"].presence || ["qts", "pgce_with_qts", "pgce pgde"] }
     end
 
     def study_type_parameters
@@ -232,22 +232,6 @@ module Find
       query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
     end
 
-    def qts?
-      qualifications.include?("qts")
-    end
-
-    def pgce_or_pgde_with_qts?
-      qualifications.include?("pgce_with_qts")
-    end
-
-    def other_qualifications?
-      qualifications.include?("other")
-    end
-
-    def all_qualifications?
-      qts? && pgce_or_pgde_with_qts? && other_qualifications?
-    end
-
     def with_salaries?
       query_parameters["funding"] == "8"
     end
@@ -311,15 +295,6 @@ module Find
         .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
     end
 
-    def qualification
-      qualification = []
-      qualification |= %w[qts] if qts?
-      qualification |= %w[pgce_with_qts pgde_with_qts] if pgce_or_pgde_with_qts?
-      qualification |= %w[pgce pgde] if other_qualifications?
-
-      qualification
-    end
-
     def course_counter(radius_to_check: nil, include_salary: true)
       course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
       course_query = course_query.order(:distance) if sort_by_distance?
@@ -330,10 +305,6 @@ module Find
     def radii_for_suggestions
       radius_for_all_england = nil
       [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
-    end
-
-    def qualifications
-      query_parameters["qualification"] || %w[QtsOnly PgdePgceWithQts Other]
     end
 
     def study_type
@@ -474,7 +445,11 @@ module Find
     end
 
     def sort_by_provider
-      query_parameters&.dig(:sortby) == "1" ? :PROVIDER_DESCENDING : :PROVIDER_ASCENDING
+      order = {
+        "0" => :PROVIDER_ASCENDING,
+        "1" => :PROVIDER_DESCENDING,
+      }
+      order[query_parameters&.dig(:sortby)]
     end
 
     def sort

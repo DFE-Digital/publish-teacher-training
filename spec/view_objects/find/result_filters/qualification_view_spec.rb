@@ -69,7 +69,7 @@ module Find
         end
 
         context "when Other param is present" do
-          let(:params) { { qualification: %w[qts other] } }
+          let(:params) { { qualification: ["qts", "pgce pgde"] } }
 
           it { is_expected.to be(true) }
         end

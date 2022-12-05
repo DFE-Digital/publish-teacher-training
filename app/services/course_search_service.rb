@@ -17,7 +17,6 @@ class CourseSearchService
 
   def call
     scope = course_scope
-    # TODO: level query for further_education ?
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies?
@@ -166,11 +165,11 @@ private
   end
 
   def sort_by_provider_ascending?
-    sort == CourseSearchService::PROVIDER_ASCENDING
+    sort == Set["0"] || sort == PROVIDER_ASCENDING
   end
 
   def sort_by_provider_descending?
-    sort == CourseSearchService::PROVIDER_DESCENDING
+    sort == Set["1"] || sort == PROVIDER_DESCENDING
   end
 
   def sort_by_distance?
@@ -189,6 +188,15 @@ private
 
   def qualifications
     return [] if filter[:qualification].blank?
+
+    if filter[:qualification].include?("pgce pgde")
+      filter[:qualification] -= ["pgce pgde"]
+      filter[:qualification] |= %w[pgce pgde]
+    end
+
+    if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
+      filter[:qualification] |= %w[pgde_with_qts]
+    end
 
     filter[:qualification].split(",")
   end

@@ -6,7 +6,7 @@ module Find
 
     let(:default_output_parameters) do
       {
-        "qualification" => %w[qts pgce_with_qts other],
+        "qualification" => ["qts", "pgce_with_qts", "pgce pgde"],
         "study_type" => %w[full_time part_time],
         "has_vacancies" => true,
         "send_courses" => false,
@@ -23,7 +23,7 @@ module Find
       end
 
       context "query_parameters have qualifications set" do
-        let(:parameter_hash) { { "qualification" => "other" } }
+        let(:parameter_hash) { { "qualification" => "pgce pgde" } }
 
         it { is_expected.to eq(default_output_parameters.merge(parameter_hash)) }
       end
@@ -86,7 +86,7 @@ module Find
     describe "filter_path_with_unescaped_commas" do
       let(:default_query_parameters) do
         {
-          "qualification" => %w[qts pgce_with_qts other],
+          "qualification" => ["qts", "pgce_with_qts", "pgce pgde"],
           "study_type" => %w[full_time part_time],
           "has_vacancies" => "true",
           "send_courses" => "false",
@@ -102,86 +102,6 @@ module Find
         )
           .and_return("test_result")
         expect(results_view).to eq("test_result")
-      end
-    end
-
-    describe "#qts?" do
-      let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-      context "when the hash includes 'qts'" do
-        let(:parameter_hash) { { "qualification" => %w[qts pgce_with_qts] } }
-
-        it "returns true" do
-          expect(results_view.qts?).to be_truthy
-        end
-      end
-
-      context "when the hash does not include 'QTS only'" do
-        let(:parameter_hash) { { "qualification" => %w[other] } }
-
-        it "returns false" do
-          expect(results_view.qts?).to be_falsy
-        end
-      end
-    end
-
-    describe "#pgce_or_pgde_with_qts?" do
-      let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-      context "when the hash includes 'PGCE (or PGDE) with QTS'" do
-        let(:parameter_hash) { { "qualification" => "qts,pgce_with_qts" } }
-
-        it "returns true" do
-          expect(results_view.pgce_or_pgde_with_qts?).to be_truthy
-        end
-      end
-
-      context "when the hash does not include 'PGCE (or PGDE) with QTS'" do
-        let(:parameter_hash) { { "qualification" => "other" } }
-
-        it "returns false" do
-          expect(results_view.pgce_or_pgde_with_qts?).to be_falsy
-        end
-      end
-    end
-
-    describe "#other_qualifications?" do
-      let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-      context "when the hash includes 'Further Education (PGCE or PGDE without QTS)'" do
-        let(:parameter_hash) { { "qualification" => "qts,other" } }
-
-        it "returns true" do
-          expect(results_view.other_qualifications?).to be_truthy
-        end
-      end
-
-      context "when the hash does not include 'Further Education (PGCE or PGDE without QTS)'" do
-        let(:parameter_hash) { { "qualification" => "qts" } }
-
-        it "returns false" do
-          expect(results_view.other_qualifications?).to be_falsy
-        end
-      end
-    end
-
-    describe "#all_qualifications?" do
-      let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-      context "when all selected'" do
-        let(:parameter_hash) { { "qualification" => "qts,pgce_with_qts,other" } }
-
-        it "returns true" do
-          expect(results_view.all_qualifications?).to be(true)
-        end
-      end
-
-      context "when not all selected" do
-        let(:parameter_hash) { { "qualification" => "qts" } }
-
-        it "returns false" do
-          expect(results_view.all_qualifications?).to be(false)
-        end
       end
     end
 
@@ -295,8 +215,8 @@ module Find
     describe "#courses" do
       let(:query_parameters) { {} }
 
-      let(:provider_ascending) { "name,provider.provider_name" }
-      let(:provider_descending)  { "name,-provider.provider_name" }
+      let(:provider_ascending) { "0" }
+      let(:provider_descending)  { "1" }
 
       subject { described_class.new(query_parameters:).courses }
 
@@ -431,7 +351,7 @@ module Find
       subject { described_class.new(query_parameters: parameter_hash).course_count }
       let(:parameter_hash) do
         {
-          "qualification" => %w[qts pgce_with_qts other],
+          "qualification" => ["qts", "pgce_with_qts", "pgce pgde"],
           "fulltime" => "true",
           "parttime" => "true",
           "has_vacancies" => "true",
@@ -954,7 +874,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?has_vacancies=true&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
+          expect(results_view.filter_params_for("/")).to eq "/?has_vacancies=true&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
 
@@ -973,7 +893,7 @@ module Find
         subject(:results_view) { described_class.new(query_parameters:) }
 
         it "returns default params without the location params" do
-          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&latitude=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=other&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
+          expect(results_view.filter_params_for("/")).to eq "/?c=England&has_vacancies=true&l=1&latitude=1.23456&loc=Brixton&long=0.54321&lq=Brixton&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time"
         end
       end
     end
