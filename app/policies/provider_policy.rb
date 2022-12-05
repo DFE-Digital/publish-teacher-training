@@ -44,7 +44,7 @@ class ProviderPolicy
   end
 
   def create?
-    user.admin?
+    user.admin? || user.providers.include?(provider)
   end
 
   def suggest?
