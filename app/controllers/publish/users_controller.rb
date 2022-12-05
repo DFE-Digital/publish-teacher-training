@@ -6,6 +6,11 @@ module Publish
       @users = provider.users
     end
 
+    def show
+      authorize(provider)
+      provider_user
+    end
+
     def new
       authorize(provider)
       @user_form = UserForm.new(current_user, user)
@@ -33,6 +38,10 @@ module Publish
 
     def user_params
       params.require(:publish_user_form).permit(:first_name, :last_name, :email).except(:code, :authenticity_token)
+    end
+
+    def provider_user
+      @provider_user ||= provider.users.find(params[:id])
     end
   end
 end

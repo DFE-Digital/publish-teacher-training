@@ -138,6 +138,9 @@ en:
         index: "Sign in"
         new: "User not found"
         personas: Teacher Training API Personas
+      providers:
+        users:
+          show: "View a provider"
       support:
         rollover:
           index: "Recruitment Cycles"
