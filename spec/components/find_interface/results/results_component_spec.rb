@@ -16,10 +16,8 @@ module FindInterface
           country: "Scotland",
           devolved_nation?: true,
           subjects: [],
-          total_pages: 0,
           number_of_courses_string: "No courses",
           no_results_found?: true,
-          suggested_search_visible?: false,
           has_results?: false,
         )
       end
@@ -49,10 +47,8 @@ module FindInterface
           country: "England",
           devolved_nation?: false,
           subjects: [],
-          total_pages: 1,
           number_of_courses_string: "10 courses",
           no_results_found?: false,
-          suggested_search_visible?: false,
           has_results?: true,
           has_sites?: true,
           location_filter?: false,
