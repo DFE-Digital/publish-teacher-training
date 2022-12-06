@@ -45,9 +45,20 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
     end
   end
 
+  describe "Removing a user in an organisation" do
+    scenario "With an existing user" do
+      given_i_visit_the_users_index_page
+      and_i_click_on_user_two
+      and_i_click_remove_user
+      and_i_confirm
+      then_the_user_should_be_deleted
+    end
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider, provider_name: "Batman's Chocolate School")
     @user = create(:user, first_name: "Mr", last_name: "User", providers: [@provider])
+    @user2 = create(:user, first_name: "Mr", last_name: "Cool", providers: [@provider])
     given_i_am_authenticated(user: @user)
   end
 
@@ -124,11 +135,27 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   alias_method :when_i_click_on_the_user, :and_i_click_on_the_user
 
+  def and_i_click_on_user_two
+    click_link "Mr Cool"
+  end
+
   def i_should_be_on_the_users_show_page
     expect(users_show_page).to be_displayed
   end
 
   def then_the_users_name_should_be_displayed
     expect(users_show_page).to have_text("Mr User")
+  end
+
+  def and_i_click_remove_user
+    users_show_page.remove_user_link.click
+  end
+
+  def and_i_confirm
+    users_delete_page.remove_user_button.click
+  end
+
+  def then_the_user_should_be_deleted
+    expect(provider_users_page).to_not have_text "Mr Cool"
   end
 end
