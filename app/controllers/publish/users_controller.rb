@@ -10,6 +10,11 @@ module Publish
       provider_user
     end
 
+    def delete
+      authorize(provider)
+      provider_user
+    end
+
     def new
       @user_form = UserForm.new(current_user, user)
       @user_form.clear_stash
@@ -28,6 +33,12 @@ module Publish
 
     def authorize_provider
       authorize(provider)
+    end
+
+    def destroy
+      UserAssociationsService::Delete.call(user: provider_user, providers: provider)
+      flash[:success] = I18n.t("success.user_removed")
+      redirect_to publish_provider_users_path(params[:provider_code])
     end
 
     def cycle_year
