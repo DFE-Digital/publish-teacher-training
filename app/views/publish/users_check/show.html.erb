@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: t("components.page_titles.users.show")) %>
+<%= render PageTitle::View.new(title: t("page_titles.users.check")) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(new_publish_provider_user_path) %>
@@ -11,8 +11,8 @@
       <%= f.hidden_field(:email, value: @user_form.email) %>
 
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= t("users.new") %></span>
-          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("users.check") %> </h1> </legend>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= t("users.add") %></span>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %> </h1> </legend>
 
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.row do |row|
@@ -37,7 +37,7 @@
         <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span> <strong class="govuk-warning-text__text">
           <span class="govuk-warning-text__assistive">Warning</span> The user will be sent an email to tell them you’ve added them to the organisation. </strong> </div>
 
-        <%= f.govuk_submit(t("users.new")) %>
+        <%= f.govuk_submit(t("users.add")) %>
       </fieldset>
     <% end %>
 

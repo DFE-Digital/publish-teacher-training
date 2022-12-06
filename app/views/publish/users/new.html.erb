@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "users.new") %>
+<%= render PageTitle::View.new(title: t("page_titles.users.new")) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(publish_provider_users_path(params[:provider_code])) %>
@@ -11,7 +11,7 @@
       <span class="govuk-caption-l">Add user</span>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h1 class="govuk-fieldset__heading">Personal details</h1>
+          <h1 class="govuk-fieldset__heading"><%= t("page_titles.users.new") %></h1>
         </legend>
 
         <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: "two-thirds" %>

@@ -49,6 +49,8 @@ en:
       change_cycle: "Change recruitment cycle"
     users:
       index: "Users"
+      new: "Personal details"
+      check: "Check your answers"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
@@ -168,10 +170,6 @@ en:
           edit: "Edit Allocation Uplift"
         data_exports:
           index: "Data exports"
-      users:
-        index: "Users"
-        new: "Personal details"
-        show: "Check your answers"
     filter:
       providers:
         provider_search: "Provider name or code"
@@ -223,8 +221,7 @@ en:
     first_name: "First name"
     last_name: "Last name"
     email: "Email address"
-    new: "Add user"
-    check: "Check your answers"
+    add: "Add user"
   support:
     data_exports:
       index:
