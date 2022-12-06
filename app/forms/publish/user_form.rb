@@ -20,10 +20,6 @@ module Publish
       model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end
 
-    def fields_to_ignore_before_save
-      %i[authenticity_token code]
-    end
-
     def email_is_lowercase
       if email.present? && email.downcase != email
         errors.add(:email, :lowercase)
