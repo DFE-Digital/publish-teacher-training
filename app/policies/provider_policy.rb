@@ -66,6 +66,7 @@ class ProviderPolicy
   alias_method :can_list_training_providers?, :show?
   alias_method :index?, :new?
   alias_method :create?, :show?
+  alias_method :delete?, :show?
 
   def permitted_provider_attributes
     if user.admin?
