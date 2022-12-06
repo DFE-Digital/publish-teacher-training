@@ -15,7 +15,7 @@ module Publish
 
     validates :first_name, presence: true
     validates :last_name, presence: true
-    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: I18n.t("activemodel.errors.models.publish/user_form.attributes.email.format") }
+    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: :format }
     validate :email_is_lowercase
 
     def provider_code_or_code(params)
@@ -32,7 +32,7 @@ module Publish
 
     def email_is_lowercase
       if email.present? && email.downcase != email
-        errors.add(:email, I18n.t("activemodel.errors.models.publish/user_form.attributes.email.lowercase"))
+        errors.add(:email, :lowercase)
       end
     end
   end
