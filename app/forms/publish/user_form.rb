@@ -7,8 +7,6 @@ module Publish
       last_name
       email
       id
-      code
-      authenticity_token
     ].freeze
 
     attr_accessor(*FIELDS)

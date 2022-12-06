@@ -32,7 +32,7 @@ module Publish
     end
 
     def user_params
-      params.require(:publish_user_form).permit(:first_name, :last_name, :email, :code, :authenticity_token)
+      params.require(:publish_user_form).permit(:first_name, :last_name, :email).except(:code, :authenticity_token)
     end
   end
 end
