@@ -9,7 +9,7 @@ module Find
     DISTANCE = "distance".freeze
     # SUGGESTED_SEARCH_THRESHOLD = 3
     MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
-    RESULTS_PER_PAGE = 10
+    # RESULTS_PER_PAGE = 10
     MILES = "50".freeze
 
     def initialize(query_parameters:)
@@ -48,9 +48,9 @@ module Find
       courses.count(:all)
     end
 
-    def subjects
-      subject_codes.any? ? filtered_subjects : all_subjects
-    end
+    # def subjects
+    #  subject_codes.any? ? filtered_subjects : all_subjects
+    # end
 
     def qualifications_parameters
       { "qualification" => query_parameters["qualification"].presence || ["qts", "pgce_with_qts", "pgce pgde"] }
@@ -153,10 +153,6 @@ module Find
     def has_sites?(course)
       !new_or_running_sites_with_vacancies_for(course).empty?
     end
-
-    # def total_pages
-    #  (course_count.to_f / results_per_page).ceil
-    # end
 
     def suggested_search_links
       all_links = []

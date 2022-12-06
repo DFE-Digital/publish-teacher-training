@@ -789,41 +789,6 @@ module Find
       end
     end
 
-    # TODO: Set pagination to 10?
-    describe "#total_pages" do
-      subject(:results_view) { described_class.new(query_parameters:) }
-
-      let(:parameter_hash) { {} }
-
-      context "where there are no results" do
-        it "returns 0 pages" do
-          expect(results_view.total_pages).to be(0)
-        end
-      end
-
-      context "where there are 30 results" do
-        before do
-          Course.destroy_all # for flakey test fail
-          # TODO: 30 findable courses
-        end
-
-        xit "returns 3 pages" do
-          expect(results_view.total_pages).to be(3)
-        end
-      end
-
-      context "where there are 60 results" do
-        before do
-          Course.destroy_all # for flakey test fail
-          # TODO: 60 findable courses
-        end
-
-        xit "returns 6 pages" do
-          expect(results_view.total_pages).to be(6)
-        end
-      end
-    end
-
     describe "#devolved_nation" do
       context "where country is devolved nation" do
         let(:results_view) { described_class.new(query_parameters: { "c" => "Wales" }) }
