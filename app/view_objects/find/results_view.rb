@@ -146,35 +146,31 @@ module Find
       ]
     end
 
-    # def suggested_search_visible?
-    #  course_count < SUGGESTED_SEARCH_THRESHOLD && suggested_search_links.any? && !devolved_nation?
-    # end
-
     def has_sites?(course)
       !new_or_running_sites_with_vacancies_for(course).empty?
     end
 
-    def suggested_search_links
-      all_links = []
+    #  def suggested_search_links
+    #    all_links = []
 
-      if with_salaries?
-        first_link = suggested_search_link_including_unsalaried(current_radius: radius)
-        all_links << first_link if first_link.present?
-      end
+    #    if with_salaries?
+    #      first_link = suggested_search_link_including_unsalaried(current_radius: radius)
+    #      all_links << first_link if first_link.present?
+    #    end
 
-      radii_for_suggestions.each do |radius|
-        break if filter_links(all_links).count == 2
+    #    radii_for_suggestions.each do |radius|
+    #      break if filter_links(all_links).count == 2
 
-        all_links << SuggestedSearchLink.new(
-          radius:,
-          count: course_counter(radius_to_check: radius),
-          parameters: query_parameters_with_defaults,
-          explicit_salary_filter: with_salaries?,
-        )
-      end
+    #      all_links << SuggestedSearchLink.new(
+    #        radius:,
+    #        count: course_counter(radius_to_check: radius),
+    #        parameters: query_parameters_with_defaults,
+    #        explicit_salary_filter: with_salaries?,
+    #      )
+    #    end
 
-      @suggested_search_links ||= filter_links(all_links)
-    end
+    #    @suggested_search_links ||= filter_links(all_links)
+    #  end
 
     def sites_count(course)
       new_or_running_sites_with_vacancies_for(course).count
@@ -260,19 +256,19 @@ module Find
       Find::UnescapedQueryStringService.call(base_path:, parameters:)
     end
 
-    def number_of_extra_subjects
-      return 37 if number_of_subjects_selected == MAXIMUM_NUMBER_OF_SUBJECTS
+    # def number_of_extra_subjects
+    #  return 37 if number_of_subjects_selected == MAXIMUM_NUMBER_OF_SUBJECTS
 
-      number_of_subjects_selected
-    end
+    #  number_of_subjects_selected
+    # end
 
     def all_subjects
       @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
     end
 
-    def show_map?
-      latitude.present? && longitude.present?
-    end
+  # def show_map?
+  #  latitude.present? && longitude.present?
+  # end
 
   private
 
