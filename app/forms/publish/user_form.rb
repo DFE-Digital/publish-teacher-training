@@ -16,10 +16,6 @@ module Publish
     validates :email, presence: true, format: { with: /\A.*@.*\z/, message: :format }
     validate :email_is_lowercase
 
-    def provider_code_or_code(params)
-      params[:code] || params[:provider_code]
-    end
-
     def compute_fields
       model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
     end
