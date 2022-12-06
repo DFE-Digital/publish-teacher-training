@@ -7,7 +7,7 @@ module Find
 
     MAXIMUM_NUMBER_OF_SUBJECTS = 43
     DISTANCE = "distance".freeze
-    SUGGESTED_SEARCH_THRESHOLD = 3
+    # SUGGESTED_SEARCH_THRESHOLD = 3
     MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
     RESULTS_PER_PAGE = 10
     MILES = "50".freeze
@@ -154,9 +154,9 @@ module Find
       !new_or_running_sites_with_vacancies_for(course).empty?
     end
 
-    def total_pages
-      (course_count.to_f / results_per_page).ceil
-    end
+    # def total_pages
+    #  (course_count.to_f / results_per_page).ceil
+    # end
 
     def suggested_search_links
       all_links = []
