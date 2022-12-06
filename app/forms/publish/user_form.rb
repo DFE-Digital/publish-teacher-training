@@ -13,7 +13,7 @@ module Publish
 
     validates :first_name, presence: true
     validates :last_name, presence: true
-    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: :format }
+    validates :email, presence: true, format: { with: /\A.*@.*\z/ }
     validate :email_is_lowercase
 
     def compute_fields
