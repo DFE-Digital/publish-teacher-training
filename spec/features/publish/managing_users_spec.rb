@@ -156,6 +156,6 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def then_the_user_should_be_deleted
-    expect(provider_users_page).to_not have_text "Mr Cool"
+    expect(provider_users_page).not_to have_text "Mr Cool"
   end
 end
