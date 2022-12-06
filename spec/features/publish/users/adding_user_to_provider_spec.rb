@@ -77,7 +77,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_the_user_should_not_be_in_the_database
-    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.where(email: "willy.wonka@bat_school.com").blank?).to be(true)
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "willy.wonka@bat_school.com")).to be(false)
   end
 
   def when_i_click_change_first_name
