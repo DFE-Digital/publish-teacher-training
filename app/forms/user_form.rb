@@ -1,10 +1,10 @@
 class UserForm < Form
   FIELDS = %i[
-      first_name
-      last_name
-      email
-      id
-    ].freeze
+    first_name
+    last_name
+    email
+    id
+  ].freeze
 
   attr_accessor(*FIELDS)
 
