@@ -3,14 +3,14 @@
 require_relative "../sections/error_link"
 
 module PageObjects
-  module Publish
+  module Find
     class CookiePreferences < PageObjects::Base
-      set_url "/cookies"
+      set_url "/find/cookies"
 
       element :heading, "h1"
 
-      element :yes_option, "#publish-cookie-preferences-form-consent-accepted-field"
-      element :no_option, "#publish-cookie-preferences-form-consent-rejected-field"
+      element :yes_option, "#find-cookie-preferences-form-consent-accepted-field"
+      element :no_option, "#find-cookie-preferences-form-consent-rejected-field"
 
       element :submit, 'button.govuk-button[type="submit"]'
 
