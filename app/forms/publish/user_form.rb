@@ -1,29 +1,6 @@
 # frozen_string_literal: true
 
 module Publish
-  class UserForm < Form
-    FIELDS = %i[
-      first_name
-      last_name
-      email
-      id
-    ].freeze
-
-    attr_accessor(*FIELDS)
-
-    validates :first_name, presence: true
-    validates :last_name, presence: true
-    validates :email, presence: true, format: { with: /\A.*@.*\z/ }
-    validate :email_is_lowercase
-
-    def compute_fields
-      model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
-    end
-
-    def email_is_lowercase
-      if email.present? && email.downcase != email
-        errors.add(:email, :lowercase)
-      end
-    end
+  class UserForm < UserForm
   end
 end
