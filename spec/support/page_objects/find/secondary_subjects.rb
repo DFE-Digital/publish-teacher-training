@@ -6,7 +6,7 @@ module PageObjects
       set_url "find/subjects?age_group=secondary"
 
       element :music, "#find-subjects-form-subject-codes-w3-field"
-      element :continue, ".govuk-button"
+      element :continue, "form .govuk-button"
     end
   end
 end
