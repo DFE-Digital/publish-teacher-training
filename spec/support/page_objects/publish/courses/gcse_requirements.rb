@@ -2,7 +2,7 @@
 
 require_relative "../../sections/copy_content"
 
-require_relative "../../sections/errorlink"
+require_relative "../../sections/error_link"
 
 module PageObjects
   module Publish
