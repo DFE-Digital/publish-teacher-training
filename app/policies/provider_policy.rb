@@ -23,10 +23,6 @@ class ProviderPolicy
     @provider = provider
   end
 
-  def index?
-    user.present?
-  end
-
   def new?
     user.present?
   end
@@ -41,10 +37,6 @@ class ProviderPolicy
 
   def show_any?
     user.present?
-  end
-
-  def create?
-    user.admin? || user.providers.include?(provider)
   end
 
   def suggest?
@@ -72,6 +64,8 @@ class ProviderPolicy
   alias_method :destroy?, :show?
   alias_method :build_new?, :show?
   alias_method :can_list_training_providers?, :show?
+  alias_method :index?, :new?
+  alias_method :create?, :show?
 
   def permitted_provider_attributes
     if user.admin?
