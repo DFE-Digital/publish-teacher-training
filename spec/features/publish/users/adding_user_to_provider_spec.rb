@@ -69,7 +69,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_i_continue
-    users_new_page.submit.click
+    users_new_page.continue.click
   end
 
   def then_i_should_be_on_the_check_page
@@ -86,10 +86,6 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   def and_i_enter_a_new_first_name
     users_new_page.first_name.set("Willy")
-  end
-
-  def and_i_continue
-    users_new_page.submit.click
   end
 
   def and_i_click_add_user
