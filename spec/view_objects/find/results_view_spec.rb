@@ -125,34 +125,34 @@ module Find
       end
     end
 
-   # describe "#number_of_extra_subjects" do
-   #   let(:results_view) { described_class.new(query_parameters: parameter_hash) }
+    # describe "#number_of_extra_subjects" do
+    #   let(:results_view) { described_class.new(query_parameters: parameter_hash) }
 
-   #   context "The maximum number of subjects are selected" do
-   #     let(:parameter_hash) { { "subjects" => (1..43).to_a } }
+    #   context "The maximum number of subjects are selected" do
+    #     let(:parameter_hash) { { "subjects" => (1..43).to_a } }
 
-   #     it "Returns the number of extra subjects - 2" do
-   #       expect(results_view.number_of_extra_subjects).to eq(37)
-   #     end
-   #   end
+    #     it "Returns the number of extra subjects - 2" do
+    #       expect(results_view.number_of_extra_subjects).to eq(37)
+    #     end
+    #   end
 
-   #   context "more than NUMBER_OF_SUBJECTS_DISPLAYED subjects are selected" do
-   #     let(:parameter_hash) { { "subjects" => %w[00 01 F1 Q8 P3] } }
+    #   context "more than NUMBER_OF_SUBJECTS_DISPLAYED subjects are selected" do
+    #     let(:parameter_hash) { { "subjects" => %w[00 01 F1 Q8 P3] } }
 
-   #     it "returns the number of the extra subjects" do
-   #       expect(results_view.number_of_extra_subjects).to eq(5)
-   #     end
-   #   end
+    #     it "returns the number of the extra subjects" do
+    #       expect(results_view.number_of_extra_subjects).to eq(5)
+    #     end
+    #   end
 
-   #   context "no subjects are selected" do
-   #     let(:parameter_hash) { {} }
+    #   context "no subjects are selected" do
+    #     let(:parameter_hash) { {} }
 
-   #     # Not sure what this is supposed to do
-   #     xit "returns the total number subjects - NUMBER_OF_SUBJECTS_DISPLAYED" do
-   #       expect(results_view.number_of_extra_subjects).to eq(37)
-   #     end
-   #   end
-   # end
+    #     # Not sure what this is supposed to do
+    #     xit "returns the total number subjects - NUMBER_OF_SUBJECTS_DISPLAYED" do
+    #       expect(results_view.number_of_extra_subjects).to eq(37)
+    #     end
+    #   end
+    # end
 
     describe "#location" do
       subject { described_class.new(query_parameters: parameter_hash).location }
@@ -178,39 +178,39 @@ module Find
       it { is_expected.to eq("50") }
     end
 
-   # describe "#show_map?" do
-   #   subject { described_class.new(query_parameters: parameter_hash).show_map? }
+    # describe "#show_map?" do
+    #   subject { described_class.new(query_parameters: parameter_hash).show_map? }
 
-   #   context "when longitude, latitude and radius are passed" do
-   #     let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "radius" => "10" } }
+    #   context "when longitude, latitude and radius are passed" do
+    #     let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "radius" => "10" } }
 
-   #     it { is_expected.to be(true) }
-   #   end
+    #     it { is_expected.to be(true) }
+    #   end
 
-   #   context "when only radius is passed" do
-   #     let(:parameter_hash) { { "radius" => "10" } }
+    #   context "when only radius is passed" do
+    #     let(:parameter_hash) { { "radius" => "10" } }
 
-   #     it { is_expected.to be(false) }
-   #   end
+    #     it { is_expected.to be(false) }
+    #   end
 
-   #   context "when only latitude is passed" do
-   #     let(:parameter_hash) { { "latitude" => "0.10" } }
+    #   context "when only latitude is passed" do
+    #     let(:parameter_hash) { { "latitude" => "0.10" } }
 
-   #     it { is_expected.to be(false) }
-   #   end
+    #     it { is_expected.to be(false) }
+    #   end
 
-   #   context "when only longitude is passed" do
-   #     let(:parameter_hash) { { "longitude" => "1.0" } }
+    #   context "when only longitude is passed" do
+    #     let(:parameter_hash) { { "longitude" => "1.0" } }
 
-   #     it { is_expected.to be(false) }
-   #   end
+    #     it { is_expected.to be(false) }
+    #   end
 
-   #   context "when no params are passed" do
-   #     let(:parameter_hash) { {} }
+    #   context "when no params are passed" do
+    #     let(:parameter_hash) { {} }
 
-   #     it { is_expected.to be(false) }
-   #   end
-   # end
+    #     it { is_expected.to be(false) }
+    #   end
+    # end
 
     describe "#courses" do
       let(:query_parameters) { {} }
