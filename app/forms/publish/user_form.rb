@@ -15,7 +15,7 @@ module Publish
 
     validates :first_name, presence: true
     validates :last_name, presence: true
-    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "Enter an email address in the correct format, like name@example.com" }
+    validates :email, presence: true, format: { with: /\A.*@.*\z/, message: I18n.t("activemodel.errors.models.publish/user_form.attributes.email.format") }
     validate :email_is_lowercase
 
     def provider_code_or_code(params)

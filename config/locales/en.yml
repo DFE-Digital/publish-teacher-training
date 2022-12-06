@@ -446,6 +446,7 @@ en:
             email:
               blank: "Enter an email address"
               lowercase: "Enter an email address that is lowercase, like name@example.com"
+              format: "Enter an email address in the correct format, like name@example.com"
             first_name:
               blank: "Enter a first name"
             last_name:
