@@ -47,7 +47,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def when_the_user_i_want_to_add_has_not_already_been_added
-    expect(users_index_page).not_to have_text("willy.wonka@bat_school.com")
+    expect(users_index_page).not_to have_text("willy.wonka@bat-school.com")
   end
 
   def and_i_click_add_user
@@ -63,7 +63,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_i_fill_in_email
-    users_new_page.email.set("willy.wonka@bat_school.com")
+    users_new_page.email.set("willy.wonka@bat-school.com")
   end
 
   def and_i_continue
@@ -75,7 +75,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def then_the_user_should_not_be_in_the_database
-    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "willy.wonka@bat_school.com")).to be(false)
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "willy.wonka@bat-school.com")).to be(false)
   end
 
   def given_i_click_change_first_name
@@ -92,11 +92,11 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   def then_i_should_see_the_users_name_and_email_listed
     expect(users_check_page).to have_text("Willy Wonka")
-    expect(users_check_page).to have_text("willy.wonka@bat_school.com")
+    expect(users_check_page).to have_text("willy.wonka@bat-school.com")
   end
 
   def and_the_user_should_be_added_to_the_database
-    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.where(email: "willy.wonka@bat_school.com").blank?).to be(false)
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.where(email: "willy.wonka@bat-school.com").blank?).to be(false)
   end
 
   def given_i_visit_the_users_new_page
