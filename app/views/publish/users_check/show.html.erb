@@ -19,19 +19,19 @@
             component.row do |row|
               row.key { t("users.first_name") }
               row.value(text:  @user_form.first_name)
-              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "first_name", visually_hidden_text: t("users.first_name"))
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
             end
 
             component.row do |row|
               row.key { t("users.last_name") }
               row.value(text: @user_form.last_name)
-              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "last_name", visually_hidden_text: t("users.last_name"))
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
             end
 
             component.row do |row|
               row.key { t("users.email") }
               row.value(text:  @user_form.email)
-              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "email", visually_hidden_text: t("users.email"))
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "email", visually_hidden_text: t("users.email").downcase)
             end
           end %>
 
