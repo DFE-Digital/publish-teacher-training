@@ -5,20 +5,26 @@
   <%= govuk_back_link_to(publish_provider_users_path(params[:provider_code])) %>
 <% end %>
 
+<%= form_with(model: @user_form, url: publish_provider_users_path(params[:provider_code]), local: true) do |f| %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= f.govuk_error_summary %>
+  </div>
+</div>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @user_form, url: publish_provider_users_path(params[:provider_code]), local: true) do |f| %>
-      <%= f.govuk_error_summary %>
-      <span class="govuk-caption-l"><%= t("users.add") %></span>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h1 class="govuk-fieldset__heading"><%= t("page_titles.users.new") %></h1>
+          <h1 class="govuk-fieldset__heading">
+            <span class="govuk-caption-l"><%= t("users.add") %></span>
+            <%= t("page_titles.users.new") %>
+          </h1>
         </legend>
-
         <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: "two-thirds" %>
         <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, width: "two-thirds" %>
         <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: "full" %>
-
         <%= f.govuk_submit %>
       </fieldset>
     <% end %>
