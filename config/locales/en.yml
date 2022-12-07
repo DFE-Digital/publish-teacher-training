@@ -442,7 +442,6 @@ en:
           attributes:
             email:
               blank: "Enter an email address"
-              lowercase: "Enter an email address that is lowercase, like name@example.com"
               invalid: "Enter an email address in the correct format, like name@example.com"
             first_name:
               blank: "Enter a first name"
@@ -452,7 +451,6 @@ en:
           attributes:
             email:
               blank: "Enter an email address"
-              lowercase: "Enter an email address that is lowercase, like name@example.com"
               invalid: "Enter an email address in the correct format, like name@example.com"
             first_name:
               blank: "Enter a first name"
