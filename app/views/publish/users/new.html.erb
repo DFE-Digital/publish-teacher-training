@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with(model: @user_form, url: publish_provider_users_path(params[:provider_code]), local: true) do |f| %>
       <%= f.govuk_error_summary %>
-      <span class="govuk-caption-l">Add user</span>
+      <span class="govuk-caption-l"><%= t("users.add") %></span>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading"><%= t("page_titles.users.new") %></h1>
