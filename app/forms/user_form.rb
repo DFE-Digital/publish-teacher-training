@@ -10,7 +10,8 @@ class UserForm < Form
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, format: { with: /\A.*@.*\z/ }
+  validates :email, presence: true
+  validates :email, email_address: true
   validate :email_is_lowercase
 
   def compute_fields
