@@ -236,9 +236,9 @@ module Find
     #  sort_by == DISTANCE
     # end
 
-    def sort_by
-      query_parameters["sortby"]
-    end
+    # def sort_by
+    #  query_parameters["sortby"]
+    # end
 
     def placement_schools_summary(course)
       site_distance = site_distance(course)
