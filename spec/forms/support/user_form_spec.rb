@@ -44,15 +44,6 @@ describe Support::UserForm, type: :model do
       end
     end
 
-    context "uppercase email" do
-      let(:params) { { email: "FOOBAR@BAT.COM" } }
-
-      it "is invalid" do
-        expect(subject.errors[:email]).to include("Enter an email address that is lowercase, like name@example.com")
-        expect(subject.valid?).to be(false)
-      end
-    end
-
     context "valid params" do
       it "is valid" do
         expect(subject.valid?).to be(true)
