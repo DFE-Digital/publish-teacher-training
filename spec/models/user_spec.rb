@@ -13,7 +13,6 @@ describe User do
   describe "validations" do
     it { is_expected.to validate_presence_of(:email).with_message("must contain @") }
     it { is_expected.to validate_uniqueness_of(:email) }
-    it { is_expected.not_to allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
     it { is_expected.not_to allow_value("email_without_at").for(:email) }
     it { is_expected.not_to allow_value(nil).for(:first_name) }
     it { is_expected.not_to allow_value(nil).for(:last_name) }
@@ -21,6 +20,7 @@ describe User do
     it { is_expected.not_to allow_value("").for(:last_name) }
     it { is_expected.not_to allow_value("  ").for(:first_name) }
     it { is_expected.not_to allow_value("  ").for(:last_name) }
+    it { is_expected.to allow_value("CAPS_IN_EMAIL@ACME.ORG").for(:email) }
 
     context "for an admin-user" do
       subject { create(:user, :admin) }
