@@ -104,3 +104,7 @@ en:
               blank: "Select an age group"
         find/subjects_form:
           blank: "Select at least one subject"
+        find/cookie_preferences_form:
+          attributes:
+            consent:
+              blank: Select yes if you want to accept Google Analytics cookies

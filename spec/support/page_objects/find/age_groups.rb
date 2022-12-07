@@ -10,7 +10,7 @@ module PageObjects
       element :primary, "#find-age-groups-form-age-group-primary-field"
       element :secondary, "#find-age-groups-form-age-group-secondary-field"
       element :further_education, "#find-age-groups-form-age-group-further-education-field"
-      element :continue, ".govuk-button"
+      element :continue, "form .govuk-button"
     end
   end
 end

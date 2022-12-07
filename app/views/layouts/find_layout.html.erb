@@ -15,6 +15,10 @@
   <body class="govuk-template__body">
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
+    <% unless hide_cookie_banner? %>
+      <%= render("layouts/cookie_banner", service_name: t("service_name.find"), cookies_path: find_cookies_path) %>
+    <% end %>
+
     <%= render FindInterface::Header::View.new(
       service_name: t("service_name.find"),
     ) %>

@@ -49,6 +49,10 @@ feature "Updating cookie preferences" do
   end
 
   def service_name
-    "Publish teacher training courses (Publish)"
+    "Find postgraduate teacher training (Find)"
+  end
+
+  def cookie_preferences_page
+    @cookie_preferences_page ||= PageObjects::Find::CookiePreferences.new
   end
 end
