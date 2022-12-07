@@ -16,10 +16,4 @@ class UserForm < Form
   def compute_fields
     model.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
   end
-
-  def email_is_lowercase
-    if email.present? && email.downcase != email
-      errors.add(:email, :lowercase)
-    end
-  end
 end

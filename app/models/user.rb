@@ -3,6 +3,8 @@ class User < ApplicationRecord
   include PgSearch::Model
   include RolloverHelper
 
+  before_save :downcase_email
+
   has_many :organisation_users
 
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
@@ -40,7 +42,6 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
-  validate :email_is_lowercase
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
@@ -104,10 +105,8 @@ class User < ApplicationRecord
 
 private
 
-  def email_is_lowercase
-    if email.present? && email.downcase != email
-      errors.add(:email, "must be lowercase")
-    end
+  def downcase_email
+    email&.downcase!
   end
 
   def current_page_acknowledgement_for(page)
