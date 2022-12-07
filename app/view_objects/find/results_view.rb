@@ -8,7 +8,7 @@ module Find
     # MAXIMUM_NUMBER_OF_SUBJECTS = 43
     DISTANCE = "distance".freeze
     # SUGGESTED_SEARCH_THRESHOLD = 3
-    MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
+    # MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
     # RESULTS_PER_PAGE = 10
     MILES = "50".freeze
 
@@ -280,19 +280,19 @@ module Find
       query_parameters["subjects"] || []
     end
 
-    def filter_links(links)
-      links
-        .uniq(&:count)
-        .reject { |link| link.count <= course_count }
-        .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
-    end
+    # def filter_links(links)
+    #   links
+    #     .uniq(&:count)
+    #     .reject { |link| link.count <= course_count }
+    #     .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
+    # end
 
-    def course_counter(radius_to_check: nil, include_salary: true)
-      course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
-      course_query = course_query.order(:distance) if sort_by_distance?
+    # def course_counter(radius_to_check: nil, include_salary: true)
+    #   course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
+    #   course_query = course_query.order(:distance) if sort_by_distance?
 
-      course_query.count(:all)
-    end
+    #   course_query.count(:all)
+    # end
 
     def radii_for_suggestions
       radius_for_all_england = nil
@@ -305,69 +305,69 @@ module Find
       return "part_time" if parttime?
     end
 
-    def course_query(include_location:, radius_to_query: radius, include_salary: true)
-      base_query = Course
-        .includes(site_statuses: [:site])
-        .includes(:subjects)
-        .includes(:provider)
-        .select(
-          :name,
-          :course_code,
-          :provider_code,
-          :study_mode,
-          :qualification,
-          :funding_type,
-          :provider_type,
-          :level,
-          :provider,
-          :site_statuses,
-          :subjects,
-          :recruitment_cycle_year,
-          :degree_grade,
-          :can_sponsor_student_visa,
-          :can_sponsor_skilled_worker_visa,
-          providers: %i[
-            provider_name
-            address1
-            address2
-            address3
-            address4
-            postcode
-          ],
-          site_statuses: %i[
-            status
-            has_vacancies?
-            site
-          ],
-          subjects: %i[
-            subject_name
-            subject_code
-            bursary_amount
-            scholarship
-          ],
-        )
+    # def course_query(include_location:, radius_to_query: radius, include_salary: true)
+    #   base_query = Course
+    #     .includes(site_statuses: [:site])
+    #     .includes(:subjects)
+    #     .includes(:provider)
+    #     .select(
+    #       :name,
+    #       :course_code,
+    #       :provider_code,
+    #       :study_mode,
+    #       :qualification,
+    #       :funding_type,
+    #       :provider_type,
+    #       :level,
+    #       :provider,
+    #       :site_statuses,
+    #       :subjects,
+    #       :recruitment_cycle_year,
+    #       :degree_grade,
+    #       :can_sponsor_student_visa,
+    #       :can_sponsor_skilled_worker_visa,
+    #       providers: %i[
+    #         provider_name
+    #         address1
+    #         address2
+    #         address3
+    #         address4
+    #         postcode
+    #       ],
+    #       site_statuses: %i[
+    #         status
+    #         has_vacancies?
+    #         site
+    #       ],
+    #       subjects: %i[
+    #         subject_name
+    #         subject_code
+    #         bursary_amount
+    #         scholarship
+    #       ],
+    #     )
 
-      base_query = base_query.with_recruitment_cycle(RecruitmentCycle.current.year)
-      base_query = base_query.where(funding: "salary") if include_salary && with_salaries?
-      base_query = base_query.with_vacancies if hasvacancies?
-      base_query = base_query.where(study_type:) if study_type.present?
-      base_query = base_query.where(degree_grade: degree_grade_types) if degree_required?
-      base_query = base_query.where(can_sponsor_visa: true) if visa_courses?
-      base_query = base_query.where(engineers_teach_physics: true) if engineers_teach_physics_courses?
-      base_query = base_query.where(qualification: qualification.join(",")) unless all_qualifications?
-      base_query = base_query.joins(:subjects).merge(Subject.with_subject_codes(subject_codes)) if subject_codes.any?
-      base_query = base_query.where(send_courses: true) if send_courses?
+    #   base_query = base_query.with_recruitment_cycle(RecruitmentCycle.current.year)
+    #   base_query = base_query.where(funding: "salary") if include_salary && with_salaries?
+    #   base_query = base_query.with_vacancies if hasvacancies?
+    #   base_query = base_query.where(study_type:) if study_type.present?
+    #   base_query = base_query.where(degree_grade: degree_grade_types) if degree_required?
+    #   base_query = base_query.where(can_sponsor_visa: true) if visa_courses?
+    #   base_query = base_query.where(engineers_teach_physics: true) if engineers_teach_physics_courses?
+    #   base_query = base_query.where(qualification: qualification.join(",")) unless all_qualifications?
+    #   base_query = base_query.joins(:subjects).merge(Subject.with_subject_codes(subject_codes)) if subject_codes.any?
+    #   base_query = base_query.where(send_courses: true) if send_courses?
 
-      if include_location
-        base_query = base_query.where("latitude" => latitude)
-        base_query = base_query.where("longitude" => longitude)
-        base_query = base_query.where("radius" => radius_to_query)
-        base_query = base_query.where(expand_university: Settings.expand_university)
-      end
+    #   if include_location
+    #     base_query = base_query.where("latitude" => latitude)
+    #     base_query = base_query.where("longitude" => longitude)
+    #     base_query = base_query.where("radius" => radius_to_query)
+    #     base_query = base_query.where(expand_university: Settings.expand_university)
+    #   end
 
-      base_query = base_query.where("provider.provider_name" => provider) if provider.present?
-      base_query
-    end
+    #   base_query = base_query.where("provider.provider_name" => provider) if provider.present?
+    #   base_query
+    # end
 
     def latitude
       query_parameters["latitude"]
