@@ -225,12 +225,12 @@ module Find
     end
 
     def with_salaries?
-      query_parameters["funding"] == "8"
+      query_parameters["funding"] == "salary"
     end
 
-    def send_courses?
-      query_parameters["send_courses"].present? && query_parameters["send_courses"].downcase == "true"
-    end
+    # def send_courses?
+    #  query_parameters["send_courses"].present? && query_parameters["send_courses"].downcase == "true"
+    # end
 
     def sort_by_distance?
       sort_by == DISTANCE
