@@ -1,4 +1,5 @@
-<%= render PageTitle::View.new(title: t("page_titles.users.check")) %>
+<% page_title = t("page_titles.users.check") %>
+<%= content_for :page_title, page_title %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(new_publish_provider_user_path) %>
