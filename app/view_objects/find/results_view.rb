@@ -232,9 +232,9 @@ module Find
     #  query_parameters["send_courses"].present? && query_parameters["send_courses"].downcase == "true"
     # end
 
-    def sort_by_distance?
-      sort_by == DISTANCE
-    end
+    # def sort_by_distance?
+    #  sort_by == DISTANCE
+    # end
 
     def sort_by
       query_parameters["sortby"]
