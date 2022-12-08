@@ -20,7 +20,9 @@ module Publish
     end
 
     def edit
-      user
+      provider
+      provider_user
+      @user_form = UserForm.new(current_user, provider_user)
     end
 
     def create
@@ -32,11 +34,24 @@ module Publish
       end
     end
 
+    def update
+      provider
+      @user_form = UserForm.new(current_user, provider_user, params: user_params)
+      if @user_form.save!
+        redirect_to publish_provider_user_path(id: params[:id])
+        flash[:success] = "User updated"
+      else
+        render(:edit)
+      end
+    end
+
+
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
       flash[:success] = I18n.t("success.user_removed")
       redirect_to publish_provider_users_path(params[:provider_code])
     end
+
 
   private
 
