@@ -220,9 +220,9 @@ module Find
     #  query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
     # end
 
-    #def engineers_teach_physics_courses?
+    # def engineers_teach_physics_courses?
     #  query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
-    #end
+    # end
 
     def with_salaries?
       query_parameters["funding"] == "salary"
