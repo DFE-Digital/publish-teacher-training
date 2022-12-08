@@ -10,6 +10,10 @@ module Publish
       provider_user
     end
 
+    def delete
+      provider_user
+    end
+
     def new
       @user_form = UserForm.new(current_user, user)
       @user_form.clear_stash
@@ -22,6 +26,12 @@ module Publish
       else
         render(:new)
       end
+    end
+
+    def destroy
+      UserAssociationsService::Delete.call(user: provider_user, providers: provider)
+      flash[:success] = I18n.t("success.user_removed")
+      redirect_to publish_provider_users_path(params[:provider_code])
     end
 
   private

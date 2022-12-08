@@ -51,6 +51,7 @@ en:
       index: "Users"
       new: "Personal details"
       check: "Check your answers"
+      delete: "Are you sure you want to remove this user?"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
