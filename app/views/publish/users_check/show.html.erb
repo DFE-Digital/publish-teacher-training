@@ -1,0 +1,49 @@
+<% page_title = t("page_titles.users.check") %>
+<%= content_for :page_title, page_title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_publish_provider_user_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @user_form, url: publish_provider_check_user_path, method: :put, local: true) do |f| %>
+
+      <%= f.hidden_field(:email, value: @user_form.email) %>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= t("users.add") %></span>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %> </h1> </legend>
+
+      <%= render GovukComponent::SummaryListComponent.new do |component|
+            component.row do |row|
+              row.key { t("users.first_name") }
+              row.value(text:  @user_form.first_name)
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
+            end
+
+            component.row do |row|
+              row.key { t("users.last_name") }
+              row.value(text: @user_form.last_name)
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
+            end
+
+            component.row do |row|
+              row.key { t("users.email") }
+              row.value(text:  @user_form.email)
+              row.action(text: t("change"), href: new_publish_provider_user_path, classes: "email", visually_hidden_text: t("users.email").downcase)
+            end
+          end %>
+
+        <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span> <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span> The user will be sent an email to tell them you’ve added them to the organisation. </strong> </div>
+
+        <%= f.govuk_submit(t("users.add")) %>
+      </fieldset>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_users_path(params[:provider_code])) %>
+    </p>
+  </div>
+</div>
