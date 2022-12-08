@@ -17,7 +17,7 @@ class Form
 
   def save!
     if valid?
-      assign_attributes_to_model # TODO: override this method on course_funding_form.rb
+      assign_attributes_to_model
       model.save!
       after_save
       clear_stash

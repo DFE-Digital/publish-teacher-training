@@ -7,7 +7,7 @@ import { initAll } from 'govuk-frontend'
 import { initAutocomplete } from './autocomplete'
 import initLocationsMap from './locations-map'
 import FilterToggle from './filters'
-import CookieBanner from './cookie_banner'
+import CookieBanner from '../cookie_banner'
 
 window.jQuery = jQuery
 window.$ = jQuery

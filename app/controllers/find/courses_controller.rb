@@ -1,5 +1,7 @@
 module Find
   class CoursesController < ApplicationController
+    before_action :render_feedback_component, only: :show
+
     def show
       @course = provider.courses.includes(
         :enrichments,

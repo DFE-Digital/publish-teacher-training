@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../sections/summary_list"
-require_relative "../sections/errorlink"
+require_relative "../sections/error_link"
 require_relative "../sections/course_button_panel"
 
 module PageObjects

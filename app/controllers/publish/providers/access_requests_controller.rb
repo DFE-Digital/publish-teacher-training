@@ -15,7 +15,7 @@ module Publish
         @access_request = AccessRequestForm.new(params: access_request_params, user: current_user)
 
         if @access_request.save!
-          redirect_to users_publish_provider_path(params[:code]),
+          redirect_to publish_provider_users_path(params[:code]),
             flash: { success: "Your request for access has been submitted" }
         else
           @errors = @access_request.errors.messages

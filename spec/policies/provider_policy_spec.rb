@@ -15,7 +15,7 @@ describe ProviderPolicy do
 
   subject { described_class }
 
-  permissions :index?, :suggest? do
+  permissions :index?, :suggest?, :new? do
     it { is_expected.to permit user }
   end
 

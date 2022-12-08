@@ -7,5 +7,12 @@ module Find
         govuk_link_to "Confirm environment to make changes", find_confirm_environment_path(from: request.fullpath)
       end
     end
+
+    def permitted_referrer?
+      return false if request.referer.blank?
+
+      request.referer.include?(request.host_with_port) ||
+        Settings.find_valid_referers.any? { |url| request.referer.start_with?(url) }
+    end
   end
 end

@@ -40,6 +40,9 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    subjects:
+      primary_title: Primary courses with subject specialisms
+      secondary_title: Which secondary subjects do you want to teach?
     subjects_page:
       title: Select a subject -
       primary_title: Primary courses with subject specialisms
@@ -104,3 +107,7 @@ en:
               blank: "Select an age group"
         find/subjects_form:
           blank: "Select at least one subject"
+        find/cookie_preferences_form:
+          attributes:
+            consent:
+              blank: Select yes if you want to accept Google Analytics cookies

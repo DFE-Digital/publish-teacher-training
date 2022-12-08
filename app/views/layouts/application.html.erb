@@ -36,7 +36,7 @@
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <% unless hide_cookie_banner? %>
-      <%= render("layouts/cookie_banner") %>
+      <%= render("layouts/cookie_banner", service_name: t("service_name.publish"), cookies_path:) %>
     <% end %>
 
     <%= govuk_skip_link %>

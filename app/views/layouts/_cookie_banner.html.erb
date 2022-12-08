@@ -3,9 +3,11 @@
     "data-module" => "govuk-cookie-banner",
     "data-cookie-consent-name" => Settings.cookies.consent.name,
     "data-cookie-consent-expiry-after-days" => Settings.cookies.consent.expire_after_days,
+    "data-qa" => "cookie-banner",
+    "nosnippet" => true,
   },
 ) do |cookie_banner| %>
-  <%= cookie_banner.message(heading_text: t("cookies.heading"),
+  <%= cookie_banner.message(heading_text: t("cookies.heading", service_name:),
                             text: t("cookies.message_html")) do |message| %>
     <% message.action do %>
       <button value="accepted" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">

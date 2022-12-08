@@ -52,7 +52,13 @@ namespace :publish, as: :publish do
   end
 
   resources :providers, path: "organisations", param: :code, only: [:show] do
-    get "/users", on: :member, to: "users#index"
+    resource :check_user, only: %i[show update], controller: "users_check", path: "users/check"
+    resources :users, controller: "users" do
+      member do
+        get :delete
+        delete :delete, to: "users#destroy"
+      end
+    end
     get "/request-access", on: :member, to: "providers/access_requests#new"
     post "/request-access", on: :member, to: "providers/access_requests#create"
     get "locations"
