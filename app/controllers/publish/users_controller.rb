@@ -19,6 +19,10 @@ module Publish
       @user_form.clear_stash
     end
 
+    def edit
+      user
+    end
+
     def create
       @user_form = UserForm.new(current_user, user, params: user_params)
       if @user_form.stash
