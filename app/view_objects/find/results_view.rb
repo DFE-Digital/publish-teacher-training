@@ -208,21 +208,21 @@ module Find
       end
     end
 
-    def radius
-      MILES
-    end
+    # def radius
+    #  MILES
+    # end
 
-    def degree_required?
-      query_parameters["degree_required"].present? && query_parameters["degree_required"] != "show_all_courses"
-    end
+    # def degree_required?
+    #  query_parameters["degree_required"].present? && query_parameters["degree_required"] != "show_all_courses"
+    # end
 
-    def visa_courses?
-      query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
-    end
+    # def visa_courses?
+    #  query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
+    # end
 
-    def engineers_teach_physics_courses?
-      query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
-    end
+    #def engineers_teach_physics_courses?
+    #  query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
+    #end
 
     def with_salaries?
       query_parameters["funding"] == "salary"
@@ -381,9 +381,9 @@ module Find
       Geokit::LatLng.new(latitude.to_f, longitude.to_f)
     end
 
-    def results_per_page
-      RESULTS_PER_PAGE
-    end
+    # def results_per_page
+    #  RESULTS_PER_PAGE
+    # end
 
     def nearest_location(course)
       new_or_running_sites_with_vacancies_for(course).min_by do |site|
@@ -436,17 +436,17 @@ module Find
     #   suggested_search_link
     # end
 
-    def sort_by_provider
-      order = {
-        "0" => :PROVIDER_ASCENDING,
-        "1" => :PROVIDER_DESCENDING,
-      }
-      order[query_parameters&.dig(:sortby)]
-    end
+    # def sort_by_provider
+    #   order = {
+    #     "0" => :PROVIDER_ASCENDING,
+    #     "1" => :PROVIDER_DESCENDING,
+    #   }
+    #   order[query_parameters&.dig(:sortby)]
+    # end
 
-    def sort
-      ::CourseSearchService.const_get("::CourseSearchService::#{sort_by_provider}").join(",")
-    end
+    # def sort
+    #  ::CourseSearchService.const_get("::CourseSearchService::#{sort_by_provider}").join(",")
+    # end
 
     def course_scope
       @course_scope ||= RecruitmentCycle.current.courses.findable
