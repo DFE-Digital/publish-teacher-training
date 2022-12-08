@@ -11,7 +11,6 @@ module Publish
     end
 
     def delete
-      authorize(provider)
       provider_user
     end
 
