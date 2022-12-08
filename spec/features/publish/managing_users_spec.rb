@@ -48,7 +48,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   describe "Removing a user in an organisation" do
     scenario "With an existing user" do
       given_i_visit_the_users_index_page
-      and_i_click_on_user_two
+      when_i_click_on_user_two
       and_i_click_remove_user
       and_i_confirm
       then_the_user_should_be_deleted
@@ -135,7 +135,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   alias_method :when_i_click_on_the_user, :and_i_click_on_the_user
 
-  def and_i_click_on_user_two
+  def when_i_click_on_user_two
     click_link "Mr Cool"
   end
 
