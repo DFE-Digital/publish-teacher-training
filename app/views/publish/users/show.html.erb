@@ -10,16 +10,19 @@
           component.row do |row|
             row.key { "First name" }
             row.value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
+            row.action(text: "Change", href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.first_name").downcase)
           end
 
           component.row do |row|
             row.key { "Last name" }
             row.value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
+            row.action(text: "Change", href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.last_name").downcase)
           end
 
           component.row do |row|
             row.key { "Email address" }
             row.value(text: @provider_user.email, html_attributes: { id: "email" })
+            row.action(text: "Change", href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.email").downcase)
           end
         end %>
 
