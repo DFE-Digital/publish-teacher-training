@@ -52,6 +52,7 @@ en:
       new: "Personal details"
       check: "Check your answers"
       delete: "Are you sure you want to remove this user?"
+      edit: "Personal details"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
@@ -223,6 +224,7 @@ en:
     last_name: "Last name"
     email: "Email address"
     add: "Add user"
+    edit: "Update user"
   support:
     data_exports:
       index:
