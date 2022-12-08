@@ -272,13 +272,13 @@ module Find
 
   private
 
-    def number_of_subjects_selected
-      subject_parameters_array.any? ? subject_parameters_array.length : all_subjects.count(:all)
-    end
+    # def number_of_subjects_selected
+    #  subject_parameters_array.any? ? subject_parameters_array.length : all_subjects.count(:all)
+    # end
 
-    def subject_parameters_array
-      query_parameters["subjects"] || []
-    end
+    # def subject_parameters_array
+    #  query_parameters["subjects"] || []
+    # end
 
     # def filter_links(links)
     #   links
@@ -294,16 +294,16 @@ module Find
     #   course_query.count(:all)
     # end
 
-    def radii_for_suggestions
-      radius_for_all_england = nil
-      [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
-    end
+    # def radii_for_suggestions
+    #  radius_for_all_england = nil
+    #  [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
+    # end
 
-    def study_type
-      return "full_time,part_time" if fulltime? && parttime?
-      return "full_time" if fulltime?
-      return "part_time" if parttime?
-    end
+    # def study_type
+    #  return "full_time,part_time" if fulltime? && parttime?
+    #  return "full_time" if fulltime?
+    #  return "part_time" if parttime?
+    # end
 
     # def course_query(include_location:, radius_to_query: radius, include_salary: true)
     #   base_query = Course
@@ -413,28 +413,28 @@ module Find
       end
     end
 
-    def suggested_search_link_including_unsalaried(current_radius:)
-      suggested_search_link = nil
+    # def suggested_search_link_including_unsalaried(current_radius:)
+    #   suggested_search_link = nil
 
-      radii_including_current = [current_radius] + radii_for_suggestions
+    #   radii_including_current = [current_radius] + radii_for_suggestions
 
-      radii_including_current.each do |radius|
-        break if suggested_search_link.present?
+    #   radii_including_current.each do |radius|
+    #     break if suggested_search_link.present?
 
-        count = course_counter(radius_to_check: radius, include_salary: false)
+    #     count = course_counter(radius_to_check: radius, include_salary: false)
 
-        next unless count > course_count
+    #     next unless count > course_count
 
-        suggested_search_link = SuggestedSearchLink.new(
-          radius:,
-          count:,
-          parameters: query_parameters_with_defaults.except("funding"),
-          including_non_salaried: true,
-        )
-      end
+    #     suggested_search_link = SuggestedSearchLink.new(
+    #       radius:,
+    #       count:,
+    #       parameters: query_parameters_with_defaults.except("funding"),
+    #       including_non_salaried: true,
+    #     )
+    #   end
 
-      suggested_search_link
-    end
+    #   suggested_search_link
+    # end
 
     def sort_by_provider
       order = {
