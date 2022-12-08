@@ -51,6 +51,7 @@ en:
       index: "Users"
       new: "Personal details"
       check: "Check your answers"
+      show: "View a provider"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
@@ -138,9 +139,6 @@ en:
         index: "Sign in"
         new: "User not found"
         personas: Teacher Training API Personas
-      providers:
-        users:
-          show: "View a provider"
       support:
         rollover:
           index: "Recruitment Cycles"
