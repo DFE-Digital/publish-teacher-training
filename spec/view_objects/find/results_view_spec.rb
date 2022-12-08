@@ -73,10 +73,6 @@ module Find
       end
 
       context "query_parameters have subjects set" do
-        # TODO: the query parameters are currently C# DB ids. They are converted internally
-        # in this class but should also be C# parameters when they are output here
-        # This will change when we fully switch to Rails
-
         let(:parameter_hash) { { "subjects" => "14,41,20" } }
 
         it { is_expected.to eq(default_output_parameters.merge(parameter_hash)) }
@@ -105,55 +101,6 @@ module Find
       end
     end
 
-    # describe "#send_courses?" do
-    #   let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-    #   context "when the send_courses is True" do
-    #     let(:parameter_hash) { { "send_courses" => "True" } }
-
-    #     it "returns true" do
-    #       expect(results_view.send_courses?).to be_truthy
-    #     end
-    #   end
-
-    #   context "when the send_courses is nil" do
-    #     let(:parameter_hash) { {} }
-
-    #     it "returns false" do
-    #       expect(results_view.send_courses?).to be_falsy
-    #     end
-    #   end
-    # end
-
-    # describe "#number_of_extra_subjects" do
-    #   let(:results_view) { described_class.new(query_parameters: parameter_hash) }
-
-    #   context "The maximum number of subjects are selected" do
-    #     let(:parameter_hash) { { "subjects" => (1..43).to_a } }
-
-    #     it "Returns the number of extra subjects - 2" do
-    #       expect(results_view.number_of_extra_subjects).to eq(37)
-    #     end
-    #   end
-
-    #   context "more than NUMBER_OF_SUBJECTS_DISPLAYED subjects are selected" do
-    #     let(:parameter_hash) { { "subjects" => %w[00 01 F1 Q8 P3] } }
-
-    #     it "returns the number of the extra subjects" do
-    #       expect(results_view.number_of_extra_subjects).to eq(5)
-    #     end
-    #   end
-
-    #   context "no subjects are selected" do
-    #     let(:parameter_hash) { {} }
-
-    #     # Not sure what this is supposed to do
-    #     xit "returns the total number subjects - NUMBER_OF_SUBJECTS_DISPLAYED" do
-    #       expect(results_view.number_of_extra_subjects).to eq(37)
-    #     end
-    #   end
-    # end
-
     describe "#location" do
       subject { described_class.new(query_parameters: parameter_hash).location }
 
@@ -169,48 +116,6 @@ module Find
         it { is_expected.to eq("Across England") }
       end
     end
-
-    # describe "#radius" do
-    #   subject { described_class.new(query_parameters: parameter_hash).radius }
-
-    #   let(:parameter_hash) { {} }
-
-    #   it { is_expected.to eq("50") }
-    # end
-
-    # describe "#show_map?" do
-    #   subject { described_class.new(query_parameters: parameter_hash).show_map? }
-
-    #   context "when longitude, latitude and radius are passed" do
-    #     let(:parameter_hash) { { "longitude" => "0.3", "latitude" => "0.2", "radius" => "10" } }
-
-    #     it { is_expected.to be(true) }
-    #   end
-
-    #   context "when only radius is passed" do
-    #     let(:parameter_hash) { { "radius" => "10" } }
-
-    #     it { is_expected.to be(false) }
-    #   end
-
-    #   context "when only latitude is passed" do
-    #     let(:parameter_hash) { { "latitude" => "0.10" } }
-
-    #     it { is_expected.to be(false) }
-    #   end
-
-    #   context "when only longitude is passed" do
-    #     let(:parameter_hash) { { "longitude" => "1.0" } }
-
-    #     it { is_expected.to be(false) }
-    #   end
-
-    #   context "when no params are passed" do
-    #     let(:parameter_hash) { {} }
-
-    #     it { is_expected.to be(false) }
-    #   end
-    # end
 
     describe "#courses" do
       let(:query_parameters) { {} }
@@ -266,27 +171,6 @@ module Find
           )
         end
       end
-    end
-
-    # TODO: where is this map displayed?
-    xdescribe "#map_image_url" do
-      subject { described_class.new(query_parameters: parameter_hash).map_image_url }
-
-      let(:parameter_hash) do
-        {
-          "loc" => "Hogwarts, Reading, UK",
-          "radius" => "10",
-          "longitude" => "-27.1504002",
-          "latitude" => "-109.3042697",
-        }
-      end
-
-      before do
-        allow(Settings.google).to receive(:maps_api_key).and_return("yellowskullkey")
-        allow(Settings.google).to receive(:maps_api_url).and_return("https://maps.googleapis.com/maps/api/staticmap")
-      end
-
-      it { is_expected.to eq("https://maps.googleapis.com/maps/api/staticmap?key=yellowskullkey&center=-109.3042697,-27.1504002&zoom=9&size=300x200&scale=2&markers=-109.3042697,-27.1504002") }
     end
 
     describe "#provider" do
@@ -461,45 +345,6 @@ module Find
               ],
             )
           end
-        end
-      end
-    end
-
-    # TODO: is this in place?
-    xdescribe "#suggested_search_visible?" do
-      def suggested_search_count_parameters
-        results_page_parameters.except("page[page]", "page[per_page]", "sort")
-      end
-
-      context "searching for courses within England" do
-        subject { described_class.new(query_parameters: { "c" => "England", "latitude" => "0.1", "longitude" => "2.4", "radius" => "50" }).suggested_search_visible? }
-
-        context "there are more than three results" do
-          before do
-            create_list(:course, 10)
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context "there are less than three results and there are suggested courses found" do
-          before do
-            create_list(:course, 2)
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context "there are less than three results and there are no suggested courses found" do
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context "searching for courses in a devolved nation" do
-        context "there are less than three results and there are suggested courses found" do
-          subject { described_class.new(query_parameters: { "c" => "Scotland", "latitude" => "0.1", "longitude" => "2.4", "radius" => "50" }).suggested_search_visible? }
-
-          it { is_expected.to be(false) }
         end
       end
     end
