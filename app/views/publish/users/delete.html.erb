@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "providers.users.delete") %>
+<%= content_for :page_title, t("page_titles.users.delete") %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(publish_provider_user_path(id: params[:id])) %>
@@ -8,7 +8,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @provider_user.full_name %></span>
-        <%= t("components.page_titles.providers.users.delete") %>
+        <%= t("page_titles.users.delete") %>
     </h1>
 
     <div class="govuk-warning-text">
