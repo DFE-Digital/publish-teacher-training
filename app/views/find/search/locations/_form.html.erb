@@ -9,7 +9,7 @@
         elsif location_error?
           "location"
         elsif provider_error?
-          "provider"
+          "provider-provider-name-field"
         end,
     } %>
     <%= form_with url: find_locations_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>

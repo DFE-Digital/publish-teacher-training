@@ -1,4 +1,4 @@
-<%= content_for :page_title, title_with_error_prefix(I18n.t("subjects.title"), @subjects_form.errors.any?) %>
+<%= content_for :page_title, title_with_error_prefix(I18n.t("find.subjects.#{@subjects_form.age_group}_title"), @subjects_form.errors.any?) %>
 <% content_for :before_content do %>
   <%= govuk_back_link(**{
     text: "Back",

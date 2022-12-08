@@ -12,6 +12,7 @@ module PageObjects
       element :across_england, "#l_2"
       element :by_school_uni_or_provider, "#l_3"
       element :provider_options, "#query-field"
+      element :provider_name, "#provider-provider-name-field"
       element :continue, "form .govuk-button"
     end
   end

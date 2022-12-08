@@ -1,21 +1,30 @@
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(url = find_results_path, body = t("find.courses.show.back_to_search")) %>
+<%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
+
+<% if permitted_referrer? %>
+  <%= content_for(:before_content) do %>
+    <%= govuk_back_link(**{
+      text: t("find.courses.show.back_to_search"),
+      href: request.referer,
+      html_attributes: {
+        data: { qa: "page-back" },
+      },
+    }) %>
+  <% end %>
 <% end %>
 
-<h1 class="govuk-heading-xl">
-    <span class="govuk-heading-l govuk-!-margin-bottom-0" data-qa="course__provider_name">
-      <%= @provider.provider_name %>
-    </span>
-  <%= @course.name_and_code %>
-</h1>
-
-<p class="govuk-body-l" data-qa="course__description"><%= @course.description %></p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl" data-qa="course__provider_name">
+        <%= smart_quotes(@course.provider.provider_name) %>
+      </span>
+      <%= @course.name_and_code %>
+    </h1>
+    <p class="govuk-body-l" data-qa="course__extended_qualification_descriptions"><%= @course.extended_qualification_descriptions %></p>
+  </div>
+</div>
 
 <%= render FindInterface::Courses::SummaryComponent::View.new(@course) %>
-
-<!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom. Uncomment once CycleTimetable moved over-->
-
-<%# <%= render FindInterface::Courses::ApplyComponent::View.new(@course) if @course.has_vacancies? || !CycleTimetable.mid_cycle? %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -53,6 +62,6 @@
 
     <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
-    <%= render FindInterface::Courses::ApplyComponent::View.new(@course) unless @course.has_vacancies? %>
+    <%= render FindInterface::Courses::ApplyComponent::View.new(@course) if @course.has_vacancies? || !CycleTimetable.mid_cycle? %>
   </div>
 </div>
