@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: t("page_titles.users.show")) %>
+<%= content_for :page_title, @provider_user.full_name %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

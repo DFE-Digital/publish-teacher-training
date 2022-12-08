@@ -51,7 +51,6 @@ en:
       index: "Users"
       new: "Personal details"
       check: "Check your answers"
-      show: "View a provider"
   publish_authentication:
     magic_link:
       invalid_token: "Magic link could not be verified, please request a new one"
