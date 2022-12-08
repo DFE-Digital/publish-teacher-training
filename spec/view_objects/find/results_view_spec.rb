@@ -606,7 +606,6 @@ module Find
           create(:course, site_statuses: [site_status1])
           create(:course, site_statuses: [site_status2])
           create(:course, site_statuses: [site_status3])
-          create(:course, site_statuses: [site_status2])
         end
 
         it { is_expected.to be(false) }
