@@ -18,7 +18,7 @@
         <% @users.each do |user| %>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
-              <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", root_path) %></a>
+              <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", publish_provider_user_path(id: user.id)) %></a>
             </td>
             <td class="govuk-table__cell">
               <%= user.email %>

@@ -36,9 +36,18 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
     end
   end
 
+  describe "Viewing a user in an organisation" do
+    scenario "With an existing user" do
+      given_i_visit_the_users_index_page
+      when_i_click_on_the_user
+      i_should_be_on_the_users_show_page
+      then_the_users_name_should_be_displayed
+    end
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider, provider_name: "Batman's Chocolate School")
-    @user = create(:user, providers: [@provider])
+    @user = create(:user, first_name: "Mr", last_name: "User", providers: [@provider])
     given_i_am_authenticated(user: @user)
   end
 
@@ -107,5 +116,19 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
     expect(users_new_page.error_summary).to have_text("Enter a first name")
     expect(users_new_page.error_summary).to have_text("Enter a last name")
     expect(users_new_page.error_summary).to have_text("Enter an email address")
+  end
+
+  def and_i_click_on_the_user
+    click_link "Mr User"
+  end
+
+  alias_method :when_i_click_on_the_user, :and_i_click_on_the_user
+
+  def i_should_be_on_the_users_show_page
+    expect(users_show_page).to be_displayed
+  end
+
+  def then_the_users_name_should_be_displayed
+    expect(users_show_page).to have_text("Mr User")
   end
 end
