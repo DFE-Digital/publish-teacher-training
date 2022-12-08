@@ -40,7 +40,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
     scenario "With an existing user" do
       given_i_visit_the_users_index_page
       when_i_click_on_the_user
-      i_should_be_on_the_user_show_page
+      i_should_be_on_the_users_show_page
       then_the_users_name_should_be_displayed
     end
   end
@@ -124,7 +124,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   alias_method :when_i_click_on_the_user, :and_i_click_on_the_user
 
-  def i_should_be_on_the_user_show_page
+  def i_should_be_on_the_users_show_page
     expect(users_show_page).to be_displayed
   end
 
