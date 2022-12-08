@@ -40,6 +40,9 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    subjects:
+      primary_title: Primary courses with subject specialisms
+      secondary_title: Which secondary subjects do you want to teach?
     subjects_page:
       title: Select a subject -
       primary_title: Primary courses with subject specialisms

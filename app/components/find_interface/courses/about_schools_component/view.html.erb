@@ -39,7 +39,7 @@
             <td class="govuk-table__cell">
               <strong><%= smart_quotes(site_status.site.location_name) %></strong>
               <br>
-              <%= smart_quotes(site_status.site.full_address) %>
+              <%= smart_quotes(site_status.site.decorate.full_address) %>
             </td>
             <td class="govuk-table__cell">
               <%= site_status.has_vacancies? ? "Yes" : "No" %>

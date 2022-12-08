@@ -11,12 +11,6 @@ module Find
       def new; end
 
       def create
-        # if searching by specific provider we have to filter params
-        if provider_option_selected?
-          redirect_to next_step(params)
-          return
-        end
-
         form_params = strip(filter_params.clone).merge(sortby: ResultsView::DISTANCE)
         form_object = LocationFilterForm.new(form_params)
 
