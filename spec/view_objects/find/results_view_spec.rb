@@ -592,14 +592,24 @@ module Find
 
     describe "#no_results_found?" do
       subject { described_class.new(query_parameters: {}).no_results_found? }
+      let(:site) { build(:site) }
+      let(:site_status) { create(:site_status, :findable, site:) }
+      let(:site_status1) { create(:site_status, :findable, site:) }
+      let(:site_status2) { create(:site_status, :findable, site:) }
+      let(:site_status3) { create(:site_status, :findable, site:) }
+      let(:site_status4) { create(:site_status, :findable, site:) }
 
       context "there are more than three results" do
         before do
           Course.destroy_all # for flakey test fail
-          # TODO: 10 findable courses
+          create(:course, site_statuses: [site_status])
+          create(:course, site_statuses: [site_status1])
+          create(:course, site_statuses: [site_status2])
+          create(:course, site_statuses: [site_status3])
+          create(:course, site_statuses: [site_status2])
         end
 
-        xit { is_expected.to be(false) }
+        it { is_expected.to be(false) }
       end
 
       context "there are no results" do
@@ -611,14 +621,16 @@ module Find
       subject { described_class.new(query_parameters: {}).number_of_courses_string }
       let(:site) { build(:site) }
       let(:site_status) { create(:site_status, :findable, site:) }
+      let(:site_status1) { create(:site_status, :findable, site:) }
 
       context "there are two results" do
         before do
           Course.destroy_all # for flakey test fail
-          # TODO: 2 findable courses
+          create(:course, site_statuses: [site_status])
+          create(:course, site_statuses: [site_status1])
         end
 
-        xit { is_expected.to eq("2 courses") }
+        it { is_expected.to eq("2 courses") }
       end
 
       context "there is one result" do
