@@ -1,31 +1,33 @@
 module Publish
   class UsersController < PublishController
-    def index
-      authorize(provider)
+    before_action :authorize_provider
 
+    def index
       @users = provider.users
     end
 
     def show
-      authorize(provider)
       provider_user
     end
 
     def new
-      authorize(provider)
       @user_form = UserForm.new(current_user, user)
       @user_form.clear_stash
     end
 
     def create
-      authorize(provider)
-
       @user_form = UserForm.new(current_user, user, params: user_params)
       if @user_form.stash
         redirect_to publish_provider_check_user_path(provider_code: params[:provider_code])
       else
         render(:new)
       end
+    end
+
+  private
+
+    def authorize_provider
+      authorize(provider)
     end
 
     def cycle_year
