@@ -170,13 +170,13 @@ module Find
       end
     end
 
-    describe "#radius" do
-      subject { described_class.new(query_parameters: parameter_hash).radius }
+    # describe "#radius" do
+    #   subject { described_class.new(query_parameters: parameter_hash).radius }
 
-      let(:parameter_hash) { {} }
+    #   let(:parameter_hash) { {} }
 
-      it { is_expected.to eq("50") }
-    end
+    #   it { is_expected.to eq("50") }
+    # end
 
     # describe "#show_map?" do
     #   subject { described_class.new(query_parameters: parameter_hash).show_map? }
