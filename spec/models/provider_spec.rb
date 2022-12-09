@@ -237,7 +237,7 @@ describe Provider do
 
     it "sets changed_at to the given time" do
       timestamp = 1.hour.ago
-      provider.update_changed_at timestamp: timestamp
+      provider.update_changed_at(timestamp:)
       expect(provider.changed_at).to be_within(1.second).of(timestamp)
     end
 

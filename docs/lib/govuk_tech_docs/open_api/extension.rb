@@ -89,4 +89,4 @@ module GovukTechDocs
   end
 end
 
-::Middleman::Extensions.register(:open_api, GovukTechDocs::OpenApi::Extension)
+Middleman::Extensions.register(:open_api, GovukTechDocs::OpenApi::Extension)

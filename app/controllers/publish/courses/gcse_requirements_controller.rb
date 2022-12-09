@@ -63,7 +63,7 @@ module Publish
         return if value.blank?
 
         if value.is_a?(Array)
-          (%w[Maths English Science] & value).present?
+          %w[Maths English Science].intersect?(value)
         else
           value == "true"
         end
