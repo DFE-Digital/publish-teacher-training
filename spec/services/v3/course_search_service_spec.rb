@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe V3::CourseSearchService do
   describe ".call" do
     before do
-      allow(::CourseSearchService).to receive(:call)
+      allow(CourseSearchService).to receive(:call)
     end
 
     subject do
@@ -12,7 +12,7 @@ RSpec.describe V3::CourseSearchService do
 
     it "call ::CourseSearchService" do
       subject
-      expect(::CourseSearchService).to have_received(:call)
+      expect(CourseSearchService).to have_received(:call)
     end
   end
 end

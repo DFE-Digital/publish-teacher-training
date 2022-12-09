@@ -17,7 +17,7 @@ module ErrorHandlers
 
     def render_json_error(status:, resource: nil, message: nil)
       if resource.nil?
-        render json: error_hash(status, message), status: status
+        render(json: error_hash(status, message), status:)
       else
         render jsonapi_errors: resource.errors, status:
       end
