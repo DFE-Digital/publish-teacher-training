@@ -5,11 +5,7 @@ module Find
 
     include ActionView::Helpers::NumberHelper
 
-    MAXIMUM_NUMBER_OF_SUBJECTS = 43
     DISTANCE = "distance".freeze
-    SUGGESTED_SEARCH_THRESHOLD = 3
-    MAXIMUM_NUMBER_OF_SUGGESTED_LINKS = 2
-    RESULTS_PER_PAGE = 10
     MILES = "50".freeze
 
     def initialize(query_parameters:)
@@ -146,38 +142,8 @@ module Find
       ]
     end
 
-    def suggested_search_visible?
-      course_count < SUGGESTED_SEARCH_THRESHOLD && suggested_search_links.any? && !devolved_nation?
-    end
-
     def has_sites?(course)
       !new_or_running_sites_with_vacancies_for(course).empty?
-    end
-
-    def total_pages
-      (course_count.to_f / results_per_page).ceil
-    end
-
-    def suggested_search_links
-      all_links = []
-
-      if with_salaries?
-        first_link = suggested_search_link_including_unsalaried(current_radius: radius)
-        all_links << first_link if first_link.present?
-      end
-
-      radii_for_suggestions.each do |radius|
-        break if filter_links(all_links).count == 2
-
-        all_links << SuggestedSearchLink.new(
-          radius:,
-          count: course_counter(radius_to_check: radius),
-          parameters: query_parameters_with_defaults,
-          explicit_salary_filter: with_salaries?,
-        )
-      end
-
-      @suggested_search_links ||= filter_links(all_links)
     end
 
     def sites_count(course)
@@ -216,36 +182,8 @@ module Find
       end
     end
 
-    def radius
-      MILES
-    end
-
-    def degree_required?
-      query_parameters["degree_required"].present? && query_parameters["degree_required"] != "show_all_courses"
-    end
-
-    def visa_courses?
-      query_parameters["can_sponsor_visa"].present? && query_parameters["can_sponsor_visa"].downcase == "true"
-    end
-
-    def engineers_teach_physics_courses?
-      query_parameters["engineers_teach_physics"].present? && query_parameters["engineers_teach_physics"].downcase == "true"
-    end
-
     def with_salaries?
-      query_parameters["funding"] == "8"
-    end
-
-    def send_courses?
-      query_parameters["send_courses"].present? && query_parameters["send_courses"].downcase == "true"
-    end
-
-    def sort_by_distance?
-      sort_by == DISTANCE
-    end
-
-    def sort_by
-      query_parameters["sortby"]
+      query_parameters["funding"] == "salary"
     end
 
     def placement_schools_summary(course)
@@ -264,118 +202,11 @@ module Find
       Find::UnescapedQueryStringService.call(base_path:, parameters:)
     end
 
-    def number_of_extra_subjects
-      return 37 if number_of_subjects_selected == MAXIMUM_NUMBER_OF_SUBJECTS
-
-      number_of_subjects_selected
-    end
-
     def all_subjects
       @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
     end
 
-    def show_map?
-      latitude.present? && longitude.present?
-    end
-
   private
-
-    def number_of_subjects_selected
-      subject_parameters_array.any? ? subject_parameters_array.length : all_subjects.count(:all)
-    end
-
-    def subject_parameters_array
-      query_parameters["subjects"] || []
-    end
-
-    def filter_links(links)
-      links
-        .uniq(&:count)
-        .reject { |link| link.count <= course_count }
-        .take(MAXIMUM_NUMBER_OF_SUGGESTED_LINKS)
-    end
-
-    def course_counter(radius_to_check: nil, include_salary: true)
-      course_query = course_query(include_location: radius_to_check.present?, radius_to_query: radius_to_check, include_salary:)
-      course_query = course_query.order(:distance) if sort_by_distance?
-
-      course_query.count(:all)
-    end
-
-    def radii_for_suggestions
-      radius_for_all_england = nil
-      [50].reject { |radius| radius <= radius.to_i } << radius_for_all_england
-    end
-
-    def study_type
-      return "full_time,part_time" if fulltime? && parttime?
-      return "full_time" if fulltime?
-      return "part_time" if parttime?
-    end
-
-    def course_query(include_location:, radius_to_query: radius, include_salary: true)
-      base_query = Course
-        .includes(site_statuses: [:site])
-        .includes(:subjects)
-        .includes(:provider)
-        .select(
-          :name,
-          :course_code,
-          :provider_code,
-          :study_mode,
-          :qualification,
-          :funding_type,
-          :provider_type,
-          :level,
-          :provider,
-          :site_statuses,
-          :subjects,
-          :recruitment_cycle_year,
-          :degree_grade,
-          :can_sponsor_student_visa,
-          :can_sponsor_skilled_worker_visa,
-          providers: %i[
-            provider_name
-            address1
-            address2
-            address3
-            address4
-            postcode
-          ],
-          site_statuses: %i[
-            status
-            has_vacancies?
-            site
-          ],
-          subjects: %i[
-            subject_name
-            subject_code
-            bursary_amount
-            scholarship
-          ],
-        )
-
-      base_query = base_query.with_recruitment_cycle(RecruitmentCycle.current.year)
-      base_query = base_query.where(funding: "salary") if include_salary && with_salaries?
-      base_query = base_query.with_vacancies if hasvacancies?
-      base_query = base_query.where(study_type:) if study_type.present?
-      base_query = base_query.where(degree_grade: degree_grade_types) if degree_required?
-      base_query = base_query.where(can_sponsor_visa: true) if visa_courses?
-      base_query = base_query.where(engineers_teach_physics: true) if engineers_teach_physics_courses?
-      base_query = base_query.where(qualification: qualification.join(",")) unless all_qualifications?
-      base_query = base_query.joins(:subjects).merge(Subject.with_subject_codes(subject_codes)) if subject_codes.any?
-      base_query = base_query.where(send_courses: true) if send_courses?
-
-      if include_location
-        base_query = base_query.where("latitude" => latitude)
-        base_query = base_query.where("longitude" => longitude)
-        base_query = base_query.where("radius" => radius_to_query)
-        base_query = base_query.where(expand_university: Settings.expand_university)
-      end
-
-      base_query = base_query.where("provider.provider_name" => provider) if provider.present?
-      base_query
-    end
 
     def latitude
       query_parameters["latitude"]
@@ -387,10 +218,6 @@ module Find
 
     def lat_long
       Geokit::LatLng.new(latitude.to_f, longitude.to_f)
-    end
-
-    def results_per_page
-      RESULTS_PER_PAGE
     end
 
     def nearest_location(course)
@@ -419,41 +246,6 @@ module Find
       sites.reject do |site|
         site.latitude.blank? || site.longitude.blank?
       end
-    end
-
-    def suggested_search_link_including_unsalaried(current_radius:)
-      suggested_search_link = nil
-
-      radii_including_current = [current_radius] + radii_for_suggestions
-
-      radii_including_current.each do |radius|
-        break if suggested_search_link.present?
-
-        count = course_counter(radius_to_check: radius, include_salary: false)
-
-        next unless count > course_count
-
-        suggested_search_link = SuggestedSearchLink.new(
-          radius:,
-          count:,
-          parameters: query_parameters_with_defaults.except("funding"),
-          including_non_salaried: true,
-        )
-      end
-
-      suggested_search_link
-    end
-
-    def sort_by_provider
-      order = {
-        "0" => :PROVIDER_ASCENDING,
-        "1" => :PROVIDER_DESCENDING,
-      }
-      order[query_parameters&.dig(:sortby)]
-    end
-
-    def sort
-      ::CourseSearchService.const_get("::CourseSearchService::#{sort_by_provider}").join(",")
     end
 
     def course_scope
