@@ -20,9 +20,8 @@ module Publish
     end
 
     def edit
-      provider
-      provider_user
       @user_form = UserForm.new(current_user, provider_user)
+      @user_form.clear_stash
     end
 
     def create
