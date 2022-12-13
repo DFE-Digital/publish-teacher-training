@@ -44,13 +44,11 @@ module Publish
       end
     end
 
-
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
       flash[:success] = I18n.t("success.user_removed")
       redirect_to publish_provider_users_path(params[:provider_code])
     end
-
 
   private
 

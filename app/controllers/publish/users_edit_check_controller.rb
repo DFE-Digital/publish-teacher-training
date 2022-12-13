@@ -11,7 +11,7 @@ module Publish
       if @user_form.stash
         redirect_to publish_provider_user_edit_check_path(provider_code: params[:provider_code])
       else
-        render(:edit) ##todo fix this
+        render(:edit) # #todo fix this
       end
     end
 
