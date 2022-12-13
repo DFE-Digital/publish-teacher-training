@@ -60,7 +60,6 @@ namespace :publish, as: :publish do
         delete :delete, to: "users#destroy"
       end
     end
-  end
 
     get "/request-access", on: :member, to: "providers/access_requests#new"
     post "/request-access", on: :member, to: "providers/access_requests#create"
