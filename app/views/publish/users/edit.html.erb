@@ -1,11 +1,11 @@
-<% page_title = t("page_titles.users.edit") %>
+<% page_title = t("page_titles.users.new") %>
 <%= content_for :page_title, title_with_error_prefix(page_title, @user_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_user_path(id: params[:id])) %>
+  <%= govuk_back_link_to(publish_provider_user_path) %>
 <% end %>
 
-<%= form_with(model: @user_form, url: publish_provider_user_path(params[:provider_code]), method: :put, local: true) do |f| %>
+<%= form_with(model: @user_form, url: publish_provider_user_edit_check_path(user_id: params[:id]), local: true) do |f| %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -19,18 +19,18 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">
             <span class="govuk-caption-l"><%= @provider_user.full_name %></span>
-            <%= t("page_titles.users.edit") %>
+            <%= t("page_titles.users.new") %>
           </h1>
         </legend>
         <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: "two-thirds" %>
         <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, width: "two-thirds" %>
         <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: "full" %>
-        <%= f.govuk_submit(t("users.edit")) %>
+        <%= f.govuk_submit %>
       </fieldset>
 <% end %>
 
 <p class="govuk-body">
-  <%= govuk_link_to(t("cancel"), publish_provider_user_path(id: params[:id])) %>
+  <%= govuk_link_to(t("cancel"), publish_provider_user_path) %>
 </p>
 </div>
 </div>
