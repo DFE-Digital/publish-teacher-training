@@ -61,7 +61,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
           and_the_new_email_is_displayed
           and_the_warning_email_text_should_be_displayed
           and_the_user_should_not_have_changed_in_the_database
-          and_click_update_user
+          and_i_click_update_user
           then_the_user_should_have_changed_in_the_database
         end
 
@@ -78,7 +78,10 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
         when_i_edit_and_enter_a_new_first_name
         and_i_continue
         and_i_see_the_new_first_name_is_displayed
-        then_the_warning_email_text_should_not_be_displayed
+        and_the_warning_email_text_should_not_be_displayed
+        and_the_first_name_should_not_have_updated_in_the_database
+        and_i_click_update_user
+        then_the_first_name_should_have_updated_in_the_database
       end
 
       scenario "Changing a last name" do
@@ -86,7 +89,10 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
         when_i_edit_and_enter_a_new_last_name
         and_i_continue
         and_i_see_the_new_last_name_is_displayed
-        then_the_warning_email_text_should_not_be_displayed
+        and_the_warning_email_text_should_not_be_displayed
+        and_the_last_name_should_not_have_updated_in_the_database
+        and_i_click_update_user
+        then_the_last_name_should_have_updated_in_the_database
       end
     end
 
@@ -160,11 +166,11 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_the_user_should_not_have_changed_in_the_database
-    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "achangedemail@address.com")).to be(false)
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "a-changed-email@address.com")).to be(false)
   end
 
   def then_the_user_should_have_changed_in_the_database
-    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "achangedemail@address.com")).to be(true)
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(email: "a-changed-email@address.com")).to be(true)
   end
 
   def given_i_click_change_first_name
@@ -176,7 +182,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def when_i_enter_a_new_valid_email
-    users_edit_page.email.set("achangedemail@address.com")
+    users_edit_page.email.set("a-changed-email@address.com")
   end
 
   def when_i_edit_and_enter_a_new_first_name
@@ -188,7 +194,7 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_the_warning_email_text_should_be_displayed
-    expect(page).to have_text("Warning The user will be sent an email to tell them you’ve added them to the organisation.")
+    expect(page).to have_text("Warning The user will be sent an email to tell them you’ve changed their email address")
   end
 
   def when_i_enter_a_new_invalid_email
@@ -199,8 +205,8 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
     expect(page).to have_text("New first name")
   end
 
-  def then_the_warning_email_text_should_not_be_displayed
-    expect(page).not_to have_text("Warning The user will be sent an email to tell them you’ve added them to the organisation.")
+  def and_the_warning_email_text_should_not_be_displayed
+    expect(page).not_to have_text("Warning The user will be sent an email to tell them you’ve changed their email address")
   end
 
   def and_i_see_the_new_last_name_is_displayed
@@ -281,14 +287,30 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def and_the_new_email_is_displayed
-    expect(page).to have_text("achangedemail@address.com")
+    expect(page).to have_text("a-changed-email@address.com")
   end
 
-  def and_click_update_user
+  def and_i_click_update_user
     click_button "Update user"
   end
 
   def then_i_should_see_a_validation_error_message
     expect(page).to have_text("Enter an email address in the correct format, like name@example.com")
+  end
+
+  def then_the_first_name_should_have_updated_in_the_database
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name: "New first name")).to be(true)
+  end
+
+  def and_the_first_name_should_not_have_updated_in_the_database
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name: "New first name")).to be(false)
+  end
+
+  def then_the_last_name_should_have_updated_in_the_database
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name: "New last name")).to be(true)
+  end
+
+  def and_the_last_name_should_not_have_updated_in_the_database
+    expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name: "New last name")).to be(false)
   end
 end
