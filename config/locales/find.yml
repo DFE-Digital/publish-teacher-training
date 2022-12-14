@@ -63,6 +63,11 @@ en:
       mathematics:
         body: Institute of Mathematics and its Applications
         url: https://teachingmathsscholars.org/eligibilitycriteria
+      french: &british_council
+        body: British Council
+        url: https://www.britishcouncil.org/
+      german: *british_council
+      spanish: *british_council
     international_candidates:
       skilled_worker_visa:
         not_available:

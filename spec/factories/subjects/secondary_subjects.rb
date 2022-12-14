@@ -18,7 +18,9 @@ FactoryBot.define do
     "Drama" => "13",
     "Economics" => "L1",
     "English" => "Q3",
+    "French" => "15",
     "Geography" => "F8",
+    "German" => "17",
     "Health and social care" => "L5",
     "History" => "V1",
     "Latin" => "A0",
@@ -31,6 +33,7 @@ FactoryBot.define do
     "Psychology" => "C8",
     "Religious education" => "V6",
     "Social sciences" => "14",
+    "Spanish" => "22",
   }
 
   factory :secondary_subject do
@@ -196,6 +199,21 @@ FactoryBot.define do
     trait :modern_languages do
       subject_name { "Modern Languages" }
       subject_code { nil }
+    end
+
+    trait :french do
+      subject_name { "French" }
+      subject_code { subjects["French"] }
+    end
+
+    trait :german do
+      subject_name { "German" }
+      subject_code { subjects["German"] }
+    end
+
+    trait :spanish do
+      subject_name { "Spanish" }
+      subject_code { subjects["Spanish"] }
     end
   end
 end

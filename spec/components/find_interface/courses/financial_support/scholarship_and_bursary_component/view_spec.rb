@@ -40,34 +40,35 @@ describe FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponen
     end
 
     context "when course has a scholarship" do
-      let(:course) {
-        build(:course,
-          subjects: [
-            build(:secondary_subject,
-              subject_name: "chemistry",
-              financial_incentive: FinancialIncentive.new(scholarship: 2000,
-                bursary_amount: 3000,
-                early_career_payments: 2000)),
-          ]).decorate
-      }
+      shared_examples "subject with scholarship" do |subject_trait, scholarship_body, scholarship_url|
+        context "#{subject_trait} subject" do
+          let(:course) { build(:course, subjects:).decorate }
 
-      it "renders link to scholarship body" do
-        render_inline(described_class.new(course))
+          let(:subjects) { [build(:secondary_subject, subject_trait)] }
 
-        expect(page.has_text?("For a scholarship, you’ll need to apply through the Royal Society of Chemistry")).to be true
-        expect(page.has_link?(
-          "Check whether you’re eligible for a scholarship and find out how to apply",
-          href: "https://www.rsc.org/prizes-funding/funding/teacher-training-scholarships/",
-        )).to be true
+          it "renders link to scholarship body" do
+            render_inline(described_class.new(course))
+
+            expect(rendered_component).to have_text("For a scholarship, you’ll need to apply through the #{scholarship_body}")
+            expect(rendered_component).to have_link("Check whether you’re eligible for a scholarship and find out how to apply", href: scholarship_url)
+          end
+        end
       end
+
+      include_examples "subject with scholarship", :physics, "Institute of Physics", "https://www.iop.org/about/support-grants/iop-teacher-training-scholarships"
+      include_examples "subject with scholarship", :chemistry, "Royal Society of Chemistry", "https://www.rsc.org/prizes-funding/funding/teacher-training-scholarships/"
+      include_examples "subject with scholarship", :computing, "Chartered Institute for IT", "https://www.bcs.org/qualifications-and-certifications/training-and-scholarships-for-teachers/bcs-computer-teacher-scholarships/"
+      include_examples "subject with scholarship", :mathematics, "Institute of Mathematics and its Applications", "https://teachingmathsscholars.org/eligibilitycriteria"
+      include_examples "subject with scholarship", :french, "British Council", "https://www.britishcouncil.org/"
+      include_examples "subject with scholarship", :german, "British Council", "https://www.britishcouncil.org/"
+      include_examples "subject with scholarship", :spanish, "British Council", "https://www.britishcouncil.org/"
     end
 
     context "when course has scholarship but we don\"t have a institution to obtain further info from" do
       let(:course) {
         build(:course,
           subjects: [
-            build(:secondary_subject,
-              subject_name: "french",
+            build(:secondary_subject, :design_and_technology,
               financial_incentive: FinancialIncentive.new(scholarship: 2000,
                 bursary_amount: 3000,
                 early_career_payments: 2000)),
