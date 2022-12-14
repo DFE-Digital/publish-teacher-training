@@ -36,9 +36,8 @@ module Publish
     def update
       provider
       @user_form = UserForm.new(current_user, provider_user, params: user_params)
-      if @user_form.save!
-        redirect_to publish_provider_user_path(id: params[:id])
-        flash[:success] = "User updated"
+      if @user_form.stash
+        redirect_to publish_provider_user_edit_check_path(user_id: params[:id])
       else
         render(:edit)
       end
