@@ -47,7 +47,11 @@ private
   end
 
   def then_subjects_list_correctly_on_confirmation_page
-    expect(course_confirmation_page.details.subjects.value).to have_content("Modern LanguagesGermanItalianMathematics")
+    text = course_confirmation_page.details.subjects.value.text
+    expect(text).to start_with("Modern Languages")
+    expect(text).to include("Italian")
+    expect(text).to include("German")
+    expect(text).to end_with("Mathematics")
   end
 
   def given_i_am_authenticated_as_a_provider_user
