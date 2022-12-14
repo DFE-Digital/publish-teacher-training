@@ -10,6 +10,6 @@ module UserHelper
   end
 
   def email_changed?(user_form)
-    user_form.email != User.find(params[:user_id]).email
+    user_form.email.downcase != User.find(params[:user_id]).email
   end
 end
