@@ -6,10 +6,6 @@ module Publish
       @user_form = UserForm.new(current_user, user)
     end
 
-    def create
-      @user_form = UserForm.new(current_user, user, params: user_params)
-    end
-
     def update
       @user_form = UserForm.new(current_user, user)
       if @user_form.save!
@@ -20,12 +16,10 @@ module Publish
       end
     end
 
+  private
+
     def user
       @user = User.find(params[:user_id])
-    end
-
-    def user_params
-      params.require(:publish_user_form).permit(:first_name, :last_name, :email).except(:code, :authenticity_token)
     end
 
     def authorize_provider
