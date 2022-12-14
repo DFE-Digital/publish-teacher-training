@@ -1,90 +1,155 @@
 <% content_for :page_title, title_with_error_prefix("Cookies", @cookie_preferences_form.errors.present?) %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @cookie_preferences_form, url: find_cookies_path, method: :put do |f| %>
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= form_with model: @cookie_preferences_form, url: find_cookies_path, method: :put do |f| %>
+        <%= f.govuk_error_summary %>
 
-      <%= f.govuk_error_summary %>
+        <h1 class="govuk-heading-xl">Cookies</h1>
 
-      <h1 class="govuk-heading-xl">Cookies</h1>
+        <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
 
-      <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
+        <p class="govuk-body">We use cookies to make <%= t("service_name.find") %> (Find) work and collect information about how you use our service.</p>
 
-      <p class="govuk-body">We use cookies to make <%= t("service_name.find") %> (Find) work and collect information about how you use our service.</p>
+        <h3 class="govuk-heading-m">Essential cookies</h3>
 
-      <h2 class="govuk-heading-m">Essential cookies</h3>
+        <p class="govuk-body">Essential cookies keep your information secure while you use Find. We do not need to ask permission to use them.</p>
 
-      <p class="govuk-body">Essential cookies keep your information secure while you use Find.</p>
-
-      <table class="govuk-table app-table--vertical-align-middle" aria-describedby="essential_cookies_desc">
-        <thead class="govuk-table__header">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Name</th>
-            <th class="govuk-table__header" scope="col">Purpose</th>
-            <th class="govuk-table__header" scope="col">Expires</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell "><span class="break-word">_find_teacher_training_courses_session</span></td>
-            <td class="govuk-table__cell ">Stores encrypted session data</td>
-            <td class="govuk-table__cell ">When you close your browser</td>
-          </tr>
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell"><%= Settings.cookies.consent.name %></td>
-            <td class="govuk-table__cell">Saves your cookie consent settings</td>
-            <td class="govuk-table__cell">6 months</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2 class="govuk-heading-m">Analytic cookies (optional)</h2>
-
-      <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use Find. This information helps us improve our service.</p>
-
-      <p class="govuk-body">Google is not allowed to use or share our analytics data with anyone.</p>
-
-      <p class="govuk-body">Google Analytics stores anonymised information about:</p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>how you got to Find</li>
-        <li>the pages you visit on this site and how long you spend on them</li>
-        <li>what you click on while you&#8217;re visiting the site</li>
-      </ul>
-
-      <table class="govuk-table" aria-describedby="google_analytics_cookies_desc">
-        <thead class="govuk-table__header">
+        <table class="govuk-table">
+          <thead class="govuk-table__header">
           <tr>
-            <th scope="col" class="govuk-table__header">Name</th>
-            <th scope="col" class="govuk-table__header">Purpose</th>
-            <th scope="col" class="govuk-table__header">Expires</th>
+            <th class="govuk-table__header govuk-!-width-one-third">Name</th>
+            <th class="govuk-table__header govuk-!-width-one-third">Purpose</th>
+            <th class="govuk-table__header govuk-!-width-one-third">Expires</th>
           </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell">_ga</td>
-            <td class="govuk-table__cell">Distinguishes anonymous users</td>
-            <td class="govuk-table__cell">2 years</td>
+          </thead>
+          <tbody class="govuk-table__body">
+          <tr>
+            <td class="govuk-table__cell">_find_teacher_training_session</td>
+            <td class="govuk-table__cell">Stores encrypted session data</td>
+            <td class="govuk-table__cell">When you close your browser</td>
           </tr>
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell">_gid</td>
-            <td class="govuk-table__cell">Distinguishes anonymous users</td>
-            <td class="govuk-table__cell">24 hours</td>
-          </tr>
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell">_gat</td>
-            <td class="govuk-table__cell">Limits requests</td>
-            <td class="govuk-table__cell">10 minutes</td>
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
 
-      <%= f.govuk_collection_radio_buttons :consent,
-                                          [%w[accepted Yes], %w[rejected No]],
-                                          :first,
-                                          :last,
-                                          legend: { text: "Do you want to accept Google Analytics cookies?", size: "s" } %>
-      <%= f.govuk_submit("Save cookie settings") %>
-    <% end %>
+        <h3 class="govuk-heading-m">Measuring website usage (Google Analytics)</h3>
+
+        <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use Find. This information helps us improve our service.</p>
+
+        <p class="govuk-body">Google is not allowed to use or share our analytics data with anyone.</p>
+
+        <p class="govuk-body">Google Analytics stores anonymised information about:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>how you got to Find</li>
+          <li>the pages you visit on this site and how long you spend on them</li>
+          <li>what you click on while you’re visiting the site</li>
+        </ul>
+
+        <table class="govuk-table">
+          <thead class="govuk-table__header">
+            <tr>
+              <th class="govuk-table__header govuk-!-width-one-third">Name</th>
+              <th class="govuk-table__header govuk-!-width-one-third">Purpose</th>
+              <th class="govuk-table__header govuk-!-width-one-third">Expires</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body govuk-!-width-one-third">
+            <tr>
+              <td class="govuk-table__cell"><%= Settings.cookies.analytics.name %></td>
+              <td class="govuk-table__cell">Saves your analytics cookie consent settings</td>
+              <td class="govuk-table__cell">6&nbsp;months</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_ga</td>
+              <td class="govuk-table__cell">Distinguishes anonymous&nbsp;users</td>
+              <td class="govuk-table__cell">2&nbsp;years</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gid</td>
+              <td class="govuk-table__cell">Distinguishes anonymous&nbsp;users</td>
+              <td class="govuk-table__cell">24&nbsp;hours</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gat</td>
+              <td class="govuk-table__cell">Limits requests</td>
+              <td class="govuk-table__cell">10&nbsp;minutes</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gat_gtag_UA_112932657_1</td>
+              <td class="govuk-table__cell">Limits requests</td>
+              <td class="govuk-table__cell">10&nbsp;minutes</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="govuk-heading-m">Marketing cookies (optional)</h3>
+
+        <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use Find. This information helps us improve our service.</p>
+        <p class="govuk-body">Google is not allowed to use or share our analytics data with anyone.</p>
+        <p class="govuk-body">Google Analytics stores anonymised information about:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>how you got to Find</li>
+          <li>the pages you visit on this site and how long you spend on them</li>
+          <li>what you click on while you’re visiting the site</li>
+        </ul>
+
+        <table class="govuk-table">
+          <thead class="govuk-table__header">
+            <tr>
+              <th class="govuk-table__header govuk-!-width-one-third">Name</th>
+              <th class="govuk-table__header govuk-!-width-one-third">Purpose</th>
+              <th class="govuk-table__header govuk-!-width-one-third">Expires</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body govuk-!-width-one-third">
+            <tr>
+              <td class="govuk-table__cell"><%= Settings.cookies.marketing.name %></td>
+              <td class="govuk-table__cell">Saves your marketing cookie consent settings</td>
+              <td class="govuk-table__cell">6&nbsp;months</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gcl_aw</td>
+              <td class="govuk-table__cell">To store ad click information (only if remarketing cookies are enabled), generate unique IDs for visitors to remember preferences and track and gather statistics and conversion rates through the website.</td>
+              <td class="govuk-table__cell">90&nbsp;Days</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gcl_dc</td>
+              <td class="govuk-table__cell">To store ad click information (only if remarketing cookies are enabled), generate unique IDs for visitors to remember preferences and track and gather statistics and conversion rates through the website.</td>
+              <td class="govuk-table__cell">90&nbsp;Days</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">_gcl_au </td>
+              <td class="govuk-table__cell">Used by Google DoubleClick segment users into audience types and attribute campaign performance to your actions on this website, including conversions.</td>
+              <td class="govuk-table__cell">90&nbsp;Days</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">IDE/ANID/NID</td>
+              <td class="govuk-table__cell">
+                One of the main advertising cookies on non-Google sites is named ‘IDE‘ and is stored in browsers under the domain doubleclick.net.
+                Another is stored in google.com and is called ANID. We use other cookies with names such as DSID, FLC, AID, TAID, and exchange_uid.
+                Other Google properties, like YouTube, may also use these cookies to show you more relevant ads. <%= govuk_link_to("https://policies.google.com/technologies/types?hl=en-US", "https://policies.google.com/technologies/types?hl=en-US") %></td>
+              <td class="govuk-table__cell">2&nbsp;Years</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <%= f.govuk_collection_radio_buttons :analytics_consent,
+                                            [%w[granted Yes], %w[denied No]],
+                                            :first,
+                                            :last,
+                                            inline: true,
+                                            legend: { text: "Do you want to accept Google Analytics cookies?", size: "s" } %>
+        <%= f.govuk_collection_radio_buttons :marketing_consent,
+                                            [%w[granted Yes], %w[denied No]],
+                                            :first,
+                                            :last,
+                                            inline: true,
+                                            legend: { text: "Do you want to accept Marketing cookies?", size: "s" } %>
+
+        <%= f.govuk_submit("Save cookie settings", data: { qa: "save-changes" }) %>
+      <% end %>
+    </div>
   </div>
 </div>

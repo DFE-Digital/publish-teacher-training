@@ -29,7 +29,8 @@ environment:
 render_json_errors: true
 
 google_tag_manager:
-  tracking_id: GTM-W56GPKW
+  find_tracking_id: GTM-K6NSLCM
+  publish_tracking_id: GTM-W56GPKW
 
 features:
   send_request_data_to_bigquery: true

@@ -526,8 +526,14 @@ en:
               invalid: "Enter a valid email address"
         publish/cookie_preferences_form:
           attributes:
-            consent:
+            analytics_consent:
               blank: Select yes if you want to accept Google Analytics cookies
+        find/cookie_preferences_form:
+          attributes:
+            analytics_consent:
+              blank: Select yes if you want to accept Google Analytics cookies
+            marketing_consent:
+              blank: Select yes if you want to accept Marketing cookies
         find/confirm_environment:
           attributes:
             environment:
@@ -654,6 +660,8 @@ en:
     heading: Cookies on %{service_name}
     accept: Accept analytics cookies
     reject: Reject analytics cookies
+    preferences:
+      success: Your cookie preferences have been updated
     message_html:
       <p class="govuk-body">We use some essential cookies to make this service work.</p>
       <p class="govuk-body app-js-only">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>

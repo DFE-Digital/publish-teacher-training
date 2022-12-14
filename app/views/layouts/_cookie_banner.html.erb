@@ -1,8 +1,8 @@
 <%= render GovukComponent::CookieBannerComponent.new(
   html_attributes: {
     "data-module" => "govuk-cookie-banner",
-    "data-cookie-consent-name" => Settings.cookies.consent.name,
-    "data-cookie-consent-expiry-after-days" => Settings.cookies.consent.expire_after_days,
+    "data-cookie-consent-name" => Settings.cookies.analytics.name,
+    "data-cookie-consent-expiry-after-days" => Settings.cookies.expire_after_days,
     "data-qa" => "cookie-banner",
     "nosnippet" => true,
   },
@@ -10,10 +10,10 @@
   <%= cookie_banner.message(heading_text: t("cookies.heading", service_name:),
                             text: t("cookies.message_html")) do |message| %>
     <% message.action do %>
-      <button value="accepted" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
+      <button value="granted" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.accept") %>
       </button>
-      <button value="rejected" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
+      <button value="denied" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.reject") %>
       </button>
       <%= govuk_link_to(t("cookies.cookies_page_link"), cookies_path) %>

@@ -19,9 +19,17 @@
     "test": "jest"
   },
   "standard": {
-    "envs": ["jest", "browser"],
-    "globals": ["$", "google"]
-
+    "envs": [
+      "jest",
+      "browser"
+    ],
+    "globals": [
+      "$",
+      "google"
+    ],
+    "ignore": [
+      "app/javascript/jestGlobalMocks.js"
+    ]
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.1",

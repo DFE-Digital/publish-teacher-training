@@ -90,9 +90,6 @@ google:
     api_json_key: "{}"
     table_name: events
 
-google_tag_manager:
-  tracking_id: change_me
-
 feedback:
   link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
 
@@ -108,8 +105,14 @@ features:
   user_management: true
 
 cookies:
-  consent:
-    name: _consented_to_analytics_cookies
-    expire_after_days: 182
+  analytics:
+    name: "consented-to-analytics-cookies"
+  marketing:
+    name: "consented-to-marketing-cookies"
+  expire_after_days: 182
+
+google_tag_manager:
+  find_tracking_id: change_me
+  publish_tracking_id: change_me
 
 STATE_CHANGE_SLACK_URL: replace_me

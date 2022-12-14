@@ -18,8 +18,8 @@ export default class CookieBanner {
       this.expiryAfterDays = this.$banner.attributes['data-cookie-consent-expiry-after-days'].value
       this.$afterConsentBanner = document.querySelector('[data-module="govuk-cookie-after-consent-banner"]')
 
-      this.$acceptButton = this.$banner.querySelector('[value="accepted"]')
-      this.$rejectButton = this.$banner.querySelector('[value="rejected"]')
+      this.$acceptButton = this.$banner.querySelector('[value="granted"]')
+      this.$rejectButton = this.$banner.querySelector('[value="denied"]')
       this.$hideButton = this.$afterConsentBanner.querySelector('button')
 
       this.bindEvents()
@@ -45,10 +45,12 @@ export default class CookieBanner {
 
   accept () {
     this.saveAnswer(this.$acceptButton.value)
+    this.updateConsent()
   }
 
   reject () {
     this.saveAnswer(this.$rejectButton.value)
+    this.updateConsent()
   }
 
   hideBanner () {
@@ -61,5 +63,16 @@ export default class CookieBanner {
 
   hideAfterConsentBanner () {
     this.$afterConsentBanner.hidden = true
+  }
+
+  consent () {
+    return {
+      analytics_storage: getCookie(this.cookieName) || 'denied',
+      ad_storage: getCookie(this.cookieName) || 'denied'
+    }
+  }
+
+  updateConsent () {
+    window.gtag('consent', 'update', this.consent())
   }
 }

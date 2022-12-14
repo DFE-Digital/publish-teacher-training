@@ -12,9 +12,9 @@
 
       <p class="govuk-body">We use cookies to make <%= t("service_name.publish") %> (Publish) work and collect information about how you use our service.</p>
 
-      <h2 class="govuk-heading-m">Essential cookies</h3>
+      <h2 class="govuk-heading-m">Essential cookies</h2>
 
-      <p class="govuk-body">Essential cookies keep your information secure while you use Publish.</p>
+      <p class="govuk-body">Essential cookies keep your information secure while you use Publish. We do not need to ask permission to use them.</p>
 
       <table class="govuk-table app-table--vertical-align-middle" aria-describedby="essential_cookies_desc">
         <thead class="govuk-table__header">
@@ -29,11 +29,6 @@
             <td class="govuk-table__cell "><span class="break-word">_publish_teacher_training_courses_session</span></td>
             <td class="govuk-table__cell ">Remembers your identity when you are signed in</td>
             <td class="govuk-table__cell ">After 6 hours or on signing out</td>
-          </tr>
-          <tr scope="row" class="govuk-table__row">
-            <td class="govuk-table__cell"><%= Settings.cookies.consent.name %></td>
-            <td class="govuk-table__cell">Saves your cookie consent settings</td>
-            <td class="govuk-table__cell">6 months</td>
           </tr>
         </tbody>
       </table>
@@ -62,6 +57,11 @@
         </thead>
         <tbody class="govuk-table__body">
           <tr scope="row" class="govuk-table__row">
+            <td class="govuk-table__cell"><%= Settings.cookies.analytics.name %></td>
+            <td class="govuk-table__cell">Saves your analytics cookie consent settings</td>
+            <td class="govuk-table__cell">6 months</td>
+          </tr>
+          <tr scope="row" class="govuk-table__row">
             <td class="govuk-table__cell">_ga</td>
             <td class="govuk-table__cell">Distinguishes anonymous users</td>
             <td class="govuk-table__cell">2 years</td>
@@ -74,8 +74,8 @@
         </tbody>
       </table>
 
-      <%= f.govuk_collection_radio_buttons :consent,
-                                          [%w[accepted Yes], %w[rejected No]],
+      <%= f.govuk_collection_radio_buttons :analytics_consent,
+                                          [%w[granted Yes], %w[denied No]],
                                           :first,
                                           :last,
                                           legend: { text: "Do you want to accept Google Analytics cookies?", size: "s" } %>
