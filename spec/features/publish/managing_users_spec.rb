@@ -68,8 +68,8 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
         scenario "with invalid details" do
           given_i_click_change_email_address
           when_i_enter_a_new_invalid_email
-          # and_i_continue
-          # expect(page).to have_text("Enter an email address in the correct format, like name@example.com") #todo make this work
+          and_i_continue
+          then_i_should_see_a_validation_error_message
         end
       end
 
@@ -286,5 +286,9 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
 
   def and_click_update_user
     click_button "Update user"
+  end
+
+  def then_i_should_see_a_validation_error_message
+    expect(page).to have_text("Enter an email address in the correct format, like name@example.com")
   end
 end
