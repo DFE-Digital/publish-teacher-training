@@ -224,7 +224,7 @@ en:
     last_name: "Last name"
     email: "Email address"
     add: "Add user"
-    edit: "Update user"
+    update: "Update user"
   support:
     data_exports:
       index:
