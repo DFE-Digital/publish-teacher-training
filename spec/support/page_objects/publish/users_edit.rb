@@ -9,8 +9,6 @@ module PageObjects
       element :last_name, "#publish-user-form-last-name-field"
       element :last_name, "#publish-user-form-last-name-field"
       element :email, "#publish-user-form-email-field"
-
-      element :error_summary, ".govuk-error-summary"
     end
   end
 end
