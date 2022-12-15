@@ -315,6 +315,6 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def user_exists_in_db(first_name)
-    Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name: first_name)
+    Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name:)
   end
 end
