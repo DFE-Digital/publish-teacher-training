@@ -142,6 +142,7 @@ gem "data_migrate"
 
 # For outgoing http requests
 gem "http"
+gem "redis"
 
 group :production, :qa, :sandbox, :staging do
   gem "cloudfront-rails"
