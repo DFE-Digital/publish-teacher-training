@@ -1,0 +1,49 @@
+<% page_title = t("page_titles.users.check") %>
+<%= content_for :page_title, page_title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(edit_publish_provider_user_path(id: params[:user_id])) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @user_form, url: publish_provider_user_edit_check_path(params[:provider_code]), method: :put, local: true) do |f| %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= @user.full_name %></span>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %></h1> </legend>
+
+        <%= render GovukComponent::SummaryListComponent.new do |component|
+          component.row do |row|
+            row.key { t("users.first_name") }
+            row.value(text:  @user_form.first_name)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
+          end
+
+          component.row do |row|
+            row.key { t("users.last_name") }
+            row.value(text: @user_form.last_name)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
+          end
+
+          component.row do |row|
+            row.key { t("users.email") }
+            row.value(text:  @user_form.email)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "email", visually_hidden_text: t("users.email").downcase)
+          end
+        end %>
+
+        <% if email_changed?(@user_form) %>
+          <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span> <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span> The user will be sent an email to tell them you’ve changed their email address  </strong>
+          </div>
+        <% end %>
+
+        <%= f.govuk_submit(t("users.update")) %>
+      </fieldset>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_user_path(id: params[:user_id])) %>
+    </p>
+  </div>
+</div>

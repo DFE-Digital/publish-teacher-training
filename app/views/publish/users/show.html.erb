@@ -9,17 +9,20 @@
     <%= render GovukComponent::SummaryListComponent.new do |component|
           component.row do |row|
             row.key { "First name" }
-            row.value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
+            row.value(text: @provider_user.first_name)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.first_name").downcase) unless @provider_user.has_sign_in_account?
           end
 
           component.row do |row|
             row.key { "Last name" }
-            row.value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
+            row.value(text: @provider_user.last_name)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.last_name").downcase) unless @provider_user.has_sign_in_account?
           end
 
           component.row do |row|
             row.key { "Email address" }
-            row.value(text: @provider_user.email, html_attributes: { id: "email" })
+            row.value(text: @provider_user.email)
+            row.action(text: t("change"), href: edit_publish_provider_user_path(provider_code: @provider.provider_code), visually_hidden_text: t("users.email").downcase) unless @provider_user.has_sign_in_account?
           end
         end %>
 

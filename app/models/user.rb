@@ -103,6 +103,10 @@ class User < ApplicationRecord
     admin? || has_multiple_providers_in_current_recruitment_cycle?
   end
 
+  def has_sign_in_account?
+    sign_in_user_id.present?
+  end
+
 private
 
   def downcase_email

@@ -19,12 +19,27 @@ module Publish
       @user_form.clear_stash
     end
 
+    def edit
+      @user_form = UserForm.new(current_user, provider_user)
+      @user_form.clear_stash
+    end
+
     def create
       @user_form = UserForm.new(current_user, user, params: user_params)
       if @user_form.stash
         redirect_to publish_provider_check_user_path(provider_code: params[:provider_code])
       else
         render(:new)
+      end
+    end
+
+    def update
+      provider
+      @user_form = UserForm.new(current_user, provider_user, params: user_params)
+      if @user_form.stash
+        redirect_to publish_provider_user_edit_check_path(user_id: params[:id])
+      else
+        render(:edit)
       end
     end
 
