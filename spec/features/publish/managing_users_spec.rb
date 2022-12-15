@@ -299,22 +299,22 @@ feature "Adding user to organisation as a provider user", { can_edit_current_and
   end
 
   def then_the_first_name_should_have_updated_in_the_database
-    expect(user_exists_in_db("New first name")).to be(true)
+    expect(user_in_db_with_name("New first name")).to be(true)
   end
 
   def and_the_first_name_should_not_have_updated_in_the_database
-    expect(user_exists_in_db("New first name")).to be(false)
+    expect(user_in_db_with_name("New first name")).to be(false)
   end
 
   def then_the_last_name_should_have_updated_in_the_database
-    expect(user_exists_in_db("New last name")).to be(true)
+    expect(user_in_db_with_name("New last name")).to be(true)
   end
 
   def and_the_last_name_should_not_have_updated_in_the_database
-    expect(user_exists_in_db("New last name")).to be(false)
+    expect(user_in_db_with_name("New last name")).to be(false)
   end
 
-  def user_exists_in_db(first_name)
+  def user_in_db_with_name(first_name)
     Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name:)
   end
 end
