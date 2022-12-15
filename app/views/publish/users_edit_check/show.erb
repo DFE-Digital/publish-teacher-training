@@ -10,7 +10,7 @@
     <%= form_with(model: @user_form, url: publish_provider_user_edit_check_path(params[:provider_code]), method: :put, local: true) do |f| %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= @user.full_name %></span>
-          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %> </h1> </legend>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %></h1> </legend>
 
         <%= render GovukComponent::SummaryListComponent.new do |component|
           component.row do |row|
