@@ -16,7 +16,39 @@ feature "course confirmation", { can_edit_current_and_next_cycles: false } do
     then_it_displays_correctly
   end
 
+  scenario "changing subject to modern languages" do
+    when_i_click_change_subject
+    and_i_select_modern_languages_and_maths
+    and_i_continue
+    and_i_select_some_languages
+    and_i_click_continue
+    then_subjects_list_correctly_on_confirmation_page
+  end
+
 private
+
+  def when_i_click_change_subject
+    course_confirmation_page.details.subjects.change_link.click
+  end
+
+  def and_i_select_modern_languages_and_maths
+    new_subjects_page.master_subject_fields.select("Modern Languages").click
+    new_subjects_page.subordinate_subject_details.click
+    new_subjects_page.subordinate_subjects_fields.select("Mathematics").click
+  end
+
+  def and_i_select_some_languages
+    new_modern_languages_page.language_checkbox("German").click
+    new_modern_languages_page.language_checkbox("Italian").click
+  end
+
+  def and_i_continue
+    new_subjects_page.continue.click
+  end
+
+  def then_subjects_list_correctly_on_confirmation_page
+    expect(course_confirmation_page.details.subjects.value).to have_content("Modern LanguagesGermanItalianMathematics")
+  end
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, providers: [build(:provider, sites: [build(:site)])])

@@ -10,6 +10,10 @@ module Publish
         authorize(@provider, :can_create_course?)
         return if has_physics_subject?
 
+        if params[:goto_confirmation] && modern_languages_present?
+          redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
+          return
+        end
         redirect_to next_step
       end
 
@@ -76,7 +80,7 @@ module Publish
           render :new
         elsif params[:skip_languages_goto_confirmation].present?
           redirect_to confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
-        elsif params[:course][:subjects_ids].include?(modern_languages_id)
+        elsif modern_languages_present?
           redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
         else
           redirect_to next_step
@@ -84,6 +88,10 @@ module Publish
       end
 
     private
+
+      def modern_languages_present?
+        params[:course][:subjects_ids]&.include?(modern_languages_id)
+      end
 
       def feature_check
         unless FeatureService.enabled?(:engineers_teach_physics_on_course)
