@@ -3,13 +3,31 @@ require "rails_helper"
 feature "switcher cycle" do
   scenario "Navigate to /find/cycle" do
     when_i_visit_switcher_cycle_page
+    then_i_should_see_the_page_title
+    and_i_should_see_the_page_heading
   end
 
+  def when_i_visit_switcher_cycle_page
+    visit "/find/cycles"
+  end
 
+  def then_i_should_see_the_page_title
+    expect(page.title).to have_content "Recruitment cycles"
+  end
 
+  def and_i_should_see_the_page_heading
+    expect(page).to have_selector("h1", text: "Recruitment cycles")
+    # todo expect(page).to have_content "Recruitment cycles"
+  end
 
-
-
+  scenario "Update to Apply 1 deadline has passed" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose_apply_1_deadline_has_passed_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_relevant_banner
+  end
 
 
 
@@ -54,13 +72,13 @@ private
     courses_by_location_or_training_provider_page.load
   end
 
-  def then_i_should_see_the_page_title
-    expect(courses_by_location_or_training_provider_page.title).to have_content "Find courses by location or by training provider"
-  end
+  # def then_i_should_see_the_page_title
+  #   expect(courses_by_location_or_training_provider_page.title).to have_content "Find courses by location or by training provider"
+  # end
 
-  def and_i_should_see_the_page_heading
-    expect(courses_by_location_or_training_provider_page.heading).to have_content "Find courses by location or by training provider"
-  end
+  # def and_i_should_see_the_page_heading
+  #   expect(courses_by_location_or_training_provider_page.heading).to have_content "Find courses by location or by training provider"
+  # end
 
   def and_i_see_the_three_search_options
     expect(courses_by_location_or_training_provider_page).to have_by_city_town_or_postcode_radio
