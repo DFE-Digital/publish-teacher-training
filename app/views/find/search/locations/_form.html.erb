@@ -21,7 +21,7 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">Find courses by location or by training provider</h1>
         </legend>
-        <div class="govuk-form-group" id="search-options">
+        <div class="govuk-form-group <%= "govuk-form-group--error" if no_option_selected? %>" id="search-options">
           <% if flash[:error] and location_error? === false and provider_error? === false %>
             <p class="govuk-error-message">
               <% if flash[:error].kind_of?(Array) %>

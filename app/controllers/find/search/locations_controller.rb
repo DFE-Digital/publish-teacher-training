@@ -6,7 +6,9 @@ module Find
       before_action :providers
       before_action :build_results_filter_query_parameters
 
-      def start; end
+      def start
+        # binding.pry
+      end
 
       def new; end
 

@@ -13,7 +13,7 @@ module Find
         let(:params) { { l: nil } }
 
         it "validates selected options" do
-          expect(subject.errors).to include("Select an option to find courses")
+          expect(subject.errors).to include("Select find courses by location or by training provider")
         end
       end
 
@@ -42,7 +42,7 @@ module Find
           end
 
           it "validates find_courses" do
-            expect(subject.errors).to include("Enter a school, university or other training provider")
+            expect(subject.errors).to include("Enter a provider name or code")
           end
         end
       end

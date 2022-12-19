@@ -8,11 +8,11 @@ en:
       pgde_with_qts: "PGDE with QTS"
     location_filter:
       errors:
-        no_option: Select an option to find courses
+        no_option: Select find courses by location or by training provider
         unknown_location: Enter a real city, town or postcode
         missing_location: Enter a city, town or postcode
         missing_provider: Enter a real school, university or training provider
-        blank_provider: Enter a school, university or other training provider
+        blank_provider: Enter a provider name or code
     fields:
       location: "Postcode, town or city"
       provider: "Training provider"
@@ -109,9 +109,9 @@ en:
         find/age_groups_form:
           attributes:
             age_group:
-              blank: "Select an age group"
+              blank: "Select which age group you want to teach"
         find/subjects_form:
-          blank: "Select at least one subject"
+          blank: "Select at least one subject you want to teach"
         find/cookie_preferences_form:
           attributes:
             consent:

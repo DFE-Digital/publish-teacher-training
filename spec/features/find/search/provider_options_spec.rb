@@ -44,7 +44,7 @@ private
   end
 
   def then_i_should_see_a_missing_provider_validation_error
-    expect(page).to have_content("Enter a school, university or other training provider")
+    expect(page).to have_content("Enter a provider name or code")
   end
 
   def when_i_select_the_provider

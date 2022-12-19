@@ -101,7 +101,7 @@ private
   end
 
   def i_should_see_an_age_group_validation_error
-    expect(page).to have_content("Select an age group")
+    expect(page).to have_content("Select which age group you want to teach")
   end
 
   def when_i_select_the_primary_radio_button
