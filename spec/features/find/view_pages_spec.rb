@@ -18,6 +18,7 @@ feature "View pages" do
 
   scenario "Navigate to /accessibility" do
     visit "find/accessibility"
-    expect(page) .to have_selector("h1", text: "Accessibility statement for Find postgraduate teacher trainin")
+    expect(page) .to have_selector("h1", text: "Accessibility statement")
+    expect(page).to have_text("This statement applies to the Find postgraduate teacher training service (Find)")
   end
 end
