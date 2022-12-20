@@ -1,11 +1,11 @@
 require "rails_helper"
 
 feature "switcher cycle" do
-  # scenario "Navigate to /find/cycle" do
-  #   when_i_visit_switcher_cycle_page
-  #   then_i_should_see_the_page_title
-  #   and_i_should_see_the_page_heading
-  # end
+  scenario "Navigate to /find/cycle" do
+    when_i_visit_switcher_cycle_page
+    then_i_should_see_the_page_title
+    and_i_should_see_the_page_heading
+  end
 
   def when_i_visit_switcher_cycle_page
     visit "/find/cycles"
@@ -34,20 +34,21 @@ feature "switcher cycle" do
   end 
 
   def then_i_click_on_update_button
-    page.click("Update point in recruitment cycle")
+    page.click_on("Update point in recruitment cycle")
   end
 
   def and_i_should_see_the_sucess_banner
-    expect(page).to have_selector("id", "success-message")
+    #expect(page).to have_selector("h1", text: "Recruitment cycles")
+    expect(page).to have_selector("h2", text: "Success")
   end  
 
-  # def and_i_visit_results_page
-  #   visit "/find/results"
-  # end  
+  def and_i_visit_results_page
+    visit "/find/results"
+  end  
 
-  # def and_i_see_relevant_banner
-    
-  # end  
+  def and_i_see_relevant_banner
+    expect(courses_by_location_or_training_provider_page.heading).to have_content "found"
+  end  
 
   # xscenario "Navigate to /find" do
   #   when_i_visit_the_search_page
