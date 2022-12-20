@@ -10,10 +10,9 @@
   }) %>
 <% end %>
 
-
     <%= form_with(model: @age_groups_form, url: find_age_groups_create_path, method: :get) do |f| %>
       <%= f.govuk_error_summary %>
-      
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
       <%= render FindInterface::HiddenFieldsComponent.new(
