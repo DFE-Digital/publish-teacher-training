@@ -112,6 +112,10 @@ en:
               blank: "Select which age group you want to teach"
         find/subjects_form:
           blank: "Select at least one subject you want to teach"
+          attributes:
+            subjects:
+              primary_subject: "Select at least one primary subject you want to teach"
+              secondary_subject: "Select at least one secondary subject you want to teach"
         find/cookie_preferences_form:
           attributes:
             consent:

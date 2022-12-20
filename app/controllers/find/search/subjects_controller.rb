@@ -18,6 +18,8 @@ module Find
             has_vacancies: default_vacancies,
           ))
         else
+          @subjects_form.errors.clear
+          @subjects_form.primary? ? @subjects_form.errors.add(:subjects, :primary_subject) : @subjects_form.errors.add(:subjects, :secondary_subject)
           render :new
         end
       end
