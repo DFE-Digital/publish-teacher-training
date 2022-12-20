@@ -1,17 +1,18 @@
 <%= content_for :page_title, title_with_error_prefix("Find courses by location or by training provider", flash[:error].present?) %>
 
+<%= render partial: "find/shared/error_message", locals: { error_anchor_id:
+    if no_option_selected?
+      "l_1"
+    elsif location_error?
+      "location"
+    elsif provider_error?
+      "provider-provider-name-field"
+    end,
+} %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render partial: "find/shared/error_message", locals: {
-      error_anchor_id:
-        if no_option_selected?
-          "l_1"
-        elsif location_error?
-          "location"
-        elsif provider_error?
-          "provider-provider-name-field"
-        end,
-    } %>
+    
     <%= form_with url: find_locations_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
 
       <%= render "find/shared/hidden_fields", exclude_keys: %w[l provider.provider_name radius], form: %>
