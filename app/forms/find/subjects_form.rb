@@ -9,6 +9,8 @@ module Find
     def subjects_have_been_selected
       if subjects.blank? && age_group.present?
         errors.add(:subjects, :"#{age_group}_subject")
+      elsif subjects.blank?
+        errors.add(:subjects, :blank)
       end
     end
 

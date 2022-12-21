@@ -14,6 +14,20 @@ module Find
 
         expect(form.valid?).to be(true)
       end
+
+      it "raises primary error message correctly" do
+        form = described_class.new(age_group: "primary")
+        form.valid?
+
+        expect(form.errors.full_messages).to eq ["Subjects Select at least one primary subject you want to teach"]
+      end
+
+      it "raises secondary error message correctly" do
+        form = described_class.new(age_group: "secondary")
+        form.valid?
+
+        expect(form.errors.full_messages).to eq ["Subjects Select at least one secondary subject you want to teach"]
+      end
     end
   end
 end
