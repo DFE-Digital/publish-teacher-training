@@ -1250,6 +1250,11 @@
             "type": "boolean",
             "example": true
           },
+          "is_accredited_body": {
+            "description": "Only return providers that is accredited body.",
+            "type": "boolean",
+            "example": true
+          },
           "provider_type": {
             "description": "Return providers based on their provider type. This is a comma delimited string. If multiple provider types are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used.",
             "type": "string",
