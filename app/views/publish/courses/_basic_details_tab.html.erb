@@ -9,10 +9,10 @@
         <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
         <% row.value { course.is_send? } %>
         <% if @course.edit_course_options[:show_is_send] %>
-          <% row.action(**{
+          <% row.action(
             # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "SEND",
-          }) %>
+          ) %>
         <% else %>
           <% row.action %>
         <% end %>
@@ -22,10 +22,10 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
           <% row.key { "Subject".pluralize(course.subjects.count) } %>
           <% row.value { course.chosen_subjects } %>
-          <% row.action(**{
+          <% row.action(
             href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "subjects",
-          }) %>
+          ) %>
         <% end %>
       <% end %>
 
@@ -34,10 +34,10 @@
           <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
             <% row.key { "Engineers Teach Physics" } %>
             <% row.value { course.engineers_teach_physics? ? "Yes" : "No" } %>
-            <% row.action(**{
+            <% row.action(
               href: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids }, skip_languages_goto_confirmation: true),
               visually_hidden_text: "Engineers Teach Physics",
-            }) %>
+            ) %>
           <% end %>
         <% end %>
       <% end %>
@@ -46,20 +46,20 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
           <% row.key { "Age range" } %>
           <% row.value { course.age_range } %>
-          <% row.action(**{
+          <% row.action(
             href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
             visually_hidden_text: "age range",
-          }) %>
+          ) %>
         <% end %>
       <% end %>
 
       <% summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
         <% row.key { "Outcome" } %>
         <% row.value { course.outcome } %>
-        <% row.action(**{
+        <% row.action(
           href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "outcome",
-        }) %>
+        ) %>
       <% end %>
 
       <% if @provider.accredited_body? %>
@@ -69,10 +69,10 @@
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
-            <% row.action(**{
+            <% row.action(
               href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? apprenticeship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
               visually_hidden_text: "if apprenticeship",
-            }) %>
+            ) %>
           <% end %>
         <% end %>
       <% else %>
@@ -82,10 +82,10 @@
           <% if course.is_published? %>
             <% row.action %>
           <% else %>
-            <% row.action(**{
+            <% row.action(
               href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
               visually_hidden_text: "funding type",
-            }) %>
+            ) %>
           <% end %>
         <% end %>
       <% end %>
@@ -93,10 +93,10 @@
       <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
         <% row.key { "Full or part time" } %>
         <% row.value { course.study_mode&.humanize } %>
-        <% row.action(**{
+        <% row.action(
           href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "if full or part time",
-        }) %>
+        ) %>
       <% end %>
 
       <% summary_list.row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
@@ -114,10 +114,10 @@
             </ul>
           <% end %>
         <% end %>
-        <% row.action(**{
+        <% row.action(
           href: locations_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
           visually_hidden_text: "locations",
-        }) %>
+        ) %>
       <% end %>
 
       <% unless @provider.accredited_body? %>
@@ -143,10 +143,10 @@
             <% if !course.changeable? %>
               <% row.action %>
             <% else %>
-              <% row.action(**{
+              <% row.action(
                 href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                 visually_hidden_text: "can sponsor student visa",
-              }) %>
+              ) %>
             <% end %>
           <% end %>
         <% else %>
@@ -156,10 +156,10 @@
             <% if !course.changeable? %>
               <% row.action %>
             <% else %>
-              <% row.action(**{
+              <% row.action(
                 href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                 visually_hidden_text: "can sponsor skilled_worker visa",
-              }) %>
+              ) %>
             <% end %>
           <% end %>
         <% end %>
