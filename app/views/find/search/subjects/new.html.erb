@@ -1,12 +1,12 @@
 <%= content_for :page_title, title_with_error_prefix(I18n.t("find.subjects.#{@subjects_form.age_group}_title"), @subjects_form.errors.any?) %>
 <% content_for :before_content do %>
-  <%= govuk_back_link(**{
+  <%= govuk_back_link(
     text: "Back",
     href: find_age_groups_path(@backlink_query_parameters),
     html_attributes: {
       data: { qa: "page-back" },
     },
-  }) %>
+  ) %>
 <% end %>
 
 <%= form_with(model: @subjects_form, url: find_subjects_create_path, method: :get) do |f| %>
