@@ -9,7 +9,7 @@
   <%= render FindInterface::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
   <% if age_range_in_years.present? %>
     <dt class="app-description-list__label">Age range</dt>
-    <dd data-qa="course__age_range"><%= age_range_in_years.humanize %></dd>
+    <dd data-qa="course__age_range"><%= age_range_in_years_row %></dd>
   <% end %>
 
   <% if length.present? %>
