@@ -56,7 +56,7 @@ module FindInterface::Courses::SummaryComponent
     end
 
     context "secondary course" do
-      it "render the age range and level" do
+      it "renders the age range and level" do
         course = build(
           :course,
           :secondary,
