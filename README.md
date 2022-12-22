@@ -1,250 +1,59 @@
+# Find & Publish Teacher Training
+
+This repo is home to three services:
+
+- A service for candidates to [find teacher training](https://www.find-postgraduate-teacher-training.service.gov.uk)
+- A service for providers to [publish teacher training courses](https://www.publish-teacher-training-courses.service.gov.uk)
+- An API to retrieve data on [teacher training courses](https://api.publish-teacher-training-courses.service.gov.uk/)
+
+## Status
+
 ![Build](https://github.com/DFE-Digital/publish-teacher-training/workflows/Build/badge.svg)
 [![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg?token=JaYZey50Y8gfC00RvzkcrDz5OP-SwiBSTtbhkMw1KIs)](https://www.skylight.io/app/applications/NXAwzyZjkp2m)
 
-# Publish Teacher Training Courses
+## Table of Contents
 
-## Prerequisites
+- [Environments](#environments)
+- [Guides](#guides)
+- [License](#license)
 
-### Native
+## Environments
 
-- PostgreSQL 11
-- GraphViz (`brew install graphviz`, or the equivalent with your package manager)
+### New Find (while the migration is in progress)
 
-### Docker
+| Name        | URL                                                                    | Description
+| ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------
+| Production  | [www](https://www2.find-postgraduate-teacher-training.service.gov.uk)   | Public site
+| Staging     | [staging](https://staging2.find-postgraduate-teacher-training.service.gov.uk)| For internal use by DfE to test deploys
+| QA          | [qa](https://qa2.find-postgraduate-teacher-training.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
 
-- docker
-- docker-compose
+### Publish
 
-## Setting up the app in development
+| Name        | URL                                                                | Description
+| ----------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------
+| Production  | [www](https://www.publish-teacher-training-courses.service.gov.uk) | Public site
+| Staging     | [staging](https://staging.publish-teacher-training-courses.service.gov.uk) | For internal use by DfE to test deploys
+| QA          | [qa](https://qa.publish-teacher-training-courses.service.gov.uk)  | For internal use by DfE for testing. Automatically deployed from main
 
-### Native
 
-#### Install build dependencies
+## Guides
 
-Install [asdf-vm](https://asdf-vm.com/).
+- [Configuration](/guides/configuration.md)
+- [Machine Setup](/guides/machine-setup.md)
+- [Setting up the application in development](/guides/setup-development.md)
+- [Testing & Linting](/guides/testing.md)
+- [Rollover](/guides/rollover.md)
+- [API](/guides/api.md)
+- [Authentication](/guides/authentication.md)
+- [Alerting & Monitoring](/guides/alerting_and_monitoring.md)
+- [Transactional Emails](/guides/emails.md)
+- [Healthchecks](/guides/healthcheck_and_ping_endpoints.md)
+- [Maintenance Mode](/guides/maintenance-mode.md)
+- [Disaster Recovery Plan](/guides/disaster-recovery.md)
+- [ADRs](/guides/adr/index.md)
+- [Support Playbook](/guides/support_playbook.md)
 
-Install the plugins and versions specified in `.tool-versions`
 
-```bash
-asdf plugin add ruby
-asdf plugin add nodejs
-asdf plugin add yarn
-asdf install
-```
+## License
 
-When the versions are updated in main run `asdf install` again to update your
-installation.
-
-(We don't mandate asdf, you can use other tools if you prefer.)
-
-#### Run the builds
-
-Run the following commands:
-
-```bash
-yarn
-bundle
-bundle exec rails db:setup
-```
-
-#### Run the server
-
-You can use [Foreman](https://github.com/ddollar/foreman) or [Overmind](https://github.com/DarthSim/overmind) to run all the processes needed for local dev. Once you have either of the two, you can run:
-
-```bash
-./bin/dev
-```
-
-Which will fire off the Rails server, watchers for JS/CSS changes and Sidekiq. You can also run them individually:
-
-```bash
-./bin/dev web
-```
-
-You don't have to use either of those tools. The script just wraps up the following commands:
-
-```bash
-yarn build --watch
-yarn build:css --watch
-bin/rails server -p 3001
-bundle exec sidekiq -t 25 -C config/sidekiq.yml
-```
-### Docker
-
-Run this in a shell and leave it running:
-
-```
-docker-compose up --build --detach
-```
-
-You can then follow the log output with
-
-```
-docker-compose logs --follow
-```
-
-The first time you run the app, you need to set up the databases. With the above command running separately, do:
-
-```
-docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
-```
-
-Then open http://localhost:3001 to see the app.
-
-### Run The Server in SSL Mode
-
-By default the server does not run in SSL mode. If you want to run the local
-server in SSL mode, you can do so by setting the environment variable
-`SETTINGS__USE_SSL`, for example, use this command to run the server:
-
-```bash
-SETTINGS__USE_SSL=1 rails s
-```
-
-### Trust the TLS certificate
-
-Depending on your browser you may need to add the automatically generated SSL
-certificate to your OS keychain to make the browser trust the local site.
-
-On macOS:
-
-```bash
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/localhost/https/localhost.crt
-```
-
-## Running specs
-
-```
-bundle exec rspec
-```
-
-Or through guard (`--no-interactions` allows the use of `pry` inside tests):
-
-```bash
-bundle exec guard --no-interactions
-```
-
-### Running specs in parallel
-
-When running specs in parallel for the first time you will first need to set up
-your test databases.
-
-`bundle exec rails parallel:setup`
-
-To run the specs in parallel:
-`bundle exec rails parallel:spec`
-
-To drop the test databases:
-`bundle exec rails parallel:drop`
-
-
-## Architectural Decision Record
-
-See the [docs/adr](docs/adr) directory for a list of the Architectural Decision
-Record (ADR). We use [adr-tools](https://github.com/npryce/adr-tools) to manage
-our ADRs, see the link for how to install (hint: `brew install adr-tools` or use
-ASDF).
-
-## Linting
-
-It's best to lint just your app directories and not those belonging to the framework:
-
-```bash
-bundle exec rubocop app config db lib spec --format clang
-
-or
-
-docker-compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
-```
-
-## Running specs, linter (with auto correct) and annotate models and serializers
-
-```
-bundle exec rake
-```
-
-## Accessing API
-
-### V2
-
-#### Authentication
-
-Authenticating with V2 of the API relies on an email address of an existing user
-in the database being supplied as the bearer token.
-
-An example HTTP request would look like:
-
-```
-GET /api/v2/recruitment_cycles.json
-Authorization: Bearer <encoded JWT token>
-```
-
-or with curl:
-
-```bash
-curl http://localhost:3001/api/v2/recruitment_cycles.json -H "Authorization: Bearer <encoded JWT token>"
-```
-
-## Settings vs config vs Environment variables
-
-Refer to the [the config gem](https://github.com/railsconfig/config#accessing-the-settings-object) to understand the `file based settings` loading order.
-
-To override file based via `Machine based env variables settings`
-
-```bash
-cat config/settings.yml
-file
-  based
-    settings
-      env1: 'some file based value'
-```
-
-```bash
-export SETTINGS__FILE__BASED__SETTINGS__ENV1="machine wins"
-```
-
-```ruby
-puts Settings.file.based.setting.env1
-
-machine wins
-```
-
-Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.\* are not considered for general consumption.
-
-### Documentation
-
-Use the following command to generate OpenAPI specification:
-
-```sh
-bundle exec rake rswag:specs:swaggerize
-```
-
-We use [Tech Docs](https://github.com/alphagov/tech-docs-gem) to build documentation. To update documentation, the relevant files can be found in `/docs`. The docker build will then take these files to generate the static site.
-
-To develop and preview the tech docs you can start and run with [Middleman](https://github.com/middleman/middleman)
-
-```sh
-cd docs && bundle install && bundle exec middleman
-```
-
-## CI variables
-
-You'll need to define the `AZURE_CR_PASSWORD` in Travis in order to successfully build and publish. This can be done using this command:
-
-```bash
-travis encrypt AZURE_CR_PASSWORD="xxx" --add
-```
-
-## Sentry
-
-To track exceptions through Sentry, configure the `SENTRY_DSN` environment variable:
-
-```
-SENTRY_DSN=https://aaa:bbb@sentry.io/123 rails s
-```
-
-## <a name="other_documentation"></a>Other Documentation
-
-- [Services pattern documentation](./app/services/README.md)
-- [Healthcheck and Ping Endpoints](./docs/healthcheck_and_ping_endpoints.md)
-- [Alerting and monitoring](./docs/alerting_and_monitoring.md)
+[MIT Licence](LICENCE)
