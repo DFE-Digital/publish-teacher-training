@@ -1,10 +1,6 @@
 require "rails_helper"
 
 feature "switcher cycle" do
-  before do
-    Capybara.reset_sessions!
-  end
-
   scenario "Navigate to /find/cycle" do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
