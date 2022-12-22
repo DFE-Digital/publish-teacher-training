@@ -1,10 +1,65 @@
 require "rails_helper"
 
 feature "switcher cycle" do
+  before(:each) do
+    Capybara.reset_sessions!
+  end
+
   scenario "Navigate to /find/cycle" do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
     and_i_should_see_the_page_heading
+  end
+
+  scenario "Mid cycle and deadlines should be displayed" do
+    
+    when_i_visit_switcher_cycle_page
+    and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_mid_cycle_and_deadlines_should_be_displayed_banner
+    
+  end
+  
+  scenario "Update to Apply 1 deadline has passed" do
+    
+    when_i_visit_switcher_cycle_page
+    and_i_choose_apply_1_deadline_has_passed_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_apply_1_deadline_has_passed_banner
+    
+  end
+  
+  scenario "Update to Apply 2 deadline has passed" do
+    
+    when_i_visit_switcher_cycle_page
+    and_i_choose_apply_2_deadline_has_passed_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_apply_2_deadline_has_passed_banner
+    
+  end
+  
+  scenario "Find has closed" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose_find_has_closed_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_find_has_closed_banner
+  end
+
+  scenario "Find has reopened" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose_find_has_reopened_option
+    then_i_click_on_update_button
+    and_i_should_see_the_sucess_banner
+    and_i_visit_results_page
+    and_i_see_find_has_reopened_banner
   end
 
   def when_i_visit_switcher_cycle_page
@@ -16,21 +71,27 @@ feature "switcher cycle" do
   end
 
   def and_i_should_see_the_page_heading
-    #expect(page).to have_selector("h1", text: "Recruitment cycles")
     expect(courses_by_location_or_training_provider_page.heading).to have_content "Recruitment cycles"
   end
 
-  scenario "Update to Apply 1 deadline has passed" do
-    when_i_visit_switcher_cycle_page
-    and_i_choose_apply_1_deadline_has_passed_option
-    then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
-    #and_i_visit_results_page
-    #and_i_see_relevant_banner
-  end
+  def  and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
+    page.choose("Mid cycle and deadlines should be displayed")
+  end 
 
   def and_i_choose_apply_1_deadline_has_passed_option
     page.choose("Apply 1 deadline has passed")
+  end 
+
+  def and_i_choose_apply_2_deadline_has_passed_option
+    page.choose("Apply 2 deadline has passed")
+  end 
+
+  def and_i_choose_find_has_closed_option
+    page.choose("Find has closed")
+  end 
+
+  def and_i_choose_find_has_reopened_option
+    page.choose("Find has reopened")
   end 
 
   def then_i_click_on_update_button
@@ -38,7 +99,6 @@ feature "switcher cycle" do
   end
 
   def and_i_should_see_the_sucess_banner
-    #expect(page).to have_selector("h1", text: "Recruitment cycles")
     expect(page).to have_selector("h2", text: "Success")
   end  
 
@@ -46,41 +106,27 @@ feature "switcher cycle" do
     visit "/find/results"
   end  
 
-  def and_i_see_relevant_banner
-    expect(courses_by_location_or_training_provider_page.heading).to have_content "found"
-  end  
+  def and_i_see_mid_cycle_and_deadlines_should_be_displayed_banner
+    expect(page).to have_selector(".govuk-notification-banner__content", text: "Apply now to get on a course starting in the 2023 to 2024 academic year")
+  end 
 
-  # xscenario "Navigate to /find" do
-  #   when_i_visit_the_search_page
-  #   then_i_should_see_the_page_title
-  #   and_i_should_see_the_page_heading
-  #   and_i_see_the_three_search_options
-  # end
+  def and_i_see_apply_1_deadline_has_passed_banner
+    expect(page).to have_selector(".govuk-notification-banner__content", text: "If you’re applying for the first time since applications opened in December 2022")
+  end 
+  
+  def and_i_see_apply_2_deadline_has_passed_banner
+    expect(page).to have_selector(".govuk-notification-banner__content", text: "Courses are currently closed but you can get your application ready")
+  end 
 
-  # xscenario "Candidate searches by provider" do
-  #   given_there_are_providers
-  #   and_i_visit_the_search_page
-  #   when_i_select_the_provider_radio_button
+  def and_i_see_find_has_closed_banner
+    expect(page).should_not have_selector(".govuk-notification-banner__content")
+  end 
 
-  #   and_i_select_the_provider
-  #   then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
-  #   and_i_am_on_the_age_groups_page
-  # end
+  def and_i_see_find_has_reopened_banner
+    expect(page).should_not have_selector(".govuk-notification-banner__content")
+  end 
 
-  # xscenario "Candidate searches for secondary courses across England" do
-  #   when_i_visit_the_search_page
-  #   and_i_select_the_across_england_radio_button
-  #   then_i_click_continue_on_the(courses_by_location_or_training_provider_page)
-  #   and_i_am_on_the_age_groups_page
-  #   then_the_correct_age_group_form_page_url_and_query_params_are_present
-
-  #   when_i_choose_secondary
-  #   then_i_click_continue_on_the(age_groups_page)
-  #   then_i_should_see_the_subjects_form
-  #   and_i_should_not_see_hidden_subjects
-  #   then_the_correct_subjects_form_page_url_and_query_params_are_present
-  # end
-
+  
 private
 
   def providers
@@ -91,13 +137,6 @@ private
     courses_by_location_or_training_provider_page.load
   end
 
-  # def then_i_should_see_the_page_title
-  #   expect(courses_by_location_or_training_provider_page.title).to have_content "Find courses by location or by training provider"
-  # end
-
-  # def and_i_should_see_the_page_heading
-  #   expect(courses_by_location_or_training_provider_page.heading).to have_content "Find courses by location or by training provider"
-  # end
 
   def and_i_see_the_three_search_options
     expect(courses_by_location_or_training_provider_page).to have_by_city_town_or_postcode_radio
