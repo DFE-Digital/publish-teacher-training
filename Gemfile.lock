@@ -810,7 +810,6 @@ DEPENDENCIES
   rails_semantic_logger
   rb-readline
   redcarpet
-  redis
   request_store
   rspec-its
   rspec-rails (= 6.0.1)
