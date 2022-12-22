@@ -2,7 +2,7 @@
 
 ## Find
 
-The Find servie is publicly available with one or two internal routes protected by basic auth.
+The Find service is publicly available with one or two internal routes protected by basic auth.
 
 ### Basic Auth
 

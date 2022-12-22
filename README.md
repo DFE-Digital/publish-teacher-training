@@ -3,7 +3,7 @@
 This repo is home to three services:
 
 - A service for candidates to [find teacher training](https://www.find-postgraduate-teacher-training.service.gov.uk)
-- A service for providers to [publish teacher courses](https://www.publish-teacher-training-courses.service.gov.uk)
+- A service for providers to [publish teacher training courses](https://www.publish-teacher-training-courses.service.gov.uk)
 - An API to retrieve data on [teacher training courses](https://api.publish-teacher-training-courses.service.gov.uk/)
 
 ## Status
