@@ -15,7 +15,7 @@ feature "switcher cycle" do
     when_i_visit_switcher_cycle_page
     and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
     then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
+    and_i_should_see_the_success_banner
     and_i_visit_results_page
     and_i_see_mid_cycle_and_deadlines_should_be_displayed_banner
   end
@@ -24,7 +24,7 @@ feature "switcher cycle" do
     when_i_visit_switcher_cycle_page
     and_i_choose_apply_1_deadline_has_passed_option
     then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
+    and_i_should_see_the_success_banner
     and_i_visit_results_page
     and_i_see_apply_1_deadline_has_passed_banner
   end
@@ -33,7 +33,7 @@ feature "switcher cycle" do
     when_i_visit_switcher_cycle_page
     and_i_choose_apply_2_deadline_has_passed_option
     then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
+    and_i_should_see_the_success_banner
     and_i_visit_results_page
     and_i_see_apply_2_deadline_has_passed_banner
   end
@@ -42,7 +42,7 @@ feature "switcher cycle" do
     when_i_visit_switcher_cycle_page
     and_i_choose_find_has_closed_option
     then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
+    and_i_should_see_the_success_banner
     and_i_visit_results_page
     and_i_see_find_has_closed_banner
   end
@@ -51,7 +51,7 @@ feature "switcher cycle" do
     when_i_visit_switcher_cycle_page
     and_i_choose_find_has_reopened_option
     then_i_click_on_update_button
-    and_i_should_see_the_sucess_banner
+    and_i_should_see_the_success_banner
     and_i_visit_results_page
     and_i_see_find_has_reopened_banner
   end
@@ -92,7 +92,7 @@ feature "switcher cycle" do
     page.click_on("Update point in recruitment cycle")
   end
 
-  def and_i_should_see_the_sucess_banner
+  def and_i_should_see_the_success_banner
     expect(page).to have_selector("h2", text: "Success")
   end
 
