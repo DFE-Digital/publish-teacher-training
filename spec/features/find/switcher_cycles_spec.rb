@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "switcher cycle" do
-  before(:each) do
+  before do
     Capybara.reset_sessions!
   end
 
@@ -12,38 +12,32 @@ feature "switcher cycle" do
   end
 
   scenario "Mid cycle and deadlines should be displayed" do
-    
     when_i_visit_switcher_cycle_page
     and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
     then_i_click_on_update_button
     and_i_should_see_the_sucess_banner
     and_i_visit_results_page
     and_i_see_mid_cycle_and_deadlines_should_be_displayed_banner
-    
   end
-  
+
   scenario "Update to Apply 1 deadline has passed" do
-    
     when_i_visit_switcher_cycle_page
     and_i_choose_apply_1_deadline_has_passed_option
     then_i_click_on_update_button
     and_i_should_see_the_sucess_banner
     and_i_visit_results_page
     and_i_see_apply_1_deadline_has_passed_banner
-    
   end
-  
+
   scenario "Update to Apply 2 deadline has passed" do
-    
     when_i_visit_switcher_cycle_page
     and_i_choose_apply_2_deadline_has_passed_option
     then_i_click_on_update_button
     and_i_should_see_the_sucess_banner
     and_i_visit_results_page
     and_i_see_apply_2_deadline_has_passed_banner
-    
   end
-  
+
   scenario "Find has closed" do
     when_i_visit_switcher_cycle_page
     and_i_choose_find_has_closed_option
@@ -74,25 +68,25 @@ feature "switcher cycle" do
     expect(courses_by_location_or_training_provider_page.heading).to have_content "Recruitment cycles"
   end
 
-  def  and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
+  def and_i_choose_mid_cycle_and_deadlines_should_be_displayed_option
     page.choose("Mid cycle and deadlines should be displayed")
-  end 
+  end
 
   def and_i_choose_apply_1_deadline_has_passed_option
     page.choose("Apply 1 deadline has passed")
-  end 
+  end
 
   def and_i_choose_apply_2_deadline_has_passed_option
     page.choose("Apply 2 deadline has passed")
-  end 
+  end
 
   def and_i_choose_find_has_closed_option
     page.choose("Find has closed")
-  end 
+  end
 
   def and_i_choose_find_has_reopened_option
     page.choose("Find has reopened")
-  end 
+  end
 
   def then_i_click_on_update_button
     page.click_on("Update point in recruitment cycle")
@@ -100,33 +94,32 @@ feature "switcher cycle" do
 
   def and_i_should_see_the_sucess_banner
     expect(page).to have_selector("h2", text: "Success")
-  end  
+  end
 
   def and_i_visit_results_page
     visit "/find/results"
-  end  
+  end
 
   def and_i_see_mid_cycle_and_deadlines_should_be_displayed_banner
     expect(page).to have_selector(".govuk-notification-banner__content", text: "Apply now to get on a course starting in the 2023 to 2024 academic year")
-  end 
+  end
 
   def and_i_see_apply_1_deadline_has_passed_banner
     expect(page).to have_selector(".govuk-notification-banner__content", text: "If you’re applying for the first time since applications opened in December 2022")
-  end 
-  
+  end
+
   def and_i_see_apply_2_deadline_has_passed_banner
     expect(page).to have_selector(".govuk-notification-banner__content", text: "Courses are currently closed but you can get your application ready")
-  end 
+  end
 
   def and_i_see_find_has_closed_banner
     expect(page).should_not have_selector(".govuk-notification-banner__content")
-  end 
+  end
 
   def and_i_see_find_has_reopened_banner
     expect(page).should_not have_selector(".govuk-notification-banner__content")
-  end 
+  end
 
-  
 private
 
   def providers
@@ -136,7 +129,6 @@ private
   def when_i_visit_the_search_page
     courses_by_location_or_training_provider_page.load
   end
-
 
   def and_i_see_the_three_search_options
     expect(courses_by_location_or_training_provider_page).to have_by_city_town_or_postcode_radio
