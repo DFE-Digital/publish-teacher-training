@@ -74,7 +74,7 @@ private
     )
 
     expect(course_preview_page.length).to have_content(
-      decorated_course.length,
+      "Up to 2 years - full time",
     )
 
     expect(course_preview_page.applications_open_from).to have_content(

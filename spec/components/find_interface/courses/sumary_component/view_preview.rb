@@ -67,6 +67,10 @@ module FindInterface::Courses::SummaryComponent
       def secondary_course?
         level.to_sym == :secondary
       end
+
+      def study_mode
+        "full_time"
+      end
     end
   end
 end

@@ -14,7 +14,8 @@ module FindInterface
         :find_outcome,
         :start_date,
         :secondary_course?,
-        :level, to: :course
+        :level,
+        :study_mode, to: :course
 
       def initialize(course)
         super
@@ -27,6 +28,10 @@ module FindInterface
         else
           age_range_in_years.humanize
         end
+      end
+
+      def course_length_with_study_mode_row
+        "#{length} - #{study_mode.humanize.downcase}"
       end
     end
   end

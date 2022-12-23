@@ -169,7 +169,7 @@ private
     )
 
     expect(course_show_page.length).to have_content(
-      @course.decorate.length,
+      "1 year - full time",
     )
 
     expect(course_show_page.applications_open_from).to have_content(
