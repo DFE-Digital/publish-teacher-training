@@ -381,7 +381,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         context "passing in is_accredited_body param" do
           let(:filter) { { is_accredited_body: true } }
 
-          it "returns 'Second' provider only" do
+          it "only returns the second provider" do
             expect(provider_names_in_response).to eq([provider2.provider_name])
           end
         end

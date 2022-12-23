@@ -1251,7 +1251,7 @@
             "example": true
           },
           "is_accredited_body": {
-            "description": "Only return providers that is accredited body.",
+            "description": "Only return providers that are accredited bodies.",
             "type": "boolean",
             "example": true
           },
