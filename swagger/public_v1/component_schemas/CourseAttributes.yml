@@ -396,3 +396,6 @@ properties:
     nullable: true
     description: "The course’s campaign code, corresponding to campaigns to help improve recruitment."
     example: "engineers_teach_physics"
+    enum:
+      - engineers_teach_physics
+      - no_campaign
