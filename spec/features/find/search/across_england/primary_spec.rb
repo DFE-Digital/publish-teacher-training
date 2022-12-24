@@ -101,7 +101,7 @@ private
   end
 
   def i_should_see_an_age_group_validation_error
-    expect(page).to have_content("Select an age group")
+    expect(page).to have_content("Select which age group you want to teach")
   end
 
   def when_i_select_the_primary_radio_button
@@ -118,7 +118,7 @@ private
   alias_method :when_i_click_find_courses, :and_i_click_find_courses
 
   def then_i_should_see_a_subjects_validation_error
-    expect(page).to have_content("Select at least one subject")
+    expect(page).to have_content("Select at least one primary subject you want to teach")
   end
 
   def when_i_select_the_primary_subject_textbox

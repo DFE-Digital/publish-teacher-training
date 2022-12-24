@@ -12,7 +12,7 @@ module Find
 
         it "is not valid" do
           expect(subject.valid?).to be(false)
-          expect(subject.errors[:age_group]).to include("Select an age group")
+          expect(subject.errors[:age_group]).to include("Select which age group you want to teach")
         end
       end
 
