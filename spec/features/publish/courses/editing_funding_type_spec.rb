@@ -4,7 +4,6 @@ require "rails_helper"
 
 feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
   before do
-    given_the_visa_sponsorship_on_course_feature_flag_is_active
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
 
@@ -56,10 +55,6 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
       and_i_cancel
       then_the_course_should_should_still_be_salaried
     end
-  end
-
-  def given_the_visa_sponsorship_on_course_feature_flag_is_active
-    allow(Settings.features).to receive(:visa_sponsorship_on_course).and_return(true)
   end
 
   def and_i_am_authenticated_as_a_lead_school_provider_user

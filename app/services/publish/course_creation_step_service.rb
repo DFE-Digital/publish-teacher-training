@@ -136,7 +136,7 @@ module Publish
     end
 
     def visas_to_remove(course)
-      if FeatureService.enabled?(:visa_sponsorship_on_course) && course.funding_type.present?
+      if course.funding_type.present?
         if course.is_fee_based?
           [:can_sponsor_skilled_worker_visa]
         elsif course.school_direct_salaried_training_programme? || course.pg_teaching_apprenticeship?

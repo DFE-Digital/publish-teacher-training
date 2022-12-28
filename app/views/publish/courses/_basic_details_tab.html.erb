@@ -68,7 +68,7 @@
             <% row.action %>
           <% else %>
             <% row.action(
-              href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? apprenticeship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+              href: course.draft_or_rolled_over? ? apprenticeship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
               visually_hidden_text: "if apprenticeship",
             ) %>
           <% end %>
@@ -81,7 +81,7 @@
             <% row.action %>
           <% else %>
             <% row.action(
-              href: FeatureService.enabled?(:visa_sponsorship_on_course) && course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+              href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
               visually_hidden_text: "funding type",
             ) %>
           <% end %>
@@ -133,7 +133,6 @@
         <% end %>
       <% end %>
 
-      <% if FeatureService.enabled?(:visa_sponsorship_on_course) %>
         <% if course.is_fee_based? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row| %>
             <% row.key { "Student visas" } %>
@@ -161,7 +160,6 @@
             <% end %>
           <% end %>
         <% end %>
-      <% end %>
 
       <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
         <% row.key { "Applications open" } %>
