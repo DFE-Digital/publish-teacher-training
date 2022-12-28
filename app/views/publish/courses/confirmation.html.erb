@@ -91,16 +91,14 @@
             ) %>
           <% end %>
         <% else %>
-          
-            <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
-              <% row.key { "Funding type" } %>
-              <% row.value { course.funding } %>
-              <% row.action(
-                href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-                visually_hidden_text: "if funding type",
-              ) %>
-            <% end %>
-          
+          <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+            <% row.key { "Funding type" } %>
+            <% row.value { course.funding } %>
+            <% row.action(
+              href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
+              visually_hidden_text: "if funding type",
+            ) %>
+          <% end %>
         <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
@@ -153,7 +151,7 @@
             ) %>
           <% end %>
         <% end %>
-   
+
         <% if course.is_fee_based? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
             <% row.key { "Student visas" } %>
@@ -175,7 +173,6 @@
             ) %>
           <% end %>
         <% end %>
-      
 
         <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
           <% row.key { "Applications open" } %>
