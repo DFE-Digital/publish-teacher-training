@@ -16,7 +16,7 @@ module Publish
 
       def update
         authorize(provider)
-        if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s && FeatureService.enabled?(:engineers_teach_physics_on_course)
+        if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(
             engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
