@@ -4,7 +4,6 @@ require "rails_helper"
 
 feature "Editing apprenticeship", { can_edit_current_and_next_cycles: false } do
   before do
-    given_the_visa_sponsorship_on_course_feature_flag_is_active
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
 
@@ -30,10 +29,6 @@ feature "Editing apprenticeship", { can_edit_current_and_next_cycles: false } do
       when_i_update_the_skilled_worker_visa_to_be_sponsored
       then_i_should_see_a_success_message_for("Skilled Worker")
     end
-  end
-
-  def given_the_visa_sponsorship_on_course_feature_flag_is_active
-    allow(Settings.features).to receive(:visa_sponsorship_on_course).and_return(true)
   end
 
   def and_i_am_authenticated_as_a_lead_school_provider_user

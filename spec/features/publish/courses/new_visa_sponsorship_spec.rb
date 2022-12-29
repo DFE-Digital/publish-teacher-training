@@ -1,10 +1,6 @@
 require "rails_helper"
 
 feature "visa sponsorship (add course summary page)", { can_edit_current_and_next_cycles: false } do
-  before do
-    given_the_visa_sponsorship_on_course_feature_flag_is_active
-  end
-
   context "for lead school" do
     before do
       given_i_am_authenticated_as_a_provider_user
@@ -36,7 +32,6 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
 
   context "for scitt or uni provider" do
     before do
-      given_the_visa_sponsorship_on_course_feature_flag_is_active
       given_i_am_authenticated_as_a_provider_user(scitt_or_uni_provider)
       when_i_visit_the_course_confirmation_page
     end
@@ -65,10 +60,6 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
   end
 
 private
-
-  def given_the_visa_sponsorship_on_course_feature_flag_is_active
-    allow(Settings.features).to receive(:visa_sponsorship_on_course).and_return(true)
-  end
 
   def lead_school_provider
     build(:provider, sites: [build(:site)])
