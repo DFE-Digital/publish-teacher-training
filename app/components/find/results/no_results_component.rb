@@ -1,7 +1,7 @@
 module Find
   module Results
     class NoResultsComponent < ViewComponent::Base
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :results
       delegate :devolved_nation?, :country, :subjects, :with_salaries?, to: :results

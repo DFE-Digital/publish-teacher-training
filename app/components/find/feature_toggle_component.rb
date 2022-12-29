@@ -1,6 +1,6 @@
 module Find
   class FeatureToggleComponent < ViewComponent::Base
-    include ViewHelper
+    include ::ViewHelper
 
     attr_reader :feature_name
 

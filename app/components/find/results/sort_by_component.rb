@@ -1,7 +1,7 @@
 module Find
   module Results
     class SortByComponent < ViewComponent::Base
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :results
 

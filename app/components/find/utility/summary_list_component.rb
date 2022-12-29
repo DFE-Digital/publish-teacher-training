@@ -1,7 +1,7 @@
 module Find
   module Utility
     class SummaryListComponent < ViewComponent::Base
-      include ViewHelper
+      include ::ViewHelper
 
       def initialize(rows:)
         super

@@ -1,6 +1,6 @@
 module Find
   class FeedbackComponent < ViewComponent::Base
-    include ViewHelper
+    include ::ViewHelper
 
     attr_reader :path, :controller
 

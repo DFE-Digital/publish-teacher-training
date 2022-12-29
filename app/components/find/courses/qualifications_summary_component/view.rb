@@ -2,7 +2,7 @@ module Find
   module Courses
     class QualificationsSummaryComponent::View < ViewComponent::Base
       include ApplicationHelper
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :find_outcome
 

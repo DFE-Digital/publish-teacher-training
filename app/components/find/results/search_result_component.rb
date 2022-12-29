@@ -1,7 +1,7 @@
 module Find
   module Results
     class SearchResultComponent < ViewComponent::Base
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :course
 

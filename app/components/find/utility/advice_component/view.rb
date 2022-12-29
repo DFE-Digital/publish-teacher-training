@@ -1,7 +1,7 @@
 module Find
   module Utility
     class AdviceComponent::View < ViewComponent::Base
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :title
 

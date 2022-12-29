@@ -1,6 +1,6 @@
 module Find
   class FeatureHistoryComponent < ViewComponent::Base
-    include ViewHelper
+    include ::ViewHelper
 
     def initialize(feature_name)
       super

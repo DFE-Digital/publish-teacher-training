@@ -2,7 +2,7 @@ module Find
   module Courses
     class SummaryComponent::View < ViewComponent::Base
       include ApplicationHelper
-      include ViewHelper
+      include ::ViewHelper
 
       attr_reader :course
       delegate :accrediting_provider,

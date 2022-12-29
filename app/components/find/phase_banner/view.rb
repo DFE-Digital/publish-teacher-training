@@ -2,7 +2,7 @@
 
 module Find
   class PhaseBanner::View < ViewComponent::Base
-    include ViewHelper
+    include ::ViewHelper
     def initialize(no_border: false)
       super
       @no_border = no_border

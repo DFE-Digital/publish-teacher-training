@@ -1,6 +1,6 @@
 module Find
   class LocationSubjectFilterComponent < ViewComponent::Base
-    include ViewHelper
+    include ::ViewHelper
 
     attr_reader :results
 
