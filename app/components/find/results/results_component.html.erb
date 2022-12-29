@@ -1,0 +1,39 @@
+<%= render Find::LocationSubjectFilterComponent.new(results:) %>
+
+<h1 class="govuk-heading-xl" data-qa="heading">
+  <%= "#{results.number_of_courses_string} found" %>
+</h1>
+
+<div class="app-filter-toggle"></div>
+
+<div class="app-filter-layout">
+  <div class="app-filter-layout__filter">
+    <%= render Find::Results::FilterComponent.new(results:) %>
+  </div>
+  <div class="app-filter-layout__content">
+
+    <div class="app-promoted-link">
+      <%= govuk_link_to "Talk to teacher training providers at an event near you",
+                        t("find.get_into_teaching.url_teacher_training_events") %>.
+    </div>
+
+    <%= render Find::Results::NoResultsComponent.new(results:) %>
+    <%= render Find::Results::SortByComponent.new(results:) %>
+    <!-- TODO suggestions -->
+    <%#= render Find::Results::SuggestedSearchesComponent.new(results:) %>
+
+    <% if results.has_results? %>
+      <ul class="app-search-results">
+        <% courses.each do |course| %>
+          <%= render Find::Results::SearchResultComponent.new(
+            course:,
+            has_sites: results.has_sites?(course),
+            filtered_by_location: results.location_filter?,
+          ) %>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%= paginate(courses) %>
+  </div>
+</div>

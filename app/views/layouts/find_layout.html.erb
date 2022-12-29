@@ -19,12 +19,12 @@
       <%= render("layouts/cookie_banner", service_name: t("service_name.find"), cookies_path: find_cookies_path) %>
     <% end %>
 
-    <%= render FindInterface::Header::View.new(
+    <%= render Find::Header::View.new(
       service_name: t("service_name.find"),
     ) %>
 
     <div class="govuk-width-container">
-      <%= render FindInterface::PhaseBanner::View.new %>
+      <%= render Find::PhaseBanner::View.new %>
 
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
@@ -39,15 +39,15 @@
           <% end %>
         <% end %>
 
-        <%= render FindInterface::MaintenanceBannerComponent.new %>
-        <%= render FindInterface::DeadlineBannerComponent.new(flash_empty: flash.reject { |flash| flash[0] == "start_wizard" }.empty?) unless request.url.include?("/results/filter/subject") %>
+        <%= render Find::MaintenanceBannerComponent.new %>
+        <%= render Find::DeadlineBannerComponent.new(flash_empty: flash.reject { |flash| flash[0] == "start_wizard" }.empty?) unless request.url.include?("/results/filter/subject") %>
 
         <%= yield %>
       </main>
     </div>
     <% if @render_feedback_component %>
       <%= render(
-        FindInterface::FeedbackComponent.new(
+        Find::FeedbackComponent.new(
           path: request.env["PATH_INFO"],
           controller: params[:controller],
         ),

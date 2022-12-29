@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::InternationalStudentsComponent::View, type: :component do
+describe Find::Courses::InternationalStudentsComponent::View, type: :component do
   context "when the course is fee-paying and does not sponsor Student visas" do
     before do
       course = build(

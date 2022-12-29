@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::AboutSchoolsComponent::View, type: :component do
+describe Find::Courses::AboutSchoolsComponent::View, type: :component do
   context "valid program_type" do
     it "renders the component" do
       %w[higher_education_programme scitt_programme].each do |program_type|

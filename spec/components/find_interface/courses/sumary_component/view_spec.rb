@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-module FindInterface::Courses::SummaryComponent
+module Find::Courses::SummaryComponent
   describe View do
     it "renders sub sections" do
       provider = build(:provider).decorate

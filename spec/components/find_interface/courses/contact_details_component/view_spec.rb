@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::ContactDetailsComponent::View, type: :component do
+describe Find::Courses::ContactDetailsComponent::View, type: :component do
   context "when the email address is not present" do
     it "does not render the email column" do
       provider = build(:provider, provider_code: "BAT", email: nil)

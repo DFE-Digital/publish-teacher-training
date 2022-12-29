@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe LocationSubjectFilterComponent, type: :component do
     it "renders the correct summary when location is used" do
       results = instance_double(Find::ResultsView, location_filter?: true, provider_filter?: false, filter_params_for: "/")

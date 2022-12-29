@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module FindInterface::Header
+module Find::Header
   class ViewPreview < ViewComponent::Preview
     def with_custom_service_name
       render(Header::View.new(service_name: "Hello"))

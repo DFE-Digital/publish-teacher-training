@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do
+describe Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do
   context "Salaried courses" do
     it "renders salaried course section if the course has a salary" do
       course = build(:course, funding_type: "salary").decorate

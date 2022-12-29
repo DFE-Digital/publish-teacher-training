@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module FindInterface::Courses::EntryRequirementsComponent
+module Find::Courses::EntryRequirementsComponent
   class ViewPreview < ViewComponent::Preview
     def qualifications_needed_only
       course = Course.new(course_code: "FIND",
@@ -11,15 +11,15 @@ module FindInterface::Courses::EntryRequirementsComponent
         level: "secondary",
         additional_gcse_equivalencies: "Additional GCSE Equivalencies Text")
 
-      render FindInterface::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
+      render Find::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
     end
 
     def fully_populated
-      render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_course)
+      render Find::Courses::EntryRequirementsComponent::View.new(course: mock_course)
     end
 
     def fully_populated_with_etp_course
-      render FindInterface::Courses::EntryRequirementsComponent::View.new(course: mock_etp_course)
+      render Find::Courses::EntryRequirementsComponent::View.new(course: mock_etp_course)
     end
 
   private

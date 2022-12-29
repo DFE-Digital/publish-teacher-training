@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-module FindInterface::Courses::AboutSchoolsComponent
+module Find::Courses::AboutSchoolsComponent
   class ViewPreview < ViewComponent::Preview
     def hei_minimum
       course = Course.new(course_code: "FIND",
         provider: Provider.new(provider_code: "DFE"),
         program_type: "higher_education_programme",
         level: "further_education").decorate
-      render FindInterface::Courses::AboutSchoolsComponent::View.new(course)
+      render Find::Courses::AboutSchoolsComponent::View.new(course)
     end
 
     def scitt_minimum
@@ -15,15 +15,15 @@ module FindInterface::Courses::AboutSchoolsComponent
         provider: Provider.new(provider_code: "DFE"),
         program_type: "scitt_programme",
         level: "secondary").decorate
-      render FindInterface::Courses::AboutSchoolsComponent::View.new(course)
+      render Find::Courses::AboutSchoolsComponent::View.new(course)
     end
 
     def scitt_with_placements_and_sites
-      render FindInterface::Courses::AboutSchoolsComponent::View.new(mock_scitt_course)
+      render Find::Courses::AboutSchoolsComponent::View.new(mock_scitt_course)
     end
 
     def hei_with_placements_and_sites
-      render FindInterface::Courses::AboutSchoolsComponent::View.new(mock_hei_course)
+      render Find::Courses::AboutSchoolsComponent::View.new(mock_hei_course)
     end
 
   private

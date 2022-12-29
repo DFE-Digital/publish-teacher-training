@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe Results::SearchResultComponent, type: :component do
     context "when the course specifies a required degree grade" do
       it "renders correct message" do

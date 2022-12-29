@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe MaintenanceBannerComponent, type: :component do
     context "when the `maintenance_mode` flag is active" do
       it "renders the correct content" do

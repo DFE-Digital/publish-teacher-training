@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-module FindInterface::Courses::SummaryComponent
+module Find::Courses::SummaryComponent
   class ViewPreview < ViewComponent::Preview
     def with_bare_minimum
       course = Course.new(course_code: "FIND",
         provider: Provider.new(provider_code: "DFE")).decorate
-      render FindInterface::Courses::SummaryComponent::View.new(course)
+      render Find::Courses::SummaryComponent::View.new(course)
     end
 
     def primary_course_with_all_columns
       course = CourseDecorator.new(mock_primary_course)
 
-      render FindInterface::Courses::SummaryComponent::View.new(course)
+      render Find::Courses::SummaryComponent::View.new(course)
     end
 
     def secondary_course_with_all_columns
       course = CourseDecorator.new(mock_secondary_course)
 
-      render FindInterface::Courses::SummaryComponent::View.new(course)
+      render Find::Courses::SummaryComponent::View.new(course)
     end
 
   private

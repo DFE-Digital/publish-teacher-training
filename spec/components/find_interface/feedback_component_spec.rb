@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe FeedbackComponent, type: :component do
     let(:path) { "/path" }
 

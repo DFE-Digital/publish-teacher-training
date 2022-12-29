@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe Results::SortByComponent, type: :component do
     it "renders nothing when provider filter is active" do
       results_view = instance_double(

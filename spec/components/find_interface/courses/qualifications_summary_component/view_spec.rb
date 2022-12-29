@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::QualificationsSummaryComponent::View, type: :component do
+describe Find::Courses::QualificationsSummaryComponent::View, type: :component do
   context "QTS qualification" do
     it "renders correct text" do
       result = render_inline(described_class.new("QTS"))

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, type: :component do
+describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, type: :component do
   let(:course) {
     build(:course,
       subjects: [

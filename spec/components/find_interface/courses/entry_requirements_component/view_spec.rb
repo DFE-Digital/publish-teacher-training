@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::EntryRequirementsComponent::View, type: :component do
+describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   context "when the provider accepts pending GCSEs" do
     it "renders correct message" do
       course = build(

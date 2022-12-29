@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module FindInterface::Courses::FeesComponent
+module Find::Courses::FeesComponent
   class ViewPreview < ViewComponent::Preview
     def default
-      render FindInterface::Courses::FeesComponent::View.new(mock_course)
+      render Find::Courses::FeesComponent::View.new(mock_course)
     end
 
   private

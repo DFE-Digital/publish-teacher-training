@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe Results::ResultsComponent, type: :component do
     before do
       allow(LocationSubjectFilterComponent).to receive(:new).and_return(plain: "")
