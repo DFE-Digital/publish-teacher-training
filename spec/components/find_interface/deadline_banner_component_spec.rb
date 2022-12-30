@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe DeadlineBannerComponent, type: :component do
     context "when it is mid cycle" do
       it "does not render" do

@@ -1,6 +1,6 @@
 <%= content_for :page_title, "#{@number_of_courses_string} found" %>
 
-<%= render FindInterface::Results::ResultsComponent.new(
+<%= render Find::Results::ResultsComponent.new(
   results: @results_view,
   courses: @courses,
 ) %>

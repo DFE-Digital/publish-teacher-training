@@ -12,7 +12,7 @@
 <%= form_with(model: @subjects_form, url: find_subjects_create_path, method: :get) do |f| %>
   <%= f.govuk_error_summary %>
 
-  <%= render FindInterface::HiddenFieldsComponent.new(
+  <%= render Find::HiddenFieldsComponent.new(
     query_params: request.query_parameters,
     form: f,
     form_name: :find_subjects_form,

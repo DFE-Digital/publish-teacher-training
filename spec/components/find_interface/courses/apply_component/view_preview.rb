@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-module FindInterface::Courses::ApplyComponent
+module Find::Courses::ApplyComponent
   class ViewPreview < ViewComponent::Preview
     def course_with_no_vacancies
       course = Course.new(course_code: "FIND",
         provider: Provider.new(provider_code: "DFE"))
 
       SiteSetting.set(name: "cycle_schedule", value: :today_is_after_find_opens)
-      render FindInterface::Courses::ApplyComponent::View.new(course)
+      render Find::Courses::ApplyComponent::View.new(course)
     end
 
     def course_with_vacancies
@@ -18,7 +18,7 @@ module FindInterface::Courses::ApplyComponent
 
       # SiteSetting.set(name: "cycle_schedule", value: :today_is_after_find_opens)
       # Instead of doing the above, when the cycle switcher page is ported across we can make this work
-      render FindInterface::Courses::ApplyComponent::View.new(course)
+      render Find::Courses::ApplyComponent::View.new(course)
     end
 
     def course_closed
@@ -27,7 +27,7 @@ module FindInterface::Courses::ApplyComponent
 
       # SiteSetting.set(name: "cycle_schedule", value: :today_is_after_find_closes)
       # Instead of doing the above, when the cycle switcher page is ported across we can make this work
-      render FindInterface::Courses::ApplyComponent::View.new(course)
+      render Find::Courses::ApplyComponent::View.new(course)
     end
   end
 end

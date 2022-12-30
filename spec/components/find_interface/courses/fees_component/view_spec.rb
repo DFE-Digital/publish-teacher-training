@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::FeesComponent::View, type: :component do
+describe Find::Courses::FeesComponent::View, type: :component do
   context "for international fees" do
     it "renders the correct text" do
       course = create(:course,

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::ContentsComponent::View, type: :component do
+describe Find::Courses::ContentsComponent::View, type: :component do
   context "when the program type is higher_education_programme" do
     it "renders the schools section link" do
       provider = build(:provider)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe FindInterface::Courses::ApplyComponent::View, type: :component do
+describe Find::Courses::ApplyComponent::View, type: :component do
   let(:provider) { build(:provider) }
 
   context "it is mid cycle" do

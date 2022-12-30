@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe FeatureHistoryComponent, type: :component do
     let(:feature_name) { "test_feature" }
 

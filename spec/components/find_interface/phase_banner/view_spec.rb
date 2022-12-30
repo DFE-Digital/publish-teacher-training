@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   module PhaseBanner
     RSpec.describe View, type: :component do
       {

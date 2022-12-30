@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-module FindInterface::Header
+module Find::Header
   describe View do
     include Rails.application.routes.url_helpers
 

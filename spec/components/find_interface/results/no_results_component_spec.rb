@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module FindInterface
+module Find
   describe Results::NoResultsComponent, type: :component do
     it "renders nothing if there are results" do
       results_view = instance_double(

@@ -3,7 +3,7 @@
 <h2 class="govuk-heading-xl">Feature flags</h2>
 
 <% FeatureFlag.features.each do |feature_name, feature_flag| %>
-  <%= render FindInterface::Utility::SummaryCardComponent.new(editable: true, border: true, rows: [
+  <%= render Find::Utility::SummaryCardComponent.new(editable: true, border: true, rows: [
     {
       key: "Description",
       value: feature_flag.description,
@@ -22,13 +22,13 @@
     {
       key: "History",
       value: render(
-        FindInterface::FeatureHistoryComponent.new(feature_name),
+        Find::FeatureHistoryComponent.new(feature_name),
       ),
     },
   ].compact) do %>
-    <%= render FindInterface::Utility::SummaryCardHeaderComponent.new(title: feature_name.to_s.humanize, heading_level: 2) do %>
+    <%= render Find::Utility::SummaryCardHeaderComponent.new(title: feature_name.to_s.humanize, heading_level: 2) do %>
       <% protect_against_mistakes do %>
-        <%= render FindInterface::FeatureToggleComponent.new(feature_name:) %>
+        <%= render Find::FeatureToggleComponent.new(feature_name:) %>
       <% end %>
     <% end %>
   <% end %>
