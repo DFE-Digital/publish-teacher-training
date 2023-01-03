@@ -6,7 +6,9 @@ module Find
       before_action :providers
       before_action :build_results_filter_query_parameters
 
-      def start; end
+      def start
+        redirect_to find_cycle_has_ended_path if CycleTimetable.find_down?
+      end
 
       def new; end
 

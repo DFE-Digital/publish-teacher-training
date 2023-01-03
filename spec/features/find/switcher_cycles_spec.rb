@@ -34,14 +34,14 @@ feature "switcher cycle" do
     and_i_see_deadline_banner("Courses are currently closed but you can get your application ready")
   end
 
-  # scenario "Find has closed" do
-  #   when_i_visit_switcher_cycle_page
-  #   and_i_choose("Find has closed")
-  #   then_i_click_on_update_button
-  #   and_i_should_see_the_success_banner
-  #   and_i_visit_results_page
-  #   and_i_see_find_has_closed_banner
-  # end
+  scenario "Find has closed" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose("Find has closed")
+    then_i_click_on_update_button
+    and_i_should_see_the_success_banner
+    and_i_visit_the_find_homepage
+    then_i_should_see_the_applications_closed_text
+  end
 
   # scenario "Find has reopened" do
   #   when_i_visit_switcher_cycle_page
@@ -80,15 +80,15 @@ feature "switcher cycle" do
     visit "/find/results"
   end
 
+  def and_i_visit_the_find_homepage
+    visit "/find"
+  end
+
   def and_i_see_deadline_banner(banner_text)
     expect(page).to have_selector(".govuk-notification-banner__content", text: banner_text)
   end
 
-  # def and_i_see_find_has_closed_banner
-  #   expect(page).should_not have_selector(".govuk-notification-banner__content")
-  # end
-
-  # def and_i_do_not_see_deadline_banner
-  #   expect(page).should_not have_selector(".govuk-notification-banner__content")
-  # end
+  def then_i_should_see_the_applications_closed_text
+    expect(page).to have_text("Applications are currently closed but you can get ready to apply")
+  end
 end
