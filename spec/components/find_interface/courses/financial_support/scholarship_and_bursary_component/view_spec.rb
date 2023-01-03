@@ -49,8 +49,8 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
           it "renders link to scholarship body" do
             render_inline(described_class.new(course))
 
-            expect(rendered_component).to have_text("For a scholarship, you’ll need to apply through the #{scholarship_body}")
-            expect(rendered_component).to have_link("Check whether you’re eligible for a scholarship and find out how to apply", href: scholarship_url)
+            expect(page).to have_text("For a scholarship, you’ll need to apply through the #{scholarship_body}")
+            expect(page).to have_link("Check whether you’re eligible for a scholarship and find out how to apply", href: scholarship_url)
           end
         end
       end
