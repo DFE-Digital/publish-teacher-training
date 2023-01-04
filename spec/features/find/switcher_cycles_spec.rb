@@ -22,7 +22,7 @@ feature "switcher cycle" do
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_results_page
-    and_i_see_deadline_banner("If you’re applying for the first time since applications opened in December 2022")
+    and_i_see_deadline_banner("You can continue to view and apply for courses starting in")
   end
 
   scenario "Update to Apply 2 deadline has passed" do
