@@ -246,10 +246,12 @@ module Find
       context "there are more than three results" do
         before do
           Course.destroy_all # for flakey test fail
-          # TODO: 10 findable courses
+          allow(CourseSearchService).to receive(:call).and_return(
+            instance_double(ActiveRecord::Relation, count: 10),
+          )
         end
 
-        xit { is_expected.to be(10) }
+        it { is_expected.to be(10) }
       end
 
       context "there are no results" do
