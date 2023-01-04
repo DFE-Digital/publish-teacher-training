@@ -43,14 +43,13 @@ feature "switcher cycle" do
     then_i_should_see_the_applications_closed_text
   end
 
-  # scenario "Find has reopened" do
-  #   when_i_visit_switcher_cycle_page
-  #   and_i_choose("Find has reopened")
-  #   then_i_click_on_update_button
-  #   and_i_should_see_the_success_banner
-  #   and_i_visit_results_page
-  #   and_i_do_not_see_deadline_banner
-  # end
+  scenario "Find has reopened" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose("Find has reopened")
+    then_i_click_on_update_button
+    and_i_should_see_the_success_banner
+    expect(page).to have_text("Previous cycle year #{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+  end
 
   def when_i_visit_switcher_cycle_page
     visit "/find/cycles"

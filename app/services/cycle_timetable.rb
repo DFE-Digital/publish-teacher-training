@@ -59,6 +59,10 @@ class CycleTimetable
     current_year + 1
   end
 
+  def self.previous_year
+    current_year - 1
+  end
+
   def self.find_closes
     date(:find_closes)
   end
