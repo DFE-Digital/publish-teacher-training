@@ -48,7 +48,7 @@ feature "switcher cycle" do
     and_i_choose("Find has reopened")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    expect(page).to have_text("Previous cycle year #{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+    and_i_should_see_the_correct_previous_recruitment_cycle_year
   end
 
   def when_i_visit_switcher_cycle_page
@@ -89,5 +89,9 @@ feature "switcher cycle" do
 
   def then_i_should_see_the_applications_closed_text
     expect(page).to have_text("Applications are currently closed but you can get ready to apply")
+  end
+
+  def and_i_should_see_the_correct_previous_recruitment_cycle_year
+    expect(page).to have_text("Previous cycle year #{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
   end
 end
