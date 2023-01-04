@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AllocationRecordCard
-  class View < ViewComponent::Base
+  class AllocationRecordCard < ViewComponent::Base
     with_collection_parameter :allocation
     delegate :provider, :accredited_body, to: :allocation
     delegate :provider_name, to: :provider

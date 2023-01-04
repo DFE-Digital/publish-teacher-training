@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module AllocationRecordCard
-  describe View do
+  describe AllocationRecordCard do
     alias_method :component, :page
 
     let(:allocation) { create(:allocation, :with_allocation_uplift, number_of_places: 5) }
