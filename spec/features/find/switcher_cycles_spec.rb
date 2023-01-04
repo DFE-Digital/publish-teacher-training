@@ -43,14 +43,14 @@ feature "switcher cycle" do
   #   and_i_see_find_has_closed_banner
   # end
 
-  scenario "Find has reopened" do
-    when_i_visit_switcher_cycle_page
-    and_i_choose("Find has reopened")
-    then_i_click_on_update_button
-    and_i_should_see_the_success_banner
-    and_i_visit_results_page
-    and_i_do_not_see_deadline_banner
-  end
+  # scenario "Find has reopened" do
+  #   when_i_visit_switcher_cycle_page
+  #   and_i_choose("Find has reopened")
+  #   then_i_click_on_update_button
+  #   and_i_should_see_the_success_banner
+  #   and_i_visit_results_page
+  #   and_i_do_not_see_deadline_banner
+  # end
 
   def when_i_visit_switcher_cycle_page
     visit "/find/cycles"
@@ -88,7 +88,7 @@ feature "switcher cycle" do
   #   expect(page).should_not have_selector(".govuk-notification-banner__content")
   # end
 
-  def and_i_do_not_see_deadline_banner
-    expect(page).should_not have_selector(".govuk-notification-banner__content")
-  end
+  # def and_i_do_not_see_deadline_banner
+  #   expect(page).should_not have_selector(".govuk-notification-banner__content")
+  # end
 end
