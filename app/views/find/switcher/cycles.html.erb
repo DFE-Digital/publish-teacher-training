@@ -1,0 +1,84 @@
+<%= content_for :page_title, "Recruitment cycles" %>
+<h1 class="govuk-heading-xl">Recruitment cycles</h1>
+<%= form_with model: Find::ChangeCycleForm.new, url: find_switch_cycle_schedule_path, method: :post do |f| %>
+  <%= f.govuk_radio_buttons_fieldset :cycle_schedule_name,
+    legend: { text: "Current point in the recruitment cycle" } do %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "real", label: { text: "Same as production environment" } %>
+    <%= f.govuk_radio_divider %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "today_is_mid_cycle", label: { text: "Mid cycle and deadlines should be displayed" }, hint: { text: "Candidates can see upcoming application deadlines (4 October 2022 to 21 September 2023)" } %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_1_deadline_passed", label: { text: "Apply 1 deadline has passed" }, hint: { text: "Candidates can no longer submit their initial application (7 September 2023 to 21 September 2023)" } %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_2_deadline_passed", label: { text: "Apply 2 deadline has passed" }, hint: { text: "Candidates can no longer submit any subsequent applications (21 September 2023 to 4 October 2023)" } %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_closes", label: { text: "Find has closed" }, hint: { text: "Candidates can no longer browse courses on Find (4 October 2023 to 5 October 2023)" } %>
+    <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_opens", label: { text: "Find has reopened" }, hint: { text: "Candidates can browse courses on Find. Courses returned from the Teacher Traininig API will be from next year\"s recruitment cycle (5 October 2023)" } %>
+  <% end %>
+
+  <%= f.govuk_submit "Update point in recruitment cycle" %>
+<% end %>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<h2 class="govuk-heading-m">Cycle years</h2>
+
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Previous cycle year
+    </dt>
+    <dd class="govuk-summary-list__value">
+      2022
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Current cycle year
+    </dt>
+    <dd class="govuk-summary-list__value">
+      2023
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Next cycle year
+    </dt>
+    <dd class="govuk-summary-list__value">
+      2024
+    </dd>
+  </div>
+</dl>
+
+<h2 class="govuk-heading-m">Deadlines</h2>
+
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Apply 1 deadline
+    </dt>
+    <dd class="govuk-summary-list__value">
+      7 September 2023
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Apply 2 deadline
+    </dt>
+    <dd class="govuk-summary-list__value">
+      21 September 2023
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Find closes on
+    </dt>
+    <dd class="govuk-summary-list__value">
+      4 October 2023
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Find reopens on
+    </dt>
+    <dd class="govuk-summary-list__value">
+      5 October 2023
+    </dd>
+  </div>
+</dl>
