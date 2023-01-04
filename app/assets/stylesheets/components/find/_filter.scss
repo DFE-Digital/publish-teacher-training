@@ -67,7 +67,7 @@
   margin-bottom: govuk-spacing(3);
   padding-bottom: govuk-spacing(2);
 
-  &:last-child {
+  &:last-of-type {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
@@ -93,6 +93,4 @@
       background-color: govuk-colour("white");
     }
   }
-
-  &.no-hr { border-bottom: 0; }
 }
