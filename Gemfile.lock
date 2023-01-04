@@ -649,7 +649,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    simplecov (0.21.2)
+    simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
@@ -826,7 +826,7 @@ DEPENDENCIES
   shoulda-matchers (~> 5.3)
   sidekiq
   sidekiq-cron
-  simplecov (< 0.22)
+  simplecov (< 0.23)
   site_prism (~> 3.7)
   skylight
   spring
