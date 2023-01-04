@@ -68,7 +68,7 @@ gem "faraday-net_http_persistent", "~> 2.0"
 gem "uk_postcode"
 
 # For change history on provider, courses, sites, etc
-gem "audited", "~> 5.0"
+gem "audited", "~> 5.1"
 
 # State machine to track users through their onboarding journey
 gem "aasm"
