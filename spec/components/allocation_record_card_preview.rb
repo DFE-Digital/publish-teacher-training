@@ -2,7 +2,7 @@
 
 class AllocationRecordCardPreview < ViewComponent::Preview
   def multiple_cards
-    render(::AllocationRecordCard::AllocationRecordCard.with_collection(multiple_allocations, recruitment_cycle_year: Settings.current_recruitment_cycle_year))
+    render(AllocationRecordCard.with_collection(multiple_allocations, recruitment_cycle_year: Settings.current_recruitment_cycle_year))
   end
 
 private
