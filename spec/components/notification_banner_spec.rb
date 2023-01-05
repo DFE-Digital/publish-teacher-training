@@ -6,7 +6,7 @@ describe NotificationBanner do
   alias_method :component, :page
 
   context "with no arguments" do
-    before { render_inline(View.new) }
+    before { render_inline(NotificationBanner.new) }
 
     it "adds the default class" do
       expect(component).to have_selector(".govuk-notification-banner")
@@ -34,7 +34,7 @@ describe NotificationBanner do
   end
 
   context "when type is success" do
-    before { render_inline(View.new(type: :success)) }
+    before { render_inline(NotificationBanner.new(type: :success)) }
 
     it "adds the success type class" do
       expect(component).to have_selector(".govuk-notification-banner--success")
@@ -50,24 +50,24 @@ describe NotificationBanner do
   end
 
   it "supports custom title and text" do
-    render_inline(View.new(title_text: "title", text: "text"))
+    render_inline(NotificationBanner.new(title_text: "title", text: "text"))
     expect(component).to have_text("title")
     expect(component).to have_text("text")
   end
 
   it "supports a custom role" do
-    render_inline(View.new(role: "role"))
+    render_inline(NotificationBanner.new(role: "role"))
     expect(banner["role"]).to eq("role")
   end
 
   it "supports a custom id on the title element and sets the ariaLabelledBy" do
-    render_inline(View.new(title_id: "test-id"))
+    render_inline(NotificationBanner.new(title_id: "test-id"))
     expect(component).to have_selector(".govuk-notification-banner__title#test-id")
     expect(banner["aria-labelledby"]).to eq "test-id"
   end
 
   it "supports disabling autofocus" do
-    render_inline(View.new(disable_auto_focus: true))
+    render_inline(NotificationBanner.new(disable_auto_focus: true))
     expect(banner["data-disable-auto-focus"]).to eq("true")
   end
 
