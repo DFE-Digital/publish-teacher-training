@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module GcseRowContentComponent
-  class View < GcseRequirementsComponent::View
+  class View < GcseRequirements
   end
 end
