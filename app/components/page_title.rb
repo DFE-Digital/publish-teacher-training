@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PageTitle::View < ApplicationComponent
+class PageTitle < ApplicationComponent
   I18N_FORMAT = /^\S*\.\S*$/
 
   attr_accessor :title
