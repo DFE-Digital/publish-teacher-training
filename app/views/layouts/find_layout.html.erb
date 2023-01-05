@@ -19,7 +19,7 @@
       <%= render("layouts/cookie_banner", service_name: t("service_name.find"), cookies_path: find_cookies_path) %>
     <% end %>
 
-    <%= render Find::Header.new(
+    <%= render Find::Header::View.new(
       service_name: t("service_name.find"),
     ) %>
 
