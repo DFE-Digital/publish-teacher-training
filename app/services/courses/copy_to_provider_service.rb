@@ -55,11 +55,7 @@ module Courses
 
       return course.applications_open_from if next_cycle.blank?
 
-      if course.applications_open_from + year_differential.year >= next_cycle.application_start_date
-        course.applications_open_from + year_differential.year
-      else
-        next_cycle.application_start_date
-      end
+      [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
     end
 
     def next_cycle
