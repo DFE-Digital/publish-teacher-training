@@ -1,7 +1,7 @@
 <% if display? %>
   <% flash.each do |key, value| %>
     <% if FLASH_TYPES.include?(key.to_s) %>
-      <%= render(NotificationBanner::View.new(text: flash[key], type: key)) %>
+      <%= render(NotificationBanner.new(text: flash[key], type: key)) %>
     <% end %>
 
     <% if key == "error" %>

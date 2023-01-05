@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class NavigationBar::View < ApplicationComponent
+class NavigationBar < ApplicationComponent
   attr_reader :items, :current_path
 
   def initialize(items:, current_path:, current_user: {}, classes: [], html_attributes: {})

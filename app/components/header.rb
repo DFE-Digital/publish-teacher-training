@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Header::View < ApplicationComponent
+class Header < ApplicationComponent
   attr_reader :service_name, :current_user
 
   include ActiveModel

@@ -44,7 +44,7 @@
     <% if content_for?(:header) %>
       <%= yield :header %>
     <% else %>
-      <%= render Header::View.new(
+      <%= render Header.new(
         service_name: I18n.t("service_name.publish"),
         current_user:,
       ) %>

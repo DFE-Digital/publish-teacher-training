@@ -2,8 +2,7 @@
 
 require "rails_helper"
 
-module NavigationBar
-  describe View do
+  describe NavigationBar do
     alias_method :component, :page
 
     let(:item_url) { "https://www.gov.uk" }

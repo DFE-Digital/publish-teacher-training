@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Find
-  class Header::View < ApplicationComponent
+  class Header < ApplicationComponent
     attr_reader :service_name
 
     include ActiveModel
