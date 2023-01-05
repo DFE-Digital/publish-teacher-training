@@ -77,7 +77,7 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render(FlashBanner::View.new(flash:)) %>
+          <%= render(FlashBanner.new(flash:)) %>
 
           <%= yield %>
         </div>
