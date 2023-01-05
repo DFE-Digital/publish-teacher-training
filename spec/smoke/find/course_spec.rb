@@ -22,7 +22,9 @@ class FindResultsPage
   end
 
   def response
-    @response ||= self.class.get("/results?age_group=primary&l=2&subjects%5B%5D=00").parsed_response
+    @response ||= self.class.get(
+      "/results?age_group=primary&fulltime=false&hasvacancies=true&l=2&parttime=false&qualifications%5B%5D=QtsOnly&qualifications%5B%5D=PgdePgceWithQts&qualifications%5B%5D=Other&senCourses=false&subject_codes%5B%5D=00&subject_codes%5B%5D=01&subject_codes%5B%5D=02&subject_codes%5B%5D=03&subject_codes%5B%5D=04&subject_codes%5B%5D=06&subject_codes%5B%5D=07&subjects%5B%5D=00",
+    ).parsed_response
   end
 
   def courses
