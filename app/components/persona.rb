@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+class Persona < ApplicationComponent
+  attr_accessor :email_address, :first_name, :last_name
+
+  def initialize(
+    email_address:,
+    first_name:,
+    last_name:,
+    classes: [],
+    html_attributes: {}
+  )
+    super(classes:, html_attributes:)
+    @email_address = email_address
+    @first_name = first_name
+    @last_name = last_name
+  end
+end
