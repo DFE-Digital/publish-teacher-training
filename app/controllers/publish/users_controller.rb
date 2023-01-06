@@ -3,7 +3,7 @@ module Publish
     before_action :authorize_provider
 
     def index
-      @users = provider.users
+      @users = provider.users.order("LOWER(first_name), LOWER(last_name)")
     end
 
     def show
