@@ -4,11 +4,11 @@ module Find
   module PhaseBanner
     class ViewPreview < ViewComponent::Preview
       def default
-        render(Find::PhaseBanner.new)
+        render(Find::PhaseBanner::View::View.new)
       end
 
       def with_no_border
-        render(Find::PhaseBanner.new(no_border: true))
+        render(Find::PhaseBanner::View::View.new(no_border: true))
       end
     end
   end

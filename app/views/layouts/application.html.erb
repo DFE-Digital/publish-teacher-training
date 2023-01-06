@@ -52,9 +52,9 @@
 
       <div class="govuk-width-container">
         <% if dont_display_phase_banner_border?(current_user) %>
-          <%= render ::PhaseBanner.new(no_border: true) %>
+          <%= render PhaseBanner.new(no_border: true) %>
         <% else %>
-          <%= render ::PhaseBanner.new %>
+          <%= render PhaseBanner.new %>
         <% end %>
         <%= yield :navigation_bar %>
         <% if params[:controller].start_with?("support") %>
@@ -66,7 +66,7 @@
       <div class="govuk-width-container">
         <% if current_user && @provider && !params[:controller].start_with?("support") %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
-           <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
+           <%= render TitleBar.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
           <% end %>
         <% end %>
       </div>
