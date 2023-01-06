@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: t("support.providers.users.check")) %>
+<%= render PageTitle.new(title: t("support.providers.users.check")) %>
 <% content_for :before_content do %>
   <%= govuk_back_link_to(new_support_recruitment_cycle_provider_user_path) %>
 <% end %>

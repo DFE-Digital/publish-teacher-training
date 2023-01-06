@@ -52,13 +52,13 @@
 
       <div class="govuk-width-container">
         <% if dont_display_phase_banner_border?(current_user) %>
-          <%= render PhaseBanner::View.new(no_border: true) %>
+          <%= render ::PhaseBanner.new(no_border: true) %>
         <% else %>
-          <%= render PhaseBanner::View.new %>
+          <%= render ::PhaseBanner.new %>
         <% end %>
         <%= yield :navigation_bar %>
         <% if params[:controller].start_with?("support") %>
-          <%= render SupportTitleBar::View.new %>
+          <%= render SupportTitleBar.new %>
         <% end %>
         <%= yield :breadcrumbs %>
       </div>
