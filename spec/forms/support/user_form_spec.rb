@@ -18,7 +18,7 @@ describe Support::UserForm, type: :model do
     before { subject.validate }
 
     context "blank first_name" do
-      let(:params) { { first_name: nil } }
+      let(:params) { { first_name: "" } }
 
       it "is invalid" do
         expect(subject.errors[:first_name]).to include("Enter a first name")
@@ -27,7 +27,7 @@ describe Support::UserForm, type: :model do
     end
 
     context "blank last_name" do
-      let(:params) { { last_name: nil } }
+      let(:params) { { last_name: "" } }
 
       it "is invalid" do
         expect(subject.errors[:last_name]).to include("Enter a last name")
@@ -40,6 +40,24 @@ describe Support::UserForm, type: :model do
 
       it "is invalid" do
         expect(subject.errors[:email]).to include("Enter an email address in the correct format, like name@example.com")
+        expect(subject.valid?).to be(false)
+      end
+    end
+
+    context "number in first name" do
+      let(:params) { { first_name: "foo12" } }
+
+      it "is invalid" do
+        expect(subject.errors[:first_name]).to include("Enter a valid first name")
+        expect(subject.valid?).to be(false)
+      end
+    end
+
+    context "number in last name" do
+      let(:params) { { last_name: "foo12" } }
+
+      it "is invalid" do
+        expect(subject.errors[:last_name]).to include("Enter a valid last name")
         expect(subject.valid?).to be(false)
       end
     end

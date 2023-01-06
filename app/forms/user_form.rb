@@ -8,8 +8,8 @@ class UserForm < Form
 
   attr_accessor(*FIELDS)
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates :first_name, presence: true, name: { message: "Enter a valid first name" }
+  validates :last_name, presence: true, name: { message: "Enter a valid last name" }
   validates :email, presence: true
   validates :email, email_address: true
 
