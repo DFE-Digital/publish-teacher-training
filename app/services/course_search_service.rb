@@ -275,6 +275,6 @@ private
   end
 
   def engineers_teach_physics_filter?
-    filter[:engineers_teach_physics].to_s.downcase == "true"
+    filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
   end
 end
