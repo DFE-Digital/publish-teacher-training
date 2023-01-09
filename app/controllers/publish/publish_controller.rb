@@ -40,7 +40,7 @@ module Publish
 
     def show_rollover_recruitment_page?
       FeatureService.enabled?("rollover.show_next_cycle_allocation_recruitment_page") &&
-        current_user.current_rollover_recruitment_acceptance.blank?
+      current_user.current_rollover_recruitment_acceptance.blank?
     end
 
     def clear_previous_cycle_year_in_session

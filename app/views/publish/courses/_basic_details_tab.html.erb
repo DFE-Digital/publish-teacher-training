@@ -207,17 +207,11 @@
         <% row.value { course.course_code } %>
         <% row.action %>
       <% end %>
-
       <% if course.next_cycle? && course.has_fees? %>
         <% summary_list.row(html_attributes: { data: { qa: "course__allocations" } }) do |row| %>
           <% row.key { "Allocations" } %>
           <% row.value do %>
-            <% if course.has_physical_education_subject? %>
-              <p class="govuk-body">Recruitment to fee-funded PE courses is limited by the number of places allocated to you by DfE.</p>
-              <p class="govuk-body">If you haven’t already, you must <%= govuk_link_to "request allocations", "https://docs.google.com/forms/d/e/1FAIpQLSfMJDoChdgXmGJM1UcEgoiyvlR9ExESF1-vv32lrXF8AK3ShA/viewform?usp=sf_link" %></p>
-            <% else %>
-              Recruitment is not restricted
-            <% end %>
+            Recruitment is not restricted
           <% end %>
           <% row.action %>
         <% end %>

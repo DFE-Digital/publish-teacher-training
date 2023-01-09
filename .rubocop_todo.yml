@@ -78,11 +78,6 @@ RSpec/EmptyExampleGroup:
     - 'spec/docs/subject_areas_spec.rb'
     - 'spec/docs/subjects_spec.rb'
 
-# Offense count: 2
-RSpec/ExpectOutput:
-  Exclude:
-    - 'spec/services/allocation_importer_service_spec.rb'
-
 # Offense count: 21
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
 # Include: **/*_spec*rb*, **/spec/**/*
@@ -106,7 +101,6 @@ RSpec/LeakyConstantDeclaration:
 # Offense count: 16
 RSpec/MessageChain:
   Exclude:
-    - 'spec/services/allocation_reporting_service_spec.rb'
     - 'spec/services/course_reporting_service_spec.rb'
     - 'spec/services/provider_reporting_service_spec.rb'
     - 'spec/services/publish_reporting_service_spec.rb'
@@ -176,7 +170,6 @@ RSpec/StubbedMock:
   Exclude:
     - 'spec/controllers/api/public/v1/providers/courses_controller_spec.rb'
     - 'spec/requests/api/v3/courses/index_spec.rb'
-    - 'spec/services/allocation_reporting_service_spec.rb'
     - 'spec/services/course_reporting_service_spec.rb'
     - 'spec/services/course_search_service_spec.rb'
     - 'spec/services/notification_service/course_published_spec.rb'

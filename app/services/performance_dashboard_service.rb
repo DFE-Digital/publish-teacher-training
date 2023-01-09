@@ -27,10 +27,6 @@ class PerformanceDashboardService
     number_with_delimiter(reporting[:publish][:users][:total][:all])
   end
 
-  def total_allocations
-    number_with_delimiter(reporting[:allocations][:current][:total][:allocations])
-  end
-
   def providers_published_courses
     number_with_delimiter(reporting[:providers][:training_providers][:findable_total][:open])
   end
@@ -53,22 +49,6 @@ class PerformanceDashboardService
 
   def courses_total_draft
     number_with_delimiter(reporting[:courses][:total][:non_findable])
-  end
-
-  def allocations_requests(recruitment_cycle)
-    number_with_delimiter(reporting[:allocations][recruitment_cycle.to_sym][:total][:allocations])
-  end
-
-  def allocations_number_of_places(recruitment_cycle)
-    number_with_delimiter(reporting[:allocations][recruitment_cycle.to_sym][:total][:number_of_places])
-  end
-
-  def allocations_accredited_bodies(recruitment_cycle)
-    number_with_delimiter(reporting[:allocations][recruitment_cycle.to_sym][:total][:distinct_accredited_bodies])
-  end
-
-  def allocations_providers(recruitment_cycle)
-    number_with_delimiter(reporting[:allocations][recruitment_cycle.to_sym][:total][:distinct_providers])
   end
 
   def users_active

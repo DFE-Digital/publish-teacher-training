@@ -70,14 +70,5 @@ module BreadcrumbHelper
     training_providers_breadcrumb.merge({ "#{@training_provider.provider_name}’s courses" => path })
   end
 
-  def allocations_breadcrumb
-    path = publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    provider_breadcrumb.merge({ "Request PE courses for #{next_allocation_cycle_period_text}" => path })
-  end
-
-  def allocations_closed_breadcrumb
-    path = publish_provider_recruitment_cycle_allocations_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    provider_breadcrumb.merge({ "PE courses for #{next_allocation_cycle_period_text}" => path })
-  end
   # rubocop:enable Rails/HelperInstanceVariable
 end

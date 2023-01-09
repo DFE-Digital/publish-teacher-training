@@ -58,11 +58,6 @@ class Provider < ApplicationRecord
     primary_key: :provider_code,
     inverse_of: :accrediting_provider
 
-  # We have a has_many relationship rather than has_one as
-  # there are lead_schools that have PE courses ratified by more than
-  # one Accredited Body
-  has_many :allocations
-
   # the accredited_providers that this provider is a training_provider for
   has_many :accrediting_providers, -> { distinct }, through: :courses
 
@@ -122,8 +117,6 @@ class Provider < ApplicationRecord
   scope :in_next_cycle, -> { where(recruitment_cycle: RecruitmentCycle.next_recruitment_cycle) }
 
   scope :in_cycle, ->(recruitment_cycle) { where(recruitment_cycle:) }
-
-  scope :with_allocations_for_current_cycle_year, -> { joins(:allocations).merge(Allocation.current_allocations).order(:provider_name) }
 
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil).or where(region_code: nil) }
 

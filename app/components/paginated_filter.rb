@@ -19,7 +19,6 @@ private
     {
       User: %i[text_search user_type],
       Provider: %i[provider_search course_search],
-      Allocation: [:text_search],
     }[collection.klass.name.to_sym]
   end
 end

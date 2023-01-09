@@ -29,12 +29,6 @@
   - requester_id
   - requester_email
   - discarded_at
-  :allocation_uplift:
-  - id
-  - allocation_id
-  - uplifts
-  - created_at
-  - updated_at
   :contact:
   - name
   - email
