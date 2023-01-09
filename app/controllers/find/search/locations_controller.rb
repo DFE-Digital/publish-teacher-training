@@ -5,7 +5,6 @@ module Find
 
       before_action :providers
       before_action :build_results_filter_query_parameters
-      before_action :redirect_to_cycle_has_ended_if_find_is_down
 
       def start; end
 
@@ -69,10 +68,6 @@ module Find
 
       def back_to_current_page_if_error(form_params)
         redirect_to find_locations_path(form_params.merge(l: params[:l]))
-      end
-
-      def redirect_to_cycle_has_ended_if_find_is_down
-        redirect_to find_cycle_has_ended_path if CycleTimetable.find_down?
       end
     end
   end
