@@ -37,6 +37,8 @@ class User < ApplicationRecord
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
   }
 
+  scope :in_name_order, -> { order("LOWER(first_name), LOWER(last_name)") }
+
   pg_search_scope :search, against: %i[first_name last_name email], using: { tsearch: { prefix: true } }
 
   validates :first_name, presence: true

@@ -289,4 +289,20 @@ describe User do
       end
     end
   end
+
+  describe ".in_name_order" do
+    let(:user1) { create(:user, first_name: "A", last_name: "A") }
+    let(:user2) { create(:user, first_name: "B", last_name: "A") }
+    let(:user3) { create(:user, first_name: "C", last_name: "A") }
+    let(:user4) { create(:user, first_name: "A", last_name: "B") }
+    let(:users) { [user1, user2, user3, user4] }
+
+    before do
+      users
+    end
+
+    it "orders alphabetically by first_name then last name" do
+      expect(User.in_name_order).to eq([user1, user4, user2, user3])
+    end
+  end
 end
