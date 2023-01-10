@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# This file can be deleted once the "user_management" feature flag is removed
+
 require "rails_helper"
 
 feature "Viewing provider users" do
   before do
     given_i_am_authenticated_as_a_provider_user
+    and_the_user_management_feature_flag_is_inactive
     when_i_visit_the_provider_users_page
   end
 
@@ -43,5 +46,9 @@ private
 
   def provider
     @current_user.providers.first
+  end
+
+  def and_the_user_management_feature_flag_is_inactive
+    allow(Settings.features).to receive(:user_management).and_return(false)
   end
 end
