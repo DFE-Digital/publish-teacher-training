@@ -18,7 +18,7 @@ module Support
     private
 
       def user
-        User.find_or_initialize_by(email: params.dig(:support_user_form, :email))
+        User.find_or_initialize_by(email: params.dig(:support_user_form, :email)&.downcase)
       end
 
       def provider

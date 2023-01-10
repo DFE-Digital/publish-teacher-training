@@ -60,7 +60,7 @@ module Publish
     end
 
     def user
-      User.find_or_initialize_by(email: params.dig(:publish_user_form, :email))
+      User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)
     end
 
     def user_params
