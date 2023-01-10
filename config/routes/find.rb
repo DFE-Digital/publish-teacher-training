@@ -10,6 +10,7 @@ namespace :find, path: "/find" do
   get "/course/:provider_code/:course_code/apply", to: "courses#apply", as: :apply
   get "/results", to: "results#index", as: "results"
   get "/location-suggestions", to: "location_suggestions#index"
+  get "/cycle-has-ended", to: "pages#cycle_has_ended", as: "cycle_has_ended"
 
   get "/feature-flags", to: "feature_flags#index"
   post "/feature-flags" => "feature_flags#update"
