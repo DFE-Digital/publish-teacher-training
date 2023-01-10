@@ -1,8 +1,12 @@
-constraints(FindConstraint.new) do
-  get "/", to: "find/search/locations#start", as: :find
+root to: "find/search/locations#start", as: :find
+
+scope via: :all do
+  match "/404", to: "find/errors#not_found"
+  match "/500", to: "find/errors#internal_server_error"
+  match "/403", to: "find/errors#forbidden"
 end
 
-namespace :find, path: "/find" do
+namespace :find, path: "/" do
   get "/accessibility", to: "pages#accessibility", as: :accessibility
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms-conditions", to: "pages#terms", as: :terms
