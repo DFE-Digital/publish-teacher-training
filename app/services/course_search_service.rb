@@ -54,6 +54,10 @@ class CourseSearchService
     elsif sort_by_provider_descending?
       outer_scope = outer_scope.descending_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
+    elsif sort_by_course_ascending?
+      outer_scope = outer_scope.order_by_name_then_provider_then_code_ascending
+    elsif sort_by_course_descending?
+      outer_scope = outer_scope.order_by_name_descending_then_provider_then_code_ascending
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
@@ -164,12 +168,20 @@ private
       filter.key?(:radius)
   end
 
+  def sort_by_course_ascending?
+    sort == Set["0"]
+  end
+
+  def sort_by_course_descending?
+    sort == Set["1"]
+  end
+
   def sort_by_provider_ascending?
-    sort == Set["0"] || sort == PROVIDER_ASCENDING
+    sort == Set["2"] || sort == PROVIDER_ASCENDING
   end
 
   def sort_by_provider_descending?
-    sort == Set["1"] || sort == PROVIDER_DESCENDING
+    sort == Set["3"] || sort == PROVIDER_DESCENDING
   end
 
   def sort_by_distance?

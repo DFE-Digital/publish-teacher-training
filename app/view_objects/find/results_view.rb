@@ -137,8 +137,10 @@ module Find
 
     def sort_options
       [
-        ["Training provider (A-Z)", 0, { "data-qa": "sort-form__options__ascending" }],
-        ["Training provider (Z-A)", 1, { "data-qa": "sort-form__options__descending" }],
+        ["Course name (A-Z)", 0, { "data-qa": "sort-form__options__ascending_course" }],
+        ["Course name (Z-A)", 1, { "data-qa": "sort-form__options__descending_course" }],
+        ["Training provider (A-Z)", 2, { "data-qa": "sort-form__options__ascending_provider" }],
+        ["Training provider (Z-A)", 3, { "data-qa": "sort-form__options__descending_provider" }],
       ]
     end
 
