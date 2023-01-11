@@ -45,7 +45,8 @@ locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
   web_app_name                 = "publish-teacher-training-${local.app_name_suffix}"
   publish_app_name             = "publish-${local.app_name_suffix}"
-  cloudapp_names               = [local.web_app_name, local.publish_app_name]
+  find2_app_name               = var.app_environment == "review" ? "find2-${local.app_name_suffix}" : ""
+  cloudapp_names               = var.app_environment == "review" ? [local.web_app_name, local.publish_app_name, local.find2_app_name] : [local.web_app_name, local.publish_app_name]
   worker_app_name              = "publish-teacher-training-worker-${local.app_name_suffix}"
   postgres_service_name        = "publish-teacher-training-postgres-${local.app_name_suffix}"
   redis_worker_service_name    = "publish-teacher-training-worker-redis-${local.app_name_suffix}"
