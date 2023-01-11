@@ -102,23 +102,5 @@ describe Support::Filter do
         end
       end
     end
-
-    context "with Allocation as model_scope" do
-      let(:model_scope) { Allocation.all }
-
-      let!(:allocation) { create(:allocation, number_of_places: 1) }
-
-      context "filtering with a known allocation provider" do
-        let(:params) do
-          {
-            text_search: allocation.provider.provider_name,
-          }
-        end
-
-        it "filters the provider out" do
-          expect(subject).to eq([allocation])
-        end
-      end
-    end
   end
 end

@@ -157,24 +157,6 @@ describe "GET /reporting" do
           created_recently: 0,
         },
       },
-      allocations: {
-        previous: {
-          total: {
-            allocations: 0,
-            distinct_accredited_bodies: 0,
-            distinct_providers: 0,
-            number_of_places: 0,
-          },
-        },
-        current: {
-          total: {
-            allocations: 0,
-            distinct_accredited_bodies: 0,
-            distinct_providers: 0,
-            number_of_places: 0,
-          },
-        },
-      },
       rollover: {
         total: {
           published_courses: 0,
@@ -195,19 +177,9 @@ describe "GET /reporting" do
     find_or_create(:recruitment_cycle, :previous)
   }
 
-  let(:allocation_recruitment_cycle) {
-    find_or_create(:recruitment_cycle, :current_allocation)
-  }
-
-  let(:previous_allocation_cycle) {
-    find_or_create(:recruitment_cycle, :previous_allocation_cycle)
-  }
-
   it "returns status success" do
     recruitment_cycle
     previous_recruitment_cycle
-    allocation_recruitment_cycle
-    previous_allocation_cycle
     get "/reporting"
     expect(response).to have_http_status(:ok)
     expect(JSON.parse(response.body)).to eq(expected)
