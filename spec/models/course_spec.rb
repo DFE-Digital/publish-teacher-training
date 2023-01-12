@@ -298,8 +298,8 @@ describe Course do
         end
       end
 
-      describe "#descending_canonical_order" do
-        subject { described_class.descending_canonical_order }
+      describe "#descending_provider_canonical_order" do
+        subject { described_class.descending_provider_canonical_order }
 
         it "sorts in descending order of provider name" do
           expect(subject).to eq([course_c, course_d, course_a, another_course_a, course_b])

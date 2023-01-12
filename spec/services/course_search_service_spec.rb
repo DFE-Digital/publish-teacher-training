@@ -63,7 +63,7 @@ RSpec.describe CourseSearchService do
         it "orders in descending order" do
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(order_scope)
-          expect(order_scope).to receive(:descending_canonical_order).and_return(select_scope)
+          expect(order_scope).to receive(:descending_provider_canonical_order).and_return(select_scope)
           expect(select_scope).to receive(:select).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end

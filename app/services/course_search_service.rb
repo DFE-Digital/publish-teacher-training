@@ -52,7 +52,7 @@ class CourseSearchService
       outer_scope = outer_scope.ascending_provider_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
-      outer_scope = outer_scope.descending_canonical_order
+      outer_scope = outer_scope.descending_provider_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_course_ascending?
       outer_scope = outer_scope.order_by_name_then_provider_then_code_ascending
