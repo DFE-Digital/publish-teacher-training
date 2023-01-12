@@ -282,8 +282,8 @@ describe Course do
         course_b
       end
 
-      describe "#ascending_canonical_order" do
-        subject { described_class.ascending_canonical_order }
+      describe "#ascending_provider_canonical_order" do
+        subject { described_class.ascending_provider_canonical_order }
 
         it "sorts in ascending order of provider name and course name" do
           expect(subject).to eq([course_a, course_b, course_c, course_d])

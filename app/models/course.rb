@@ -168,7 +168,7 @@ class Course < ApplicationRecord
     order(name: :desc)
   }
 
-  scope :ascending_canonical_order, lambda {
+  scope :ascending_provider_canonical_order, lambda {
     joins(:provider).merge(Provider.by_name_ascending).order(name: :asc, course_code: :asc)
   }
 
