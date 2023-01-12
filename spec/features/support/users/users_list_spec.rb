@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View users" do
+feature "View users", :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view users" do

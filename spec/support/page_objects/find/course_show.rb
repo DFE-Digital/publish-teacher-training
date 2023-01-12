@@ -3,7 +3,7 @@
 module PageObjects
   module Find
     class CourseShow < PageObjects::Base
-      set_url "/find/course/{provider_code}/{course_code}"
+      set_url "/course/{provider_code}/{course_code}"
 
       element :title, ".govuk-heading-xl"
       element :sub_title, "[data-qa=course__provider_name]"

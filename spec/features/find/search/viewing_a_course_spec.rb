@@ -293,13 +293,13 @@ private
 
     expect(course_show_page.apply_link.text).to eq("Apply for this course")
 
-    expect(course_show_page.apply_link[:href]).to eq("/find/course/#{provider.provider_code}/#{@course.course_code}/apply")
+    expect(course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
 
     expect(course_show_page).not_to have_content("When you apply you’ll need these codes for the Choices section of your application form")
 
     expect(course_show_page).not_to have_end_of_cycle_notice
 
-    expect(course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/find/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
+    expect(course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
   end
 
   def then_i_should_not_see_the_apply_button
@@ -312,7 +312,7 @@ private
   end
 
   def set_referrer
-    page.driver.header("Referer", "http://localhost:9000/find/results")
+    page.driver.header("Referer", "http://localhost:9000/results")
   end
 
   def then_i_should_not_see_the_back_link

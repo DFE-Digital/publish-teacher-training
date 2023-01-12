@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Adding user to provider as an admin", { can_edit_current_and_next_cycles: false } do
+feature "Adding user to provider as an admin", { can_edit_current_and_next_cycles: false, with_publish_constraint: true } do
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider

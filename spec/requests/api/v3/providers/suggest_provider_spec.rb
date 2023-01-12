@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET /provider-suggestions" do
+describe "GET /provider-suggestions", :with_publish_constraint do
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:courses) { [build(:course, site_statuses: [build(:site_status, :findable)])] }
   let(:courses2) { [build(:course, site_statuses: [build(:site_status, :findable)])] }

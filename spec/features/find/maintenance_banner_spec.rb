@@ -1,10 +1,6 @@
 require "rails_helper"
 
 feature "Maintenance banner" do
-  before do
-    allow_any_instance_of(FindConstraint).to receive(:matches?).and_return(true)
-  end
-
   context "given the maintenance_mode feature flag is active and i arrive at the site" do
     scenario "sends me to the maintenance page" do
       FeatureFlag.activate(:maintenance_banner)

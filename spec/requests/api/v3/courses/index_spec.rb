@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3/recruitment_cycles/:year/courses" do
+describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
   let(:request_path) { "/api/v3/recruitment_cycles/#{RecruitmentCycle.current.year}/courses" }
   let(:current_course) do
     create(:course, site_statuses: [build(:site_status, :findable)], enrichments: [build(:course_enrichment, :published)])
@@ -126,7 +126,7 @@ describe "GET v3/recruitment_cycles/:year/courses" do
   end
 end
 
-describe "GET v3/courses" do
+describe "GET v3/courses", :with_publish_constraint do
   let(:findable_status) { build(:site_status, :findable) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
 

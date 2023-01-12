@@ -3,7 +3,7 @@
 module PageObjects
   module Find
     class Results < PageObjects::Base
-      set_url "/find/results{?query*}"
+      set_url "/results{?query*}"
 
       class Courses < SitePrism::Section
         element :provider_name, '[data-qa="course__provider_name"]'

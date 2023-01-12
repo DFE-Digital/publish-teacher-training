@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers" do
+describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers", :with_publish_constraint do
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 
   let!(:provider) {

@@ -97,36 +97,16 @@ psql manage_courses_backend_development < ~/Downloads/backup_sanitised.sql
 
 ## Configuring local domains
 
-This app is setup to serve two domains for two live services. In order to develop locally you will need to configure your local machine to resolve these domains to `localhost`. There are two approaches you can use to do this:
-
-### Setup your hosts file
-
-Add the following to your hosts file:
-
-```
-127.0.0.1 publish.test
-127.0.0.1 find.test
-```
-
-And make sure to set the following settings in `config/settings/development.local.yml`:
-
-```ruby
-# Settings.base_url to http://publish.test:3001
-# Settings.find_temp_url to http://find.test:3001
-```
-
-You should be able to access the service you need to work via those urls.
-
-### Using Caddy
+This app is setup to serve two domains for two live services. In order to develop locally you will need to configure your local machine to resolve these domains to `localhost`. You can use [Caddy](https://caddyserver.com/) to do this.
 
 [Caddy](https://caddyserver.com/) is a web server that can be used to proxy requests to the local server. It can be configured to resolve the domains to `localhost`. You can install it with homebrew and setup a Caddyfile in the root of the project with the following content:
 
 ```
-publish.test {
+publish.localhost {
   reverse_proxy localhost:3001
 }
 
-find.test {
+find.localhost {
   reverse_proxy localhost:3001
 }
 ```
@@ -134,8 +114,8 @@ find.test {
 And make sure to set the following settings in `config/settings/development.local.yml`:
 
 ```ruby
-# Settings.base_url to https://publish.test
-# Settings.find_temp_url to https://find.test
+# Settings.base_url to https://publish.localhost
+# Settings.find_temp_url to https://find.localhost
 # Settings.use_ssl to true
 ```
 

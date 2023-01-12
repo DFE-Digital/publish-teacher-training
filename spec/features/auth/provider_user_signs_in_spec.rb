@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Authentication" do
+feature "Authentication", :with_publish_constraint do
   scenario "Provider user signs in", { can_edit_current_and_next_cycles: false } do
     given_i_am_a_provider_user
     when_i_visit_the_root_path

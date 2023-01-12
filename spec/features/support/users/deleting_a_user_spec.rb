@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Deleting a new user" do
+feature "Deleting a new user", :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_exists_to_delete

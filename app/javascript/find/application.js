@@ -19,7 +19,7 @@ setupAutocomplete('provider-provider-name-field')
 initAutocomplete({
   element: 'location-autocomplete',
   input: 'location',
-  path: '/find/location-suggestions'
+  path: '/location-suggestions'
 })
 
 const filterToggleButton = new FilterToggleButton({
