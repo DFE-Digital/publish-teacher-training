@@ -44,7 +44,7 @@
     <% if content_for?(:header) %>
       <%= yield :header %>
     <% else %>
-      <%= render Header::View.new(
+      <%= render Header.new(
         service_name: I18n.t("service_name.publish"),
         current_user:,
       ) %>
@@ -52,13 +52,13 @@
 
       <div class="govuk-width-container">
         <% if dont_display_phase_banner_border?(current_user) %>
-          <%= render PhaseBanner::View.new(no_border: true) %>
+          <%= render PhaseBanner.new(no_border: true) %>
         <% else %>
-          <%= render PhaseBanner::View.new %>
+          <%= render PhaseBanner.new %>
         <% end %>
         <%= yield :navigation_bar %>
         <% if params[:controller].start_with?("support") %>
-          <%= render SupportTitleBar::View.new %>
+          <%= render SupportTitleBar.new %>
         <% end %>
         <%= yield :breadcrumbs %>
       </div>
@@ -66,7 +66,7 @@
       <div class="govuk-width-container">
         <% if current_user && @provider && !params[:controller].start_with?("support") %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
-           <%= render TitleBar::View.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
+           <%= render TitleBar.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
           <% end %>
         <% end %>
       </div>
@@ -77,7 +77,7 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-width-container">
-          <%= render(FlashBanner::View.new(flash:)) %>
+          <%= render(FlashBanner.new(flash:)) %>
 
           <%= yield %>
         </div>

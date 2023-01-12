@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "support.users.show") %>
+<%= render PageTitle.new(title: "support.users.show") %>
 
 <%= extends_layout :support do %>
   <%= content_for(:breadcrumbs) do %>
@@ -10,7 +10,7 @@
 
   <h1 class="govuk-heading-l"><%= @user.full_name %></h1>
 
-  <%= render TabNavigation::View.new(items: [
+  <%= render TabNavigation.new(items: [
     { name: "Details", url: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) },
     { name: "Providers", url: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) },
   ]) %>

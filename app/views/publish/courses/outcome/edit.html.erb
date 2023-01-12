@@ -19,7 +19,7 @@
                   method: :put do |form| %>
 
       <% course_name_and_code = capture do %>
-        <%= render CaptionText::View.new(text: course.name_and_code) %>
+        <%= render CaptionText.new(text: course.name_and_code) %>
       <% end %>
 
       <%= render "form_fields", form:, course_name_and_code: %>

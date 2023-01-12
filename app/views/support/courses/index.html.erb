@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "support.providers.courses.index") %>
+<%= render PageTitle.new(title: "support.providers.courses.index") %>
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
@@ -22,4 +22,4 @@
   </tbody>
 </table>
 
-<%= render Paginator::View.new(scope: @courses) %>
+<%= render Paginator.new(scope: @courses) %>
