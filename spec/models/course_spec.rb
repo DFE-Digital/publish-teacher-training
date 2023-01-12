@@ -314,8 +314,8 @@ describe Course do
         end
       end
 
-      describe "#order_by_name_then_provider_then_code_ascending" do
-        subject { described_class.order_by_name_then_provider_then_code_ascending }
+      describe "#ascending_course_canonical_order" do
+        subject { described_class.ascending_course_canonical_order }
 
         it "sorts in ascending order of course name" do
           expect(subject).to eq([course_a, course_b, course_c, course_d])
@@ -347,8 +347,8 @@ describe Course do
         end
       end
 
-      describe "#order_by_name_descending_then_provider_then_code_ascending" do
-        subject { described_class.order_by_name_descending_then_provider_then_code_ascending }
+      describe "#descending_course_canonical_order" do
+        subject { described_class.descending_course_canonical_order }
 
         it "sorts in descending order of course name" do
           expect(subject).to eq([course_d, course_c, course_b, course_a])

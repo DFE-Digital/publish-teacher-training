@@ -176,9 +176,9 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.by_name_descending).order(name: :asc, course_code: :asc)
   }
 
-  scope :order_by_name_then_provider_then_code_ascending, -> { order(name: :asc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
+  scope :ascending_course_canonical_order, -> { order(name: :asc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
 
-  scope :order_by_name_descending_then_provider_then_code_ascending, -> { order(name: :desc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
+  scope :descending_course_canonical_order, -> { order(name: :desc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
 
   scope :accredited_body_order, lambda { |provider_name|
     joins(:provider).merge(Provider.by_provider_name(provider_name))

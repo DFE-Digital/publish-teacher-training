@@ -55,9 +55,9 @@ class CourseSearchService
       outer_scope = outer_scope.descending_provider_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_course_ascending?
-      outer_scope = outer_scope.order_by_name_then_provider_then_code_ascending
+      outer_scope = outer_scope.ascending_course_canonical_order
     elsif sort_by_course_descending?
-      outer_scope = outer_scope.order_by_name_descending_then_provider_then_code_ascending
+      outer_scope = outer_scope.descending_course_canonical_order
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
