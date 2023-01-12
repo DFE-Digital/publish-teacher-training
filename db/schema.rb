@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_084448) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_12_150146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -37,32 +37,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_084448) do
     t.datetime "discarded_at", precision: nil
     t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
     t.index ["requester_id"], name: "IX_access_request_requester_id"
-  end
-
-  create_table "allocation", force: :cascade do |t|
-    t.bigint "provider_id"
-    t.bigint "accredited_body_id"
-    t.integer "number_of_places"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "request_type", default: 0
-    t.text "accredited_body_code"
-    t.text "provider_code"
-    t.integer "recruitment_cycle_id"
-    t.integer "confirmed_number_of_places"
-    t.index ["accredited_body_id"], name: "index_allocation_on_accredited_body_id"
-    t.index ["provider_id", "accredited_body_id", "provider_code", "accredited_body_code", "recruitment_cycle_id"], name: "index_allocations_on_uniqueness_of_codes_and_ids", unique: true
-    t.index ["provider_id"], name: "index_allocation_on_provider_id"
-    t.index ["recruitment_cycle_id", "accredited_body_code", "provider_code"], name: "index_allocation_recruitment_and_codes"
-    t.index ["request_type"], name: "index_allocation_on_request_type"
-  end
-
-  create_table "allocation_uplift", force: :cascade do |t|
-    t.bigint "allocation_id", null: false
-    t.integer "uplifts"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["allocation_id"], name: "index_allocation_uplift_on_allocation_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -404,9 +378,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_084448) do
   end
 
   add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
-  add_foreign_key "allocation", "provider"
-  add_foreign_key "allocation", "provider", column: "accredited_body_id"
-  add_foreign_key "allocation_uplift", "allocation"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
   add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
