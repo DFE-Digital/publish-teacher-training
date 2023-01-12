@@ -1,5 +1,9 @@
 ---
 :shared:
+  :organisation_provider:
+  - id
+  - provider_id
+  - organisation_id
   :audit:
   - id
   - auditable_id
@@ -16,23 +20,28 @@
   - remote_address
   - request_uuid
   - created_at
-  :provider:
-  - scheme_member
-  - contact_name
+  :user:
   - email
-  - telephone
-  :access_request:
-  - email_address
   - first_name
   - last_name
-  - reason
-  - requester_id
-  - requester_email
-  - discarded_at
-  :contact:
+  - magic_link_token
+  :provider_ucas_preference:
+  - id
+  - provider_id
+  - type_of_gt12
+  - send_application_alerts
+  - application_alert_email
+  - gt12_response_destination
+  - created_at
+  - updated_at
+  :organisation_user:
+  - id
+  - organisation_id
+  - user_id
+  :organisation:
+  - id
   - name
-  - email
-  - telephone
+  - org_id
   :course_enrichment:
   - about_course
   - course_length
@@ -46,39 +55,26 @@
   - personal_qualities
   - required_qualifications
   - salary_details
+  :contact:
+  - name
+  - email
+  - telephone
+  :access_request:
+  - email_address
+  - first_name
+  - last_name
+  - reason
+  - requester_id
+  - requester_email
+  - discarded_at
   :site:
   - uuid
   - discarded_at
-  :provider_ucas_preference:
-  - id
-  - provider_id
-  - type_of_gt12
-  - send_application_alerts
-  - application_alert_email
-  - gt12_response_destination
-  - created_at
-  - updated_at
-  :user:
+  :provider:
+  - scheme_member
+  - contact_name
   - email
-  - first_name
-  - last_name
-  - magic_link_token
-  :organisation_provider:
-  - id
-  - provider_id
-  - organisation_id
-  :organisation_user:
-  - id
-  - organisation_id
-  - user_id
-  :organisation:
-  - id
-  - name
-  - org_id
-  :schema_migrations:
-  - version
-  :data_migrations:
-  - version
+  - telephone
   :course:
-  - campaign_name
   - master_subject_id
+  - campaign_name
