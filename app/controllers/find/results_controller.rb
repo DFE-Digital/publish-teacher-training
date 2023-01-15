@@ -23,7 +23,6 @@ module Find
     }.freeze
 
     def index
-      binding.pry
       match_old_find_params
       @results_view = ResultsView.new(query_parameters: request.query_parameters)
 
