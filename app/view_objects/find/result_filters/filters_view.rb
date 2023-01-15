@@ -74,6 +74,8 @@ module Find
       def default_study_types_to_true
         return true if params[:study_type].nil?
 
+        # params[:study_type] = ["full_time, part_time"] if params[:study_type].nil?
+
         params[:study_type] == "full_time_or_part_time"
       end
 
