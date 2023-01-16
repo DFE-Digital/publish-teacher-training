@@ -111,12 +111,5 @@ find.localhost {
 }
 ```
 
-And make sure to set the following settings in `config/settings/development.local.yml`:
+Then make sure to run `caddy start` in the root of the project. You should now be able to access the app at `https://publish.localhost` and `https://find.localhost`.
 
-```ruby
-# Settings.base_url to https://publish.localhost
-# Settings.find_temp_url to https://find.localhost
-# Settings.use_ssl to true
-```
-
-Then run `caddy start` and you should be able to access those urls locally without modifying your hosts file.
