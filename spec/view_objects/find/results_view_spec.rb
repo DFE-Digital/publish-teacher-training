@@ -120,8 +120,10 @@ module Find
     describe "#courses" do
       let(:query_parameters) { {} }
 
-      let(:provider_ascending) { "0" }
-      let(:provider_descending)  { "1" }
+      let(:course_ascending) { "A" }
+      let(:course_descending) { "B" }
+      let(:provider_ascending) { "C" }
+      let(:provider_descending)  { "D" }
 
       subject { described_class.new(query_parameters:).courses }
 
@@ -134,16 +136,46 @@ module Find
           allow(CourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it "delegates to the CourseSearchService with sort set to provider_ascending" do
+        it "delegates to the CourseSearchService with sort set to course_ascending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: provider_ascending),
+            hash_including(filter: query_parameters, sort: course_ascending),
           )
         end
       end
 
-      context "sortby is set to 0 in query_parameters" do
-        let(:query_parameters) { { sortby: "0" } }
+      context "sortby is set to A in query_parameters" do
+        let(:query_parameters) { { sortby: "A" } }
+
+        before do
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+        end
+
+        it "delegates to the CourseSearchService with sort set to course_ascending" do
+          subject
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: query_parameters, sort: course_ascending),
+          )
+        end
+      end
+
+      context "sortby is set to B in query_parameters" do
+        let(:query_parameters) { { sortby: "B" } }
+
+        before do
+          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+        end
+
+        it "delegates to the CourseSearchService with sort set to course_descending" do
+          subject
+          expect(CourseSearchService).to have_received(:call).with(
+            hash_including(filter: query_parameters, sort: course_descending),
+          )
+        end
+      end
+
+      context "sortby is set to C in query_parameters" do
+        let(:query_parameters) { { sortby: "C" } }
 
         before do
           allow(CourseSearchService).to receive(:call).and_return(Course.all)
@@ -157,8 +189,8 @@ module Find
         end
       end
 
-      context "sortby is set to 1 in query_parameters" do
-        let(:query_parameters) { { sortby: "1" } }
+      context "sortby is set to D in query_parameters" do
+        let(:query_parameters) { { sortby: "D" } }
 
         before do
           allow(CourseSearchService).to receive(:call).and_return(Course.all)
@@ -584,10 +616,10 @@ module Find
         it {
           expect(results_view).to eq(
             [
-              ["Course name (A-Z)", 0, { "data-qa": "sort-form__options__ascending_course" }],
-              ["Course name (Z-A)", 1, { "data-qa": "sort-form__options__descending_course" }],
-              ["Training provider (A-Z)", 2, { "data-qa": "sort-form__options__ascending_provider" }],
-              ["Training provider (Z-A)", 3, { "data-qa": "sort-form__options__descending_provider" }],
+              ["Course name (A-Z)", "A", { "data-qa": "sort-form__options__ascending_course" }],
+              ["Course name (Z-A)", "B", { "data-qa": "sort-form__options__descending_course" }],
+              ["Training provider (A-Z)", "C", { "data-qa": "sort-form__options__ascending_provider" }],
+              ["Training provider (Z-A)", "D", { "data-qa": "sort-form__options__descending_provider" }],
             ],
           )
         }

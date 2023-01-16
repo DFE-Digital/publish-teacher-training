@@ -46,7 +46,7 @@ RSpec.describe CourseSearchService do
 
     describe "sort by" do
       context "ascending provider name and course name" do
-        let(:sort) { "name,provider.provider_name" }
+        let(:sort) { "provider.provider_name,order" }
 
         it "orders in ascending order" do
           expect(scope).to receive(:select).and_return(inner_query_scope)
@@ -58,7 +58,7 @@ RSpec.describe CourseSearchService do
       end
 
       context "descending provider name and course name" do
-        let(:sort) { "-provider.provider_name,name" }
+        let(:sort) { "-provider.provider_name,order" }
 
         it "orders in descending order" do
           expect(scope).to receive(:select).and_return(inner_query_scope)
