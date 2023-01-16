@@ -2,6 +2,22 @@ require "rails_helper"
 
 module Find
   RSpec.describe MatchOldParams do
+    context "with sortby and funding keys" do
+      subject {
+        described_class.call({
+          "sortby" => "2",
+          "funding" => "8",
+        })
+      }
+
+      it "maps the old find params" do
+        expect(subject).to eq({
+          "sortby" => "distance",
+          "funding" => "salary",
+        })
+      end
+    end
+
     context "with FILTERS" do
       subject {
         described_class.call({
