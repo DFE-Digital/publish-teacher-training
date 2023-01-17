@@ -4,13 +4,13 @@ require "rails_helper"
 
 feature "Accepting rollover" do
   before do
-    enable_features("rollover.show_next_cycle_allocation_recruitment_page")
+    enable_features("rollover.show_next_cycle_recruitment_page")
     given_i_am_a_user_who_has_not_accepted_rollover_recruitment
     when_i_visit_the_publish_service
   end
 
   after do
-    disable_features("rollover.show_next_cycle_allocation_recruitment_page")
+    disable_features("rollover.show_next_cycle_recruitment_page")
   end
 
   scenario "i can accept the rollover interruption" do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View providers" do
+feature "View providers", :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   before do

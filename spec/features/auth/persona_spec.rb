@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Authentication with Personas" do
+feature "Authentication with Personas", :with_publish_constraint do
   before do
     given_persona_based_authentication_is_active
   end

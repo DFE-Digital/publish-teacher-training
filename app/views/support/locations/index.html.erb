@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "support.providers.locations.index") %>
+<%= render PageTitle.new(title: "support.providers.locations.index") %>
 
 <%= govuk_link_to("Add location", new_support_recruitment_cycle_provider_location_path, class: "govuk-button govuk-!-margin-bottom-3") %>
 
@@ -36,4 +36,4 @@
   </tbody>
 </table>
 
-<%= render Paginator::View.new(scope: @sites) %>
+<%= render Paginator.new(scope: @sites) %>

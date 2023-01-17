@@ -1,4 +1,4 @@
-<%= render PageTitle::View.new(title: "support.providers.show") %>
+<%= render PageTitle.new(title: "support.providers.show") %>
 
 <%= extends_layout :support do %>
   <%= content_for(:breadcrumbs) do %>
@@ -10,7 +10,7 @@
 
   <h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
 
-  <%= render TabNavigation::View.new(items: [
+  <%= render TabNavigation.new(items: [
     { name: "Details", url: support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider) },
     { name: "Users", url: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider) },
     { name: "Courses", url: support_recruitment_cycle_provider_courses_path(@provider.recruitment_cycle_year, @provider) },

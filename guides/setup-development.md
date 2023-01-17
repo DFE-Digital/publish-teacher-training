@@ -94,3 +94,22 @@ Then run the following command to populate the database:
 ```bash
 psql manage_courses_backend_development < ~/Downloads/backup_sanitised.sql
 ```
+
+## Configuring local domains
+
+This app is setup to serve two domains for two live services. In order to develop locally you will need to configure your local machine to resolve these domains to `localhost`. You can use [Caddy](https://caddyserver.com/) to do this.
+
+[Caddy](https://caddyserver.com/) is a web server that can be used to proxy requests to the local server. It can be configured to resolve the domains to `localhost`. You can install it with homebrew and setup a Caddyfile in the root of the project with the following content:
+
+```
+publish.localhost {
+  reverse_proxy localhost:3001
+}
+
+find.localhost {
+  reverse_proxy localhost:3001
+}
+```
+
+Then make sure to run `caddy start` in the root of the project. You should now be able to access the app at `https://publish.localhost` and `https://find.localhost`.
+

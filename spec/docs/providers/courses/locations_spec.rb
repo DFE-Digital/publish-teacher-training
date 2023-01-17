@@ -1,6 +1,6 @@
 require "swagger_helper"
 
-describe "API" do
+describe "API", :with_publish_constraint do
   path "/recruitment_cycles/{year}/providers/{provider_code}/courses/{course_code}/locations" do
     get "Returns the locations for the specified course." do
       operationId :public_api_v1_provider_course_locations

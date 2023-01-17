@@ -4,18 +4,6 @@ shared:
     - organisation
     - request_date_utc
     - status
-  allocation:
-    - id
-    - provider_id
-    - accredited_body_id
-    - number_of_places
-    - created_at
-    - updated_at
-    - request_type
-    - accredited_body_code
-    - provider_code
-    - recruitment_cycle_id
-    - confirmed_number_of_places
   contact:
     - id
     - provider_id

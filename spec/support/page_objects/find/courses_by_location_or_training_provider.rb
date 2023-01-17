@@ -3,7 +3,7 @@
 module PageObjects
   module Find
     class CoursesByLocationOrTrainingProvider < PageObjects::Base
-      set_url "/find"
+      set_url "/"
 
       element :heading, "h1"
 

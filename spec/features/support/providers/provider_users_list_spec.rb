@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "View provider users" do
+feature "View provider users", :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view users belong to a provider" do

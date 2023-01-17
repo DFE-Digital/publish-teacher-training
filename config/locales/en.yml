@@ -1,10 +1,6 @@
 en:
   cycles:
     updated: "Cycle schedule updated"
-  allocations_for_pe:
-    open_state_link_text: "Request PE courses for %{period}"
-    closed_state_link_text: "Request PE courses for %{period}"
-    confirmed_state_link_text: "View your PE allocations for %{period}"
   helpers:
     hint:
       site:
@@ -166,20 +162,12 @@ en:
           show: "User overview"
           new: "Add a user"
           edit: "Edit a user"
-        allocations:
-          index: "Allocations"
-          show: "Allocation overview"
-        allocation_uplifts:
-          new: "Create an Allocation Uplift"
-          edit: "Edit Allocation Uplift"
         data_exports:
           index: "Data exports"
     filter:
       providers:
         provider_search: "Provider name or code"
         course_search: "Course code"
-      allocations:
-        text_search: "Name or code"
       users:
         text_search: "Name or email"
         user_type: "User type"

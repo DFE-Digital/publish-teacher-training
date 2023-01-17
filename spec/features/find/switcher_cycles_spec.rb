@@ -1,7 +1,7 @@
 require "rails_helper"
 
 feature "switcher cycle" do
-  scenario "Navigate to /find/cycle" do
+  scenario "Navigate to /cycle" do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
     and_i_should_see_the_page_heading
@@ -52,7 +52,7 @@ feature "switcher cycle" do
   end
 
   def when_i_visit_switcher_cycle_page
-    visit "/find/cycles"
+    visit "/cycles"
   end
 
   def then_i_should_see_the_page_title
@@ -76,11 +76,11 @@ feature "switcher cycle" do
   end
 
   def and_i_visit_results_page
-    visit "/find/results"
+    visit "/results"
   end
 
   def and_i_visit_the_find_homepage
-    visit "/find"
+    visit "/"
   end
 
   def and_i_see_deadline_banner(banner_text)

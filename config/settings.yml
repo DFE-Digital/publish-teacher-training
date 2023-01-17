@@ -49,11 +49,6 @@ cookies:
 current_recruitment_cycle_year: 2023
 next_cycle_open_date: 2023-10-4
 
-allocation_cycle_year: 2021
-allocations_close_date: 2021-07-02
-allocations:
-  view_previous_link: https://www.gov.uk/government/publications/initial-teacher-training-allocations-academic-year-2021-to-2022
-
 govuk_notify:
   api_key: please_change_me
   welcome_email_template_id: 42a9723d-b5a1-413a-89e6-bbdd073373ab
@@ -109,11 +104,7 @@ features:
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: false
-    show_next_cycle_allocation_recruitment_page: false
-  allocations:
-    # state: open # Users can make requests for allocations
-    # state: closed # Readonly - Users can see if they have or have not made request (does not show number of places)
-    state: confirmed # final allocation places are displayed to users in a readonly state
+    show_next_cycle_recruitment_page: false
   user_management: true
 
 cookies:

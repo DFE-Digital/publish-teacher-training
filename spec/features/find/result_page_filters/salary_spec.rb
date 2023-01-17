@@ -27,7 +27,7 @@ RSpec.feature "Funding filter" do
 
   def and_the_salary_query_parameter_is_retained
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/find/results")
+      expect(uri.path).to eq("/results")
       expect(uri.query).to eq("has_vacancies=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses&funding=salary")
     end
   end

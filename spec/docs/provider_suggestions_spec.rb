@@ -1,6 +1,6 @@
 require "swagger_helper"
 
-describe "API" do
+describe "API", :with_publish_constraint do
   path "/provider_suggestions" do
     get "Returns a list of providers suggestions matching the query term." do
       operationId :public_api_v1_provider_suggestions

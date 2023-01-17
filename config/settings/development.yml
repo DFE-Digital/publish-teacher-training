@@ -11,3 +11,7 @@ environment:
 
 find_valid_referers:
   - http://localhost:3001
+
+base_url: https://publish.localhost
+find_temp_url: https://find.localhost
+use_ssl: true

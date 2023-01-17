@@ -5,7 +5,7 @@ require_relative "../sections/error_link"
 module PageObjects
   module Find
     class CookiePreferences < PageObjects::Base
-      set_url "/find/cookies"
+      set_url "/cookies"
 
       element :heading, "h1"
 
