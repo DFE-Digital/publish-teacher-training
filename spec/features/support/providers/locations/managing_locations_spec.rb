@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Managing a provider's locations" do
+feature "Managing a provider's locations", :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     when_i_visit_a_provider_locations_page

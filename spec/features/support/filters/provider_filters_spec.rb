@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Filter providers" do
+feature "Filter providers", :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_providers_with_courses

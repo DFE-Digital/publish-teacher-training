@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Authentication" do
+feature "Authentication", :with_publish_constraint do
   scenario "Support user signs in" do
     given_i_am_a_support_user
     when_i_visit_the_support_interface

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module Find
-  describe "/find/sitemap.xml" do
+  describe "/sitemap.xml", :with_find_constraint do
     let(:provider_code) { "T92" }
     let(:provider) { build(:provider, provider_code:) }
     let(:changed_at) { Time.zone.now }
@@ -24,7 +24,7 @@ module Find
     before do
       course
 
-      get "/find/sitemap.xml"
+      get "/sitemap.xml"
     end
 
     it "renders sitemap" do

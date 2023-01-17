@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Authentication with magic links" do
+feature "Authentication with magic links", :with_publish_constraint do
   include ActiveJob::TestHelper
 
   before do

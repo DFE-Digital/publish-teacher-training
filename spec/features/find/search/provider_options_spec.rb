@@ -57,7 +57,7 @@ private
 
   def and_the_correct_age_group_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/find/age-groups")
+      expect(uri.path).to eq("/age-groups")
       expect(uri.query).to eq("l=3&provider.provider_name=Provider+1&sortby=distance")
     end
   end

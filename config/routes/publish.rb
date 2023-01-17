@@ -1,5 +1,11 @@
 root to: "publish/providers#index"
 
+scope via: :all do
+  match "/404", to: "publish/errors#not_found"
+  match "/500", to: "publish/errors#internal_server_error"
+  match "/403", to: "publish/errors#forbidden"
+end
+
 get "/sign-in", to: "sign_in#index"
 get "/user-not-found", to: "sign_in#new"
 get "/sign-out", to: "sessions#sign_out"

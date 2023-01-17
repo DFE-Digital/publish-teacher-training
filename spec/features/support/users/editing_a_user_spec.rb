@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-feature "Editing a user" do
+feature "Editing a user", :with_publish_constraint do
   before do
     given_i_am_authenticated(user: admin)
     and_a_user_exists

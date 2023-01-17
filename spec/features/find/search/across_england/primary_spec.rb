@@ -88,14 +88,14 @@ private
 
   def and_the_correct_age_group_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/find/age-groups")
+      expect(uri.path).to eq("/age-groups")
       expect(uri.query).to eq("l=2")
     end
   end
 
   def and_the_correct_subjects_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/find/subjects")
+      expect(uri.path).to eq("/subjects")
       expect(uri.query).to eq("age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time")
     end
   end
@@ -126,7 +126,7 @@ private
   end
 
   def then_i_should_see_the_results_page
-    expect(page).to have_current_path("/find/results?age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00")
+    expect(page).to have_current_path("/results?age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00")
   end
 
   def and_i_should_see_the_correct_courses

@@ -3,7 +3,7 @@
 module PageObjects
   module Find
     class AgeGroups < PageObjects::Base
-      set_url "/find/age-groups"
+      set_url "/age-groups"
 
       element :heading, "h1"
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "GET v3 /subjects" do
+describe "GET v3 /subjects", :with_publish_constraint do
   let(:request_path) { "/api/v3/subjects" }
   let(:json_response) { JSON.parse(response.body) }
 

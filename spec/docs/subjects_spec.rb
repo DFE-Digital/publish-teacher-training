@@ -1,6 +1,6 @@
 require "swagger_helper"
 
-describe "API" do
+describe "API", :with_publish_constraint do
   path "/subjects" do
     get "Returns a list of subjects" do
       operationId :public_api_v1_subjects

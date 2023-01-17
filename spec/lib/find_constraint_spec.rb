@@ -33,6 +33,14 @@ describe FindConstraint do
       end
     end
 
+    context "Settings.find_temp_url is different but subdomain matches" do
+      let(:host) { "find2-pr-123" }
+
+      it "returns false" do
+        expect(subject).to be_truthy
+      end
+    end
+
     context "Settings.find_temp_url is nil" do
       let(:find_temp_url) { nil }
 
