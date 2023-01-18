@@ -14,6 +14,10 @@ properties:
     description: "Only return providers that are accredited bodies."
     type: boolean
     example: true
+  provider_name:
+    description: "Returns the providers that has the specific provider name."
+    type: "string"
+    example: "oxf"
   provider_type:
     description: "Return providers based on their provider type. This is a comma delimited string. If multiple provider types are provided then any provider matching any one of the options provider will be returned, i.e. the OR operator is used."
     type: string
