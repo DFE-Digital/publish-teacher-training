@@ -23,6 +23,10 @@ module API
 
       private
 
+        def provider_name
+          @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&. > 2
+        end
+
         def updated_since
           @updated_since ||= params.dig(:filter, :updated_since)
         end
@@ -56,6 +60,7 @@ module API
         def providers
           @providers = recruitment_cycle.providers
 
+          @providers = @providers.provider_name_search(provider_name) if provider_name.present?
           @providers = @providers.changed_since(updated_since) if updated_since.present?
           @providers = @providers.with_provider_types(provider_types) if provider_types.present?
           @providers = @providers.with_region_codes(region_codes) if region_codes.present?
