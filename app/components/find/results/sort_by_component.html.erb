@@ -7,7 +7,7 @@
       <%= form.label(:sortby, "Sorted by", class: "govuk-label govuk-!-display-inline-block") %>
       <%= form.select(
         :sortby,
-        options_for_select(results.sort_options, selected: params["sortby"] || "A"),
+        options_for_select(results.sort_options, selected: params["sortby"] || "course_asc"),
         {},
         {
           class: "govuk-select",

@@ -8,16 +8,8 @@ class CourseSearchService
   )
     @filter = filter || {}
     @course_scope = course_scope
-    @sort = Set.new(sort&.split(","))
+    @sort = sort
   end
-
-  COURSE_ASCENDING = Set["name", "provider.provider_name"].freeze
-
-  COURSE_DESCENDING = Set["-name", "provider.provider_name"].freeze
-
-  PROVIDER_ASCENDING = Set["provider.provider_name", "order"].freeze
-
-  PROVIDER_DESCENDING = Set["-provider.provider_name", "order"].freeze
 
   def call
     scope = course_scope
@@ -173,23 +165,23 @@ private
   end
 
   def sort_by_course_ascending?
-    sort == Set["A"] || sort == COURSE_ASCENDING
+    sort == "course_asc" || old_find_course_asc_requirement
   end
 
   def sort_by_course_descending?
-    sort == Set["B"] || sort == COURSE_DESCENDING
+    sort == "course_desc" || old_find_course_desc_requirement
   end
 
   def sort_by_provider_ascending?
-    sort == Set["C"] || sort == PROVIDER_ASCENDING
+    sort == "provider_asc" || old_find_provider_asc_requirement
   end
 
   def sort_by_provider_descending?
-    sort == Set["D"] || sort == PROVIDER_DESCENDING
+    sort == "provider_desc" || old_find_provider_desc_requirement
   end
 
   def sort_by_distance?
-    sort == Set["distance"]
+    sort == "distance"
   end
 
   def origin
@@ -292,5 +284,23 @@ private
 
   def engineers_teach_physics_filter?
     filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
+  end
+
+  # The old_find methods below and their usages can be deleted along with the old find
+
+  def old_find_course_asc_requirement
+    sort == "name,provider.provider_name".freeze
+  end
+
+  def old_find_course_desc_requirement
+    sort == "-name,provider.provider_name".freeze
+  end
+
+  def old_find_provider_asc_requirement
+    sort == "provider.provider_name,order".freeze
+  end
+
+  def old_find_provider_desc_requirement
+    sort == "-provider.provider_name,order".freeze
   end
 end
