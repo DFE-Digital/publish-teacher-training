@@ -210,6 +210,21 @@ describe Provider do
     end
   end
 
+  describe "#provider_name_search" do
+    let!(:provider)  { create(:provider, provider_name: "Ford school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
+    let!(:provider2) { create(:provider, provider_name: "Almost forgotten school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
+
+    subject { described_class.provider_name_search(provider_name) }
+
+    context "when partial provider name is given" do
+      let(:provider_name) { "FOR" }
+
+      it "returns the correct list of providers" do
+        expect(subject).to match_array([provider, provider2])
+      end
+    end
+  end
+
   describe "#course_search" do
     let!(:provider) { create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")]) }
     let!(:provider2) { create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")]) }
