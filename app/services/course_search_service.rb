@@ -297,10 +297,10 @@ private
   end
 
   def old_find_provider_asc_requirement
-    sort == "provider.provider_name,order".freeze
+    sort == "provider.provider_name,name".freeze
   end
 
   def old_find_provider_desc_requirement
-    sort == "-provider.provider_name,order".freeze
+    sort == "-provider.provider_name,name".freeze
   end
 end
