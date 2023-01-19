@@ -36,9 +36,6 @@ runs:
           echo "publish_api_url: https://publish-teacher-training-pr-$PR_NUMBER.london.cloudapps.digital" >> config/settings/review.yml
         fi;
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-
     - name: Smoke Tests ${{ inputs.environment }}
       shell: bash
       run: RAILS_ENV=${{ inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
