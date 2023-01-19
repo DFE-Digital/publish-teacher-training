@@ -236,6 +236,20 @@ describe Course do
           provider: provider_a)
       end
 
+      let(:course_a_with_provider_b) do
+        create(:course,
+          name: "Course A",
+          course_code: "AAA",
+          provider: provider_b)
+      end
+
+      let(:course_a_with_provider_b_with_different_course_code) do
+        create(:course,
+          name: "Course A",
+          course_code: "AAB",
+          provider: provider_b)
+      end
+
       let(:course_b) do
         create(
           :course,
@@ -268,8 +282,8 @@ describe Course do
         course_b
       end
 
-      describe "#ascending_canonical_order" do
-        subject { described_class.ascending_canonical_order }
+      describe "#ascending_provider_canonical_order" do
+        subject { described_class.ascending_provider_canonical_order }
 
         it "sorts in ascending order of provider name and course name" do
           expect(subject).to eq([course_a, course_b, course_c, course_d])
@@ -284,8 +298,8 @@ describe Course do
         end
       end
 
-      describe "#descending_canonical_order" do
-        subject { described_class.descending_canonical_order }
+      describe "#descending_provider_canonical_order" do
+        subject { described_class.descending_provider_canonical_order }
 
         it "sorts in descending order of provider name" do
           expect(subject).to eq([course_c, course_d, course_a, another_course_a, course_b])
@@ -296,6 +310,72 @@ describe Course do
 
           it "sorts by course_code" do
             expect(subject).to eq([course_c, course_d, course_a, another_course_a, course_b])
+          end
+        end
+      end
+
+      describe "#ascending_course_canonical_order" do
+        subject { described_class.ascending_course_canonical_order }
+
+        it "sorts in ascending order of course name" do
+          expect(subject).to eq([course_a, course_b, course_c, course_d])
+        end
+
+        context "when there are multiple courses with the same name" do
+          before do
+            course_a_with_provider_b
+            another_course_a
+          end
+
+          it "sorts by provider_name" do
+            expect(subject).to eq([course_a, another_course_a, course_a_with_provider_b, course_b, course_c, course_d])
+          end
+
+          context "when there are multiple providers with the same name" do
+            before { course_a_with_provider_b_with_different_course_code }
+
+            it "sorts by course_code" do
+              expect(subject).to eq([course_a,
+                                     another_course_a,
+                                     course_a_with_provider_b,
+                                     course_a_with_provider_b_with_different_course_code,
+                                     course_b,
+                                     course_c,
+                                     course_d])
+            end
+          end
+        end
+      end
+
+      describe "#descending_course_canonical_order" do
+        subject { described_class.descending_course_canonical_order }
+
+        it "sorts in descending order of course name" do
+          expect(subject).to eq([course_d, course_c, course_b, course_a])
+        end
+
+        context "when there are multiple courses with the same name" do
+          before do
+            course_a_with_provider_b
+            another_course_a
+          end
+
+          it "sorts by provider_name" do
+            expect(subject).to eq([course_d, course_c, course_b, course_a, another_course_a, course_a_with_provider_b])
+          end
+
+          context "when there are multiple providers with the same name" do
+            before { course_a_with_provider_b_with_different_course_code }
+
+            it "sorts by course_code" do
+              expect(subject).to eq([course_d,
+                                     course_c,
+                                     course_b,
+                                     course_a,
+                                     another_course_a,
+                                     course_a_with_provider_b,
+                                     course_a_with_provider_b_with_different_course_code])
+            end
           end
         end
       end

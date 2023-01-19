@@ -8,12 +8,8 @@ class CourseSearchService
   )
     @filter = filter || {}
     @course_scope = course_scope
-    @sort = Set.new(sort&.split(","))
+    @sort = sort
   end
-
-  PROVIDER_ASCENDING = Set["name", "provider.provider_name"].freeze
-
-  PROVIDER_DESCENDING = Set["name", "-provider.provider_name"].freeze
 
   def call
     scope = course_scope
@@ -47,13 +43,17 @@ class CourseSearchService
     if provider_name.present?
       outer_scope = outer_scope
                       .accredited_body_order(provider_name)
-                      .ascending_canonical_order
+                      .ascending_provider_canonical_order
     elsif sort_by_provider_ascending?
-      outer_scope = outer_scope.ascending_canonical_order
+      outer_scope = outer_scope.ascending_provider_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
     elsif sort_by_provider_descending?
-      outer_scope = outer_scope.descending_canonical_order
+      outer_scope = outer_scope.descending_provider_canonical_order
       outer_scope = outer_scope.select("provider.provider_name", "course.*")
+    elsif sort_by_course_ascending?
+      outer_scope = outer_scope.ascending_course_canonical_order
+    elsif sort_by_course_descending?
+      outer_scope = outer_scope.descending_course_canonical_order
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
@@ -164,16 +164,24 @@ private
       filter.key?(:radius)
   end
 
+  def sort_by_course_ascending?
+    sort == "course_asc" || course_asc_requirement
+  end
+
+  def sort_by_course_descending?
+    sort == "course_desc" || course_desc_requirement
+  end
+
   def sort_by_provider_ascending?
-    sort == Set["0"] || sort == PROVIDER_ASCENDING
+    sort == "provider_asc" || provider_asc_requirement
   end
 
   def sort_by_provider_descending?
-    sort == Set["1"] || sort == PROVIDER_DESCENDING
+    sort == "provider_desc" || provider_desc_requirement
   end
 
   def sort_by_distance?
-    sort == Set["distance"]
+    sort == "distance"
   end
 
   def origin
@@ -276,5 +284,21 @@ private
 
   def engineers_teach_physics_filter?
     filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
+  end
+
+  def course_asc_requirement
+    sort == "name,provider.provider_name".freeze
+  end
+
+  def course_desc_requirement
+    sort == "-name,provider.provider_name".freeze
+  end
+
+  def provider_asc_requirement
+    sort == "provider.provider_name,name".freeze
+  end
+
+  def provider_desc_requirement
+    sort == "-provider.provider_name,name".freeze
   end
 end

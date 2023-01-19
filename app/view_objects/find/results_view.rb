@@ -24,7 +24,7 @@ module Find
     def courses
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
-        sort: query_parameters[:sortby] || "0",
+        sort: query_parameters[:sortby] || "course_asc",
         course_scope:,
       )
     end
@@ -137,8 +137,10 @@ module Find
 
     def sort_options
       [
-        ["Training provider (A-Z)", 0, { "data-qa": "sort-form__options__ascending" }],
-        ["Training provider (Z-A)", 1, { "data-qa": "sort-form__options__descending" }],
+        ["Course name (A-Z)", "course_asc", { "data-qa": "sort-form__options__ascending_course" }],
+        ["Course name (Z-A)", "course_desc", { "data-qa": "sort-form__options__descending_course" }],
+        ["Training provider (A-Z)", "provider_asc", { "data-qa": "sort-form__options__ascending_provider" }],
+        ["Training provider (Z-A)", "provider_desc", { "data-qa": "sort-form__options__descending_provider" }],
       ]
     end
 
