@@ -28,9 +28,22 @@ module Find
     end
 
     def call
+      sortby_and_funding
+      qualification_filters
+      filters
+      study_filters
+
+      @request_params
+    end
+
+  private
+
+    def sortby_and_funding
       @request_params["sortby"] = "distance" if @request_params["sortby"] == "2"
       @request_params["funding"] = "salary" if @request_params["funding"] == "8"
+    end
 
+    def qualification_filters
       if @request_params["qualifications"]
         @request_params["qualification"] = @request_params.delete("qualifications")
         QAULIFICATION_FILTERS.each do |k, v|
@@ -40,13 +53,17 @@ module Find
           end
         end
       end
+    end
 
+    def filters
       if FILTERS.keys & @request_params.keys
         (FILTERS.keys & @request_params.keys).each do |k|
           @request_params[FILTERS[k]] = @request_params.delete k
         end
       end
+    end
 
+    def study_filters
       if STUDY_FILTERS.keys & @request_params.keys
         (STUDY_FILTERS.keys & @request_params.keys).each do |k|
           next unless @request_params[k] == "true"
@@ -56,7 +73,6 @@ module Find
           @request_params.delete(k)
         end
       end
-      @request_params
     end
   end
 end
