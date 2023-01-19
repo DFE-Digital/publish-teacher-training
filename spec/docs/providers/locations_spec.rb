@@ -24,9 +24,9 @@ describe "API", :with_publish_constraint do
         required: false,
         description: "The associated data for this resource.",
         schema: {
-          enum: %w[recruitment_cycle provider course location_status],
+          enum: %w[recruitment_cycle provider],
         },
-        example: "recruitment_cycle,provider,course,location_status"
+        example: "recruitment_cycle,provider"
 
       response "200", "The collection of locations for the specified provider." do
         let(:provider) { create(:provider) }
