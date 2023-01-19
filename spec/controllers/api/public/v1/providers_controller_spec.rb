@@ -354,6 +354,14 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
+        context "passing in provider_name param" do
+          let(:filter) { { provider_name: "Sec" } }
+
+          it "returns 'Second' provider only" do
+            expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
+
         context "passing in provider_type param" do
           let(:filter) { { provider_type: "university" } }
 

@@ -174,6 +174,10 @@ class Provider < ApplicationRecord
       courses: %i[course_code],
     }, using: { tsearch: { prefix: true } }
 
+  pg_search_scope :provider_name_search,
+    against: %i[provider_name],
+    using: { tsearch: { prefix: true } }
+
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations
 
