@@ -15,7 +15,7 @@ properties:
     type: boolean
     example: true
   provider_name:
-    description: "Returns the providers that has the specific provider name."
+    description: "Return providers where the name matches some or all of the input string."
     type: "string"
     example: "oxf"
   provider_type:
