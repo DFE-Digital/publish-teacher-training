@@ -165,19 +165,19 @@ private
   end
 
   def sort_by_course_ascending?
-    sort == "course_asc" || old_find_course_asc_requirement
+    sort == "course_asc" || course_asc_requirement
   end
 
   def sort_by_course_descending?
-    sort == "course_desc" || old_find_course_desc_requirement
+    sort == "course_desc" || course_desc_requirement
   end
 
   def sort_by_provider_ascending?
-    sort == "provider_asc" || old_find_provider_asc_requirement
+    sort == "provider_asc" || provider_asc_requirement
   end
 
   def sort_by_provider_descending?
-    sort == "provider_desc" || old_find_provider_desc_requirement
+    sort == "provider_desc" || provider_desc_requirement
   end
 
   def sort_by_distance?
@@ -286,21 +286,19 @@ private
     filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
   end
 
-  # The old_find methods below and their usages can be deleted along with the old find
-
-  def old_find_course_asc_requirement
+  def course_asc_requirement
     sort == "name,provider.provider_name".freeze
   end
 
-  def old_find_course_desc_requirement
+  def course_desc_requirement
     sort == "-name,provider.provider_name".freeze
   end
 
-  def old_find_provider_asc_requirement
+  def provider_asc_requirement
     sort == "provider.provider_name,name".freeze
   end
 
-  def old_find_provider_desc_requirement
+  def provider_desc_requirement
     sort == "-provider.provider_name,name".freeze
   end
 end
