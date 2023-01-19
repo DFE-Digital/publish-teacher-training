@@ -504,7 +504,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.5)
+    rack (2.2.6.2)
     rack-oauth2 (1.21.3)
       activesupport
       attr_required
