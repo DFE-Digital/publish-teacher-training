@@ -2332,12 +2332,10 @@
             "schema": {
               "enum": [
                 "recruitment_cycle",
-                "provider",
-                "course",
-                "location_status"
+                "provider"
               ]
             },
-            "example": "recruitment_cycle,provider,course,location_status"
+            "example": "recruitment_cycle,provider"
           }
         ],
         "responses": {
