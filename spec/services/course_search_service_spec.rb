@@ -69,6 +69,28 @@ RSpec.describe CourseSearchService do
         end
       end
 
+      context "ascending course name and provider name" do
+        let(:sort) { "name,provider.provider_name" }
+
+        it "orders in ascending order" do
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).with(id: inner_query_scope).and_return(outer_query_scope)
+          expect(outer_query_scope).to receive(:ascending_course_canonical_order).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context "descending course name and provider name" do
+        let(:sort) { "-name,provider.provider_name" }
+
+        it "orders in descending order" do
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(order_scope)
+          expect(order_scope).to receive(:descending_course_canonical_order).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
       context "by distance" do
         let(:sort) { "distance" }
 
