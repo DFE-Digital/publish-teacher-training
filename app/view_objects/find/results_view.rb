@@ -45,9 +45,7 @@ module Find
     end
 
     def subjects
-      binding.pry
-      subject_codes = subject_codes.split if subject_codes&.is_a(String)
-      subject_codes&.any? ? filtered_subjects : all_subjects
+      subject_codes.any? ? filtered_subjects : all_subjects
     end
 
     def qualifications_parameters

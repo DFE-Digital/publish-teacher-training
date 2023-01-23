@@ -10,11 +10,11 @@ module Find
       end
 
       def create
-        @subjects_form = SubjectsForm.new(subjects: form_params["subjects"], age_group: form_params[:age_group])
+        @subjects_form = SubjectsForm.new(subjects: sanitised_subject_codes, age_group: form_params[:age_group])
 
         if @subjects_form.valid?
           redirect_to find_results_path(form_params.merge(
-            subjects: form_params[:subjects],
+            subjects: sanitised_subject_codes,
             has_vacancies: default_vacancies,
           ))
         else
@@ -24,11 +24,6 @@ module Find
 
     private
 
-<<<<<<< HEAD
-      def form_params
-        params.require(:find_subjects_form)
-          .permit(:c, :latitude, :longitude, :loc, :lq, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, "provider.provider_name", :degree_required, :can_sponsor_visa, :funding, :subjects, qualification: [], study_type: [])
-=======
       def sanitised_subject_codes
         return form_params["subjects"].split if form_params["subjects"].is_a? String
 
@@ -38,7 +33,6 @@ module Find
       def form_params
         params.require(:find_subjects_form)
           .permit(:c, :latitude, :longitude, :loc, :lq, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, "provider.provider_name", :degree_required, :can_sponsor_visa, :funding, :subjects, qualification: [], subjects: [], study_type: [])
->>>>>>> main
       end
 
       def build_backlink_query_parameters
