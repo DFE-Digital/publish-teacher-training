@@ -272,7 +272,7 @@ GEM
       raabro (~> 1.4)
     geocoder (1.8.1)
     geokit (1.13.1)
-    geokit-rails (2.3.2)
+    geokit-rails (2.5.0)
       geokit (~> 1.5)
       rails (>= 3.0)
     globalid (1.0.1)
@@ -536,7 +536,7 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.4.4)
+    rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
     rails_semantic_logger (4.11.0)
       rack
