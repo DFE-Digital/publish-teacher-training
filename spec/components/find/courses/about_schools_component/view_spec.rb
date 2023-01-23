@@ -105,7 +105,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include("You’ll be placed in different schools during your training.")
+      expect(result.text).to include("You'll be placed in different schools during your training.")
     end
 
     context "Provider is Educate Teacher Training" do
