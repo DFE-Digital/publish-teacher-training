@@ -9,6 +9,11 @@ module Publish
 
     after_action :verify_authorized
 
+    # DFE Analytics namespace
+    def current_namespace
+      "publish"
+    end
+
   private
 
     def provider
