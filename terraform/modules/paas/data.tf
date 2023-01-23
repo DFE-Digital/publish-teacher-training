@@ -30,3 +30,8 @@ data cloudfoundry_service postgres {
 data cloudfoundry_service redis {
   name = "redis"
 }
+
+data cloudfoundry_app find_app {
+  name_or_id  = local.find_app_name
+  space       = data.cloudfoundry_space.space.id
+}

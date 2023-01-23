@@ -37,7 +37,7 @@ provider "cloudfoundry" {
 }
 
 provider "statuscake" {
-  api_token   = local.infra_secrets.STATUSCAKE_PASSWORD
+  api_token  = local.infra_secrets.STATUSCAKE_PASSWORD
 }
 
 module "paas" {
@@ -59,6 +59,8 @@ module "paas" {
   app_environment_variables      = local.paas_app_environment_variables
   publish_gov_uk_host_names      = var.publish_gov_uk_host_names
   find_gov_uk_host_names         = var.find_gov_uk_host_names
+  find_app_gov_uk_host_names     = var.find_app_gov_uk_host_names
+  find_route_target              = var.find_route_target
   restore_from_db_guid           = var.paas_restore_from_db_guid
   db_backup_before_point_in_time = var.paas_db_backup_before_point_in_time
   enable_external_logging        = var.paas_enable_external_logging

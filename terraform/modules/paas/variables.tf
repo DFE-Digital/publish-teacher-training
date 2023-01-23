@@ -36,6 +36,13 @@ variable "find_gov_uk_host_names" {
   type = list
 }
 
+variable "find_app_gov_uk_host_names" {
+  default = []
+  type = list
+}
+
+variable "find_route_target" {}
+
 variable "restore_from_db_guid" {}
 
 variable "db_backup_before_point_in_time" {}
@@ -45,8 +52,8 @@ locals {
   app_name_suffix              = var.app_environment != "review" ? var.app_environment : "pr-${var.web_app_host_name}"
   web_app_name                 = "publish-teacher-training-${local.app_name_suffix}"
   publish_app_name             = "publish-${local.app_name_suffix}"
-  find2_app_name               = var.app_environment == "review" ? "find2-${local.app_name_suffix}" : ""
-  cloudapp_names               = var.app_environment == "review" ? [local.web_app_name, local.publish_app_name, local.find2_app_name] : [local.web_app_name, local.publish_app_name]
+  cloudapp_names               = var.app_environment == "review" ? [local.web_app_name, local.publish_app_name, "find2-${local.app_name_suffix}"] : [local.web_app_name, local.publish_app_name]
+  find_app_name                = "find-${local.app_name_suffix}"
   worker_app_name              = "publish-teacher-training-worker-${local.app_name_suffix}"
   postgres_service_name        = "publish-teacher-training-postgres-${local.app_name_suffix}"
   redis_worker_service_name    = "publish-teacher-training-worker-redis-${local.app_name_suffix}"
