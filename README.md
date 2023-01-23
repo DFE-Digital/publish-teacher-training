@@ -21,20 +21,19 @@ This repo is home to three services:
 
 ### New Find (while the migration is in progress)
 
-| Name        | URL                                                                    | Description
-| ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------
-| Production  | [www](https://www2.find-postgraduate-teacher-training.service.gov.uk)   | Public site
-| Staging     | [staging](https://staging2.find-postgraduate-teacher-training.service.gov.uk)| For internal use by DfE to test deploys
-| QA          | [qa](https://qa2.find-postgraduate-teacher-training.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
+| Name       | URL                                                                           | Description                                                           |
+| ---------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Production | [www](https://www2.find-postgraduate-teacher-training.service.gov.uk)         | Public site                                                           |
+| Staging    | [staging](https://staging2.find-postgraduate-teacher-training.service.gov.uk) | For internal use by DfE to test deploys                               |
+| QA         | [qa](https://qa2.find-postgraduate-teacher-training.service.gov.uk)           | For internal use by DfE for testing. Automatically deployed from main |
 
 ### Publish
 
-| Name        | URL                                                                | Description
-| ----------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------
-| Production  | [www](https://www.publish-teacher-training-courses.service.gov.uk) | Public site
-| Staging     | [staging](https://staging.publish-teacher-training-courses.service.gov.uk) | For internal use by DfE to test deploys
-| QA          | [qa](https://qa.publish-teacher-training-courses.service.gov.uk)  | For internal use by DfE for testing. Automatically deployed from main
-
+| Name       | URL                                                                        | Description                                                           |
+| ---------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Production | [www](https://www.publish-teacher-training-courses.service.gov.uk)         | Public site                                                           |
+| Staging    | [staging](https://staging.publish-teacher-training-courses.service.gov.uk) | For internal use by DfE to test deploys                               |
+| QA         | [qa](https://qa.publish-teacher-training-courses.service.gov.uk)           | For internal use by DfE for testing. Automatically deployed from main |
 
 ## Guides
 
@@ -52,7 +51,6 @@ This repo is home to three services:
 - [Disaster Recovery Plan](/guides/disaster-recovery.md)
 - [ADRs](/guides/adr/index.md)
 - [Support Playbook](/guides/support_playbook.md)
-
 
 ## License
 
