@@ -14,7 +14,7 @@
       to teach that subject better.
     </p>
 
-    <%= f.govuk_collection_check_boxes :subjects, primary_subject_options,
+    <%= f.govuk_collection_radio_buttons :subjects, primary_subject_options,
        :code, :name, legend: { text: "Which courses would you like to find?" } %>
 
     <%= f.govuk_submit "Find courses" %>

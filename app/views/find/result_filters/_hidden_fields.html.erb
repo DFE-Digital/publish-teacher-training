@@ -5,8 +5,12 @@
 <% end %>
 
 <% if params["subjects"].present? %>
-  <% request.params["subjects"].each do |subject_code| %>
-    <%= form.hidden_field(:subjects, multiple: true, value: subject_code) %>
+  <% if params["subjects"].is_a?(String) %>
+    <%= form.hidden_field(:subjects, multiple: true, value: params["subjects"]) %>
+  <% else %>
+    <% request.params["subjects"].each do |subject_code| %>
+      <%= form.hidden_field(:subjects, multiple: true, value: subject_code) %>
+    <% end %>
   <% end %>
 <% end %>
 <!-- NOTE: to preserve old find subject codes -->
