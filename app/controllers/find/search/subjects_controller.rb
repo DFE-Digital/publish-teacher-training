@@ -24,9 +24,21 @@ module Find
 
     private
 
+<<<<<<< HEAD
       def form_params
         params.require(:find_subjects_form)
           .permit(:c, :latitude, :longitude, :loc, :lq, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, "provider.provider_name", :degree_required, :can_sponsor_visa, :funding, :subjects, qualification: [], study_type: [])
+=======
+      def sanitised_subject_codes
+        return form_params["subjects"].split if form_params["subjects"].is_a? String
+
+        form_params["subjects"].compact_blank!
+      end
+
+      def form_params
+        params.require(:find_subjects_form)
+          .permit(:c, :latitude, :longitude, :loc, :lq, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses, :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, "provider.provider_name", :degree_required, :can_sponsor_visa, :funding, :subjects, qualification: [], subjects: [], study_type: [])
+>>>>>>> main
       end
 
       def build_backlink_query_parameters

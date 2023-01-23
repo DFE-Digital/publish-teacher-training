@@ -17,6 +17,13 @@
     <%= f.govuk_collection_radio_buttons :subjects, primary_subject_options,
        :code, :name, legend: { text: "Which courses would you like to find?" } %>
 
+    <%= f.govuk_radio_buttons_fieldset :subjects, legend: { text: "Which courses would you like to find?" } do %>
+        <%= f.govuk_radio_button :subjects, "primary", label: { text: "Primary" }, link_errors: true %>
+        <%= f.govuk_radio_button :subjects, "secondary", label: { text: "Secondary" } %>
+        <%= f.govuk_radio_divider %>
+        <%= f.govuk_radio_button :subjects, "further_education", label: { text: "Further education" }, hint: { text: I18n.t("find.subjectss.further_education.hint") } %>
+      <% end %>
+
     <%= f.govuk_submit "Find courses" %>
   </div>
 </div>
