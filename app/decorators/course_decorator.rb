@@ -285,7 +285,7 @@ class CourseDecorator < ApplicationDecorator
     when "primary"
       "Pick a primary subject"
     when "secondary"
-      "Pick a secondary subject"
+      "Subject"
     else
       "Pick a subject"
     end
@@ -296,7 +296,7 @@ class CourseDecorator < ApplicationDecorator
     when "primary"
       "Primary subject"
     when "secondary"
-      "Secondary subject"
+      "First subject"
     else
       "Pick a subject"
     end
