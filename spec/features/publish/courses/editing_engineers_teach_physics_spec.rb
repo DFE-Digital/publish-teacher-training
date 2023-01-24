@@ -25,7 +25,7 @@ feature "updating engineers teach physics", { can_edit_current_and_next_cycles: 
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
-    and_i_open_second_subject
+    # and_i_open_second_subject
     and_i_select_subordinate_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_edit_engineers_teach_physics_with_languages_page
@@ -92,7 +92,7 @@ private
   end
 
   def when_i_select_a_subject(subject_type)
-    subjects_edit_page.subjects_fields.select(course_subject(subject_type).subject_name).click
+    subjects_edit_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
