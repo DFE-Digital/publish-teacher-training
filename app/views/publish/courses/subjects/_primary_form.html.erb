@@ -1,4 +1,4 @@
-<%= render "publish/shared/error_wrapper", error_keys: [:subjects], data_qa: "course__subjects" do %>
+<%= render "publish/shared/error_wrapper", error_keys: [:master_subject_id], data_qa: "course__master_subject_id" do %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h1 class="govuk-fieldset__heading" data-qa="page-heading">
@@ -9,14 +9,14 @@
         <%= course.subject_page_title %>
       </h1>
     </legend>
-    <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
-    <%= form.govuk_radio_buttons_fieldset :subjects, legend: { text: "Which courses would you like to find?" } do %>
-        <%= form.govuk_radio_button :subjects, "00", checked: params[:subjects] == ["00"], label: { text: "Primary" } %>
-        <%= form.govuk_radio_button :subjects, "01", checked: params[:subjects] == ["01"], label: { text: "Primary with English" } %>
-        <%= form.govuk_radio_button :subjects, "02", checked: params[:subjects] == ["02"], label: { text: "Primary with geography and history" } %>      <%= form.govuk_radio_button :subjects, "03", checked: params[:subjects] == ["03"], label: { text: "Primary with mathematics" } %>
-        <%= form.govuk_radio_button :subjects, "04", checked: params[:subjects] == ["04"], label: { text: "Primary with modern languages" } %>
-        <%= form.govuk_radio_button :subjects, "05", checked: params[:subjects] == ["05"], label: { text: "Primary with physical education" } %>
-        <%= form.govuk_radio_button :subjects, "06", checked: params[:subjects] == ["06"], label: { text: "Primary with science" } %>
+    <%= render "publish/shared/error_messages", error_keys: [:master_subject_id] %>
+    <%= form.govuk_radio_buttons_fieldset :master_subject_id, legend: { text: "Which courses would you like to find?" } do %>
+        <%= form.govuk_radio_button :master_subject_id, "00", checked: params[:master_subject_id] == ["00"], label: { text: "Primary" } %>
+        <%= form.govuk_radio_button :master_subject_id, "01", checked: params[:master_subject_id] == ["01"], label: { text: "Primary with English" } %>
+        <%= form.govuk_radio_button :master_subject_id, "02", checked: params[:master_subject_id] == ["02"], label: { text: "Primary with geography and history" } %>      <%= form.govuk_radio_button :master_subject_id, "03", checked: params[:master_subject_id] == ["03"], label: { text: "Primary with mathematics" } %>
+        <%= form.govuk_radio_button :master_subject_id, "04", checked: params[:master_subject_id] == ["04"], label: { text: "Primary with modern languages" } %>
+        <%= form.govuk_radio_button :master_subject_id, "05", checked: params[:master_subject_id] == ["05"], label: { text: "Primary with physical education" } %>
+        <%= form.govuk_radio_button :master_subject_id, "06", checked: params[:master_subject_id] == ["06"], label: { text: "Primary with science" } %>
       <% end %> 
   </fieldset>
 <% end %>
