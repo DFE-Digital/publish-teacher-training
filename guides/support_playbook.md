@@ -106,6 +106,25 @@ $ /usr/local/bin/bundle exec rails rollover:provider[provider_code,'course_code1
 
 ## Copying courses from one provider to another
 
+### Copying a single course
+
+```ruby
+# Find provider to copy courses from
+provider_to_copy_to = RecruitmentCycle.current.providers.find_by(provider_code: "7K9")
+
+
+# Initialize the CopyToProviderService and assign to a variable
+copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToCourseService.new, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
+
+# Assign the course you want to copy to a variable
+course = RecruitmentCycle.current.providers.find_by(provider_code: "1TZ").courses.find_by(course_code: "2KG4")
+
+# Execute the service with the correct course and provider
+copier.execute(course:, new_provider: provider_to_copy_to)
+````
+
+### Copying all courses
+
 The example below copies scheduled courses during rollover from one provider to another. It may need tweaking depending on the scenario but the structure and format of what to run should help.
 
 ```ruby
