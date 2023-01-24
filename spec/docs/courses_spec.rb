@@ -29,13 +29,16 @@ describe "API", :with_publish_constraint do
         }
       parameter name: :sort,
         in: :query,
-        schema: { "$ref" => "#/components/schemas/Sort" },
+        schema: {
+          enum: ["provider.provider_name,name", "-provider.provider_name,name", "name,provider.provider_name", "name,provider.provider_name"],
+          "$ref" => "#/components/schemas/Sort",
+        },
         type: :object,
         style: :form,
         explode: false,
         required: false,
         example: "provider.provider_name,name",
-        description: "Field(s) to sort the courses by. Available sort options, 'provider.provider_name,name', '-provider.provider_name,name', 'name,provider.provider_name' and ''name,provider.provider_name'"
+        description: "Field(s) to sort the courses by."
       parameter name: :page,
         in: :query,
         schema: { "$ref" => "#/components/schemas/Pagination" },
