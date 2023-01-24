@@ -1,5 +1,7 @@
 module Publish
   class CoursesController < PublishController
+    include ApplyRedirect
+
     decorates_assigned :course
 
     def index
