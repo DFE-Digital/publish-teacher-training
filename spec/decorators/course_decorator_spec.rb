@@ -795,7 +795,7 @@ describe CourseDecorator do
       let(:course) { build_stubbed(:course, level: "secondary") }
 
       it "returns the correct page title" do
-        expect(subject_page_title).to eq("Pick a secondary subject")
+        expect(subject_page_title).to eq("Subject")
       end
     end
 
@@ -803,7 +803,7 @@ describe CourseDecorator do
       let(:course) { build_stubbed(:course, level: "further_education") }
 
       it "returns the correct page title" do
-        expect(subject_page_title).to eq("Subject")
+        expect(subject_page_title).to eq("Pick a subject")
       end
     end
   end

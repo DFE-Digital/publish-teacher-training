@@ -37,7 +37,7 @@ feature "Searching across England" do
     when_i_click_find_courses
     then_i_should_see_a_subjects_validation_error
 
-    when_i_select_the_primary_subject_textbox
+    when_i_select_the_primary_radio_button
     and_i_click_find_courses
     then_i_should_see_the_results_page
     and_i_should_see_the_correct_courses
@@ -119,10 +119,6 @@ private
 
   def then_i_should_see_a_subjects_validation_error
     expect(page).to have_content("Select at least one primary subject you want to teach")
-  end
-
-  def when_i_select_the_primary_subject_textbox
-    check "Primary"
   end
 
   def then_i_should_see_the_results_page

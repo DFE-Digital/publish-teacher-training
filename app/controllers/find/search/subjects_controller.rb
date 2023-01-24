@@ -27,7 +27,7 @@ module Find
       def sanitised_subject_codes
         return form_params["subjects"].split if form_params["subjects"].is_a? String
 
-        form_params["subjects"].compact_blank!
+        form_params["subjects"]&.compact_blank!
       end
 
       def form_params

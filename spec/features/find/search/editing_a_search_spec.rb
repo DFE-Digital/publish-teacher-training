@@ -24,7 +24,7 @@ feature "Editing a search" do
     and_i_click_continue
     and_i_select_the_primary_radio_button
     and_i_click_continue
-    and_i_select_the_primary_subject_checkbox
+    and_i_select_the_primary_subject_radio
     and_i_click_find_courses
   end
 
@@ -55,8 +55,8 @@ private
     primary_subjects_page.find_courses.click
   end
 
-  def and_i_select_the_primary_subject_checkbox
-    primary_subjects_page.primary.check
+  def and_i_select_the_primary_subject_radio
+    primary_subjects_page.primary.choose
   end
 
   def then_i_should_see_the_results_page
