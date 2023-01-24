@@ -6,7 +6,8 @@
           <%= render CaptionText.new(text: course.name_and_code) %>
         <% end %>
 
-        <%= course.subject_page_title %>
+        <%#= Change this ? course.subject_page_title %>
+        Subject
       </h1>
     </legend>
     <%= render "publish/shared/error_messages", error_keys: [:subjects] %>

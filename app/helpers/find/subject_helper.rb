@@ -6,6 +6,12 @@ module Find
       end
     end
 
+    def primary_form_options(subjects = primary_subjects)
+      subjects.map do |subject|
+        PrimarySubjectInput.new(1 + subject.subject_code.to_i, subject.subject_name)
+      end
+    end
+
     def secondary_subject_options(subjects = secondary_subjects)
       subjects.map do |subject|
         financial_incentive = subject.financial_incentive
