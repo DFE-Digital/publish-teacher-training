@@ -42,6 +42,7 @@ class CoursePolicy
   end
 
   alias_method :preview?, :show?
+  alias_method :apply?, :show?
   alias_method :details?, :show?
   alias_method :update?, :show?
   alias_method :edit?, :show?
