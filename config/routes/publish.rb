@@ -1,3 +1,8 @@
+require "sidekiq/web"
+require "sidekiq/cron/web"
+
+mount Sidekiq::Web, at: "/sidekiq", constraints: SystemAdminConstraint.new
+
 root to: "publish/providers#index"
 
 scope via: :all do
