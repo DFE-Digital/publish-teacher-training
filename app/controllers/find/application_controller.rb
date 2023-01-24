@@ -12,11 +12,6 @@ module Find
       @render_feedback_component = true
     end
 
-    # For DfE::Analytics as Find doesn't have a current_user
-    def current_user
-      nil
-    end
-
     # DFE Analytics namespace
     def current_namespace
       "find"
