@@ -280,17 +280,19 @@ class CourseDecorator < ApplicationDecorator
     level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
+  # TODO: check we still need this
   def subject_page_title
     case level
     when "primary"
       "Pick a primary subject"
     when "secondary"
-      "Subject"
+      "Pick a secondary subject"
     else
       "Pick a subject"
     end
   end
 
+  # TODO: check we still need this
   def subject_input_label
     case level
     when "primary"

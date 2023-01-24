@@ -15,9 +15,6 @@
                   ),
                   method: :get do |form| %>
       <%= render "publish/courses/new_fields_holder", form:, except_keys: [] do |fields| %>
-
-        <%#= render "form_fields", form: fields %>
-        <%# binding.pry %>
         <%= render(partial: "primary_form", locals: { form: fields }) if @course.primary_course? %>
         <%= render(partial: "secondary_form", locals: { form: fields }) if @course.secondary_course? %>
       <% end %>
