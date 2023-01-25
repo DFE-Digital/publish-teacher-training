@@ -9,7 +9,7 @@ module FeatureHelpers
     processed_file_names.each do |processed_file_name|
       file_name = processed_file_name.split("/").last
 
-      processed_file_name.include?("/support/") ? method_name = "support_#{file_name}_page" : method_name = "#{file_name}_page"
+      method_name = processed_file_name.include?("/support/") ? "support_#{file_name}_page" : "#{file_name}_page"
 
       define_method method_name do
         return instance_variable_get("@#{file_name}") if instance_variable_get("@#{file_name}").present?
