@@ -13,7 +13,21 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
+      expect(result).to have_link("Apply for this course", href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
       expect(result.text).to include("Apply for this course")
+    end
+
+    context "using 'Find::CoursesController'" do
+      it "renders the apply button when there are vacancies" do
+        course = build(:course, provider:, site_statuses: [create(:site_status, :published, :running)])
+        result = with_controller_class(Find::CoursesController) do
+          render_inline(described_class.new(course))
+        end
+
+        expect(result).to have_link("Apply for this course", href: "/course/#{course.provider.provider_code}/#{course.course_code}/apply")
+
+        expect(result.text).to include("Apply for this course")
+      end
     end
 
     it "renders a 'no vacancies' warning when there are no vacancies" do
