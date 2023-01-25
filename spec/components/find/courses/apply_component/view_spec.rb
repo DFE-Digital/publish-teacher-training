@@ -14,7 +14,6 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       result = render_inline(described_class.new(course))
 
       expect(result).to have_link("Apply for this course", href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
-      expect(result.text).to include("Apply for this course")
     end
 
     context "using 'Find::CoursesController'" do
@@ -25,8 +24,6 @@ describe Find::Courses::ApplyComponent::View, type: :component do
         end
 
         expect(result).to have_link("Apply for this course", href: "/course/#{course.provider.provider_code}/#{course.course_code}/apply")
-
-        expect(result.text).to include("Apply for this course")
       end
     end
 
