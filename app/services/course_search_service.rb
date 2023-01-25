@@ -236,7 +236,7 @@ private
   end
 
   def degree_grades_accepted
-    return [] if !degrees_accepted?
+    return [] unless degrees_accepted?
 
     degree_required_parameter = filter[:degree_required].to_sym
 

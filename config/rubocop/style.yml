@@ -26,7 +26,7 @@ Style/NumericLiterals:
 
 # Sometimes it's easier to think about a negated if, for example `render_error if !model.valid?` vs `render_error unless model.valid?`
 Style/NegatedIf:
-  Enabled: false
+  Enabled: true
 
 # 🤷‍♂️
 Style/AsciiComments:

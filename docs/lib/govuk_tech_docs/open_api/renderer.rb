@@ -73,7 +73,7 @@ module GovukTechDocs
 
             schema = response.content["application/json"].schema
             schema_name = get_schema_name(schema.node_context.source_location.to_s)
-            if !schema_name.nil?
+            unless schema_name.nil?
               schemas.push schema_name
             end
             schemas.concat(schemas_from_schema(schema))
@@ -84,7 +84,7 @@ module GovukTechDocs
         schemas.uniq.each do |schema_name|
           output += schema(schema_name)
         end
-        if !output.empty?
+        unless output.empty?
           output.prepend('<h2 id="schemas">Schemas</h2>')
         end
         output
@@ -114,7 +114,7 @@ module GovukTechDocs
               !property.node_context.source_location.to_s.include?("/properties/")
             schema_name = get_schema_name(property.node_context.source_location.to_s)
           end
-          if !schema_name.nil?
+          unless schema_name.nil?
             schemas.push schema_name
           end
           # Check sub-properties for references
@@ -293,7 +293,7 @@ module GovukTechDocs
 
       def get_schema_link(schema)
         schema_name = get_schema_name schema.node_context.source_location.to_s
-        if !schema_name.nil?
+        unless schema_name.nil?
           id = "schema-#{schema_name.parameterize}"
           output = "<a href='##{id}'>#{schema_name}</a>"
           output
