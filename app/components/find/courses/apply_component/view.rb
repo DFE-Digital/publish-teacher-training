@@ -1,13 +1,15 @@
 module Find
   module Courses
-    class ApplyComponent::View < ViewComponent::Base
-      attr_reader :course
+    module ApplyComponent
+      class View < ViewComponent::Base
+        attr_reader :course
 
-      delegate :has_vacancies?, :provider, to: :course
+        delegate :has_vacancies?, :provider, to: :course
 
-      def initialize(course)
-        super
-        @course = course
+        def initialize(course)
+          super
+          @course = course
+        end
       end
 
       def apply_path
