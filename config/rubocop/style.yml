@@ -17,11 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/FormatStringToken:
-  EnforcedStyle: template
-  Exclude:
-    - app/helpers/geocode_helper.rb
-
 Style/Alias:
   Enabled: false
 
