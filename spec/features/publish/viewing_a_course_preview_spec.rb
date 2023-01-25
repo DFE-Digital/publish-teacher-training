@@ -229,7 +229,7 @@ private
     site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]
 
     course_enrichment = build(
-      :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000
+      :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000
     )
 
     accrediting_provider = build(:provider)

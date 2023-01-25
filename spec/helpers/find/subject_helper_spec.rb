@@ -34,7 +34,7 @@ describe Find::SubjectHelper do
       end
 
       context "with scholarship only" do
-        let(:subjects) { [find_or_create(:secondary_subject, subject_name: "made up subject", scholarship: 1000000000)] }
+        let(:subjects) { [find_or_create(:secondary_subject, subject_name: "made up subject", scholarship: 1_000_000_000)] }
 
         it "returns the correct financial information" do
           expect(subject.first.financial_info).to eq("Scholarships of £1,000,000,000 are available")
@@ -63,7 +63,7 @@ describe Find::SubjectHelper do
         end
 
         context "with scholarship only" do
-          let(:subjects) { [find_or_create(:secondary_subject, subject_name: "made up subject", scholarship: 1000000000)] }
+          let(:subjects) { [find_or_create(:secondary_subject, subject_name: "made up subject", scholarship: 1_000_000_000)] }
 
           it "returns the correct financial information" do
             expect(subject.first.financial_info).to be_nil

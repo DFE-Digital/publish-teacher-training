@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :provider do
-    provider_name { "ACME SCITT#{rand(1000000)}" }
+    provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
     sequence(:provider_code) { |n| format("A%02d", n) }
 

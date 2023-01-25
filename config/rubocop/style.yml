@@ -22,7 +22,7 @@ Style/HashTransformValues:
 
 # This cop has too many false positives (it also requires underscores for things that are not numbers)
 Style/NumericLiterals:
-  Enabled: false
+  Enabled: true
 
 # Sometimes it's easier to think about a negated if, for example `render_error if !model.valid?` vs `render_error unless model.valid?`
 Style/NegatedIf:

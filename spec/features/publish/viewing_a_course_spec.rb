@@ -236,15 +236,15 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def course_enrichment
-    @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
+    @course_enrichment ||= build(:course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000)
   end
 
   def financial_incentive
-    @financial_incentive ||= build(:financial_incentive, bursary_amount: 10000)
+    @financial_incentive ||= build(:financial_incentive, bursary_amount: 10_000)
   end
 
   def course_enrichment_unpublished_changes
-    @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14000)
+    @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000)
   end
 
   def course_enrichment_initial_draft
@@ -293,7 +293,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_course_financial_incentives
-    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10000))
+    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10_000))
   end
 
   def and_i_should_see_the_course_has_no_financial_incentives_information
@@ -392,7 +392,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       :secondary,
       enrichments: [course_enrichment],
       funding_type: "fee",
-      subjects: [build(:secondary_subject, bursary_amount: 10000)],
+      subjects: [build(:secondary_subject, bursary_amount: 10_000)],
     )
   end
 

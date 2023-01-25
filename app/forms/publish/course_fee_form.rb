@@ -22,13 +22,13 @@ module Publish
       numericality: { allow_blank: true,
                       only_integer: true,
                       greater_than_or_equal_to: 0,
-                      less_than_or_equal_to: 100000 }
+                      less_than_or_equal_to: 100_000 }
 
     validates :fee_international,
       numericality: { allow_blank: true,
                       only_integer: true,
                       greater_than_or_equal_to: 0,
-                      less_than_or_equal_to: 100000 }
+                      less_than_or_equal_to: 100_000 }
 
     validates :fee_details, words_count: { maximum: 250, message: :too_long }
     validates :financial_support, words_count: { maximum: 250, message: :too_long }

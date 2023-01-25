@@ -49,7 +49,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
           widgetInteger: {
             type: "object",
             properties: {
-              id: { type: "integer", example: 12345 },
+              id: { type: "integer", example: 12_345 },
             },
           },
           widgetString: {
@@ -119,7 +119,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
         json = subject.json_output(schema)
         hash = JSON.parse(json)
 
-        expect(hash).to eql({ "data" => [{ "id" => 12345 }] })
+        expect(hash).to eql({ "data" => [{ "id" => 12_345 }] })
       end
     end
   end

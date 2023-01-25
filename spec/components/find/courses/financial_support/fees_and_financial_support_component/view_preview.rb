@@ -36,8 +36,8 @@ module Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent
         bursary_only: false,
         has_scholarship_and_bursary: false,
         financial_support: false,
-        fee_uk_eu: 99999,
-        fee_international: 9000000000,
+        fee_uk_eu: 99_999,
+        fee_international: 9_000_000_000,
         cycle_range: "2022 to 2023",
         fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
     end
@@ -49,8 +49,8 @@ module Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent
         bursary_only: false,
         has_scholarship_and_bursary: false,
         financial_support: false,
-        fee_uk_eu: 99999,
-        fee_international: 9000000000,
+        fee_uk_eu: 99_999,
+        fee_international: 9_000_000_000,
         cycle_range: "2022 to 2023",
         fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
     end
@@ -62,11 +62,11 @@ module Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent
         bursary_only: true,
         has_scholarship_and_bursary: false,
         financial_support: false,
-        fee_uk_eu: 99999,
-        fee_international: 9000000000,
+        fee_uk_eu: 99_999,
+        fee_international: 9_000_000_000,
         cycle_range: "2022 to 2023",
         fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
-        bursary_amount: 99999999)
+        bursary_amount: 99_999_999)
     end
 
     def scholarship_and_bursary_course
@@ -76,11 +76,11 @@ module Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent
         bursary_only: false,
         has_scholarship_and_bursary: true,
         financial_support: false,
-        fee_uk_eu: 99999,
-        fee_international: 9000000000,
+        fee_uk_eu: 99_999,
+        fee_international: 9_000_000_000,
         cycle_range: "2022 to 2023",
         fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
-        bursary_amount: 99999999,
+        bursary_amount: 99_999_999,
         scholarship_amount: 1,
         has_early_career_payments: true,
         subject_name: "foobar")
@@ -93,11 +93,11 @@ module Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent
         bursary_only: false,
         has_scholarship_and_bursary: false,
         financial_support: "Much support available",
-        fee_uk_eu: 99999,
-        fee_international: 9000000000,
+        fee_uk_eu: 99_999,
+        fee_international: 9_000_000_000,
         cycle_range: "2022 to 2023",
         fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
-        bursary_amount: 99999999,
+        bursary_amount: 99_999_999,
         scholarship_amount: 1,
         has_early_career_payments: false,
         subject_name: "foobar")

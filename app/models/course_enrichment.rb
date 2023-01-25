@@ -43,14 +43,14 @@ class CourseEnrichment < ApplicationRecord
     numericality: { allow_blank: true,
                     only_integer: true,
                     greater_than_or_equal_to: 0,
-                    less_than_or_equal_to: 100000 },
+                    less_than_or_equal_to: 100_000 },
     if: :is_fee_based?
 
   validates :fee_international,
     numericality: { allow_blank: true,
                     only_integer: true,
                     greater_than_or_equal_to: 0,
-                    less_than_or_equal_to: 100000 },
+                    less_than_or_equal_to: 100_000 },
     if: :is_fee_based?
 
   validates :fee_details, words_count: { maximum: 250 }, if: :is_fee_based?
