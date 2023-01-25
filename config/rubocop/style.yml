@@ -17,10 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/FormatString:
-  Exclude:
-    - app/helpers/geocode_helper.rb
-
 Style/AccessorGrouping:
   Enabled: false
 
