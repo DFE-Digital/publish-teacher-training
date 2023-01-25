@@ -1,6 +1,6 @@
 module Publish
   class NotificationForm < BaseModelForm
-    alias_method :user, :model
+    alias user model
 
     FIELDS = %i[
       explicitly_enabled

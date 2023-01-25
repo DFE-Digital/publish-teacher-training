@@ -1,6 +1,6 @@
 module Publish
   class CourseSalaryForm < BaseModelForm
-    alias_method :course_enrichment, :model
+    alias course_enrichment model
 
     include FundingTypeFormMethods
 

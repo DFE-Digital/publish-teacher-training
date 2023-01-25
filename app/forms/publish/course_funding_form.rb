@@ -1,6 +1,6 @@
 module Publish
   class CourseFundingForm < Form
-    alias_method :course, :model
+    alias course model
 
     FIELDS = %i[
       funding_type

@@ -1,6 +1,6 @@
 module Publish
   class CourseInformationForm < BaseProviderForm
-    alias_method :course_enrichment, :model
+    alias course_enrichment model
 
     FIELDS = %i[
       about_course

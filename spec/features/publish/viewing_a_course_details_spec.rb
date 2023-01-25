@@ -54,7 +54,7 @@ private
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
-  alias and_i_am_authenticated_as_a_provider_user given_i_am_authenticated_as_a_provider_user
+  alias_method :and_i_am_authenticated_as_a_provider_user, :given_i_am_authenticated_as_a_provider_user
 
   def and_i_am_authenticated_as_a_provider_user_for_next_cycle
     given_i_am_authenticated(user: create(:user, :with_provider_for_next_cycle))

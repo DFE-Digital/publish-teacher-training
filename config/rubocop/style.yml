@@ -17,9 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/Alias:
-  Enabled: false
-
 Style/RegexpLiteral:
   Enabled: false
   EnforcedStyle: mixed

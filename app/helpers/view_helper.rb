@@ -123,7 +123,7 @@ module ViewHelper
     end
   end
 
-  alias_method :cns, :classnames
+  alias cns classnames
 
 private
 

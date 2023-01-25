@@ -13,10 +13,10 @@ class AccessRequestPolicy
     @user.present?
   end
 
-  alias_method :new?, :create?
-  alias_method :index?, :approve?
-  alias_method :show?, :approve?
-  alias_method :inform_publisher?, :approve?
-  alias_method :confirm?, :approve?
-  alias_method :destroy?, :approve?
+  alias new? create?
+  alias index? approve?
+  alias show? approve?
+  alias inform_publisher? approve?
+  alias confirm? approve?
+  alias destroy? approve?
 end

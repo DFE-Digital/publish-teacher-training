@@ -6,7 +6,7 @@ module UserSessions
 
     attr_reader :user, :successful
 
-    alias_method :successful?, :successful
+    alias successful? successful
 
     def initialize(user:, user_session:)
       @user = user

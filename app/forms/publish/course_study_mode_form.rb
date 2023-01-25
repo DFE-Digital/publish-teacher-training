@@ -1,6 +1,6 @@
 module Publish
   class CourseStudyModeForm < BaseModelForm
-    alias_method :course, :model
+    alias course model
 
     FIELDS = %i[study_mode].freeze
 

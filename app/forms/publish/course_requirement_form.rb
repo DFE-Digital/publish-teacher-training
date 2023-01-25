@@ -1,6 +1,6 @@
 module Publish
   class CourseRequirementForm < BaseModelForm
-    alias_method :course_enrichment, :model
+    alias course_enrichment model
 
     FIELDS = %i[
       personal_qualities

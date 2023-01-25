@@ -23,7 +23,7 @@ class AccessRequest < ApplicationRecord
       status: :requested)
   end
 
-  alias_method :approve, :completed!
+  alias approve completed!
 
   validates :first_name, :last_name, :email_address,
     :organisation, :reason, :requester_email,

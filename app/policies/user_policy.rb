@@ -14,10 +14,10 @@ class UserPolicy
     user.admin? || user == accessed_user
   end
 
-  alias_method :update?, :show?
-  alias_method :accept_transition_screen?, :update?
-  alias_method :accept_rollover_screen?, :update?
-  alias_method :accept_terms?, :update?
-  alias_method :index?, :show?
-  alias_method :create?, :update?
+  alias update? show?
+  alias accept_transition_screen? update?
+  alias accept_rollover_screen? update?
+  alias accept_terms? update?
+  alias index? show?
+  alias create? update?
 end

@@ -1,6 +1,6 @@
 module Publish
   class EngineersTeachPhysicsForm < BaseCourseForm
-    alias_method :course, :model
+    alias course model
 
     FIELDS = %i[campaign_name subjects_ids skip_languages_goto_confirmation].freeze
 

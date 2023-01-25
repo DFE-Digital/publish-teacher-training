@@ -1,6 +1,6 @@
 module Publish
   class CourseSubjectsForm < BaseCourseForm
-    alias_method :subject_ids, :params
+    alias subject_ids params
 
     def initialize(model, params: {})
       @previous_subject_names = model.subjects.map(&:subject_name)

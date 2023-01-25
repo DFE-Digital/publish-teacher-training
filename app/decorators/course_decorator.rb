@@ -219,7 +219,7 @@ class CourseDecorator < ApplicationDecorator
   def cycle_range
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
-  alias_method :year_range, :cycle_range
+  alias year_range cycle_range
 
   def age_range
     if object.age_range_in_years.present?

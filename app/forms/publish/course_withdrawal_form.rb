@@ -1,6 +1,6 @@
 module Publish
   class CourseWithdrawalForm < BaseCourseForm
-    alias_method :course, :model
+    alias course model
 
     FIELDS = %i[
       confirm_course_code

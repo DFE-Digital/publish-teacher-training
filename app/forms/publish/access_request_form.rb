@@ -1,6 +1,6 @@
 module Publish
   class AccessRequestForm < BaseModelForm
-    alias_method :access_request, :model
+    alias access_request model
 
     validates :first_name, :last_name, :email_address,
       :organisation, :reason,

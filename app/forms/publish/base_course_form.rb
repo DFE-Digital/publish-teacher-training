@@ -1,6 +1,6 @@
 module Publish
   class BaseCourseForm < BaseModelForm
-    alias_method :course, :model
+    alias course model
 
     def save!
       if valid?

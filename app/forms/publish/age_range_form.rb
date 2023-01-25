@@ -1,6 +1,6 @@
 module Publish
   class AgeRangeForm < BaseModelForm
-    alias_method :course, :model
+    alias course model
 
     include ::Courses::EditOptions::AgeRangeConcern
 

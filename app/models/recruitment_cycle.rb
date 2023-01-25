@@ -12,12 +12,12 @@ class RecruitmentCycle < ApplicationRecord
     def current_recruitment_cycle
       find_by(year: Settings.current_recruitment_cycle_year)
     end
-    alias_method :current, :current_recruitment_cycle
+    alias current current_recruitment_cycle
 
     def next_recruitment_cycle
       current_recruitment_cycle.next
     end
-    alias_method :next, :next_recruitment_cycle
+    alias next next_recruitment_cycle
   end
 
   def previous

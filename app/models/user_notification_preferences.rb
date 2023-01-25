@@ -39,7 +39,7 @@ class UserNotificationPreferences
     self
   end
 
-  alias_method :enabled?, :enabled
+  alias enabled? enabled
 
 private
 
