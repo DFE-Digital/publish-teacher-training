@@ -94,9 +94,7 @@ private
   end
 
   def course_subject(level)
-    if level == "primary"
-      primary_subject
-    end
+    primary_subject if level == "primary"
   end
 
   def select_subjects(course_creation_params, level:, next_page:)

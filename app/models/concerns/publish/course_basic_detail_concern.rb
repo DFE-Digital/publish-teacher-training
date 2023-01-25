@@ -119,9 +119,7 @@ module Publish
     def next_step
       continue_path = course_creation_path_for(continue_step)
 
-      if continue_path.nil?
-        raise "No path defined for continue step: #{continue_path}"
-      end
+      raise "No path defined for continue step: #{continue_path}" if continue_path.nil?
 
       continue_path
     end
@@ -147,9 +145,7 @@ module Publish
     def build_back_link
       previous_path = course_back_path_for(back_step)
 
-      if previous_path.nil?
-        raise "No path defined for back step: #{back_step}"
-      end
+      raise "No path defined for back step: #{back_step}" if previous_path.nil?
 
       @back_link_path = previous_path
     end

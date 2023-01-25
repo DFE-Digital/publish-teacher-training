@@ -29,9 +29,7 @@ module Find
           handle_location_option
         end
       when PROVIDER_OPTION
-        if provider_query.blank? || provider_query == "Select a provider"
-          @errors = [I18n.t("find.location_filter.errors.blank_provider")]
-        end
+        @errors = [I18n.t("find.location_filter.errors.blank_provider")] if provider_query.blank? || provider_query == "Select a provider"
       end
     end
 

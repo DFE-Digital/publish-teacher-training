@@ -202,9 +202,7 @@ private
       filter[:qualification] |= %w[pgce pgde]
     end
 
-    if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
-      filter[:qualification] |= %w[pgde_with_qts]
-    end
+    filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
 
     filter[:qualification].split(",")
   end

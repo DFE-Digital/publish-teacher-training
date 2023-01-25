@@ -67,9 +67,7 @@ module Publish
 
     def add_enrichment_errors
       accredited_bodies&.each_with_index do |accredited_body, _index|
-        if accredited_body.invalid?
-          errors.add :accredited_bodies, accredited_body.errors[:description].first
-        end
+        errors.add :accredited_bodies, accredited_body.errors[:description].first if accredited_body.invalid?
       end
     end
 

@@ -106,9 +106,7 @@ private
   end
 
   def vac_status_must_be_consistent_with_course_study_mode
-    unless vac_status_consistent_with_course_study_mode?
-      errors.add(:vac_status, "(#{vac_status}) must be consistent with course study mode #{course.study_mode}")
-    end
+    errors.add(:vac_status, "(#{vac_status}) must be consistent with course study mode #{course.study_mode}") unless vac_status_consistent_with_course_study_mode?
   end
 
   def vac_status_consistent_with_course_study_mode?

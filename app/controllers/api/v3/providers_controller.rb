@@ -4,9 +4,7 @@ module API
       before_action :build_recruitment_cycle
 
       def index
-        if params[:search].present? && (params[:search].length < 2)
-          return render(status: :bad_request)
-        end
+        return render(status: :bad_request) if params[:search].present? && (params[:search].length < 2)
 
         build_fields_for_index
         @providers = @recruitment_cycle.providers.includes(:recruitment_cycle)

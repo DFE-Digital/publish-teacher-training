@@ -54,9 +54,7 @@ module GovukTechDocs
         title = schema_data[0]
         schema = schema_data[1]
 
-        if schema_data[1]["anyOf"]
-          return @template_any_of.result(binding)
-        end
+        return @template_any_of.result(binding) if schema_data[1]["anyOf"]
 
         @template_schema.result(binding)
       end
@@ -73,9 +71,7 @@ module GovukTechDocs
 
             schema = response.content["application/json"].schema
             schema_name = get_schema_name(schema.node_context.source_location.to_s)
-            unless schema_name.nil?
-              schemas.push schema_name
-            end
+            schemas.push schema_name unless schema_name.nil?
             schemas.concat(schemas_from_schema(schema))
           end
         end
@@ -84,9 +80,7 @@ module GovukTechDocs
         schemas.uniq.each do |schema_name|
           output += schema(schema_name)
         end
-        unless output.empty?
-          output.prepend('<h2 id="schemas">Schemas</h2>')
-        end
+        output.prepend('<h2 id="schemas">Schemas</h2>') unless output.empty?
         output
       end
 
@@ -96,9 +90,7 @@ module GovukTechDocs
         schema.properties.each do |property|
           properties.push property[1]
         end
-        if schema.type == "array"
-          properties.push schema.items
-        end
+        properties.push schema.items if schema.type == "array"
         all_of = schema["allOf"]
         if all_of.present?
           all_of.each do |schema_nested|
@@ -114,9 +106,7 @@ module GovukTechDocs
               !property.node_context.source_location.to_s.include?("/properties/")
             schema_name = get_schema_name(property.node_context.source_location.to_s)
           end
-          unless schema_name.nil?
-            schemas.push schema_name
-          end
+          schemas.push schema_name unless schema_name.nil?
           # Check sub-properties for references
           schemas.concat(schemas_from_schema(property))
         end
@@ -156,9 +146,7 @@ module GovukTechDocs
       end
 
       def markdown(text)
-        if text
-          Tilt["markdown"].new(context: @app) { text }.render
-        end
+        Tilt["markdown"].new(context: @app) { text }.render if text
       end
 
       def json_output(schema)
@@ -185,18 +173,12 @@ module GovukTechDocs
           when "object"
             properties_hash[pkey] = {}
             items = property.items
-            if items.present?
-              properties_hash[pkey] = schema_properties(items)
-            end
-            if property.properties.present?
-              properties_hash[pkey] = schema_properties(property)
-            end
+            properties_hash[pkey] = schema_properties(items) if items.present?
+            properties_hash[pkey] = schema_properties(property) if property.properties.present?
           when "array"
             properties_hash[pkey] = []
             items = property.items
-            if items.present?
-              properties_hash[pkey].push schema_properties(items)
-            end
+            properties_hash[pkey].push schema_properties(items) if items.present?
           else
             properties_hash[pkey] = property.example.nil? ? property.type : property.example
           end
@@ -221,18 +203,12 @@ module GovukTechDocs
 
       def get_all_of_array(schema)
         properties = []
-        if schema.is_a?(Array)
-          schema = schema[1]
-        end
-        if schema["allOf"]
-          all_of = schema["allOf"]
-        end
+        schema = schema[1] if schema.is_a?(Array)
+        all_of = schema["allOf"] if schema["allOf"]
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
-              if property.is_a?(Array)
-                property = property[1]
-              end
+              property = property[1] if property.is_a?(Array)
               properties.push property
             end
           end
@@ -242,9 +218,7 @@ module GovukTechDocs
 
       def get_all_of_hash(schema)
         properties = {}
-        if schema["allOf"]
-          all_of = schema["allOf"]
-        end
+        all_of = schema["allOf"] if schema["allOf"]
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |key, property|
@@ -339,9 +313,7 @@ module GovukTechDocs
           properties.push property
         end
 
-        if schema_data[1] && schema_data[1].type == "array"
-          properties.push ["Item", schema_data[1].items]
-        end
+        properties.push ["Item", schema_data[1].items] if schema_data[1] && schema_data[1].type == "array"
 
         properties
       end

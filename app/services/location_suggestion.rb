@@ -28,9 +28,7 @@ class LocationSuggestion
     end
 
     def report_error(response)
-      if response.status != 200 || response.body["error_message"].present?
-        Sentry.capture_message("Google Places API error - status: #{response.status}, body: #{response.body}")
-      end
+      Sentry.capture_message("Google Places API error - status: #{response.status}, body: #{response.body}") if response.status != 200 || response.body["error_message"].present?
     end
 
     def location_query_cache_key(input)

@@ -38,9 +38,7 @@ module Publish
     def location_name_unique_to_provider
       sibling_sites = provider.sites - [site]
 
-      if location_name.in?(sibling_sites.pluck(:location_name))
-        errors.add(:location_name, "Name is in use by another location")
-      end
+      errors.add(:location_name, "Name is in use by another location") if location_name.in?(sibling_sites.pluck(:location_name))
     end
   end
 end

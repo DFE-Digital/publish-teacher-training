@@ -3,9 +3,7 @@
 module FeatureService
   class << self
     def require(feature_name)
-      unless enabled?(feature_name)
-        raise "Feature #{feature_name} is disabled"
-      end
+      raise "Feature #{feature_name} is disabled" unless enabled?(feature_name)
 
       true
     end

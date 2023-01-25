@@ -256,13 +256,9 @@ class Course < ApplicationRecord
   scope :with_funding_types, lambda { |funding_types|
     program_types = []
 
-    if funding_types.include?("salary")
-      program_types << :school_direct_salaried_training_programme
-    end
+    program_types << :school_direct_salaried_training_programme if funding_types.include?("salary")
 
-    if funding_types.include?("apprenticeship")
-      program_types << :pg_teaching_apprenticeship
-    end
+    program_types << :pg_teaching_apprenticeship if funding_types.include?("apprenticeship")
 
     if funding_types.include?("fee")
       %i[
@@ -726,9 +722,7 @@ class Course < ApplicationRecord
     requirements = [I18n.t("course.values.bursary_requirements.second_degree")]
     mathematics_requirement = I18n.t("course.values.bursary_requirements.maths")
 
-    if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
-      requirements.push(mathematics_requirement)
-    end
+    requirements.push(mathematics_requirement) if subjects.any? { |subject| subject.subject_name == "Primary with mathematics" }
 
     requirements
   end
@@ -875,16 +869,12 @@ private
 
   def validate_site_statuses_publishable
     site_statuses.each do |site_status|
-      unless site_status.valid?
-        raise "Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}"
-      end
+      raise "Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}" unless site_status.valid?
     end
   end
 
   def validate_provider_visa_sponsorship_publishable
-    if provider.can_sponsor_student_visa.nil? || provider.can_sponsor_skilled_worker_visa.nil?
-      errors.add(:base, :visa_sponsorship_not_publishable)
-    end
+    errors.add(:base, :visa_sponsorship_not_publishable) if provider.can_sponsor_student_visa.nil? || provider.can_sponsor_skilled_worker_visa.nil?
   end
 
   def validate_provider_urn_ukprn_publishable
@@ -935,15 +925,11 @@ private
   end
 
   def validate_modern_languages
-    if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
-      errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject")
-    end
+    errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject") if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
   end
 
   def validate_site_status_findable
-    unless findable?
-      errors.add(:site_statuses, "must be findable")
-    end
+    errors.add(:site_statuses, "must be findable") unless findable?
   end
 
   def has_the_modern_languages_secondary_subject_type?
@@ -954,9 +940,7 @@ private
   end
 
   def validate_has_languages
-    unless has_any_modern_language_subject_type?
-      errors.add(:modern_languages_subjects, :select_a_language)
-    end
+    errors.add(:modern_languages_subjects, :select_a_language) unless has_any_modern_language_subject_type?
   end
 
   def validate_subject_count
@@ -967,13 +951,9 @@ private
 
     case level
     when "primary", "further_education"
-      if subjects.count > 1
-        errors.add(:subjects, "has too many subjects")
-      end
+      errors.add(:subjects, "has too many subjects") if subjects.count > 1
     when "secondary"
-      if subjects.count > 2 && !has_any_modern_language_subject_type?
-        errors.add(:subjects, "has too many subjects")
-      end
+      errors.add(:subjects, "has too many subjects") if subjects.count > 2 && !has_any_modern_language_subject_type?
     end
   end
 
@@ -986,17 +966,11 @@ private
 
     case level
     when "primary"
-      unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
-        errors.add(:subjects, "must be primary")
-      end
+      errors.add(:subjects, "must be primary") unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     when "secondary"
-      unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
-        errors.add(:subjects, "must be secondary")
-      end
+      errors.add(:subjects, "must be secondary") unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     when "further_education"
-      unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
-        errors.add(:subjects, "must be further education")
-      end
+      errors.add(:subjects, "must be further education") unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     end
   end
 

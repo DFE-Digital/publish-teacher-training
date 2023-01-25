@@ -5,9 +5,7 @@ module Publish
       decorates_assigned :course
 
       def edit
-        if params[:display_errors] == "true"
-          form_object.valid?
-        end
+        form_object.valid? if params[:display_errors] == "true"
 
         render locals: { form_object: }
       end

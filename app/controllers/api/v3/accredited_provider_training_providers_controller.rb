@@ -15,9 +15,7 @@ module API
         def call
           scope = all_providers.order(:provider_name)
 
-          if params[:filter]
-            scope = scope.where(id: eligible_training_provider_ids)
-          end
+          scope = scope.where(id: eligible_training_provider_ids) if params[:filter]
 
           scope
         end

@@ -29,9 +29,7 @@ module Find
 
       response = HTTP.post(@webhook_url, body: payload.to_json)
 
-      unless response.status.success?
-        raise SlackMessageError, "Slack error: #{response.body}"
-      end
+      raise SlackMessageError, "Slack error: #{response.body}" unless response.status.success?
     end
 
     class SlackMessageError < StandardError; end

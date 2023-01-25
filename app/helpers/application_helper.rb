@@ -50,9 +50,7 @@ module ApplicationHelper
       classes = "app-summary-list__value--truncate"
     end
 
-    if value.blank?
-      value = raw("<span class=\"app-!-colour-muted\">Empty</span>")
-    end
+    value = raw("<span class=\"app-!-colour-muted\">Empty</span>") if value.blank?
 
     summary_list.row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
       row.key { key.html_safe }

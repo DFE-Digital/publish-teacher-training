@@ -14,9 +14,7 @@ module Publish
     end
 
     def save
-      if valid?
-        cookies[cookie_name] = { value: consent, expires: expiry_date }
-      end
+      cookies[cookie_name] = { value: consent, expires: expiry_date } if valid?
     end
   end
 end

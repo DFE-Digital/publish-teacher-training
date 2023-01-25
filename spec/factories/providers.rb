@@ -68,9 +68,7 @@ FactoryBot.define do
       # updated_at does. Maybe this is because we've added changed_at to
       # timestamp_attributes_for_update but FactoryBot doesn't actually
       # recognise it.
-      if evaluator.changed_at.present?
-        provider.update changed_at: evaluator.changed_at
-      end
+      provider.update changed_at: evaluator.changed_at if evaluator.changed_at.present?
     end
 
     trait :next_recruitment_cycle do

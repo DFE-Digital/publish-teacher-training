@@ -26,9 +26,7 @@ module Publish
     end
 
     def show
-      if session[:cycle_year].present?
-        @cycle_year = session[:cycle_year]
-      end
+      @cycle_year = session[:cycle_year] if session[:cycle_year].present?
       authorize provider
 
       if rollover_active?

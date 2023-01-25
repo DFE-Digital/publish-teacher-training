@@ -21,9 +21,7 @@ module Find
           row.tap do |r|
             next if r[:key].in? ignore_editable
 
-            unless editable
-              r.delete(:action)
-            end
+            r.delete(:action) unless editable
           end
         end
       end

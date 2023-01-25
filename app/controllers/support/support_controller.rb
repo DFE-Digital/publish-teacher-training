@@ -11,9 +11,7 @@ module Support
   private
 
     def check_user_is_admin
-      unless current_user.admin?
-        render "errors/forbidden", status: :forbidden, formats: :html
-      end
+      render "errors/forbidden", status: :forbidden, formats: :html unless current_user.admin?
     end
 
     def recruitment_cycle

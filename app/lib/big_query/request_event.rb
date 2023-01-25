@@ -46,9 +46,7 @@ module BigQuery
     end
 
     def anonymised_user_agent_and_ip(rack_request)
-      if rack_request.remote_ip.present?
-        anonymise(rack_request.user_agent.to_s + rack_request.remote_ip.to_s)
-      end
+      anonymise(rack_request.user_agent.to_s + rack_request.remote_ip.to_s) if rack_request.remote_ip.present?
     end
 
     def anonymise(text)

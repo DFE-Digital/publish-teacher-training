@@ -88,9 +88,7 @@ FactoryBot.define do
         end
       end
 
-      if course.subjects.any? && course.name.blank?
-        course.name = course.generate_name
-      end
+      course.name = course.generate_name if course.subjects.any? && course.name.blank?
     end
 
     after(:create) do |course, evaluator|
@@ -102,13 +100,9 @@ FactoryBot.define do
         course.changed_at = evaluator.age
       end
 
-      if course.subjects.any? && course.name.blank?
-        course.name = course.generate_name
-      end
+      course.name = course.generate_name if course.subjects.any? && course.name.blank?
 
-      if course.subjects.any? && course.master_subject_id.nil?
-        course.master_subject_id = course.subjects.first.id
-      end
+      course.master_subject_id = course.subjects.first.id if course.subjects.any? && course.master_subject_id.nil?
 
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.

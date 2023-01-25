@@ -52,9 +52,7 @@ module Publish
       def qts_qualifications(edit_options)
         options = %w[pgce_with_qts qts pgde_with_qts]
 
-        if edit_options.sort != options.sort
-          raise "Non QTS qualification options do not match"
-        end
+        raise "Non QTS qualification options do not match" if edit_options.sort != options.sort
 
         options
       end
@@ -62,9 +60,7 @@ module Publish
       def non_qts_qualifications(edit_options)
         options = %w[pgce pgde]
 
-        if edit_options.sort != options.sort
-          raise "QTS qualification options do not match"
-        end
+        raise "QTS qualification options do not match" if edit_options.sort != options.sort
 
         options
       end
