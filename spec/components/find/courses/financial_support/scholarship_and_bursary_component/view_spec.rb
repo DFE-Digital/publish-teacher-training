@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, type: :component do
-  let(:course) {
+  let(:course) do
     build(:course,
       subjects: [
         build(:primary_subject,
@@ -10,7 +10,7 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
             bursary_amount: 3000,
             early_career_payments: 2000)),
       ]).decorate
-  }
+  end
 
   context "bursaries_and_scholarships_announced feature flag is on" do
     before do
@@ -65,7 +65,7 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
     end
 
     context "when course has scholarship but we don\"t have a institution to obtain further info from" do
-      let(:course) {
+      let(:course) do
         build(:course,
           subjects: [
             build(:secondary_subject, :design_and_technology,
@@ -73,7 +73,7 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
                 bursary_amount: 3000,
                 early_career_payments: 2000)),
           ]).decorate
-      }
+      end
 
       it "does not try to render link to scholarship body" do
         result = render_inline(described_class.new(course))

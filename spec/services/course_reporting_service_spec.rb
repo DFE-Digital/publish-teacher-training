@@ -77,16 +77,16 @@ describe CourseReportingService do
         closed: { yes: 0, no: 0 },
       },
       subject: {
-        open: Subject.active.each_with_index.map { |sub, i|
+        open: Subject.active.each_with_index.map do |sub, i|
                 x = {}
                 x[sub.subject_name] = (i + 1) * 3
                 x
-              } .reduce({}, :merge),
-        closed: Subject.active.each_with_index.map { |sub, _i|
+              end .reduce({}, :merge),
+        closed: Subject.active.each_with_index.map do |sub, _i|
                   x = {}
                   x[sub.subject_name] = 0
                   x
-                } .reduce({}, :merge),
+                end .reduce({}, :merge),
       },
     }
   end
@@ -142,11 +142,11 @@ describe CourseReportingService do
 
         expect(open_course_subjects).to receive(:group).with(:subject_id).and_return(open_course_subjects_grouped)
         expect(open_course_subjects_grouped).to receive(:count).and_return(
-          Subject.active.each_with_index.map { |sub, i|
+          Subject.active.each_with_index.map do |sub, i|
             x = {}
             x[sub.id] = (i + 1) * 3
             x
-          } .reduce({}, :merge),
+          end .reduce({}, :merge),
         )
 
         expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)

@@ -13,17 +13,17 @@ describe Course do
     context "with enrichment" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
-      let(:course) {
+      let(:course) do
         create(:course, :with_gcse_equivalency, :self_accredited, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
-      }
+      end
 
       its(:publishable?) { is_expected.to be_truthy }
     end
 
     context "with no enrichment" do
-      let(:course) {
+      let(:course) do
         create(:course, site_statuses: [site_status])
-      }
+      end
 
       its(:publishable?) { is_expected.to be_falsey }
 
@@ -39,9 +39,9 @@ describe Course do
 
     context "with no sites" do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
-      let(:course) {
+      let(:course) do
         create(:course, site_statuses: [], enrichments: [enrichment])
-      }
+      end
 
       its(:publishable?) { is_expected.to be_falsey }
 

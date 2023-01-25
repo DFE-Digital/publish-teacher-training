@@ -239,14 +239,14 @@ describe CourseDecorator do
       let(:physics) { build_stubbed(:secondary_subject, :physics, id: 29) }
       let(:chemistry) { build_stubbed(:secondary_subject, :chemistry, id: 12) }
       let(:subjects) { [physics, chemistry] }
-      let(:course) {
+      let(:course) do
         build_stubbed(
           :course,
           name: "Physics",
           subjects:,
           master_subject_id: 29,
         )
-      }
+      end
 
       let(:decorated_course) { course.decorate }
 
@@ -259,14 +259,14 @@ describe CourseDecorator do
       let(:french) { build_stubbed(:modern_languages_subject, :french) }
       let(:german) { build_stubbed(:modern_languages_subject, :german) }
       let(:subjects) { [french, german] }
-      let(:course) {
+      let(:course) do
         build_stubbed(
           :course,
           name: "Modern languages",
           subjects:,
           master_subject_id: 33,
         )
-      }
+      end
 
       let(:decorated_course) { course.decorate }
 
@@ -280,14 +280,14 @@ describe CourseDecorator do
       let(:french) { build_stubbed(:modern_languages_subject, :french) }
       let(:german) { build_stubbed(:modern_languages_subject, :german) }
       let(:subjects) { [modern_languages, french, german] }
-      let(:course) {
+      let(:course) do
         build_stubbed(
           :course,
           name: "Physics",
           subjects:,
           master_subject_id: 29,
         )
-      }
+      end
 
       let(:decorated_course) { course.decorate }
 
@@ -301,14 +301,14 @@ describe CourseDecorator do
       let(:german) { build_stubbed(:modern_languages_subject, :german) }
       let(:latin) { build_stubbed(:secondary_subject, :latin) }
       let(:subjects) { [french, german, latin] }
-      let(:course) {
+      let(:course) do
         build_stubbed(
           :course,
           name: "Modern languages",
           subjects:,
           master_subject_id: 33,
         )
-      }
+      end
 
       let(:decorated_course) { course.decorate }
 

@@ -16,9 +16,9 @@ RSpec.describe Providers::CreateFakeProviderService do
   end
 
   it "creates providers" do
-    expect {
+    expect do
       service.execute
-    }.to change { Provider.count }.by(1).and \
+    end.to change { Provider.count }.by(1).and \
       change { Organisation.count }.by(1).and \
         change { Site.count }.by(1)
   end

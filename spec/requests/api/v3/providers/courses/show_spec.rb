@@ -7,14 +7,14 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:previous_year) { current_year - 1 }
   let(:next_year)     { current_year + 1 }
   let(:provider) { create(:provider, recruitment_cycle: current_cycle) }
-  let(:courses_site_status) {
+  let(:courses_site_status) do
     build(:site_status,
       :findable,
       :full_time_vacancies,
       site: create(:site, provider:))
-  }
+  end
 
-  let(:jsonapi_course) {
+  let(:jsonapi_course) do
     JSON.parse(
       JSONAPI::Serializable::Renderer.new.render(
         course,
@@ -23,21 +23,21 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         },
       ).to_json,
     )
-  }
+  end
   let(:jsonapi_response) { JSON.parse(response.body) }
-  let(:route) {
+  let(:route) do
     "/api/v3/recruitment_cycles/#{current_year}" \
       "/providers/#{provider.provider_code}" \
       "/courses/#{course.course_code}"
-  }
-  let(:course) {
+  end
+  let(:course) do
     create(:course,
       :with_gcse_equivalency,
       provider:,
       enrichments:,
       site_statuses: [courses_site_status],
       applications_open_from: Time.now.utc)
-  }
+  end
 
   context "with a published course" do
     let(:enrichments) { [build(:course_enrichment, :published)] }

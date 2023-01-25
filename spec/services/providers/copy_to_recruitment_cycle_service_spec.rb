@@ -7,7 +7,7 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:course_enrichments) { [published_course_enrichment] }
     let(:course) { create(:course, enrichments: course_enrichments, provider:) }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
-    let(:contacts) {
+    let(:contacts) do
       [
         build(:contact, :admin_type),
         build(:contact, :utt_type),
@@ -15,14 +15,14 @@ describe Providers::CopyToRecruitmentCycleService do
         build(:contact, :finance_type),
         build(:contact, :fraud_type),
       ]
-    }
-    let(:provider) {
+    end
+    let(:provider) do
       create(:provider,
         :with_users,
         sites: [site],
         ucas_preferences:,
         contacts:)
-    }
+    end
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:new_provider) do
@@ -70,21 +70,21 @@ describe Providers::CopyToRecruitmentCycleService do
 
         expect(Rails.logger).to receive(:fatal).with("error trying to copy course #{course.course_code}")
 
-        expect {
+        expect do
           service.execute(provider:, new_recruitment_cycle:)
-        }.to raise_error(StandardError)
+        end.to raise_error(StandardError)
       end
     end
 
     context "the provider already exists in the new recruitment cycle" do
       let(:old_recruitment_cycle) { create(:recruitment_cycle, :previous) }
-      let(:new_provider) {
+      let(:new_provider) do
         create(:provider, recruitment_cycle: old_recruitment_cycle, provider_code: provider.provider_code)
-      }
-      let(:new_recruitment_cycle) {
+      end
+      let(:new_recruitment_cycle) do
         create(:recruitment_cycle, :next,
           providers: [new_provider])
-      }
+      end
 
       it "does not make a copy of the provider" do
         expect { service.execute(provider:, new_recruitment_cycle:) }
@@ -163,13 +163,13 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     context "provider is not rollable?" do
-      let(:provider) {
+      let(:provider) do
         create(:provider,
           :with_users,
           sites: [site],
           ucas_preferences:,
           contacts:)
-      }
+      end
       let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }
 
@@ -192,9 +192,9 @@ describe Providers::CopyToRecruitmentCycleService do
         end
 
         it "still copies the provider" do
-          expect {
+          expect do
             subject
-          }.to(change { new_recruitment_cycle.providers.count })
+          end.to(change { new_recruitment_cycle.providers.count })
         end
 
         it "does not copies the courses" do
@@ -213,9 +213,9 @@ describe Providers::CopyToRecruitmentCycleService do
           let(:course_codes) { [] }
 
           it "still copies the provider" do
-            expect {
+            expect do
               subject
-            }.to(change { new_recruitment_cycle.providers.count })
+            end.to(change { new_recruitment_cycle.providers.count })
           end
 
           it "does not copies the courses" do
@@ -229,9 +229,9 @@ describe Providers::CopyToRecruitmentCycleService do
           let(:course_codes) { [course.course_code] }
 
           it "still copies the provider" do
-            expect {
+            expect do
               subject
-            }.to(change { new_recruitment_cycle.providers.count })
+            end.to(change { new_recruitment_cycle.providers.count })
           end
 
           it "still copies the courses" do
@@ -245,9 +245,9 @@ describe Providers::CopyToRecruitmentCycleService do
           let(:course_codes) { ["B05S"] }
 
           it "errors out with correct message" do
-            expect {
+            expect do
               subject
-            }.to raise_error("Error: discrepancy between courses found and provided course codes (0 vs 1)")
+            end.to raise_error("Error: discrepancy between courses found and provided course codes (0 vs 1)")
           end
         end
       end

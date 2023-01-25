@@ -26,11 +26,11 @@ describe "TestDataCache" do
     end
 
     it "raises for traits not pre-defined in test setup [:published, :primary, :resulting_in_pgce_with_qts]" do
-      expect {
+      expect do
         TestDataCache.get(
           :course, :primary, :resulting_in_pgce_with_qts, :unpublished
         )
-      }.to raise_error(
+      end.to raise_error(
         <<~ERR_MSG,
           No predefined course for these traits: [:primary, :resulting_in_pgce_with_qts, :unpublished].
           Either add it to test_setup.rb or if it's used frequently, just create
@@ -40,9 +40,9 @@ describe "TestDataCache" do
     end
 
     it "raises for unknown Factory types" do
-      expect {
+      expect do
         TestDataCache.get(:foo, :bar, :raz)
-      }.to raise_error(
+      end.to raise_error(
         <<~ERR_MSG,
           Unknown model type 'foo' for traits '[:bar, :raz]'.
           You need to add 'foo' to TestSetup or use a standard FactoryBot factory.

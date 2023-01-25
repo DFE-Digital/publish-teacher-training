@@ -560,9 +560,9 @@ describe Provider do
         create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
       end
 
-      subject {
+      subject do
         described_class.with_findable_courses
-      }
+      end
 
       it "returns only findable courses' provider and/or accrediting provider" do
         expect(subject).to contain_exactly(findable_course.provider,
@@ -743,7 +743,7 @@ describe Provider do
     end
 
     # Geocoding stubbed with support/helpers.rb
-    let(:provider) {
+    let(:provider) do
       build(:provider,
         provider_name: "Southampton High School",
         address1: "Long Lane",
@@ -751,7 +751,7 @@ describe Provider do
         address3: "Southampton",
         address4: nil,
         postcode: "SO45 2PA")
-    }
+    end
 
     describe "#full_address" do
       it "Concatenates address details" do
@@ -796,7 +796,7 @@ describe Provider do
       end
 
       context "address" do
-        let(:provider) {
+        let(:provider) do
           create(:provider,
             latitude: 1.456789,
             longitude: 1.456789,
@@ -806,7 +806,7 @@ describe Provider do
             address3: "Southampton",
             address4: nil,
             postcode: "SO45 2PA")
-        }
+        end
 
         context "has not changed" do
           before do

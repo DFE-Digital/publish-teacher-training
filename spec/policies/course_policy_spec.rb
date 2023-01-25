@@ -11,11 +11,11 @@ describe CoursePolicy do
 
   permissions :show?, :update?, :withdraw?, :details? do
     let(:course) { create(:course) }
-    let!(:provider) {
+    let!(:provider) do
       create(:provider,
         courses: [course],
         users: [user])
-    }
+    end
 
     it { is_expected.to permit(user, course) }
 

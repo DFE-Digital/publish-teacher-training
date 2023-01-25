@@ -73,11 +73,11 @@ describe Course do
     end
 
     context "on a course with only a draft enrichment" do
-      let(:enrichments) {
+      let(:enrichments) do
         [build(:course_enrichment, :initial_draft,
           created_at: 1.day.ago,
           updated_at: 20.minutes.ago)]
-      }
+      end
       let(:enrichment) { subject.enrichments.first }
 
       subject do

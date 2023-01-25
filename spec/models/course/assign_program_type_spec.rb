@@ -47,9 +47,9 @@ RSpec.describe Course do
 
         subject { create(:course, provider:) }
 
-        its(:program_type) {
+        its(:program_type) do
           is_expected.to eq("scitt_programme")
-        }
+        end
       end
 
       context "a HEIs self accredited courses" do

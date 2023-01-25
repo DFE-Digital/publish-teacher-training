@@ -40,13 +40,13 @@ module Publish
 
       context "when age_range_in_years is other" do
         context "and from years is not present" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: nil,
               course_age_range_in_years_other_to: "10",
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject).not_to be_valid
@@ -54,13 +54,13 @@ module Publish
         end
 
         context "and to years is not present" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
               course_age_range_in_years_other_to: nil,
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject).not_to be_valid
@@ -68,13 +68,13 @@ module Publish
         end
 
         context "when from is bigger than to age" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "11",
               course_age_range_in_years_other_to: "10",
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject).not_to be_valid
@@ -82,13 +82,13 @@ module Publish
         end
 
         context "when custom age range is less than 4 years" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
               course_age_range_in_years_other_to: "11",
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject).not_to be_valid
@@ -96,13 +96,13 @@ module Publish
         end
 
         context "when from age is outside allowed range" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "47",
               course_age_range_in_years_other_to: "49",
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject).not_to be_valid
@@ -111,13 +111,13 @@ module Publish
         end
 
         context "when to age is outside allowed range" do
-          let(:params) {
+          let(:params) do
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
               course_age_range_in_years_other_to: "51",
             }
-          }
+          end
 
           it "is not valid" do
             expect(subject.valid?).to be_falsey

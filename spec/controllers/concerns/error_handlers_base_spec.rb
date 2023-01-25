@@ -12,9 +12,9 @@ describe ErrorHandlers::Base do
   before do
     allow(Settings).to receive(:render_json_errors).and_return(render_json_errors)
 
-    routes.draw {
+    routes.draw do
       get "error" => "anonymous#error"
-    }
+    end
   end
 
   context "when json error reporting is enabled" do

@@ -11,17 +11,17 @@ describe WordsCountValidator do
     end
   end
 
-  let(:model) {
+  let(:model) do
     model = Validatable.new
     model.some_words = some_words_field
     model
-  }
+  end
 
   let(:expected_errors) { ["^Reduce the word count for some words"] }
 
-  subject! {
+  subject! do
     model.valid?
-  }
+  end
 
   context "with max valid number of words" do
     let(:some_words_field) { (%w[word] * maximum).join(" ") }

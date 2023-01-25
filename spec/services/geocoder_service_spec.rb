@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe GeocoderService do
   describe "#geocode" do
-    let(:valid_site) {
+    let(:valid_site) do
       create(:site,
         location_name: "Fun Academy",
         address1: "Long Lane",
@@ -11,7 +11,7 @@ describe GeocoderService do
         address4: "UK",
         postcode: "SO45 2PA",
         region_code: nil)
-    }
+    end
 
     let(:invalid_site) do
       invalid_site = build(:site, postcode: "this is not a postcode", region_code: nil)

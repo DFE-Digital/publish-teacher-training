@@ -115,16 +115,16 @@ describe "GET /reporting" do
           closed: { yes: 0, no: 0 },
         },
         subject: {
-          open: Subject.active.each_with_index.map { |sub, _i|
+          open: Subject.active.each_with_index.map do |sub, _i|
                   x = {}
                   x[sub.subject_name] = 0
                   x
-                } .reduce({}, :merge),
-          closed: Subject.active.each_with_index.map { |sub, _i|
+                end .reduce({}, :merge),
+          closed: Subject.active.each_with_index.map do |sub, _i|
                     x = {}
                     x[sub.subject_name] = 0
                     x
-                  } .reduce({}, :merge),
+                  end .reduce({}, :merge),
         },
       },
       publish: {
@@ -169,13 +169,13 @@ describe "GET /reporting" do
     }.with_indifferent_access
   end
 
-  let(:recruitment_cycle) {
+  let(:recruitment_cycle) do
     find_or_create(:recruitment_cycle)
-  }
+  end
 
-  let(:previous_recruitment_cycle) {
+  let(:previous_recruitment_cycle) do
     find_or_create(:recruitment_cycle, :previous)
-  }
+  end
 
   it "returns status success" do
     recruitment_cycle

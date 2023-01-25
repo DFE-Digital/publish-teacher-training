@@ -1580,9 +1580,9 @@ describe Course do
     end
 
     describe "#has_vacancies? (when site_statuses not loaded)" do
-      subject {
+      subject do
         create(:course, site_statuses:).reload
-      }
+      end
 
       context "for a single site status that has vacancies" do
         let(:site_statuses) { [findable, with_any_vacancy] }
@@ -1720,9 +1720,9 @@ describe Course do
           applications_open_from:)
       end
 
-      subject {
+      subject do
         course.reload
-      }
+      end
 
       context "no site statuses" do
         context "applications_open_from is in present or past" do
@@ -1907,12 +1907,12 @@ describe Course do
 
   describe "#description" do
     context "for a both full time and part time course" do
-      subject {
+      subject do
         create(:course,
           study_mode: :full_time_or_part_time,
           program_type: :scitt_programme,
           qualification: :qts)
-      }
+      end
 
       its(:description) { is_expected.to eq("QTS, full time or part time") }
     end
@@ -1939,23 +1939,23 @@ describe Course do
     end
 
     context "for a salaried course" do
-      subject {
+      subject do
         create(:course,
           study_mode: :full_time,
           program_type: :school_direct_salaried_training_programme,
           qualification: :pgce_with_qts)
-      }
+      end
 
       its(:description) { is_expected.to eq("PGCE with QTS full time with salary") }
     end
 
     context "for a teaching apprenticeship" do
-      subject {
+      subject do
         create(:course,
           study_mode: :part_time,
           program_type: :pg_teaching_apprenticeship,
           qualification: :pgde_with_qts)
-      }
+      end
 
       its(:description) { is_expected.to eq("PGDE with QTS part time teaching apprenticeship") }
     end

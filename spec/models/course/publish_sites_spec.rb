@@ -24,7 +24,7 @@ RSpec.describe Course do
     end
 
     context "on a course with many sites" do
-      let(:course) {
+      let(:course) do
         create(:course, site_statuses: [
           published_new_site,
           published_running_site,
@@ -35,7 +35,7 @@ RSpec.describe Course do
           unpublished_discontinued_site,
           unpublished_suspended_site,
         ])
-      }
+      end
 
       it "sets all the sites to the right published/status states" do
         expect(published_new_site.reload).to be_published_on_ucas

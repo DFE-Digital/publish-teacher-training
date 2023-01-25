@@ -14,9 +14,6 @@ Style/FrozenStringLiteralComment:
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
 
-Style/BlockDelimiters:
-  Enabled: false
-
 Style/Documentation:
   Enabled: false
 

@@ -40,9 +40,9 @@ module ApplicationHelper
     action = render_action(action_path, action_visually_hidden_text)
 
     if fields.select { |field| @errors&.key? field.to_sym }.any?
-      errors = fields.map { |field|
+      errors = fields.map do |field|
         @errors[field.to_sym]&.map { |error| enrichment_error_link(model, field, error) }
-      }.flatten
+      end.flatten
 
       value = raw(*errors)
       action = nil

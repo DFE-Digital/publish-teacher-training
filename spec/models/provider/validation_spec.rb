@@ -111,7 +111,7 @@ describe Provider do
       describe "#accrediting_provider_providers" do
         let(:word_count) { 100 }
 
-        let(:accrediting_provider_enrichments) {
+        let(:accrediting_provider_enrichments) do
           result = []
           10.times do |index|
             result <<
@@ -121,16 +121,16 @@ describe Provider do
               }
           end
           result
-        }
+        end
 
         let(:provider) do
           create(:provider)
         end
 
-        subject {
+        subject do
           provider.accrediting_provider_enrichments = accrediting_provider_enrichments
           provider
-        }
+        end
 
         context "word count within limit" do
           it { is_expected.to be_valid }
@@ -152,22 +152,22 @@ describe Provider do
       describe "#accrediting_provider_providers" do
         let(:word_count) { 100 }
 
-        let(:accrediting_providers) {
+        let(:accrediting_providers) do
           result = []
           10.times do
             result << create(:provider)
           end
           result
-        }
+        end
 
-        let(:accrediting_provider_enrichments) {
+        let(:accrediting_provider_enrichments) do
           accrediting_providers.map do |ap|
             {
               "Description" => Faker::Lorem.sentence(word_count:),
               "UcasProviderCode" => ap.provider_code.to_s,
             }
           end
-        }
+        end
 
         let(:courses) do
           accrediting_providers.map do |ap|
@@ -179,10 +179,10 @@ describe Provider do
           create(:provider, courses:)
         end
 
-        subject {
+        subject do
           provider.accrediting_provider_enrichments = accrediting_provider_enrichments
           provider
-        }
+        end
 
         context "word count within limit" do
           it { is_expected.to be_valid }

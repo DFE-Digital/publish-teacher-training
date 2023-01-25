@@ -8,7 +8,7 @@ end
 
 JSONAPI::Rails.configure do |config|
   # Set a default serializable class mapping.
-  config.jsonapi_class = Hash.new { |h, k|
+  config.jsonapi_class = Hash.new do |h, k|
     names = k.to_s.split("::")
     klass = names.pop
 
@@ -18,7 +18,7 @@ JSONAPI::Rails.configure do |config|
     ].lazy
       .map(&:safe_constantize)
       .detect(&:present?)
-  }
+  end
 
   # # Set a default serializable class mapping for errors.
   # config.jsonapi_errors_class = Hash.new { |h, k|

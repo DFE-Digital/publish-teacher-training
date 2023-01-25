@@ -1,18 +1,19 @@
 require "rails_helper"
 
 describe FindConstraint do
-  let(:request) {
+  let(:request) do
     double(
       :request,
       host:,
     )
-  }
+  end
+
   let(:find_url) { "find_url" }
   let(:host) { "find_url" }
 
-  subject {
+  subject do
     described_class.new.matches?(request)
-  }
+  end
 
   describe "#matched?" do
     before do

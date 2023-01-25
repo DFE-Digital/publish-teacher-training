@@ -37,9 +37,9 @@ RSpec.describe CSVImports::FakeProvidersImport do
     end
 
     it "creates two providers" do
-      expect {
+      expect do
         described_class.new("csv_file.csv").execute
-      }.to change { Provider.count }.by(2)
+      end.to change { Provider.count }.by(2)
     end
 
     it "reports on both created providers" do
