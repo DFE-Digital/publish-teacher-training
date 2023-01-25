@@ -13,13 +13,6 @@ class AccreditingProviderEnrichment
     end
   end
 
-  def attributes
-    %i[UcasProviderCode Description].inject({}) do |hash, attr|
-      hash[attr] = send(attr)
-      hash
-    end
-  end
-
   class ArraySerializer
     class << self
       def load(json)
