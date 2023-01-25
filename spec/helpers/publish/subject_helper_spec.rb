@@ -12,7 +12,7 @@ describe Publish::SubjectHelper do
       expect(subject.first.code).to eq 1 + subjects.first.subject_code.to_i
     end
 
-    it "returns secondary subject name" do
+    it "returns primary subject name" do
       expect(subject.first.name).to eq subjects.first.subject_name
     end
   end
