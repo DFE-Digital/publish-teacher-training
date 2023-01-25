@@ -101,9 +101,9 @@ resource cloudfoundry_route find_web_app_cloudapps_digital_route {
   space    = data.cloudfoundry_space.space.id
   hostname = local.find_app_name
 
-  target {
-    app = local.target_app
-  }
+#  target {
+#    app = local.target_app
+#  }
 }
 
 resource cloudfoundry_route find_web_app_find_gov_uk_route {
@@ -112,9 +112,9 @@ resource cloudfoundry_route find_web_app_find_gov_uk_route {
   space    = data.cloudfoundry_space.space.id
   hostname = each.value
 
-  target {
-    app = local.target_app
-  }
+#  target {
+#    app = local.target_app
+#  }
 }
 
 resource cloudfoundry_service_instance postgres {

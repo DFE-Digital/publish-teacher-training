@@ -91,7 +91,9 @@ locals {
     values(cloudfoundry_route.web_app_cloudapps_digital_route),
     cloudfoundry_route.web_app_service_gov_uk_route,
     values(cloudfoundry_route.web_app_publish_gov_uk_route),
-    values(cloudfoundry_route.web_app_find_gov_uk_route)
+    values(cloudfoundry_route.web_app_find_gov_uk_route),
+    cloudfoundry_route.find_web_app_cloudapps_digital_route,
+    values(cloudfoundry_route.find_web_app_find_gov_uk_route)
   ])
 
   logging_service_bindings = var.enable_external_logging ? [cloudfoundry_user_provided_service.logging.id] : []
