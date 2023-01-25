@@ -17,9 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/AccessorGrouping:
-  Enabled: false
-
 Style/RedundantAssignment:
   Enabled: false
 

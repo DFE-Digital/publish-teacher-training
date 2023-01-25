@@ -7,8 +7,7 @@ module Support
       course_code name
     ].freeze
 
-    attr_accessor(*FIELDS)
-    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send
+    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send)
     validate :validate_start_date_format
     validate :validate_applications_open_from_format
 
