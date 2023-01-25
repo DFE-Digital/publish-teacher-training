@@ -52,7 +52,7 @@ module GovukTechDocs
             text.gsub!(/#{Regexp.escape(key)}\s+?/, "")
 
             # Strip paragraph tags from text
-            text = text.gsub(/<\/?[^>]*>/, "")
+            text = text.gsub(%r{</?[^>]*>}, "")
             text = text.strip
 
             if text == "api&gt;"

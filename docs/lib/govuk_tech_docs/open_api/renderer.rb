@@ -262,7 +262,7 @@ module GovukTechDocs
         return unless text.is_a?(String)
 
         # Schema dictates that it's always components['schemas']
-        text.gsub(/#\/components\/schemas\//, "")
+        text.gsub(%r{#/components/schemas/}, "")
       end
 
       def get_schema_link(schema)

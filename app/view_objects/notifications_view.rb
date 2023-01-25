@@ -1,5 +1,5 @@
 class NotificationsView
-  ORGANISATION_URL_PATTERN = /\/organisations\/(\S+)\/?/
+  ORGANISATION_URL_PATTERN = %r{/organisations/(\S+)/?}
 
   def initialize(
     request:,

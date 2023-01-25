@@ -17,11 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/RegexpLiteral:
-  Enabled: false
-  EnforcedStyle: mixed
-  AllowInnerSlashes: true
-
 Style/GuardClause:
   Enabled: false
 

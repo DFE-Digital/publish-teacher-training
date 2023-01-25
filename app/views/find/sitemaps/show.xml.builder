@@ -5,12 +5,12 @@ xml.urlset "xmlns" => "http://www.google.com/schemas/sitemap/0.9", "xmlns:xhtml"
   end
 
   xml.url do
-    xml.loc find_results_url.sub(/\/find/, "")
+    xml.loc find_results_url.sub(%r{/find}, "")
   end
 
   @courses.each do |course|
     xml.url do
-      xml.loc find_course_url(course.provider_code, course.course_code).sub(/\/find/, "")
+      xml.loc find_course_url(course.provider_code, course.course_code).sub(%r{/find}, "")
       xml.lastmod course.changed_at.to_date.strftime("%Y-%m-%d")
     end
   end
