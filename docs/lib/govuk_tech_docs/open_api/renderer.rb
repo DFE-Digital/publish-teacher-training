@@ -129,8 +129,7 @@ module GovukTechDocs
       def parameters(operation, operation_id)
         parameters = operation.parameters
         id = "#{operation_id}-parameters"
-        output = @template_parameters.result(binding)
-        output
+        @template_parameters.result(binding)
       end
 
       def curl_examples(operation, operation_id)
@@ -270,8 +269,7 @@ module GovukTechDocs
         return if schema_name.nil?
 
         id = "schema-#{schema_name.parameterize}"
-        output = "<a href='##{id}'>#{schema_name}</a>"
-        output
+        "<a href='##{id}'>#{schema_name}</a>"
       end
 
       def schemas_data

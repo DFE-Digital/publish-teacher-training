@@ -17,9 +17,6 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/RedundantAssignment:
-  Enabled: false
-
 Style/RedundantRegexpEscape:
   Enabled: false
 
