@@ -6,7 +6,7 @@ describe Sites::CodeGenerator do
   subject { described_class.call(provider:) }
 
   it "generates a UCAS style code (one of A-Z, 0-9 or -)" do
-    expect(subject).to match(/\A[A-Z0-9\-]{1}\z/)
+    expect(subject).to match(/\A[A-Z0-9-]{1}\z/)
   end
 
   context "when UCAS style codes exist" do

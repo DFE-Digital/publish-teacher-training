@@ -49,7 +49,7 @@ def parse_cells(text_table)
 end
 
 def is_a_row_delimeter?(row)
-  contains_only_dashes = /^\-+$/
+  contains_only_dashes = /^-+$/
   row.join.match?(contains_only_dashes)
 end
 

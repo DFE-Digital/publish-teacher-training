@@ -17,6 +17,3 @@ Style/TrailingCommaInArguments:
 Style/Documentation:
   Enabled: false
 
-Style/RedundantRegexpEscape:
-  Enabled: false
-
