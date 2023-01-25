@@ -63,10 +63,10 @@ class User < ApplicationRecord
     next_recruitment_cycle_provider_codes = providers_to_remove
         .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
 
-    if rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
-      next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.where(provider_code: next_recruitment_cycle_provider_codes)
-      self.providers = providers - next_cycle_providers
-    end
+    return unless rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
+
+    next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.where(provider_code: next_recruitment_cycle_provider_codes)
+    self.providers = providers - next_cycle_providers
   end
 
   def associated_with_accredited_body?

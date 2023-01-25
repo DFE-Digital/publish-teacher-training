@@ -78,18 +78,18 @@ module Publish
     end
 
     def after_save
-      if funding_type_updated?
-        enrichment = course.enrichments.find_or_initialize_draft
+      return unless funding_type_updated?
 
-        if enrichment.persisted?
-          enrichment.assign_attributes(reset_enrichment_attributes)
+      enrichment = course.enrichments.find_or_initialize_draft
 
-          enrichment.save!
-        end
+      if enrichment.persisted?
+        enrichment.assign_attributes(reset_enrichment_attributes)
 
-        course.assign_attributes(reset_course_attributes)
-        course.save!
+        enrichment.save!
       end
+
+      course.assign_attributes(reset_course_attributes)
+      course.save!
     end
 
     def original_fields_values

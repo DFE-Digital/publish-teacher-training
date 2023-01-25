@@ -30,11 +30,11 @@ module Publish
 
     def initialize(model, params: nil)
       super
-      if process_custom_range?
-        self.course_age_range_in_years_other_from = extract_from_years
-        self.course_age_range_in_years_other_to = extract_to_years
-        self.age_range_in_years = "other"
-      end
+      return unless process_custom_range?
+
+      self.course_age_range_in_years_other_from = extract_from_years
+      self.course_age_range_in_years_other_to = extract_to_years
+      self.age_range_in_years = "other"
     end
 
     validates :age_range_in_years, presence: true
@@ -84,11 +84,11 @@ module Publish
     end
 
     def age_range_from_and_to_missing
-      if age_range_in_years == "other"
-        errors.add(:course_age_range_in_years_other_from, :blank) if course_age_range_in_years_other_from.blank?
+      return unless age_range_in_years == "other"
 
-        errors.add(:course_age_range_in_years_other_to, :blank) if course_age_range_in_years_other_to.blank?
-      end
+      errors.add(:course_age_range_in_years_other_from, :blank) if course_age_range_in_years_other_from.blank?
+
+      errors.add(:course_age_range_in_years_other_to, :blank) if course_age_range_in_years_other_to.blank?
     end
 
     def age_range_from_and_to_reversed

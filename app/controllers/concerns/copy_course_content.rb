@@ -6,19 +6,19 @@ private
   def copy_content_check(fields)
     fetch_course_list_to_copy_from
 
-    if params[:copy_from].present?
-      fetch_course_to_copy_from
-      @copied_fields = ::Courses::Copy.get_present_fields_in_source_course(fields, @source_course, @course)
-    end
+    return if params[:copy_from].blank?
+
+    fetch_course_to_copy_from
+    @copied_fields = ::Courses::Copy.get_present_fields_in_source_course(fields, @source_course, @course)
   end
 
   def copy_boolean_check(fields)
     fetch_course_list_to_copy_from
 
-    if params[:copy_from].present?
-      fetch_course_to_copy_from
-      @copied_fields = ::Courses::Copy.get_boolean_fields(fields, @source_course, @course)
-    end
+    return if params[:copy_from].blank?
+
+    fetch_course_to_copy_from
+    @copied_fields = ::Courses::Copy.get_boolean_fields(fields, @source_course, @course)
   end
 
   def fetch_course_to_copy_from

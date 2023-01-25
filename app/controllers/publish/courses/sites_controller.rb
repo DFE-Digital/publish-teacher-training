@@ -11,10 +11,10 @@ module Publish
 
       def new
         authorize(@provider, :edit?)
-        if @provider.sites.count == 1
-          set_default_site
-          redirect_to next_step
-        end
+        return unless @provider.sites.count == 1
+
+        set_default_site
+        redirect_to next_step
       end
 
       def edit

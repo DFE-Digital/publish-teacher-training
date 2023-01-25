@@ -19,15 +19,13 @@ module API
       def show
         @course = @courses.find_by!(course_code: params[:code].upcase)
 
-        if @course.is_published?
-          # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
-          render jsonapi: @course,
-            fields: fields_param,
-            include: params[:include],
-            class: CourseSerializersService.new.execute
-        else
-          raise ActiveRecord::RecordNotFound
-        end
+        raise ActiveRecord::RecordNotFound unless @course.is_published?
+
+        # https://github.com/jsonapi-rb/jsonapi-rails/issues/113
+        render jsonapi: @course,
+          fields: fields_param,
+          include: params[:include],
+          class: CourseSerializersService.new.execute
       end
 
     private
@@ -41,9 +39,9 @@ module API
       end
 
       def fields_for_sitemap?
-        if (courses = params.dig(:fields, :courses))
-          (courses.split(",") & %w[course_code provider_code changed_at]).size == 3
-        end
+        return unless (courses = params.dig(:fields, :courses))
+
+        (courses.split(",") & %w[course_code provider_code changed_at]).size == 3
       end
 
       def build_courses
@@ -58,11 +56,11 @@ module API
       end
 
       def build_provider
-        if params[:provider_code].present?
-          @provider = @recruitment_cycle.providers.find_by!(
-            provider_code: params[:provider_code].upcase,
-          )
-        end
+        return if params[:provider_code].blank?
+
+        @provider = @recruitment_cycle.providers.find_by!(
+          provider_code: params[:provider_code].upcase,
+        )
       end
     end
   end

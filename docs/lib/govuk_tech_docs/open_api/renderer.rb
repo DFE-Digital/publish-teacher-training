@@ -267,11 +267,11 @@ module GovukTechDocs
 
       def get_schema_link(schema)
         schema_name = get_schema_name schema.node_context.source_location.to_s
-        unless schema_name.nil?
-          id = "schema-#{schema_name.parameterize}"
-          output = "<a href='##{id}'>#{schema_name}</a>"
-          output
-        end
+        return if schema_name.nil?
+
+        id = "schema-#{schema_name.parameterize}"
+        output = "<a href='##{id}'>#{schema_name}</a>"
+        output
       end
 
       def schemas_data

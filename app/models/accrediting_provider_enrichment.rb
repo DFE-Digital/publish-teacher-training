@@ -16,12 +16,12 @@ class AccreditingProviderEnrichment
   class ArraySerializer
     class << self
       def load(json)
-        if json.present?
-          arr = JSON.parse json
+        return if json.blank?
 
-          arr.map do |item|
-            AccreditingProviderEnrichment.new(item)
-          end
+        arr = JSON.parse json
+
+        arr.map do |item|
+          AccreditingProviderEnrichment.new(item)
         end
       end
 

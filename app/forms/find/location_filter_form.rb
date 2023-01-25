@@ -45,15 +45,15 @@ module Find
 
     def geocode_params_for(query)
       results = Geocoder.search(query, components: "country:UK").first
-      if results
-        {
-          latitude: results.latitude,
-          longitude: results.longitude,
-          loc: results.address,
-          lq: location_query,
-          c: country(results),
-        }
-      end
+      return unless results
+
+      {
+        latitude: results.latitude,
+        longitude: results.longitude,
+        loc: results.address,
+        lq: location_query,
+        c: country(results),
+      }
     end
 
     def selected_option
