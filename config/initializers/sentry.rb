@@ -1,5 +1,5 @@
 Sentry.init do |config|
-  # Let’s not exclude ActiveRecord::RecordNotFound from Sentry
+  # Let's not exclude ActiveRecord::RecordNotFound from Sentry
   # https://github.com/DFE-Digital/publish-teacher-training/pull/160
   config.excluded_exceptions -= ["ActiveRecord::RecordNotFound"]
 

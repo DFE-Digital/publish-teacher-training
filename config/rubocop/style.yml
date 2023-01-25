@@ -30,7 +30,7 @@ Style/NegatedIf:
 
 # 🤷‍♂️
 Style/AsciiComments:
-  Enabled: false
+  Enabled: true
 
 Style/ConditionalAssignment:
   Enabled: false

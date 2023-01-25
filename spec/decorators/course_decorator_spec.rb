@@ -360,20 +360,20 @@ describe CourseDecorator do
   #       let(:mathematics) { build_stubbed(:subject, :mathematics, scholarship: "2000", bursary_amount: "3000") }
   #       let(:course) { build_stubbed :course, subjects: [mathematics] }
 
-  #       it { is_expected.to eq("Scholarships or bursaries, as well as student finance, are available if you’re eligible") }
+  #       it { is_expected.to eq("Scholarships or bursaries, as well as student finance, are available if youre eligible") }
   #     end
 
   #     context "Bursary" do
   #       let(:mathematics) { build_stubbed(:subject, :mathematics, bursary_amount: "3000") }
   #       let(:course) { build_stubbed :course, subjects: [mathematics] }
 
-  #       it { is_expected.to eq("Bursaries and student finance are available if you’re eligible") }
+  #       it { is_expected.to eq("Bursaries and student finance are available if youre eligible") }
   #     end
 
   #     context "Student finance" do
   #       let(:course) { build_stubbed :course }
 
-  #       it { is_expected.to eq("Student finance if you’re eligible") }
+  #       it { is_expected.to eq("Student finance if youre eligible") }
   #     end
 
   #     context "Courses excluded from bursaries" do
@@ -382,7 +382,7 @@ describe CourseDecorator do
 
   #       let(:course) { build_stubbed :course, name: "Drama with English", subjects: [pe, english] }
 
-  #       it { is_expected.to eq("Student finance if you’re eligible") }
+  #       it { is_expected.to eq("Student finance if youre eligible") }
   #     end
   #   end
 

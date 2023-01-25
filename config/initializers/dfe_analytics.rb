@@ -11,11 +11,11 @@ DfE::Analytics.configure do |config|
   #
   config.queue = :low_priority
 
-  # The name of the BigQuery table we’re writing to.
+  # The name of the BigQuery table we're writing to.
   #
   config.bigquery_table_name = Settings.google.bigquery.table_name
 
-  # The name of the BigQuery project we’re writing to.
+  # The name of the BigQuery project we're writing to.
   #
   config.bigquery_project_id = Settings.google.bigquery.project_id
 
@@ -42,7 +42,7 @@ DfE::Analytics.configure do |config|
   #
   config.enable_analytics = proc { FeatureService.enabled?(:send_request_data_to_bigquery) }
 
-  # The environment we’re running in. This value will be attached
+  # The environment we're running in. This value will be attached
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
