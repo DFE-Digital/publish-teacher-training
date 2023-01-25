@@ -3,6 +3,11 @@ module Support
     layout "support"
     before_action :check_user_is_admin
 
+    # DFE Analytics namespace
+    def current_namespace
+      "support"
+    end
+
   private
 
     def check_user_is_admin

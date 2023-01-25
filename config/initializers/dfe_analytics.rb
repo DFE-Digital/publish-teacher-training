@@ -1,15 +1,15 @@
 DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
-  # config.log_only = true
+  config.log_only = false
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
-  # config.async = true
+  config.async = true
 
   # Which ActiveJob queue to put events on
   #
-  # config.queue = :default
+  config.queue = :low_priority
 
   # The name of the BigQuery table we’re writing to.
   #

@@ -1,5 +1,7 @@
 module Find
   class ApplicationController < ActionController::Base
+    include DfE::Analytics::Requests
+
     layout "find_layout"
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
@@ -8,6 +10,11 @@ module Find
 
     def render_feedback_component
       @render_feedback_component = true
+    end
+
+    # DFE Analytics namespace
+    def current_namespace
+      "find"
     end
 
   private
