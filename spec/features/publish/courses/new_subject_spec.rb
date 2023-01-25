@@ -7,7 +7,7 @@ feature "selecting a subject", { can_edit_current_and_next_cycles: false } do
 
   scenario "selecting primary subject" do
     when_i_visit_the_new_course_subject_page(:primary)
-    when_i_select_a_subject(:primary_with_english)
+    when_i_select_a_primary_subject("Primary with English")
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:primary, :primary_with_english)
   end
@@ -43,8 +43,12 @@ private
     new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
   end
 
+  def when_i_select_a_primary_subject(subject_type)
+    new_subjects_page.choose(subject_type)
+  end
+
   def when_i_select_a_subject(subject_type)
-    new_subjects_page.subjects_fields.select(course_subject(subject_type).subject_name).click
+    new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue

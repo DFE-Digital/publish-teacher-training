@@ -33,7 +33,6 @@ private
 
   def and_i_select_modern_languages_and_maths
     new_subjects_page.master_subject_fields.select("Modern Languages").click
-    new_subjects_page.subordinate_subject_details.click
     new_subjects_page.subordinate_subjects_fields.select("Mathematics").click
   end
 
