@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccessRequest < ApplicationRecord
   include Discard::Model
   default_scope -> { kept }

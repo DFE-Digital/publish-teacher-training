@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Site < ApplicationRecord
-  MAIN_SITE = "main site".freeze
+  MAIN_SITE = "main site"
   URN_2022_REQUIREMENTS_REQUIRED_FROM = 2022
 
   include PostcodeNormalize

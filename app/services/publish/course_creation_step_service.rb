@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseCreationStepService
     def execute(current_step:, course:)

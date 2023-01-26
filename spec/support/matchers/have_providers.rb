@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_providers do |*expected_providers|
   expected_providers = expected_providers.flatten
   def provider_codes(server_response_body)

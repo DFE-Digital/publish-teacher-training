@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MigrateSubjects < ActiveRecord::Migration[5.2]
   def up
     say_with_time "populating/migrating course subjects" do

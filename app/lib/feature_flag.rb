@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FeatureFlag
   class << self
     def active?(feature_name)

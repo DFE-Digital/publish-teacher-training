@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class DegreeGradeForm
     # TODO: Refactor to use our form object pattern

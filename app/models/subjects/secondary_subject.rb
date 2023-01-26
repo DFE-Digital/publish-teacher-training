@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SecondarySubject < Subject
   class << self
     def modern_languages

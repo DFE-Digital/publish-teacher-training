@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProviderHelper
   def course_accredited_body_name(course)
     # TODO: Handle rollover

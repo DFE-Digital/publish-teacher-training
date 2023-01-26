@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module ViewHelper
     def protect_against_mistakes

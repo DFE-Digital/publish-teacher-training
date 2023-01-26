@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "pundit/rspec"
 require "jsonapi/rspec"
 require "super_diff/rspec"

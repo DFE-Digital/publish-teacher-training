@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Sentry.init do |config|
   # Let's not exclude ActiveRecord::RecordNotFound from Sentry
   # https://github.com/DFE-Digital/publish-teacher-training/pull/160

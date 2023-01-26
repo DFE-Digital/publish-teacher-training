@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(RSpec)
   require "rspec/core/rake_task"
 

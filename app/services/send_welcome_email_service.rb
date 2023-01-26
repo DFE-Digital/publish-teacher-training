@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SendWelcomeEmailService
   class MissingFirstNameError < StandardError; end
   class << self

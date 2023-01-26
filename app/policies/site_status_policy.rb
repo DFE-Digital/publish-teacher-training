@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SiteStatusPolicy
   attr_reader :user, :site_status
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Subjects
   class FinancialIncentiveCreatorService
     def initialize(year:, subject: Subject, financial_incentive: FinancialIncentive)

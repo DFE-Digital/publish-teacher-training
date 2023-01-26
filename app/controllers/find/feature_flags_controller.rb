@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class FeatureFlagsController < ApplicationController
     before_action :enforce_basic_auth

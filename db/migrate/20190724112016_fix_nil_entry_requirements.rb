@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixNilEntryRequirements < ActiveRecord::Migration[5.2]
   def up
     say_with_time "fixing courses with a nil subject requirement for required subjects" do

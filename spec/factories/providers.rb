@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :provider do
     provider_name { "ACME SCITT#{rand(1_000_000)}" }

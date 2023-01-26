@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
   enum status: { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }

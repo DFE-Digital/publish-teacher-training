@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccessRequestPolicy
   attr_reader :user, :access_request
 

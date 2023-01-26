@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AgeRangeErrorsViewHelper
   def expand_another_age_range?(errors)
     (course.other_age_range? && course.age_range_in_years.present?) ||

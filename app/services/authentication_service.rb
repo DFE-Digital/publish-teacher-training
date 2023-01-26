@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthenticationService
   attr_accessor :encoded_token, :user
 
@@ -6,9 +8,9 @@ class AuthenticationService
   end
 
   class << self
-    DFE_SIGNIN = "dfe_signin".freeze
-    PERSONA = "persona".freeze
-    MAGIC_LINK = "magic_link".freeze
+    DFE_SIGNIN = "dfe_signin"
+    PERSONA = "persona"
+    MAGIC_LINK = "magic_link"
 
     def mode
       case Settings.authentication.mode

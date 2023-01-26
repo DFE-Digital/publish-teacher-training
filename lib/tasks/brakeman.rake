@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task brakeman: :environment do
   sh <<~EOSHELL
     mkdir -p tmp && \

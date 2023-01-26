@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReferenceNumberFormatValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if options[:allow_blank] && value.blank?

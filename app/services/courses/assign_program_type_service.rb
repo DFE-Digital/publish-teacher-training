@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Courses
   class AssignProgramTypeService
     def execute(funding_type, course)

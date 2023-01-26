@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CycleTimetable
   CYCLE_DATES = {
     2021 => {

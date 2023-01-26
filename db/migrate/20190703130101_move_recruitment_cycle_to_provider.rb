@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "20190619142449_add_recruitment_cycle_to_course"
 require_relative "20190619144634_add_2019_recruitment_cycle_to_courses"
 require_relative "20190620060536_set_recruitment_cycle_to_not_null"

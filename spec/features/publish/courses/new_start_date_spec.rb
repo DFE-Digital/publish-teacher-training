@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "choosing a start date", { can_edit_current_and_next_cycles: false } do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecruitmentCycle < ApplicationRecord
   has_many :providers, -> { kept }, inverse_of: false
   # Because this is through a has_many, these associations can't be updated,

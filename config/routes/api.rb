@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 mount OpenApi::Rswag::Ui::Engine => "/api-docs"
 mount OpenApi::Rswag::Api::Engine => "/api-docs"
 

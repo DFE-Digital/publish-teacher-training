@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MarkWithdrawnCoursesAsWithdrawn < ActiveRecord::Migration[6.0]
   def up
     say_with_time "Marking all courses with site statuses that have been suspended with no vacancies" do

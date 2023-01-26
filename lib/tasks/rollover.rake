@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :rollover do
   desc "Rollover provider, courses and locations to the next cycle, (Use the force to rollover for non rollable provider and or courses)"
   task :provider, %i[provider_code course_codes force] => :environment do |_task, args|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeApplicationStartAndEndDateToNotNull < ActiveRecord::Migration[5.2]
   def change
     change_column_null :recruitment_cycle, :application_start_date, false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class UsersController < PublishController
     before_action :authorize_provider

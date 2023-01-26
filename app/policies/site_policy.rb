@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SitePolicy
   attr_reader :user, :site
 

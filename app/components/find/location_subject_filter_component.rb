@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class LocationSubjectFilterComponent < ViewComponent::Base
     include ::ViewHelper

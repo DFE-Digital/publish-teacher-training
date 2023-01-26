@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProviderEnrichmentFieldsToProvider < ActiveRecord::Migration[6.0]
   def change
     change_table :provider, bulk: true do |t|

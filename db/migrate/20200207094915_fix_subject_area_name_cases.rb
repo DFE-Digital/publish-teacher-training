@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixSubjectAreaNameCases < ActiveRecord::Migration[6.0]
   def up
     say_with_time "fixing the subject areas naming case" do

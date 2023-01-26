@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InitializeProviderChangedAt < ActiveRecord::Migration[5.2]
   def change
     # Initialize all the changed_at data to make it unique, the ucas api relies on unique values for paging.

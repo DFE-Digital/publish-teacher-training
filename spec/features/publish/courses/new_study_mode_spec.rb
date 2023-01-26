@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "selecting full time or part time or full or part time", { can_edit_current_and_next_cycles: false } do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Courses
   class ValidateCustomAgeRangeService
     def execute(age_range_in_years, course)

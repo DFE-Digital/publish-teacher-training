@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "openapi3_parser"
 require "uri"
 require_relative "renderer"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeFormat
   # Primarily so that our incremental fetch can handle many records being
   # updated within the same second.

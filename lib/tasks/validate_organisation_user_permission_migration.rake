@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :validate_organisation_user_permission do
   task run_validation: :environment do
     User.find_each do |user|

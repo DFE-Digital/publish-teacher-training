@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APISpec
   # Define the version and location of our public spec.
   class Public

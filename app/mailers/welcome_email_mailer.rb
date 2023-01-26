@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WelcomeEmailMailer < GovukNotifyRails::Mailer
   class MissingFirstNameError < StandardError; end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   class SupportController < ApplicationController
     layout "support"

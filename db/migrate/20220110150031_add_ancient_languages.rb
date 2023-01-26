@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAncientLanguages < ActiveRecord::Migration[6.1]
   def up
     Subjects::CreatorService.new.execute

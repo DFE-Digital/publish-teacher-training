@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   class CoursesController < SupportController
     def index

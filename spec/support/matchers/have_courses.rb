@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_courses do |*expected_courses|
   expected_courses = expected_courses.flatten
   def course_codes(server_response_body)

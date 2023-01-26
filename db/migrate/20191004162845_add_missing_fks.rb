@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMissingFks < ActiveRecord::Migration[6.0]
   def up
     # there is bad data in prod (3 rows), kill it:

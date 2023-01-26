@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveAllFinancialIncentiveRecords < ActiveRecord::Migration[6.0]
   def up
     say_with_time "removing all finanical incentive" do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VacancyStatusDeterminationService
   attr_reader :vacancy_status_full_time,
     :vacancy_status_part_time,

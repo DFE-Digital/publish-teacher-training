@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "visa sponsorship (add course summary page)", { can_edit_current_and_next_cycles: false } do

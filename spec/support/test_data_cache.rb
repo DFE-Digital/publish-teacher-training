@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Style/ClassVars
 class TestDataCache
   #  A helper class for pre-creating test data with FactoryBot factories

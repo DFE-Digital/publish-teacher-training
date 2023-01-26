@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddUuidToCourse < ActiveRecord::Migration[6.0]
   def change
     add_column :course, :uuid, :uuid, default: "uuid_generate_v4()", null: false

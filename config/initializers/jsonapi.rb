@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def page_url(page:)
   params.then do |new_params|
     new_params[:page] = {} unless new_params.key? :page

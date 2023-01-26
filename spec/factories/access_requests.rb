@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :access_request do
     requester { build(:user, :with_organisation, :with_provider) }

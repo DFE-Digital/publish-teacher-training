@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "GET v3 /subjects", :with_publish_constraint do

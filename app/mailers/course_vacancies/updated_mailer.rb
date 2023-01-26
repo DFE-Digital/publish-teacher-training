@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CourseVacancies
   class UpdatedMailer < GovukNotifyRails::Mailer
     include TimeFormat

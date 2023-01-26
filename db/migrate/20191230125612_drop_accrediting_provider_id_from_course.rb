@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropAccreditingProviderIdFromCourse < ActiveRecord::Migration[6.0]
   def up
     remove_column :course, :accrediting_provider_id

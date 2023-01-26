@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PublishReportingService
   def initialize(recruitment_cycle_scope: RecruitmentCycle)
     @courses = recruitment_cycle_scope.courses

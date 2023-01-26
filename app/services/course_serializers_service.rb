@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSerializersService
   def initialize(
     course_serializer: API::V3::SerializableCourse,

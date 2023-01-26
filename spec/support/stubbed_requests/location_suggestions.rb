@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StubbedRequests
   module LocationSuggestions
     def stub_location_suggestions(query:)

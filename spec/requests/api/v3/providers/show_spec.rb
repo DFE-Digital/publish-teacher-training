@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code", :with_publish_constraint do

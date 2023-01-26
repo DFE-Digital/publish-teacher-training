@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :support do
   get "/", to: "recruitment_cycle#index"
 

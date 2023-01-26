@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RolloverReportingService
   def initialize
     @rollover_scope = RecruitmentCycle.current_recruitment_cycle

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Taken from https://gist.github.com/radiac/d91d2ed1b971c03d49e9b7bd85e23f1c
 UK_COUNTIES_AND_REGIONS = [
   ["Guernsey", "Crown Dependencies"],

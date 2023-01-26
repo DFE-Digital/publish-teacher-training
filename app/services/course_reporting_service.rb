@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseReportingService
   def initialize(courses_scope: Course)
     @courses = courses_scope.distinct

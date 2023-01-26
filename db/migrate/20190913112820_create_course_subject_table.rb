@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:todo Rails/CreateTableWithTimestamps
 class CreateCourseSubjectTable < ActiveRecord::Migration[5.2]
   def change

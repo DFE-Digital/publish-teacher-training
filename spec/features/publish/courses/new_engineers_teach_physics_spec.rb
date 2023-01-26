@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 feature "selecting a physics subject", { can_edit_current_and_next_cycles: false } do

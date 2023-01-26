@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NotificationsView
   ORGANISATION_URL_PATTERN = %r{/organisations/(\S+)/?}
 

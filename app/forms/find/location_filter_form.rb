@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Find
   class LocationFilterForm
     NO_OPTION = nil
-    LOCATION_OPTION = "1".freeze
-    PROVIDER_OPTION = "3".freeze
+    LOCATION_OPTION = "1"
+    PROVIDER_OPTION = "3"
 
     attr_reader :params, :errors
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UserAssociationsService
   class Delete
     attr_reader :user, :providers

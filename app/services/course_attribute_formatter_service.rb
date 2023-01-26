@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseAttributeFormatterService
   def initialize(name:, value:)
     @name = name

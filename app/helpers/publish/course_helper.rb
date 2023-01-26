@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module CourseHelper
     def course_value_provided?(value)

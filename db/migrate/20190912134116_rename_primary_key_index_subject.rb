@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenamePrimaryKeyIndexSubject < ActiveRecord::Migration[5.2]
   def up
     execute 'ALTER INDEX IF EXISTS "PK_ucas_subject" RENAME TO "subject_pkey"'

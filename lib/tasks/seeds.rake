@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :db do
   namespace :seed do
     desc "Seed integration test data"

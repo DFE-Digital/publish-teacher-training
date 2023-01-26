@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
   self.inheritance_column = "_unused"
 

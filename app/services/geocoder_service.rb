@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GeocoderService
   def self.geocode(obj:, force: false)
     return if obj.full_address.blank?

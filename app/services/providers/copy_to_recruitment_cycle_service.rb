@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Providers
   class CopyToRecruitmentCycleService
     def initialize(copy_course_to_provider_service:, copy_site_to_provider_service:, force:)

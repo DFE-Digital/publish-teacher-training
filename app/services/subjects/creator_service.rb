@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Subjects
   class CreatorService
     def initialize(primary_subject: PrimarySubject,

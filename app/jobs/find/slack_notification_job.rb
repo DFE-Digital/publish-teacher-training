@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "http"
 
 module Find
   class SlackNotificationJob < ApplicationJob
-    SLACK_CHANNEL = "#twd_findpub_tech".freeze
+    SLACK_CHANNEL = "#twd_findpub_tech"
 
     def perform(text, url = nil)
       @webhook_url = Settings.STATE_CHANGE_SLACK_URL

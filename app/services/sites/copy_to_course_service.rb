@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sites
   class CopyToCourseService
     def execute(new_site:, new_course:)

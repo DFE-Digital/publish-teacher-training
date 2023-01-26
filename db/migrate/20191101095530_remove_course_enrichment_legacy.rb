@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Rails/ReversibleMigration
 class RemoveCourseEnrichmentLegacy < ActiveRecord::Migration[6.0]
   def change

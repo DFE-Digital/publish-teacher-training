@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InterruptPageAcknowledgement < ApplicationRecord
   belongs_to :user
   belongs_to :recruitment_cycle

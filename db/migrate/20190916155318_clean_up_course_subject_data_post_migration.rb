@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CleanUpCourseSubjectDataPostMigration < ActiveRecord::Migration[5.2]
   def change
     say_with_time "cleansing subject data" do

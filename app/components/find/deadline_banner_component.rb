@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class DeadlineBannerComponent < ViewComponent::Base
     attr_accessor :flash_empty

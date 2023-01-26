@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   class UserPermissionsController < SupportController
     def destroy

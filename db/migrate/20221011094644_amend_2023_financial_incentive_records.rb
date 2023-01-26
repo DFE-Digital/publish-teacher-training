@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Amend2023FinancialIncentiveRecords < ActiveRecord::Migration[7.0]
   def up
     say_with_time "populating 2022 finanical incentive" do

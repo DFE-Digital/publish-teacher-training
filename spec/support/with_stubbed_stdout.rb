@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: This can be removed
 # Retaining as the tests becomes very noise without this.
 

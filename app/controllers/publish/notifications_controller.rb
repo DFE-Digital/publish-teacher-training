@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class NotificationsController < PublishController
     skip_before_action :check_interrupt_redirects

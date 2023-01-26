@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "mock_redis"
 
 RSpec.configure do |config|

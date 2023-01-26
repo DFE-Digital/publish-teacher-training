@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropNctlOrganisationTable < ActiveRecord::Migration[6.1]
   def change
     drop_table :nctl_organisation do |t|

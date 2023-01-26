@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPeWithEbaccToSubjects < ActiveRecord::Migration[7.0]
   def up
     Subjects::CreatorService.new.execute

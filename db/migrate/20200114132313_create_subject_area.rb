@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSubjectArea < ActiveRecord::Migration[6.0]
   def change
     create_table :subject_area, primary_key: :typename, id: false do |t|

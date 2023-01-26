@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SubjectAndUCASSubjectSubjectNameIndexing < ActiveRecord::Migration[5.2]
   def change
     say_with_time "index subject name for subject and ucas subject" do

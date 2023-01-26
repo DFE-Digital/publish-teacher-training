@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   subjects = {
     # Modern Languages has been removed as it would cause validation errors if it

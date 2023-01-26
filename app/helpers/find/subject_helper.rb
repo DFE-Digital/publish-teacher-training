@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module SubjectHelper
     def primary_subject_options(subjects = primary_subjects)

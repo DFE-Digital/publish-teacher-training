@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSubject < ApplicationRecord
   self.table_name = "course_subject"
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GeocoderHelper
   class GeocoderStub
     def geocode(address, **_params)

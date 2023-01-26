@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "csv"
 
 desc "Backfill Providers URNs and UKPRNs"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccreditingProviderEnrichment
   include ActiveModel::Validations
   include ActiveModel::Model

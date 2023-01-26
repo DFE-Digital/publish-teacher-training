@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class AccessRequestsController < PublishController
     before_action -> { authorize(access_request) }, except: :index

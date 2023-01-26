@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :correct_subject_positions do
   desc "Flip incorrect subject position of courses"
   task :flip_subjects, [:course_ids] => :environment do |_task, args|

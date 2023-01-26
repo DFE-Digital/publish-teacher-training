@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NavigationBarHelper
   def render_navigation_bar?(provider)
     !request.path.include?("support") &&

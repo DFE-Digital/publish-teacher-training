@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseInformationForm < BaseProviderForm
     alias course_enrichment model

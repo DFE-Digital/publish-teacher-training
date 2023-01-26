@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :delegate_method_to_service do |method, service|
   match do |model|
     @service_spy = spy

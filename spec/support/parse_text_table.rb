@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Issues to be mindful of when using this function
 # It is coupled to the border styling
 # All whitespace is discarded

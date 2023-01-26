@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderDecorator < ApplicationDecorator
   delegate_all
 

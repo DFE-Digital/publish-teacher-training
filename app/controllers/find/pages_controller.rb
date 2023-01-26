@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class PagesController < ApplicationController
     skip_before_action :redirect_to_cycle_has_ended_if_find_is_down, only: :cycle_has_ended

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddFulltextIndexForProviders < ActiveRecord::Migration[6.0]
   def up
     execute "CREATE EXTENSION IF NOT EXISTS btree_gin;"

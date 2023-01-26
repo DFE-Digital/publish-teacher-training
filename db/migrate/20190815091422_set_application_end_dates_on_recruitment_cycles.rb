@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetApplicationEndDatesOnRecruitmentCycles < ActiveRecord::Migration[5.2]
   def up
     say_with_time "fixing recruitment cycles with a nil application end dates" do

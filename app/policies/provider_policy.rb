@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderPolicy
   attr_reader :user, :provider
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReportingController < ActionController::API
   before_action :build_recruitment_cycle
 

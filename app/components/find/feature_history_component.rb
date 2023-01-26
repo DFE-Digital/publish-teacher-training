@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class FeatureHistoryComponent < ViewComponent::Base
     include ::ViewHelper

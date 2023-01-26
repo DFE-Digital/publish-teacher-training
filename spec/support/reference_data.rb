@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Reference data that gets created for every test as a matter of convenience.
 #
 # There is some data that we can assume will always be in the db, and, where

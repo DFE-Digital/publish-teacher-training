@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class SubjectsController < API::V3::ApplicationController

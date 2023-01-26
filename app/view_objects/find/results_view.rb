@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   # FIND:TODO need to prune unused methods etc.
   class ResultsView
@@ -5,8 +7,8 @@ module Find
 
     include ActionView::Helpers::NumberHelper
 
-    DISTANCE = "distance".freeze
-    MILES = "50".freeze
+    DISTANCE = "distance"
+    MILES = "50"
 
     def initialize(query_parameters:)
       @query_parameters = query_parameters

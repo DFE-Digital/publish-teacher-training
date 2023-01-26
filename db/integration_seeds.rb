@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../spec/strategies/find_or_create_strategy"
 Faker::Config.locale = "en-GB"
 

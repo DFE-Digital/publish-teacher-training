@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixCourseApplicationOpenFromDates < ActiveRecord::Migration[6.0]
   def up
     recruitment_cycle = RecruitmentCycle.find_by(year: "2021")

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class SubjectRequirementForm
     # TODO: Refactor to use our form object pattern

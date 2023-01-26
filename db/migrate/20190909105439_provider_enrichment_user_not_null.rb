@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderEnrichmentUserNotNull < ActiveRecord::Migration[5.2]
   def up
     production_user = User.find_by(email: "tim.abell@digital.education.gov.uk")

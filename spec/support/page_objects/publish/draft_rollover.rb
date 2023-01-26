@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PageObjects
   module Publish
     class DraftRollover < PageObjects::Base

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RolloverHelper
   def rollover_inactive
     !rollover_active

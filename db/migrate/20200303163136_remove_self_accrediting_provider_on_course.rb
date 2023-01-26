@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveSelfAccreditingProviderOnCourse < ActiveRecord::Migration[6.0]
   def up
     say_with_time "remove accrediting provider code" do

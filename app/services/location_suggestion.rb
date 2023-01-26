@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LocationSuggestion
   CACHE_EXPIRY = 30.minutes
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ViewHelper
   def govuk_back_link_to(url = :back, body = "Back")
     render GovukComponent::BackLinkComponent.new(

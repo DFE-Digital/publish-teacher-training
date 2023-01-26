@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :site do
     location_name { "Main Site#{rand(1_000_000)}" }

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module FilterParameters
-  PREVIOUS_PARAMETER_PREFIX = "prev_".freeze
+  PREVIOUS_PARAMETER_PREFIX = "prev_"
 
   def filter_params
     parameters.reject do |param|

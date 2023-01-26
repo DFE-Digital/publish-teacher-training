@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if Rails.env.development? || Rails.env.production?
   Rails.application.configure do
     config.semantic_logger.application = Settings.application_name

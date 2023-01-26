@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Add2021FinancialIncentives < ActiveRecord::Migration[6.0]
   def up
     say_with_time "populating subjects finanical" do

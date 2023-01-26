@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIsSendToCourse < ActiveRecord::Migration[5.2]
   def change
     add_column :course, :is_send, :boolean, default: false

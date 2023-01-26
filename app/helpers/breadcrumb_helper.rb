@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BreadcrumbHelper
   def render_breadcrumbs(type)
     breadcrumbs = send("#{type}_breadcrumb")

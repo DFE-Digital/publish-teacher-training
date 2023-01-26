@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddApplicationsOpenFromToCourses < ActiveRecord::Migration[5.2]
   def up
     add_column :course, :applications_open_from, :date

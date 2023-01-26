@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Unpleasant hack to stop autoload error on CI
 require_relative "../services/providers/generate_course_code_service"
 

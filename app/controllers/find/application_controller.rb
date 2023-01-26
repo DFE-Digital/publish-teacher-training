@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class ApplicationController < ActionController::Base
     include DfE::Analytics::Requests

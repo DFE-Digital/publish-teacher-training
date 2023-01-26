@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeCourseAccreditingProviderIdToCode < ActiveRecord::Migration[5.2]
   class Course < ApplicationRecord
     belongs_to :accrediting_provider, class_name: "Provider", optional: true

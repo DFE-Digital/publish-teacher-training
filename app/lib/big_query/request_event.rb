@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BigQuery
   class RequestEvent
     def initialize

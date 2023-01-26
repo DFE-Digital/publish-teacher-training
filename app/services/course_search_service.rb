@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSearchService
   include ServicePattern
 
@@ -285,18 +287,18 @@ private
   end
 
   def course_asc_requirement
-    sort == "name,provider.provider_name".freeze
+    sort == "name,provider.provider_name"
   end
 
   def course_desc_requirement
-    sort == "-name,provider.provider_name".freeze
+    sort == "-name,provider.provider_name"
   end
 
   def provider_asc_requirement
-    sort == "provider.provider_name,name".freeze
+    sort == "provider.provider_name,name"
   end
 
   def provider_desc_requirement
-    sort == "-provider.provider_name,name".freeze
+    sort == "-provider.provider_name,name"
   end
 end

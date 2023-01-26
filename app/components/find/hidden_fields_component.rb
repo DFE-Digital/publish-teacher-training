@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class HiddenFieldsComponent < ViewComponent::Base
     attr_reader :query_params, :form_name, :form, :exclude_keys

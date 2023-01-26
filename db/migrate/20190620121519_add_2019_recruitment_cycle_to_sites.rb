@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: These migrations need to run in the below order
 # 1) AddRecruitmentCycleToSite
 #     Add schema change the foreign id as `null`

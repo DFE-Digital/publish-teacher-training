@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   class UsersController < SupportController
     def index

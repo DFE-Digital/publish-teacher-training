@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_text_table_row do |*column_values|
   match do |actual|
     escaped_column_values = column_values.map do |val|

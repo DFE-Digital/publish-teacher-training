@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Subjects
   class SubjectAreaCreatorService
     def initialize(subject_area: SubjectArea)

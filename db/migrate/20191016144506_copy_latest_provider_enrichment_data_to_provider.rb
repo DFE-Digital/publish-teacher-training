@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CopyLatestProviderEnrichmentDataToProvider < ActiveRecord::Migration[6.0]
   def up
     say_with_time "copy provider enrichment to provider" do

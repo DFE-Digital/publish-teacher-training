@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatisticService
   def self.reporting(recruitment_cycle:)
     {

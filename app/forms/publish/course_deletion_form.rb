@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseDeletionForm < BaseModelForm
     alias course model

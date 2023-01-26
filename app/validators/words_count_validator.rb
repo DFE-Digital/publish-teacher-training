@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WordsCountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, string)
     return if string.blank?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationDecorator < Draper::Decorator
   # TODO: Move this to a view component
   def status_tag

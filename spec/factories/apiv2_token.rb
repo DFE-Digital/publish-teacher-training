@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "ostruct"
 
 # We only need this strategy here for the moment.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 root to: "find/search/locations#start", as: :find
 
 scope via: :all do

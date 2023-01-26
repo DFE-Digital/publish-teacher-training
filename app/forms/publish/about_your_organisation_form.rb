@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class AboutYourOrganisationForm < BaseProviderForm
     validates :train_with_us, presence: { message: "Enter details about training with you" }, if: :train_with_us_changed?

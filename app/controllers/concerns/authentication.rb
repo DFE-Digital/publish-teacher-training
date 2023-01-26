@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authentication
   def user_session
     @user_session ||= UserSession.load_from_session(session)

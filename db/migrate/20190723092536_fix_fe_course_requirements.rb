@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixFeCourseRequirements < ActiveRecord::Migration[5.2]
   def up
     say_with_time "setting further education course requirements to not_required" do

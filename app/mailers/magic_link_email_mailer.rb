@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MagicLinkEmailMailer < GovukNotifyRails::Mailer
   def magic_link_email(user)
     set_template(Settings.govuk_notify.magic_link_email_template_id)

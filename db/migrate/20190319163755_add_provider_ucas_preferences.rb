@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProviderUCASPreferences < ActiveRecord::Migration[5.2]
   def change
     create_table :provider_ucas_preference do |t|

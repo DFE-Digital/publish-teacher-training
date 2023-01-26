@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Providers
   class GenerateUniqueCourseCodeService
     def initialize(generate_course_code_service:)

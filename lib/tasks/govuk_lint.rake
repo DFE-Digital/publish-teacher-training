@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "English"
 desc "Lint ruby code"
 namespace :lint do

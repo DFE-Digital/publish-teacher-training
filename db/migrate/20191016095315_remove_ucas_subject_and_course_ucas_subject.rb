@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:todo Rails/CreateTableWithTimestamps
 class RemoveUCASSubjectAndCourseUCASSubject < ActiveRecord::Migration[6.0]
   def up

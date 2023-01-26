@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module ProviderHelper
     def select_provider_options(providers)

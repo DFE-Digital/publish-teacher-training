@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :organisation_user_migrate do
   task migrate_organisation_user_to_user_permission: :environment do
     total_bm = Benchmark.measure do

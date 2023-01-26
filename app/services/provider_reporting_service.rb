@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderReportingService
   def initialize(providers_scope: Provider)
     @providers = providers_scope.distinct

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveUserFromOrganisationMailer < GovukNotifyRails::Mailer
   def remove_user_from_provider_email(recipient:, provider:)
     set_template(Settings.govuk_notify.remove_user_from_organisation_id)

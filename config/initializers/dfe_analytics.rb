@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
