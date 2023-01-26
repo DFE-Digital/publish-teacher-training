@@ -1,4 +1,4 @@
-<%= render "publish/shared/error_wrapper", error_keys: [:master_subject_id], data_qa: "course__master_subject_id" do %>
+<%= render "publish/shared/error_wrapper", error_keys: [:subjects], data_qa: "course__master_subject_id" do %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h1 class="govuk-fieldset__heading" data-qa="page-heading">
@@ -10,10 +10,15 @@
         Subject
       </h1>
     </legend>
-    <%= render "publish/shared/error_messages", error_keys: [:master_subject_id] %>
+    <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
 
-        <%= form.govuk_collection_radio_buttons :master_subject_id, primary_form_options,
-       :code, :name, legend: { text: "Which courses would you like to find?" } %>
+        <%#= form.govuk_collection_radio_buttons :master_subject_id, primary_form_options,
+       :code, :name, legend: { text: "Choose a primary subject" } %>
+      <%#= form.govuk_radio_buttons_fieldset :master_subject_id, legend: {} do %>
+        <% primary_form_options.each do |opt| %>
+          <%= form.govuk_radio_button :master_subject_id, opt.code, label: { text: opt.name } %>
+        <% end %>
+      <%# end %>
 
   </fieldset>
 <% end %>
