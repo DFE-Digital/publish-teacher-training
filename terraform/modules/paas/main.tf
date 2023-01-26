@@ -90,20 +90,12 @@ resource cloudfoundry_route web_app_find_gov_uk_route {
   hostname = each.value
 }
 
-locals {
-  target_app = var.find_route_target == "find" ? data.cloudfoundry_app.find_app.id : resource.cloudfoundry_app.web_app.id
-}
-
 resource cloudfoundry_route find_web_app_cloudapps_digital_route {
-  count = var.find_route_target != null ? 1 : 0
+  count = var.enable_find == true ? 1 : 0
 
   domain   = data.cloudfoundry_domain.london_cloudapps_digital.id
   space    = data.cloudfoundry_space.space.id
   hostname = local.find_app_name
-
-#  target {
-#    app = local.target_app
-#  }
 }
 
 resource cloudfoundry_route find_web_app_find_gov_uk_route {
@@ -111,10 +103,6 @@ resource cloudfoundry_route find_web_app_find_gov_uk_route {
   domain   = data.cloudfoundry_domain.find_service_gov_uk.id
   space    = data.cloudfoundry_space.space.id
   hostname = each.value
-
-#  target {
-#    app = local.target_app
-#  }
 }
 
 resource cloudfoundry_service_instance postgres {

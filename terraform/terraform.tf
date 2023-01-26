@@ -60,7 +60,7 @@ module "paas" {
   publish_gov_uk_host_names      = var.publish_gov_uk_host_names
   find_gov_uk_host_names         = var.find_gov_uk_host_names
   find_app_gov_uk_host_names     = var.find_app_gov_uk_host_names
-  find_route_target              = var.find_route_target
+  enable_find                    = var.enable_find
   restore_from_db_guid           = var.paas_restore_from_db_guid
   db_backup_before_point_in_time = var.paas_db_backup_before_point_in_time
   enable_external_logging        = var.paas_enable_external_logging
