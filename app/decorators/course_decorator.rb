@@ -280,7 +280,6 @@ class CourseDecorator < ApplicationDecorator
     level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
   end
 
-  # TODO: check we still need this
   def subject_page_title
     if level == "primary" || level == "secondary"
       "Subject"
