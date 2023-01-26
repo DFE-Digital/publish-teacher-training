@@ -22,6 +22,10 @@ module Find
 
     private
 
+      def formatted_qualification
+        t("find.qualification.description_with_abbreviation.#{course.qualification}.html")
+      end
+
       def show_visa_sponsorship_and_degree_required?
         course.show_visa_sponsorship?
       end
