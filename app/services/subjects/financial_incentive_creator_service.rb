@@ -28,14 +28,14 @@ module Subjects
             "Japanese",
             "Mandarin",
             "Modern languages (other)",
-            "Russian",
+            "Russian"
           ] => {
             bursary_amount: "25000",
           },
           [
             "Latin",
             "Ancient Greek",
-            "Ancient Hebrew",
+            "Ancient Hebrew"
           ] => {
             bursary_amount: "25000",
           },

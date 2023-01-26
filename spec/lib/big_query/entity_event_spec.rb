@@ -67,7 +67,7 @@ module BigQuery
             { "key" => "one", "value" => ["one"] },
             { "key" => "two", "value" => ["true"] },
             { "key" => "three", "value" => ["[1,2,3]"] },
-            { "key" => "four", "value" => ["{\"first\":\"test-one\",\"second\":\"test-two\"}"] },
+            { "key" => "four", "value" => ["{\"first\":\"test-one\",\"second\":\"test-two\"}"] }
           ]
         end
 

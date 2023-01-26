@@ -69,7 +69,7 @@ feature "Editing course length and funding type" do
           "Fee for UK students",
           "Fee for international students",
           "Fee details",
-          "Financial support",
+          "Financial support"
         ].each do |name|
           expect(publish_course_fee_page.copy_content_warning).to have_content(name)
         end
@@ -90,7 +90,7 @@ feature "Editing course length and funding type" do
 
         [
           "Your changes are not yet saved",
-          "Course length",
+          "Course length"
         ].each do |name|
           expect(publish_course_fee_page.copy_content_warning).to have_content(name)
         end
@@ -99,7 +99,7 @@ feature "Editing course length and funding type" do
           "Fee for UK students",
           "Fee for international students",
           "Fee details",
-          "Financial support",
+          "Financial support"
         ].each do |name|
           expect(publish_course_fee_page.copy_content_warning).not_to have_content(name)
         end

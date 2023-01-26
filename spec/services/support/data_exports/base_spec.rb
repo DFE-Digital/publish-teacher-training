@@ -19,7 +19,7 @@ RSpec.describe Support::DataExports::Base do
           col3: "item2_test3",
           col4: "item2_test4",
           col5: "item2_test5",
-        },
+        }
       ]
     end
 

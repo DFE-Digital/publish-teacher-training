@@ -18,7 +18,7 @@ module NotificationService
     let(:course) { create(:course, accrediting_provider: accredited_body) }
     let(:vacancy_statuses) do
       [
-        { id: 123_456, status: "no_vacancies" },
+        { id: 123_456, status: "no_vacancies" }
       ]
     end
 
@@ -100,7 +100,7 @@ module NotificationService
         let(:vacancy_statuses) do
           [
             { id: 123_456, status: "no_vacancies" },
-            { id: 789_789, status: "no_vacancies" },
+            { id: 789_789, status: "no_vacancies" }
           ]
         end
 
@@ -124,7 +124,7 @@ module NotificationService
         let(:vacancy_statuses) do
           [
             { id: 123_456, status: "full_time_vacancies" },
-            { id: 789_789, status: "part_time_vacancies" },
+            { id: 789_789, status: "part_time_vacancies" }
           ]
         end
 
@@ -152,7 +152,7 @@ module NotificationService
         let(:vacancy_statuses) do
           [
             { id: first_site_status_id, status: "no_vacancies" },
-            { id: second_site_status_id, status: "part_time_vacancies" },
+            { id: second_site_status_id, status: "part_time_vacancies" }
           ]
         end
         let(:course) { create(:course, accrediting_provider: accredited_body, site_statuses: [first_site_status, second_site_status]) }

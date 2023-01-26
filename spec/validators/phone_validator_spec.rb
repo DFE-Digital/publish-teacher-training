@@ -49,7 +49,7 @@ describe PhoneValidator do
     let(:invalid_telephone_numbers) do
       [
         "12 3 4 cat",
-        "12dog34",
+        "12dog34"
       ]
     end
 
@@ -86,7 +86,7 @@ describe PhoneValidator do
         "1234 123 1234 x123",
         "1234 123 1234 ext 1234",
         "1234 123 1234  ext 123",
-        "+44(0)123 12 12345",
+        "+44(0)123 12 12345"
       ]
     end
 

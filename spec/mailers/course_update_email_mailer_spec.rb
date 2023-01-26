@@ -109,7 +109,7 @@ describe CourseUpdateEmailMailer do
       {
         original_value: "full or part time",
         updated_value: "part time",
-      },
+      }
     ]
 
     study_mode_update_scenarios.each do |scenario|

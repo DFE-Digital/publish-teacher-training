@@ -31,9 +31,9 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
             :provider,
             sites: [
               build(:site, location_name: "Site 1"),
-              build(:site, location_name: "Site 2"),
+              build(:site, location_name: "Site 2")
             ]
-          ),
+          )
         ]
       )
     )

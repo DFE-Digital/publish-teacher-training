@@ -8,7 +8,7 @@ describe WithQualifications do
     pgce: { values: [:pgce], description: "PGCE" },
     pgde: { values: [:pgde], description: "PGDE" },
     pgce_with_qts: { values: %i[qts pgce], description: "PGCE with QTS" },
-    pgde_with_qts: { values: %i[qts pgde], description: "PGDE with QTS" },
+    pgde_with_qts: { values: %i[qts pgde], description: "PGDE with QTS" }
   ].freeze
 
   describe "#qualifications" do

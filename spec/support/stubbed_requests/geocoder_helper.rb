@@ -14,7 +14,7 @@ module StubbedRequests
             "country" => "United Kingdom",
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
-          },
+          }
         ]
       )
 
@@ -29,7 +29,7 @@ module StubbedRequests
             "country" => "United Kingdom",
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
-          },
+          }
         ]
       )
 
@@ -44,7 +44,7 @@ module StubbedRequests
             "country" => "United Kingdom",
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
-          },
+          }
         ]
       )
 

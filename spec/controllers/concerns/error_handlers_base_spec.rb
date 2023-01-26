@@ -34,7 +34,7 @@ describe ErrorHandlers::Base do
         "errors" => [
           "status" => 500,
           "title" => a_string_including("ERROR"),
-          "detail" => a_string_including("gone wrong"),
+          "detail" => a_string_including("gone wrong")
         ]
       )
     end

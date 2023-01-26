@@ -15,7 +15,7 @@ describe Providers::CopyToRecruitmentCycleService do
         build(:contact, :utt_type),
         build(:contact, :web_link_type),
         build(:contact, :finance_type),
-        build(:contact, :fraud_type),
+        build(:contact, :fraud_type)
       ]
     end
     let(:provider) do

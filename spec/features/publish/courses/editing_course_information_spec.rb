@@ -33,7 +33,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
         "Your changes are not yet saved",
         "About the course",
         "Interview process",
-        "How school placements work",
+        "How school placements work"
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).to have_content(name)
       end
@@ -51,14 +51,14 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
       [
         "Your changes are not yet saved",
-        "About the course",
+        "About the course"
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).to have_content(name)
       end
 
       [
         "Interview process",
-        "How school placements work",
+        "How school placements work"
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).not_to have_content(name)
       end

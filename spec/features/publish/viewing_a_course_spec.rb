@@ -264,7 +264,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       user: create(
         :user,
         providers: [
-          create(:provider, sites: [build(:site)], courses: [course]),
+          create(:provider, sites: [build(:site)], courses: [course])
         ]
       )
     )

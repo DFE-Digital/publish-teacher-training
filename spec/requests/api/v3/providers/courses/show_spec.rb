@@ -83,7 +83,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       [
         build(:course_enrichment, :published, fee_details: "Some details about the fees"),
         build(:course_enrichment, :published, fee_details: "Some new details about the fees"),
-        build(:course_enrichment, :subsequent_draft),
+        build(:course_enrichment, :subsequent_draft)
       ]
     end
     let(:enrichment) { course.enrichments.second }
@@ -189,7 +189,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "urn" => courses_site_status.site.urn,
               "recruitment_cycle_year" => current_year.to_s,
             },
-          },
+          }
         ],
         "jsonapi" => {
           "version" => "1.0",

@@ -576,7 +576,7 @@ describe "GET v3 /subjects", :with_publish_constraint do
             "scholarship" => nil,
             "subject_knowledge_enhancement_course_available" => nil,
           },
-        },
+        }
       ],
       "jsonapi" => {
         "version" => "1.0",
@@ -918,7 +918,7 @@ describe "GET v3 /subjects", :with_publish_constraint do
             "attributes" => {
               "subject_name" => "Further education",
             },
-          },
+          }
         ],
         "jsonapi" => {
           "version" => "1.0",
@@ -977,7 +977,7 @@ describe "GET v3 /subjects", :with_publish_constraint do
           "Russian",
           "Science",
           "Social sciences",
-          "Spanish",
+          "Spanish"
         ])
       end
     end

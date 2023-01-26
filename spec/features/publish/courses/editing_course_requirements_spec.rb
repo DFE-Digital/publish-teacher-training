@@ -53,7 +53,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
       [
         "Your changes are not yet saved",
         "Personal qualities",
-        "Other requirements",
+        "Other requirements"
       ].each do |name|
         expect(course_requirement_edit_page.copy_content_warning).to have_content(name)
       end
@@ -70,13 +70,13 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
       [
         "Your changes are not yet saved",
-        "Personal qualities",
+        "Personal qualities"
       ].each do |name|
         expect(course_requirement_edit_page.copy_content_warning).to have_content(name)
       end
 
       [
-        "other requirements",
+        "other requirements"
       ].each do |name|
         expect(course_requirement_edit_page.copy_content_warning).not_to have_content(name)
       end

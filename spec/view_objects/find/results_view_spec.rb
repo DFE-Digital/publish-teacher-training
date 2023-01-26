@@ -359,7 +359,7 @@ module Find
                 russian_subject_code,
                 primary_subject_code,
                 spanish_subject_code,
-                mathematics_subject_code,
+                mathematics_subject_code
               ],
             })
           end
@@ -453,7 +453,7 @@ module Find
             :course,
             site_statuses: [
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
+              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2)
             ]
           )
 
@@ -472,7 +472,7 @@ module Find
             :course,
             site_statuses: [
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
+              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2)
             ]
           )
 
@@ -489,7 +489,7 @@ module Find
           course = build(
             :course,
             site_statuses: [
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
+              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1)
             ]
           )
 
@@ -567,7 +567,7 @@ module Find
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site3),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site4, status: "suspended"),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :with_no_vacancies, site: site5),
+            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :with_no_vacancies, site: site5)
           ]
         )
       end
@@ -621,7 +621,7 @@ module Find
               ["Course name (A-Z)", "course_asc", { "data-qa": "sort-form__options__ascending_course" }],
               ["Course name (Z-A)", "course_desc", { "data-qa": "sort-form__options__descending_course" }],
               ["Training provider (A-Z)", "provider_asc", { "data-qa": "sort-form__options__ascending_provider" }],
-              ["Training provider (Z-A)", "provider_desc", { "data-qa": "sort-form__options__descending_provider" }],
+              ["Training provider (Z-A)", "provider_desc", { "data-qa": "sort-form__options__descending_provider" }]
             ]
           )
         }

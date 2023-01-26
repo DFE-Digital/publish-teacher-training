@@ -36,7 +36,7 @@ private
       user: create(
         :user,
         providers: [
-          create(:provider, :accredited_body, sites: [build(:site), build(:site)]),
+          create(:provider, :accredited_body, sites: [build(:site), build(:site)])
         ]
       )
     )

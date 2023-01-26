@@ -53,7 +53,7 @@ describe API::V3::SerializableCourse do
           Provider: API::V3::SerializableProvider,
         },
         include: [
-          :provider,
+          :provider
         ]
       ).to_json
     end
@@ -78,7 +78,7 @@ describe API::V3::SerializableCourse do
           PrimarySubject: API::V3::SerializableSubject,
         },
         include: [
-          :subjects,
+          :subjects
         ]
       ).to_json
     end
@@ -97,7 +97,7 @@ describe API::V3::SerializableCourse do
           Provider: API::V3::SerializableProvider,
         },
         include: [
-          :accrediting_provider,
+          :accrediting_provider
         ]
       ).to_json
     end
@@ -116,7 +116,7 @@ describe API::V3::SerializableCourse do
           Provider: API::V3::SerializableProvider,
         },
         include: [
-          :site_status,
+          :site_status
         ]
       ).to_json
     end
@@ -135,7 +135,7 @@ describe API::V3::SerializableCourse do
           Provider: API::V3::SerializableProvider,
         },
         include: [
-          :site,
+          :site
         ]
       ).to_json
     end

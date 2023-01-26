@@ -459,7 +459,7 @@ describe CourseDecorator do
 
       expected_requirements = [
         "a degree of 2:2 or above in any subject",
-        "at least grade B in maths A-level (or an equivalent)",
+        "at least grade B in maths A-level (or an equivalent)"
       ]
 
       it { is_expected.to eq(expected_requirements) }
@@ -470,7 +470,7 @@ describe CourseDecorator do
       let(:subjects) { [biology, english] }
 
       expected_requirements = [
-        "a degree of 2:2 or above in any subject",
+        "a degree of 2:2 or above in any subject"
       ]
 
       it { is_expected.to eq(expected_requirements) }

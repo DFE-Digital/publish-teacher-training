@@ -91,7 +91,7 @@ private
         build(:site_status, :full_time_vacancies, :suspended),
         build(:site_status, :full_time_vacancies, :new),
         build(:site_status, :with_no_vacancies, :new),
-        build(:site_status, :with_no_vacancies, :findable),
+        build(:site_status, :with_no_vacancies, :findable)
       ],
       enrichments: [
         build(
@@ -107,7 +107,7 @@ private
           how_school_placements_work: "Some info about how school placements work",
           about_course: "This is a course",
           required_qualifications: "You need some qualifications for this course"
-        ),
+        )
       ],
       subjects: [
         build(
@@ -115,7 +115,7 @@ private
           :chemistry,
           scholarship: "2000",
           bursary_amount: "4000"
-        ),
+        )
       ]
     )
   end
@@ -132,7 +132,7 @@ private
           :published,
           fee_uk_eu: "9250",
           fee_international: nil
-        ),
+        )
       ]
     )
   end

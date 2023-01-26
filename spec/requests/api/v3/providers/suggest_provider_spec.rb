@@ -43,7 +43,7 @@ describe "GET /provider-suggestions", :with_publish_constraint do
                 "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
                 "recruitment_cycle_year" => provider.recruitment_cycle.year,
               },
-            },
+            }
           ])
     end
 
@@ -99,7 +99,7 @@ describe "GET /provider-suggestions", :with_publish_constraint do
                 "can_sponsor_skilled_worker_visa" => provider2.can_sponsor_skilled_worker_visa,
                 "recruitment_cycle_year" => provider2.recruitment_cycle.year,
               },
-            },
+            }
           ])
     end
   end

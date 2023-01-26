@@ -532,7 +532,7 @@ UK_COUNTIES_AND_REGIONS = [
   ["South Yorkshire", "Yorkshire and the Humber"],
   ["Wakefield", "Yorkshire and the Humber"],
   ["West Yorkshire", "Yorkshire and the Humber"],
-  ["York", "Yorkshire and the Humber"],
+  ["York", "Yorkshire and the Humber"]
 ].freeze
 
 def remove_unused_regions(list)

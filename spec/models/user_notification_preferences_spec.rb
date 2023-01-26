@@ -56,7 +56,7 @@ describe UserNotificationPreferences do
         let(:user_notifications) do
           [
             user_notification,
-            create(:user_notification, user:),
+            create(:user_notification, user:)
           ]
         end
 

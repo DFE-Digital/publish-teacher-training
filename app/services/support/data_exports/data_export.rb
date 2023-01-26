@@ -6,7 +6,7 @@ module Support
       class << self
         def all
           [
-            DataExports::UsersExport,
+            DataExports::UsersExport
           ].map(&:new)
         end
 

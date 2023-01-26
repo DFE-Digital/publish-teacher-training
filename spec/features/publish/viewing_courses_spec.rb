@@ -27,7 +27,7 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
       user: create(
         :user,
         providers: [
-          create(:provider, sites: [build(:site)], courses: [build(:course)]),
+          create(:provider, sites: [build(:site)], courses: [build(:course)])
         ]
       )
     )

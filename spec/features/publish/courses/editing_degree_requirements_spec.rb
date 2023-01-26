@@ -125,7 +125,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
         [
           "Your changes are not yet saved",
           "Additional degree subject requirements",
-          "Degree subject requirements",
+          "Degree subject requirements"
         ].each do |name|
           expect(degree_subject_requirement_page.copy_content_warning).to have_content(name)
         end

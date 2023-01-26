@@ -130,7 +130,7 @@ RSpec.describe SiteStatus do
         course_study_mode: :full_time_or_part_time,
         valid_states: %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
         invalid_states: [],
-      },
+      }
     ].freeze
 
     specs.each do |spec|

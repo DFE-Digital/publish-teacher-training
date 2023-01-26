@@ -801,7 +801,7 @@ describe Course do
           :course,
           enrichments:,
           site_statuses: [
-            build(:site_status, :findable, site: build(:site, longitude: 0, latitude: 0)),
+            build(:site_status, :findable, site: build(:site, longitude: 0, latitude: 0))
           ]
         )
       end
@@ -811,7 +811,7 @@ describe Course do
           :course,
           enrichments:,
           site_statuses: [
-            build(:site_status, :findable, site: build(:site, longitude: 32, latitude: 32)),
+            build(:site_status, :findable, site: build(:site, longitude: 32, latitude: 32))
           ]
         )
       end
@@ -928,7 +928,7 @@ describe Course do
       context "course is findable" do
         let(:site_statuses) do
           [
-            build(:site_status, :findable),
+            build(:site_status, :findable)
           ]
         end
 
@@ -940,7 +940,7 @@ describe Course do
       context "course is not findable" do
         let(:site_statuses) do
           [
-            build(:site_status),
+            build(:site_status)
           ]
         end
 
@@ -960,7 +960,7 @@ describe Course do
       context "course has vacancies" do
         let(:site_statuses) do
           [
-            build(:site_status, :with_any_vacancy, :findable),
+            build(:site_status, :with_any_vacancy, :findable)
           ]
         end
 
@@ -972,7 +972,7 @@ describe Course do
       context "course has no vacancies" do
         let(:site_statuses) do
           [
-            build(:site_status, :with_no_vacancies, :findable),
+            build(:site_status, :with_no_vacancies, :findable)
           ]
         end
 
@@ -984,7 +984,7 @@ describe Course do
       context "course is not findable" do
         let(:site_statuses) do
           [
-            build(:site_status, :with_any_vacancy),
+            build(:site_status, :with_any_vacancy)
           ]
         end
 

@@ -18,7 +18,7 @@ private
   def items
     [
       { name: "Personal details", url: mock_link },
-      { name: "Timeline", url: mock_link },
+      { name: "Timeline", url: mock_link }
     ]
   end
 

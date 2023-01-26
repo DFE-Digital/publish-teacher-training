@@ -21,7 +21,7 @@ describe Course do
             find(:modern_languages_subject, :mandarin),
             find(:modern_languages_subject, :russian),
             find(:modern_languages_subject, :spanish),
-            find(:modern_languages_subject, :modern_languages_other),
+            find(:modern_languages_subject, :modern_languages_other)
           ]
         )
       )
@@ -47,7 +47,7 @@ describe Course do
           find(:primary_subject, :primary_with_mathematics),
           find(:primary_subject, :primary_with_modern_languages),
           find(:primary_subject, :primary_with_physical_education),
-          find(:primary_subject, :primary_with_science),
+          find(:primary_subject, :primary_with_science)
         ]
       )
     end
@@ -84,7 +84,7 @@ describe Course do
           find(:secondary_subject, :psychology),
           find(:secondary_subject, :religious_education),
           find(:secondary_subject, :science),
-          find(:secondary_subject, :social_sciences),
+          find(:secondary_subject, :social_sciences)
         ]
       )
     end

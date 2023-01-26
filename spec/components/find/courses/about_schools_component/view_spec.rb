@@ -37,7 +37,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         provider:,
         site_statuses: [
           build(:site_status, site: build(:site)),
-          build(:site_status, site: build(:site)),
+          build(:site_status, site: build(:site))
         ]).decorate
 
       result = render_inline(described_class.new(course))
@@ -52,7 +52,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       course = build(:course,
         provider:,
         site_statuses: [
-          build(:site_status, site: build(:site)),
+          build(:site_status, site: build(:site))
         ]).decorate
 
       result = render_inline(described_class.new(course))

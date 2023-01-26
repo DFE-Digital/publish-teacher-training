@@ -5,9 +5,6 @@ Style/StringLiterals:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
-Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: comma
-
 Style/Documentation:
   Enabled: false
 

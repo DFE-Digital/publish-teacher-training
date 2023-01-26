@@ -45,7 +45,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
           widget: {
             anyOf: [
               { "$ref": "#/components/schemas/widgetInteger" },
-              { "$ref": "#/components/schemas/widgetString" },
+              { "$ref": "#/components/schemas/widgetString" }
             ],
           },
           widgetInteger: {
@@ -79,7 +79,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
 
     it "renders a server with no description" do
       spec["servers"] = [
-        { url: "https://example.com" },
+        { url: "https://example.com" }
       ]
       document = Openapi3Parser.load(spec)
 
@@ -95,7 +95,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
     it "renders a list of servers" do
       spec["servers"] = [
         { url: "https://example.com", description: "Production" },
-        { url: "https://dev.example.com", description: "Development" },
+        { url: "https://dev.example.com", description: "Development" }
       ]
       document = Openapi3Parser.load(spec)
 

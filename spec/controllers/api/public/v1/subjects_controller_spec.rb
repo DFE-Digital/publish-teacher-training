@@ -576,7 +576,7 @@ RSpec.describe API::Public::V1::SubjectsController do
               "scholarship" => nil,
               "subject_knowledge_enhancement_course_available" => nil,
             },
-          },
+          }
         ])
       end
     end
@@ -639,7 +639,7 @@ RSpec.describe API::Public::V1::SubjectsController do
           "Russian",
           "Science",
           "Social sciences",
-          "Spanish",
+          "Spanish"
         ])
       end
     end

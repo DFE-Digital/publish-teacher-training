@@ -10,7 +10,7 @@ describe TabNavigation do
   let(:items) do
     [
       { name: "Home", url: mock_link },
-      { name: "Providers", url: mock_link },
+      { name: "Providers", url: mock_link }
     ]
   end
 

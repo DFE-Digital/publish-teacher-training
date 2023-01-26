@@ -27,7 +27,7 @@ private
       object.address2,
       object.address3,
       object.address4,
-      object.postcode,
+      object.postcode
     ].compact_blank
   end
 end

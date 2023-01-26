@@ -72,7 +72,7 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
               },
             },
           },
-        },
+        }
       ],
       "jsonapi" => {
         "version" => "1.0",
@@ -113,7 +113,7 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
             "attributes" => {
               "typename" => "FurtherEducationSubject",
             },
-          },
+          }
         ],
         "jsonapi" => {
           "version" => "1.0",
@@ -163,7 +163,7 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
               {
                 "type" => "subjects",
                 "id" => "7",
-              },
+              }
             ],
           },
         }

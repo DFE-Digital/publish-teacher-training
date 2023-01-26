@@ -63,7 +63,7 @@ RSpec.describe Support::DataExports::UsersExport do
           first_login_at: user2.first_login_date_utc,
           last_login_at: user2.last_login_date_utc,
           sign_in_user_id: user2.sign_in_user_id,
-        },
+        }
       ])
     end
   end

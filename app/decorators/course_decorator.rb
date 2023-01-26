@@ -420,7 +420,7 @@ private
       /^Drama/,
       /^Media Studies/,
       /^PE/,
-      /^Physical/,
+      /^Physical/
     ]
     # We only care about course with a name matching the pattern 'Foo with bar'
     # We don't care about courses matching the pattern 'Foo and bar'

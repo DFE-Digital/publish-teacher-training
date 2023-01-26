@@ -3,5 +3,5 @@
 DEVOLVED_NATIONS = [
   "Northern Ireland",
   "Scotland",
-  "Wales",
+  "Wales"
 ].freeze

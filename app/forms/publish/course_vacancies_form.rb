@@ -45,7 +45,7 @@ module Publish
           {
             id: statuses_attributes[:id],
             status: statuses_attributes[:vac_status],
-          },
+          }
         ]
       end
     end

@@ -7,7 +7,7 @@ class DegreeRowContentPreview < ViewComponent::Preview
     "two_two",
     "third_class",
     "not_required",
-    "two_one",
+    "two_one"
   ].each do |degree_grade|
     define_method "degree_grade_is_#{degree_grade || 'nil'}" do
       provider = Provider.new(provider_code: "BAT", recruitment_cycle: RecruitmentCycle.current)

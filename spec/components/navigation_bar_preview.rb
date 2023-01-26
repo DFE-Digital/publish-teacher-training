@@ -14,7 +14,7 @@ private
   def items
     [
       { name: "Home", url: "root_path" },
-      { name: "Providers", url: "#", current: false },
+      { name: "Providers", url: "#", current: false }
     ]
   end
 

@@ -77,7 +77,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     qualification: :pgce_with_qts,
     level: "primary",
     subjects: [
-      PrimarySubject.find_by(subject_name: "Primary with mathematics"),
+      PrimarySubject.find_by(subject_name: "Primary with mathematics")
     ],
     study_mode: "F",
     age_range_in_years: "3_to_7"
@@ -105,7 +105,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     qualification: :pgce,
     level: "secondary",
     subjects: [
-      SecondarySubject.find_by(subject_name: "Biology"),
+      SecondarySubject.find_by(subject_name: "Biology")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"
@@ -134,7 +134,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     level: "secondary",
     subjects: [
       SecondarySubject.find_by(subject_name: "Art and design"),
-      SecondarySubject.find_by(subject_name: "Music"),
+      SecondarySubject.find_by(subject_name: "Music")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"
@@ -162,7 +162,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     qualification: :pgce,
     level: "Further education",
     subjects: [
-      FurtherEducationSubject.find_by(subject_name: "Further education"),
+      FurtherEducationSubject.find_by(subject_name: "Further education")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"
@@ -191,7 +191,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     level: "secondary",
     subjects: [
       SecondarySubject.find_by(subject_name: "Modern Languages"),
-      ModernLanguagesSubject.find_by(subject_name: "Modern languages (other)"),
+      ModernLanguagesSubject.find_by(subject_name: "Modern languages (other)")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"
@@ -220,7 +220,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     level: "secondary",
     subjects: [
       SecondarySubject.find_by(subject_name: "Modern Languages"),
-      ModernLanguagesSubject.find_by(subject_name: "Japanese"),
+      ModernLanguagesSubject.find_by(subject_name: "Japanese")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"
@@ -252,7 +252,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       ModernLanguagesSubject.find_by(subject_name: "Japanese"),
       ModernLanguagesSubject.find_by(subject_name: "French"),
       ModernLanguagesSubject.find_by(subject_name: "Russian"),
-      ModernLanguagesSubject.find_by(subject_name: "German"),
+      ModernLanguagesSubject.find_by(subject_name: "German")
     ],
     study_mode: "B",
     age_range_in_years: "7_to_14"

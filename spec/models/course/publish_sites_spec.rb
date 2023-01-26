@@ -35,7 +35,7 @@ RSpec.describe Course do
           unpublished_new_site,
           unpublished_running_site,
           unpublished_discontinued_site,
-          unpublished_suspended_site,
+          unpublished_suspended_site
         ])
       end
 

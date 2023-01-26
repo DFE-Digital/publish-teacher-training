@@ -54,7 +54,7 @@ feature "GCSE equivalency requirements", { can_edit_current_and_next_cycles: fal
       "Accept GCSE equivalency",
       "Accept English GCSE equivalency",
       "Accept Maths GCSE equivalency",
-      "Additional GCSE equivalencies",
+      "Additional GCSE equivalencies"
     ].each do |name|
       expect(gcse_requirements_page.copy_content_warning).to have_content(name)
     end

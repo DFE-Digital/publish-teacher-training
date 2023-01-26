@@ -27,7 +27,7 @@ FactoryBot.define do
         "September to June",
         "Approximately 15 months",
         "1 year and 1 day minimum",
-        "Academic Year",
+        "Academic Year"
       ].sample
     end
     fee_details do
@@ -35,7 +35,7 @@ FactoryBot.define do
         "This apprenticeship programme is funded via the apprentice levy from eligible schools.",
         "You will not have to pay these fees upfront. Eligible UK and EU students can apply for a tuition fee loan to cover the cost of tuition fees from the government.",
         "Student grants are available to eligible applicants.",
-        "Fees are made payable to the University.",
+        "Fees are made payable to the University."
       ].sample
     end
     fee_uk_eu         { Faker::Number.within(range: 0..100_000).to_i }
@@ -48,7 +48,7 @@ FactoryBot.define do
         "Bursaries and scholarships are available to trainees",
         "You may be eligible for a government bursary if you are applying to teach one of our secondary subjects",
         "DfE bursaries are available for select trainees",
-        "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)",
+        "You can find information about tuition fee loans and other financial help on the Gov.uk website - (https://www.gov.uk/student-finance)"
       ].sample
     end
     how_school_placements_work { Faker::Lorem.sentence }
@@ -65,7 +65,7 @@ FactoryBot.define do
         "Salary negotiable.",
         "Applicants will be paid as an unqualified teacher.",
         "The trainee will be paid and taxed as an unqualified teacher.",
-        "Using the unqualified teachers scale",
+        "Using the unqualified teachers scale"
       ].sample
     end
 

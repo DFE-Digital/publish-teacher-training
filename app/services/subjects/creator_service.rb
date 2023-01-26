@@ -22,7 +22,7 @@ module Subjects
         { subject_name: "Primary with mathematics", subject_code: "03" },
         { subject_name: "Primary with modern languages", subject_code: "04" },
         { subject_name: "Primary with physical education", subject_code: "06" },
-        { subject_name: "Primary with science", subject_code: "07" },
+        { subject_name: "Primary with science", subject_code: "07" }
       ]
 
       secondary = [
@@ -59,7 +59,7 @@ module Subjects
         { subject_name: "Latin", subject_code: "A0" },
         { subject_name: "Ancient Greek", subject_code: "A1" },
         { subject_name: "Ancient Hebrew", subject_code: "A2" },
-        { subject_name: "Physical education with an EBacc subject", subject_code: "C7" },
+        { subject_name: "Physical education with an EBacc subject", subject_code: "C7" }
       ]
 
       modern_languages = [
@@ -71,17 +71,17 @@ module Subjects
         { subject_name: "Mandarin", subject_code:  "20" },
         { subject_name: "Russian", subject_code:  "21" },
         { subject_name: "Spanish", subject_code:  "22" },
-        { subject_name: "Modern languages (other)", subject_code: "24" },
+        { subject_name: "Modern languages (other)", subject_code: "24" }
       ]
 
       further_education = [
-        { subject_name: "Further education", subject_code: "41" },
+        { subject_name: "Further education", subject_code: "41" }
       ]
 
       # old 2019 DfE subjects
       discontinued = [
         { subject_name: "Humanities" },
-        { subject_name: "Balanced Science" },
+        { subject_name: "Balanced Science" }
       ]
 
       primary.each do |subject|

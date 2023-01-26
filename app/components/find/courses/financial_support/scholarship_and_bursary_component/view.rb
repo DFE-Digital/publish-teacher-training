@@ -34,7 +34,7 @@ module Find
             %w[F3 physics],
             %w[15 french],
             %w[17 german],
-            %w[22 spanish],
+            %w[22 spanish]
           ].freeze
 
           def subject_with_scholarship

@@ -16,7 +16,7 @@ JSONAPI::Rails.configure do |config|
 
     h[k] = [
       "API::V3::Serializable#{klass}",
-      [*names, klass].join("::"),
+      [*names, klass].join("::")
     ].lazy
       .map(&:safe_constantize)
       .detect(&:present?)

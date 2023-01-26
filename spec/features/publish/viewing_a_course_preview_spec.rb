@@ -182,7 +182,7 @@ private
       ["New site with no vacancies", "No"],
       ["New site with vacancies", "No"],
       ["Running site with no vacancies", "No"],
-      ["Running site with vacancies", "Yes"],
+      ["Running site with vacancies", "Yes"]
     ].each.with_index(1) do |site, index|
       name, has_vacancies_string = site
 
@@ -207,7 +207,7 @@ private
     create(
       :user,
       providers: [
-        provider,
+        provider
       ]
     )
   end
@@ -255,7 +255,7 @@ private
     create(
       :user,
       providers: [
-        provider,
+        provider
       ]
     )
   end

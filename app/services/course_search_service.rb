@@ -114,7 +114,7 @@ private
         .eq_any([
           SiteStatus.vac_statuses[:full_time_vacancies],
           SiteStatus.vac_statuses[:part_time_vacancies],
-          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
+          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies]
         ])
     else
       running_and_published_criteria

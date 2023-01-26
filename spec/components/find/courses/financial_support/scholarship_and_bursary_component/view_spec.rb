@@ -10,7 +10,7 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
           subject_name: "primary with mathematics",
           financial_incentive: FinancialIncentive.new(scholarship: 2000,
             bursary_amount: 3000,
-            early_career_payments: 2000)),
+            early_career_payments: 2000))
       ]).decorate
   end
 
@@ -73,7 +73,7 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
             build(:secondary_subject, :design_and_technology,
               financial_incentive: FinancialIncentive.new(scholarship: 2000,
                 bursary_amount: 3000,
-                early_career_payments: 2000)),
+                early_career_payments: 2000))
           ]).decorate
       end
 

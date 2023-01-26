@@ -87,7 +87,7 @@ describe Courses::GenerateCourseNameService do
             let(:subjects) do
               [
                 find_or_create(:secondary_subject, :communication_and_media_studies),
-                find_or_create(:secondary_subject, :mathematics),
+                find_or_create(:secondary_subject, :mathematics)
               ]
             end
 
@@ -113,7 +113,7 @@ describe Courses::GenerateCourseNameService do
               [
                 modern_languages,
                 find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
-                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :spanish)
               ]
             end
 
@@ -128,7 +128,7 @@ describe Courses::GenerateCourseNameService do
                 modern_languages,
                 find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
                 find_or_create(:modern_languages_subject, :french),
-                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :spanish)
               ]
             end
 
@@ -154,7 +154,7 @@ describe Courses::GenerateCourseNameService do
               [
                 modern_languages,
                 find_or_create(:modern_languages_subject, :modern_languages_other),
-                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :spanish)
               ]
             end
 
@@ -169,7 +169,7 @@ describe Courses::GenerateCourseNameService do
                 modern_languages,
                 find_or_create(:modern_languages_subject, :modern_languages_other),
                 find_or_create(:modern_languages_subject, :french),
-                find_or_create(:modern_languages_subject, :spanish),
+                find_or_create(:modern_languages_subject, :spanish)
               ]
             end
 
@@ -241,7 +241,7 @@ describe Courses::GenerateCourseNameService do
             [
               modern_languages,
               find_or_create(:modern_languages_subject, :french),
-              find_or_create(:modern_languages_subject, :german),
+              find_or_create(:modern_languages_subject, :german)
             ]
           end
 
@@ -258,7 +258,7 @@ describe Courses::GenerateCourseNameService do
               modern_languages,
               find_or_create(:modern_languages_subject, :french),
               find_or_create(:modern_languages_subject, :german),
-              find_or_create(:modern_languages_subject, :japanese),
+              find_or_create(:modern_languages_subject, :japanese)
             ]
           end
 
@@ -276,7 +276,7 @@ describe Courses::GenerateCourseNameService do
               find_or_create(:modern_languages_subject, :french),
               find_or_create(:modern_languages_subject, :german),
               find_or_create(:modern_languages_subject, :japanese),
-              find_or_create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :spanish)
             ]
           end
 
@@ -293,7 +293,7 @@ describe Courses::GenerateCourseNameService do
               modern_languages,
               find_or_create(:modern_languages_subject, :french),
               find_or_create(:modern_languages_subject, :spanish),
-              find_or_create(:secondary_subject, :mathematics),
+              find_or_create(:secondary_subject, :mathematics)
             ]
           end
 
@@ -310,7 +310,7 @@ describe Courses::GenerateCourseNameService do
               find_or_create(:secondary_subject, :mathematics),
               modern_languages,
               find_or_create(:modern_languages_subject, :french),
-              find_or_create(:modern_languages_subject, :spanish),
+              find_or_create(:modern_languages_subject, :spanish)
             ]
           end
 
