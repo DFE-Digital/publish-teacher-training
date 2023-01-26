@@ -105,7 +105,7 @@ describe RequiredQualificationsSummary do
           course.update!(
             accept_english_gcse_equivalency: true,
             accept_maths_gcse_equivalency: true,
-            accept_science_gcse_equivalency: true,
+            accept_science_gcse_equivalency: true
           )
           summary = described_class.new(course).extract
 

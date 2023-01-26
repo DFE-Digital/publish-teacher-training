@@ -64,8 +64,8 @@ module Publish
         redirect_to(
           details_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            provider.recruitment_cycle_year,
-          ),
+            provider.recruitment_cycle_year
+          )
         )
       else
         @errors = @about_form.errors.messages
@@ -116,7 +116,7 @@ module Publish
         .fetch(:publish_about_your_organisation_form, {})
         .permit(
           *AboutYourOrganisationForm::FIELDS,
-          accredited_bodies: %i[provider_name provider_code description],
+          accredited_bodies: %i[provider_name provider_code description]
         )
     end
   end

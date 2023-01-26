@@ -38,7 +38,7 @@ feature "Editing course study mode", { can_edit_current_and_next_cycles: false }
 
   def when_i_visit_the_course_study_mode_page
     course_study_mode_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -60,7 +60,7 @@ feature "Editing course study mode", { can_edit_current_and_next_cycles: false }
 
   def then_i_should_see_an_error_message
     expect(course_study_mode_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank"),
+      I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank")
     )
   end
 

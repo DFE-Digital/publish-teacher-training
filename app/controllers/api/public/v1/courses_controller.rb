@@ -17,13 +17,13 @@ module API
           @courses ||= CourseSearchService.call(
             filter: params[:filter],
             sort: params[:sort],
-            course_scope: recruitment_cycle.courses,
+            course_scope: recruitment_cycle.courses
           )
         end
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year],
+            year: params[:recruitment_cycle_year]
           ) || RecruitmentCycle.current_recruitment_cycle
         end
 

@@ -20,12 +20,12 @@ module ApplicationHelper
                provider_code: @provider.provider_code,
                course: @course,
                field: field.to_s,
-               message: error,
+               message: error
              )
            when :provider
              provider_enrichment_error_url(
                provider: @provider,
-               field: field.to_s,
+               field: field.to_s
              )
            end
 

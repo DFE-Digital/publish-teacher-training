@@ -94,7 +94,7 @@ module Find
       it "appends an unescaped querystring to the passed path" do
         allow(UnescapedQueryStringService).to receive(:call).with(
           base_path: "/test",
-          parameters: default_output_parameters,
+          parameters: default_output_parameters
         )
           .and_return("test_result")
         expect(results_view).to eq("test_result")
@@ -139,7 +139,7 @@ module Find
         it "delegates to the CourseSearchService with sort set to course_ascending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: course_ascending),
+            hash_including(filter: query_parameters, sort: course_ascending)
           )
         end
       end
@@ -154,7 +154,7 @@ module Find
         it "delegates to the CourseSearchService with sort set to course_ascending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: course_ascending),
+            hash_including(filter: query_parameters, sort: course_ascending)
           )
         end
       end
@@ -169,7 +169,7 @@ module Find
         it "delegates to the CourseSearchService with sort set to course_descending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: course_descending),
+            hash_including(filter: query_parameters, sort: course_descending)
           )
         end
       end
@@ -184,7 +184,7 @@ module Find
         it "delegates to the CourseSearchService with sort set to provider_ascending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: provider_ascending),
+            hash_including(filter: query_parameters, sort: provider_ascending)
           )
         end
       end
@@ -199,7 +199,7 @@ module Find
         it "delegates to the CourseSearchService with sort set to provider_descending" do
           subject
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(filter: query_parameters, sort: provider_descending),
+            hash_including(filter: query_parameters, sort: provider_descending)
           )
         end
       end
@@ -279,7 +279,7 @@ module Find
         before do
           Course.destroy_all # for flakey test fail
           allow(CourseSearchService).to receive(:call).and_return(
-            instance_double(ActiveRecord::Relation, count: 10),
+            instance_double(ActiveRecord::Relation, count: 10)
           )
         end
 
@@ -345,7 +345,7 @@ module Find
              "Russian",
              "Science",
              "Social sciences",
-             "Spanish"],
+             "Spanish"]
           )
         end
 
@@ -376,7 +376,7 @@ module Find
                 Primary
                 Russian
                 Spanish
-              ],
+              ]
             )
           end
         end
@@ -399,7 +399,7 @@ module Find
       let(:course) do
         build(
           :course,
-          site_statuses:,
+          site_statuses:
         )
       end
 
@@ -452,7 +452,7 @@ module Find
             site_statuses: [
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
-            ],
+            ]
           )
 
           expect(results_view.site_distance(course)).to eq(2)
@@ -471,7 +471,7 @@ module Find
             site_statuses: [
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
-            ],
+            ]
           )
 
           expect(results_view.site_distance(course)).to eq(0.1)
@@ -488,7 +488,7 @@ module Find
             :course,
             site_statuses: [
               build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-            ],
+            ]
           )
 
           expect(results_view.site_distance(course)).to eq(0.1)
@@ -511,7 +511,7 @@ module Find
           address2: "Witham",
           address3: "Essex",
           address4: "UK",
-          postcode: "CM8 2SD",
+          postcode: "CM8 2SD"
         )
       end
       let(:site2) do
@@ -527,7 +527,7 @@ module Find
           address3: "Essex",
           address4: "UK",
           postcode: "CM8 2SD",
-          location_name: "no latitude long",
+          location_name: "no latitude long"
         )
       end
       let(:site4) do
@@ -540,7 +540,7 @@ module Find
           address3: "Essex",
           address4: "UK",
           postcode: "CM8 2SD",
-          location_name: "suspended",
+          location_name: "suspended"
         )
       end
 
@@ -553,7 +553,7 @@ module Find
           address2: "Witham",
           address3: "Essex",
           address4: "UK",
-          postcode: "CM8 2SD",
+          postcode: "CM8 2SD"
         )
       end
 
@@ -566,7 +566,7 @@ module Find
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site3),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site4, status: "suspended"),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :with_no_vacancies, site: site5),
-          ],
+          ]
         )
       end
 
@@ -620,7 +620,7 @@ module Find
               ["Course name (Z-A)", "course_desc", { "data-qa": "sort-form__options__descending_course" }],
               ["Training provider (A-Z)", "provider_asc", { "data-qa": "sort-form__options__ascending_provider" }],
               ["Training provider (Z-A)", "provider_desc", { "data-qa": "sort-form__options__descending_provider" }],
-            ],
+            ]
           )
         }
       end

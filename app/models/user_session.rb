@@ -39,7 +39,7 @@ class UserSession
       first_name: user_session["first_name"],
       last_name: user_session["last_name"],
       id_token: user_session["id_token"],
-      provider: user_session["provider"],
+      provider: user_session["provider"]
     )
   end
 

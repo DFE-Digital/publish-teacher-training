@@ -240,12 +240,12 @@ class Course < ApplicationRecord
 
   scope :with_provider_name, lambda { |provider_name|
     where(
-      provider_id: Provider.where(provider_name:),
+      provider_id: Provider.where(provider_name:)
     ).or(
       where(
         accredited_body_code: Provider.where(provider_name:)
-                                       .select(:provider_code),
-      ),
+                                       .select(:provider_code)
+      )
     )
   }
 
@@ -280,13 +280,13 @@ class Course < ApplicationRecord
   scope :can_sponsor_visa, lambda {
     where(
       program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
-      can_sponsor_student_visa: true,
+      can_sponsor_student_visa: true
     )
     .or(
       where(
         program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
-        can_sponsor_skilled_worker_visa: true,
-      ),
+        can_sponsor_skilled_worker_visa: true
+      )
     )
   }
 
@@ -919,7 +919,7 @@ private
       errors.add(
         :applications_open_from,
         "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
-        "A valid date must be between #{start_date} and #{end_date}",
+        "A valid date must be between #{start_date} and #{end_date}"
       )
     end
   end

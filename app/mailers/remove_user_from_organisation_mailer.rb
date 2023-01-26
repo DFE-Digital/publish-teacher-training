@@ -3,7 +3,7 @@ class RemoveUserFromOrganisationMailer < GovukNotifyRails::Mailer
     set_template(Settings.govuk_notify.remove_user_from_organisation_id)
 
     set_personalisation(
-      provider_name: provider.provider_name,
+      provider_name: provider.provider_name
     )
 
     mail(to: recipient.email)

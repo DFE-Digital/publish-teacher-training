@@ -19,7 +19,7 @@ describe GenerateAndSendMagicLinkService do
     end .to(
       have_enqueued_email(MagicLinkEmailMailer, :magic_link_email)
         .with { user.reload } # Use block to reload user after queue processing
-        .on_queue(:mailers),
+        .on_queue(:mailers)
     )
   end
 end

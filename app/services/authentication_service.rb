@@ -52,7 +52,7 @@ private
       algorithm: Settings.authentication.algorithm,
       audience: Settings.authentication.audience,
       issuer: Settings.authentication.issuer,
-      subject: Settings.authentication.subject,
+      subject: Settings.authentication.subject
     )
   end
 
@@ -163,7 +163,7 @@ private
       "sign_in_user_id",
       "welcome_email_date_utc",
       "invite_date_utc",
-      "accept_terms_date_utc",
+      "accept_terms_date_utc"
     ).merge("email_md5" => obfuscate_email(user.email))
   end
 

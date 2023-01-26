@@ -28,7 +28,7 @@ RSpec.describe Courses::CopyToProviderService do
     described_class.new(
       sites_copy_to_course: mocked_sites_copy_to_course_service,
       enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-      force:,
+      force:
     )
   end
 
@@ -81,7 +81,7 @@ RSpec.describe Courses::CopyToProviderService do
     service.execute(course:, new_provider:)
 
     expect(mocked_enrichments_copy_to_course_service).not_to have_received(:execute).with(
-      enrichment: nil,
+      enrichment: nil
     )
   end
 
@@ -106,7 +106,7 @@ RSpec.describe Courses::CopyToProviderService do
       service.execute(course:, new_provider:)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
-        enrichment: published_enrichment, new_course:,
+        enrichment: published_enrichment, new_course:
       )
     end
   end
@@ -123,7 +123,7 @@ RSpec.describe Courses::CopyToProviderService do
       service.execute(course:, new_provider:)
 
       expect(mocked_enrichments_copy_to_course_service).to have_received(:execute).with(
-        enrichment: draft_enrichment, new_course:,
+        enrichment: draft_enrichment, new_course:
       )
     end
   end
@@ -191,7 +191,7 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-        force:,
+        force:
       ).execute(course:, new_provider:)
     end
 
@@ -218,7 +218,7 @@ RSpec.describe Courses::CopyToProviderService do
       described_class.new(
         sites_copy_to_course: mocked_sites_copy_to_course_service,
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-        force:,
+        force:
       ).execute(course:, new_provider:)
     end
 

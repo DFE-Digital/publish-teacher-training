@@ -83,7 +83,7 @@ private
     course_confirmation_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
-      query: confirmation_params(provider),
+      query: confirmation_params(provider)
     )
   end
 

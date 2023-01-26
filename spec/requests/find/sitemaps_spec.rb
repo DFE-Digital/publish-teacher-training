@@ -13,7 +13,7 @@ module Find
         course_code:,
         provider:,
         changed_at:,
-        site_statuses: [site_status],
+        site_statuses: [site_status]
       )
     end
 
@@ -30,7 +30,7 @@ module Find
     it "renders sitemap" do
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq(
-        <<~XML,
+        <<~XML
           <?xml version="1.0" encoding="UTF-8"?>
           <urlset xmlns="http://www.google.com/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
             <url>

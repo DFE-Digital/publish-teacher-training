@@ -37,25 +37,25 @@ feature "Editing apprenticeship", { can_edit_current_and_next_cycles: false } do
 
   def given_there_is_fee_course
     given_a_course_exists(
-      funding_type: "fee",
+      funding_type: "fee"
     )
   end
 
   def given_there_is_apprenticeship_course
     given_a_course_exists(
-      funding_type: "apprenticeship",
+      funding_type: "apprenticeship"
     )
   end
 
   def when_i_visit_the_apprenticeship_edit_page
     apprenticeship_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
     skilled_worker_visa_sponsorship_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

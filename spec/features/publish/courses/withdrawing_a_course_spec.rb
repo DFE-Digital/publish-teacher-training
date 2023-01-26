@@ -56,7 +56,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_withdrawal_page
     withdrawal_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -90,7 +90,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_an_error_message
     expect(withdrawal_page.error_messages).to include(
-      "Enter the course code #{course.course_code} to withdraw this course",
+      "Enter the course code #{course.course_code} to withdraw this course"
     )
   end
 

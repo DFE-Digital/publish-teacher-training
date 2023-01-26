@@ -7,7 +7,7 @@ describe API::V3::DeserializableSite do
       site,
       class: {
         Site: API::V3::SerializableSite,
-      },
+      }
     ).to_json)["data"]
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }

@@ -44,7 +44,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers", :with_pub
         }],
         "jsonapi" => {
           "version" => "1.0",
-        },
+        }
       )
     end
   end

@@ -32,10 +32,10 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
             sites: [
               build(:site, location_name: "Site 1"),
               build(:site, location_name: "Site 2"),
-            ],
+            ]
           ),
-        ],
-      ),
+        ]
+      )
     )
   end
 
@@ -47,7 +47,7 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
     course_location_edit_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
-      course_code: course.course_code,
+      course_code: course.course_code
     )
   end
 
@@ -75,7 +75,7 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
 
   def then_i_should_see_an_error_message
     expect(course_location_edit_page).to have_content(
-      I18n.t("activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations"),
+      I18n.t("activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations")
     )
   end
 

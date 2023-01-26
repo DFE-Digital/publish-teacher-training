@@ -7,7 +7,7 @@ describe API::V3::DeserializableCourse do
       course,
       class: {
         Course: API::V3::SerializableCourse,
-      },
+      }
     ).to_json)["data"]
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }

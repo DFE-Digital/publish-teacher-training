@@ -6,7 +6,7 @@ module API
           render(
             jsonapi: SubjectArea.active.includes(subjects: [:financial_incentive]),
             include: params[:include],
-            class: API::Public::V1::SerializerService.call,
+            class: API::Public::V1::SerializerService.call
           )
         end
       end

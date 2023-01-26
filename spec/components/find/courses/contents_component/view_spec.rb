@@ -8,7 +8,7 @@ describe Find::Courses::ContentsComponent::View, type: :component do
       course = build(
         :course,
         provider:,
-        program_type: "higher_education_programme",
+        program_type: "higher_education_programme"
       ).decorate
 
       result = render_inline(described_class.new(course))
@@ -24,7 +24,7 @@ describe Find::Courses::ContentsComponent::View, type: :component do
       course = build(
         :course,
         provider:,
-        program_type: "scitt_programme",
+        program_type: "scitt_programme"
       ).decorate
 
       result = render_inline(described_class.new(course))
@@ -39,7 +39,7 @@ describe Find::Courses::ContentsComponent::View, type: :component do
 
       course = build(
         :course,
-        provider:,
+        provider:
       ).decorate
 
       result = render_inline(described_class.new(course))

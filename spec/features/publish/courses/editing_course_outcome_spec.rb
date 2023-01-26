@@ -46,7 +46,7 @@ feature "Editing course outcome", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_outcome_page
     outcome_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -68,13 +68,13 @@ feature "Editing course outcome", { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_shown_the_correct_qts_options
     expect(outcome_edit_page.qualification_names).to match_array(
-      ["QTS", "PGCE with QTS", "PGDE with QTS"],
+      ["QTS", "PGCE with QTS", "PGDE with QTS"]
     )
   end
 
   def then_i_am_shown_the_correct_non_qts_options
     expect(outcome_edit_page.qualification_names).to match_array(
-      ["PGCE only (without QTS)", "PGDE only (without QTS)"],
+      ["PGCE only (without QTS)", "PGDE only (without QTS)"]
     )
   end
 

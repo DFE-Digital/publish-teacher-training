@@ -6,7 +6,7 @@ shared_context "copy_courses" do
       :course,
       provider:,
       name: "Biology",
-      enrichments: [course2_enrichment],
+      enrichments: [course2_enrichment]
     )
   end
 

@@ -578,7 +578,7 @@ describe "GET v3 /subjects", :with_publish_constraint do
       ],
       "jsonapi" => {
         "version" => "1.0",
-      },
+      }
     )
   end
 
@@ -920,7 +920,7 @@ describe "GET v3 /subjects", :with_publish_constraint do
         ],
         "jsonapi" => {
           "version" => "1.0",
-        },
+        }
       )
     end
 

@@ -17,7 +17,7 @@ module Publish
 
           redirect_to details_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            recruitment_cycle.year,
+            recruitment_cycle.year
           )
         else
           render :edit

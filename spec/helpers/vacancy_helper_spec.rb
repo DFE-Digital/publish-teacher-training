@@ -12,7 +12,7 @@ describe VacancyHelper do
       vacancy_available_for_course_site_status?(
         course,
         site_status,
-        vacancy_study_mode,
+        vacancy_study_mode
       )
     end
 
@@ -28,7 +28,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: true,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -41,7 +41,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: true,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -54,7 +54,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: true,
+              part_time_vacancies?: true
             )
           end
 
@@ -67,7 +67,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -84,7 +84,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: true,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -97,7 +97,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: true,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -110,7 +110,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: true,
+              part_time_vacancies?: true
             )
           end
 
@@ -123,7 +123,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -138,7 +138,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: true,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -151,7 +151,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: true,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -164,7 +164,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: true,
+              part_time_vacancies?: true
             )
           end
 
@@ -177,7 +177,7 @@ describe VacancyHelper do
               :site_status,
               both_full_time_and_part_time_vacancies?: false,
               full_time_vacancies?: false,
-              part_time_vacancies?: false,
+              part_time_vacancies?: false
             )
           end
 
@@ -195,7 +195,7 @@ describe VacancyHelper do
             :site_status,
             both_full_time_and_part_time_vacancies?: false,
             full_time_vacancies?: true,
-            part_time_vacancies?: false,
+            part_time_vacancies?: false
           )
         end
 
@@ -208,7 +208,7 @@ describe VacancyHelper do
             :site_status,
             both_full_time_and_part_time_vacancies?: false,
             full_time_vacancies?: false,
-            part_time_vacancies?: false,
+            part_time_vacancies?: false
           )
         end
 
@@ -225,7 +225,7 @@ describe VacancyHelper do
             :site_status,
             both_full_time_and_part_time_vacancies?: false,
             full_time_vacancies?: false,
-            part_time_vacancies?: true,
+            part_time_vacancies?: true
           )
         end
 
@@ -238,7 +238,7 @@ describe VacancyHelper do
             :site_status,
             both_full_time_and_part_time_vacancies?: false,
             full_time_vacancies?: false,
-            part_time_vacancies?: false,
+            part_time_vacancies?: false
           )
         end
 

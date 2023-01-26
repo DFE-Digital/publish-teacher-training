@@ -20,7 +20,7 @@ module NotificationService
           :user_notification,
           user: subscribed_user,
           course_update: true,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -29,7 +29,7 @@ module NotificationService
           :user_notification,
           user: non_subscribed_user,
           course_update: false,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -38,7 +38,7 @@ module NotificationService
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_publish: true,
-          provider_code: other_accredited_body.provider_code,
+          provider_code: other_accredited_body.provider_code
         )
       end
       let(:self_accredited) { false }
@@ -57,7 +57,7 @@ module NotificationService
         described_class.call(
           course:,
           previous_subject_names:,
-          previous_course_name:,
+          previous_course_name:
         )
       end
 
@@ -93,7 +93,7 @@ module NotificationService
                 course:,
                 previous_subject_names:,
                 previous_course_name:,
-                recipient: subscribed_user,
+                recipient: subscribed_user
               ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
 

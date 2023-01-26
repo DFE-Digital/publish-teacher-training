@@ -12,7 +12,7 @@ describe ProviderUCASPreference do
                 coming_or_not: "Coming or Not",
                 coming_enrol: "Coming / Enrol",
                 not_coming: "Not coming",
-                no_response: "No response",
+                no_response: "No response"
               )
               .with_prefix("type_of_gt12")
     end
@@ -27,7 +27,7 @@ describe ProviderUCASPreference do
                 all: "Yes, required",
                 none: "No, not required",
                 my_programmes: "Yes - only my programmes",
-                accredited_programmes: "Yes - for accredited programmes only",
+                accredited_programmes: "Yes - for accredited programmes only"
               )
               .with_prefix("send_application_alerts_for")
     end

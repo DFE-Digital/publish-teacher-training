@@ -9,7 +9,7 @@ describe UserNotificationPreferences do
         :user_notification,
         user:,
         course_publish: preference,
-        course_update: preference,
+        course_update: preference
       )
     end
 
@@ -80,7 +80,7 @@ describe UserNotificationPreferences do
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body1.provider_code,
+        provider_code: accredited_body1.provider_code
       )
     end
 
@@ -90,7 +90,7 @@ describe UserNotificationPreferences do
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body2.provider_code,
+        provider_code: accredited_body2.provider_code
       )
     end
 
@@ -100,7 +100,7 @@ describe UserNotificationPreferences do
         user: other_user,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body1.provider_code,
+        provider_code: accredited_body1.provider_code
       )
     end
 
@@ -242,7 +242,7 @@ describe UserNotificationPreferences do
             .to contain_exactly(
               accredited_body1.provider_code,
               accredited_body2.provider_code,
-              accredited_body3.provider_code,
+              accredited_body3.provider_code
             )
         end
       end

@@ -102,8 +102,8 @@ class Provider < ApplicationRecord
   scope :by_provider_name, lambda { |provider_name|
     order(
       Arel.sql(
-        "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END",
-      ),
+        "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END"
+      )
     )
   }
 
@@ -234,7 +234,7 @@ class Provider < ApplicationRecord
   # less time rendering because there's less data to comb through.
   def self.include_courses_counts
     joins(
-      <<~EOSQL,
+      <<~EOSQL
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
@@ -247,7 +247,7 @@ class Provider < ApplicationRecord
 
   def self.include_accredited_courses_counts(provider_code)
     joins(
-      <<~EOSQL,
+      <<~EOSQL
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
@@ -305,7 +305,7 @@ class Provider < ApplicationRecord
 
   def next_available_course_code
     services[:generate_unique_course_code].execute(
-      existing_codes: courses.order(:course_code).pluck(:course_code),
+      existing_codes: courses.order(:course_code).pluck(:course_code)
     )
   end
 
@@ -372,7 +372,7 @@ private
     @services = Dry::Container.new
     @services.register(:generate_unique_course_code) do
       Providers::GenerateUniqueCourseCodeService.new(
-        generate_course_code_service: Providers::GenerateCourseCodeService.new,
+        generate_course_code_service: Providers::GenerateCourseCodeService.new
       )
     end
   end

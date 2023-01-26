@@ -11,7 +11,7 @@ module Publish
         :with_gcse_equivalency,
         enrichments: [build(:course_enrichment, :initial_draft)],
         sites: [create(:site, location_name: "location 1")],
-        provider:,
+        provider:
       )
     end
 

@@ -7,7 +7,7 @@ class TabNavigationPreview < ViewComponent::Preview
 
   def with_current_item_highlited
     with_current = items.prepend(
-      { name: "Training details", url: mock_link, current: true },
+      { name: "Training details", url: mock_link, current: true }
     )
 
     render(TabNavigation.new(items: with_current))

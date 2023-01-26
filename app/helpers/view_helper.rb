@@ -8,7 +8,7 @@ module ViewHelper
         data: {
           qa: "page-back",
         },
-      },
+      }
     )
   end
 

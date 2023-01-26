@@ -6,7 +6,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       course = build(
         :course,
         funding_type: "fee",
-        can_sponsor_student_visa: false,
+        can_sponsor_student_visa: false
       )
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
@@ -25,7 +25,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       course = build(
         :course,
         funding_type: "fee",
-        can_sponsor_student_visa: true,
+        can_sponsor_student_visa: true
       )
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
@@ -52,7 +52,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       course = build(
         :course,
         funding_type: "salary",
-        can_sponsor_skilled_worker_visa: true,
+        can_sponsor_skilled_worker_visa: true
       )
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
@@ -71,7 +71,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       course = build(
         :course,
         funding_type: "salary",
-        can_sponsor_skilled_worker_visa: false,
+        can_sponsor_skilled_worker_visa: false
       )
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
@@ -97,7 +97,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     before do
       course = build(
         :course,
-        funding_type: "apprenticeship",
+        funding_type: "apprenticeship"
       )
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end

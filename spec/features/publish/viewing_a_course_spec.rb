@@ -141,7 +141,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def when_i_click_the_view_rollover_link
     provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
     provider_courses_show_page.rolled_over_course_link.click
   end
@@ -159,7 +159,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_the_rollover_form_page
     rollover_form_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/rollover?")
     expect(page).to have_content "Are you sure you want to roll over the course into the next recruitment cycle?"
@@ -265,30 +265,30 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
         :user,
         providers: [
           create(:provider, sites: [build(:site)], courses: [course]),
-        ],
-      ),
+        ]
+      )
     )
   end
 
   def when_i_visit_the_course_page
     provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def then_i_should_see_the_description_of_the_unpublished_changes_course
     expect(provider_courses_show_page.about_course).to have_content(
-      course_enrichment_unpublished_changes.about_course,
+      course_enrichment_unpublished_changes.about_course
     )
   end
 
   def then_i_should_see_the_description_of_the_initial_draft_course
     expect(provider_courses_show_page.about_course).to have_content(
-      course_enrichment_initial_draft.about_course,
+      course_enrichment_initial_draft.about_course
     )
 
     expect(provider_courses_show_page.content_status).to have_content(
-      "Draft",
+      "Draft"
     )
   end
 
@@ -302,28 +302,28 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_the_description_of_the_fee_course
     expect(provider_courses_show_page.title).to have_content(
-      "#{course.name} (#{course.course_code})",
+      "#{course.name} (#{course.course_code})"
     )
     expect(provider_courses_show_page.about_course).to have_content(
-      course_enrichment.about_course,
+      course_enrichment.about_course
     )
     expect(provider_courses_show_page.interview_process).to have_content(
-      course_enrichment.interview_process,
+      course_enrichment.interview_process
     )
     expect(provider_courses_show_page.how_school_placements_work).to have_content(
-      course_enrichment.how_school_placements_work,
+      course_enrichment.how_school_placements_work
     )
     expect(provider_courses_show_page.course_length).to have_content(
-      "Up to 2 years",
+      "Up to 2 years"
     )
     expect(provider_courses_show_page.fee_uk_eu).to have_content(
-      "£9,250",
+      "£9,250"
     )
     expect(provider_courses_show_page.fee_international).to have_content(
-      "£14,000",
+      "£14,000"
     )
     expect(provider_courses_show_page.fee_details).to have_content(
-      course_enrichment.fee_details,
+      course_enrichment.fee_details
     )
 
     expect(provider_courses_show_page).not_to have_salary_details
@@ -332,29 +332,29 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
     expect(provider_courses_show_page).to have_gcse
 
     expect(provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities,
+      course_enrichment.personal_qualities
     )
     expect(provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements,
+      course_enrichment.other_requirements
     )
   end
 
   def then_i_should_see_the_description_of_the_salary_course
     expect(provider_courses_show_page.title).to have_content(
-      "#{course.name} (#{course.course_code})",
+      "#{course.name} (#{course.course_code})"
     )
 
     expect(provider_courses_show_page.about_course).to have_content(
-      course_enrichment.about_course,
+      course_enrichment.about_course
     )
     expect(provider_courses_show_page.interview_process).to have_content(
-      course_enrichment.interview_process,
+      course_enrichment.interview_process
     )
     expect(provider_courses_show_page.how_school_placements_work).to have_content(
-      course_enrichment.how_school_placements_work,
+      course_enrichment.how_school_placements_work
     )
     expect(provider_courses_show_page.course_length).to have_content(
-      "Up to 2 years",
+      "Up to 2 years"
     )
     expect(provider_courses_show_page).not_to have_fee_uk_eu
 
@@ -362,15 +362,15 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
     expect(provider_courses_show_page).not_to have_fee_details
     expect(provider_courses_show_page.salary_details).to have_content(
-      course_enrichment.salary_details,
+      course_enrichment.salary_details
     )
     expect(provider_courses_show_page).to have_degree
     expect(provider_courses_show_page).to have_gcse
     expect(provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities,
+      course_enrichment.personal_qualities
     )
     expect(provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements,
+      course_enrichment.other_requirements
     )
   end
 
@@ -392,7 +392,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
       :secondary,
       enrichments: [course_enrichment],
       funding_type: "fee",
-      subjects: [build(:secondary_subject, bursary_amount: 10_000)],
+      subjects: [build(:secondary_subject, bursary_amount: 10_000)]
     )
   end
 
@@ -406,7 +406,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_next_cycle_courses_page
     provider_courses_index_page.load(
-      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year,
+      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year
     )
   end
 

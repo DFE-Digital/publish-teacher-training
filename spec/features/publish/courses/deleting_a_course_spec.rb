@@ -44,13 +44,13 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_page
     provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def when_i_visit_the_delete_page
     delete_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -85,7 +85,7 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_an_error_message
     expect(delete_page.error_messages).to include(
-      "Enter the course code #{course.course_code} to delete this course",
+      "Enter the course code #{course.course_code} to delete this course"
     )
   end
 

@@ -14,7 +14,7 @@ describe API::V3::SerializableCourse do
       course,
       class: {
         Course: API::V3::SerializableCourse,
-      },
+      }
     ).to_json
   end
   let(:parsed_json) { JSON.parse(course_json) }
@@ -52,7 +52,7 @@ describe API::V3::SerializableCourse do
         },
         include: [
           :provider,
-        ],
+        ]
       ).to_json
     end
 
@@ -77,7 +77,7 @@ describe API::V3::SerializableCourse do
         },
         include: [
           :subjects,
-        ],
+        ]
       ).to_json
     end
 
@@ -96,7 +96,7 @@ describe API::V3::SerializableCourse do
         },
         include: [
           :accrediting_provider,
-        ],
+        ]
       ).to_json
     end
 
@@ -115,7 +115,7 @@ describe API::V3::SerializableCourse do
         },
         include: [
           :site_status,
-        ],
+        ]
       ).to_json
     end
 
@@ -134,7 +134,7 @@ describe API::V3::SerializableCourse do
         },
         include: [
           :site,
-        ],
+        ]
       ).to_json
     end
 

@@ -11,7 +11,7 @@ describe Courses::Fetch do
       expect(described_class.by_code(
         provider_code:,
         course_code:,
-        recruitment_cycle_year:,
+        recruitment_cycle_year:
       )).to eq(course)
     end
   end

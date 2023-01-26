@@ -8,7 +8,7 @@ describe CourseSitesUpdateEmailMailer do
       course:,
       recipient: user,
       previous_site_names:,
-      updated_site_names:,
+      updated_site_names:
     )
   end
   let(:previous_site_names) { ["location 1", "location 2"] }

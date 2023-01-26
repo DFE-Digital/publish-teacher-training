@@ -23,7 +23,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
         :course,
         provider:,
         name: "Biology",
-        enrichments: [course2_enrichment],
+        enrichments: [course2_enrichment]
       )
     end
 
@@ -64,7 +64,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
     scenario "missing fields do not get copied" do
       course_requirement_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code
       )
       course_requirement_edit_page.copy_content.copy(course3)
 
@@ -105,7 +105,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
   def when_i_visit_the_course_requirements_page
     course_requirement_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -139,7 +139,7 @@ feature "Editing course requirements", { can_edit_current_and_next_cycles: false
 
   def then_i_should_see_an_error_message
     expect(course_requirement_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_requirement_form.attributes.personal_qualities.too_long"),
+      I18n.t("activemodel.errors.models.publish/course_requirement_form.attributes.personal_qualities.too_long")
     )
   end
 

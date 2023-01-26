@@ -60,7 +60,7 @@ module Support
         :address2,
         :address3,
         :address4,
-        :postcode,
+        :postcode
       )
     end
 

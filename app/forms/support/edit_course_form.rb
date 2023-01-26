@@ -63,7 +63,7 @@ module Support
       Struct.new(:day, :month, :year).new(
         send("#{date_type}_day"),
         send("#{date_type}_month"),
-        send("#{date_type}_year"),
+        send("#{date_type}_year")
       )
     end
 

@@ -27,7 +27,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :published)],
       provider: create(:provider),
-      accrediting_provider:,
+      accrediting_provider:
     )
 
     create(:course, enrichments: [build(:course_enrichment, :published)], provider: create(:provider))
@@ -35,7 +35,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
 
   def when_i_visit_the_training_provider_index_page
     training_provider_index_page.load(
-      provider_code: accrediting_provider.provider_code, recruitment_cycle_year: accrediting_provider.recruitment_cycle_year,
+      provider_code: accrediting_provider.provider_code, recruitment_cycle_year: accrediting_provider.recruitment_cycle_year
     )
   end
 

@@ -12,7 +12,7 @@ module API
 
           render(
             jsonapi: found_providers,
-            class: { Provider: SerializableProviderSuggestion },
+            class: { Provider: SerializableProviderSuggestion }
           )
         end
 
@@ -20,7 +20,7 @@ module API
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year],
+            year: params[:recruitment_cycle_year]
           ) || RecruitmentCycle.current_recruitment_cycle
         end
 

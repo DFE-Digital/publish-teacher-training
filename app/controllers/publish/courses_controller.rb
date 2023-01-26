@@ -41,8 +41,8 @@ module Publish
         redirect_to(
           publish_provider_recruitment_cycle_courses_path(
             @course.provider_code,
-            @course.recruitment_cycle.year,
-          ),
+            @course.recruitment_cycle.year
+          )
         )
       else
         @errors = @course.errors.messages
@@ -76,7 +76,7 @@ module Publish
         redirect_to publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
-          @course.course_code,
+          @course.course_code
         )
       else
         @errors = format_publish_error_messages
@@ -94,7 +94,7 @@ module Publish
           .permit(
             policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
-            subjects_ids: [],
+            subjects_ids: []
           )
       else
         ActionController::Parameters.new({}).permit(:course)

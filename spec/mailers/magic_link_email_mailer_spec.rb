@@ -11,7 +11,7 @@ describe MagicLinkEmailMailer do
   context "sending an email to a user" do
     it "sends an email with the correct template" do
       expect(mail.govuk_notify_template).to(
-        eq(Settings.govuk_notify.magic_link_email_template_id),
+        eq(Settings.govuk_notify.magic_link_email_template_id)
       )
     end
 
@@ -21,7 +21,7 @@ describe MagicLinkEmailMailer do
 
     it "includes the first name in the personalisation" do
       expect(mail.govuk_notify_personalisation[:first_name]).to(
-        eq(user.first_name),
+        eq(user.first_name)
       )
     end
 
@@ -30,8 +30,8 @@ describe MagicLinkEmailMailer do
         eq(
           "#{Settings.base_url}/signin_with_magic_link" \
           "?email=#{user.email}" \
-          "&token=#{user.magic_link_token}",
-        ),
+          "&token=#{user.magic_link_token}"
+        )
       )
     end
   end

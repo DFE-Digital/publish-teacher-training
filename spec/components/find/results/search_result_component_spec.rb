@@ -6,12 +6,12 @@ module Find
       it "renders correct message" do
         course = build(
           :course,
-          degree_grade: :two_one,
+          degree_grade: :two_one
         )
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "An undergraduate degree at class 2:1 or above, or equivalent",
+          "An undergraduate degree at class 2:1 or above, or equivalent"
         )
       end
     end
@@ -22,12 +22,12 @@ module Find
           :course,
           funding_type: "salary",
           can_sponsor_student_visa: false,
-          can_sponsor_skilled_worker_visa: true,
+          can_sponsor_skilled_worker_visa: true
         )
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "Skilled Worker visas can be sponsored",
+          "Skilled Worker visas can be sponsored"
         )
       end
     end
@@ -38,12 +38,12 @@ module Find
           :course,
           funding_type: "fee",
           can_sponsor_student_visa: false,
-          can_sponsor_skilled_worker_visa: true,
+          can_sponsor_skilled_worker_visa: true
         )
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "Visas cannot be sponsored",
+          "Visas cannot be sponsored"
         )
       end
     end
@@ -54,7 +54,7 @@ module Find
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "Student visas can be sponsored",
+          "Student visas can be sponsored"
         )
       end
 
@@ -62,12 +62,12 @@ module Find
         course = build(
           :course,
           can_sponsor_student_visa: false,
-          can_sponsor_skilled_worker_visa: false,
+          can_sponsor_skilled_worker_visa: false
         )
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "Visas cannot be sponsored",
+          "Visas cannot be sponsored"
         )
       end
     end
@@ -76,7 +76,7 @@ module Find
       it "renders correct message" do
         course = build(
           :course,
-          accrediting_provider: build(:provider, :accredited_body, provider_name: "ACME SCITT A1"),
+          accrediting_provider: build(:provider, :accredited_body, provider_name: "ACME SCITT A1")
         )
         result = render_inline(described_class.new(course:))
 
@@ -88,7 +88,7 @@ module Find
       it "renders correct message" do
         course = build(
           :course,
-          accrediting_provider: nil,
+          accrediting_provider: nil
         )
         result = render_inline(described_class.new(course:))
 

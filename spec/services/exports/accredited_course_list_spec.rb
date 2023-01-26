@@ -9,8 +9,8 @@ module Exports
         create(
           :course,
           site_statuses: [create(:site_status, :full_time_vacancies, :findable)],
-          enrichments: [build(:course_enrichment, :published)],
-        ),
+          enrichments: [build(:course_enrichment, :published)]
+        )
       )
     end
 

@@ -93,13 +93,13 @@ private
 
     create(
       :user,
-      providers: [provider],
+      providers: [provider]
     )
   end
 
   def when_i_visit_the_course_gcse_requirements_page(course:)
     gcse_requirements_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -121,7 +121,7 @@ private
 
   def when_i_visit_the_course_page(course:)
     provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -179,7 +179,7 @@ private
     expect(page).to have_current_path publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle.year,
-      course.course_code,
+      course.course_code
     )
   end
 

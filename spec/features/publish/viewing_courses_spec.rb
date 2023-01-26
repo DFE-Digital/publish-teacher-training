@@ -28,14 +28,14 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
         :user,
         providers: [
           create(:provider, sites: [build(:site)], courses: [build(:course)]),
-        ],
-      ),
+        ]
+      )
     )
   end
 
   def when_i_visit_the_courses_page
     provider_courses_index_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 

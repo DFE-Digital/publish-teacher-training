@@ -31,7 +31,7 @@ describe "TestDataCache" do
           :course, :primary, :resulting_in_pgce_with_qts, :unpublished
         )
       end.to raise_error(
-        <<~ERR_MSG,
+        <<~ERR_MSG
           No predefined course for these traits: [:primary, :resulting_in_pgce_with_qts, :unpublished].
           Either add it to test_setup.rb or if it's used frequently, just create
           a FactoryBot factory instance.
@@ -43,7 +43,7 @@ describe "TestDataCache" do
       expect do
         TestDataCache.get(:foo, :bar, :raz)
       end.to raise_error(
-        <<~ERR_MSG,
+        <<~ERR_MSG
           Unknown model type 'foo' for traits '[:bar, :raz]'.
           You need to add 'foo' to TestSetup or use a standard FactoryBot factory.
         ERR_MSG

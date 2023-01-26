@@ -16,7 +16,7 @@ class CourseSitesUpdateEmailMailer < GovukNotifyRails::Mailer
       course_url: create_course_url(course),
       previous_site_names: previous_site_names.join(", "),
       updated_site_names: updated_site_names.join(", "),
-      sites_updated_datetime: gov_uk_format(course.updated_at),
+      sites_updated_datetime: gov_uk_format(course.updated_at)
     )
 
     mail(to: recipient.email)

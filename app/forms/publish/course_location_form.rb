@@ -30,7 +30,7 @@ module Publish
       NotificationService::CourseSitesUpdated.call(
         course:,
         previous_site_names:,
-        updated_site_names:,
+        updated_site_names:
       )
     end
 

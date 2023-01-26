@@ -33,7 +33,7 @@ module Publish
             :skip_languages_goto_confirmation,
             :accredited_body_code,
             :campaign_name,
-            :master_subject_id,
+            :master_subject_id
           )
           .permit(
             :start_date,
@@ -42,7 +42,7 @@ module Publish
             :month,
             :year,
             :can_sponsor_student_visa,
-            :can_sponsor_skilled_worker_visa,
+            :can_sponsor_skilled_worker_visa
           )
       end
 
@@ -65,7 +65,7 @@ module Publish
       def build_recruitment_cycle
         cycle_year = params.fetch(
           :recruitment_cycle_year,
-          Settings.current_recruitment_cycle_year,
+          Settings.current_recruitment_cycle_year
         )
 
         @recruitment_cycle = RecruitmentCycle.find_by(year: cycle_year)

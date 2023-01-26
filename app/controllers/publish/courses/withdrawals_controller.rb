@@ -20,7 +20,7 @@ module Publish
 
           redirect_to publish_provider_recruitment_cycle_courses_path(
             provider.provider_code,
-            recruitment_cycle.year,
+            recruitment_cycle.year
           )
         else
           render :edit
@@ -40,7 +40,7 @@ module Publish
 
         redirect_to publish_provider_recruitment_cycle_courses_path(
           provider.provider_code,
-          course.recruitment_cycle_year,
+          course.recruitment_cycle_year
         )
       end
 

@@ -48,7 +48,7 @@ def run(stdin: nil, stderr: nil)
 
   allow_any_instance_of(Binding).to(
     receive(:pry)
-      .and_raise("Cannot use pry with stubbed stdout, set WITHOUT_STUBBED_STDOUT"),
+      .and_raise("Cannot use pry with stubbed stdout, set WITHOUT_STUBBED_STDOUT")
   )
 
   yield

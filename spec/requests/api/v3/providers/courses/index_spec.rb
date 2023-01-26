@@ -142,7 +142,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             },
             "jsonapi" => {
               "version" => "1.0",
-            },
+            }
           )
         end
 

@@ -14,7 +14,7 @@ class GcseRowContentPreview < ViewComponent::Preview
       accept_english_gcse_equivalency: true,
       accept_maths_gcse_equivalency: true,
       accept_science_gcse_equivalency: true,
-      additional_gcse_equivalencies: "Geography",
+      additional_gcse_equivalencies: "Geography"
     )
 
     render(GcseRowContent.new(course: course.decorate))
@@ -27,7 +27,7 @@ class GcseRowContentPreview < ViewComponent::Preview
       accept_english_gcse_equivalency: false,
       accept_maths_gcse_equivalency: false,
       accept_science_gcse_equivalency: false,
-      additional_gcse_equivalencies: nil,
+      additional_gcse_equivalencies: nil
     )
 
     render(GcseRowContent.new(course: course.decorate))

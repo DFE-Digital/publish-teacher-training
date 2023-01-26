@@ -6,7 +6,7 @@ class WordsCountValidator < ActiveModel::EachValidator
 
     record.errors.add(
       attribute,
-      message: options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}",
+      message: options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}"
     )
   end
 

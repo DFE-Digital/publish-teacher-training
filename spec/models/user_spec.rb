@@ -229,7 +229,7 @@ describe User do
           :user_notification,
           user: subscribed_user,
           course_update: true,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -238,7 +238,7 @@ describe User do
           :user_notification,
           user: non_subscribed_user,
           course_update: false,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -247,7 +247,7 @@ describe User do
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_publish: true,
-          provider_code: other_accredited_body.provider_code,
+          provider_code: other_accredited_body.provider_code
         )
       end
 
@@ -262,7 +262,7 @@ describe User do
           :user_notification,
           user: subscribed_user,
           course_publish: true,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -271,7 +271,7 @@ describe User do
           :user_notification,
           user: non_subscribed_user,
           course_publish: false,
-          provider_code: accredited_body.provider_code,
+          provider_code: accredited_body.provider_code
         )
       end
 
@@ -280,7 +280,7 @@ describe User do
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_update: true,
-          provider_code: other_accredited_body.provider_code,
+          provider_code: other_accredited_body.provider_code
         )
       end
 

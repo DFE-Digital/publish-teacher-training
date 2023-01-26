@@ -5,12 +5,12 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     it "renders correct message" do
       course = build(
         :course,
-        accept_pending_gcse: true,
+        accept_pending_gcse: true
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "We’ll consider candidates with pending GCSEs",
+                               "We’ll consider candidates with pending GCSEs"
                              )
     end
   end
@@ -19,12 +19,12 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     it "renders correct message" do
       course = build(
         :course,
-        accept_pending_gcse: false,
+        accept_pending_gcse: false
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "We will not consider candidates with pending GCSEs.",
+                               "We will not consider candidates with pending GCSEs."
                              )
     end
   end
@@ -34,15 +34,15 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       course = build(
         :course,
         provider: build(:provider, provider_code: "ABC"),
-        level: "primary",
+        level: "primary"
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "Grade 4 (C) or above in English, maths and science, or equivalent qualification.",
+                               "Grade 4 (C) or above in English, maths and science, or equivalent qualification."
                              )
       expect(result.text).not_to include(
-                                   "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
+                                   "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
                                  )
     end
   end
@@ -52,7 +52,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       raw_course = build(
         :course,
         provider: build(:provider, provider_code: "U80"),
-        level: "secondary",
+        level: "secondary"
       )
 
       course = raw_course.decorate
@@ -60,10 +60,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "Grade 5 (C) or above in English and maths, or equivalent qualification.",
+                               "Grade 5 (C) or above in English and maths, or equivalent qualification."
                              )
       expect(result.text).to include(
-                               "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way",
+                               "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
                              )
     end
 
@@ -73,14 +73,14 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
           :course,
           :engineers_teach_physics,
           :secondary,
-          provider: build(:provider, provider_code: "U80"),
+          provider: build(:provider, provider_code: "U80")
         )
 
         course = raw_course.decorate
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          "Your degree subject should be in engineering, materials science or a related subject, otherwise you’ll need to prove your subject knowledge in some other way.",
+          "Your degree subject should be in engineering, materials science or a related subject, otherwise you’ll need to prove your subject knowledge in some other way."
         )
       end
     end
@@ -92,13 +92,13 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
           :course,
           provider: build(:provider),
           accrediting_provider:,
-          level: "secondary",
+          level: "secondary"
         )
 
         result = render_inline(described_class.new(course: course.decorate))
 
         expect(result.text).to include(
-                                 "Grade 5 (C) or above in English and maths, or equivalent qualification.",
+                                 "Grade 5 (C) or above in English and maths, or equivalent qualification."
                                )
       end
     end
@@ -111,12 +111,12 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         accept_gcse_equivalency: false,
         accept_english_gcse_equivalency: false,
         accept_maths_gcse_equivalency: false,
-        accept_science_gcse_equivalency: false,
+        accept_science_gcse_equivalency: false
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "We will not consider candidates who need to take a GCSE equivalency test.",
+                               "We will not consider candidates who need to take a GCSE equivalency test."
                              )
     end
   end
@@ -128,12 +128,12 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         accept_gcse_equivalency: true,
         accept_english_gcse_equivalency: false,
         accept_maths_gcse_equivalency: true,
-        accept_science_gcse_equivalency: true,
+        accept_science_gcse_equivalency: true
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "We’ll consider candidates who need to take a GCSE equivalency test in maths or science",
+                               "We’ll consider candidates who need to take a GCSE equivalency test in maths or science"
                              )
     end
   end
@@ -144,15 +144,15 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         :course,
         degree_grade: "two_two",
         additional_degree_subject_requirements: true,
-        degree_subject_requirements: "Certificate must be printed on green paper.",
+        degree_subject_requirements: "Certificate must be printed on green paper."
       )
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               "2:2 or above, or equivalent.",
+                               "2:2 or above, or equivalent."
                              )
       expect(result.text).to include(
-                               "Certificate must be printed on green paper.",
+                               "Certificate must be printed on green paper."
                              )
     end
   end

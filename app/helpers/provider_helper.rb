@@ -51,8 +51,8 @@ private
           "Select if visas can be sponsored",
           visas_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            provider.recruitment_cycle_year,
-          ),
+            provider.recruitment_cycle_year
+          )
         )
     end
   end

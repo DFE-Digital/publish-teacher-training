@@ -11,7 +11,7 @@ module GeocoderHelper
           state: "England",
           state_code: "England",
           country: "United Kingdom",
-          country_code: "gb",
+          country_code: "gb"
         ).tap do |loc|
           loc.district = "Hampshire"
           loc.success = true
@@ -31,7 +31,7 @@ module GeocoderHelper
           state_code: "England",
           country: "United Kingdom",
           country_code: "UK",
-          success: true,
+          success: true
         ).tap do |loc|
           loc.district = "Greater London"
           loc.success = true
@@ -53,7 +53,7 @@ module GeocoderHelper
           "country_code" => "UK",
           "address_components" => [{ long_name: "England" }],
         },
-      ],
+      ]
     )
 
     Geocoder::Lookup::Test.add_stub(
@@ -68,7 +68,7 @@ module GeocoderHelper
           "country_code" => "UK",
           "address_components" => [{ long_name: "England" }],
         },
-      ],
+      ]
     )
 
     Geocoder::Lookup::Test.add_stub(
@@ -83,12 +83,12 @@ module GeocoderHelper
           "country_code" => "UK",
           "address_components" => [{ long_name: "England" }],
         },
-      ],
+      ]
     )
 
     Geocoder::Lookup::Test.add_stub(
       "Unknown location",
-      [],
+      []
     )
   end
 end

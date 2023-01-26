@@ -15,7 +15,7 @@ describe GcseRowContent, type: :component do
         accept_english_gcse_equivalency: nil,
         accept_maths_gcse_equivalency: nil,
         accept_science_gcse_equivalency: nil,
-        additional_gcse_equivalencies: nil,
+        additional_gcse_equivalencies: nil
       )
 
       render_inline(described_class.new(course: course.decorate))
@@ -25,8 +25,8 @@ describe GcseRowContent, type: :component do
         href: Rails.application.routes.url_helpers.gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle.year,
-          course.course_code,
-        ),
+          course.course_code
+        )
       )).to be true
     end
   end
@@ -38,7 +38,7 @@ describe GcseRowContent, type: :component do
           :course,
           provider:,
           accept_pending_gcse: true,
-          accept_gcse_equivalency: true,
+          accept_gcse_equivalency: true
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -51,7 +51,7 @@ describe GcseRowContent, type: :component do
           :course,
           provider:,
           accept_pending_gcse: false,
-          accept_gcse_equivalency: true,
+          accept_gcse_equivalency: true
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -67,7 +67,7 @@ describe GcseRowContent, type: :component do
           provider:,
           accept_pending_gcse: true,
           accept_gcse_equivalency: true,
-          level: "primary",
+          level: "primary"
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -83,7 +83,7 @@ describe GcseRowContent, type: :component do
           provider:,
           accept_pending_gcse: true,
           accept_gcse_equivalency: true,
-          level: "secondary",
+          level: "secondary"
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -97,7 +97,7 @@ describe GcseRowContent, type: :component do
         course = build(
           :course,
           provider:,
-          level: "Further education",
+          level: "Further education"
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -114,7 +114,7 @@ describe GcseRowContent, type: :component do
           provider:,
           accept_pending_gcse: true,
           accept_gcse_equivalency: false,
-          additional_gcse_equivalencies: nil,
+          additional_gcse_equivalencies: nil
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -130,7 +130,7 @@ describe GcseRowContent, type: :component do
           provider:,
           accept_pending_gcse: true,
           accept_gcse_equivalency: true,
-          accept_english_gcse_equivalency: true,
+          accept_english_gcse_equivalency: true
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -147,7 +147,7 @@ describe GcseRowContent, type: :component do
           accept_pending_gcse: true,
           accept_gcse_equivalency: true,
           accept_english_gcse_equivalency: true,
-          accept_science_gcse_equivalency: true,
+          accept_science_gcse_equivalency: true
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -165,7 +165,7 @@ describe GcseRowContent, type: :component do
           accept_gcse_equivalency: true,
           accept_english_gcse_equivalency: true,
           accept_maths_gcse_equivalency: true,
-          accept_science_gcse_equivalency: true,
+          accept_science_gcse_equivalency: true
         )
 
         render_inline(described_class.new(course: course.decorate))
@@ -181,7 +181,7 @@ describe GcseRowContent, type: :component do
           provider:,
           accept_pending_gcse: true,
           accept_gcse_equivalency: true,
-          additional_gcse_equivalencies: "Geography",
+          additional_gcse_equivalencies: "Geography"
         )
 
         render_inline(described_class.new(course: course.decorate))

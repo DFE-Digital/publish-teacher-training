@@ -13,7 +13,7 @@ describe Contact do
                 utt: "utt",
                 web_link: "web_link",
                 fraud: "fraud",
-                finance: "finance",
+                finance: "finance"
               )
               .with_suffix("contact")
     end

@@ -4,7 +4,7 @@ describe Courses::AssignSubjectsService do
   subject do
     described_class.call(
       course:,
-      subject_ids:,
+      subject_ids:
     )
   end
 

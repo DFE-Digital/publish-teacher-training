@@ -66,7 +66,7 @@ module NotificationService
                     course:,
                     user:,
                     datetime: DateTime.now,
-                    vacancies_filled: true,
+                    vacancies_filled: true
                   ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later)
         end

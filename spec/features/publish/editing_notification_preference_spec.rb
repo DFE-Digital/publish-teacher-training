@@ -68,7 +68,7 @@ feature "Opting into notifications" do
 
   def then_i_should_see_an_error_message
     expect(course_study_mode_edit_page.error_messages).to include(
-      "Please select one option",
+      "Please select one option"
     )
   end
 

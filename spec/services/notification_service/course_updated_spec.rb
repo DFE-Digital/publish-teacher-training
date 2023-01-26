@@ -19,7 +19,7 @@ module NotificationService
         age_range_in_years: "3_to_7",
         accrediting_provider: accredited_body,
         english: "expect_to_achieve_before_training_begins",
-        maths: "expect_to_achieve_before_training_begins",
+        maths: "expect_to_achieve_before_training_begins"
       )
     end
 
@@ -72,7 +72,7 @@ module NotificationService
                 attribute_name: "age_range_in_years",
                 original_value: "3_to_7",
                 updated_value: "7_to_14",
-                recipient: user,
+                recipient: user
               ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
           end
@@ -91,7 +91,7 @@ module NotificationService
                 attribute_name:,
                 original_value: "expect_to_achieve_before_training_begins",
                 updated_value: "must_have_qualification_at_application_time",
-                recipient: subscribed_user1,
+                recipient: subscribed_user1
               ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
           end

@@ -18,7 +18,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
       previous_subjects: format(previous_subject_names),
       updated_subjects: format(course.subjects.map(&:subject_name)),
       previous_course_name:,
-      updated_course_name: course.name,
+      updated_course_name: course.name
     )
 
     mail(to: recipient.email)

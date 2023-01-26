@@ -9,14 +9,14 @@ module IntegrationSeeds
         :organisation,
         :with_anonymised_data,
         name: "Test Organisation",
-        org_id: organisation_id,
+        org_id: organisation_id
       )
 
       test_user = create_user(
         email: "becomingateacher+integration-tests@digital.education.gov.uk",
         first_name: "integration",
         last_name: "tests",
-        state: "transitioned",
+        state: "transitioned"
       )
       add_user_to_organisation test_user, organisation
 
@@ -25,7 +25,7 @@ module IntegrationSeeds
         first_name: "admin",
         last_name: "admin",
         state: "transitioned",
-        admin: true,
+        admin: true
       )
       add_user_to_organisation admin_user, organisation
 
@@ -57,7 +57,7 @@ module IntegrationSeeds
           # email: "becomingateacher+integration-tests+#{provider_code}@digital.education.gov.uk",
 
           train_with_us: "Train With Us #{provider_code}",
-          train_with_disability: "Train With Disability #{provider_code}",
+          train_with_disability: "Train With Disability #{provider_code}"
         )
       end
 
@@ -74,7 +74,7 @@ module IntegrationSeeds
           address3: "#{provider_code} Westminster",
           address4: "#{provider_code} London",
           postcode: "SW1 #{provider_code}",
-          region_code: "london",
+          region_code: "london"
         )
       end
 
@@ -90,7 +90,7 @@ module IntegrationSeeds
           name: "Integrated Testing Course #{course_code}",
           age_range_in_years: "7_to_11",
           level: :secondary,
-          subjects: [subject_computing],
+          subjects: [subject_computing]
         )
       end
 

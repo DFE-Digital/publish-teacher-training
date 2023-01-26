@@ -18,7 +18,7 @@ module Find
           subjects: [],
           number_of_courses_string: "No courses",
           no_results_found?: true,
-          has_results?: false,
+          has_results?: false
         )
       end
 
@@ -26,7 +26,7 @@ module Find
 
       it 'renders a "No courses found" message when there are no results' do
         component = render_inline(
-          described_class.new(results: results_view, courses:),
+          described_class.new(results: results_view, courses:)
         )
 
         expect(component.text).to include("No courses found")
@@ -34,7 +34,7 @@ module Find
 
       it "renders the inset text" do
         component = render_inline(
-          described_class.new(results: results_view, courses:),
+          described_class.new(results: results_view, courses:)
         )
         expect(component.text).to include("event near you")
       end
@@ -51,7 +51,7 @@ module Find
           no_results_found?: false,
           has_results?: true,
           has_sites?: true,
-          location_filter?: false,
+          location_filter?: false
         )
       end
 
@@ -65,14 +65,14 @@ module Find
         allow(Results::SearchResultComponent).to receive(:new).and_return(plain: "")
 
         component = render_inline(
-          described_class.new(results: results_view, courses:),
+          described_class.new(results: results_view, courses:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
             has_sites: true,
-            filtered_by_location: false,
+            filtered_by_location: false
           )
         end
 
@@ -81,14 +81,14 @@ module Find
 
       it "renders the inset text" do
         component = render_inline(
-          described_class.new(results: results_view, courses:),
+          described_class.new(results: results_view, courses:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
             has_sites: true,
-            filtered_by_location: false,
+            filtered_by_location: false
           )
         end
         expect(component.text).to include("event near you")

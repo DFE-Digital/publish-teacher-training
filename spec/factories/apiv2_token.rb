@@ -8,7 +8,7 @@ class JWTStrategy
     JWT.encode(
       data(evaluation),
       evaluation.object.secret,
-      evaluation.object.algorithm,
+      evaluation.object.algorithm
     )
   end
 
@@ -40,7 +40,7 @@ jwt = Struct.new(
   :audience,
   :issuer,
   :subject,
-  :now,
+  :now
 )
 
 FactoryBot.define do

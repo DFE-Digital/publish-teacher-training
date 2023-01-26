@@ -19,20 +19,20 @@ module BigQuery
         request_user_agent: request.user_agent,
         request_query: query_to_kv_pairs(request.query_string),
         request_referer: request.referer,
-        anonymised_user_agent_and_ip: anonymised_user_agent_and_ip(request),
+        anonymised_user_agent_and_ip: anonymised_user_agent_and_ip(request)
       )
     end
 
     def with_response_details(response)
       event_hash.merge!(
         response_content_type: response.content_type,
-        response_status: response.status,
+        response_status: response.status
       )
     end
 
     def with_user(user)
       event_hash.merge!(
-        user_id: user&.id,
+        user_id: user&.id
       )
     end
 

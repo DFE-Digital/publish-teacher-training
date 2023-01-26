@@ -35,14 +35,14 @@ private
         :user,
         providers: [
           create(:provider, :accredited_body, sites: [build(:site), build(:site)]),
-        ],
-      ),
+        ]
+      )
     )
   end
 
   def when_i_visit_the_courses_page
     provider_courses_index_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 
@@ -79,7 +79,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -109,7 +109,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -123,7 +123,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -137,7 +137,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -151,7 +151,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -165,7 +165,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -179,7 +179,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -195,7 +195,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params
@@ -209,7 +209,7 @@ private
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
-      expected_query_params: course_creation_params,
+      expected_query_params: course_creation_params
     )
 
     course_creation_params

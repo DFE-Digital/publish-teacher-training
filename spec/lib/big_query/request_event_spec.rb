@@ -28,7 +28,7 @@ module BigQuery
             user_agent: "browser-stuff",
             query_string: "test=one&other-test=two",
             referer: "https://www.example.com",
-            remote_ip: "120.0.0.1",
+            remote_ip: "120.0.0.1"
           )
         end
         let(:sha2_hashed_browser_stuff_plus_ip) { "03c72584280cb752f8bf5e662a55ef1adafb3f628812bb9f08fe32dd1e0f6352" }
@@ -57,7 +57,7 @@ module BigQuery
         let(:response) do
           double(
             content_type: "words",
-            status: 200,
+            status: 200
           )
         end
 
@@ -77,7 +77,7 @@ module BigQuery
         context "user is present" do
           let(:user) do
             double(
-              id: 1,
+              id: 1
             )
           end
 

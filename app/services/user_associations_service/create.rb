@@ -53,7 +53,7 @@ module UserAssociationsService
       return if user_notification_preferences.updated_at.nil?
 
       user_notification_preferences.update(
-        enable_notifications: user_notification_preferences.enabled,
+        enable_notifications: user_notification_preferences.enabled
       )
     end
   end

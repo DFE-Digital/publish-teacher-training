@@ -16,14 +16,14 @@ module Publish
 
       course.update(
         additional_degree_subject_requirements:,
-        degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil,
+        degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil
       )
     end
 
     def self.build_from_course(course)
       new(
         additional_degree_subject_requirements: course.additional_degree_subject_requirements,
-        degree_subject_requirements: course.degree_subject_requirements,
+        degree_subject_requirements: course.degree_subject_requirements
       )
     end
 

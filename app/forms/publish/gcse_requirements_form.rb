@@ -23,7 +23,7 @@ module Publish
         accept_english_gcse_equivalency:,
         accept_maths_gcse_equivalency:,
         accept_science_gcse_equivalency:,
-        additional_gcse_equivalencies:,
+        additional_gcse_equivalencies:
       )
     end
 
@@ -35,7 +35,7 @@ module Publish
         accept_maths_gcse_equivalency: course.accept_maths_gcse_equivalency,
         accept_science_gcse_equivalency: course.accept_science_gcse_equivalency,
         additional_gcse_equivalencies: course.additional_gcse_equivalencies,
-        level: course.level,
+        level: course.level
       )
     end
 

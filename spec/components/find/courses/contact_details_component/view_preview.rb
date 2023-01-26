@@ -23,7 +23,7 @@ module Find
           course = Course.new(provider: Provider.new(
             email: "learn@learsomuch.com",
             telephone: "0207 123 1234",
-            website: "www.gov.uk",
+            website: "www.gov.uk"
           )).decorate
           render Find::Courses::ContactDetailsComponent::View.new(course)
         end

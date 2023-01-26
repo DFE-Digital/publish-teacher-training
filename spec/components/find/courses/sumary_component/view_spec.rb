@@ -19,7 +19,7 @@ module Find
             "Qualification",
             "Date you can apply from",
             "Date course starts",
-            "Website",
+            "Website"
           )
         end
 
@@ -28,13 +28,13 @@ module Find
             course = build(
               :course,
               provider: build(:provider),
-              accrediting_provider: build(:provider),
+              accrediting_provider: build(:provider)
             ).decorate
 
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include(
-                                     "Accredited body",
+                                     "Accredited body"
                                    )
           end
         end
@@ -46,13 +46,13 @@ module Find
             course = build(
               :course,
               provider:,
-              accrediting_provider: provider,
+              accrediting_provider: provider
             ).decorate
 
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include(
-                                         "Accredited body",
+                                         "Accredited body"
                                        )
           end
         end
@@ -62,7 +62,7 @@ module Find
             course = build(
               :course,
               :secondary,
-              provider: build(:provider),
+              provider: build(:provider)
             ).decorate
 
             result = render_inline(described_class.new(course))
@@ -75,7 +75,7 @@ module Find
           it "render the age range only" do
             course = build(
               :course,
-              provider: build(:provider),
+              provider: build(:provider)
             ).decorate
 
             result = render_inline(described_class.new(course))

@@ -55,7 +55,7 @@ feature "Accepting terms", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_an_error_message
     expect(course_study_mode_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted"),
+      I18n.t("activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted")
     )
   end
 end

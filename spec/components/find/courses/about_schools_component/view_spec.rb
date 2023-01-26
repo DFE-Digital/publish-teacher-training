@@ -81,7 +81,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
           provider_type: "scitt",
           website: "https://scitt.org",
           address1: "1 Long Rd",
-          postcode: "E1 ABC",
+          postcode: "E1 ABC"
         )
 
         course = build(:course,
@@ -117,7 +117,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
           provider_type: "scitt",
           website: "https://scitt.org",
           address1: "1 Long Rd",
-          postcode: "E1 ABC",
+          postcode: "E1 ABC"
         )
 
         course = build(:course,

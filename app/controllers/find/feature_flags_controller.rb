@@ -11,7 +11,7 @@ module Find
       if Rails.env.production?
         SlackNotificationJob.perform_now(
           ":flags: Feature ‘#{feature_name}‘ was #{action}d",
-          find_feature_flags_path,
+          find_feature_flags_path
         )
       end
 

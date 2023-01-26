@@ -7,7 +7,7 @@ class VacancyStatusDeterminationService
     new(
       vacancy_status_full_time:,
       vacancy_status_part_time:,
-      course:,
+      course:
     ).vacancy_status
   end
 

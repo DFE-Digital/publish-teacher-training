@@ -22,8 +22,8 @@ module Publish
           redirect_to(
             search_new_publish_provider_recruitment_cycle_courses_accredited_body_path(
               query: @accredited_body,
-              course: course_params,
-            ),
+              course: course_params
+            )
           )
         else
           params[:course][:accredited_body_code] = @autocompleted_provider_code if @autocompleted_provider_code.present?
@@ -86,8 +86,8 @@ module Publish
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
-            query: update_course_params[:accredited_body],
-          ),
+            query: update_course_params[:accredited_body]
+          )
         )
       end
 
@@ -97,8 +97,8 @@ module Publish
           details_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
+            @course.course_code
+          )
         )
       end
 
@@ -136,7 +136,7 @@ module Publish
         params.require(:course).permit(
           :autocompleted_provider_code,
           :accredited_body_code,
-          :accredited_body,
+          :accredited_body
         )
       end
 

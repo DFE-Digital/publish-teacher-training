@@ -27,8 +27,8 @@ describe Header do
       render_inline(
         described_class.new(
           service_name: "test",
-          current_user: build(:user, :admin),
-        ),
+          current_user: build(:user, :admin)
+        )
       )
 
       expect(component).to have_text("Sign out")

@@ -19,13 +19,13 @@ module BigQuery
       raise "Invalid analytics event type" unless EVENT_TYPES.include?(type.to_s)
 
       @event_hash.merge!(
-        event_type: type,
+        event_type: type
       )
     end
 
     def with_entity_table_name(table_name)
       @event_hash.merge!(
-        entity_table_name: table_name,
+        entity_table_name: table_name
       )
     end
 

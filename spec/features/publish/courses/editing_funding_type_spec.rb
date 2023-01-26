@@ -65,7 +65,7 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
     given_a_course_exists(
       funding_type: "fee",
       can_sponsor_student_visa: false,
-      accrediting_provider:,
+      accrediting_provider:
     )
   end
 
@@ -73,19 +73,19 @@ feature "Editing funding type", { can_edit_current_and_next_cycles: false } do
     given_a_course_exists(
       funding_type: "salary",
       can_sponsor_skilled_worker_visa: false,
-      accrediting_provider:,
+      accrediting_provider:
     )
   end
 
   def when_i_visit_the_funding_type_edit_page
     funding_type_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
     skilled_worker_visa_sponsorship_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

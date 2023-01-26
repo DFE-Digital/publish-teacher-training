@@ -40,7 +40,7 @@ module Publish
       AccreditedBody.new(
         provider_name:,
         provider_code:,
-        description: params_description(provider_code) || description,
+        description: params_description(provider_code) || description
       )
     end
 

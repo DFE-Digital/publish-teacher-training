@@ -4,7 +4,7 @@ describe FindConstraint do
   let(:request) do
     double(
       :request,
-      host:,
+      host:
     )
   end
 

@@ -17,13 +17,13 @@ private
       :total_count,
       :limit_value,
       :current_page,
-      :total_pages,
+      :total_pages
     ).new(
       Provider.all.page(1),
       total_count,
       page_size,
       current_page,
-      (total_count.to_f / page_size).ceil,
+      (total_count.to_f / page_size).ceil
     )
   end
 end

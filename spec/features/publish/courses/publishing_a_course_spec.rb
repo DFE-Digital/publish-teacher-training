@@ -48,14 +48,14 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
     given_a_course_exists(
       :with_gcse_equivalency,
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: "location 1")],
+      sites: [create(:site, location_name: "location 1")]
     )
   end
 
   def and_there_is_a_draft_course
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: "location 1")],
+      sites: [create(:site, location_name: "location 1")]
     )
   end
 
@@ -65,7 +65,7 @@ feature "Publishing courses", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_page
     provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

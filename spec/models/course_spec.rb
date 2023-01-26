@@ -11,7 +11,7 @@ describe Course do
       level: "secondary",
       name: "Biology",
       course_code: "3X9F",
-      subjects: [find_or_create(:secondary_subject, :biology)],
+      subjects: [find_or_create(:secondary_subject, :biology)]
     )
   end
 
@@ -254,7 +254,7 @@ describe Course do
         create(
           :course,
           name: "Course B",
-          provider: provider_a,
+          provider: provider_a
         )
       end
 
@@ -263,7 +263,7 @@ describe Course do
         create(
           :course,
           name: "Course C",
-          provider: provider_b,
+          provider: provider_b
         )
       end
 
@@ -271,7 +271,7 @@ describe Course do
         create(
           :course,
           name: "Course D",
-          provider: provider_b,
+          provider: provider_b
         )
       end
 
@@ -800,7 +800,7 @@ describe Course do
           enrichments:,
           site_statuses: [
             build(:site_status, :findable, site: build(:site, longitude: 0, latitude: 0)),
-          ],
+          ]
         )
       end
 
@@ -810,7 +810,7 @@ describe Course do
           enrichments:,
           site_statuses: [
             build(:site_status, :findable, site: build(:site, longitude: 32, latitude: 32)),
-          ],
+          ]
         )
       end
 
@@ -1971,7 +1971,7 @@ describe Course do
     it "Delegate the method to the service" do
       expect(course).to delegate_method_to_service(
         :content_status,
-        "Courses::ContentStatusService",
+        "Courses::ContentStatusService"
       ).with_arguments(enrichment: enrichment1, recruitment_cycle:)
     end
   end
@@ -2344,7 +2344,7 @@ describe Course do
       expect(Course.get_by_codes(
         course.recruitment_cycle.year,
         course.provider.provider_code,
-        course.course_code,
+        course.course_code
       )).to eq course
     end
   end
@@ -2414,7 +2414,7 @@ describe Course do
           create(:site_status, :running, :published, site:, course:)
 
           expect { course.discard }.to raise_error(
-                                         "You cannot delete the running course #{course}",
+                                         "You cannot delete the running course #{course}"
                                        )
         end
       end
@@ -2632,10 +2632,10 @@ describe Course do
       expect(course).to(
         delegate_method_to_service(
           :assignable_master_subjects,
-          "Courses::AssignableMasterSubjectService",
+          "Courses::AssignableMasterSubjectService"
         ).with_arguments(
-          course:,
-        ),
+          course:
+        )
       )
     end
   end
@@ -2645,10 +2645,10 @@ describe Course do
       expect(course).to(
         delegate_method_to_service(
           :assignable_subjects,
-          "Courses::AssignableSubjectService",
+          "Courses::AssignableSubjectService"
         ).with_arguments(
-          course:,
-        ),
+          course:
+        )
       )
     end
   end
@@ -2693,7 +2693,7 @@ describe Course do
           level: "primary",
           name: "Primary with english",
           course_code: "AAAA",
-          subjects: [find_or_create(:primary_subject, :primary_with_english)],
+          subjects: [find_or_create(:primary_subject, :primary_with_english)]
         )
       end
 
@@ -2709,7 +2709,7 @@ describe Course do
           level: "secondary",
           name: "Classics",
           course_code: "AAAA",
-          subjects: [find_or_create(:secondary_subject, :classics)],
+          subjects: [find_or_create(:secondary_subject, :classics)]
         )
       end
 
@@ -2726,7 +2726,7 @@ describe Course do
         level: "secondary",
         name: "Classics",
         course_code: "AAAA",
-        enrichments: [enrichment],
+        enrichments: [enrichment]
       ).rollable?
     end
 

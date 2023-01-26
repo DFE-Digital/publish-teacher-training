@@ -5,7 +5,7 @@ describe Providers::GenerateUniqueCourseCodeService do
   let(:mocked_gen_code_service) { double }
   let(:service) do
     described_class.new(
-      generate_course_code_service: mocked_gen_code_service,
+      generate_course_code_service: mocked_gen_code_service
     )
   end
 

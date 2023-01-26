@@ -12,7 +12,7 @@ describe CourseSubjectsUpdatedEmailMailer do
       course:,
       previous_subject_names: [previous_subject.subject_name],
       previous_course_name:,
-      recipient: user,
+      recipient: user
     )
   end
 
@@ -73,7 +73,7 @@ describe CourseSubjectsUpdatedEmailMailer do
           course:,
           previous_subject_names: [previous_subject.subject_name],
           previous_course_name:,
-          recipient: user,
+          recipient: user
         )
       end
 

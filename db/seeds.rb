@@ -30,7 +30,7 @@ superuser = User.create!(
   accept_terms_date_utc: Time.now.utc,
   email: "super.admin@education.gov.uk", # matches authentication.rb
   state: "rolled_over",
-  admin: true,
+  admin: true
 )
 
 def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
@@ -40,7 +40,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     provider_type: "B",
     recruitment_cycle:,
     email: Faker::Internet.email,
-    telephone: Faker::PhoneNumber.phone_number,
+    telephone: Faker::PhoneNumber.phone_number
   )
   provider.skip_geocoding = true
   provider.save!
@@ -55,7 +55,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     address3: Faker::Address.city,
     address4: Faker::Address.state,
     postcode: Faker::Address.postcode,
-    urn: Faker::Number.number(digits: [5, 6].sample),
+    urn: Faker::Number.number(digits: [5, 6].sample)
   )
 
   site.skip_geocoding = true
@@ -78,7 +78,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       PrimarySubject.find_by(subject_name: "Primary with mathematics"),
     ],
     study_mode: "F",
-    age_range_in_years: "3_to_7",
+    age_range_in_years: "3_to_7"
   )
 
   SiteStatus.create!(
@@ -86,7 +86,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "F",
     publish: "Y",
     course: primary_course,
-    status: "R",
+    status: "R"
   )
 
   secondary_course1 = Course.create!(
@@ -106,7 +106,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       SecondarySubject.find_by(subject_name: "Biology"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -114,7 +114,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: secondary_course1,
-    status: "N",
+    status: "N"
   )
 
   secondary_course2 = Course.create!(
@@ -135,7 +135,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       SecondarySubject.find_by(subject_name: "Music"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -143,7 +143,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: secondary_course2,
-    status: "N",
+    status: "N"
   )
 
   further_education_course = Course.create!(
@@ -163,7 +163,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       FurtherEducationSubject.find_by(subject_name: "Further education"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -171,7 +171,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: further_education_course,
-    status: "N",
+    status: "N"
   )
 
   modern_language_course1 = Course.create!(
@@ -192,7 +192,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       ModernLanguagesSubject.find_by(subject_name: "Modern languages (other)"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -200,7 +200,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: modern_language_course1,
-    status: "N",
+    status: "N"
   )
 
   modern_language_course2 = Course.create!(
@@ -221,7 +221,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       ModernLanguagesSubject.find_by(subject_name: "Japanese"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -229,7 +229,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: modern_language_course2,
-    status: "N",
+    status: "N"
   )
 
   modern_language_course3 = Course.create!(
@@ -253,7 +253,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
       ModernLanguagesSubject.find_by(subject_name: "German"),
     ],
     study_mode: "B",
-    age_range_in_years: "7_to_14",
+    age_range_in_years: "7_to_14"
   )
 
   SiteStatus.create!(
@@ -261,7 +261,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     vac_status: "B",
     publish: "Y",
     course: modern_language_course3,
-    status: "N",
+    status: "N"
   )
 end
 
@@ -275,7 +275,7 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
     provider_type: "B",
     recruitment_cycle: current_recruitment_cycle,
     email: Faker::Internet.email,
-    telephone: Faker::PhoneNumber.phone_number,
+    telephone: Faker::PhoneNumber.phone_number
   )
 
   provider.skip_geocoding = true
@@ -284,7 +284,7 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
   user = User.create!(
     email: Faker::Internet.unique.email,
     first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
+    last_name: Faker::Name.last_name
   )
 
   user.providers << provider
@@ -303,6 +303,6 @@ access_requester_user = User.all.reject(&:admin?).sample
     request_date_utc: rand(1..20).days.ago,
     status: %i[requested completed].sample,
     reason: "No reason",
-    organisation: Provider.first.provider_name,
+    organisation: Provider.first.provider_name
   )
 end

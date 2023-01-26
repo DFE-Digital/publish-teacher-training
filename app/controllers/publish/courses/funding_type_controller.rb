@@ -76,7 +76,7 @@ module Publish
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            course_values,
+            course_values
           )
         end
       end

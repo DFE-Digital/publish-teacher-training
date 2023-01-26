@@ -42,7 +42,7 @@ private
 
   def when_i_visit_the_edit_age_range_page
     age_range_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -84,7 +84,7 @@ private
 
   def then_i_should_see_an_error_message
     expect(age_range_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/age_range_form.attributes.course_age_range_in_years_other_from.invalid"),
+      I18n.t("activemodel.errors.models.publish/age_range_form.attributes.course_age_range_in_years_other_from.invalid")
     )
   end
 

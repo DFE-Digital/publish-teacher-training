@@ -18,7 +18,7 @@ describe AccessRequest do
                 requested: 0,
                 approved: 1,
                 completed: 2,
-                declined: 3,
+                declined: 3
               )
     end
   end

@@ -5,7 +5,7 @@ class MigrateSubjects < ActiveRecord::Migration[5.2]
       all_courses_includes_ucas_subjects = Course.includes(
         :ucas_subjects,
         :subjects,
-        provider: :recruitment_cycle,
+        provider: :recruitment_cycle
       )
       all_courses_includes_ucas_subjects.each do |course|
         course.update_column(:level, course.ucas_level)

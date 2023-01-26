@@ -28,7 +28,7 @@ feature "Course show", { can_edit_current_and_next_cycles: false } do
   context "contact details for London School of Jewish Studies and the course code is X104" do
     scenario "renders the custom address requested via zendesk" do
       given_i_am_authenticated(
-        user: user_with_custom_address_requested_via_zendesk,
+        user: user_with_custom_address_requested_via_zendesk
       )
       when_i_visit_the_course_preview_page
       then_i_see_custom_address
@@ -46,136 +46,136 @@ private
 
   def then_i_see_the_course_preview_details
     expect(course_preview_page.title).to have_content(
-      "#{course.name} (#{course.course_code})",
+      "#{course.name} (#{course.course_code})"
     )
 
     expect(course_preview_page.sub_title).to have_content(
-      provider.provider_name,
+      provider.provider_name
     )
 
     expect(course_preview_page.accredited_body).to have_content(
-      accrediting_provider.provider_name,
+      accrediting_provider.provider_name
     )
 
     expect(course_preview_page.description).to have_content(
-      course.description,
+      course.description
     )
 
     expect(course_preview_page.qualifications).to have_content(
-      "PGCE with QTS",
+      "PGCE with QTS"
     )
 
     expect(course_preview_page.age_range_in_years).to have_content(
-      "11 to 18",
+      "11 to 18"
     )
 
     expect(course_preview_page.funding_option).to have_content(
-      decorated_course.funding_option,
+      decorated_course.funding_option
     )
 
     expect(course_preview_page.length).to have_content(
-      "Up to 2 years - full time",
+      "Up to 2 years - full time"
     )
 
     expect(course_preview_page.applications_open_from).to have_content(
-      course.applications_open_from.strftime("%-d %B %Y"),
+      course.applications_open_from.strftime("%-d %B %Y")
     )
 
     expect(course_preview_page.start_date).to have_content(
-      "September #{recruitment_cycle.year}",
+      "September #{recruitment_cycle.year}"
     )
 
     expect(course_preview_page.provider_website).to have_content(
-      provider.website,
+      provider.website
     )
 
     expect(course_preview_page).not_to have_vacancies
 
     expect(course_preview_page.about_course).to have_content(
-      decorated_course.about_course,
+      decorated_course.about_course
     )
 
     expect(course_preview_page.interview_process).to have_content(
-      decorated_course.interview_process,
+      decorated_course.interview_process
     )
 
     expect(course_preview_page.school_placements).to have_content(
-      decorated_course.how_school_placements_work,
+      decorated_course.how_school_placements_work
     )
 
     expect(course_preview_page).to have_content(
-      "The course fees for #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} are as follows",
+      "The course fees for #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} are as follows"
     )
 
     expect(course_preview_page.uk_fees).to have_content(
-      "£9,250",
+      "£9,250"
     )
 
     expect(course_preview_page.international_fees).to have_content(
-      "£14,000",
+      "£14,000"
     )
 
     expect(course_preview_page.fee_details).to have_content(
-      decorated_course.fee_details,
+      decorated_course.fee_details
     )
 
     expect(course_preview_page).not_to have_salary_details
 
     expect(course_preview_page.financial_support_details).to have_content(
-      "Financial support from the training provider",
+      "Financial support from the training provider"
     )
 
     expect(course_preview_page.personal_qualities).to have_content(
-      decorated_course.personal_qualities,
+      decorated_course.personal_qualities
     )
 
     expect(course_preview_page.other_requirements).to have_content(
-      decorated_course.other_requirements,
+      decorated_course.other_requirements
     )
 
     expect(course_preview_page.train_with_us).to have_content(
-      provider.train_with_us,
+      provider.train_with_us
     )
 
     expect(course_preview_page.about_accrediting_body).to have_content(
-      decorated_course.about_accrediting_body,
+      decorated_course.about_accrediting_body
     )
 
     expect(course_preview_page.train_with_disability).to have_content(
-      provider.train_with_disability,
+      provider.train_with_disability
     )
 
     expect(course_preview_page.contact_email).to have_content(
-      provider.email,
+      provider.email
     )
 
     expect(course_preview_page.contact_telephone).to have_content(
-      provider.telephone,
+      provider.telephone
     )
 
     expect(course_preview_page).to have_content "2:1 or above, or equivalent"
     expect(course_preview_page).to have_content "Maths A level"
 
     expect(course_preview_page.contact_website).to have_content(
-      provider.website,
+      provider.website
     )
 
     expect(course_preview_page.contact_address).to have_content(
-      provider.address1,
+      provider.address1
     )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address2,
+                                                     provider.address2
                                                    )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address3,
+                                                     provider.address3
                                                    )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address4,
+                                                     provider.address4
                                                    )
 
     expect(course_preview_page).to have_choose_a_training_location_table
     expect(course_preview_page.choose_a_training_location_table).not_to have_content(
-      "Suspended site with vacancies",
+      "Suspended site with vacancies"
     )
 
     [
@@ -208,7 +208,7 @@ private
       :user,
       providers: [
         provider,
-      ],
+      ]
     )
   end
 
@@ -256,13 +256,13 @@ private
       :user,
       providers: [
         provider,
-      ],
+      ]
     )
   end
 
   def when_i_visit_the_course_preview_page
     course_preview_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

@@ -29,7 +29,7 @@ module NotificationService
           course:,
           user:,
           datetime: DateTime.now,
-          vacancies_filled:,
+          vacancies_filled:
         ).deliver_later
       end
     end
@@ -41,7 +41,7 @@ module NotificationService
           user:,
           datetime: DateTime.now,
           vacancies_opened:,
-          vacancies_closed:,
+          vacancies_closed:
         ).deliver_later
       end
     end

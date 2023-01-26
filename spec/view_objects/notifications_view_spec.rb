@@ -4,7 +4,7 @@ describe NotificationsView do
   subject do
     described_class.new(
       request:,
-      current_user:,
+      current_user:
     )
   end
 

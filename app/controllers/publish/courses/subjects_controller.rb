@@ -23,8 +23,8 @@ module Publish
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids },
-            ),
+              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids }
+            )
           )
 
         elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
@@ -34,8 +34,8 @@ module Publish
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { subjects_ids: selected_subject_ids },
-            ),
+              course: { subjects_ids: selected_subject_ids }
+            )
           )
 
         elsif course_subjects_form.save!
@@ -50,8 +50,8 @@ module Publish
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
-              @course.course_code,
-            ),
+              @course.course_code
+            )
           )
         else
           @errors = @course.errors.messages

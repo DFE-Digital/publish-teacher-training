@@ -27,7 +27,7 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:new_provider) do
       new_recruitment_cycle.reload.providers.find_by(
-        provider_code: provider.provider_code,
+        provider_code: provider.provider_code
       )
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
@@ -36,7 +36,7 @@ describe Providers::CopyToRecruitmentCycleService do
       described_class.new(
         copy_course_to_provider_service: mocked_copy_course_service,
         copy_site_to_provider_service: mocked_copy_site_service,
-        force:,
+        force:
       )
     end
     let(:force) { false }
@@ -48,8 +48,8 @@ describe Providers::CopyToRecruitmentCycleService do
     it "makes a copy of the provider in the new recruitment cycle" do
       expect(
         new_recruitment_cycle.providers.find_by(
-          provider_code: provider.provider_code,
-        ),
+          provider_code: provider.provider_code
+        )
       ).to be_nil
 
       service.execute(provider:, new_recruitment_cycle:)
@@ -158,7 +158,7 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(output).to eq(
         providers: 1,
         sites: 1,
-        courses: 1,
+        courses: 1
       )
     end
 

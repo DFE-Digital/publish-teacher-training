@@ -153,7 +153,7 @@ RSpec.describe API::Public::V1::CoursesController do
           provider_id = relationships.dig("provider", "data", "id").to_i
 
           expect(json_response["data"][0]["relationships"].keys.sort).to eq(
-            %w[accredited_body provider recruitment_cycle],
+            %w[accredited_body provider recruitment_cycle]
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
@@ -175,7 +175,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
         it "delegates to the CourseSearchService" do
           expect(CourseSearchService).to have_received(:call).with(
-            hash_including(sort: sort_attribute),
+            hash_including(sort: sort_attribute)
           )
         end
       end
@@ -197,7 +197,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
           it "delegates to the CourseSearchService" do
             expect(CourseSearchService).to have_received(:call).with(
-              hash_including(filter: ActionController::Parameters.new(funding_type: "salary")),
+              hash_including(filter: ActionController::Parameters.new(funding_type: "salary"))
             )
           end
         end

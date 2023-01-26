@@ -12,7 +12,7 @@ module API
           code = params.fetch(:code, params[:provider_code])
           provider = recruitment_cycle.providers
                                         .find_by!(
-                                          provider_code: code.upcase,
+                                          provider_code: code.upcase
                                         )
 
           render jsonapi: provider,
@@ -80,7 +80,7 @@ module API
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year],
+            year: params[:recruitment_cycle_year]
           ) || RecruitmentCycle.current_recruitment_cycle
         end
 

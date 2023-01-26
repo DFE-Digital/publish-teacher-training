@@ -9,7 +9,7 @@ module Find
 
       expect(page).to have_link(
         "How can we improve this page? (Opens in a new tab)",
-        href: "#{Settings.apply_base_url}/candidate/find-feedback?path=#{path}&find_controller=results",
+        href: "#{Settings.apply_base_url}/candidate/find-feedback?path=#{path}&find_controller=results"
       )
     end
   end

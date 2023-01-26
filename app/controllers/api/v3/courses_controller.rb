@@ -51,7 +51,7 @@ module API
           :enrichments,
           subjects: [:financial_incentive],
           site_statuses: [:site],
-          provider: %i[recruitment_cycle ucas_preferences],
+          provider: %i[recruitment_cycle ucas_preferences]
         ).findable
       end
 
@@ -59,7 +59,7 @@ module API
         return if params[:provider_code].blank?
 
         @provider = @recruitment_cycle.providers.find_by!(
-          provider_code: params[:provider_code].upcase,
+          provider_code: params[:provider_code].upcase
         )
       end
     end

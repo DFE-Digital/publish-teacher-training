@@ -31,8 +31,8 @@ module Publish
               details_publish_provider_recruitment_cycle_course_path(
                 provider.provider_code,
                 recruitment_cycle.year,
-                course.course_code,
-              ),
+                course.course_code
+              )
             )
           else
             render :edit
@@ -44,8 +44,8 @@ module Publish
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { subjects_ids: form_params[:subjects_ids] },
-            ),
+              course: { subjects_ids: form_params[:subjects_ids] }
+            )
           )
         elsif @engineers_teach_physics_form.save!
           course.update(name: course.generate_name)
@@ -53,7 +53,7 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           @errors = @engineers_teach_physics_form.errors.messages
@@ -113,7 +113,7 @@ module Publish
           .permit(
             :campaign_name,
             :skip_languages_goto_confirmation,
-            subjects_ids: [],
+            subjects_ids: []
           )
       end
     end

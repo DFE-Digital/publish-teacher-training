@@ -20,8 +20,8 @@ describe Course do
             find(:modern_languages_subject, :russian),
             find(:modern_languages_subject, :spanish),
             find(:modern_languages_subject, :modern_languages_other),
-          ],
-        ),
+          ]
+        )
       )
     end
   end
@@ -46,7 +46,7 @@ describe Course do
           find(:primary_subject, :primary_with_modern_languages),
           find(:primary_subject, :primary_with_physical_education),
           find(:primary_subject, :primary_with_science),
-        ],
+        ]
       )
     end
 
@@ -83,7 +83,7 @@ describe Course do
           find(:secondary_subject, :religious_education),
           find(:secondary_subject, :science),
           find(:secondary_subject, :social_sciences),
-        ],
+        ]
       )
     end
   end
@@ -160,7 +160,7 @@ describe Course do
          "April #{recruitment_year + 1}",
          "May #{recruitment_year + 1}",
          "June #{recruitment_year + 1}",
-         "July #{recruitment_year + 1}"],
+         "July #{recruitment_year + 1}"]
       )
     end
   end

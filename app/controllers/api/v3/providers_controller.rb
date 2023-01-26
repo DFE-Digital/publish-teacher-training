@@ -18,7 +18,7 @@ module API
         @provider = @recruitment_cycle.providers
           .includes(:sites, :courses, courses: [:enrichments, :sites, { site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive] }])
           .find_by!(
-            provider_code: code.upcase,
+            provider_code: code.upcase
           )
 
         render jsonapi: @provider,

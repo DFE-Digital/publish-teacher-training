@@ -68,7 +68,7 @@ describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
       expect(
         cached_data.each_value.map do |cache_entry|
           JSON.parse(cache_entry.value)["id"].to_i
-        end,
+        end
       ).to match_array [current_course.id, additional_course.id]
     end
 
@@ -89,7 +89,7 @@ describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
       included_hashes = JSON.parse(response.body)["included"]
 
       expect(
-        included_hashes.map { |h| h.dig("attributes", "provider_name") },
+        included_hashes.map { |h| h.dig("attributes", "provider_name") }
       ).to match_array [current_course.provider.provider_name, additional_course.provider.provider_name]
 
       additional_course.provider.update!(provider_name: "Fubar Ltd.")
@@ -97,7 +97,7 @@ describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
       included_hashes = JSON.parse(response.body)["included"]
 
       expect(
-        included_hashes.map { |h| h.dig("attributes", "provider_name") },
+        included_hashes.map { |h| h.dig("attributes", "provider_name") }
       ).to match_array [current_course.provider.provider_name, "Fubar Ltd."]
     end
 
@@ -108,7 +108,7 @@ describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
       included_hashes = JSON.parse(response.body)["included"]
 
       expect(
-        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact,
+        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact
       ).to match_array [current_course.sites.first.location_name, additional_course.sites.first.location_name]
 
       additional_site = create(:site, location_name: "An additional site")
@@ -120,7 +120,7 @@ describe "GET v3/recruitment_cycles/:year/courses", :with_publish_constraint do
       included_hashes = JSON.parse(response.body)["included"]
 
       expect(
-        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact,
+        included_hashes.map { |h| h.dig("attributes", "location_name") }.compact
       ).to match_array [current_course.sites.first.location_name, additional_course.sites.first.location_name, additional_site.location_name]
     end
   end
@@ -148,7 +148,7 @@ describe "GET v3/courses", :with_publish_constraint do
           name: "Course B",
           provider: provider_b,
           site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 16, longitude: 32))],
-          enrichments: [build(:course_enrichment, :published)],
+          enrichments: [build(:course_enrichment, :published)]
         )
       end
 
@@ -189,7 +189,7 @@ describe "GET v3/courses", :with_publish_constraint do
         name: "Course B",
         provider: provider_b,
         site_statuses: [build(:site_status, :findable, site: near_site)],
-        enrichments: [build(:course_enrichment, :published)],
+        enrichments: [build(:course_enrichment, :published)]
       )
     end
     let(:near_site) { build(:site, latitude: 1, longitude: 1) }

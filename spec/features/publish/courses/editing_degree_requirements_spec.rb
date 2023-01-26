@@ -103,7 +103,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
           provider:,
           name: "Biology",
           additional_degree_subject_requirements: true,
-          degree_subject_requirements: "Course 2 requirements",
+          degree_subject_requirements: "Course 2 requirements"
         )
       end
 
@@ -113,7 +113,7 @@ feature "Editing degree requirements", { can_edit_current_and_next_cycles: false
           provider:,
           name: "Biology",
           additional_degree_subject_requirements: nil,
-          degree_subject_requirements: nil,
+          degree_subject_requirements: nil
         )
       end
 

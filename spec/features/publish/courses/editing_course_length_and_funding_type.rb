@@ -29,7 +29,7 @@ feature "Editing course length and funding type" do
           :course,
           provider:,
           name: "Biology",
-          enrichments: [course2_enrichment],
+          enrichments: [course2_enrichment]
         )
       end
 
@@ -149,13 +149,13 @@ feature "Editing course length and funding type" do
 
   def when_i_visit_the_course_fee_page
     publish_course_fee_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def when_i_visit_the_course_salary_page
     publish_course_salary_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -209,13 +209,13 @@ feature "Editing course length and funding type" do
 
   def then_i_should_see_an_error_message_for_the_course_fee
     expect(publish_course_fee_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_fee_form.attributes.fee_uk_eu.less_than_or_equal_to"),
+      I18n.t("activemodel.errors.models.publish/course_fee_form.attributes.fee_uk_eu.less_than_or_equal_to")
     )
   end
 
   def then_i_should_see_an_error_message_for_the_course_salary_details
     expect(publish_course_salary_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_salary_form.attributes.salary_details.blank"),
+      I18n.t("activemodel.errors.models.publish/course_salary_form.attributes.salary_details.blank")
     )
   end
 

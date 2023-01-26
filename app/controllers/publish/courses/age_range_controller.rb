@@ -21,8 +21,8 @@ module Publish
               details_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
-                @course.course_code,
-              ),
+                @course.course_code
+              )
             )
           end
         else

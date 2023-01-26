@@ -33,7 +33,7 @@ describe ErrorHandlers::Base do
           "status" => 500,
           "title" => a_string_including("ERROR"),
           "detail" => a_string_including("gone wrong"),
-        ],
+        ]
       )
     end
   end

@@ -57,7 +57,7 @@ feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false }
   def when_i_visit_the_provider_details_page
     provider_details_show_page.load(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year,
+      recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 

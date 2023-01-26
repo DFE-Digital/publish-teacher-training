@@ -111,7 +111,7 @@ describe CourseReportingService do
         expect(open_courses_scope).to receive(:group).with(:provider_type).and_return(open_courses_provider_type_scope)
         expect(open_courses_provider_type_scope).to receive(:count)
           .and_return(
-            { "B" => 1, "Y" => 2, "O" => 3, "" => 4, "0" => 5 },
+            { "B" => 1, "Y" => 2, "O" => 3, "" => 4, "0" => 5 }
           )
 
         expect(open_courses_scope).to receive(:group).with(:program_type).and_return(open_courses_program_type_scope)
@@ -119,19 +119,19 @@ describe CourseReportingService do
           .and_return(
             { "higher_education_programme" => 1, "school_direct_training_programme" => 2,
               "school_direct_salaried_training_programme" => 3, "scitt_programme" => 4,
-              "pg_teaching_apprenticeship" => 5 },
+              "pg_teaching_apprenticeship" => 5 }
           )
 
         expect(open_courses_scope).to receive(:group).with(:study_mode).and_return(open_courses_study_mode_scope)
         expect(open_courses_study_mode_scope).to receive(:count)
           .and_return(
-            { "full_time" => 1, "part_time" => 2, "full_time_or_part_time" => 3 },
+            { "full_time" => 1, "part_time" => 2, "full_time_or_part_time" => 3 }
           )
 
         expect(open_courses_scope).to receive(:group).with(:qualification).and_return(open_courses_qualification_scope)
         expect(open_courses_qualification_scope).to receive(:count)
           .and_return(
-            { "qts" => 1, "pgce_with_qts" => 2, "pgde_with_qts" => 3, "pgce" => 4, "pgde" => 5 },
+            { "qts" => 1, "pgce_with_qts" => 2, "pgde_with_qts" => 3, "pgce" => 4, "pgde" => 5 }
           )
 
         expect(open_courses_scope).to receive(:group).with(:is_send).and_return(open_courses_is_send_scope)
@@ -146,7 +146,7 @@ describe CourseReportingService do
             x = {}
             x[sub.id] = (i + 1) * 3
             x
-          end .reduce({}, :merge),
+          end .reduce({}, :merge)
         )
 
         expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)

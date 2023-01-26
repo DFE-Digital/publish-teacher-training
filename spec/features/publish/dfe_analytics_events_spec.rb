@@ -33,13 +33,13 @@ private
     given_a_course_exists(
       :with_gcse_equivalency,
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: "location 1")],
+      sites: [create(:site, location_name: "location 1")]
     )
   end
 
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

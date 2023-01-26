@@ -42,7 +42,7 @@ describe Courses::EditOptions::StartDateConcern do
          "April #{year + 1}",
          "May #{year + 1}",
          "June #{year + 1}",
-         "July #{year + 1}"],
+         "July #{year + 1}"]
       )
     end
   end

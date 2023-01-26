@@ -26,7 +26,7 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           render :edit
@@ -43,7 +43,7 @@ module Publish
         params
           .require(:publish_course_requirement_form)
           .permit(
-            CourseRequirementForm::FIELDS,
+            CourseRequirementForm::FIELDS
           )
       end
 

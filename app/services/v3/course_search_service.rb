@@ -16,7 +16,7 @@ module V3
       ::CourseSearchService.call(
         filter:,
         sort:,
-        course_scope:,
+        course_scope:
       )
     end
 

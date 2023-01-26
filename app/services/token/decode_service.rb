@@ -31,7 +31,7 @@ module Token
           verify_iat: true,
           exp_leeway: 6.seconds.to_i,
           **claims,
-        },
+        }
       )
 
       (payload, _algorithm) = decoded_token

@@ -20,8 +20,8 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         course,
         class: {
           Course: API::V3::SerializableCourse,
-        },
-      ).to_json,
+        }
+      ).to_json
     )
   end
   let(:jsonapi_response) { JSON.parse(response.body) }
@@ -191,7 +191,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
         ],
         "jsonapi" => {
           "version" => "1.0",
-        },
+        }
       )
     end
   end
@@ -201,7 +201,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       course,
       class: {
         Course: API::V3::SerializableCourse,
-      },
+      }
     )
   end
 end

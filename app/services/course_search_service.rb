@@ -37,7 +37,7 @@ class CourseSearchService
       :financial_incentives,
       course_subjects: [:subject],
       site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences],
+      provider: %i[recruitment_cycle ucas_preferences]
     ).where(id: scope.select(:id))
 
     if provider_name.present?
@@ -145,7 +145,7 @@ private
     # form a temporary table with results
     Arel::Nodes::TableAlias.new(
       Arel.sql(
-        format("(%s)", course_id_with_lowest_locatable_distance.to_sql),
+        format("(%s)", course_id_with_lowest_locatable_distance.to_sql)
       ), "distances"
     )
   end

@@ -16,7 +16,7 @@ Geocoder.configure(
   always_raise: [Geocoder::InvalidApiKey, Geocoder::OverQueryLimitError],
 
   # Calculation options
-  units: :mi, # :km for kilometers or :mi for miles
+  units: :mi # :km for kilometers or :mi for miles
   # distances: :linear          # :spherical or :linear
 
   # Cache configuration

@@ -2,7 +2,7 @@ class RemoveSelfAccreditingProviderOnCourse < ActiveRecord::Migration[6.0]
   def up
     say_with_time "remove accrediting provider code" do
       ids = Course.find_by_sql(
-        <<~EOSQL,
+        <<~EOSQL
           SELECT c.* FROM course AS c
           INNER JOIN provider AS p
             ON p.id = c.provider_id

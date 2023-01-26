@@ -111,13 +111,13 @@ describe ProviderReportingService do
 
         expect(open_providers_accrediting_provider_scope).to receive(:count)
           .and_return(
-            { "accredited_body" => 1, "not_an_accredited_body" => 2 },
+            { "accredited_body" => 1, "not_an_accredited_body" => 2 }
           )
 
         expect(open_providers_scope).to receive(:group).with(:provider_type).and_return(open_providers_provider_type_scope)
         expect(open_providers_provider_type_scope).to receive(:count)
           .and_return(
-            { "scitt" => 1, "lead_school" => 2, "university" => 3, "unknown" => 4, "invalid_value" => 5 },
+            { "scitt" => 1, "lead_school" => 2, "university" => 3, "unknown" => 4, "invalid_value" => 5 }
           )
 
         expect(open_providers_scope).to receive(:group).with(:region_code).and_return(open_providers_region_code_scope)
@@ -136,7 +136,7 @@ describe ProviderReportingService do
               "yorkshire_and_the_humber" => 9,
               "north_east" => 10,
               "scotland" => 12,
-            },
+            }
           )
 
         expect(closed_providers_scope).to receive(:count).and_return(closed_providers_count)

@@ -31,7 +31,7 @@ module Find
 
       def build_results_filter_query_parameters
         @results_filter_query_parameters = merge_previous_parameters(
-          ResultsView.new(query_parameters: request.query_parameters).query_parameters_with_defaults,
+          ResultsView.new(query_parameters: request.query_parameters).query_parameters_with_defaults
         )
       end
 

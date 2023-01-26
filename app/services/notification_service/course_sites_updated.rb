@@ -16,7 +16,7 @@ module NotificationService
           course:,
           previous_site_names:,
           updated_site_names:,
-          recipient: user,
+          recipient: user
         ).deliver_later
       end
     end
@@ -27,7 +27,7 @@ module NotificationService
 
     def users_to_notify
       User.joins(:user_notifications).merge(
-        UserNotification.course_update_notification_requests(course.accredited_body_code),
+        UserNotification.course_update_notification_requests(course.accredited_body_code)
       )
     end
 

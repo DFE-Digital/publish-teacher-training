@@ -7,7 +7,7 @@ describe Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailab
   let(:service) do
     described_class.new(
       financial_incentive: financial_incentive_spy,
-      year: 2020,
+      year: 2020
     )
   end
 

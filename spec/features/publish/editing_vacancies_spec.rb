@@ -166,7 +166,7 @@ private
     given_a_site_exists(
       :both_full_time_and_part_time_vacancies,
       :findable,
-      site: build(:site, location_name: "Uni full and part time 1"),
+      site: build(:site, location_name: "Uni full and part time 1")
     )
   end
 
@@ -175,7 +175,7 @@ private
     given_a_site_exists(
       :full_time_vacancies,
       :findable,
-      site: build(:site, location_name: "Uni 1"),
+      site: build(:site, location_name: "Uni 1")
     )
   end
 
@@ -189,7 +189,7 @@ private
 
   def when_i_visit_the_vacancy_edit_page_for_a_course
     course_vacancies_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -232,7 +232,7 @@ private
     expect(course_vacancies_edit_page).to have_vacancies_radio_choice
     expect(course_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
     expect(course_vacancies_edit_page.vacancy_names).to match_array(
-      ["Uni full and part time 1 (Full time)", "Uni full and part time 1 (Part time)"],
+      ["Uni full and part time 1 (Full time)", "Uni full and part time 1 (Part time)"]
     )
     expect(course_vacancies_edit_page.vacancy_checked_values).to all(be_truthy)
   end

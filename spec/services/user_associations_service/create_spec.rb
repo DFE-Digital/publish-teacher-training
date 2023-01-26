@@ -14,7 +14,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
       subject do
         described_class.call(
           provider: new_accredited_body,
-          user:,
+          user:
         )
       end
 
@@ -36,7 +36,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             user:,
             provider: accredited_body,
             course_publish: true,
-            course_update: true,
+            course_update: true
           )
         end
 
@@ -46,7 +46,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             user:,
             provider: new_accredited_body,
             course_publish: true,
-            course_update: true,
+            course_update: true
           )
         end
 
@@ -89,7 +89,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
       subject do
         described_class.call(
           user:,
-          all_providers: true,
+          all_providers: true
         )
       end
 
@@ -103,7 +103,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             user:,
             provider: accredited_body,
             course_publish: true,
-            course_update: true,
+            course_update: true
           )
         end
 

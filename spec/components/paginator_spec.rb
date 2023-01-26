@@ -15,7 +15,7 @@ describe Paginator do
       total_count:,
       limit_value: page_size,
       current_page:,
-      total_pages: (total_count.to_f / page_size).ceil,
+      total_pages: (total_count.to_f / page_size).ceil
     )
     component = described_class.new(scope:)
     allow(component).to receive(:paginate).and_return("paginator")
@@ -54,7 +54,7 @@ describe Paginator do
         total_count: total_pages * 25,
         limit_value: 25,
         current_page:,
-        total_pages:,
+        total_pages:
       )
 
       described_class.new(scope:).paginate_configuration

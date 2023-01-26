@@ -23,7 +23,7 @@ class CopyLatestProviderEnrichmentDataToProvider < ActiveRecord::Migration[6.0]
 
         enrichment_data = latest_updated_at.attributes.slice(
           *enrichment_fields,
-          *contact_fields,
+          *contact_fields
         )
 
         provider.update(enrichment_data)

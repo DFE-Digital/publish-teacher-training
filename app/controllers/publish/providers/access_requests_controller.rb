@@ -28,7 +28,7 @@ module Publish
 
       def access_request_params
         params.require(:publish_access_request_form).permit(
-          *AccessRequestForm::FIELDS,
+          *AccessRequestForm::FIELDS
         )
       end
     end

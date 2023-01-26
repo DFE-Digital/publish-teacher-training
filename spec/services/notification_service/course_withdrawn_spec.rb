@@ -58,7 +58,7 @@ module NotificationService
             .with(
               course,
               user,
-              DateTime.now,
+              DateTime.now
             ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later)
         end

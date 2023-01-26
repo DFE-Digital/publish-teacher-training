@@ -16,13 +16,13 @@ feature "Managing a provider's locations", { can_edit_current_and_next_cycles: f
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
-      user: create(:user, providers: [create(:provider, sites: [build(:site)])]),
+      user: create(:user, providers: [create(:provider, sites: [build(:site)])])
     )
   end
 
   def when_i_visit_the_locations_page
     locations_index_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 
@@ -40,7 +40,7 @@ feature "Managing a provider's locations", { can_edit_current_and_next_cycles: f
 
   def then_i_can_add_a_location
     expect(page).to have_current_path location_new_page.url(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
 
     location_new_page.name_field.set "Some place"
@@ -60,7 +60,7 @@ feature "Managing a provider's locations", { can_edit_current_and_next_cycles: f
     expect(page).to have_current_path location_edit_page.url(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
-      location_id: Site.last.id,
+      location_id: Site.last.id
     )
 
     location_edit_page.name_field.set "Renamed place"

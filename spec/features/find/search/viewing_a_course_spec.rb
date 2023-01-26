@@ -104,7 +104,7 @@ private
           interview_process: "Some helpful guidance about the interview process",
           how_school_placements_work: "Some info about how school placements work",
           about_course: "This is a course",
-          required_qualifications: "You need some qualifications for this course",
+          required_qualifications: "You need some qualifications for this course"
         ),
       ],
       subjects: [
@@ -112,9 +112,9 @@ private
           :secondary_subject,
           :chemistry,
           scholarship: "2000",
-          bursary_amount: "4000",
+          bursary_amount: "4000"
         ),
-      ],
+      ]
     )
   end
 
@@ -129,9 +129,9 @@ private
           :course_enrichment,
           :published,
           fee_uk_eu: "9250",
-          fee_international: nil,
+          fee_international: nil
         ),
-      ],
+      ]
     )
   end
 
@@ -141,73 +141,73 @@ private
 
   def then_i_should_see_the_course_information
     expect(course_show_page.title).to have_content(
-            "#{@course.name} (#{@course.course_code})",
+            "#{@course.name} (#{@course.course_code})"
           )
 
     expect(course_show_page.sub_title).to have_content(
-      provider.provider_name,
+      provider.provider_name
     )
 
     expect(course_show_page.accredited_body).to have_content(
-      accrediting_provider.provider_name,
+      accrediting_provider.provider_name
     )
 
     expect(course_show_page.extended_qualification_descriptions).to have_content(
-      @course.extended_qualification_descriptions,
+      @course.extended_qualification_descriptions
     )
 
     expect(course_show_page.qualifications).to have_content(
-      "PGCE with QTS",
+      "PGCE with QTS"
     )
 
     expect(course_show_page.age_range).to have_content(
-      "11 to 18",
+      "11 to 18"
     )
 
     expect(course_show_page.funding_option).to have_content(
-      @course.decorate.funding_option,
+      @course.decorate.funding_option
     )
 
     expect(course_show_page.length).to have_content(
-      "1 year - full time",
+      "1 year - full time"
     )
 
     expect(course_show_page.applications_open_from).to have_content(
-      "1 January 2022",
+      "1 January 2022"
     )
 
     expect(course_show_page.start_date).to have_content(
-      "September 2022",
+      "September 2022"
     )
 
     expect(course_show_page.provider_website).to have_content(
-      provider.website,
+      provider.website
     )
 
     expect(course_show_page).not_to have_vacancies
 
     expect(course_show_page.about_course).to have_content(
-      @course.latest_published_enrichment.about_course,
+      @course.latest_published_enrichment.about_course
     )
 
     expect(course_show_page.interview_process).to have_content(
-      @course.latest_published_enrichment.interview_process,
+      @course.latest_published_enrichment.interview_process
     )
 
     expect(course_show_page.school_placements).to have_content(
-      @course.latest_published_enrichment.how_school_placements_work,
+      @course.latest_published_enrichment.how_school_placements_work
     )
 
     expect(course_show_page.uk_fees).to have_content(
-      "£9,250",
+      "£9,250"
     )
 
     expect(course_show_page.international_fees).to have_content(
-      "£9,250",
+      "£9,250"
     )
 
     expect(course_show_page.fee_details).to have_content(
-      @course.decorate.fee_details,
+      @course.decorate.fee_details
     )
 
     expect(course_show_page).not_to have_salary_details
@@ -219,68 +219,68 @@ private
     expect(course_show_page.financial_support_details).to have_content("Financial support from the training provider")
 
     expect(course_show_page.required_qualifications).not_to have_content(
-      @course.latest_published_enrichment.required_qualifications,
+      @course.latest_published_enrichment.required_qualifications
     )
 
     expect(course_show_page).to have_international_students
     expect(course_show_page.international_students).to have_content(
-      "Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.",
+      "Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa."
     )
 
     expect(course_show_page.required_qualifications).to have_content(
-      "Grade 4 (C) or above in English and maths, or equivalent qualification.",
+      "Grade 4 (C) or above in English and maths, or equivalent qualification."
     )
     expect(course_show_page.required_qualifications).to have_content(
-      "We’ll consider candidates with pending GCSEs.",
+      "We’ll consider candidates with pending GCSEs."
     )
     expect(course_show_page.required_qualifications).to have_content(
-      "We’ll consider candidates who need to take a GCSE equivalency test in English.",
+      "We’ll consider candidates who need to take a GCSE equivalency test in English."
     )
     expect(course_show_page.required_qualifications).to have_content(
-      "You need to work hard",
+      "You need to work hard"
     )
 
     expect(course_show_page.required_qualifications).to have_content(
-      "2:1 or above, or equivalent.",
+      "2:1 or above, or equivalent."
     )
     expect(course_show_page.required_qualifications).to have_content(
-      "Certificate must be print in blue ink",
+      "Certificate must be print in blue ink"
     )
 
     expect(course_show_page.personal_qualities).to have_content(
-      @course.latest_published_enrichment.personal_qualities,
+      @course.latest_published_enrichment.personal_qualities
     )
 
     expect(course_show_page.other_requirements).to have_content(
-      @course.latest_published_enrichment.other_requirements,
+      @course.latest_published_enrichment.other_requirements
     )
 
     expect(course_show_page.train_with_us).to have_content(
-      provider.train_with_us,
+      provider.train_with_us
     )
 
     expect(course_show_page.about_accrediting_body).to have_content(
-      @course.decorate.about_accrediting_body,
+      @course.decorate.about_accrediting_body
     )
 
     expect(course_show_page.train_with_disability).to have_content(
-      provider.train_with_disability,
+      provider.train_with_disability
     )
 
     expect(course_show_page.contact_email).to have_content(
-      provider.email,
+      provider.email
     )
 
     expect(course_show_page.contact_telephone).to have_content(
-      provider.telephone,
+      provider.telephone
     )
 
     expect(course_show_page.contact_website).to have_content(
-      provider.website,
+      provider.website
     )
 
     expect(course_show_page.contact_address).to have_content(
-      [@provider.address1, @provider.address2, @provider.address3, @provider.address4, @provider.postcode].compact.join(" "),
+      [@provider.address1, @provider.address2, @provider.address3, @provider.address4, @provider.postcode].compact.join(" ")
     )
 
     expect(course_show_page.school_placements).not_to have_content("Suspended site with vacancies")
@@ -325,7 +325,7 @@ private
 
   def then_i_should_only_see_the_uk_fees
     expect(course_show_page).to have_content(
-    "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250",
+    "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
   )
 
     expect(course_show_page).not_to have_international_fees
@@ -339,7 +339,7 @@ private
       accrediting_provider_enrichments: [{
         "Description" => "Something great about the accredited body",
         "UcasProviderCode" => accrediting_provider.provider_code,
-      }],
+      }]
     )
   end
 
@@ -347,7 +347,7 @@ private
     @accrediting_provider ||= create(
       :provider,
       :accredited_body,
-      provider_name: "Accrediting Provider 1",
+      provider_name: "Accrediting Provider 1"
     )
   end
 end

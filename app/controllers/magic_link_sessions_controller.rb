@@ -57,7 +57,7 @@ private
     user.update!(
       last_login_date_utc: Time.now.utc,
       magic_link_token: nil,
-      magic_link_token_sent_at: nil,
+      magic_link_token_sent_at: nil
     )
   end
 

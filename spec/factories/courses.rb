@@ -19,7 +19,7 @@ FactoryBot.define do
     applications_open_from do
       Faker::Time.between(
         from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
-        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
+        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29)
       )
     end
     degree_grade { :two_one }

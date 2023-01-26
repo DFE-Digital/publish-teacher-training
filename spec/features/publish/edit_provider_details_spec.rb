@@ -26,7 +26,7 @@ feature "About Your Organisation section", { can_edit_current_and_next_cycles: f
   def when_i_visit_the_details_page
     provider_details_show_page.load(
       provider_code: @provider.provider_code,
-      recruitment_cycle_year: @provider.recruitment_cycle_year,
+      recruitment_cycle_year: @provider.recruitment_cycle_year
     )
     sign_in_page.sign_in_button.click
   end
@@ -35,7 +35,7 @@ feature "About Your Organisation section", { can_edit_current_and_next_cycles: f
     provider_details_show_page.train_with_us_link.click
     expect(page).to have_current_path provider_details_edit_page.url(
       provider_code: @provider.provider_code,
-      recruitment_cycle_year: @provider.recruitment_cycle_year,
+      recruitment_cycle_year: @provider.recruitment_cycle_year
     )
 
     provider_details_edit_page.training_with_you_field.set ""

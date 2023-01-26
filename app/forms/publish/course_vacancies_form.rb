@@ -26,7 +26,7 @@ module Publish
     def after_successful_save_action
       NotificationService::CourseVacanciesUpdated.call(
         course:,
-        vacancy_statuses:,
+        vacancy_statuses:
       )
     end
 
@@ -120,7 +120,7 @@ module Publish
       VacancyStatusDeterminationService.call(
         vacancy_status_full_time: site_status_params[:full_time],
         vacancy_status_part_time: site_status_params[:part_time],
-        course:,
+        course:
       )
     end
   end

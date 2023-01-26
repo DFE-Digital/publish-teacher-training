@@ -7,7 +7,7 @@ module Find
         Find::ResultsView,
         country: "Scotland",
         devolved_nation?: true,
-        no_results_found?: false,
+        no_results_found?: false
       )
       component = render_inline(described_class.new(results: results_view))
 
@@ -20,7 +20,7 @@ module Find
           Find::ResultsView,
           country: "Scotland",
           devolved_nation?: true,
-          no_results_found?: true,
+          no_results_found?: true
         )
         component = render_inline(described_class.new(results: results_view))
 
@@ -33,7 +33,7 @@ module Find
             Find::ResultsView,
             country: "Scotland",
             devolved_nation?: true,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 
@@ -47,7 +47,7 @@ module Find
             Find::ResultsView,
             country: "Wales",
             devolved_nation?: true,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 
@@ -61,7 +61,7 @@ module Find
             Find::ResultsView,
             country: "Northern Ireland",
             devolved_nation?: true,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 
@@ -79,7 +79,7 @@ module Find
             devolved_nation?: false,
             subjects: %w[Math English],
             with_salaries?: false,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 
@@ -97,7 +97,7 @@ module Find
             devolved_nation?: false,
             subjects: %w[Math],
             with_salaries?: false,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 
@@ -114,7 +114,7 @@ module Find
             devolved_nation?: false,
             subjects: %w[Math],
             with_salaries?: true,
-            no_results_found?: true,
+            no_results_found?: true
           )
           component = render_inline(described_class.new(results: results_view))
 

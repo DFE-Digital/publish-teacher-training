@@ -39,7 +39,7 @@ describe UserNotification do
         :user_notification,
         provider_code: provider.provider_code,
         user_id: user.id,
-        course_publish: true,
+        course_publish: true
       )
     end
 
@@ -48,7 +48,7 @@ describe UserNotification do
         :user_notification,
         provider_code: provider.provider_code,
         user_id: user.id,
-        course_update: true,
+        course_update: true
       )
     end
 

@@ -8,7 +8,7 @@ class CourseWithdrawEmailMailer < GovukNotifyRails::Mailer
       provider_name: course.provider.provider_name,
       course_name: course.name,
       course_code: course.course_code,
-      withdraw_course_datetime: gov_uk_format(datetime),
+      withdraw_course_datetime: gov_uk_format(datetime)
     )
 
     mail(to: user.email)

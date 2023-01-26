@@ -13,7 +13,7 @@ describe Subjects::CreatorService do
       secondary_subject: secondary_model,
       further_education_subject: further_education_model,
       modern_languages_subject: modern_languages_model,
-      discontinued_subject: discontinued_model,
+      discontinued_subject: discontinued_model
     )
   end
 

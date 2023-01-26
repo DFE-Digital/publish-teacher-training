@@ -12,7 +12,7 @@ describe DegreeRowContent, type: :component do
       :course,
       provider:,
       degree_grade:,
-      degree_subject_requirements: "Maths A level.",
+      degree_subject_requirements: "Maths A level."
     )
   end
 
@@ -29,8 +29,8 @@ describe DegreeRowContent, type: :component do
         href: degrees_start_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle.year,
-          course.course_code,
-        ),
+          course.course_code
+        )
       )).to be true
     end
   end

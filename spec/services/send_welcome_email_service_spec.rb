@@ -11,7 +11,7 @@ describe SendWelcomeEmailService do
         first_name: "Meowington",
         email: "meowington@cat.net",
         first_login_date_utc: nil,
-        welcome_email_date_utc: nil,
+        welcome_email_date_utc: nil
       )
     end
 
@@ -42,7 +42,7 @@ describe SendWelcomeEmailService do
       spy(
         first_name: "Meowington",
         first_login_date_utc: Time.local(2018, 1, 1).utc,
-        welcome_email_date_utc: Time.local(2018, 1, 1).utc,
+        welcome_email_date_utc: Time.local(2018, 1, 1).utc
       )
     end
 
@@ -71,7 +71,7 @@ describe SendWelcomeEmailService do
           email: "meowington@cat.net",
           first_name: "Meowington",
           first_login_date_utc: Time.local(2018, 1, 1).utc,
-          welcome_email_date_utc: nil,
+          welcome_email_date_utc: nil
         )
       end
 
@@ -102,7 +102,7 @@ describe SendWelcomeEmailService do
           email: "meowington@cat.net",
           first_name: nil,
           first_login_date_utc: Time.local(2018, 1, 1).utc,
-          welcome_email_date_utc: nil,
+          welcome_email_date_utc: nil
         )
       end
 

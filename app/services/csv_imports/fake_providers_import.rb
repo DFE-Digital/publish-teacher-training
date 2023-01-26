@@ -21,7 +21,7 @@ module CSVImports
           provider_name:,
           provider_code:,
           provider_type:,
-          is_accredited_body:,
+          is_accredited_body:
         )
 
         @results << if service.execute

@@ -7,7 +7,7 @@ describe Courses::AssignableSubjectService do
       secondary_subject: secondary_model,
       further_education_subject: further_education_model,
       modern_language_subject: modern_language_model,
-      modern_languages_parent_subject:,
+      modern_languages_parent_subject:
     )
   end
   let(:primary_model) { spy(all: []) }

@@ -18,7 +18,7 @@ describe CourseDecorator do
   let(:course_enrichment) do
     build_stubbed(
       :course_enrichment,
-      course_length: "OneYear",
+      course_length: "OneYear"
     )
   end
 
@@ -37,7 +37,7 @@ describe CourseDecorator do
       accrediting_provider: provider,
       subjects:,
       enrichments: [course_enrichment],
-      funding_type: "fee",
+      funding_type: "fee"
     )
   end
 
@@ -244,7 +244,7 @@ describe CourseDecorator do
           :course,
           name: "Physics",
           subjects:,
-          master_subject_id: 29,
+          master_subject_id: 29
         )
       end
 
@@ -264,7 +264,7 @@ describe CourseDecorator do
           :course,
           name: "Modern languages",
           subjects:,
-          master_subject_id: 33,
+          master_subject_id: 33
         )
       end
 
@@ -285,7 +285,7 @@ describe CourseDecorator do
           :course,
           name: "Physics",
           subjects:,
-          master_subject_id: 29,
+          master_subject_id: 29
         )
       end
 
@@ -306,7 +306,7 @@ describe CourseDecorator do
           :course,
           name: "Modern languages",
           subjects:,
-          master_subject_id: 33,
+          master_subject_id: 33
         )
       end
 

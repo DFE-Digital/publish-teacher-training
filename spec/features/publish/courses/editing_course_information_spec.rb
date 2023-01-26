@@ -25,7 +25,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
     scenario "all fields get copied if all are present" do
       course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
       )
       course_information_edit_page.copy_content.copy(course2)
 
@@ -45,7 +45,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
     scenario "only fields with values are copied if the source is incomplete" do
       course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code
       )
       course_information_edit_page.copy_content.copy(course3)
 
@@ -88,7 +88,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
   def when_i_visit_the_course_information_edit_page
     course_information_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -125,7 +125,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
   def then_i_should_see_an_error_message
     expect(course_information_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_information_form.attributes.about_course.blank"),
+      I18n.t("activemodel.errors.models.publish/course_information_form.attributes.about_course.blank")
     )
   end
 

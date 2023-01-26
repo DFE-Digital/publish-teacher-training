@@ -51,7 +51,7 @@ describe "API", :with_publish_constraint do
             :site,
             2,
             latitude: Faker::Address.latitude,
-            longitude: Faker::Address.longitude,
+            longitude: Faker::Address.longitude
           )
         end
 

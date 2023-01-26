@@ -14,7 +14,7 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
 
     scenario "the course does not display its own name in the copy list" do
       course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
       )
 
       list_options = course_information_edit_page.copy_content.copy_options
@@ -36,7 +36,7 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
 
     scenario "the course does not display its own name in the copy list" do
       course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
       )
 
       list_options = course_information_edit_page.copy_content.copy_options
@@ -65,7 +65,7 @@ feature "Copying course information", { can_edit_current_and_next_cycles: false 
 
   def when_i_visit_the_course_information_edit_page
     course_information_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

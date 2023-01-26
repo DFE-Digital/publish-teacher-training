@@ -26,7 +26,7 @@ module Publish
       NotificationService::CourseSubjectsUpdated.call(
         course:,
         previous_subject_names:,
-        previous_course_name:,
+        previous_course_name:
       )
     end
 

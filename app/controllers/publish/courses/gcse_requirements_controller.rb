@@ -55,7 +55,7 @@ module Publish
           { accept_english_gcse_equivalency: [] },
           { accept_maths_gcse_equivalency: [] },
           { accept_science_gcse_equivalency: [] },
-          :additional_gcse_equivalencies,
+          :additional_gcse_equivalencies
         )
       end
 

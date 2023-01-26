@@ -13,7 +13,7 @@ module StubbedRequests
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
           },
-        ],
+        ]
       )
 
       Geocoder::Lookup::Test.add_stub(
@@ -28,7 +28,7 @@ module StubbedRequests
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
           },
-        ],
+        ]
       )
 
       Geocoder::Lookup::Test.add_stub(
@@ -43,12 +43,12 @@ module StubbedRequests
             "country_code" => "UK",
             "address_components" => [{ long_name: "England" }],
           },
-        ],
+        ]
       )
 
       Geocoder::Lookup::Test.add_stub(
         "Unknown location",
-        [],
+        []
       )
     end
   end

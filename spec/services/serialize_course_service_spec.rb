@@ -8,7 +8,7 @@ describe SerializeCourseService do
   let(:service) do
     described_class.new(
       serializers_service: serializers_service_spy,
-      renderer: renderer_spy,
+      renderer: renderer_spy
     )
   end
 

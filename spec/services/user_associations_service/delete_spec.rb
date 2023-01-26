@@ -13,7 +13,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       user:,
       provider: accredited_body1,
       course_publish: true,
-      course_update: true,
+      course_update: true
     )
   end
 
@@ -23,7 +23,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       user:,
       provider: accredited_body2,
       course_publish: true,
-      course_update: true,
+      course_update: true
     )
   end
 
@@ -39,7 +39,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       subject do
         described_class.call(
           user:,
-          providers: accredited_body1,
+          providers: accredited_body1
         )
       end
 
@@ -110,7 +110,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       subject do
         described_class.call(
           user:,
-          providers: [accredited_body1, accredited_body2],
+          providers: [accredited_body1, accredited_body2]
         )
       end
 
@@ -127,7 +127,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
           user:,
           provider: accredited_body3,
           course_publish: true,
-          course_update: true,
+          course_update: true
         )
       end
 

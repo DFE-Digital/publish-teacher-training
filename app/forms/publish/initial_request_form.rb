@@ -12,7 +12,7 @@ module Publish
     def add_no_results_error
       errors.add(
         :training_provider_query,
-        "We could not find this organisation - please check your information and try again.",
+        "We could not find this organisation - please check your information and try again."
       )
     end
 

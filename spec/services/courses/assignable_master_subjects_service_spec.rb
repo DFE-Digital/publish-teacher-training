@@ -5,7 +5,7 @@ describe Courses::AssignableMasterSubjectService do
     described_class.new(
       primary_subject: primary_model,
       secondary_subject: secondary_model,
-      further_education_subject: further_education_model,
+      further_education_subject: further_education_model
     )
   end
   let(:primary_model) { spy(all: []) }

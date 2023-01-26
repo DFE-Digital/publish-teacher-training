@@ -36,7 +36,7 @@ feature "Updating cookie preferences" do
 
   def then_i_should_see_an_error_message
     expect(cookie_preferences_page.error_messages).to include(
-      "Select yes if you want to accept Google Analytics cookies",
+      "Select yes if you want to accept Google Analytics cookies"
     )
   end
 

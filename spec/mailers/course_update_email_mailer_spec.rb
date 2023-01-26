@@ -11,7 +11,7 @@ describe CourseUpdateEmailMailer do
         attribute_name: "qualification",
         original_value: "original",
         updated_value: "updated",
-        recipient: user,
+        recipient: user
       )
     end
 
@@ -118,7 +118,7 @@ describe CourseUpdateEmailMailer do
             attribute_name: "study_mode",
             original_value: scenario[:original_value],
             updated_value: scenario[:updated_value],
-            recipient: user,
+            recipient: user
           )
         end
 
@@ -150,7 +150,7 @@ describe CourseUpdateEmailMailer do
         attribute_name: "name",
         original_value: previous_name,
         updated_value: "new course",
-        recipient: user,
+        recipient: user
       )
     end
 

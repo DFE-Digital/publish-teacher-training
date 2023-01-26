@@ -54,7 +54,7 @@ describe Provider do
         create(
           :provider,
           ukprn: "",
-          recruitment_cycle: create(:recruitment_cycle, year: "2022"),
+          recruitment_cycle: create(:recruitment_cycle, year: "2022")
         )
       end
 
@@ -491,9 +491,9 @@ describe Provider do
     it "Delegates to the correct service" do
       expect(provider).to delegate_method_to_service(
         :next_available_course_code,
-        "Providers::GenerateUniqueCourseCodeService",
+        "Providers::GenerateUniqueCourseCodeService"
       ).with_arguments(
-        existing_codes: %w[A123 B456],
+        existing_codes: %w[A123 B456]
       )
     end
   end
@@ -579,7 +579,7 @@ describe Provider do
         it "is returned" do
           expect(subject).to contain_exactly(
             findable_course_with_accrediting_provider.provider,
-            findable_course_with_accrediting_provider.accrediting_provider,
+            findable_course_with_accrediting_provider.accrediting_provider
           )
         end
       end

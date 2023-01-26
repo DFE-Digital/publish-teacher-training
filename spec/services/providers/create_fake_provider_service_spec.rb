@@ -11,7 +11,7 @@ RSpec.describe Providers::CreateFakeProviderService do
       provider_code: "123",
       provider_type:,
       recruitment_cycle:,
-      is_accredited_body:,
+      is_accredited_body:
     )
   end
 

@@ -6,7 +6,7 @@ class FixVacStatusOnPublishedCourses < ActiveRecord::Migration[7.0]
       provider: { recruitment_cycle: { year: "2023" } },
       enrichments: { status: %w[published] },
       study_mode: :full_time_or_part_time,
-      site_statuses: { vac_status: %w[part_time_vacancies full_time_vacancies] },
+      site_statuses: { vac_status: %w[part_time_vacancies full_time_vacancies] }
     ).find_each do |course|
       next unless course.is_published?
 

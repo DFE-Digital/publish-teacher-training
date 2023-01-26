@@ -76,7 +76,7 @@ describe AccessRequestApprovalService do
           target_user.providers.reload
 
           expect(target_user.providers).to(
-            include(requester.providers.first),
+            include(requester.providers.first)
           )
           expect(target_user.providers).to include(old_provider)
         end
@@ -88,7 +88,7 @@ describe AccessRequestApprovalService do
           create(
             :user,
             email: access_request.email_address,
-            providers: access_request.requester.providers,
+            providers: access_request.requester.providers
           )
         end
 
@@ -101,7 +101,7 @@ describe AccessRequestApprovalService do
           target_user.providers.reload
 
           expect(target_user.providers).to(
-            match_array(access_request.requester.providers),
+            match_array(access_request.requester.providers)
           )
         end
       end
@@ -118,7 +118,7 @@ describe AccessRequestApprovalService do
 
           expect(User.where(email: "Abc@de.com")).not_to exist
           expect(target_user.providers).to(
-            match_array(access_request.requester.providers),
+            match_array(access_request.requester.providers)
           )
         end
       end

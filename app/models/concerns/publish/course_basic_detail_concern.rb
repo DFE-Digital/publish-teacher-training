@@ -33,8 +33,8 @@ module Publish
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
+            @course.course_code
+          )
         )
       else
         @errors = @course.errors.messages
@@ -89,11 +89,11 @@ module Publish
             :goto_confirmation,
             :skip_languages_goto_confirmation,
             :goto_visa,
-            :language_ids,
+            :language_ids
           ).permit(
             policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
-            subjects_ids: [],
+            subjects_ids: []
           )
       else
         ActionController::Parameters.new({}).permit(:course)

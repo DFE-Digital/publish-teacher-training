@@ -46,7 +46,7 @@ module Providers
         address4: provider.address4,
         postcode: provider.postcode,
         region_code: provider.region_code,
-        urn: Faker::Number.number(digits: [5, 6].sample),
+        urn: Faker::Number.number(digits: [5, 6].sample)
       )
 
       true

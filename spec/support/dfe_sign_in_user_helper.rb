@@ -7,8 +7,8 @@ module DfESignInUserHelper
         email: user.email,
         sign_in_user_id: user.sign_in_user_id,
         first_name: user.first_name,
-        last_name: user.last_name,
-      ),
+        last_name: user.last_name
+      )
     )
   end
 
