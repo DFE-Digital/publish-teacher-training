@@ -41,7 +41,7 @@ variable "find_app_gov_uk_host_names" {
   type = list
 }
 
-variable "find_route_target" {}
+variable "enable_find" {}
 
 variable "restore_from_db_guid" {}
 

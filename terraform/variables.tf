@@ -61,7 +61,7 @@ variable find_app_gov_uk_host_names {
   type = list
 }
 
-variable find_route_target { default = null }
+variable enable_find { default = false }
 
 variable statuscake_alerts {
   type    = map
