@@ -12,7 +12,7 @@ module Find::Courses::ApplyComponent
 
     def course_with_vacancies
       course = Course.new(course_code: "FIND",
-        provider: Provider.new(provider_code: "DFE"),
+        provider: Provider.new(provider_code: "DFE", recruitment_cycle: RecruitmentCycle.current),
         site_statuses: [SiteStatus.new(publish: "published",
           status: "running")])
 
