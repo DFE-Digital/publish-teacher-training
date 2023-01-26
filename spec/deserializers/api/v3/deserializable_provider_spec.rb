@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe API::V3::DeserializableProvider do
   let(:provider) { build(:provider) }
@@ -10,14 +10,14 @@ describe API::V3::DeserializableProvider do
       class: {
         Course: API::V2::SerializableProvider
       }
-    ).to_json)["data"]
+    ).to_json)['data']
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
-  describe "reverse_mapping" do
+  describe 'reverse_mapping' do
     subject { described_class.new({}).reverse_mapping }
 
-    it "always contains all attributes" do
+    it 'always contains all attributes' do
       API::V3::DeserializableProvider::PROVIDER_ATTRIBUTES.each do |attribute|
         expect(subject[attribute.to_sym]).to eq("/data/attributes/#{attribute}")
       end

@@ -4,7 +4,7 @@ class GeocoderService
   def self.geocode(obj:, force: false)
     return if obj.full_address.blank?
 
-    result = Geokit::Geocoders::GoogleGeocoder.geocode(obj.full_address, bias: "gb")
+    result = Geokit::Geocoders::GoogleGeocoder.geocode(obj.full_address, bias: 'gb')
 
     return unless result&.success == true
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FilterParameters
-  PREVIOUS_PARAMETER_PREFIX = "prev_"
+  PREVIOUS_PARAMETER_PREFIX = 'prev_'
 
   def filter_params
     parameters.reject do |param|
@@ -15,7 +15,7 @@ module FilterParameters
 
   def merge_previous_parameters(all_parameters)
     previous_parameters.each do |key, value|
-      next if value == "none"
+      next if value == 'none'
 
       all_parameters[key.delete_prefix(PREVIOUS_PARAMETER_PREFIX)] = value
     end

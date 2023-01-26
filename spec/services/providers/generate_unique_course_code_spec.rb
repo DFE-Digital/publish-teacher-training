@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Providers::GenerateUniqueCourseCodeService do
   let(:existing_codes) { [] }
@@ -11,42 +11,42 @@ describe Providers::GenerateUniqueCourseCodeService do
     )
   end
 
-  describe "when there are no existing codes" do
+  describe 'when there are no existing codes' do
     it 'calls "Providers::GenerateCourseCodeService" once' do
-      expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
+      expect(mocked_gen_code_service).to receive(:execute).once.and_return('A000')
 
       service.execute(existing_codes:)
     end
   end
 
-  describe "when there is one existing code" do
-    context "and we generate a different code" do
+  describe 'when there is one existing code' do
+    context 'and we generate a different code' do
       let(:existing_codes) { %w[A111] }
 
       it 'calls "Providers::GenerateCourseCodeService" once' do
-        expect(mocked_gen_code_service).to receive(:execute).once.and_return("A000")
+        expect(mocked_gen_code_service).to receive(:execute).once.and_return('A000')
 
         service.execute(existing_codes:)
       end
     end
 
-    context "and we generate the same code first" do
+    context 'and we generate the same code first' do
       let(:existing_codes) { %w[A111] }
 
       it 'calls "Providers::GenerateCourseCodeService" twice' do
-        expect(mocked_gen_code_service).to receive(:execute).twice.and_return("A111", "A000")
+        expect(mocked_gen_code_service).to receive(:execute).twice.and_return('A111', 'A000')
 
         service.execute(existing_codes:)
       end
     end
   end
 
-  describe "when there are many existing codes" do
+  describe 'when there are many existing codes' do
     let(:existing_codes) { %w[A111 X232 D268] }
 
-    context "and the code generator generates the same codes" do
-      it "still generates a new code" do
-        expected_code = "B123"
+    context 'and the code generator generates the same codes' do
+      it 'still generates a new code' do
+        expected_code = 'B123'
         expect(mocked_gen_code_service).to receive(:execute).exactly(4)
                                                             .times
                                                             .and_return(*existing_codes, expected_code)

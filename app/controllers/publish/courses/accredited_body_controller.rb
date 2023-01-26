@@ -54,7 +54,7 @@ module Publish
         @errors = errors_for_search_query(code, query)
         return render :edit if @errors.present?
 
-        if update_params[:accredited_body_code] == "other"
+        if update_params[:accredited_body_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
           redirect_to_update_successful
@@ -94,7 +94,7 @@ module Publish
       end
 
       def redirect_to_update_successful
-        flash[:success] = I18n.t("success.saved")
+        flash[:success] = I18n.t('success.saved')
         redirect_to(
           details_provider_recruitment_cycle_course_path(
             @course.provider_code,
@@ -117,9 +117,9 @@ module Publish
         errors = {}
 
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
-          errors = { accredited_body: ["Accredited body search too short, enter 2 or more characters"] }
+          errors = { accredited_body: ['Accredited body search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_body_code: ["Pick an accredited body"] }
+          errors = { accredited_body_code: ['Pick an accredited body'] }
         end
 
         errors
@@ -152,7 +152,7 @@ module Publish
       end
 
       def other_selected_with_no_autocompleted_code?(code)
-        code == "other" && @autocompleted_provider_code.blank?
+        code == 'other' && @autocompleted_provider_code.blank?
       end
     end
   end

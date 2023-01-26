@@ -4,9 +4,9 @@ module BigQuery
   class RequestEvent
     def initialize
       @event_hash = {
-        environment: ENV.fetch("RAILS_ENV", nil),
+        environment: ENV.fetch('RAILS_ENV', nil),
         occurred_at: Time.zone.now.iso8601,
-        event_type: "web_request"
+        event_type: 'web_request'
       }
       yield self if block_given?
     end
@@ -44,7 +44,7 @@ module BigQuery
 
     def query_to_kv_pairs(query_string)
       vars = Rack::Utils.parse_query(query_string)
-      vars.map { |k, v| { "key" => k, "value" => [v].flatten } }
+      vars.map { |k, v| { 'key' => k, 'value' => [v].flatten } }
     end
 
     def anonymised_user_agent_and_ip(rack_request)

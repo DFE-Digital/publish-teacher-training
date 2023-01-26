@@ -2,9 +2,9 @@
 
 module BigQuery
   class EntityEvent
-    CREATE_ENTITY_EVENT_TYPE = "create_entity"
-    UPDATE_ENTITY_EVENT_TYPE = "update_entity"
-    IMPORT_EVENT_TYPE = "import_entity"
+    CREATE_ENTITY_EVENT_TYPE = 'create_entity'
+    UPDATE_ENTITY_EVENT_TYPE = 'update_entity'
+    IMPORT_EVENT_TYPE = 'import_entity'
     EVENT_TYPES = [CREATE_ENTITY_EVENT_TYPE, UPDATE_ENTITY_EVENT_TYPE, IMPORT_EVENT_TYPE].freeze
 
     def initialize
@@ -18,7 +18,7 @@ module BigQuery
     delegate :as_json, to: :event_hash
 
     def with_type(type)
-      raise "Invalid analytics event type" unless EVENT_TYPES.include?(type.to_s)
+      raise 'Invalid analytics event type' unless EVENT_TYPES.include?(type.to_s)
 
       @event_hash.merge!(
         event_type: type
@@ -46,7 +46,7 @@ module BigQuery
         value = value.to_s if value.in? [true, false]
         value = value.to_json if value.is_a?(Hash) || value.is_a?(Array)
 
-        { "key" => key, "value" => Array.wrap(value) }
+        { 'key' => key, 'value' => Array.wrap(value) }
       end
     end
   end

@@ -7,7 +7,7 @@ module Publish
 
     attr_accessor :grade
 
-    validates :grade, presence: { message: "Select the minimum degree classification you require" }
+    validates :grade, presence: { message: 'Select the minimum degree classification you require' }
 
     def save(course)
       return false unless valid?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe API::V3::ApplicationController do
   controller do
@@ -12,7 +12,7 @@ RSpec.describe API::V3::ApplicationController do
   private
 
     def page_url(_)
-      "/"
+      '/'
     end
 
     def max_per_page
@@ -20,24 +20,24 @@ RSpec.describe API::V3::ApplicationController do
     end
   end
 
-  describe "pagination" do
+  describe 'pagination' do
     before do
       provider = create(:provider)
       2.times.map { create(:course, provider:) }
     end
 
-    it "is enabled by default" do
+    it 'is enabled by default' do
       get :index
-      expect(JSON.parse(response.body)["data"].size).to be(1)
+      expect(JSON.parse(response.body)['data'].size).to be(1)
     end
 
-    it "can not be disabled only with per_page param" do
+    it 'can not be disabled only with per_page param' do
       get :index, params: { page: { per_page: 100_000 } }
-      expect(JSON.parse(response.body)["data"].size).to be(1)
+      expect(JSON.parse(response.body)['data'].size).to be(1)
     end
 
-    context "when custom max_per_page" do
-      it "is respected" do
+    context 'when custom max_per_page' do
+      it 'is respected' do
         controller.instance_eval do
           def max_per_page
             100_000
@@ -45,7 +45,7 @@ RSpec.describe API::V3::ApplicationController do
         end
 
         get :index, params: { page: { per_page: 100_000 } }
-        expect(JSON.parse(response.body)["data"].size).to be(2)
+        expect(JSON.parse(response.body)['data'].size).to be(2)
       end
     end
   end

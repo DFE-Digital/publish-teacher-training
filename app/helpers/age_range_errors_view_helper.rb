@@ -8,17 +8,17 @@ module AgeRangeErrorsViewHelper
 
   def age_range_from_field_value
     if course.other_age_range? && course.age_range_in_years.present?
-      course.age_range_in_years.split("_").first
+      course.age_range_in_years.split('_').first
     else
-      ""
+      ''
     end
   end
 
   def age_range_to_field_value
     if course.other_age_range? && course.age_range_in_years.present?
-      course.age_range_in_years.split("_").last
+      course.age_range_in_years.split('_').last
     else
-      ""
+      ''
     end
   end
 end

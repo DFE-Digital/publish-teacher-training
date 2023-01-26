@@ -5,14 +5,14 @@ class SessionsController < ApplicationController
 
   def sign_out
     if AuthenticationService.persona?
-      redirect_to "/auth/developer/signout"
+      redirect_to '/auth/developer/signout'
     else
-      redirect_to "/auth/dfe/signout"
+      redirect_to '/auth/dfe/signout'
     end
   end
 
   def callback
-    UserSession.begin_session!(session, request.env["omniauth.auth"])
+    UserSession.begin_session!(session, request.env['omniauth.auth'])
 
     if current_user
       UserSessions::Update.call(user: current_user, user_session:)
@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
 private
 
   def after_sign_in_path
-    saved_path = session.delete("post_dfe_sign_in_path")
+    saved_path = session.delete('post_dfe_sign_in_path')
 
     saved_path || publish_root_path
   end

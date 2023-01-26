@@ -48,7 +48,7 @@ private
     @recent_active_user_count_by_provider ||= recent_active_users
       .joins(:providers)          # Results include a user entry for _each_ matching provider
       .merge(@providers)          # Limit our scope to the current recruitment Cycle
-      .group("provider_id")
+      .group('provider_id')
       .count                      # Count the users for each provider
   end
 

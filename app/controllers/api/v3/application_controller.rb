@@ -58,7 +58,7 @@ module API
         params.fetch(:fields, {})
           .permit(:subject_areas, :subjects, :courses, :providers, :site_statuses)
           .to_h
-          .map { |k, v| [k, v.split(",").map(&:to_sym)] }
+          .map { |k, v| [k, v.split(',').map(&:to_sym)] }
       end
 
       def store_request_id

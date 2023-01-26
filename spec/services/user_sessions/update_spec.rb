@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module UserSessions
   describe Update do
-    describe ".call" do
+    describe '.call' do
       let(:service) { described_class.call(user:, user_session:) }
 
-      context "when user are valid" do
+      context 'when user are valid' do
         let(:user) { create(:user) }
 
         let(:user_session) do
@@ -30,7 +30,7 @@ module UserSessions
           expect(user.last_name).to eq(user_session.last_name)
         end
 
-        it "is successful" do
+        it 'is successful' do
           expect(service).to be_successful
         end
       end
@@ -57,7 +57,7 @@ module UserSessions
           expect(user.last_name).not_to eq(user_session.last_name)
         end
 
-        it "is unsuccessful" do
+        it 'is unsuccessful' do
           expect(service).not_to be_successful
         end
       end

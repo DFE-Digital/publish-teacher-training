@@ -6,7 +6,7 @@ module API
       class SerializableLocationStatus < JSONAPI::Serializable::Resource
         extend JSONAPI::Serializable::Resource::ConditionalFields
 
-        type "location_statuses"
+        type 'location_statuses'
 
         attributes :publish,
           :status

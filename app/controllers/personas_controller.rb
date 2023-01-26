@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PersonasController < ApplicationController
-  layout "application"
+  layout 'application'
 
   skip_before_action :authenticate
 

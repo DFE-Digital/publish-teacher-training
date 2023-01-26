@@ -35,10 +35,10 @@ module Publish
         message = if course_withdrawn?
                     "#{course.name} (#{course.course_code}) has already been withdrawn"
                   else
-                    "Courses that have not been published should be deleted not withdrawn"
+                    'Courses that have not been published should be deleted not withdrawn'
                   end
 
-        flash[:error] = { id: "withdraw-error", message: }
+        flash[:error] = { id: 'withdraw-error', message: }
 
         redirect_to publish_provider_recruitment_cycle_courses_path(
           provider.provider_code,

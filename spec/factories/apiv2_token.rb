@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "ostruct"
+require 'ostruct'
 
 # We only need this strategy here for the moment.
 class JWTStrategy

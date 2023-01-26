@@ -9,11 +9,11 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
   # stderr which is lost when we have it mocked out. This env gives us a way to
   # disable redirection when trying to debug a failure in order to see the error
   # message.
-  if ENV["WITHOUT_STUBBED_STDOUT"]
+  if ENV['WITHOUT_STUBBED_STDOUT']
     yield
     { stdout: nil, stderr: nil }
   else
-    stderr ||= ""
+    stderr ||= ''
     stdout = run(stdin:, stderr:, &block)
     { stdout:, stderr: }
   end
@@ -24,7 +24,7 @@ private
 def run(stdin: nil, stderr: nil)
   # Here is where we'll redirect STDOUT to temporarily. Using a StringIO
   # doesn't seem to work, it seems to require a proper file.
-  output_file = Tempfile.new("stdout.")
+  output_file = Tempfile.new('stdout.')
 
   # We neeed to save a duplicate of the original STDOUT so that we can
   # re-instate it when we're done fiddling.
@@ -35,7 +35,7 @@ def run(stdin: nil, stderr: nil)
   $stdout.sync
 
   if stderr
-    stderr_file = Tempfile.new("stderr.")
+    stderr_file = Tempfile.new('stderr.')
     original_stderr = $stderr.dup
     $stderr.reopen(stderr_file)
     $stderr.sync
@@ -50,7 +50,7 @@ def run(stdin: nil, stderr: nil)
 
   allow_any_instance_of(Binding).to(
     receive(:pry)
-      .and_raise("Cannot use pry with stubbed stdout, set WITHOUT_STUBBED_STDOUT")
+      .and_raise('Cannot use pry with stubbed stdout, set WITHOUT_STUBBED_STDOUT')
   )
 
   yield

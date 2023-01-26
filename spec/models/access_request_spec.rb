@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe AccessRequest do
-  describe "associations" do
+  describe 'associations' do
     it { is_expected.to belong_to(:requester) }
   end
 
-  describe "auditing" do
+  describe 'auditing' do
     it { is_expected.to be_audited }
   end
 
-  describe "type" do
-    it "is an enum" do
+  describe 'type' do
+    it 'is an enum' do
       expect(subject)
         .to define_enum_for(:status)
               .backed_by_column_of_type(:integer)
@@ -25,20 +25,20 @@ describe AccessRequest do
     end
   end
 
-  describe "#approve" do
+  describe '#approve' do
     let(:access_request) { build(:access_request) }
 
     subject { access_request.approve }
 
-    it "marks the access request as completed" do
+    it 'marks the access request as completed' do
       expect { subject }.to change { access_request.status }
-        .from("requested")
-        .to("completed")
+        .from('requested')
+        .to('completed')
     end
   end
 
-  describe "#index" do
-    context "with all types of access requests" do
+  describe '#index' do
+    context 'with all types of access requests' do
       let!(:access_request1) { create(:access_request, :requested) }
       let!(:access_request2) { create(:access_request, :requested) }
       let!(:access_request3) { create(:access_request, :declined) }
@@ -52,17 +52,17 @@ describe AccessRequest do
     end
   end
 
-  describe "#by_request_date" do
+  describe '#by_request_date' do
     let!(:access_request1) { create(:access_request, request_date_utc: Time.now.utc) }
     let!(:access_request2) { create(:access_request, request_date_utc: 2.minutes.ago.utc) }
 
-    it "returns the new enrichment first" do
+    it 'returns the new enrichment first' do
       expect(AccessRequest.by_request_date.first).to eq access_request2
       expect(AccessRequest.by_request_date.last).to eq access_request1
     end
   end
 
-  describe "#add_additional_attributes" do
+  describe '#add_additional_attributes' do
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { build(:organisation) }
     let(:access_request) do
@@ -87,11 +87,11 @@ describe AccessRequest do
 
     its(:requester)         { is_expected.to eq user }
     its(:request_date_utc)  { is_expected.to be_within(1.second).of Time.now.utc }
-    its(:status)            { is_expected.to eq "requested" }
+    its(:status)            { is_expected.to eq 'requested' }
   end
 
-  describe "default scope" do
-    context "discarded records should not be returned" do
+  describe 'default scope' do
+    context 'discarded records should not be returned' do
       let(:access_request1) { create(:access_request) }
       let(:access_request2) { create(:access_request) }
       let(:access_request3) { create(:access_request) }

@@ -47,10 +47,10 @@ module Courses
     end
 
     def update_further_education_fields
-      course.funding_type = "fee"
-      course.english = "not_required"
-      course.maths = "not_required"
-      course.science = "not_required"
+      course.funding_type = 'fee'
+      course.english = 'not_required'
+      course.maths = 'not_required'
+      course.science = 'not_required'
     end
   end
 end

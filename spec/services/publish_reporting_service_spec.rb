@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe PublishReportingService do
   let(:expected) do
@@ -78,8 +78,8 @@ describe PublishReportingService do
   let(:open_courses_scope) { instance_double(Course.all.class) }
   let(:closed_courses_scope) { instance_double(Course.all.class) }
 
-  describe ".call" do
-    describe "when scope is passed" do
+  describe '.call' do
+    describe 'when scope is passed' do
       before do
         allow(recruitment_cycle_scope).to receive(:courses).and_return(courses_scope)
         allow(recruitment_cycle_scope).to receive(:providers).and_return(providers_scope)
@@ -87,7 +87,7 @@ describe PublishReportingService do
 
       subject { described_class.call(recruitment_cycle_scope:) }
 
-      it "applies the scopes" do
+      it 'applies the scopes' do
         expect(User).to receive(:count).and_return(666)
         expect(User).to receive_message_chain(:active, :count).and_return(600)
         expect(User).to receive_message_chain(:active, :last_login_since).and_return(recent_active_users)

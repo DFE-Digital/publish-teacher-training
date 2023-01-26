@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-describe "GET /reporting" do
+describe 'GET /reporting' do
   let(:expected) do
     {
       providers: {
@@ -179,10 +179,10 @@ describe "GET /reporting" do
     find_or_create(:recruitment_cycle, :previous)
   end
 
-  it "returns status success" do
+  it 'returns status success' do
     recruitment_cycle
     previous_recruitment_cycle
-    get "/reporting"
+    get '/reporting'
     expect(response).to have_http_status(:ok)
     expect(JSON.parse(response.body)).to eq(expected)
   end

@@ -7,7 +7,7 @@ class FeatureFlag
 
       return false unless feature
 
-      JSON.parse(feature)["state"]
+      JSON.parse(feature)['state']
     end
 
     def activate(feature_name)
@@ -33,7 +33,7 @@ class FeatureFlag
 
       return unless feature
 
-      JSON.parse(feature)["updated_at"]
+      JSON.parse(feature)['updated_at']
     end
 
   private

@@ -5,13 +5,13 @@ module Find
     module EntryRequirementsComponent
       class ViewPreview < ViewComponent::Preview
         def qualifications_needed_only
-          course = Course.new(course_code: "FIND",
-            name: "Super cool awesome course",
-            provider: Provider.new(provider_code: "DFE"),
+          course = Course.new(course_code: 'FIND',
+            name: 'Super cool awesome course',
+            provider: Provider.new(provider_code: 'DFE'),
             additional_degree_subject_requirements: true,
-            degree_subject_requirements: "Degree Subject Requirements Text",
-            level: "secondary",
-            additional_gcse_equivalencies: "Additional GCSE Equivalencies Text")
+            degree_subject_requirements: 'Degree Subject Requirements Text',
+            level: 'secondary',
+            additional_gcse_equivalencies: 'Additional GCSE Equivalencies Text')
 
           render Find::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
         end
@@ -36,19 +36,19 @@ module Find
 
         def mock_course_attributes
           { degree_grade: 1,
-            degree_subject_requirements: "Degree Subject Requirements Text Goes Here",
-            level: "secondary",
-            name: "Super Awesome Course",
-            gcse_grade_required: "A*",
+            degree_subject_requirements: 'Degree Subject Requirements Text Goes Here',
+            level: 'secondary',
+            name: 'Super Awesome Course',
+            gcse_grade_required: 'A*',
             accept_pending_gcse: true,
             accept_gcse_equivalency: true,
             accept_english_gcse_equivalency: true,
             accept_maths_gcse_equivalency: true,
             accept_science_gcse_equivalency: true,
-            additional_gcse_equivalencies: "much much more",
-            personal_qualities: "Personal Qualities Text Goes Here",
-            other_requirements: "Other Requirements Text Goes Here",
-            computed_subject_name_or_names: "Biology" }
+            additional_gcse_equivalencies: 'much much more',
+            personal_qualities: 'Personal Qualities Text Goes Here',
+            other_requirements: 'Other Requirements Text Goes Here',
+            computed_subject_name_or_names: 'Biology' }
         end
 
         def mock_course
@@ -68,7 +68,7 @@ module Find
           end
 
           def secondary_course?
-            level == "secondary"
+            level == 'secondary'
           end
 
           def engineers_teach_physics?

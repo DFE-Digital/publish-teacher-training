@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module Find
-  describe "/sitemap.xml", :with_find_constraint do
-    let(:provider_code) { "T92" }
+  describe '/sitemap.xml', :with_find_constraint do
+    let(:provider_code) { 'T92' }
     let(:provider) { build(:provider, provider_code:) }
     let(:changed_at) { Time.zone.now }
-    let(:course_code) { "X102" }
+    let(:course_code) { 'X102' }
     let(:course) do
       create(
         :course,
@@ -21,15 +21,15 @@ module Find
 
     let(:site_status) { build(:site_status, :running, :published, site: site1) }
 
-    let(:site1) { build(:site, location_name: "location 1") }
+    let(:site1) { build(:site, location_name: 'location 1') }
 
     before do
       course
 
-      get "/sitemap.xml"
+      get '/sitemap.xml'
     end
 
-    it "renders sitemap" do
+    it 'renders sitemap' do
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq(
         <<~XML

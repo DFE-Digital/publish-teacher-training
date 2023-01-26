@@ -5,7 +5,7 @@ module API
     class SerializableSite < JSONAPI::Serializable::Resource
       include JsonapiCacheKeyHelper
 
-      type "sites"
+      type 'sites'
 
       attributes :code, :location_name, :address1, :address2,
         :address3, :address4, :postcode, :region_code,

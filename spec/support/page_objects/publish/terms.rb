@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "../sections/error_link"
+require_relative '../sections/error_link'
 
 module PageObjects
   module Publish
     class Terms < PageObjects::Base
-      set_url "/publish/accept-terms"
+      set_url '/publish/accept-terms'
 
-      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
+      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
-      element :accept_terms, "#publish-interruption-accept-terms-form-terms-accepted-1-field"
+      element :accept_terms, '#publish-interruption-accept-terms-form-terms-accepted-1-field'
 
       element :submit, 'button.govuk-button[type="submit"]'
 

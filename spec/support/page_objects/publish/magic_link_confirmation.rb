@@ -3,7 +3,7 @@
 module PageObjects
   module Publish
     class MagicLinkConfirmation < PageObjects::Base
-      set_url "/magic-link-sent"
+      set_url '/magic-link-sent'
     end
   end
 end

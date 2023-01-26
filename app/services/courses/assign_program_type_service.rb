@@ -4,11 +4,11 @@ module Courses
   class AssignProgramTypeService
     def execute(funding_type, course)
       case funding_type
-      when "salary"
+      when 'salary'
         course.program_type = :school_direct_salaried_training_programme
-      when "apprenticeship"
+      when 'apprenticeship'
         course.program_type = :pg_teaching_apprenticeship
-      when "fee"
+      when 'fee'
         course.program_type = calculate_fee_program(course)
       end
 

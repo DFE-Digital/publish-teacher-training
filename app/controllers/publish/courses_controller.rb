@@ -39,7 +39,7 @@ module Publish
       @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
 
       if @course.save
-        flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
+        flash[:success_with_body] = { title: 'Your course has been created', body: 'Add the rest of your details and publish the course, so that candidates can find and apply to it.' }
         redirect_to(
           publish_provider_recruitment_cycle_courses_path(
             @course.provider_code,
@@ -73,7 +73,7 @@ module Publish
 
       if @course.publishable?
         publish_course
-        flash[:success] = "Your course has been published."
+        flash[:success] = 'Your course has been published.'
 
         redirect_to publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
@@ -104,7 +104,7 @@ module Publish
     end
 
     def render_locations_messages
-      flash[:error] = { id: "locations-error", message: "You need to create at least one location before creating a course" }
+      flash[:error] = { id: 'locations-error', message: 'You need to create at least one location before creating a course' }
 
       redirect_to new_publish_provider_recruitment_cycle_location_path(provider.provider_code, provider.recruitment_cycle_year)
     end
@@ -135,7 +135,7 @@ module Publish
 
     def format_publish_error_messages
       @course.errors.messages.transform_values do |error_messages|
-        error_messages.map { |message| message.gsub(/^\^/, "") }
+        error_messages.map { |message| message.gsub(/^\^/, '') }
       end
     end
   end

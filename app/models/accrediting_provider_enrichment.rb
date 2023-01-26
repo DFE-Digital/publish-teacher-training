@@ -11,7 +11,7 @@ class AccreditingProviderEnrichment
 
   def initialize(attrs)
     attrs.each do |attr, value|
-      send("#{attr}=", value) unless attr == "errors"
+      send("#{attr}=", value) unless attr == 'errors'
     end
   end
 

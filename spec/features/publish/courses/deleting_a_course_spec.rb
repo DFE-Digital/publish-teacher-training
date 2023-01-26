@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
+feature 'Deleting courses', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "i can delete a course" do
+  scenario 'i can delete a course' do
     and_there_is_a_course_i_want_to_delete
     when_i_visit_the_course_page
     and_i_click_the_delete_link
@@ -17,14 +17,14 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
     and_the_course_is_deleted
   end
 
-  scenario "wrong course code provided" do
+  scenario 'wrong course code provided' do
     and_there_is_a_course_i_want_to_delete
     when_i_visit_the_delete_page
     and_i_submit_with_the_wrong_code
     then_i_should_see_an_error_message
   end
 
-  scenario "attempting to delete a published course" do
+  scenario 'attempting to delete a published course' do
     and_there_is_a_published_course
     when_i_visit_the_delete_page
     then_i_am_redirected_to_the_courses_page
@@ -63,7 +63,7 @@ feature "Deleting courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_with_the_wrong_code
-    delete_page.confirm_course_code.set("random")
+    delete_page.confirm_course_code.set('random')
     and_i_submit
   end
 

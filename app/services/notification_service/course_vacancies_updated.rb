@@ -50,25 +50,25 @@ module NotificationService
 
     def all_vacancies_open?
       vacancy_statuses.all? do |vacancy_status|
-        vacancy_status[:status] == "full_time_vacancies" ||
-          vacancy_status[:status] == "both_full_time_and_part_time_vacancies" ||
-          vacancy_status[:status] == "part_time_vacancies"
+        vacancy_status[:status] == 'full_time_vacancies' ||
+          vacancy_status[:status] == 'both_full_time_and_part_time_vacancies' ||
+          vacancy_status[:status] == 'part_time_vacancies'
       end
     end
 
     def all_vacancies_closed?
-      vacancy_statuses.all? { |vacancy_status| vacancy_status[:status] == "no_vacancies" }
+      vacancy_statuses.all? { |vacancy_status| vacancy_status[:status] == 'no_vacancies' }
     end
 
     def vacancies_closed
       vacancy_statuses
-        .select { |vacancy_status| vacancy_status[:status] == "no_vacancies" }
+        .select { |vacancy_status| vacancy_status[:status] == 'no_vacancies' }
         .map { |vacancy_status| SiteStatus.find(vacancy_status[:id]).site.location_name }
     end
 
     def vacancies_opened
       vacancy_statuses
-        .select { |vacancy_status| vacancy_status[:status] == "full_time_vacancies" || vacancy_status[:status] == "part_time_vacancies" || vacancy_status[:status] == "both_full_time_and_part_time_vacancies" }
+        .select { |vacancy_status| vacancy_status[:status] == 'full_time_vacancies' || vacancy_status[:status] == 'part_time_vacancies' || vacancy_status[:status] == 'both_full_time_and_part_time_vacancies' }
         .map { |vacancy_status| SiteStatus.find(vacancy_status[:id]).site.location_name }
     end
 

@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Filter providers", :with_publish_constraint do
+feature 'Filter providers', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_providers_with_courses
     when_i_visit_the_providers_index_page
   end
 
-  context "adding filters" do
-    scenario "by provider name" do
+  context 'adding filters' do
+    scenario 'by provider name' do
       then_i_can_search_by_provider_name
       and_when_i_click_apply_filters
       the_correct_provider_shows
     end
 
-    scenario "by provider code" do
+    scenario 'by provider code' do
       then_i_can_search_by_code
       and_when_i_click_apply_filters
       the_correct_provider_shows
     end
 
-    scenario "by course code" do
+    scenario 'by course code' do
       then_i_can_search_by_course_code
       and_when_i_click_apply_filters
       the_correct_provider_shows
     end
   end
 
-  context "removing filters" do
+  context 'removing filters' do
     before do
       given_i_have_filters_selected
     end
 
-    scenario "removing selected filters" do
+    scenario 'removing selected filters' do
       i_can_remove_filters
       and_i_can_see_unfiltered_results
     end

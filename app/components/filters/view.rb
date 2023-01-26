@@ -27,7 +27,7 @@ module Filters
     end
 
     def title_html(filter, value)
-      tag.span("Remove ", class: "govuk-visually-hidden") + value + tag.span(" #{filter.humanize.downcase} filter", class: "govuk-visually-hidden")
+      tag.span('Remove ', class: 'govuk-visually-hidden') + value + tag.span(" #{filter.humanize.downcase} filter", class: 'govuk-visually-hidden')
     end
 
     def remove_select_tag_link(filter)

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe ProviderPolicy do
   let(:user) { build(:user) }
   let(:admin) { build(:user, :admin) }
 
-  describe "scope" do
-    it "limits the providers to those the user is assigned to" do
+  describe 'scope' do
+    it 'limits the providers to those the user is assigned to' do
       provider1 = create(:provider, users: [user])
       _provider2 = create(:provider)
 
@@ -43,27 +43,27 @@ describe ProviderPolicy do
     it { is_expected.not_to permit(not_allowed_user, training_provider) }
   end
 
-  describe "#permitted_provider_attributes" do
-    context "when user" do
+  describe '#permitted_provider_attributes' do
+    context 'when user' do
       subject { described_class.new(user, build(:provider)) }
 
-      it "includes email" do
+      it 'includes email' do
         expect(subject.permitted_provider_attributes).to include(:email)
       end
 
-      it "excludes provider_name" do
+      it 'excludes provider_name' do
         expect(subject.permitted_provider_attributes).not_to include(:provider_name)
       end
     end
 
-    context "when admin" do
+    context 'when admin' do
       subject { described_class.new(admin, build(:provider)) }
 
-      it "includes email" do
+      it 'includes email' do
         expect(subject.permitted_provider_attributes).to include(:email)
       end
 
-      it "includes provider_name" do
+      it 'includes provider_name' do
         expect(subject.permitted_provider_attributes).to include(:provider_name)
       end
     end

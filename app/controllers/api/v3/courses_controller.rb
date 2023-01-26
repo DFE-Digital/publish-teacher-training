@@ -43,7 +43,7 @@ module API
       def fields_for_sitemap?
         return unless (courses = params.dig(:fields, :courses))
 
-        (courses.split(",") & %w[course_code provider_code changed_at]).size == 3
+        (courses.split(',') & %w[course_code provider_code changed_at]).size == 3
       end
 
       def build_courses

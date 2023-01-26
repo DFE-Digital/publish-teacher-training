@@ -9,7 +9,7 @@ module ServicePattern
   end
 
   def call
-    raise NotImplementedError("#call must be implemented")
+    raise NotImplementedError('#call must be implemented')
   end
 
   module ClassMethods

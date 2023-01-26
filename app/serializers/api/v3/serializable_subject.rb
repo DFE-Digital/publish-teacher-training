@@ -5,7 +5,7 @@ module API
     class SerializableSubject < JSONAPI::Serializable::Resource
       include JsonapiCacheKeyHelper
 
-      type "subjects"
+      type 'subjects'
 
       attributes :subject_name, :subject_code
 

@@ -14,7 +14,7 @@ module Find
         formatted_date = DateTime.parse(last_updated).to_fs(:govuk_date_and_time)
         "Changed to #{status} at #{formatted_date}"
       else
-        "This flag has not been updated"
+        'This flag has not been updated'
       end
     end
 
@@ -25,7 +25,7 @@ module Find
     end
 
     def status
-      FeatureFlag.active?(@feature_name) ? "active" : "inactive"
+      FeatureFlag.active?(@feature_name) ? 'active' : 'inactive'
     end
   end
 end

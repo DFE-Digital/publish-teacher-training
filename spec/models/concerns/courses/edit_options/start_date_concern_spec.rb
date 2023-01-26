@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Courses::EditOptions::StartDateConcern do
   let(:example_model) do
@@ -18,10 +18,10 @@ describe Courses::EditOptions::StartDateConcern do
     example_model.provider = provider
   end
 
-  context "start_date_options" do
+  context 'start_date_options' do
     let(:year) { provider.recruitment_cycle.year.to_i }
 
-    it "returns the correct options for the recruitment_cycle" do
+    it 'returns the correct options for the recruitment_cycle' do
       expect(example_model.start_date_options).to eq(
         ["October #{year - 1}",
          "November #{year - 1}",

@@ -109,15 +109,15 @@ module Publish
     def single_site_status_vacancy
       case params[:change_vacancies_confirmation]
 
-      when "no_vacancies_confirmation"
-        "no_vacancies"
-      when "has_vacancies_confirmation"
-        course.full_time? ? "full_time_vacancies" : "part_time_vacancies"
+      when 'no_vacancies_confirmation'
+        'no_vacancies'
+      when 'has_vacancies_confirmation'
+        course.full_time? ? 'full_time_vacancies' : 'part_time_vacancies'
       end
     end
 
     def site_status_vacancy(site_status_params)
-      return "no_vacancies" if params[:has_vacancies] == "false"
+      return 'no_vacancies' if params[:has_vacancies] == 'false'
 
       VacancyStatusDeterminationService.call(
         vacancy_status_full_time: site_status_params[:full_time],

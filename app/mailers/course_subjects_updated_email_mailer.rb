@@ -29,7 +29,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
 private
 
   def format(subject_names)
-    subject_names.join(", ")
+    subject_names.join(', ')
   end
 
   def create_course_url(course)

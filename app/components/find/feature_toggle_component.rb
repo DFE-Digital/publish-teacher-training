@@ -12,7 +12,7 @@ module Find
     end
 
     def toggle_label
-      FeatureFlag.active?(feature_name) ? "Deactivate" : "Activate"
+      FeatureFlag.active?(feature_name) ? 'Deactivate' : 'Activate'
     end
 
     def toggle_link

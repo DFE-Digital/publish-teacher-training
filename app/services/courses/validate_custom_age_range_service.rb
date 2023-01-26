@@ -6,15 +6,15 @@ module Courses
       valid_age_range_regex = Regexp.new(/^(?<from>\d{1,2})_to_(?<to>\d{1,2})$/)
 
       if valid_age_range_regex.match(age_range_in_years)
-        from_age = get_ages(age_range_in_years, valid_age_range_regex)["from"]
-        to_age = get_ages(age_range_in_years, valid_age_range_regex)["to"]
+        from_age = get_ages(age_range_in_years, valid_age_range_regex)['from']
+        to_age = get_ages(age_range_in_years, valid_age_range_regex)['to']
         if from_age_invalid?(from_age) || to_age_invalid?(to_age)
-          course.errors.add(:age_range_in_years, "^Age range must be a school age")
+          course.errors.add(:age_range_in_years, '^Age range must be a school age')
         elsif to_age - from_age < 4
-          course.errors.add(:age_range_in_years, "^Age range must cover at least 4 years")
+          course.errors.add(:age_range_in_years, '^Age range must cover at least 4 years')
         end
       else
-        course.errors.add(:age_range_in_years, "^Enter an age range")
+        course.errors.add(:age_range_in_years, '^Enter an age range')
       end
     end
 

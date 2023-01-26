@@ -16,7 +16,7 @@ class LocationSuggestion
         return
       end
 
-      result = response.body["predictions"].map(&format_prediction).take(5)
+      result = response.body['predictions'].map(&format_prediction).take(5)
       Rails.cache.write(location_query_cache_key(input), result, expires_in: CACHE_EXPIRY)
       result
     end
@@ -25,12 +25,12 @@ class LocationSuggestion
 
     def do_not_cache?(response)
       response.status != 200 ||
-        response.body["error_message"].present? ||
-        response.body["predictions"].blank?
+        response.body['error_message'].present? ||
+        response.body['predictions'].blank?
     end
 
     def report_error(response)
-      Sentry.capture_message("Google Places API error - status: #{response.status}, body: #{response.body}") if response.status != 200 || response.body["error_message"].present?
+      Sentry.capture_message("Google Places API error - status: #{response.status}, body: #{response.body}") if response.status != 200 || response.body['error_message'].present?
     end
 
     def location_query_cache_key(input)
@@ -46,18 +46,18 @@ class LocationSuggestion
 
     def format_prediction
       lambda do |prediction|
-        prediction_split = prediction["description"].split(",")
-        prediction_split.first(prediction_split.size - 1).join(",")
+        prediction_split = prediction['description'].split(',')
+        prediction_split.first(prediction_split.size - 1).join(',')
       end
     end
 
     def build_query(input)
       {
         key: Settings.google.gcp_api_key,
-        language: "en",
+        language: 'en',
         input:,
-        components: "country:uk",
-        types: "geocode"
+        components: 'country:uk',
+        types: 'geocode'
       }
     end
   end

@@ -14,7 +14,7 @@ module Support
 
         UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
         redirect_to support_recruitment_cycle_provider_users_path
-        flash[:success] = "User added"
+        flash[:success] = 'User added'
       end
 
     private

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe DegreeRowContent, type: :component do
   include Rails.application.routes.url_helpers
@@ -12,7 +12,7 @@ describe DegreeRowContent, type: :component do
       :course,
       provider:,
       degree_grade:,
-      degree_subject_requirements: "Maths A level."
+      degree_subject_requirements: 'Maths A level.'
     )
   end
 
@@ -20,12 +20,12 @@ describe DegreeRowContent, type: :component do
     render_inline(described_class.new(course: course.decorate))
   end
 
-  context "when the degree section is incomplete" do
+  context 'when the degree section is incomplete' do
     let(:degree_grade) { nil }
 
-    it "renders a link to the degree section" do
+    it 'renders a link to the degree section' do
       expect(page.has_link?(
-        "Enter degree requirements",
+        'Enter degree requirements',
         href: degrees_start_publish_provider_recruitment_cycle_course_path(
           provider.provider_code,
           provider.recruitment_cycle.year,
@@ -35,45 +35,45 @@ describe DegreeRowContent, type: :component do
     end
   end
 
-  context "when the degree section is complete" do
+  context 'when the degree section is complete' do
     context "when degree type is 'two_one'" do
-      let(:degree_grade) { "two_one" }
+      let(:degree_grade) { 'two_one' }
 
       it "renders '2:1 or above, or equivalent'" do
-        expect(page).to have_content("2:1 or above, or equivalent")
+        expect(page).to have_content('2:1 or above, or equivalent')
       end
     end
 
     context "when degree type is 'two_two'" do
-      let(:degree_grade) { "two_two" }
+      let(:degree_grade) { 'two_two' }
 
       it "renders '2:2 or above, or equivalent'" do
-        expect(page).to have_content("2:2 or above, or equivalent")
+        expect(page).to have_content('2:2 or above, or equivalent')
       end
     end
 
     context "when degree type is 'third_class'" do
-      let(:degree_grade) { "third_class" }
+      let(:degree_grade) { 'third_class' }
 
       it "renders 'Third class degree or above, or equivalent'" do
-        expect(page).to have_content("Third class degree or above, or equivalent")
+        expect(page).to have_content('Third class degree or above, or equivalent')
       end
     end
 
     context "when degree type is 'not_required'" do
-      let(:degree_grade) { "not_required" }
+      let(:degree_grade) { 'not_required' }
 
       it "renders 'Third class degree or above, or equivalent'" do
-        expect(page).to have_content("An undergraduate degree, or equivalent")
+        expect(page).to have_content('An undergraduate degree, or equivalent')
       end
     end
 
-    context "when degree_subject_requirements and a degree grade are present" do
-      let(:degree_grade) { "two_one" }
+    context 'when degree_subject_requirements and a degree grade are present' do
+      let(:degree_grade) { 'two_one' }
 
-      it "renders the correct content for both attributes" do
-        expect(page).to have_content("2:1 or above, or equivalent")
-        expect(page).to have_content("Maths A level.")
+      it 'renders the correct content for both attributes' do
+        expect(page).to have_content('2:1 or above, or equivalent')
+        expect(page).to have_content('Maths A level.')
       end
     end
   end

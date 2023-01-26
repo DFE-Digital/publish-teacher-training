@@ -18,11 +18,11 @@ module Find
     end
 
     def primary?
-      age_group == "primary"
+      age_group == 'primary'
     end
 
     def secondary?
-      age_group == "secondary"
+      age_group == 'secondary'
     end
   end
 end

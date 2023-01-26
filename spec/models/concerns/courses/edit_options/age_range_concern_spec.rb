@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Courses::EditOptions::AgeRangeConcern do
   let(:example_model) do
@@ -16,18 +16,18 @@ describe Courses::EditOptions::AgeRangeConcern do
     example_model.level = level_value
   end
 
-  context "for primary" do
-    let(:level_value) { "primary" }
+  context 'for primary' do
+    let(:level_value) { 'primary' }
 
-    it "returns the correct ages range for users to choose between" do
+    it 'returns the correct ages range for users to choose between' do
       expect(example_model.age_range_options).to eq(%w[3_to_7 5_to_11 7_to_11 7_to_14])
     end
   end
 
-  context "for secondary" do
-    let(:level_value) { "secondary" }
+  context 'for secondary' do
+    let(:level_value) { 'secondary' }
 
-    it "returns the correct age ranges for users to choose between" do
+    it 'returns the correct age ranges for users to choose between' do
       expect(example_model.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
     end
   end

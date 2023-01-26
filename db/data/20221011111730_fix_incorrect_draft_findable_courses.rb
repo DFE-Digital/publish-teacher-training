@@ -8,7 +8,7 @@ class FixIncorrectDraftFindableCourses < ActiveRecord::Migration[7.0]
   }.freeze
 
   def up
-    Course.joins(:site_statuses, :enrichments, provider: :recruitment_cycle).where(provider: { recruitment_cycle: { year: "2023" } }, enrichments: { status: %w[draft rolled_over] }, site_statuses: { status: "running" }).find_each do |course|
+    Course.joins(:site_statuses, :enrichments, provider: :recruitment_cycle).where(provider: { recruitment_cycle: { year: '2023' } }, enrichments: { status: %w[draft rolled_over] }, site_statuses: { status: 'running' }).find_each do |course|
       next if course.is_published?
 
       course.site_statuses.update_all(publish: :unpublished, status: :new_status, vac_status: VAC_MAPPING[course.study_mode.to_sym] || :no_vacancies)

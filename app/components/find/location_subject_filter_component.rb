@@ -12,7 +12,7 @@ module Find
     end
 
     def subjects_line
-      to_sentence(@results.subjects.map { |subject| tag.b(subject[:subject_name]) }, last_word_connector: " and ")
+      to_sentence(@results.subjects.map { |subject| tag.b(subject[:subject_name]) }, last_word_connector: ' and ')
     end
   end
 end

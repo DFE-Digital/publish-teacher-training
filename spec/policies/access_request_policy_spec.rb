@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe AccessRequestPolicy do
   subject { described_class }
@@ -8,13 +8,13 @@ describe AccessRequestPolicy do
   permissions :approve?, :index?, :show? do
     let(:access_request) { build(:access_request) }
 
-    context "non-admin user" do
+    context 'non-admin user' do
       let(:user) { build(:user) }
 
       it { is_expected.not_to permit(user) }
     end
 
-    context "admin user" do
+    context 'admin user' do
       let(:user) { build(:user, :admin) }
 
       it { is_expected.to permit(user) }
@@ -22,7 +22,7 @@ describe AccessRequestPolicy do
   end
 
   permissions :create?, :new? do
-    context "non-admin user" do
+    context 'non-admin user' do
       let(:user) { build(:user) }
 
       it { is_expected.to permit(user) }

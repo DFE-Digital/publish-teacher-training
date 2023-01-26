@@ -32,7 +32,7 @@ private
     Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
                       "#{counts[:sites]} sites copied, " \
                       "#{counts[:courses]} courses copied " +
-                      format("in %.3f seconds", bm.real)
+                      format('in %.3f seconds', bm.real)
     counts
   end
 

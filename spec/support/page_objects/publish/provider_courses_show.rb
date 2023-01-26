@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "../sections/summary_list"
-require_relative "../sections/error_link"
-require_relative "../sections/course_button_panel"
+require_relative '../sections/summary_list'
+require_relative '../sections/error_link'
+require_relative '../sections/course_button_panel'
 
 module PageObjects
   module Publish
     class ProviderCoursesShow < PageObjects::Base
-      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}"
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}'
 
-      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
+      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li'
 
       section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :interview_process, Sections::SummaryList, '[data-qa="enrichment__interview_process"]'
@@ -27,7 +27,7 @@ module PageObjects
       section :other_requirements, Sections::SummaryList, '[data-qa="enrichment__other_requirements"]'
       section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'
 
-      element :basic_details_link, "a.govuk-link.govuk-tabs__tab", text: "Basic details"
+      element :basic_details_link, 'a.govuk-link.govuk-tabs__tab', text: 'Basic details'
       element :content_status, '[data-qa="course__content-status"]'
       element :rolled_over_course_link, '[data-qa="course__rolled-over-link"]'
 

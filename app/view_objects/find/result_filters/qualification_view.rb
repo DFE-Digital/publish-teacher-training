@@ -8,15 +8,15 @@ module Find
       end
 
       def qts_only_checked?
-        checked?("qts")
+        checked?('qts')
       end
 
       def pgde_pgce_with_qts_checked?
-        checked?("pgce_with_qts")
+        checked?('pgce_with_qts')
       end
 
       def other_checked?
-        checked?("pgce pgde") || checked?("pgce") || checked?("pgde")
+        checked?('pgce pgde') || checked?('pgce') || checked?('pgde')
       end
 
       def qualification_selected?

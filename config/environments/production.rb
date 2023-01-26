@@ -22,7 +22,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -44,7 +44,7 @@ Rails.application.configure do
   config.active_record.logger = nil # Don't log SQL in production
 
   # Use a different cache store in production.
-  config.cache_store = :redis_cache_store, { url: ENV.fetch("REDIS_CACHE_URL") }
+  config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_CACHE_URL') }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
@@ -66,7 +66,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.authentication_token = ENV.fetch("AUTHENTICATION_TOKEN", nil)
+  config.authentication_token = ENV.fetch('AUTHENTICATION_TOKEN', nil)
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector

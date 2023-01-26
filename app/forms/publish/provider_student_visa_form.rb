@@ -8,7 +8,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: "Select if candidates can get a sponsored Student visa" }
+    validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: 'Select if candidates can get a sponsored Student visa' }
 
   private
 

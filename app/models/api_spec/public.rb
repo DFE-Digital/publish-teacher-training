@@ -12,7 +12,7 @@ module APISpec
       end
 
       def openapi_file_path
-        "swagger/v%<version>s/swagger.json"
+        'swagger/v%<version>s/swagger.json'
       end
     end
   end

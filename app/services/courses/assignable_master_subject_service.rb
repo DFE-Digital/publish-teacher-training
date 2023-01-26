@@ -14,11 +14,11 @@ module Courses
 
     def execute(course:)
       case course.level
-      when "primary"
+      when 'primary'
         @primary_subject.includes(:financial_incentive).all
-      when "secondary"
+      when 'secondary'
         @secondary_subject.includes(:financial_incentive).all
-      when "further_education"
+      when 'further_education'
         @further_education_subject.includes(:financial_incentive).all
       end
     end

@@ -2,7 +2,7 @@
 
 class GcseRowContentPreview < ViewComponent::Preview
   def incomplete
-    course = Course.new(course_code: "C0D3", provider: Provider.new(provider_code: "E2E", recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year)))
+    course = Course.new(course_code: 'C0D3', provider: Provider.new(provider_code: 'E2E', recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year)))
 
     render(GcseRowContent.new(course: course.decorate))
   end
@@ -14,7 +14,7 @@ class GcseRowContentPreview < ViewComponent::Preview
       accept_english_gcse_equivalency: true,
       accept_maths_gcse_equivalency: true,
       accept_science_gcse_equivalency: true,
-      additional_gcse_equivalencies: "Geography"
+      additional_gcse_equivalencies: 'Geography'
     )
 
     render(GcseRowContent.new(course: course.decorate))

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Course do
-  describe "#publishable?" do
+  describe '#publishable?' do
     let(:course) { create(:course) }
     let(:site) { create(:site) }
     let(:site_status) { create(:site_status, :new, site:) }
@@ -12,7 +12,7 @@ describe Course do
 
     its(:publishable?) { is_expected.to be_falsey }
 
-    context "with enrichment" do
+    context 'with enrichment' do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
       let(:course) do
@@ -22,14 +22,14 @@ describe Course do
       its(:publishable?) { is_expected.to be_truthy }
     end
 
-    context "with no enrichment" do
+    context 'with no enrichment' do
       let(:course) do
         create(:course, site_statuses: [site_status])
       end
 
       its(:publishable?) { is_expected.to be_falsey }
 
-      describe "course errors" do
+      describe 'course errors' do
         subject do
           course.publishable?
           course.errors
@@ -39,7 +39,7 @@ describe Course do
       end
     end
 
-    context "with no sites" do
+    context 'with no sites' do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:course) do
         create(:course, site_statuses: [], enrichments: [enrichment])
@@ -47,7 +47,7 @@ describe Course do
 
       its(:publishable?) { is_expected.to be_falsey }
 
-      describe "course errors" do
+      describe 'course errors' do
         subject do
           course.publishable?
           course.errors

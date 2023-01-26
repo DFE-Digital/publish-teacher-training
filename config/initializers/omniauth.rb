@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../app/services/authentication_service"
+require_relative '../../app/services/authentication_service'
 
 if AuthenticationService.persona?
 
@@ -14,7 +14,7 @@ else
   OmniAuth.config.logger = Rails.logger
 
   dfe_sign_in_issuer_uri = URI.parse(Settings.dfe_signin.issuer)
-  dfe_sign_in_redirect_uri = URI.join(Settings.base_url, "/auth/dfe/callback")
+  dfe_sign_in_redirect_uri = URI.join(Settings.base_url, '/auth/dfe/callback')
 
   client_options = {
     identifier: Settings.dfe_signin.identifier,
@@ -32,8 +32,8 @@ else
     discovery: true,
     response_type: :code,
     scope: %i[email profile],
-    path_prefix: "/auth",
-    callback_path: "/auth/dfe/callback",
+    path_prefix: '/auth',
+    callback_path: '/auth/dfe/callback',
     client_options:
   }
 

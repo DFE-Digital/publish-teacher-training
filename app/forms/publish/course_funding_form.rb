@@ -13,8 +13,8 @@ module Publish
     attr_accessor(*FIELDS)
 
     validates :funding_type, presence: true
-    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { skilled_worker_visa? }
-    validates :can_sponsor_student_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { student_visa? }
+    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { skilled_worker_visa? }
+    validates :can_sponsor_student_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
@@ -28,7 +28,7 @@ module Publish
 
     def origin_step
       @origin_step ||= if funding_type_updated?
-                         if [course.funding_type, new_attributes[:funding_type]].include?("apprenticeship")
+                         if [course.funding_type, new_attributes[:funding_type]].include?('apprenticeship')
                            :apprenticeship
                          else
                            :funding_type
@@ -37,7 +37,7 @@ module Publish
     end
 
     def is_fee_based?
-      funding_type == "fee"
+      funding_type == 'fee'
     end
 
     def visa_type

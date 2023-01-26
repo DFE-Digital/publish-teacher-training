@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "../sections/error_link"
+require_relative '../sections/error_link'
 
 module PageObjects
   module Publish
     class Notification < PageObjects::Base
-      set_url "/publish/notifications"
+      set_url '/publish/notifications'
 
-      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
+      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
-      element :opt_in_radio, "#publish-notification-form-explicitly-enabled-true-field"
-      element :opt_out_radio, "#publish-notification-form-explicitly-enabled-field"
+      element :opt_in_radio, '#publish-notification-form-explicitly-enabled-true-field'
+      element :opt_out_radio, '#publish-notification-form-explicitly-enabled-field'
 
       element :submit, 'button.govuk-button[type="submit"]'
 

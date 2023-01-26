@@ -10,10 +10,10 @@ class Subject < ApplicationRecord
     where(subject_code: subject_codes)
   }
 
-  scope :active, -> { where.not(type: "DiscontinuedSubject") }
+  scope :active, -> { where.not(type: 'DiscontinuedSubject') }
 
   def secondary_subject?
-    type == "SecondarySubject"
+    type == 'SecondarySubject'
   end
 
   def to_sym

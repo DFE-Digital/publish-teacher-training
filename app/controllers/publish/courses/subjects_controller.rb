@@ -41,7 +41,7 @@ module Publish
           )
 
         elsif course_subjects_form.save!
-          value = @course.is_primary? ? "primary subject" : "secondary subject"
+          value = @course.is_primary? ? 'primary subject' : 'secondary subject'
           course_details_success_message(value)
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
@@ -64,7 +64,7 @@ module Publish
     private
 
       def campaign_name_check
-        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics.id
+        params[:course][:campaign_name] = '' unless @course.master_subject_id == SecondarySubject.physics.id
       end
 
       def course_subjects_form

@@ -4,9 +4,9 @@ module PageObjects
   module Publish
     module Courses
       class AgeRangeEdit < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/age_range"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/age_range'
 
-        sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
+        sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
         element :three_to_seven, '[data-qa="course__age_range_in_years_3_to_7_radio"]'
         element :five_to_eleven, '[data-qa="course__age_range_in_years_5_to_11_radio"]'

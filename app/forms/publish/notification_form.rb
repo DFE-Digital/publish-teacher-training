@@ -10,7 +10,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :explicitly_enabled, inclusion: { in: [true, false], message: "Please select one option" }
+    validates :explicitly_enabled, inclusion: { in: [true, false], message: 'Please select one option' }
 
     def save!
       if valid?

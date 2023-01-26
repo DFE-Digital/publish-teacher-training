@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe SitePolicy do
   let(:user) { create(:user) }
@@ -8,7 +8,7 @@ describe SitePolicy do
   subject { described_class }
 
   permissions :index? do
-    it "allows the :index action for any authenticated user" do
+    it 'allows the :index action for any authenticated user' do
       expect(subject).to permit(user)
     end
   end
@@ -23,7 +23,7 @@ describe SitePolicy do
 
     it { is_expected.to permit(user, site) }
 
-    context "with a user outside the provider" do
+    context 'with a user outside the provider' do
       let(:other_user) { create(:user) }
 
       it { is_expected.not_to permit(other_user, site) }

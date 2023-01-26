@@ -11,7 +11,7 @@ module Find
       end
 
       def border_css_class
-        @border ? "" : "no-border"
+        @border ? '' : 'no-border'
       end
 
     private

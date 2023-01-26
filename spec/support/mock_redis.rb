@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "mock_redis"
+require 'mock_redis'
 
 RSpec.configure do |config|
   config.before do

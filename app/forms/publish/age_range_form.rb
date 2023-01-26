@@ -36,7 +36,7 @@ module Publish
 
       self.course_age_range_in_years_other_from = extract_from_years
       self.course_age_range_in_years_other_to = extract_to_years
-      self.age_range_in_years = "other"
+      self.age_range_in_years = 'other'
     end
 
     validates :age_range_in_years, presence: true
@@ -62,7 +62,7 @@ module Publish
   private
 
     def age_range_other?
-      age_range_in_years == "other"
+      age_range_in_years == 'other'
     end
 
     def presets
@@ -74,19 +74,19 @@ module Publish
     end
 
     def process_custom_range?
-      age_range_in_years.present? && age_range_in_years != "other" && !presets.include?(age_range_in_years)
+      age_range_in_years.present? && age_range_in_years != 'other' && !presets.include?(age_range_in_years)
     end
 
     def extract_from_years
-      age_range_in_years.split("_").first
+      age_range_in_years.split('_').first
     end
 
     def extract_to_years
-      age_range_in_years.split("_").last
+      age_range_in_years.split('_').last
     end
 
     def age_range_from_and_to_missing
-      return unless age_range_in_years == "other"
+      return unless age_range_in_years == 'other'
 
       errors.add(:course_age_range_in_years_other_from, :blank) if course_age_range_in_years_other_from.blank?
 
@@ -94,11 +94,11 @@ module Publish
     end
 
     def age_range_from_and_to_reversed
-      errors.add(:course_age_range_in_years_other_from, :invalid) if age_range_in_years == "other" && course_age_range_in_years_other_from.present? && course_age_range_in_years_other_to.present? && (course_age_range_in_years_other_from.to_i > course_age_range_in_years_other_to.to_i)
+      errors.add(:course_age_range_in_years_other_from, :invalid) if age_range_in_years == 'other' && course_age_range_in_years_other_from.present? && course_age_range_in_years_other_to.present? && (course_age_range_in_years_other_from.to_i > course_age_range_in_years_other_to.to_i)
     end
 
     def age_range_spans_at_least_4_years
-      errors.add(:course_age_range_in_years_other_to, :invalid) if age_range_in_years == "other" && ((course_age_range_in_years_other_to.to_i - course_age_range_in_years_other_from.to_i).abs < 4)
+      errors.add(:course_age_range_in_years_other_to, :invalid) if age_range_in_years == 'other' && ((course_age_range_in_years_other_to.to_i - course_age_range_in_years_other_from.to_i).abs < 4)
     end
   end
 end

@@ -4,13 +4,13 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def pagy_govuk_nav(pagy)
-    render "pagy/paginator", pagy:
+    render 'pagy/paginator', pagy:
   end
 
   def header_items(current_user)
     return unless current_user
 
-    [{ name: t("header.items.sign_out"), url: sign_out_path }]
+    [{ name: t('header.items.sign_out'), url: sign_out_path }]
   end
 
   # rubocop:disable Rails/HelperInstanceVariable
@@ -31,7 +31,7 @@ module ApplicationHelper
              )
            end
 
-    govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do
+    govuk_inset_text(classes: 'app-inset-text--narrow-border app-inset-text--error') do
       govuk_link_to(error, href)
     end
   end
@@ -48,14 +48,14 @@ module ApplicationHelper
       value = raw(*errors)
       action = nil
     elsif truncate_value
-      classes = "app-summary-list__value--truncate"
+      classes = 'app-summary-list__value--truncate'
     end
 
-    value = raw("<span class=\"app-!-colour-muted\">Empty</span>") if value.blank?
+    value = raw('<span class="app-!-colour-muted">Empty</span>') if value.blank?
 
     summary_list.row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
       row.key { key.html_safe }
-      row.value(classes: classes || ["govuk-summary-list__value"]) { value }
+      row.value(classes: classes || ['govuk-summary-list__value']) { value }
       if action
         row.action(**action)
       else
@@ -66,7 +66,7 @@ module ApplicationHelper
   # rubocop:enable Rails/HelperInstanceVariable
 
   def dont_display_phase_banner_border?(user)
-    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && !FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && !FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
   end
 
 private

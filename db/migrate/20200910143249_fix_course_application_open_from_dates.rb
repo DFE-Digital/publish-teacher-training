@@ -2,7 +2,7 @@
 
 class FixCourseApplicationOpenFromDates < ActiveRecord::Migration[6.0]
   def up
-    recruitment_cycle = RecruitmentCycle.find_by(year: "2021")
+    recruitment_cycle = RecruitmentCycle.find_by(year: '2021')
     return if recruitment_cycle.nil?
 
     valid_start_date_range = recruitment_cycle.application_start_date..recruitment_cycle.application_end_date

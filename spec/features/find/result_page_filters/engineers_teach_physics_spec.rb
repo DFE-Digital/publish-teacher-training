@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.feature "Engineers teach physics" do
+RSpec.feature 'Engineers teach physics' do
   include FiltersFeatureSpecsHelper
 
   before do
@@ -11,12 +11,12 @@ RSpec.feature "Engineers teach physics" do
     given_i_choose_secondary
   end
 
-  scenario "Candidate searches for physics subject" do
+  scenario 'Candidate searches for physics subject' do
     given_i_choose_physics
     then_i_see_that_the_etp_checkbox_is_unchecked
   end
 
-  scenario "Candidate searches for any other subject" do
+  scenario 'Candidate searches for any other subject' do
     given_i_choose_music
     then_i_dont_see_the_etp_checkbox
   end
@@ -36,22 +36,22 @@ RSpec.feature "Engineers teach physics" do
   end
 
   def given_i_choose_physics
-    check "Physics"
+    check 'Physics'
     secondary_subjects_page.continue.click
   end
 
   def given_i_choose_music
-    check "Chemistry"
+    check 'Chemistry'
     secondary_subjects_page.continue.click
   end
 
   def then_i_see_that_the_etp_checkbox_is_unchecked
-    expect(results_page.engineers_teach_physics_filter.legend.text).to eq("Engineers teach physics")
+    expect(results_page.engineers_teach_physics_filter.legend.text).to eq('Engineers teach physics')
     expect(results_page.engineers_teach_physics_filter.checkbox.checked?).to be(false)
-    expect(results_page).to have_text("Only show Engineers teach physics courses")
+    expect(results_page).to have_text('Only show Engineers teach physics courses')
   end
 
   def then_i_dont_see_the_etp_checkbox
-    expect(results_page).not_to have_text("Only show Engineers teach physics courses")
+    expect(results_page).not_to have_text('Only show Engineers teach physics courses')
   end
 end

@@ -53,12 +53,12 @@ module Publish
       def build_course_params
         if params.key?(:course)
           applications_open_from =
-            if actual_params["applications_open_from"] == "other"
+            if actual_params['applications_open_from'] == 'other'
               "#{actual_params['year']}-#{actual_params['month']}-#{actual_params['day']}"
             else
-              actual_params["applications_open_from"]
+              actual_params['applications_open_from']
             end
-          params["course"]["applications_open_from"] = applications_open_from
+          params['course']['applications_open_from'] = applications_open_from
         else
           ActionController::Parameters.new({}).permit
         end

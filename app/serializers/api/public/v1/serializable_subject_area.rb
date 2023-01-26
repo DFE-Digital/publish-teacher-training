@@ -4,7 +4,7 @@ module API
   module Public
     module V1
       class SerializableSubjectArea < JSONAPI::Serializable::Resource
-        type "subject_areas"
+        type 'subject_areas'
 
         has_many :subjects
 

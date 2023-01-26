@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Courses
       class ModernLanguagesEdit < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/modern-languages{?query*}"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/modern-languages{?query*}'
 
         element :languages_fields, '[data-qa="course__languages"]'
         element :title, '[data-qa="page-heading"]'

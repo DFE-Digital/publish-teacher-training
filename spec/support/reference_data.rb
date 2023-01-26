@@ -31,11 +31,11 @@ RSpec.configure do |config|
     Subjects::FinancialIncentiveCreatorService.new(year:).execute
     Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
 
-    TestDataCache.create_and_cache_test_records if ENV["TEST_DATA_CACHE"]
+    TestDataCache.create_and_cache_test_records if ENV['TEST_DATA_CACHE']
   end
 
   config.after(:all) do
-    TestDataCache.clear if ENV["TEST_DATA_CACHE"]
+    TestDataCache.clear if ENV['TEST_DATA_CACHE']
   end
 
   config.before(:each, without_subjects: true) do

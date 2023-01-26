@@ -11,10 +11,10 @@ module Find
       private
 
         def mock_course
-          FakeCourse.new(fee_uk_eu: "900000",
-            fee_international: "999993393",
-            cycle_range: "2022 to 2023",
-            fee_details: "Other details")
+          FakeCourse.new(fee_uk_eu: '900000',
+            fee_international: '999993393',
+            cycle_range: '2022 to 2023',
+            fee_details: 'Other details')
         end
 
         class FakeCourse

@@ -16,7 +16,7 @@ module Publish
         @course_vacancies_form = CourseVacanciesForm.new(course, params: vacancy_params)
 
         if @course_vacancies_form.save!
-          flash[:success] = I18n.t("success.published")
+          flash[:success] = I18n.t('success.published')
 
           redirect_to publish_provider_recruitment_cycle_courses_path(
             provider.provider_code,

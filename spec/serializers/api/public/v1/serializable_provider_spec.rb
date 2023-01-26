@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe API::Public::V1::SerializableProvider do
   let(:provider) { create(:provider) }
   let(:resource) { described_class.new object: provider }
 
-  it "sets type to providers" do
+  it 'sets type to providers' do
     expect(resource.jsonapi_type).to eq :providers
   end
 
   subject { JSON.parse(resource.as_jsonapi.to_json) }
 
-  it { is_expected.to have_type "providers" }
+  it { is_expected.to have_type 'providers' }
 
   it { is_expected.to have_attribute(:postcode).with_value(provider.postcode) }
   it { is_expected.to have_attribute(:provider_type).with_value(provider.provider_type) }

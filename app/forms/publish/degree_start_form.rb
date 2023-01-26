@@ -10,12 +10,12 @@ module Publish
 
     before_validation :cast_degree_grade_required
 
-    validates :degree_grade_required, inclusion: { in: [true, false], message: "Select if you require a minimum degree classification" }
+    validates :degree_grade_required, inclusion: { in: [true, false], message: 'Select if you require a minimum degree classification' }
 
     def save(course)
       return false unless valid? && degree_grade_required_is_false?
 
-      course.update(degree_grade: "not_required")
+      course.update(degree_grade: 'not_required')
     end
 
     def build_from_course(course)
@@ -33,7 +33,7 @@ module Publish
     end
 
     def handle_degree_grade_required(course)
-      if course.degree_grade == "not_required"
+      if course.degree_grade == 'not_required'
         false
       elsif course.degree_grade.present?
         true

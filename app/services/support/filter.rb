@@ -39,9 +39,9 @@ module Support
       return records if user_type_arr&.all?(&:blank?)
 
       case user_type_arr
-      when ["admin"]
+      when ['admin']
         records.admins
-      when ["provider"]
+      when ['provider']
         records.non_admins
       else
         records

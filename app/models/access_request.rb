@@ -4,7 +4,7 @@ class AccessRequest < ApplicationRecord
   include Discard::Model
   default_scope -> { kept }
 
-  belongs_to :requester, class_name: "User"
+  belongs_to :requester, class_name: 'User'
 
   enum status: %i[
     requested

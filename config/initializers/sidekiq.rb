@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-if ENV.key?("VCAP_SERVICES")
+if ENV.key?('VCAP_SERVICES')
   Sidekiq.configure_server do |config|
     config.redis = {
-      url: ENV.fetch("REDIS_WORKER_URL")
+      url: ENV.fetch('REDIS_WORKER_URL')
     }
     config.logger.level = Logger::WARN
 
@@ -12,7 +12,7 @@ if ENV.key?("VCAP_SERVICES")
 
   Sidekiq.configure_client do |config|
     config.redis = {
-      url: ENV.fetch("REDIS_WORKER_URL")
+      url: ENV.fetch('REDIS_WORKER_URL')
     }
   end
 

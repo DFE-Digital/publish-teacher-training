@@ -41,7 +41,7 @@ private
   end
 
   def set_course_name(course, attribute_name, original)
-    return original if attribute_name == "name"
+    return original if attribute_name == 'name'
 
     course.name
   end

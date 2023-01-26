@@ -8,7 +8,7 @@ module API
           def index
             render jsonapi: locations,
               include: include_param,
-              meta: { count: locations.count("site.id") },
+              meta: { count: locations.count('site.id') },
               class: API::Public::V1::SerializerService.call
           end
 
@@ -27,7 +27,7 @@ module API
           end
 
           def include_param
-            params.fetch(:include, "")
+            params.fetch(:include, '')
           end
         end
       end

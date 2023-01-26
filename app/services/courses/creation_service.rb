@@ -51,11 +51,11 @@ module Courses
     end
 
     def subject_ids
-      @subject_ids ||= course_params["subjects_ids"]
+      @subject_ids ||= course_params['subjects_ids']
     end
 
     def site_ids
-      @site_ids ||= course_params["sites_ids"]
+      @site_ids ||= course_params['sites_ids']
     end
 
     def update_sites(course)
@@ -63,7 +63,7 @@ module Courses
 
       course.sites = sites if site_ids.any?
 
-      course.errors.add(:sites, message: "Select at least one location") if site_ids.empty?
+      course.errors.add(:sites, message: 'Select at least one location') if site_ids.empty?
     end
   end
 end

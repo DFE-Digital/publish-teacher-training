@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe VacancyHelper do
   include VacancyHelper
 
-  describe "#vacancy_available_for_course_site_status" do
+  describe '#vacancy_available_for_course_site_status' do
     let(:vacancy_study_mode) { nil }
 
     subject do
@@ -16,13 +16,13 @@ describe VacancyHelper do
       )
     end
 
-    context "with a full time or part time course" do
-      let(:course) { double(:course, study_mode: "full_time_or_part_time") }
+    context 'with a full time or part time course' do
+      let(:course) { double(:course, study_mode: 'full_time_or_part_time') }
 
-      context "when the vacancy study mode is full time" do
+      context 'when the vacancy study mode is full time' do
         let(:vacancy_study_mode) { :full_time }
 
-        context "with a full and part time vacancy" do
+        context 'with a full and part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -35,7 +35,7 @@ describe VacancyHelper do
           it { is_expected.to be true }
         end
 
-        context "with a full time vacancy" do
+        context 'with a full time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -48,7 +48,7 @@ describe VacancyHelper do
           it { is_expected.to be true }
         end
 
-        context "with a part time vacancy" do
+        context 'with a part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -61,7 +61,7 @@ describe VacancyHelper do
           it { is_expected.to be false }
         end
 
-        context "with no vacancy" do
+        context 'with no vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -75,10 +75,10 @@ describe VacancyHelper do
         end
       end
 
-      context "when the vacancy study mode is part time" do
+      context 'when the vacancy study mode is part time' do
         let(:vacancy_study_mode) { :part_time }
 
-        context "with a full and part time vacancy" do
+        context 'with a full and part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -91,7 +91,7 @@ describe VacancyHelper do
           it { is_expected.to be true }
         end
 
-        context "with a full time vacancy" do
+        context 'with a full time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -104,7 +104,7 @@ describe VacancyHelper do
           it { is_expected.to be false }
         end
 
-        context "with a part time vacancy" do
+        context 'with a part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -117,7 +117,7 @@ describe VacancyHelper do
           it { is_expected.to be true }
         end
 
-        context "with no vacancy" do
+        context 'with no vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -131,8 +131,8 @@ describe VacancyHelper do
         end
       end
 
-      context "without a vacancy study mode set" do
-        context "with a full and part time vacancy" do
+      context 'without a vacancy study mode set' do
+        context 'with a full and part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -145,7 +145,7 @@ describe VacancyHelper do
           it { is_expected.to be true }
         end
 
-        context "with a full time vacancy" do
+        context 'with a full time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -158,7 +158,7 @@ describe VacancyHelper do
           it { is_expected.to be false }
         end
 
-        context "with a part time vacancy" do
+        context 'with a part time vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -171,7 +171,7 @@ describe VacancyHelper do
           it { is_expected.to be false }
         end
 
-        context "with no vacancy" do
+        context 'with no vacancy' do
           let(:site_status) do
             double(
               :site_status,
@@ -186,10 +186,10 @@ describe VacancyHelper do
       end
     end
 
-    context "with a full time course and vacancy" do
-      let(:course) { double(:course, study_mode: "full_time") }
+    context 'with a full time course and vacancy' do
+      let(:course) { double(:course, study_mode: 'full_time') }
 
-      context "with a full time vacancy" do
+      context 'with a full time vacancy' do
         let(:site_status) do
           double(
             :site_status,
@@ -202,7 +202,7 @@ describe VacancyHelper do
         it { is_expected.to be true }
       end
 
-      context "with no vacancy" do
+      context 'with no vacancy' do
         let(:site_status) do
           double(
             :site_status,
@@ -216,10 +216,10 @@ describe VacancyHelper do
       end
     end
 
-    context "with a part time course" do
-      let(:course) { double(:course, study_mode: "part_time") }
+    context 'with a part time course' do
+      let(:course) { double(:course, study_mode: 'part_time') }
 
-      context "with a part time vacancy" do
+      context 'with a part time vacancy' do
         let(:site_status) do
           double(
             :site_status,
@@ -232,7 +232,7 @@ describe VacancyHelper do
         it { is_expected.to be true }
       end
 
-      context "with no vacancy" do
+      context 'with no vacancy' do
         let(:site_status) do
           double(
             :site_status,

@@ -1,37 +1,37 @@
 # frozen_string_literal: true
 
-require_relative "../spec/strategies/find_or_create_strategy"
-Faker::Config.locale = "en-GB"
+require_relative '../spec/strategies/find_or_create_strategy'
+Faker::Config.locale = 'en-GB'
 
 module IntegrationSeeds
   class << self
     def call
-      organisation_id = "000"
+      organisation_id = '000'
       organisation = FactoryBot.find_or_create(
         :organisation,
         :with_anonymised_data,
-        name: "Test Organisation",
+        name: 'Test Organisation',
         org_id: organisation_id
       )
 
       test_user = create_user(
-        email: "becomingateacher+integration-tests@digital.education.gov.uk",
-        first_name: "integration",
-        last_name: "tests",
-        state: "transitioned"
+        email: 'becomingateacher+integration-tests@digital.education.gov.uk',
+        first_name: 'integration',
+        last_name: 'tests',
+        state: 'transitioned'
       )
       add_user_to_organisation test_user, organisation
 
       admin_user = create_user(
-        email: "becomingateacher+admin-integration-tests@digital.education.gov.uk",
-        first_name: "admin",
-        last_name: "admin",
-        state: "transitioned",
+        email: 'becomingateacher+admin-integration-tests@digital.education.gov.uk',
+        first_name: 'admin',
+        last_name: 'admin',
+        state: 'transitioned',
         admin: true
       )
       add_user_to_organisation admin_user, organisation
 
-      provider_code = "0AA"
+      provider_code = '0AA'
       provider = current_recruitment_cycle.providers.find_by(provider_code:)
       if provider.blank?
         provider = FactoryBot.find_or_create(
@@ -63,34 +63,34 @@ module IntegrationSeeds
         )
       end
 
-      location_code = "-"
-      site = provider.sites.find_by(code: "-")
+      location_code = '-'
+      site = provider.sites.find_by(code: '-')
       if site.nil?
         site = FactoryBot.find_or_create(
           :site,
           provider:,
           code: location_code,
-          location_name: "Main Site",
+          location_name: 'Main Site',
           address1: "#{provider_code} DfE",
           address2: "#{provider_code} Great Smith St",
           address3: "#{provider_code} Westminster",
           address4: "#{provider_code} London",
           postcode: "SW1 #{provider_code}",
-          region_code: "london"
+          region_code: 'london'
         )
       end
 
-      course_code = "0AAA"
+      course_code = '0AAA'
       course = provider.courses.find_by(course_code:)
       if course.blank?
-        subject_computing = Subject::SecondarySubject.find_by(subject_code: "11")
+        subject_computing = Subject::SecondarySubject.find_by(subject_code: '11')
         course = FactoryBot.find_or_create(
           :course,
           :secondary,
           course_code:,
           provider:,
           name: "Integrated Testing Course #{course_code}",
-          age_range_in_years: "7_to_11",
+          age_range_in_years: '7_to_11',
           level: :secondary,
           subjects: [subject_computing]
         )

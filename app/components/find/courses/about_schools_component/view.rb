@@ -19,8 +19,8 @@ module Find
 
         def render?
           how_school_placements_work.present? ||
-            program_type == "higher_education_programme" ||
-            program_type == "scitt_programme" ||
+            program_type == 'higher_education_programme' ||
+            program_type == 'scitt_programme' ||
             site_statuses.map(&:site).uniq.many?
         end
       end

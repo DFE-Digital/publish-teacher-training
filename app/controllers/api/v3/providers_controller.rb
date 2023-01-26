@@ -43,7 +43,7 @@ module API
 
         return if params[:fields].blank? || params[:fields][:providers].blank?
 
-        @fields[:providers] = params[:fields][:providers].split(",")
+        @fields[:providers] = params[:fields][:providers].split(',')
       end
 
       def default_fields_for_index

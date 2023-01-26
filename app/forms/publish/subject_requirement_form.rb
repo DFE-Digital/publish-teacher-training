@@ -10,8 +10,8 @@ module Publish
 
     before_validation :cast_additional_degree_subject_requirements
 
-    validates :additional_degree_subject_requirements, inclusion: { in: [true, false], message: "Select if you have degree subject requirements" }
-    validates :degree_subject_requirements, presence: { message: "Enter details of degree subject requirements" }, if: -> { additional_degree_subject_requirements }
+    validates :additional_degree_subject_requirements, inclusion: { in: [true, false], message: 'Select if you have degree subject requirements' }
+    validates :degree_subject_requirements, presence: { message: 'Enter details of degree subject requirements' }, if: -> { additional_degree_subject_requirements }
 
     def save(course)
       return false unless valid?

@@ -2,11 +2,11 @@
 
 module Publish
   class AboutYourOrganisationForm < BaseProviderForm
-    validates :train_with_us, presence: { message: "Enter details about training with you" }, if: :train_with_us_changed?
-    validates :train_with_disability, presence: { message: "Enter details about training with a disability" }, if: :train_with_disability_changed?
+    validates :train_with_us, presence: { message: 'Enter details about training with you' }, if: :train_with_us_changed?
+    validates :train_with_disability, presence: { message: 'Enter details about training with a disability' }, if: :train_with_disability_changed?
 
-    validates :train_with_us, words_count: { maximum: 250, message: "Reduce the word count for training with you" }
-    validates :train_with_disability, words_count: { maximum: 250, message: "Reduce the word count for training with disabilities and other needs" }
+    validates :train_with_us, words_count: { maximum: 250, message: 'Reduce the word count for training with you' }
+    validates :train_with_disability, words_count: { maximum: 250, message: 'Reduce the word count for training with disabilities and other needs' }
 
     validate :add_enrichment_errors
 

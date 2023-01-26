@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Sites::CopyToCourseService do
   let(:site) { create(:site) }
@@ -16,11 +16,11 @@ describe Sites::CopyToCourseService do
     service.execute(new_site: site, new_course: course)
   end
 
-  it "copies the site" do
+  it 'copies the site' do
     expect(course.sites.count).to eq(1)
   end
 
-  it "has the same code as the original site" do
+  it 'has the same code as the original site' do
     new_site = course.sites.last
     expect(new_site.code).to eq(site.code)
   end

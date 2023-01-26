@@ -23,6 +23,6 @@ private
   end
 
   def render_not_found
-    render "errors/not_found", status: :not_found, formats: :html
+    render 'errors/not_found', status: :not_found, formats: :html
   end
 end

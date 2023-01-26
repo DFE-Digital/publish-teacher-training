@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Deleting a new user", :with_publish_constraint do
+feature 'Deleting a new user', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_exists_to_delete
     when_i_visit_the_user_show_page(@user_to_delete.id)
   end
 
-  scenario "Deleting a user record" do
+  scenario 'Deleting a user record' do
     when_i_click_the_delete_button
     then_i_am_taken_to_the_user_index_page
     with_a_success_message
@@ -35,7 +35,7 @@ private
   end
 
   def with_a_success_message
-    expect(support_users_index_page).to have_content("User successfully deleted")
+    expect(support_users_index_page).to have_content('User successfully deleted')
   end
 
   def and_the_user_is_in_a_discarded_state

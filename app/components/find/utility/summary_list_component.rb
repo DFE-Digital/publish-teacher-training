@@ -18,12 +18,12 @@ module Find
           elsif row[:paragraph_format]
             format_list_as_paragraphs(row[:value])
           else
-            row[:value].map { |s| ERB::Util.html_escape(s) }.join("<br>").html_safe
+            row[:value].map { |s| ERB::Util.html_escape(s) }.join('<br>').html_safe
           end
         elsif row[:value].html_safe?
           row[:value].to_s
         else
-          simple_format(row[:value], class: "govuk-body")
+          simple_format(row[:value], class: 'govuk-body')
         end
       end
 
@@ -32,7 +32,7 @@ module Find
 
         return defined_action if defined_action.present?
 
-        { href: "" } if any_rows_with_actions?
+        { href: '' } if any_rows_with_actions?
       end
 
       def html_attributes(row)
@@ -53,13 +53,13 @@ module Find
       end
 
       def format_list_with_bullets(list)
-        tag.ul(class: "govuk-list govuk-list--bullet") do
+        tag.ul(class: 'govuk-list govuk-list--bullet') do
           safe_join(list.map { |item| tag.li(item) })
         end
       end
 
       def format_list_as_paragraphs(list)
-        safe_join(list.map { |s| tag.p(class: "govuk-body") { ERB::Util.html_escape(s) } })
+        safe_join(list.map { |s| tag.p(class: 'govuk-body') { ERB::Util.html_escape(s) } })
       end
 
       def any_rows_with_actions?

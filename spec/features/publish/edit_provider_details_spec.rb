@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "About Your Organisation section", { can_edit_current_and_next_cycles: false } do
-  scenario "Provider user edits provider details" do
+feature 'About Your Organisation section', { can_edit_current_and_next_cycles: false } do
+  scenario 'Provider user edits provider details' do
     given_i_am_a_provider_user
     and_my_provider_has_accrediting_providers
     when_i_visit_the_details_page
@@ -38,42 +38,42 @@ feature "About Your Organisation section", { can_edit_current_and_next_cycles: f
       recruitment_cycle_year: @provider.recruitment_cycle_year
     )
 
-    provider_details_edit_page.training_with_you_field.set ""
+    provider_details_edit_page.training_with_you_field.set ''
     provider_details_edit_page.save_and_publish.click
     within provider_details_edit_page.error_summary do
-      expect(page).to have_content "Enter details about training with you"
+      expect(page).to have_content 'Enter details about training with you'
     end
 
-    provider_details_edit_page.training_with_you_field.set "Updated: Training with you"
+    provider_details_edit_page.training_with_you_field.set 'Updated: Training with you'
     provider_details_edit_page.save_and_publish.click
 
-    expect(page).to have_content "Your changes have been published"
-    within_summary_row "Training with your organisation" do
-      expect(page).to have_content "Updated: Training with you"
+    expect(page).to have_content 'Your changes have been published'
+    within_summary_row 'Training with your organisation' do
+      expect(page).to have_content 'Updated: Training with you'
     end
   end
 
   def then_i_can_edit_info_about_our_accredited_bodies
     click_link "Change details about #{@accrediting_provider.provider_name}"
 
-    provider_details_edit_page.accredited_body_description_field.set "Updated: accredited body description"
+    provider_details_edit_page.accredited_body_description_field.set 'Updated: accredited body description'
     provider_details_edit_page.save_and_publish.click
 
-    expect(page).to have_content "Your changes have been published"
+    expect(page).to have_content 'Your changes have been published'
     within_summary_row @accrediting_provider.provider_name do
-      expect(page).to have_content "Updated: accredited body description"
+      expect(page).to have_content 'Updated: accredited body description'
     end
   end
 
   def then_i_can_edit_info_about_disabilities_and_other_needs
     provider_details_show_page.train_with_disability_link.click
 
-    provider_details_edit_page.train_with_disability_field.set "Updated: training with disabilities"
+    provider_details_edit_page.train_with_disability_field.set 'Updated: training with disabilities'
     provider_details_edit_page.save_and_publish.click
 
-    expect(page).to have_content "Your changes have been published"
-    within_summary_row "Training with disabilities and other needs" do
-      expect(page).to have_content "Updated: training with disabilities"
+    expect(page).to have_content 'Your changes have been published'
+    within_summary_row 'Training with disabilities and other needs' do
+      expect(page).to have_content 'Updated: training with disabilities'
     end
   end
 end

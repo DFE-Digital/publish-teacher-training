@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "new course", { can_edit_current_and_next_cycles: false } do
-  scenario "creates the correct course" do
+feature 'new course', { can_edit_current_and_next_cycles: false } do
+  scenario 'creates the correct course' do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end
     # with the correct course being created
@@ -17,10 +17,10 @@ private
 
   def then_i_can_create_the_course
     expect(new_level_page).to be_displayed
-    course_creation_params = select_level({}, level: "primary", level_selection: new_level_page.level_fields.primary, next_page: new_subjects_page)
-    course_creation_params = select_subjects(course_creation_params, level: "primary", next_page: new_age_range_page)
+    course_creation_params = select_level({}, level: 'primary', level_selection: new_level_page.level_fields.primary, next_page: new_subjects_page)
+    course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: new_age_range_page)
     course_creation_params = select_age_range(course_creation_params, next_page: new_outcome_page)
-    course_creation_params = select_outcome(course_creation_params, qualification: "qts", qualification_selection: new_outcome_page.qualification_fields.qts, next_page: new_apprenticeship_page)
+    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: new_outcome_page.qualification_fields.qts, next_page: new_apprenticeship_page)
     course_creation_params = select_apprenticeship(course_creation_params, next_page: new_study_mode_page)
     course_creation_params = select_study_mode(course_creation_params, next_page: new_locations_page)
     course_creation_params = select_location(course_creation_params, next_page: new_student_visa_sponsorship_page)
@@ -74,7 +74,7 @@ private
 
   def select_level(course_creation_params, level:, level_selection:, next_page:)
     course_creation_params[:level] = level
-    course_creation_params[:is_send] = "0"
+    course_creation_params[:is_send] = '0'
 
     level_selection.click
     new_level_page.continue.click
@@ -96,7 +96,7 @@ private
   end
 
   def course_subject(level)
-    primary_subject if level == "primary"
+    primary_subject if level == 'primary'
   end
 
   def select_subjects(course_creation_params, level:, next_page:)
@@ -104,7 +104,7 @@ private
     course_subject = course_subject(level)
     course_creation_params[:subjects_ids] = [course_subject.id.to_s]
     course_creation_params[:master_subject_id] = course_subject.id.to_s
-    course_creation_params[:campaign_name] = ""
+    course_creation_params[:campaign_name] = ''
 
     new_subjects_page.subjects_fields.select(course_subject.subject_name)
     new_subjects_page.continue.click
@@ -118,7 +118,7 @@ private
   end
 
   def select_age_range(course_creation_params, next_page:)
-    course_creation_params[:age_range_in_years] = "5_to_11"
+    course_creation_params[:age_range_in_years] = '5_to_11'
 
     new_age_range_page.age_range_fields.five_to_eleven.click
     new_age_range_page.continue.click
@@ -146,7 +146,7 @@ private
   end
 
   def select_apprenticeship(course_creation_params, next_page:)
-    course_creation_params[:funding_type] = "fee"
+    course_creation_params[:funding_type] = 'fee'
 
     new_apprenticeship_page.no.click
     new_apprenticeship_page.continue.click
@@ -160,7 +160,7 @@ private
   end
 
   def select_study_mode(course_creation_params, next_page:)
-    course_creation_params[:study_mode] = "full_time"
+    course_creation_params[:study_mode] = 'full_time'
 
     new_study_mode_page.study_mode_fields.full_time.click
     new_study_mode_page.continue.click
@@ -174,7 +174,7 @@ private
   end
 
   def select_visa_settings(course_creation_params, next_page:)
-    course_creation_params[:can_sponsor_student_visa] = "true"
+    course_creation_params[:can_sponsor_student_visa] = 'true'
 
     new_student_visa_sponsorship_page.yes.click
     new_student_visa_sponsorship_page.continue.click
@@ -244,6 +244,6 @@ private
     expect { course_confirmation_page.save_button.click }.to change { provider.courses.reload.count } .from(0).to(1)
 
     expect(provider_courses_index_page).to be_displayed
-    expect(provider_courses_index_page.success_summary).to have_content("Your course has been created")
+    expect(provider_courses_index_page.success_summary).to have_content('Your course has been created')
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe SiteStatusPolicy do
   let(:provider) { site_status.course.provider }
@@ -11,11 +11,11 @@ describe SiteStatusPolicy do
   permissions :update? do
     let(:user) { create(:user).tap { |u| provider.users << u } }
 
-    context "with an user inside the provider" do
+    context 'with an user inside the provider' do
       it { is_expected.to permit(user, site_status) }
     end
 
-    context "with a user outside the provider" do
+    context 'with a user outside the provider' do
       let(:user) { build(:user) }
 
       it { is_expected.not_to permit(user, site_status) }

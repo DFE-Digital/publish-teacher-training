@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe Courses::AssignableMasterSubjectService do
   let(:service) do
@@ -14,22 +14,22 @@ describe Courses::AssignableMasterSubjectService do
   let(:secondary_model) { spy(all: []) }
   let(:further_education_model) { spy(all: []) }
 
-  it "gets all primary subjects if the level is primary" do
-    course = create(:course, level: "primary")
+  it 'gets all primary subjects if the level is primary' do
+    course = create(:course, level: 'primary')
 
     expect(service.execute(course:)).to eq([])
     expect(primary_model).to have_received(:all)
   end
 
-  it "gets all secondary subjects if the level is secondary" do
-    course = create(:course, level: "secondary")
+  it 'gets all secondary subjects if the level is secondary' do
+    course = create(:course, level: 'secondary')
 
     expect(service.execute(course:)).to eq([])
     expect(secondary_model).to have_received(:all)
   end
 
-  it "gets all further education subjects if the level is further education" do
-    course = create(:course, level: "further_education")
+  it 'gets all further education subjects if the level is further education' do
+    course = create(:course, level: 'further_education')
 
     expect(service.execute(course:)).to eq([])
     expect(further_education_model).to have_received(:all)

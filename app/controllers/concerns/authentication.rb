@@ -16,9 +16,9 @@ module Authentication
   def authenticate
     return if authenticated?
 
-    session["post_dfe_sign_in_path"] = request.fullpath
+    session['post_dfe_sign_in_path'] = request.fullpath
     if AuthenticationService.persona?
-      redirect_to sign_in_path({ support: params[:controller].start_with?("support") })
+      redirect_to sign_in_path({ support: params[:controller].start_with?('support') })
     else
       redirect_to sign_in_path
     end

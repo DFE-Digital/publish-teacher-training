@@ -7,14 +7,14 @@ module Publish
       decorates_assigned :course
 
       def edit
-        form_object.valid? if params[:display_errors] == "true"
+        form_object.valid? if params[:display_errors] == 'true'
 
         render locals: { form_object: }
       end
 
       def update
         if form_object.valid?
-          course_details_success_message("age range")
+          course_details_success_message('age range')
 
           update_age_range_param
 
@@ -71,7 +71,7 @@ module Publish
       end
 
       def age_range_is_other?
-        age_range_param == "other"
+        age_range_param == 'other'
       end
 
       def course_param

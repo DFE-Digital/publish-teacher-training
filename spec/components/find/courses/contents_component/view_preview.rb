@@ -11,13 +11,13 @@ module Find
       private
 
         def mock_course
-          FakeCourse.new(provider: Provider.new(provider_code: "DFE", website: "wwww.awesomeprovider@aol.com", train_with_disability: "foo"),
-            about_course: "foo",
-            how_school_placements_work: "bar",
-            placements_heading: "School placements",
-            about_accrediting_body: "foo",
+          FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com', train_with_disability: 'foo'),
+            about_course: 'foo',
+            how_school_placements_work: 'bar',
+            placements_heading: 'School placements',
+            about_accrediting_body: 'foo',
             salaried: true,
-            interview_process: "bar",
+            interview_process: 'bar',
             has_vacancies: true)
         end
 

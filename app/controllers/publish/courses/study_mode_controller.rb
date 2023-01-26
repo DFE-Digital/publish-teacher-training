@@ -16,7 +16,7 @@ module Publish
 
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
         if @course_study_mode_form.save!
-          course_description_success_message("full or part time")
+          course_description_success_message('full or part time')
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -41,7 +41,7 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: ["Pick full time, part time or full time and part time"] }
+        params.dig(:course, :study_mode) ? {} : { study_mode: ['Pick full time, part time or full time and part time'] }
       end
     end
   end

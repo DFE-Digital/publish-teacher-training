@@ -5,8 +5,8 @@ module Find
     module SummaryComponent
       class ViewPreview < ViewComponent::Preview
         def with_bare_minimum
-          course = Course.new(course_code: "FIND",
-            provider: Provider.new(provider_code: "DFE")).decorate
+          course = Course.new(course_code: 'FIND',
+            provider: Provider.new(provider_code: 'DFE')).decorate
           render Find::Courses::SummaryComponent::View.new(course)
         end
 
@@ -25,31 +25,31 @@ module Find
       private
 
         def mock_secondary_course
-          accrediting_provider = Provider.new(provider_name: "University of BAT", accrediting_provider: "accredited_body", provider_type: "university")
-          FakeCourse.new(provider: Provider.new(provider_code: "DFE", website: "wwww.awesomeprovider@aol.com"),
+          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_body', provider_type: 'university')
+          FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
             accrediting_provider:,
             has_bursary: false,
-            age_range_in_years: "11_to_18",
-            course_length: "OneYear",
+            age_range_in_years: '11_to_18',
+            course_length: 'OneYear',
             applications_open_from: Time.zone.now,
             start_date: Time.zone.now,
-            qualification: "pgce",
-            funding_type: "salaried",
+            qualification: 'pgce',
+            funding_type: 'salaried',
             subjects: nil,
             level: :secondary)
         end
 
         def mock_primary_course
-          accrediting_provider = Provider.new(provider_name: "University of BAT", accrediting_provider: "accredited_body", provider_type: "university")
-          FakeCourse.new(provider: Provider.new(provider_code: "DFE", website: "wwww.awesomeprovider@aol.com"),
+          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_body', provider_type: 'university')
+          FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
             accrediting_provider:,
             has_bursary: false,
-            age_range_in_years: "3_to_7",
-            course_length: "OneYear",
+            age_range_in_years: '3_to_7',
+            course_length: 'OneYear',
             applications_open_from: Time.zone.now,
             start_date: Time.zone.now,
-            qualification: "pgce",
-            funding_type: "salaried",
+            qualification: 'pgce',
+            funding_type: 'salaried',
             subjects: nil,
             level: :primary)
         end
@@ -71,7 +71,7 @@ module Find
           end
 
           def study_mode
-            "full_time"
+            'full_time'
           end
         end
       end

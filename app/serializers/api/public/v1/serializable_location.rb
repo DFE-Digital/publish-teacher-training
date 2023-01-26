@@ -6,7 +6,7 @@ module API
       class SerializableLocation < JSONAPI::Serializable::Resource
         extend JSONAPI::Serializable::Resource::ConditionalFields
 
-        type "locations"
+        type 'locations'
 
         belongs_to :course, unless: -> { @course.nil? } do
           data { @course }

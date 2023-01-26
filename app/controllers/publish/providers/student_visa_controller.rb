@@ -15,7 +15,7 @@ module Publish
         @provider_student_visa_form = ProviderStudentVisaForm.new(provider, params: provider_student_visa_params)
 
         if @provider_student_visa_form.save!
-          flash[:success] = I18n.t("success.visa_changes")
+          flash[:success] = I18n.t('success.visa_changes')
 
           redirect_to details_publish_provider_recruitment_cycle_path(
             provider.provider_code,

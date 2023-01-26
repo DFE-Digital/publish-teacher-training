@@ -1,39 +1,39 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Editing course information", { can_edit_current_and_next_cycles: false } do
+feature 'Editing course information', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_information_edit_page
   end
 
-  scenario "i can update some information about the course" do
+  scenario 'i can update some information about the course' do
     and_i_set_information_about_the_course
     and_i_submit
     then_i_should_see_a_success_message
     and_the_course_information_is_updated
   end
 
-  scenario "copying course information with no courses available" do
+  scenario 'copying course information with no courses available' do
     then_i_should_see_the_reuse_content
   end
 
-  context "copying content from another course" do
-    include_context "copy_courses"
+  context 'copying content from another course' do
+    include_context 'copy_courses'
 
-    scenario "all fields get copied if all are present" do
+    scenario 'all fields get copied if all are present' do
       course_information_edit_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
       )
       course_information_edit_page.copy_content.copy(course2)
 
       [
-        "Your changes are not yet saved",
-        "About the course",
-        "Interview process",
-        "How school placements work"
+        'Your changes are not yet saved',
+        'About the course',
+        'Interview process',
+        'How school placements work'
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).to have_content(name)
       end
@@ -43,22 +43,22 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
       expect(course_information_edit_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
     end
 
-    scenario "only fields with values are copied if the source is incomplete" do
+    scenario 'only fields with values are copied if the source is incomplete' do
       course_information_edit_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code
       )
       course_information_edit_page.copy_content.copy(course3)
 
       [
-        "Your changes are not yet saved",
-        "About the course"
+        'Your changes are not yet saved',
+        'About the course'
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).to have_content(name)
       end
 
       [
-        "Interview process",
-        "How school placements work"
+        'Interview process',
+        'How school placements work'
       ].each do |name|
         expect(course_information_edit_page.copy_content_warning).not_to have_content(name)
       end
@@ -69,7 +69,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
     end
   end
 
-  scenario "updating with invalid data" do
+  scenario 'updating with invalid data' do
     and_i_submit_with_invalid_data
     then_i_should_see_an_error_message
   end
@@ -93,9 +93,9 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
   end
 
   def and_i_set_information_about_the_course
-    @about_course = "This is a new description"
-    @interview_process = "This is a new interview process"
-    @school_placements = "This is a new school placements"
+    @about_course = 'This is a new description'
+    @interview_process = 'This is a new interview process'
+    @school_placements = 'This is a new school placements'
 
     course_information_edit_page.about_course.set(@about_course)
     course_information_edit_page.interview_process.set(@interview_process)
@@ -112,7 +112,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content("Changes to course information saved")
+    expect(page).to have_content('Changes to course information saved')
   end
 
   def and_the_course_information_is_updated
@@ -125,7 +125,7 @@ feature "Editing course information", { can_edit_current_and_next_cycles: false 
 
   def then_i_should_see_an_error_message
     expect(course_information_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_information_form.attributes.about_course.blank")
+      I18n.t('activemodel.errors.models.publish/course_information_form.attributes.about_course.blank')
     )
   end
 

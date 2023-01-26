@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Updating cookie preferences" do
-  scenario "i can update my cookie preferences" do
+feature 'Updating cookie preferences' do
+  scenario 'i can update my cookie preferences' do
     given_i_am_on_the_cookie_preferences_page
     and_i_can_see_the_heading
     and_i_can_see_the_the_use_of_cookies_for_service
@@ -11,7 +11,7 @@ feature "Updating cookie preferences" do
     then_i_should_see_a_confirmation_message
   end
 
-  scenario "i cannot update without selecting a preference" do
+  scenario 'i cannot update without selecting a preference' do
     given_i_am_on_the_cookie_preferences_page
     when_i_submit
     then_i_should_see_an_error_message
@@ -27,7 +27,7 @@ feature "Updating cookie preferences" do
   end
 
   def then_i_should_see_a_confirmation_message
-    expect(cookie_preferences_page).to have_content("Your cookie preferences have been updated")
+    expect(cookie_preferences_page).to have_content('Your cookie preferences have been updated')
   end
 
   def when_i_submit
@@ -36,12 +36,12 @@ feature "Updating cookie preferences" do
 
   def then_i_should_see_an_error_message
     expect(cookie_preferences_page.error_messages).to include(
-      "Select yes if you want to accept Google Analytics cookies"
+      'Select yes if you want to accept Google Analytics cookies'
     )
   end
 
   def and_i_can_see_the_heading
-    expect(cookie_preferences_page.heading).to have_content("Cookies")
+    expect(cookie_preferences_page.heading).to have_content('Cookies')
   end
 
   def and_i_can_see_the_the_use_of_cookies_for_service
@@ -49,7 +49,7 @@ feature "Updating cookie preferences" do
   end
 
   def service_name
-    "Find postgraduate teacher training (Find)"
+    'Find postgraduate teacher training (Find)'
   end
 
   def cookie_preferences_page

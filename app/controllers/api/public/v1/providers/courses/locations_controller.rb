@@ -36,7 +36,7 @@ module API
             end
 
             def include_param
-              params.fetch(:include, "")
+              params.fetch(:include, '')
             end
           end
         end

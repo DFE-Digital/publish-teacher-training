@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Editing a user under a provider as an admin", :with_publish_constraint do
+feature 'Editing a user under a provider as an admin', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_edit
     and_i_visit_the_support_provider_user_show_page
   end
 
-  scenario "Editing a user from a provider" do
+  scenario 'Editing a user from a provider' do
     when_i_click_the_change_firstname_link
     and_i_am_taken_to_the_support_provider_user_edit_page
     and_i_fill_the_form
@@ -43,9 +43,9 @@ private
   end
 
   def and_i_fill_the_form
-    support_provider_user_edit_page.first_name.set("Aba")
-    support_provider_user_edit_page.last_name.set("Bernharb")
-    support_provider_user_edit_page.email.set("viela_fisher@boyle.io")
+    support_provider_user_edit_page.first_name.set('Aba')
+    support_provider_user_edit_page.last_name.set('Bernharb')
+    support_provider_user_edit_page.email.set('viela_fisher@boyle.io')
   end
 
   def and_i_click_update
@@ -53,9 +53,9 @@ private
   end
 
   def then_should_see_the_updated_details_displayed
-    expect(support_users_check_page).to have_text("Aba")
-    expect(support_users_check_page).to have_text("Bernharb")
-    expect(support_users_check_page).to have_text("viela_fisher@boyle.io")
+    expect(support_users_check_page).to have_text('Aba')
+    expect(support_users_check_page).to have_text('Bernharb')
+    expect(support_users_check_page).to have_text('viela_fisher@boyle.io')
   end
 
   def when_i_click_the_change_lastname_link

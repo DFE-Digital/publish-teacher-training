@@ -4,7 +4,7 @@ module Support
   module DataExports
     class UsersExport < Base
       def type
-        "users"
+        'users'
       end
 
       def data

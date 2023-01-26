@@ -12,7 +12,7 @@ class CreateSubjectArea < ActiveRecord::Migration[6.0]
       t.references :subject_area
     end
 
-    say_with_time "populating subject areas" do
+    say_with_time 'populating subject areas' do
       Subjects::SubjectAreaCreatorService.new.execute
     end
   end

@@ -9,7 +9,7 @@ class CreateSubjectTable < ActiveRecord::Migration[5.2]
       t.text :subject_name
     end
 
-    say_with_time "populating subjects" do
+    say_with_time 'populating subjects' do
       Subjects::CreatorService.new.execute
     end
   end

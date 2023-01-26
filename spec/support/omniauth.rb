@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-require "omniauth"
+require 'omniauth'
 
 OmniAuth.config.test_mode = true

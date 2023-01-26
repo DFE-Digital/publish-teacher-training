@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module NotificationService
   describe CoursePublished do
-    describe "#call" do
+    describe '#call' do
       let(:accredited_body) { create(:provider, :accredited_body) }
       let(:other_accredited_body) { create(:provider, :accredited_body) }
       let(:course) { create(:course, accredited_body_code: accredited_body.provider_code) }
@@ -51,34 +51,34 @@ module NotificationService
         allow(course).to receive(:findable?).and_return(findable)
       end
 
-      context "with a course that is in the current cycle" do
+      context 'with a course that is in the current cycle' do
         before { setup_notifications }
 
-        it "sends notifications" do
+        it 'sends notifications' do
           expect(CoursePublishEmailMailer).to receive(:course_publish_email)
           expect(course.recruitment_cycle).to eql(RecruitmentCycle.current)
           described_class.call(course:)
         end
       end
 
-      context "with a course that is not in the current cycle" do
+      context 'with a course that is not in the current cycle' do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
         let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
 
         before { setup_notifications }
 
-        it "does not notifications" do
+        it 'does not notifications' do
           expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
           expect(course.recruitment_cycle).not_to eql(RecruitmentCycle.current)
           described_class.call(course:)
         end
       end
 
-      context "non self-accredited course" do
+      context 'non self-accredited course' do
         before { setup_notifications }
 
-        context "that is findable?" do
-          it "mails subscribed users" do
+        context 'that is findable?' do
+          it 'mails subscribed users' do
             expect(CoursePublishEmailMailer)
               .to receive(:course_publish_email)
               .with(course, subscribed_user).and_return(mailer = double)
@@ -86,7 +86,7 @@ module NotificationService
             described_class.call(course:)
           end
 
-          it "does not email non subscribed users" do
+          it 'does not email non subscribed users' do
             expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
               .with(course, non_subscribed_user)
             expect(CoursePublishEmailMailer).not_to receive(:course_publish_email)
@@ -95,10 +95,10 @@ module NotificationService
           end
         end
 
-        context "that is not findable?" do
+        context 'that is not findable?' do
           let(:findable) { false }
 
-          it "does not mail subscribed users" do
+          it 'does not mail subscribed users' do
             expect(CoursePublishEmailMailer)
               .not_to receive(:course_publish_email)
             described_class.call(course:)
@@ -106,12 +106,12 @@ module NotificationService
         end
       end
 
-      context "self accredited course" do
+      context 'self accredited course' do
         let(:self_accredited) { true }
 
         before { setup_notifications }
 
-        it "does not mail subscribed users" do
+        it 'does not mail subscribed users' do
           expect(CoursePublishEmailMailer)
             .not_to receive(:course_publish_email)
           described_class.call(course:)

@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
-require "swagger_helper"
+require 'swagger_helper'
 
-describe "API", :with_publish_constraint do
-  path "/subjects" do
-    get "Returns a list of subjects" do
+describe 'API', :with_publish_constraint do
+  path '/subjects' do
+    get 'Returns a list of subjects' do
       operationId :public_api_v1_subjects
-      tags "Subjects"
-      produces "application/json"
+      tags 'Subjects'
+      produces 'application/json'
       parameter name: :sort,
         in: :query,
-        schema: { "type" => "string" },
+        schema: { 'type' => 'string' },
         type: :string,
         style: :form,
         explode: false,
         required: false,
-        example: "name",
-        description: "Sort subjects by name"
+        example: 'name',
+        description: 'Sort subjects by name'
 
-      curl_example description: "Get all subjects",
-        command: "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subjects"
+      curl_example description: 'Get all subjects',
+        command: 'curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subjects'
 
-      response "200", "The list of subjects" do
-        let(:sort) { "name" }
+      response '200', 'The list of subjects' do
+        let(:sort) { 'name' }
 
-        schema({ "$ref": "#/components/schemas/SubjectListResponse" })
+        schema({ '$ref': '#/components/schemas/SubjectListResponse' })
 
         run_test!
       end

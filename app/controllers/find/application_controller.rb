@@ -4,7 +4,7 @@ module Find
   class ApplicationController < ActionController::Base
     include DfE::Analytics::Requests
 
-    layout "find_layout"
+    layout 'find_layout'
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
     before_action :redirect_to_cycle_has_ended_if_find_is_down
@@ -16,7 +16,7 @@ module Find
 
     # DFE Analytics namespace
     def current_namespace
-      "find"
+      'find'
     end
 
   private

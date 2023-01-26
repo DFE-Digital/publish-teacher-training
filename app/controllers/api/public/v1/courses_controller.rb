@@ -7,10 +7,10 @@ module API
         def index
           render jsonapi: paginate(courses),
             include: include_param,
-            meta: { count: courses.count("course.id") },
+            meta: { count: courses.count('course.id') },
             class: API::Public::V1::SerializerService.call
         rescue ActiveRecord::StatementInvalid
-          render json: { status: 400, message: "Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`" }.to_json, status: :bad_request
+          render json: { status: 400, message: 'Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`' }.to_json, status: :bad_request
         end
 
       private
@@ -30,7 +30,7 @@ module API
         end
 
         def include_param
-          params.fetch(:include, "")
+          params.fetch(:include, '')
         end
       end
     end

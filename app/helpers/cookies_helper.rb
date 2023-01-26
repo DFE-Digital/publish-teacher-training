@@ -6,6 +6,6 @@ module CookiesHelper
   end
 
   def google_analytics_allowed?
-    request.cookie_jar[Settings.cookies.consent.name] == "accepted"
+    request.cookie_jar[Settings.cookies.consent.name] == 'accepted'
   end
 end

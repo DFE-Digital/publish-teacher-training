@@ -39,7 +39,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def current_and_open?
-    current? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+    current? && FeatureService.enabled?('rollover.has_current_cycle_started?')
   end
 
   def to_s

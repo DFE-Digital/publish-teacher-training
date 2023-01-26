@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe API::V3::DeserializableSite do
   let(:site) { build(:site) }
@@ -10,13 +10,13 @@ describe API::V3::DeserializableSite do
       class: {
         Site: API::V3::SerializableSite
       }
-    ).to_json)["data"]
+    ).to_json)['data']
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
 
   subject { described_class.new(site_jsonapi).to_h }
 
-  describe "attributes" do
+  describe 'attributes' do
     it { is_expected.to include(address1: site.address1) }
     it { is_expected.to include(address2: site.address2) }
     it { is_expected.to include(address3: site.address3) }

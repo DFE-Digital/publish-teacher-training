@@ -20,7 +20,7 @@ module Publish
       end
 
       def formatted_params
-        if funding_type_params[:course_length] == "Other" && funding_type_params[:course_length_other_length].present?
+        if funding_type_params[:course_length] == 'Other' && funding_type_params[:course_length_other_length].present?
           funding_type_params.merge(
             course_length: funding_type_params[:course_length_other_length]
           )

@@ -20,11 +20,11 @@ class VacancyStatusDeterminationService
   end
 
   def vacancy_status
-    return "both_full_time_and_part_time_vacancies" if full_or_part_time?
-    return "full_time_vacancies" if full_time?
-    return "part_time_vacancies" if part_time?
+    return 'both_full_time_and_part_time_vacancies' if full_or_part_time?
+    return 'full_time_vacancies' if full_time?
+    return 'part_time_vacancies' if part_time?
 
-    "no_vacancies"
+    'no_vacancies'
   end
 
 private
@@ -45,10 +45,10 @@ private
   end
 
   def vacancy_status_full_time?
-    vacancy_status_full_time == "1"
+    vacancy_status_full_time == '1'
   end
 
   def vacancy_status_part_time?
-    vacancy_status_part_time == "1"
+    vacancy_status_part_time == '1'
   end
 end

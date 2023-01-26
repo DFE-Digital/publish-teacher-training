@@ -4,7 +4,7 @@ module PageObjects
   module Support
     module AccessRequests
       class Index < PageObjects::Base
-        set_url "/publish/access-requests"
+        set_url '/publish/access-requests'
 
         sections :requests, '[data-qa="access-request"]' do
           element :id, '[data-qa="access-request__id"]'

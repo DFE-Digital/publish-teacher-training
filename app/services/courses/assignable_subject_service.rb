@@ -18,11 +18,11 @@ module Courses
 
     def execute(course:)
       case course.level
-      when "primary"
+      when 'primary'
         @primary_subject.all
-      when "secondary"
+      when 'secondary'
         @secondary_subject.where.not(id: @modern_languages_parent_subject) + @modern_language_subject.all
-      when "further_education"
+      when 'further_education'
         @further_education_subject.all
       end
     end

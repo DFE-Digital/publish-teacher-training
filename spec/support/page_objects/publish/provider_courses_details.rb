@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "../sections/summary_list"
-require_relative "../sections/course_button_panel"
+require_relative '../sections/summary_list'
+require_relative '../sections/course_button_panel'
 
 module PageObjects
   module Publish
     class ProviderCoursesDetails < PageObjects::Base
-      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/details"
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/details'
 
       section :about_course, Sections::SummaryList, '[data-qa="enrichment__about_course"]'
       section :level, Sections::SummaryList, '[data-qa="course__level"]'
@@ -29,10 +29,10 @@ module PageObjects
       section :contact_support_link, Sections::SummaryList, '[data-qa="course__contact_support_link"]'
       section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'
 
-      element :description_link, "a.govuk-link.govuk-tabs__tab", text: "Description"
+      element :description_link, 'a.govuk-link.govuk-tabs__tab', text: 'Description'
 
       def change_link_texts
-        all(".govuk-summary-list__actions .govuk-link .govuk-visually-hidden").map(&:text)
+        all('.govuk-summary-list__actions .govuk-link .govuk-visually-hidden').map(&:text)
       end
     end
   end

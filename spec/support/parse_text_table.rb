@@ -32,12 +32,12 @@ def parse_text_table(text_table)
 
     group.each do |row|
       row.each_with_index do |cell, index|
-        real_rows.last[index] = "" if real_rows.last[index].nil?
+        real_rows.last[index] = '' if real_rows.last[index].nil?
         real_rows.last[index] += cell
       end
 
       real_rows.last.map! do |cell|
-        cell.gsub(/\s/, "")
+        cell.gsub(/\s/, '')
       end
     end
   end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Authentication", :with_publish_constraint do
-  scenario "Support user signs in" do
+feature 'Authentication', :with_publish_constraint do
+  scenario 'Support user signs in' do
     given_i_am_a_support_user
     when_i_visit_the_support_interface
     then_i_am_expected_to_sign_in
@@ -21,11 +21,11 @@ feature "Authentication", :with_publish_constraint do
   end
 
   def then_i_am_expected_to_sign_in
-    expect(page).to have_content "Use DfE Sign-in to access your account"
+    expect(page).to have_content 'Use DfE Sign-in to access your account'
   end
 
   def when_i_sign_in
-    click_button "Sign in using DfE Sign-in"
+    click_button 'Sign in using DfE Sign-in'
   end
 
   def then_i_can_access_the_support_interface

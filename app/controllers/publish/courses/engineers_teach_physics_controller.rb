@@ -74,7 +74,7 @@ module Publish
 
       def continue
         authorize(@provider, :can_create_course?)
-        @errors = { campaign_name: ["Select an option"] } if params[:course][:campaign_name].blank?
+        @errors = { campaign_name: ['Select an option'] } if params[:course][:campaign_name].blank?
 
         if @errors.present?
           render :new

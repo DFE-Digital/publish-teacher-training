@@ -10,7 +10,7 @@ module BreadcrumbHelper
 
   # rubocop:disable Rails/HelperInstanceVariable
   def organisations_breadcrumb
-    current_user.has_multiple_providers? ? { "Organisations" => root_path } : {}
+    current_user.has_multiple_providers? ? { 'Organisations' => root_path } : {}
   end
 
   def provider_breadcrumb
@@ -29,7 +29,7 @@ module BreadcrumbHelper
 
   def courses_breadcrumb
     path = publish_provider_recruitment_cycle_courses_path(@provider.provider_code)
-    recruitment_cycle_breadcrumb.merge({ "Courses" => path })
+    recruitment_cycle_breadcrumb.merge({ 'Courses' => path })
   end
 
   def course_breadcrumb
@@ -39,17 +39,17 @@ module BreadcrumbHelper
 
   def sites_breadcrumb
     path = publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @recruitment_cycle.year)
-    recruitment_cycle_breadcrumb.merge({ "Locations" => path })
+    recruitment_cycle_breadcrumb.merge({ 'Locations' => path })
   end
 
   def organisation_details_breadcrumb
     path = details_publish_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
-    recruitment_cycle_breadcrumb.merge({ "About your organisation" => path })
+    recruitment_cycle_breadcrumb.merge({ 'About your organisation' => path })
   end
 
   def users_breadcrumb
     path = details_publish_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
-    recruitment_cycle_breadcrumb.merge({ "Users" => path })
+    recruitment_cycle_breadcrumb.merge({ 'Users' => path })
   end
 
   def edit_site_breadcrumb
@@ -59,12 +59,12 @@ module BreadcrumbHelper
 
   def new_site_breadcrumb
     path = new_publish_provider_recruitment_cycle_location_path(@provider.provider_code)
-    sites_breadcrumb.merge({ "Add a location" => path })
+    sites_breadcrumb.merge({ 'Add a location' => path })
   end
 
   def training_providers_breadcrumb
     path = publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    provider_breadcrumb.merge({ "Courses as an accredited body" => path })
+    provider_breadcrumb.merge({ 'Courses as an accredited body' => path })
   end
 
   def training_provider_courses_breadcrumb

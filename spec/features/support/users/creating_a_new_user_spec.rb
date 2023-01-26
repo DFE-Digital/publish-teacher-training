@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Creating a new user", :with_publish_constraint do
+feature 'Creating a new user', :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   before do
@@ -12,9 +12,9 @@ feature "Creating a new user", :with_publish_constraint do
     then_i_am_taken_to_the_support_user_new_page
   end
 
-  describe "Adding a user" do
-    context "Valid details" do
-      scenario "Adding a new user record" do
+  describe 'Adding a user' do
+    context 'Valid details' do
+      scenario 'Adding a new user record' do
         and_i_fill_in_first_name
         and_i_fill_in_last_name
         and_i_fill_in_email
@@ -23,8 +23,8 @@ feature "Creating a new user", :with_publish_constraint do
       end
     end
 
-    context "Invalid details" do
-      scenario "Failing to add a user trigging the validations" do
+    context 'Invalid details' do
+      scenario 'Failing to add a user trigging the validations' do
         when_i_save_the_form
         then_i_should_see_the_error_summary
       end
@@ -44,15 +44,15 @@ feature "Creating a new user", :with_publish_constraint do
   end
 
   def and_i_fill_in_first_name
-    support_user_new_page.first_name.set("Luke")
+    support_user_new_page.first_name.set('Luke')
   end
 
   def and_i_fill_in_last_name
-    support_user_new_page.last_name.set("Skywalker")
+    support_user_new_page.last_name.set('Skywalker')
   end
 
   def and_i_fill_in_email
-    support_user_new_page.email.set("lukeskywalker@jedi.com")
+    support_user_new_page.email.set('lukeskywalker@jedi.com')
   end
 
   def when_i_save_the_form

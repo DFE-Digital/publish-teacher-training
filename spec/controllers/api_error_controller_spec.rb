@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe APIErrorController do
-  describe "GET error500" do
-    it "throws an error" do
+  describe 'GET error500' do
+    it 'throws an error' do
       expect do
         get :error500
       end.to raise_exception RuntimeError

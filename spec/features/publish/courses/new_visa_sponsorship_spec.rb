@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "visa sponsorship (add course summary page)", { can_edit_current_and_next_cycles: false } do
-  context "for lead school" do
+feature 'visa sponsorship (add course summary page)', { can_edit_current_and_next_cycles: false } do
+  context 'for lead school' do
     before do
       given_i_am_authenticated_as_a_provider_user
       when_i_visit_the_course_confirmation_page
     end
 
-    scenario "changing funding_type to fee shows the student question" do
+    scenario 'changing funding_type to fee shows the student question' do
       when_i_change_funding_type
       and_i_choose_fee
       and_i_click_continue
@@ -20,7 +20,7 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
       then_i_should_be_back_on_the_course_confirmation_page
     end
 
-    scenario "changing funding_type to salaried shows the skilled worker question" do
+    scenario 'changing funding_type to salaried shows the skilled worker question' do
       when_i_change_funding_type
       and_i_choose_salary
       and_i_click_continue
@@ -32,13 +32,13 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
     end
   end
 
-  context "for scitt or uni provider" do
+  context 'for scitt or uni provider' do
     before do
       given_i_am_authenticated_as_a_provider_user(scitt_or_uni_provider)
       when_i_visit_the_course_confirmation_page
     end
 
-    scenario "changing funding_type to fee shows the student question" do
+    scenario 'changing funding_type to fee shows the student question' do
       when_i_change_apprenticeship
       and_i_choose_no_for_apprenticeship
       and_i_click_continue
@@ -49,7 +49,7 @@ feature "visa sponsorship (add course summary page)", { can_edit_current_and_nex
       then_i_should_be_back_on_the_course_confirmation_page
     end
 
-    scenario "changing funding_type to salaried shows the skilled worker question" do
+    scenario 'changing funding_type to salaried shows the skilled worker question' do
       when_i_change_apprenticeship
       and_i_choose_yes_for_apprenticeship
       and_i_click_continue
@@ -114,15 +114,15 @@ private
   end
 
   def and_i_click_continue
-    click_button "Continue"
+    click_button 'Continue'
   end
 
   def then_i_should_see_the_student_visas_title
-    expect(new_student_visa_sponsorship_page.title).to have_text("Student visas")
+    expect(new_student_visa_sponsorship_page.title).to have_text('Student visas')
   end
 
   def then_i_should_see_the_skilled_worker_visas_title
-    expect(new_skilled_worker_visa_sponsorship_page.title).to have_text("Skilled Worker visas")
+    expect(new_skilled_worker_visa_sponsorship_page.title).to have_text('Skilled Worker visas')
   end
 
   def when_i_choose_yes_for_student_visa
@@ -134,6 +134,6 @@ private
   end
 
   def then_i_should_be_back_on_the_course_confirmation_page
-    expect(page).to have_text("Check your answers before confirming")
+    expect(page).to have_text('Check your answers before confirming')
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "factory_bot"
+require 'factory_bot'
 
 module FactoryBot
   module Strategy

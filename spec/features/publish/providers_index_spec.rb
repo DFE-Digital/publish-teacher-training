@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Providers index" do
-  scenario "view page as Mary - multi provider user" do
+feature 'Providers index' do
+  scenario 'view page as Mary - multi provider user' do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_a_multi_provider_user
     when_i_visit_the_providers_index_page
@@ -15,7 +15,7 @@ feature "Providers index" do
     i_should_see_the_provider_list
   end
 
-  scenario "view page as Colin - admin user" do
+  scenario 'view page as Colin - admin user' do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
@@ -28,7 +28,7 @@ feature "Providers index" do
     i_should_see_the_change_organisation_link
   end
 
-  scenario "view page as a multi org user during rollover" do
+  scenario 'view page as a multi org user during rollover' do
     given_we_are_in_rollover
     and_there_is_a_previous_recruitment_cycle
     and_i_am_authenticated_as_a_multi_provider_user
@@ -77,16 +77,16 @@ feature "Providers index" do
   end
 
   def i_should_be_on_the_recruitment_cycle_switcher_page
-    expect(page).to have_text "Recruitment cycles"
+    expect(page).to have_text 'Recruitment cycles'
   end
 
   def i_should_be_on_the_courses_index_page_in_the_same_recruitment_cycle
     expect(page).to have_current_path("/publish/organisations/#{current_user.providers.first.provider_code}/#{Settings.current_recruitment_cycle_year}/courses")
-    expect(page).to have_text "Courses"
+    expect(page).to have_text 'Courses'
   end
 
   def and_click_change_recruitment_cycle
-    click_link "Change recruitment cycle"
+    click_link 'Change recruitment cycle'
   end
 
   def given_we_are_not_in_rollover
@@ -99,7 +99,7 @@ feature "Providers index" do
 
   def and_i_am_authenticated_as_a_multi_provider_user
     current_recruitment_cycle = find_or_create(:recruitment_cycle)
-    accredited_body = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle, provider_name: "Bat School")
+    accredited_body = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle, provider_name: 'Bat School')
     accredited_body1 = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle)
     organisation = create(:organisation, providers: [accredited_body, accredited_body1])
     given_i_am_authenticated(user: create(:user, providers: [accredited_body, accredited_body1], organisations: [organisation]))
@@ -110,14 +110,14 @@ feature "Providers index" do
   end
 
   def i_can_search_with_provider_details
-    providers_index_page.search_input.set "Really big school (A01)"
+    providers_index_page.search_input.set 'Really big school (A01)'
     providers_index_page.search_button.click
     expect(provider_courses_index_page).to be_displayed
     expect(provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
   end
 
   def i_should_see_the_pagination_link
-    expect(providers_index_page.pagination_pages.text).to eq("2 of 2")
+    expect(providers_index_page.pagination_pages.text).to eq('2 of 2')
   end
 
   def when_i_visit_the_providers_index_page
@@ -137,25 +137,25 @@ feature "Providers index" do
   end
 
   def and_there_are_providers
-    create(:provider, provider_name: "Really big school", provider_code: "A01", courses: [build(:course, course_code: "2VVZ")])
-    create(:provider, provider_name: "Slightly smaller school", provider_code: "A02", courses: [build(:course, course_code: "2VVZ")])
+    create(:provider, provider_name: 'Really big school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')])
+    create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', courses: [build(:course, course_code: '2VVZ')])
     create_list(:provider, 30)
   end
 
   def and_i_click_on_a_provider
-    click_link "Bat School"
+    click_link 'Bat School'
   end
 
   def i_should_see_the_change_organisation_link
-    expect(page).to have_text "Change organisation"
+    expect(page).to have_text 'Change organisation'
   end
 
   def i_should_be_on_the_organisations_list
     expect(page).to have_current_path("/?recruitment_cycle_year=#{Settings.current_recruitment_cycle_year}")
-    expect(page).to have_text "Organisations"
+    expect(page).to have_text 'Organisations'
   end
 
   def and_i_click_the_change_organisation_link
-    click_link "Change organisation"
+    click_link 'Change organisation'
   end
 end

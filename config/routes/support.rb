@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 namespace :support do
-  get "/", to: "recruitment_cycle#index"
+  get '/', to: 'recruitment_cycle#index'
 
-  resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: "" do
+  resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     resources :providers, except: %i[destroy] do
-      resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
-      resources :users, controller: "providers/users" do
+      resource :check_user, only: %i[show update], controller: 'providers/users_check', path: 'users/check'
+      resources :users, controller: 'providers/users' do
         member do
           get :delete
-          delete :delete, to: "providers/users#destroy"
+          delete :delete, to: 'providers/users#destroy'
         end
       end
       resources :courses, only: %i[index edit update]
@@ -21,7 +21,7 @@ namespace :support do
       end
     end
 
-    resources :data_exports, path: "data-exports", only: [:index] do
+    resources :data_exports, path: 'data-exports', only: [:index] do
       member do
         post :download
       end

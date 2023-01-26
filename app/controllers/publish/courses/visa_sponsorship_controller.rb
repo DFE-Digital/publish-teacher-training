@@ -52,7 +52,7 @@ module Publish
       end
 
       def success_message
-        success_message_key = visa_sponsorship_form.funding_type_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : "visa_sponsorships.updated.visa"
+        success_message_key = visa_sponsorship_form.funding_type_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : 'visa_sponsorships.updated.visa'
 
         visa_type = t("visa_sponsorships.#{visa_sponsorship_form.visa_type}")
         t(success_message_key, visa_type:)

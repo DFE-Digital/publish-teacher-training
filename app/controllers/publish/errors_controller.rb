@@ -6,6 +6,6 @@ module Publish
 
     include Errorable
 
-    layout "publish"
+    layout 'publish'
   end
 end

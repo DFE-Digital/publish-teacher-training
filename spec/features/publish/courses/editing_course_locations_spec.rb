@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Editing course locations", { can_edit_current_and_next_cycles: false } do
+feature 'Editing course locations', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_locations_page
   end
 
-  scenario "i can update the course locations" do
+  scenario 'i can update the course locations' do
     then_i_should_see_a_list_of_locations
     when_i_update_the_course_locations
     and_i_submit
@@ -17,7 +17,7 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
     and_the_course_locations_are_updated
   end
 
-  scenario "updating with invalid data" do
+  scenario 'updating with invalid data' do
     and_i_submit
     then_i_should_see_an_error_message
   end
@@ -30,8 +30,8 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
           build(
             :provider,
             sites: [
-              build(:site, location_name: "Site 1"),
-              build(:site, location_name: "Site 2")
+              build(:site, location_name: 'Site 1'),
+              build(:site, location_name: 'Site 2')
             ]
           )
         ]
@@ -52,12 +52,12 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_a_list_of_locations
-    expect(course_location_edit_page.vacancy_names).to match_array(["Site 1", "Site 2"])
+    expect(course_location_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
   end
 
   def when_i_update_the_course_locations
     course_location_edit_page.vacancies.find do |el|
-      el.find(".govuk-label").text == "Site 1"
+      el.find('.govuk-label').text == 'Site 1'
     end.check
   end
 
@@ -66,16 +66,16 @@ feature "Editing course locations", { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.value_saved", value: "course locations"))
+    expect(page).to have_content(I18n.t('success.value_saved', value: 'course locations'))
   end
 
   def and_the_course_locations_are_updated
-    expect(course.reload.sites.map(&:location_name)).to match_array(["Site 1"])
+    expect(course.reload.sites.map(&:location_name)).to match_array(['Site 1'])
   end
 
   def then_i_should_see_an_error_message
     expect(course_location_edit_page).to have_content(
-      I18n.t("activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations")
+      I18n.t('activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations')
     )
   end
 

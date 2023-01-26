@@ -30,7 +30,7 @@ module Publish
       return render :edit if @errors.present?
 
       if @course.update(course_params)
-        flash[:success] = I18n.t("success.saved")
+        flash[:success] = I18n.t('success.saved')
         redirect_to(
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
@@ -58,7 +58,7 @@ module Publish
   private
 
     def build_new_course
-      add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
+      add_custom_age_range_into_params if params.dig('course', 'age_range_in_years') == 'other'
 
       @course = ::Courses::CreationService.call(course_params:, provider:)
     end
@@ -68,7 +68,7 @@ module Publish
     end
 
     def add_custom_age_range_into_params
-      params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
+      params['course']['age_range_in_years'] = "#{age_from_param}_to_#{age_to_param}"
     end
 
     def errors

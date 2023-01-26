@@ -7,7 +7,7 @@ class SignInController < ApplicationController
     if AuthenticationService.magic_link?
       redirect_to magic_links_path
     else
-      render "index"
+      render 'index'
     end
   end
 end

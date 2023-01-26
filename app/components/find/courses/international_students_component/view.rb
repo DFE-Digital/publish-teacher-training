@@ -15,9 +15,9 @@ module Find
 
         def right_required
           if course.salaried?
-            "right to work"
+            'right to work'
           else
-            "right to study"
+            'right to study'
           end
         end
 

@@ -4,7 +4,7 @@ module API
   module Public
     module V1
       class SerializableProvider < JSONAPI::Serializable::Resource
-        type "providers"
+        type 'providers'
 
         belongs_to :recruitment_cycle
 

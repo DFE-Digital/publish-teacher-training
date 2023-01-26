@@ -15,17 +15,17 @@ module Find
 
       def environment_colour
         {
-          "development" => "grey",
-          "qa" => "orange",
-          "review" => "purple",
-          "sandbox" => "purple",
-          "staging" => "red",
-          "unknown-environment" => "yellow"
+          'development' => 'grey',
+          'qa' => 'orange',
+          'review' => 'purple',
+          'sandbox' => 'purple',
+          'staging' => 'red',
+          'unknown-environment' => 'yellow'
         }[Settings.environment.name]
       end
 
       def sandbox_mode?
-        Settings.environment.name == "sandbox"
+        Settings.environment.name == 'sandbox'
       end
 
       def feedback_link_to

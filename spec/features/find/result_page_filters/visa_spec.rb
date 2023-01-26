@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.feature "Visa filter" do
+RSpec.feature 'Visa filter' do
   include FiltersFeatureSpecsHelper
 
-  scenario "Candidate applies visa filter" do
+  scenario 'Candidate applies visa filter' do
     when_i_visit_the_results_page
     then_i_see_that_the_visa_checkbox_is_unchecked
 
@@ -29,8 +29,8 @@ RSpec.feature "Visa filter" do
 
   def and_the_visa_query_parameter_is_retained
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/results")
-      expect(uri.query).to eq("has_vacancies=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses&can_sponsor_visa=true")
+      expect(uri.path).to eq('/results')
+      expect(uri.query).to eq('has_vacancies=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses&can_sponsor_visa=true')
     end
   end
 end

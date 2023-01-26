@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "selecting a subject", { can_edit_current_and_next_cycles: false } do
+feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "selecting primary subject" do
+  scenario 'selecting primary subject' do
     when_i_visit_the_new_course_subject_page(:primary)
     when_i_select_a_subject(:primary_with_english)
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:primary, :primary_with_english)
   end
 
-  scenario "selecting secondary subject" do
+  scenario 'selecting secondary subject' do
     when_i_visit_the_new_course_subject_page(:secondary)
     when_i_select_a_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:secondary, :business_studies)
   end
 
-  scenario "selecting secondary subject modern languages" do
+  scenario 'selecting secondary subject modern languages' do
     when_i_visit_the_new_course_subject_page(:secondary)
     when_i_select_a_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_modern_languages_page
   end
 
-  scenario "invalid entries" do
+  scenario 'invalid entries' do
     when_i_visit_the_new_course_subject_page(%i[primary secondary].sample)
     and_i_click_continue
     then_i_am_met_with_errors
@@ -59,17 +59,17 @@ private
 
   def then_i_am_met_with_the_age_range_page(level, subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_subject(level, subject_type)}")
-    expect(page).to have_content("Specify an age range")
+    expect(page).to have_content('Specify an age range')
   end
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{params_with_subject(:secondary, :modern_languages)}")
-    expect(page).to have_content("Pick all the languages for this course")
+    expect(page).to have_content('Pick all the languages for this course')
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select at least one subject")
+    expect(page).to have_content('There is a problem')
+    expect(page).to have_content('Select at least one subject')
   end
 
   def course_subject(subject_type)

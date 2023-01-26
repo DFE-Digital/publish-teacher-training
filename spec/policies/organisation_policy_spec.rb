@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe OrganisationPolicy do
   let(:user) { create(:user) }
@@ -8,7 +8,7 @@ describe OrganisationPolicy do
   let(:organisation) { create(:organisation) }
 
   permissions :add_user?, :index? do
-    it "allows a user to be added by an admin" do
+    it 'allows a user to be added by an admin' do
       expect(described_class.new(admin, organisation).add_user?).to be_truthy
     end
 

@@ -4,9 +4,9 @@ FactoryBot.define do
   factory :site_status do
     association :course, study_mode: :full_time
     association(:site)
-    publish { "N" }
+    publish { 'N' }
     vac_status { :full_time_vacancies }
-    status { "running" }
+    status { 'running' }
 
     transient do
       any_vancancy { false }
@@ -65,11 +65,11 @@ FactoryBot.define do
     after(:build) do |site_status, evaluator|
       if evaluator.any_vancancy && site_status&.course&.study_mode.present?
         vac_status = case site_status.course.study_mode
-                     when "full_time"
+                     when 'full_time'
                        :full_time_vacancies
-                     when "part_time"
+                     when 'part_time'
                        :part_time_vacancies
-                     when "full_time_or_part_time"
+                     when 'full_time_or_part_time'
                        :both_full_time_and_part_time_vacancies
                      else
                        :no_vacancies

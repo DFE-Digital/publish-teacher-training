@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Editing course study mode", { can_edit_current_and_next_cycles: false } do
+feature 'Editing course study mode', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "i can update the course study mode" do
+  scenario 'i can update the course study mode' do
     and_there_is_a_part_time_course_i_want_to_edit
     when_i_visit_the_course_study_mode_page
     and_i_choose_a_full_time_study_mode
@@ -16,7 +16,7 @@ feature "Editing course study mode", { can_edit_current_and_next_cycles: false }
     and_the_course_study_mode_is_updated
   end
 
-  scenario "updating with invalid data" do
+  scenario 'updating with invalid data' do
     and_there_is_a_course_with_no_study_mode
     when_i_visit_the_course_study_mode_page
     and_i_submit
@@ -51,7 +51,7 @@ feature "Editing course study mode", { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.value_saved", value: "full or part time"))
+    expect(page).to have_content(I18n.t('success.value_saved', value: 'full or part time'))
   end
 
   def and_the_course_study_mode_is_updated
@@ -60,7 +60,7 @@ feature "Editing course study mode", { can_edit_current_and_next_cycles: false }
 
   def then_i_should_see_an_error_message
     expect(course_study_mode_edit_page.error_messages).to include(
-      I18n.t("activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank")
+      I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')
     )
   end
 

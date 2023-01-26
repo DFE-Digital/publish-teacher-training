@@ -5,7 +5,7 @@ module Support
     def destroy
       user.remove_access_to(provider)
 
-      redirect_to origin_page, flash: { success: t("support.flash.deleted", resource: flash_resource) }
+      redirect_to origin_page, flash: { success: t('support.flash.deleted', resource: flash_resource) }
     end
 
   private
@@ -27,7 +27,7 @@ module Support
     end
 
     def flash_resource
-      @flash_resource ||= "User permission"
+      @flash_resource ||= 'User permission'
     end
   end
 end

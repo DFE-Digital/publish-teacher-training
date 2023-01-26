@@ -20,7 +20,7 @@ module Publish
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
         if @gcse_requirements_form.save(course)
-          course_description_success_message("GCSE requirements")
+          course_description_success_message('GCSE requirements')
 
           redirect_to publish_provider_recruitment_cycle_course_path
         else
@@ -67,7 +67,7 @@ module Publish
         if value.is_a?(Array)
           %w[Maths English Science].intersect?(value)
         else
-          value == "true"
+          value == 'true'
         end
       end
     end

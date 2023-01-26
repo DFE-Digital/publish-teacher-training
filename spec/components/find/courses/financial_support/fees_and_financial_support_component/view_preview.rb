@@ -6,7 +6,7 @@ module Find
       module FeesAndFinancialSupportComponent
         class ViewPreview < ViewComponent::Preview
           def salaried
-            course = Course.new(funding_type: "salary").decorate
+            course = Course.new(funding_type: 'salary').decorate
             render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course)
           end
 
@@ -41,8 +41,8 @@ module Find
               financial_support: false,
               fee_uk_eu: 99_999,
               fee_international: 9_000_000_000,
-              cycle_range: "2022 to 2023",
-              fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
+              cycle_range: '2022 to 2023',
+              fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
           end
 
           def excluded_from_bursary_course
@@ -54,8 +54,8 @@ module Find
               financial_support: false,
               fee_uk_eu: 99_999,
               fee_international: 9_000_000_000,
-              cycle_range: "2022 to 2023",
-              fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.")
+              cycle_range: '2022 to 2023',
+              fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
           end
 
           def bursary_only_course
@@ -67,8 +67,8 @@ module Find
               financial_support: false,
               fee_uk_eu: 99_999,
               fee_international: 9_000_000_000,
-              cycle_range: "2022 to 2023",
-              fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
+              cycle_range: '2022 to 2023',
+              fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
               bursary_amount: 99_999_999)
           end
 
@@ -81,12 +81,12 @@ module Find
               financial_support: false,
               fee_uk_eu: 99_999,
               fee_international: 9_000_000_000,
-              cycle_range: "2022 to 2023",
-              fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
+              cycle_range: '2022 to 2023',
+              fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
               bursary_amount: 99_999_999,
               scholarship_amount: 1,
               has_early_career_payments: true,
-              subject_name: "foobar")
+              subject_name: 'foobar')
           end
 
           def financial_support_course
@@ -95,15 +95,15 @@ module Find
               excluded_from_bursary: false,
               bursary_only: false,
               has_scholarship_and_bursary: false,
-              financial_support: "Much support available",
+              financial_support: 'Much support available',
               fee_uk_eu: 99_999,
               fee_international: 9_000_000_000,
-              cycle_range: "2022 to 2023",
-              fee_details: "The course fees for UK students in 2022 to 2023 are £9,250.",
+              cycle_range: '2022 to 2023',
+              fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.',
               bursary_amount: 99_999_999,
               scholarship_amount: 1,
               has_early_career_payments: false,
-              subject_name: "foobar")
+              subject_name: 'foobar')
           end
 
           class FakeCourse

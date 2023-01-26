@@ -2,7 +2,7 @@
 
 class ChangeApplicationStartAndEndDateForRecruitmentCycles < ActiveRecord::Migration[6.0]
   def up
-    recruitment_cycle = RecruitmentCycle.find_by(year: "2021")
+    recruitment_cycle = RecruitmentCycle.find_by(year: '2021')
     return if recruitment_cycle.nil?
 
     recruitment_cycle.application_start_date = Date.new(2020, 10, 13)
@@ -11,7 +11,7 @@ class ChangeApplicationStartAndEndDateForRecruitmentCycles < ActiveRecord::Migra
   end
 
   def down
-    recruitment_cycle = RecruitmentCycle.find_by(year: "2021")
+    recruitment_cycle = RecruitmentCycle.find_by(year: '2021')
     return if recruitment_cycle.nil?
 
     recruitment_cycle.application_start_date = Date.new(2020, 10, 8)

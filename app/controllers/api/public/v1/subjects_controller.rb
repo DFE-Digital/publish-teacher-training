@@ -7,7 +7,7 @@ module API
         def index
           subjects = Subject.active.includes(:financial_incentive)
 
-          subjects = subjects.order(:subject_name) if params["sort"] == "name"
+          subjects = subjects.order(:subject_name) if params['sort'] == 'name'
           render jsonapi: subjects,
             class: API::Public::V1::SerializerService.call,
             include: params[:include],
@@ -19,7 +19,7 @@ module API
         end
 
         def subject_fields
-          params.dig(:fields, :subjects)&.split(",")
+          params.dig(:fields, :subjects)&.split(',')
         end
       end
     end

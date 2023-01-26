@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 describe RolloverService do
   let!(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
@@ -22,12 +22,12 @@ describe RolloverService do
     ).and_return(copy_provider_to_recruitment_cycle_service)
   end
 
-  describe ".call" do
+  describe '.call' do
     let(:force) { false }
 
-    context "with provider codes" do
-      let(:provider) { create(:provider, provider_code: "AB1") }
-      let(:provider_to_ignore) { create(:provider, provider_code: "CD2") }
+    context 'with provider codes' do
+      let(:provider) { create(:provider, provider_code: 'AB1') }
+      let(:provider_to_ignore) { create(:provider, provider_code: 'CD2') }
 
       before do
         provider
@@ -42,12 +42,12 @@ describe RolloverService do
         )
       end
 
-      it "passes the providers in provider_codes to the `CopyToRecruitmentCycle` service" do
+      it 'passes the providers in provider_codes to the `CopyToRecruitmentCycle` service' do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
           provider:, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil
         )
 
-        no_output { described_class.call(provider_codes: ["AB1"]) }
+        no_output { described_class.call(provider_codes: ['AB1']) }
       end
 
       it "doesn't pass other providers" do
@@ -55,12 +55,12 @@ describe RolloverService do
           provider: provider_to_ignore, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil
         )
 
-        no_output { described_class.call(provider_codes: ["AB1"]) }
+        no_output { described_class.call(provider_codes: ['AB1']) }
       end
 
-      context "when providers exist in other cycles" do
+      context 'when providers exist in other cycles' do
         let(:previous_cycle) { create(:recruitment_cycle, :previous) }
-        let(:past_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: "AB1") }
+        let(:past_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: 'AB1') }
         let(:future_provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
 
         it "doesn't pass other providers" do
@@ -76,14 +76,14 @@ describe RolloverService do
             provider: future_provider, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil
           )
 
-          no_output { described_class.call(provider_codes: ["AB1"]) }
+          no_output { described_class.call(provider_codes: ['AB1']) }
         end
       end
     end
 
-    context "without provider codes" do
-      let(:provider) { create(:provider, provider_code: "AB1") }
-      let(:other_provider) { create(:provider, provider_code: "CD2") }
+    context 'without provider codes' do
+      let(:provider) { create(:provider, provider_code: 'AB1') }
+      let(:other_provider) { create(:provider, provider_code: 'CD2') }
 
       before do
         provider
@@ -98,7 +98,7 @@ describe RolloverService do
         )
       end
 
-      it "passes all providers `CopyToRecruitmentCycle` service" do
+      it 'passes all providers `CopyToRecruitmentCycle` service' do
         expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
           provider:, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil
         )
@@ -109,9 +109,9 @@ describe RolloverService do
         no_output { described_class.call(provider_codes: []) }
       end
 
-      context "when providers exist in other cycles" do
+      context 'when providers exist in other cycles' do
         let(:previous_cycle) { create(:recruitment_cycle, :previous) }
-        let(:past_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: "AB1") }
+        let(:past_provider) { create(:provider, recruitment_cycle: previous_cycle, provider_code: 'AB1') }
         let(:future_provider) { create(:provider, recruitment_cycle: next_recruitment_cycle) }
 
         it "doesn't pass other providers" do
@@ -131,10 +131,10 @@ describe RolloverService do
         end
       end
 
-      context "force: true" do
+      context 'force: true' do
         let(:force) { true }
 
-        it "passes the argument to the `CopyToRecruitmentCycle` service" do
+        it 'passes the argument to the `CopyToRecruitmentCycle` service' do
           expect(copy_provider_to_recruitment_cycle_service).to receive(:execute).with(
             provider:, new_recruitment_cycle: next_recruitment_cycle, course_codes: nil
           )
