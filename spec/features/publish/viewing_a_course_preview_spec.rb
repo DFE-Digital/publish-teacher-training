@@ -195,7 +195,7 @@ private
 
     expect(course_preview_page).to have_course_advice
 
-    expect(course_preview_page).to have_link("Apply for this course", href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
+    expect(course_preview_page).to have_link('Apply for this course', href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
   end
 
   def user_with_custom_address_requested_via_zendesk

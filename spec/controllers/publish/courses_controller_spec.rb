@@ -39,7 +39,7 @@ module Publish
         get :apply, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          code: course.course_code,
+          code: course.course_code
         }
 
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
