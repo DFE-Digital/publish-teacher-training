@@ -282,23 +282,8 @@ class CourseDecorator < ApplicationDecorator
 
   # TODO: check we still need this
   def subject_page_title
-    case level
-    when "primary"
-      "Pick a primary subject"
-    when "secondary"
-      "Pick a secondary subject"
-    else
-      "Pick a subject"
-    end
-  end
-
-  # TODO: check we still need this
-  def subject_input_label
-    case level
-    when "primary"
-      "Primary subject"
-    when "secondary"
-      "First subject"
+    if level == "primary" || level == "secondary"
+      "Subject"
     else
       "Pick a subject"
     end

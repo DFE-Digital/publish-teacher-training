@@ -5,9 +5,7 @@
         <% if course.course_code %>
           <%= render CaptionText.new(text: course.name_and_code) %>
         <% end %>
-
-        <%#= Change this ? course.subject_page_title %>
-        Subject
+        <%= course.subject_page_title %>
       </h1>
     </legend>
     <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
@@ -17,7 +15,7 @@
       <%= govuk_link_to "Learn more about the bursaries and scholarships", "https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2023-to-2024#postgraduate-bursaries-and-scholarships" %>
     </p>
     <div class="govuk-form-group">
-      <%= form.label :master_subject_id, course.subject_input_label, class: "govuk-label" %>
+      <%= form.label :master_subject_id, "First Subject", class: "govuk-label" %>
       <%= form.select :master_subject_id, options_for_select(course.selectable_subjects, course.master_subject_id || course.selected_subject_ids.first), { include_blank: true }, data: { qa: "course__master_subject" }, class: "govuk-select" %>
     </div>
 
