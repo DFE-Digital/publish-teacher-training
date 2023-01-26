@@ -4,7 +4,7 @@
   <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
       text: "All user records",
-      href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year]),
+      href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year])
     ) %>
   <% end %>
 

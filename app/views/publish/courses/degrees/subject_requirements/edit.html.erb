@@ -15,7 +15,7 @@
       model: @subject_requirements_form, url: degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(
         @course.provider.provider_code,
         @course.provider.recruitment_cycle_year,
-        @course.course_code,
+        @course.course_code
       ),
       method: :put
     ) do |f| %>
@@ -41,7 +41,7 @@
       locals: {
         course: @course,
         page_path: degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
-      },
+      }
     ) %>
   </aside>
 </div>

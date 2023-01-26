@@ -8,7 +8,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
       model: @notification_form,
-      url: publish_notification_path(current_user.id),
+      url: publish_notification_path(current_user.id)
     ) do |f| %>
 
       <%= f.govuk_error_summary %>

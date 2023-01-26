@@ -5,7 +5,7 @@
     html_attributes: {
       data: { qa: "copy-course-warning" },
       role: "alert",
-    },
+    }
   ) do |notification_banner| %>
     <% notification_banner.heading(text: "Your changes are not yet saved") %>
     <p class="govuk-body">We’ve copied these fields from <%= @source_course.name %> (<%= @source_course.course_code %>):</p>

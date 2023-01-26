@@ -10,7 +10,7 @@
     <%= form_with(
       model: @access_request,
       url: request_access_publish_provider_path(params[:code]),
-      method: :post,
+      method: :post
     ) do |f| %>
 
       <%= f.govuk_error_summary %>

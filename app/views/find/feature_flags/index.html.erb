@@ -12,7 +12,7 @@
       key: "Status",
       value: govuk_tag(
         text: FeatureFlag.active?(feature_name) ? "Active" : "Inactive",
-        colour: FeatureFlag.active?(feature_name) ? "green" : "grey",
+        colour: FeatureFlag.active?(feature_name) ? "green" : "grey"
       ),
     },
     {
@@ -22,7 +22,7 @@
     {
       key: "History",
       value: render(
-        Find::FeatureHistoryComponent.new(feature_name),
+        Find::FeatureHistoryComponent.new(feature_name)
       ),
     },
   ].compact) do %>

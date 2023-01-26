@@ -5,7 +5,7 @@
     href: find_age_groups_path(@backlink_query_parameters),
     html_attributes: {
       data: { qa: "page-back" },
-    },
+    }
   ) %>
 <% end %>
 
@@ -16,7 +16,7 @@
     query_params: request.query_parameters,
     form: f,
     form_name: :find_subjects_form,
-    exclude_keys: ["subjects"],
+    exclude_keys: ["subjects"]
   ) %>
 
   <%= render(partial: "primary_subjects", locals: { f: }) if @subjects_form.primary? %>

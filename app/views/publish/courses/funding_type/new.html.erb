@@ -11,7 +11,7 @@
     <%= render CaptionText.new(text: t("course.add_course")) %>
     <%= form_with url: continue_publish_provider_recruitment_cycle_courses_funding_type_path(
                     @provider.provider_code,
-                    @provider.recruitment_cycle_year,
+                    @provider.recruitment_cycle_year
                   ),
                   method: :get do |form| %>
 
@@ -19,7 +19,7 @@
       <%= render(
         "form_fields",
         form: fields,
-        program_types: %i[pg_teaching_apprenticeship school_direct_training_programme school_direct_salaried_training_programme],
+        program_types: %i[pg_teaching_apprenticeship school_direct_training_programme school_direct_salaried_training_programme]
       ) %>
       <% end %>
     <% end %>

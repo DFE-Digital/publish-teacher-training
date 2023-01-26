@@ -3,7 +3,7 @@
     <%= govuk_link_to(
     "#{current_recruitment_cycle_period_text} - current",
     publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_recruitment_cycle_year),
-    data: { qa: "provider__courses__current_cycle" },
+    data: { qa: "provider__courses__current_cycle" }
   ) %>
   </li>
 
@@ -12,7 +12,7 @@
         <%= govuk_link_to(
         next_recruitment_cycle_period_text.to_s,
         publish_provider_recruitment_cycle_path(@provider.provider_code, Settings.current_recruitment_cycle_year + 1),
-        data: { qa: "provider__courses__next_cycle" },
+        data: { qa: "provider__courses__next_cycle" }
       ) %>
     </li>
 </ul>

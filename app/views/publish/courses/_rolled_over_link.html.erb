@@ -6,7 +6,7 @@
         <%= govuk_link_to "View rolled over course for the #{next_recruitment_cycle_period_text} recruitment cycle", publish_provider_recruitment_cycle_course_path(
               @provider.provider_code,
               @course.recruitment_cycle_year.next,
-              @course.course_code,
+              @course.course_code
             ),
             { class: "govuk-link--no-visited-state", data: { qa: "course__rolled-over-link" } } %>
       </p>

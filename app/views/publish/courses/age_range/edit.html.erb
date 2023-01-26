@@ -11,7 +11,7 @@
       model: form_object,
       url: age_range_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
       scope: :course,
-      method: :put,
+      method: :put
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
