@@ -12,7 +12,7 @@
       <% end %>
     <% elsif course.program_type == "scitt_programme" && course.provider.provider_code != "E65" %>
       <%= render Find::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
-        <p class="govuk-body">You'll be placed in different schools during your training. You can't pick which schools you want to be in, but your training provider will place you in schools you can travel to.</p>
+        <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools you want to be in, but your training provider will place you in schools you can travel to.</p>
       <% end %>
     <% end %>
 
