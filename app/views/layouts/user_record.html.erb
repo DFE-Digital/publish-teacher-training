@@ -12,7 +12,7 @@
 
   <%= render TabNavigation.new(items: [
     { name: "Details", url: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user) },
-    { name: "Providers", url: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) },
+    { name: "Providers", url: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user) }
   ]) %>
 
   <%= yield %>
