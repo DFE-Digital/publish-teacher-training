@@ -22,8 +22,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "2",
@@ -34,8 +34,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "3",
@@ -46,8 +46,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "4",
@@ -58,8 +58,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "5",
@@ -70,8 +70,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "6",
@@ -82,8 +82,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "7",
@@ -94,8 +94,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "8",
@@ -106,8 +106,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "9",
@@ -118,8 +118,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "10",
@@ -130,8 +130,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "7000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "11",
@@ -142,8 +142,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "12",
@@ -154,8 +154,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "24000",
               "early_career_payments" => nil,
               "scholarship" => "26000",
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "13",
@@ -166,8 +166,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "14",
@@ -178,8 +178,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "15",
@@ -190,8 +190,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "16",
@@ -202,8 +202,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "24000",
               "early_career_payments" => nil,
               "scholarship" => "26000",
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "17",
@@ -214,8 +214,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "18",
@@ -226,8 +226,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "19",
@@ -238,8 +238,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "20",
@@ -250,8 +250,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "21",
@@ -262,8 +262,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "22",
@@ -274,8 +274,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "23",
@@ -286,8 +286,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "24",
@@ -298,8 +298,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "25",
@@ -310,8 +310,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "24000",
               "early_career_payments" => nil,
               "scholarship" => "26000",
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "26",
@@ -322,8 +322,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "27",
@@ -334,8 +334,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "28",
@@ -346,8 +346,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "29",
@@ -358,8 +358,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "24000",
               "early_career_payments" => nil,
               "scholarship" => "26000",
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "30",
@@ -370,8 +370,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "31",
@@ -382,8 +382,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "32",
@@ -394,8 +394,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "33",
@@ -406,8 +406,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "34",
@@ -418,8 +418,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "35",
@@ -430,8 +430,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "36",
@@ -442,8 +442,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "37",
@@ -454,8 +454,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "38",
@@ -466,8 +466,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "39",
@@ -478,8 +478,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           },
           {
             "id" => "40",
@@ -490,8 +490,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "41",
@@ -502,8 +502,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "42",
@@ -514,8 +514,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "43",
@@ -526,8 +526,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "44",
@@ -538,8 +538,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "45",
@@ -550,8 +550,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "46",
@@ -562,8 +562,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => "10000",
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => false,
-            },
+              "subject_knowledge_enhancement_course_available" => false
+            }
           },
           {
             "id" => "47",
@@ -574,8 +574,8 @@ RSpec.describe API::Public::V1::SubjectsController do
               "bursary_amount" => nil,
               "early_career_payments" => nil,
               "scholarship" => nil,
-              "subject_knowledge_enhancement_course_available" => nil,
-            },
+              "subject_knowledge_enhancement_course_available" => nil
+            }
           }
         ])
       end
@@ -585,9 +585,9 @@ RSpec.describe API::Public::V1::SubjectsController do
       let(:params) do
         {
           fields: {
-            subjects: "name",
+            subjects: "name"
           },
-          sort: "name",
+          sort: "name"
         }
       end
 

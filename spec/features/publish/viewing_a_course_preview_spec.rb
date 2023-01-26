@@ -245,7 +245,7 @@ private
     )
     accrediting_provider_enrichment = {
       "UcasProviderCode" => accrediting_provider.provider_code,
-      "Description" => Faker::Lorem.sentence,
+      "Description" => Faker::Lorem.sentence
     }
 
     provider = build(

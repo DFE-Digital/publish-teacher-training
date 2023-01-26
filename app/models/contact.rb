@@ -19,7 +19,7 @@ class Contact < ApplicationRecord
          utt: "utt",
          web_link: "web_link",
          fraud: "fraud",
-         finance: "finance",
+         finance: "finance"
        },
     _suffix: "contact"
 end

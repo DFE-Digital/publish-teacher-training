@@ -8,7 +8,7 @@ class CycleTimetable
       first_deadline_banner: Time.zone.local(2021, 7, 12, 9),
       apply_1_deadline: Time.zone.local(2021, 9, 7, 18),
       apply_2_deadline: Time.zone.local(2021, 9, 21, 18),
-      find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59),
+      find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59)
     },
     2022 => {
       find_opens: Time.zone.local(2021, 10, 5, 9),
@@ -16,7 +16,7 @@ class CycleTimetable
       first_deadline_banner: Time.zone.local(2022, 8, 2, 9),
       apply_1_deadline: Time.zone.local(2022, 9, 6, 18),
       apply_2_deadline: Time.zone.local(2022, 9, 20, 18),
-      find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59),
+      find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59)
     },
     2023 => {
       find_opens: Time.zone.local(2022, 10, 4, 9),
@@ -27,7 +27,7 @@ class CycleTimetable
       first_deadline_banner: Time.zone.local(2023, 7, 12, 9),
       apply_1_deadline: Time.zone.local(2023, 9, 7, 18),
       apply_2_deadline: Time.zone.local(2023, 9, 21, 18),
-      find_closes: Time.zone.local(2023, 10, 4, 23, 59, 59),
+      find_closes: Time.zone.local(2023, 10, 4, 23, 59, 59)
     },
     2024 => {
       find_opens: Time.zone.local(2023, 10, 5, 9),
@@ -35,8 +35,8 @@ class CycleTimetable
       first_deadline_banner: Time.zone.local(2024, 7, 12, 9),
       apply_1_deadline: Time.zone.local(2024, 9, 7, 18),
       apply_2_deadline: Time.zone.local(2024, 9, 21, 18),
-      find_closes: Time.zone.local(2024, 10, 4, 23, 59, 59),
-    },
+      find_closes: Time.zone.local(2024, 10, 4, 23, 59, 59)
+    }
   }.freeze
 
   def self.current_year
@@ -161,12 +161,12 @@ class CycleTimetable
           first_deadline_banner: 1.day.ago,
           apply_1_deadline: 1.day.from_now,
           apply_2_deadline: 2.days.from_now,
-          find_closes: 3.days.from_now,
+          find_closes: 3.days.from_now
         },
         next_year => {
           find_opens: 6.days.from_now,
-          apply_opens: 7.days.from_now,
-        },
+          apply_opens: 7.days.from_now
+        }
       },
       today_is_after_apply_1_deadline_passed: {
         current_year => {
@@ -175,12 +175,12 @@ class CycleTimetable
           first_deadline_banner: 3.days.ago,
           apply_1_deadline: 1.day.ago,
           apply_2_deadline: 2.days.from_now,
-          find_closes: 3.days.from_now,
+          find_closes: 3.days.from_now
         },
         next_year => {
           find_opens: 6.days.from_now,
-          apply_opens: 7.days.from_now,
-        },
+          apply_opens: 7.days.from_now
+        }
       },
       today_is_after_apply_2_deadline_passed: {
         current_year => {
@@ -189,12 +189,12 @@ class CycleTimetable
           first_deadline_banner: 4.days.ago,
           apply_1_deadline: 3.days.ago,
           apply_2_deadline: 1.day.ago,
-          find_closes: 1.day.from_now,
+          find_closes: 1.day.from_now
         },
         next_year => {
           find_opens: 6.days.from_now,
-          apply_opens: 7.days.from_now,
-        },
+          apply_opens: 7.days.from_now
+        }
       },
       today_is_after_find_closes: {
         current_year => {
@@ -203,12 +203,12 @@ class CycleTimetable
           first_deadline_banner: 5.days.ago,
           apply_1_deadline: 4.days.ago,
           apply_2_deadline: 2.days.ago,
-          find_closes: 1.day.ago,
+          find_closes: 1.day.ago
         },
         next_year => {
           find_opens: 6.days.from_now,
-          apply_opens: 7.days.from_now,
-        },
+          apply_opens: 7.days.from_now
+        }
       },
       today_is_after_find_opens: {
         current_year => {
@@ -217,13 +217,13 @@ class CycleTimetable
           first_deadline_banner: 7.days.ago,
           apply_1_deadline: 6.days.ago,
           apply_2_deadline: 5.days.ago,
-          find_closes: 4.days.ago,
+          find_closes: 4.days.ago
         },
         next_year => {
           find_opens: 1.day.ago,
-          apply_opens: 2.days.from_now,
-        },
-      },
+          apply_opens: 2.days.from_now
+        }
+      }
     }
   end
 

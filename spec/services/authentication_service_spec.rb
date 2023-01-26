@@ -15,7 +15,7 @@ describe AuthenticationService do
         email:,
         sign_in_user_id:,
         first_name:,
-        last_name:,
+        last_name:
       }
     end
     let(:token) { build_jwt(:apiv2, payload:) }

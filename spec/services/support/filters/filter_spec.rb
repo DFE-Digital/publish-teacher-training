@@ -15,7 +15,7 @@ describe Support::Filter do
       context "filtering with a known provider" do
         let(:params) do
           {
-            provider_search: provider.provider_name,
+            provider_search: provider.provider_name
           }
         end
 
@@ -27,7 +27,7 @@ describe Support::Filter do
       context "filtering with an unknown provider or invalid entry" do
         let(:params) do
           {
-            provider_search: "i can haz cheezeburger",
+            provider_search: "i can haz cheezeburger"
           }
         end
 
@@ -49,7 +49,7 @@ describe Support::Filter do
         let(:params) do
           {
             provider_search: "A01",
-            course_search: provider.courses.first.course_code,
+            course_search: provider.courses.first.course_code
           }
         end
 
@@ -62,7 +62,7 @@ describe Support::Filter do
         let(:params) do
           {
             provider_search: "A01",
-            course_search: "",
+            course_search: ""
           }
         end
 
@@ -75,7 +75,7 @@ describe Support::Filter do
         let(:params) do
           {
             provider_search: "",
-            course_search: "2VVZ",
+            course_search: "2VVZ"
           }
         end
 
@@ -93,7 +93,7 @@ describe Support::Filter do
       context "filtering with a known user" do
         let(:params) do
           {
-            text_search: user.first_name,
+            text_search: user.first_name
           }
         end
 

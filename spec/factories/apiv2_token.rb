@@ -17,7 +17,7 @@ class JWTStrategy
   def data(evaluation)
     {
       data: evaluation.object.payload,
-      **claims(evaluation),
+      **claims(evaluation)
     }
   end
 
@@ -28,7 +28,7 @@ class JWTStrategy
       exp: (now + 5.minutes).to_i,
       iat: now.to_i,
       iss: evaluation.object.issuer,
-      sub: evaluation.object.subject,
+      sub: evaluation.object.subject
     }
   end
 end

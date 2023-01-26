@@ -12,7 +12,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          course_code: course.course_code,
+          course_code: course.course_code
         }
       end
 
@@ -28,7 +28,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          course_code: course.course_code,
+          course_code: course.course_code
         }
       end
 
@@ -42,7 +42,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
             course_code: course.course_code,
-            include: "recruitment_cycle,provider,course,location_status",
+            include: "recruitment_cycle,provider,course,location_status"
           }
         end
 

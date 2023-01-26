@@ -35,7 +35,7 @@ module Courses
           show_applications_open: show_applications_open?,
           subjects: potential_subjects,
           modern_languages:,
-          modern_languages_subject:,
+          modern_languages_subject:
         }.with_indifferent_access
       end
     end

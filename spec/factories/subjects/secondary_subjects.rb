@@ -35,7 +35,7 @@ FactoryBot.define do
     "Psychology" => "C8",
     "Religious education" => "V6",
     "Social sciences" => "14",
-    "Spanish" => "22",
+    "Spanish" => "22"
   }
 
   factory :secondary_subject do

@@ -46,13 +46,13 @@ module Publish
         only_integer: true,
         allow_blank: true,
         greater_than_or_equal_to: 0,
-        less_than_or_equal_to: 46,
+        less_than_or_equal_to: 46
       }
       validates :course_age_range_in_years_other_to, numericality: {
         only_integer: true,
         allow_blank: true,
         greater_than_or_equal_to: 4,
-        less_than_or_equal_to: 50,
+        less_than_or_equal_to: 50
       }
       validate :age_range_from_and_to_missing
       validate :age_range_from_and_to_reversed

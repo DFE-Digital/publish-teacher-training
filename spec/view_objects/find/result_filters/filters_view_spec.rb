@@ -347,7 +347,7 @@ module Find
         context "when parameters are present" do
           let(:params) do
             {
-              degree_required: "2",
+              degree_required: "2"
             }
           end
 

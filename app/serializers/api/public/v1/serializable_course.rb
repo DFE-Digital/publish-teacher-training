@@ -5,7 +5,7 @@ module API
     module V1
       class SerializableCourse < JSONAPI::Serializable::Resource
         COURSE_STATE_MAPPING = {
-          published_with_unpublished_changes: :published,
+          published_with_unpublished_changes: :published
         }.freeze
 
         class << self

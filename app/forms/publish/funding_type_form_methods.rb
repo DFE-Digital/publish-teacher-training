@@ -23,7 +23,7 @@ module Publish
 
       {
         course_length: "Other",
-        course_length_other_length: course_enrichment[:course_length],
+        course_length_other_length: course_enrichment[:course_length]
       }
     end
 

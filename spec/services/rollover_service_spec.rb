@@ -37,7 +37,7 @@ describe RolloverService do
           {
             providers: 0,
             sites: 0,
-            courses: 0,
+            courses: 0
           }
         )
       end
@@ -93,7 +93,7 @@ describe RolloverService do
           {
             providers: 0,
             sites: 0,
-            courses: 0,
+            courses: 0
           }
         )
       end

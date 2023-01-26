@@ -58,7 +58,7 @@ module BigQuery
             one: "one",
             two: true,
             three: [1, 2, 3],
-            four: { first: "test-one", second: "test-two" },
+            four: { first: "test-one", second: "test-two" }
           }
         end
 

@@ -47,7 +47,7 @@ module Find
         row_hash.map do |key, value|
           {
             key:,
-            value:,
+            value:
           }
         end
       end

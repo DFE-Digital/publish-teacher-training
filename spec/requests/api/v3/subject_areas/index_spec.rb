@@ -18,64 +18,64 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
           "type" => "subject_areas",
           "attributes" => {
             "name" => "Primary",
-            "typename" => "PrimarySubject",
+            "typename" => "PrimarySubject"
           },
           "relationships" => {
             "subjects" => {
               "meta" => {
-                "included" => false,
-              },
-            },
-          },
+                "included" => false
+              }
+            }
+          }
         },
         {
           "id" => "SecondarySubject",
           "type" => "subject_areas",
           "attributes" => {
             "name" => "Secondary",
-            "typename" => "SecondarySubject",
+            "typename" => "SecondarySubject"
           },
           "relationships" => {
             "subjects" => {
               "meta" => {
-                "included" => false,
-              },
-            },
-          },
+                "included" => false
+              }
+            }
+          }
         },
         {
           "id" => "ModernLanguagesSubject",
           "type" => "subject_areas",
           "attributes" => {
             "name" => "Secondary: Modern languages",
-            "typename" => "ModernLanguagesSubject",
+            "typename" => "ModernLanguagesSubject"
           },
           "relationships" => {
             "subjects" => {
               "meta" => {
-                "included" => false,
-              },
-            },
-          },
+                "included" => false
+              }
+            }
+          }
         },
         {
           "id" => "FurtherEducationSubject",
           "type" => "subject_areas",
           "attributes" => {
             "name" => "Further education",
-            "typename" => "FurtherEducationSubject",
+            "typename" => "FurtherEducationSubject"
           },
           "relationships" => {
             "subjects" => {
               "meta" => {
-                "included" => false,
-              },
-            },
-          },
+                "included" => false
+              }
+            }
+          }
         }
       ],
       "jsonapi" => {
-        "version" => "1.0",
+        "version" => "1.0"
       }
     )
   end
@@ -90,33 +90,33 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
             "id" => "PrimarySubject",
             "type" => "subject_areas",
             "attributes" => {
-              "typename" => "PrimarySubject",
-            },
+              "typename" => "PrimarySubject"
+            }
           },
           {
             "id" => "SecondarySubject",
             "type" => "subject_areas",
             "attributes" => {
-              "typename" => "SecondarySubject",
-            },
+              "typename" => "SecondarySubject"
+            }
           },
           {
             "id" => "ModernLanguagesSubject",
             "type" => "subject_areas",
             "attributes" => {
-              "typename" => "ModernLanguagesSubject",
-            },
+              "typename" => "ModernLanguagesSubject"
+            }
           },
           {
             "id" => "FurtherEducationSubject",
             "type" => "subject_areas",
             "attributes" => {
-              "typename" => "FurtherEducationSubject",
-            },
+              "typename" => "FurtherEducationSubject"
+            }
           }
         ],
         "jsonapi" => {
-          "version" => "1.0",
+          "version" => "1.0"
         }
       )
     end
@@ -131,41 +131,41 @@ describe "GET v3 /subject_areas", :with_publish_constraint do
         "type" => "subject_areas",
         "attributes" => {
           "typename" => "PrimarySubject",
-          "name" => "Primary",
+          "name" => "Primary"
         },
         "relationships" => {
           "subjects" => {
             "data" => [
               {
                 "type" => "subjects",
-                "id" => "1",
+                "id" => "1"
               },
               {
                 "type" => "subjects",
-                "id" => "2",
+                "id" => "2"
               },
               {
                 "type" => "subjects",
-                "id" => "3",
+                "id" => "3"
               },
               {
                 "type" => "subjects",
-                "id" => "4",
+                "id" => "4"
               },
               {
                 "type" => "subjects",
-                "id" => "5",
+                "id" => "5"
               },
               {
                 "type" => "subjects",
-                "id" => "6",
+                "id" => "6"
               },
               {
                 "type" => "subjects",
-                "id" => "7",
+                "id" => "7"
               }
-            ],
-          },
+            ]
+          }
         }
       )
     end

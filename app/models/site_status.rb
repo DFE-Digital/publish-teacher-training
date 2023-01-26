@@ -18,19 +18,19 @@ class SiteStatus < ApplicationRecord
     both_full_time_and_part_time_vacancies: "B",
     part_time_vacancies: "P",
     full_time_vacancies: "F",
-    no_vacancies: "",
+    no_vacancies: ""
   }
 
   enum status: {
     discontinued: "D",
     running: "R",
     new_status: "N",
-    suspended: "S",
+    suspended: "S"
   }, _prefix: :status
 
   enum publish: {
     published: "Y",
-    unpublished: "N",
+    unpublished: "N"
   }, _suffix: :on_ucas
 
   aasm column: :status, enum: true do

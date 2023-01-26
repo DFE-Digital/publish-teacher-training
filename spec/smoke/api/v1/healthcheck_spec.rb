@@ -24,8 +24,8 @@ describe "V1 Public API Smoke Tests", :aggregate_failures, smoke: true do
           checks: {
             database: true,
             redis: true,
-            sidekiq_processes: true,
-          },
+            sidekiq_processes: true
+          }
         }.to_json
       )
     end

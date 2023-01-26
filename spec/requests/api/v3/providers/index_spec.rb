@@ -41,11 +41,11 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers", :with_pub
           "attributes" => {
             "provider_code" => provider.provider_code,
             "provider_name" => provider.provider_name,
-            "recruitment_cycle_year" => provider.recruitment_cycle.year,
-          },
+            "recruitment_cycle_year" => provider.recruitment_cycle.year
+          }
         }],
         "jsonapi" => {
-          "version" => "1.0",
+          "version" => "1.0"
         }
       )
     end

@@ -44,7 +44,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: nil,
-              course_age_range_in_years_other_to: "10",
+              course_age_range_in_years_other_to: "10"
             }
           end
 
@@ -58,7 +58,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
-              course_age_range_in_years_other_to: nil,
+              course_age_range_in_years_other_to: nil
             }
           end
 
@@ -72,7 +72,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "11",
-              course_age_range_in_years_other_to: "10",
+              course_age_range_in_years_other_to: "10"
             }
           end
 
@@ -86,7 +86,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
-              course_age_range_in_years_other_to: "11",
+              course_age_range_in_years_other_to: "11"
             }
           end
 
@@ -100,7 +100,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "47",
-              course_age_range_in_years_other_to: "49",
+              course_age_range_in_years_other_to: "49"
             }
           end
 
@@ -115,7 +115,7 @@ module Publish
             {
               age_range_in_years: "other",
               course_age_range_in_years_other_from: "10",
-              course_age_range_in_years_other_to: "51",
+              course_age_range_in_years_other_to: "51"
             }
           end
 

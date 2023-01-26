@@ -36,11 +36,11 @@ describe CourseReportingService do
       total: {
         all: courses_count,
         non_findable: courses_count - findable_courses_count,
-        all_findable: findable_courses_count,
+        all_findable: findable_courses_count
       },
       findable_total: {
         open: open_courses_count,
-        closed: closed_courses_count,
+        closed: closed_courses_count
       },
       provider_type: {
         open: {
@@ -48,7 +48,7 @@ describe CourseReportingService do
         },
         closed: {
           scitt: 0, lead_school: 0, university: 0
-        },
+        }
       },
       program_type: {
         open: {
@@ -60,11 +60,11 @@ describe CourseReportingService do
           higher_education_programme: 0, school_direct_training_programme: 0,
           school_direct_salaried_training_programme: 0, scitt_programme: 0,
           pg_teaching_apprenticeship: 0
-        },
+        }
       },
       study_mode: {
         open: { full_time: 1, part_time: 2, full_time_or_part_time: 3 },
-        closed: { full_time: 0, part_time: 0, full_time_or_part_time: 0 },
+        closed: { full_time: 0, part_time: 0, full_time_or_part_time: 0 }
       },
       qualification: {
         open: {
@@ -72,11 +72,11 @@ describe CourseReportingService do
         },
         closed: {
           qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
-        },
+        }
       },
       is_send: {
         open: { yes: 1, no: 2 },
-        closed: { yes: 0, no: 0 },
+        closed: { yes: 0, no: 0 }
       },
       subject: {
         open: Subject.active.each_with_index.map do |sub, i|
@@ -88,8 +88,8 @@ describe CourseReportingService do
                   x = {}
                   x[sub.subject_name] = 0
                   x
-                end .reduce({}, :merge),
-      },
+                end .reduce({}, :merge)
+      }
     }
   end
 

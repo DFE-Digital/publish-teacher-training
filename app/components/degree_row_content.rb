@@ -7,7 +7,7 @@ class DegreeRowContent < ViewComponent::Base
     "two_one" => "2:1 or above, or equivalent",
     "two_two" => "2:2 or above, or equivalent",
     "third_class" => "Third class degree or above, or equivalent",
-    "not_required" => "An undergraduate degree, or equivalent",
+    "not_required" => "An undergraduate degree, or equivalent"
   }.freeze
 
   def initialize(course:, errors: nil)

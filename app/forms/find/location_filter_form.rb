@@ -54,7 +54,7 @@ module Find
         longitude: results.longitude,
         loc: results.address,
         lq: location_query,
-        c: country(results),
+        c: country(results)
       }
     end
 

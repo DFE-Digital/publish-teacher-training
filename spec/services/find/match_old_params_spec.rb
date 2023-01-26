@@ -8,14 +8,14 @@ module Find
       subject do
         described_class.call({
           "sortby" => "2",
-          "funding" => "8",
+          "funding" => "8"
         })
       end
 
       it "maps the old find params" do
         expect(subject).to eq({
           "sortby" => "distance",
-          "funding" => "salary",
+          "funding" => "salary"
         })
       end
     end
@@ -29,7 +29,7 @@ module Find
           "rad" => "50",
           "query" => "provider name",
           "hasvacancies" => "false",
-          "subject_codes" => ["W1"],
+          "subject_codes" => ["W1"]
         })
       end
 
@@ -41,7 +41,7 @@ module Find
           "radius" => "50",
           "provider.provider_name" => "provider name",
           "has_vacancies" => "false",
-          "subjects" => ["W1"],
+          "subjects" => ["W1"]
         })
       end
     end
@@ -50,7 +50,7 @@ module Find
       subject do
         described_class.call({
           "parttime" => "true",
-          "fulltime" => "true",
+          "fulltime" => "true"
         })
       end
 
@@ -62,13 +62,13 @@ module Find
     context "with QUALIFICATION_FILTERS" do
       subject do
         described_class.call({
-          "qualifications" => %w[Other PgdePgceWithQts QtsOnly],
+          "qualifications" => %w[Other PgdePgceWithQts QtsOnly]
         })
       end
 
       it "maps the old find params" do
         expect(subject).to eq({
-          "qualification" => ["pgce pgde", "pgce_with_qts", "qts"],
+          "qualification" => ["pgce pgde", "pgce_with_qts", "qts"]
         })
       end
     end

@@ -47,7 +47,7 @@ describe "API", :with_publish_constraint do
         required: false,
         description: "The associated data for this resource.",
         schema: {
-          enum: %w[recruitment_cycle],
+          enum: %w[recruitment_cycle]
         },
         example: "recruitment_cycle"
 
@@ -91,7 +91,7 @@ describe "API", :with_publish_constraint do
         required: false,
         description: "The associated data for this resource.",
         schema: {
-          enum: %w[recruitment_cycle],
+          enum: %w[recruitment_cycle]
         },
         example: "recruitment_cycle"
 

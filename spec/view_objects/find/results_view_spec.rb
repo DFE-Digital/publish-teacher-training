@@ -11,7 +11,7 @@ module Find
         "qualification" => ["qts", "pgce_with_qts", "pgce pgde"],
         "study_type" => %w[full_time part_time],
         "has_vacancies" => true,
-        "send_courses" => false,
+        "send_courses" => false
       }
     end
 
@@ -87,7 +87,7 @@ module Find
           "qualification" => ["qts", "pgce_with_qts", "pgce pgde"],
           "study_type" => %w[full_time part_time],
           "has_vacancies" => "true",
-          "send_courses" => "false",
+          "send_courses" => "false"
         }
       end
 
@@ -273,7 +273,7 @@ module Find
           "fulltime" => "true",
           "parttime" => "true",
           "has_vacancies" => "true",
-          "send_courses" => "false",
+          "send_courses" => "false"
         }
       end
 
@@ -360,7 +360,7 @@ module Find
                 primary_subject_code,
                 spanish_subject_code,
                 mathematics_subject_code
-              ],
+              ]
             })
           end
 
@@ -409,7 +409,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "51.5079",
-            "longitude" => "0.0877",
+            "longitude" => "0.0877"
           }
         end
 
@@ -420,7 +420,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "51.6985",
-            "longitude" => "0.1367",
+            "longitude" => "0.1367"
           }
         end
 
@@ -431,7 +431,7 @@ module Find
         let(:parameter_hash) do
           {
             "latitude" => "52",
-            "longitude" => "0.1367",
+            "longitude" => "0.1367"
           }
         end
 
@@ -726,7 +726,7 @@ module Find
             "long" => "0.54321",
             "loc" => "Cardiff",
             "lq" => "Cardiff",
-            "l" => "1",
+            "l" => "1"
           }
         end
 
@@ -745,7 +745,7 @@ module Find
             "long" => "0.54321",
             "loc" => "Brixton",
             "lq" => "Brixton",
-            "l" => "1",
+            "l" => "1"
           }
         end
 

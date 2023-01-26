@@ -18,7 +18,7 @@ module API
             PrimarySubject: API::Public::V1::SerializableSubject,
             SecondarySubject: API::Public::V1::SerializableSubject,
             ModernLanguagesSubject: API::Public::V1::SerializableSubject,
-            FurtherEducationSubject: API::Public::V1::SerializableSubject,
+            FurtherEducationSubject: API::Public::V1::SerializableSubject
           }
         end
       end

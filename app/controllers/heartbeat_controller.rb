@@ -11,14 +11,14 @@ class HeartbeatController < ActionController::API
     checks = {
       database: database_alive?,
       redis: redis_alive?,
-      sidekiq_processes: sidekiq_processes_checks,
+      sidekiq_processes: sidekiq_processes_checks
     }
 
     status = checks.values.all? ? :ok : :service_unavailable
 
     render status:,
       json: {
-        checks:,
+        checks:
       }
   end
 

@@ -79,7 +79,7 @@ module Support
         name:,
         start_date:,
         applications_open_from:,
-        is_send: send?,
+        is_send: send?
       }
 
       course.assign_attributes(attributes)

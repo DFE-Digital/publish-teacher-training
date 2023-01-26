@@ -60,22 +60,22 @@ module Publish
           fee_details: nil,
           fee_international: nil,
           fee_uk_eu: nil,
-          financial_support: nil,
+          financial_support: nil
         },
         student: {
-          salary_details: nil,
-        },
+          salary_details: nil
+        }
       }[visa_type]
     end
 
     def reset_course_attributes
       {
         skilled_worker: {
-          can_sponsor_student_visa: false,
+          can_sponsor_student_visa: false
         },
         student: {
-          can_sponsor_skilled_worker_visa: false,
-        },
+          can_sponsor_skilled_worker_visa: false
+        }
       }[visa_type]
     end
 
@@ -98,7 +98,7 @@ module Publish
       {
         funding_type: course.funding_type,
         can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
-        can_sponsor_student_visa: course.can_sponsor_student_visa,
+        can_sponsor_student_visa: course.can_sponsor_student_visa
       }
     end
 

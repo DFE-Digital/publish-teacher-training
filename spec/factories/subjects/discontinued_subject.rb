@@ -3,7 +3,7 @@
 FactoryBot.define do
   subjects = {
     "Humanities" => nil,
-    "Balanced Science" => nil,
+    "Balanced Science" => nil
   }
 
   factory :discontinued_subject do

@@ -33,7 +33,7 @@ describe CourseSerializersService do
       Site: API::V3::SerializableSite,
       Provider: API::V3::SerializableProvider,
       RecruitmentCycle: API::V3::SerializableRecruitmentCycle,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      SubjectArea: API::V3::SerializableSubjectArea
     }
   end
 
@@ -49,7 +49,7 @@ describe CourseSerializersService do
       Site: site_serializer_spy,
       Provider: provider_serializer_spy,
       RecruitmentCycle: recruitment_cycle_serializer_spy,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      SubjectArea: API::V3::SerializableSubjectArea
     }
   end
 

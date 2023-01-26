@@ -9,7 +9,7 @@ module Subjects
 
     def subject_with_subject_knowledge_enhancement_course_available
       subject_with_subject_knowledge_enhancement_course_available = {
-        2020 => ["Primary with mathematics", "Biology", "Computing", "English", "Design and technology", "Geography", "Chemistry", "Mathematics", "Physics", "French", "German", "Spanish", "Italian", "Japanese", "Mandarin", "Russian", "Modern languages (other)", "Religious education"],
+        2020 => ["Primary with mathematics", "Biology", "Computing", "English", "Design and technology", "Geography", "Chemistry", "Mathematics", "Physics", "French", "German", "Spanish", "Italian", "Japanese", "Mandarin", "Russian", "Modern languages (other)", "Religious education"]
       }
       subject_with_subject_knowledge_enhancement_course_available[@year]
     end

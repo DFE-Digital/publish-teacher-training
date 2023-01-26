@@ -26,12 +26,12 @@ class Provider < ApplicationRecord
   enum provider_type: {
     scitt: "B",
     lead_school: "Y",
-    university: "O",
+    university: "O"
   }
 
   enum accrediting_provider: {
     accredited_body: "Y",
-    not_an_accredited_body: "N",
+    not_an_accredited_body: "N"
   }
 
   belongs_to :recruitment_cycle
@@ -173,7 +173,7 @@ class Provider < ApplicationRecord
 
   pg_search_scope :course_search,
     associated_against: {
-      courses: %i[course_code],
+      courses: %i[course_code]
     }, using: { tsearch: { prefix: true } }
 
   pg_search_scope :provider_name_search,
@@ -300,7 +300,7 @@ class Provider < ApplicationRecord
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_enrichment&.Description || "",
+        description: accrediting_provider_enrichment&.Description || ""
       }
     end
   end

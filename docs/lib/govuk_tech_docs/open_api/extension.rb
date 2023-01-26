@@ -40,7 +40,7 @@ module GovukTechDocs
 
           keywords = {
             "api&gt;" => "default",
-            "api_schema&gt;" => "schema",
+            "api_schema&gt;" => "schema"
           }
 
           regexp = keywords.map { |k, _| Regexp.escape(k) }.join("|")

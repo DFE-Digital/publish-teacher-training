@@ -147,7 +147,7 @@ module Publish
         code = update_course_params[:accredited_body_code]
 
         {
-          accredited_body_code: autocompleted_code.presence || code,
+          accredited_body_code: autocompleted_code.presence || code
         }
       end
 

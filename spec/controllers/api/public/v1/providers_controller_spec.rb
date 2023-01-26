@@ -9,7 +9,7 @@ RSpec.describe API::Public::V1::ProvidersController do
     context "when there are no providers" do
       before do
         get :index, params: {
-          recruitment_cycle_year: recruitment_cycle.year,
+          recruitment_cycle_year: recruitment_cycle.year
         }
       end
 
@@ -40,7 +40,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         context "with current recruitment cycle specified" do
           before do
             get :index, params: {
-              recruitment_cycle_year: recruitment_cycle.year,
+              recruitment_cycle_year: recruitment_cycle.year
             }
           end
 
@@ -63,7 +63,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           before do
             next_provider
             get :index, params: {
-              recruitment_cycle_year: next_recruitment_cycle.year,
+              recruitment_cycle_year: next_recruitment_cycle.year
             }
           end
 
@@ -80,14 +80,14 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            **pagination,
+            **pagination
           }
         end
 
         let(:pagination) do
           {
             page:,
-            per_page: 1,
+            per_page: 1
           }
         end
 
@@ -164,7 +164,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         before do
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            include: "recruitment_cycle",
+            include: "recruitment_cycle"
           }
         end
 
@@ -211,7 +211,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         context "default ordering" do
           before do
             get :index, params: {
-              recruitment_cycle_year: recruitment_cycle.year,
+              recruitment_cycle_year: recruitment_cycle.year
             }
           end
 
@@ -224,7 +224,7 @@ RSpec.describe API::Public::V1::ProvidersController do
           before do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
-              sort: sort_field,
+              sort: sort_field
             }
           end
 
@@ -268,8 +268,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
               fields: {
-                providers: "name",
-              },
+                providers: "name"
+              }
             }
           end
 
@@ -308,7 +308,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           before do
             get :index, params: {
-              recruitment_cycle_year: recruitment_cycle.year,
+              recruitment_cycle_year: recruitment_cycle.year
             }
           end
 
@@ -344,7 +344,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            filter:,
+            filter:
           }
         end
 
@@ -410,7 +410,7 @@ RSpec.describe API::Public::V1::ProvidersController do
       before do
         create_list(:provider, 4)
         get :index, params: {
-          recruitment_cycle_year: recruitment_cycle.year,
+          recruitment_cycle_year: recruitment_cycle.year
         }
       end
 
@@ -439,7 +439,7 @@ RSpec.describe API::Public::V1::ProvidersController do
       before do
         get :show, params: {
           recruitment_cycle_year:,
-          code: provider_code,
+          code: provider_code
         }
       end
 
@@ -478,15 +478,15 @@ RSpec.describe API::Public::V1::ProvidersController do
             "telephone" => provider.telephone,
             "email" => provider.email,
             "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
-            "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-          },
+            "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa
+          }
         }
       end
 
       before do
         get :show, params: {
           recruitment_cycle_year:,
-          code: provider_code,
+          code: provider_code
         }
       end
 

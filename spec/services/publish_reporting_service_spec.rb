@@ -9,21 +9,21 @@ describe PublishReportingService do
         total: {
           all: 666,
           active_users: 600,
-          non_active_users: 66,
+          non_active_users: 66
         },
-        recent_active_users: 60,
+        recent_active_users: 60
       },
       providers: {
         total: {
           all: 1000,
           providers_with_non_active_users: 990,
-          providers_with_recent_active_users: 10,
+          providers_with_recent_active_users: 10
         },
         with_1_recent_active_users: 1,
         with_2_recent_active_users: 2,
         with_3_recent_active_users: 0,
         with_4_recent_active_users: 4,
-        with_more_than_5_recent_active_users: 6,
+        with_more_than_5_recent_active_users: 6
       },
       courses: {
         total_updated_recently: 100,
@@ -31,8 +31,8 @@ describe PublishReportingService do
         updated_findable_recently: 60,
         updated_open_courses_recently: 35,
         updated_closed_courses_recently: 25,
-        created_recently: 10,
-      },
+        created_recently: 10
+      }
     }
   end
 
@@ -61,7 +61,7 @@ describe PublishReportingService do
       10 => 6,
       11 => 6,
       12 => 6,
-      13 => 6,
+      13 => 6
     }
   end
   let(:providers_count) { 1000 }

@@ -22,7 +22,7 @@ module Find
           let(:params) do
             {
               l: "1",
-              lq: "",
+              lq: ""
             }
           end
 
@@ -37,7 +37,7 @@ module Find
           let(:params) do
             {
               l: "3",
-              "provider.provider_name" => "",
+              "provider.provider_name" => ""
             }
           end
 

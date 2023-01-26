@@ -53,7 +53,7 @@ module GeocoderHelper
           "state" => "England",
           "country" => "United Kingdom",
           "country_code" => "UK",
-          "address_components" => [{ long_name: "England" }],
+          "address_components" => [{ long_name: "England" }]
         }
       ]
     )
@@ -68,7 +68,7 @@ module GeocoderHelper
           "state_code" => "England",
           "country" => "United Kingdom",
           "country_code" => "UK",
-          "address_components" => [{ long_name: "England" }],
+          "address_components" => [{ long_name: "England" }]
         }
       ]
     )
@@ -83,7 +83,7 @@ module GeocoderHelper
           "state_code" => "England",
           "country" => "United Kingdom",
           "country_code" => "UK",
-          "address_components" => [{ long_name: "England" }],
+          "address_components" => [{ long_name: "England" }]
         }
       ]
     )

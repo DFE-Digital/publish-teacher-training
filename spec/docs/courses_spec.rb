@@ -27,7 +27,7 @@ describe "API", :with_publish_constraint do
           subjects: "00,01",
           updated_since: "2020-11-13T11:21:55Z",
           degree_grade: "two_two",
-          can_sponsor_visa: true,
+          can_sponsor_visa: true
         }
       parameter name: :sort,
         in: :query,
@@ -53,7 +53,7 @@ describe "API", :with_publish_constraint do
         required: false,
         description: "The associated data for this resource.",
         schema: {
-          enum: %w[accredited_body provider recruitment_cycle],
+          enum: %w[accredited_body provider recruitment_cycle]
         },
         example: "recruitment_cycle,provider"
 

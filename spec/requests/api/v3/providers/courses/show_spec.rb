@@ -21,7 +21,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       JSONAPI::Serializable::Renderer.new.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: API::V3::SerializableCourse
         }
       ).to_json
     )
@@ -161,15 +161,15 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             "can_sponsor_skilled_worker_visa" => course.can_sponsor_skilled_worker_visa,
             "can_sponsor_student_visa" => course.can_sponsor_student_visa,
             "campaign_name" => course.campaign_name,
-            "extended_qualification_descriptions" => "Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)",
+            "extended_qualification_descriptions" => "Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)"
           },
           "relationships" => {
             "accrediting_provider" => { "meta" => { "included" => false } },
             "provider" => { "meta" => { "included" => false } },
             "sites" => { "data" => [{ "type" => "sites", "id" => courses_site_status.site.id.to_s }] },
             "site_statuses" => { "meta" => { "included" => false } },
-            "subjects" => { "meta" => { "included" => false } },
-          },
+            "subjects" => { "meta" => { "included" => false } }
+          }
         },
         "included" => [
           {
@@ -187,12 +187,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
               "latitude" => courses_site_status.site.latitude,
               "longitude" => courses_site_status.site.longitude,
               "urn" => courses_site_status.site.urn,
-              "recruitment_cycle_year" => current_year.to_s,
-            },
+              "recruitment_cycle_year" => current_year.to_s
+            }
           }
         ],
         "jsonapi" => {
-          "version" => "1.0",
+          "version" => "1.0"
         }
       )
     end
@@ -202,7 +202,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
     JSONAPI::Serializable::Renderer.new.render(
       course,
       class: {
-        Course: API::V3::SerializableCourse,
+        Course: API::V3::SerializableCourse
       }
     )
   end

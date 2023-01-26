@@ -8,8 +8,8 @@ module ViewHelper
       classes: "govuk-!-display-none-print",
       html_attributes: {
         data: {
-          qa: "page-back",
-        },
+          qa: "page-back"
+        }
       }
     )
   end
@@ -58,7 +58,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        sites: "#{base}/locations?display_errors=true",
+        sites: "#{base}/locations?display_errors=true"
       }.with_indifferent_access[field]
     end
   end
@@ -75,7 +75,7 @@ module ViewHelper
       "address1" => "#{base}/contact?display_errors=true#provider_address1",
       "address3" => "#{base}/contact?display_errors=true#provider_address3",
       "address4" => "#{base}/contact?display_errors=true#provider_address4",
-      "postcode" => "#{base}/contact?display_errors=true#provider_postcode",
+      "postcode" => "#{base}/contact?display_errors=true#provider_postcode"
     }[field]
   end
 
@@ -150,7 +150,7 @@ private
       "Enter degree requirements" =>
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
       "Enter GCSE requirements" =>
-        gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
+        gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true)
     }
   end
 end

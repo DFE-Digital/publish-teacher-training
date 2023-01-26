@@ -33,7 +33,7 @@ module Find
           two_one: "An undergraduate degree at class 2:1 or above, or equivalent",
           two_two: "An undergraduate degree at class 2:2 or above, or equivalent",
           third_class: "An undergraduate degree, or equivalent. This should be an honours degree (Third or above), or equivalent",
-          not_required: "An undergraduate degree, or equivalent",
+          not_required: "An undergraduate degree, or equivalent"
         }[course.degree_grade&.to_sym || "N/A"]
       end
 

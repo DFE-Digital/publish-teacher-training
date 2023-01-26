@@ -6,7 +6,7 @@ module BigQuery
       @event_hash = {
         environment: ENV.fetch("RAILS_ENV", nil),
         occurred_at: Time.zone.now.iso8601,
-        event_type: "web_request",
+        event_type: "web_request"
       }
       yield self if block_given?
     end

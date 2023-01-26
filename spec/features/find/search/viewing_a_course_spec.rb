@@ -340,7 +340,7 @@ private
       provider_name: "Provider 1",
       accrediting_provider_enrichments: [{
         "Description" => "Something great about the accredited body",
-        "UcasProviderCode" => accrediting_provider.provider_code,
+        "UcasProviderCode" => accrediting_provider.provider_code
       }]
     )
   end

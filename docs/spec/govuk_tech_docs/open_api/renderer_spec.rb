@@ -10,7 +10,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
       openapi: "3.0.0",
       info: {
         title: "title",
-        version: "0.0.1",
+        version: "0.0.1"
       },
       paths: {
         "/widgets": {
@@ -21,14 +21,14 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
                 content: {
                   "application/json": {
                     schema: {
-                      "$ref": "#/components/schemas/widgets",
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
+                      "$ref": "#/components/schemas/widgets"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       components: {
         schemas: {
@@ -37,31 +37,31 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
               data: {
                 type: "array",
                 items: {
-                  "$ref": "#/components/schemas/widget",
-                },
-              },
-            },
+                  "$ref": "#/components/schemas/widget"
+                }
+              }
+            }
           },
           widget: {
             anyOf: [
               { "$ref": "#/components/schemas/widgetInteger" },
               { "$ref": "#/components/schemas/widgetString" }
-            ],
+            ]
           },
           widgetInteger: {
             type: "object",
             properties: {
-              id: { type: "integer", example: 12_345 },
-            },
+              id: { type: "integer", example: 12_345 }
+            }
           },
           widgetString: {
             type: "object",
             properties: {
-              id: { type: "string", example: "abcde" },
-            },
-          },
-        },
-      },
+              id: { type: "string", example: "abcde" }
+            }
+          }
+        }
+      }
     }
   end
 

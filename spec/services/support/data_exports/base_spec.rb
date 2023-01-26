@@ -11,14 +11,14 @@ RSpec.describe Support::DataExports::Base do
           col2: "item1_test2",
           col3: "item1_test3",
           col4: "item1_test4",
-          col5: "item1_test5",
+          col5: "item1_test5"
         },
         {
           col1: "item2_test1",
           col2: "item2_test2",
           col3: "item2_test3",
           col4: "item2_test4",
-          col5: "item2_test5",
+          col5: "item2_test5"
         }
       ]
     end

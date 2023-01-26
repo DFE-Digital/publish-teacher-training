@@ -57,7 +57,7 @@ class LocationSuggestion
         language: "en",
         input:,
         components: "country:uk",
-        types: "geocode",
+        types: "geocode"
       }
     end
   end

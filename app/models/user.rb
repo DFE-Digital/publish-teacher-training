@@ -49,7 +49,7 @@ class User < ApplicationRecord
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
-    message: "must be an @[digital.]education.gov.uk domain",
+    message: "must be an @[digital.]education.gov.uk domain"
   }
 
   audited

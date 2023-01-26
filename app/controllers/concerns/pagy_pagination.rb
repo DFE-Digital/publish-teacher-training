@@ -24,7 +24,7 @@ private
       first: meta[:first_url],
       last: meta[:last_url],
       prev: meta[:prev].nil? ? nil : meta[:prev_url],
-      next: meta[:next].nil? ? nil : meta[:next_url],
+      next: meta[:next].nil? ? nil : meta[:next_url]
     }
   end
 

@@ -11,7 +11,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       before do
         get :index, params: {
           recruitment_cycle_year: recruitment_cycle.year,
-          provider_code: provider.provider_code,
+          provider_code: provider.provider_code
         }
       end
 
@@ -26,7 +26,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: provider.provider_code,
+          provider_code: provider.provider_code
         }
       end
 
@@ -53,7 +53,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       let(:pagination) do
         {
           page:,
-          per_page: 3,
+          per_page: 3
         }
       end
 
@@ -61,7 +61,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         get :index, params: {
           recruitment_cycle_year: recruitment_cycle.year,
           provider_code: provider.provider_code,
-          **pagination,
+          **pagination
         }
       end
 
@@ -143,8 +143,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           filter: {
-            funding_type: "salary",
-          },
+            funding_type: "salary"
+          }
         }
       end
     end
@@ -157,7 +157,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
-            include: "provider,accredited_body",
+            include: "provider,accredited_body"
           }
         end
 
@@ -176,7 +176,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
-            include: "subjects",
+            include: "subjects"
           }
         end
 
@@ -195,7 +195,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         get :show, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          code: course.course_code,
+          code: course.course_code
         }
       end
 
@@ -217,7 +217,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           code: course.course_code,
-          include: "provider,accredited_body,recruitment_cycle",
+          include: "provider,accredited_body,recruitment_cycle"
         }
       end
 
@@ -239,7 +239,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         get :show, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          code: "ABCD",
+          code: "ABCD"
         }
       end
 
@@ -253,7 +253,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         get :show, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: "ABC",
-          code: "ABCD",
+          code: "ABCD"
         }
       end
 

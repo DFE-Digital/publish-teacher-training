@@ -28,31 +28,31 @@ class Course < ApplicationRecord
     school_direct_training_programme: "SD",
     school_direct_salaried_training_programme: "SS",
     scitt_programme: "SC",
-    pg_teaching_apprenticeship: "TA",
+    pg_teaching_apprenticeship: "TA"
   }
 
   enum study_mode: {
     full_time: "F",
     part_time: "P",
-    full_time_or_part_time: "B",
+    full_time_or_part_time: "B"
   }
 
   enum level: {
     primary: "Primary",
     secondary: "Secondary",
-    further_education: "Further education",
+    further_education: "Further education"
   }, _suffix: :course
 
   enum degree_grade: {
     two_one: 0,
     two_two: 1,
     third_class: 2,
-    not_required: 9,
+    not_required: 9
   }
 
   enum :campaign_name, {
     no_campaign: 0,
-    engineers_teach_physics: 1,
+    engineers_teach_physics: 1
   }
 
   ENTRY_REQUIREMENT_OPTIONS = {
@@ -60,7 +60,7 @@ class Course < ApplicationRecord
     expect_to_achieve_before_training_begins: 2,
     equivalence_test: 3,
     not_required: 9,
-    not_set: nil,
+    not_set: nil
   }.freeze
 
   STRUCTURED_REQUIREMENTS_REQUIRED_FROM = 2022

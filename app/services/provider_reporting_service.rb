@@ -21,17 +21,17 @@ class ProviderReportingService
       total: {
         all: @providers.count,
         non_training_providers: @providers.count - @training_providers.count,
-        training_providers: @training_providers.count,
+        training_providers: @training_providers.count
       },
       training_providers: {
         findable_total: {
           open: @open_providers.count,
-          closed: @closed_providers.count,
+          closed: @closed_providers.count
         },
         accredited_body: { **group_by_count(:accrediting_provider) },
         provider_type: { **group_by_count(:provider_type) },
-        region_code: { **group_by_count(:region_code) },
-      },
+        region_code: { **group_by_count(:region_code) }
+      }
     }
   end
 
@@ -53,7 +53,7 @@ private
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
-              end .reduce({}, :merge),
+              end .reduce({}, :merge)
     }
   end
 end

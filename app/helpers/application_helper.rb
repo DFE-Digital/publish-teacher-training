@@ -76,7 +76,7 @@ private
 
     {
       href: action_path,
-      visually_hidden_text: action_visually_hidden_text,
+      visually_hidden_text: action_visually_hidden_text
     }
   end
 end

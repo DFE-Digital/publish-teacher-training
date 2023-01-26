@@ -15,7 +15,7 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:accrediting_provider_enrichments) do
     [{
       "UcasProviderCode" => accrediting_provider.provider_code,
-      "Description" => description,
+      "Description" => description
     }]
   end
   let(:accrediting_provider) { create(:provider) }
@@ -53,12 +53,12 @@ describe "GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
           "train_with_disability" => provider.train_with_disability,
           "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
           "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-          "recruitment_cycle_year" => provider.recruitment_cycle.year,
-        },
+          "recruitment_cycle_year" => provider.recruitment_cycle.year
+        }
       },
       "jsonapi" => {
-        "version" => "1.0",
-      },
+        "version" => "1.0"
+      }
     }
   end
 

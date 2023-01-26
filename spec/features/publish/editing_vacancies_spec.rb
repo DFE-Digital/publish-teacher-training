@@ -244,7 +244,7 @@ private
       "Uni 2 (Full time)" => false,
       "Uni 2 (Part time)" => true,
       "Uni 3 (Full time)" => true,
-      "Uni 3 (Part time)" => true,
+      "Uni 3 (Part time)" => true
     }
 
     expect(course_vacancies_edit_page).to have_vacancies_radio_choice

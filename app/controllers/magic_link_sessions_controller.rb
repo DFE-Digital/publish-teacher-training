@@ -29,8 +29,8 @@ private
     redirect_to root_path, flash: {
       error: {
         id: "publish-authentication-magic-link-form-email-field",
-        message: t("publish_authentication.magic_link.invalid_token"),
-      },
+        message: t("publish_authentication.magic_link.invalid_token")
+      }
     }
   end
 
@@ -40,8 +40,8 @@ private
     redirect_to root_path, flash: {
       error: {
         id: "publish-authentication-magic-link-form-email-field",
-        message: t("publish_authentication.magic_link.expired"),
-      },
+        message: t("publish_authentication.magic_link.expired")
+      }
     }
   end
 
@@ -68,7 +68,7 @@ private
       "email" => user.email,
       "first_name" => user.first_name,
       "last_name" => user.last_name,
-      "last_active_at" => Time.zone.now,
+      "last_active_at" => Time.zone.now
     }
   end
 

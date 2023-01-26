@@ -29,7 +29,7 @@ module Publish
         post :publish, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          code: course.course_code,
+          code: course.course_code
         }
       end
     end

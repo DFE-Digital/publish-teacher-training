@@ -244,7 +244,7 @@ private
       show_all_courses: "two_one,two_two,third_class,not_required",
       two_two: "two_two,third_class,not_required",
       third_class: "third_class,not_required",
-      not_required: "not_required",
+      not_required: "not_required"
     }
 
     accepted_degrees[degree_required_parameter].split(",")

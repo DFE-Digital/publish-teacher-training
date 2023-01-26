@@ -46,7 +46,7 @@ describe "heartbeat requests" do
         expect(response.body).to eq({ checks: {
           database: true,
           redis: true,
-          sidekiq_processes: true,
+          sidekiq_processes: true
         } }.to_json)
       end
     end

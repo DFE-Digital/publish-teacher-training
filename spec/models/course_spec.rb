@@ -1895,7 +1895,7 @@ describe Course do
     specs = {
       full_time: "full time",
       part_time: "part time",
-      full_time_or_part_time: "full time or part time",
+      full_time_or_part_time: "full time or part time"
     }.freeze
 
     specs.each do |study_mode, expected_description|
@@ -1923,13 +1923,13 @@ describe Course do
       "QTS, full time or part time" => {
         study_mode: :full_time_or_part_time,
         program_type: :scitt_programme,
-        qualification: :qts,
+        qualification: :qts
       },
       "PGCE with QTS full time with salary" => {
         study_mode: :full_time,
         program_type: :school_direct_salaried_training_programme,
-        qualification: :pgce_with_qts,
-      },
+        qualification: :pgce_with_qts
+      }
     }.freeze
 
     specs.each do |expected_description, course_attributes|
@@ -2248,7 +2248,7 @@ describe Course do
         let(:accrediting_provider_enrichment) do
           {
             "UcasProviderCode" => accrediting_provider.provider_code,
-            "Description" => accrediting_provider_enrichment_description,
+            "Description" => accrediting_provider_enrichment_description
           }
         end
 

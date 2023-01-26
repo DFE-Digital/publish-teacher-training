@@ -14,7 +14,7 @@ module UserSessions
       attributes = {
         last_login_date_utc: Time.zone.now,
         email: user_session.email,
-        sign_in_user_id: user_session.sign_in_user_id,
+        sign_in_user_id: user_session.sign_in_user_id
       }
 
       attributes[:first_name] = user_session.first_name if user_session.first_name.present?

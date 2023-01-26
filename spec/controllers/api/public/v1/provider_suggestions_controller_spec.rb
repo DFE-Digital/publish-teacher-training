@@ -10,7 +10,7 @@ RSpec.describe API::Public::V1::ProviderSuggestionsController do
       @provider = create(:provider, provider_code: "oxf")
       create(:course, provider: @provider, site_statuses: [published_running_site])
       get :index, params: {
-        query: "oxf",
+        query: "oxf"
       }
     end
 

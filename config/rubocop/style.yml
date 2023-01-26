@@ -2,9 +2,6 @@ Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
 
-Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: comma
-
 Style/Documentation:
   Enabled: false
 

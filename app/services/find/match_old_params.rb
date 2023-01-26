@@ -11,18 +11,18 @@ module Find
       "rad" => "radius",
       "query" => "provider.provider_name",
       "hasvacancies" => "has_vacancies",
-      "subject_codes" => "subjects",
+      "subject_codes" => "subjects"
     }.freeze
 
     STUDY_FILTERS = {
       "parttime" => "part_time",
-      "fulltime" => "full_time",
+      "fulltime" => "full_time"
     }.freeze
 
     QAULIFICATION_FILTERS = {
       "Other" => "pgce pgde",
       "PgdePgceWithQts" => "pgce_with_qts",
-      "QtsOnly" => "qts",
+      "QtsOnly" => "qts"
     }.freeze
 
     def initialize(request_params)

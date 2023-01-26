@@ -35,7 +35,7 @@ describe Provider do
           [{
             "Description" => description,
             # XX4 might have previously been an accrediting provider for this provider, and the data is still in the database
-            "UcasProviderCode" => "XX4",
+            "UcasProviderCode" => "XX4"
           }]
         end
 
@@ -61,7 +61,7 @@ describe Provider do
         let(:accrediting_provider_enrichments) do
           [{
             "Description" => description,
-            "UcasProviderCode" => accrediting_provider.provider_code,
+            "UcasProviderCode" => accrediting_provider.provider_code
           }]
         end
 
@@ -79,7 +79,7 @@ describe Provider do
       context "with a corrupt accredited body enrichment" do
         let(:accrediting_provider_enrichments) do
           [{
-            "Description" => description,
+            "Description" => description
             # UcasProviderCode missing. We found data like this in our database so need to handle it.
           }]
         end

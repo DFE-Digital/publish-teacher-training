@@ -10,7 +10,7 @@ module BigQuery
     def initialize
       @event_hash = {
         environment: Rails.env,
-        occurred_at: Time.zone.now.iso8601(6),
+        occurred_at: Time.zone.now.iso8601(6)
       }
       yield self if block_given?
     end
@@ -33,7 +33,7 @@ module BigQuery
 
     def with_data(hash)
       @event_hash.deep_merge!({
-        data: hash_to_kv_pairs(hash),
+        data: hash_to_kv_pairs(hash)
       })
     end
 

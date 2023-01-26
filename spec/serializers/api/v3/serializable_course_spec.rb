@@ -15,7 +15,7 @@ describe API::V3::SerializableCourse do
     jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V3::SerializableCourse,
+        Course: API::V3::SerializableCourse
       }
     ).to_json
   end
@@ -50,7 +50,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V3::SerializableProvider
         },
         include: [
           :provider
@@ -75,7 +75,7 @@ describe API::V3::SerializableCourse do
         class: {
           Course: API::V3::SerializableCourse,
           Subject: API::V3::SerializableSubject,
-          PrimarySubject: API::V3::SerializableSubject,
+          PrimarySubject: API::V3::SerializableSubject
         },
         include: [
           :subjects
@@ -94,7 +94,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V3::SerializableProvider
         },
         include: [
           :accrediting_provider
@@ -113,7 +113,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V3::SerializableProvider
         },
         include: [
           :site_status
@@ -132,7 +132,7 @@ describe API::V3::SerializableCourse do
         course,
         class: {
           Course: API::V3::SerializableCourse,
-          Provider: API::V3::SerializableProvider,
+          Provider: API::V3::SerializableProvider
         },
         include: [
           :site

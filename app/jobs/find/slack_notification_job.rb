@@ -26,7 +26,7 @@ module Find
         channel: SLACK_CHANNEL,
         text:,
         mrkdwn: true,
-        icon_emoji: ":livecanary:",
+        icon_emoji: ":livecanary:"
       }
 
       response = HTTP.post(@webhook_url, body: payload.to_json)

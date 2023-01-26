@@ -10,7 +10,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
       before do
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: provider.provider_code,
+          provider_code: provider.provider_code
         }
       end
 
@@ -25,7 +25,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: provider.provider_code,
+          provider_code: provider.provider_code
         }
       end
 
@@ -38,7 +38,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
-            include: "recruitment_cycle,provider",
+            include: "recruitment_cycle,provider"
           }
         end
 

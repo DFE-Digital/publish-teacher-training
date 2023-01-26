@@ -112,7 +112,7 @@ module NotificationService
                       course:,
                       user:,
                       datetime: DateTime.now,
-                      vacancies_filled: true,
+                      vacancies_filled: true
                     })
           end
 
@@ -136,7 +136,7 @@ module NotificationService
                       course:,
                       user:,
                       datetime: DateTime.now,
-                      vacancies_filled: false,
+                      vacancies_filled: false
                     })
           end
 
@@ -171,7 +171,7 @@ module NotificationService
                       user:,
                       datetime: DateTime.now,
                       vacancies_closed: [first_site_status.site.location_name],
-                      vacancies_opened: [second_site_status.site.location_name],
+                      vacancies_opened: [second_site_status.site.location_name]
                     })
                     .and_return(double(deliver_later: true))
           end

@@ -57,7 +57,7 @@ class CourseDecorator < ApplicationDecorator
     {
       "salary" => "Salary",
       "apprenticeship" => "Teaching apprenticeship - with salary",
-      "fee" => "Fee paying - no salary",
+      "fee" => "Fee paying - no salary"
     }[object.funding_type]
   end
 

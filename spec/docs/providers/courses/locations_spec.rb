@@ -31,7 +31,7 @@ describe "API", :with_publish_constraint do
         required: false,
         description: "The associated data for this resource.",
         schema: {
-          enum: %w[recruitment_cycle provider course location_status],
+          enum: %w[recruitment_cycle provider course location_status]
         },
         example: "recruitment_cycle,provider,course,location_status"
 

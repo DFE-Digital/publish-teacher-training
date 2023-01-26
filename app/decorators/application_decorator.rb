@@ -41,7 +41,7 @@ private
       empty: { text: "Draft", colour: "grey" },
       draft: { text: "Draft", colour: "grey" },
       published_with_unpublished_changes: { text: "Open&nbsp;*", colour: "turquoise" },
-      rolled_over: { text: "Rolled over", colour: "yellow" },
+      rolled_over: { text: "Rolled over", colour: "yellow" }
     }
   end
 

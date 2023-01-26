@@ -32,7 +32,7 @@ module WithQualifications
       # Both professional and postgraduate: the student has the option of taking at least one
       # postgraduate (master's) Level 7 module or obtaining some
       # postgraduate-level credits as part of the programme.
-      professional_postgraduate: "BO",
+      professional_postgraduate: "BO"
     }
 
     # When UCAS basic courses were being imported into Manage Courses DB, this

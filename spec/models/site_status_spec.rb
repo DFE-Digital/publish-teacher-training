@@ -119,17 +119,17 @@ RSpec.describe SiteStatus do
       {
         course_study_mode: :full_time,
         valid_states: %w[no_vacancies full_time_vacancies],
-        invalid_states: %w[part_time_vacancies both_full_time_and_part_time_vacancies],
+        invalid_states: %w[part_time_vacancies both_full_time_and_part_time_vacancies]
       },
       {
         course_study_mode: :part_time,
         valid_states: %w[no_vacancies part_time_vacancies],
-        invalid_states: %w[full_time_vacancies both_full_time_and_part_time_vacancies],
+        invalid_states: %w[full_time_vacancies both_full_time_and_part_time_vacancies]
       },
       {
         course_study_mode: :full_time_or_part_time,
         valid_states: %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
-        invalid_states: [],
+        invalid_states: []
       }
     ].freeze
 

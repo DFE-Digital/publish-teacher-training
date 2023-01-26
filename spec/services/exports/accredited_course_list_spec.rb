@@ -29,7 +29,7 @@ module Exports
           "Status" => course.content_status&.to_s&.humanize,
           "View on Find" => course.find_url,
           "Applications open from" => I18n.l(course.applications_open_from&.to_date),
-          "Vacancies" => "Yes",
+          "Vacancies" => "Yes"
         }
       end
 

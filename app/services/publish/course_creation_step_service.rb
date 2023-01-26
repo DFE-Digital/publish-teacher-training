@@ -6,7 +6,7 @@ module Publish
       workflow_steps = get_workflow_steps(course)
       {
         next: get_next_step(workflow_steps, current_step),
-        previous: get_previous_step(workflow_steps, current_step),
+        previous: get_previous_step(workflow_steps, current_step)
       }
     end
 

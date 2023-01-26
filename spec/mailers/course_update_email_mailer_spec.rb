@@ -88,27 +88,27 @@ describe CourseUpdateEmailMailer do
     study_mode_update_scenarios = [
       {
         original_value: "full time",
-        updated_value: "part time",
+        updated_value: "part time"
       },
       {
         original_value: "part time",
-        updated_value: "full time",
+        updated_value: "full time"
       },
       {
         original_value: "part time",
-        updated_value: "full or part time",
+        updated_value: "full or part time"
       },
       {
         original_value: "full time",
-        updated_value: "full or part time",
+        updated_value: "full or part time"
       },
       {
         original_value: "full or part time",
-        updated_value: "full time",
+        updated_value: "full time"
       },
       {
         original_value: "full or part time",
-        updated_value: "part time",
+        updated_value: "part time"
       }
     ]
 

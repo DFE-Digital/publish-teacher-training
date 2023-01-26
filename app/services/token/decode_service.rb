@@ -32,7 +32,7 @@ module Token
           verify_sub: true,
           verify_iat: true,
           exp_leeway: 6.seconds.to_i,
-          **claims,
+          **claims
         }
       )
 
@@ -49,7 +49,7 @@ module Token
       @claims ||= {
         aud: audience,
         iss: issuer,
-        sub: subject,
+        sub: subject
       }
     end
   end

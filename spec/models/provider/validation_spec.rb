@@ -119,7 +119,7 @@ describe Provider do
             result <<
               {
                 "Description" => Faker::Lorem.sentence(word_count:),
-                "UcasProviderCode" => "UPC#{index}",
+                "UcasProviderCode" => "UPC#{index}"
               }
           end
           result
@@ -166,7 +166,7 @@ describe Provider do
           accrediting_providers.map do |ap|
             {
               "Description" => Faker::Lorem.sentence(word_count:),
-              "UcasProviderCode" => ap.provider_code.to_s,
+              "UcasProviderCode" => ap.provider_code.to_s
             }
           end
         end

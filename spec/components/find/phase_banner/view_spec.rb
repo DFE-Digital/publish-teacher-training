@@ -11,7 +11,7 @@ module Find
         "review" => "purple",
         "sandbox" => "purple",
         "staging" => "red",
-        "unknown-environment" => "yellow",
+        "unknown-environment" => "yellow"
       }.each do |environment, colour|
         it "renders a #{colour} phase banner for the #{environment} environment" do
           allow(Settings.environment).to receive(:name).and_return(environment)

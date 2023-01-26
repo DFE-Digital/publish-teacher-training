@@ -10,7 +10,7 @@ module Providers
       address4: "County",
       postcode: "M1 1JG",
       region_code: "north_west",
-      ukprn: "12345678",
+      ukprn: "12345678"
     }.freeze
 
     def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)
@@ -33,7 +33,7 @@ module Providers
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
-        accrediting_provider: @is_accredited_body ? "accredited_body" : "not_an_accredited_body",
+        accrediting_provider: @is_accredited_body ? "accredited_body" : "not_an_accredited_body"
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 
       organisation = Organisation.new(name: @provider_name)

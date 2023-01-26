@@ -18,7 +18,7 @@ class PhaseBanner < ViewComponent::Base
       "rollover" => "turquoise",
       "sandbox" => "purple",
       "staging" => "red",
-      "unknown-environment" => "yellow",
+      "unknown-environment" => "yellow"
     }[Settings.environment.name]
   end
 

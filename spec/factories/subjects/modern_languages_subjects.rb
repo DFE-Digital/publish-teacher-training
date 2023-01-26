@@ -10,7 +10,7 @@ FactoryBot.define do
     "Mandarin" => "20",
     "Russian" => "21",
     "Spanish" => "22",
-    "Modern languages (other)" => "24",
+    "Modern languages (other)" => "24"
   }
 
   factory :modern_languages_subject do

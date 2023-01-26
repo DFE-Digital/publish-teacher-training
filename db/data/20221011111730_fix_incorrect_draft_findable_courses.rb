@@ -4,7 +4,7 @@ class FixIncorrectDraftFindableCourses < ActiveRecord::Migration[7.0]
   VAC_MAPPING = {
     full_time_or_part_time: :both_full_time_and_part_time_vacancies,
     part_time: :part_time_vacancies,
-    full_time: :full_time_vacancies,
+    full_time: :full_time_vacancies
   }.freeze
 
   def up

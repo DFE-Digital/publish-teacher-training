@@ -41,8 +41,8 @@ describe "GET /provider-suggestions", :with_publish_constraint do
                 "telephone" => provider.telephone,
                 "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
                 "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-                "recruitment_cycle_year" => provider.recruitment_cycle.year,
-              },
+                "recruitment_cycle_year" => provider.recruitment_cycle.year
+              }
             }
           ])
     end
@@ -73,8 +73,8 @@ describe "GET /provider-suggestions", :with_publish_constraint do
                 "telephone" => provider.telephone,
                 "can_sponsor_student_visa" => provider.can_sponsor_student_visa,
                 "can_sponsor_skilled_worker_visa" => provider.can_sponsor_skilled_worker_visa,
-                "recruitment_cycle_year" => provider.recruitment_cycle.year,
-              },
+                "recruitment_cycle_year" => provider.recruitment_cycle.year
+              }
             },
             {
               "id" => provider2.id.to_s,
@@ -97,8 +97,8 @@ describe "GET /provider-suggestions", :with_publish_constraint do
                 "telephone" => provider2.telephone,
                 "can_sponsor_student_visa" => provider2.can_sponsor_student_visa,
                 "can_sponsor_skilled_worker_visa" => provider2.can_sponsor_skilled_worker_visa,
-                "recruitment_cycle_year" => provider2.recruitment_cycle.year,
-              },
+                "recruitment_cycle_year" => provider2.recruitment_cycle.year
+              }
             }
           ])
     end

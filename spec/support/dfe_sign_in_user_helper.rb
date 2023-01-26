@@ -27,21 +27,21 @@ private
         "gender" => nil,
         "image" => nil,
         "phone" => nil,
-        "urls" => { "website" => nil },
+        "urls" => { "website" => nil }
       },
       "credentials" => {
         "id_token" => "id_token",
         "token" => "DFE_SIGN_IN_TOKEN",
         "refresh_token" => nil,
         "expires_in" => 3600,
-        "scope" => "email openid",
+        "scope" => "email openid"
       },
       "extra" => {
         "raw_info" => {
           "email" => email,
-          "sub" => sign_in_user_id,
-        },
-      },
+          "sub" => sign_in_user_id
+        }
+      }
     }
   end
 end

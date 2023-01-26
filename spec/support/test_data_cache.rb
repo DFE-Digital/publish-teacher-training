@@ -64,7 +64,7 @@ class TestDataCache
                                  end,
         %i[resulting_in_pgde] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgde)
-                                 end,
+                                 end
       }
     end
 

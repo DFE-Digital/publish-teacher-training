@@ -11,7 +11,7 @@ module FeatureHelpers
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
         "course[subjects_ids][]" => "2",
-        "commit" => ["Continue"],
+        "commit" => ["Continue"]
       }
     end
 
@@ -19,7 +19,7 @@ module FeatureHelpers
       {
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
-        "course[subjects_ids][]" => "2",
+        "course[subjects_ids][]" => "2"
       }
     end
 
@@ -32,7 +32,7 @@ module FeatureHelpers
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
         "course[subjects_ids][]" => "2",
-        "commit" => ["Continue"],
+        "commit" => ["Continue"]
       }
     end
 
@@ -41,7 +41,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
         "course[subjects_ids][]" => "2",
-        "course[age_range_in_years]" => ["3_to_7"],
+        "course[age_range_in_years]" => ["3_to_7"]
       }
     end
 
@@ -50,7 +50,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
         "course[subjects_ids][]" => "2",
-        "course[age_range_in_years]" => ["3_to_7"],
+        "course[age_range_in_years]" => ["3_to_7"]
       }
     end
 
@@ -62,7 +62,7 @@ module FeatureHelpers
         "course[level]" => "primary",
         "course[qualification]" => "qts",
         "course[study_mode]" => "full_time",
-        "course[subjects_ids][]" => "2",
+        "course[subjects_ids][]" => "2"
       }
     end
 
@@ -78,7 +78,7 @@ module FeatureHelpers
         "course[start_date]" => "October #{provider.recruitment_cycle_year.to_i - 1}",
         "course[study_mode]" => "full_time_or_part_time",
         "course[subjects_ids][]" => "30",
-        "course[sites_ids][]" => provider.sites.first.id,
+        "course[sites_ids][]" => provider.sites.first.id
       }
     end
 
@@ -92,7 +92,7 @@ module FeatureHelpers
         "course[study_mode]" => "full_time",
         "course[age_range_in_years]" => ["11_to_16"],
         "course[subjects_ids][]" => "30",
-        "course[applications_open_from]" => "2021-10-12",
+        "course[applications_open_from]" => "2021-10-12"
       }
     end
 
@@ -101,7 +101,7 @@ module FeatureHelpers
         "course[is_send]" => ["0"],
         "course[level]" => "primary",
         "course[subjects_ids][]" => "2",
-        "course[age_range_in_years]" => ["3_to_7"],
+        "course[age_range_in_years]" => ["3_to_7"]
       }
     end
 

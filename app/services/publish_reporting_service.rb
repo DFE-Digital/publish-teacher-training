@@ -16,7 +16,7 @@ class PublishReportingService
     {
       users: user_breakdown,
       providers: provider_breakdown,
-      courses: course_breakdown,
+      courses: course_breakdown
     }
   end
 
@@ -83,9 +83,9 @@ private
       total: {
         all: user_count,
         active_users: active_users_count,
-        non_active_users: user_count - active_users_count,
+        non_active_users: user_count - active_users_count
       },
-      recent_active_users: recent_active_users_count,
+      recent_active_users: recent_active_users_count
     }
   end
 
@@ -94,14 +94,14 @@ private
       total: {
         all: provider_count,
         providers_with_non_active_users: (provider_count - providers_with_recent_active_users_distinct_count),
-        providers_with_recent_active_users: providers_with_recent_active_users_distinct_count,
+        providers_with_recent_active_users: providers_with_recent_active_users_distinct_count
       },
 
       with_1_recent_active_users: grouped_providers_with_x_active_users[1] || 0,
       with_2_recent_active_users: grouped_providers_with_x_active_users[2] || 0,
       with_3_recent_active_users: grouped_providers_with_x_active_users[3] || 0,
       with_4_recent_active_users: grouped_providers_with_x_active_users[4] || 0,
-      with_more_than_5_recent_active_users:,
+      with_more_than_5_recent_active_users:
     }
   end
 
@@ -123,7 +123,7 @@ private
       updated_open_courses_recently: open_courses.count,
       updated_closed_courses_recently: closed_courses.count,
 
-      created_recently: @courses.created_at_since(days_ago).count,
+      created_recently: @courses.created_at_since(days_ago).count
     }
   end
 end

@@ -9,7 +9,7 @@ module Find
         first_deadline_banner: Time.zone.local(2021, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2021, 9, 7, 18),
         apply_2_deadline: Time.zone.local(2021, 9, 21, 18),
-        find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59),
+        find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59)
       },
       2022 => {
         find_opens: Time.zone.local(2021, 10, 5, 9),
@@ -17,7 +17,7 @@ module Find
         first_deadline_banner: Time.zone.local(2022, 8, 2, 9),
         apply_1_deadline: Time.zone.local(2022, 9, 6, 18),
         apply_2_deadline: Time.zone.local(2022, 9, 20, 18),
-        find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59),
+        find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59)
       },
       2023 => {
         find_opens: Time.zone.local(2022, 10, 4, 9),
@@ -28,7 +28,7 @@ module Find
         first_deadline_banner: Time.zone.local(2023, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2023, 9, 7, 18),
         apply_2_deadline: Time.zone.local(2023, 9, 21, 18),
-        find_closes: Time.zone.local(2023, 10, 4, 23, 59, 59),
+        find_closes: Time.zone.local(2023, 10, 4, 23, 59, 59)
       },
       2024 => {
         find_opens: Time.zone.local(2023, 10, 5, 9),
@@ -36,7 +36,7 @@ module Find
         first_deadline_banner: Time.zone.local(2024, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2024, 9, 7, 18),
         apply_2_deadline: Time.zone.local(2024, 9, 21, 18),
-        find_closes: Time.zone.local(2024, 10, 4, 23, 59, 59),
+        find_closes: Time.zone.local(2024, 10, 4, 23, 59, 59)
       },
       2025 => {
         find_opens: Time.zone.local(2024, 10, 5, 9),
@@ -44,8 +44,8 @@ module Find
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2025, 9, 7, 18),
         apply_2_deadline: Time.zone.local(2025, 9, 21, 18),
-        find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59),
-      },
+        find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
+      }
     }.freeze
 
     def self.current_year

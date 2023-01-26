@@ -22,7 +22,7 @@ RSpec.describe API::V3::AccreditedProviderTrainingProvidersController do
       get :show, params: {
         recruitment_cycle_year: recruitment_cycle.year,
         provider_code: provider.provider_code,
-        training_provider_code: training_provider.provider_code,
+        training_provider_code: training_provider.provider_code
       }
 
       expect(JSON.parse(response.body).dig("data", "id").to_i).to eql(training_provider.id)

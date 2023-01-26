@@ -11,7 +11,7 @@ describe SessionsController do
       session["user"] = {
         "last_active_at" => Time.zone.now,
         "email" => user.email,
-        "id_token" => "id_token",
+        "id_token" => "id_token"
       }
 
       post :destroy

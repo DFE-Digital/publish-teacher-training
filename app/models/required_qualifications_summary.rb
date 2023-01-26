@@ -66,7 +66,7 @@ private
     {
       english: course.accept_english_gcse_equivalency?,
       maths: course.accept_maths_gcse_equivalency?,
-      science: course.accept_science_gcse_equivalency?,
+      science: course.accept_science_gcse_equivalency?
     }.select { |_k, v| v }.keys
   end
 
@@ -76,7 +76,7 @@ private
       "two_two" => "An undergraduate degree at class 2:2 or above, or equivalent.",
       "third_class" => "An undergraduate degree, or equivalent. This should be an honours degree (Third or above), or equivalent.",
       "not_required" => "An undergraduate degree, or equivalent.",
-      nil => "",
+      nil => ""
     }[course.degree_grade]
   end
 

@@ -37,14 +37,14 @@ module Publish
         statuses_attributes.values.map do |value|
           {
             id: value[:id],
-            status: value[:vac_status],
+            status: value[:vac_status]
           }
         end
       else
         [
           {
             id: statuses_attributes[:id],
-            status: statuses_attributes[:vac_status],
+            status: statuses_attributes[:vac_status]
           }
         ]
       end

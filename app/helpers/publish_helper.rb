@@ -35,7 +35,7 @@ private
       single_right_quote: "’",
       ellipsis: "…",
       em_dash: "—",
-      en_dash: "–",
+      en_dash: "–"
     }
   end
 end

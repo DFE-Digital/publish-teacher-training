@@ -10,7 +10,7 @@ RSpec.describe API::Public::V1::CoursesController do
     context "when there are no courses" do
       before do
         get :index, params: {
-          recruitment_cycle_year: recruitment_cycle.year,
+          recruitment_cycle_year: recruitment_cycle.year
         }
       end
 
@@ -31,7 +31,7 @@ RSpec.describe API::Public::V1::CoursesController do
           next_cycle
 
           get :index, params: {
-            include: "recruitment_cycle",
+            include: "recruitment_cycle"
           }
         end
 
@@ -45,7 +45,7 @@ RSpec.describe API::Public::V1::CoursesController do
       context "default response" do
         before do
           get :index, params: {
-            recruitment_cycle_year: recruitment_cycle.year,
+            recruitment_cycle_year: recruitment_cycle.year
           }
         end
 
@@ -60,14 +60,14 @@ RSpec.describe API::Public::V1::CoursesController do
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            **pagination,
+            **pagination
           }
         end
 
         let(:pagination) do
           {
             page:,
-            per_page: 3,
+            per_page: 3
           }
         end
 
@@ -144,7 +144,7 @@ RSpec.describe API::Public::V1::CoursesController do
         before do
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            include: "recruitment_cycle,provider",
+            include: "recruitment_cycle,provider"
           }
         end
 
@@ -171,7 +171,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
-            sort: sort_attribute,
+            sort: sort_attribute
           }
         end
 
@@ -192,8 +192,8 @@ RSpec.describe API::Public::V1::CoursesController do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
               filter: {
-                funding_type: "salary",
-              },
+                funding_type: "salary"
+              }
             }
           end
 
@@ -211,8 +211,8 @@ RSpec.describe API::Public::V1::CoursesController do
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
               filter: {
-                updated_since: "foobar",
-              },
+                updated_since: "foobar"
+              }
             }
           end
 
@@ -226,7 +226,7 @@ RSpec.describe API::Public::V1::CoursesController do
       context "courses count" do
         it "returns the course count in a meta object" do
           get :index, params: {
-            recruitment_cycle_year: recruitment_cycle.year,
+            recruitment_cycle_year: recruitment_cycle.year
           }
 
           json_response = JSON.parse(response.body)
@@ -298,7 +298,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
           before do
             get :index, params: {
-              recruitment_cycle_year: recruitment_cycle.year,
+              recruitment_cycle_year: recruitment_cycle.year
             }
           end
 

@@ -69,7 +69,7 @@ module Publish
         {
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
-          course_code: course.course_code,
+          course_code: course.course_code
         }
       end
 

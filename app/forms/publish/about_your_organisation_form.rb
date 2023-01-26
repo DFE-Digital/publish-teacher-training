@@ -54,7 +54,7 @@ module Publish
       accredited_bodies.map do |accredited_body|
         {
           UcasProviderCode: accredited_body.provider_code,
-          Description: accredited_body.description,
+          Description: accredited_body.description
         }
       end
     end

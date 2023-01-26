@@ -13,7 +13,7 @@ module StubbedRequests
             "state" => "England",
             "country" => "United Kingdom",
             "country_code" => "UK",
-            "address_components" => [{ long_name: "England" }],
+            "address_components" => [{ long_name: "England" }]
           }
         ]
       )
@@ -28,7 +28,7 @@ module StubbedRequests
             "state_code" => "England",
             "country" => "United Kingdom",
             "country_code" => "UK",
-            "address_components" => [{ long_name: "England" }],
+            "address_components" => [{ long_name: "England" }]
           }
         ]
       )
@@ -43,7 +43,7 @@ module StubbedRequests
             "state_code" => "England",
             "country" => "United Kingdom",
             "country_code" => "UK",
-            "address_components" => [{ long_name: "England" }],
+            "address_components" => [{ long_name: "England" }]
           }
         ]
       )

@@ -83,8 +83,8 @@ describe RolloverReportingService do
             new_courses_published: 0,
             deleted_courses: 0,
             existing_courses_in_draft: 0,
-            existing_courses_in_review: 0,
-          },
+            existing_courses_in_review: 0
+          }
         })
       end
     end

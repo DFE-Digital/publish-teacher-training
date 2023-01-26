@@ -48,7 +48,7 @@ module API
 
       def default_fields_for_index
         {
-          providers: %w[provider_name provider_code recruitment_cycle_year],
+          providers: %w[provider_name provider_code recruitment_cycle_year]
         }
       end
     end

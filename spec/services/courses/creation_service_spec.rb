@@ -33,7 +33,7 @@ describe Courses::CreationService do
         "study_mode" => "full_time",
         "sites_ids" => [site.id],
         "subjects_ids" => [primary_subject.id],
-        "course_code" => "D0CK",
+        "course_code" => "D0CK"
       }
     end
 
@@ -86,7 +86,7 @@ describe Courses::CreationService do
         "study_mode" => "part_time",
         "sites_ids" => [site.id],
         "subjects_ids" => [secondary_subject.id],
-        "course_code" => "D0CK",
+        "course_code" => "D0CK"
       }
     end
 
@@ -135,7 +135,7 @@ describe Courses::CreationService do
         "qualification" => "pgde",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => "full_time_or_part_time",
-        "sites_ids" => [site.id],
+        "sites_ids" => [site.id]
       }
     end
 

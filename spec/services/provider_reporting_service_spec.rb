@@ -28,22 +28,22 @@ describe ProviderReportingService do
       total: {
         all: providers_count,
         non_training_providers: providers_count - training_providers_count,
-        training_providers: training_providers_count,
+        training_providers: training_providers_count
       },
       training_providers: {
         findable_total: {
           open: open_providers_count,
-          closed: closed_providers_count,
+          closed: closed_providers_count
         },
         accredited_body: {
           open: {
             accredited_body: 1,
-            not_an_accredited_body: 2,
+            not_an_accredited_body: 2
           },
           closed: {
             accredited_body: 0,
-            not_an_accredited_body: 0,
-          },
+            not_an_accredited_body: 0
+          }
         },
         provider_type: {
           open: {
@@ -51,7 +51,7 @@ describe ProviderReportingService do
           },
           closed: {
             scitt: 0, lead_school: 0, university: 0
-          },
+          }
         },
         region_code: {
           open: {
@@ -66,7 +66,7 @@ describe ProviderReportingService do
             north_west: 8,
             yorkshire_and_the_humber: 9,
             north_east: 10,
-            scotland: 12,
+            scotland: 12
           },
           closed: {
             no_region: 0,
@@ -80,10 +80,10 @@ describe ProviderReportingService do
             north_west: 0,
             yorkshire_and_the_humber: 0,
             north_east: 0,
-            scotland: 0,
-          },
-        },
-      },
+            scotland: 0
+          }
+        }
+      }
     }
   end
 
@@ -137,7 +137,7 @@ describe ProviderReportingService do
               "north_west" => 8,
               "yorkshire_and_the_humber" => 9,
               "north_east" => 10,
-              "scotland" => 12,
+              "scotland" => 12
             }
           )
 
