@@ -2,7 +2,7 @@
   <%= subjects_line %>
 
   <% if @results.location_filter? %>
-    courses in <b><%= @results.location_search %></b>
+    courses in or near <b><%= @results.location_search %></b>
   <% elsif @results.england_filter? %>
     courses in <b>England</b>
   <% elsif @results.provider_filter? %>

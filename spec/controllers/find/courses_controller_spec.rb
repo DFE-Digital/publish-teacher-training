@@ -1,6 +1,6 @@
 require "rails_helper"
 
-module Publish
+module Find
   describe CoursesController do
     let(:user) { create(:user, :with_provider) }
     let(:provider) { user.providers.first }
@@ -15,29 +15,14 @@ module Publish
       )
     end
 
-    before do
-      allow(controller).to receive(:authenticate).and_return(true)
-      controller.instance_variable_set(:@current_user, user)
-    end
-
-    describe "#Publish", { can_edit_current_and_next_cycles: false } do
-      it "calls NotificationService::CoursePublished when successful" do
-        expect(NotificationService::CoursePublished).to receive(:call).with(course:)
-
-        post :publish, params: {
-          recruitment_cycle_year: provider.recruitment_cycle.year,
-          provider_code: provider.provider_code,
-          code: course.course_code,
-        }
-      end
-    end
-
     describe "#apply" do
       it "redirects" do
+        expect(Rails.logger).to receive(:info).with("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}").once
+        expect(Rails.logger).to receive(:info)
+
         get :apply, params: {
-          recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
-          code: course.course_code,
+          course_code: course.course_code,
         }
 
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")

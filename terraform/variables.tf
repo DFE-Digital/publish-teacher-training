@@ -56,6 +56,13 @@ variable "find_gov_uk_host_names" {
   type = list
 }
 
+variable find_app_gov_uk_host_names {
+  default = []
+  type = list
+}
+
+variable enable_find { default = false }
+
 variable statuscake_alerts {
   type    = map
   default = {}

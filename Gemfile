@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "~> 3.1.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "7.0.4.1"
+gem "rails", "7.0.4.2"
 
 # Use PostgreSQL as the database for Active Record
 gem "pg"
@@ -68,7 +68,7 @@ gem "faraday-net_http_persistent", "~> 2.0"
 gem "uk_postcode"
 
 # For change history on provider, courses, sites, etc
-gem "audited", "~> 5.1"
+gem "audited", "~> 5.2"
 
 # State machine to track users through their onboarding journey
 gem "aasm"
@@ -135,7 +135,7 @@ gem "jsbundling-rails", "~> 1.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 
 # for sending analytics data to the analytics platform
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.6.0"
 
 # For running data migrations
 gem "data_migrate"

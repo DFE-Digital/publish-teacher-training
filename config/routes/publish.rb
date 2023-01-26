@@ -1,3 +1,8 @@
+require "sidekiq/web"
+require "sidekiq/cron/web"
+
+mount Sidekiq::Web, at: "/sidekiq", constraints: SystemAdminConstraint.new
+
 root to: "publish/providers#index"
 
 scope via: :all do
@@ -139,6 +144,7 @@ namespace :publish, as: :publish do
       end
 
       resources :courses, param: :code, only: %i[index new create show] do
+        get "/apply", on: :member, to: "courses#apply", as: :apply
         get "/details", on: :member, to: "courses#details"
 
         get "/engineers_teach_physics", on: :member, to: "courses/engineers_teach_physics#edit"

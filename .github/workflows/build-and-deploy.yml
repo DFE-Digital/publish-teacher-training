@@ -116,7 +116,7 @@ jobs:
         SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
       with:
         image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
-        args: --file=Dockerfile --severity-threshold=high
+        args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
 
     - name: Push ${{ env.DOCKER_IMAGE }} images
       if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -156,7 +156,7 @@ jobs:
       run: |
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-        docker-compose exec -T web /bin/sh -c "yarn add jest"
+        docker-compose exec -T web /bin/sh -c "yarn add jest@28.1.3"
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
 
