@@ -4,7 +4,7 @@
     "data-cookie-consent-name" => Settings.cookies.consent.name,
     "data-cookie-consent-expiry-after-days" => Settings.cookies.consent.expire_after_days,
     "data-qa" => "cookie-banner",
-    "nosnippet" => true,
+    "nosnippet" => true
   }
 ) do |cookie_banner| %>
   <%= cookie_banner.message(heading_text: t("cookies.heading", service_name:),
@@ -22,7 +22,7 @@
 <% end %>
 <%= render GovukComponent::CookieBannerComponent.new(html_attributes: {
   "hidden" => true,
-  "data-module" => "govuk-cookie-after-consent-banner",
+  "data-module" => "govuk-cookie-after-consent-banner"
 }) do |cookie_banner| %>
   <% cookie_preferences_link = govuk_link_to(t("cookies.after_consent.page_link_text"), cookies_path) %>
   <%= cookie_banner.message(text: t("cookies.after_consent.message",

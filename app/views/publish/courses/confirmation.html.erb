@@ -217,14 +217,14 @@
                   partial: "publish/courses/entry_requirements",
                   locals: {
                     gcse_subject: subject.titleize,
-                    gcse_subject_code: course[subject],
+                    gcse_subject_code: course[subject]
                   }
                 ) %>
               <% end %>
             <% end %>
             <% row.action({
               href: new_provider_recruitment_cycle_courses_entry_requirements_path(course.provider.provider_code, course.recruitment_cycle_year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "entry requirements",
+              visually_hidden_text: "entry requirements"
             }) %>
           <% end %>
         <% end %>

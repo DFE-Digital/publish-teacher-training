@@ -16,11 +16,11 @@
       class: "govuk-radios__input",
       data: {
         "aria-controls" => "other-container",
-        qa: "course__age_range_in_years_other_radio",
+        qa: "course__age_range_in_years_other_radio"
       },
       checked: expand_another_age_range?(@errors),
       aria: {
-        describedby: @errors && @errors[:age_range_in_years_other] ? "course_age_range_in_years-error" : "",
+        describedby: @errors && @errors[:age_range_in_years_other] ? "course_age_range_in_years-error" : ""
       }
     ) %>
     <%= form.label :age_range_in_years, t("edit_options.age_range_in_years.other.label"), value: "other", class: "govuk-label govuk-radios__label" %>
@@ -37,7 +37,7 @@
         value: age_range_from_field_value,
         class: "govuk-input govuk-input--width-2",
         data: {
-          qa: "course__age_range_in_years_other_from_input",
+          qa: "course__age_range_in_years_other_from_input"
         }
       ) %>
     <% end %>
@@ -51,7 +51,7 @@
         value: age_range_to_field_value,
         class: "govuk-input govuk-input--width-2",
         data: {
-          qa: "course__age_range_in_years_other_to_input",
+          qa: "course__age_range_in_years_other_to_input"
         }
       ) %>
     <% end %>

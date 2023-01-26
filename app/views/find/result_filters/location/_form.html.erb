@@ -10,7 +10,7 @@
           "location"
         elsif provider_error?
           "provider"
-        end,
+        end
     } %>
     <%= form_with url: location_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
       <%= render "shared/hidden_fields", exclude_keys: %w[l provider.provider_name radius], form: %>
@@ -79,10 +79,10 @@
                 "3",
                 class: "govuk-radios__input",
                 data: {
-                  qa: "by-provider",
+                  qa: "by-provider"
                 },
                 aria: {
-                  controls: "query-container",
+                  controls: "query-container"
                 },
                 checked: params[:l] == "3"
               ) %>
