@@ -23,3 +23,5 @@ linters:
         Enabled: false
       Naming/VariableNumber:
         Enabled: false
+      Style/FrozenStringLiteralComment:
+        Enabled: false
