@@ -10,7 +10,7 @@ module Find
       @cookie_preferences_form = Find::CookiePreferencesForm.new(cookies, cookie_preferences_params)
 
       if @cookie_preferences_form.save
-        redirect_back(fallback_location: root_path, flash: { success: "Your cookie preferences have been updated" })
+        redirect_back(fallback_location: root_path, flash: { success: 'Your cookie preferences have been updated' })
       else
         render(:show)
       end

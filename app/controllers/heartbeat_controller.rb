@@ -1,27 +1,29 @@
-require "sidekiq/api"
+# frozen_string_literal: true
+
+require 'sidekiq/api'
 
 class HeartbeatController < ActionController::API
   def ping
-    render body: "PONG"
+    render body: 'PONG'
   end
 
   def healthcheck
     checks = {
       database: database_alive?,
       redis: redis_alive?,
-      sidekiq_processes: sidekiq_processes_checks,
+      sidekiq_processes: sidekiq_processes_checks
     }
 
     status = checks.values.all? ? :ok : :service_unavailable
 
     render status:,
       json: {
-        checks:,
+        checks:
       }
   end
 
   def sha
-    render json: { sha: ENV.fetch("COMMIT_SHA", nil) }
+    render json: { sha: ENV.fetch('COMMIT_SHA', nil) }
   end
 
 private
@@ -46,7 +48,7 @@ private
     # Iterate over each Sidekiq queue and ensure that there is a process
     # running for it.
     stats.queues.keys.all? do |queue|
-      processes.any? { |process| queue.in? process["queues"] }
+      processes.any? { |process| queue.in? process['queues'] }
     end
   rescue StandardError
     false

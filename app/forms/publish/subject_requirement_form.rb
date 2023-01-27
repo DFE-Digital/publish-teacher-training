@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class SubjectRequirementForm
     # TODO: Refactor to use our form object pattern
@@ -8,22 +10,22 @@ module Publish
 
     before_validation :cast_additional_degree_subject_requirements
 
-    validates :additional_degree_subject_requirements, inclusion: { in: [true, false], message: "Select if you have degree subject requirements" }
-    validates :degree_subject_requirements, presence: { message: "Enter details of degree subject requirements" }, if: -> { additional_degree_subject_requirements }
+    validates :additional_degree_subject_requirements, inclusion: { in: [true, false], message: 'Select if you have degree subject requirements' }
+    validates :degree_subject_requirements, presence: { message: 'Enter details of degree subject requirements' }, if: -> { additional_degree_subject_requirements }
 
     def save(course)
       return false unless valid?
 
       course.update(
         additional_degree_subject_requirements:,
-        degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil,
+        degree_subject_requirements: additional_degree_subject_requirements.present? ? degree_subject_requirements : nil
       )
     end
 
     def self.build_from_course(course)
       new(
         additional_degree_subject_requirements: course.additional_degree_subject_requirements,
-        degree_subject_requirements: course.degree_subject_requirements,
+        degree_subject_requirements: course.degree_subject_requirements
       )
     end
 

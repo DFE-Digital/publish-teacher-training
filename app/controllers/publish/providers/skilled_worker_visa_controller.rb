@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Providers
     class SkilledWorkerVisaController < PublishController
@@ -13,11 +15,11 @@ module Publish
         @provider_skilled_worker_visa_form = ProviderSkilledWorkerVisaForm.new(provider, params: provider_skilled_worker_visa_params)
 
         if @provider_skilled_worker_visa_form.save!
-          flash[:success] = I18n.t("success.visa_changes")
+          flash[:success] = I18n.t('success.visa_changes')
 
           redirect_to details_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            recruitment_cycle.year,
+            recruitment_cycle.year
           )
         else
           render :edit

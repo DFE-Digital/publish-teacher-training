@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProviderHelper
   def course_accredited_body_name(course)
     # TODO: Handle rollover
@@ -10,23 +12,23 @@ module ProviderHelper
     elsif provider.can_sponsor_student_visa || provider.can_sponsor_skilled_worker_visa
       "#{visa_sponsorship_short_status(provider)} can be sponsored"
     else
-      "Visas cannot be sponsored"
+      'Visas cannot be sponsored'
     end
   end
 
   def student_visa_sponsorship_status(provider)
     if provider.can_sponsor_student_visa
-      "Yes - can sponsor"
+      'Yes - can sponsor'
     else
-      "No - cannot sponsor"
+      'No - cannot sponsor'
     end
   end
 
   def skilled_worker_visa_sponsorship_status(provider)
     if provider.can_sponsor_skilled_worker_visa
-      "Yes - can sponsor"
+      'Yes - can sponsor'
     else
-      "No - cannot sponsor"
+      'No - cannot sponsor'
     end
   end
 
@@ -34,25 +36,25 @@ module ProviderHelper
     if !provider.declared_visa_sponsorship?
       visa_sponsorship_call_to_action(provider)
     elsif provider.can_sponsor_all_visas?
-      "Student and Skilled Worker visas"
+      'Student and Skilled Worker visas'
     elsif provider.can_only_sponsor_student_visa?
-      "Student visas"
+      'Student visas'
     elsif provider.can_only_sponsor_skilled_worker_visa?
-      "Skilled Worker visas"
+      'Skilled Worker visas'
     end
   end
 
 private
 
   def visa_sponsorship_call_to_action(provider)
-    govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do
-      raw("<p class=\"govuk-heading-s app-inset-text__title\">Can you sponsor visas?</p>") +
+    govuk_inset_text(classes: 'app-inset-text--narrow-border app-inset-text--important') do
+      raw('<p class="govuk-heading-s app-inset-text__title">Can you sponsor visas?</p>') +
         govuk_link_to(
-          "Select if visas can be sponsored",
+          'Select if visas can be sponsored',
           visas_publish_provider_recruitment_cycle_path(
             provider.provider_code,
-            provider.recruitment_cycle_year,
-          ),
+            provider.recruitment_cycle_year
+          )
         )
     end
   end

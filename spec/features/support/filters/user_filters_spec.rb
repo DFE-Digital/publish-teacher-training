@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Filter users", :with_publish_constraint do
+feature 'Filter users', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_users
     when_i_visit_the_support_users_index_page
   end
 
-  context "adding filters" do
-    scenario "by users name" do
+  context 'adding filters' do
+    scenario 'by users name' do
       then_i_can_search_by_first_name
       and_when_i_click_apply_filters
       the_correct_admin_user_shows
     end
 
-    scenario "by users email" do
+    scenario 'by users email' do
       then_i_can_search_by_email
       and_when_i_click_apply_filters
       the_correct_admin_user_shows
     end
 
-    scenario "by user type" do
+    scenario 'by user type' do
       then_i_select_provider_user_checkbox
       and_when_i_click_apply_filters
       the_correct_provider_user_shows
     end
   end
 
-  context "removing filters" do
+  context 'removing filters' do
     before do
       given_i_have_filters_selected
     end
 
-    scenario "removing selected filters" do
+    scenario 'removing selected filters' do
       i_can_remove_filters
       and_i_can_see_unfiltered_results
     end

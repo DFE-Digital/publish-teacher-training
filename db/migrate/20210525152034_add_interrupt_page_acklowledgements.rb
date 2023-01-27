@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddInterruptPageAcklowledgements < ActiveRecord::Migration[6.1]
   def change
     create_table :interrupt_page_acknowledgement do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseLocationForm < BaseCourseForm
     FIELDS = %i[site_ids].freeze
@@ -30,7 +32,7 @@ module Publish
       NotificationService::CourseSitesUpdated.call(
         course:,
         previous_site_names:,
-        updated_site_names:,
+        updated_site_names:
       )
     end
 

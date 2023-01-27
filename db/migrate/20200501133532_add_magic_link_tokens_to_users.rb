@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddMagicLinkTokensToUsers < ActiveRecord::Migration[6.0]
   def change
     change_table :user, bulk: true do |table|

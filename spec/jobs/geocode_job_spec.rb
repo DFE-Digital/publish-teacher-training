@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 describe GeocodeJob do
   include ActiveJob::TestHelper
 
@@ -9,26 +11,26 @@ describe GeocodeJob do
 
   let(:site) do
     build(:site,
-      address1: "Long Lane",
-      address2: "Holbury",
-      address3: "Southampton",
+      address1: 'Long Lane',
+      address2: 'Holbury',
+      address3: 'Southampton',
       address4: nil,
-      postcode: "SO45 2PA")
+      postcode: 'SO45 2PA')
   end
 
-  subject(:job) { described_class.perform_later("Site", site.id) }
+  subject(:job) { described_class.perform_later('Site', site.id) }
 
-  it "queues the job" do
+  it 'queues the job' do
     expect { job }
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
-  it "is put into the geocoding queue" do
-    expect(described_class.new.queue_name).to eq("geocoding")
+  it 'is put into the geocoding queue' do
+    expect(described_class.new.queue_name).to eq('geocoding')
   end
 
-  context "executing the job" do
-    it "calls the GeocoderService" do
+  context 'executing the job' do
+    it 'calls the GeocoderService' do
       expect(GeocoderService).to receive(:geocode).with(obj: site)
 
       site.save!

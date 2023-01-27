@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveApplicationsAcceptedFromFromCourseSite < ActiveRecord::Migration[6.0]
   def up
     remove_column :course_site, :applications_accepted_from

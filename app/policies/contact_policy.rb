@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContactPolicy
   attr_reader :user, :contact
 

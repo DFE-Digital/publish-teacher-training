@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SitePolicy
   attr_reader :user, :site
 
@@ -14,6 +16,6 @@ class SitePolicy
     user.admin? || user.providers.include?(site.provider)
   end
 
-  alias_method :update?, :show?
-  alias_method :create?, :show?
+  alias update? show?
+  alias create? show?
 end

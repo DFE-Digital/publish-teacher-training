@@ -23,3 +23,8 @@ linters:
         Enabled: false
       Naming/VariableNumber:
         Enabled: false
+      Style/FrozenStringLiteralComment:
+        Enabled: false
+      Style/StringLiterals:
+        Enabled: true
+        EnforcedStyle: double_quotes

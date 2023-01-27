@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require_relative "../sections/error_link"
-require_relative "../sections/copy_content"
+require_relative '../sections/error_link'
+require_relative '../sections/copy_content'
 
 module PageObjects
   module Publish
     class CourseInformationEdit < PageObjects::Base
-      set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/about"
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/about'
 
-      sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li>a"
+      sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
       element :copy_content_warning, '[data-qa="copy-course-warning"]'
-      element :about_course, "#publish-course-information-form-about-course-field"
-      element :interview_process, "#publish-course-information-form-interview-process-field"
-      element :school_placements, "#publish-course-information-form-how-school-placements-work-field"
+      element :about_course, '#publish-course-information-form-about-course-field'
+      element :interview_process, '#publish-course-information-form-interview-process-field'
+      element :school_placements, '#publish-course-information-form-how-school-placements-work-field'
       element :use_content, '[data-qa="course__use_content"]'
       element :submit, 'button.govuk-button[type="submit"]'
 

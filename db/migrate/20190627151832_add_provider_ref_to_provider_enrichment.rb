@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddProviderRefToProviderEnrichment < ActiveRecord::Migration[5.2]
   def up
     add_reference :provider_enrichment, :provider, index: true, type: :int

@@ -23,11 +23,11 @@ private
   end
 
   def change_organisation_link
-    govuk_link_to t("change_organisation"), root_path, class: "title-bar__link govuk-link--no-visited-state"
+    govuk_link_to t('change_organisation'), root_path, class: 'title-bar__link govuk-link--no-visited-state'
   end
 
   def change_cycle_link
-    govuk_link_to t("page_titles.rollover.change_cycle"), publish_provider_path(code: @provider, switcher: true), class: "title-bar__link govuk-link--no-visited-state"
+    govuk_link_to t('page_titles.rollover.change_cycle'), publish_provider_path(code: @provider, switcher: true), class: 'title-bar__link govuk-link--no-visited-state'
   end
 
   def current_recruitment_cycle?

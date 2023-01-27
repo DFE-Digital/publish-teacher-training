@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class ConfirmEnvironmentController < ApplicationController
     skip_before_action :redirect_to_maintenance_page_if_flag_is_active

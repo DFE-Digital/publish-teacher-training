@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserNotificationPreferencesPolicy
   def initialize(user, user_notification_preferences)
     @user = user

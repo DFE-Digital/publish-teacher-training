@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GenerateAndSendMagicLinkService
   class << self
     def call(user:)

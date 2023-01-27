@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RolloverReportingService
   def initialize
     @rollover_scope = RecruitmentCycle.current_recruitment_cycle
@@ -14,7 +16,7 @@ class RolloverReportingService
         new_courses_published: 0,
         deleted_courses: 0,
         existing_courses_in_draft: 0,
-        existing_courses_in_review: 0,
+        existing_courses_in_review: 0
       } }
     else
       {
@@ -23,8 +25,8 @@ class RolloverReportingService
           new_courses_published: new_courses_published_count,
           deleted_courses: deleted_courses_count,
           existing_courses_in_draft: existing_courses_in_draft_count,
-          existing_courses_in_review:,
-        },
+          existing_courses_in_review:
+        }
       }
     end
   end

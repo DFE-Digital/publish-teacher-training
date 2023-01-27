@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class SerializableSite < JSONAPI::Serializable::Resource
       include JsonapiCacheKeyHelper
 
-      type "sites"
+      type 'sites'
 
       attributes :code, :location_name, :address1, :address2,
         :address3, :address4, :postcode, :region_code,

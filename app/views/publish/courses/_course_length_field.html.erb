@@ -1,7 +1,7 @@
 <%= f.govuk_radio_buttons_fieldset(:course_length,
   legend: { text: "Course length", size: "m" },
   form_group: {
-    id: form_object.errors.key?(:course_length) ? "course_length-error" : "course-length",
+    id: form_object.errors.key?(:course_length) ? "course_length-error" : "course-length"
   }) do %>
     <%= f.govuk_radio_button(:course_length, "OneYear",
       checked: @course.course_length == "OneYear",

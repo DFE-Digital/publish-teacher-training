@@ -1,4 +1,6 @@
-require "csv"
+# frozen_string_literal: true
+
+require 'csv'
 
 namespace :sandbox do
   desc <<~DESC
@@ -15,7 +17,7 @@ namespace :sandbox do
     Providers are not created, if they don't exist the task will log this and skip the user.
   DESC
   task :import_users, [:csv_file_path] => [:environment] do |_task, args|
-    raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
+    raise 'Can only be run in sandbox or development' unless Rails.env.sandbox? || Rails.env.development?
 
     current_recruitment_cycle = RecruitmentCycle.current
 
@@ -25,7 +27,7 @@ namespace :sandbox do
       provider_name = row[2]
 
       first_name = names.shift
-      last_name = names.join(" ")
+      last_name = names.join(' ')
 
       provider = current_recruitment_cycle.providers.find_by(provider_name:)
       user = User
@@ -61,7 +63,7 @@ namespace :sandbox do
     Organisation and Site per-provider.
   DESC
   task :create_providers, [:csv_file_path] => [:environment] do |_task, args|
-    raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
+    raise 'Can only be run in sandbox or development' unless Rails.env.sandbox? || Rails.env.development?
 
     import = CSVImports::FakeProvidersImport.new(args[:csv_file_path])
     import.execute
@@ -69,7 +71,7 @@ namespace :sandbox do
     if import.results.any?
       puts import.results.join("\n")
     else
-      puts "Nothing was imported"
+      puts 'Nothing was imported'
     end
   end
 end

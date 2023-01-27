@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderPolicy
   attr_reader :user, :provider
 
@@ -56,17 +58,17 @@ class ProviderPolicy
     !(accredited_bodies_codes & user_provider_codes).compact.empty?
   end
 
-  alias_method :can_list_sites?, :show?
-  alias_method :can_create_sites?, :show?
-  alias_method :can_create_course?, :show?
-  alias_method :edit?, :show?
-  alias_method :update?, :show?
-  alias_method :destroy?, :show?
-  alias_method :build_new?, :show?
-  alias_method :can_list_training_providers?, :show?
-  alias_method :index?, :new?
-  alias_method :create?, :show?
-  alias_method :delete?, :show?
+  alias can_list_sites? show?
+  alias can_create_sites? show?
+  alias can_create_course? show?
+  alias edit? show?
+  alias update? show?
+  alias destroy? show?
+  alias build_new? show?
+  alias can_list_training_providers? show?
+  alias index? new?
+  alias create? show?
+  alias delete? show?
 
   def permitted_provider_attributes
     if user.admin?

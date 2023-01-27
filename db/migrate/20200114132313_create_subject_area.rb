@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSubjectArea < ActiveRecord::Migration[6.0]
   def change
     create_table :subject_area, primary_key: :typename, id: false do |t|
@@ -10,7 +12,7 @@ class CreateSubjectArea < ActiveRecord::Migration[6.0]
       t.references :subject_area
     end
 
-    say_with_time "populating subject areas" do
+    say_with_time 'populating subject areas' do
       Subjects::SubjectAreaCreatorService.new.execute
     end
   end

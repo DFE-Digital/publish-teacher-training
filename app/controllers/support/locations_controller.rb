@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Support
   class LocationsController < SupportController
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
-      render layout: "provider_record"
+      render layout: 'provider_record'
     rescue ActiveRecord::RecordNotFound
-      flash[:warning] = "Provider not found"
+      flash[:warning] = 'Provider not found'
       redirect_to support_providers_path
     end
 
@@ -21,7 +23,7 @@ module Support
       @site = provider.sites.build(site_params)
 
       if @site.save
-        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.created", resource: flash_resource) }
+        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.created', resource: flash_resource) }
       else
         render :new
       end
@@ -29,7 +31,7 @@ module Support
 
     def update
       if site.update(site_params)
-        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: flash_resource) }
+        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: flash_resource) }
       else
         render :edit
       end
@@ -38,7 +40,7 @@ module Support
     def destroy
       site.destroy!
 
-      redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.deleted", resource: flash_resource) }
+      redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.deleted', resource: flash_resource) }
     end
 
   private
@@ -48,7 +50,7 @@ module Support
     end
 
     def flash_resource
-      @flash_resource ||= "Location"
+      @flash_resource ||= 'Location'
     end
 
     def site_params
@@ -60,7 +62,7 @@ module Support
         :address2,
         :address3,
         :address4,
-        :postcode,
+        :postcode
       )
     end
 

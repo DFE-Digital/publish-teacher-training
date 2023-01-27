@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CopyEnrichmentsToNextCycle < ActiveRecord::Migration[5.2]
   def up
     next_providers = RecruitmentCycle.next_recruitment_cycle.providers.all

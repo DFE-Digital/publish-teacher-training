@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe ContactPolicy do
   let(:user) { create(:user) }
@@ -8,7 +10,7 @@ describe ContactPolicy do
   subject { described_class }
 
   permissions :show?, :update? do
-    context "a user that belongs to the provider" do
+    context 'a user that belongs to the provider' do
       before do
         provider.users << user
       end
@@ -20,7 +22,7 @@ describe ContactPolicy do
       it { is_expected.not_to permit(user, contact) }
     end
 
-    context "a user that is an admin" do
+    context 'a user that is an admin' do
       let(:user) { create(:user, :admin) }
 
       it { is_expected.to permit(user, contact) }

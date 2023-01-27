@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CoursesController < PublishController
     include ApplyRedirect
@@ -37,12 +39,12 @@ module Publish
       @course = ::Courses::CreationService.call(course_params:, provider:, next_available_course_code: true)
 
       if @course.save
-        flash[:success_with_body] = { title: "Your course has been created", body: "Add the rest of your details and publish the course, so that candidates can find and apply to it." }
+        flash[:success_with_body] = { title: 'Your course has been created', body: 'Add the rest of your details and publish the course, so that candidates can find and apply to it.' }
         redirect_to(
           publish_provider_recruitment_cycle_courses_path(
             @course.provider_code,
-            @course.recruitment_cycle.year,
-          ),
+            @course.recruitment_cycle.year
+          )
         )
       else
         @errors = @course.errors.messages
@@ -71,12 +73,12 @@ module Publish
 
       if @course.publishable?
         publish_course
-        flash[:success] = "Your course has been published."
+        flash[:success] = 'Your course has been published.'
 
         redirect_to publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @course.recruitment_cycle_year,
-          @course.course_code,
+          @course.course_code
         )
       else
         @errors = format_publish_error_messages
@@ -94,7 +96,7 @@ module Publish
           .permit(
             policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
-            subjects_ids: [],
+            subjects_ids: []
           )
       else
         ActionController::Parameters.new({}).permit(:course)
@@ -102,7 +104,7 @@ module Publish
     end
 
     def render_locations_messages
-      flash[:error] = { id: "locations-error", message: "You need to create at least one location before creating a course" }
+      flash[:error] = { id: 'locations-error', message: 'You need to create at least one location before creating a course' }
 
       redirect_to new_publish_provider_recruitment_cycle_location_path(provider.provider_code, provider.recruitment_cycle_year)
     end
@@ -133,7 +135,7 @@ module Publish
 
     def format_publish_error_messages
       @course.errors.messages.transform_values do |error_messages|
-        error_messages.map { |message| message.gsub(/^\^/, "") }
+        error_messages.map { |message| message.gsub(/^\^/, '') }
       end
     end
   end

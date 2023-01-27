@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AssignProviderNameToContacts < ActiveRecord::Migration[6.0]
   def change
     ucas_contacts_without_name = Contact.where(name: nil).includes(:provider)

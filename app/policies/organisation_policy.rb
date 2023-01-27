@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrganisationPolicy
   attr_reader :user, :accessed_organisation
 
@@ -10,5 +12,5 @@ class OrganisationPolicy
     @user.admin?
   end
 
-  alias_method :index?, :add_user?
+  alias index? add_user?
 end

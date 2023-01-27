@@ -16,7 +16,7 @@ module PublishHelper
   end
 
   def smart_quotes(string)
-    return "" if string.blank?
+    return '' if string.blank?
 
     RubyPants.new(string, [2, :dashes], ruby_pants_options).to_html
   end
@@ -29,13 +29,13 @@ private
   # https://github.com/jmcnevin/rubypants/blob/master/lib/rubypants.rb
   def ruby_pants_options
     {
-      double_left_quote: "“",
-      double_right_quote: "”",
-      single_left_quote: "‘",
-      single_right_quote: "’",
-      ellipsis: "…",
-      em_dash: "—",
-      en_dash: "–",
+      double_left_quote: '“',
+      double_right_quote: '”',
+      single_left_quote: '‘',
+      single_right_quote: '’',
+      ellipsis: '…',
+      em_dash: '—',
+      en_dash: '–'
     }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLatitudeAndLongitudeToSite < ActiveRecord::Migration[6.0]
   def change
     change_table :site, bulk: true do |t|

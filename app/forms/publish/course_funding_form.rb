@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseFundingForm < Form
-    alias_method :course, :model
+    alias course model
 
     FIELDS = %i[
       funding_type
@@ -11,8 +13,8 @@ module Publish
     attr_accessor(*FIELDS)
 
     validates :funding_type, presence: true
-    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { skilled_worker_visa? }
-    validates :can_sponsor_student_visa, inclusion: { in: [true, false, "true", "false"] }, if: -> { student_visa? }
+    validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { skilled_worker_visa? }
+    validates :can_sponsor_student_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
@@ -26,7 +28,7 @@ module Publish
 
     def origin_step
       @origin_step ||= if funding_type_updated?
-                         if [course.funding_type, new_attributes[:funding_type]].include?("apprenticeship")
+                         if [course.funding_type, new_attributes[:funding_type]].include?('apprenticeship')
                            :apprenticeship
                          else
                            :funding_type
@@ -35,7 +37,7 @@ module Publish
     end
 
     def is_fee_based?
-      funding_type == "fee"
+      funding_type == 'fee'
     end
 
     def visa_type
@@ -58,45 +60,45 @@ module Publish
           fee_details: nil,
           fee_international: nil,
           fee_uk_eu: nil,
-          financial_support: nil,
+          financial_support: nil
         },
         student: {
-          salary_details: nil,
-        },
+          salary_details: nil
+        }
       }[visa_type]
     end
 
     def reset_course_attributes
       {
         skilled_worker: {
-          can_sponsor_student_visa: false,
+          can_sponsor_student_visa: false
         },
         student: {
-          can_sponsor_skilled_worker_visa: false,
-        },
+          can_sponsor_skilled_worker_visa: false
+        }
       }[visa_type]
     end
 
     def after_save
-      if funding_type_updated?
-        enrichment = course.enrichments.find_or_initialize_draft
+      return unless funding_type_updated?
 
-        if enrichment.persisted?
-          enrichment.assign_attributes(reset_enrichment_attributes)
+      enrichment = course.enrichments.find_or_initialize_draft
 
-          enrichment.save!
-        end
+      if enrichment.persisted?
+        enrichment.assign_attributes(reset_enrichment_attributes)
 
-        course.assign_attributes(reset_course_attributes)
-        course.save!
+        enrichment.save!
       end
+
+      course.assign_attributes(reset_course_attributes)
+      course.save!
     end
 
     def original_fields_values
       {
         funding_type: course.funding_type,
         can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
-        can_sponsor_student_visa: course.can_sponsor_student_visa,
+        can_sponsor_student_visa: course.can_sponsor_student_visa
       }
     end
 

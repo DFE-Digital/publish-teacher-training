@@ -26,7 +26,7 @@
     <% end %>
 
     <%= render Find::Header::View.new(
-      service_name: t("service_name.find"),
+      service_name: t("service_name.find")
     ) %>
 
     <div class="govuk-width-container">
@@ -39,7 +39,7 @@
             title_text: "Success",
             success: true,
             title_id: "success-message",
-            html_attributes: { role: "alert" },
+            html_attributes: { role: "alert" }
           ) do |notification_banner| %>
             <% notification_banner.heading(text: flash[:success]) %>
           <% end %>
@@ -55,8 +55,8 @@
       <%= render(
         Find::FeedbackComponent.new(
           path: request.env["PATH_INFO"],
-          controller: params[:controller],
-        ),
+          controller: params[:controller]
+        )
       ) %>
     <% end %>
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccreditingProviderEnrichment
   include ActiveModel::Validations
   include ActiveModel::Model
@@ -9,26 +11,19 @@ class AccreditingProviderEnrichment
 
   def initialize(attrs)
     attrs.each do |attr, value|
-      send("#{attr}=", value) unless attr == "errors"
-    end
-  end
-
-  def attributes
-    %i[UcasProviderCode Description].inject({}) do |hash, attr|
-      hash[attr] = send(attr)
-      hash
+      send("#{attr}=", value) unless attr == 'errors'
     end
   end
 
   class ArraySerializer
     class << self
       def load(json)
-        if json.present?
-          arr = JSON.parse json
+        return if json.blank?
 
-          arr.map do |item|
-            AccreditingProviderEnrichment.new(item)
-          end
+        arr = JSON.parse json
+
+        arr.map do |item|
+          AccreditingProviderEnrichment.new(item)
         end
       end
 

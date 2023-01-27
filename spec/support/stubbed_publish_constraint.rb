@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
-  config.define_derived_metadata(file_path: Regexp.new("/spec/features/publish")) do |metadata|
+  config.define_derived_metadata(file_path: Regexp.new('/spec/features/publish')) do |metadata|
     metadata[:with_publish_constraint] = true
   end
 

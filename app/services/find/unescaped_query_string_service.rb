@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class UnescapedQueryStringService
     include ServicePattern
@@ -8,7 +10,7 @@ module Find
     end
 
     def call
-      "#{base_path}?#{parameters.to_param}".gsub("%2C", ",")
+      "#{base_path}?#{parameters.to_param}".gsub('%2C', ',')
     end
 
     private_class_method :new

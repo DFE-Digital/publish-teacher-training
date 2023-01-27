@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JsonapiCourseCacheKeyHelper
   # When a course has sites updated the course's 'changed_at' field is touched
   # We need to add the 'changed_at' value to the cache key so that the cache is refreshed

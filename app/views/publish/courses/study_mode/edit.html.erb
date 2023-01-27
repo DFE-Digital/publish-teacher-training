@@ -5,8 +5,8 @@
         details_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
-          course.course_code,
-        ),
+          course.course_code
+        )
       ) %>
 <% end %>
 
@@ -17,10 +17,10 @@
       url: full_part_time_publish_provider_recruitment_cycle_course_path(
         course.provider_code,
         course.recruitment_cycle_year,
-        course.course_code,
+        course.course_code
       ),
       method: :put,
-      local: true,
+      local: true
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -33,7 +33,7 @@
             :study_mode,
             study_mode,
             label: { text: t("edit_options.study_modes.#{study_mode}.label") },
-            link_errors: index.zero?,
+            link_errors: index.zero?
           ) %>
         <% end %>
       <% end %>

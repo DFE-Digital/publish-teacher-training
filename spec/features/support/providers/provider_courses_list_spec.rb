@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "View provider courses", :with_publish_constraint do
+feature 'View provider courses', :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
-  scenario "i can view courses belonging to a provider" do
+  scenario 'i can view courses belonging to a provider' do
     given_i_am_authenticated(user:)
     and_there_is_a_provider_with_courses
     when_i_visit_the_support_provider_show_page
@@ -38,6 +38,6 @@ feature "View provider courses", :with_publish_constraint do
 
     expect(support_courses_index_page.courses_row.first.name).to have_text(course.name)
     expect(support_courses_index_page.courses_row.first.name).to have_text(course.course_code)
-    expect(support_courses_index_page.courses_row.first.change_link).to have_text("Change")
+    expect(support_courses_index_page.courses_row.first.change_link).to have_text('Change')
   end
 end

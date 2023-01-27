@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class WordsCountValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, string)
     return if string.blank?
 
-    if word_count(string) > options[:maximum]
-      record.errors.add(
-        attribute,
-        message: options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}",
-      )
-    end
+    return unless word_count(string) > options[:maximum]
+
+    record.errors.add(
+      attribute,
+      message: options[:message] || "^Reduce the word count for #{attribute.to_s.humanize(capitalize: false)}"
+    )
   end
 
   def word_count(string)

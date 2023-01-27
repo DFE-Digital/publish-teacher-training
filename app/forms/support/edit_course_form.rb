@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Support
   class EditCourseForm
     include ActiveModel::Model
@@ -7,8 +9,7 @@ module Support
       course_code name
     ].freeze
 
-    attr_accessor(*FIELDS)
-    attr_accessor :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send
+    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send)
     validate :validate_start_date_format
     validate :validate_applications_open_from_format
 
@@ -64,7 +65,7 @@ module Support
       Struct.new(:day, :month, :year).new(
         send("#{date_type}_day"),
         send("#{date_type}_month"),
-        send("#{date_type}_year"),
+        send("#{date_type}_year")
       )
     end
 
@@ -78,7 +79,7 @@ module Support
         name:,
         start_date:,
         applications_open_from:,
-        is_send: send?,
+        is_send: send?
       }
 
       course.assign_attributes(attributes)

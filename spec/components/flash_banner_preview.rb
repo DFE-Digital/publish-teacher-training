@@ -2,11 +2,11 @@
 
 class FlashBannerPreview < ViewComponent::Preview
   def with_error
-    render(FlashBanner.new(flash: flash(:error, flash_value: { id: "some-id", message: "some message" }.with_indifferent_access)))
+    render(FlashBanner.new(flash: flash(:error, flash_value: { id: 'some-id', message: 'some message' }.with_indifferent_access)))
   end
 
   def with_success_with_body
-    render(FlashBanner.new(flash: flash(:success_with_body, flash_value: { title: "some title", body: "some body" }.with_indifferent_access)))
+    render(FlashBanner.new(flash: flash(:success_with_body, flash_value: { title: 'some title', body: 'some body' }.with_indifferent_access)))
   end
 
   def with_success

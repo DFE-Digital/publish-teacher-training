@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class ProviderSuggestionsController < API::V3::ApplicationController
@@ -13,7 +15,7 @@ module API
 
         render(
           jsonapi: found_providers,
-          class: { Provider: SerializableProvider },
+          class: { Provider: SerializableProvider }
         )
       end
 

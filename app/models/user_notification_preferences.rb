@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserNotificationPreferences
   def initialize(user_id:)
     @user_id = user_id
@@ -28,7 +30,7 @@ class UserNotificationPreferences
             user_id: id,
             course_publish: enable_notifications,
             course_update: enable_notifications,
-            provider_code:,
+            provider_code:
           )
         end
       end
@@ -39,7 +41,7 @@ class UserNotificationPreferences
     self
   end
 
-  alias_method :enabled?, :enabled
+  alias enabled? enabled
 
 private
 

@@ -3,10 +3,10 @@
 module PageObjects
   module Find
     class SecondarySubjects < PageObjects::Base
-      set_url "/subjects?age_group=secondary"
+      set_url '/subjects?age_group=secondary'
 
-      element :music, "#find-subjects-form-subject-codes-w3-field"
-      element :continue, "form .govuk-button"
+      element :music, '#find-subjects-form-subject-codes-w3-field'
+      element :continue, 'form .govuk-button'
     end
   end
 end

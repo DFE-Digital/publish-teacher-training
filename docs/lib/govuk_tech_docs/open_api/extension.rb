@@ -1,6 +1,8 @@
-require "openapi3_parser"
-require "uri"
-require_relative "renderer"
+# frozen_string_literal: true
+
+require 'openapi3_parser'
+require 'uri'
+require_relative 'renderer'
 
 module GovukTechDocs
   module OpenApi
@@ -28,7 +30,7 @@ module GovukTechDocs
           @document = Openapi3Parser.load_file(api_path)
         else
           @api_parser = false
-          raise "Unable to load api path from tech-docs.yml"
+          raise 'Unable to load api path from tech-docs.yml'
         end
         @render = Renderer.new(@app, @document)
       end
@@ -37,11 +39,11 @@ module GovukTechDocs
         if @api_parser == true
 
           keywords = {
-            "api&gt;" => "default",
-            "api_schema&gt;" => "schema",
+            'api&gt;' => 'default',
+            'api_schema&gt;' => 'schema'
           }
 
-          regexp = keywords.map { |k, _| Regexp.escape(k) }.join("|")
+          regexp = keywords.map { |k, _| Regexp.escape(k) }.join('|')
 
           md = text.match(/^<p>(#{regexp})/)
 
@@ -49,15 +51,15 @@ module GovukTechDocs
             key = md.captures[0]
             type = keywords[key]
 
-            text.gsub!(/#{Regexp.escape(key)}\s+?/, "")
+            text.gsub!(/#{Regexp.escape(key)}\s+?/, '')
 
             # Strip paragraph tags from text
-            text = text.gsub(/<\/?[^>]*>/, "")
+            text = text.gsub(%r{</?[^>]*>}, '')
             text = text.strip
 
-            if text == "api&gt;"
+            if text == 'api&gt;'
               @render.api_full
-            elsif type == "default"
+            elsif type == 'default'
               output = @render.path(text)
               # Render any schemas referenced in the above path
               output += @render.schemas_from_path(text)
@@ -83,7 +85,7 @@ module GovukTechDocs
       end
 
       def api_path
-        @config["open_api_path"].to_s
+        @config['open_api_path'].to_s
       end
     end
   end

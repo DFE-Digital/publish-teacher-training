@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
       class SerializableProviderSuggestion < JSONAPI::Serializable::Resource
-        type "provider_suggestions"
+        type 'provider_suggestions'
 
         attributes :ukprn,
           :urn

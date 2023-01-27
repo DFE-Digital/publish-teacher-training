@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe CourseSerializersService do
   let(:course_serializer_spy) { spy }
@@ -13,7 +15,7 @@ describe CourseSerializersService do
   let(:recruitment_cycle_serializer_spy) { spy }
   let(:subject_area_serializer_spy) { spy }
 
-  let(:course) { spy("course", present?: true) }
+  let(:course) { spy('course', present?: true) }
 
   let(:service) do
     described_class.new
@@ -31,7 +33,7 @@ describe CourseSerializersService do
       Site: API::V3::SerializableSite,
       Provider: API::V3::SerializableProvider,
       RecruitmentCycle: API::V3::SerializableRecruitmentCycle,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      SubjectArea: API::V3::SerializableSubjectArea
     }
   end
 
@@ -47,15 +49,15 @@ describe CourseSerializersService do
       Site: site_serializer_spy,
       Provider: provider_serializer_spy,
       RecruitmentCycle: recruitment_cycle_serializer_spy,
-      SubjectArea: API::V3::SerializableSubjectArea,
+      SubjectArea: API::V3::SerializableSubjectArea
     }
   end
 
-  describe "#execute" do
-    let(:course_jsonapi) { spy("course JSONAPI") }
+  describe '#execute' do
+    let(:course_jsonapi) { spy('course JSONAPI') }
     let(:renderer) { spy(render: course_jsonapi) }
 
-    it "returns the default class serializers" do
+    it 'returns the default class serializers' do
       expect(service.execute).to eq(default_class_serializers)
     end
   end

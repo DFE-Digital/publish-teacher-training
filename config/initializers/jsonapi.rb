@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def page_url(page:)
   params.then do |new_params|
     new_params[:page] = {} unless new_params.key? :page
@@ -8,17 +10,17 @@ end
 
 JSONAPI::Rails.configure do |config|
   # Set a default serializable class mapping.
-  config.jsonapi_class = Hash.new { |h, k|
-    names = k.to_s.split("::")
+  config.jsonapi_class = Hash.new do |h, k|
+    names = k.to_s.split('::')
     klass = names.pop
 
     h[k] = [
       "API::V3::Serializable#{klass}",
-      [*names, klass].join("::"),
+      [*names, klass].join('::')
     ].lazy
       .map(&:safe_constantize)
       .detect(&:present?)
-  }
+  end
 
   # # Set a default serializable class mapping for errors.
   # config.jsonapi_errors_class = Hash.new { |h, k|
@@ -44,17 +46,11 @@ JSONAPI::Rails.configure do |config|
   # # Set a default pagination scheme.
   config.jsonapi_pagination = lambda { |collection|
     {}.tap do |links|
-      if collection.respond_to?(:next_page) && collection.next_page.present?
-        links[:next] = page_url(page: collection.next_page)
-      end
+      links[:next] = page_url(page: collection.next_page) if collection.respond_to?(:next_page) && collection.next_page.present?
 
-      if collection.respond_to?(:prev_page) && collection.prev_page.present?
-        links[:prev] = page_url(page: collection.prev_page)
-      end
+      links[:prev] = page_url(page: collection.prev_page) if collection.respond_to?(:prev_page) && collection.prev_page.present?
 
-      if collection.respond_to?(:total_pages)
-        links[:last] = page_url(page: [collection.total_pages - 1, 1].max)
-      end
+      links[:last] = page_url(page: [collection.total_pages - 1, 1].max) if collection.respond_to?(:total_pages)
     end
   }
   #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module Utility
     class SummaryCardComponent < ViewComponent::Base
@@ -9,7 +11,7 @@ module Find
       end
 
       def border_css_class
-        @border ? "" : "no-border"
+        @border ? '' : 'no-border'
       end
 
     private
@@ -21,9 +23,7 @@ module Find
           row.tap do |r|
             next if r[:key].in? ignore_editable
 
-            unless editable
-              r.delete(:action)
-            end
+            r.delete(:action) unless editable
           end
         end
       end
@@ -32,7 +32,7 @@ module Find
         row_hash.map do |key, value|
           {
             key:,
-            value:,
+            value:
           }
         end
       end

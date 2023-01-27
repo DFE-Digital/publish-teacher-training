@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddVisaColumnsToTheDatabase < ActiveRecord::Migration[6.1]
   def change
     add_column :provider, :can_sponsor_skilled_worker_visa, :boolean

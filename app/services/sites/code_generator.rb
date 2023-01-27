@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sites
   class CodeGenerator
     include ServicePattern
@@ -15,7 +17,7 @@ module Sites
     attr_reader :provider
 
     def highest_site_code
-      return "Z" if existing_sequential_codes.blank?
+      return 'Z' if existing_sequential_codes.blank?
 
       existing_sequential_codes.max
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class CourseInformationController < PublishController
@@ -18,12 +20,12 @@ module Publish
         @course_information_form = CourseInformationForm.new(course_enrichment, params: course_information_params)
 
         if @course_information_form.save!
-          course_description_success_message("course information")
+          course_description_success_message('course information')
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           render :edit
@@ -40,7 +42,7 @@ module Publish
         params
           .require(:publish_course_information_form)
           .permit(
-            CourseInformationForm::FIELDS,
+            CourseInformationForm::FIELDS
           )
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class FeedbackComponent < ViewComponent::Base
     include ::ViewHelper

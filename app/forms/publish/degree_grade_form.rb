@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class DegreeGradeForm
     # TODO: Refactor to use our form object pattern
@@ -5,7 +7,7 @@ module Publish
 
     attr_accessor :grade
 
-    validates :grade, presence: { message: "Select the minimum degree classification you require" }
+    validates :grade, presence: { message: 'Select the minimum degree classification you require' }
 
     def save(course)
       return false unless valid?

@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Viewing courses as an accredited body", { can_edit_current_and_next_cycles: false } do
+feature 'Viewing courses as an accredited body', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_accredited_body_user
     and_some_courses_exist_with_one_i_accredit
     when_i_visit_the_training_provider_index_page
   end
 
-  scenario "i can see who lists me as their accredited body" do
+  scenario 'i can see who lists me as their accredited body' do
     then_i_should_see_a_list_of_training_providers
     and_i_should_see_a_count_of_the_courses_i_accredit
   end
 
-  scenario "i can see which courses i am the accredited body for" do
+  scenario 'i can see which courses i am the accredited body for' do
     and_i_click_on_a_training_provider
     then_i_see_the_courses_i_accredit_for
   end
@@ -27,7 +27,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :published)],
       provider: create(:provider),
-      accrediting_provider:,
+      accrediting_provider:
     )
 
     create(:course, enrichments: [build(:course_enrichment, :published)], provider: create(:provider))
@@ -35,7 +35,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
 
   def when_i_visit_the_training_provider_index_page
     training_provider_index_page.load(
-      provider_code: accrediting_provider.provider_code, recruitment_cycle_year: accrediting_provider.recruitment_cycle_year,
+      provider_code: accrediting_provider.provider_code, recruitment_cycle_year: accrediting_provider.recruitment_cycle_year
     )
   end
 
@@ -46,7 +46,7 @@ feature "Viewing courses as an accredited body", { can_edit_current_and_next_cyc
   end
 
   def and_i_should_see_a_count_of_the_courses_i_accredit
-    expect(training_provider_index_page.training_provider_rows.first.course_count).to have_text("1")
+    expect(training_provider_index_page.training_provider_rows.first.course_count).to have_text('1')
   end
 
   def and_i_click_on_a_training_provider

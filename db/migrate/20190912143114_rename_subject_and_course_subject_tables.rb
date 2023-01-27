@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameSubjectAndCourseSubjectTables < ActiveRecord::Migration[5.2]
   def change
     rename_table :subject, :ucas_subject

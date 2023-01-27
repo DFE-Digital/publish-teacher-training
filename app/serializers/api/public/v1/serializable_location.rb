@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
       class SerializableLocation < JSONAPI::Serializable::Resource
         extend JSONAPI::Serializable::Resource::ConditionalFields
 
-        type "locations"
+        type 'locations'
 
         belongs_to :course, unless: -> { @course.nil? } do
           data { @course }

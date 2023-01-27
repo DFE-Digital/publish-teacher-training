@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
@@ -25,8 +27,8 @@
 #  * 'just' rspec: 'rspec'
 
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: "bundle exec spring rspec", failed_mode: :keep do
-    require "guard/rspec/dsl"
+  guard :rspec, cmd: 'bundle exec spring rspec', failed_mode: :keep do
+    require 'guard/rspec/dsl'
     dsl = Guard::RSpec::Dsl.new(self)
 
     # Feel free to open issues for suggestions and improvements
@@ -48,7 +50,7 @@ group :red_green_refactor, halt_on_fail: true do
 
     watch(rails.controllers) do |m|
       [
-        rspec.spec.call("controllers/#{m[1]}_controller"),
+        rspec.spec.call("controllers/#{m[1]}_controller")
       ]
     end
 
@@ -59,7 +61,7 @@ group :red_green_refactor, halt_on_fail: true do
   end
 
   guard :rubocop, all_on_start: false do
-    watch(%r{.+\.rb$})
+    watch(/.+\.rb$/)
     watch(%r{(?:.+/)?\.rubocop(?:_todo)?\.yml$}) { |m| File.dirname(m[0]) }
   end
 end

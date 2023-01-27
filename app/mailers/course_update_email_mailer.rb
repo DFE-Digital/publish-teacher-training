@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
   include TimeFormat
 
@@ -20,7 +22,7 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
       attribute_change_datetime: gov_uk_format(course.updated_at),
       course_url: create_course_url(course),
       original_value: formatter.call(name: attribute_name, value: original_value),
-      updated_value: formatter.call(name: attribute_name, value: updated_value),
+      updated_value: formatter.call(name: attribute_name, value: updated_value)
     )
 
     mail(to: recipient.email)
@@ -39,7 +41,7 @@ private
   end
 
   def set_course_name(course, attribute_name, original)
-    return original if attribute_name == "name"
+    return original if attribute_name == 'name'
 
     course.name
   end

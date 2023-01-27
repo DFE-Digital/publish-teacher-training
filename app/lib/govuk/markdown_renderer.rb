@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Govuk
   class MarkdownRenderer < ::Redcarpet::Render::Safe
     def block_html(raw_html)

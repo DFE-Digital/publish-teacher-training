@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddRequestTypeToAllocations < ActiveRecord::Migration[6.0]
   def change
     add_column :allocation, :request_type, :integer, default: 0

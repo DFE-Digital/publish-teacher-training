@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class AccreditedBodyController < PublishController
@@ -22,8 +24,8 @@ module Publish
           redirect_to(
             search_new_publish_provider_recruitment_cycle_courses_accredited_body_path(
               query: @accredited_body,
-              course: course_params,
-            ),
+              course: course_params
+            )
           )
         else
           params[:course][:accredited_body_code] = @autocompleted_provider_code if @autocompleted_provider_code.present?
@@ -52,7 +54,7 @@ module Publish
         @errors = errors_for_search_query(code, query)
         return render :edit if @errors.present?
 
-        if update_params[:accredited_body_code] == "other"
+        if update_params[:accredited_body_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
           redirect_to_update_successful
@@ -86,19 +88,19 @@ module Publish
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
-            query: update_course_params[:accredited_body],
-          ),
+            query: update_course_params[:accredited_body]
+          )
         )
       end
 
       def redirect_to_update_successful
-        flash[:success] = I18n.t("success.saved")
+        flash[:success] = I18n.t('success.saved')
         redirect_to(
           details_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
+            @course.course_code
+          )
         )
       end
 
@@ -115,9 +117,9 @@ module Publish
         errors = {}
 
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
-          errors = { accredited_body: ["Accredited body search too short, enter 2 or more characters"] }
+          errors = { accredited_body: ['Accredited body search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_body_code: ["Pick an accredited body"] }
+          errors = { accredited_body_code: ['Pick an accredited body'] }
         end
 
         errors
@@ -136,7 +138,7 @@ module Publish
         params.require(:course).permit(
           :autocompleted_provider_code,
           :accredited_body_code,
-          :accredited_body,
+          :accredited_body
         )
       end
 
@@ -145,12 +147,12 @@ module Publish
         code = update_course_params[:accredited_body_code]
 
         {
-          accredited_body_code: autocompleted_code.presence || code,
+          accredited_body_code: autocompleted_code.presence || code
         }
       end
 
       def other_selected_with_no_autocompleted_code?(code)
-        code == "other" && @autocompleted_provider_code.blank?
+        code == 'other' && @autocompleted_provider_code.blank?
       end
     end
   end

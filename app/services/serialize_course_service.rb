@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SerializeCourseService
   def initialize(serializers_service: CourseSerializersService.new, renderer: JSONAPI::Serializable::Renderer.new)
     @serializers_service = serializers_service

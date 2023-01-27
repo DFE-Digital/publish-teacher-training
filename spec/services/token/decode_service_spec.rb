@@ -1,8 +1,10 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe Token::DecodeService do
-  let(:email) { "bat@localhost" }
-  let(:payload) { { "email" => email } }
+  let(:email) { 'bat@localhost' }
+  let(:payload) { { 'email' => email } }
 
   let(:encode_service_secret) do
     Settings.authentication.secret
@@ -39,38 +41,38 @@ describe Token::DecodeService do
       subject: Settings.authentication.subject)
   end
 
-  describe "#call" do
-    context "non-expired token" do
+  describe '#call' do
+    context 'non-expired token' do
       around do |spec|
         Timecop.freeze do
           spec.run
         end
       end
 
-      it "token values are equal" do
+      it 'token values are equal' do
         expect(subject).to match(payload)
       end
 
-      context "mismatch" do
-        shared_examples "mismatch" do |option, exception, value = option|
+      context 'mismatch' do
+        shared_examples 'mismatch' do |option, exception, value = option|
           context "#{option} settings" do
             let("encode_service_#{option}".to_sym) { value.to_s }
 
-            it "raises an exception" do
+            it 'raises an exception' do
               expect { subject }.to raise_exception exception
             end
           end
         end
 
-        include_examples "mismatch", :secret, JWT::VerificationError
-        include_examples "mismatch", :algorithm, JWT::IncorrectAlgorithm, "HS512"
-        include_examples "mismatch", :audience, JWT::InvalidAudError
-        include_examples "mismatch", :issuer, JWT::InvalidIssuerError
-        include_examples "mismatch", :subject, JWT::InvalidSubError
+        include_examples 'mismatch', :secret, JWT::VerificationError
+        include_examples 'mismatch', :algorithm, JWT::IncorrectAlgorithm, 'HS512'
+        include_examples 'mismatch', :audience, JWT::InvalidAudError
+        include_examples 'mismatch', :issuer, JWT::InvalidIssuerError
+        include_examples 'mismatch', :subject, JWT::InvalidSubError
       end
     end
 
-    context "expired token" do
+    context 'expired token' do
       around do |spec|
         encoded_token # encoded with actual Time.now
 
@@ -79,7 +81,7 @@ describe Token::DecodeService do
         end
       end
 
-      it "raises an exception" do
+      it 'raises an exception' do
         expect { subject }.to raise_exception JWT::ExpiredSignature
       end
     end

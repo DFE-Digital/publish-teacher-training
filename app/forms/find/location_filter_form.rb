@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Find
   class LocationFilterForm
     NO_OPTION = nil
-    LOCATION_OPTION = "1".freeze
-    PROVIDER_OPTION = "3".freeze
+    LOCATION_OPTION = '1'
+    PROVIDER_OPTION = '3'
 
     attr_reader :params, :errors
 
@@ -21,17 +23,15 @@ module Find
     def validate
       case selected_option
       when NO_OPTION
-        @errors = [I18n.t("find.location_filter.errors.no_option")]
+        @errors = [I18n.t('find.location_filter.errors.no_option')]
       when LOCATION_OPTION
         if location_query.blank?
-          @errors = [I18n.t("find.fields.location"), I18n.t("find.location_filter.errors.missing_location")]
+          @errors = [I18n.t('find.fields.location'), I18n.t('find.location_filter.errors.missing_location')]
         else
           handle_location_option
         end
       when PROVIDER_OPTION
-        if provider_query.blank? || provider_query == "Select a provider"
-          @errors = [I18n.t("find.location_filter.errors.blank_provider")]
-        end
+        @errors = [I18n.t('find.location_filter.errors.blank_provider')] if provider_query.blank? || provider_query == 'Select a provider'
       end
     end
 
@@ -41,21 +41,21 @@ module Find
         @params.merge!(geocode_params)
         @valid = true
       else
-        @errors = [I18n.t("find.location_filter.fields.location"), I18n.t("find.location_filter.errors.unknown_location")]
+        @errors = [I18n.t('find.location_filter.fields.location'), I18n.t('find.location_filter.errors.unknown_location')]
       end
     end
 
     def geocode_params_for(query)
-      results = Geocoder.search(query, components: "country:UK").first
-      if results
-        {
-          latitude: results.latitude,
-          longitude: results.longitude,
-          loc: results.address,
-          lq: location_query,
-          c: country(results),
-        }
-      end
+      results = Geocoder.search(query, components: 'country:UK').first
+      return unless results
+
+      {
+        latitude: results.latitude,
+        longitude: results.longitude,
+        loc: results.address,
+        lq: location_query,
+        c: country(results)
+      }
     end
 
     def selected_option
@@ -67,7 +67,7 @@ module Find
     end
 
     def provider_query
-      @params["provider.provider_name"]
+      @params['provider.provider_name']
     end
 
     def search_radius
@@ -76,7 +76,7 @@ module Find
 
     def country(results)
       flattened_results = results.address_components.map(&:values).flatten
-      countries = [DEVOLVED_NATIONS, "England"].flatten
+      countries = [DEVOLVED_NATIONS, 'England'].flatten
 
       countries.each { |country| return country if flattened_results.include?(country) }
     end

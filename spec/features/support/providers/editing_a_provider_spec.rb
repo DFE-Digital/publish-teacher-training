@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "View provider users", :with_publish_constraint do
+feature 'View provider users', :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   before do
@@ -14,7 +14,7 @@ feature "View provider users", :with_publish_constraint do
     then_i_am_on_the_support_provider_edit_page
   end
 
-  context "valid details" do
+  context 'valid details' do
     scenario "I can edit a provider's name" do
       when_i_fill_in_a_valid_provider_name
       and_i_choose_a_different_provider_type
@@ -24,7 +24,7 @@ feature "View provider users", :with_publish_constraint do
     end
   end
 
-  context "invalid details" do
+  context 'invalid details' do
     scenario "I cannot edit a provider's name" do
       when_i_fill_in_an_invalid_provider_name
       and_i_click_the_submit_button
@@ -35,7 +35,7 @@ feature "View provider users", :with_publish_constraint do
 private
 
   def and_there_is_a_provider
-    @provider = create(:provider, provider_name: "Provider 1", provider_type: "scitt", accrediting_provider: "accredited_body")
+    @provider = create(:provider, provider_name: 'Provider 1', provider_type: 'scitt', accrediting_provider: 'accredited_body')
   end
 
   def when_i_visit_the_support_provider_show_page
@@ -43,13 +43,13 @@ private
   end
 
   def then_i_can_view_provider_details
-    expect(support_provider_show_page).to have_text("Provider 1")
-    expect(support_provider_show_page).to have_text("Yes")
-    expect(support_provider_show_page).to have_text("SCITT")
+    expect(support_provider_show_page).to have_text('Provider 1')
+    expect(support_provider_show_page).to have_text('Yes')
+    expect(support_provider_show_page).to have_text('SCITT')
   end
 
   def when_i_click_on_the_change_link
-    click_link "Change provider name"
+    click_link 'Change provider name'
   end
 
   def then_i_am_on_the_support_provider_edit_page
@@ -57,11 +57,11 @@ private
   end
 
   def when_i_fill_in_a_valid_provider_name
-    support_provider_edit_page.provider_name.set("Provider 2")
+    support_provider_edit_page.provider_name.set('Provider 2')
   end
 
   def and_i_choose_a_different_provider_type
-    choose "Lead school"
+    choose 'Lead school'
   end
 
   def and_i_click_the_submit_button
@@ -73,9 +73,9 @@ private
   end
 
   def and_the_provider_details_are_updated
-    expect(support_provider_show_page).to have_text("Provider 2")
-    expect(support_provider_show_page).to have_text("No")
-    expect(support_provider_show_page).to have_text("Lead school")
+    expect(support_provider_show_page).to have_text('Provider 2')
+    expect(support_provider_show_page).to have_text('No')
+    expect(support_provider_show_page).to have_text('Lead school')
   end
 
   def when_i_fill_in_an_invalid_provider_name

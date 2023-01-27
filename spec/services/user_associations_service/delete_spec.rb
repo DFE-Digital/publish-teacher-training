@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycles: false } do
   let(:user) { create(:user) }
@@ -13,7 +15,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       user:,
       provider: accredited_body1,
       course_publish: true,
-      course_update: true,
+      course_update: true
     )
   end
 
@@ -23,7 +25,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       user:,
       provider: accredited_body2,
       course_publish: true,
-      course_update: true,
+      course_update: true
     )
   end
 
@@ -34,12 +36,12 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
     allow(action_mailer).to receive(:deliver_later)
   end
 
-  describe "#call" do
-    context "when removing access to a single provider" do
+  describe '#call' do
+    context 'when removing access to a single provider' do
       subject do
         described_class.call(
           user:,
-          providers: accredited_body1,
+          providers: accredited_body1
         )
       end
 
@@ -48,19 +50,19 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
         accredited_body2
       end
 
-      context "when user have saved notification preferences" do
+      context 'when user have saved notification preferences' do
         before do
           user_notification1
           user_notification2
         end
 
-        it "sends the email to the user" do
+        it 'sends the email to the user' do
           subject
           expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body1))
           expect(action_mailer).to have_received(:deliver_later)
         end
 
-        it "removes user_permissions association" do
+        it 'removes user_permissions association' do
           subject
 
           accredited_body1.reload
@@ -68,7 +70,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
           expect(user.providers).not_to include(accredited_body1)
         end
 
-        it "removes user_notifications association for providers within the provider" do
+        it 'removes user_notifications association for providers within the provider' do
           subject
 
           expect(UserNotification.where(user_id: user.id).count).to eq(1)
@@ -76,8 +78,8 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
         end
       end
 
-      context "when user has never set notification preferences" do
-        it "removes organisation_users association" do
+      context 'when user has never set notification preferences' do
+        it 'removes organisation_users association' do
           subject
 
           accredited_body1.reload
@@ -92,10 +94,10 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
         end
       end
 
-      context "during rollover", { can_edit_current_and_next_cycles: true } do
-        let(:next_accredited_body1) { create(:provider, :accredited_body, :next_recruitment_cycle, provider_code: "AAA") }
+      context 'during rollover', { can_edit_current_and_next_cycles: true } do
+        let(:next_accredited_body1) { create(:provider, :accredited_body, :next_recruitment_cycle, provider_code: 'AAA') }
 
-        it "removes user_permissions association in both cycles" do
+        it 'removes user_permissions association in both cycles' do
           subject
           accredited_body1.reload
           expect(accredited_body1.users).not_to include(user)
@@ -106,11 +108,11 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
       end
     end
 
-    context "when removing access to multiple organsations" do
+    context 'when removing access to multiple organsations' do
       subject do
         described_class.call(
           user:,
-          providers: [accredited_body1, accredited_body2],
+          providers: [accredited_body1, accredited_body2]
         )
       end
 
@@ -127,18 +129,18 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
           user:,
           provider: accredited_body3,
           course_publish: true,
-          course_update: true,
+          course_update: true
         )
       end
 
-      it "sends the emails to the user" do
+      it 'sends the emails to the user' do
         subject
         expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body1))
         expect(RemoveUserFromOrganisationMailer).to have_received(:remove_user_from_provider_email).with(hash_including(recipient: user, provider: accredited_body2))
         expect(action_mailer).to have_received(:deliver_later).twice
       end
 
-      context "when user have saved notification preferences" do
+      context 'when user have saved notification preferences' do
         before do
           accredited_body3
 
@@ -147,7 +149,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
           user_notification3
         end
 
-        it "removes user_permissions associations" do
+        it 'removes user_permissions associations' do
           subject
 
           expect(user.providers).not_to include(accredited_body1, accredited_body2)
@@ -157,7 +159,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
           expect(accredited_body2.users).not_to include(user)
         end
 
-        it "removes user_notifications only for providers within the removed organisations" do
+        it 'removes user_notifications only for providers within the removed organisations' do
           subject
 
           expect(UserNotification.where(user_id: user.id).count).to eq(1)

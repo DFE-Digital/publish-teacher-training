@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Filters
   module UserAttributes
     class View < ViewComponent::Base

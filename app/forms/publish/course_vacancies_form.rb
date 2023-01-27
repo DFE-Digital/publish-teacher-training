@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class CourseVacanciesForm < BaseCourseForm
     FIELDS = %i[
@@ -26,7 +28,7 @@ module Publish
     def after_successful_save_action
       NotificationService::CourseVacanciesUpdated.call(
         course:,
-        vacancy_statuses:,
+        vacancy_statuses:
       )
     end
 
@@ -35,15 +37,15 @@ module Publish
         statuses_attributes.values.map do |value|
           {
             id: value[:id],
-            status: value[:vac_status],
+            status: value[:vac_status]
           }
         end
       else
         [
           {
             id: statuses_attributes[:id],
-            status: statuses_attributes[:vac_status],
-          },
+            status: statuses_attributes[:vac_status]
+          }
         ]
       end
     end
@@ -107,20 +109,20 @@ module Publish
     def single_site_status_vacancy
       case params[:change_vacancies_confirmation]
 
-      when "no_vacancies_confirmation"
-        "no_vacancies"
-      when "has_vacancies_confirmation"
-        course.full_time? ? "full_time_vacancies" : "part_time_vacancies"
+      when 'no_vacancies_confirmation'
+        'no_vacancies'
+      when 'has_vacancies_confirmation'
+        course.full_time? ? 'full_time_vacancies' : 'part_time_vacancies'
       end
     end
 
     def site_status_vacancy(site_status_params)
-      return "no_vacancies" if params[:has_vacancies] == "false"
+      return 'no_vacancies' if params[:has_vacancies] == 'false'
 
       VacancyStatusDeterminationService.call(
         vacancy_status_full_time: site_status_params[:full_time],
         vacancy_status_part_time: site_status_params[:part_time],
-        course:,
+        course:
       )
     end
   end

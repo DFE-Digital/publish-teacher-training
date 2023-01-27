@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Style/ClassVars
 class TestDataCache
   #  A helper class for pre-creating test data with FactoryBot factories
@@ -62,7 +64,7 @@ class TestDataCache
                                  end,
         %i[resulting_in_pgde] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgde)
-                                 end,
+                                 end
       }
     end
 
@@ -76,7 +78,7 @@ class TestDataCache
 
     def raise_model_error(name, traits)
       raise(
-        <<~ERR_MSG,
+        <<~ERR_MSG
           Unknown model type '#{name}' for traits '#{traits}'.
           You need to add '#{name}' to TestSetup or use a standard FactoryBot factory.
         ERR_MSG
@@ -85,7 +87,7 @@ class TestDataCache
 
     def raise_trait_error(factory_type, traits)
       raise(
-        <<~ERR_MSG,
+        <<~ERR_MSG
           No predefined #{factory_type} for these traits: #{traits}.
           Either add it to test_setup.rb or if it's used frequently, just create
           a FactoryBot factory instance.

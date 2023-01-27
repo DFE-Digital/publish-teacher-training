@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
@@ -34,7 +36,7 @@ module API
             end
 
             def include_param
-              params.fetch(:include, "")
+              params.fetch(:include, '')
             end
           end
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UniqueCourseValidator < ActiveModel::Validator
   def validate(record)
     return if course_is_unique?(record)

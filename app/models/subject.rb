@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Subject < ApplicationRecord
   has_many :course_subjects
   has_many :courses, through: :course_subjects
@@ -8,10 +10,10 @@ class Subject < ApplicationRecord
     where(subject_code: subject_codes)
   }
 
-  scope :active, -> { where.not(type: "DiscontinuedSubject") }
+  scope :active, -> { where.not(type: 'DiscontinuedSubject') }
 
   def secondary_subject?
-    type == "SecondarySubject"
+    type == 'SecondarySubject'
   end
 
   def to_sym

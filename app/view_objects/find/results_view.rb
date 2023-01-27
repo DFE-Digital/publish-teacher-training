@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   # FIND:TODO need to prune unused methods etc.
   class ResultsView
@@ -5,15 +7,15 @@ module Find
 
     include ActionView::Helpers::NumberHelper
 
-    DISTANCE = "distance".freeze
-    MILES = "50".freeze
+    DISTANCE = 'distance'
+    MILES = '50'
 
     def initialize(query_parameters:)
       @query_parameters = query_parameters
     end
 
     def query_parameters_with_defaults
-      query_parameters.except("utf8", "authenticity_token")
+      query_parameters.except('utf8', 'authenticity_token')
         .merge(qualifications_parameters)
         .merge(study_type_parameters)
         .merge(has_vacancies_parameters)
@@ -24,17 +26,17 @@ module Find
     def courses
       @courses ||= ::CourseSearchService.call(
         filter: query_parameters,
-        sort: query_parameters[:sortby] || "course_asc",
-        course_scope:,
+        sort: query_parameters[:sortby] || 'course_asc',
+        course_scope:
       )
     end
 
     def number_of_courses_string
       case course_count
       when 0
-        "No courses"
+        'No courses'
       when 1
-        "1 course"
+        '1 course'
       else
         "#{number_with_delimiter(course_count)} courses"
       end
@@ -49,38 +51,38 @@ module Find
     end
 
     def qualifications_parameters
-      { "qualification" => query_parameters["qualification"].presence || ["qts", "pgce_with_qts", "pgce pgde"] }
+      { 'qualification' => query_parameters['qualification'].presence || ['qts', 'pgce_with_qts', 'pgce pgde'] }
     end
 
     def study_type_parameters
-      { "study_type" => query_parameters["study_type"].presence || %w[full_time part_time] }
+      { 'study_type' => query_parameters['study_type'].presence || %w[full_time part_time] }
     end
 
     def has_vacancies_parameters
-      { "has_vacancies" => has_vacancies? }
+      { 'has_vacancies' => has_vacancies? }
     end
 
     def sen_courses_parameters
-      { "send_courses" => sen_courses? }
+      { 'send_courses' => sen_courses? }
     end
 
     def has_vacancies?
-      return true if query_parameters["has_vacancies"].nil?
+      return true if query_parameters['has_vacancies'].nil?
 
-      query_parameters["has_vacancies"] == "true"
+      query_parameters['has_vacancies'] == 'true'
     end
 
     def sen_courses?
-      query_parameters["send_courses"] == "true"
+      query_parameters['send_courses'] == 'true'
     end
 
     # FIND:TODO double check
     def subject_parameters
-      query_parameters["subjects"].present? ? { "subjects" => query_parameters["subjects"].presence } : {}
+      query_parameters['subjects'].present? ? { 'subjects' => query_parameters['subjects'].presence } : {}
     end
 
     def subject_codes
-      query_parameters["subjects"] || []
+      query_parameters['subjects'] || []
     end
 
     def filtered_subjects
@@ -88,27 +90,27 @@ module Find
     end
 
     def provider
-      query_parameters["provider.provider_name"]
+      query_parameters['provider.provider_name']
     end
 
     def location
-      query_parameters["loc"] || "Across England"
+      query_parameters['loc'] || 'Across England'
     end
 
     def location_filter?
-      query_parameters["l"] == "1"
+      query_parameters['l'] == '1'
     end
 
     def england_filter?
-      query_parameters["l"] == "2"
+      query_parameters['l'] == '2'
     end
 
     def provider_filter?
-      query_parameters["l"] == "3"
+      query_parameters['l'] == '3'
     end
 
     def location_search
-      query_parameters["lq"]
+      query_parameters['lq']
     end
 
     def filter_params_for(path)
@@ -124,7 +126,7 @@ module Find
     end
 
     def country
-      query_parameters["c"]
+      query_parameters['c']
     end
 
     def no_results_found?
@@ -137,10 +139,10 @@ module Find
 
     def sort_options
       [
-        ["Course name (A-Z)", "course_asc", { "data-qa": "sort-form__options__ascending_course" }],
-        ["Course name (Z-A)", "course_desc", { "data-qa": "sort-form__options__descending_course" }],
-        ["Training provider (A-Z)", "provider_asc", { "data-qa": "sort-form__options__ascending_provider" }],
-        ["Training provider (Z-A)", "provider_desc", { "data-qa": "sort-form__options__descending_provider" }],
+        ['Course name (A-Z)', 'course_asc', { 'data-qa': 'sort-form__options__ascending_course' }],
+        ['Course name (Z-A)', 'course_desc', { 'data-qa': 'sort-form__options__descending_course' }],
+        ['Training provider (A-Z)', 'provider_asc', { 'data-qa': 'sort-form__options__ascending_provider' }],
+        ['Training provider (Z-A)', 'provider_desc', { 'data-qa': 'sort-form__options__descending_provider' }]
       ]
     end
 
@@ -160,8 +162,8 @@ module Find
         nearest_address.address2,
         nearest_address.address3,
         nearest_address.address4,
-        nearest_address.postcode,
-      ].select(&:present?).join(", ").html_safe
+        nearest_address.postcode
+      ].select(&:present?).join(', ').html_safe
     end
 
     def nearest_location_name(course)
@@ -185,18 +187,18 @@ module Find
     end
 
     def with_salaries?
-      query_parameters["funding"] == "salary"
+      query_parameters['funding'] == 'salary'
     end
 
     def placement_schools_summary(course)
       site_distance = site_distance(course)
 
       if site_distance < 11
-        "Placement schools are near you"
+        'Placement schools are near you'
       elsif site_distance < 21
-        "Placement schools might be near you"
+        'Placement schools might be near you'
       else
-        "Placement schools might be in commuting distance"
+        'Placement schools might be in commuting distance'
       end
     end
 
@@ -211,11 +213,11 @@ module Find
   private
 
     def latitude
-      query_parameters["latitude"]
+      query_parameters['latitude']
     end
 
     def longitude
-      query_parameters["longitude"]
+      query_parameters['longitude']
     end
 
     def lat_long
@@ -229,7 +231,7 @@ module Find
     end
 
     def stripped_devolved_nation_params(path)
-      parameters = query_parameters_with_defaults.except("c", "latitude", "long", "loc", "lq", "l")
+      parameters = query_parameters_with_defaults.except('c', 'latitude', 'long', 'loc', 'lq', 'l')
       filter_params_with_unescaped_commas(path, parameters:)
     end
 

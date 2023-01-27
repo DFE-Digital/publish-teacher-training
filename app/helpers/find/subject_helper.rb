@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module SubjectHelper
     def primary_subject_options(subjects = primary_subjects)
@@ -29,7 +31,7 @@ module Find
     PrimarySubjectInput = Struct.new(:code, :name)
 
     def primary_subjects
-      Subject.where(type: "PrimarySubject")
+      Subject.where(type: 'PrimarySubject')
              .order(:subject_name)
     end
 
@@ -38,7 +40,7 @@ module Find
     def secondary_subjects
       Subject.includes(:financial_incentive)
              .where(type: %w[SecondarySubject ModernLanguagesSubject])
-             .where.not(subject_name: ["Modern Languages"])
+             .where.not(subject_name: ['Modern Languages'])
              .order(:subject_name)
     end
   end

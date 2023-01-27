@@ -3,14 +3,14 @@
 module PageObjects
   module Find
     class AgeGroups < PageObjects::Base
-      set_url "/age-groups"
+      set_url '/age-groups'
 
-      element :heading, "h1"
+      element :heading, 'h1'
 
-      element :primary, "#find-age-groups-form-age-group-primary-field"
-      element :secondary, "#find-age-groups-form-age-group-secondary-field"
-      element :further_education, "#find-age-groups-form-age-group-further-education-field"
-      element :continue, "form .govuk-button"
+      element :primary, '#find-age-groups-form-age-group-primary-field'
+      element :secondary, '#find-age-groups-form-age-group-secondary-field'
+      element :further_education, '#find-age-groups-form-age-group-further-education-field'
+      element :continue, 'form .govuk-button'
     end
   end
 end

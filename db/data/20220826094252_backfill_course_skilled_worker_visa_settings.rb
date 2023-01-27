@@ -3,7 +3,7 @@
 class BackfillCourseSkilledWorkerVisaSettings < ActiveRecord::Migration[7.0]
   def up
     Course.where(
-      provider: Provider.where(can_sponsor_skilled_worker_visa: true),
+      provider: Provider.where(can_sponsor_skilled_worker_visa: true)
     ).update_all(can_sponsor_skilled_worker_visa: true)
   end
 

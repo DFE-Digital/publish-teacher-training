@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class AccessRequest < ApplicationRecord
   include Discard::Model
   default_scope -> { kept }
 
-  belongs_to :requester, class_name: "User"
+  belongs_to :requester, class_name: 'User'
 
   enum status: %i[
     requested
@@ -23,7 +25,7 @@ class AccessRequest < ApplicationRecord
       status: :requested)
   end
 
-  alias_method :approve, :completed!
+  alias approve completed!
 
   validates :first_name, :last_name, :email_address,
     :organisation, :reason, :requester_email,

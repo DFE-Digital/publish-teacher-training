@@ -13,7 +13,7 @@
             <li data-error-message="<%= message %>">
               <a href="<%= provider_enrichment_error_url(
                 provider: @provider,
-                field: id,
+                field: id
               ) %>"><%= message %></a>
             </li>
           <% end %>
@@ -37,7 +37,7 @@
         @provider.train_with_us,
         %w[train_with_us],
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
-        action_visually_hidden_text: "details about training with your organisation",
+        action_visually_hidden_text: "details about training with your organisation"
       ) %>
       <% if @provider.accredited_bodies.present? %>
         <% @provider.accredited_bodies.each do |accredited_provider| %>
@@ -48,7 +48,7 @@
             accredited_provider[:description],
             ["accrediting_provider_#{accredited_provider[:provider_code]}"],
             action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#accrediting-provider-#{accredited_provider[:provider_code]}",
-            action_visually_hidden_text: "details about #{accredited_provider[:provider_name]}",
+            action_visually_hidden_text: "details about #{accredited_provider[:provider_name]}"
           ) %>
         <% end %>
       <% end %>
@@ -60,7 +60,7 @@
         @provider.train_with_disability,
         %w[train_with_disability],
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-disability",
-        action_visually_hidden_text: "details about training with disabilities and other needs",
+        action_visually_hidden_text: "details about training with disabilities and other needs"
       ) %>
     <% end %>
 
@@ -75,7 +75,7 @@
              %w[can_sponsor_student_visa],
              truncate_value: false,
              action_path: @provider.university? ? student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) : nil,
-             action_visually_hidden_text: "if candidates can get Student visa sponsorship",
+             action_visually_hidden_text: "if candidates can get Student visa sponsorship"
            ) %>
 
         <% enrichment_summary(
@@ -86,7 +86,7 @@
              %w[can_sponsor_skilled_worker_visa],
              truncate_value: false,
              action_path: skilled_worker_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
-             action_visually_hidden_text: "if candidates can get Skilled Worker visa sponsorship",
+             action_visually_hidden_text: "if candidates can get Skilled Worker visa sponsorship"
            ) %>
       <% end %>
     <% end %>
@@ -100,7 +100,7 @@
         @provider.email,
         %w[email],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#email",
-        action_visually_hidden_text: "email address",
+        action_visually_hidden_text: "email address"
       ) %>
 
       <% enrichment_summary(
@@ -110,7 +110,7 @@
         @provider.telephone,
         %w[telephone],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#telephone",
-        action_visually_hidden_text: "telephone number",
+        action_visually_hidden_text: "telephone number"
       ) %>
 
       <% enrichment_summary(
@@ -120,7 +120,7 @@
         @provider.website,
         %w[website],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#website",
-        action_visually_hidden_text: "website",
+        action_visually_hidden_text: "website"
       ) %>
 
       <% enrichment_summary(
@@ -130,7 +130,7 @@
         @provider.ukprn,
         %w[ukprn],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#ukprn",
-        action_visually_hidden_text: "UKPRN",
+        action_visually_hidden_text: "UKPRN"
       ) %>
 
       <% if @provider.provider_type == "lead_school" %>
@@ -141,7 +141,7 @@
           @provider.urn,
           %w[urn],
           action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#urn",
-          action_visually_hidden_text: "URN",
+          action_visually_hidden_text: "URN"
         ) %>
       <% end %>
 
@@ -152,7 +152,7 @@
         @provider.full_address_with_breaks,
         %w[address1 address2 address3 address4 postcode],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#address",
-        action_visually_hidden_text: "contact address",
+        action_visually_hidden_text: "contact address"
       ) %>
     <% end %>
   </div>

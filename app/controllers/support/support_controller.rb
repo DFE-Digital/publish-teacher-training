@@ -1,19 +1,19 @@
+# frozen_string_literal: true
+
 module Support
   class SupportController < ApplicationController
-    layout "support"
+    layout 'support'
     before_action :check_user_is_admin
 
     # DFE Analytics namespace
     def current_namespace
-      "support"
+      'support'
     end
 
   private
 
     def check_user_is_admin
-      if !current_user.admin?
-        render "errors/forbidden", status: :forbidden, formats: :html
-      end
+      render 'errors/forbidden', status: :forbidden, formats: :html unless current_user.admin?
     end
 
     def recruitment_cycle

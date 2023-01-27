@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_courses do |*expected_courses|
   expected_courses = expected_courses.flatten
   def course_codes(server_response_body)
     json = JSON.parse(server_response_body)
-    json.map { |course| course["course_code"] }
+    json.map { |course| course['course_code'] }
   end
 
   match do |server_response_body|

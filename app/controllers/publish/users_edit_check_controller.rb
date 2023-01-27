@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class UsersEditCheckController < PublishController
     before_action :authorize_provider
@@ -8,11 +10,11 @@ module Publish
 
     def update
       @user_form = UserForm.new(current_user, user)
-      if @user_form.save!
-        UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
-        redirect_to publish_provider_user_path(id: params[:user_id])
-        flash[:success] = "User updated"
-      end
+      return unless @user_form.save!
+
+      UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
+      redirect_to publish_provider_user_path(id: params[:user_id])
+      flash[:success] = 'User updated'
     end
 
   private

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :organisation_user_migrate do
   task migrate_organisation_user_to_user_permission: :environment do
     total_bm = Benchmark.measure do
@@ -8,7 +10,7 @@ namespace :organisation_user_migrate do
               user_id: organisation_user.user.id,
               provider_id: id,
               updated_at: Time.current,
-              created_at: Time.current,
+              created_at: Time.current
             }
           end
         end, unique_by: :index_user_permission_on_user_id_and_provider_id

@@ -11,7 +11,7 @@
       model: @provider_student_visa_form,
       url: student_visa_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :put,
-      local: true,
+      local: true
     ) do |f| %>
 
       <%= f.govuk_error_summary %>

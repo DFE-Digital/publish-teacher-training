@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecruitmentCyclePolicy
   attr_reader :user, :recruitment_cycle
 

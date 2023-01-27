@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Publish
   class AboutYourOrganisationForm < BaseProviderForm
-    validates :train_with_us, presence: { message: "Enter details about training with you" }, if: :train_with_us_changed?
-    validates :train_with_disability, presence: { message: "Enter details about training with a disability" }, if: :train_with_disability_changed?
+    validates :train_with_us, presence: { message: 'Enter details about training with you' }, if: :train_with_us_changed?
+    validates :train_with_disability, presence: { message: 'Enter details about training with a disability' }, if: :train_with_disability_changed?
 
-    validates :train_with_us, words_count: { maximum: 250, message: "Reduce the word count for training with you" }
-    validates :train_with_disability, words_count: { maximum: 250, message: "Reduce the word count for training with disabilities and other needs" }
+    validates :train_with_us, words_count: { maximum: 250, message: 'Reduce the word count for training with you' }
+    validates :train_with_disability, words_count: { maximum: 250, message: 'Reduce the word count for training with disabilities and other needs' }
 
     validate :add_enrichment_errors
 
@@ -40,7 +42,7 @@ module Publish
       AccreditedBody.new(
         provider_name:,
         provider_code:,
-        description: params_description(provider_code) || description,
+        description: params_description(provider_code) || description
       )
     end
 
@@ -52,7 +54,7 @@ module Publish
       accredited_bodies.map do |accredited_body|
         {
           UcasProviderCode: accredited_body.provider_code,
-          Description: accredited_body.description,
+          Description: accredited_body.description
         }
       end
     end
@@ -67,9 +69,7 @@ module Publish
 
     def add_enrichment_errors
       accredited_bodies&.each_with_index do |accredited_body, _index|
-        if accredited_body.invalid?
-          errors.add :accredited_bodies, accredited_body.errors[:description].first
-        end
+        errors.add :accredited_bodies, accredited_body.errors[:description].first if accredited_body.invalid?
       end
     end
 

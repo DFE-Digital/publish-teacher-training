@@ -1,26 +1,28 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "selecting an age range", { can_edit_current_and_next_cycles: false } do
+require 'rails_helper'
+
+feature 'selecting an age range', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "selecting an age range" do
+  scenario 'selecting an age range' do
     when_i_visit_the_new_age_range_page
     when_i_select_an_age_range
     and_i_click_continue
-    then_i_am_met_with_the_course_outcome_page("3_to_7")
+    then_i_am_met_with_the_course_outcome_page('3_to_7')
   end
 
-  scenario "creating a custom age range" do
+  scenario 'creating a custom age range' do
     when_i_visit_the_new_age_range_page
     when_i_select_another_age_range
     and_fill_out_custom_values
     and_i_click_continue
-    then_i_am_met_with_the_course_outcome_page("6_to_12")
+    then_i_am_met_with_the_course_outcome_page('6_to_12')
   end
 
-  scenario "invalid entries" do
+  scenario 'invalid entries' do
     when_i_visit_the_new_age_range_page
 
     and_i_click_continue
@@ -47,8 +49,8 @@ private
   end
 
   def and_fill_out_custom_values
-    new_age_range_page.age_range_from_field.set("6")
-    new_age_range_page.age_range_to_field.set("12")
+    new_age_range_page.age_range_from_field.set('6')
+    new_age_range_page.age_range_to_field.set('12')
   end
 
   def and_i_click_continue
@@ -61,12 +63,12 @@ private
 
   def then_i_am_met_with_the_course_outcome_page(age_range)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/outcome/new#{selected_params(age_range)}")
-    expect(page).to have_content("Pick a course outcome")
+    expect(page).to have_content('Pick a course outcome')
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select an age range")
+    expect(page).to have_content('There is a problem')
+    expect(page).to have_content('Select an age range')
   end
 
   def selected_params(age_range)

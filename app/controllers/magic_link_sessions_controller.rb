@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class MagicLinkSessionsController < ApplicationController
-  layout "application"
+  layout 'application'
 
   skip_before_action :authenticate
 
@@ -26,9 +28,9 @@ private
 
     redirect_to root_path, flash: {
       error: {
-        id: "publish-authentication-magic-link-form-email-field",
-        message: t("publish_authentication.magic_link.invalid_token"),
-      },
+        id: 'publish-authentication-magic-link-form-email-field',
+        message: t('publish_authentication.magic_link.invalid_token')
+      }
     }
   end
 
@@ -37,9 +39,9 @@ private
 
     redirect_to root_path, flash: {
       error: {
-        id: "publish-authentication-magic-link-form-email-field",
-        message: t("publish_authentication.magic_link.expired"),
-      },
+        id: 'publish-authentication-magic-link-form-email-field',
+        message: t('publish_authentication.magic_link.expired')
+      }
     }
   end
 
@@ -57,16 +59,16 @@ private
     user.update!(
       last_login_date_utc: Time.now.utc,
       magic_link_token: nil,
-      magic_link_token_sent_at: nil,
+      magic_link_token_sent_at: nil
     )
   end
 
   def set_user_session
-    session["user"] = {
-      "email" => user.email,
-      "first_name" => user.first_name,
-      "last_name" => user.last_name,
-      "last_active_at" => Time.zone.now,
+    session['user'] = {
+      'email' => user.email,
+      'first_name' => user.first_name,
+      'last_name' => user.last_name,
+      'last_active_at' => Time.zone.now
     }
   end
 

@@ -5,8 +5,8 @@
     text: "Back",
     href: find_root_path(@backlink_query_parameters),
     html_attributes: {
-      data: { qa: "page-back" },
-    },
+      data: { qa: "page-back" }
+    }
   ) %>
 <% end %>
 
@@ -19,7 +19,7 @@
         query_params: request.query_parameters,
         form: f,
         form_name: :find_age_groups_form,
-        exclude_keys: ["age_group"],
+        exclude_keys: ["age_group"]
       ) %>
 
       <%= f.govuk_radio_buttons_fieldset :age_group, legend: { text: I18n.t("find.age_groups.title"), size: "l", tag: "h1" } do %>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RegionCode
   extend ActiveSupport::Concern
   included do
@@ -16,7 +18,7 @@ module RegionCode
       north_west: 8,
       yorkshire_and_the_humber: 9,
       north_east: 10,
-      scotland: 11,
+      scotland: 11
     }
   end
 end

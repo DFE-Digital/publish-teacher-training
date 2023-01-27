@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProviderReportingService
   def initialize(providers_scope: Provider)
     @providers = providers_scope.distinct
@@ -19,17 +21,17 @@ class ProviderReportingService
       total: {
         all: @providers.count,
         non_training_providers: @providers.count - @training_providers.count,
-        training_providers: @training_providers.count,
+        training_providers: @training_providers.count
       },
       training_providers: {
         findable_total: {
           open: @open_providers.count,
-          closed: @closed_providers.count,
+          closed: @closed_providers.count
         },
         accredited_body: { **group_by_count(:accrediting_provider) },
         provider_type: { **group_by_count(:provider_type) },
-        region_code: { **group_by_count(:region_code) },
-      },
+        region_code: { **group_by_count(:region_code) }
+      }
     }
   end
 
@@ -42,16 +44,16 @@ private
     closed = @closed_providers.group(column).count
 
     {
-      open: Provider.send(column.to_s.pluralize).map { |key, _value|
+      open: Provider.send(column.to_s.pluralize).map do |key, _value|
               x = {}
               x[key.to_sym] = open[key] || 0
               x
-            } .reduce({}, :merge),
-      closed: Provider.send(column.to_s.pluralize).map { |key, _value|
+            end .reduce({}, :merge),
+      closed: Provider.send(column.to_s.pluralize).map do |key, _value|
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
-              } .reduce({}, :merge),
+              end .reduce({}, :merge)
     }
   end
 end

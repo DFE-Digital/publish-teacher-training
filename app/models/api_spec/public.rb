@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APISpec
   # Define the version and location of our public spec.
   class Public
@@ -10,7 +12,7 @@ module APISpec
       end
 
       def openapi_file_path
-        "swagger/v%{version}/swagger.json"
+        'swagger/v%<version>s/swagger.json'
       end
     end
   end

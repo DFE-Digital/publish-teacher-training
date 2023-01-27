@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class ApplicationsOpenController < PublishController
@@ -33,7 +35,7 @@ module Publish
             :skip_languages_goto_confirmation,
             :accredited_body_code,
             :campaign_name,
-            :master_subject_id,
+            :master_subject_id
           )
           .permit(
             :start_date,
@@ -42,7 +44,7 @@ module Publish
             :month,
             :year,
             :can_sponsor_student_visa,
-            :can_sponsor_skilled_worker_visa,
+            :can_sponsor_skilled_worker_visa
           )
       end
 
@@ -51,12 +53,12 @@ module Publish
       def build_course_params
         if params.key?(:course)
           applications_open_from =
-            if actual_params["applications_open_from"] == "other"
+            if actual_params['applications_open_from'] == 'other'
               "#{actual_params['year']}-#{actual_params['month']}-#{actual_params['day']}"
             else
-              actual_params["applications_open_from"]
+              actual_params['applications_open_from']
             end
-          params["course"]["applications_open_from"] = applications_open_from
+          params['course']['applications_open_from'] = applications_open_from
         else
           ActionController::Parameters.new({}).permit
         end
@@ -65,7 +67,7 @@ module Publish
       def build_recruitment_cycle
         cycle_year = params.fetch(
           :recruitment_cycle_year,
-          Settings.current_recruitment_cycle_year,
+          Settings.current_recruitment_cycle_year
         )
 
         @recruitment_cycle = RecruitmentCycle.find_by(year: cycle_year)

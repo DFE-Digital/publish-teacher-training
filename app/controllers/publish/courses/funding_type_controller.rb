@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class FundingTypeController < PublishController
@@ -67,7 +69,7 @@ module Publish
         {
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
-          course_code: course.course_code,
+          course_code: course.course_code
         }
       end
 
@@ -76,7 +78,7 @@ module Publish
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            course_values,
+            course_values
           )
         end
       end

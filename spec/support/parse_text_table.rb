@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Issues to be mindful of when using this function
 # It is coupled to the border styling
 # All whitespace is discarded
@@ -30,12 +32,12 @@ def parse_text_table(text_table)
 
     group.each do |row|
       row.each_with_index do |cell, index|
-        real_rows.last[index] = "" if real_rows.last[index].nil?
+        real_rows.last[index] = '' if real_rows.last[index].nil?
         real_rows.last[index] += cell
       end
 
       real_rows.last.map! do |cell|
-        cell.gsub(/\s/, "")
+        cell.gsub(/\s/, '')
       end
     end
   end
@@ -49,7 +51,7 @@ def parse_cells(text_table)
 end
 
 def is_a_row_delimeter?(row)
-  contains_only_dashes = /^\-+$/
+  contains_only_dashes = /^-+$/
   row.join.match?(contains_only_dashes)
 end
 

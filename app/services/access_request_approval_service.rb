@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccessRequestApprovalService
   def self.call(access_request)
     new(access_request).call

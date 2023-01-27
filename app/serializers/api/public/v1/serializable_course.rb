@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
       class SerializableCourse < JSONAPI::Serializable::Resource
         COURSE_STATE_MAPPING = {
-          published_with_unpublished_changes: :published,
+          published_with_unpublished_changes: :published
         }.freeze
 
         class << self
@@ -14,7 +16,7 @@ module API
           end
         end
 
-        type "courses"
+        type 'courses'
 
         belongs_to :accredited_body do
           data { @object.accrediting_provider }
@@ -115,7 +117,7 @@ module API
         end
 
         attribute :start_date do
-          @object.start_date&.strftime("%B %Y")
+          @object.start_date&.strftime('%B %Y')
         end
 
         attribute :state do

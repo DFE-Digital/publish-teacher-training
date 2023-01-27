@@ -81,6 +81,6 @@ private
   end
 
   def form_store_key
-    self.class.name.underscore.chomp("_form").split("/").last.to_sym
+    self.class.name.underscore.chomp('_form').split('/').last.to_sym
   end
 end

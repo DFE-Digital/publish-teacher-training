@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSearchService
   include ServicePattern
 
@@ -37,7 +39,7 @@ class CourseSearchService
       :financial_incentives,
       course_subjects: [:subject],
       site_statuses: [:site],
-      provider: %i[recruitment_cycle ucas_preferences],
+      provider: %i[recruitment_cycle ucas_preferences]
     ).where(id: scope.select(:id))
 
     if provider_name.present?
@@ -46,10 +48,10 @@ class CourseSearchService
                       .ascending_provider_canonical_order
     elsif sort_by_provider_ascending?
       outer_scope = outer_scope.ascending_provider_canonical_order
-      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.select('provider.provider_name', 'course.*')
     elsif sort_by_provider_descending?
       outer_scope = outer_scope.descending_provider_canonical_order
-      outer_scope = outer_scope.select("provider.provider_name", "course.*")
+      outer_scope = outer_scope.select('provider.provider_name', 'course.*')
     elsif sort_by_course_ascending?
       outer_scope = outer_scope.ascending_course_canonical_order
     elsif sort_by_course_descending?
@@ -75,13 +77,13 @@ class CourseSearchService
 private
 
   def expand_university?
-    filter[:expand_university].to_s.downcase == "true"
+    filter[:expand_university].to_s.downcase == 'true'
   end
 
   def distance_with_university_area_adjustment
     university_provider_type = Provider.provider_types[:university]
     university_location_area_radius = 10
-    <<~EOSQL.gsub(/\s+/m, " ").strip
+    <<~EOSQL.gsub(/\s+/m, ' ').strip
       (CASE
         WHEN provider.provider_type = '#{university_provider_type}'
           THEN (distance - #{university_location_area_radius})
@@ -112,7 +114,7 @@ private
         .eq_any([
           SiteStatus.vac_statuses[:full_time_vacancies],
           SiteStatus.vac_statuses[:part_time_vacancies],
-          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
+          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies]
         ])
     else
       running_and_published_criteria
@@ -129,7 +131,7 @@ private
     # there are some sites with no address1 or postcode that cannot be
     # accurately geocoded. We don't want to return these as the closest site.
     # This should be removed once the data is fixed
-    sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
+    sites[:address1].not_eq('').or(sites[:postcode].not_eq(''))
   end
 
   def course_id_with_lowest_locatable_distance
@@ -145,8 +147,8 @@ private
     # form a temporary table with results
     Arel::Nodes::TableAlias.new(
       Arel.sql(
-        format("(%s)", course_id_with_lowest_locatable_distance.to_sql),
-      ), "distances"
+        format('(%s)', course_id_with_lowest_locatable_distance.to_sql)
+      ), 'distances'
     )
   end
 
@@ -165,23 +167,23 @@ private
   end
 
   def sort_by_course_ascending?
-    sort == "course_asc" || course_asc_requirement
+    sort == 'course_asc' || course_asc_requirement
   end
 
   def sort_by_course_descending?
-    sort == "course_desc" || course_desc_requirement
+    sort == 'course_desc' || course_desc_requirement
   end
 
   def sort_by_provider_ascending?
-    sort == "provider_asc" || provider_asc_requirement
+    sort == 'provider_asc' || provider_asc_requirement
   end
 
   def sort_by_provider_descending?
-    sort == "provider_desc" || provider_desc_requirement
+    sort == 'provider_desc' || provider_desc_requirement
   end
 
   def sort_by_distance?
-    sort == "distance"
+    sort == 'distance'
   end
 
   def origin
@@ -191,30 +193,28 @@ private
   attr_reader :sort, :filter, :course_scope
 
   def funding_filter_salary?
-    filter[:funding] == "salary"
+    filter[:funding] == 'salary'
   end
 
   def qualifications
     return [] if filter[:qualification].blank?
 
-    if filter[:qualification].include?("pgce pgde")
-      filter[:qualification] -= ["pgce pgde"]
+    if filter[:qualification].include?('pgce pgde')
+      filter[:qualification] -= ['pgce pgde']
       filter[:qualification] |= %w[pgce pgde]
     end
 
-    if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
-      filter[:qualification] |= %w[pgde_with_qts]
-    end
+    filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?('pgce_with_qts')
 
-    filter[:qualification].split(",")
+    filter[:qualification].split(',')
   end
 
   def has_vacancies?
-    filter[:has_vacancies].to_s.downcase == "true"
+    filter[:has_vacancies].to_s.downcase == 'true'
   end
 
   def findable?
-    filter[:findable].to_s.downcase == "true"
+    filter[:findable].to_s.downcase == 'true'
   end
 
   def study_types
@@ -222,13 +222,13 @@ private
     return [] if filter[:study_type].blank?
     return filter[:study_type] if filter[:study_type].is_a? Array
 
-    filter[:study_type].split(",")
+    filter[:study_type].split(',')
   end
 
   def funding_types
     return [] if filter[:funding_type].blank?
 
-    filter[:funding_type].split(",")
+    filter[:funding_type].split(',')
   end
 
   def degrees_accepted?
@@ -236,42 +236,42 @@ private
   end
 
   def degree_grades_accepted
-    return [] if !degrees_accepted?
+    return [] unless degrees_accepted?
 
     degree_required_parameter = filter[:degree_required].to_sym
 
     accepted_degrees = {
-      show_all_courses: "two_one,two_two,third_class,not_required",
-      two_two: "two_two,third_class,not_required",
-      third_class: "third_class,not_required",
-      not_required: "not_required",
+      show_all_courses: 'two_one,two_two,third_class,not_required',
+      two_two: 'two_two,third_class,not_required',
+      third_class: 'third_class,not_required',
+      not_required: 'not_required'
     }
 
-    accepted_degrees[degree_required_parameter].split(",")
+    accepted_degrees[degree_required_parameter].split(',')
   end
 
   def degree_grades
     return [] if filter[:degree_grade].blank?
     return [] unless filter[:degree_grade].is_a?(String)
 
-    filter[:degree_grade].split(",")
+    filter[:degree_grade].split(',')
   end
 
   def subject_codes
     return [] if filter[:subjects].blank?
     return filter[:subjects] if filter[:subjects].is_a? Array
 
-    filter[:subjects].split(",")
+    filter[:subjects].split(',')
   end
 
   def provider_name
-    return [] if filter[:"provider.provider_name"].blank?
+    return [] if filter[:'provider.provider_name'].blank?
 
-    filter[:"provider.provider_name"]
+    filter[:'provider.provider_name']
   end
 
   def send_courses_filter?
-    filter[:send_courses].to_s.downcase == "true"
+    filter[:send_courses].to_s.downcase == 'true'
   end
 
   def updated_since_filter?
@@ -279,26 +279,26 @@ private
   end
 
   def can_sponsor_visa_filter?
-    filter[:can_sponsor_visa].to_s.downcase == "true"
+    filter[:can_sponsor_visa].to_s.downcase == 'true'
   end
 
   def engineers_teach_physics_filter?
-    filter[:engineers_teach_physics].to_s.downcase == "true" || filter[:campaign_name] == "engineers_teach_physics"
+    filter[:engineers_teach_physics].to_s.downcase == 'true' || filter[:campaign_name] == 'engineers_teach_physics'
   end
 
   def course_asc_requirement
-    sort == "name,provider.provider_name".freeze
+    sort == 'name,provider.provider_name'
   end
 
   def course_desc_requirement
-    sort == "-name,provider.provider_name".freeze
+    sort == '-name,provider.provider_name'
   end
 
   def provider_asc_requirement
-    sort == "provider.provider_name,name".freeze
+    sort == 'provider.provider_name,name'
   end
 
   def provider_desc_requirement
-    sort == "-provider.provider_name,name".freeze
+    sort == '-provider.provider_name,name'
   end
 end

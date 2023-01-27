@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveLondonBoroughAndTravelToWorkAreaFromSite < ActiveRecord::Migration[6.1]
   def change
     remove_column :site, :travel_to_work_area, :string

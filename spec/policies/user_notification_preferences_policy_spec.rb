@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe UserNotificationPreferencesPolicy do
   subject { described_class }
@@ -6,7 +8,7 @@ describe UserNotificationPreferencesPolicy do
   let(:user) { create(:user) }
 
   permissions :show? do
-    context "when the user matches" do
+    context 'when the user matches' do
       it { is_expected.to permit(user, double(id: user.id)) }
     end
 
@@ -16,7 +18,7 @@ describe UserNotificationPreferencesPolicy do
   end
 
   permissions :update? do
-    context "when the user matches" do
+    context 'when the user matches' do
       it { is_expected.to permit(user, double(id: user.id)) }
     end
 

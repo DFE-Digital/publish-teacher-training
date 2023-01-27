@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe PublishReportingService do
   let(:expected) do
@@ -7,21 +9,21 @@ describe PublishReportingService do
         total: {
           all: 666,
           active_users: 600,
-          non_active_users: 66,
+          non_active_users: 66
         },
-        recent_active_users: 60,
+        recent_active_users: 60
       },
       providers: {
         total: {
           all: 1000,
           providers_with_non_active_users: 990,
-          providers_with_recent_active_users: 10,
+          providers_with_recent_active_users: 10
         },
         with_1_recent_active_users: 1,
         with_2_recent_active_users: 2,
         with_3_recent_active_users: 0,
         with_4_recent_active_users: 4,
-        with_more_than_5_recent_active_users: 6,
+        with_more_than_5_recent_active_users: 6
       },
       courses: {
         total_updated_recently: 100,
@@ -29,8 +31,8 @@ describe PublishReportingService do
         updated_findable_recently: 60,
         updated_open_courses_recently: 35,
         updated_closed_courses_recently: 25,
-        created_recently: 10,
-      },
+        created_recently: 10
+      }
     }
   end
 
@@ -45,7 +47,7 @@ describe PublishReportingService do
 
   let(:providers_with_recent_active_users_distinct_count) { 10 }
 
-  let(:recent_active_user_count_by_provider) {
+  let(:recent_active_user_count_by_provider) do
     {
       1 => 1,
       2 => 2,
@@ -59,9 +61,9 @@ describe PublishReportingService do
       10 => 6,
       11 => 6,
       12 => 6,
-      13 => 6,
+      13 => 6
     }
-  }
+  end
   let(:providers_count) { 1000 }
   let(:courses_changed_at_since_count) { 100 }
   let(:courses_findable_count) { 60 }
@@ -76,8 +78,8 @@ describe PublishReportingService do
   let(:open_courses_scope) { instance_double(Course.all.class) }
   let(:closed_courses_scope) { instance_double(Course.all.class) }
 
-  describe ".call" do
-    describe "when scope is passed" do
+  describe '.call' do
+    describe 'when scope is passed' do
       before do
         allow(recruitment_cycle_scope).to receive(:courses).and_return(courses_scope)
         allow(recruitment_cycle_scope).to receive(:providers).and_return(providers_scope)
@@ -85,7 +87,7 @@ describe PublishReportingService do
 
       subject { described_class.call(recruitment_cycle_scope:) }
 
-      it "applies the scopes" do
+      it 'applies the scopes' do
         expect(User).to receive(:count).and_return(666)
         expect(User).to receive_message_chain(:active, :count).and_return(600)
         expect(User).to receive_message_chain(:active, :last_login_since).and_return(recent_active_users)

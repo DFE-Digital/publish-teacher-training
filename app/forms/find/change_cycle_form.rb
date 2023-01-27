@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class ChangeCycleForm
     include ActiveModel::Model

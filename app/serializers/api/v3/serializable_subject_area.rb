@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class SerializableSubjectArea < JSONAPI::Serializable::Resource
-      type "subject_areas"
+      type 'subject_areas'
       has_many :subjects
 
       attributes :name

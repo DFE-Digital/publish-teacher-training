@@ -2,20 +2,20 @@
 
 # This file can be deleted once the "user_management" feature flag is removed
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Viewing provider users" do
+feature 'Viewing provider users' do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_the_user_management_feature_flag_is_inactive
     when_i_visit_the_provider_users_page
   end
 
-  scenario "i can view associated users" do
+  scenario 'i can view associated users' do
     then_i_can_view_users_associated_with_the_provider
   end
 
-  scenario "i can view request access form" do
+  scenario 'i can view request access form' do
     and_i_click_on_request_access_for_someone_else
     then_i_see_the_request_access_form
   end
@@ -40,7 +40,7 @@ private
   end
 
   def then_i_can_view_users_associated_with_the_provider
-    expect(provider_users_page.heading.text).to eq("Users")
+    expect(provider_users_page.heading.text).to eq('Users')
     expect(provider_users_page.user_name.text).to eq("#{@user.first_name} #{@user.last_name}")
   end
 

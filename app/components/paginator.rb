@@ -34,7 +34,7 @@ class Paginator < ViewComponent::Base
     {
       window: numbers_each_side,
       left: numbers_left,
-      right: numbers_right,
+      right: numbers_right
     }
   end
 

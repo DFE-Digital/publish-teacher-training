@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Courses
       class NewAgeRange < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/age-range/new{?query*}"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/age-range/new{?query*}'
 
         section :age_range_fields, '[data-qa="course__age_range_in_years"]' do
           element :three_to_eleven, '[data-qa="course__age_range_in_years_3_to_7_radio"]'

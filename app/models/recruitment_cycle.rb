@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RecruitmentCycle < ApplicationRecord
   has_many :providers, -> { kept }, inverse_of: false
   # Because this is through a has_many, these associations can't be updated,
@@ -12,12 +14,12 @@ class RecruitmentCycle < ApplicationRecord
     def current_recruitment_cycle
       find_by(year: Settings.current_recruitment_cycle_year)
     end
-    alias_method :current, :current_recruitment_cycle
+    alias current current_recruitment_cycle
 
     def next_recruitment_cycle
       current_recruitment_cycle.next
     end
-    alias_method :next, :next_recruitment_cycle
+    alias next next_recruitment_cycle
   end
 
   def previous
@@ -37,7 +39,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def current_and_open?
-    current? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+    current? && FeatureService.enabled?('rollover.has_current_cycle_started?')
   end
 
   def to_s

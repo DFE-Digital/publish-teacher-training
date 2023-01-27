@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :site do
     location_name { "Main Site#{rand(1_000_000)}" }
@@ -6,7 +8,7 @@ FactoryBot.define do
     address3 { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
-    region_code { "london" }
+    region_code { 'london' }
     urn { Faker::Number.number(digits: [5, 6].sample) }
     uuid { Faker::Internet.uuid }
 

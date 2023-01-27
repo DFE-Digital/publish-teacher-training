@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Accepting rollover" do
+feature 'Accepting rollover' do
   before do
-    enable_features("rollover.show_next_cycle_recruitment_page")
+    enable_features('rollover.show_next_cycle_recruitment_page')
     given_i_am_a_user_who_has_not_accepted_rollover_recruitment
     when_i_visit_the_publish_service
   end
 
   after do
-    disable_features("rollover.show_next_cycle_recruitment_page")
+    disable_features('rollover.show_next_cycle_recruitment_page')
   end
 
-  scenario "i can accept the rollover interruption" do
+  scenario 'i can accept the rollover interruption' do
     then_i_am_taken_to_the_rollover_recruitment_page
     when_i_accept_rollover_recruitment
     then_i_should_be_redirected_to_the_courses_index_page

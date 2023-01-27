@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   module Utility
     class SummaryCardHeaderComponent < ViewComponent::Base

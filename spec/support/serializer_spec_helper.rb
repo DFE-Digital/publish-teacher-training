@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # https://gist.github.com/roalcantara/6cd4f7d915102f3d50018606bb61d091
 
 module SerializerSpecHelper

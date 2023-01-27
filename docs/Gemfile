@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 # If you do not have OpenSSL installed, change
 # the following line to use "http://"
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-ruby "~> 2.7.5"
+ruby '~> 2.7.5'
 
 # Include the tech docs gem
-gem "govuk_tech_docs", git: "https://github.com/DFE-Digital/tech-docs-gem"
+gem 'govuk_tech_docs', git: 'https://github.com/DFE-Digital/tech-docs-gem'
 
 group :test do
-  gem "capybara"
-  gem "rspec"
+  gem 'capybara'
+  gem 'rspec'
 end
