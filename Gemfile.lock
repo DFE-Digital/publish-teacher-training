@@ -357,7 +357,7 @@ GEM
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
     json (2.6.3)
-    json-jwt (1.16.1)
+    json-jwt (1.16.3)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
@@ -454,7 +454,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth_openid_connect (0.5.0)
+    omniauth_openid_connect (0.6.0)
       omniauth (>= 1.9, < 3)
       openid_connect (~> 1.1)
     openid_connect (1.4.2)
@@ -792,7 +792,7 @@ DEPENDENCIES
   oj
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
-  omniauth_openid_connect (~> 0.5)
+  omniauth_openid_connect (~> 0.6)
   open_api-rswag-api
   open_api-rswag-specs!
   open_api-rswag-ui
