@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'About Your Organisation section', { can_edit_current_and_next_cycles: false } do
   scenario 'Provider user edits provider details' do
-    given_i_am_a_provider_user
+    given_i_am_a_provider_user_as_a_provider_user
     and_my_provider_has_accrediting_providers
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us
@@ -12,10 +12,9 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     then_i_can_edit_info_about_disabilities_and_other_needs
   end
 
-  def given_i_am_a_provider_user
-    @current_user = create(:user, :with_provider)
+  def given_i_am_a_provider_user_as_a_provider_user
+    given_i_am_authenticated(user: create(:user, :with_provider))
     @provider = @current_user.providers.first
-    user_exists_in_dfe_sign_in(user: @current_user)
   end
 
   def and_my_provider_has_accrediting_providers
@@ -28,7 +27,6 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year
     )
-    sign_in_page.sign_in_button.click
   end
 
   def then_i_can_edit_info_about_training_with_us

@@ -8,7 +8,7 @@ module FeatureHelpers
           file_segments = file.chomp('.rb').split('/')
           page_objects_dir, application_type, *path_to_file, filename = file_segments[2..file_segments.length]
 
-          method_name = if application_type == 'support'
+          method_name = if %w[support auth].include?(application_type)
                           ([application_type, *path_to_file, filename] + ['page']) .join('_')
                         else
                           ([filename] + ['page']) .join('_')

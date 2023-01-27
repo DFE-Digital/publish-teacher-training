@@ -81,7 +81,7 @@ feature 'Authentication with magic links', :with_publish_constraint do
   end
 
   def when_i_go_to_sign_in
-    sign_in_page.load
+    auth_sign_in_page.load
   end
 
   def then_i_am_taken_to_the_magic_link_page
