@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module SubjectHelper
     def primary_form_options(subjects = primary_subjects)
@@ -11,7 +13,7 @@ module Publish
     PrimarySubjectInput = Struct.new(:code, :name)
 
     def primary_subjects
-      Subject.where(type: "PrimarySubject")
+      Subject.where(type: 'PrimarySubject')
              .order(:subject_name)
     end
   end

@@ -9,7 +9,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   scenario 'selecting primary subject' do
     when_i_visit_the_new_course_subject_page(:primary)
-    when_i_select_a_primary_subject("Primary with English")
+    when_i_select_a_primary_subject('Primary with English')
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:primary, :primary_with_english)
   end
