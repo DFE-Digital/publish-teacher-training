@@ -11,8 +11,6 @@
   <%= yield fields %>
 <% end %>
 
-<p class="govuk-body">
-  <%= form.submit "Continue",
-                class: "govuk-button govuk-!-margin-top-3",
+<%= form.submit "Continue",
+                class: "govuk-button",
                 data: { qa: "course__save" } %>
-</p>

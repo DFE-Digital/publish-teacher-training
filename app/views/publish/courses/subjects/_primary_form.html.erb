@@ -1,0 +1,16 @@
+<%= render "publish/shared/error_wrapper", error_keys: [:subjects], data_qa: "course__master_subject_id" do %>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading" data-qa="page-heading">
+        <% if course.course_code %>
+          <%= render CaptionText.new(text: course.name_and_code) %>
+        <% end %>
+        <%= course.subject_page_title %>
+      </h1>
+    </legend>
+    <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
+    <% primary_form_options.each do |opt| %>
+      <%= form.govuk_radio_button :master_subject_id, opt.code, label: { text: opt.name } %>
+    <% end %>
+  </fieldset>
+<% end %>

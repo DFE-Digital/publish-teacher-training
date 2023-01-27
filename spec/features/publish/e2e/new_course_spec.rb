@@ -87,12 +87,8 @@ private
     course_creation_params
   end
 
-  def primary
-    @primary ||= %i[primary primary_with_english primary_with_geography_and_history primary_with_mathematics primary_with_modern_languages primary_with_physical_education primary_with_science].sample
-  end
-
   def primary_subject
-    @primary_subject ||= find(:primary_subject, primary)
+    @primary_subject ||= find(:primary_subject, :primary)
   end
 
   def course_subject(level)
@@ -106,7 +102,7 @@ private
     course_creation_params[:master_subject_id] = course_subject.id.to_s
     course_creation_params[:campaign_name] = ''
 
-    new_subjects_page.subjects_fields.select(course_subject.subject_name)
+    new_subjects_page.choose(course_subject.subject_name)
     new_subjects_page.continue.click
 
     expect_page_to_be_displayed_with_query(

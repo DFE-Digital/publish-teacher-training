@@ -78,12 +78,12 @@ private
 
   def then_i_am_met_with_the_primary_subjects_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/subjects/new#{primary_level_selected_params}")
-    expect(page).to have_content('Pick a primary subject')
+    expect(page).to have_content('Subject')
   end
 
   def then_i_am_met_with_the_secondary_subjects_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/subjects/new#{secondary_level_selected_params}")
-    expect(page).to have_content('Pick a secondary subject')
+    expect(page).to have_content('Subject')
   end
 
   def then_i_am_met_with_the_course_outcome_page

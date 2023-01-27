@@ -22,7 +22,6 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   scenario 'selecting physics and modern languages subjects' do
     when_i_visit_the_new_course_subject_page(:secondary)
     and_i_select_a_subject(:physics)
-    and_i_open_second_subject
     and_i_select_subordinate_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_engineers_teach_physics_with_languages_page(:secondary, :physics)
@@ -76,7 +75,7 @@ private
   end
 
   def and_i_select_a_subject(subject_type)
-    new_subjects_page.subjects_fields.select(course_subject(subject_type).subject_name).click
+    new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
@@ -93,10 +92,6 @@ private
 
   def then_i_see_an_error_message
     expect(page).to have_content('Select an option')
-  end
-
-  def and_i_open_second_subject
-    new_subjects_page.subordinate_subject_details.click
   end
 
   def and_i_select_subordinate_subject(subject_type)

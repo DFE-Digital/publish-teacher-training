@@ -10,7 +10,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   scenario 'updating primary subject' do
     and_there_is_a_primary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
-    when_i_select_a_subject(:primary_with_english)
+    when_i_select_a_primary_subject('Primary with English')
     and_i_click_continue
     then_i_am_met_with_course_details_page
     and_i_should_see_a_success_message('primary subject')
@@ -56,8 +56,12 @@ private
     subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, course_code: course.course_code)
   end
 
+  def when_i_select_a_primary_subject(subject_type)
+    new_subjects_page.choose(subject_type)
+  end
+
   def when_i_select_a_subject(subject_type)
-    new_subjects_page.subjects_fields.select(course_subject(subject_type).subject_name).click
+    new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
