@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class SerializableCourse < JSONAPI::Serializable::Resource
@@ -15,7 +17,7 @@ module API
         end
       end
 
-      type "courses"
+      type 'courses'
 
       attributes :findable?, :open_for_applications?, :has_vacancies?,
         :course_code, :name, :study_mode, :qualification, :description,

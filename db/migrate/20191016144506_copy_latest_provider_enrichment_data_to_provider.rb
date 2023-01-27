@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CopyLatestProviderEnrichmentDataToProvider < ActiveRecord::Migration[6.0]
   def up
-    say_with_time "copy provider enrichment to provider" do
+    say_with_time 'copy provider enrichment to provider' do
       enrichment_fields = %w[train_with_us
                              train_with_disability
                              accrediting_provider_enrichments
@@ -23,7 +25,7 @@ class CopyLatestProviderEnrichmentDataToProvider < ActiveRecord::Migration[6.0]
 
         enrichment_data = latest_updated_at.attributes.slice(
           *enrichment_fields,
-          *contact_fields,
+          *contact_fields
         )
 
         provider.update(enrichment_data)

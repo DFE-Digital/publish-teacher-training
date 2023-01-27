@@ -1,29 +1,31 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "updating a subject", { can_edit_current_and_next_cycles: false } do
+require 'rails_helper'
+
+feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "updating primary subject" do
+  scenario 'updating primary subject' do
     and_there_is_a_primary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_primary_subject("Primary with English")
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message("primary subject")
+    and_i_should_see_a_success_message('primary subject')
   end
 
-  scenario "updating secondary subject" do
+  scenario 'updating secondary subject' do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message("secondary subject")
+    and_i_should_see_a_success_message('secondary subject')
   end
 
-  scenario "updating secondary subject modern languages" do
+  scenario 'updating secondary subject modern languages' do
     and_there_is_a_secondary_course_i_want_to_edit
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:modern_languages)
@@ -34,7 +36,7 @@ feature "updating a subject", { can_edit_current_and_next_cycles: false } do
 private
 
   def and_i_should_see_a_success_message(value)
-    expect(page).to have_content(I18n.t("success.value_saved", value:))
+    expect(page).to have_content(I18n.t('success.value_saved', value:))
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -80,7 +82,7 @@ private
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/modern-languages?#{params_with_subject}")
-    expect(page).to have_content("Pick all the languages for this course")
+    expect(page).to have_content('Pick all the languages for this course')
   end
 
   def course_subject(subject_type)

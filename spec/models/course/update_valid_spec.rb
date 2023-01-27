@@ -1,13 +1,15 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe Course do
-  describe "#update_valid" do
+  describe '#update_valid' do
     let(:current_cycle) { find_or_create :recruitment_cycle }
     let(:next_cycle)    { find_or_create(:recruitment_cycle, :next) }
     let(:current_year)  { current_cycle.year.to_i }
     let(:next_year)     { next_cycle.year.to_i }
 
-    context "applications_open_from" do
+    context 'applications_open_from' do
       let(:course) do
         create(:course,
           applications_open_from: current_cycle.application_start_date)
@@ -15,12 +17,12 @@ describe Course do
 
       subject { course }
 
-      context "for the current recruitment cycle" do
-        context "with a valid date" do
+      context 'for the current recruitment cycle' do
+        context 'with a valid date' do
           its(:update_valid?) { is_expected.to be true }
         end
 
-        context "with an invalid date" do
+        context 'with an invalid date' do
           let(:course) do
             create(:course,
               applications_open_from: DateTime.new(current_year, 10, 1))
@@ -30,10 +32,10 @@ describe Course do
         end
       end
 
-      context "for the next recruitment cycle" do
+      context 'for the next recruitment cycle' do
         let(:provider) { build(:provider, recruitment_cycle: next_cycle) }
 
-        context "with a valid date" do
+        context 'with a valid date' do
           let(:course) do
             create(:course,
               provider:,
@@ -43,7 +45,7 @@ describe Course do
           its(:update_valid?) { is_expected.to be true }
         end
 
-        context "with an invalid date" do
+        context 'with an invalid date' do
           let(:course) do
             create(:course,
               provider:,
@@ -55,28 +57,28 @@ describe Course do
       end
     end
 
-    context "start_date" do
+    context 'start_date' do
       let(:course) { create(:course, start_date: DateTime.new(current_year, 9, 1)) }
 
       subject { course }
 
-      context "for the current recruitment cycle" do
-        context "with a valid start date" do
+      context 'for the current recruitment cycle' do
+        context 'with a valid start date' do
           its(:update_valid?) { is_expected.to be true }
         end
 
-        context "with an invalid start date" do
+        context 'with an invalid start date' do
           let(:course) { create(:course, start_date: DateTime.new(next_year, 9, 1)) }
 
           its(:update_valid?) { is_expected.to be false }
         end
       end
 
-      context "for the next recruitment cycle" do
+      context 'for the next recruitment cycle' do
         let(:provider) { build(:provider, recruitment_cycle: next_cycle) }
         let(:next_cycle) { create(:recruitment_cycle, :next) }
 
-        context "with a valid start date" do
+        context 'with a valid start date' do
           let(:course) do
             create(:course,
               provider:,
@@ -86,7 +88,7 @@ describe Course do
           its(:update_valid?) { is_expected.to be true }
         end
 
-        context "with an invalid start date" do
+        context 'with an invalid start date' do
           let(:course) do
             create(:course,
               provider:,

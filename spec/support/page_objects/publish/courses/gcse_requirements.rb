@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require_relative "../../sections/copy_content"
+require_relative '../../sections/copy_content'
 
-require_relative "../../sections/error_link"
+require_relative '../../sections/error_link'
 
 module PageObjects
   module Publish
     module Courses
       class GcseRequirements < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/gcses-pending-or-equivalency-tests{?query*}'
 
         element :copy_content_warning, '[data-qa="copy-course-warning"]'
 
-        sections :errors, Sections::ErrorLink, ".govuk-error-summary__list li"
+        sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li'
 
         element :pending_gcse_yes_radio, '[data-qa="gcse_requirements__pending_gcse_yes_radio"]'
         element :pending_gcse_no_radio, '[data-qa="gcse_requirements__pending_gcse_no_radio"]'

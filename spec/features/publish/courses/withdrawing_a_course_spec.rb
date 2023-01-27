@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
+feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "i can withdraw a course" do
+  scenario 'i can withdraw a course' do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_withdrawal_page
     and_i_confirm_the_course_code
@@ -16,21 +16,21 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
     and_the_course_is_withdrawn
   end
 
-  scenario "wrong course code provided" do
+  scenario 'wrong course code provided' do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_withdrawal_page
     and_i_submit_with_the_wrong_code
     then_i_should_see_an_error_message
   end
 
-  scenario "course already withdrawn" do
+  scenario 'course already withdrawn' do
     and_there_is_a_course_already_withdrawn
     when_i_visit_the_course_withdrawal_page
     then_i_am_redirected_to_the_courses_page
     and_i_see_the(already_withdrawn_message)
   end
 
-  scenario "attempting to withdraw a non published course" do
+  scenario 'attempting to withdraw a non published course' do
     and_there_is_a_draft_course
     when_i_visit_the_course_withdrawal_page
     then_i_am_redirected_to_the_courses_page
@@ -56,7 +56,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_course_withdrawal_page
     withdrawal_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
@@ -65,7 +65,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_with_the_wrong_code
-    withdrawal_page.confirm_course_code.set("random")
+    withdrawal_page.confirm_course_code.set('random')
     and_i_submit
   end
 
@@ -81,7 +81,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
     enrichment = course.reload.enrichments.max_by(&:created_at)
 
     expect(enrichment).to be_withdrawn
-    expect(course.site_statuses.pluck(:vac_status)).to all(eq("no_vacancies"))
+    expect(course.site_statuses.pluck(:vac_status)).to all(eq('no_vacancies'))
   end
 
   def then_i_am_redirected_to_the_courses_page
@@ -90,7 +90,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_an_error_message
     expect(withdrawal_page.error_messages).to include(
-      "Enter the course code #{course.course_code} to withdraw this course",
+      "Enter the course code #{course.course_code} to withdraw this course"
     )
   end
 
@@ -111,7 +111,7 @@ feature "Withdrawing courses", { can_edit_current_and_next_cycles: false } do
   end
 
   def course_should_be_deleted_message
-    "Courses that have not been published should be deleted not withdrawn"
+    'Courses that have not been published should be deleted not withdrawn'
   end
 
   def course_name_and_code

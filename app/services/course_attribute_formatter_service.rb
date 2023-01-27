@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseAttributeFormatterService
   def initialize(name:, value:)
     @name = name
@@ -26,7 +28,7 @@ private
   attr_reader :name, :value
 
   def age_range?
-    name == "age_range_in_years"
+    name == 'age_range_in_years'
   end
 
   def age_range_value
@@ -34,7 +36,7 @@ private
   end
 
   def qualification?
-    name == "qualification"
+    name == 'qualification'
   end
 
   def qualification_value
@@ -42,7 +44,7 @@ private
   end
 
   def study_mode?
-    name == "study_mode"
+    name == 'study_mode'
   end
 
   def study_mode_value
@@ -59,9 +61,9 @@ private
 
   def strip_underscores
     if value
-      value.tr("_", " ")
+      value.tr('_', ' ')
     else
-      "unknown"
+      'unknown'
     end
   end
 end

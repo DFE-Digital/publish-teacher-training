@@ -1,4 +1,6 @@
-require "ostruct"
+# frozen_string_literal: true
+
+require 'ostruct'
 
 # We only need this strategy here for the moment.
 class JWTStrategy
@@ -8,14 +10,14 @@ class JWTStrategy
     JWT.encode(
       data(evaluation),
       evaluation.object.secret,
-      evaluation.object.algorithm,
+      evaluation.object.algorithm
     )
   end
 
   def data(evaluation)
     {
       data: evaluation.object.payload,
-      **claims(evaluation),
+      **claims(evaluation)
     }
   end
 
@@ -26,7 +28,7 @@ class JWTStrategy
       exp: (now + 5.minutes).to_i,
       iat: now.to_i,
       iss: evaluation.object.issuer,
-      sub: evaluation.object.subject,
+      sub: evaluation.object.subject
     }
   end
 end
@@ -40,7 +42,7 @@ jwt = Struct.new(
   :audience,
   :issuer,
   :subject,
-  :now,
+  :now
 )
 
 FactoryBot.define do

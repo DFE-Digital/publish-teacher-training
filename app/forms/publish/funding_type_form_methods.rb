@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module FundingTypeFormMethods
     def other_course_length?
@@ -20,8 +22,8 @@ module Publish
       return {} unless course_length_is_other?(course_enrichment[:course_length])
 
       {
-        course_length: "Other",
-        course_length_other_length: course_enrichment[:course_length],
+        course_length: 'Other',
+        course_length_other_length: course_enrichment[:course_length]
       }
     end
 

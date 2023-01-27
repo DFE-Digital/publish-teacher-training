@@ -1,5 +1,7 @@
-mount OpenApi::Rswag::Ui::Engine => "/api-docs"
-mount OpenApi::Rswag::Api::Engine => "/api-docs"
+# frozen_string_literal: true
+
+mount OpenApi::Rswag::Ui::Engine => '/api-docs'
+mount OpenApi::Rswag::Api::Engine => '/api-docs'
 
 namespace :api do
   namespace :v3 do
@@ -13,10 +15,10 @@ namespace :api do
         resources :courses, only: %i[index show], param: :code
       end
     end
-    get "provider-suggestions", to: "provider_suggestions#index"
-    get "training_providers/:training_provider_code", to: "accredited_provider_training_providers#show"
-    get :training_providers, to: "accredited_provider_training_providers#index"
-    get "/training_providers/:training_provider_code/courses", to: "accredited_body_training_provider_courses#index"
+    get 'provider-suggestions', to: 'provider_suggestions#index'
+    get 'training_providers/:training_provider_code', to: 'accredited_provider_training_providers#show'
+    get :training_providers, to: 'accredited_provider_training_providers#index'
+    get '/training_providers/:training_provider_code/courses', to: 'accredited_body_training_provider_courses#index'
   end
 
   namespace :public do
@@ -37,11 +39,11 @@ namespace :api do
       resources :subjects, only: %i[index]
       resources :subject_areas, only: :index
 
-      get "provider_suggestions", to: "provider_suggestions#index"
-      get "/courses", to: "courses#index"
+      get 'provider_suggestions', to: 'provider_suggestions#index'
+      get '/courses', to: 'courses#index'
     end
   end
 end
 
-get "error_500", to: "api_error#error500"
-get "error_nodb", to: "api_error#error_nodb"
+get 'error_500', to: 'api_error#error500'
+get 'error_nodb', to: 'api_error#error_nodb'

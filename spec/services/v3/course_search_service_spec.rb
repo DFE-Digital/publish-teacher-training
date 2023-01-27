@@ -1,7 +1,9 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe V3::CourseSearchService do
-  describe ".call" do
+  describe '.call' do
     before do
       allow(CourseSearchService).to receive(:call)
     end
@@ -10,7 +12,7 @@ RSpec.describe V3::CourseSearchService do
       described_class.call
     end
 
-    it "call ::CourseSearchService" do
+    it 'call ::CourseSearchService' do
       subject
       expect(CourseSearchService).to have_received(:call)
     end

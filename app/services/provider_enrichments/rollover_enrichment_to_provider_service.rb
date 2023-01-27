@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ProviderEnrichments
   class RolloverEnrichmentToProviderService
     def execute(enrichment:, new_provider:)

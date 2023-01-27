@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Find
   class LocationSuggestionsController < ApplicationController
     def index
-      return render(json: { error: "Bad request" }, status: :bad_request) if params_invalid?
+      return render(json: { error: 'Bad request' }, status: :bad_request) if params_invalid?
 
       suggestions = LocationSuggestion.suggest(params[:query])
       render json: suggestions

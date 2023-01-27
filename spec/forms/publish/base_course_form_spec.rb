@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module Publish
   class InheritedBaseCourseForm < BaseCourseForm
@@ -9,7 +9,7 @@ module Publish
     end
   end
 
-  describe "BaseCourseForm", type: :model do
+  describe 'BaseCourseForm', type: :model do
     let(:params) { {} }
     let(:course) { create(:course) }
 
@@ -17,8 +17,8 @@ module Publish
 
     subject { form }
 
-    describe "#save!" do
-      it "calls the course updated notification service" do
+    describe '#save!' do
+      it 'calls the course updated notification service' do
         expect(NotificationService::CourseUpdated).to receive(:call).with(course:)
         subject.save!
       end

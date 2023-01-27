@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NotificationService
   class CourseSubjectsUpdated
     include ServicePattern
@@ -21,7 +23,7 @@ module NotificationService
           course:,
           previous_subject_names:,
           previous_course_name:,
-          recipient: user,
+          recipient: user
         ).deliver_later
       end
     end

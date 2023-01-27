@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Sending DFE Analytics events" do
+feature 'Sending DFE Analytics events' do
   before do
     allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
   end
 
-  scenario "publishing a course" do
+  scenario 'publishing a course' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_publish
     when_i_visit_the_course_page
@@ -33,13 +33,13 @@ private
     given_a_course_exists(
       :with_gcse_equivalency,
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: "location 1")],
+      sites: [create(:site, location_name: 'location 1')]
     )
   end
 
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSerializersService
   def initialize(
     course_serializer: API::V3::SerializableCourse,
@@ -37,7 +39,7 @@ class CourseSerializersService
       Site: @site_serializer,
       Provider: @provider_serializer,
       RecruitmentCycle: @recruitment_cycle_serializer,
-      SubjectArea: @subject_area_serializer,
+      SubjectArea: @subject_area_serializer
     }
   end
 end

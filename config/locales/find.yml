@@ -103,6 +103,23 @@ en:
       url_bursaries_and_scholarships: https://getintoteaching.education.gov.uk/funding-your-training#bursaries-and-scholarships
       url_improve_your_subject_knowledge: https://getintoteaching.education.gov.uk/improve-your-subject-knowledge
       url_teacher_training_events: https://getintoteaching.education.gov.uk/events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_banner
+    qualification:
+      description_with_abbreviation:
+        qts:
+          html:
+            <abbr title='Qualified teacher status'>QTS</abbr> only
+        pgce_with_qts:
+          html:
+            <abbr title='Postgraduate certificate in education'>PGCE</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
+        pgde_with_qts:
+          html:
+            <abbr title='Postgraduate diploma in education'>PGDE</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
+        pgce:
+          html:
+            <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+        pgde:
+          html:
+            <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
   activemodel:
     errors:
       models:

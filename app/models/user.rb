@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
@@ -10,7 +12,7 @@ class User < ApplicationRecord
   # dependent destroy because https://stackoverflow.com/questions/34073757/removing-relations-is-not-being-audited-by-audited-gem/34078860#34078860
   has_many :organisations, through: :organisation_users, dependent: :destroy
 
-  has_many :user_notifications, class_name: "UserNotification"
+  has_many :user_notifications, class_name: 'UserNotification'
 
   has_many :providers_via_organisations, through: :organisations, source: :providers
 
@@ -20,7 +22,7 @@ class User < ApplicationRecord
   has_many :access_requests,
     foreign_key: :requester_id,
     primary_key: :id,
-    inverse_of: "requester"
+    inverse_of: 'requester'
 
   has_many :interrupt_page_acknowledgements
 
@@ -28,7 +30,7 @@ class User < ApplicationRecord
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
   scope :last_login_since, lambda { |timestamp|
-    where("last_login_date_utc > ?", timestamp)
+    where('last_login_date_utc > ?', timestamp)
   }
   scope :course_update_subscribers, lambda { |accredited_body_code|
     joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_body_code))
@@ -37,17 +39,17 @@ class User < ApplicationRecord
     joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
   }
 
-  scope :in_name_order, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :in_name_order, -> { order('LOWER(first_name), LOWER(last_name)') }
 
   pg_search_scope :search, against: %i[first_name last_name email], using: { tsearch: { prefix: true } }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: 'must contain @' }, uniqueness: true
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
-    message: "must be an @[digital.]education.gov.uk domain",
+    message: 'must be an @[digital.]education.gov.uk domain'
   }
 
   audited
@@ -63,10 +65,10 @@ class User < ApplicationRecord
     next_recruitment_cycle_provider_codes = providers_to_remove
         .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
 
-    if rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
-      next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.where(provider_code: next_recruitment_cycle_provider_codes)
-      self.providers = providers - next_cycle_providers
-    end
+    return unless rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
+
+    next_cycle_providers = RecruitmentCycle.next_recruitment_cycle.providers.where(provider_code: next_recruitment_cycle_provider_codes)
+    self.providers = providers - next_cycle_providers
   end
 
   def associated_with_accredited_body?
@@ -90,7 +92,7 @@ class User < ApplicationRecord
   end
 
   def current_rollover_recruitment_acceptance
-    current_page_acknowledgement_for("rollover_recruitment")
+    current_page_acknowledgement_for('rollover_recruitment')
   end
 
   def has_multiple_providers?

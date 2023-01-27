@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class SubjectsController < PublishController
@@ -23,8 +25,8 @@ module Publish
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids },
-            ),
+              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids }
+            )
           )
 
         elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
@@ -34,12 +36,12 @@ module Publish
               @course.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code,
-              course: { subjects_ids: selected_subject_ids },
-            ),
+              course: { subjects_ids: selected_subject_ids }
+            )
           )
 
         elsif course_subjects_form.save!
-          value = @course.is_primary? ? "primary subject" : "secondary subject"
+          value = @course.is_primary? ? 'primary subject' : 'secondary subject'
           course_details_success_message(value)
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
@@ -50,8 +52,8 @@ module Publish
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
-              @course.course_code,
-            ),
+              @course.course_code
+            )
           )
         else
           @errors = @course.errors.messages
@@ -62,7 +64,7 @@ module Publish
     private
 
       def campaign_name_check
-        params[:course][:campaign_name] = "" unless @course.master_subject_id == SecondarySubject.physics.id
+        params[:course][:campaign_name] = '' unless @course.master_subject_id == SecondarySubject.physics.id
       end
 
       def course_subjects_form

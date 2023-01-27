@@ -1,6 +1,8 @@
-require "erb"
-require "json"
-require "rouge"
+# frozen_string_literal: true
+
+require 'erb'
+require 'json'
+require 'rouge'
 
 module GovukTechDocs
   module OpenApi
@@ -12,18 +14,18 @@ module GovukTechDocs
         @document = document
 
         # Load template files
-        @template_api_full = get_renderer("api_reference_full.html.erb")
-        @template_path = get_renderer("path.html.erb")
-        @template_schema = get_renderer("schema.html.erb")
-        @template_operation = get_renderer("operation.html.erb")
-        @template_parameters = get_renderer("parameters.html.erb")
-        @template_responses = get_renderer("responses.html.erb")
-        @template_any_of = get_renderer("any_of.html.erb")
-        @template_curl_examples = get_renderer("curl_examples.html.erb")
+        @template_api_full = get_renderer('api_reference_full.html.erb')
+        @template_path = get_renderer('path.html.erb')
+        @template_schema = get_renderer('schema.html.erb')
+        @template_operation = get_renderer('operation.html.erb')
+        @template_parameters = get_renderer('parameters.html.erb')
+        @template_responses = get_renderer('responses.html.erb')
+        @template_any_of = get_renderer('any_of.html.erb')
+        @template_curl_examples = get_renderer('curl_examples.html.erb')
       end
 
       def api_full
-        paths = ""
+        paths = ''
         paths_data = @document.paths
         paths_data.each do |path_data|
           # For some reason paths.each returns an array of arrays [title, object]
@@ -31,7 +33,7 @@ module GovukTechDocs
           text = path_data[0]
           paths += path(text)
         end
-        schemas = ""
+        schemas = ''
         schemas_data.each do |schema_data|
           text = schema_data[0]
           schemas += schema(text)
@@ -54,9 +56,7 @@ module GovukTechDocs
         title = schema_data[0]
         schema = schema_data[1]
 
-        if schema_data[1]["anyOf"]
-          return @template_any_of.result(binding)
-        end
+        return @template_any_of.result(binding) if schema_data[1]['anyOf']
 
         @template_schema.result(binding)
       end
@@ -69,24 +69,20 @@ module GovukTechDocs
         operations.compact.each_value do |operation|
           responses = operation.responses
           responses.each do |_rkey, response|
-            next unless response.content["application/json"]
+            next unless response.content['application/json']
 
-            schema = response.content["application/json"].schema
+            schema = response.content['application/json'].schema
             schema_name = get_schema_name(schema.node_context.source_location.to_s)
-            if !schema_name.nil?
-              schemas.push schema_name
-            end
+            schemas.push schema_name unless schema_name.nil?
             schemas.concat(schemas_from_schema(schema))
           end
         end
         # Render all referenced schemas
-        output = ""
+        output = ''
         schemas.uniq.each do |schema_name|
           output += schema(schema_name)
         end
-        if !output.empty?
-          output.prepend('<h2 id="schemas">Schemas</h2>')
-        end
+        output.prepend('<h2 id="schemas">Schemas</h2>') unless output.empty?
         output
       end
 
@@ -96,10 +92,8 @@ module GovukTechDocs
         schema.properties.each do |property|
           properties.push property[1]
         end
-        if schema.type == "array"
-          properties.push schema.items
-        end
-        all_of = schema["allOf"]
+        properties.push schema.items if schema.type == 'array'
+        all_of = schema['allOf']
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
@@ -110,13 +104,11 @@ module GovukTechDocs
         properties.each do |property|
           # Must be a schema be referenced by another schema
           # And not a property of a schema
-          if property.node_context.referenced_by.to_s.include?("#/components/schemas") &&
-              !property.node_context.source_location.to_s.include?("/properties/")
+          if property.node_context.referenced_by.to_s.include?('#/components/schemas') &&
+              !property.node_context.source_location.to_s.include?('/properties/')
             schema_name = get_schema_name(property.node_context.source_location.to_s)
           end
-          if !schema_name.nil?
-            schemas.push schema_name
-          end
+          schemas.push schema_name unless schema_name.nil?
           # Check sub-properties for references
           schemas.concat(schemas_from_schema(property))
         end
@@ -124,7 +116,7 @@ module GovukTechDocs
       end
 
       def operations(text:, path:, path_id:)
-        output = ""
+        output = ''
         operations = get_operations(path)
         operations.compact.each do |key, operation|
           id = "#{path_id}-#{key.parameterize}"
@@ -139,12 +131,11 @@ module GovukTechDocs
       def parameters(operation, operation_id)
         parameters = operation.parameters
         id = "#{operation_id}-parameters"
-        output = @template_parameters.result(binding)
-        output
+        @template_parameters.result(binding)
       end
 
       def curl_examples(operation, operation_id)
-        curl_examples = operation.node_data["x-curl-examples"] || []
+        curl_examples = operation.node_data['x-curl-examples'] || []
         id = "#{operation_id}-curl-examples"
         @template_curl_examples.result(binding)
       end
@@ -156,9 +147,7 @@ module GovukTechDocs
       end
 
       def markdown(text)
-        if text
-          Tilt["markdown"].new(context: @app) { text }.render
-        end
+        Tilt['markdown'].new(context: @app) { text }.render if text
       end
 
       def json_output(schema)
@@ -182,21 +171,15 @@ module GovukTechDocs
         properties_hash = {}
         properties.each do |pkey, property|
           case property.type
-          when "object"
+          when 'object'
             properties_hash[pkey] = {}
             items = property.items
-            if items.present?
-              properties_hash[pkey] = schema_properties(items)
-            end
-            if property.properties.present?
-              properties_hash[pkey] = schema_properties(property)
-            end
-          when "array"
+            properties_hash[pkey] = schema_properties(items) if items.present?
+            properties_hash[pkey] = schema_properties(property) if property.properties.present?
+          when 'array'
             properties_hash[pkey] = []
             items = property.items
-            if items.present?
-              properties_hash[pkey].push schema_properties(items)
-            end
+            properties_hash[pkey].push schema_properties(items) if items.present?
           else
             properties_hash[pkey] = property.example.nil? ? property.type : property.example
           end
@@ -221,18 +204,12 @@ module GovukTechDocs
 
       def get_all_of_array(schema)
         properties = []
-        if schema.is_a?(Array)
-          schema = schema[1]
-        end
-        if schema["allOf"]
-          all_of = schema["allOf"]
-        end
+        schema = schema[1] if schema.is_a?(Array)
+        all_of = schema['allOf'] if schema['allOf']
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
-              if property.is_a?(Array)
-                property = property[1]
-              end
+              property = property[1] if property.is_a?(Array)
               properties.push property
             end
           end
@@ -242,9 +219,7 @@ module GovukTechDocs
 
       def get_all_of_hash(schema)
         properties = {}
-        if schema["allOf"]
-          all_of = schema["allOf"]
-        end
+        all_of = schema['allOf'] if schema['allOf']
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |key, property|
@@ -257,7 +232,7 @@ module GovukTechDocs
 
       def get_any_of_hash(schema)
         properties = {}
-        any_of = schema["anyOf"]
+        any_of = schema['anyOf']
 
         if any_of.present?
           nested_schema = any_of.first
@@ -276,11 +251,11 @@ module GovukTechDocs
 
       def get_operations(path)
         operations = {}
-        operations["get"] = path.get if defined? path.get
-        operations["put"] = path.put if defined? path.put
-        operations["post"] = path.post if defined? path.post
-        operations["delete"] = path.delete if defined? path.delete
-        operations["patch"] = path.patch if defined? path.patch
+        operations['get'] = path.get if defined? path.get
+        operations['put'] = path.put if defined? path.put
+        operations['post'] = path.post if defined? path.post
+        operations['delete'] = path.delete if defined? path.delete
+        operations['patch'] = path.patch if defined? path.patch
         operations
       end
 
@@ -288,16 +263,15 @@ module GovukTechDocs
         return unless text.is_a?(String)
 
         # Schema dictates that it's always components['schemas']
-        text.gsub(/#\/components\/schemas\//, "")
+        text.gsub(%r{#/components/schemas/}, '')
       end
 
       def get_schema_link(schema)
         schema_name = get_schema_name schema.node_context.source_location.to_s
-        if !schema_name.nil?
-          id = "schema-#{schema_name.parameterize}"
-          output = "<a href='##{id}'>#{schema_name}</a>"
-          output
-        end
+        return if schema_name.nil?
+
+        id = "schema-#{schema_name.parameterize}"
+        "<a href='##{id}'>#{schema_name}</a>"
       end
 
       def schemas_data
@@ -305,8 +279,8 @@ module GovukTechDocs
       end
 
       def format_possible_value(possible_value)
-        if possible_value == ""
-          "<em>empty string</em>"
+        if possible_value == ''
+          '<em>empty string</em>'
         else
           possible_value
         end
@@ -317,7 +291,7 @@ module GovukTechDocs
 
         properties = []
 
-        all_of = schema_data[1]["allOf"]
+        all_of = schema_data[1]['allOf']
         if all_of.present?
           all_of.each do |schema_nested|
             schema_nested.properties.each do |property|
@@ -326,7 +300,7 @@ module GovukTechDocs
           end
         end
 
-        any_of = schema_data[1]["anyOf"]
+        any_of = schema_data[1]['anyOf']
         if any_of.present?
           any_of.each do |schema_nested|
             schema_nested.properties.each do |property|
@@ -339,9 +313,7 @@ module GovukTechDocs
           properties.push property
         end
 
-        if schema_data[1] && schema_data[1].type == "array"
-          properties.push ["Item", schema_data[1].items]
-        end
+        properties.push ['Item', schema_data[1].items] if schema_data[1] && schema_data[1].type == 'array'
 
         properties
       end

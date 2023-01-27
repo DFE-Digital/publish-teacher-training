@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class FeatureToggleComponent < ViewComponent::Base
     include ::ViewHelper
@@ -10,7 +12,7 @@ module Find
     end
 
     def toggle_label
-      FeatureFlag.active?(feature_name) ? "Deactivate" : "Activate"
+      FeatureFlag.active?(feature_name) ? 'Deactivate' : 'Activate'
     end
 
     def toggle_link

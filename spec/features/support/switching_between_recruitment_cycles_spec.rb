@@ -1,7 +1,9 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "Support index", :with_publish_constraint do
-  scenario "viewing support cycles page during rollover" do
+require 'rails_helper'
+
+feature 'Support index', :with_publish_constraint do
+  scenario 'viewing support cycles page during rollover' do
     given_we_are_in_rollover
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
@@ -17,7 +19,7 @@ feature "Support index", :with_publish_constraint do
     i_should_be_on_the_next_cycle_page
   end
 
-  scenario "viewing providers page when not in rollover" do
+  scenario 'viewing providers page when not in rollover' do
     given_we_are_not_in_rollover
     and_there_are_two_recruitment_cycles
     and_i_am_authenticated_as_an_admin_user
@@ -56,7 +58,7 @@ feature "Support index", :with_publish_constraint do
   end
 
   def and_should_not_see_the_switch_cycle_link
-    expect(support_provider_index_page).not_to have_link "Change recruitment cycle"
+    expect(support_provider_index_page).not_to have_link 'Change recruitment cycle'
   end
 
   def when_i_click_on_the_current_cycle
@@ -72,7 +74,7 @@ feature "Support index", :with_publish_constraint do
   end
 
   def when_click_the_switch_cycle_link
-    click_link "Change recruitment cycle"
+    click_link 'Change recruitment cycle'
   end
 
   def i_should_be_on_the_next_cycle_page
@@ -80,10 +82,10 @@ feature "Support index", :with_publish_constraint do
   end
 
   def and_i_should_see_the_pe_allocations_tab
-    expect(support_provider_index_page).to have_link "PE Allocations"
+    expect(support_provider_index_page).to have_link 'PE Allocations'
   end
 
   def and_i_should_not_see_the_pe_allocations_tab
-    expect(support_provider_index_page).not_to have_link "PE Allocations"
+    expect(support_provider_index_page).not_to have_link 'PE Allocations'
   end
 end

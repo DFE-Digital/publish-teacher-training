@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RolloverService
   include ServicePattern
 
@@ -13,11 +15,11 @@ class RolloverService
       provider_codes_to_copy.each { |provider_code| rollover(provider_code, total_counts) }
     end
 
-    Rails.logger.info "Rollover done: " \
+    Rails.logger.info 'Rollover done: ' \
                       "#{total_counts[:providers]} providers, " \
                       "#{total_counts[:sites]} sites, " \
                       "#{total_counts[:courses]} courses " +
-                      format("in %.3f seconds", total_bm.real)
+                      format('in %.3f seconds', total_bm.real)
   end
 
 private

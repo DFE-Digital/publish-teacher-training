@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NotificationService
   class CoursePublished
     include ServicePattern
@@ -13,7 +15,7 @@ module NotificationService
       users.each do |user|
         CoursePublishEmailMailer.course_publish_email(
           course,
-          user,
+          user
         ).deliver_later
       end
     end

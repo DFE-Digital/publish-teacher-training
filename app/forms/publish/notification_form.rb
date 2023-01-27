@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Publish
   class NotificationForm < BaseModelForm
-    alias_method :user, :model
+    alias user model
 
     FIELDS = %i[
       explicitly_enabled
@@ -8,7 +10,7 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :explicitly_enabled, inclusion: { in: [true, false], message: "Please select one option" }
+    validates :explicitly_enabled, inclusion: { in: [true, false], message: 'Please select one option' }
 
     def save!
       if valid?

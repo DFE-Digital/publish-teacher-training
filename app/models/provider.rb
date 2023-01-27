@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Unpleasant hack to stop autoload error on CI
-require_relative "../services/providers/generate_course_code_service"
+require_relative '../services/providers/generate_course_code_service'
 
 class Provider < ApplicationRecord
   include RegionCode
@@ -22,14 +24,14 @@ class Provider < ApplicationRecord
   # that they are an `accredited_body` for accrediting providers
   # therefore `lead_school` is a `not_an_accredited_body`.
   enum provider_type: {
-    scitt: "B",
-    lead_school: "Y",
-    university: "O",
+    scitt: 'B',
+    lead_school: 'Y',
+    university: 'O'
   }
 
   enum accrediting_provider: {
-    accredited_body: "Y",
-    not_an_accredited_body: "N",
+    accredited_body: 'Y',
+    not_an_accredited_body: 'N'
   }
 
   belongs_to :recruitment_cycle
@@ -49,11 +51,11 @@ class Provider < ApplicationRecord
     inverse_of: :provider
 
   has_many :courses, -> { kept }, inverse_of: false
-  has_one :ucas_preferences, class_name: "ProviderUCASPreference"
+  has_one :ucas_preferences, class_name: 'ProviderUCASPreference'
   has_many :contacts
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
     -> { where(discarded_at: nil) },
-    class_name: "Course",
+    class_name: 'Course',
     foreign_key: :accredited_body_code,
     primary_key: :provider_code,
     inverse_of: :accrediting_provider
@@ -76,7 +78,7 @@ class Provider < ApplicationRecord
   end
 
   def rolled_over?
-    FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
   end
 
   # the providers that this provider is an accredited_provider for
@@ -90,9 +92,9 @@ class Provider < ApplicationRecord
 
   scope :changed_since, lambda { |timestamp|
     if timestamp.present?
-      where("provider.changed_at > ?", timestamp)
+      where('provider.changed_at > ?', timestamp)
     else
-      where("changed_at is not null")
+      where('changed_at is not null')
     end.order(:changed_at, :id)
   }
 
@@ -102,8 +104,8 @@ class Provider < ApplicationRecord
   scope :by_provider_name, lambda { |provider_name|
     order(
       Arel.sql(
-        "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END",
-      ),
+        "CASE WHEN provider.provider_name = #{connection.quote(provider_name)} THEN '1' END"
+      )
     )
   }
 
@@ -130,8 +132,8 @@ class Provider < ApplicationRecord
 
   serialize :accrediting_provider_enrichments, AccreditingProviderEnrichment::ArraySerializer
 
-  validates :train_with_us, words_count: { maximum: 250, message: "^Reduce the word count for training with you" }
-  validates :train_with_disability, words_count: { maximum: 250, message: "^Reduce the word count for training with disabilities and other needs" }
+  validates :train_with_us, words_count: { maximum: 250, message: '^Reduce the word count for training with you' }
+  validates :train_with_disability, words_count: { maximum: 250, message: '^Reduce the word count for training with disabilities and other needs' }
 
   validates :email, email_address: true, if: :email_changed?
 
@@ -141,17 +143,17 @@ class Provider < ApplicationRecord
 
   validates :provider_type, presence: true
 
-  validates :telephone, phone: { message: "Enter a valid telephone number" }, if: :telephone_changed?
+  validates :telephone, phone: { message: 'Enter a valid telephone number' }, if: :telephone_changed?
 
   # TODO: Remove this validation once the 2021 recruitment cycle is over
-  validates :ukprn, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: "UKPRN must be 8 numbers" }
+  validates :ukprn, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: 'UKPRN must be 8 numbers' }
 
-  validates :ukprn, reference_number_format: { allow_blank: false, minimum: 8, maximum: 8, message: "UKPRN must be 8 numbers" }, if: -> { recruitment_cycle.after_2021? }, on: :update
+  validates :ukprn, reference_number_format: { allow_blank: false, minimum: 8, maximum: 8, message: 'UKPRN must be 8 numbers' }, if: -> { recruitment_cycle.after_2021? }, on: :update
 
   # TODO: Remove this validation once the 2021 recruitment cycle is over
-  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: "Provider URN must be 5 or 6 numbers" }, if: :lead_school?
+  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: :lead_school?
 
-  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "Provider URN must be 5 or 6 numbers" }, if: -> { lead_school? && recruitment_cycle.after_2021? }, on: :update
+  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: -> { lead_school? && recruitment_cycle.after_2021? }, on: :update
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
@@ -171,7 +173,7 @@ class Provider < ApplicationRecord
 
   pg_search_scope :course_search,
     associated_against: {
-      courses: %i[course_code],
+      courses: %i[course_code]
     }, using: { tsearch: { prefix: true } }
 
   pg_search_scope :provider_name_search,
@@ -185,7 +187,7 @@ class Provider < ApplicationRecord
   after_commit :geocode_provider, unless: :skip_geocoding
 
   def geocode_provider
-    GeocodeJob.perform_later("Provider", id) if needs_geolocation?
+    GeocodeJob.perform_later('Provider', id) if needs_geolocation?
   end
 
   def needs_geolocation?
@@ -197,13 +199,13 @@ class Provider < ApplicationRecord
   def full_address
     address = [provider_name, address1, address2, address3, address4, postcode]
 
-    return "" if address.all?(&:blank?)
+    return '' if address.all?(&:blank?)
 
-    address.compact.join(", ")
+    address.compact.join(', ')
   end
 
   def full_address_with_breaks
-    [address1, address2, address3, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join("<br> ").html_safe
+    [address1, address2, address3, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
   end
 
   def address_changed?
@@ -234,7 +236,7 @@ class Provider < ApplicationRecord
   # less time rendering because there's less data to comb through.
   def self.include_courses_counts
     joins(
-      <<~EOSQL,
+      <<~EOSQL
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
@@ -242,12 +244,12 @@ class Provider < ApplicationRecord
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       EOSQL
-    ).select("provider.*, COALESCE(a.courses_count, 0) AS included_courses_count")
+    ).select('provider.*, COALESCE(a.courses_count, 0) AS included_courses_count')
   end
 
   def self.include_accredited_courses_counts(provider_code)
     joins(
-      <<~EOSQL,
+      <<~EOSQL
         LEFT OUTER JOIN (
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
@@ -256,15 +258,15 @@ class Provider < ApplicationRecord
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       EOSQL
-    ).select("provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count")
+    ).select('provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count')
   end
 
   def courses_count
-    has_attribute?("included_courses_count") ? included_courses_count : courses.size
+    has_attribute?('included_courses_count') ? included_courses_count : courses.size
   end
 
   def accredited_courses_count
-    has_attribute?("included_accredited_courses_count") ? included_accredited_courses_count : 0
+    has_attribute?('included_accredited_courses_count') ? included_accredited_courses_count : 0
   end
 
   def update_changed_at(timestamp: Time.now.utc)
@@ -298,14 +300,14 @@ class Provider < ApplicationRecord
       {
         provider_name: ap.provider_name,
         provider_code: ap.provider_code,
-        description: accrediting_provider_enrichment&.Description || "",
+        description: accrediting_provider_enrichment&.Description || ''
       }
     end
   end
 
   def next_available_course_code
     services[:generate_unique_course_code].execute(
-      existing_codes: courses.order(:course_code).pluck(:course_code),
+      existing_codes: courses.order(:course_code).pluck(:course_code)
     )
   end
 
@@ -372,7 +374,7 @@ private
     @services = Dry::Container.new
     @services.register(:generate_unique_course_code) do
       Providers::GenerateUniqueCourseCodeService.new(
-        generate_course_code_service: Providers::GenerateCourseCodeService.new,
+        generate_course_code_service: Providers::GenerateCourseCodeService.new
       )
     end
   end

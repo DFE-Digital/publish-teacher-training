@@ -11,10 +11,10 @@
           class: "govuk-checkboxes__input",
           multiple: true,
           data: { qa: "qts_only" },
-          checked: @filters_view.qts_only_checked? || @filters_view.qualification_params_nil?,
+          checked: @filters_view.qts_only_checked? || @filters_view.qualification_params_nil?
         },
         "qts",
-        false,
+        false
       ) %>
       <%= form.label :qualification, value: "QtsOnly", class: "govuk-label govuk-checkboxes__label" do %>
         QTS only
@@ -28,10 +28,10 @@
           class: "govuk-checkboxes__input",
           multiple: true,
           data: { qa: "pgde_pgce_with_qts" },
-          checked: @filters_view.pgde_pgce_with_qts_checked? || @filters_view.qualification_params_nil?,
+          checked: @filters_view.pgde_pgce_with_qts_checked? || @filters_view.qualification_params_nil?
         },
         "pgce_with_qts",
-        false,
+        false
       ) %>
       <%= form.label :qualification, value: "PgdePgceWithQts", class: "govuk-label govuk-checkboxes__label" do %>
         PGCE (or PGDE) with QTS
@@ -45,10 +45,10 @@
           class: "govuk-checkboxes__input",
           multiple: true,
           data: { qa: "other" },
-          checked: @filters_view.other_checked? || @filters_view.qualification_params_nil?,
+          checked: @filters_view.other_checked? || @filters_view.qualification_params_nil?
         },
         ["pgce pgde"],
-        false,
+        false
       ) %>
       <%= form.label :qualification, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
         Further education (PGCE or PGDE without QTS)

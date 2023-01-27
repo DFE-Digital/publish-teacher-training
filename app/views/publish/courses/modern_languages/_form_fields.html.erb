@@ -20,15 +20,15 @@
                 checked: course.subject_present?(language),
                 class: "govuk-checkboxes__input",
                 multiple: true,
-                data: { qa: "checkbox_language_#{language.subject_name}" },
+                data: { qa: "checkbox_language_#{language.subject_name}" }
               },
               language.id,
-              nil,
+              nil
             ) %>
             <%= form.label(
               "language_ids_#{language.id}",
               language.subject_name,
-              class: "govuk-label govuk-checkboxes__label",
+              class: "govuk-label govuk-checkboxes__label"
             ) %>
           </div>
         <% end %>

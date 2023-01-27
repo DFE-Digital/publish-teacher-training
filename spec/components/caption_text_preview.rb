@@ -2,6 +2,6 @@
 
 class CaptionTextPreview < ViewComponent::Preview
   def default
-    render(CaptionText.new(text: "Enter some random text here"))
+    render(CaptionText.new(text: 'Enter some random text here'))
   end
 end

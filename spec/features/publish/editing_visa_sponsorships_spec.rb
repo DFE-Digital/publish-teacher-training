@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false } do
-  scenario "as a lead school i cannot view any visa details" do
+feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false } do
+  scenario 'as a lead school i cannot view any visa details' do
     given_i_am_authenticated_as_a_lead_school_provider_user
     when_i_visit_the_provider_details_page
     then_i_should_not_see_any_visa_details
   end
 
-  scenario "as a scitt i can update the skilled worker visa sponsorships" do
+  scenario 'as a scitt i can update the skilled worker visa sponsorships' do
     given_i_am_authenticated_as_a_scitt_provider_user
     when_i_visit_the_provider_details_page
     then_i_should_see_visa_details
@@ -21,7 +21,7 @@ feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false }
     and_the_skilled_worker_visa_sponsorship_is_updated
   end
 
-  scenario "as an hei i can update the skilled worker visa sponsorships" do
+  scenario 'as an hei i can update the skilled worker visa sponsorships' do
     given_i_am_authenticated_as_a_hei_provider_user
     when_i_visit_the_provider_details_page
     then_i_should_see_visa_details
@@ -41,34 +41,34 @@ feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false }
 
   def given_i_am_authenticated_as_a_lead_school_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
-    provider.update!(provider_type: "lead_school")
+    provider.update!(provider_type: 'lead_school')
   end
 
   def given_i_am_authenticated_as_a_scitt_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
-    provider.update!(provider_type: "scitt", can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)
+    provider.update!(provider_type: 'scitt', can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)
   end
 
   def given_i_am_authenticated_as_a_hei_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
-    provider.update!(provider_type: "university", can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)
+    provider.update!(provider_type: 'university', can_sponsor_student_visa: false, can_sponsor_skilled_worker_visa: false)
   end
 
   def when_i_visit_the_provider_details_page
     provider_details_show_page.load(
       provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year,
+      recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 
   def then_i_should_not_see_any_visa_details
-    expect(page).not_to have_content("Visa sponsorship")
+    expect(page).not_to have_content('Visa sponsorship')
   end
 
   def then_i_should_see_visa_details
-    expect(page).to have_content("Visa sponsorship")
-    expect(page).to have_content("Student visa")
-    expect(page).to have_content("Skilled Worker visa")
+    expect(page).to have_content('Visa sponsorship')
+    expect(page).to have_content('Student visa')
+    expect(page).to have_content('Skilled Worker visa')
   end
 
   def when_i_click_on_the_change_skilled_worker_visa_link
@@ -96,7 +96,7 @@ feature "Editing visa sponsorships", { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t("success.visa_changes"))
+    expect(page).to have_content(I18n.t('success.visa_changes'))
   end
 
   def and_the_skilled_worker_visa_sponsorship_is_updated

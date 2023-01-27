@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authentication
   def user_session
     @user_session ||= UserSession.load_from_session(session)
@@ -12,13 +14,13 @@ module Authentication
   end
 
   def authenticate
-    unless authenticated?
-      session["post_dfe_sign_in_path"] = request.fullpath
-      if AuthenticationService.persona?
-        redirect_to sign_in_path({ support: params[:controller].start_with?("support") })
-      else
-        redirect_to sign_in_path
-      end
+    return if authenticated?
+
+    session['post_dfe_sign_in_path'] = request.fullpath
+    if AuthenticationService.persona?
+      redirect_to sign_in_path({ support: params[:controller].start_with?('support') })
+    else
+      redirect_to sign_in_path
     end
   end
 end

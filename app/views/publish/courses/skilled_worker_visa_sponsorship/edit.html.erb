@@ -5,8 +5,8 @@
         details_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,
-          course.course_code,
-        ),
+          course.course_code
+        )
       ) %>
 <% end %>
 
@@ -17,10 +17,10 @@
           url: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
             course.provider_code,
             course.recruitment_cycle_year,
-            course.course_code,
+            course.course_code
           ),
           method: :put,
-          local: true,
+          local: true
         ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -44,7 +44,7 @@
                 :can_sponsor_skilled_worker_visa,
                 can_sponsor_skilled_worker_visa,
                 label: { text: t("edit_options.can_sponsor_skilled_worker_visas.#{can_sponsor_skilled_worker_visa}.label") },
-                link_errors: index.zero?,
+                link_errors: index.zero?
               ) %>
         <% end %>
       <% end %>

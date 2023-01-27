@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Viewing a providers courses", :with_publish_constraint do
-  scenario "Provider is discarded" do
+feature 'Viewing a providers courses', :with_publish_constraint do
+  scenario 'Provider is discarded' do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_discarded_provider_with_courses
     when_i_visit_the_support_courses_index_page

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseDecorator < ApplicationDecorator
   include ActiveSupport::NumberHelper
 
@@ -10,11 +12,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def modern_languages_other_id
-    "24"
+    '24'
   end
 
   def vacancies
-    content = object.has_vacancies? ? "Yes" : "No"
+    content = object.has_vacancies? ? 'Yes' : 'No'
     content += " (#{edit_vacancy_link})" unless object.is_withdrawn?
     content.html_safe
   end
@@ -26,7 +28,7 @@ class CourseDecorator < ApplicationDecorator
   def on_find(provider = object.provider)
     if object.findable?
       if current_cycle_and_open?
-        h.govuk_link_to("Yes - view online", h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
+        h.govuk_link_to('Yes - view online', h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code))
       else
         "No - live on #{l(Settings.next_cycle_open_date.to_date, format: :govuk_short)}"
       end
@@ -36,7 +38,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def open_or_closed_for_applications
-    object.open_for_applications? ? "Open" : "Closed"
+    object.open_for_applications? ? 'Open' : 'Closed'
   end
 
   def outcome
@@ -48,14 +50,14 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def is_send?
-    object.is_send? ? "Yes" : "No"
+    object.is_send? ? 'Yes' : 'No'
   end
 
   def funding
     {
-      "salary" => "Salary",
-      "apprenticeship" => "Teaching apprenticeship - with salary",
-      "fee" => "Fee paying - no salary",
+      'salary' => 'Salary',
+      'apprenticeship' => 'Teaching apprenticeship - with salary',
+      'fee' => 'Fee paying - no salary'
     }[object.funding_type]
   end
 
@@ -76,7 +78,7 @@ class CourseDecorator < ApplicationDecorator
       transformed_subjects = subjects.map { |subject| LANGUAGE_SUBJECT_CODES.include?(subject.subject_code) ? subject.subject_name : subject.subject_name.downcase }
       "#{transformed_subjects.first} with #{transformed_subjects.second}"
     else
-      object.name.gsub("Modern Languages", "modern languages")
+      object.name.gsub('Modern Languages', 'modern languages')
     end
   end
 
@@ -86,17 +88,17 @@ class CourseDecorator < ApplicationDecorator
 
   def bursary_first_line_ending
     if bursary_requirements.count > 1
-      ":"
+      ':'
     else
       "#{bursary_requirements.first}."
     end
   end
 
   def bursary_requirements
-    requirements = ["a degree of 2:2 or above in any subject"]
+    requirements = ['a degree of 2:2 or above in any subject']
 
-    if object.subjects.any? { |subject| subject.subject_name.downcase == "primary with mathematics" }
-      mathematics_requirement = "at least grade B in maths A-level (or an equivalent)"
+    if object.subjects.any? { |subject| subject.subject_name.downcase == 'primary with mathematics' }
+      mathematics_requirement = 'at least grade B in maths A-level (or an equivalent)'
       requirements.push(mathematics_requirement)
     end
 
@@ -115,27 +117,27 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def bursary_amount
-    find_max_funding_for("bursary_amount")
+    find_max_funding_for('bursary_amount')
   end
 
   def scholarship_amount
-    find_max_funding_for("scholarship")
+    find_max_funding_for('scholarship')
   end
 
   def salaried?
-    object.funding_type == "salary" || object.funding_type == "apprenticeship"
+    object.funding_type == 'salary' || object.funding_type == 'apprenticeship'
   end
 
   def apprenticeship?
-    object.funding_type == "apprenticeship"
+    object.funding_type == 'apprenticeship'
   end
 
   def apprenticeship
-    object.funding_type.to_s == "apprenticeship" ? "Yes" : "No"
+    object.funding_type.to_s == 'apprenticeship' ? 'Yes' : 'No'
   end
 
   def sorted_subjects
-    object.subjects.map(&:subject_name).sort.join("<br>").html_safe
+    object.subjects.map(&:subject_name).sort.join('<br>').html_safe
   end
 
   def chosen_subjects
@@ -152,10 +154,10 @@ class CourseDecorator < ApplicationDecorator
 
   def length
     case course_length.to_s
-    when "OneYear"
-      "1 year"
-    when "TwoYears"
-      "Up to 2 years"
+    when 'OneYear'
+      '1 year'
+    when 'TwoYears'
+      'Up to 2 years'
     else
       course_length.to_s
     end
@@ -166,7 +168,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def other_age_range?
-    options = object.edit_course_options["age_range_in_years"]
+    options = object.edit_course_options['age_range_in_years']
     options.exclude?(course.age_range_in_years)
   end
 
@@ -185,17 +187,17 @@ class CourseDecorator < ApplicationDecorator
   # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def funding_option
     if salaried?
-      "Salary"
+      'Salary'
     elsif excluded_from_bursary?
       # Duplicate branch body detected
-      "Student finance if you’re eligible"
+      'Student finance if you’re eligible'
     elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Scholarships or bursaries, as well as student finance, are available if you’re eligible"
+      'Scholarships or bursaries, as well as student finance, are available if you’re eligible'
     elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      "Bursaries and student finance are available if you’re eligible"
+      'Bursaries and student finance are available if you’re eligible'
     else
       # Duplicate branch body detected
-      "Student finance if you’re eligible"
+      'Student finance if you’re eligible'
     end
   end
   # rubocop:enable Lint/DuplicateBranch: Duplicate branch body detected
@@ -205,7 +207,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def current_cycle_and_open?
-    current_cycle? && FeatureService.enabled?("rollover.has_current_cycle_started?")
+    current_cycle? && FeatureService.enabled?('rollover.has_current_cycle_started?')
   end
 
   def next_cycle?
@@ -219,7 +221,7 @@ class CourseDecorator < ApplicationDecorator
   def cycle_range
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
-  alias_method :year_range, :cycle_range
+  alias year_range cycle_range
 
   def age_range
     if object.age_range_in_years.present?
@@ -231,20 +233,20 @@ class CourseDecorator < ApplicationDecorator
 
   def applications_open_from_message_for(recruitment_cycle)
     if current_cycle?
-      "As soon as the course is on Find (recommended)"
+      'As soon as the course is on Find (recommended)'
     else
       year = recruitment_cycle.year.to_i
-      day_month = recruitment_cycle.application_start_date.strftime("%-d %B")
+      day_month = recruitment_cycle.application_start_date.strftime('%-d %B')
       "On #{day_month} when applications for the #{year - 1} to #{year} cycle open"
     end
   end
 
   def selectable_subjects
-    edit_course_options["subjects"].map { |subject| [subject.attributes["subject_name"], subject["id"]] }
+    edit_course_options['subjects'].map { |subject| [subject.attributes['subject_name'], subject['id']] }
   end
 
   def selected_subject_ids
-    selectable_subject_ids = course.subjects.map { |subject| subject["id"] }
+    selectable_subject_ids = course.subjects.map { |subject| subject['id'] }
     selected_subject_ids = subjects.map(&:id)
 
     selectable_subject_ids & selected_subject_ids
@@ -261,7 +263,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def return_start_date
-    if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles")
+    if FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
       start_date.presence || "September #{Settings.current_recruitment_cycle_year + 1}"
     else
       start_date.presence || "September #{Settings.current_recruitment_cycle_year}"
@@ -270,21 +272,21 @@ class CourseDecorator < ApplicationDecorator
 
   def placements_heading
     if further_education?
-      "Teaching placements"
+      'Teaching placements'
     else
-      "School placements"
+      'School placements'
     end
   end
 
   def further_education?
-    level == "further_education" && subjects.any? { |s| s.subject_name == "Further education" || s.subject_code = "41" }
+    level == 'further_education' && subjects.any? { |s| s.subject_name == 'Further education' || s.subject_code = '41' }
   end
 
   def subject_page_title
-    if level == "primary" || level == "secondary"
-      "Subject"
+    if level == 'primary' || level == 'secondary'
+      'Subject'
     else
-      "Pick a subject"
+      'Pick a subject'
     end
   end
 
@@ -341,14 +343,12 @@ class CourseDecorator < ApplicationDecorator
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
     scholarship = number_to_currency(financial_incentive&.scholarship)
 
-    return I18n.t("components.course.financial_incentives.not_yet_available") if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
-    return I18n.t("components.course.financial_incentives.none") if financial_incentive.nil?
+    return I18n.t('components.course.financial_incentives.not_yet_available') if (course.recruitment_cycle_year.to_i > Settings.current_recruitment_cycle_year) || !FeatureFlag.active?(:bursaries_and_scholarships_announced)
+    return I18n.t('components.course.financial_incentives.none') if financial_incentive.nil?
 
-    if bursary_amount.present? && scholarship.present?
-      return I18n.t("components.course.financial_incentives.bursary_and_scholarship", scholarship:, bursary_amount:)
-    end
+    return I18n.t('components.course.financial_incentives.bursary_and_scholarship', scholarship:, bursary_amount:) if bursary_amount.present? && scholarship.present?
 
-    I18n.t("components.course.financial_incentives.bursary", amount: bursary_amount)
+    I18n.t('components.course.financial_incentives.bursary', amount: bursary_amount)
   end
 
   def salary_details
@@ -372,18 +372,18 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def has_physical_education_subject?
-    subjects.map(&:subject_name).include?("Physical education")
+    subjects.map(&:subject_name).include?('Physical education')
   end
 
 private
 
   def not_on_find
     if object.new_and_not_running?
-      "No - still in draft"
+      'No - still in draft'
     elsif object.is_withdrawn?
-      "No - withdrawn"
+      'No - withdrawn'
     else
-      "No"
+      'No'
     end
   end
 
@@ -395,9 +395,7 @@ private
 
   def find_max_funding_for(attribute)
     subject_funding_amounts = object.subjects.map do |s|
-      if s.financial_incentive.attributes[attribute].present?
-        s.financial_incentive.public_send(attribute.to_sym).to_i
-      end
+      s.financial_incentive.public_send(attribute.to_sym).to_i if s.financial_incentive.attributes[attribute].present?
     end
 
     subject_funding_amounts.compact.max.to_s
@@ -408,7 +406,7 @@ private
       /^Drama/,
       /^Media Studies/,
       /^PE/,
-      /^Physical/,
+      /^Physical/
     ]
     # We only care about course with a name matching the pattern 'Foo with bar'
     # We don't care about courses matching the pattern 'Foo and bar'
@@ -446,6 +444,6 @@ private
   end
 
   def format_name(subjects)
-    subjects.map(&:subject_name).join("<br>").html_safe
+    subjects.map(&:subject_name).join('<br>').html_safe
   end
 end

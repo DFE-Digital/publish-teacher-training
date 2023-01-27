@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSubjectIndexes < ActiveRecord::Migration[6.0]
   def change
     add_index :subject, :type

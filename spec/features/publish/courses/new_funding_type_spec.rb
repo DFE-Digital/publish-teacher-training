@@ -1,30 +1,32 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "selecting funding type", { can_edit_current_and_next_cycles: false } do
+require 'rails_helper'
+
+feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_funding_type_page
   end
 
-  scenario "selecting fee paying" do
+  scenario 'selecting fee paying' do
     when_i_select_funding_type(:fee)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:fee)
   end
 
-  scenario "selecting salaried" do
+  scenario 'selecting salaried' do
     when_i_select_funding_type(:salary)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:salary)
   end
 
-  scenario "selecting apprenticeship" do
+  scenario 'selecting apprenticeship' do
     when_i_select_funding_type(:apprenticeship)
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:apprenticeship)
   end
 
-  scenario "invalid entries" do
+  scenario 'invalid entries' do
     and_i_click_continue
     then_i_am_met_with_errors
   end
@@ -54,12 +56,12 @@ private
 
   def then_i_am_met_with_the_full_or_part_time_page(funding_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/full-part-time/new#{selected_params(funding_type)}")
-    expect(page).to have_content("Full time or part time?")
+    expect(page).to have_content('Full time or part time?')
   end
 
   def then_i_am_met_with_errors
-    expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select a program type")
+    expect(page).to have_content('There is a problem')
+    expect(page).to have_content('Select a program type')
   end
 
   def selected_params(funding_type)

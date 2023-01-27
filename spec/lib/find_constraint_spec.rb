@@ -1,50 +1,53 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe FindConstraint do
-  let(:request) {
+  let(:request) do
     double(
       :request,
-      host:,
+      host:
     )
-  }
-  let(:find_temp_url) { "find_temp_url" }
-  let(:host) { "find_temp_url" }
+  end
 
-  subject {
+  let(:find_url) { 'find_url' }
+  let(:host) { 'find_url' }
+
+  subject do
     described_class.new.matches?(request)
-  }
+  end
 
-  describe "#matched?" do
+  describe '#matched?' do
     before do
-      Settings.find_temp_url = find_temp_url
+      Settings.find_url = find_url
     end
 
-    context "Settings.find_temp_url is same as host" do
-      it "returns true" do
+    context 'Settings.find_url is same as host' do
+      it 'returns true' do
         expect(subject).to be_truthy
       end
     end
 
-    context "Settings.find_temp_url is different to host" do
-      let(:host) { "find_different_url" }
+    context 'Settings.find_url is different to host' do
+      let(:host) { 'find_different_url' }
 
-      it "returns false" do
+      it 'returns false' do
         expect(subject).to be_falsey
       end
     end
 
-    context "Settings.find_temp_url is different but subdomain matches" do
-      let(:host) { "find2-pr-123" }
+    context 'Review environment' do
+      let(:host) { 'find-pr-123' }
 
-      it "returns false" do
+      it 'returns true' do
         expect(subject).to be_truthy
       end
     end
 
-    context "Settings.find_temp_url is nil" do
-      let(:find_temp_url) { nil }
+    context 'Settings.find_url is nil' do
+      let(:find_url) { nil }
 
-      it "returns false" do
+      it 'returns false' do
         expect(subject).to be_falsey
       end
     end

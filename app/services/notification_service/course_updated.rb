@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NotificationService
   class CourseUpdated
     include ServicePattern
@@ -18,7 +20,7 @@ module NotificationService
             attribute_name: updated_attribute,
             original_value:,
             updated_value:,
-            recipient: user,
+            recipient: user
           ).deliver_later
         end
       end

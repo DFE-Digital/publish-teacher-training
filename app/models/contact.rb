@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Contact < ApplicationRecord
-  self.inheritance_column = "_unused"
+  self.inheritance_column = '_unused'
 
   include TouchProvider
 
@@ -13,11 +15,11 @@ class Contact < ApplicationRecord
   validates :permission_given, acceptance: true
 
   enum type: {
-         admin: "admin",
-         utt: "utt",
-         web_link: "web_link",
-         fraud: "fraud",
-         finance: "finance",
+         admin: 'admin',
+         utt: 'utt',
+         web_link: 'web_link',
+         fraud: 'fraud',
+         finance: 'finance'
        },
-    _suffix: "contact"
+    _suffix: 'contact'
 end

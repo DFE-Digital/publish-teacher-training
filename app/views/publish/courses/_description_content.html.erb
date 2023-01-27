@@ -8,7 +8,7 @@
     course_value_provided?(course.about_course),
     %w[about_course],
     action_path: about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-    action_visually_hidden_text: "details about this course",
+    action_visually_hidden_text: "details about this course"
   ) %>
 
   <% enrichment_summary(
@@ -18,7 +18,7 @@
     course_value_provided?(course.interview_process),
     %w[interview_process],
     action_path: "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#interview-process",
-    action_visually_hidden_text: "details about the interview process",
+    action_visually_hidden_text: "details about the interview process"
   ) %>
 
   <% enrichment_summary(
@@ -28,7 +28,7 @@
     course_value_provided?(course.how_school_placements_work),
     %w[how_school_placements_work],
     action_path: "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#how-school-placements-work",
-    action_visually_hidden_text: "details about how school placements work",
+    action_visually_hidden_text: "details about how school placements work"
   ) %>
 <% end %>
 
@@ -48,7 +48,7 @@
       course_value_provided?(course.length),
       %w[course_length],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
-      action_visually_hidden_text: "course length",
+      action_visually_hidden_text: "course length"
     ) %>
 
     <% enrichment_summary(
@@ -58,7 +58,7 @@
       course_value_provided?(number_to_currency(course.fee_uk_eu)),
       %w[fee_uk_eu],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
-      action_visually_hidden_text: "fee for UK students",
+      action_visually_hidden_text: "fee for UK students"
     ) %>
 
     <% enrichment_summary(
@@ -68,7 +68,7 @@
       course_value_provided?(number_to_currency(course.fee_international)),
       %w[fee_international],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
-      action_visually_hidden_text: "fee for international students",
+      action_visually_hidden_text: "fee for international students"
     ) %>
 
     <% enrichment_summary(
@@ -78,7 +78,7 @@
       course_value_provided?(course.fee_details),
       %w[fee_details],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
-      action_visually_hidden_text: "fee details",
+      action_visually_hidden_text: "fee details"
     ) %>
 
     <% enrichment_summary(
@@ -88,7 +88,7 @@
       course_value_provided?(course.financial_support),
       %w[financial_support],
       action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
-      action_visually_hidden_text: "details of financial support you offer",
+      action_visually_hidden_text: "details of financial support you offer"
     ) %>
 
     <% summary_list.row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
@@ -104,7 +104,7 @@
       course_value_provided?(course.length),
       %w[course_length],
       action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
-      action_visually_hidden_text: "course length",
+      action_visually_hidden_text: "course length"
     ) %>
 
     <% enrichment_summary(
@@ -114,7 +114,7 @@
       course_value_provided?(course.salary_details),
       %w[salary_details],
       action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#salary",
-      action_visually_hidden_text: "salary",
+      action_visually_hidden_text: "salary"
     ) %>
   <% end %>
 <% end %>
@@ -130,7 +130,7 @@
       %w[degree_grade degree_subject_requirements],
       truncate_value: false,
       action_path: course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
-      action_visually_hidden_text: "degree",
+      action_visually_hidden_text: "degree"
     ) %>
 
     <% enrichment_summary(
@@ -141,7 +141,7 @@
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
       truncate_value: false,
       action_path: course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
-      action_visually_hidden_text: "GCSEs",
+      action_visually_hidden_text: "GCSEs"
     ) %>
 
   <% enrichment_summary(
@@ -151,7 +151,7 @@
     course_value_provided?(course.personal_qualities),
     %w[personal_qualities],
     action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
-    action_visually_hidden_text: "personal qualities",
+    action_visually_hidden_text: "personal qualities"
   ) %>
 
   <% enrichment_summary(
@@ -161,6 +161,6 @@
     course_value_provided?(course.other_requirements),
     %w[other_requirements],
     action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
-    action_visually_hidden_text: "other requirements",
+    action_visually_hidden_text: "other requirements"
   ) %>
 <% end %>

@@ -5,14 +5,14 @@ class PageTitle < ApplicationComponent
 
   attr_accessor :title
 
-  def initialize(title: "", has_errors: false, classes: [], html_attributes: {})
+  def initialize(title: '', has_errors: false, classes: [], html_attributes: {})
     super(classes:, html_attributes:)
     @title = title
     @has_errors = has_errors
   end
 
   def build_page_title
-    [build_error + build_title + build_service_name, "GOV.UK"].join(" - ")
+    [build_error + build_title + build_service_name, 'GOV.UK'].join(' - ')
   end
 
 private
@@ -20,7 +20,7 @@ private
   attr_reader :has_errors
 
   def build_error
-    has_errors ? "Error: " : ""
+    has_errors ? 'Error: ' : ''
   end
 
   def build_title
@@ -28,6 +28,6 @@ private
   end
 
   def build_service_name
-    title.present? ? " - #{I18n.t('service_name.publish')}" : I18n.t("service_name.publish")
+    title.present? ? " - #{I18n.t('service_name.publish')}" : I18n.t('service_name.publish')
   end
 end

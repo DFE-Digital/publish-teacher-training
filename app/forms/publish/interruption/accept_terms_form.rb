@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Publish
   module Interruption
     class AcceptTermsForm < BaseModelForm
-      alias_method :user, :model
+      alias user model
 
       FIELDS = %i[
         terms_accepted

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CoursePolicy
   attr_reader :user, :course
 
@@ -41,15 +43,16 @@ class CoursePolicy
     course.draft_or_rolled_over?
   end
 
-  alias_method :preview?, :show?
-  alias_method :details?, :show?
-  alias_method :update?, :show?
-  alias_method :edit?, :show?
-  alias_method :destroy?, :show?
-  alias_method :publish?, :update?
-  alias_method :publishable?, :update?
-  alias_method :new?, :index?
-  alias_method :withdraw?, :show?
+  alias preview? show?
+  alias apply? show?
+  alias details? show?
+  alias update? show?
+  alias edit? show?
+  alias destroy? show?
+  alias publish? update?
+  alias publishable? update?
+  alias new? index?
+  alias withdraw? show?
 
   def permitted_attributes
     if user.admin?

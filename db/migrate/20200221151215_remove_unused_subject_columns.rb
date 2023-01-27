@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveUnusedSubjectColumns < ActiveRecord::Migration[6.0]
   def up
     change_table :subject, bulk: true do |t|

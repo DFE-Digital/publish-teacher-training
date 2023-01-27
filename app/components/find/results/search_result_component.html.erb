@@ -11,10 +11,10 @@
     <dt class="app-description-list__label">Qualification</dt>
     <dd data-qa="course__qualification">
       <% if accredited_body %>
-        <p class="govuk-body"><%= course.find_outcome %></p>
+        <p class="govuk-body"><%= formatted_qualification %></p>
         <p class="govuk-hint"><%= accredited_body %></p>
       <% else %>
-        <%= course.find_outcome %>
+        <%= formatted_qualification %>
       <% end %>
     </dd>
 

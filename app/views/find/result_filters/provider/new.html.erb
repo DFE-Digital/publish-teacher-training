@@ -11,7 +11,7 @@
           <%= govuk_link_to(
             "#{provider.provider_name} (#{provider.provider_code})",
             find_subject_path(filter_params_without_previous_parameters.merge(query: provider.provider_name)),
-            { data: { qa: "provider_suggestion__link" } },
+            { data: { qa: "provider_suggestion__link" } }
           ) %>
         </li>
       <% end %>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveStructuredGcseColumnsFromCourseTable < ActiveRecord::Migration[6.1]
   def change
     remove_column :course, :accept_pending_gcse, :boolean

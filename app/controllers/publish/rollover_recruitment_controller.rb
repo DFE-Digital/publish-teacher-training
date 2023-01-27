@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class RolloverRecruitmentController < ApplicationController
     def new; end
@@ -6,7 +8,7 @@ module Publish
       InterruptPageAcknowledgement.find_or_create_by!(
         user: current_user,
         recruitment_cycle: RecruitmentCycle.current,
-        page: "rollover_recruitment",
+        page: 'rollover_recruitment'
       )
 
       redirect_to publish_root_path

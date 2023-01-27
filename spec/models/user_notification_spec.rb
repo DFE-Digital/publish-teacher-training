@@ -1,25 +1,27 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe UserNotification do
-  describe "validations" do
+  describe 'validations' do
     before do
       subject.valid?
     end
 
-    it "requires course_publish" do
+    it 'requires course_publish' do
       subject.course_publish = nil
       subject.save
-      expect(subject.errors["course_publish"]).to include("is not included in the list")
+      expect(subject.errors['course_publish']).to include('is not included in the list')
     end
 
-    it "requires course_update" do
+    it 'requires course_update' do
       subject.course_update = nil
       subject.save
-      expect(subject.errors["course_update"]).to include("is not included in the list")
+      expect(subject.errors['course_update']).to include('is not included in the list')
     end
   end
 
-  describe "associations" do
+  describe 'associations' do
     let(:organisation) { create(:organisation, providers: [provider]) }
     let(:user) { create(:user, organisations: [organisation]) }
     let(:provider) { create(:provider) }
@@ -30,7 +32,7 @@ describe UserNotification do
     it { is_expected.to belong_to(:user) }
   end
 
-  describe "scopes" do
+  describe 'scopes' do
     let(:organisation) { create(:organisation, providers: [provider]) }
     let(:user) { create(:user, organisations: [organisation]) }
     let(:provider) { create(:provider) }
@@ -39,7 +41,7 @@ describe UserNotification do
         :user_notification,
         provider_code: provider.provider_code,
         user_id: user.id,
-        course_publish: true,
+        course_publish: true
       )
     end
 
@@ -48,11 +50,11 @@ describe UserNotification do
         :user_notification,
         provider_code: provider.provider_code,
         user_id: user.id,
-        course_update: true,
+        course_update: true
       )
     end
 
-    describe ".course_publish_notification_requests" do
+    describe '.course_publish_notification_requests' do
       before do
         user_notification_create
         user_notification_update
@@ -63,7 +65,7 @@ describe UserNotification do
       it { is_expected.to contain_exactly(user_notification_create) }
     end
 
-    describe ".course_update_notification_requests" do
+    describe '.course_update_notification_requests' do
       before do
         user_notification_create
         user_notification_update

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module CourseBasicDetailConcern
     extend ActiveSupport::Concern
@@ -28,13 +30,13 @@ module Publish
       return render :edit if @errors.present?
 
       if @course.update(course_params)
-        flash[:success] = I18n.t("success.saved")
+        flash[:success] = I18n.t('success.saved')
         redirect_to(
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
+            @course.course_code
+          )
         )
       else
         @errors = @course.errors.messages
@@ -56,7 +58,7 @@ module Publish
   private
 
     def build_new_course
-      add_custom_age_range_into_params if params.dig("course", "age_range_in_years") == "other"
+      add_custom_age_range_into_params if params.dig('course', 'age_range_in_years') == 'other'
 
       @course = ::Courses::CreationService.call(course_params:, provider:)
     end
@@ -66,7 +68,7 @@ module Publish
     end
 
     def add_custom_age_range_into_params
-      params["course"]["age_range_in_years"] = "#{age_from_param}_to_#{age_to_param}"
+      params['course']['age_range_in_years'] = "#{age_from_param}_to_#{age_to_param}"
     end
 
     def errors
@@ -89,11 +91,11 @@ module Publish
             :goto_confirmation,
             :skip_languages_goto_confirmation,
             :goto_visa,
-            :language_ids,
+            :language_ids
           ).permit(
             policy(Course.new).permitted_new_course_attributes,
             sites_ids: [],
-            subjects_ids: [],
+            subjects_ids: []
           )
       else
         ActionController::Parameters.new({}).permit(:course)
@@ -119,9 +121,7 @@ module Publish
     def next_step
       continue_path = course_creation_path_for(continue_step)
 
-      if continue_path.nil?
-        raise "No path defined for continue step: #{continue_path}"
-      end
+      raise "No path defined for continue step: #{continue_path}" if continue_path.nil?
 
       continue_path
     end
@@ -147,9 +147,7 @@ module Publish
     def build_back_link
       previous_path = course_back_path_for(back_step)
 
-      if previous_path.nil?
-        raise "No path defined for back step: #{back_step}"
-      end
+      raise "No path defined for back step: #{back_step}" if previous_path.nil?
 
       @back_link_path = previous_path
     end

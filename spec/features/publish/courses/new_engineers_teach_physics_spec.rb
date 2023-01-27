@@ -1,11 +1,13 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "selecting a physics subject", { can_edit_current_and_next_cycles: false } do
+require 'rails_helper'
+
+feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario "selecting physics only" do
+  scenario 'selecting physics only' do
     when_i_visit_the_new_course_subject_page(:secondary)
     and_i_select_a_subject(:physics)
     and_i_click_continue
@@ -17,7 +19,7 @@ feature "selecting a physics subject", { can_edit_current_and_next_cycles: false
     then_i_am_met_with_the_age_range_page(:secondary, :physics)
   end
 
-  scenario "selecting physics and modern languages subjects" do
+  scenario 'selecting physics and modern languages subjects' do
     when_i_visit_the_new_course_subject_page(:secondary)
     and_i_select_a_subject(:physics)
     and_i_select_subordinate_subject(:modern_languages)
@@ -28,7 +30,7 @@ feature "selecting a physics subject", { can_edit_current_and_next_cycles: false
     then_i_am_met_with_the_modern_languages_page
   end
 
-  scenario "changing from physics to another course clears the campaign_name params" do
+  scenario 'changing from physics to another course clears the campaign_name params' do
     when_i_visit_the_new_course_subject_page(:secondary)
     and_i_select_a_subject(:physics)
     and_i_click_continue
@@ -81,7 +83,7 @@ private
   end
 
   def when_i_go_back
-    click_link("Back")
+    click_link('Back')
   end
 
   def and_i_select_an_option
@@ -89,7 +91,7 @@ private
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content("Select an option")
+    expect(page).to have_content('Select an option')
   end
 
   def and_i_select_subordinate_subject(subject_type)
@@ -98,42 +100,42 @@ private
 
   def then_i_am_met_with_the_engineers_teach_physics_page(_level, _subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_subject(:secondary, :physics)}")
-    expect(page).to have_content("Engineers Teach Physics")
+    expect(page).to have_content('Engineers Teach Physics')
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page_with_etp(_level, _subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_etp(:secondary, :physics)}")
-    expect(page).to have_content("Engineers Teach Physics")
+    expect(page).to have_content('Engineers Teach Physics')
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page_with_no_etp(_level, _subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{params_with_no_etp(:secondary, :physics)}")
-    expect(page).to have_content("Engineers Teach Physics")
+    expect(page).to have_content('Engineers Teach Physics')
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_with_languages_page(_level, _subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/engineers-teach-physics/new?#{modern_language_params_with_subject(:secondary, :physics)}")
-    expect(page).to have_content("Engineers Teach Physics")
+    expect(page).to have_content('Engineers Teach Physics')
   end
 
   def then_i_am_met_with_the_age_range_page(level, subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_etp(level, subject_type)}")
-    expect(page).to have_content("Specify an age range")
+    expect(page).to have_content('Specify an age range')
   end
 
   def then_i_am_met_with_the_age_range_page_with_latin(level, subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{form_params_with_latin(level, subject_type)}")
-    expect(page).to have_content("Specify an age range")
+    expect(page).to have_content('Specify an age range')
   end
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
-    expect(page).to have_content("Pick all the languages for this course")
+    expect(page).to have_content('Pick all the languages for this course')
   end
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
-    expect(page).to have_content("Pick all the languages for this course")
+    expect(page).to have_content('Pick all the languages for this course')
   end
 
   def provider

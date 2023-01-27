@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Deleting a provider from user", :with_publish_constraint do
+feature 'Deleting a provider from user', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_remove
     when_i_visit_the_user_show_providers_page
   end
 
-  scenario "Deleting a user-provider relationship" do
+  scenario 'Deleting a user-provider relationship' do
     when_i_click_the_remove_user_from_provider_button
     then_i_am_taken_to_the_user_show_providers_page
     with_a_success_message
@@ -36,7 +36,7 @@ private
   end
 
   def with_a_success_message
-    expect(support_user_show_providers_page).to have_content("User permission successfully deleted")
+    expect(support_user_show_providers_page).to have_content('User permission successfully deleted')
   end
 
   def and_the_user_provider_relationship_is_destroyed

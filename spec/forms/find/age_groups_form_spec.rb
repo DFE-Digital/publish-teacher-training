@@ -1,42 +1,42 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 module Find
   describe AgeGroupsForm do
-    describe "validation" do
+    describe 'validation' do
       subject { described_class.new(params) }
 
-      context "when no option is selected" do
+      context 'when no option is selected' do
         let(:params) { {} }
 
-        it "is not valid" do
+        it 'is not valid' do
           expect(subject.valid?).to be(false)
-          expect(subject.errors[:age_group]).to include("Select which age group you want to teach")
+          expect(subject.errors[:age_group]).to include('Select which age group you want to teach')
         end
       end
 
-      context "when selected option is not one of the accepted age groups" do
-        let(:params) { { age_group: "foo" } }
+      context 'when selected option is not one of the accepted age groups' do
+        let(:params) { { age_group: 'foo' } }
 
-        it "is not valid" do
+        it 'is not valid' do
           expect(subject.valid?).to be(false)
         end
       end
 
-      shared_examples "valid option" do |age_group|
+      shared_examples 'valid option' do |age_group|
         context "when option selected is #{age_group}" do
           let(:params) { { age_group: } }
 
-          it "is valid" do
+          it 'is valid' do
             expect(subject.valid?).to be(true)
           end
         end
       end
 
-      include_examples "valid option", "primary"
-      include_examples "valid option", "secondary"
-      include_examples "valid option", "further_education"
+      include_examples 'valid option', 'primary'
+      include_examples 'valid option', 'secondary'
+      include_examples 'valid option', 'further_education'
     end
   end
 end

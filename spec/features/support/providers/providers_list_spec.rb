@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "View providers", :with_publish_constraint do
+feature 'View providers', :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
   before do
@@ -11,7 +11,7 @@ feature "View providers", :with_publish_constraint do
     when_i_visit_the_support_provider_index_page
   end
 
-  scenario "i can view the providers" do
+  scenario 'i can view the providers' do
     then_i_see_the_providers
   end
 

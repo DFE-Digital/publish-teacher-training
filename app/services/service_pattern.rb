@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ServicePattern
   def self.included(base)
     base.extend ClassMethods
@@ -7,7 +9,7 @@ module ServicePattern
   end
 
   def call
-    raise NotImplementedError("#call must be implemented")
+    raise NotImplementedError('#call must be implemented')
   end
 
   module ClassMethods

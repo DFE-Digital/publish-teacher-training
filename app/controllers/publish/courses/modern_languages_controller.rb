@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class ModernLanguagesController < PublishController
@@ -26,8 +28,8 @@ module Publish
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
-          ),
+            @course.course_code
+          )
         )
       end
 
@@ -35,13 +37,13 @@ module Publish
         authorize(provider)
 
         if course_subjects_form.save!
-          flash[:success] = I18n.t("success.saved")
+          flash[:success] = I18n.t('success.saved')
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,
               @course.recruitment_cycle_year,
-              @course.course_code,
-            ),
+              @course.course_code
+            )
           )
         else
           @errors = @course.errors.messages

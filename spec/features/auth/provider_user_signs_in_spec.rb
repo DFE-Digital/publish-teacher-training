@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Authentication", :with_publish_constraint do
-  scenario "Provider user signs in", { can_edit_current_and_next_cycles: false } do
+feature 'Authentication', :with_publish_constraint do
+  scenario 'Provider user signs in', { can_edit_current_and_next_cycles: false } do
     given_i_am_a_provider_user
     when_i_visit_the_root_path
     then_i_am_expected_to_sign_in
@@ -22,22 +22,22 @@ feature "Authentication", :with_publish_constraint do
   end
 
   def then_i_am_expected_to_sign_in
-    expect(page).to have_content "Use DfE Sign-in to access your account"
+    expect(page).to have_content 'Use DfE Sign-in to access your account'
   end
 
   def when_i_sign_in
-    click_button "Sign in using DfE Sign-in"
+    click_button 'Sign in using DfE Sign-in'
   end
 
   def then_i_can_access_the_publish
     expect(page).to have_current_path publish_root_path
-    expect(page).to have_content "Publish teacher training"
+    expect(page).to have_content 'Publish teacher training'
   end
 
   def and_i_cannot_access_the_support_interface
     visit support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
     expect(page).to have_current_path support_recruitment_cycle_providers_path(recruitment_cycle_year: Settings.current_recruitment_cycle_year)
     expect(page.status_code).to eq(403)
-    expect(page.find("h1")).to have_content("You are not permitted to see this page")
+    expect(page.find('h1')).to have_content('You are not permitted to see this page')
   end
 end

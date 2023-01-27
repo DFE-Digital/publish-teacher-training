@@ -2,7 +2,7 @@
 
 module UserHelper
   def full_name(user)
-    [user.first_name, user.last_name].join(" ")
+    [user.first_name, user.last_name].join(' ')
   end
 
   def user_details(user)

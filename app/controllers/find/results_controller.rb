@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class ResultsController < ApplicationController
     before_action :render_feedback_component

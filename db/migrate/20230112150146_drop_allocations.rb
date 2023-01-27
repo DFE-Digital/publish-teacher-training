@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropAllocations < ActiveRecord::Migration[7.0]
   def up
     drop_table :allocation_uplift

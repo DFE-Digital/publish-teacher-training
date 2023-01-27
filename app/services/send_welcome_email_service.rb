@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SendWelcomeEmailService
   class MissingFirstNameError < StandardError; end
   class << self
@@ -17,7 +19,7 @@ class SendWelcomeEmailService
       .deliver_later
 
     current_user.update(
-      welcome_email_date_utc: Time.now.utc,
+      welcome_email_date_utc: Time.now.utc
     )
   rescue MissingFirstNameError => e
     Sentry.capture_exception(e)

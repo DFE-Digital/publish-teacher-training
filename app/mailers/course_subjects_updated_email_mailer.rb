@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
   include TimeFormat
 
@@ -18,7 +20,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
       previous_subjects: format(previous_subject_names),
       updated_subjects: format(course.subjects.map(&:subject_name)),
       previous_course_name:,
-      updated_course_name: course.name,
+      updated_course_name: course.name
     )
 
     mail(to: recipient.email)
@@ -27,7 +29,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
 private
 
   def format(subject_names)
-    subject_names.join(", ")
+    subject_names.join(', ')
   end
 
   def create_course_url(course)

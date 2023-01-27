@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PostcodeNormalize
   extend ActiveSupport::Concern
   included do

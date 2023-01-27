@@ -6,19 +6,19 @@ class NavigationBarPreview < ViewComponent::Preview
   end
 
   def with_a_user_signed_in
-    render NavigationBar.new(items:, current_path:, current_user: { first_name: "Ted" })
+    render NavigationBar.new(items:, current_path:, current_user: { first_name: 'Ted' })
   end
 
 private
 
   def items
     [
-      { name: "Home", url: "root_path" },
-      { name: "Providers", url: "#", current: false },
+      { name: 'Home', url: 'root_path' },
+      { name: 'Providers', url: '#', current: false }
     ]
   end
 
   def current_path
-    "root_path"
+    'root_path'
   end
 end

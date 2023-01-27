@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ErrorHandlers
   module Base
     extend ActiveSupport::Concern
@@ -29,9 +31,9 @@ module ErrorHandlers
           {
             status:,
             title: I18n.t("errors.#{status}.title"),
-            detail: I18n.t("errors.#{status}.detail", message:),
-          },
-        ],
+            detail: I18n.t("errors.#{status}.detail", message:)
+          }
+        ]
       }
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Enrichments
   class CopyToCourseService
     def execute(enrichment:, new_course:)

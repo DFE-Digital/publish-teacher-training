@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V3
   class CourseSearchService
     def initialize(filter: nil, sort: nil, course_scope: Course)
@@ -16,7 +18,7 @@ module V3
       ::CourseSearchService.call(
         filter:,
         sort:,
-        course_scope:,
+        course_scope:
       )
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UniqueCourseSubject < ActiveRecord::Migration[6.0]
   def up
     Rails.logger.info { "De-duping course_subject. Count before: #{CourseSubject.count}" }

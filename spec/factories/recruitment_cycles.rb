@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :recruitment_cycle do
     year { Settings.current_recruitment_cycle_year }

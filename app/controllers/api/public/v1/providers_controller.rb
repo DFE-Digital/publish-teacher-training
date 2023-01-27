@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
@@ -5,14 +7,14 @@ module API
         def index
           render jsonapi: paginate(providers),
             include: params[:include],
-            meta: { count: providers.count("provider.id") }, class: API::Public::V1::SerializerService.call, fields:
+            meta: { count: providers.count('provider.id') }, class: API::Public::V1::SerializerService.call, fields:
         end
 
         def show
           code = params.fetch(:code, params[:provider_code])
           provider = recruitment_cycle.providers
                                         .find_by!(
-                                          provider_code: code.upcase,
+                                          provider_code: code.upcase
                                         )
 
           render jsonapi: provider,
@@ -35,26 +37,26 @@ module API
           return [] if params.dig(:filter, :provider_type).blank?
           return [] unless params.dig(:filter, :provider_type).is_a?(String)
 
-          params.dig(:filter, :provider_type).split(",")
+          params.dig(:filter, :provider_type).split(',')
         end
 
         def region_codes
           return [] if params.dig(:filter, :region_code).blank?
           return [] unless params.dig(:filter, :region_code).is_a?(String)
 
-          params.dig(:filter, :region_code).split(",")
+          params.dig(:filter, :region_code).split(',')
         end
 
         def can_sponsor_skilled_worker_visa?
-          @can_sponsor_skilled_worker_visa ||= params.dig(:filter, :can_sponsor_skilled_worker_visa)&.to_s&.downcase == "true"
+          @can_sponsor_skilled_worker_visa ||= params.dig(:filter, :can_sponsor_skilled_worker_visa)&.to_s&.downcase == 'true'
         end
 
         def can_sponsor_student_visa?
-          @can_sponsor_student_visa ||= params.dig(:filter, :can_sponsor_student_visa)&.to_s&.downcase == "true"
+          @can_sponsor_student_visa ||= params.dig(:filter, :can_sponsor_student_visa)&.to_s&.downcase == 'true'
         end
 
         def is_accredited_body?
-          @is_accredited_body ||= params.dig(:filter, :is_accredited_body)&.to_s&.downcase == "true"
+          @is_accredited_body ||= params.dig(:filter, :is_accredited_body)&.to_s&.downcase == 'true'
         end
 
         def providers
@@ -80,7 +82,7 @@ module API
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year],
+            year: params[:recruitment_cycle_year]
           ) || RecruitmentCycle.current_recruitment_cycle
         end
 
@@ -89,19 +91,19 @@ module API
         end
 
         def sort_by_provider_ascending?
-          sort_field.include?("name") || !sort_by_provider_descending?
+          sort_field.include?('name') || !sort_by_provider_descending?
         end
 
         def sort_by_provider_descending?
-          sort_field.include?("-name")
+          sort_field.include?('-name')
         end
 
         def sort_field
-          @sort_field ||= Set.new(params[:sort]&.split(","))
+          @sort_field ||= Set.new(params[:sort]&.split(','))
         end
 
         def provider_fields
-          params.dig(:fields, :providers)&.split(",")
+          params.dig(:fields, :providers)&.split(',')
         end
       end
     end

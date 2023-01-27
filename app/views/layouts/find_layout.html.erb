@@ -2,6 +2,12 @@
 <html lang="en" class="govuk-template">
   <head>
     <title><%= yield :page_title %> - <%= t("service_name.find") %> - GOV.UK</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= canonical_tag %>
+    <%= tag.meta name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag.meta property: "og:image", content: asset_path("govuk-frontend/govuk/assets/images/govuk-opengraph-image.png") %>
+    <%= tag.meta name: "theme-color", content: "#0b0c0c" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/favicon.ico" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-mask-icon.svg", rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png", rel: "apple-touch-icon", type: "image/png" %>
@@ -20,7 +26,7 @@
     <% end %>
 
     <%= render Find::Header::View.new(
-      service_name: t("service_name.find"),
+      service_name: t("service_name.find")
     ) %>
 
     <div class="govuk-width-container">
@@ -33,7 +39,7 @@
             title_text: "Success",
             success: true,
             title_id: "success-message",
-            html_attributes: { role: "alert" },
+            html_attributes: { role: "alert" }
           ) do |notification_banner| %>
             <% notification_banner.heading(text: flash[:success]) %>
           <% end %>
@@ -49,8 +55,8 @@
       <%= render(
         Find::FeedbackComponent.new(
           path: request.env["PATH_INFO"],
-          controller: params[:controller],
-        ),
+          controller: params[:controller]
+        )
       ) %>
     <% end %>
 

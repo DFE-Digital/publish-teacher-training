@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewUserAddedBySupportTeamMailer < GovukNotifyRails::Mailer
   def user_added_to_provider_email(
     recipient:

@@ -1,4 +1,6 @@
-Rails.application.config.assets.paths << Rails.root.join("node_modules")
+# frozen_string_literal: true
+
+Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 # GOVUK Deps
 Rails.application.config.assets.precompile += %w[

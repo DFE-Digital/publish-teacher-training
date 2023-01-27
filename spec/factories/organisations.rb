@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :organisation do
-    name { "LONDON SCITT#{rand(1000000)}" }
+    name { "LONDON SCITT#{rand(1_000_000)}" }
     sequence(:org_id)
 
     trait :with_anonymised_data do

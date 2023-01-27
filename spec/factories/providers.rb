@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :provider do
-    provider_name { "ACME SCITT#{rand(1000000)}" }
+    provider_name { "ACME SCITT#{rand(1_000_000)}" }
 
-    sequence(:provider_code) { |n| format("A%02d", n) }
+    sequence(:provider_code) { |n| format('A%02d', n) }
 
     trait :with_anonymised_data do
       sequence(:provider_code) do |n|
@@ -22,8 +24,8 @@ FactoryBot.define do
     provider_type { :lead_school }
     urn { Faker::Number.number(digits: [5, 6].sample) }
     ukprn { Faker::Number.number(digits: 8) }
-    accrediting_provider { "N" }
-    region_code { "london" }
+    accrediting_provider { 'N' }
+    region_code { 'london' }
     association :recruitment_cycle, strategy: :find_or_create
 
     train_with_us { Faker::Lorem.sentence.to_s }
@@ -33,24 +35,24 @@ FactoryBot.define do
     can_sponsor_skilled_worker_visa { [true, false].sample }
 
     trait :with_name do
-      provider_name { "Test Name" }
+      provider_name { 'Test Name' }
     end
 
     trait :university do
       provider_type { :university }
-      accrediting_provider { "Y" }
+      accrediting_provider { 'Y' }
       urn { nil }
     end
 
     trait :scitt do
       provider_type { :scitt }
-      accrediting_provider { "Y" }
+      accrediting_provider { 'Y' }
       urn { nil }
     end
 
     trait :accredited_body do
       provider_type { %i[university scitt].sample }
-      accrediting_provider { "Y" }
+      accrediting_provider { 'Y' }
       urn { nil }
     end
 
@@ -68,9 +70,7 @@ FactoryBot.define do
       # updated_at does. Maybe this is because we've added changed_at to
       # timestamp_attributes_for_update but FactoryBot doesn't actually
       # recognise it.
-      if evaluator.changed_at.present?
-        provider.update changed_at: evaluator.changed_at
-      end
+      provider.update changed_at: evaluator.changed_at if evaluator.changed_at.present?
     end
 
     trait :next_recruitment_cycle do
@@ -87,7 +87,7 @@ FactoryBot.define do
 
     trait :published_scitt do
       transient do
-        identifier { "published_scitt" }
+        identifier { 'published_scitt' }
       end
 
       provider_name { "#{identifier} provider name" }

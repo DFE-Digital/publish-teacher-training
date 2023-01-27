@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class CookiePreferencesForm
     include ActiveModel::Model
@@ -14,9 +16,7 @@ module Find
     end
 
     def save
-      if valid?
-        cookies[cookie_name] = { value: consent, expires: expiry_date }
-      end
+      cookies[cookie_name] = { value: consent, expires: expiry_date } if valid?
     end
   end
 end

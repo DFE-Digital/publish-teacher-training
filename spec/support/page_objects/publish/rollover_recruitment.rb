@@ -3,7 +3,7 @@
 module PageObjects
   module Publish
     class RolloverRecruitment < PageObjects::Base
-      set_url "/publish/rollover-recruitment"
+      set_url '/publish/rollover-recruitment'
 
       element :submit, 'button.govuk-button[type="submit"]'
     end

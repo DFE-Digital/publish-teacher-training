@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Courses
       class SubjectsEdit < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/subjects"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/subjects'
 
         element :title, '[data-qa="page-heading"]'
         element :master_subject_fields, '[data-qa="course__master_subject"]'

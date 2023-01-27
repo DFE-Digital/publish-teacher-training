@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RolloverProviderService
   include ServicePattern
 
@@ -22,7 +24,7 @@ private
     bm = Benchmark.measure do
       Provider.connection.transaction do
         counts = copy_provider_to_recruitment_cycle.execute(
-          provider:, new_recruitment_cycle:, course_codes:,
+          provider:, new_recruitment_cycle:, course_codes:
         )
       end
     end
@@ -30,7 +32,7 @@ private
     Rails.logger.info "provider #{counts[:providers].zero? ? 'skipped' : 'copied'}, " \
                       "#{counts[:sites]} sites copied, " \
                       "#{counts[:courses]} courses copied " +
-                      format("in %.3f seconds", bm.real)
+                      format('in %.3f seconds', bm.real)
     counts
   end
 
@@ -46,7 +48,7 @@ private
     @copy_courses_to_provider_service ||= Courses::CopyToProviderService.new(
       sites_copy_to_course: Sites::CopyToCourseService.new,
       enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
-      force:,
+      force:
     )
   end
 
@@ -54,7 +56,7 @@ private
     @copy_provider_to_recruitment_cycle ||= Providers::CopyToRecruitmentCycleService.new(
       copy_course_to_provider_service: copy_courses_to_provider_service,
       copy_site_to_provider_service: Sites::CopyToProviderService.new,
-      force:,
+      force:
     )
   end
 end

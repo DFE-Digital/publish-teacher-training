@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 module ViewHelper
-  def govuk_back_link_to(url = :back, body = "Back")
+  def govuk_back_link_to(url = :back, body = 'Back')
     render GovukComponent::BackLinkComponent.new(
       text: body,
       href: url,
-      classes: "govuk-!-display-none-print",
+      classes: 'govuk-!-display-none-print',
       html_attributes: {
         data: {
-          qa: "page-back",
-        },
-      },
+          qa: 'page-back'
+        }
+      }
     )
   end
 
@@ -27,7 +29,7 @@ module ViewHelper
   def bat_contact_email_address_with_wrap
     # https://developer.mozilla.org/en-US/docs/Web/HTML/Element/wbr
     # The <wbr> element will not be copied when copying and pasting the email address
-    bat_contact_email_address.gsub("@", "<wbr>@").html_safe
+    bat_contact_email_address.gsub('@', '<wbr>@').html_safe
   end
 
   def bat_contact_mail_to(name = nil, **kwargs)
@@ -56,7 +58,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        sites: "#{base}/locations?display_errors=true",
+        sites: "#{base}/locations?display_errors=true"
       }.with_indifferent_access[field]
     end
   end
@@ -65,15 +67,15 @@ module ViewHelper
     base = "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}"
 
     {
-      "train_with_us" => "#{base}/about?display_errors=true#provider_train_with_us",
-      "train_with_disability" => "#{base}/about?display_errors=true#provider_train_with_disability",
-      "email" => "#{base}/contact?display_errors=true#provider_email",
-      "website" => "#{base}/contact?display_errors=true#provider_website",
-      "telephone" => "#{base}/contact?display_errors=true#provider_telephone",
-      "address1" => "#{base}/contact?display_errors=true#provider_address1",
-      "address3" => "#{base}/contact?display_errors=true#provider_address3",
-      "address4" => "#{base}/contact?display_errors=true#provider_address4",
-      "postcode" => "#{base}/contact?display_errors=true#provider_postcode",
+      'train_with_us' => "#{base}/about?display_errors=true#provider_train_with_us",
+      'train_with_disability' => "#{base}/about?display_errors=true#provider_train_with_disability",
+      'email' => "#{base}/contact?display_errors=true#provider_email",
+      'website' => "#{base}/contact?display_errors=true#provider_website",
+      'telephone' => "#{base}/contact?display_errors=true#provider_telephone",
+      'address1' => "#{base}/contact?display_errors=true#provider_address1",
+      'address3' => "#{base}/contact?display_errors=true#provider_address3",
+      'address4' => "#{base}/contact?display_errors=true#provider_address4",
+      'postcode' => "#{base}/contact?display_errors=true#provider_postcode"
     }[field]
   end
 
@@ -108,7 +110,7 @@ module ViewHelper
   ## Example usage:
   ##   <input class="<%= cns("govuk-input", "govuk-input--width-10": is_small) %>">
   def classnames(*args)
-    args.reduce("") do |str, arg|
+    args.reduce('') do |str, arg|
       classes =
 
         case arg
@@ -119,36 +121,36 @@ module ViewHelper
         else
           []
         end
-      ([str] + classes).compact_blank.join(" ")
+      ([str] + classes).compact_blank.join(' ')
     end
   end
 
-  alias_method :cns, :classnames
+  alias cns classnames
 
 private
 
   def base_errors_hash(provider_code, course)
     {
-      "Select if student visas can be sponsored" =>
+      'Select if student visas can be sponsored' =>
         student_visa_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Select if skilled worker visas can be sponsored" =>
+      'Select if skilled worker visas can be sponsored' =>
         skilled_worker_visa_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "You must provide a Unique Reference Number (URN) for all course locations" =>
+      'You must provide a Unique Reference Number (URN) for all course locations' =>
         locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
-      "Enter a Unique Reference Number (URN) for all course locations" =>
+      'Enter a Unique Reference Number (URN) for all course locations' =>
         locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
-      "You must provide a UK provider reference number (UKPRN)" =>
+      'You must provide a UK provider reference number (UKPRN)' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "You must provide a UK provider reference number (UKPRN) and URN" =>
+      'You must provide a UK provider reference number (UKPRN) and URN' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Enter a UK Provider Reference Number (UKPRN)" =>
+      'Enter a UK Provider Reference Number (UKPRN)' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Enter a UK Provider Reference Number (UKPRN) and URN" =>
+      'Enter a UK Provider Reference Number (UKPRN) and URN' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      "Enter degree requirements" =>
+      'Enter degree requirements' =>
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
-      "Enter GCSE requirements" =>
-        gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true),
+      'Enter GCSE requirements' =>
+        gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code, display_errors: true)
     }
   end
 end

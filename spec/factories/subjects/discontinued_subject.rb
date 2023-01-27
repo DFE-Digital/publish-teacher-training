@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   subjects = {
-    "Humanities" => nil,
-    "Balanced Science" => nil,
+    'Humanities' => nil,
+    'Balanced Science' => nil
   }
 
   factory :discontinued_subject do
@@ -13,13 +15,13 @@ FactoryBot.define do
     subject_code { sample_subject.second }
 
     trait :humanities do
-      subject_name { "Humanities" }
-      subject_code { subjects["Humanities"] }
+      subject_name { 'Humanities' }
+      subject_code { subjects['Humanities'] }
     end
 
     trait :balanced_science do
-      subject_name { "Balanced Science" }
-      subject_code { subjects["Balanced Science"] }
+      subject_name { 'Balanced Science' }
+      subject_code { subjects['Balanced Science'] }
     end
   end
 end

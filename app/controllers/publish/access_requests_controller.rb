@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   class AccessRequestsController < PublishController
     before_action -> { authorize(access_request) }, except: :index
@@ -11,7 +13,7 @@ module Publish
     def approve
       AccessRequestApprovalService.call(access_request)
 
-      flash[:success] = "Successfully approved request"
+      flash[:success] = 'Successfully approved request'
       redirect_to inform_publisher_publish_access_request_path
     end
 
@@ -21,7 +23,7 @@ module Publish
 
     def destroy
       access_request.destroy
-      flash[:success] = "Successfully deleted the Access Request"
+      flash[:success] = 'Successfully deleted the Access Request'
       redirect_to publish_access_requests_path
     end
 

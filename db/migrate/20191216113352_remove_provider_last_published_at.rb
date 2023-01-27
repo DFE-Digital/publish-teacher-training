@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Rails/ReversibleMigration
 class RemoveProviderLastPublishedAt < ActiveRecord::Migration[6.0]
   def change

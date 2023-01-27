@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class DraftRolloverController < PublishController
@@ -15,11 +17,11 @@ module Publish
         @course_rollover_form = CourseRolloverForm.new(course)
         if @course_rollover_form.valid?
           RolloverProviderService.call(provider_code: params[:provider_code], course_codes: params[:code]&.split, force: true)
-          flash[:success] = "Course rolled over"
+          flash[:success] = 'Course rolled over'
           redirect_to publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code,
+            @course.course_code
           )
         else
           render :edit
@@ -31,7 +33,7 @@ module Publish
       def redirect_to_courses
         redirect_to publish_provider_recruitment_cycle_courses_path(
           provider.provider_code,
-          course.recruitment_cycle_year,
+          course.recruitment_cycle_year
         )
       end
 

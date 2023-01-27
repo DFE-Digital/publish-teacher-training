@@ -1,66 +1,68 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "switcher cycle" do
-  scenario "Navigate to /cycle" do
+require 'rails_helper'
+
+feature 'switcher cycle' do
+  scenario 'Navigate to /cycle' do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
     and_i_should_see_the_page_heading
   end
 
-  scenario "Mid cycle and deadlines should be displayed" do
+  scenario 'Mid cycle and deadlines should be displayed' do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Mid cycle and deadlines should be displayed")
+    and_i_choose('Mid cycle and deadlines should be displayed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_results_page
-    and_i_see_deadline_banner("Apply now to get on a course starting in the 2023 to 2024 academic year")
+    and_i_see_deadline_banner('Apply now to get on a course starting in the 2023 to 2024 academic year')
   end
 
-  scenario "Update to Apply 1 deadline has passed" do
+  scenario 'Update to Apply 1 deadline has passed' do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Apply 1 deadline has passed")
+    and_i_choose('Apply 1 deadline has passed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_results_page
-    and_i_see_deadline_banner("You can continue to view and apply for courses starting in")
+    and_i_see_deadline_banner('You can continue to view and apply for courses starting in')
   end
 
-  scenario "Update to Apply 2 deadline has passed" do
+  scenario 'Update to Apply 2 deadline has passed' do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Apply 2 deadline has passed")
+    and_i_choose('Apply 2 deadline has passed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_results_page
-    and_i_see_deadline_banner("Courses are currently closed but you can get your application ready")
+    and_i_see_deadline_banner('Courses are currently closed but you can get your application ready')
   end
 
-  scenario "Find has closed" do
+  scenario 'Find has closed' do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Find has closed")
+    and_i_choose('Find has closed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_the_find_homepage
     then_i_should_see_the_applications_closed_text
   end
 
-  scenario "Find has reopened" do
+  scenario 'Find has reopened' do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Find has reopened")
+    and_i_choose('Find has reopened')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_should_see_the_correct_previous_recruitment_cycle_year
   end
 
   def when_i_visit_switcher_cycle_page
-    visit "/cycles"
+    visit '/cycles'
   end
 
   def then_i_should_see_the_page_title
-    expect(page.title).to have_content "Recruitment cycles"
+    expect(page.title).to have_content 'Recruitment cycles'
   end
 
   def and_i_should_see_the_page_heading
-    expect(courses_by_location_or_training_provider_page.heading).to have_content "Recruitment cycles"
+    expect(courses_by_location_or_training_provider_page.heading).to have_content 'Recruitment cycles'
   end
 
   def and_i_choose(option)
@@ -68,27 +70,27 @@ feature "switcher cycle" do
   end
 
   def then_i_click_on_update_button
-    page.click_on("Update point in recruitment cycle")
+    page.click_on('Update point in recruitment cycle')
   end
 
   def and_i_should_see_the_success_banner
-    expect(page).to have_selector("h2", text: "Success")
+    expect(page).to have_selector('h2', text: 'Success')
   end
 
   def and_i_visit_results_page
-    visit "/results"
+    visit '/results'
   end
 
   def and_i_visit_the_find_homepage
-    visit "/"
+    visit '/'
   end
 
   def and_i_see_deadline_banner(banner_text)
-    expect(page).to have_selector(".govuk-notification-banner__content", text: banner_text)
+    expect(page).to have_selector('.govuk-notification-banner__content', text: banner_text)
   end
 
   def then_i_should_see_the_applications_closed_text
-    expect(page).to have_text("Applications are currently closed but you can get ready to apply")
+    expect(page).to have_text('Applications are currently closed but you can get ready to apply')
   end
 
   def and_i_should_see_the_correct_previous_recruitment_cycle_year

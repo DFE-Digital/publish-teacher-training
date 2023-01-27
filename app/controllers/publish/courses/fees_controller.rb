@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class FeesController < BaseFundingTypeController
@@ -18,12 +20,12 @@ module Publish
         @course_fee_form = CourseFeeForm.new(course_enrichment, params: formatted_params)
 
         if @course_fee_form.save!
-          course_description_success_message("course length and fees")
+          course_description_success_message('course length and fees')
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           render :edit

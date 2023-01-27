@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FiltersFeatureSpecsHelper
   def results_page
     @results_page ||= PageObjects::Find::Results.new

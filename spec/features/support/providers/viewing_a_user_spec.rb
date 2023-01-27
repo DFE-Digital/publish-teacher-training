@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "Viewing a user", :with_publish_constraint do
+feature 'Viewing a user', :with_publish_constraint do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
   end
 
-  scenario "viewing a users details" do
+  scenario 'viewing a users details' do
     and_there_is_a_user
     when_i_visit_the_support_provider_show_page
     and_click_on_the_users_tab
@@ -17,7 +17,7 @@ feature "Viewing a user", :with_publish_constraint do
     and_i_see_the_users_details
   end
 
-  scenario "with last login information" do
+  scenario 'with last login information' do
     and_there_is_a_user(with_previous_login)
     when_i_visit_the_support_provider_show_page
     and_click_on_the_users_tab
@@ -67,7 +67,7 @@ private
 
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
-    expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
-    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_recruitment_cycle_provider_user_path(Settings.current_recruitment_cycle_year, @user.providers.first, @user))
+    expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime('%d %B %Y at %I:%M%p'))
+    expect(support_provider_user_show_page.remove_user_link['href']).to eq(delete_support_recruitment_cycle_provider_user_path(Settings.current_recruitment_cycle_year, @user.providers.first, @user))
   end
 end

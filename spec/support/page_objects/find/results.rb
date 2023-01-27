@@ -3,7 +3,7 @@
 module PageObjects
   module Find
     class Results < PageObjects::Base
-      set_url "/results{?query*}"
+      set_url '/results{?query*}'
 
       class Courses < SitePrism::Section
         element :provider_name, '[data-qa="course__provider_name"]'
@@ -47,7 +47,7 @@ module PageObjects
       end
 
       class EngineersTeachPhysics < SitePrism::Section
-        element :legend, "legend"
+        element :legend, 'legend'
         element :checkbox, 'input[name="engineers_teach_physics"]'
       end
 

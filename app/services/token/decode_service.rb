@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Token
   class DecodeService
     include ServicePattern
@@ -30,8 +32,8 @@ module Token
           verify_sub: true,
           verify_iat: true,
           exp_leeway: 6.seconds.to_i,
-          **claims,
-        },
+          **claims
+        }
       )
 
       (payload, _algorithm) = decoded_token
@@ -47,7 +49,7 @@ module Token
       @claims ||= {
         aud: audience,
         iss: issuer,
-        sub: subject,
+        sub: subject
       }
     end
   end

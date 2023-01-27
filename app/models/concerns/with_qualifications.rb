@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WithQualifications
   extend ActiveSupport::Concern
 
@@ -11,26 +13,26 @@ module WithQualifications
       # Recommendation for QTS: the student will not receive an academic teacher
       # training qualification on successful completion of the
       # programme.
-      recommendation_for_qts: "",
+      recommendation_for_qts: '',
 
       # Professional: the student will receive a Professional Graduate
       # Certificate of Education (offered at Level 6) or Professional
       # Graduate Diploma in Education (PGDE), with no credits or
       # modules at postgraduate (master's) Level 7 on successful
       # completion of the programme.
-      professional: "PF",
+      professional: 'PF',
 
       # Postgraduate: the student will receive a Postgraduate Certificate
       # of Education (PGCE) or other qualification which includes at
       # least one module or some credits at postgraduate
       # (master's) Level 7 on successful completion the
       # programme.
-      postgraduate: "PG",
+      postgraduate: 'PG',
 
       # Both professional and postgraduate: the student has the option of taking at least one
       # postgraduate (master's) Level 7 module or obtaining some
       # postgraduate-level credits as part of the programme.
-      professional_postgraduate: "BO",
+      professional_postgraduate: 'BO'
     }
 
     # When UCAS basic courses were being imported into Manage Courses DB, this
@@ -52,32 +54,32 @@ module WithQualifications
     # as a list and leave the gluing of them to the presentation layer.
     def qualifications
       case qualification
-      when "qts" then [:qts]
-      when "pgce_with_qts" then %i[qts pgce]
-      when "pgde_with_qts" then %i[qts pgde]
-      when "pgce" then [:pgce]
-      when "pgde" then [:pgde]
+      when 'qts' then [:qts]
+      when 'pgce_with_qts' then %i[qts pgce]
+      when 'pgde_with_qts' then %i[qts pgde]
+      when 'pgce' then [:pgce]
+      when 'pgde' then [:pgde]
       end
     end
 
     def full_qualifications
       case qualification
-      when "qts" then "Qualified teacher status (QTS)"
-      when "pgce_with_qts" then "Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)"
-      when "pgde_with_qts" then "Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)"
-      when "pgce" then "Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)"
-      when "pgde" then "Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)"
+      when 'qts' then 'Qualified teacher status (QTS)'
+      when 'pgce_with_qts' then 'Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)'
+      when 'pgde_with_qts' then 'Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)'
+      when 'pgce' then 'Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)'
+      when 'pgde' then 'Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)'
       end
     end
 
     def qualifications_description
-      return "" unless qualifications
+      return '' unless qualifications
 
-      qualifications.map(&:upcase).sort.join(" with ")
+      qualifications.map(&:upcase).sort.join(' with ')
     end
 
     def full_qualification_descriptions
-      return "" unless full_qualifications
+      return '' unless full_qualifications
 
       full_qualifications
     end

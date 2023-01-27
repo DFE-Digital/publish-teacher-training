@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Providers
     class AccessRequestsController < PublishController
@@ -16,7 +18,7 @@ module Publish
 
         if @access_request.save!
           redirect_to publish_provider_users_path(params[:code]),
-            flash: { success: "Your request for access has been submitted" }
+            flash: { success: 'Your request for access has been submitted' }
         else
           @errors = @access_request.errors.messages
 
@@ -28,7 +30,7 @@ module Publish
 
       def access_request_params
         params.require(:publish_access_request_form).permit(
-          *AccessRequestForm::FIELDS,
+          *AccessRequestForm::FIELDS
         )
       end
     end

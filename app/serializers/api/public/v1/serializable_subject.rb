@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module API
   module Public
     module V1
       class SerializableSubject < JSONAPI::Serializable::Resource
-        type "subjects"
+        type 'subjects'
 
         attribute :name do
           @object.subject_name

@@ -1,11 +1,13 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "Searching across England" do
+require 'rails_helper'
+
+feature 'Searching across England' do
   before do
     given_there_are_primary_courses_in_england
   end
 
-  scenario "Candidate searches for primary courses across England" do
+  scenario 'Candidate searches for primary courses across England' do
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
     and_i_click_continue
@@ -59,11 +61,11 @@ private
   end
 
   def and_i_click_continue
-    click_button "Continue"
+    click_button 'Continue'
   end
 
   def when_i_click_back
-    click_link "Back"
+    click_link 'Back'
   end
 
   def when_i_click_continue
@@ -79,54 +81,54 @@ private
   end
 
   def and_age_group_radio_selected
-    expect(find_field("Primary")).to be_checked
+    expect(find_field('Primary')).to be_checked
   end
 
   def then_i_should_see_the_age_groups_form
-    expect(page).to have_content(I18n.t("find.age_groups.title"))
+    expect(page).to have_content(I18n.t('find.age_groups.title'))
   end
 
   def and_the_correct_age_group_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/age-groups")
-      expect(uri.query).to eq("l=2")
+      expect(uri.path).to eq('/age-groups')
+      expect(uri.query).to eq('l=2')
     end
   end
 
   def and_the_correct_subjects_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/subjects")
-      expect(uri.query).to eq("age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time")
+      expect(uri.path).to eq('/subjects')
+      expect(uri.query).to eq('age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time')
     end
   end
 
   def i_should_see_an_age_group_validation_error
-    expect(page).to have_content("Select which age group you want to teach")
+    expect(page).to have_content('Select which age group you want to teach')
   end
 
   def when_i_select_the_primary_radio_button
-    choose "Primary"
+    choose 'Primary'
   end
 
   def then_i_should_see_the_subjects_form
-    expect(page).to have_content("Primary courses with subject specialisms")
+    expect(page).to have_content('Primary courses with subject specialisms')
   end
 
   def and_i_click_find_courses
-    click_button "Find courses"
+    click_button 'Find courses'
   end
   alias_method :when_i_click_find_courses, :and_i_click_find_courses
 
   def then_i_should_see_a_subjects_validation_error
-    expect(page).to have_content("Select at least one primary subject you want to teach")
+    expect(page).to have_content('Select at least one primary subject you want to teach')
   end
 
   def when_i_select_the_primary_subject_textbox
-    check "Primary"
+    check 'Primary'
   end
 
   def then_i_should_see_the_results_page
-    expect(page).to have_current_path("/results?age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00")
+    expect(page).to have_current_path('/results?age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00')
   end
 
   def and_i_should_see_the_correct_courses

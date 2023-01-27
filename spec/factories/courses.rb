@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :course do
     sequence(:uuid) { |_i| SecureRandom.uuid }
@@ -13,18 +15,18 @@ FactoryBot.define do
     english { :must_have_qualification_at_application_time }
     science { :must_have_qualification_at_application_time }
     level { :primary }
-    age_range_in_years { "3_to_7" }
+    age_range_in_years { '3_to_7' }
     resulting_in_pgce_with_qts
     start_date { DateTime.new(provider.recruitment_cycle.year.to_i, 9, 1) }
-    applications_open_from {
+    applications_open_from do
       Faker::Time.between(
         from: DateTime.new(provider.recruitment_cycle.year.to_i - 1, 10, 1),
-        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29),
+        to: DateTime.new(provider.recruitment_cycle.year.to_i, 9, 29)
       )
-    }
+    end
     degree_grade { :two_one }
     additional_degree_subject_requirements { true }
-    degree_subject_requirements { "Completed at least one programming module." }
+    degree_subject_requirements { 'Completed at least one programming module.' }
     is_send { false }
 
     trait :with_gcse_equivalency do
@@ -42,11 +44,11 @@ FactoryBot.define do
 
     trait :primary do
       level { :primary }
-      age_range_in_years { "3_to_7" }
+      age_range_in_years { '3_to_7' }
     end
 
     trait :secondary do
-      age_range_in_years { "11_to_18" }
+      age_range_in_years { '11_to_18' }
       level { :secondary }
     end
 
@@ -65,32 +67,30 @@ FactoryBot.define do
 
       if evaluator.infer_subjects? && course.subjects.empty?
         case course.level
-        when "primary"
+        when 'primary'
           course.subjects << find_or_create(:primary_subject, :primary)
-        when "secondary"
+        when 'secondary'
           course.subjects << find_or_create(:secondary_subject, :drama)
-        when "further_education"
+        when 'further_education'
           course.subjects << find_or_create(:further_education_subject)
         end
       end
 
       if evaluator.infer_level? && course.subjects.present?
         subjects = course.subjects
-          .reject { |s| s.type == "DiscontinuedSubject" }
-          .reject { |s| s.type == "MordernLanguagesSubject" }
+          .reject { |s| s.type == 'DiscontinuedSubject' }
+          .reject { |s| s.type == 'MordernLanguagesSubject' }
 
-        if subjects.all? do |subject| subject.type == "PrimarySubject" end
-          course.level = "primary"
-        elsif subjects.all? do |subject| subject.type == "SecondarySubject" end
-          course.level = "secondary"
-        elsif subjects.all? do |subject| subject.type == "FurtherEducationSubject" end
-          course.level = "further_education"
+        if subjects.all? { |subject| subject.type == 'PrimarySubject' }
+          course.level = 'primary'
+        elsif subjects.all? { |subject| subject.type == 'SecondarySubject' }
+          course.level = 'secondary'
+        elsif subjects.all? { |subject| subject.type == 'FurtherEducationSubject' }
+          course.level = 'further_education'
         end
       end
 
-      if course.subjects.any? && course.name.blank?
-        course.name = course.generate_name
-      end
+      course.name = course.generate_name if course.subjects.any? && course.name.blank?
     end
 
     after(:create) do |course, evaluator|
@@ -102,13 +102,9 @@ FactoryBot.define do
         course.changed_at = evaluator.age
       end
 
-      if course.subjects.any? && course.name.blank?
-        course.name = course.generate_name
-      end
+      course.name = course.generate_name if course.subjects.any? && course.name.blank?
 
-      if course.subjects.any? && course.master_subject_id.nil?
-        course.master_subject_id = course.subjects.first.id
-      end
+      course.master_subject_id = course.subjects.first.id if course.subjects.any? && course.master_subject_id.nil?
 
       # We've just created a course with this provider's code, so ensure it's
       # up-to-date and has this course loaded.
@@ -176,10 +172,10 @@ FactoryBot.define do
     end
 
     trait :fee_type_based do
-      program_type {
+      program_type do
         %i[higher_education_programme school_direct_training_programme
            scitt_programme].sample
-      }
+      end
     end
 
     trait :salary_type_based do
@@ -204,7 +200,7 @@ FactoryBot.define do
 
     trait :unpublished do
       transient do
-        identifier { "unpublished" }
+        identifier { 'unpublished' }
       end
 
       name { "#{identifier} course name" }

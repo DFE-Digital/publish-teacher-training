@@ -8,14 +8,14 @@ class TitleBarPreview < ViewComponent::Preview
 private
 
   def title
-    "BAT School"
+    'BAT School'
   end
 
   def provider_code
-    "1BJ"
+    '1BJ'
   end
 
   def current_user
-    User.new(email: "foo@live.com", first_name: "foo", last_name: "bar", admin: true)
+    User.new(email: 'foo@live.com', first_name: 'foo', last_name: 'bar', admin: true)
   end
 end

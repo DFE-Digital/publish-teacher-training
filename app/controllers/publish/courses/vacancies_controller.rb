@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class VacanciesController < PublishController
@@ -14,11 +16,11 @@ module Publish
         @course_vacancies_form = CourseVacanciesForm.new(course, params: vacancy_params)
 
         if @course_vacancies_form.save!
-          flash[:success] = I18n.t("success.published")
+          flash[:success] = I18n.t('success.published')
 
           redirect_to publish_provider_recruitment_cycle_courses_path(
             provider.provider_code,
-            recruitment_cycle.year,
+            recruitment_cycle.year
           )
         else
           @site_statuses = @course_vacancies_form.running_site_statuses
@@ -40,7 +42,7 @@ module Publish
           .require(:publish_course_vacancies_form)
           .permit(
             CourseVacanciesForm::FIELDS,
-            site_statuses_attributes: %i[id vac_status full_time part_time],
+            site_statuses_attributes: %i[id vac_status full_time part_time]
           )
       end
     end

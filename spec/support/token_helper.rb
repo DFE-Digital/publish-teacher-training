@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TokenHelper
   def encode_to_bearer_token(payload)
     token = encode_to_token(payload)

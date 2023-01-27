@@ -4,10 +4,10 @@
       <p class="govuk-body">
         <%= govuk_start_button(
               text: "Apply for this course",
-              href: find_apply_path(provider_code: provider.provider_code, course_code: course.course_code),
+              href: apply_path,
               html_attributes: {
-                data: { qa: "course__apply_link" },
-              },
+                data: { qa: "course__apply_link" }
+              }
             ) %>
       </p>
     <% else %>

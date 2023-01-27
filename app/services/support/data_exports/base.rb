@@ -4,7 +4,7 @@ module Support
   module DataExports
     class Base
       def to_csv(data_for_export: data)
-        require "csv"
+        require 'csv'
         header_row = data_for_export.first.keys
         ::CSV.generate(headers: true) do |rows|
           rows << header_row

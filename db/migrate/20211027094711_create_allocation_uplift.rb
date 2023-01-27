@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateAllocationUplift < ActiveRecord::Migration[6.1]
   def change
     create_table :allocation_uplift do |t|

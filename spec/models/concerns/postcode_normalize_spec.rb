@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe PostcodeNormalize do
   # TODO: Create a test object to use this on instead.
@@ -6,22 +8,22 @@ describe PostcodeNormalize do
 
   subject { object }
 
-  describe "#postcode" do
-    let(:postcode) { "sw1a1aa" }
+  describe '#postcode' do
+    let(:postcode) { 'sw1a1aa' }
 
     before do
       subject.postcode = postcode
     end
 
-    it "normalises postcode" do
-      expect(subject.postcode).to eq "SW1A 1AA"
+    it 'normalises postcode' do
+      expect(subject.postcode).to eq 'SW1A 1AA'
     end
 
-    context "with a bad postcode" do
-      let(:postcode) { "really bad postcode dawg" }
+    context 'with a bad postcode' do
+      let(:postcode) { 'really bad postcode dawg' }
 
-      it "does not do formatting" do
-        expect(subject.postcode).to eq "really bad postcode dawg"
+      it 'does not do formatting' do
+        expect(subject.postcode).to eq 'really bad postcode dawg'
       end
     end
   end

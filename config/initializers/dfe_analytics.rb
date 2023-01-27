@@ -1,21 +1,23 @@
+# frozen_string_literal: true
+
 DfE::Analytics.configure do |config|
   # Whether to log events instead of sending them to BigQuery.
   #
-  # config.log_only = true
+  config.log_only = false
 
   # Whether to use ActiveJob or dispatch events immediately.
   #
-  # config.async = true
+  config.async = true
 
   # Which ActiveJob queue to put events on
   #
-  # config.queue = :default
+  config.queue = :low_priority
 
-  # The name of the BigQuery table we’re writing to.
+  # The name of the BigQuery table we're writing to.
   #
   config.bigquery_table_name = Settings.google.bigquery.table_name
 
-  # The name of the BigQuery project we’re writing to.
+  # The name of the BigQuery project we're writing to.
   #
   config.bigquery_project_id = Settings.google.bigquery.project_id
 
@@ -42,7 +44,7 @@ DfE::Analytics.configure do |config|
   #
   config.enable_analytics = proc { FeatureService.enabled?(:send_request_data_to_bigquery) }
 
-  # The environment we’re running in. This value will be attached
+  # The environment we're running in. This value will be attached
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')

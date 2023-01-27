@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 module Find
   class ApplicationController < ActionController::Base
-    layout "find_layout"
+    include DfE::Analytics::Requests
+
+    layout 'find_layout'
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
     before_action :redirect_to_cycle_has_ended_if_find_is_down
@@ -8,6 +12,11 @@ module Find
 
     def render_feedback_component
       @render_feedback_component = true
+    end
+
+    # DFE Analytics namespace
+    def current_namespace
+      'find'
     end
 
   private

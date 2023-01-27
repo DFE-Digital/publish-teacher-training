@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ValidateJsonapiType
   extend ActiveSupport::Concern
 
@@ -8,8 +10,6 @@ module ValidateJsonapiType
     #
     # So for now, we do this by hand.
     sent_type = params[:_jsonapi][:data][:type]
-    unless sent_type == type
-      raise ActionController::BadRequest, "data type '#{sent_type}' did not match expected type '#{type}'"
-    end
+    raise ActionController::BadRequest, "data type '#{sent_type}' did not match expected type '#{type}'" unless sent_type == type
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Find
   class FeatureFlagsController < ApplicationController
     before_action :enforce_basic_auth
@@ -11,7 +13,7 @@ module Find
       if Rails.env.production?
         SlackNotificationJob.perform_now(
           ":flags: Feature ‘#{feature_name}‘ was #{action}d",
-          find_feature_flags_path,
+          find_feature_flags_path
         )
       end
 

@@ -5,8 +5,8 @@
         publish_provider_recruitment_cycle_course_path(
           @course.provider_code,
           @course.recruitment_cycle_year,
-          @course.course_code,
-        ),
+          @course.course_code
+        )
       ) %>
 <% end %>
 
@@ -16,7 +16,7 @@
       model: @course_deletion_form,
       url: delete_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
       data: { qa: "enrichment-form", module: "form-check-leave" },
-      method: :delete,
+      method: :delete
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -47,7 +47,7 @@
       <%= govuk_link_to(
         "Cancel",
         publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
-        no_visited_state: true,
+        no_visited_state: true
       ) %>
     </p>
   </div>

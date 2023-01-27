@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API
   module V3
     class ApplicationController < PublicAPIController
@@ -48,7 +50,7 @@ module API
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(
-          year: params[:recruitment_cycle_year],
+          year: params[:recruitment_cycle_year]
         ) || RecruitmentCycle.current_recruitment_cycle
       end
 
@@ -56,7 +58,7 @@ module API
         params.fetch(:fields, {})
           .permit(:subject_areas, :subjects, :courses, :providers, :site_statuses)
           .to_h
-          .map { |k, v| [k, v.split(",").map(&:to_sym)] }
+          .map { |k, v| [k, v.split(',').map(&:to_sym)] }
       end
 
       def store_request_id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class VisaSponsorshipController < PublishController
@@ -22,7 +24,7 @@ module Publish
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           render :edit
@@ -50,7 +52,7 @@ module Publish
       end
 
       def success_message
-        success_message_key = visa_sponsorship_form.funding_type_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : "visa_sponsorships.updated.visa"
+        success_message_key = visa_sponsorship_form.funding_type_updated? ? "visa_sponsorships.updated.#{visa_sponsorship_form.origin_step}_and_visa" : 'visa_sponsorships.updated.visa'
 
         visa_type = t("visa_sponsorships.#{visa_sponsorship_form.visa_type}")
         t(success_message_key, visa_type:)

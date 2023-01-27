@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 feature "Managing a provider's locations", :with_publish_constraint do
   before do
@@ -12,7 +12,7 @@ feature "Managing a provider's locations", :with_publish_constraint do
     then_i_should_see_a_list_of_locations
   end
 
-  scenario "i can add a new location" do
+  scenario 'i can add a new location' do
     and_i_click_on_the_add_location_link
     then_should_be_on_the_create_page_for_the_location
     when_i_add_the_location_details
@@ -30,7 +30,7 @@ feature "Managing a provider's locations", :with_publish_constraint do
     and_the_location_details_are_updated
   end
 
-  scenario "i cannot update with invalid data" do
+  scenario 'i cannot update with invalid data' do
     and_i_click_on_the_edit_link_for_a_location
     and_i_submit_with_invalid_data
     then_i_should_see_a_an_error_message
@@ -63,14 +63,14 @@ feature "Managing a provider's locations", :with_publish_constraint do
   end
 
   def when_i_add_the_location_details
-    support_location_create_page.location_form.location_name.set("Acre woods")
-    support_location_create_page.location_form.urn.set("12345")
-    support_location_create_page.location_form.building_and_street.set("100 Acre Woods")
-    support_location_create_page.location_form.postcode.set("BN1 1AA")
+    support_location_create_page.location_form.location_name.set('Acre woods')
+    support_location_create_page.location_form.urn.set('12345')
+    support_location_create_page.location_form.building_and_street.set('100 Acre Woods')
+    support_location_create_page.location_form.postcode.set('BN1 1AA')
   end
 
   def and_the_new_location_should_show_in_the_list
-    expect(support_locations_index_page.locations.first.name).to have_text("Acre woods")
+    expect(support_locations_index_page.locations.first.name).to have_text('Acre woods')
   end
 
   def and_i_click_on_the_edit_link_for_a_location
@@ -82,7 +82,7 @@ feature "Managing a provider's locations", :with_publish_constraint do
   end
 
   def when_i_edit_the_location_details
-    support_location_edit_page.location_form.location_name.set("Updated location name")
+    support_location_edit_page.location_form.location_name.set('Updated location name')
   end
 
   def and_i_submit_for(page_object)
@@ -90,13 +90,13 @@ feature "Managing a provider's locations", :with_publish_constraint do
   end
 
   def then_i_should_see_a_success_message_for(flash_key)
-    expect(page).to have_content(I18n.t("support.flash.#{flash_key}", resource: "Location"))
+    expect(page).to have_content(I18n.t("support.flash.#{flash_key}", resource: 'Location'))
   end
 
   def and_the_location_details_are_updated
     site.reload
 
-    expect(site.location_name).to eq("Updated location name")
+    expect(site.location_name).to eq('Updated location name')
   end
 
   def and_i_submit_with_invalid_data

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Courses
   class CopyToProviderService
     def initialize(sites_copy_to_course:, enrichments_copy_to_course:, force:)

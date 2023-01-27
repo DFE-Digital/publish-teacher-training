@@ -1,24 +1,26 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe Sites::CopyToCourseService do
   let(:site) { create(:site) }
   let(:course) { create(:course, provider: new_provider) }
   let(:service) { described_class.new }
-  let(:new_provider) {
+  let(:new_provider) do
     create(:provider,
       recruitment_cycle: new_recruitment_cycle)
-  }
+  end
   let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
 
   before do
     service.execute(new_site: site, new_course: course)
   end
 
-  it "copies the site" do
+  it 'copies the site' do
     expect(course.sites.count).to eq(1)
   end
 
-  it "has the same code as the original site" do
+  it 'has the same code as the original site' do
     new_site = course.sites.last
     expect(new_site.code).to eq(site.code)
   end

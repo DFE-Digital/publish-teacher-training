@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class BaseFundingTypeController < PublishController
@@ -18,9 +20,9 @@ module Publish
       end
 
       def formatted_params
-        if funding_type_params[:course_length] == "Other" && funding_type_params[:course_length_other_length].present?
+        if funding_type_params[:course_length] == 'Other' && funding_type_params[:course_length_other_length].present?
           funding_type_params.merge(
-            course_length: funding_type_params[:course_length_other_length],
+            course_length: funding_type_params[:course_length_other_length]
           )
         else
           funding_type_params

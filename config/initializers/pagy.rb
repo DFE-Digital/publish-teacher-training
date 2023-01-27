@@ -1,1 +1,3 @@
-require "pagy/extras/metadata"
+# frozen_string_literal: true
+
+require 'pagy/extras/metadata'

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-feature "View provider users", :with_publish_constraint do
+feature 'View provider users', :with_publish_constraint do
   let(:user) { create(:user, :admin) }
 
-  scenario "i can view users belong to a provider" do
+  scenario 'i can view users belong to a provider' do
     given_i_am_authenticated(user:)
     and_there_is_a_provider
     when_i_visit_the_support_provider_show_page

@@ -1,4 +1,6 @@
-require "csv"
+# frozen_string_literal: true
+
+require 'csv'
 
 module CSVImports
   class FakeProvidersImport
@@ -11,23 +13,23 @@ module CSVImports
 
     def execute
       CSV.foreach(@path_to_csv, headers: true) do |row|
-        provider_name = row["name"]
-        provider_code = row["code"]
-        provider_type = row["type"]
-        is_accredited_body = ActiveModel::Type::Boolean.new.cast(row["accredited_body"])
+        provider_name = row['name']
+        provider_code = row['code']
+        provider_type = row['type']
+        is_accredited_body = ActiveModel::Type::Boolean.new.cast(row['accredited_body'])
 
         service = Providers::CreateFakeProviderService.new(
           recruitment_cycle: RecruitmentCycle.current,
           provider_name:,
           provider_code:,
           provider_type:,
-          is_accredited_body:,
+          is_accredited_body:
         )
 
         @results << if service.execute
                       "Created provider #{provider_name}."
                     else
-                      service.errors.join(" ")
+                      service.errors.join(' ')
                     end
       end
     end

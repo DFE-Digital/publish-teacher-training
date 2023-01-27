@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Courses
       class NewApplicationsOpen < PageObjects::Base
-        set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/applications-open/new{?query*}"
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/applications-open/new{?query*}'
 
         element :applications_open_field, '[data-qa="applications_open_from"]'
         element :applications_open_field_other, '[data-qa="applications_open_from_other"]'

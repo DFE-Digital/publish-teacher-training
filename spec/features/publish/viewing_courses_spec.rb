@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 feature "Managing a provider's courses", { can_edit_current_and_next_cycles: false } do
   before do
@@ -17,7 +17,7 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
     then_i_see_the_course
   end
 
-  scenario "i can view new course level page" do
+  scenario 'i can view new course level page' do
     and_i_click_on_add_course
     then_i_see_the_new_course_level_page
   end
@@ -27,15 +27,15 @@ feature "Managing a provider's courses", { can_edit_current_and_next_cycles: fal
       user: create(
         :user,
         providers: [
-          create(:provider, sites: [build(:site)], courses: [build(:course)]),
-        ],
-      ),
+          create(:provider, sites: [build(:site)], courses: [build(:course)])
+        ]
+      )
     )
   end
 
   def when_i_visit_the_courses_page
     provider_courses_index_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateProvidersWithUCASContactsChangedAt < ActiveRecord::Migration[6.0]
   def change
     providers = Provider.select { |provider| provider.contacts.any? }

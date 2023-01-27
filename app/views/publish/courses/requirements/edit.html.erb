@@ -17,7 +17,7 @@
       url: requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
       data: { qa: "enrichment-form", module: "form-check-leave" },
       method: :patch,
-      local: true,
+      local: true
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
@@ -57,8 +57,8 @@
       partial: "publish/courses/related_sidebar",
       locals: {
         course: @course,
-        page_path: requirements_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
-      },
+        page_path: requirements_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code)
+      }
     ) %>
   </aside>
 </div>

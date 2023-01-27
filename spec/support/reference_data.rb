@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Reference data that gets created for every test as a matter of convenience.
 #
 # There is some data that we can assume will always be in the db, and, where
@@ -14,9 +16,7 @@ RSpec.configure do |config|
   # Disable with the tag: no_default_recycle: true
   # Retrieve with: find_or_create(:recruitment_cycle)
   config.before do |example|
-    unless example.metadata[:no_default_recycle] == true
-      find_or_create :recruitment_cycle
-    end
+    find_or_create :recruitment_cycle unless example.metadata[:no_default_recycle] == true
   end
 
   # It's standard to have subjects in the DB, so create them by default, and use
@@ -31,15 +31,11 @@ RSpec.configure do |config|
     Subjects::FinancialIncentiveCreatorService.new(year:).execute
     Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
 
-    if ENV["TEST_DATA_CACHE"]
-      TestDataCache.create_and_cache_test_records
-    end
+    TestDataCache.create_and_cache_test_records if ENV['TEST_DATA_CACHE']
   end
 
   config.after(:all) do
-    if ENV["TEST_DATA_CACHE"]
-      TestDataCache.clear
-    end
+    TestDataCache.clear if ENV['TEST_DATA_CACHE']
   end
 
   config.before(:each, without_subjects: true) do

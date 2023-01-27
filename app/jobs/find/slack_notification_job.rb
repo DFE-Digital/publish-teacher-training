@@ -1,15 +1,17 @@
-require "http"
+# frozen_string_literal: true
+
+require 'http'
 
 module Find
   class SlackNotificationJob < ApplicationJob
-    SLACK_CHANNEL = "#twd_findpub_tech".freeze
+    SLACK_CHANNEL = '#twd_findpub_tech'
 
     def perform(text, url = nil)
       @webhook_url = Settings.STATE_CHANGE_SLACK_URL
-      if @webhook_url.present?
-        message = url.present? ? hyperlink(text, url) : text
-        post_to_slack message
-      end
+      return if @webhook_url.blank?
+
+      message = url.present? ? hyperlink(text, url) : text
+      post_to_slack message
     end
 
   private
@@ -20,18 +22,16 @@ module Find
 
     def post_to_slack(text)
       payload = {
-        username: "Find postgraduate teacher training",
+        username: 'Find postgraduate teacher training',
         channel: SLACK_CHANNEL,
         text:,
         mrkdwn: true,
-        icon_emoji: ":livecanary:",
+        icon_emoji: ':livecanary:'
       }
 
       response = HTTP.post(@webhook_url, body: payload.to_json)
 
-      unless response.status.success?
-        raise SlackMessageError, "Slack error: #{response.body}"
-      end
+      raise SlackMessageError, "Slack error: #{response.body}" unless response.status.success?
     end
 
     class SlackMessageError < StandardError; end

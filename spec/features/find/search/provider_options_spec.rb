@@ -1,11 +1,13 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-feature "Searching by provider" do
+require 'rails_helper'
+
+feature 'Searching by provider' do
   before do
     given_there_is_a_provider_with_courses
   end
 
-  scenario "persists the correct provider options in the url" do
+  scenario 'persists the correct provider options in the url' do
     when_i_visit_the_start_page
     and_i_select_the_provider_radio_button
     and_i_click_continue
@@ -44,7 +46,7 @@ private
   end
 
   def then_i_should_see_a_missing_provider_validation_error
-    expect(page).to have_content("Enter a provider name or code")
+    expect(page).to have_content('Enter a provider name or code')
   end
 
   def when_i_select_the_provider
@@ -52,13 +54,13 @@ private
   end
 
   def then_i_should_see_the_age_groups_form
-    expect(page).to have_content(I18n.t("find.age_groups.title"))
+    expect(page).to have_content(I18n.t('find.age_groups.title'))
   end
 
   def and_the_correct_age_group_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/age-groups")
-      expect(uri.query).to eq("l=3&provider.provider_name=Provider+1&sortby=distance")
+      expect(uri.path).to eq('/age-groups')
+      expect(uri.query).to eq('l=3&provider.provider_name=Provider+1&sortby=distance')
     end
   end
 
@@ -67,7 +69,7 @@ private
   end
 
   def when_i_click_back
-    click_link "Back"
+    click_link 'Back'
   end
 
   def and_the_provider_radio_button_is_selected
@@ -75,6 +77,6 @@ private
   end
 
   def provider
-    @provider ||= create(:provider, provider_name: "Provider 1")
+    @provider ||= create(:provider, provider_name: 'Provider 1')
   end
 end

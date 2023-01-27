@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Providers
   module ProviderList
     class View < ApplicationComponent
@@ -13,7 +15,7 @@ module Providers
       end
 
       def formatted_accrediting_provider
-        @provider.accredited_body? ? "Yes" : "No"
+        @provider.accredited_body? ? 'Yes' : 'No'
       end
     end
   end

@@ -1,13 +1,15 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 describe Course do
-  let(:course) { create(:course, level: "primary", subjects: [subjects]) }
+  let(:course) { create(:course, level: 'primary', subjects: [subjects]) }
   let(:subjects) { find(:primary_subject, :primary) }
 
-  describe "modern languages" do
+  describe 'modern languages' do
     let(:course) { create(:course) }
 
-    it "returns modern languages subjects" do
+    it 'returns modern languages subjects' do
       expect(course.modern_languages).to(
         match_array(
           [
@@ -19,24 +21,24 @@ describe Course do
             find(:modern_languages_subject, :mandarin),
             find(:modern_languages_subject, :russian),
             find(:modern_languages_subject, :spanish),
-            find(:modern_languages_subject, :modern_languages_other),
-          ],
-        ),
+            find(:modern_languages_subject, :modern_languages_other)
+          ]
+        )
       )
     end
   end
 
-  describe "#modern_languages_subject" do
-    it "returns modern language subject" do
+  describe '#modern_languages_subject' do
+    it 'returns modern language subject' do
       expect(course.modern_languages_subject).to eql(find(:secondary_subject, :modern_languages))
     end
   end
 
-  describe "subjects" do
-    let(:course) { create(:course, level: "primary", subjects: []) }
-    let(:secondary_course) { create(:course, level: "secondary", subjects: []) }
+  describe 'subjects' do
+    let(:course) { create(:course, level: 'primary', subjects: []) }
+    let(:secondary_course) { create(:course, level: 'secondary', subjects: []) }
 
-    it "returns the subjects the user can choose according to their level" do
+    it 'returns the subjects the user can choose according to their level' do
       expect(course.potential_subjects).to match_array(
         [
           find(:primary_subject, :primary),
@@ -45,12 +47,12 @@ describe Course do
           find(:primary_subject, :primary_with_mathematics),
           find(:primary_subject, :primary_with_modern_languages),
           find(:primary_subject, :primary_with_physical_education),
-          find(:primary_subject, :primary_with_science),
-        ],
+          find(:primary_subject, :primary_with_science)
+        ]
       )
     end
 
-    it "sorts the potentinal subject by their name" do
+    it 'sorts the potentinal subject by their name' do
       expect(secondary_course.potential_subjects).to eql(
         [
           find(:secondary_subject, :ancient_greek),
@@ -82,62 +84,62 @@ describe Course do
           find(:secondary_subject, :psychology),
           find(:secondary_subject, :religious_education),
           find(:secondary_subject, :science),
-          find(:secondary_subject, :social_sciences),
-        ],
+          find(:secondary_subject, :social_sciences)
+        ]
       )
     end
   end
 
-  describe "entry_requirements" do
-    it "returns the entry requirements that users can choose between" do
+  describe 'entry_requirements' do
+    it 'returns the entry requirements that users can choose between' do
       expect(course.entry_requirements).to eq(%i[must_have_qualification_at_application_time expect_to_achieve_before_training_begins equivalence_test])
     end
   end
 
-  describe "qualifications" do
+  describe 'qualifications' do
     context "for a course that's not further education" do
-      it "returns only QTS options for users to choose between" do
+      it 'returns only QTS options for users to choose between' do
         expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
         course.qualification_options.each do |q|
-          expect(q.include?("qts")).to be_truthy
+          expect(q.include?('qts')).to be_truthy
         end
       end
     end
 
-    context "for a further education course" do
-      let(:course) { create(:course, level: "further_education", subjects: [subjects]) }
+    context 'for a further education course' do
+      let(:course) { create(:course, level: 'further_education', subjects: [subjects]) }
       let(:subjects) { find(:further_education_subject) }
 
-      it "returns only QTS options for users to choose between" do
+      it 'returns only QTS options for users to choose between' do
         expect(course.qualification_options).to eq(%w[pgce pgde])
         course.qualification_options.each do |q|
-          expect(q.include?("qts")).to be_falsy
+          expect(q.include?('qts')).to be_falsy
         end
       end
     end
   end
 
-  describe "age_range" do
-    context "for primary" do
-      it "returns the correct ages range for users to co choose between" do
+  describe 'age_range' do
+    context 'for primary' do
+      it 'returns the correct ages range for users to co choose between' do
         expect(course.age_range_options).to eq(%w[3_to_7 5_to_11 7_to_11 7_to_14])
       end
     end
 
-    context "for secondary" do
-      let(:course) { create(:course, level: "secondary", subjects: [subjects]) }
+    context 'for secondary' do
+      let(:course) { create(:course, level: 'secondary', subjects: [subjects]) }
       let(:subjects) { find(:secondary_subject, :biology) }
 
-      it "returns the correct age ranges for users to co choose between" do
+      it 'returns the correct age ranges for users to co choose between' do
         expect(course.age_range_options).to eq(%w[11_to_16 11_to_18 14_to_19])
       end
     end
   end
 
-  describe "start_date_options" do
+  describe 'start_date_options' do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    it "returns the correct options for the recruitment_cycle" do
+    it 'returns the correct options for the recruitment_cycle' do
       expect(course.start_date_options).to eq(
         ["October #{recruitment_year - 1}",
          "November #{recruitment_year - 1}",
@@ -160,63 +162,63 @@ describe Course do
          "April #{recruitment_year + 1}",
          "May #{recruitment_year + 1}",
          "June #{recruitment_year + 1}",
-         "July #{recruitment_year + 1}"],
+         "July #{recruitment_year + 1}"]
       )
     end
   end
 
-  describe "available_start_date_options" do
+  describe 'available_start_date_options' do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    context "when unpublished" do
-      it "returns the correct options for the recruitment_cycle" do
+    context 'when unpublished' do
+      it 'returns the correct options for the recruitment_cycle' do
         expect(course.show_start_date?).to be(true)
       end
     end
 
-    context "when published" do
+    context 'when published' do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "returns no options" do
+      it 'returns no options' do
         expect(course.show_start_date?).to be(false)
       end
     end
   end
 
-  describe "is_send" do
+  describe 'is_send' do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    context "when unpublished" do
-      it "indicates that the option is a checkbox" do
+    context 'when unpublished' do
+      it 'indicates that the option is a checkbox' do
         expect(course.show_is_send?).to be(true)
       end
     end
 
-    context "when published" do
+    context 'when published' do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "indicates that the option is hidden" do
+      it 'indicates that the option is hidden' do
         expect(course.show_is_send?).to be(false)
       end
     end
   end
 
-  describe "applications_open" do
+  describe 'applications_open' do
     let(:recruitment_year) { course.provider.recruitment_cycle.year.to_i }
 
-    context "when unpublished" do
-      it "indicates that the option is a checkbox" do
+    context 'when unpublished' do
+      it 'indicates that the option is a checkbox' do
         expect(course.show_applications_open?).to be(true)
       end
     end
 
-    context "when published" do
+    context 'when published' do
       let(:enrichment) { create(:course_enrichment, :published) }
       let(:course) { create(:course, enrichments: [enrichment]) }
 
-      it "indicates that the option is hidden" do
+      it 'indicates that the option is hidden' do
         expect(course.show_applications_open?).to be(false)
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Wrapper for our API Specs
 #
 # This concern contains methods to operate on our API specs, primarily defined

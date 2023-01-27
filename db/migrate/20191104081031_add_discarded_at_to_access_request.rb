@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDiscardedAtToAccessRequest < ActiveRecord::Migration[6.0]
   def change
     add_column :access_request, :discarded_at, :datetime

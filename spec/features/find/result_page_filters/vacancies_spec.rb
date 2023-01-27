@@ -1,9 +1,11 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.feature "Results page new vacancies filter" do
+require 'rails_helper'
+
+RSpec.feature 'Results page new vacancies filter' do
   include FiltersFeatureSpecsHelper
 
-  scenario "Candidate applies vacancies filter on results page" do
+  scenario 'Candidate applies vacancies filter on results page' do
     when_i_visit_the_results_page
     then_i_see_the_vacancies_checkbox_is_selected
 
@@ -27,8 +29,8 @@ RSpec.feature "Results page new vacancies filter" do
 
   def and_the_vacancies_query_parameters_are_retained
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/results")
-      expect(uri.query).to eq("has_vacancies=false&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses")
+      expect(uri.path).to eq('/results')
+      expect(uri.query).to eq('has_vacancies=false&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
     end
   end
 end

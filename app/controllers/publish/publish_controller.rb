@@ -1,13 +1,20 @@
+# frozen_string_literal: true
+
 module Publish
   class PublishController < ApplicationController
     include SuccessMessage
 
-    layout "publish"
+    layout 'publish'
 
     before_action :check_interrupt_redirects
-    before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") }
+    before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?('rollover.can_edit_current_and_next_cycles') }
 
     after_action :verify_authorized
+
+    # DFE Analytics namespace
+    def current_namespace
+      'publish'
+    end
 
   private
 
@@ -39,7 +46,7 @@ module Publish
     end
 
     def show_rollover_recruitment_page?
-      FeatureService.enabled?("rollover.show_next_cycle_recruitment_page") && current_user.current_rollover_recruitment_acceptance.blank?
+      FeatureService.enabled?('rollover.show_next_cycle_recruitment_page') && current_user.current_rollover_recruitment_acceptance.blank?
     end
 
     def clear_previous_cycle_year_in_session

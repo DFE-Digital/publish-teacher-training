@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SignInController < ApplicationController
   skip_before_action :authenticate
 
@@ -5,7 +7,7 @@ class SignInController < ApplicationController
     if AuthenticationService.magic_link?
       redirect_to magic_links_path
     else
-      render "index"
+      render 'index'
     end
   end
 end

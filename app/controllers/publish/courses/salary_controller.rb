@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class SalaryController < BaseFundingTypeController
@@ -14,12 +16,12 @@ module Publish
         @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
 
         if @course_salary_form.save!
-          flash[:success] = I18n.t("success.saved")
+          flash[:success] = I18n.t('success.saved')
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
-            course.course_code,
+            course.course_code
           )
         else
           render :edit

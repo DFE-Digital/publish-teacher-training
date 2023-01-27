@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 task brakeman: :environment do
   sh <<~EOSHELL
     mkdir -p tmp && \
@@ -7,6 +9,4 @@ task brakeman: :environment do
   EOSHELL
 end
 
-if %w[development test].include? Rails.env
-  task(:default).prerequisites << task(brakeman: :environment)
-end
+task(:default).prerequisites << task(brakeman: :environment) if %w[development test].include? Rails.env

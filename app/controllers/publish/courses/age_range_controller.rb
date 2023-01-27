@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Publish
   module Courses
     class AgeRangeController < PublishController
@@ -5,16 +7,14 @@ module Publish
       decorates_assigned :course
 
       def edit
-        if params[:display_errors] == "true"
-          form_object.valid?
-        end
+        form_object.valid? if params[:display_errors] == 'true'
 
         render locals: { form_object: }
       end
 
       def update
         if form_object.valid?
-          course_details_success_message("age range")
+          course_details_success_message('age range')
 
           update_age_range_param
 
@@ -23,8 +23,8 @@ module Publish
               details_publish_provider_recruitment_cycle_course_path(
                 @course.provider_code,
                 @course.recruitment_cycle_year,
-                @course.course_code,
-              ),
+                @course.course_code
+              )
             )
           end
         else
@@ -71,7 +71,7 @@ module Publish
       end
 
       def age_range_is_other?
-        age_range_param == "other"
+        age_range_param == 'other'
       end
 
       def course_param

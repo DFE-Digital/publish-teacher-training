@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Courses
   module EditOptions
     module QualificationConcern
@@ -8,7 +10,7 @@ module Courses
         #
         # https://github.com/DFE-Digital/publish-teacher-training/blob/master/spec/factories/courses.rb
         def qualification_options
-          if level == "further_education"
+          if level == 'further_education'
             qualifications_without_qts
           else
             qualifications_with_qts
@@ -17,13 +19,13 @@ module Courses
 
         def qualifications_with_qts
           Course.qualifications.keys.select do |qualification|
-            qualification.include?("qts")
+            qualification.include?('qts')
           end
         end
 
         def qualifications_without_qts
           Course.qualifications.keys.reject do |qualification|
-            qualification.include?("qts")
+            qualification.include?('qts')
           end
         end
       end
