@@ -6,7 +6,7 @@ RSpec.feature 'Degree required filter' do
   include FiltersFeatureSpecsHelper
 
   scenario 'Candidate applies required degree filters on results page' do
-    when_i_visit_the_results_page
+    when_i_visit_the_find_results_page
     then_i_see_the_two_one_degree_radio_checked
 
     when_i_select_the_two_two_degree_radio
@@ -26,31 +26,31 @@ RSpec.feature 'Degree required filter' do
   end
 
   def then_i_see_the_two_one_degree_radio_checked
-    expect(results_page.degree_grade.show_all_courses.checked?).to be(true)
+    expect(find_results_page.degree_grade.show_all_courses.checked?).to be(true)
   end
 
   def when_i_select_the_two_two_degree_radio
-    results_page.degree_grade.two_two.choose
+    find_results_page.degree_grade.two_two.choose
   end
 
   def when_i_select_the_third_degree_radio
-    results_page.degree_grade.third_class.choose
+    find_results_page.degree_grade.third_class.choose
   end
 
   def when_i_select_the_pass_degree_radio
-    results_page.degree_grade.not_required.choose
+    find_results_page.degree_grade.not_required.choose
   end
 
   def then_i_see_that_the_two_two_degree_radio_is_selected
-    expect(results_page.degree_grade.two_two).to be_checked
+    expect(find_results_page.degree_grade.two_two).to be_checked
   end
 
   def then_i_see_that_the_third_degree_radio_is_selected
-    expect(results_page.degree_grade.third_class).to be_checked
+    expect(find_results_page.degree_grade.third_class).to be_checked
   end
 
   def then_i_see_that_the_pass_degree_radio_is_selected
-    expect(results_page.degree_grade.not_required).to be_checked
+    expect(find_results_page.degree_grade.not_required).to be_checked
   end
 
   def and_the_two_two_degree_query_parameters_are_retained

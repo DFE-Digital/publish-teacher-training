@@ -138,175 +138,175 @@ feature 'Viewing a findable course' do
   end
 
   def when_i_visit_the_course_page
-    course_show_page.load(provider_code: @course.provider.provider_code, course_code: @course.course_code)
+    find_course_show_page.load(provider_code: @course.provider.provider_code, course_code: @course.course_code)
   end
 
   def then_i_should_see_the_course_information
-    expect(course_show_page.title).to have_content(
+    expect(find_course_show_page.title).to have_content(
       "#{@course.name} (#{@course.course_code})"
     )
 
-    expect(course_show_page.sub_title).to have_content(
+    expect(find_course_show_page.sub_title).to have_content(
       provider.provider_name
     )
 
-    expect(course_show_page.accredited_body).to have_content(
+    expect(find_course_show_page.accredited_body).to have_content(
       accrediting_provider.provider_name
     )
 
-    expect(course_show_page.extended_qualification_descriptions).to have_content(
+    expect(find_course_show_page.extended_qualification_descriptions).to have_content(
       @course.extended_qualification_descriptions
     )
 
-    expect(course_show_page.qualifications).to have_content(
+    expect(find_course_show_page.qualifications).to have_content(
       'PGCE with QTS'
     )
 
-    expect(course_show_page.age_range).to have_content(
+    expect(find_course_show_page.age_range).to have_content(
       '11 to 18'
     )
 
-    expect(course_show_page.funding_option).to have_content(
+    expect(find_course_show_page.funding_option).to have_content(
       @course.decorate.funding_option
     )
 
-    expect(course_show_page.length).to have_content(
+    expect(find_course_show_page.length).to have_content(
       '1 year - full time'
     )
 
-    expect(course_show_page.applications_open_from).to have_content(
+    expect(find_course_show_page.applications_open_from).to have_content(
       '1 January 2022'
     )
 
-    expect(course_show_page.start_date).to have_content(
+    expect(find_course_show_page.start_date).to have_content(
       'September 2022'
     )
 
-    expect(course_show_page.provider_website).to have_content(
+    expect(find_course_show_page.provider_website).to have_content(
       provider.website
     )
 
-    expect(course_show_page).not_to have_vacancies
+    expect(find_course_show_page).not_to have_vacancies
 
-    expect(course_show_page.about_course).to have_content(
+    expect(find_course_show_page.about_course).to have_content(
       @course.latest_published_enrichment.about_course
     )
 
-    expect(course_show_page.interview_process).to have_content(
+    expect(find_course_show_page.interview_process).to have_content(
       @course.latest_published_enrichment.interview_process
     )
 
-    expect(course_show_page.school_placements).to have_content(
+    expect(find_course_show_page.school_placements).to have_content(
       @course.latest_published_enrichment.how_school_placements_work
     )
 
-    expect(course_show_page.uk_fees).to have_content(
+    expect(find_course_show_page.uk_fees).to have_content(
       '£9,250'
     )
 
-    expect(course_show_page.international_fees).to have_content(
+    expect(find_course_show_page.international_fees).to have_content(
       '£9,250'
     )
 
-    expect(course_show_page.fee_details).to have_content(
+    expect(find_course_show_page.fee_details).to have_content(
       @course.decorate.fee_details
     )
 
-    expect(course_show_page).not_to have_salary_details
+    expect(find_course_show_page).not_to have_salary_details
 
-    expect(course_show_page.scholarship_amount).to have_content('a scholarship of £2,000')
+    expect(find_course_show_page.scholarship_amount).to have_content('a scholarship of £2,000')
 
-    expect(course_show_page.bursary_amount).to have_content('a bursary of £4,000')
+    expect(find_course_show_page.bursary_amount).to have_content('a bursary of £4,000')
 
-    expect(course_show_page.financial_support_details).to have_content('Financial support from the training provider')
+    expect(find_course_show_page.financial_support_details).to have_content('Financial support from the training provider')
 
-    expect(course_show_page.required_qualifications).not_to have_content(
+    expect(find_course_show_page.required_qualifications).not_to have_content(
       @course.latest_published_enrichment.required_qualifications
     )
 
-    expect(course_show_page).to have_international_students
-    expect(course_show_page.international_students).to have_content(
+    expect(find_course_show_page).to have_international_students
+    expect(find_course_show_page.international_students).to have_content(
       'Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.'
     )
 
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       'Grade 4 (C) or above in English and maths, or equivalent qualification.'
     )
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       'We’ll consider candidates with pending GCSEs.'
     )
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       'We’ll consider candidates who need to take a GCSE equivalency test in English.'
     )
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       'You need to work hard'
     )
 
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       '2:1 or above, or equivalent.'
     )
-    expect(course_show_page.required_qualifications).to have_content(
+    expect(find_course_show_page.required_qualifications).to have_content(
       'Certificate must be print in blue ink'
     )
 
-    expect(course_show_page.personal_qualities).to have_content(
+    expect(find_course_show_page.personal_qualities).to have_content(
       @course.latest_published_enrichment.personal_qualities
     )
 
-    expect(course_show_page.other_requirements).to have_content(
+    expect(find_course_show_page.other_requirements).to have_content(
       @course.latest_published_enrichment.other_requirements
     )
 
-    expect(course_show_page.train_with_us).to have_content(
+    expect(find_course_show_page.train_with_us).to have_content(
       provider.train_with_us
     )
 
-    expect(course_show_page.about_accrediting_body).to have_content(
+    expect(find_course_show_page.about_accrediting_body).to have_content(
       @course.decorate.about_accrediting_body
     )
 
-    expect(course_show_page.train_with_disability).to have_content(
+    expect(find_course_show_page.train_with_disability).to have_content(
       provider.train_with_disability
     )
 
-    expect(course_show_page.contact_email).to have_content(
+    expect(find_course_show_page.contact_email).to have_content(
       provider.email
     )
 
-    expect(course_show_page.contact_telephone).to have_content(
+    expect(find_course_show_page.contact_telephone).to have_content(
       provider.telephone
     )
 
-    expect(course_show_page.contact_website).to have_content(
+    expect(find_course_show_page.contact_website).to have_content(
       provider.website
     )
 
-    expect(course_show_page.contact_address).to have_content(
+    expect(find_course_show_page.contact_address).to have_content(
       [@provider.address1, @provider.address2, @provider.address3, @provider.address4, @provider.postcode].compact.join(' ')
     )
 
-    expect(course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
+    expect(find_course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
 
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
-      expect(course_show_page).to have_content(site.decorate.full_address)
+      expect(find_course_show_page).to have_content(site.decorate.full_address)
     end
 
-    expect(course_show_page).to have_course_advice
+    expect(find_course_show_page).to have_course_advice
 
-    expect(course_show_page.apply_link.text).to eq('Apply for this course')
+    expect(find_course_show_page.apply_link.text).to eq('Apply for this course')
 
-    expect(course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
+    expect(find_course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
 
-    expect(course_show_page).not_to have_content('When you apply you’ll need these codes for the Choices section of your application form')
+    expect(find_course_show_page).not_to have_content('When you apply you’ll need these codes for the Choices section of your application form')
 
-    expect(course_show_page).not_to have_end_of_cycle_notice
+    expect(find_course_show_page).not_to have_end_of_cycle_notice
 
-    expect(course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
+    expect(find_course_show_page.feedback_link[:href]).to eq("https://www.apply-for-teacher-training.service.gov.uk/candidate/find-feedback?path=/course/#{provider.provider_code}/#{@course.course_code}&find_controller=find/courses")
   end
 
   def then_i_should_not_see_the_apply_button
-    expect(course_show_page).not_to have_apply_link
-    expect(course_show_page).to have_end_of_cycle_notice
+    expect(find_course_show_page).not_to have_apply_link
+    expect(find_course_show_page).to have_end_of_cycle_notice
   end
 
   def then_i_should_see_the_deadline_banner
@@ -318,19 +318,19 @@ feature 'Viewing a findable course' do
   end
 
   def then_i_should_not_see_the_back_link
-    expect(course_show_page).not_to have_back_link
+    expect(find_course_show_page).not_to have_back_link
   end
 
   def then_i_should_see_the_back_link
-    expect(course_show_page).to have_back_link
+    expect(find_course_show_page).to have_back_link
   end
 
   def then_i_should_only_see_the_uk_fees
-    expect(course_show_page).to have_content(
+    expect(find_course_show_page).to have_content(
       "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
     )
 
-    expect(course_show_page).not_to have_international_fees
+    expect(find_course_show_page).not_to have_international_fees
   end
 
   def provider

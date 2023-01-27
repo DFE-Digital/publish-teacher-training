@@ -4,18 +4,18 @@ require 'rails_helper'
 
 feature 'results' do
   scenario 'when I visit the results page with no courses' do
-    when_i_visit_the_results_page
+    when_i_visit_the_find_results_page
     i_see_the_no_results_message
   end
 
   scenario 'when I visit the results page with courses' do
     given_there_are_courses
-    when_i_visit_the_results_page
+    when_i_visit_the_find_results_page
     i_see_the_courses
   end
 
-  def when_i_visit_the_results_page
-    results_page.load
+  def when_i_visit_the_find_results_page
+    find_results_page.load
   end
 
   def i_see_the_no_results_message
@@ -32,8 +32,8 @@ feature 'results' do
   end
 
   def i_see_the_courses
-    expect(results_page.courses.count).to eq(2)
-    results_page.courses.first.then do |first_course|
+    expect(find_results_page.courses.count).to eq(2)
+    find_results_page.courses.first.then do |first_course|
       # list by provider?
       expect(first_course.course_name.text).to include('Hello there')
       expect(first_course.provider_name.text).to be_present

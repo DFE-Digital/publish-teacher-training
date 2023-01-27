@@ -37,7 +37,7 @@ feature 'Feature flags' do
   end
 
   def when_i_visit_the_features_page
-    feature_flag_page.load
+    find_feature_flag_page.load
   end
 
   def given_i_am_authenticated
@@ -66,9 +66,9 @@ feature 'Feature flags' do
 
   def then_the_feature_is_activated
     expect(FeatureFlag.active?('test_feature')).to be true
-    expect(feature_flag_page).to have_content('Test feature')
-    expect(feature_flag_page).to have_content('Active')
-    expect(feature_flag_page).to have_content('12pm on 1 December 2021')
+    expect(find_feature_flag_page).to have_content('Test feature')
+    expect(find_feature_flag_page).to have_content('Active')
+    expect(find_feature_flag_page).to have_content('12pm on 1 December 2021')
   end
 
   def when_i_deactivate_the_feature
@@ -76,12 +76,12 @@ feature 'Feature flags' do
   end
 
   def then_the_feature_is_deactivated
-    expect(feature_flag_page).to have_content('Inactive')
+    expect(find_feature_flag_page).to have_content('Inactive')
     expect(FeatureFlag.active?('test_feature')).to be false
   end
 
   def feature_card
-    feature_flag_page.find('.app-summary-card')
+    find_feature_flag_page.find('.app-summary-card')
   end
 
   def feature

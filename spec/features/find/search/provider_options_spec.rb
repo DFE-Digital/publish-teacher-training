@@ -34,15 +34,15 @@ feature 'Searching by provider' do
   end
 
   def when_i_visit_the_start_page
-    courses_by_location_or_training_provider_page.load
+    find_courses_by_location_or_training_provider_page.load
   end
 
   def and_i_select_the_provider_radio_button
-    courses_by_location_or_training_provider_page.by_school_uni_or_provider.choose
+    find_courses_by_location_or_training_provider_page.by_school_uni_or_provider.choose
   end
 
   def and_i_click_continue
-    courses_by_location_or_training_provider_page.continue.click
+    find_courses_by_location_or_training_provider_page.continue.click
   end
 
   def then_i_should_see_a_missing_provider_validation_error
@@ -50,7 +50,7 @@ feature 'Searching by provider' do
   end
 
   def when_i_select_the_provider
-    courses_by_location_or_training_provider_page.provider_name.select(provider.provider_name)
+    find_courses_by_location_or_training_provider_page.provider_name.select(provider.provider_name)
   end
 
   def then_i_should_see_the_age_groups_form
@@ -65,7 +65,7 @@ feature 'Searching by provider' do
   end
 
   def then_i_should_see_the_start_page
-    expect(courses_by_location_or_training_provider_page).to be_displayed
+    expect(find_courses_by_location_or_training_provider_page).to be_displayed
   end
 
   def when_i_click_back
@@ -73,7 +73,7 @@ feature 'Searching by provider' do
   end
 
   def and_the_provider_radio_button_is_selected
-    expect(courses_by_location_or_training_provider_page.by_school_uni_or_provider).to be_checked
+    expect(find_courses_by_location_or_training_provider_page.by_school_uni_or_provider).to be_checked
   end
 
   def provider
