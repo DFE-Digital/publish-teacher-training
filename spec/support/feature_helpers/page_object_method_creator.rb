@@ -2,21 +2,23 @@
 
 module FeatureHelpers
   module PageObjectMethodCreator
-    raw_file_names = Dir['spec/support/page_objects/**/*.rb']
+    Dir['spec/support/page_objects/{publish,shared}/**/*.rb'].each do |file|
+      file_segments = file.chomp('.rb').split('/')
+      page_objects_dir, application_type, *path_to_file, filename = file_segments[2..file_segments.length]
 
-    processed_file_names = raw_file_names.map { |raw_file_name| raw_file_name.chomp('.rb').gsub('spec/support/', '') }
-
-    processed_file_names.each do |processed_file_name|
-      file_name = processed_file_name.split('/').last
-
-      method_name = processed_file_name.include?('/support/') ? "support_#{file_name}_page" : "#{file_name}_page"
+      method_name = if application_type == 'support'
+                      ([application_type, *path_to_file, filename] + ['page']) .join('_')
+                    else
+                      ([filename] + ['page']) .join('_')
+                    end
+      page_object_path = [page_objects_dir, application_type, *path_to_file, filename].join('/').camelize
 
       define_method method_name do
-        return instance_variable_get("@#{file_name}") if instance_variable_get("@#{file_name}").present?
+        return instance_variable_get("@#{method_name}") if instance_variable_get("@#{method_name}").present?
 
-        page_object = processed_file_name.camelize.constantize
+        page_object = page_object_path.constantize.new
 
-        instance_variable_set("@#{file_name}", page_object.new)
+        instance_variable_set("@#{method_name}", page_object)
       end
     end
   end
