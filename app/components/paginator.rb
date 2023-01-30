@@ -48,7 +48,7 @@ class Paginator < ViewComponent::Base
     return 4 unless total_pages_exceed_limit?
 
     if scope.current_page >= (KAMINARI_LINKS_LIMIT - 1) &&
-        scope.current_page <= scope.total_pages - (KAMINARI_LINKS_LIMIT - 2)
+       scope.current_page <= scope.total_pages - (KAMINARI_LINKS_LIMIT - 2)
 
       ((KAMINARI_LINKS_LIMIT - 2).to_f / 2).floor
     else

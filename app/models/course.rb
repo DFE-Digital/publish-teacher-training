@@ -466,7 +466,7 @@ class Course < ApplicationRecord
 
   def description
     study_mode_string = (full_time_or_part_time? ? ', ' : ' ') +
-      study_mode_description
+                        study_mode_description
     qualifications_description + study_mode_string + program_type_description
   end
 

@@ -4,8 +4,5 @@ Layout/LineLength:
 # Disable these cops because they do not allow reasonable code like splitting
 # `attr_reader :bla, :foo` over 2 lines.
 
-Layout/MultilineOperationIndentation:
-  Enabled: false
-
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
