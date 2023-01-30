@@ -37,6 +37,7 @@ class Site < ApplicationRecord
   scope :not_geocoded, -> { where(latitude: nil, longitude: nil) }
 
   attr_accessor :skip_geocoding
+
   after_commit :geocode_site, unless: :skip_geocoding
 
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true

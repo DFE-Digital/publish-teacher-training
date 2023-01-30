@@ -13,6 +13,7 @@ module Publish
     ].freeze
 
     attr_accessor(*FIELDS)
+
     delegate :provider, to: :site
     delegate :provider_code, :recruitment_cycle_year, to: :provider
 

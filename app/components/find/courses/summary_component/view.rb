@@ -8,6 +8,7 @@ module Find
         include ::ViewHelper
 
         attr_reader :course
+
         delegate :accrediting_provider,
           :provider,
           :funding_option,

@@ -184,6 +184,7 @@ class Provider < ApplicationRecord
   accepts_nested_attributes_for :organisations
 
   attr_accessor :skip_geocoding
+
   after_commit :geocode_provider, unless: :skip_geocoding
 
   def geocode_provider
