@@ -26,7 +26,7 @@ module API
         private
 
         def provider_name
-          @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&. > 2
+          @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&.> 2
         end
 
         def updated_since

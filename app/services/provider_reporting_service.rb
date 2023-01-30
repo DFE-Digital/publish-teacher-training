@@ -48,12 +48,12 @@ class ProviderReportingService
               x = {}
               x[key.to_sym] = open[key] || 0
               x
-            end .reduce({}, :merge),
+            end.reduce({}, :merge),
       closed: Provider.send(column.to_s.pluralize).map do |key, _value|
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
-              end .reduce({}, :merge)
+              end.reduce({}, :merge)
     }
   end
 end

@@ -49,12 +49,12 @@ class CourseReportingService
               x = {}
               x[sub.subject_name] = open[sub.id] || 0
               x
-            end .reduce({}, :merge),
+            end.reduce({}, :merge),
       closed: Subject.active.map do |sub|
                 x = {}
                 x[sub.subject_name] = closed[sub.id] || 0
                 x
-              end              .reduce({}, :merge)
+              end.reduce({}, :merge)
     }
   end
 
@@ -69,12 +69,12 @@ class CourseReportingService
                 x = {}
                 x[key.to_sym] = open[value] || 0
                 x
-              end              .reduce({}, :merge),
+              end.reduce({}, :merge),
         closed: Provider.provider_types.map do |key, value|
                   x = {}
                   x[key.to_sym] = closed[value] || 0
                   x
-                end .reduce({}, :merge)
+                end.reduce({}, :merge)
       }
     when :program_type, :study_mode, :qualification
       {
@@ -82,12 +82,12 @@ class CourseReportingService
                 x = {}
                 x[key.to_sym] = open[key] || 0
                 x
-              end .reduce({}, :merge),
+              end.reduce({}, :merge),
         closed: Course.send(column.to_s.pluralize).map do |key, _value|
                   x = {}
                   x[key.to_sym] = closed[key] || 0
                   x
-                end .reduce({}, :merge)
+                end.reduce({}, :merge)
       }
     when :is_send
       {

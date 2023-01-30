@@ -4,9 +4,6 @@ Layout/LineLength:
 # Disable these cops because they do not allow reasonable code like splitting
 # `attr_reader :bla, :foo` over 2 lines.
 
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: false
-
 Layout/MultilineOperationIndentation:
   Enabled: false
 

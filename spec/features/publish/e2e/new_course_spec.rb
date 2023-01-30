@@ -237,7 +237,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def save_course
-    expect { course_confirmation_page.save_button.click }.to change { provider.courses.reload.count } .from(0).to(1)
+    expect { course_confirmation_page.save_button.click }.to change { provider.courses.reload.count }.from(0).to(1)
 
     expect(provider_courses_index_page).to be_displayed
     expect(provider_courses_index_page.success_summary).to have_content('Your course has been created')

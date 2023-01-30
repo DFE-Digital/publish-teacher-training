@@ -96,7 +96,7 @@ describe PublishReportingService do
         expect(recent_active_users).to receive_message_chain(:joins, :merge, :group, :count).and_return(recent_active_user_count_by_provider)
 
         expect(providers_scope).to receive_message_chain(:joins, :merge).with(recent_active_users).and_return(providers_active_user_scope)
-        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count) .and_return(providers_with_recent_active_users_distinct_count)
+        expect(providers_active_user_scope).to receive_message_chain(:distinct, :count).and_return(providers_with_recent_active_users_distinct_count)
 
         expect(providers_scope).to receive(:count).and_return(providers_count)
 
