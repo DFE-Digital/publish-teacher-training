@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Viewing a user', :with_publish_constraint do
+feature 'Viewing a user' do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
   end

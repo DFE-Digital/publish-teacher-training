@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Viewing a providers courses', :with_publish_constraint do
+feature 'Viewing a providers courses' do
   scenario 'Provider is discarded' do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_discarded_provider_with_courses

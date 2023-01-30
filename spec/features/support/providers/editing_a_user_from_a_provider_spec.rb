@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Editing a user under a provider as an admin', :with_publish_constraint do
+feature 'Editing a user under a provider as an admin' do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_edit

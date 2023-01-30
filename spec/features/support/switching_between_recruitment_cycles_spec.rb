@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Support index', :with_publish_constraint do
+feature 'Support index' do
   scenario 'viewing support cycles page during rollover' do
     given_we_are_in_rollover
     and_there_are_two_recruitment_cycles
