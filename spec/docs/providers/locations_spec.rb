@@ -9,26 +9,26 @@ describe 'API', :with_publish_constraint do
       tags 'locations'
       produces 'application/json'
       parameter name: :year,
-        in: :path,
-        type: :string,
-        required: true,
-        description: 'The starting year of the recruitment cycle.',
-        example: Settings.current_recruitment_cycle_year
+                in: :path,
+                type: :string,
+                required: true,
+                description: 'The starting year of the recruitment cycle.',
+                example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
-        in: :path,
-        type: :string,
-        required: true,
-        description: 'The unique code of the provider.',
-        example: 'T92'
+                in: :path,
+                type: :string,
+                required: true,
+                description: 'The unique code of the provider.',
+                example: 'T92'
       parameter name: :include,
-        in: :query,
-        type: :string,
-        required: false,
-        description: 'The associated data for this resource.',
-        schema: {
-          enum: %w[recruitment_cycle provider]
-        },
-        example: 'recruitment_cycle,provider'
+                in: :query,
+                type: :string,
+                required: false,
+                description: 'The associated data for this resource.',
+                schema: {
+                  enum: %w[recruitment_cycle provider]
+                },
+                example: 'recruitment_cycle,provider'
 
       response '200', 'The collection of locations for the specified provider.' do
         let(:provider) { create(:provider) }

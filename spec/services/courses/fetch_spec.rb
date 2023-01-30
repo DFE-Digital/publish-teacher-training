@@ -11,10 +11,10 @@ describe Courses::Fetch do
 
     it 'fetches a course by course_code' do
       expect(described_class.by_code(
-        provider_code:,
-        course_code:,
-        recruitment_cycle_year:
-      )).to eq(course)
+               provider_code:,
+               course_code:,
+               recruitment_cycle_year:
+             )).to eq(course)
     end
   end
 end

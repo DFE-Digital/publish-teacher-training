@@ -8,9 +8,9 @@ module Find
         attr_reader :course
 
         delegate :fee_uk_eu,
-          :fee_international,
-          :cycle_range,
-          :fee_details, to: :course
+                 :fee_international,
+                 :cycle_range,
+                 :fee_details, to: :course
 
         def initialize(course)
           super

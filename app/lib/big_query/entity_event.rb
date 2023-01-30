@@ -33,8 +33,8 @@ module BigQuery
 
     def with_data(hash)
       @event_hash.deep_merge!({
-        data: hash_to_kv_pairs(hash)
-      })
+                                data: hash_to_kv_pairs(hash)
+                              })
     end
 
     private

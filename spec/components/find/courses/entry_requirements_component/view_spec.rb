@@ -12,8 +12,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'We’ll consider candidates with pending GCSEs'
-                             )
+        'We’ll consider candidates with pending GCSEs'
+      )
     end
   end
 
@@ -26,8 +26,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'We will not consider candidates with pending GCSEs.'
-                             )
+        'We will not consider candidates with pending GCSEs.'
+      )
     end
   end
 
@@ -41,11 +41,11 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'Grade 4 (C) or above in English, maths and science, or equivalent qualification.'
-                             )
+        'Grade 4 (C) or above in English, maths and science, or equivalent qualification.'
+      )
       expect(result.text).not_to include(
-                                   "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
-                                 )
+        "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
+      )
     end
   end
 
@@ -62,11 +62,11 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'Grade 5 (C) or above in English and maths, or equivalent qualification.'
-                             )
+        'Grade 5 (C) or above in English and maths, or equivalent qualification.'
+      )
       expect(result.text).to include(
-                               "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
-                             )
+        "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
+      )
     end
 
     context 'when the campaign_name is set to engineers_teach_physics' do
@@ -100,8 +100,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         result = render_inline(described_class.new(course: course.decorate))
 
         expect(result.text).to include(
-                                 'Grade 5 (C) or above in English and maths, or equivalent qualification.'
-                               )
+          'Grade 5 (C) or above in English and maths, or equivalent qualification.'
+        )
       end
     end
   end
@@ -118,8 +118,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'We will not consider candidates who need to take a GCSE equivalency test.'
-                             )
+        'We will not consider candidates who need to take a GCSE equivalency test.'
+      )
     end
   end
 
@@ -135,8 +135,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               'We’ll consider candidates who need to take a GCSE equivalency test in maths or science'
-                             )
+        'We’ll consider candidates who need to take a GCSE equivalency test in maths or science'
+      )
     end
   end
 
@@ -151,11 +151,11 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-                               '2:2 or above, or equivalent.'
-                             )
+        '2:2 or above, or equivalent.'
+      )
       expect(result.text).to include(
-                               'Certificate must be printed on green paper.'
-                             )
+        'Certificate must be printed on green paper.'
+      )
     end
   end
 end

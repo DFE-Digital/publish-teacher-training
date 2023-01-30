@@ -6,12 +6,12 @@ module Find
       class ViewPreview < ViewComponent::Preview
         def qualifications_needed_only
           course = Course.new(course_code: 'FIND',
-            name: 'Super cool awesome course',
-            provider: Provider.new(provider_code: 'DFE'),
-            additional_degree_subject_requirements: true,
-            degree_subject_requirements: 'Degree Subject Requirements Text',
-            level: 'secondary',
-            additional_gcse_equivalencies: 'Additional GCSE Equivalencies Text')
+                              name: 'Super cool awesome course',
+                              provider: Provider.new(provider_code: 'DFE'),
+                              additional_degree_subject_requirements: true,
+                              degree_subject_requirements: 'Degree Subject Requirements Text',
+                              level: 'secondary',
+                              additional_gcse_equivalencies: 'Additional GCSE Equivalencies Text')
 
           render Find::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
         end

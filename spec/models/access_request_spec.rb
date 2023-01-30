@@ -67,11 +67,11 @@ describe AccessRequest do
     let(:organisation) { build(:organisation) }
     let(:access_request) do
       build(:access_request,
-        organisation: user.organisations.first.name,
-        requester_email: user.email,
-        requester: nil,
-        request_date_utc: nil,
-        status: nil)
+            organisation: user.organisations.first.name,
+            requester_email: user.email,
+            requester: nil,
+            request_date_utc: nil,
+            status: nil)
     end
 
     before do

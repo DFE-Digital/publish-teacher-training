@@ -24,12 +24,12 @@ RSpec.describe API::Public::V1::ProvidersController do
 
       let(:provider) do
         create(:provider,
-          provider_code: '1AT',
-          provider_name: 'First',
-          organisations: [organisation],
-          contacts: [contact],
-          can_sponsor_skilled_worker_visa: false,
-          can_sponsor_student_visa: false)
+               provider_code: '1AT',
+               provider_name: 'First',
+               organisations: [organisation],
+               contacts: [contact],
+               can_sponsor_skilled_worker_visa: false,
+               can_sponsor_student_visa: false)
       end
 
       before do
@@ -55,9 +55,9 @@ RSpec.describe API::Public::V1::ProvidersController do
           let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
           let(:next_provider) do
             create(:provider,
-              organisations: [organisation],
-              provider_code: provider.provider_code,
-              recruitment_cycle: next_recruitment_cycle)
+                   organisations: [organisation],
+                   provider_code: provider.provider_code,
+                   recruitment_cycle: next_recruitment_cycle)
           end
 
           before do
@@ -183,18 +183,18 @@ RSpec.describe API::Public::V1::ProvidersController do
       context 'with sorting' do
         let(:provider2) do
           create(:provider,
-            provider_code: '0AT',
-            provider_name: 'Before',
-            organisations: [organisation],
-            contacts: [contact])
+                 provider_code: '0AT',
+                 provider_name: 'Before',
+                 organisations: [organisation],
+                 contacts: [contact])
         end
 
         let(:provider3) do
           create(:provider,
-            provider_code: '2AT',
-            provider_name: 'Second',
-            organisations: [organisation],
-            contacts: [contact])
+                 provider_code: '2AT',
+                 provider_name: 'Second',
+                 organisations: [organisation],
+                 contacts: [contact])
         end
 
         let(:provider_names_in_response) do
@@ -322,14 +322,14 @@ RSpec.describe API::Public::V1::ProvidersController do
         let(:provider2) do
           Timecop.freeze(Time.zone.today + 1) do
             create(:provider,
-              :university,
-              provider_code: '2AT',
-              provider_name: 'Second',
-              organisations: [organisation],
-              contacts: [contact],
-              can_sponsor_skilled_worker_visa: true,
-              can_sponsor_student_visa: true,
-              region_code: :yorkshire_and_the_humber)
+                   :university,
+                   provider_code: '2AT',
+                   provider_name: 'Second',
+                   organisations: [organisation],
+                   contacts: [contact],
+                   can_sponsor_skilled_worker_visa: true,
+                   can_sponsor_student_visa: true,
+                   region_code: :yorkshire_and_the_humber)
           end
         end
 

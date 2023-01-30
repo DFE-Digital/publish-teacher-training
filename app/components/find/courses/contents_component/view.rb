@@ -7,12 +7,12 @@ module Find
         attr_reader :course
 
         delegate :about_course,
-          :how_school_placements_work,
-          :program_type,
-          :provider,
-          :about_accrediting_body,
-          :salaried?,
-          :interview_process, to: :course
+                 :how_school_placements_work,
+                 :program_type,
+                 :provider,
+                 :about_accrediting_body,
+                 :salaried?,
+                 :interview_process, to: :course
 
         def initialize(course)
           super

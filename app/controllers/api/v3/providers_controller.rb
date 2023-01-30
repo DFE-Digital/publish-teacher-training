@@ -20,20 +20,20 @@ module API
         @provider = @recruitment_cycle.providers
                                       .includes(:sites, :courses, courses: [:enrichments, :sites, { site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive] }])
                                       .find_by!(
-            provider_code: code.upcase
-          )
+                                        provider_code: code.upcase
+                                      )
 
         render jsonapi: @provider,
-          class: CourseSerializersService.new.execute,
-          include: params[:include],
-          fields: { providers: %i[provider_code provider_name courses
-                                  recruitment_cycle_year address1 address2
-                                  address3 address4 postcode region_code
-                                  email website telephone train_with_us
-                                  train_with_disability sites
-                                  accredited_bodies accredited_body?
-                                  can_sponsor_student_visa
-                                  can_sponsor_skilled_worker_visa] }
+               class: CourseSerializersService.new.execute,
+               include: params[:include],
+               fields: { providers: %i[provider_code provider_name courses
+                                       recruitment_cycle_year address1 address2
+                                       address3 address4 postcode region_code
+                                       email website telephone train_with_us
+                                       train_with_disability sites
+                                       accredited_bodies accredited_body?
+                                       can_sponsor_student_visa
+                                       can_sponsor_skilled_worker_visa] }
       end
 
       private

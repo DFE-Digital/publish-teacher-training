@@ -67,21 +67,21 @@ module Support
 
     def create_provider_params
       params.require(:provider).permit(:provider_name,
-        :provider_code,
-        :provider_type,
-        :urn,
-        :recruitment_cycle_id,
-        :email,
-        :ukprn,
-        :telephone, sites_attributes: %i[code
-                                         urn
-                                         location_name
-                                         address1
-                                         address2
-                                         address3
-                                         address4
-                                         postcode],
-        organisations_attributes: %i[name]).merge(recruitment_cycle:)
+                                       :provider_code,
+                                       :provider_type,
+                                       :urn,
+                                       :recruitment_cycle_id,
+                                       :email,
+                                       :ukprn,
+                                       :telephone, sites_attributes: %i[code
+                                                                        urn
+                                                                        location_name
+                                                                        address1
+                                                                        address2
+                                                                        address3
+                                                                        address4
+                                                                        postcode],
+                                                   organisations_attributes: %i[name]).merge(recruitment_cycle:)
     end
   end
 end

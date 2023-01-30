@@ -354,14 +354,14 @@ module Find
         context 'when subject parameters are passed' do
           let(:results_view) do
             described_class.new(query_parameters: {
-              'subjects' => [
-                french_subject_code,
-                russian_subject_code,
-                primary_subject_code,
-                spanish_subject_code,
-                mathematics_subject_code
-              ]
-            })
+                                  'subjects' => [
+                                    french_subject_code,
+                                    russian_subject_code,
+                                    primary_subject_code,
+                                    spanish_subject_code,
+                                    mathematics_subject_code
+                                  ]
+                                })
           end
 
           let(:french_subject_code) { '15' }

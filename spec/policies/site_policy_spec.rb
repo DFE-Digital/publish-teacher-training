@@ -17,8 +17,8 @@ describe SitePolicy do
     let(:site) { create(:site) }
     let!(:provider) do
       create(:provider,
-        sites: [site],
-        users: [user])
+             sites: [site],
+             users: [user])
     end
 
     it { is_expected.to permit(user, site) }

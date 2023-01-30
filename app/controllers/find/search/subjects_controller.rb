@@ -16,9 +16,9 @@ module Find
 
         if @subjects_form.valid?
           redirect_to find_results_path(form_params.merge(
-            subjects: sanitised_subject_codes,
-            has_vacancies: default_vacancies
-          ))
+                                          subjects: sanitised_subject_codes,
+                                          has_vacancies: default_vacancies
+                                        ))
         else
           render :new
         end

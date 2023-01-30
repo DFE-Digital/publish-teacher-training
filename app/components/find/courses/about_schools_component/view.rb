@@ -9,8 +9,8 @@ module Find
         attr_reader :course
 
         delegate :how_school_placements_work,
-          :program_type,
-          :site_statuses, to: :course
+                 :program_type,
+                 :site_statuses, to: :course
 
         def initialize(course)
           super

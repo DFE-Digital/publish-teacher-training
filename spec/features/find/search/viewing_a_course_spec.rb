@@ -143,8 +143,8 @@ feature 'Viewing a findable course' do
 
   def then_i_should_see_the_course_information
     expect(course_show_page.title).to have_content(
-            "#{@course.name} (#{@course.course_code})"
-          )
+      "#{@course.name} (#{@course.course_code})"
+    )
 
     expect(course_show_page.sub_title).to have_content(
       provider.provider_name
@@ -327,8 +327,8 @@ feature 'Viewing a findable course' do
 
   def then_i_should_only_see_the_uk_fees
     expect(course_show_page).to have_content(
-    "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
-  )
+      "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
+    )
 
     expect(course_show_page).not_to have_international_fees
   end

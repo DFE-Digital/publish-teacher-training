@@ -5,8 +5,8 @@ module Publish
     alias access_request model
 
     validates :first_name, :last_name, :email_address,
-      :organisation, :reason,
-      presence: true
+              :organisation, :reason,
+              presence: true
 
     FIELDS = %i[
       first_name

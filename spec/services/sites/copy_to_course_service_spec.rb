@@ -8,7 +8,7 @@ describe Sites::CopyToCourseService do
   let(:service) { described_class.new }
   let(:new_provider) do
     create(:provider,
-      recruitment_cycle: new_recruitment_cycle)
+           recruitment_cycle: new_recruitment_cycle)
   end
   let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
 

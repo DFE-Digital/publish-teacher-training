@@ -20,10 +20,10 @@ describe Providers::CopyToRecruitmentCycleService do
     end
     let(:provider) do
       create(:provider,
-        :with_users,
-        sites: [site],
-        ucas_preferences:,
-        contacts:)
+             :with_users,
+             sites: [site],
+             ucas_preferences:,
+             contacts:)
     end
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
@@ -85,7 +85,7 @@ describe Providers::CopyToRecruitmentCycleService do
       end
       let(:new_recruitment_cycle) do
         create(:recruitment_cycle, :next,
-          providers: [new_provider])
+               providers: [new_provider])
       end
 
       it 'does not make a copy of the provider' do
@@ -167,10 +167,10 @@ describe Providers::CopyToRecruitmentCycleService do
     context 'provider is not rollable?' do
       let(:provider) do
         create(:provider,
-          :with_users,
-          sites: [site],
-          ucas_preferences:,
-          contacts:)
+               :with_users,
+               sites: [site],
+               ucas_preferences:,
+               contacts:)
       end
       let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }

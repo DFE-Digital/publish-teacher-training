@@ -8,9 +8,9 @@ module Find
           attr_reader :course
 
           delegate :scholarship_amount,
-            :bursary_amount,
-            :has_early_career_payments?,
-            to: :course
+                   :bursary_amount,
+                   :has_early_career_payments?,
+                   to: :course
 
           def initialize(course)
             super

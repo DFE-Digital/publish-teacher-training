@@ -77,15 +77,15 @@ describe Course do
     context 'on a course with only a draft enrichment' do
       let(:enrichments) do
         [build(:course_enrichment, :initial_draft,
-          created_at: 1.day.ago,
-          updated_at: 20.minutes.ago)]
+               created_at: 1.day.ago,
+               updated_at: 20.minutes.ago)]
       end
       let(:enrichment) { subject.enrichments.first }
 
       subject do
         create(:course,
-          changed_at: 10.minutes.ago,
-          enrichments:)
+               changed_at: 10.minutes.ago,
+               enrichments:)
       end
 
       its(:changed_at) { is_expected.to be_within(1.second).of Time.now.utc }

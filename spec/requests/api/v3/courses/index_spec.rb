@@ -137,10 +137,10 @@ describe 'GET v3/courses', :with_publish_constraint do
       let(:provider_a) { create(:provider, provider_name: 'Provider A') }
       let(:course_a) do
         create(:course,
-          name: 'Course A',
-          provider: provider_a,
-          site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 0, longitude: 0))],
-          enrichments: [build(:course_enrichment, :published)])
+               name: 'Course A',
+               provider: provider_a,
+               site_statuses: [build(:site_status, :findable, site: build(:site, latitude: 0, longitude: 0))],
+               enrichments: [build(:course_enrichment, :published)])
       end
 
       let(:provider_b) { create(:provider, provider_name: 'Provider B') }
@@ -178,10 +178,10 @@ describe 'GET v3/courses', :with_publish_constraint do
     let(:provider_a) { create(:provider, provider_name: 'Provider A') }
     let(:course_a) do
       create(:course,
-        name: 'Course A',
-        provider: provider_a,
-        site_statuses: [build(:site_status, :findable, site: far_site)],
-        enrichments: [build(:course_enrichment, :published)])
+             name: 'Course A',
+             provider: provider_a,
+             site_statuses: [build(:site_status, :findable, site: far_site)],
+             enrichments: [build(:course_enrichment, :published)])
     end
 
     let(:provider_b) { create(:provider, provider_name: 'Provider B') }
@@ -569,9 +569,9 @@ describe 'GET v3/courses', :with_publish_constraint do
   describe 'subjects filter' do
     let(:course_with_a1_subject) do
       create(:course,
-        enrichments: [published_enrichment],
-        site_statuses: [findable_status],
-        subjects: [create(:primary_subject, subject_code: 'A1')])
+             enrichments: [published_enrichment],
+             site_statuses: [findable_status],
+             subjects: [create(:primary_subject, subject_code: 'A1')])
     end
 
     context 'with courses that match a single subject' do
@@ -593,9 +593,9 @@ describe 'GET v3/courses', :with_publish_constraint do
       let(:request_path) { '/api/v3/courses?filter[subjects]=A1,B1' }
       let(:course_with_b1_subject) do
         create(:course,
-          enrichments: [published_enrichment],
-          site_statuses: [build(:site_status, :findable)],
-          subjects: [create(:primary_subject, subject_code: 'B1')])
+               enrichments: [published_enrichment],
+               site_statuses: [build(:site_status, :findable)],
+               subjects: [create(:primary_subject, subject_code: 'B1')])
       end
 
       before do
@@ -672,19 +672,19 @@ describe 'GET v3/courses', :with_publish_constraint do
       let(:site1) { build(:site) }
       let(:filtered_provider_course) do
         create(:course,
-          name: 'Course A',
-          provider: provider_filtered_by,
-          accrediting_provider: provider_filtered_by,
-          site_statuses: [create(:site_status, :findable, site: site1)],
-          enrichments: [published_enrichment])
+               name: 'Course A',
+               provider: provider_filtered_by,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site1)],
+               enrichments: [published_enrichment])
       end
       let(:another_provider_course) do
         create(:course,
-          name: 'Course B',
-          provider: another_training_provider,
-          accrediting_provider: provider_filtered_by,
-          site_statuses: [create(:site_status, :findable, site: site2)],
-          enrichments: [published_enrichment])
+               name: 'Course B',
+               provider: another_training_provider,
+               accrediting_provider: provider_filtered_by,
+               site_statuses: [create(:site_status, :findable, site: site2)],
+               enrichments: [published_enrichment])
       end
 
       before do
