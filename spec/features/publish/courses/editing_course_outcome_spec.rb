@@ -45,17 +45,17 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_outcome_page
-    outcome_edit_page.load(
+    publish_courses_outcome_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_update_the_course_outcome
-    outcome_edit_page.pgce_with_qts.choose
+    publish_courses_outcome_edit_page.pgce_with_qts.choose
   end
 
   def and_i_submit
-    outcome_edit_page.submit.click
+    publish_courses_outcome_edit_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -67,13 +67,13 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_shown_the_correct_qts_options
-    expect(outcome_edit_page.qualification_names).to match_array(
+    expect(publish_courses_outcome_edit_page.qualification_names).to match_array(
       ['QTS', 'PGCE with QTS', 'PGDE with QTS']
     )
   end
 
   def then_i_am_shown_the_correct_non_qts_options
-    expect(outcome_edit_page.qualification_names).to match_array(
+    expect(publish_courses_outcome_edit_page.qualification_names).to match_array(
       ['PGCE only (without QTS)', 'PGDE only (without QTS)']
     )
   end

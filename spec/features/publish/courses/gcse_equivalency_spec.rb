@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: false } do
   scenario 'a provider completes the gcse equivalency requirements section' do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course:)
+    when_i_visit_the_course_publish_courses_gcse_requirements_page(course:)
 
     and_i_click_save
     and_i_see_pending_gcse_and_equivalency_tests_errors
@@ -38,15 +38,15 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
 
   scenario 'a provider has completed the pending GCSE & equivalency requirements and sees their answer pre-populated on the gcse requirements page' do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course: course3)
+    when_i_visit_the_course_publish_courses_gcse_requirements_page(course: course3)
 
     then_i_see_the_form_pre_populated
   end
 
   scenario 'a provider copies gcse data from another course with all fields' do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course:)
-    gcse_requirements_page.copy_content.copy(course3)
+    when_i_visit_the_course_publish_courses_gcse_requirements_page(course:)
+    publish_courses_gcse_requirements_page.copy_content.copy(course3)
 
     [
       'Your changes are not yet saved',
@@ -56,27 +56,27 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
       'Accept Maths GCSE equivalency',
       'Additional GCSE equivalencies'
     ].each do |name|
-      expect(gcse_requirements_page.copy_content_warning).to have_content(name)
+      expect(publish_courses_gcse_requirements_page.copy_content_warning).to have_content(name)
     end
 
-    expect(gcse_requirements_page.pending_gcse_yes_radio).to be_checked
-    expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
-    expect(gcse_requirements_page.english_equivalency).to be_checked
-    expect(gcse_requirements_page.maths_equivalency).to be_checked
-    expect(gcse_requirements_page.additional_requirements.value).to eq course3.additional_gcse_equivalencies
+    expect(publish_courses_gcse_requirements_page.pending_gcse_yes_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.english_equivalency).to be_checked
+    expect(publish_courses_gcse_requirements_page.maths_equivalency).to be_checked
+    expect(publish_courses_gcse_requirements_page.additional_requirements.value).to eq course3.additional_gcse_equivalencies
   end
 
   scenario 'a provider copies gcse data from another course with missing fields' do
     given_i_am_authenticated(user: user_with_courses)
-    when_i_visit_the_course_gcse_requirements_page(course:)
-    gcse_requirements_page.copy_content.copy(course2)
+    when_i_visit_the_course_publish_courses_gcse_requirements_page(course:)
+    publish_courses_gcse_requirements_page.copy_content.copy(course2)
 
-    expect(gcse_requirements_page).not_to have_copy_content_warning
-    expect(gcse_requirements_page.pending_gcse_no_radio).to be_checked
-    expect(gcse_requirements_page.gcse_equivalency_no_radio).to be_checked
-    expect(gcse_requirements_page.english_equivalency).not_to be_checked
-    expect(gcse_requirements_page.maths_equivalency).not_to be_checked
-    expect(gcse_requirements_page.additional_requirements.text).to eq('')
+    expect(publish_courses_gcse_requirements_page).not_to have_copy_content_warning
+    expect(publish_courses_gcse_requirements_page.pending_gcse_no_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.gcse_equivalency_no_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.english_equivalency).not_to be_checked
+    expect(publish_courses_gcse_requirements_page.maths_equivalency).not_to be_checked
+    expect(publish_courses_gcse_requirements_page.additional_requirements.text).to eq('')
   end
 
   private
@@ -99,8 +99,8 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
     )
   end
 
-  def when_i_visit_the_course_gcse_requirements_page(course:)
-    gcse_requirements_page.load(
+  def when_i_visit_the_course_publish_courses_gcse_requirements_page(course:)
+    publish_courses_gcse_requirements_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
@@ -122,7 +122,7 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
   end
 
   def when_i_visit_the_course_page(course:)
-    provider_courses_show_page.load(
+    publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
@@ -141,15 +141,15 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
   end
 
   def then_i_see_the_form_pre_populated
-    expect(gcse_requirements_page.pending_gcse_yes_radio).to be_checked
-    expect(gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
-    expect(gcse_requirements_page.english_equivalency).to be_checked
-    expect(gcse_requirements_page.maths_equivalency).to be_checked
-    expect(gcse_requirements_page.additional_requirements).to have_content('Cycling Proficiency')
+    expect(publish_courses_gcse_requirements_page.pending_gcse_yes_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.gcse_equivalency_yes_radio).to be_checked
+    expect(publish_courses_gcse_requirements_page.english_equivalency).to be_checked
+    expect(publish_courses_gcse_requirements_page.maths_equivalency).to be_checked
+    expect(publish_courses_gcse_requirements_page.additional_requirements).to have_content('Cycling Proficiency')
   end
 
   def and_i_click_save
-    gcse_requirements_page.save.click
+    publish_courses_gcse_requirements_page.save.click
   end
 
   def and_i_see_pending_gcse_and_equivalency_tests_errors
@@ -158,12 +158,12 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_set_the_gcse_requirements
-    gcse_requirements_page.pending_gcse_yes_radio.click
-    gcse_requirements_page.gcse_equivalency_yes_radio.click
+    publish_courses_gcse_requirements_page.pending_gcse_yes_radio.click
+    publish_courses_gcse_requirements_page.gcse_equivalency_yes_radio.click
   end
 
   def and_there_is_no_science_equivalency
-    expect(gcse_requirements_page).not_to have_science_equivalency
+    expect(publish_courses_gcse_requirements_page).not_to have_science_equivalency
   end
 
   def and_i_see_equivalency_errors
@@ -172,9 +172,9 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
   end
 
   def then_i_fill_the_equivalency_requirements
-    gcse_requirements_page.english_equivalency.check
-    gcse_requirements_page.maths_equivalency.check
-    gcse_requirements_page.additional_requirements.set('Cycling Proficiency')
+    publish_courses_gcse_requirements_page.english_equivalency.check
+    publish_courses_gcse_requirements_page.maths_equivalency.check
+    publish_courses_gcse_requirements_page.additional_requirements.set('Cycling Proficiency')
   end
 
   def and_i_am_on_the_course_page
@@ -186,6 +186,6 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_see_the_success_summary
-    expect(provider_courses_index_page.success_summary).to have_content(I18n.t('success.value_saved', value: 'GCSE requirements'))
+    expect(publish_provider_courses_index_page.success_summary).to have_content(I18n.t('success.value_saved', value: 'GCSE requirements'))
   end
 end

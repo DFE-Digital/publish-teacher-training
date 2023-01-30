@@ -8,7 +8,7 @@ feature 'Viewing provider users' do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_the_user_management_feature_flag_is_inactive
-    when_i_visit_the_provider_users_page
+    when_i_visit_the_publish_provider_users_page
   end
 
   scenario 'i can view associated users' do
@@ -27,7 +27,7 @@ feature 'Viewing provider users' do
   end
 
   def and_i_click_on_request_access_for_someone_else
-    provider_users_page.request_access.click
+    publish_provider_users_page.request_access.click
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -35,13 +35,13 @@ feature 'Viewing provider users' do
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_provider_users_page
-    provider_users_page.load(provider_code: provider.provider_code)
+  def when_i_visit_the_publish_provider_users_page
+    publish_provider_users_page.load(provider_code: provider.provider_code)
   end
 
   def then_i_can_view_users_associated_with_the_provider
-    expect(provider_users_page.heading.text).to eq('Users')
-    expect(provider_users_page.user_name.text).to eq("#{@user.first_name} #{@user.last_name}")
+    expect(publish_provider_users_page.heading.text).to eq('Users')
+    expect(publish_provider_users_page.user_name.text).to eq("#{@user.first_name} #{@user.last_name}")
   end
 
   def provider

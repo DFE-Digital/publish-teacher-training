@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_new_outcome_page
+    when_i_visit_the_publish_courses_new_outcome_page
   end
 
   scenario 'selecting qts' do
@@ -38,16 +38,16 @@ feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false 
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_new_outcome_page
-    new_outcome_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: outcome_params)
+  def when_i_visit_the_publish_courses_new_outcome_page
+    publish_courses_new_outcome_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: outcome_params)
   end
 
   def when_i_select_an_outcome(outcome)
-    new_outcome_page.qualification_fields.send(outcome).click
+    publish_courses_new_outcome_page.qualification_fields.send(outcome).click
   end
 
   def and_i_click_continue
-    new_outcome_page.continue.click
+    publish_courses_new_outcome_page.continue.click
   end
 
   def provider

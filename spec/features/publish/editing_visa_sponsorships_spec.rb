@@ -55,7 +55,7 @@ feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_visit_the_provider_details_page
-    provider_details_show_page.load(
+    publish_provider_details_show_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year
     )
@@ -72,27 +72,27 @@ feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_click_on_the_change_skilled_worker_visa_link
-    provider_details_show_page.skilled_worker_visa_link.click
+    publish_provider_details_show_page.skilled_worker_visa_link.click
   end
 
   def when_i_click_on_the_change_student_visa_link
-    provider_details_show_page.student_visa_link.click
+    publish_provider_details_show_page.student_visa_link.click
   end
 
   def and_i_set_my_skilled_worker_visa_sponsorships
-    provider_skilled_worker_visa_sponsorships_page.can_sponsor_skilled_worker_visa.choose
+    publish_provider_skilled_worker_visa_sponsorships_page.can_sponsor_skilled_worker_visa.choose
   end
 
   def and_i_set_my_student_visa_sponsorships
-    provider_student_visa_sponsorships_page.can_sponsor_student_visa.choose
+    publish_provider_student_visa_sponsorships_page.can_sponsor_student_visa.choose
   end
 
   def and_i_submit_skilled_worker_visas
-    provider_skilled_worker_visa_sponsorships_page.update_skilled_worker_visas.click
+    publish_provider_skilled_worker_visa_sponsorships_page.update_skilled_worker_visas.click
   end
 
   def and_i_submit_student_visas
-    provider_student_visa_sponsorships_page.update_student_visas.click
+    publish_provider_student_visa_sponsorships_page.update_student_visas.click
   end
 
   def then_i_should_see_a_success_message

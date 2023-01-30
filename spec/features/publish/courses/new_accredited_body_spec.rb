@@ -30,15 +30,15 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
   end
 
   def when_i_visit_the_new_accredited_bodies_page
-    new_accredited_body_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_body_params)
+    publish_courses_new_accredited_body_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_body_params)
   end
 
   def when_i_select_an_accredited_body
-    new_accredited_body_page.find("#course_accredited_body_code_#{@accredited_body_code.downcase}").click
+    publish_courses_new_accredited_body_page.find("#course_accredited_body_code_#{@accredited_body_code.downcase}").click
   end
 
   def and_i_click_continue
-    new_accredited_body_page.continue.click
+    publish_courses_new_accredited_body_page.continue.click
   end
 
   def provider

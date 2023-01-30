@@ -37,7 +37,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_select_a_language
-    new_modern_languages_page.language_checkbox(language_subject.subject_name).click
+    publish_courses_new_modern_languages_page.language_checkbox(language_subject.subject_name).click
   end
 
   def new_course_modern_languages_page_with_query(invalid: false)
@@ -49,11 +49,11 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def when_i_visit_the_new_course_modern_languages_page(with_invalid_query: false)
     query = new_course_modern_languages_page_with_query(invalid: with_invalid_query)
-    new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query:)
+    publish_courses_new_modern_languages_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query:)
   end
 
   def and_i_click_continue
-    new_modern_languages_page.continue.click
+    publish_courses_new_modern_languages_page.continue.click
   end
 
   def language

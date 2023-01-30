@@ -33,31 +33,31 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_courses_index_page
-    provider_courses_index_page
+    publish_provider_courses_index_page
   end
 
   def then_i_should_see_the_organisation_details_link
-    expect(primary_nav_page).to have_organisation_details
+    expect(publish_primary_nav_page).to have_organisation_details
   end
 
   def and_i_should_see_the_locations_link
-    expect(primary_nav_page).to have_locations
+    expect(publish_primary_nav_page).to have_locations
   end
 
   def and_i_should_see_the_courses_link
-    expect(primary_nav_page).to have_courses
+    expect(publish_primary_nav_page).to have_courses
   end
 
   def and_i_should_see_the_users_link
-    expect(primary_nav_page).to have_users
+    expect(publish_primary_nav_page).to have_users
   end
 
   def and_i_should_see_the_training_partners_link
-    expect(primary_nav_page).to have_training_partners
+    expect(publish_primary_nav_page).to have_training_partners
   end
 
   def and_i_should_not_see_the_training_partners_link
-    expect(primary_nav_page).not_to have_training_partners
+    expect(publish_primary_nav_page).not_to have_training_partners
   end
 
   def and_i_should_not_see_the_training_partners_link

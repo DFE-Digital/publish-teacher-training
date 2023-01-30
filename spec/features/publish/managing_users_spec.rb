@@ -10,7 +10,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
   describe 'Adding user to organisation' do
     scenario 'With valid details' do
-      given_i_visit_the_users_index_page
+      given_i_visit_the_publish_users_index_page
       when_the_user_i_want_to_add_has_not_already_been_added
       and_i_click_add_user
       and_i_fill_in_first_name
@@ -29,7 +29,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     end
 
     scenario 'With invalid details' do
-      given_i_visit_the_users_new_page
+      given_i_visit_the_publish_users_new_page
       and_i_continue
 
       then_it_should_display_the_correct_error_messages
@@ -38,9 +38,9 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
   describe 'Viewing a user in an organisation' do
     scenario 'With an existing user' do
-      given_i_visit_the_users_index_page
+      given_i_visit_the_publish_users_index_page
       when_i_click_on_the_user
-      i_should_be_on_the_users_show_page
+      i_should_be_on_the_publish_users_show_page
       then_the_users_name_should_be_displayed
     end
   end
@@ -49,7 +49,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     context 'User does not have a dfe sign in account' do
       before do
         given_that_the_user_does_not_have_a_dfe_signin_account
-        when_i_visit_the_users_index_page
+        when_i_visit_the_publish_users_index_page
         and_i_click_on_the_user
       end
 
@@ -99,7 +99,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     context 'User has a dfe signin account' do
       scenario 'Changing any details' do
         given_the_user_has_an_associated_dfe_signin_account
-        when_i_visit_the_users_index_page
+        when_i_visit_the_publish_users_index_page
         and_i_click_on_the_user
         then_i_should_not_see_any_change_links
       end
@@ -108,7 +108,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
   describe 'Removing a user in an organisation' do
     scenario 'With an existing user' do
-      given_i_visit_the_users_index_page
+      given_i_visit_the_publish_users_index_page
       when_i_click_on_user_two
       and_i_click_remove_user
       and_i_confirm
@@ -127,30 +127,30 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     given_i_am_authenticated(user: @user)
   end
 
-  def given_i_visit_the_users_index_page
-    users_index_page.load(provider_code: @provider.provider_code)
+  def given_i_visit_the_publish_users_index_page
+    publish_users_index_page.load(provider_code: @provider.provider_code)
   end
 
-  alias_method :when_i_visit_the_users_index_page, :given_i_visit_the_users_index_page
+  alias_method :when_i_visit_the_publish_users_index_page, :given_i_visit_the_publish_users_index_page
 
   def when_the_user_i_want_to_add_has_not_already_been_added
-    expect(users_index_page).not_to have_text('willy.wonka@bat-school.com')
+    expect(publish_users_index_page).not_to have_text('willy.wonka@bat-school.com')
   end
 
   def and_i_click_add_user
-    users_index_page.add_user.click
+    publish_users_index_page.add_user.click
   end
 
   def and_i_fill_in_first_name
-    users_new_page.first_name.set('Silly')
+    publish_users_new_page.first_name.set('Silly')
   end
 
   def and_i_fill_in_last_name
-    users_new_page.last_name.set('Wonka')
+    publish_users_new_page.last_name.set('Wonka')
   end
 
   def and_i_fill_in_email
-    users_new_page.email.set('willy.wonka@bat-school.com')
+    publish_users_new_page.email.set('willy.wonka@bat-school.com')
   end
 
   def and_i_continue
@@ -158,7 +158,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_i_am_on_the_check_page
-    expect(users_check_page).to be_displayed(provider_code: @provider.provider_code)
+    expect(publish_users_check_page).to be_displayed(provider_code: @provider.provider_code)
   end
 
   def then_the_user_should_not_be_in_the_database
@@ -174,23 +174,23 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def given_i_click_change_first_name
-    users_check_page.change_first_name.click
+    publish_users_check_page.change_first_name.click
   end
 
   def when_i_enter_a_new_first_name
-    users_new_page.first_name.set('Willy')
+    publish_users_new_page.first_name.set('Willy')
   end
 
   def when_i_enter_a_new_valid_email
-    users_edit_page.email.set('a-changed-email@address.com')
+    publish_users_edit_page.email.set('a-changed-email@address.com')
   end
 
   def when_i_edit_and_enter_a_new_first_name
-    users_edit_page.first_name.set('New first name')
+    publish_users_edit_page.first_name.set('New first name')
   end
 
   def when_i_edit_and_enter_a_new_last_name
-    users_edit_page.first_name.set('New last name')
+    publish_users_edit_page.first_name.set('New last name')
   end
 
   def and_the_warning_email_text_should_be_displayed
@@ -222,26 +222,26 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_i_click_add_user
-    users_check_page.add_user.click
+    publish_users_check_page.add_user.click
   end
 
   def then_i_should_see_the_users_name_and_email_listed
-    expect(users_check_page).to have_text('Willy Wonka')
-    expect(users_check_page).to have_text('willy.wonka@bat-school.com')
+    expect(publish_users_check_page).to have_text('Willy Wonka')
+    expect(publish_users_check_page).to have_text('willy.wonka@bat-school.com')
   end
 
   def and_the_user_should_be_added_to_the_database
     expect(Provider.find_by(provider_name: "Batman's Chocolate School").users.where(email: 'willy.wonka@bat-school.com').blank?).to be(false)
   end
 
-  def given_i_visit_the_users_new_page
-    users_new_page.load(provider_code: @provider.provider_code)
+  def given_i_visit_the_publish_users_new_page
+    publish_users_new_page.load(provider_code: @provider.provider_code)
   end
 
   def then_it_should_display_the_correct_error_messages
-    expect(users_new_page.error_summary).to have_text('Enter a first name')
-    expect(users_new_page.error_summary).to have_text('Enter a last name')
-    expect(users_new_page.error_summary).to have_text('Enter an email address')
+    expect(publish_users_new_page.error_summary).to have_text('Enter a first name')
+    expect(publish_users_new_page.error_summary).to have_text('Enter a last name')
+    expect(publish_users_new_page.error_summary).to have_text('Enter an email address')
   end
 
   def and_i_click_on_the_user
@@ -254,36 +254,36 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     click_link 'Mr Cool'
   end
 
-  def i_should_be_on_the_users_show_page
-    expect(users_show_page).to be_displayed
+  def i_should_be_on_the_publish_users_show_page
+    expect(publish_users_show_page).to be_displayed
   end
 
   def then_the_users_name_should_be_displayed
-    expect(users_show_page).to have_text('Mr User')
+    expect(publish_users_show_page).to have_text('Mr User')
   end
 
   def and_i_click_remove_user
-    users_show_page.remove_user_link.click
+    publish_users_show_page.remove_user_link.click
   end
 
   def given_i_click_change_email_address
-    users_show_page.change_email_address.click
+    publish_users_show_page.change_email_address.click
   end
 
   def given_i_click_change_first_name
-    users_show_page.change_first_name.click
+    publish_users_show_page.change_first_name.click
   end
 
   def given_i_click_change_last_name
-    users_show_page.change_last_name.click
+    publish_users_show_page.change_last_name.click
   end
 
   def and_i_confirm
-    users_delete_page.remove_user_button.click
+    publish_users_delete_page.remove_user_button.click
   end
 
   def then_the_user_should_be_deleted
-    expect(provider_users_page).not_to have_text 'Mr Cool'
+    expect(publish_provider_users_page).not_to have_text 'Mr Cool'
   end
 
   def and_the_new_email_is_displayed

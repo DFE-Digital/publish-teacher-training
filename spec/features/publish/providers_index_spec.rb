@@ -6,7 +6,7 @@ feature 'Providers index' do
   scenario 'view page as Mary - multi provider user' do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_a_multi_provider_user
-    when_i_visit_the_providers_index_page
+    when_i_visit_the_publish_providers_index_page
     i_should_see_the_provider_list
     i_should_not_see_the_admin_search_box
 
@@ -19,7 +19,7 @@ feature 'Providers index' do
     given_we_are_not_in_rollover
     and_i_am_authenticated_as_an_admin_user
     and_there_are_providers
-    when_i_visit_the_providers_index_page
+    when_i_visit_the_publish_providers_index_page
     i_should_see_the_provider_list
     i_should_see_the_admin_search_box
     i_should_see_the_pagination_link
@@ -33,7 +33,7 @@ feature 'Providers index' do
     and_there_is_a_previous_recruitment_cycle
     and_i_am_authenticated_as_a_multi_provider_user
     and_there_are_providers
-    when_i_visit_the_providers_index_page
+    when_i_visit_the_publish_providers_index_page
     and_i_click_on_a_provider
     i_should_be_on_the_recruitment_cycle_switcher_page
 
@@ -57,15 +57,15 @@ feature 'Providers index' do
   end
 
   def i_should_see_the_recruitment_cycle_text
-    expect(title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
+    expect(publish_title_bar_page.recruitment_cycle_text).to have_text("#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current")
   end
 
   def when_i_click_on_users
-    primary_nav_page.users.click
+    publish_primary_nav_page.users.click
   end
 
   def when_i_click_on_organisations
-    primary_nav_page.organisation_details.click
+    publish_primary_nav_page.organisation_details.click
   end
 
   def when_i_click_on_the_current_cycle_link
@@ -110,30 +110,30 @@ feature 'Providers index' do
   end
 
   def i_can_search_with_provider_details
-    providers_index_page.search_input.set 'Really big school (A01)'
-    providers_index_page.search_button.click
-    expect(provider_courses_index_page).to be_displayed
-    expect(provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
+    publish_providers_index_page.search_input.set 'Really big school (A01)'
+    publish_providers_index_page.search_button.click
+    expect(publish_provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page.current_url).to end_with("A01/#{Settings.current_recruitment_cycle_year}/courses")
   end
 
   def i_should_see_the_pagination_link
-    expect(providers_index_page.pagination_pages.text).to eq('2 of 2')
+    expect(publish_providers_index_page.pagination_pages.text).to eq('2 of 2')
   end
 
-  def when_i_visit_the_providers_index_page
-    providers_index_page.load
+  def when_i_visit_the_publish_providers_index_page
+    publish_providers_index_page.load
   end
 
   def i_should_see_the_provider_list
-    expect(providers_index_page).to have_provider_list
+    expect(publish_providers_index_page).to have_provider_list
   end
 
   def i_should_see_the_admin_search_box
-    expect(providers_index_page).to have_admin_search_box
+    expect(publish_providers_index_page).to have_admin_search_box
   end
 
   def i_should_not_see_the_admin_search_box
-    expect(providers_index_page).not_to have_admin_search_box
+    expect(publish_providers_index_page).not_to have_admin_search_box
   end
 
   def and_there_are_providers

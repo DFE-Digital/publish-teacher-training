@@ -14,7 +14,7 @@ feature 'Accepting rollover' do
   end
 
   scenario 'i can accept the rollover interruption' do
-    then_i_am_taken_to_the_rollover_recruitment_page
+    then_i_am_taken_to_the_publish_rollover_recruitment_page
     when_i_accept_rollover_recruitment
     then_i_should_be_redirected_to_the_courses_index_page
     and_the_user_is_marked_as_accepting_rollover_recruitment
@@ -28,16 +28,16 @@ feature 'Accepting rollover' do
     visit(publish_root_path)
   end
 
-  def then_i_am_taken_to_the_rollover_recruitment_page
-    expect(rollover_recruitment_page).to be_displayed
+  def then_i_am_taken_to_the_publish_rollover_recruitment_page
+    expect(publish_rollover_recruitment_page).to be_displayed
   end
 
   def when_i_accept_rollover_recruitment
-    rollover_recruitment_page.submit.click
+    publish_rollover_recruitment_page.submit.click
   end
 
   def then_i_should_be_redirected_to_the_courses_index_page
-    expect(provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page).to be_displayed
   end
 
   def and_the_user_is_marked_as_accepting_rollover_recruitment

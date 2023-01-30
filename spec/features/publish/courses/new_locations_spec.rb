@@ -6,7 +6,7 @@ feature 'selection locations', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
     and_that_sites_exist
-    when_i_visit_the_new_locations_page
+    when_i_visit_the_publish_courses_new_locations_page
   end
 
   scenario 'selecting multiple locations' do
@@ -31,17 +31,17 @@ feature 'selection locations', { can_edit_current_and_next_cycles: false } do
     provider.sites << create_list(:site, 3)
   end
 
-  def when_i_visit_the_new_locations_page
-    new_locations_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: locations_params)
+  def when_i_visit_the_publish_courses_new_locations_page
+    publish_courses_new_locations_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: locations_params)
   end
 
   def when_i_select_a_location
-    new_locations_page.check(provider.sites.first.location_name)
-    new_locations_page.check(provider.sites.second.location_name)
+    publish_courses_new_locations_page.check(provider.sites.first.location_name)
+    publish_courses_new_locations_page.check(provider.sites.second.location_name)
   end
 
   def and_i_click_continue
-    new_locations_page.continue.click
+    publish_courses_new_locations_page.continue.click
   end
 
   def provider

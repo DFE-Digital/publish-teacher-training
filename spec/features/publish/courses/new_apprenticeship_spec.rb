@@ -34,15 +34,15 @@ feature 'selecting a teaching apprenticeship', { can_edit_current_and_next_cycle
   end
 
   def when_i_visit_the_apprenticeship_page
-    new_apprenticeship_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: outcome_params)
+    publish_courses_new_apprenticeship_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: outcome_params)
   end
 
   def when_i_select(choice)
-    new_apprenticeship_page.send(choice).click
+    publish_courses_new_apprenticeship_page.send(choice).click
   end
 
   def and_i_click_continue
-    new_apprenticeship_page.continue.click
+    publish_courses_new_apprenticeship_page.continue.click
   end
 
   def provider

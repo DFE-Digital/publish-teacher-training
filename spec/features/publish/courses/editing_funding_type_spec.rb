@@ -10,10 +10,10 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   context 'fee paying to salaried course' do
     scenario 'i am taken to the skilled worker visa step' do
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-      when_i_visit_the_funding_type_edit_page
+      when_i_visit_the_publish_courses_funding_type_edit_page
       when_i_select_a_funding_type(:salary)
       and_i_continue
-      then_i_should_be_on_the_skilled_worker_visa_sponsorship_edit_page
+      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored
       then_i_should_see_a_success_message_for('Skilled Worker')
       and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
@@ -24,7 +24,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
     scenario 'i cancel after changing funding type and changes are not retained' do
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-      when_i_visit_the_funding_type_edit_page
+      when_i_visit_the_publish_courses_funding_type_edit_page
       when_i_select_a_funding_type(:salary)
       and_i_continue
       and_i_cancel
@@ -35,7 +35,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   context 'salaried to fee paying course' do
     scenario 'i am taken to the student visa step' do
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-      when_i_visit_the_funding_type_edit_page
+      when_i_visit_the_publish_courses_funding_type_edit_page
       when_i_select_a_funding_type(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
@@ -49,7 +49,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
     scenario 'i cancel after changing funding type and changes are not retained' do
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-      when_i_visit_the_funding_type_edit_page
+      when_i_visit_the_publish_courses_funding_type_edit_page
       when_i_select_a_funding_type(:fee)
       and_i_continue
       and_i_cancel
@@ -77,20 +77,20 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def when_i_visit_the_funding_type_edit_page
-    funding_type_edit_page.load(
+  def when_i_visit_the_publish_courses_funding_type_edit_page
+    publish_courses_funding_type_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
-  def when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
-    skilled_worker_visa_sponsorship_edit_page.load(
+  def when_i_visit_the_course_publish_courses_skilled_worker_visa_sponsorship_edit_page
+    publish_courses_skilled_worker_visa_sponsorship_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_continue
-    funding_type_edit_page.update.click
+    publish_courses_funding_type_edit_page.update.click
   end
 
   def and_i_cancel
@@ -118,14 +118,14 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_update_funding_type_back_to_salaried_and_skilled_worker_to_sponsored
-    when_i_visit_the_funding_type_edit_page
+    when_i_visit_the_publish_courses_funding_type_edit_page
     when_i_select_a_funding_type(:salary)
     and_i_continue
     when_i_update_the_skilled_worker_visa_to_be_sponsored
   end
 
   def when_i_update_funding_type_back_to_fee_paying_and_student_visa_to_sponsored
-    when_i_visit_the_funding_type_edit_page
+    when_i_visit_the_publish_courses_funding_type_edit_page
     when_i_select_a_funding_type(:fee)
     and_i_continue
     when_i_update_the_student_visa_to_be_sponsored
@@ -150,25 +150,25 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_select_a_funding_type(funding_type)
-    funding_type_edit_page.funding_type_fields.send(funding_type).click
+    publish_courses_funding_type_edit_page.funding_type_fields.send(funding_type).click
   end
 
-  def then_i_should_be_on_the_skilled_worker_visa_sponsorship_edit_page
-    expect(skilled_worker_visa_sponsorship_edit_page).to be_displayed
+  def then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+    expect(publish_courses_skilled_worker_visa_sponsorship_edit_page).to be_displayed
   end
 
   def then_i_should_be_on_the_student_visa_edit_page
-    expect(student_visa_sponsorship_edit_page).to be_displayed
+    expect(publish_courses_student_visa_sponsorship_edit_page).to be_displayed
   end
 
   def when_i_update_the_skilled_worker_visa_to_be_sponsored
-    skilled_worker_visa_sponsorship_edit_page.yes.choose
-    skilled_worker_visa_sponsorship_edit_page.update.click
+    publish_courses_skilled_worker_visa_sponsorship_edit_page.yes.choose
+    publish_courses_skilled_worker_visa_sponsorship_edit_page.update.click
   end
 
   def when_i_update_the_student_visa_to_be_sponsored
-    student_visa_sponsorship_edit_page.yes.choose
-    student_visa_sponsorship_edit_page.update.click
+    publish_courses_student_visa_sponsorship_edit_page.yes.choose
+    publish_courses_student_visa_sponsorship_edit_page.update.click
   end
 
   def then_i_should_see_a_success_message_for(visa_type)

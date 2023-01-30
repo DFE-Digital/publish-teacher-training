@@ -23,27 +23,27 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
   end
 
   def when_i_visit_the_details_page
-    provider_details_show_page.load(
+    publish_provider_details_show_page.load(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year
     )
   end
 
   def then_i_can_edit_info_about_training_with_us
-    provider_details_show_page.train_with_us_link.click
-    expect(page).to have_current_path provider_details_edit_page.url(
+    publish_provider_details_show_page.train_with_us_link.click
+    expect(page).to have_current_path publish_provider_details_edit_page.url(
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year
     )
 
-    provider_details_edit_page.training_with_you_field.set ''
-    provider_details_edit_page.save_and_publish.click
-    within provider_details_edit_page.error_summary do
+    publish_provider_details_edit_page.training_with_you_field.set ''
+    publish_provider_details_edit_page.save_and_publish.click
+    within publish_provider_details_edit_page.error_summary do
       expect(page).to have_content 'Enter details about training with you'
     end
 
-    provider_details_edit_page.training_with_you_field.set 'Updated: Training with you'
-    provider_details_edit_page.save_and_publish.click
+    publish_provider_details_edit_page.training_with_you_field.set 'Updated: Training with you'
+    publish_provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content 'Your changes have been published'
     within_summary_row 'Training with your organisation' do
@@ -54,8 +54,8 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
   def then_i_can_edit_info_about_our_accredited_bodies
     click_link "Change details about #{@accrediting_provider.provider_name}"
 
-    provider_details_edit_page.accredited_body_description_field.set 'Updated: accredited body description'
-    provider_details_edit_page.save_and_publish.click
+    publish_provider_details_edit_page.accredited_body_description_field.set 'Updated: accredited body description'
+    publish_provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content 'Your changes have been published'
     within_summary_row @accrediting_provider.provider_name do
@@ -64,10 +64,10 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
   end
 
   def then_i_can_edit_info_about_disabilities_and_other_needs
-    provider_details_show_page.train_with_disability_link.click
+    publish_provider_details_show_page.train_with_disability_link.click
 
-    provider_details_edit_page.train_with_disability_field.set 'Updated: training with disabilities'
-    provider_details_edit_page.save_and_publish.click
+    publish_provider_details_edit_page.train_with_disability_field.set 'Updated: training with disabilities'
+    publish_provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content 'Your changes have been published'
     within_summary_row 'Training with disabilities and other needs' do

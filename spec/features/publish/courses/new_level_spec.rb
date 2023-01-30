@@ -47,29 +47,29 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_visit_the_new_course_level_page
-    new_level_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
+    publish_courses_new_level_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
   def given_i_select_primary_level
-    new_level_page.level_fields.primary.click
+    publish_courses_new_level_page.level_fields.primary.click
   end
 
   def given_i_select_secondary_level
-    new_level_page.level_fields.secondary.click
+    publish_courses_new_level_page.level_fields.secondary.click
   end
 
   def given_i_select_further_education_level
-    new_level_page.level_fields.further_education.click
+    publish_courses_new_level_page.level_fields.further_education.click
   end
 
   def given_i_select_nothing; end
 
   def and_i_click_continue
-    new_level_page.continue.click
+    publish_courses_new_level_page.continue.click
   end
 
   def and_i_check_is_send
-    new_level_page.send_specialism_checkbox.click
+    publish_courses_new_level_page.send_specialism_checkbox.click
   end
 
   def provider

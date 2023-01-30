@@ -6,7 +6,7 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   before do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
-    when_i_visit_the_course_locations_page
+    when_i_visit_the_publish_course_location_edit_page
   end
 
   scenario 'i can update the course locations' do
@@ -43,8 +43,8 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
     given_a_course_exists(sites: [])
   end
 
-  def when_i_visit_the_course_locations_page
-    course_location_edit_page.load(
+  def when_i_visit_the_publish_course_location_edit_page
+    publish_course_location_edit_page.load(
       provider_code: provider.provider_code,
       recruitment_cycle_year: provider.recruitment_cycle_year,
       course_code: course.course_code
@@ -52,17 +52,17 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_a_list_of_locations
-    expect(course_location_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
+    expect(publish_course_location_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
   end
 
   def when_i_update_the_course_locations
-    course_location_edit_page.vacancies.find do |el|
+    publish_course_location_edit_page.vacancies.find do |el|
       el.find('.govuk-label').text == 'Site 1'
     end.check
   end
 
   def and_i_submit
-    course_location_edit_page.submit.click
+    publish_course_location_edit_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -74,7 +74,7 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_an_error_message
-    expect(course_location_edit_page).to have_content(
+    expect(publish_course_location_edit_page).to have_content(
       I18n.t('activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations')
     )
   end

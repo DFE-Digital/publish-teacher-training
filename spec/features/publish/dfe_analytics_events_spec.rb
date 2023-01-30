@@ -21,8 +21,8 @@ feature 'Sending DFE Analytics events' do
     @provider ||= @current_user.providers.first
   end
 
-  def publish_provider_courses_show_page
-    @publish_provider_courses_show_page ||= PageObjects::Publish::ProviderCoursesShow.new
+  def publish_publish_provider_courses_show_page
+    @publish_publish_provider_courses_show_page ||= PageObjects::Publish::ProviderCoursesShow.new
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -38,13 +38,13 @@ feature 'Sending DFE Analytics events' do
   end
 
   def when_i_visit_the_course_page
-    publish_provider_courses_show_page.load(
+    publish_publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_click_the_publish_link
-    publish_provider_courses_show_page.course_button_panel.publish_button.click
+    publish_publish_provider_courses_show_page.course_button_panel.publish_button.click
   end
 
   def then_it_has_sent_analytics_events
