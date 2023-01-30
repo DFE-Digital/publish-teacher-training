@@ -7,8 +7,8 @@ describe Course do
     let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
     let(:another_course) do
       create(:course, enrichments: [
-        build(:course_enrichment, :published, created_at: 5.days.ago)
-      ])
+               build(:course_enrichment, :published, created_at: 5.days.ago)
+             ])
     end
     let(:second_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
     let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }

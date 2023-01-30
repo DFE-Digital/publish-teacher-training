@@ -156,14 +156,14 @@ feature 'Course show' do
 
   def then_i_see_the_correct_change_links
     expect(provider_courses_details_page.change_link_texts).to match_array([
-      'subjects', 'age range', 'outcome', 'if full or part time', 'locations'
-    ])
+                                                                             'subjects', 'age range', 'outcome', 'if full or part time', 'locations'
+                                                                           ])
   end
 
   def then_i_see_the_correct_change_links_for_the_next_cycle
     expect(provider_courses_details_page.change_link_texts).to match_array([
-      'subjects', 'age range', 'outcome', 'if full or part time', 'locations', 'can sponsor skilled_worker visa'
-    ])
+                                                                             'subjects', 'age range', 'outcome', 'if full or part time', 'locations', 'can sponsor skilled_worker visa'
+                                                                           ])
   end
 
   def provider
