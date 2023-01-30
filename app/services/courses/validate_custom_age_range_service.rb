@@ -18,7 +18,7 @@ module Courses
       end
     end
 
-  private
+    private
 
     def get_ages(age_range_in_years, valid_age_range_regex)
       valid_age_range_regex.match(age_range_in_years)&.named_captures&.transform_values(&:to_i)

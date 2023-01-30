@@ -42,7 +42,7 @@ module Providers
       }
     end
 
-  private
+    private
 
     attr_reader :copy_course_to_provider_service, :copy_site_to_provider_service, :force
 

@@ -21,7 +21,7 @@ module API
         render jsonapi: nil, status: :not_found
       end
 
-    private
+      private
 
       def paginate(scope)
         _pagy, paginated_records = pagy(scope, items: per_page, page:)
@@ -56,9 +56,9 @@ module API
 
       def fields_param
         params.fetch(:fields, {})
-          .permit(:subject_areas, :subjects, :courses, :providers, :site_statuses)
-          .to_h
-          .map { |k, v| [k, v.split(',').map(&:to_sym)] }
+              .permit(:subject_areas, :subjects, :courses, :providers, :site_statuses)
+              .to_h
+              .map { |k, v| [k, v.split(',').map(&:to_sym)] }
       end
 
       def store_request_id

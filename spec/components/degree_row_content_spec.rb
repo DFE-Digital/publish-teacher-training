@@ -25,13 +25,13 @@ describe DegreeRowContent, type: :component do
 
     it 'renders a link to the degree section' do
       expect(page.has_link?(
-        'Enter degree requirements',
-        href: degrees_start_publish_provider_recruitment_cycle_course_path(
-          provider.provider_code,
-          provider.recruitment_cycle.year,
-          course.course_code
-        )
-      )).to be true
+               'Enter degree requirements',
+               href: degrees_start_publish_provider_recruitment_cycle_course_path(
+                 provider.provider_code,
+                 provider.recruitment_cycle.year,
+                 course.course_code
+               )
+             )).to be true
     end
   end
 

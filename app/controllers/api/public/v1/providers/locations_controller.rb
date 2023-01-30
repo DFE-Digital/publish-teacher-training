@@ -7,12 +7,12 @@ module API
         class LocationsController < API::Public::V1::ApplicationController
           def index
             render jsonapi: locations,
-              include: include_param,
-              meta: { count: locations.count('site.id') },
-              class: API::Public::V1::SerializerService.call
+                   include: include_param,
+                   meta: { count: locations.count('site.id') },
+                   class: API::Public::V1::SerializerService.call
           end
 
-        private
+          private
 
           def locations
             @locations ||= provider&.sites

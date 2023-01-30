@@ -18,7 +18,7 @@ feature 'Removing a user from provider', :with_publish_constraint do
     and_the_user_provider_relationship_is_destroyed
   end
 
-private
+  private
 
   def and_a_user_provider_relationship_exists_to_remove
     @provider = create(:provider)

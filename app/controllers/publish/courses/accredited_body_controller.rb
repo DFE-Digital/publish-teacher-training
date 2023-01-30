@@ -70,12 +70,12 @@ module Publish
         @provider_suggestions = recruitment_cycle.providers.with_findable_courses.provider_search(@query).limit(10)
       end
 
-    private
+      private
 
       def build_provider
         @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
-                      .providers
-                      .find_by(provider_code: params[:provider_code])
+                                    .providers
+                                    .find_by(provider_code: params[:provider_code])
       end
 
       def error_keys
@@ -127,11 +127,11 @@ module Publish
 
       def build_course
         @course = Course
-          .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-          .where(provider_code: params[:provider_code])
-          .includes(:accrediting_provider)
-          .find(params[:code])
-          .first
+                  .where(recruitment_cycle_year: params[:recruitment_cycle_year])
+                  .where(provider_code: params[:provider_code])
+                  .includes(:accrediting_provider)
+                  .find(params[:code])
+                  .first
       end
 
       def update_course_params

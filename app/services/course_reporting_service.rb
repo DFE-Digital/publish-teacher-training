@@ -38,7 +38,7 @@ class CourseReportingService
 
   private_class_method :new
 
-private
+  private
 
   def group_by_subject_count
     open = CourseSubject.where(course_id: @open_courses).group(:subject_id).count
@@ -49,12 +49,12 @@ private
               x = {}
               x[sub.subject_name] = open[sub.id] || 0
               x
-            end .reduce({}, :merge),
+            end.reduce({}, :merge),
       closed: Subject.active.map do |sub|
                 x = {}
                 x[sub.subject_name] = closed[sub.id] || 0
                 x
-              end              .reduce({}, :merge)
+              end.reduce({}, :merge)
     }
   end
 
@@ -69,12 +69,12 @@ private
                 x = {}
                 x[key.to_sym] = open[value] || 0
                 x
-              end              .reduce({}, :merge),
+              end.reduce({}, :merge),
         closed: Provider.provider_types.map do |key, value|
                   x = {}
                   x[key.to_sym] = closed[value] || 0
                   x
-                end .reduce({}, :merge)
+                end.reduce({}, :merge)
       }
     when :program_type, :study_mode, :qualification
       {
@@ -82,12 +82,12 @@ private
                 x = {}
                 x[key.to_sym] = open[key] || 0
                 x
-              end .reduce({}, :merge),
+              end.reduce({}, :merge),
         closed: Course.send(column.to_s.pluralize).map do |key, _value|
                   x = {}
                   x[key.to_sym] = closed[key] || 0
                   x
-                end .reduce({}, :merge)
+                end.reduce({}, :merge)
       }
     when :is_send
       {

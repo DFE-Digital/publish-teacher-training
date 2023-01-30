@@ -10,7 +10,7 @@ module Filters
       super
     end
 
-  private
+    private
 
     def tags_for_filter(filter, value)
       [value].flatten.map do |v|

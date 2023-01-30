@@ -20,7 +20,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

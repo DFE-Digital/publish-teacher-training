@@ -7,22 +7,22 @@ module API
         class CoursesController < API::Public::V1::ApplicationController
           def index
             render jsonapi: paginate(courses),
-              include: include_param,
-              meta: { count: courses.count('course.id') },
-              class: API::Public::V1::SerializerService.call
+                   include: include_param,
+                   meta: { count: courses.count('course.id') },
+                   class: API::Public::V1::SerializerService.call
           end
 
           def show
             render jsonapi: course,
-              include: include_param,
-              class: API::Public::V1::SerializerService.call
+                   include: include_param,
+                   class: API::Public::V1::SerializerService.call
           end
 
-        private
+          private
 
           def courses
             @courses ||= CourseSearchService.call(filter: params[:filter],
-              course_scope: provider.courses)
+                                                  course_scope: provider.courses)
           end
 
           def course

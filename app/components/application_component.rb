@@ -5,7 +5,7 @@ class ApplicationComponent < GovukComponent::Base
     super(classes:, html_attributes:)
   end
 
-private
+  private
 
   def default_attributes
     {}

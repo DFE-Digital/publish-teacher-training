@@ -24,7 +24,7 @@ module Publish
       workflows_for_2022_cycle_onwards(course)
     end
 
-  private
+    private
 
     def workflows_for_2022_cycle_onwards(course)
       if course.is_further_education?

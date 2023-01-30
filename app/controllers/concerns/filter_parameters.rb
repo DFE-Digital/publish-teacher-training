@@ -23,7 +23,7 @@ module FilterParameters
     remove_previous_parameters(all_parameters)
   end
 
-private
+  private
 
   def parameters
     return request.query_parameters if %w[GET HEAD].include?(request.method)

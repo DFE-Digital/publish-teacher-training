@@ -19,7 +19,7 @@ feature 'Searching across England' do
     then_i_should_see_the_results_page
   end
 
-private
+  private
 
   def given_there_are_further_education_courses_in_england
     create(:course, :published, :with_salary, site_statuses: [build(:site_status, :findable)])

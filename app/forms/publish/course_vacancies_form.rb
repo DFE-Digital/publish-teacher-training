@@ -23,7 +23,7 @@ module Publish
       @site_statuses = attributes.values
     end
 
-  private
+    private
 
     def after_successful_save_action
       NotificationService::CourseVacanciesUpdated.call(

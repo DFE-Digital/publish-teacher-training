@@ -6,27 +6,27 @@ module API
       class ProvidersController < API::Public::V1::ApplicationController
         def index
           render jsonapi: paginate(providers),
-            include: params[:include],
-            meta: { count: providers.count('provider.id') }, class: API::Public::V1::SerializerService.call, fields:
+                 include: params[:include],
+                 meta: { count: providers.count('provider.id') }, class: API::Public::V1::SerializerService.call, fields:
         end
 
         def show
           code = params.fetch(:code, params[:provider_code])
           provider = recruitment_cycle.providers
-                                        .find_by!(
-                                          provider_code: code.upcase
-                                        )
+                                      .find_by!(
+                                        provider_code: code.upcase
+                                      )
 
           render jsonapi: provider,
-            class: API::Public::V1::SerializerService.call,
-            include: params[:include],
-            fields:
+                 class: API::Public::V1::SerializerService.call,
+                 include: params[:include],
+                 fields:
         end
 
-      private
+        private
 
         def provider_name
-          @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&. > 2
+          @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&.> 2
         end
 
         def updated_since

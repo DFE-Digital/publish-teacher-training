@@ -47,9 +47,9 @@ module BigQuery
 
         it {
           expect(subject).to include('request_query' => [
-            { 'key' => 'test', 'value' => ['one'] },
-            { 'key' => 'other-test', 'value' => ['two'] }
-          ])
+                                       { 'key' => 'test', 'value' => ['one'] },
+                                       { 'key' => 'other-test', 'value' => ['two'] }
+                                     ])
         }
 
         it { is_expected.to include('request_referer' => 'https://www.example.com') }

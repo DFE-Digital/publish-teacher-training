@@ -20,7 +20,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def compute_fields
       { explicitly_enabled: preference_selected? }.merge(new_attributes).symbolize_keys

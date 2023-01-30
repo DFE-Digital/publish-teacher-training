@@ -7,7 +7,7 @@ describe Persona do
 
   before do
     render_inline(described_class.new(email_address: 'becomingateacher+admin-integration-tests@digital.education.gov.uk',
-      first_name: 'Support agent', last_name: 'Colin'))
+                                      first_name: 'Support agent', last_name: 'Colin'))
   end
 
   it 'renders a govuk button' do

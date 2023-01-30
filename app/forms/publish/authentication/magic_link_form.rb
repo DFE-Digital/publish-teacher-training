@@ -18,7 +18,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def user
         @user ||= User.find_by(email:)

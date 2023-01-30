@@ -7,10 +7,10 @@ describe Provider do
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
-      provider_name: 'ACME SCITT',
-      provider_code: 'A01',
-      accrediting_provider_enrichments:,
-      courses:)
+           provider_name: 'ACME SCITT',
+           provider_code: 'A01',
+           accrediting_provider_enrichments:,
+           courses:)
   end
 
   subject { provider }
@@ -506,19 +506,19 @@ describe Provider do
     let(:provider) { create(:provider, :accredited_body) }
     let!(:findable_course) do
       create(:course, name: 'findable-course',
-        accrediting_provider: provider,
-        site_statuses: [build(:site_status, :findable)])
+                      accrediting_provider: provider,
+                      site_statuses: [build(:site_status, :findable)])
     end
     let!(:discarded_course) do
       create(:course, :deleted,
-        name: 'deleted-course',
-        accrediting_provider: provider)
+             name: 'deleted-course',
+             accrediting_provider: provider)
     end
     let!(:discontinued_course) do
       create(:course,
-        name: 'discontinued-course',
-        accrediting_provider: provider,
-        site_statuses: [build(:site_status, :discontinued)])
+             name: 'discontinued-course',
+             accrediting_provider: provider,
+             site_statuses: [build(:site_status, :discontinued)])
     end
 
     it { is_expected.to include findable_course }
@@ -534,10 +534,10 @@ describe Provider do
       end
       let!(:last_years_course) do
         create(:course,
-          name: 'last-years-course',
-          provider: last_years_provider,
-          accrediting_provider: provider,
-          site_statuses: [build(:site_status, :discontinued)])
+               name: 'last-years-course',
+               provider: last_years_provider,
+               accrediting_provider: provider,
+               site_statuses: [build(:site_status, :discontinued)])
       end
 
       it { is_expected.not_to include last_years_course }
@@ -568,8 +568,8 @@ describe Provider do
 
       it "returns only findable courses' provider and/or accrediting provider" do
         expect(subject).to contain_exactly(findable_course.provider,
-          findable_course_with_accrediting_provider.provider,
-          findable_course_with_accrediting_provider.accrediting_provider)
+                                           findable_course_with_accrediting_provider.provider,
+                                           findable_course_with_accrediting_provider.accrediting_provider)
       end
 
       context 'when the provider is the accredited body for a course' do
@@ -605,8 +605,8 @@ describe Provider do
 
         it 'is not returned' do
           expect(subject).not_to include(non_findable_course.provider,
-            non_findable_course_with_accrediting_provider.provider,
-            non_findable_course_with_accrediting_provider.accrediting_provider)
+                                         non_findable_course_with_accrediting_provider.provider,
+                                         non_findable_course_with_accrediting_provider.accrediting_provider)
         end
       end
     end
@@ -747,12 +747,12 @@ describe Provider do
     # Geocoding stubbed with support/helpers.rb
     let(:provider) do
       build(:provider,
-        provider_name: 'Southampton High School',
-        address1: 'Long Lane',
-        address2: 'Holbury',
-        address3: 'Southampton',
-        address4: nil,
-        postcode: 'SO45 2PA')
+            provider_name: 'Southampton High School',
+            address1: 'Long Lane',
+            address2: 'Holbury',
+            address3: 'Southampton',
+            address4: nil,
+            postcode: 'SO45 2PA')
     end
 
     describe '#full_address' do
@@ -800,14 +800,14 @@ describe Provider do
       context 'address' do
         let(:provider) do
           create(:provider,
-            latitude: 1.456789,
-            longitude: 1.456789,
-            provider_name: 'Southampton High School',
-            address1: 'Long Lane',
-            address2: 'Holbury',
-            address3: 'Southampton',
-            address4: nil,
-            postcode: 'SO45 2PA')
+                 latitude: 1.456789,
+                 longitude: 1.456789,
+                 provider_name: 'Southampton High School',
+                 address1: 'Long Lane',
+                 address2: 'Holbury',
+                 address3: 'Southampton',
+                 address4: nil,
+                 postcode: 'SO45 2PA')
         end
 
         context 'has not changed' do

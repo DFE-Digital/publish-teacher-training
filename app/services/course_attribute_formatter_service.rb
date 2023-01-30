@@ -23,7 +23,7 @@ class CourseAttributeFormatterService
 
   private_class_method :new
 
-private
+  private
 
   attr_reader :name, :value
 

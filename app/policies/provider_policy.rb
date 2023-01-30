@@ -78,7 +78,7 @@ class ProviderPolicy
     end
   end
 
-private
+  private
 
   def user_provider_attributes
     base_attributes = %i[

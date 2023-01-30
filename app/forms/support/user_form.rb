@@ -2,7 +2,7 @@
 
 module Support
   class UserForm < UserForm
-  private
+    private
 
     def form_store_key
       :user

@@ -52,7 +52,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def current_step
         :location
@@ -69,9 +69,9 @@ module Publish
 
       def build_course_params
         selected_site_ids = params.dig(:course, :site_statuses_attributes)
-          .values
-          .select { |field| field['selected'] == '1' }
-          .map { |field| field['id'] }
+                                  .values
+                                  .select { |field| field['selected'] == '1' }
+                                  .map { |field| field['id'] }
 
         params['course']['sites_ids'] = selected_site_ids
         params['course'].delete('site_statuses_attributes')

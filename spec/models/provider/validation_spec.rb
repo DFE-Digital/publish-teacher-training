@@ -7,10 +7,10 @@ describe Provider do
   let(:courses) { [] }
   let(:provider) do
     create(:provider,
-      provider_name: 'ACME SCITT',
-      provider_code: 'A01',
-      accrediting_provider_enrichments:,
-      courses:)
+           provider_name: 'ACME SCITT',
+           provider_code: 'A01',
+           accrediting_provider_enrichments:,
+           courses:)
   end
 
   describe 'validation' do

@@ -31,8 +31,8 @@ namespace :sandbox do
 
       provider = current_recruitment_cycle.providers.find_by(provider_name:)
       user = User
-        .create_with(first_name:, last_name:, accept_terms_date_utc: Time.now.utc)
-        .find_or_create_by(email:)
+             .create_with(first_name:, last_name:, accept_terms_date_utc: Time.now.utc)
+             .find_or_create_by(email:)
 
       if provider.blank?
         puts "Provider: #{provider_name} not found. User: #{email} skipped"

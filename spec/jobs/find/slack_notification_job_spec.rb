@@ -7,7 +7,7 @@ module Find
     describe '#perform' do
       it 'sends a Slack notification to this webhook if the URL is set' do
         slack_request = stub_request(:post, 'https://example.com/webhook')
-          .to_return(status: 200, headers: {})
+                        .to_return(status: 200, headers: {})
         invoke_worker
 
         expect(slack_request).to have_been_made
@@ -16,7 +16,7 @@ module Find
       it 'does not send a Slack notification if STATE_CHANGE_SLACK_URL is empty' do
         allow(Settings).to receive(:STATE_CHANGE_SLACK_URL).and_return(nil)
         slack_request = stub_request(:post, 'https://example.com/webhook')
-          .to_return(status: 200, headers: {})
+                        .to_return(status: 200, headers: {})
         invoke_worker
 
         expect(slack_request).not_to have_been_made
@@ -31,7 +31,7 @@ module Find
 
       it 'includes a link if given' do
         slack_request = stub_request(:post, 'https://example.com/webhook')
-          .to_return(status: 200, headers: {})
+                        .to_return(status: 200, headers: {})
 
         invoke_worker
 
@@ -41,7 +41,7 @@ module Find
 
       it 'does not include a link if none given' do
         slack_request = stub_request(:post, 'https://example.com/webhook')
-          .to_return(status: 200, headers: {})
+                        .to_return(status: 200, headers: {})
 
         described_class.new.perform('example text')
 

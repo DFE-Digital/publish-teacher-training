@@ -300,8 +300,8 @@ describe CourseEnrichment do
 
     subject do
       create(:course_enrichment, :published,
-        last_published_timestamp_utc:,
-        course:)
+             last_published_timestamp_utc:,
+             course:)
     end
 
     describe 'to initial draft' do

@@ -10,9 +10,9 @@ describe Sites::CopyToProviderService do
     let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:next_provider) do
       create(:provider,
-        sites: [],
-        provider_code: provider.provider_code,
-        recruitment_cycle: next_recruitment_cycle)
+             sites: [],
+             provider_code: provider.provider_code,
+             recruitment_cycle: next_recruitment_cycle)
     end
 
     let(:service) { described_class.new }
@@ -33,8 +33,8 @@ describe Sites::CopyToProviderService do
     context 'the site already exists in the new provider' do
       let!(:next_site) do
         create(:site,
-          code: site.code,
-          provider: next_provider)
+               code: site.code,
+               provider: next_provider)
       end
 
       it 'does not make a copy of the site' do

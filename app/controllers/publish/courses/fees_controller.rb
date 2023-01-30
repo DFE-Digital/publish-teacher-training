@@ -32,7 +32,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def funding_type
         :publish_course_fee_form

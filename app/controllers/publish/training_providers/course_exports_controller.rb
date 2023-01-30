@@ -13,7 +13,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def courses
         @courses ||= provider.current_accredited_courses.includes(:enrichments, :sites, :site_statuses)

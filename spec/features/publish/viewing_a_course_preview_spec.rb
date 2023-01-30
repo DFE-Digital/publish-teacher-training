@@ -35,7 +35,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-private
+  private
 
   def then_i_see_custom_address
     expect(course_preview_page).to have_content 'LSJS'
@@ -164,14 +164,14 @@ private
       provider.address1
     )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address2
-                                                   )
+      provider.address2
+    )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address3
-                                                   )
+      provider.address3
+    )
     expect(course_preview_page.contact_address).to have_content(
-                                                     provider.address4
-                                                   )
+      provider.address4
+    )
 
     expect(course_preview_page).to have_choose_a_training_location_table
     expect(course_preview_page.choose_a_training_location_table).not_to have_content(
@@ -238,10 +238,10 @@ private
 
     course = build(
       :course, :secondary, :fee_type_based, accrediting_provider:,
-      site_statuses:, enrichments: [course_enrichment],
-      degree_grade: 'two_one',
-      degree_subject_requirements: 'Maths A level',
-      subjects: [course_subject]
+                                            site_statuses:, enrichments: [course_enrichment],
+                                            degree_grade: 'two_one',
+                                            degree_subject_requirements: 'Maths A level',
+                                            subjects: [course_subject]
     )
     accrediting_provider_enrichment = {
       'UcasProviderCode' => accrediting_provider.provider_code,

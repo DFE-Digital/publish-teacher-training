@@ -28,7 +28,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def redirect_to_courses
         redirect_to publish_provider_recruitment_cycle_courses_path(

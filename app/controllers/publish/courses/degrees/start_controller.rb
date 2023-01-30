@@ -31,7 +31,7 @@ module Publish
           end
         end
 
-      private
+        private
 
         def course
           @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))

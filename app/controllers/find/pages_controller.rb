@@ -16,7 +16,7 @@ module Find
 
     def maintenance; end
 
-  private
+    private
 
     def redirect_to_homepage_unless_in_maintenance_mode
       redirect_to find_path unless FeatureFlag.active?(:maintenance_mode)

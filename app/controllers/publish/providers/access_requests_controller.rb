@@ -18,7 +18,7 @@ module Publish
 
         if @access_request.save!
           redirect_to publish_provider_users_path(params[:code]),
-            flash: { success: 'Your request for access has been submitted' }
+                      flash: { success: 'Your request for access has been submitted' }
         else
           @errors = @access_request.errors.messages
 
@@ -26,7 +26,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def access_request_params
         params.require(:publish_access_request_form).permit(

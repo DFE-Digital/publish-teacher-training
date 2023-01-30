@@ -19,7 +19,7 @@ class CopyEnrichmentsToNextCycle < ActiveRecord::Migration[5.2]
     RecruitmentCycle.next_recruitment_cycle.providers.each { |provider| provider.enrichments.destroy_all }
   end
 
-private
+  private
 
   def current_providers_with_enrichments
     RecruitmentCycle.current_recruitment_cycle.providers.includes(:enrichments).all.reject { |provider| provider.enrichments.empty? }

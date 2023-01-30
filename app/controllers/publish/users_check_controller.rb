@@ -17,7 +17,7 @@ module Publish
       flash[:success] = 'User added'
     end
 
-  private
+    private
 
     def authorize_provider
       authorize(provider)

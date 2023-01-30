@@ -23,7 +23,7 @@ module Courses
       title
     end
 
-  private
+    private
 
     attr_reader :course, :subjects
 

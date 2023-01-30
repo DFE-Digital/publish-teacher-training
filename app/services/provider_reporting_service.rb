@@ -37,7 +37,7 @@ class ProviderReportingService
 
   private_class_method :new
 
-private
+  private
 
   def group_by_count(column)
     open = @open_providers.group(column).count
@@ -48,12 +48,12 @@ private
               x = {}
               x[key.to_sym] = open[key] || 0
               x
-            end .reduce({}, :merge),
+            end.reduce({}, :merge),
       closed: Provider.send(column.to_s.pluralize).map do |key, _value|
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
-              end .reduce({}, :merge)
+              end.reduce({}, :merge)
     }
   end
 end

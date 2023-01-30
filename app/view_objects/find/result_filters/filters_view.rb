@@ -117,7 +117,7 @@ module Find
         }
       end
 
-    private
+      private
 
       attr_reader :params
 

@@ -18,7 +18,7 @@ module Publish
     validates :salary_details, presence: true
     validates :salary_details, words_count: { maximum: 250, message: :too_long }
 
-  private
+    private
 
     def declared_fields
       FIELDS

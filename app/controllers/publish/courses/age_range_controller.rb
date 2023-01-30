@@ -32,7 +32,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def form_object
         @form_object ||= AgeRangeForm.new(@course, params: permitted_params)

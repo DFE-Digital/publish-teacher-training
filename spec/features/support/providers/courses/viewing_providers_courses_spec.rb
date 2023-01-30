@@ -10,7 +10,7 @@ feature 'Viewing a providers courses', :with_publish_constraint do
     then_i_am_redirected_to_the_providers_page
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_an_admin_user
     given_i_am_authenticated(user: create(:user, :admin))

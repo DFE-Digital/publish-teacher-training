@@ -12,7 +12,7 @@ describe Course do
     context 'applications_open_from' do
       let(:course) do
         create(:course,
-          applications_open_from: current_cycle.application_start_date)
+               applications_open_from: current_cycle.application_start_date)
       end
 
       subject { course }
@@ -25,7 +25,7 @@ describe Course do
         context 'with an invalid date' do
           let(:course) do
             create(:course,
-              applications_open_from: DateTime.new(current_year, 10, 1))
+                   applications_open_from: DateTime.new(current_year, 10, 1))
           end
 
           its(:update_valid?) { is_expected.to be false }
@@ -38,8 +38,8 @@ describe Course do
         context 'with a valid date' do
           let(:course) do
             create(:course,
-              provider:,
-              applications_open_from: next_cycle.application_start_date)
+                   provider:,
+                   applications_open_from: next_cycle.application_start_date)
           end
 
           its(:update_valid?) { is_expected.to be true }
@@ -48,8 +48,8 @@ describe Course do
         context 'with an invalid date' do
           let(:course) do
             create(:course,
-              provider:,
-              applications_open_from: DateTime.new(current_year - 1, 10, 1))
+                   provider:,
+                   applications_open_from: DateTime.new(current_year - 1, 10, 1))
           end
 
           its(:update_valid?) { is_expected.to be false }
@@ -81,8 +81,8 @@ describe Course do
         context 'with a valid start date' do
           let(:course) do
             create(:course,
-              provider:,
-              start_date: DateTime.new(next_year, 9, 1))
+                   provider:,
+                   start_date: DateTime.new(next_year, 9, 1))
           end
 
           its(:update_valid?) { is_expected.to be true }
@@ -91,8 +91,8 @@ describe Course do
         context 'with an invalid start date' do
           let(:course) do
             create(:course,
-              provider:,
-              start_date: DateTime.new(next_year - 1, 9, 1))
+                   provider:,
+                   start_date: DateTime.new(next_year - 1, 9, 1))
           end
 
           its(:update_valid?) { is_expected.to be false }

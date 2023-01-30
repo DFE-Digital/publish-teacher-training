@@ -9,7 +9,7 @@ module Find
       render json: suggestions
     end
 
-  private
+    private
 
     def params_invalid?
       params[:query].nil?

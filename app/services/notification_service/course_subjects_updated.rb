@@ -28,7 +28,7 @@ module NotificationService
       end
     end
 
-  private
+    private
 
     attr_reader :course, :previous_subject_names, :previous_course_name
 

@@ -43,7 +43,7 @@ module Support
       redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.deleted', resource: flash_resource) }
     end
 
-  private
+    private
 
     def provider
       @provider ||= recruitment_cycle.providers.find(params[:provider_id])

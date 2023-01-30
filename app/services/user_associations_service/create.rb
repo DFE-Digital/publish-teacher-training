@@ -23,7 +23,7 @@ module UserAssociationsService
 
     private_class_method :new
 
-  private
+    private
 
     def add_user_to_providers
       if all_providers

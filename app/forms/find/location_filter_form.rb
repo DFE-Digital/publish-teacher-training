@@ -18,7 +18,7 @@ module Find
       @errors.empty?
     end
 
-  private
+    private
 
     def validate
       case selected_option

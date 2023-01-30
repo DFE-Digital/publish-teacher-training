@@ -8,8 +8,8 @@ module Find
           attr_reader :course
 
           delegate :bursary_amount,
-            :bursary_requirements,
-            :bursary_first_line_ending, to: :course
+                   :bursary_requirements,
+                   :bursary_first_line_ending, to: :course
 
           def initialize(course)
             super

@@ -79,15 +79,15 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
     expect(gcse_requirements_page.additional_requirements.text).to eq('')
   end
 
-private
+  private
 
   def user_with_courses
     course = build(:course, :secondary, course_code: 'XXX1', additional_gcse_equivalencies: '')
     course2 = build(:course, :primary, course_code: 'XXX2', accept_pending_gcse: false, accept_gcse_equivalency: false, additional_gcse_equivalencies: nil)
     course3 = build(:course, :secondary,
-      course_code: 'XXX3', accept_pending_gcse: true, accept_gcse_equivalency: true,
-      accept_english_gcse_equivalency: true, accept_maths_gcse_equivalency: true, accept_science_gcse_equivalency: nil,
-      additional_gcse_equivalencies: 'Cycling Proficiency')
+                    course_code: 'XXX3', accept_pending_gcse: true, accept_gcse_equivalency: true,
+                    accept_english_gcse_equivalency: true, accept_maths_gcse_equivalency: true, accept_science_gcse_equivalency: nil,
+                    additional_gcse_equivalencies: 'Cycling Proficiency')
 
     provider = build(
       :provider, courses: [course, course2, course3]

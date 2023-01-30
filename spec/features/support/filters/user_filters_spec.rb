@@ -40,7 +40,7 @@ feature 'Filter users', :with_publish_constraint do
     end
   end
 
-private
+  private
 
   def and_there_are_users
     @user = create(:user)

@@ -9,7 +9,7 @@ class NavigationBarPreview < ViewComponent::Preview
     render NavigationBar.new(items:, current_path:, current_user: { first_name: 'Ted' })
   end
 
-private
+  private
 
   def items
     [

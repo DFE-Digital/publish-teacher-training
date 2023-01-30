@@ -20,9 +20,9 @@ class User < ApplicationRecord
   has_many :providers, through: :user_permissions
 
   has_many :access_requests,
-    foreign_key: :requester_id,
-    primary_key: :id,
-    inverse_of: 'requester'
+           foreign_key: :requester_id,
+           primary_key: :id,
+           inverse_of: 'requester'
 
   has_many :interrupt_page_acknowledgements
 
@@ -63,7 +63,7 @@ class User < ApplicationRecord
     self.providers = providers - providers_to_remove
 
     next_recruitment_cycle_provider_codes = providers_to_remove
-        .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
+                                            .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
 
     return unless rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
 
@@ -111,7 +111,7 @@ class User < ApplicationRecord
     sign_in_user_id.present?
   end
 
-private
+  private
 
   def downcase_email
     email&.downcase!

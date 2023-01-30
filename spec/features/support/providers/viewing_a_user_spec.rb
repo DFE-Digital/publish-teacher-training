@@ -27,7 +27,7 @@ feature 'Viewing a user', :with_publish_constraint do
     and_i_see_the_users_details_with_last_login
   end
 
-private
+  private
 
   def when_i_visit_the_support_provider_show_page
     support_provider_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, id: @user.providers.first.id)

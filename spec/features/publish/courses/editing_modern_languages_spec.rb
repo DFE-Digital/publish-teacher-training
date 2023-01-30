@@ -27,7 +27,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_errors
   end
 
-private
+  private
 
   def and_there_is_a_secondary_course_i_want_to_edit
     given_a_course_exists(:secondary)

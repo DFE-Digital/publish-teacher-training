@@ -64,7 +64,7 @@ module Publish
         :modern_languages
       end
 
-    private
+      private
 
       def updated_subject_list
         @updated_subject_list ||= selected_language_subjects_ids.concat(selected_non_language_subjects_ids)

@@ -24,7 +24,7 @@ module V3
 
     private_class_method :new
 
-  private
+    private
 
     attr_reader :sort, :filter, :course_scope
   end

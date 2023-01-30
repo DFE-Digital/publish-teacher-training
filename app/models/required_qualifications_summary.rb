@@ -14,7 +14,7 @@ class RequiredQualificationsSummary
     generate_summary_text
   end
 
-private
+  private
 
   def generate_summary_text
     output = ''

@@ -7,7 +7,7 @@ module TouchCourse
     after_save :touch_course
   end
 
-private
+  private
 
   def touch_course
     course.update_changed_at

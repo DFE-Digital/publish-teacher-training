@@ -13,7 +13,7 @@ class RedisSetting
     config[:url]
   end
 
-private
+  private
 
   def parse_config(config)
     service_config = JSON.parse(config.presence || '{}')

@@ -16,7 +16,7 @@ class ContactPolicy
     user_is_admin_or_belongs_to_provider?
   end
 
-private
+  private
 
   def user_belongs_to_the_provider?
     user.providers.include?(contact.provider)

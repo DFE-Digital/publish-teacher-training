@@ -55,7 +55,7 @@ class UserSession
     end
   end
 
-private
+  private
 
   def dfe_logout_url
     uri = URI("#{Settings.dfe_signin.issuer}/session/end")

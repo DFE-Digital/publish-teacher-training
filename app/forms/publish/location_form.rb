@@ -13,6 +13,7 @@ module Publish
     ].freeze
 
     attr_accessor(*FIELDS)
+
     delegate :provider, to: :site
     delegate :provider_code, :recruitment_cycle_year, to: :provider
 
@@ -27,7 +28,7 @@ module Publish
     validates :postcode, postcode: { message: 'Postcode is not valid (for example, BN1 1AA)' }
     validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }
 
-  private
+    private
 
     def assign_attributes_to_site
       site.assign_attributes(fields.except(*fields_to_ignore_before_save))

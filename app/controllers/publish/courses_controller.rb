@@ -88,16 +88,16 @@ module Publish
       end
     end
 
-  private
+    private
 
     def course_params
       if params.key? :course
         params.require(:course)
-          .permit(
-            policy(Course.new).permitted_new_course_attributes,
-            sites_ids: [],
-            subjects_ids: []
-          )
+              .permit(
+                policy(Course.new).permitted_new_course_attributes,
+                sites_ids: [],
+                subjects_ids: []
+              )
       else
         ActionController::Parameters.new({}).permit(:course)
       end
@@ -115,8 +115,8 @@ module Publish
 
     def provider
       @provider ||= recruitment_cycle.providers
-        .includes(courses: %i[sites site_statuses enrichments provider])
-        .find_by!(provider_code: params[:provider_code])
+                                     .includes(courses: %i[sites site_statuses enrichments provider])
+                                     .find_by!(provider_code: params[:provider_code])
     end
 
     def courses_by_accrediting_provider

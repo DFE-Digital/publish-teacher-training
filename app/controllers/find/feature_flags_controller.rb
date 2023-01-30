@@ -21,7 +21,7 @@ module Find
       redirect_to find_feature_flags_path
     end
 
-  private
+    private
 
     def enforce_basic_auth
       authenticate_or_request_with_http_basic do |username, password|

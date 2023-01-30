@@ -15,7 +15,7 @@ feature 'Sending DFE Analytics events' do
     then_it_has_sent_analytics_events
   end
 
-private
+  private
 
   def provider
     @provider ||= @current_user.providers.first

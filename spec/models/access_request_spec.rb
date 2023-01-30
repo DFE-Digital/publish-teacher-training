@@ -15,13 +15,13 @@ describe AccessRequest do
     it 'is an enum' do
       expect(subject)
         .to define_enum_for(:status)
-              .backed_by_column_of_type(:integer)
-              .with_values(
-                requested: 0,
-                approved: 1,
-                completed: 2,
-                declined: 3
-              )
+        .backed_by_column_of_type(:integer)
+        .with_values(
+          requested: 0,
+          approved: 1,
+          completed: 2,
+          declined: 3
+        )
     end
   end
 
@@ -67,11 +67,11 @@ describe AccessRequest do
     let(:organisation) { build(:organisation) }
     let(:access_request) do
       build(:access_request,
-        organisation: user.organisations.first.name,
-        requester_email: user.email,
-        requester: nil,
-        request_date_utc: nil,
-        status: nil)
+            organisation: user.organisations.first.name,
+            requester_email: user.email,
+            requester: nil,
+            request_date_utc: nil,
+            status: nil)
     end
 
     before do

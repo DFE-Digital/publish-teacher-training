@@ -32,7 +32,7 @@ class ApplicationDecorator < Draper::Decorator
     h.tag.span('*&nbsp;Unpublished&nbsp;changes'.html_safe, class: 'govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-margin-top-1')
   end
 
-private
+  private
 
   def status_tags_for_vacancies
     {

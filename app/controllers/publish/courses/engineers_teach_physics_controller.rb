@@ -87,7 +87,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def modern_languages_present?
         params[:course][:subjects_ids]&.include?(modern_languages_id)

@@ -3,7 +3,7 @@
 module CopyCourseContent
   extend ActiveSupport::Concern
 
-private
+  private
 
   def copy_content_check(fields)
     fetch_course_list_to_copy_from

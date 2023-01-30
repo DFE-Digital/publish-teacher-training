@@ -54,7 +54,7 @@ module Providers
       true
     end
 
-  private
+    private
 
     def provider_already_exists?
       if @recruitment_cycle.providers.exists?(provider_code: @provider_code)

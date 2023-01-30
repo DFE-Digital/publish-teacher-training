@@ -15,7 +15,7 @@ class PageTitle < ApplicationComponent
     [build_error + build_title + build_service_name, 'GOV.UK'].join(' - ')
   end
 
-private
+  private
 
   attr_reader :has_errors
 

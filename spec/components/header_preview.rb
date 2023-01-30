@@ -13,7 +13,7 @@ class HeaderPreview < ViewComponent::Preview
     render(Header.new(service_name: I18n.t('service_name.publish'), current_user: mock_user))
   end
 
-private
+  private
 
   def mock_items
     [{ name: 'Link', url: 'https://www.google.com' }]

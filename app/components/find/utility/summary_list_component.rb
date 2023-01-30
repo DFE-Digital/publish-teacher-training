@@ -39,7 +39,7 @@ module Find
         row[:html_attributes] || {}
       end
 
-    private
+      private
 
       attr_reader :rows
 

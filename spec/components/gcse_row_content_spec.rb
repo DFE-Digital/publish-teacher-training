@@ -21,13 +21,13 @@ describe GcseRowContent, type: :component do
       render_inline(described_class.new(course: course.decorate))
 
       expect(page.has_link?(
-        'Enter GCSE and equivalency test requirements',
-        href: Rails.application.routes.url_helpers.gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
-          provider.provider_code,
-          provider.recruitment_cycle.year,
-          course.course_code
-        )
-      )).to be true
+               'Enter GCSE and equivalency test requirements',
+               href: Rails.application.routes.url_helpers.gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
+                 provider.provider_code,
+                 provider.recruitment_cycle.year,
+                 course.course_code
+               )
+             )).to be true
     end
   end
 

@@ -22,7 +22,7 @@ module Publish
       self.degree_grade_required = handle_degree_grade_required(course)
     end
 
-  private
+    private
 
     def cast_degree_grade_required
       self.degree_grade_required = ActiveModel::Type::Boolean.new.cast(degree_grade_required)

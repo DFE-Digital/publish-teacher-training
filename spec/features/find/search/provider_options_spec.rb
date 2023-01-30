@@ -23,14 +23,14 @@ feature 'Searching by provider' do
     and_the_provider_radio_button_is_selected
   end
 
-private
+  private
 
   def given_there_is_a_provider_with_courses
     create(:course,
-      :published,
-      :salary_type_based,
-      provider:,
-      site_statuses: [build(:site_status, :findable)])
+           :published,
+           :salary_type_based,
+           provider:,
+           site_statuses: [build(:site_status, :findable)])
   end
 
   def when_i_visit_the_start_page

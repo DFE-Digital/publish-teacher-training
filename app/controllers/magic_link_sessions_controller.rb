@@ -17,7 +17,7 @@ class MagicLinkSessionsController < ApplicationController
     redirect_to root_path
   end
 
-private
+  private
 
   def magic_link_params
     params.permit(:email, :token)

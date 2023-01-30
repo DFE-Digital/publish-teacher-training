@@ -6,17 +6,17 @@ module Find
       class ViewPreview < ViewComponent::Preview
         def hei_minimum
           course = Course.new(course_code: 'FIND',
-            provider: Provider.new(provider_code: 'DFE'),
-            program_type: 'higher_education_programme',
-            level: 'further_education').decorate
+                              provider: Provider.new(provider_code: 'DFE'),
+                              program_type: 'higher_education_programme',
+                              level: 'further_education').decorate
           render Find::Courses::AboutSchoolsComponent::View.new(course)
         end
 
         def scitt_minimum
           course = Course.new(course_code: 'FIND',
-            provider: Provider.new(provider_code: 'DFE'),
-            program_type: 'scitt_programme',
-            level: 'secondary').decorate
+                              provider: Provider.new(provider_code: 'DFE'),
+                              program_type: 'scitt_programme',
+                              level: 'secondary').decorate
           render Find::Courses::AboutSchoolsComponent::View.new(course)
         end
 
@@ -28,22 +28,22 @@ module Find
           render Find::Courses::AboutSchoolsComponent::View.new(mock_hei_course)
         end
 
-      private
+        private
 
         def mock_scitt_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
-            how_school_placements_work: 'you will go on placement and learn more',
-            placements_heading: 'Teaching placements',
-            program_type: 'scitt_programme',
-            site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
+                         how_school_placements_work: 'you will go on placement and learn more',
+                         placements_heading: 'Teaching placements',
+                         program_type: 'scitt_programme',
+                         site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
         end
 
         def mock_hei_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
-            how_school_placements_work: 'you will go on placement and learn more',
-            placements_heading: 'Teaching placements',
-            program_type: 'higher_education_programme',
-            site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
+                         how_school_placements_work: 'you will go on placement and learn more',
+                         placements_heading: 'Teaching placements',
+                         program_type: 'higher_education_programme',
+                         site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
         end
 
         class FakeCourse

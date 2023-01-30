@@ -8,9 +8,9 @@ module Find
           attr_reader :course
 
           delegate :scholarship_amount,
-            :bursary_amount,
-            :has_early_career_payments?,
-            to: :course
+                   :bursary_amount,
+                   :has_early_career_payments?,
+                   to: :course
 
           def initialize(course)
             super
@@ -25,7 +25,7 @@ module Find
             I18n.t("find.scholarships.#{subject_with_scholarship}.url", default: nil)
           end
 
-        private
+          private
 
           SUBJECT_WITH_SCHOLARSHIPS = [
             %w[F1 chemistry],

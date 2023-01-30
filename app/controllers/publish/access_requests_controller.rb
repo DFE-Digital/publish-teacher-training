@@ -27,7 +27,7 @@ module Publish
       redirect_to publish_access_requests_path
     end
 
-  private
+    private
 
     def access_request
       @access_request ||= AccessRequest.includes(:requester, requester: [:organisations]).find(params[:id])

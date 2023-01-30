@@ -9,7 +9,7 @@ module Support
         render layout: 'user_record'
       end
 
-    private
+      private
 
       def user
         @user ||= User.find(params[:user_id])

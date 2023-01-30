@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SupportTitleBar < ViewComponent::Base
-private
+  private
 
   def title
     if current_recruitment_cycle?

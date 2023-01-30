@@ -98,7 +98,7 @@ module Find
           base_path: '/test',
           parameters: default_output_parameters
         )
-          .and_return('test_result')
+                                                            .and_return('test_result')
         expect(results_view).to eq('test_result')
       end
     end
@@ -354,14 +354,14 @@ module Find
         context 'when subject parameters are passed' do
           let(:results_view) do
             described_class.new(query_parameters: {
-              'subjects' => [
-                french_subject_code,
-                russian_subject_code,
-                primary_subject_code,
-                spanish_subject_code,
-                mathematics_subject_code
-              ]
-            })
+                                  'subjects' => [
+                                    french_subject_code,
+                                    russian_subject_code,
+                                    primary_subject_code,
+                                    spanish_subject_code,
+                                    mathematics_subject_code
+                                  ]
+                                })
           end
 
           let(:french_subject_code) { '15' }

@@ -10,7 +10,7 @@ module Publish
 
     validates :campaign_name, inclusion: { in: Course.campaign_names.keys }
 
-  private
+    private
 
     def compute_fields
       course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes).symbolize_keys

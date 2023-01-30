@@ -43,7 +43,7 @@ class TestDataCache
       @@cache_populated = false
     end
 
-  private
+    private
 
     def course_factories
       {

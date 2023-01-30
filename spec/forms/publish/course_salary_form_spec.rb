@@ -61,7 +61,7 @@ module Publish
 
       it 'saves the provider with any new attributes' do
         expect { subject.save! }.to change(enrichment, :course_length).from(nil).to('some new value')
-        .and change(enrichment, :salary_details).to('some text')
+                                                                      .and change(enrichment, :salary_details).to('some text')
       end
     end
   end

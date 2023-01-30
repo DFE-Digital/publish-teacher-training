@@ -14,7 +14,7 @@ class UserNotificationPreferencesPolicy
     user.present? && user_matches?
   end
 
-private
+  private
 
   attr_reader :user, :user_notification_preferences
 

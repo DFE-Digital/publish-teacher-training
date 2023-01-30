@@ -13,7 +13,7 @@ class GenerateAndSendMagicLinkService
     send_magic_link(user)
   end
 
-private
+  private
 
   def generate_magic_link_token(user)
     user.magic_link_token = SecureRandom.uuid

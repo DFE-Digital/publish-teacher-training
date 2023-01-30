@@ -9,7 +9,7 @@ class PaginatorPreview < ViewComponent::Preview
     render(Paginator.new(scope: scope(current_page: 2)))
   end
 
-private
+  private
 
   def scope(current_page: 1, total_count: 29, page_size: 25)
     Struct.new(

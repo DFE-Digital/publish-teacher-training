@@ -56,7 +56,7 @@ module Support
         redirect_to support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       end
 
-    private
+      private
 
       def user
         User.find_or_initialize_by(email: params.dig(:support_user_form, :email)&.downcase)

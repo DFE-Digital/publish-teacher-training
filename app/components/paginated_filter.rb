@@ -13,7 +13,7 @@ class PaginatedFilter < ViewComponent::Base
     filter_params.slice(*allowed_search_params_keys)
   end
 
-private
+  private
 
   def allowed_search_params_keys
     {

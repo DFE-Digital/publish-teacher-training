@@ -26,7 +26,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def provider_skilled_worker_visa_params
         return { can_sponsor_skilled_worker_visa: nil } if params[:publish_provider_skilled_worker_visa_form].blank?

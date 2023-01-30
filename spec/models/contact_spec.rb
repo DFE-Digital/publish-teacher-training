@@ -9,15 +9,15 @@ describe Contact do
     it 'is an enum' do
       expect(subject)
         .to define_enum_for(:type)
-              .backed_by_column_of_type(:text)
-              .with_values(
-                admin: 'admin',
-                utt: 'utt',
-                web_link: 'web_link',
-                fraud: 'fraud',
-                finance: 'finance'
-              )
-              .with_suffix('contact')
+        .backed_by_column_of_type(:text)
+        .with_values(
+          admin: 'admin',
+          utt: 'utt',
+          web_link: 'web_link',
+          fraud: 'fraud',
+          finance: 'finance'
+        )
+        .with_suffix('contact')
     end
   end
 

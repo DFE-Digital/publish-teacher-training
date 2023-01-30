@@ -19,88 +19,88 @@ describe 'GET /provider-suggestions', :with_publish_constraint do
       get "/api/v3/provider-suggestions?query=#{provider.provider_name}"
 
       expect(JSON.parse(response.body)['data'])
-          .to match_array([
-            {
-              'id' => provider.id.to_s,
-              'type' => 'providers',
-              'attributes' => {
-                'provider_code' => provider.provider_code,
-                'provider_name' => provider.provider_name,
-                'provider_type' => provider.provider_type,
-                'latitude' => provider.latitude,
-                'longitude' => provider.longitude,
-                'address1' => provider.address1,
-                'address2' => provider.address2,
-                'address3' => provider.address3,
-                'address4' => provider.address4,
-                'postcode' => provider.postcode,
-                'website' => provider.website,
-                'train_with_us' => provider.train_with_us,
-                'train_with_disability' => provider.train_with_disability,
-                'email' => provider.email,
-                'telephone' => provider.telephone,
-                'can_sponsor_student_visa' => provider.can_sponsor_student_visa,
-                'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa,
-                'recruitment_cycle_year' => provider.recruitment_cycle.year
-              }
-            }
-          ])
+        .to match_array([
+                          {
+                            'id' => provider.id.to_s,
+                            'type' => 'providers',
+                            'attributes' => {
+                              'provider_code' => provider.provider_code,
+                              'provider_name' => provider.provider_name,
+                              'provider_type' => provider.provider_type,
+                              'latitude' => provider.latitude,
+                              'longitude' => provider.longitude,
+                              'address1' => provider.address1,
+                              'address2' => provider.address2,
+                              'address3' => provider.address3,
+                              'address4' => provider.address4,
+                              'postcode' => provider.postcode,
+                              'website' => provider.website,
+                              'train_with_us' => provider.train_with_us,
+                              'train_with_disability' => provider.train_with_disability,
+                              'email' => provider.email,
+                              'telephone' => provider.telephone,
+                              'can_sponsor_student_visa' => provider.can_sponsor_student_visa,
+                              'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa,
+                              'recruitment_cycle_year' => provider.recruitment_cycle.year
+                            }
+                          }
+                        ])
     end
 
     it 'searches for a partial provider' do
       get "/api/v3/provider-suggestions?query=#{provider2.provider_name[0..3]}"
 
       expect(JSON.parse(response.body)['data'])
-          .to match_array([
-            {
-              'id' => provider.id.to_s,
-              'type' => 'providers',
-              'attributes' => {
-                'provider_code' => provider.provider_code,
-                'provider_name' => provider.provider_name,
-                'provider_type' => provider.provider_type,
-                'latitude' => provider.latitude,
-                'longitude' => provider.longitude,
-                'address1' => provider.address1,
-                'address2' => provider.address2,
-                'address3' => provider.address3,
-                'address4' => provider.address4,
-                'postcode' => provider.postcode,
-                'website' => provider.website,
-                'train_with_us' => provider.train_with_us,
-                'train_with_disability' => provider.train_with_disability,
-                'email' => provider.email,
-                'telephone' => provider.telephone,
-                'can_sponsor_student_visa' => provider.can_sponsor_student_visa,
-                'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa,
-                'recruitment_cycle_year' => provider.recruitment_cycle.year
-              }
-            },
-            {
-              'id' => provider2.id.to_s,
-              'type' => 'providers',
-              'attributes' => {
-                'provider_code' => provider2.provider_code,
-                'provider_name' => provider2.provider_name,
-                'provider_type' => provider2.provider_type,
-                'latitude' => provider2.latitude,
-                'longitude' => provider2.longitude,
-                'address1' => provider2.address1,
-                'address2' => provider2.address2,
-                'address3' => provider2.address3,
-                'address4' => provider2.address4,
-                'postcode' => provider2.postcode,
-                'website' => provider2.website,
-                'train_with_us' => provider2.train_with_us,
-                'train_with_disability' => provider2.train_with_disability,
-                'email' => provider2.email,
-                'telephone' => provider2.telephone,
-                'can_sponsor_student_visa' => provider2.can_sponsor_student_visa,
-                'can_sponsor_skilled_worker_visa' => provider2.can_sponsor_skilled_worker_visa,
-                'recruitment_cycle_year' => provider2.recruitment_cycle.year
-              }
-            }
-          ])
+        .to match_array([
+                          {
+                            'id' => provider.id.to_s,
+                            'type' => 'providers',
+                            'attributes' => {
+                              'provider_code' => provider.provider_code,
+                              'provider_name' => provider.provider_name,
+                              'provider_type' => provider.provider_type,
+                              'latitude' => provider.latitude,
+                              'longitude' => provider.longitude,
+                              'address1' => provider.address1,
+                              'address2' => provider.address2,
+                              'address3' => provider.address3,
+                              'address4' => provider.address4,
+                              'postcode' => provider.postcode,
+                              'website' => provider.website,
+                              'train_with_us' => provider.train_with_us,
+                              'train_with_disability' => provider.train_with_disability,
+                              'email' => provider.email,
+                              'telephone' => provider.telephone,
+                              'can_sponsor_student_visa' => provider.can_sponsor_student_visa,
+                              'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa,
+                              'recruitment_cycle_year' => provider.recruitment_cycle.year
+                            }
+                          },
+                          {
+                            'id' => provider2.id.to_s,
+                            'type' => 'providers',
+                            'attributes' => {
+                              'provider_code' => provider2.provider_code,
+                              'provider_name' => provider2.provider_name,
+                              'provider_type' => provider2.provider_type,
+                              'latitude' => provider2.latitude,
+                              'longitude' => provider2.longitude,
+                              'address1' => provider2.address1,
+                              'address2' => provider2.address2,
+                              'address3' => provider2.address3,
+                              'address4' => provider2.address4,
+                              'postcode' => provider2.postcode,
+                              'website' => provider2.website,
+                              'train_with_us' => provider2.train_with_us,
+                              'train_with_disability' => provider2.train_with_disability,
+                              'email' => provider2.email,
+                              'telephone' => provider2.telephone,
+                              'can_sponsor_student_visa' => provider2.can_sponsor_student_visa,
+                              'can_sponsor_skilled_worker_visa' => provider2.can_sponsor_skilled_worker_visa,
+                              'recruitment_cycle_year' => provider2.recruitment_cycle.year
+                            }
+                          }
+                        ])
     end
   end
 

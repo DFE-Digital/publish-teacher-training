@@ -23,13 +23,13 @@ describe CourseUpdateEmailMailer do
 
       allow(CourseAttributeFormatterService)
         .to receive(:call)
-              .with(name: 'qualification', value: 'original')
-              .and_return('ORIGINAL')
+        .with(name: 'qualification', value: 'original')
+        .and_return('ORIGINAL')
 
       allow(CourseAttributeFormatterService)
         .to receive(:call)
-              .with(name: 'qualification', value: 'updated')
-              .and_return('UPDATED')
+        .with(name: 'qualification', value: 'updated')
+        .and_return('UPDATED')
     end
 
     it 'sends an email with the correct template' do
@@ -127,13 +127,13 @@ describe CourseUpdateEmailMailer do
         before do
           allow(CourseAttributeFormatterService)
             .to receive(:call)
-                  .with(name: 'study_mode', value: scenario[:original_value])
-                  .and_return('ORIGINAL')
+            .with(name: 'study_mode', value: scenario[:original_value])
+            .and_return('ORIGINAL')
 
           allow(CourseAttributeFormatterService)
             .to receive(:call)
-                  .with(name: 'study_mode', value: scenario[:updated_value])
-                  .and_return('UPDATED')
+            .with(name: 'study_mode', value: scenario[:updated_value])
+            .and_return('UPDATED')
         end
 
         it 'includes the updated detail in the personalisation' do
@@ -159,13 +159,13 @@ describe CourseUpdateEmailMailer do
     before do
       allow(CourseAttributeFormatterService)
         .to receive(:call)
-              .with(name: 'name', value: previous_name)
-              .and_return('ORIGINAL')
+        .with(name: 'name', value: previous_name)
+        .and_return('ORIGINAL')
 
       allow(CourseAttributeFormatterService)
         .to receive(:call)
-              .with(name: 'name', value: 'new course')
-              .and_return('UPDATED')
+        .with(name: 'name', value: 'new course')
+        .and_return('UPDATED')
     end
 
     it 'includes the original course name in the personalisation' do

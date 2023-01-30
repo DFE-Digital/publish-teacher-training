@@ -12,7 +12,7 @@ module Publish
 
     validate :course_is_rollable?
 
-  private
+    private
 
     def course_is_rollable?
       return if %i[draft empty rolled_over].include? course.content_status

@@ -16,7 +16,7 @@ module Courses
       course.save
     end
 
-  private
+    private
 
     def calculate_fee_program(course)
       if !course.self_accredited?

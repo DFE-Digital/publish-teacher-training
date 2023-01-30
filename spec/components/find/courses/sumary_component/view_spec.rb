@@ -9,7 +9,7 @@ module Find
         it 'renders sub sections' do
           provider = build(:provider).decorate
           course = create(:course, :draft_enrichment,
-            provider:).decorate
+                          provider:).decorate
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
@@ -34,8 +34,8 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include(
-                                     'Accredited body'
-                                   )
+              'Accredited body'
+            )
           end
         end
 
@@ -52,8 +52,8 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include(
-                                         'Accredited body'
-                                       )
+              'Accredited body'
+            )
           end
         end
 

@@ -10,7 +10,7 @@ module Stores
       FORM_STORE_KEYS
     end
 
-  private
+    private
 
     def identifier_id
       identifier_model.id

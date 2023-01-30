@@ -58,9 +58,9 @@ describe Course do
 
     it do
       expect(subject).to belong_to(:accrediting_provider)
-                           .with_foreign_key(:accredited_body_code)
-                           .with_primary_key(:provider_code)
-                           .optional
+        .with_foreign_key(:accredited_body_code)
+        .with_primary_key(:provider_code)
+        .optional
     end
 
     it { is_expected.to have_many(:subjects).through(:course_subjects) }
@@ -226,30 +226,30 @@ describe Course do
       let(:provider_a) { create(:provider, provider_name: 'Provider A') }
       let(:course_a) do
         create(:course,
-          name: 'Course A',
-          course_code: 'AAA',
-          provider: provider_a)
+               name: 'Course A',
+               course_code: 'AAA',
+               provider: provider_a)
       end
 
       let(:another_course_a) do
         create(:course,
-          name: 'Course A',
-          course_code: 'BBB',
-          provider: provider_a)
+               name: 'Course A',
+               course_code: 'BBB',
+               provider: provider_a)
       end
 
       let(:course_a_with_provider_b) do
         create(:course,
-          name: 'Course A',
-          course_code: 'AAA',
-          provider: provider_b)
+               name: 'Course A',
+               course_code: 'AAA',
+               provider: provider_b)
       end
 
       let(:course_a_with_provider_b_with_different_course_code) do
         create(:course,
-          name: 'Course A',
-          course_code: 'AAB',
-          provider: provider_b)
+               name: 'Course A',
+               course_code: 'AAB',
+               provider: provider_b)
       end
 
       let(:course_b) do
@@ -459,14 +459,14 @@ describe Course do
 
     it {
       expect(subject).to validate_presence_of(:level)
-                           .on(:publish)
-                           .with_message('^Select a course level')
+        .on(:publish)
+        .with_message('^Select a course level')
     }
 
     it 'validates scoped to provider_id and only on create and update' do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
-                                   .scoped_to(:provider_id)
-                                   .on(%i[create update])
+        .scoped_to(:provider_id)
+        .on(%i[create update])
     end
 
     describe 'valid?' do
@@ -1618,8 +1618,8 @@ describe Course do
 
       let(:course) do
         create(:course,
-          site_statuses:,
-          applications_open_from:)
+               site_statuses:,
+               applications_open_from:)
       end
 
       subject { course }
@@ -1718,8 +1718,8 @@ describe Course do
 
       let(:course) do
         create(:course,
-          site_statuses:,
-          applications_open_from:)
+               site_statuses:,
+               applications_open_from:)
       end
 
       subject do
@@ -1911,9 +1911,9 @@ describe Course do
     context 'for a both full time and part time course' do
       subject do
         create(:course,
-          study_mode: :full_time_or_part_time,
-          program_type: :scitt_programme,
-          qualification: :qts)
+               study_mode: :full_time_or_part_time,
+               program_type: :scitt_programme,
+               qualification: :qts)
       end
 
       its(:description) { is_expected.to eq('QTS, full time or part time') }
@@ -1943,9 +1943,9 @@ describe Course do
     context 'for a salaried course' do
       subject do
         create(:course,
-          study_mode: :full_time,
-          program_type: :school_direct_salaried_training_programme,
-          qualification: :pgce_with_qts)
+               study_mode: :full_time,
+               program_type: :school_direct_salaried_training_programme,
+               qualification: :pgce_with_qts)
       end
 
       its(:description) { is_expected.to eq('PGCE with QTS full time with salary') }
@@ -1954,9 +1954,9 @@ describe Course do
     context 'for a teaching apprenticeship' do
       subject do
         create(:course,
-          study_mode: :part_time,
-          program_type: :pg_teaching_apprenticeship,
-          qualification: :pgde_with_qts)
+               study_mode: :part_time,
+               program_type: :pg_teaching_apprenticeship,
+               qualification: :pgde_with_qts)
       end
 
       its(:description) { is_expected.to eq('PGDE with QTS part time teaching apprenticeship') }
@@ -2143,9 +2143,9 @@ describe Course do
         it 'is an enum' do
           expect(subject)
             .to define_enum_for(gcse_subject)
-                  .backed_by_column_of_type(:integer)
-                  .with_values(Course::ENTRY_REQUIREMENT_OPTIONS)
-                  .with_suffix("for_#{gcse_subject}")
+            .backed_by_column_of_type(:integer)
+            .with_values(Course::ENTRY_REQUIREMENT_OPTIONS)
+            .with_suffix("for_#{gcse_subject}")
         end
       end
     end
@@ -2344,10 +2344,10 @@ describe Course do
   describe 'self.get_by_codes' do
     it 'returns the found course' do
       expect(Course.get_by_codes(
-        course.recruitment_cycle.year,
-        course.provider.provider_code,
-        course.course_code
-      )).to eq course
+               course.recruitment_cycle.year,
+               course.provider.provider_code,
+               course.course_code
+             )).to eq course
     end
   end
 
@@ -2416,8 +2416,8 @@ describe Course do
           create(:site_status, :running, :published, site:, course:)
 
           expect { course.discard }.to raise_error(
-                                         "You cannot delete the running course #{course}"
-                                       )
+            "You cannot delete the running course #{course}"
+          )
         end
       end
     end

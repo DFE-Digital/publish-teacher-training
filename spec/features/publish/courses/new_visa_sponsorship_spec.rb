@@ -61,7 +61,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
     end
   end
 
-private
+  private
 
   def lead_school_provider
     build(:provider, sites: [build(:site)])

@@ -59,7 +59,7 @@ module Publish
       validate :age_range_spans_at_least_4_years
     end
 
-  private
+    private
 
     def age_range_other?
       age_range_in_years == 'other'

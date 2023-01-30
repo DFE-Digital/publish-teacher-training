@@ -105,7 +105,7 @@ module GovukTechDocs
           # Must be a schema be referenced by another schema
           # And not a property of a schema
           if property.node_context.referenced_by.to_s.include?('#/components/schemas') &&
-              !property.node_context.source_location.to_s.include?('/properties/')
+             !property.node_context.source_location.to_s.include?('/properties/')
             schema_name = get_schema_name(property.node_context.source_location.to_s)
           end
           schemas.push schema_name unless schema_name.nil?
@@ -192,7 +192,7 @@ module GovukTechDocs
         schema.node_context.source_location.pointer.segments[0..1] == %w[components schemas]
       end
 
-    private
+      private
 
       def info
         document.info

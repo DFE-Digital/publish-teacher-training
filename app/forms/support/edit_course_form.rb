@@ -10,6 +10,7 @@ module Support
     ].freeze
 
     attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send)
+
     validate :validate_start_date_format
     validate :validate_applications_open_from_format
 
@@ -51,7 +52,7 @@ module Support
       @applications_open_from ||= check_date(:applications_open_from)
     end
 
-  private
+    private
 
     def check_date(date_type)
       date_args = date_array(date_type).map(&:to_i)

@@ -16,28 +16,28 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:campaign_name) { nil }
   let(:findable_open_course) do
     create(:course, :resulting_in_pgce_with_qts, :with_apprenticeship, :with_gcse_equivalency,
-      level: 'primary',
-      name: 'Mathematics',
-      provider:,
-      start_date: Time.now.utc,
-      study_mode: :full_time,
-      subjects:,
-      is_send: true,
-      site_statuses: [courses_site_status],
-      enrichments: [enrichment],
-      maths: :must_have_qualification_at_application_time,
-      english: :must_have_qualification_at_application_time,
-      science: :must_have_qualification_at_application_time,
-      age_range_in_years: '3_to_7',
-      applications_open_from:,
-      campaign_name:)
+           level: 'primary',
+           name: 'Mathematics',
+           provider:,
+           start_date: Time.now.utc,
+           study_mode: :full_time,
+           subjects:,
+           is_send: true,
+           site_statuses: [courses_site_status],
+           enrichments: [enrichment],
+           maths: :must_have_qualification_at_application_time,
+           english: :must_have_qualification_at_application_time,
+           science: :must_have_qualification_at_application_time,
+           age_range_in_years: '3_to_7',
+           applications_open_from:,
+           campaign_name:)
   end
 
   let(:courses_site_status) do
     build(:site_status,
-      :findable,
-      :with_any_vacancy,
-      site: create(:site, provider:))
+          :findable,
+          :with_any_vacancy,
+          site: create(:site, provider:))
   end
 
   let(:enrichment)     { build(:course_enrichment, :published) }
@@ -157,7 +157,7 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             perform_request
             json_response = JSON.parse response.body
             expect(json_response['data'].first)
-            .to have_attribute('campaign_name').with_value('engineers_teach_physics')
+              .to have_attribute('campaign_name').with_value('engineers_teach_physics')
           end
         end
       end
@@ -194,14 +194,14 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
       let(:next_cycle) { create(:recruitment_cycle, :next) }
       let(:next_provider) do
         create(:provider,
-          provider_code: provider.provider_code,
-          recruitment_cycle: next_cycle)
+               provider_code: provider.provider_code,
+               recruitment_cycle: next_cycle)
       end
       let(:next_course) do
         create(:course,
-          provider: next_provider,
-          course_code: findable_open_course.course_code,
-          site_statuses: [build(:site_status, :findable)])
+               provider: next_provider,
+               course_code: findable_open_course.course_code,
+               site_statuses: [build(:site_status, :findable)])
       end
 
       describe 'making a request without specifying a recruitment cycle' do

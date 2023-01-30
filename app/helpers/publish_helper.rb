@@ -21,7 +21,7 @@ module PublishHelper
     RubyPants.new(string, [2, :dashes], ruby_pants_options).to_html
   end
 
-private
+  private
 
   # Use characters rather than HTML entities for smart quotes this matches how
   # we write smart quotes in templates and allows us to use them in <title>

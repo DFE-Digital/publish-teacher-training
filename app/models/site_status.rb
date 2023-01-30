@@ -12,7 +12,7 @@ class SiteStatus < ApplicationRecord
   audited associated_with: :course
 
   validate :vac_status_must_be_consistent_with_course_study_mode,
-    if: proc { |s| s.course&.study_mode.present? }
+           if: proc { |s| s.course&.study_mode.present? }
 
   enum vac_status: {
     both_full_time_and_part_time_vacancies: 'B',
@@ -96,7 +96,7 @@ class SiteStatus < ApplicationRecord
     status.in?(%w[running new_status])
   end
 
-private
+  private
 
   def set_defaults
     self.status ||= :new_status

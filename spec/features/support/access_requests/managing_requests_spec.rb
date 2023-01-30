@@ -28,7 +28,7 @@ feature 'Viewing and approving requests', { can_edit_current_and_next_cycles: fa
     then_the_request_should_be_deleted
   end
 
-private
+  private
 
   def and_there_are_access_requests
     create_list(:access_request, 2, :requested)

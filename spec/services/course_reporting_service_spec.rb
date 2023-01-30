@@ -83,12 +83,12 @@ describe CourseReportingService do
                 x = {}
                 x[sub.subject_name] = (i + 1) * 3
                 x
-              end .reduce({}, :merge),
+              end.reduce({}, :merge),
         closed: Subject.active.each_with_index.map do |sub, _i|
                   x = {}
                   x[sub.subject_name] = 0
                   x
-                end .reduce({}, :merge)
+                end.reduce({}, :merge)
       }
     }
   end
@@ -148,7 +148,7 @@ describe CourseReportingService do
             x = {}
             x[sub.id] = (i + 1) * 3
             x
-          end .reduce({}, :merge)
+          end.reduce({}, :merge)
         )
 
         expect(closed_courses_scope).to receive(:count).and_return(closed_courses_count)

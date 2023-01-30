@@ -13,7 +13,7 @@ module TokenHelper
     ActionController::HttpAuthentication::Token.encode_credentials(token)
   end
 
-private
+  private
 
   def encode_to_token(payload)
     build_jwt(:apiv2, payload:)

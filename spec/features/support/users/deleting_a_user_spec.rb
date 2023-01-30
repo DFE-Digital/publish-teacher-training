@@ -16,7 +16,7 @@ feature 'Deleting a new user', :with_publish_constraint do
     and_the_user_is_in_a_discarded_state
   end
 
-private
+  private
 
   def and_a_user_exists_to_delete
     @user_to_delete = create(:user)

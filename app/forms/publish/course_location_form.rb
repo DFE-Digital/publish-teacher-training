@@ -22,7 +22,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     attr_reader :previous_site_names
 

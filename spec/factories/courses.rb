@@ -78,8 +78,8 @@ FactoryBot.define do
 
       if evaluator.infer_level? && course.subjects.present?
         subjects = course.subjects
-          .reject { |s| s.type == 'DiscontinuedSubject' }
-          .reject { |s| s.type == 'MordernLanguagesSubject' }
+                         .reject { |s| s.type == 'DiscontinuedSubject' }
+                         .reject { |s| s.type == 'MordernLanguagesSubject' }
 
         if subjects.all? { |subject| subject.type == 'PrimarySubject' }
           course.level = 'primary'

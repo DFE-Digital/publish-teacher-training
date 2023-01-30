@@ -40,7 +40,7 @@ feature 'Filter providers', :with_publish_constraint do
     end
   end
 
-private
+  private
 
   def and_there_are_providers_with_courses
     @course = create(:course)

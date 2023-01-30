@@ -37,7 +37,7 @@ module Courses
       new_course
     end
 
-  private
+    private
 
     attr_reader :sites_copy_to_course, :enrichments_copy_to_course, :force
 

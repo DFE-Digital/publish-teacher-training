@@ -8,7 +8,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     PrimarySubjectInput = Struct.new(:code, :name)
 

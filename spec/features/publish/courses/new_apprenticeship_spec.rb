@@ -25,7 +25,7 @@ feature 'selecting a teaching apprenticeship', { can_edit_current_and_next_cycle
     then_i_am_met_with_errors
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_an_accredited_body_provider_user
     @user = create(:user)

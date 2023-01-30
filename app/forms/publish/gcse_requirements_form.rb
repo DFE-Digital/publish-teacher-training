@@ -6,7 +6,7 @@ module Publish
     include ActiveModel::Validations::Callbacks
 
     attr_accessor :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency,
-      :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :level
+                  :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :level
 
     validates :accept_pending_gcse, inclusion: { in: [true, false], message: 'Select if you consider candidates with pending GCSEs' }
     validates :accept_gcse_equivalency, inclusion: { in: [true, false], message: 'Select if you consider candidates with pending equivalency tests' }
@@ -41,7 +41,7 @@ module Publish
       )
     end
 
-  private
+    private
 
     def primary_or_secondary_equivalency_details_not_given
       if level == 'primary'

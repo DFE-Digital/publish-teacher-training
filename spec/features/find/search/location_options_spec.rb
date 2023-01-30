@@ -26,7 +26,7 @@ feature 'Searching by location' do
     and_the_location_radio_button_is_selected
   end
 
-private
+  private
 
   def given_i_visit_the_start_page
     courses_by_location_or_training_provider_page.load

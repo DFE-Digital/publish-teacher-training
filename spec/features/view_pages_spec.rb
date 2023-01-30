@@ -16,31 +16,31 @@ feature 'View pages', :with_publish_constraint do
 
   scenario 'Navigate to /terms-conditions' do
     visit '/terms-conditions'
-    expect(page) .to have_selector('h1', text: 'Terms and conditions')
+    expect(page).to have_selector('h1', text: 'Terms and conditions')
   end
 
   scenario 'Navigate to /privacy-policy' do
     visit '/privacy'
-    expect(page) .to have_selector('h1', text: 'Publish teacher training courses privacy notice')
+    expect(page).to have_selector('h1', text: 'Publish teacher training courses privacy notice')
   end
 
   scenario 'Navigate to /how-to-use-this-service' do
     visit '/how-to-use-this-service'
-    expect(page) .to have_selector('h1', text: 'How to use this service')
+    expect(page).to have_selector('h1', text: 'How to use this service')
   end
 
   scenario 'Navigate to /how-to-use-this-service/course-summary-examples' do
     visit '/how-to-use-this-service/course-summary-examples'
-    expect(page) .to have_selector('h1', text: ' Course summary examples')
+    expect(page).to have_selector('h1', text: ' Course summary examples')
   end
 
   scenario 'Navigate to /how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses' do
     visit '/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses'
-    expect(page) .to have_selector('h1', text: ' Writing descriptions for Publish teacher training courses')
+    expect(page).to have_selector('h1', text: ' Writing descriptions for Publish teacher training courses')
   end
 
   scenario 'Navigate to /accessibility' do
     visit '/accessibility'
-    expect(page) .to have_selector('h1', text: 'Accessibility statement for Publish teacher training courses')
+    expect(page).to have_selector('h1', text: 'Accessibility statement for Publish teacher training courses')
   end
 end

@@ -25,7 +25,7 @@ module Find
         qualifications_parameter.any?
       end
 
-    private
+      private
 
       attr_reader :qualifications_parameter
 

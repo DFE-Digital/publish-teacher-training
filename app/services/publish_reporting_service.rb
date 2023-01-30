@@ -22,7 +22,7 @@ class PublishReportingService
 
   private_class_method :new
 
-private
+  private
 
   def days_ago
     @days_ago ||= 30.days.ago
@@ -38,24 +38,24 @@ private
 
   def providers_with_recent_active_users_distinct_count
     @providers_with_recent_active_users_distinct_count ||= @providers
-      .joins(:users)
-      .merge(recent_active_users)
-      .distinct
-      .count
+                                                           .joins(:users)
+                                                           .merge(recent_active_users)
+                                                           .distinct
+                                                           .count
   end
 
   def recent_active_user_count_by_provider
     @recent_active_user_count_by_provider ||= recent_active_users
-      .joins(:providers)          # Results include a user entry for _each_ matching provider
-      .merge(@providers)          # Limit our scope to the current recruitment Cycle
-      .group('provider_id')
-      .count                      # Count the users for each provider
+                                              .joins(:providers)          # Results include a user entry for _each_ matching provider
+                                              .merge(@providers)          # Limit our scope to the current recruitment Cycle
+                                              .group('provider_id')
+                                              .count                      # Count the users for each provider
   end
 
   def grouped_providers_with_x_active_users
     @grouped_providers_with_x_active_users ||= recent_active_user_count_by_provider
-      .group_by(&:second)             # Group the results by the number of users they have
-      .transform_values(&:count)      # Count the results
+                                               .group_by(&:second)             # Group the results by the number of users they have
+                                               .transform_values(&:count)      # Count the results
   end
 
   def with_more_than_5_recent_active_users

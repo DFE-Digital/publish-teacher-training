@@ -18,7 +18,7 @@ module Find
       end
     end
 
-  private
+    private
 
     def last_updated
       FeatureFlag.last_updated(@feature_name)

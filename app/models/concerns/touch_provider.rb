@@ -7,7 +7,7 @@ module TouchProvider
     after_save :touch_provider
   end
 
-private
+  private
 
   def touch_provider
     provider.update_changed_at

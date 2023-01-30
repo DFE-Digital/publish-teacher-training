@@ -23,7 +23,7 @@ class GcseRequirements < ViewComponent::Base
     inset_text_css_classes.include?('app-inset-text--error')
   end
 
-private
+  private
 
   def required_gcse_summary_content(course)
     case course.level

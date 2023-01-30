@@ -25,7 +25,7 @@ module Find
         end
       end
 
-    private
+      private
 
       def providers
         @providers ||= RecruitmentCycle.current.providers.by_name_ascending

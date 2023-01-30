@@ -5,7 +5,7 @@ module Publish
     class LevelController < PublishController
       include CourseBasicDetailConcern
 
-    private
+      private
 
       def error_keys
         [:level]

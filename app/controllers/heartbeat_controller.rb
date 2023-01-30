@@ -17,16 +17,16 @@ class HeartbeatController < ActionController::API
     status = checks.values.all? ? :ok : :service_unavailable
 
     render status:,
-      json: {
-        checks:
-      }
+           json: {
+             checks:
+           }
   end
 
   def sha
     render json: { sha: ENV.fetch('COMMIT_SHA', nil) }
   end
 
-private
+  private
 
   def database_alive?
     ActiveRecord::Base.connection.active?

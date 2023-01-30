@@ -21,7 +21,7 @@ class FlashBannerPreview < ViewComponent::Preview
     render(FlashBanner.new(flash: flash(:info)))
   end
 
-private
+  private
 
   def flash(type, flash_value: "Provider #{type}")
     flash = ActionDispatch::Flash::FlashHash.new

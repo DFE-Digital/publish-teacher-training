@@ -25,7 +25,7 @@ feature 'Creating a provider', :with_publish_constraint do
     then_i_see_the_error_summary
   end
 
-private
+  private
 
   def when_i_visit_the_new_provider_page
     support_provider_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year)

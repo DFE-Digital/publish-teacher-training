@@ -16,7 +16,7 @@ module Find
       end
     end
 
-  private
+    private
 
     def cookie_preferences_params
       params.require(:find_cookie_preferences_form).permit(:consent)

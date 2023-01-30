@@ -375,7 +375,7 @@ class CourseDecorator < ApplicationDecorator
     subjects.map(&:subject_name).include?('Physical education')
   end
 
-private
+  private
 
   def not_on_find
     if object.new_and_not_running?

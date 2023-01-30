@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
     end
   end
 
-private
+  private
 
   def after_sign_in_path
     saved_path = session.delete('post_dfe_sign_in_path')

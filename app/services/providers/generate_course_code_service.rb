@@ -6,7 +6,7 @@ module Providers
       "#{valid_letters.sample}#{valid_number}"
     end
 
-  private
+    private
 
     def valid_letters
       ('A'..'Z').to_a - %w[O I]

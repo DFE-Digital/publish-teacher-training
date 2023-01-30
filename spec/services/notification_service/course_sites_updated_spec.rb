@@ -91,12 +91,12 @@ module NotificationService
           it 'mails subscribed users' do
             expect(CourseSitesUpdateEmailMailer)
               .to receive(:course_sites_update_email)
-                    .with(
-                      course:,
-                      recipient: subscribed_user,
-                      previous_site_names:,
-                      updated_site_names:
-                    ).and_return(mailer = double)
+              .with(
+                course:,
+                recipient: subscribed_user,
+                previous_site_names:,
+                updated_site_names:
+              ).and_return(mailer = double)
             expect(mailer).to receive(:deliver_later)
             described_class.call(
               course:,
@@ -107,9 +107,9 @@ module NotificationService
 
           it 'does not email non subscribed users' do
             expect(CourseSitesUpdateEmailMailer).not_to receive(:course_sites_update_email)
-                                                          .with(course, non_subscribed_user)
+              .with(course, non_subscribed_user)
             expect(CourseSitesUpdateEmailMailer).not_to receive(:course_sites_update_email)
-                                                          .with(course, user_subscribed_to_other_provider)
+              .with(course, user_subscribed_to_other_provider)
             described_class.call(
               course:,
               previous_site_names:,

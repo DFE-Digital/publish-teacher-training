@@ -13,7 +13,7 @@ module Support
       filter_records.page(filter_params[:page] || 1)
     end
 
-  private
+    private
 
     attr_reader :model_data_scope, :filter_params
 

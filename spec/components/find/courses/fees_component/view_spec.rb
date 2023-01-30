@@ -6,8 +6,8 @@ describe Find::Courses::FeesComponent::View, type: :component do
   context 'for international fees' do
     it 'renders the correct text' do
       course = create(:course,
-        enrichments: [create(:course_enrichment, :published)],
-        provider: build(:provider)).decorate
+                      enrichments: [create(:course_enrichment, :published)],
+                      provider: build(:provider)).decorate
 
       result = render_inline(described_class.new(course))
       expect(result.text).to include('Student type')
@@ -21,8 +21,8 @@ describe Find::Courses::FeesComponent::View, type: :component do
   context 'for uk fees' do
     it 'renders the correct text' do
       course = create(:course,
-        enrichments: [create(:course_enrichment, :published, fee_international: nil)],
-        provider: build(:provider)).decorate
+                      enrichments: [create(:course_enrichment, :published, fee_international: nil)],
+                      provider: build(:provider)).decorate
 
       result = render_inline(described_class.new(course))
       expect(result.text).not_to include('International students')

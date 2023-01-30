@@ -22,7 +22,7 @@ module API
           scope
         end
 
-      private
+        private
 
         def course_scope
           provider_courses = Course.where(provider: [provider.id])
@@ -59,10 +59,10 @@ module API
         end
 
         render jsonapi: providers,
-          include: params[:include],
-          meta: {
-            accredited_courses_counts:
-          }
+               include: params[:include],
+               meta: {
+                 accredited_courses_counts:
+               }
       end
 
       def show
@@ -73,7 +73,7 @@ module API
         render jsonapi: training_provider
       end
 
-    private
+      private
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(

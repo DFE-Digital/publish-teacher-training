@@ -13,7 +13,7 @@ class RolloverProviderService
     rollover
   end
 
-private
+  private
 
   attr_reader :provider_code, :course_codes, :force
 

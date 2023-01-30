@@ -7,7 +7,7 @@ class ReportingController < ActionController::API
     render json: StatisticService.reporting(recruitment_cycle: @recruitment_cycle)
   end
 
-private
+  private
 
   def build_recruitment_cycle
     @recruitment_cycle = RecruitmentCycle.find_by(

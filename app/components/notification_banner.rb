@@ -30,7 +30,7 @@ class NotificationBanner < ApplicationComponent
     @disable_auto_focus = disable_auto_focus
   end
 
-private
+  private
 
   attr_reader :title_text, :role, :type, :disable_auto_focus
 

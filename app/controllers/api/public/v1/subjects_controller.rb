@@ -9,9 +9,9 @@ module API
 
           subjects = subjects.order(:subject_name) if params['sort'] == 'name'
           render jsonapi: subjects,
-            class: API::Public::V1::SerializerService.call,
-            include: params[:include],
-            fields:
+                 class: API::Public::V1::SerializerService.call,
+                 include: params[:include],
+                 fields:
         end
 
         def fields

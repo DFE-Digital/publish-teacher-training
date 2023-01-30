@@ -22,7 +22,7 @@ class RolloverService
                       format('in %.3f seconds', total_bm.real)
   end
 
-private
+  private
 
   attr_reader :provider_codes, :force
 
