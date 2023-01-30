@@ -41,7 +41,7 @@ feature 'Course show' do
     end
   end
 
-private
+  private
 
   def given_we_are_not_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)

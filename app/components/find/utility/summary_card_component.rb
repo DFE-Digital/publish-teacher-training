@@ -14,7 +14,7 @@ module Find
         @border ? '' : 'no-border'
       end
 
-    private
+      private
 
       attr_reader :rows, :ignore_editable
 

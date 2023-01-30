@@ -30,7 +30,7 @@ class DegreeRowContent < ViewComponent::Base
     inset_text_css_classes.include?('app-inset-text--error')
   end
 
-private
+  private
 
   def degree_grade_content(course)
     DEGREE_GRADE_MAPPING[course.degree_grade]

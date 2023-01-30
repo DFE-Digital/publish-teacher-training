@@ -12,7 +12,7 @@ module DfESignInUserHelper
     )
   end
 
-private
+  private
 
   def fake_dfe_sign_in_auth_hash(email:, sign_in_user_id:, first_name:, last_name:)
     {

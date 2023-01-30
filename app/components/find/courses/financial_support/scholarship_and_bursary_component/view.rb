@@ -25,7 +25,7 @@ module Find
             I18n.t("find.scholarships.#{subject_with_scholarship}.url", default: nil)
           end
 
-        private
+          private
 
           SUBJECT_WITH_SCHOLARSHIPS = [
             %w[F1 chemistry],

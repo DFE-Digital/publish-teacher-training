@@ -128,7 +128,7 @@ feature 'Editing vacancies', { can_edit_current_and_next_cycles: false } do
     then_the_vacancies_are_updated_with(%w[both_full_time_and_part_time_vacancies])
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))

@@ -38,7 +38,7 @@ module Find
       @request_params
     end
 
-  private
+    private
 
     def sortby_and_funding
       @request_params['sortby'] = 'distance' if @request_params['sortby'] == '2'

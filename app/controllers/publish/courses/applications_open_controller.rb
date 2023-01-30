@@ -15,7 +15,7 @@ module Publish
         super
       end
 
-    private
+      private
 
       def actual_params
         params.require(:course)

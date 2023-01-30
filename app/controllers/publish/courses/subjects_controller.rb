@@ -61,7 +61,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def campaign_name_check
         params[:course][:campaign_name] = '' unless @course.master_subject_id == SecondarySubject.physics.id

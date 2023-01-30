@@ -22,7 +22,7 @@ class PublishReportingService
 
   private_class_method :new
 
-private
+  private
 
   def days_ago
     @days_ago ||= 30.days.ago

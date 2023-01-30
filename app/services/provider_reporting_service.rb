@@ -37,7 +37,7 @@ class ProviderReportingService
 
   private_class_method :new
 
-private
+  private
 
   def group_by_count(column)
     open = @open_providers.group(column).count

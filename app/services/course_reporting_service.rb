@@ -38,7 +38,7 @@ class CourseReportingService
 
   private_class_method :new
 
-private
+  private
 
   def group_by_subject_count
     open = CourseSubject.where(course_id: @open_courses).group(:subject_id).count

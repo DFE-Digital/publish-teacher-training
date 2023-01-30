@@ -15,7 +15,7 @@ module Find
 
     private_class_method :new
 
-  private
+    private
 
     attr_reader :base_path, :parameters
   end

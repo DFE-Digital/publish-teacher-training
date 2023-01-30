@@ -89,7 +89,7 @@ class PerformanceDashboardService
     number_with_delimiter(rollover_total[:existing_courses_in_review])
   end
 
-private
+  private
 
   def reporting
     @reporting ||= StatisticService.reporting(recruitment_cycle:)

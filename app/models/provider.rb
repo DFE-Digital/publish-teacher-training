@@ -343,7 +343,7 @@ class Provider < ApplicationRecord
     Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Settings.current_recruitment_cycle_year.succ.to_s }).find_by(provider_code:)
   end
 
-private
+  private
 
   scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
 

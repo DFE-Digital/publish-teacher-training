@@ -26,7 +26,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def provider_contact_params
         params.require(:publish_provider_contact_form).permit(*ProviderContactForm::FIELDS)

@@ -27,7 +27,7 @@ class VacancyStatusDeterminationService
     'no_vacancies'
   end
 
-private
+  private
 
   def part_time?
     (course.full_time_or_part_time? && vacancy_status_part_time?) ||

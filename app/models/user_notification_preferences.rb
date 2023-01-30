@@ -43,7 +43,7 @@ class UserNotificationPreferences
 
   alias enabled? enabled
 
-private
+  private
 
   def user_accredited_body_codes
     user.providers.accredited_body.in_current_cycle.distinct.pluck(:provider_code)

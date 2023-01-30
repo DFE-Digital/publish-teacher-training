@@ -127,7 +127,7 @@ module ViewHelper
 
   alias cns classnames
 
-private
+  private
 
   def base_errors_hash(provider_code, course)
     {

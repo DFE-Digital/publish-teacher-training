@@ -28,7 +28,7 @@ module Find
           render Find::Courses::AboutSchoolsComponent::View.new(mock_hei_course)
         end
 
-      private
+        private
 
         def mock_scitt_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),

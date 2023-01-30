@@ -10,7 +10,7 @@ module Filters
         super
       end
 
-    private
+      private
 
       def checked?(filters, filter, value)
         filters && filters[filter]&.include?(value)

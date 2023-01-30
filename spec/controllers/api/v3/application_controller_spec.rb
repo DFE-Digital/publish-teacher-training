@@ -9,7 +9,7 @@ RSpec.describe API::V3::ApplicationController do
         class: CourseSerializersService.new.execute
     end
 
-  private
+    private
 
     def page_url(_)
       '/'

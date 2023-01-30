@@ -30,7 +30,7 @@ feature 'Editing a search' do
     and_i_click_find_courses
   end
 
-private
+  private
 
   def when_i_visit_the_start_page
     courses_by_location_or_training_provider_page.load

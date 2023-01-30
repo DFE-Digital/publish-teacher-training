@@ -5,7 +5,7 @@ module Publish
     class StartDateController < PublishController
       include CourseBasicDetailConcern
 
-    private
+      private
 
       def current_step
         :start_date

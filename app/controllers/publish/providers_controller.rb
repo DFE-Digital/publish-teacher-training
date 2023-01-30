@@ -93,7 +93,7 @@ module Publish
       redirect_to publish_provider_path(provider_code)
     end
 
-  private
+    private
 
     def provider
       @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])

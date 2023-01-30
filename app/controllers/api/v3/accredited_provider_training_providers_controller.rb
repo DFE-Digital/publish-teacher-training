@@ -22,7 +22,7 @@ module API
           scope
         end
 
-      private
+        private
 
         def course_scope
           provider_courses = Course.where(provider: [provider.id])
@@ -73,7 +73,7 @@ module API
         render jsonapi: training_provider
       end
 
-    private
+      private
 
       def build_recruitment_cycle
         @recruitment_cycle = RecruitmentCycle.find_by(

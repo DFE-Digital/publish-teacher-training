@@ -12,7 +12,7 @@ class TitleBar < ViewComponent::Base
     @provider = provider
   end
 
-private
+  private
 
   def change_items
     [*(change_cycle_link if rollover_active?), *(change_organisation_link if multiple_providers_or_admin?)]

@@ -27,7 +27,7 @@ feature 'Editing a user under a provider as an admin', :with_publish_constraint 
     then_should_see_the_updated_details_displayed
   end
 
-private
+  private
 
   def and_a_user_provider_relationship_exists_to_edit
     @provider = create(:provider)

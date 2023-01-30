@@ -18,7 +18,7 @@ module API
               class: API::Public::V1::SerializerService.call
           end
 
-        private
+          private
 
           def courses
             @courses ||= CourseSearchService.call(filter: params[:filter],

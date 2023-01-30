@@ -79,7 +79,7 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
     expect(gcse_requirements_page.additional_requirements.text).to eq('')
   end
 
-private
+  private
 
   def user_with_courses
     course = build(:course, :secondary, course_code: 'XXX1', additional_gcse_equivalencies: '')

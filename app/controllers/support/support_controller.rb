@@ -10,7 +10,7 @@ module Support
       'support'
     end
 
-  private
+    private
 
     def check_user_is_admin
       render 'errors/forbidden', status: :forbidden, formats: :html unless current_user.admin?

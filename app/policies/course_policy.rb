@@ -81,7 +81,7 @@ class CoursePolicy
     ]
   end
 
-private
+  private
 
   def permitted_user_attributes
     permitted_new_course_attributes + %i[

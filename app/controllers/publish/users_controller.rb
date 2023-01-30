@@ -51,7 +51,7 @@ module Publish
       redirect_to publish_provider_users_path(params[:provider_code])
     end
 
-  private
+    private
 
     def authorize_provider
       authorize(provider)

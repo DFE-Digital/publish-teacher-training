@@ -65,7 +65,7 @@ feature 'Edit provider course details', :with_publish_constraint do
     end
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_an_admin_user
     Timecop.travel(1.second.from_now)

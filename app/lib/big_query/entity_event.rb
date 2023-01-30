@@ -37,7 +37,7 @@ module BigQuery
       })
     end
 
-  private
+    private
 
     attr_reader :event_hash
 

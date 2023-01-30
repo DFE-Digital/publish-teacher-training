@@ -7,7 +7,7 @@ class UniqueCourseValidator < ActiveModel::Validator
     record.errors.add(:base, :duplicate)
   end
 
-private
+  private
 
   def course_is_unique?(new_course)
     existing_courses = new_course.provider.courses

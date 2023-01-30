@@ -41,7 +41,7 @@ module Publish
       )
     end
 
-  private
+    private
 
     def primary_or_secondary_equivalency_details_not_given
       if level == 'primary'

@@ -70,7 +70,7 @@ module Publish
         @provider_suggestions = recruitment_cycle.providers.with_findable_courses.provider_search(@query).limit(10)
       end
 
-    private
+      private
 
       def build_provider
         @provider = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])

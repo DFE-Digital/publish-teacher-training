@@ -20,7 +20,7 @@ feature 'Viewing provider users' do
     then_i_see_the_request_access_form
   end
 
-private
+  private
 
   def then_i_see_the_request_access_form
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/request-access")

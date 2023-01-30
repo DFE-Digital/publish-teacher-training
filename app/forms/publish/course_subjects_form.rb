@@ -10,7 +10,7 @@ module Publish
       super
     end
 
-  private
+    private
 
     attr_reader :previous_subject_names, :previous_course_name
 

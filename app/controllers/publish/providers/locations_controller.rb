@@ -48,7 +48,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def site
         @site ||= provider.sites.find(params[:id])

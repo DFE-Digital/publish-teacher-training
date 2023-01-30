@@ -5,7 +5,7 @@ module Publish
     class BaseFundingTypeController < PublishController
       include SuccessMessage
 
-    private
+      private
 
       def course
         @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))

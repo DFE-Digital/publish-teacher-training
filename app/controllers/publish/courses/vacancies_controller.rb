@@ -29,7 +29,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def course
         @course ||= provider.courses.find_by!(course_code: params[:code])

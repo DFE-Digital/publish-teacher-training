@@ -30,7 +30,7 @@ module Find
             render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(financial_support_course)
           end
 
-        private
+          private
 
           def salaried_with_fees_course
             FakeCourse.new(has_fees: true,

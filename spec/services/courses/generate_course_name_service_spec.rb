@@ -324,7 +324,7 @@ describe Courses::GenerateCourseNameService do
     end
   end
 
-private
+  private
 
   def set_course_subjects_and_master_id
     course.course_subjects = subjects.map.with_index do |subject, index|

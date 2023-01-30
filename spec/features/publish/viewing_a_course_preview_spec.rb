@@ -35,7 +35,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-private
+  private
 
   def then_i_see_custom_address
     expect(course_preview_page).to have_content 'LSJS'

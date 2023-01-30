@@ -20,7 +20,7 @@ class NavigationBar < ApplicationComponent
     @current_user.present?
   end
 
-private
+  private
 
   def show_current_link?(item)
     item.fetch(:current, false) || [item.fetch(:url), item[:additional_url]].compact.any? { |url| current_path.include?(url) }

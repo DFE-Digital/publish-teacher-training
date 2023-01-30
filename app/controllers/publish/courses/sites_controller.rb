@@ -52,7 +52,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def current_step
         :location

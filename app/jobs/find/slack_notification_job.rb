@@ -14,7 +14,7 @@ module Find
       post_to_slack message
     end
 
-  private
+    private
 
     def hyperlink(text, url)
       "<#{url}|#{text}>"

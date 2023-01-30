@@ -13,7 +13,7 @@ class TabNavigationPreview < ViewComponent::Preview
     render(TabNavigation.new(items: with_current))
   end
 
-private
+  private
 
   def items
     [

@@ -192,7 +192,7 @@ module GovukTechDocs
         schema.node_context.source_location.pointer.segments[0..1] == %w[components schemas]
       end
 
-    private
+      private
 
       def info
         document.info

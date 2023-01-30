@@ -13,7 +13,7 @@ module PagyPagination
     pagy_results.second
   end
 
-private
+  private
 
   attr_accessor :pagy_results
 

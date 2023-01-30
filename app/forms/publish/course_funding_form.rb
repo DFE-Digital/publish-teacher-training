@@ -52,7 +52,7 @@ module Publish
       visa_type == :skilled_worker
     end
 
-  private
+    private
 
     def reset_enrichment_attributes
       {

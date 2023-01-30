@@ -14,7 +14,7 @@ module Find
       flash_empty && !cycle_timetable.find_down?
     end
 
-  private
+    private
 
     attr_reader :cycle_timetable
 

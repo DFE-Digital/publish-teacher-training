@@ -22,7 +22,7 @@ module Find
         @has_sites
       end
 
-    private
+      private
 
       def formatted_qualification
         t("find.qualification.description_with_abbreviation.#{course.qualification}.html")

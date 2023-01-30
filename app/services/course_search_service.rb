@@ -74,7 +74,7 @@ class CourseSearchService
 
   private_class_method :new
 
-private
+  private
 
   def expand_university?
     filter[:expand_university].to_s.downcase == 'true'

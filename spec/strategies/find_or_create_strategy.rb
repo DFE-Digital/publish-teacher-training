@@ -13,7 +13,7 @@ module FactoryBot
         build_class(evaluation).where(get_match_attributes(evaluation)).first
       end
 
-    private
+      private
 
       def build_class(evaluation)
         @build_class ||= evaluation

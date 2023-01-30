@@ -19,7 +19,7 @@ module API
         )
       end
 
-    private
+      private
 
       def begins_with_alphanumeric(string)
         string.match?(/^[[:alnum:]].*$/)

@@ -33,7 +33,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_the_modern_languages_page
   end
 
-private
+  private
 
   def and_i_should_see_a_success_message(value)
     expect(page).to have_content(I18n.t('success.value_saved', value:))

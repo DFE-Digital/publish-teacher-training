@@ -26,7 +26,7 @@ class HeartbeatController < ActionController::API
     render json: { sha: ENV.fetch('COMMIT_SHA', nil) }
   end
 
-private
+  private
 
   def database_alive?
     ActiveRecord::Base.connection.active?

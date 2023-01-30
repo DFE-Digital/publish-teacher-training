@@ -30,7 +30,7 @@ module API
           class: CourseSerializersService.new.execute
       end
 
-    private
+      private
 
       def max_per_page
         if fields_for_sitemap?

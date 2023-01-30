@@ -88,7 +88,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def course_params
       if params.key? :course

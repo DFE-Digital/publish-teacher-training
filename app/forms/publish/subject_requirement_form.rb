@@ -29,7 +29,7 @@ module Publish
       )
     end
 
-  private
+    private
 
     def cast_additional_degree_subject_requirements
       self.additional_degree_subject_requirements = ActiveModel::Type::Boolean.new.cast(additional_degree_subject_requirements)

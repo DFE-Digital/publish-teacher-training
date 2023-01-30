@@ -96,7 +96,7 @@ class SiteStatus < ApplicationRecord
     status.in?(%w[running new_status])
   end
 
-private
+  private
 
   def set_defaults
     self.status ||= :new_status

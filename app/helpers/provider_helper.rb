@@ -44,7 +44,7 @@ module ProviderHelper
     end
   end
 
-private
+  private
 
   def visa_sponsorship_call_to_action(provider)
     govuk_inset_text(classes: 'app-inset-text--narrow-border app-inset-text--important') do

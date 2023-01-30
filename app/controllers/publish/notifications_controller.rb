@@ -26,7 +26,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def redirect_to_path
       if permitted_params[:provider_code].present?

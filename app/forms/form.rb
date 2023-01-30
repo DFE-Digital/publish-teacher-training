@@ -34,7 +34,7 @@ class Form
     store.stash(form_store_key, fields.except(*fields_to_ignore_before_stash)) if valid?
   end
 
-private
+  private
 
   def after_save; end
 

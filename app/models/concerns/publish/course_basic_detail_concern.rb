@@ -55,7 +55,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def build_new_course
       add_custom_age_range_into_params if params.dig('course', 'age_range_in_years') == 'other'

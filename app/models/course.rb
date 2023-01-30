@@ -776,7 +776,7 @@ class Course < ApplicationRecord
     subjects.any? { |subject| subject.type == 'ModernLanguagesSubject' }
   end
 
-private
+  private
 
   def add_site!(site:)
     is_course_new = ucas_status == :new

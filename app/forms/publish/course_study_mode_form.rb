@@ -12,7 +12,7 @@ module Publish
       presence: true,
       inclusion: { in: Course.study_modes.keys }
 
-  private
+    private
 
     def valid_before_save
       course.ensure_site_statuses_match_study_mode if course.changed?

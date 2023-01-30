@@ -32,7 +32,7 @@ class NotificationsView
     matches[1]
   end
 
-private
+  private
 
   attr_reader :request, :current_user
 end

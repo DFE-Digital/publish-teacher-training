@@ -24,7 +24,7 @@ module Find
           render Find::Courses::EntryRequirementsComponent::View.new(course: mock_etp_course)
         end
 
-      private
+        private
 
         def mock_etp_course
           FakeCourse.new(**mock_etp_course_attributes)

@@ -11,7 +11,7 @@ module Publish
         redirect_to next_step
       end
 
-    private
+      private
 
       def current_step
         :can_sponsor_skilled_worker_visa

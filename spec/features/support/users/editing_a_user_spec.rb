@@ -22,7 +22,7 @@ feature 'Editing a user', :with_publish_constraint do
     i_am_met_with_error_messages
   end
 
-private
+  private
 
   def and_a_user_exists
     @user = create(:user, :with_provider)

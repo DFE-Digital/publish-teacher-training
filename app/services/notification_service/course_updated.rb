@@ -26,7 +26,7 @@ module NotificationService
       end
     end
 
-  private
+    private
 
     attr_reader :course
 

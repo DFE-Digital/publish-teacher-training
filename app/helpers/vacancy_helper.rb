@@ -14,7 +14,7 @@ module VacancyHelper
     end
   end
 
-private
+  private
 
   def vacancy_available_for_study_mode?(site_status, vacancy_study_mode)
     return true if site_status.both_full_time_and_part_time_vacancies?

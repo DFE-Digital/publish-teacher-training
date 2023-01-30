@@ -18,7 +18,7 @@ module Publish
       )
     end
 
-  private
+    private
 
     def provider_search?
       training_provider_code == '-1'

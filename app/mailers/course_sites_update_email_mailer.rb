@@ -24,7 +24,7 @@ class CourseSitesUpdateEmailMailer < GovukNotifyRails::Mailer
     mail(to: recipient.email)
   end
 
-private
+  private
 
   def create_course_url(course)
     "#{Settings.find_url}" \

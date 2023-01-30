@@ -18,7 +18,7 @@ module API
           )
         end
 
-      private
+        private
 
         def recruitment_cycle
           @recruitment_cycle = RecruitmentCycle.find_by(

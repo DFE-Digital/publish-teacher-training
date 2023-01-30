@@ -21,7 +21,7 @@ class LocationSuggestion
       result
     end
 
-  private
+    private
 
     def do_not_cache?(response)
       response.status != 200 ||

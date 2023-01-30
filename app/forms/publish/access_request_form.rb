@@ -23,7 +23,7 @@ module Publish
       super(AccessRequest.new, params:)
     end
 
-  private
+    private
 
     def requester_email
       @requester_email ||= user.email

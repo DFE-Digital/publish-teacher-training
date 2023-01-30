@@ -31,7 +31,7 @@ feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false 
     then_i_am_met_with_errors
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)

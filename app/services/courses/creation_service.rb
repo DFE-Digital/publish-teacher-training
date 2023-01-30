@@ -16,7 +16,7 @@ module Courses
       build_new_course
     end
 
-  private
+    private
 
     def new_course
       @new_course ||= provider.courses.new

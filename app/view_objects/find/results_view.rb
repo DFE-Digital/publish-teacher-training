@@ -210,7 +210,7 @@ module Find
       @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
     end
 
-  private
+    private
 
     def latitude
       query_parameters['latitude']

@@ -12,7 +12,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def after_successful_save_action
       NotificationService::CourseUpdated.call(course:)

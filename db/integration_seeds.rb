@@ -99,7 +99,7 @@ module IntegrationSeeds
       course.sites << site unless site.in? course.sites
     end
 
-  private
+    private
 
     def add_user_to_organisation(user, organisation)
       organisation.users << user unless user.in? organisation.users

@@ -19,7 +19,7 @@ module Find
       'find'
     end
 
-  private
+    private
 
     def provider
       @provider ||= RecruitmentCycle.current.providers.find_by(provider_code: params[:provider_code])

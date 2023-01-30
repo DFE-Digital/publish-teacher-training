@@ -3,7 +3,7 @@
 module Publish
   module Courses
     class ApprenticeshipController < FundingTypeController
-    private
+      private
 
       def current_step
         :apprenticeship

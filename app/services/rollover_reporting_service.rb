@@ -33,7 +33,7 @@ class RolloverReportingService
 
   private_class_method :new
 
-private
+  private
 
   def next_findable
     @rollover_scope.next.courses.findable

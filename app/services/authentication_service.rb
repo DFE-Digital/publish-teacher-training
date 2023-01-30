@@ -43,7 +43,7 @@ class AuthenticationService
     user
   end
 
-private
+  private
 
   attr_reader :logger
 

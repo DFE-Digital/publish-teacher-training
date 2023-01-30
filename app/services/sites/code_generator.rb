@@ -12,7 +12,7 @@ module Sites
       ucas_style_code.presence || highest_site_code.next
     end
 
-  private
+    private
 
     attr_reader :provider
 

@@ -35,7 +35,7 @@ module Publish
     validates :fee_details, words_count: { maximum: 250, message: :too_long }
     validates :financial_support, words_count: { maximum: 250, message: :too_long }
 
-  private
+    private
 
     def declared_fields
       FIELDS

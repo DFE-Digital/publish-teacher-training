@@ -40,7 +40,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?

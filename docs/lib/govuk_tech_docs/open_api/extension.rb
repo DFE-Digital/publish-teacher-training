@@ -75,7 +75,7 @@ module GovukTechDocs
         end
       end
 
-    private
+      private
 
       def uri?(string)
         uri = URI.parse(string)

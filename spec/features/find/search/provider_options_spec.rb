@@ -23,7 +23,7 @@ feature 'Searching by provider' do
     and_the_provider_radio_button_is_selected
   end
 
-private
+  private
 
   def given_there_is_a_provider_with_courses
     create(:course,

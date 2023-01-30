@@ -24,7 +24,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def train_with_us_changed?
       changed?(:train_with_us)

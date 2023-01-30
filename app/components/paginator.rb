@@ -38,7 +38,7 @@ class Paginator < ViewComponent::Base
     }
   end
 
-private
+  private
 
   def total_pages_exceed_limit?
     scope.total_pages > KAMINARI_LINKS_LIMIT

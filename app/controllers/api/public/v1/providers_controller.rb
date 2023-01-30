@@ -23,7 +23,7 @@ module API
             fields:
         end
 
-      private
+        private
 
         def provider_name
           @provider_name ||= params.dig(:filter, :provider_name) if params.dig(:filter, :provider_name)&.length&. > 2

@@ -28,7 +28,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def study_mode_params
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?

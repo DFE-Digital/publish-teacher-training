@@ -24,7 +24,7 @@ module Find
         end
       end
 
-    private
+      private
 
       def sanitised_subject_codes
         form_params['subjects'].compact_blank!

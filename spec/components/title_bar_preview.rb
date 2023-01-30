@@ -5,7 +5,7 @@ class TitleBarPreview < ViewComponent::Preview
     render(TitleBar.new(title:, provider: provider_code, current_user:))
   end
 
-private
+  private
 
   def title
     'BAT School'

@@ -63,7 +63,7 @@ feature 'Viewing a findable course' do
     end
   end
 
-private
+  private
 
   def given_there_is_a_findable_course
     @course ||= create(

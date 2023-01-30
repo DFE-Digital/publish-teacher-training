@@ -13,7 +13,7 @@ module API
                 class: API::Public::V1::SerializerService.call
             end
 
-          private
+            private
 
             def locations
               @locations ||= course&.sites

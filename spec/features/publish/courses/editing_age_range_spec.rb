@@ -32,7 +32,7 @@ feature 'selecting an age range', { can_edit_current_and_next_cycles: false } do
     and_the_course_age_range_is_not_updated
   end
 
-private
+  private
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))

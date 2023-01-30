@@ -25,7 +25,7 @@ module Support
       end
     end
 
-  private
+    private
 
     def provider
       @provider ||= recruitment_cycle.providers.find(params[:provider_id])

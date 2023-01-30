@@ -27,7 +27,7 @@ module Publish
       end
     end
 
-  private
+    private
 
     def valid_before_save; end
 

@@ -20,7 +20,7 @@ module Exports
       "courses-#{Time.zone.today}.csv"
     end
 
-  private
+    private
 
     attr_reader :data_for_export
 

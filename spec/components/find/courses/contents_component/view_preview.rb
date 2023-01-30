@@ -8,7 +8,7 @@ module Find
           render Find::Courses::ContentsComponent::View.new(mock_course)
         end
 
-      private
+        private
 
         def mock_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com', train_with_disability: 'foo'),

@@ -8,7 +8,7 @@ module Find
           render Find::Courses::FeesComponent::View.new(mock_course)
         end
 
-      private
+        private
 
         def mock_course
           FakeCourse.new(fee_uk_eu: '900000',

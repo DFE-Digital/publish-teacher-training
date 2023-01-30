@@ -17,7 +17,7 @@ module Support
         flash[:success] = 'User added'
       end
 
-    private
+      private
 
       def user
         User.find_or_initialize_by(email: params.dig(:support_user_form, :email)&.downcase)

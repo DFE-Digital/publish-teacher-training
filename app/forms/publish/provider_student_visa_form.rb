@@ -10,7 +10,7 @@ module Publish
 
     validates :can_sponsor_student_visa, inclusion: { in: [true, false], message: 'Select if candidates can get a sponsored Student visa' }
 
-  private
+    private
 
     def compute_fields
       provider.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

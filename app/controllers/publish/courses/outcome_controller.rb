@@ -36,7 +36,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def order_edit_options
         qualification_options = @course.edit_course_options[:qualifications]

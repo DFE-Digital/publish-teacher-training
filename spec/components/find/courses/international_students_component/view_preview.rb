@@ -35,7 +35,7 @@ module Find
           render Find::Courses::InternationalStudentsComponent::View.new(course:)
         end
 
-      private
+        private
 
         def provider
           @provider ||= Provider.new(provider_code: 'DFE')

@@ -36,7 +36,7 @@ module API
                                   can_sponsor_skilled_worker_visa] }
       end
 
-    private
+      private
 
       def build_fields_for_index
         @fields = default_fields_for_index

@@ -11,7 +11,7 @@ module Find
           @course = course
         end
 
-      private
+        private
 
         def degree_grade_content(course)
           degree_grade_hash = {

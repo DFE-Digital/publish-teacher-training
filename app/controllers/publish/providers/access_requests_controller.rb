@@ -26,7 +26,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def access_request_params
         params.require(:publish_access_request_form).permit(

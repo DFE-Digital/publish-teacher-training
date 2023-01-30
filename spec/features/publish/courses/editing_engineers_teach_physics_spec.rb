@@ -55,7 +55,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     then_i_see_an_error_message
   end
 
-private
+  private
 
   def then_i_see_an_error_message
     expect(page).to have_content('Select an option')

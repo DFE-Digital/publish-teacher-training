@@ -6,7 +6,7 @@ module Publish
       course_length_is_other?(course_length)
     end
 
-  private
+    private
 
     def compute_fields
       course_enrichment

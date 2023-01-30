@@ -36,7 +36,7 @@ module CourseVacancies
       mail(to: user.email)
     end
 
-  private
+    private
 
     def create_course_url(course)
       "#{Settings.find_url}" \

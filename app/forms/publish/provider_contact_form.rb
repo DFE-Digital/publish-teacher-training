@@ -16,7 +16,7 @@ module Publish
     validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }, if: :lead_school?
     validates :ukprn, reference_number_format: { allow_blank: false, minimum: 8, maximum: 8, message: 'UKPRN must be 8 numbers' }
 
-  private
+    private
 
     def compute_fields
       provider.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)

@@ -22,7 +22,7 @@ module Find
           render Find::Courses::SummaryComponent::View.new(course)
         end
 
-      private
+        private
 
         def mock_secondary_course
           accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_body', provider_type: 'university')

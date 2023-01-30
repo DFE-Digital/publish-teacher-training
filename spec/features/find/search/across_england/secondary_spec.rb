@@ -35,7 +35,7 @@ feature 'Searching across England' do
     and_i_should_see_the_correct_courses
   end
 
-private
+  private
 
   def given_there_are_secondary_courses_in_england
     create(:course, :published, :with_salary, site_statuses: [build(:site_status, :findable)])

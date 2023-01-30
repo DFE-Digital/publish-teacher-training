@@ -27,7 +27,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     then_subjects_list_correctly_on_confirmation_page
   end
 
-private
+  private
 
   def when_i_click_change_subject
     course_confirmation_page.details.subjects.change_link.click

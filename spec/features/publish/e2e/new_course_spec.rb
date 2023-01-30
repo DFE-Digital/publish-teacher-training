@@ -13,7 +13,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     then_i_can_create_the_course
   end
 
-private
+  private
 
   def then_i_can_create_the_course
     expect(new_level_page).to be_displayed

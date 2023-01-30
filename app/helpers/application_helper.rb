@@ -69,7 +69,7 @@ module ApplicationHelper
     user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && !FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
   end
 
-private
+  private
 
   def render_action(action_path, action_visually_hidden_text)
     return if action_path.blank?

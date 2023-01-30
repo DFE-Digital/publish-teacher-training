@@ -31,7 +31,7 @@ module Publish
         end
       end
 
-    private
+      private
 
       def visa_sponsorship_form
         @visa_sponsorship_form ||= CourseFundingForm.new(@course, params: visa_sponsorship_params)

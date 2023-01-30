@@ -69,7 +69,7 @@ feature "Managing a provider's locations", { can_edit_current_and_next_cycles: f
     expect(locations_index_page.locations.last.name).to have_text('Renamed place')
   end
 
-private
+  private
 
   def provider
     @current_user.providers.first

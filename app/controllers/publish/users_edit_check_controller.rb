@@ -17,7 +17,7 @@ module Publish
       flash[:success] = 'User updated'
     end
 
-  private
+    private
 
     def user
       @user = User.find(params[:user_id])

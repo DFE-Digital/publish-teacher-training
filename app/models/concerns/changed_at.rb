@@ -4,7 +4,7 @@ module ChangedAt
   extend ActiveSupport::Concern
 
   class_methods do
-  private
+    private
 
     # Hook into Rails' built-in mechanism to update `updated_at` by adding to
     # it's list of columns that get updated when an object changes (by default

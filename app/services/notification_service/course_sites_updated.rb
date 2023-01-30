@@ -23,7 +23,7 @@ module NotificationService
       end
     end
 
-  private
+    private
 
     attr_reader :course, :previous_site_names, :updated_site_names
 

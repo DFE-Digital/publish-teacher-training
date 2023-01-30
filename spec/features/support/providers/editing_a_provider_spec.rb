@@ -32,7 +32,7 @@ feature 'View provider users', :with_publish_constraint do
     end
   end
 
-private
+  private
 
   def and_there_is_a_provider
     @provider = create(:provider, provider_name: 'Provider 1', provider_type: 'scitt', accrediting_provider: 'accredited_body')

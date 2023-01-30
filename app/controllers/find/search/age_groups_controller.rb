@@ -26,7 +26,7 @@ module Find
         end
       end
 
-    private
+      private
 
       def further_education_params
         filter_params[:find_age_groups_form].merge(age_group: @age_groups_form.age_group, subjects: ['41'])

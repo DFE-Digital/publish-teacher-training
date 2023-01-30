@@ -8,7 +8,7 @@ module Support
       redirect_to origin_page, flash: { success: t('support.flash.deleted', resource: flash_resource) }
     end
 
-  private
+    private
 
     def user_permission
       @user_permission ||= UserPermission.find(params[:id])

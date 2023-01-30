@@ -51,7 +51,7 @@ module Support
       @applications_open_from ||= check_date(:applications_open_from)
     end
 
-  private
+    private
 
     def check_date(date_type)
       date_args = date_array(date_type).map(&:to_i)

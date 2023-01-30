@@ -26,7 +26,7 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
     mail(to: recipient.email)
   end
 
-private
+  private
 
   def format(subject_names)
     subject_names.join(', ')

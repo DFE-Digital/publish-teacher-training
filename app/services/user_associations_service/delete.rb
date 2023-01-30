@@ -23,7 +23,7 @@ module UserAssociationsService
 
     private_class_method :new
 
-  private
+    private
 
     def send_remove_user_from_provider_email
       providers.each do |provider|

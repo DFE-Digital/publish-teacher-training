@@ -111,7 +111,7 @@ class User < ApplicationRecord
     sign_in_user_id.present?
   end
 
-private
+  private
 
   def downcase_email
     email&.downcase!

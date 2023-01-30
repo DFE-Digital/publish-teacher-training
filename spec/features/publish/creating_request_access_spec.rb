@@ -18,7 +18,7 @@ feature 'Creating request access' do
     then_i_should_see_a_success_message
   end
 
-private
+  private
 
   def then_i_should_see_a_success_message
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/users")

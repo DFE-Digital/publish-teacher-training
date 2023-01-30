@@ -36,7 +36,7 @@ class FeatureFlag
       JSON.parse(feature)['updated_at']
     end
 
-  private
+    private
 
     def sync_with_redis(feature_name, feature_state)
       RedisClient.current.set(
