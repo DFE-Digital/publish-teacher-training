@@ -63,7 +63,7 @@ class User < ApplicationRecord
     self.providers = providers - providers_to_remove
 
     next_recruitment_cycle_provider_codes = providers_to_remove
-        .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
+                                            .filter_map { |provider| provider.provider_code if provider.recruitment_cycle.current? }
 
     return unless rollover_active? && !RecruitmentCycle.next.nil? && next_recruitment_cycle_provider_codes.any?
 

@@ -13,7 +13,7 @@ module API
         def show
           code = params.fetch(:code, params[:provider_code])
           provider = recruitment_cycle.providers
-                                        .find_by!(
+                                      .find_by!(
                                           provider_code: code.upcase
                                         )
 

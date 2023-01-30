@@ -16,7 +16,7 @@ module Publish
         form = described_class.new(course, params:)
         expect(form.valid?).to be(false)
         expect(form.errors[:campaign_name])
-            .to include('Select an option')
+          .to include('Select an option')
       end
 
       it 'is valid when campaign_names are included' do

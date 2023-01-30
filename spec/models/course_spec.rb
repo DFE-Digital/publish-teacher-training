@@ -58,9 +58,9 @@ describe Course do
 
     it do
       expect(subject).to belong_to(:accrediting_provider)
-                           .with_foreign_key(:accredited_body_code)
-                           .with_primary_key(:provider_code)
-                           .optional
+        .with_foreign_key(:accredited_body_code)
+        .with_primary_key(:provider_code)
+        .optional
     end
 
     it { is_expected.to have_many(:subjects).through(:course_subjects) }
@@ -459,14 +459,14 @@ describe Course do
 
     it {
       expect(subject).to validate_presence_of(:level)
-                           .on(:publish)
-                           .with_message('^Select a course level')
+        .on(:publish)
+        .with_message('^Select a course level')
     }
 
     it 'validates scoped to provider_id and only on create and update' do
       expect(create(:course)).to validate_uniqueness_of(:course_code)
-                                   .scoped_to(:provider_id)
-                                   .on(%i[create update])
+        .scoped_to(:provider_id)
+        .on(%i[create update])
     end
 
     describe 'valid?' do
@@ -2143,9 +2143,9 @@ describe Course do
         it 'is an enum' do
           expect(subject)
             .to define_enum_for(gcse_subject)
-                  .backed_by_column_of_type(:integer)
-                  .with_values(Course::ENTRY_REQUIREMENT_OPTIONS)
-                  .with_suffix("for_#{gcse_subject}")
+            .backed_by_column_of_type(:integer)
+            .with_values(Course::ENTRY_REQUIREMENT_OPTIONS)
+            .with_suffix("for_#{gcse_subject}")
         end
       end
     end

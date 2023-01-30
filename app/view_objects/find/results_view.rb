@@ -16,11 +16,11 @@ module Find
 
     def query_parameters_with_defaults
       query_parameters.except('utf8', 'authenticity_token')
-        .merge(qualifications_parameters)
-        .merge(study_type_parameters)
-        .merge(has_vacancies_parameters)
-        .merge(sen_courses_parameters)
-        .merge(subject_parameters)
+                      .merge(qualifications_parameters)
+                      .merge(study_type_parameters)
+                      .merge(has_vacancies_parameters)
+                      .merge(sen_courses_parameters)
+                      .merge(subject_parameters)
     end
 
     def courses
@@ -237,15 +237,15 @@ module Find
 
     def new_or_running_sites_with_vacancies_for(course)
       sites = course
-        .site_statuses
-        .select(&:new_or_running?)
-        .select(&:has_vacancies?)
-        .map(&:site)
-        .reject do |site|
-          # Sites that have no address details whatsoever are not to be considered
-          # when calculating '#nearest_address' or '#site_distance'
-          [site.address1, site.address2, site.address3, site.address4, site.postcode].all?(&:blank?)
-        end
+              .site_statuses
+              .select(&:new_or_running?)
+              .select(&:has_vacancies?)
+              .map(&:site)
+              .reject do |site|
+        # Sites that have no address details whatsoever are not to be considered
+        # when calculating '#nearest_address' or '#site_distance'
+        [site.address1, site.address2, site.address3, site.address4, site.postcode].all?(&:blank?)
+      end
 
       sites.reject do |site|
         site.latitude.blank? || site.longitude.blank?

@@ -19,33 +19,33 @@ module Publish
 
       def actual_params
         params.require(:course)
-          .except(
-            :qualification,
-            :maths,
-            :english,
-            :science,
-            :funding_type,
-            :level,
-            :is_send,
-            :study_mode,
-            :age_range_in_years,
-            :sites_ids,
-            :subjects_ids,
-            :goto_confirmation,
-            :skip_languages_goto_confirmation,
-            :accredited_body_code,
-            :campaign_name,
-            :master_subject_id
-          )
-          .permit(
-            :start_date,
-            :applications_open_from,
-            :day,
-            :month,
-            :year,
-            :can_sponsor_student_visa,
-            :can_sponsor_skilled_worker_visa
-          )
+              .except(
+                :qualification,
+                :maths,
+                :english,
+                :science,
+                :funding_type,
+                :level,
+                :is_send,
+                :study_mode,
+                :age_range_in_years,
+                :sites_ids,
+                :subjects_ids,
+                :goto_confirmation,
+                :skip_languages_goto_confirmation,
+                :accredited_body_code,
+                :campaign_name,
+                :master_subject_id
+              )
+              .permit(
+                :start_date,
+                :applications_open_from,
+                :day,
+                :month,
+                :year,
+                :can_sponsor_student_visa,
+                :can_sponsor_skilled_worker_visa
+              )
       end
 
       # This is needed to handle the fact that dates are optionally specified as year/month/day in the UI

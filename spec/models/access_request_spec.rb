@@ -15,13 +15,13 @@ describe AccessRequest do
     it 'is an enum' do
       expect(subject)
         .to define_enum_for(:status)
-              .backed_by_column_of_type(:integer)
-              .with_values(
-                requested: 0,
-                approved: 1,
-                completed: 2,
-                declined: 3
-              )
+        .backed_by_column_of_type(:integer)
+        .with_values(
+          requested: 0,
+          approved: 1,
+          completed: 2,
+          declined: 3
+        )
     end
   end
 

@@ -98,7 +98,7 @@ module Find
           base_path: '/test',
           parameters: default_output_parameters
         )
-          .and_return('test_result')
+                                                            .and_return('test_result')
         expect(results_view).to eq('test_result')
       end
     end

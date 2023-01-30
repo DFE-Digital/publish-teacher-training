@@ -18,8 +18,8 @@ module API
       def show
         code = params.fetch(:code, params[:provider_code])
         @provider = @recruitment_cycle.providers
-          .includes(:sites, :courses, courses: [:enrichments, :sites, { site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive] }])
-          .find_by!(
+                                      .includes(:sites, :courses, courses: [:enrichments, :sites, { site_statuses: [:site], provider: [:recruitment_cycle], subjects: [:financial_incentive] }])
+                                      .find_by!(
             provider_code: code.upcase
           )
 

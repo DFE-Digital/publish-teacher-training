@@ -157,7 +157,7 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
             perform_request
             json_response = JSON.parse response.body
             expect(json_response['data'].first)
-            .to have_attribute('campaign_name').with_value('engineers_teach_physics')
+              .to have_attribute('campaign_name').with_value('engineers_teach_physics')
           end
         end
       end

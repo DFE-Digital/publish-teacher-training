@@ -10,8 +10,8 @@ module API
         def enrichment_attribute(name, enrichment_name = name)
           attribute name do
             @object.enrichments
-              .select(&:published?)
-              .max_by { |e| [e.created_at, e.id] }
+                   .select(&:published?)
+                   .max_by { |e| [e.created_at, e.id] }
               &.__send__(enrichment_name)
           end
         end

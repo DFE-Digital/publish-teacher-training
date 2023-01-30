@@ -117,7 +117,7 @@ RSpec.describe CourseSearchService do
               select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
 
               expect(select_scope).to receive(:select).with(select_criteria)
-                .and_return(order_scope)
+                                                      .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
               expect(subject).to eq(expected_scope)
             end
@@ -143,7 +143,7 @@ RSpec.describe CourseSearchService do
               select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
 
               expect(select_scope).to receive(:select).with(select_criteria)
-                .and_return(order_scope)
+                                                      .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:distance).and_return(expected_scope)
               expect(subject).to eq(expected_scope)
             end
@@ -169,7 +169,7 @@ RSpec.describe CourseSearchService do
               select_criteria = "course.*, distance, #{distance_with_university_area_adjustment}"
 
               expect(select_scope).to receive(:select).with(select_criteria)
-                .and_return(order_scope)
+                                                      .and_return(order_scope)
               expect(order_scope).to receive(:order).with(:boosted_distance).and_return(expected_scope)
               expect(subject).to eq(expected_scope)
             end

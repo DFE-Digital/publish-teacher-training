@@ -32,7 +32,7 @@ module Publish
 
         it 'calls the course sites updated notification service' do
           expect(NotificationService::CourseSitesUpdated).to receive(:call)
-          .with(course:, previous_site_names:, updated_site_names:)
+            .with(course:, previous_site_names:, updated_site_names:)
           subject.save!
         end
 

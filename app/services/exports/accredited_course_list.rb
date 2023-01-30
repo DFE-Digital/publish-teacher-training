@@ -26,8 +26,8 @@ module Exports
 
     def format_courses(courses)
       courses
-      .map(&:decorate)
-      .flat_map do |c|
+        .map(&:decorate)
+        .flat_map do |c|
         base_data = {
           'Provider code' => c.provider.provider_code,
           'Provider' => c.provider.provider_name,

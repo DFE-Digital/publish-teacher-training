@@ -82,21 +82,21 @@ module Publish
     def course_params
       if params.key? :course
         params.require(:course)
-          .except(
-            :day,
-            :month,
-            :year,
-            :course_age_range_in_years_other_from,
-            :course_age_range_in_years_other_to,
-            :goto_confirmation,
-            :skip_languages_goto_confirmation,
-            :goto_visa,
-            :language_ids
-          ).permit(
-            policy(Course.new).permitted_new_course_attributes,
-            sites_ids: [],
-            subjects_ids: []
-          )
+              .except(
+                :day,
+                :month,
+                :year,
+                :course_age_range_in_years_other_from,
+                :course_age_range_in_years_other_to,
+                :goto_confirmation,
+                :skip_languages_goto_confirmation,
+                :goto_visa,
+                :language_ids
+              ).permit(
+                policy(Course.new).permitted_new_course_attributes,
+                sites_ids: [],
+                subjects_ids: []
+              )
       else
         ActionController::Parameters.new({}).permit(:course)
       end

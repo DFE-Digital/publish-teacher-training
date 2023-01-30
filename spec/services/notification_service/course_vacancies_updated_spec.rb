@@ -64,12 +64,12 @@ module NotificationService
         [subscribed_user1, subscribed_user2].each do |user|
           expect(CourseVacancies::UpdatedMailer)
             .to receive(:fully_updated)
-                  .with(
-                    course:,
-                    user:,
-                    datetime: DateTime.now,
-                    vacancies_filled: true
-                  ).and_return(mailer = double)
+            .with(
+              course:,
+              user:,
+              datetime: DateTime.now,
+              vacancies_filled: true
+            ).and_return(mailer = double)
           expect(mailer).to receive(:deliver_later)
         end
 
@@ -108,12 +108,12 @@ module NotificationService
           [subscribed_user1, subscribed_user2].each do |user|
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
-                    .with({
-                      course:,
-                      user:,
-                      datetime: DateTime.now,
-                      vacancies_filled: true
-                    })
+              .with({
+                course:,
+                user:,
+                datetime: DateTime.now,
+                vacancies_filled: true
+              })
           end
 
           service_call
@@ -132,12 +132,12 @@ module NotificationService
           [subscribed_user1, subscribed_user2].each do |user|
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:fully_updated)
-                    .with({
-                      course:,
-                      user:,
-                      datetime: DateTime.now,
-                      vacancies_filled: false
-                    })
+              .with({
+                course:,
+                user:,
+                datetime: DateTime.now,
+                vacancies_filled: false
+              })
           end
 
           service_call
@@ -166,14 +166,14 @@ module NotificationService
           [subscribed_user1, subscribed_user2].each do |user|
             expect(CourseVacancies::UpdatedMailer)
               .to receive(:partially_updated)
-                    .with({
-                      course:,
-                      user:,
-                      datetime: DateTime.now,
-                      vacancies_closed: [first_site_status.site.location_name],
-                      vacancies_opened: [second_site_status.site.location_name]
-                    })
-                    .and_return(double(deliver_later: true))
+              .with({
+                course:,
+                user:,
+                datetime: DateTime.now,
+                vacancies_closed: [first_site_status.site.location_name],
+                vacancies_opened: [second_site_status.site.location_name]
+              })
+              .and_return(double(deliver_later: true))
           end
 
           service_call

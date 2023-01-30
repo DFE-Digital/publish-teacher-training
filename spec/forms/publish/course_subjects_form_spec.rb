@@ -22,7 +22,7 @@ module Publish
 
         it 'calls the course subjects updated notification service' do
           expect(NotificationService::CourseSubjectsUpdated).to receive(:call)
-          .with(course:, previous_subject_names:, previous_course_name:)
+            .with(course:, previous_subject_names:, previous_course_name:)
           subject.save!
         end
       end

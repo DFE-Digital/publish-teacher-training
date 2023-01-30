@@ -93,7 +93,7 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers', :with_pub
         expect(json_response['data'].count).to eq 1
         expect(json_response['data'].first)
           .to have_attribute('recruitment_cycle_year')
-                .with_value(recruitment_cycle.year)
+          .with_value(recruitment_cycle.year)
       end
     end
 
@@ -110,7 +110,7 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers', :with_pub
         expect(json_response['data'].count).to eq 1
         expect(json_response['data'].first)
           .to have_attribute('recruitment_cycle_year')
-                .with_value(next_recruitment_cycle.year)
+          .with_value(next_recruitment_cycle.year)
       end
     end
   end

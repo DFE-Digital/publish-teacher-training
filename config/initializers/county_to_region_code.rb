@@ -558,6 +558,6 @@ def region_code_from(region)
 end
 
 COUNTY_TO_REGION_CODE = remove_unused_regions(UK_COUNTIES_AND_REGIONS)
-  .uniq
-  .to_h
-  .transform_values { |pretty_region| region_code_from(pretty_region.parameterize.underscore) }
+                        .uniq
+                        .to_h
+                        .transform_values { |pretty_region| region_code_from(pretty_region.parameterize.underscore) }

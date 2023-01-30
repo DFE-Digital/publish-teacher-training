@@ -49,7 +49,7 @@ module Publish
 
           it 'calls the course vacancies updated notification service' do
             expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-            .with(course:, vacancy_statuses:)
+              .with(course:, vacancy_statuses:)
             subject.save!
           end
         end
@@ -65,7 +65,7 @@ module Publish
 
           it 'calls the course vacancies updated notification service' do
             expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-            .with(course:, vacancy_statuses:)
+              .with(course:, vacancy_statuses:)
             subject.save!
           end
         end
@@ -78,7 +78,7 @@ module Publish
 
             it 'calls the course vacancies updated notification service' do
               expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-              .with(course:, vacancy_statuses:)
+                .with(course:, vacancy_statuses:)
               subject.save!
             end
           end
@@ -94,7 +94,7 @@ module Publish
 
             it 'calls the course vacancies updated notification service' do
               expect(NotificationService::CourseVacanciesUpdated).to receive(:call)
-              .with(course:, vacancy_statuses:)
+                .with(course:, vacancy_statuses:)
               subject.save!
             end
           end

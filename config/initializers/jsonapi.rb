@@ -18,8 +18,8 @@ JSONAPI::Rails.configure do |config|
       "API::V3::Serializable#{klass}",
       [*names, klass].join('::')
     ].lazy
-      .map(&:safe_constantize)
-      .detect(&:present?)
+           .map(&:safe_constantize)
+           .detect(&:present?)
   end
 
   # # Set a default serializable class mapping for errors.

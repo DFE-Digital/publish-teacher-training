@@ -21,9 +21,9 @@ module Publish
       authorize :provider, :show?
 
       @provider_list = providers
-                        .provider_search(params[:query])
-                        .limit(10)
-                        .map { |provider| { code: provider.provider_code, name: provider.provider_name } }
+                       .provider_search(params[:query])
+                       .limit(10)
+                       .map { |provider| { code: provider.provider_code, name: provider.provider_name } }
       render json: @provider_list
     end
 
@@ -86,9 +86,9 @@ module Publish
       end
 
       provider_code = provider_query
-                        .split
-                        .last
-                        .gsub(/[()]/, '')
+                      .split
+                      .last
+                      .gsub(/[()]/, '')
 
       redirect_to publish_provider_path(provider_code)
     end

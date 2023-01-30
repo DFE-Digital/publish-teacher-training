@@ -44,8 +44,8 @@ class CourseSearchService
 
     if provider_name.present?
       outer_scope = outer_scope
-                      .accredited_body_order(provider_name)
-                      .ascending_provider_canonical_order
+                    .accredited_body_order(provider_name)
+                    .ascending_provider_canonical_order
     elsif sort_by_provider_ascending?
       outer_scope = outer_scope.ascending_provider_canonical_order
       outer_scope = outer_scope.select('provider.provider_name', 'course.*')
@@ -98,9 +98,9 @@ private
 
     # Create virtual table with sites and site statuses
     site_statuses.join(sites).on(site_statuses[:site_id].eq(sites[:id]))
-     .where(site_statuses_criteria(site_statuses))
-     .where(has_been_geocoded_criteria(sites))
-     .where(locatable_address_criteria(sites))
+                 .where(site_statuses_criteria(site_statuses))
+                 .where(has_been_geocoded_criteria(sites))
+                 .where(locatable_address_criteria(sites))
   end
 
   def site_statuses_criteria(site_statuses)

@@ -17,8 +17,8 @@ module FactoryBot
 
       def build_class(evaluation)
         @build_class ||= evaluation
-                           .instance_variable_get(:@attribute_assigner)
-                           .instance_variable_get(:@build_class)
+                         .instance_variable_get(:@attribute_assigner)
+                         .instance_variable_get(:@build_class)
       end
 
       def get_match_attributes(evaluation)
@@ -32,9 +32,9 @@ module FactoryBot
         return @overrides unless @overrides.nil?
 
         evaluation.instance_variable_get(:@attribute_assigner)
-          .instance_variable_get(:@evaluator)
-          .instance_variable_get(:@overrides)
-          .clone
+                  .instance_variable_get(:@evaluator)
+                  .instance_variable_get(:@overrides)
+                  .clone
       end
     end
 

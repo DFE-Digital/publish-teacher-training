@@ -9,14 +9,14 @@ describe ProviderUCASPreference do
     it 'is an enum' do
       expect(subject)
         .to define_enum_for(:type_of_gt12)
-              .backed_by_column_of_type(:text)
-              .with_values(
-                coming_or_not: 'Coming or Not',
-                coming_enrol: 'Coming / Enrol',
-                not_coming: 'Not coming',
-                no_response: 'No response'
-              )
-              .with_prefix('type_of_gt12')
+        .backed_by_column_of_type(:text)
+        .with_values(
+          coming_or_not: 'Coming or Not',
+          coming_enrol: 'Coming / Enrol',
+          not_coming: 'Not coming',
+          no_response: 'No response'
+        )
+        .with_prefix('type_of_gt12')
     end
   end
 
@@ -24,14 +24,14 @@ describe ProviderUCASPreference do
     it 'is an enum' do
       expect(subject)
         .to define_enum_for(:send_application_alerts)
-              .backed_by_column_of_type(:text)
-              .with_values(
-                all: 'Yes, required',
-                none: 'No, not required',
-                my_programmes: 'Yes - only my programmes',
-                accredited_programmes: 'Yes - for accredited programmes only'
-              )
-              .with_prefix('send_application_alerts_for')
+        .backed_by_column_of_type(:text)
+        .with_values(
+          all: 'Yes, required',
+          none: 'No, not required',
+          my_programmes: 'Yes - only my programmes',
+          accredited_programmes: 'Yes - for accredited programmes only'
+        )
+        .with_prefix('send_application_alerts_for')
     end
   end
 
@@ -58,8 +58,8 @@ describe ProviderUCASPreference do
     it 'updates the providers application_alert_email attribute' do
       expect { provider.ucas_preferences.application_alert_contact = new_application_alert_contact }
         .to change { provider.ucas_preferences.application_alert_email }
-              .from(old_application_alert_contact)
-              .to(new_application_alert_contact)
+        .from(old_application_alert_contact)
+        .to(new_application_alert_contact)
     end
   end
 
@@ -72,8 +72,8 @@ describe ProviderUCASPreference do
     it 'updates the providers application_alert_email attribute' do
       expect { provider.ucas_preferences.application_alert_contact = new_application_alert_contact }
         .to change { provider.ucas_preferences.application_alert_email }
-              .from(old_application_alert_contact)
-              .to(new_application_alert_contact)
+        .from(old_application_alert_contact)
+        .to(new_application_alert_contact)
     end
   end
 end

@@ -130,10 +130,10 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
         expect(json_response['data'])
           .to have_attribute('recruitment_cycle_year')
-                .with_value(provider.recruitment_cycle.year)
+          .with_value(provider.recruitment_cycle.year)
         expect(json_response['data'])
           .to have_attribute('provider_code')
-                .with_value(provider.provider_code)
+          .with_value(provider.provider_code)
       end
     end
 
@@ -150,10 +150,10 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
         expect(json_response['data'])
           .to have_attribute('recruitment_cycle_year')
-                .with_value(next_recruitment_cycle.year)
+          .with_value(next_recruitment_cycle.year)
         expect(json_response['data'])
           .to have_attribute('provider_code')
-                .with_value(next_provider.provider_code)
+          .with_value(next_provider.provider_code)
       end
     end
   end

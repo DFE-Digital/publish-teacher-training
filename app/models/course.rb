@@ -142,10 +142,10 @@ class Course < ApplicationRecord
 
       if latest_published_enrichment.present?
         latest_published_enrichment_attributes = latest_published_enrichment
-          .dup
-          .attributes
-          .with_indifferent_access
-          .except(:json_data)
+                                                 .dup
+                                                 .attributes
+                                                 .with_indifferent_access
+                                                 .except(:json_data)
 
         latest_published_enrichment_attributes[:status] = :draft
         latest_published_enrichment_attributes
@@ -284,7 +284,7 @@ class Course < ApplicationRecord
       program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
       can_sponsor_student_visa: true
     )
-    .or(
+      .or(
       where(
         program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
         can_sponsor_skilled_worker_visa: true
@@ -372,8 +372,8 @@ class Course < ApplicationRecord
 
   def self.get_by_codes(year, provider_code, course_code)
     RecruitmentCycle.find_by(year:)
-      .providers.find_by(provider_code:)
-      .courses.find_by(course_code:)
+                    .providers.find_by(provider_code:)
+                    .courses.find_by(course_code:)
   end
 
   def generate_name
@@ -385,7 +385,7 @@ class Course < ApplicationRecord
     return if provider.accrediting_provider_enrichments.blank?
 
     accrediting_provider_enrichment = provider.accrediting_provider_enrichments
-      .find do |provider|
+                                              .find do |provider|
       provider.UcasProviderCode == accrediting_provider.provider_code
     end
 
