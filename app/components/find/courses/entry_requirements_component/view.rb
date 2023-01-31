@@ -14,6 +14,8 @@ module Find
           @course = course
         end
 
+        private
+
         def degree_grade_content(course)
           degree_grade_hash = {
             'two_one' => 'An undergraduate degree at class 2:1 or above, or equivalent.',
@@ -23,9 +25,7 @@ module Find
           }
 
           degree_grade_hash[course.degree_grade]
-        end
-
-        private
+        end      
 
         def subject_knowledge_enhancement_content?(course)
           course.subjects.any? { |subject| subject.subject_code if SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
