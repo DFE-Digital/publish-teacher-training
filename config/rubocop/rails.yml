@@ -15,9 +15,6 @@ Rails/OutputSafety:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
-Rails/FindById:
-  Enabled: false
-
 Rails/MatchRoute:
   Enabled: false
 
