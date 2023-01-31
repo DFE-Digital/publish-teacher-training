@@ -74,7 +74,7 @@ module Publish
     end
 
     def process_custom_range?
-      age_range_in_years.present? && age_range_in_years != 'other' && !presets.include?(age_range_in_years)
+      age_range_in_years.present? && age_range_in_years != 'other' && presets.exclude?(age_range_in_years)
     end
 
     def extract_from_years
