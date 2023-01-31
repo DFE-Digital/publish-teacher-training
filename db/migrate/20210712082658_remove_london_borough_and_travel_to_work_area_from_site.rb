@@ -2,7 +2,9 @@
 
 class RemoveLondonBoroughAndTravelToWorkAreaFromSite < ActiveRecord::Migration[6.1]
   def change
-    remove_column :site, :travel_to_work_area, :string
-    remove_column :site, :london_borough, :string
+    change_table :site, bulk: true do |t|
+      t.remove :travel_to_work_area, type: :string
+      t.remove :london_borough, type: :string
+    end
   end
 end

@@ -1,8 +1,5 @@
 require: rubocop-rails
 
-Rails/BulkChangeTable:
-  Enabled: false
-
 # We do not want to subclass from ApplicationController. This enables separation
 # between the namespaces, and allows subclassing from ActionController::API in
 # the Vendor API.
