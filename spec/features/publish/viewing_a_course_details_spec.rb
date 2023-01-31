@@ -3,45 +3,67 @@
 require 'rails_helper'
 
 feature 'Course show' do
-  scenario 'i can view the course basic details' do
-    given_i_am_authenticated_as_a_provider_user
-    and_there_is_a_published_course
-    when_i_visit_the_course_details_page
-    then_i_see_the_primary_course_basic_details
-    and_i_do_not_see_engineers_teach_physics_row
-  end
-
-  context 'Engineers Teach Physics course' do
+  context 'published course' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated_as_a_provider_user
-      and_there_is_a_published_physics_course
+      and_there_is_a_published_course
       when_i_visit_the_course_details_page
-      then_i_see_the_secondary_course_basic_details
-      and_i_see_engineers_teach_physics_row
+      then_i_see_the_primary_course_basic_details
+      and_there_are_change_links
+      and_i_do_not_see_engineers_teach_physics_row
+    end
+
+    context 'Engineers Teach Physics course' do
+      scenario 'i can view the course basic details' do
+        given_i_am_authenticated_as_a_provider_user
+        and_there_is_a_published_physics_course
+        when_i_visit_the_course_details_page
+        then_i_see_the_secondary_course_basic_details
+        and_i_see_engineers_teach_physics_row
+      end
+    end
+
+    context 'when cycle is current' do
+      scenario 'i can see the correct change links' do
+        given_we_are_not_in_rollover
+        and_i_am_authenticated_as_a_provider_user
+        and_there_is_a_published_course
+        when_i_visit_the_course_details_page
+        then_i_see_the_correct_change_links
+      end
+    end
+
+    context 'when cycle is next' do
+      scenario 'i can see the correct change links' do
+        given_we_are_in_rollover
+        and_i_am_authenticated_as_a_provider_user_for_next_cycle
+        and_there_is_a_published_course
+        when_i_visit_the_course_details_page
+        then_i_see_the_correct_change_links_for_the_next_cycle
+      end
     end
   end
 
-  context 'when cycle is current' do
-    scenario 'i can see the correct change links' do
-      given_we_are_not_in_rollover
-      and_i_am_authenticated_as_a_provider_user
-      and_there_is_a_published_course
+  context 'withdrawn course' do
+    scenario 'i can view the course basic details' do
+      given_i_am_authenticated_as_a_provider_user
+      and_there_is_a_withdrawn_course
       when_i_visit_the_course_details_page
-      then_i_see_the_correct_change_links
-    end
-  end
-
-  context 'when cycle is next' do
-    scenario 'i can see the correct change links' do
-      given_we_are_in_rollover
-      and_i_am_authenticated_as_a_provider_user_for_next_cycle
-      and_there_is_a_published_course
-      when_i_visit_the_course_details_page
-      then_i_see_the_correct_change_links_for_the_next_cycle
+      then_i_see_the_primary_course_basic_details
+      and_there_is_no_change_links
+      and_i_do_not_see_engineers_teach_physics_row
     end
   end
 
   private
+
+  def and_there_are_change_links
+    expect(page.find_all('.govuk-summary-list__actions a').all? { |actions| actions.text.include?('Change ') }).to be(true)
+  end
+
+  def and_there_is_no_change_links
+    expect(page.find_all('.govuk-summary-list__actions a').any?).to be(false)
+  end
 
   def given_we_are_not_in_rollover
     allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(false)
@@ -62,6 +84,11 @@ feature 'Course show' do
 
   def and_there_is_a_published_physics_course
     given_a_course_exists(:with_accrediting_provider, :secondary, master_subject_id: 29, campaign_name: 'engineers_teach_physics', start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
+    given_a_site_exists(:full_time_vacancies, :findable)
+  end
+
+  def and_there_is_a_withdrawn_course
+    given_a_course_exists(:with_accrediting_provider, start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :withdrawn)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
 

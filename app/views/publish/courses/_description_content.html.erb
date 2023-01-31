@@ -7,7 +7,7 @@
     "About this course",
     course_value_provided?(course.about_course),
     %w[about_course],
-    action_path: about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+    action_path: course.is_withdrawn? ? nil : about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: "details about this course"
   ) %>
 
@@ -17,7 +17,7 @@
     "Interview process",
     course_value_provided?(course.interview_process),
     %w[interview_process],
-    action_path: "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#interview-process",
+    action_path: course.is_withdrawn? ? nil : "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#interview-process",
     action_visually_hidden_text: "details about the interview process"
   ) %>
 
@@ -27,7 +27,7 @@
     course.placements_heading,
     course_value_provided?(course.how_school_placements_work),
     %w[how_school_placements_work],
-    action_path: "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#how-school-placements-work",
+    action_path: course.is_withdrawn? ? nil : "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#how-school-placements-work",
     action_visually_hidden_text: "details about how school placements work"
   ) %>
 <% end %>
@@ -47,7 +47,7 @@
       "Course length",
       course_value_provided?(course.length),
       %w[course_length],
-      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
+      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
       action_visually_hidden_text: "course length"
     ) %>
 
@@ -57,7 +57,7 @@
       "Fee for UK students",
       course_value_provided?(number_to_currency(course.fee_uk_eu)),
       %w[fee_uk_eu],
-      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
+      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
       action_visually_hidden_text: "fee for UK students"
     ) %>
 
@@ -67,7 +67,7 @@
       "Fee for international students",
       course_value_provided?(number_to_currency(course.fee_international)),
       %w[fee_international],
-      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
+      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
       action_visually_hidden_text: "fee for international students"
     ) %>
 
@@ -77,7 +77,7 @@
       "Fee details",
       course_value_provided?(course.fee_details),
       %w[fee_details],
-      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
+      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
       action_visually_hidden_text: "fee details"
     ) %>
 
@@ -87,7 +87,7 @@
       "Financial support you offer",
       course_value_provided?(course.financial_support),
       %w[financial_support],
-      action_path: "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
+      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
       action_visually_hidden_text: "details of financial support you offer"
     ) %>
 
@@ -103,7 +103,7 @@
       "Course length",
       course_value_provided?(course.length),
       %w[course_length],
-      action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
+      action_path: course.is_withdrawn? ? nil : "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
       action_visually_hidden_text: "course length"
     ) %>
 
@@ -113,7 +113,7 @@
       "Salary",
       course_value_provided?(course.salary_details),
       %w[salary_details],
-      action_path: "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#salary",
+      action_path: course.is_withdrawn? ? nil : "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#salary",
       action_visually_hidden_text: "salary"
     ) %>
   <% end %>
@@ -129,7 +129,7 @@
       (render DegreeRowContent.new(course:, errors: @errors)),
       %w[degree_grade degree_subject_requirements],
       truncate_value: false,
-      action_path: course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
+      action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       action_visually_hidden_text: "degree"
     ) %>
 
@@ -140,7 +140,7 @@
       (render GcseRowContent.new(course:, errors: @errors)),
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
       truncate_value: false,
-      action_path: course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
+      action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       action_visually_hidden_text: "GCSEs"
     ) %>
 
@@ -150,7 +150,7 @@
     "Personal qualities",
     course_value_provided?(course.personal_qualities),
     %w[personal_qualities],
-    action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
+    action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
     action_visually_hidden_text: "personal qualities"
   ) %>
 
@@ -160,7 +160,7 @@
     "Other requirements",
     course_value_provided?(course.other_requirements),
     %w[other_requirements],
-    action_path: "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
+    action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
     action_visually_hidden_text: "other requirements"
   ) %>
 <% end %>
