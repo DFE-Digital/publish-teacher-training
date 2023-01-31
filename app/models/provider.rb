@@ -94,7 +94,7 @@ class Provider < ApplicationRecord
     if timestamp.present?
       where('provider.changed_at > ?', timestamp)
     else
-      where('changed_at is not null')
+      where.not(changed_at: nil)
     end.order(:changed_at, :id)
   }
 
