@@ -12,7 +12,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
     and_i_click_continue
-    then_i_am_met_with_the_edit_engineers_teach_physics_page
+    then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
     and_i_click_continue
     then_i_see_an_error_message
     and_i_select_an_option
@@ -39,7 +39,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
     and_i_click_continue
-    then_i_am_met_with_the_edit_engineers_teach_physics_page
+    then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
     and_i_select_an_option
     and_i_click_continue
     then_i_am_met_with_course_details_page
@@ -50,7 +50,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     when_i_visit_the_edit_course_subject_page
     when_i_select_a_subject(:physics)
     and_i_click_continue
-    then_i_am_met_with_the_edit_engineers_teach_physics_page
+    then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
     and_i_click_continue
     then_i_see_an_error_message
   end
@@ -62,11 +62,11 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_select_an_option
-    new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
+    publish_courses_new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
   end
 
   def and_i_select_subordinate_subject(subject_type)
-    subjects_edit_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_subjects_edit_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_should_see_a_success_message(value)
@@ -83,15 +83,15 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   end
 
   def when_i_visit_the_edit_course_subject_page
-    subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, course_code: course.course_code)
+    publish_courses_subjects_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, course_code: course.course_code)
   end
 
   def when_i_select_a_subject(subject_type)
-    subjects_edit_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_subjects_edit_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
-    subjects_edit_page.continue.click
+    publish_courses_subjects_edit_page.continue.click
   end
 
   def provider
@@ -106,7 +106,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
-  def then_i_am_met_with_the_edit_engineers_teach_physics_page
+  def then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{params_with_subject}")
     expect(page).to have_content('Engineers Teach Physics')
   end

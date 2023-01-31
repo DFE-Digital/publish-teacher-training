@@ -8,12 +8,12 @@ module FeatureHelpers
       @current_user = user || create(:user)
       user_exists_in_dfe_sign_in(user: @current_user)
 
-      visit_sign_in_page
+      visit_auth_sign_in_page
     end
 
-    def visit_sign_in_page
-      sign_in_page.load
-      sign_in_page.sign_in_button.click
+    def visit_auth_sign_in_page
+      auth_sign_in_page.load
+      auth_sign_in_page.sign_in_button.click
     end
   end
 end

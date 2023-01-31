@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Removing a user from provider', :with_publish_constraint do
+feature 'Removing a user from provider' do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_remove

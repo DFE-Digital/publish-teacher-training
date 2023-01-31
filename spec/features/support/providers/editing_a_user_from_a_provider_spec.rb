@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Editing a user under a provider as an admin', :with_publish_constraint do
+feature 'Editing a user under a provider as an admin' do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_a_user_provider_relationship_exists_to_edit
@@ -53,9 +53,9 @@ feature 'Editing a user under a provider as an admin', :with_publish_constraint 
   end
 
   def then_should_see_the_updated_details_displayed
-    expect(support_users_check_page).to have_text('Aba')
-    expect(support_users_check_page).to have_text('Bernharb')
-    expect(support_users_check_page).to have_text('viela_fisher@boyle.io')
+    expect(support_provider_user_users_check_page).to have_text('Aba')
+    expect(support_provider_user_users_check_page).to have_text('Bernharb')
+    expect(support_provider_user_users_check_page).to have_text('viela_fisher@boyle.io')
   end
 
   def when_i_click_the_change_lastname_link

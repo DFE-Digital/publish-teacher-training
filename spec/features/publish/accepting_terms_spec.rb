@@ -9,7 +9,7 @@ feature 'Accepting terms', { can_edit_current_and_next_cycles: false } do
   end
 
   scenario 'i can accept the terms and conditions' do
-    then_i_am_taken_to_the_terms_page
+    then_i_am_taken_to_the_publish_terms_page
     when_i_accept_the_terms_and_conditions
     then_i_should_be_redirected_to_the_courses_index_page
     and_the_user_is_marked_as_accepting_the_terms
@@ -28,17 +28,17 @@ feature 'Accepting terms', { can_edit_current_and_next_cycles: false } do
     visit(root_path)
   end
 
-  def then_i_am_taken_to_the_terms_page
-    expect(terms_page).to be_displayed
+  def then_i_am_taken_to_the_publish_terms_page
+    expect(publish_terms_page).to be_displayed
   end
 
   def when_i_accept_the_terms_and_conditions
-    terms_page.accept_terms.check
+    publish_terms_page.accept_terms.check
     and_i_submit
   end
 
   def then_i_should_be_redirected_to_the_courses_index_page
-    expect(provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page).to be_displayed
   end
 
   def and_the_user_is_marked_as_accepting_the_terms
@@ -50,11 +50,11 @@ feature 'Accepting terms', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit
-    terms_page.submit.click
+    publish_terms_page.submit.click
   end
 
   def then_i_should_see_an_error_message
-    expect(course_study_mode_edit_page.error_messages).to include(
+    expect(publish_course_study_mode_edit_page.error_messages).to include(
       I18n.t('activemodel.errors.models.publish/interruption/accept_terms_form.attributes.terms_accepted.accepted')
     )
   end

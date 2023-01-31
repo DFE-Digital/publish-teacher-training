@@ -140,10 +140,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_click_the_view_rollover_link
-    provider_courses_show_page.load(
+    publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
-    provider_courses_show_page.rolled_over_course_link.click
+    publish_provider_courses_show_page.rolled_over_course_link.click
   end
 
   def given_there_is_a_next_recruitment_cycle
@@ -172,17 +172,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_course_button_panel
-    expect(provider_courses_show_page).to have_course_button_panel
+    expect(publish_provider_courses_show_page).to have_course_button_panel
   end
 
   def and_i_should_see_the_rollover_button
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_rollover_button
     end
   end
 
   def and_i_should_not_see_the_rollover_button
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).not_to have_rollover_button
     end
   end
@@ -190,7 +190,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
 
   def and_i_should_see_the_unpublished_with_changes_partial
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
       expect(course_button_panel).to have_withdraw_link
       expect(course_button_panel).to have_vacancies_link
@@ -199,7 +199,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_unpublished_partial
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
       expect(course_button_panel).to have_preview_link
       expect(course_button_panel).to have_delete_link
@@ -207,7 +207,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_published_partial
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_view_on_find
       expect(course_button_panel).to have_withdraw_link
       expect(course_button_panel).to have_vacancies_link
@@ -217,11 +217,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_click_on_basic_details
-    provider_courses_show_page.basic_details_link.click
+    publish_provider_courses_show_page.basic_details_link.click
   end
 
   def when_i_click_the_rollover_button
-    provider_courses_show_page.course_button_panel.rollover_button.click
+    publish_provider_courses_show_page.course_button_panel.rollover_button.click
   end
 
   def then_i_see_the_course_basic_details
@@ -229,7 +229,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_course_withdrawn_date_and_preview_link
-    provider_courses_show_page.course_button_panel.within do |course_button_panel|
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_withdrawn_date
       expect(course_button_panel).to have_preview_link
     end
@@ -271,111 +271,111 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_course_page
-    provider_courses_show_page.load(
+    publish_provider_courses_show_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def then_i_should_see_the_description_of_the_unpublished_changes_course
-    expect(provider_courses_show_page.about_course).to have_content(
+    expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment_unpublished_changes.about_course
     )
   end
 
   def then_i_should_see_the_description_of_the_initial_draft_course
-    expect(provider_courses_show_page.about_course).to have_content(
+    expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment_initial_draft.about_course
     )
 
-    expect(provider_courses_show_page.content_status).to have_content(
+    expect(publish_provider_courses_show_page.content_status).to have_content(
       'Draft'
     )
   end
 
   def and_i_should_see_the_course_financial_incentives
-    expect(provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10_000))
+    expect(publish_provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10_000))
   end
 
   def and_i_should_see_the_course_has_no_financial_incentives_information
-    expect(provider_courses_show_page.financial_incentives).to have_content('Information not yet available')
+    expect(publish_provider_courses_show_page.financial_incentives).to have_content('Information not yet available')
   end
 
   def then_i_should_see_the_description_of_the_fee_course
-    expect(provider_courses_show_page.title).to have_content(
+    expect(publish_provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})"
     )
-    expect(provider_courses_show_page.about_course).to have_content(
+    expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course
     )
-    expect(provider_courses_show_page.interview_process).to have_content(
+    expect(publish_provider_courses_show_page.interview_process).to have_content(
       course_enrichment.interview_process
     )
-    expect(provider_courses_show_page.how_school_placements_work).to have_content(
+    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
       course_enrichment.how_school_placements_work
     )
-    expect(provider_courses_show_page.course_length).to have_content(
+    expect(publish_provider_courses_show_page.course_length).to have_content(
       'Up to 2 years'
     )
-    expect(provider_courses_show_page.fee_uk_eu).to have_content(
+    expect(publish_provider_courses_show_page.fee_uk_eu).to have_content(
       '£9,250'
     )
-    expect(provider_courses_show_page.fee_international).to have_content(
+    expect(publish_provider_courses_show_page.fee_international).to have_content(
       '£14,000'
     )
-    expect(provider_courses_show_page.fee_details).to have_content(
+    expect(publish_provider_courses_show_page.fee_details).to have_content(
       course_enrichment.fee_details
     )
 
-    expect(provider_courses_show_page).not_to have_salary_details
+    expect(publish_provider_courses_show_page).not_to have_salary_details
 
-    expect(provider_courses_show_page).to have_degree
-    expect(provider_courses_show_page).to have_gcse
+    expect(publish_provider_courses_show_page).to have_degree
+    expect(publish_provider_courses_show_page).to have_gcse
 
-    expect(provider_courses_show_page.personal_qualities).to have_content(
+    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
       course_enrichment.personal_qualities
     )
-    expect(provider_courses_show_page.other_requirements).to have_content(
+    expect(publish_provider_courses_show_page.other_requirements).to have_content(
       course_enrichment.other_requirements
     )
   end
 
   def then_i_should_see_the_description_of_the_salary_course
-    expect(provider_courses_show_page.title).to have_content(
+    expect(publish_provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})"
     )
 
-    expect(provider_courses_show_page.about_course).to have_content(
+    expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment.about_course
     )
-    expect(provider_courses_show_page.interview_process).to have_content(
+    expect(publish_provider_courses_show_page.interview_process).to have_content(
       course_enrichment.interview_process
     )
-    expect(provider_courses_show_page.how_school_placements_work).to have_content(
+    expect(publish_provider_courses_show_page.how_school_placements_work).to have_content(
       course_enrichment.how_school_placements_work
     )
-    expect(provider_courses_show_page.course_length).to have_content(
+    expect(publish_provider_courses_show_page.course_length).to have_content(
       'Up to 2 years'
     )
-    expect(provider_courses_show_page).not_to have_fee_uk_eu
+    expect(publish_provider_courses_show_page).not_to have_fee_uk_eu
 
-    expect(provider_courses_show_page).not_to have_fee_international
+    expect(publish_provider_courses_show_page).not_to have_fee_international
 
-    expect(provider_courses_show_page).not_to have_fee_details
-    expect(provider_courses_show_page.salary_details).to have_content(
+    expect(publish_provider_courses_show_page).not_to have_fee_details
+    expect(publish_provider_courses_show_page.salary_details).to have_content(
       course_enrichment.salary_details
     )
-    expect(provider_courses_show_page).to have_degree
-    expect(provider_courses_show_page).to have_gcse
-    expect(provider_courses_show_page.personal_qualities).to have_content(
+    expect(publish_provider_courses_show_page).to have_degree
+    expect(publish_provider_courses_show_page).to have_gcse
+    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
       course_enrichment.personal_qualities
     )
-    expect(provider_courses_show_page.other_requirements).to have_content(
+    expect(publish_provider_courses_show_page.other_requirements).to have_content(
       course_enrichment.other_requirements
     )
   end
 
   def and_i_should_see_the_course_as(status_tag)
-    expect(provider_courses_show_page.content_status).to have_content(status_tag)
+    expect(publish_provider_courses_show_page.content_status).to have_content(status_tag)
   end
 
   def provider
@@ -405,7 +405,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_next_cycle_courses_page
-    provider_courses_index_page.load(
+    publish_provider_courses_index_page.load(
       provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year
     )
   end
@@ -415,6 +415,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_the_status_scheduled
-    expect(provider_courses_index_page).to have_scheduled_tag
+    expect(publish_provider_courses_index_page).to have_scheduled_tag
   end
 end

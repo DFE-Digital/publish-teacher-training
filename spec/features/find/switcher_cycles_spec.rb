@@ -14,7 +14,7 @@ feature 'switcher cycle' do
     and_i_choose('Mid cycle and deadlines should be displayed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_i_visit_results_page
+    and_i_visit_find_results_page
     and_i_see_deadline_banner('Apply now to get on a course starting in the 2023 to 2024 academic year')
   end
 
@@ -23,7 +23,7 @@ feature 'switcher cycle' do
     and_i_choose('Apply 1 deadline has passed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_i_visit_results_page
+    and_i_visit_find_results_page
     and_i_see_deadline_banner('You can continue to view and apply for courses starting in')
   end
 
@@ -32,7 +32,7 @@ feature 'switcher cycle' do
     and_i_choose('Apply 2 deadline has passed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_i_visit_results_page
+    and_i_visit_find_results_page
     and_i_see_deadline_banner('Courses are currently closed but you can get your application ready')
   end
 
@@ -62,7 +62,7 @@ feature 'switcher cycle' do
   end
 
   def and_i_should_see_the_page_heading
-    expect(courses_by_location_or_training_provider_page.heading).to have_content 'Recruitment cycles'
+    expect(find_courses_by_location_or_training_provider_page.heading).to have_content 'Recruitment cycles'
   end
 
   def and_i_choose(option)
@@ -77,7 +77,7 @@ feature 'switcher cycle' do
     expect(page).to have_selector('h2', text: 'Success')
   end
 
-  def and_i_visit_results_page
+  def and_i_visit_find_results_page
     visit '/results'
   end
 

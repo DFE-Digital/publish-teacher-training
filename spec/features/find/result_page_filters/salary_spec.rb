@@ -6,7 +6,7 @@ RSpec.feature 'Funding filter' do
   include FiltersFeatureSpecsHelper
 
   scenario 'Candidate applies salary filter' do
-    when_i_visit_the_results_page
+    when_i_visit_the_find_results_page
     then_i_see_that_the_salary_checkbox_is_not_selected
 
     when_i_select_the_salary_checkbox
@@ -16,15 +16,15 @@ RSpec.feature 'Funding filter' do
   end
 
   def then_i_see_that_the_salary_checkbox_is_not_selected
-    expect(results_page.funding.checkbox).not_to be_checked
+    expect(find_results_page.funding.checkbox).not_to be_checked
   end
 
   def when_i_select_the_salary_checkbox
-    results_page.funding.checkbox.check
+    find_results_page.funding.checkbox.check
   end
 
   def then_i_see_that_the_salary_checkbox_is_selected
-    expect(results_page.funding.checkbox).to be_checked
+    expect(find_results_page.funding.checkbox).to be_checked
   end
 
   def and_the_salary_query_parameter_is_retained

@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'sorted by' do
   before do
     given_there_are_courses
-    and_i_visit_the_results_page
+    and_i_visit_the_find_results_page
   end
 
   scenario 'when I search the default sorting is by courses (A-Z)' do
@@ -47,36 +47,36 @@ feature 'sorted by' do
     create(:course, name: 'Arandomcoursename', course_code: 'AAAD', site_statuses: [site_status1], provider: provider1)
   end
 
-  def and_i_visit_the_results_page
-    results_page.load
+  def and_i_visit_the_find_results_page
+    find_results_page.load
   end
 
   def then_the_results_should_be_ordered_by_course_name_ascending_then_provider_name_then_course_code
-    results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAC') }
-    results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAD') }
-    results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAB') }
-    results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAA') }
+    find_results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAC') }
+    find_results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAD') }
+    find_results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAB') }
+    find_results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAA') }
   end
 
   def then_the_results_should_be_ordered_by_course_name_descending_then_provider_name_then_course_code
-    results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAA') }
-    results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAC') }
-    results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAD') }
-    results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAB') }
+    find_results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAA') }
+    find_results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAC') }
+    find_results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAD') }
+    find_results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAB') }
   end
 
   def then_the_results_should_be_ordered_by_provider_name_ascending_then_course_name_then_course_code
-    results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAC') }
-    results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAD') }
-    results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAA') }
-    results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAB') }
+    find_results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAC') }
+    find_results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAD') }
+    find_results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAA') }
+    find_results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAB') }
   end
 
   def then_the_results_should_be_ordered_by_provider_name_descending_then_course_name_then_course_code
-    results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAB') }
-    results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAC') }
-    results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAD') }
-    results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAA') }
+    find_results_page.courses.first.then { |first_course| expect(first_course.course_name.text).to include('AAAB') }
+    find_results_page.courses.second.then { |second_course| expect(second_course.course_name.text).to include('AAAC') }
+    find_results_page.courses.third.then { |third_course| expect(third_course.course_name.text).to include('AAAD') }
+    find_results_page.courses.fourth.then { |fourth_course| expect(fourth_course.course_name.text).to include('AAAA') }
   end
 
   def given_that_i_select_the_option(selected_option)

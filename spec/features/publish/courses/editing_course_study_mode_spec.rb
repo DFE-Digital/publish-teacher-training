@@ -37,17 +37,17 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_visit_the_course_study_mode_page
-    course_study_mode_edit_page.load(
+    publish_course_study_mode_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_choose_a_full_time_study_mode
-    course_study_mode_edit_page.full_time.choose
+    publish_course_study_mode_edit_page.full_time.choose
   end
 
   def and_i_submit
-    course_study_mode_edit_page.submit.click
+    publish_course_study_mode_edit_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -59,7 +59,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_an_error_message
-    expect(course_study_mode_edit_page.error_messages).to include(
+    expect(publish_course_study_mode_edit_page.error_messages).to include(
       I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')
     )
   end

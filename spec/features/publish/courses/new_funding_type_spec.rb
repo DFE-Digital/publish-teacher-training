@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_new_funding_type_page
+    when_i_visit_the_publish_courses_new_funding_type_page
   end
 
   scenario 'selecting fee paying' do
@@ -38,16 +38,16 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_new_funding_type_page
-    new_funding_type_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: funding_type_params)
+  def when_i_visit_the_publish_courses_new_funding_type_page
+    publish_courses_new_funding_type_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: funding_type_params)
   end
 
   def when_i_select_funding_type(funding_type)
-    new_funding_type_page.funding_type_fields.send(funding_type).click
+    publish_courses_new_funding_type_page.funding_type_fields.send(funding_type).click
   end
 
   def and_i_click_continue
-    new_funding_type_page.continue.click
+    publish_courses_new_funding_type_page.continue.click
   end
 
   def provider

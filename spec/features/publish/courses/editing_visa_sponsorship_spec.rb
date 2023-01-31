@@ -10,7 +10,7 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   context 'fee paying course' do
     scenario 'i can update the student visa' do
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
-      when_i_visit_the_course_student_visa_sponsorship_edit_page
+      when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_student_sponsorship_question
       and_i_continue_for('Student')
       and_i_click_on_basic_details
@@ -21,7 +21,7 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   context 'salaried course' do
     scenario 'i can update the skilled worker visa' do
       given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-      when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
+      when_i_visit_the_course_publish_courses_skilled_worker_visa_sponsorship_edit_page
       and_i_choose_yes_to_the_skilled_worker_sponsorship_question
       and_i_continue_for('Skilled Worker')
       and_i_click_on_basic_details
@@ -44,27 +44,27 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_on_basic_details
-    provider_courses_show_page.basic_details_link.click
+    publish_provider_courses_show_page.basic_details_link.click
   end
 
-  def when_i_visit_the_course_student_visa_sponsorship_edit_page
-    student_visa_sponsorship_edit_page.load(
+  def when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
+    publish_courses_student_visa_sponsorship_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
-  def when_i_visit_the_course_skilled_worker_visa_sponsorship_edit_page
-    skilled_worker_visa_sponsorship_edit_page.load(
+  def when_i_visit_the_course_publish_courses_skilled_worker_visa_sponsorship_edit_page
+    publish_courses_skilled_worker_visa_sponsorship_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_choose_yes_to_the_student_sponsorship_question
-    student_visa_sponsorship_edit_page.yes.choose
+    publish_courses_student_visa_sponsorship_edit_page.yes.choose
   end
 
   def and_i_choose_yes_to_the_skilled_worker_sponsorship_question
-    skilled_worker_visa_sponsorship_edit_page.yes.choose
+    publish_courses_skilled_worker_visa_sponsorship_edit_page.yes.choose
   end
 
   def and_i_continue_for(visa_type)

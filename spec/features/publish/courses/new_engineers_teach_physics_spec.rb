@@ -71,15 +71,15 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def when_i_visit_the_new_course_subject_page(level)
-    new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
+    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
   end
 
   def and_i_select_a_subject(subject_type)
-    new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
-    new_subjects_page.continue.click
+    publish_courses_new_subjects_page.continue.click
   end
 
   def when_i_go_back
@@ -87,7 +87,7 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def and_i_select_an_option
-    new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
+    publish_courses_new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
   end
 
   def then_i_see_an_error_message
@@ -95,7 +95,7 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def and_i_select_subordinate_subject(subject_type)
-    new_subjects_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_new_subjects_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def then_i_am_met_with_the_engineers_teach_physics_page(_level, _subject_type)

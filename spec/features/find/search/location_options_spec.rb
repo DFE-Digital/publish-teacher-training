@@ -29,15 +29,15 @@ feature 'Searching by location' do
   private
 
   def given_i_visit_the_start_page
-    courses_by_location_or_training_provider_page.load
+    find_courses_by_location_or_training_provider_page.load
   end
 
   def and_i_select_the_location_radio_button
-    courses_by_location_or_training_provider_page.by_city_town_or_postcode_radio.choose
+    find_courses_by_location_or_training_provider_page.by_city_town_or_postcode_radio.choose
   end
 
   def and_i_click_continue
-    courses_by_location_or_training_provider_page.continue.click
+    find_courses_by_location_or_training_provider_page.continue.click
   end
 
   def then_i_should_see_a_missing_location_validation_error
@@ -45,7 +45,7 @@ feature 'Searching by location' do
   end
 
   def when_i_enter_a_location
-    courses_by_location_or_training_provider_page.location.set('Yorkshire')
+    find_courses_by_location_or_training_provider_page.location.set('Yorkshire')
   end
 
   def then_i_should_see_the_age_groups_form
@@ -60,7 +60,7 @@ feature 'Searching by location' do
   end
 
   def then_i_should_see_the_start_page
-    expect(courses_by_location_or_training_provider_page).to be_displayed
+    expect(find_courses_by_location_or_training_provider_page).to be_displayed
   end
 
   def when_i_click_back
@@ -68,6 +68,6 @@ feature 'Searching by location' do
   end
 
   def and_the_location_radio_button_is_selected
-    expect(courses_by_location_or_training_provider_page.by_city_town_or_postcode_radio).to be_checked
+    expect(find_courses_by_location_or_training_provider_page.by_city_town_or_postcode_radio).to be_checked
   end
 end

@@ -42,19 +42,19 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_new_course_subject_page(level)
-    new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
+    publish_courses_new_subjects_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: level_params(level))
   end
 
   def when_i_select_a_primary_subject(subject_type)
-    new_subjects_page.choose(subject_type)
+    publish_courses_new_subjects_page.choose(subject_type)
   end
 
   def when_i_select_a_subject(subject_type)
-    new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
+    publish_courses_new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
   def and_i_click_continue
-    new_subjects_page.continue.click
+    publish_courses_new_subjects_page.continue.click
   end
 
   def provider

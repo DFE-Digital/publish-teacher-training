@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Filter users', :with_publish_constraint do
+feature 'Filter users' do
   before do
     given_i_am_authenticated(user: create(:user, :admin))
     and_there_are_users

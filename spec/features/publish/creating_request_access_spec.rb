@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'Creating request access' do
   before do
     given_i_am_authenticated_as_a_provider_user
-    and_i_visit_the_request_access_new_page
+    and_i_visit_the_publish_request_access_new_page
   end
 
   scenario 'creating request access with invalid data' do
@@ -30,35 +30,35 @@ feature 'Creating request access' do
     given_i_am_authenticated(user:)
   end
 
-  def and_i_visit_the_request_access_new_page
-    request_access_new_page.load(provider_code: provider.provider_code)
+  def and_i_visit_the_publish_request_access_new_page
+    publish_request_access_new_page.load(provider_code: provider.provider_code)
   end
 
   def and_i_click_on_request_access
-    request_access_new_page.request_access.click
+    publish_request_access_new_page.request_access.click
   end
 
   def and_i_submit_with_valid_data
-    request_access_new_page.first_name.set('first_name')
-    request_access_new_page.last_name.set('last_name')
-    request_access_new_page.email_address.set('email@address')
-    request_access_new_page.organisation.set('organisation')
-    request_access_new_page.reason.set('reason')
+    publish_request_access_new_page.first_name.set('first_name')
+    publish_request_access_new_page.last_name.set('last_name')
+    publish_request_access_new_page.email_address.set('email@address')
+    publish_request_access_new_page.organisation.set('organisation')
+    publish_request_access_new_page.reason.set('reason')
     and_i_click_on_request_access
   end
 
   def and_i_submit_with_invalid_data
-    request_access_new_page.first_name.set('')
-    request_access_new_page.last_name.set('')
-    request_access_new_page.email_address.set('')
-    request_access_new_page.organisation.set('')
-    request_access_new_page.reason.set('')
+    publish_request_access_new_page.first_name.set('')
+    publish_request_access_new_page.last_name.set('')
+    publish_request_access_new_page.email_address.set('')
+    publish_request_access_new_page.organisation.set('')
+    publish_request_access_new_page.reason.set('')
     and_i_click_on_request_access
   end
 
   def then_i_should_see_an_error_message
     expected_error_messages = ['Enter a first name', 'Enter a last name', 'Enter an email address', 'Enter their organisation', 'Enter why they need access']
-    expect(request_access_new_page.error_messages).to eq(expected_error_messages)
+    expect(publish_request_access_new_page.error_messages).to eq(expected_error_messages)
   end
 
   def provider

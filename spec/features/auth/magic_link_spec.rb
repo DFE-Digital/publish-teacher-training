@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Authentication with magic links', :with_publish_constraint do
+feature 'Authentication with magic links' do
   include ActiveJob::TestHelper
 
   before do
@@ -16,7 +16,7 @@ feature 'Authentication with magic links', :with_publish_constraint do
   scenario 'Receiving a magic link' do
     and_a_user_exists
     when_i_go_to_sign_in
-    then_i_am_taken_to_the_magic_link_page
+    then_i_am_taken_to_the_publish_magic_link_page
     and_i_am_given_the_option_to_sign_in_with_a_magic_link
     when_i_enter_a_valid_email
     then_a_magic_link_is_sent
@@ -45,7 +45,7 @@ feature 'Authentication with magic links', :with_publish_constraint do
 
   scenario 'Entering invalid email' do
     when_i_go_to_sign_in
-    then_i_am_taken_to_the_magic_link_page
+    then_i_am_taken_to_the_publish_magic_link_page
     and_i_am_given_the_option_to_sign_in_with_a_magic_link
     when_i_enter_an_invalid_email
     then_i_am_shown_an_error_message
@@ -81,39 +81,39 @@ feature 'Authentication with magic links', :with_publish_constraint do
   end
 
   def when_i_go_to_sign_in
-    sign_in_page.load
+    auth_sign_in_page.load
   end
 
-  def then_i_am_taken_to_the_magic_link_page
-    expect(magic_link_page).to be_displayed
+  def then_i_am_taken_to_the_publish_magic_link_page
+    expect(publish_magic_link_page).to be_displayed
   end
 
   def when_i_enter_a_valid_email
-    magic_link_page.email_field.set(@user.email)
+    publish_magic_link_page.email_field.set(@user.email)
   end
 
   def then_a_magic_link_is_sent
     expect do
-      magic_link_page.submit.click
+      publish_magic_link_page.submit.click
     end.to have_enqueued_job.on_queue('mailers').exactly(:once)
   end
 
   def when_i_enter_an_invalid_email
-    magic_link_page.email_field.set('some random string')
-    magic_link_page.submit.click
+    publish_magic_link_page.email_field.set('some random string')
+    publish_magic_link_page.submit.click
   end
 
   def then_i_am_shown_an_error_message
-    expect(magic_link_page).to have_text('Enter a valid email address')
+    expect(publish_magic_link_page).to have_text('Enter a valid email address')
   end
 
   def and_i_am_taken_to_the_confirmation_page
-    expect(magic_link_confirmation_page).to be_displayed
+    expect(publish_magic_link_confirmation_page).to be_displayed
   end
 
   def and_i_am_given_the_option_to_sign_in_with_a_magic_link
-    expect(magic_link_page).to have_text('DfE Sign-in is experiencing problems. You need to sign in using your email address.')
-    expect(magic_link_page).to have_email_field
+    expect(publish_magic_link_page).to have_text('DfE Sign-in is experiencing problems. You need to sign in using your email address.')
+    expect(publish_magic_link_page).to have_email_field
   end
 
   def and_i_am_shown_the(message)

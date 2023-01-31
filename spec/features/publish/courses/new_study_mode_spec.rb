@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'selecting full time or part time or full or part time', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_new_study_mode_page
+    when_i_visit_the_publish_courses_new_study_mode_page
   end
 
   scenario 'selecting full time' do
@@ -38,16 +38,16 @@ feature 'selecting full time or part time or full or part time', { can_edit_curr
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_new_study_mode_page
-    new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: study_mode_params)
+  def when_i_visit_the_publish_courses_new_study_mode_page
+    publish_courses_new_study_mode_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: study_mode_params)
   end
 
   def when_i_select_a_study_mode(study_mode)
-    new_study_mode_page.study_mode_fields.send(study_mode).click
+    publish_courses_new_study_mode_page.study_mode_fields.send(study_mode).click
   end
 
   def and_i_click_continue
-    new_study_mode_page.continue.click
+    publish_courses_new_study_mode_page.continue.click
   end
 
   def provider

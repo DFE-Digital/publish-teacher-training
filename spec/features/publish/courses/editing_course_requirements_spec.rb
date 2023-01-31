@@ -48,41 +48,41 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
 
     scenario 'all fields get copied if all are present' do
       when_i_visit_the_course_requirements_page
-      course_requirement_edit_page.copy_content.copy(course2)
+      publish_course_requirement_edit_page.copy_content.copy(course2)
 
       [
         'Your changes are not yet saved',
         'Personal qualities',
         'Other requirements'
       ].each do |name|
-        expect(course_requirement_edit_page.copy_content_warning).to have_content(name)
+        expect(publish_course_requirement_edit_page.copy_content_warning).to have_content(name)
       end
 
-      expect(course_requirement_edit_page.personal_qualities.value).to eq(course2_enrichment.personal_qualities)
-      expect(course_requirement_edit_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
+      expect(publish_course_requirement_edit_page.personal_qualities.value).to eq(course2_enrichment.personal_qualities)
+      expect(publish_course_requirement_edit_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
     end
 
     scenario 'missing fields do not get copied' do
-      course_requirement_edit_page.load(
+      publish_course_requirement_edit_page.load(
         provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code
       )
-      course_requirement_edit_page.copy_content.copy(course3)
+      publish_course_requirement_edit_page.copy_content.copy(course3)
 
       [
         'Your changes are not yet saved',
         'Personal qualities'
       ].each do |name|
-        expect(course_requirement_edit_page.copy_content_warning).to have_content(name)
+        expect(publish_course_requirement_edit_page.copy_content_warning).to have_content(name)
       end
 
       [
         'other requirements'
       ].each do |name|
-        expect(course_requirement_edit_page.copy_content_warning).not_to have_content(name)
+        expect(publish_course_requirement_edit_page.copy_content_warning).not_to have_content(name)
       end
 
-      expect(course_requirement_edit_page.personal_qualities.value).to eq(course3_enrichment.personal_qualities)
-      expect(course_requirement_edit_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
+      expect(publish_course_requirement_edit_page.personal_qualities.value).to eq(course3_enrichment.personal_qualities)
+      expect(publish_course_requirement_edit_page.other_requirements.value).to eq(course2_enrichment.other_requirements)
     end
   end
 
@@ -92,7 +92,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_see_the_reuse_content
-    expect(course_requirement_edit_page).to have_use_content
+    expect(publish_course_requirement_edit_page).to have_use_content
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -104,7 +104,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
   end
 
   def when_i_visit_the_course_requirements_page
-    course_requirement_edit_page.load(
+    publish_course_requirement_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
@@ -113,17 +113,17 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
     @personal_qualities = 'This is a new requirement'
     @other_requirements = 'This is another new requirement'
 
-    course_requirement_edit_page.personal_qualities.set(@personal_qualities)
-    course_requirement_edit_page.other_requirements.set(@other_requirements)
+    publish_course_requirement_edit_page.personal_qualities.set(@personal_qualities)
+    publish_course_requirement_edit_page.other_requirements.set(@other_requirements)
   end
 
   def and_i_submit_with_invalid_data
-    course_requirement_edit_page.personal_qualities.set(Faker::Lorem.sentence(word_count: 101))
+    publish_course_requirement_edit_page.personal_qualities.set(Faker::Lorem.sentence(word_count: 101))
     and_i_submit
   end
 
   def and_i_submit
-    course_requirement_edit_page.submit.click
+    publish_course_requirement_edit_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -138,7 +138,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_see_an_error_message
-    expect(course_requirement_edit_page.error_messages).to include(
+    expect(publish_course_requirement_edit_page.error_messages).to include(
       I18n.t('activemodel.errors.models.publish/course_requirement_form.attributes.personal_qualities.too_long')
     )
   end

@@ -16,7 +16,7 @@ feature 'Searching across England' do
 
     when_i_select_the_further_education_radio_button
     and_i_click_continue
-    then_i_should_see_the_results_page
+    then_i_should_see_the_find_results_page
   end
 
   private
@@ -28,11 +28,11 @@ feature 'Searching across England' do
   end
 
   def when_i_visit_the_start_page
-    courses_by_location_or_training_provider_page.load
+    find_courses_by_location_or_training_provider_page.load
   end
 
   def and_i_select_the_across_england_radio_button
-    courses_by_location_or_training_provider_page.across_england.choose
+    find_courses_by_location_or_training_provider_page.across_england.choose
   end
 
   def and_i_click_continue
@@ -54,14 +54,14 @@ feature 'Searching across England' do
     choose 'Further education'
   end
 
-  def then_i_should_see_the_results_page
+  def then_i_should_see_the_find_results_page
     expect(page).to have_current_path('/results?age_group=further_education&has_vacancies=true&l=2&subjects%5B%5D=41')
   end
 
   def and_i_should_see_the_correct_courses
-    expect(results_page.courses.count).to eq(1)
+    expect(find_results_page.courses.count).to eq(1)
 
-    results_page.courses.first.then do |first_course|
+    find_results_page.courses.first.then do |first_course|
       expect(first_course.course_name.text).to include(@further_education_course.name)
     end
   end

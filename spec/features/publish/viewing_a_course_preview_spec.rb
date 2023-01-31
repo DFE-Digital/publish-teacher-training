@@ -10,7 +10,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     scenario 'i can view the course basic details' do
       given_i_am_authenticated(user: user_with_fee_based_course)
-      when_i_visit_the_course_preview_page
+      when_i_visit_the_publish_course_preview_page
       then_i_see_the_course_preview_details
       and_i_see_financial_support
     end
@@ -19,7 +19,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   context 'bursaries and scholarships is not announced' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated(user: user_with_fee_based_course)
-      when_i_visit_the_course_preview_page
+      when_i_visit_the_publish_course_preview_page
       then_i_see_the_course_preview_details
       and_i_do_not_see_financial_support
     end
@@ -30,7 +30,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated(
         user: user_with_custom_address_requested_via_zendesk
       )
-      when_i_visit_the_course_preview_page
+      when_i_visit_the_publish_course_preview_page
       then_i_see_custom_address
     end
   end
@@ -38,143 +38,143 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   private
 
   def then_i_see_custom_address
-    expect(course_preview_page).to have_content 'LSJS'
-    expect(course_preview_page).to have_content '44A Albert Road'
-    expect(course_preview_page).to have_content 'London'
-    expect(course_preview_page).to have_content 'NW4 2SJ'
+    expect(publish_course_preview_page).to have_content 'LSJS'
+    expect(publish_course_preview_page).to have_content '44A Albert Road'
+    expect(publish_course_preview_page).to have_content 'London'
+    expect(publish_course_preview_page).to have_content 'NW4 2SJ'
   end
 
   def then_i_see_the_course_preview_details
-    expect(course_preview_page.title).to have_content(
+    expect(publish_course_preview_page.title).to have_content(
       "#{course.name} (#{course.course_code})"
     )
 
-    expect(course_preview_page.sub_title).to have_content(
+    expect(publish_course_preview_page.sub_title).to have_content(
       provider.provider_name
     )
 
-    expect(course_preview_page.accredited_body).to have_content(
+    expect(publish_course_preview_page.accredited_body).to have_content(
       accrediting_provider.provider_name
     )
 
-    expect(course_preview_page.description).to have_content(
+    expect(publish_course_preview_page.description).to have_content(
       course.description
     )
 
-    expect(course_preview_page.qualifications).to have_content(
+    expect(publish_course_preview_page.qualifications).to have_content(
       'PGCE with QTS'
     )
 
-    expect(course_preview_page.age_range_in_years).to have_content(
+    expect(publish_course_preview_page.age_range_in_years).to have_content(
       '11 to 18'
     )
 
-    expect(course_preview_page.funding_option).to have_content(
+    expect(publish_course_preview_page.funding_option).to have_content(
       decorated_course.funding_option
     )
 
-    expect(course_preview_page.length).to have_content(
+    expect(publish_course_preview_page.length).to have_content(
       'Up to 2 years - full time'
     )
 
-    expect(course_preview_page.applications_open_from).to have_content(
+    expect(publish_course_preview_page.applications_open_from).to have_content(
       course.applications_open_from.strftime('%-d %B %Y')
     )
 
-    expect(course_preview_page.start_date).to have_content(
+    expect(publish_course_preview_page.start_date).to have_content(
       "September #{recruitment_cycle.year}"
     )
 
-    expect(course_preview_page.provider_website).to have_content(
+    expect(publish_course_preview_page.provider_website).to have_content(
       provider.website
     )
 
-    expect(course_preview_page).not_to have_vacancies
+    expect(publish_course_preview_page).not_to have_vacancies
 
-    expect(course_preview_page.about_course).to have_content(
+    expect(publish_course_preview_page.about_course).to have_content(
       decorated_course.about_course
     )
 
-    expect(course_preview_page.interview_process).to have_content(
+    expect(publish_course_preview_page.interview_process).to have_content(
       decorated_course.interview_process
     )
 
-    expect(course_preview_page.school_placements).to have_content(
+    expect(publish_course_preview_page.school_placements).to have_content(
       decorated_course.how_school_placements_work
     )
 
-    expect(course_preview_page).to have_content(
+    expect(publish_course_preview_page).to have_content(
       "The course fees for #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} are as follows"
     )
 
-    expect(course_preview_page.uk_fees).to have_content(
+    expect(publish_course_preview_page.uk_fees).to have_content(
       '£9,250'
     )
 
-    expect(course_preview_page.international_fees).to have_content(
+    expect(publish_course_preview_page.international_fees).to have_content(
       '£14,000'
     )
 
-    expect(course_preview_page.fee_details).to have_content(
+    expect(publish_course_preview_page.fee_details).to have_content(
       decorated_course.fee_details
     )
 
-    expect(course_preview_page).not_to have_salary_details
+    expect(publish_course_preview_page).not_to have_salary_details
 
-    expect(course_preview_page.financial_support_details).to have_content(
+    expect(publish_course_preview_page.financial_support_details).to have_content(
       'Financial support from the training provider'
     )
 
-    expect(course_preview_page.personal_qualities).to have_content(
+    expect(publish_course_preview_page.personal_qualities).to have_content(
       decorated_course.personal_qualities
     )
 
-    expect(course_preview_page.other_requirements).to have_content(
+    expect(publish_course_preview_page.other_requirements).to have_content(
       decorated_course.other_requirements
     )
 
-    expect(course_preview_page.train_with_us).to have_content(
+    expect(publish_course_preview_page.train_with_us).to have_content(
       provider.train_with_us
     )
 
-    expect(course_preview_page.about_accrediting_body).to have_content(
+    expect(publish_course_preview_page.about_accrediting_body).to have_content(
       decorated_course.about_accrediting_body
     )
 
-    expect(course_preview_page.train_with_disability).to have_content(
+    expect(publish_course_preview_page.train_with_disability).to have_content(
       provider.train_with_disability
     )
 
-    expect(course_preview_page.contact_email).to have_content(
+    expect(publish_course_preview_page.contact_email).to have_content(
       provider.email
     )
 
-    expect(course_preview_page.contact_telephone).to have_content(
+    expect(publish_course_preview_page.contact_telephone).to have_content(
       provider.telephone
     )
 
-    expect(course_preview_page).to have_content '2:1 or above, or equivalent'
-    expect(course_preview_page).to have_content 'Maths A level'
+    expect(publish_course_preview_page).to have_content '2:1 or above, or equivalent'
+    expect(publish_course_preview_page).to have_content 'Maths A level'
 
-    expect(course_preview_page.contact_website).to have_content(
+    expect(publish_course_preview_page.contact_website).to have_content(
       provider.website
     )
 
-    expect(course_preview_page.contact_address).to have_content(
+    expect(publish_course_preview_page.contact_address).to have_content(
       provider.address1
     )
-    expect(course_preview_page.contact_address).to have_content(
+    expect(publish_course_preview_page.contact_address).to have_content(
       provider.address2
     )
-    expect(course_preview_page.contact_address).to have_content(
+    expect(publish_course_preview_page.contact_address).to have_content(
       provider.address3
     )
-    expect(course_preview_page.contact_address).to have_content(
+    expect(publish_course_preview_page.contact_address).to have_content(
       provider.address4
     )
 
-    expect(course_preview_page).to have_choose_a_training_location_table
-    expect(course_preview_page.choose_a_training_location_table).not_to have_content(
+    expect(publish_course_preview_page).to have_choose_a_training_location_table
+    expect(publish_course_preview_page.choose_a_training_location_table).not_to have_content(
       'Suspended site with vacancies'
     )
 
@@ -186,16 +186,16 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     ].each.with_index(1) do |site, index|
       name, has_vacancies_string = site
 
-      expect(course_preview_page.choose_a_training_location_table)
+      expect(publish_course_preview_page.choose_a_training_location_table)
         .to have_selector("tbody tr:nth-child(#{index}) strong", text: name)
 
-      expect(course_preview_page.choose_a_training_location_table)
+      expect(publish_course_preview_page.choose_a_training_location_table)
         .to have_selector("tbody tr:nth-child(#{index}) td", text: has_vacancies_string)
     end
 
-    expect(course_preview_page).to have_course_advice
+    expect(publish_course_preview_page).to have_course_advice
 
-    expect(course_preview_page).to have_link('Apply for this course', href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
+    expect(publish_course_preview_page).to have_link('Apply for this course', href: "/publish/organisations/#{course.provider.provider_code}/#{course.provider.recruitment_cycle.year}/courses/#{course.course_code}/apply")
   end
 
   def user_with_custom_address_requested_via_zendesk
@@ -260,8 +260,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def when_i_visit_the_course_preview_page
-    course_preview_page.load(
+  def when_i_visit_the_publish_course_preview_page
+    publish_course_preview_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
@@ -289,14 +289,14 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def and_i_see_financial_support
     expect(decorated_course.use_financial_support_placeholder?).to be_falsey
 
-    expect(course_preview_page.scholarship_amount).to have_content('a scholarship of £26,000')
-    expect(course_preview_page.bursary_amount).to have_content('a bursary of £24,000')
+    expect(publish_course_preview_page.scholarship_amount).to have_content('a scholarship of £26,000')
+    expect(publish_course_preview_page.bursary_amount).to have_content('a bursary of £24,000')
 
-    expect(course_preview_page).not_to have_content('Information not yet available')
+    expect(publish_course_preview_page).not_to have_content('Information not yet available')
   end
 
   def and_i_do_not_see_financial_support
-    expect(course_preview_page).not_to have_scholarship_amount
-    expect(course_preview_page).not_to have_bursary_amount
+    expect(publish_course_preview_page).not_to have_scholarship_amount
+    expect(publish_course_preview_page).not_to have_bursary_amount
   end
 end

@@ -16,16 +16,16 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   private
 
   def then_i_can_create_the_course
-    expect(new_level_page).to be_displayed
-    course_creation_params = select_level({}, level: 'primary', level_selection: new_level_page.level_fields.primary, next_page: new_subjects_page)
-    course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: new_age_range_page)
-    course_creation_params = select_age_range(course_creation_params, next_page: new_outcome_page)
-    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: new_outcome_page.qualification_fields.qts, next_page: new_apprenticeship_page)
-    course_creation_params = select_apprenticeship(course_creation_params, next_page: new_study_mode_page)
-    course_creation_params = select_study_mode(course_creation_params, next_page: new_locations_page)
-    course_creation_params = select_location(course_creation_params, next_page: new_student_visa_sponsorship_page)
-    course_creation_params = select_visa_settings(course_creation_params, next_page: new_applications_open_page)
-    course_creation_params = select_applications_open_from(course_creation_params, next_page: new_start_date_page)
+    expect(publish_courses_new_level_page).to be_displayed
+    course_creation_params = select_level({}, level: 'primary', level_selection: publish_courses_new_level_page.level_fields.primary, next_page: publish_courses_new_subjects_page)
+    course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: publish_courses_new_age_range_page)
+    course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
+    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_apprenticeship_page)
+    course_creation_params = select_apprenticeship(course_creation_params, next_page: publish_courses_new_study_mode_page)
+    course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_locations_page)
+    course_creation_params = select_location(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
+    course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
+    course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)
 
     save_course
@@ -43,7 +43,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_courses_page
-    provider_courses_index_page.load(
+    publish_provider_courses_index_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
     )
   end
@@ -65,7 +65,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_click_on_add_course
-    provider_courses_index_page.add_course.click
+    publish_provider_courses_index_page.add_course.click
   end
 
   def then_i_see_the_new_course_level_page
@@ -77,7 +77,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params[:is_send] = '0'
 
     level_selection.click
-    new_level_page.continue.click
+    publish_courses_new_level_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -102,8 +102,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params[:master_subject_id] = course_subject.id.to_s
     course_creation_params[:campaign_name] = ''
 
-    new_subjects_page.choose(course_subject.subject_name)
-    new_subjects_page.continue.click
+    publish_courses_new_subjects_page.choose(course_subject.subject_name)
+    publish_courses_new_subjects_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -116,8 +116,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_age_range(course_creation_params, next_page:)
     course_creation_params[:age_range_in_years] = '5_to_11'
 
-    new_age_range_page.age_range_fields.five_to_eleven.click
-    new_age_range_page.continue.click
+    publish_courses_new_age_range_page.age_range_fields.five_to_eleven.click
+    publish_courses_new_age_range_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -131,7 +131,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params[:qualification] = qualification
 
     qualification_selection.click
-    new_outcome_page.continue.click
+    publish_courses_new_outcome_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -144,8 +144,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_apprenticeship(course_creation_params, next_page:)
     course_creation_params[:funding_type] = 'fee'
 
-    new_apprenticeship_page.no.click
-    new_apprenticeship_page.continue.click
+    publish_courses_new_apprenticeship_page.no.click
+    publish_courses_new_apprenticeship_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -158,8 +158,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_study_mode(course_creation_params, next_page:)
     course_creation_params[:study_mode] = 'full_time'
 
-    new_study_mode_page.study_mode_fields.full_time.click
-    new_study_mode_page.continue.click
+    publish_courses_new_study_mode_page.study_mode_fields.full_time.click
+    publish_courses_new_study_mode_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -172,8 +172,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_visa_settings(course_creation_params, next_page:)
     course_creation_params[:can_sponsor_student_visa] = 'true'
 
-    new_student_visa_sponsorship_page.yes.click
-    new_student_visa_sponsorship_page.continue.click
+    publish_courses_new_student_visa_sponsorship_page.yes.click
+    publish_courses_new_student_visa_sponsorship_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -186,10 +186,10 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_location(course_creation_params, next_page:)
     course_creation_params[:sites_ids] = [sites.first.id.to_s, sites.second.id.to_s]
 
-    new_locations_page.check(sites.first.location_name)
-    new_locations_page.check(sites.second.location_name)
+    publish_courses_new_locations_page.check(sites.first.location_name)
+    publish_courses_new_locations_page.check(sites.second.location_name)
 
-    new_locations_page.continue.click
+    publish_courses_new_locations_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -202,8 +202,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_applications_open_from(course_creation_params, next_page:)
     course_creation_params[:applications_open_from] = recruitment_cycle.application_start_date.iso8601
 
-    new_applications_open_page.applications_open_field.click
-    new_applications_open_page.continue.click
+    publish_courses_new_applications_open_page.applications_open_field.click
+    publish_courses_new_applications_open_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,
@@ -216,8 +216,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_start_date(course_creation_params)
     course_creation_params[:start_date] = "September #{recruitment_cycle.year}"
 
-    new_start_date_page.select "September #{recruitment_cycle.year}"
-    new_start_date_page.continue.click
+    publish_courses_new_start_date_page.select "September #{recruitment_cycle.year}"
+    publish_courses_new_start_date_page.continue.click
 
     # Addressable, the gem site-prism relies on, cannot match parameters containing a +
     # https://github.com/sporkmonger/addressable/issues/142
@@ -237,9 +237,9 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def save_course
-    expect { course_confirmation_page.save_button.click }.to change { provider.courses.reload.count }.from(0).to(1)
+    expect { publish_course_confirmation_page.save_button.click }.to change { provider.courses.reload.count }.from(0).to(1)
 
-    expect(provider_courses_index_page).to be_displayed
-    expect(provider_courses_index_page.success_summary).to have_content('Your course has been created')
+    expect(publish_provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page.success_summary).to have_content('Your course has been created')
   end
 end

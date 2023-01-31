@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Authentication with Personas', :with_publish_constraint do
+feature 'Authentication with Personas' do
   before do
     given_persona_based_authentication_is_active
   end
@@ -23,7 +23,7 @@ feature 'Authentication with Personas', :with_publish_constraint do
   end
 
   def when_i_go_to_sign_in
-    sign_in_page.load
+    auth_sign_in_page.load
   end
 
   def when_i_go_to_support
@@ -31,16 +31,16 @@ feature 'Authentication with Personas', :with_publish_constraint do
   end
 
   def then_i_am_given_the_option_to_sign_in_with_a_persona
-    expect(sign_in_page).to have_text('Use Personas to access an account.')
-    expect(sign_in_page).to have_link('Sign in using a Persona')
+    expect(auth_sign_in_page).to have_text('Use Personas to access an account.')
+    expect(auth_sign_in_page).to have_link('Sign in using a Persona')
   end
 
   def i_am_given_the_option_to_login_as_an_admin
-    expect(sign_in_page).to have_button('Login as an Admin')
+    expect(auth_sign_in_page).to have_button('Login as an Admin')
   end
 
   def and_i_do_not_see_persona_related_text
-    expect(sign_in_page).not_to have_text('Use Personas to access an account.')
-    expect(sign_in_page).not_to have_link('Sign in using a Persona')
+    expect(auth_sign_in_page).not_to have_text('Use Personas to access an account.')
+    expect(auth_sign_in_page).not_to have_link('Sign in using a Persona')
   end
 end

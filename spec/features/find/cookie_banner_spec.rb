@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'cookie banner' do
   before do
-    results_page.load
+    find_results_page.load
   end
 
   it 'renders a visible js fallback banner' do

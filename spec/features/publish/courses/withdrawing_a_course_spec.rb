@@ -9,7 +9,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
 
   scenario 'i can withdraw a course' do
     and_there_is_a_course_i_want_to_withdraw
-    when_i_visit_the_course_withdrawal_page
+    when_i_visit_the_course_publish_courses_withdrawal_page
     and_i_confirm_the_course_code
     and_i_submit
     then_i_should_see_a_success_message
@@ -18,21 +18,21 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
 
   scenario 'wrong course code provided' do
     and_there_is_a_course_i_want_to_withdraw
-    when_i_visit_the_course_withdrawal_page
+    when_i_visit_the_course_publish_courses_withdrawal_page
     and_i_submit_with_the_wrong_code
     then_i_should_see_an_error_message
   end
 
   scenario 'course already withdrawn' do
     and_there_is_a_course_already_withdrawn
-    when_i_visit_the_course_withdrawal_page
+    when_i_visit_the_course_publish_courses_withdrawal_page
     then_i_am_redirected_to_the_courses_page
     and_i_see_the(already_withdrawn_message)
   end
 
   scenario 'attempting to withdraw a non published course' do
     and_there_is_a_draft_course
-    when_i_visit_the_course_withdrawal_page
+    when_i_visit_the_course_publish_courses_withdrawal_page
     then_i_am_redirected_to_the_courses_page
     and_i_see_the(course_should_be_deleted_message)
   end
@@ -54,23 +54,23 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     given_a_course_exists(enrichments: [build(:course_enrichment, :initial_draft)])
   end
 
-  def when_i_visit_the_course_withdrawal_page
-    withdrawal_page.load(
+  def when_i_visit_the_course_publish_courses_withdrawal_page
+    publish_courses_withdrawal_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
 
   def and_i_confirm_the_course_code
-    withdrawal_page.confirm_course_code.set(course.course_code)
+    publish_courses_withdrawal_page.confirm_course_code.set(course.course_code)
   end
 
   def and_i_submit_with_the_wrong_code
-    withdrawal_page.confirm_course_code.set('random')
+    publish_courses_withdrawal_page.confirm_course_code.set('random')
     and_i_submit
   end
 
   def and_i_submit
-    withdrawal_page.submit.click
+    publish_courses_withdrawal_page.submit.click
   end
 
   def then_i_should_see_a_success_message
@@ -85,11 +85,11 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_redirected_to_the_courses_page
-    expect(provider_courses_index_page).to be_displayed
+    expect(publish_provider_courses_index_page).to be_displayed
   end
 
   def then_i_should_see_an_error_message
-    expect(withdrawal_page.error_messages).to include(
+    expect(publish_courses_withdrawal_page.error_messages).to include(
       "Enter the course code #{course.course_code} to withdraw this course"
     )
   end
