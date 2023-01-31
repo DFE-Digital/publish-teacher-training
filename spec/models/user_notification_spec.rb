@@ -22,11 +22,11 @@ describe UserNotification do
   end
 
   describe 'associations' do
+    subject { described_class.new(user_id: user.id, provider_code: provider.provider_code) }
+
     let(:organisation) { create(:organisation, providers: [provider]) }
     let(:user) { create(:user, organisations: [organisation]) }
     let(:provider) { create(:provider) }
-
-    subject { described_class.new(user_id: user.id, provider_code: provider.provider_code) }
 
     it { is_expected.to belong_to(:provider) }
     it { is_expected.to belong_to(:user) }
@@ -55,23 +55,23 @@ describe UserNotification do
     end
 
     describe '.course_publish_notification_requests' do
+      subject { described_class.course_publish_notification_requests(provider.provider_code) }
+
       before do
         user_notification_create
         user_notification_update
       end
-
-      subject { described_class.course_publish_notification_requests(provider.provider_code) }
 
       it { is_expected.to contain_exactly(user_notification_create) }
     end
 
     describe '.course_update_notification_requests' do
+      subject { described_class.course_update_notification_requests(provider.provider_code) }
+
       before do
         user_notification_create
         user_notification_update
       end
-
-      subject { described_class.course_update_notification_requests(provider.provider_code) }
 
       it { is_expected.to contain_exactly(user_notification_update) }
     end

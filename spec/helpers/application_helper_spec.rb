@@ -22,9 +22,9 @@ describe ApplicationHelper do
   end
 
   describe '#enrichment_summary' do
-    let(:summary_list) { GovukComponent::SummaryListComponent.new }
-
     subject { render(summary_list) }
+
+    let(:summary_list) { GovukComponent::SummaryListComponent.new }
 
     context 'with a value' do
       before do

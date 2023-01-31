@@ -121,10 +121,10 @@ describe User do
 
     describe '#associated_with_accredited_body?' do
       context 'user is associated with accredited body' do
+        subject { create(:user, providers: [accredited_body]) }
+
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
         let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-
-        subject { create(:user, providers: [accredited_body]) }
 
         it 'returns true' do
           expect(subject.associated_with_accredited_body?).to be true

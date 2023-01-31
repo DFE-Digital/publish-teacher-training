@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe Course do
+  subject { course }
+
   let(:recruitment_cycle) { course.recruitment_cycle }
   let(:french) { find_or_create(:modern_languages_subject, :french) }
   let!(:financial_incentive) { create(:financial_incentive, subject: modern_languages) }
@@ -16,8 +18,6 @@ describe Course do
       subjects: [find_or_create(:secondary_subject, :biology)]
     )
   end
-
-  subject { course }
 
   its(:to_s) { is_expected.to eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { is_expected.to eq('') }
@@ -384,6 +384,8 @@ describe Course do
     end
 
     describe 'accredited_body_order' do
+      subject { described_class.accredited_body_order(provider.provider_name) }
+
       let(:provider) { create(:provider) }
       let(:delivered_course) { create(:course, provider:) }
       let(:accredited_course) { create(:course, accrediting_provider: provider) }
@@ -393,17 +395,15 @@ describe Course do
         delivered_course
       end
 
-      subject { described_class.accredited_body_order(provider.provider_name) }
-
       it 'returns courses accredited after courses delivered' do
         expect(subject).to eq([delivered_course, accredited_course])
       end
     end
 
     describe 'case_insensitive_search' do
-      let(:course) { create(:course, course_code: '2VvZ') }
-
       subject { described_class.case_insensitive_search('2vVZ') }
+
+      let(:course) { create(:course, course_code: '2VvZ') }
 
       it 'returns correct course with incorrect' do
         expect(subject).to eq([course])
@@ -586,12 +586,12 @@ describe Course do
       end
 
       context 'blank attribute' do
-        let(:course) { build(:course, **blank_field) }
-
         subject do
           course.valid?
           course.errors.full_messages.first
         end
+
+        let(:course) { build(:course, **blank_field) }
 
         context 'age_range_in_years' do
           let(:blank_field) { { age_range_in_years: nil } }
@@ -995,11 +995,11 @@ describe Course do
     end
 
     describe '.with_study_modes' do
+      subject { described_class.with_study_modes(study_modes) }
+
       let(:course_part_time) { create(:course, study_mode: :part_time) }
       let(:course_full_time) { create(:course, study_mode: :full_time) }
       let(:course_both) { create(:course, study_mode: :full_time_or_part_time) }
-
-      subject { described_class.with_study_modes(study_modes) }
 
       before do
         course_both
@@ -1033,13 +1033,13 @@ describe Course do
     end
 
     describe '.with_funding_types' do
+      subject { described_class.with_funding_types(funding_types) }
+
       let(:fee_course_higher_education) { create(:course, :with_higher_education) }
       let(:fee_course_scitt) { create(:course, :with_scitt) }
       let(:fee_course_school_direct) { create(:course, :with_school_direct) }
       let(:salary_course) { create(:course, :with_salary) }
       let(:apprenticeship_course) { create(:course, :with_apprenticeship) }
-
-      subject { described_class.with_funding_types(funding_types) }
 
       context 'fee courses' do
         let(:funding_types) { %w[fee] }
@@ -1087,11 +1087,11 @@ describe Course do
     end
 
     describe '.with_degree_grades' do
+      subject { described_class.with_degree_grades(degree_grades) }
+
       let(:two_two_course) { create(:course, degree_grade: :two_two) }
       let(:third_class_course) { create(:course, degree_grade: :third_class) }
       let(:minimum_degree_not_required_course) { create(:course, degree_grade: :not_required) }
-
-      subject { described_class.with_degree_grades(degree_grades) }
 
       before do
         two_two_course
@@ -1125,6 +1125,8 @@ describe Course do
     end
 
     describe '.with_salary' do
+      subject { described_class.with_salary }
+
       let(:course_higher_education_programme) do
         create(:course, program_type: :higher_education_programme)
       end
@@ -1142,8 +1144,6 @@ describe Course do
         create(:course, program_type: :pg_teaching_apprenticeship)
       end
 
-      subject { described_class.with_salary }
-
       before do
         course_higher_education_programme
         course_school_direct_training_programme
@@ -1158,13 +1158,13 @@ describe Course do
     end
 
     describe '.with_qualifications' do
+      subject { described_class.with_qualifications(qualifications) }
+
       let(:course_qts) { TestDataCache.get(:course, :resulting_in_qts) }
       let(:course_pgce_with_qts) { TestDataCache.get(:course, :resulting_in_pgce_with_qts) }
       let(:course_pgde_with_qts) { TestDataCache.get(:course, :resulting_in_pgde_with_qts) }
       let(:course_pgce) { TestDataCache.get(:course, :resulting_in_pgce) }
       let(:course_pgde) { TestDataCache.get(:course, :resulting_in_pgde) }
-
-      subject { described_class.with_qualifications(qualifications) }
 
       before do
         course_qts
@@ -1260,12 +1260,12 @@ describe Course do
 
     describe '.with_accredited_bodies' do
       context 'course with an accredited body' do
+        subject { described_class.with_accredited_bodies(accredited_provider.provider_code) }
+
         let!(:provider) { create(:provider) }
         let!(:course) { create(:course, provider:) }
         let!(:accredited_provider) { create(:provider, :accredited_body) }
         let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
-
-        subject { described_class.with_accredited_bodies(accredited_provider.provider_code) }
 
         it 'returns courses for which the provider is the accredited body' do
           expect(subject).to contain_exactly(accredited_course)
@@ -1389,14 +1389,14 @@ describe Course do
   end
 
   context 'with sites' do
+    subject { create(:course, provider:, site_statuses: [first_site_status, second_site_status]) }
+
     let(:provider) { build(:provider) }
     let(:first_site) { build(:site, provider:) }
     let(:first_site_status) { create(:site_status, :running, site: first_site) }
     let(:second_site) { build(:site, provider:) }
     let(:second_site_status) { create(:site_status, :suspended, site: second_site) }
     let(:new_site) { build(:site, provider:) }
-
-    subject { create(:course, provider:, site_statuses: [first_site_status, second_site_status]) }
 
     describe '#sites' do
       it 'onlies return new and running sites' do
@@ -1460,6 +1460,8 @@ describe Course do
   end
 
   context 'with site statuses' do
+    subject { create(:course, provider:, site_statuses:) }
+
     let(:provider) { build(:provider, sites: [site]) }
     let(:site) { build(:site) }
     let(:new_site_status) { build(:site_status, :new, site:) }
@@ -1475,8 +1477,6 @@ describe Course do
     let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
     let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :with_no_vacancies, site:) }
     let(:site_statuses) { [] }
-
-    subject { create(:course, provider:, site_statuses:) }
 
     describe '#findable_site_statuses' do
       context 'with a site_statuses association that have been loaded' do
@@ -1612,6 +1612,8 @@ describe Course do
     end
 
     describe '#open_for_applications?' do
+      subject { course }
+
       let(:site_statuses) { [] }
 
       let(:applications_open_from) { Time.now.utc }
@@ -1621,8 +1623,6 @@ describe Course do
                site_statuses:,
                applications_open_from:)
       end
-
-      subject { course }
 
       context 'no site statuses' do
         context 'applications_open_from is in present or past' do
@@ -1712,6 +1712,10 @@ describe Course do
     end
 
     describe 'open_for_applications? (when site_statuses not loaded)' do
+      subject do
+        course.reload
+      end
+
       let(:site_statuses) { [] }
 
       let(:applications_open_from) { Time.now.utc }
@@ -1720,10 +1724,6 @@ describe Course do
         create(:course,
                site_statuses:,
                applications_open_from:)
-      end
-
-      subject do
-        course.reload
       end
 
       context 'no site statuses' do
@@ -1803,17 +1803,17 @@ describe Course do
       end
 
       context 'with a new site_status' do
-        let(:new) { build(:site_status, :new) }
-
         subject { create(:course, site_statuses: [new]) }
+
+        let(:new) { build(:site_status, :new) }
 
         its(:ucas_status) { is_expected.to eq :new }
       end
 
       context 'with a not running site_status' do
-        let(:suspended) { build(:site_status, :suspended) }
-
         subject { create(:course, site_statuses: [suspended]) }
+
+        let(:suspended) { build(:site_status, :suspended) }
 
         its(:ucas_status) { is_expected.to eq :not_running }
       end
@@ -1851,41 +1851,41 @@ describe Course do
 
   describe '#changed_since' do
     context 'with no parameters' do
+      subject { described_class.changed_since(nil) }
+
       let!(:old_course) { create(:course, age: 1.hour.ago) }
       let!(:course) { create(:course, age: 1.hour.ago) }
-
-      subject { described_class.changed_since(nil) }
 
       it { is_expected.to include course }
       it { is_expected.to include old_course }
     end
 
     context 'with a course that was just updated' do
+      subject { described_class.changed_since(10.minutes.ago) }
+
       let(:course) { create(:course, age: 1.hour.ago) }
       let!(:old_course) { create(:course, age: 1.hour.ago) }
 
       before { course.touch }
-
-      subject { described_class.changed_since(10.minutes.ago) }
 
       it { is_expected.to include course }
       it { is_expected.not_to include old_course }
     end
 
     context 'with a course that has been changed less than a second after the given timestamp' do
+      subject { described_class.changed_since(timestamp) }
+
       let(:timestamp) { 5.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
-
-      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.to include course }
     end
 
     context 'with a course that has been changed exactly at the given timestamp' do
+      subject { described_class.changed_since(timestamp) }
+
       let(:timestamp) { 10.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp) }
-
-      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.not_to include course }
     end
@@ -2069,10 +2069,10 @@ describe Course do
   end
 
   context 'bursaries and scholarships' do
+    subject { create(:course, :skip_validate, level: 'secondary', subjects: [english]) }
+
     let(:english) { find_or_create(:secondary_subject, :english) }
     let!(:financial_incentive) { create(:financial_incentive, subject: english, bursary_amount: 255, scholarship: 1415, early_career_payments: 32) }
-
-    subject { create(:course, :skip_validate, level: 'secondary', subjects: [english]) }
 
     it { is_expected.to have_bursary }
     it { is_expected.to have_scholarship_and_bursary }
@@ -2109,14 +2109,14 @@ describe Course do
 
       context 'with modern languages' do
         context 'with a language as a second subject' do
+          subject { create(:course, :skip_validate, level: 'secondary', subjects: [modern_languages, french, german, spanish]) }
+
           let(:french) { create(:modern_languages_subject, :french) }
           let(:german) { create(:modern_languages_subject, :german) }
           let(:spanish) { create(:modern_languages_subject, :spanish) }
           let!(:french_financial_incentive) { create(:financial_incentive, subject: french, bursary_amount: '15000', scholarship: nil) }
           let!(:german_financial_incentive) { create(:financial_incentive, subject: german, bursary_amount: '14000', scholarship: nil) }
           let!(:spanish_financial_incentive) { create(:financial_incentive, subject: spanish, bursary_amount: '13000', scholarship: nil) }
-
-          subject { create(:course, :skip_validate, level: 'secondary', subjects: [modern_languages, french, german, spanish]) }
 
           it "reads financial incentives from only the first subject, and ignores the 'Modern Languages' subject" do
             expect(subject.bursary_amount).to eq french.financial_incentive.bursary_amount
@@ -2152,14 +2152,14 @@ describe Course do
   end
 
   describe 'adding and removing sites on a course' do
+    subject { create(:course, site_statuses: [existing_site_status]) }
+
     let(:provider) { build(:provider) }
     # this code will be removed and fixed properly in the next pr
     let(:new_site) { create(:site, provider:, code: 'A') }
     # this code will be removed and fixed properly in the next pr
     let(:existing_site) { create(:site, provider:, code: 'B') }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
-
-    subject { create(:course, site_statuses: [existing_site_status]) }
 
     context 'for running courses' do
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
@@ -2222,10 +2222,10 @@ describe Course do
   end
 
   describe '#accrediting_provider_description' do
+    subject { course.accrediting_provider_description }
+
     let(:accrediting_provider) { nil }
     let(:course) { create(:course, accrediting_provider:) }
-
-    subject { course.accrediting_provider_description }
 
     context 'for courses without accrediting provider' do
       it { is_expected.to be_nil }
@@ -2277,12 +2277,12 @@ describe Course do
           salary_details
         ].freeze
 
+      subject { course.enrichments.find_or_initialize_draft }
+
       let(:course) { create(:course, enrichments:) }
       let(:actual_enrichment_attributes) do
         subject.attributes.slice(*copyable_enrichment_attributes)
       end
-
-      subject { course.enrichments.find_or_initialize_draft }
 
       context 'no enrichments' do
         let(:enrichments) { [] }
@@ -2369,6 +2369,8 @@ describe Course do
 
   describe '#discard' do
     context 'new course' do
+      subject { course }
+
       let!(:course) do
         course = create(:course)
 
@@ -2377,8 +2379,6 @@ describe Course do
 
         course
       end
-
-      subject { course }
 
       context 'before discarding' do
         its(:discarded?) { is_expected.to be false }
@@ -2425,18 +2425,18 @@ describe Course do
 
   describe '#applications_open_from' do
     context 'a new course with a given date' do
-      let(:applications_open_from) { Time.zone.today }
-
       subject { create(:course, applications_open_from:) }
+
+      let(:applications_open_from) { Time.zone.today }
 
       its(:applications_open_from) { is_expected.to eq applications_open_from }
     end
 
     context 'a new course within a recruitment cycle' do
+      subject { create(:course, :applications_open_from_not_set, provider:) }
+
       let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
       let(:provider)          { build(:provider, recruitment_cycle:) }
-
-      subject { create(:course, :applications_open_from_not_set, provider:) }
 
       its(:applications_open_from) { is_expected.to eq recruitment_cycle.application_start_date }
     end
@@ -2811,9 +2811,9 @@ describe Course do
 
   describe '#academic_year' do
     context 'when the course has a September 2021 start date' do
-      let(:start_date) { Date.new(2021, 9, 1) }
-
       subject { build(:course, start_date:) }
+
+      let(:start_date) { Date.new(2021, 9, 1) }
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2021 to 2022')
@@ -2821,9 +2821,9 @@ describe Course do
     end
 
     context 'when the course has a December 2021 start date' do
-      let(:start_date) { Date.new(2021, 12, 1) }
-
       subject { build(:course, start_date:) }
+
+      let(:start_date) { Date.new(2021, 12, 1) }
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2021 to 2022')
@@ -2831,9 +2831,9 @@ describe Course do
     end
 
     context 'when the course has a January 2022 start date' do
-      let(:start_date) { Date.new(2022, 1, 1) }
-
       subject { build(:course, start_date:) }
+
+      let(:start_date) { Date.new(2022, 1, 1) }
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2021 to 2022')
@@ -2841,9 +2841,9 @@ describe Course do
     end
 
     context 'when the course has a January 2023 start date' do
-      let(:start_date) { Date.new(2023, 1, 1) }
-
       subject { build(:course, start_date:) }
+
+      let(:start_date) { Date.new(2023, 1, 1) }
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2022 to 2023')
@@ -2851,9 +2851,9 @@ describe Course do
     end
 
     context 'when the course has an August 2023 start date' do
-      let(:start_date) { Date.new(2023, 8, 1) }
-
       subject { build(:course, start_date:) }
+
+      let(:start_date) { Date.new(2023, 8, 1) }
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2022 to 2023')

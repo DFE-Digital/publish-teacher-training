@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe CourseSearchService do
   describe '.call' do
+    subject do
+      described_class.call(filter:, sort:, course_scope: scope)
+    end
+
     let(:course_with_includes) { class_double(Course) }
     let(:scope) { class_double(Course) }
     let(:select_scope) { class_double(Course) }
@@ -40,10 +44,6 @@ RSpec.describe CourseSearchService do
         expect(course_with_includes).to receive(:where).and_return(expected_scope)
         expect(subject).to eq(expected_scope)
       end
-    end
-
-    subject do
-      described_class.call(filter:, sort:, course_scope: scope)
     end
 
     describe 'sort by' do

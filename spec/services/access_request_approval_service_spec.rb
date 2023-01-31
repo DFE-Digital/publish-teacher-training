@@ -4,15 +4,15 @@ require 'rails_helper'
 
 describe AccessRequestApprovalService do
   describe '.call' do
-    let!(:access_request) { create(:access_request) }
-
     subject(:call_service!) { described_class.call(access_request) }
+
+    let!(:access_request) { create(:access_request) }
 
     context 'for a new user' do
       let(:target_user) { User.find_by(email: access_request.email_address) }
 
       it 'creates the new user' do
-        expect { call_service! }.to change { User.count }.by(1)
+        expect { call_service! }.to change(User, :count).by(1)
       end
 
       it 'sets the email address' do
@@ -36,7 +36,7 @@ describe AccessRequestApprovalService do
       end
 
       it 'is marked completed' do
-        expect { call_service! }.to change { access_request.status }
+        expect { call_service! }.to change(access_request, :status)
           .from('requested')
           .to('completed')
       end
@@ -57,7 +57,7 @@ describe AccessRequestApprovalService do
       let!(:target_user) { create(:user, email: access_request.email_address) }
 
       it 'does not create a new user' do
-        expect { call_service! }.not_to(change { User.count })
+        expect { call_service! }.not_to(change(User, :count))
       end
 
       it "sets the target user's providers to the requesting user's providers" do
@@ -130,7 +130,7 @@ describe AccessRequestApprovalService do
       let(:requester_provider_count) { access_request.requester.providers.count }
 
       it 'successfully writes to user_permission' do
-        expect { call_service! }.to change { UserPermission.count }.by(requester_provider_count)
+        expect { call_service! }.to change(UserPermission, :count).by(requester_provider_count)
       end
     end
   end

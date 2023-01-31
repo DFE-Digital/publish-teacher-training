@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 describe SitePolicy do
-  let(:user) { create(:user) }
-
   subject { described_class }
+
+  let(:user) { create(:user) }
 
   permissions :index? do
     it 'allows the :index action for any authenticated user' do

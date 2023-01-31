@@ -69,9 +69,9 @@ describe CourseEnrichment do
   end
 
   describe 'about_course attribute' do
-    let(:about_course_text) { 'this course is great' }
-
     subject { build(:course_enrichment, about_course: about_course_text) }
+
+    let(:about_course_text) { 'this course is great' }
 
     context 'with over 400 words' do
       let(:about_course_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
@@ -91,9 +91,9 @@ describe CourseEnrichment do
   end
 
   describe 'course_length attribute' do
-    let(:course_length_text) { 'this course is great' }
-
     subject { build(:course_enrichment, course_length: course_length_text) }
+
+    let(:course_length_text) { 'this course is great' }
 
     context 'when nil' do
       let(:course_length_text) { nil }
@@ -107,9 +107,9 @@ describe CourseEnrichment do
   end
 
   describe 'how_school_placements_work attribute' do
-    let(:how_school_placements_work_text) { 'this course is great' }
-
     subject { build(:course_enrichment, how_school_placements_work: how_school_placements_work_text) }
+
+    let(:how_school_placements_work_text) { 'this course is great' }
 
     context 'with over 400 words' do
       let(:how_school_placements_work_text) { Faker::Lorem.sentence(word_count: 400 + 1) }
@@ -129,9 +129,9 @@ describe CourseEnrichment do
   end
 
   describe 'interview_process attribute' do
-    let(:interview_process_text) { 'this course is great' }
-
     subject { build(:course_enrichment, interview_process: interview_process_text) }
+
+    let(:interview_process_text) { 'this course is great' }
 
     context 'with over 250 words' do
       let(:interview_process_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
@@ -141,12 +141,12 @@ describe CourseEnrichment do
   end
 
   describe 'required_qualifications attribute' do
+    subject { build(:course_enrichment, required_qualifications: required_qualifications_text, course:) }
+
     let(:required_qualifications_text) { 'this course is great' }
     let(:recruitment_cycle) { build(:recruitment_cycle, year: '2021') }
     let(:provider) { build(:provider, recruitment_cycle:) }
     let(:course) { build(:course, provider:) }
-
-    subject { build(:course_enrichment, required_qualifications: required_qualifications_text, course:) }
 
     context 'with over 100 words' do
       let(:required_qualifications_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -174,9 +174,9 @@ describe CourseEnrichment do
   end
 
   describe 'personal_qualities attribute' do
-    let(:personal_qualities_text) { 'this course is great' }
-
     subject { build(:course_enrichment, personal_qualities: personal_qualities_text) }
+
+    let(:personal_qualities_text) { 'this course is great' }
 
     context 'with over 100 words' do
       let(:personal_qualities_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -186,9 +186,9 @@ describe CourseEnrichment do
   end
 
   describe 'other_requirements attribute' do
-    let(:other_requirements_text) { 'this course is great' }
-
     subject { build(:course_enrichment, other_requirements: other_requirements_text) }
+
+    let(:other_requirements_text) { 'this course is great' }
 
     context 'with over 100 words' do
       let(:other_requirements_text) { Faker::Lorem.sentence(word_count: 100 + 1) }
@@ -198,11 +198,11 @@ describe CourseEnrichment do
   end
 
   describe 'salary_details attribute' do
+    subject { build(:course_enrichment, salary_details: salary_details_text, course: salaried_course) }
+
     let(:salary_details_text) { 'this course is great' }
 
     let(:salaried_course) { build(:course, :with_salary) }
-
-    subject { build(:course_enrichment, salary_details: salary_details_text, course: salaried_course) }
 
     context 'with over 250 words' do
       let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }
@@ -222,9 +222,9 @@ describe CourseEnrichment do
   end
 
   describe 'validation for publish' do
-    let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
-
     subject { course_enrichment }
+
+    let(:course_enrichment) { build(:course_enrichment, :with_fee_based_course) }
 
     context 'fee based course' do
       it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
@@ -294,15 +294,15 @@ describe CourseEnrichment do
   end
 
   describe '#unpublish' do
-    let(:provider) { create(:provider) }
-    let(:course) { create(:course, provider:) }
-    let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
-
     subject do
       create(:course_enrichment, :published,
              last_published_timestamp_utc:,
              course:)
     end
+
+    let(:provider) { create(:provider) }
+    let(:course) { create(:course, provider:) }
+    let(:last_published_timestamp_utc) { Date.new(2017, 1, 1) }
 
     describe 'to initial draft' do
       it 'sets the course to draft' do

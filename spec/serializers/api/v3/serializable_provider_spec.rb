@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 describe API::V3::SerializableProvider do
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
+
   let(:provider) { create(:provider) }
   let(:resource) { described_class.new object: provider }
 
   it 'sets type to providers' do
     expect(resource.jsonapi_type).to eq :providers
   end
-
-  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   it { is_expected.to have_type 'providers' }
   it { is_expected.to have_attribute(:provider_code).with_value(provider.provider_code) }

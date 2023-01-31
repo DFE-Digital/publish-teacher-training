@@ -12,9 +12,6 @@ RSpec/ContextWording:
 RSpec/LetSetup:
   Enabled: false
 
-RSpec/LeadingSubject:
-  Enabled: false
-
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false

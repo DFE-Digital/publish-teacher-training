@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe Provider do
+  subject { provider }
+
   let(:accrediting_provider_enrichments) { [] }
   let(:courses) { [] }
   let(:provider) do
@@ -12,8 +14,6 @@ describe Provider do
            accrediting_provider_enrichments:,
            courses:)
   end
-
-  subject { provider }
 
   its(:to_s) { is_expected.to eq("ACME SCITT (A01) [#{provider.recruitment_cycle}]") }
 
@@ -62,7 +62,7 @@ describe Provider do
 
       it 'validates the presence of a ukprn' do
         # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
-        expect { provider }.to change { described_class.count }.by(1)
+        expect { provider }.to change(described_class, :count).by(1)
         expect(provider).not_to be_valid
       end
     end
@@ -163,45 +163,45 @@ describe Provider do
 
   describe '#changed_since' do
     context 'with a provider that has been changed after the given timestamp' do
-      let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
-
       subject { described_class.changed_since(10.minutes.ago) }
+
+      let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
 
       it { is_expected.to include provider }
     end
 
     context 'with a provider that has been changed less than a second after the given timestamp' do
+      subject { described_class.changed_since(timestamp) }
+
       let(:timestamp) { 5.minutes.ago }
       let(:provider) { create(:provider, changed_at: timestamp + 0.001.seconds) }
-
-      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.to include provider }
     end
 
     context 'with a provider that has been changed exactly at the given timestamp' do
+      subject { described_class.changed_since(publish_time) }
+
       let(:publish_time) { 10.minutes.ago }
       let(:provider) { create(:provider, changed_at: publish_time) }
-
-      subject { described_class.changed_since(publish_time) }
 
       it { is_expected.not_to include provider }
     end
 
     context 'with a provider that has been changed before the given timestamp' do
-      let(:provider) { create(:provider, changed_at: 1.hour.ago) }
-
       subject { described_class.changed_since(10.minutes.ago) }
+
+      let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
       it { is_expected.not_to include provider }
     end
   end
 
   describe '#provider_search' do
+    subject { described_class.provider_search(provider_code) }
+
     let!(:provider) { create(:provider, provider_name: 'Really big school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')]) }
     let!(:provider2) { create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', courses: [build(:course, course_code: '2VVZ')]) }
-
-    subject { described_class.provider_search(provider_code) }
 
     context 'when provider code only is given' do
       let(:provider_code) { 'A01' }
@@ -213,10 +213,10 @@ describe Provider do
   end
 
   describe '#provider_name_search' do
+    subject { described_class.provider_name_search(provider_name) }
+
     let!(:provider)  { create(:provider, provider_name: 'Ford school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')]) }
     let!(:provider2) { create(:provider, provider_name: 'Almost forgotten school', provider_code: 'A02', courses: [build(:course, course_code: '2VVZ')]) }
-
-    subject { described_class.provider_name_search(provider_name) }
 
     context 'when partial provider name is given' do
       let(:provider_name) { 'FOR' }
@@ -228,10 +228,10 @@ describe Provider do
   end
 
   describe '#course_search' do
+    subject { described_class.course_search(course_code) }
+
     let!(:provider) { create(:provider, provider_name: 'Really big school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')]) }
     let!(:provider2) { create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', courses: [build(:course, course_code: '2VVZ')]) }
-
-    subject { described_class.course_search(course_code) }
 
     context 'when course code only is present' do
       let(:course_code) { '2VVZ' }
@@ -272,25 +272,25 @@ describe Provider do
 
     it 'sets the provider type' do
       expect { subject.provider_type = 'scitt' }
-        .to change { subject.provider_type }
+        .to change(subject, :provider_type)
         .from('lead_school').to('scitt')
     end
 
     it "sets 'accrediting_provider' correctly for SCITTs" do
       expect { subject.provider_type = 'scitt' }
-        .to change { subject.accrediting_provider }
+        .to change(subject, :accrediting_provider)
         .from(nil).to('accredited_body')
     end
 
     it "sets 'accrediting_provider' correctly for universities" do
       expect { subject.provider_type = 'university' }
-        .to change { subject.accrediting_provider }
+        .to change(subject, :accrediting_provider)
         .from(nil).to('accredited_body')
     end
 
     it "sets 'accrediting_provider' correctly for universities" do
       expect { subject.provider_type = 'lead_school' }
-        .to change { subject.accrediting_provider }
+        .to change(subject, :accrediting_provider)
         .from(nil).to('not_an_accredited_body')
     end
   end
@@ -369,14 +369,14 @@ describe Provider do
   end
 
   describe 'training_providers' do
+    subject { accredited_provider.training_providers }
+
     let(:accredited_provider) { create(:provider, :accredited_body) }
     let(:training_provider1) { create(:provider) }
     let(:training_provider2) { create(:provider) }
 
     let!(:course1) { create(:course, accrediting_provider: accredited_provider, provider: training_provider1) }
     let!(:course2) { create(:course, provider: training_provider2) }
-
-    subject { accredited_provider.training_providers }
 
     it { is_expected.to contain_exactly(training_provider1) }
   end
@@ -546,6 +546,10 @@ describe Provider do
 
   describe 'scopes' do
     describe '.with_findable_courses' do
+      subject do
+        described_class.with_findable_courses
+      end
+
       let(:findable_course) do
         create(:course, site_statuses: [build(:site_status, :findable)])
       end
@@ -560,10 +564,6 @@ describe Provider do
 
       let(:non_findable_course_with_accrediting_provider) do
         create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
-      end
-
-      subject do
-        described_class.with_findable_courses
       end
 
       it "returns only findable courses' provider and/or accrediting provider" do
@@ -612,6 +612,8 @@ describe Provider do
     end
 
     describe 'in_current_cycle' do
+      subject { described_class.in_current_cycle }
+
       let(:current_provider) { create(:provider) }
       let(:non_current_provider) { create(:provider, :previous_recruitment_cycle) }
 
@@ -620,19 +622,17 @@ describe Provider do
         non_current_provider
       end
 
-      subject { described_class.in_current_cycle }
-
       it 'includes providers in the current recruitment cycle' do
         expect(subject).to contain_exactly(current_provider)
       end
     end
 
     describe '#with_provider_types' do
+      subject { described_class.with_provider_types(provider_types) }
+
       let(:provider_types) { ['lead_school'] }
 
       let(:provider) { create(:provider) }
-
-      subject { described_class.with_provider_types(provider_types) }
 
       it 'returns the correct providers' do
         expect(subject).to contain_exactly(provider)
@@ -640,6 +640,8 @@ describe Provider do
     end
 
     describe '#with_region_codes' do
+      subject { described_class.with_region_codes(region_codes) }
+
       let(:region_codes) { ['london'] }
 
       let(:provider) { create(:provider) }
@@ -647,8 +649,6 @@ describe Provider do
       before do
         provider
       end
-
-      subject { described_class.with_region_codes(region_codes) }
 
       it 'returns the providers with the region codes' do
         expect(subject).to contain_exactly(provider)
@@ -721,6 +721,8 @@ describe Provider do
   end
 
   describe 'in_cycle' do
+    subject { described_class.in_cycle(provider_in_current_cycle.recruitment_cycle) }
+
     let(:provider_in_current_cycle) { create(:provider) }
     let(:provider_in_previous_cycle) { create(:provider, :previous_recruitment_cycle) }
 
@@ -728,8 +730,6 @@ describe Provider do
       provider_in_current_cycle
       provider_in_previous_cycle
     end
-
-    subject { described_class.in_cycle(provider_in_current_cycle.recruitment_cycle) }
 
     it 'includes providers specified via the cycle provided' do
       expect(subject).to contain_exactly(provider_in_current_cycle)
@@ -856,10 +856,10 @@ describe Provider do
   end
 
   describe '#search' do
+    subject { described_class.provider_search(search_term) }
+
     let!(:matching_provider) { create(:provider, provider_code: 'ABC', provider_name: "Dave's Searches") }
     let!(:non_matching_provider) { create(:provider) }
-
-    subject { described_class.provider_search(search_term) }
 
     context 'with an exactly matching code' do
       let(:search_term) { 'ABC' }

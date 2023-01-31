@@ -21,11 +21,11 @@ describe Provider do
   end
 
   describe '#accredited_bodies' do
-    let(:description) { 'Ye olde establishmente' }
-
     subject do
       provider.accredited_bodies
     end
+
+    let(:description) { 'Ye olde establishmente' }
 
     context 'with no accrediting provider (via courses)' do
       it { is_expected.to be_empty }

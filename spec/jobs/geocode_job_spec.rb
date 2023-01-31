@@ -4,6 +4,8 @@ require 'rails_helper'
 describe GeocodeJob do
   include ActiveJob::TestHelper
 
+  subject(:job) { described_class.perform_later('Site', site.id) }
+
   after do
     clear_enqueued_jobs
     clear_performed_jobs
@@ -17,8 +19,6 @@ describe GeocodeJob do
           address4: nil,
           postcode: 'SO45 2PA')
   end
-
-  subject(:job) { described_class.perform_later('Site', site.id) }
 
   it 'queues the job' do
     expect { job }

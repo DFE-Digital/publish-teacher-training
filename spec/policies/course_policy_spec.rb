@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 describe CoursePolicy do
-  let(:user) { create(:user) }
-
   subject { described_class }
+
+  let(:user) { create(:user) }
 
   permissions :index?, :new? do
     it { is_expected.to permit(user, Course) }
@@ -93,12 +93,12 @@ describe CoursePolicy do
   end
 
   describe CoursePolicy::Scope do
+    subject { described_class.new(user, Course).resolve }
+
     let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
     let(:training_provider) { create(:provider) }
     let!(:course) { create(:course, provider: training_provider, accrediting_provider: accredited_body) }
     let!(:other_course) { create(:course) }
-
-    subject { described_class.new(user, Course).resolve }
 
     context 'user from the accredited_body' do
       it { is_expected.to contain_exactly(course) }

@@ -4,9 +4,6 @@ require 'spec_helper'
 
 describe VacancyStatusDeterminationService do
   describe '.call' do
-    let(:vacancy_status_full_time) { '0' }
-    let(:vacancy_status_part_time) { '0' }
-
     subject do
       described_class.call(
         vacancy_status_full_time:,
@@ -14,6 +11,9 @@ describe VacancyStatusDeterminationService do
         course:
       )
     end
+
+    let(:vacancy_status_full_time) { '0' }
+    let(:vacancy_status_part_time) { '0' }
 
     context 'with a full time or part time course' do
       let(:course) { build_stubbed(:course, :full_time_or_part_time) }

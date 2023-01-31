@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe API::Public::V1::SerializableCourse do
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
+
   let(:enrichment) { build(:course_enrichment, :published) }
   let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment]) }
   let(:resource) { described_class.new(object: course) }
-
-  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   it 'sets type to courses' do
     expect(resource.jsonapi_type).to eq(:courses)

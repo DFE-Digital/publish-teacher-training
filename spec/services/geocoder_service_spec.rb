@@ -38,8 +38,8 @@ describe GeocoderService do
       it 'geocodes a valid object' do
         expect { described_class.geocode(obj: valid_site) }
           .to change { valid_site.reload.latitude }.from(nil).to(50.8312522)
-                                                   .and change { valid_site.longitude }.from(nil).to(-1.3792036)
-                                                                                       .and change { valid_site.region_code }.from(nil).to('south_east')
+                                                   .and change(valid_site, :longitude).from(nil).to(-1.3792036)
+                                                                                      .and change(valid_site, :region_code).from(nil).to('south_east')
       end
 
       it 'geocodes UK (gb) addresses only' do
@@ -58,8 +58,8 @@ describe GeocoderService do
       it 'geocodes an invalid object if forced' do
         expect { described_class.geocode(obj: invalid_site, force: true) }
           .to change { invalid_site.reload.latitude }.from(nil).to(51.4524877)
-                                                     .and change { invalid_site.longitude }.from(nil).to(-0.1204749)
-                                                                                           .and change { invalid_site.region_code }.from(nil).to('london')
+                                                     .and change(invalid_site, :longitude).from(nil).to(-0.1204749)
+                                                                                          .and change(invalid_site, :region_code).from(nil).to('london')
       end
 
       it 'does not save to database if Geocoder returns an unsuccessful response' do

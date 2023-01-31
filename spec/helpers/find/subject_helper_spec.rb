@@ -4,9 +4,9 @@ require 'rails_helper'
 
 describe Find::SubjectHelper do
   describe '#secondary_subject_options' do
-    let(:subjects) { [find_or_create(:secondary_subject, :english)] }
-
     subject { secondary_subject_options(subjects) }
+
+    let(:subjects) { [find_or_create(:secondary_subject, :english)] }
 
     it 'returns secondary subject code' do
       expect(subject.first.code).to eq subjects.first.subject_code
@@ -82,9 +82,9 @@ describe Find::SubjectHelper do
   end
 
   describe '#primary_subject_options' do
-    let(:subjects) { [find_or_create(:primary_subject, :primary_with_english)] }
-
     subject { primary_subject_options(subjects) }
+
+    let(:subjects) { [find_or_create(:primary_subject, :primary_with_english)] }
 
     it 'returns primary subject code' do
       expect(subject.first.code).to eq subjects.first.subject_code

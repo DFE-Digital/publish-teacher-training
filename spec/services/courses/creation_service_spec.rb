@@ -3,6 +3,13 @@
 require 'rails_helper'
 
 describe Courses::CreationService do
+  subject do
+    described_class.call(
+      course_params: valid_course_params, provider:,
+      next_available_course_code:
+    )
+  end
+
   let(:provider) { create(:provider, sites: [site]) }
 
   let(:site) { build(:site) }
@@ -10,13 +17,6 @@ describe Courses::CreationService do
   let(:recruitment_cycle) { provider.recruitment_cycle }
 
   let(:next_available_course_code) { false }
-
-  subject do
-    described_class.call(
-      course_params: valid_course_params, provider:,
-      next_available_course_code:
-    )
-  end
 
   context 'primary course' do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }

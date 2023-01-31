@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe RecruitmentCyclePolicy do
+  subject { described_class }
+
   let(:current_recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:next_recruitment_cycle) { find_or_create :recruitment_cycle, :next }
 
@@ -17,8 +19,6 @@ describe RecruitmentCyclePolicy do
         .to match_array [current_recruitment_cycle, next_recruitment_cycle]
     end
   end
-
-  subject { described_class }
 
   permissions :index? do
     let(:user) { create(:user) }

@@ -10,12 +10,12 @@ describe Course do
     let(:next_year)     { next_cycle.year.to_i }
 
     context 'applications_open_from' do
+      subject { course }
+
       let(:course) do
         create(:course,
                applications_open_from: current_cycle.application_start_date)
       end
-
-      subject { course }
 
       context 'for the current recruitment cycle' do
         context 'with a valid date' do
@@ -58,9 +58,9 @@ describe Course do
     end
 
     context 'start_date' do
-      let(:course) { create(:course, start_date: DateTime.new(current_year, 9, 1)) }
-
       subject { course }
+
+      let(:course) { create(:course, start_date: DateTime.new(current_year, 9, 1)) }
 
       context 'for the current recruitment cycle' do
         context 'with a valid start date' do

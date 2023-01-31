@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe ProviderPolicy do
+  subject { described_class }
+
   let(:user) { build(:user) }
   let(:admin) { build(:user, :admin) }
 
@@ -14,8 +16,6 @@ describe ProviderPolicy do
       expect(Pundit.policy_scope(user, Provider.all)).to eq [provider1]
     end
   end
-
-  subject { described_class }
 
   permissions :index?, :suggest?, :new? do
     it { is_expected.to permit user }

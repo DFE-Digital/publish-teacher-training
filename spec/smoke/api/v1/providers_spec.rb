@@ -3,10 +3,10 @@
 require 'spec_helper_smoke'
 
 describe 'V1 Public API Smoke Tests', :aggregate_failures, smoke: true do
+  subject(:response) { HTTParty.get(url) }
+
   let(:recruitment_year) { Settings.current_recruitment_cycle_year }
   let(:base_url) { Settings.publish_api_url }
-
-  subject(:response) { HTTParty.get(url) }
 
   context 'providers' do
     describe 'GET /v1/recruitment_cycles/:recruitment_year/providers' do

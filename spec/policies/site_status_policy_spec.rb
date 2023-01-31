@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 describe SiteStatusPolicy do
+  subject { described_class }
+
   let(:provider) { site_status.course.provider }
   let(:site_status) { create(:site_status) }
-
-  subject { described_class }
 
   permissions :update? do
     let(:user) { create(:user).tap { |u| provider.users << u } }

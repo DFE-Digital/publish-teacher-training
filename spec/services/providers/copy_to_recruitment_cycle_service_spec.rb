@@ -186,12 +186,12 @@ describe Providers::CopyToRecruitmentCycleService do
       end
 
       context 'with force as true' do
-        let(:force) { true }
-        let(:course_codes) { nil }
-
         subject do
           service.execute(provider:, new_recruitment_cycle:, course_codes:)
         end
+
+        let(:force) { true }
+        let(:course_codes) { nil }
 
         it 'still copies the provider' do
           expect do

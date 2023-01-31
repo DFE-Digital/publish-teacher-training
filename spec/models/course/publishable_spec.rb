@@ -4,11 +4,11 @@ require 'rails_helper'
 
 describe Course do
   describe '#publishable?' do
+    subject { course }
+
     let(:course) { create(:course) }
     let(:site) { create(:site) }
     let(:site_status) { create(:site_status, :new, site:) }
-
-    subject { course }
 
     its(:publishable?) { is_expected.to be_falsey }
 

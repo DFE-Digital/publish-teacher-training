@@ -3,6 +3,11 @@
 require 'rails_helper'
 
 describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code', :with_publish_constraint do
+  subject do
+    perform_request
+    response
+  end
+
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
   let(:request_path) { "/api/v3/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}" }
   let(:request_params) { {} }
@@ -63,11 +68,6 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   end
 
   let(:json_response) { JSON.parse(response.body) }
-
-  subject do
-    perform_request
-    response
-  end
 
   def perform_request
     get request_path, params: request_params

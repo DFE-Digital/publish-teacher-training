@@ -26,12 +26,12 @@ describe AccessRequest do
   end
 
   describe '#approve' do
-    let(:access_request) { build(:access_request) }
-
     subject { access_request.approve }
 
+    let(:access_request) { build(:access_request) }
+
     it 'marks the access request as completed' do
-      expect { subject }.to change { access_request.status }
+      expect { subject }.to change(access_request, :status)
         .from('requested')
         .to('completed')
     end
@@ -39,13 +39,13 @@ describe AccessRequest do
 
   describe '#index' do
     context 'with all types of access requests' do
+      subject { described_class.requested }
+
       let!(:access_request1) { create(:access_request, :requested) }
       let!(:access_request2) { create(:access_request, :requested) }
       let!(:access_request3) { create(:access_request, :declined) }
       let!(:access_request4) { create(:access_request, :approved) }
       let!(:access_request5) { create(:access_request, :completed) }
-
-      subject { described_class.requested }
 
       it { is_expected.to include access_request1, access_request2 }
       it { is_expected.not_to include access_request3, access_request4, access_request5 }
@@ -63,6 +63,8 @@ describe AccessRequest do
   end
 
   describe '#add_additional_attributes' do
+    subject { access_request }
+
     let(:user) { create(:user, organisations: [organisation]) }
     let(:organisation) { build(:organisation) }
     let(:access_request) do
@@ -83,8 +85,6 @@ describe AccessRequest do
       Timecop.return
     end
 
-    subject { access_request }
-
     its(:requester)         { is_expected.to eq user }
     its(:request_date_utc)  { is_expected.to be_within(1.second).of Time.now.utc }
     its(:status)            { is_expected.to eq 'requested' }
@@ -92,6 +92,8 @@ describe AccessRequest do
 
   describe 'default scope' do
     context 'discarded records should not be returned' do
+      subject { described_class.all }
+
       let(:access_request1) { create(:access_request) }
       let(:access_request2) { create(:access_request) }
       let(:access_request3) { create(:access_request) }
@@ -99,8 +101,6 @@ describe AccessRequest do
       before do
         access_request2.discard
       end
-
-      subject { described_class.all }
 
       it { is_expected.to include access_request1, access_request3 }
     end

@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe API::Public::V1::SerializableRecruitmentCycle do
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
+
   let(:cycle) { create(:recruitment_cycle) }
   let(:resource) { described_class.new(object: cycle) }
-
-  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   it 'sets type to courses' do
     expect(resource.jsonapi_type).to eq(:recruitment_cycles)
