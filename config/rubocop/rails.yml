@@ -8,15 +8,12 @@ Rails/SkipsModelValidations:
     - 'app/models/provider.rb'
     - 'app/services/subjects/financial_incentive_set_subject_knowledge_enhancement_course_available_service.rb'
     - 'lib/tasks/migrate_user_organisation_to_user_permission.rake'
+
 Rails/OutputSafety:
   Enabled: false
 
 Rails/HasManyOrHasOneDependent:
   Enabled: false
-
-Rails/InverseOf:
-  Exclude:
-    - app/models/course.rb
 
 Rails/HttpStatus:
   Enabled: false

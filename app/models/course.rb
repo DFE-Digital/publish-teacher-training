@@ -156,7 +156,7 @@ class Course < ApplicationRecord
   end
 
   has_one :latest_published_enrichment, -> { published.order('created_at DESC, id DESC').limit(1) },
-          class_name: 'CourseEnrichment'
+          class_name: 'CourseEnrichment', inverse_of: :course
 
   scope :within, lambda { |range, origin:|
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin:))
