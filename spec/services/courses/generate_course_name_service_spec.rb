@@ -92,7 +92,7 @@ describe Courses::GenerateCourseNameService do
             end
 
             it 'Returns the title Media studies' do
-              expect(subject).to eq('Media studies with Mathematics')
+              expect(subject).to eq('Media studies with mathematics')
             end
           end
         end
@@ -298,7 +298,7 @@ describe Courses::GenerateCourseNameService do
           end
 
           it 'Returns a name modern language with both languages and the additional subject' do
-            expect(subject).to eq('Modern Languages (French and Spanish) with Mathematics')
+            expect(subject).to eq('Modern Languages (French and Spanish) with mathematics')
           end
 
           include_examples 'with SEND'

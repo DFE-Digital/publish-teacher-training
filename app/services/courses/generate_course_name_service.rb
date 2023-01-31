@@ -4,6 +4,20 @@ module Courses
   class GenerateCourseNameService
     include ServicePattern
 
+    LANGUAGES = %w[
+      English
+      German
+      Italian
+      Japanese
+      Mandarin
+      Russian
+      Spanish
+      French
+      Ancient Greek
+      Ancient Hebrew
+      Latin
+    ].freeze
+
     ENGINEERS_TEACH_PHYSICS_TITLE = I18n.t('courses.generate_course_name_service.etp_title')
     FURTHER_EDUCATION_TITLE = I18n.t('courses.generate_course_name_service.further_education_title')
 
@@ -32,7 +46,13 @@ module Courses
 
       return formatted_subjects.first if formatted_subjects.length == 1
 
-      "#{formatted_subjects.first} with #{formatted_subjects.last}"
+      "#{formatted_subjects.first} with #{downcase_if_not_language(formatted_subjects.last)}"
+    end
+
+    def downcase_if_not_language(subject_name)
+      return subject_name if LANGUAGES.any? { |s| subject_name.match s }
+
+      subject_name.downcase
     end
 
     def formatted_subjects
