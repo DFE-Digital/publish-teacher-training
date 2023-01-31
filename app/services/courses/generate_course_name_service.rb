@@ -49,10 +49,10 @@ module Courses
       "#{formatted_subjects.first} with #{downcase_if_not_language(formatted_subjects.last)}"
     end
 
-    def downcase_if_not_language(str)
-      return str if LANGUAGES.any? { |s| str.match s }
+    def downcase_if_not_language(subject_name)
+      return subject_name if LANGUAGES.any? { |s| subject_name.match s }
 
-      str.downcase
+      subject_name.downcase
     end
 
     def formatted_subjects
