@@ -3,6 +3,48 @@
 require 'rails_helper'
 
 describe Find::Courses::EntryRequirementsComponent::View, type: :component do
+  def then_i_should_see_the_ske_link
+    expect(page).to have_link('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')
+  end
+
+  context 'with a single subject_knowledge_enhancement_subject' do
+    it 'renders correct message' do
+      course = build(
+        :course,
+        subjects: [build(:secondary_subject, :english)]
+      )
+      result = render_inline(described_class.new(course: course.decorate))
+      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      then_i_should_see_the_ske_link
+    end
+  end
+
+  context 'with multiple subject_knowledge_enhancement_subjects' do
+    it 'renders correct message' do
+      course = build(
+        :course,
+        subjects: [build(:secondary_subject, :german), build(:secondary_subject, :spanish)]
+      )
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      then_i_should_see_the_ske_link
+    end
+  end
+
+  context 'with a primary maths subject_knowledge_enhancement_subject' do
+    it 'renders correct message' do
+      course = build(
+        :course,
+        subjects: [build(:primary_subject, :primary_with_mathematics)]
+      )
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).to include('If you need to improve your primary mathematics knowledge, you may be asked to complete a')
+      then_i_should_see_the_ske_link
+    end
+  end
+
   context 'when the provider accepts pending GCSEs' do
     it 'renders correct message' do
       course = build(

@@ -6,12 +6,13 @@ module Find
       class View < ViewComponent::Base
         attr_accessor :course
 
+        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22].freeze
+        PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES = %w[03].freeze
+
         def initialize(course:)
           super
           @course = course
         end
-
-        private
 
         def degree_grade_content(course)
           degree_grade_hash = {
@@ -22,6 +23,16 @@ module Find
           }
 
           degree_grade_hash[course.degree_grade]
+        end
+
+        private
+
+        def subject_knowledge_enhancement_content?(course)
+          course.subjects.any? { |subject| subject.subject_code if SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
+        end
+
+        def primary_with_mathematics_subject?(course)
+          PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
         end
 
         def required_gcse_content(course)
