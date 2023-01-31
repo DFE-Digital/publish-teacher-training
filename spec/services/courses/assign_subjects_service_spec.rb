@@ -72,7 +72,7 @@ describe Courses::AssignSubjectsService do
       end
 
       it 'sets the name' do
-        expect(subject.name).to eq('English with Biology')
+        expect(subject.name).to eq('English with biology')
       end
     end
   end
