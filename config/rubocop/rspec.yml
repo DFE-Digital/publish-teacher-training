@@ -12,11 +12,6 @@ RSpec/ContextWording:
 RSpec/LetSetup:
   Enabled: false
 
-# This cop wants us to use `expect().to change(Candidate, :count)` instead
-# of `expect().to change { Candidate.count }`, which does not seem better.
-RSpec/ExpectChange:
-  Enabled: false
-
 RSpec/LeadingSubject:
   Enabled: false
 
