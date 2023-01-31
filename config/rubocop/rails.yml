@@ -1,7 +1,4 @@
 require: rubocop-rails
-Rails/Output:
-  Exclude:
-    - config/initializers/console.rb
 
 Rails/SkipsModelValidations:
   Enabled: false
