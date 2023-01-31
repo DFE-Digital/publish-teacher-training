@@ -15,9 +15,6 @@ Rails/OutputSafety:
 Rails/HasManyOrHasOneDependent:
   Enabled: false
 
-Rails/Pluck:
-  Enabled: false
-
 Rails/SquishedSQLHeredocs:
   Enabled: false
 

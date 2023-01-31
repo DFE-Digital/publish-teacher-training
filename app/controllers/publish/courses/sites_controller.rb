@@ -71,7 +71,7 @@ module Publish
         selected_site_ids = params.dig(:course, :site_statuses_attributes)
                                   .values
                                   .select { |field| field['selected'] == '1' }
-                                  .map { |field| field['id'] }
+                                  .pluck('id')
 
         params['course']['sites_ids'] = selected_site_ids
         params['course'].delete('site_statuses_attributes')
