@@ -9,11 +9,6 @@ RSpec/MultipleExpectations:
 RSpec/ContextWording:
   Enabled: false
 
-# we have a property called "subject" in some factories
-RSpec/EmptyLineAfterSubject:
-  Exclude:
-    - 'spec/factories/*.rb'
-
 RSpec/LetSetup:
   Enabled: false
 
