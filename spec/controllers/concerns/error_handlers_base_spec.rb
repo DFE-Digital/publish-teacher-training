@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ErrorHandlers::Base do
   controller(ActionController::Base) do
-    include ErrorHandlers::Base
+    include described_class
 
     def error
       raise hell

@@ -472,7 +472,7 @@ describe Course do
     describe 'valid?' do
       context 'A new course' do
         let(:provider) { build(:provider) }
-        let(:course) { Course.new(provider:) }
+        let(:course) { described_class.new(provider:) }
         let(:errors) { course.errors.messages }
 
         before { course.valid?(:new) }
@@ -490,7 +490,7 @@ describe Course do
         end
 
         context 'With modern languages as a subject' do
-          let(:course) { Course.new(provider:, subjects: [modern_languages]) }
+          let(:course) { described_class.new(provider:, subjects: [modern_languages]) }
 
           it 'Requires a language to be selected' do
             error = errors[:modern_languages_subjects]
@@ -819,10 +819,10 @@ describe Course do
       it 'returns courses in range' do
         course1
         course2
-        courses_within_range = Course.within(16, origin: [0, 0])
+        courses_within_range = described_class.within(16, origin: [0, 0])
 
         expect(courses_within_range.count).to eq(1)
-        expect(Course.within(16, origin: [0, 0])).to match_array([course1])
+        expect(described_class.within(16, origin: [0, 0])).to match_array([course1])
       end
     end
 
@@ -1509,7 +1509,7 @@ describe Course do
 
       context 'with a site_statuses association that has not been loaded' do
         it 'uses #select on the association' do
-          course_with_site_statuses_not_loaded = Course.find(course.id)
+          course_with_site_statuses_not_loaded = described_class.find(course.id)
           allow(course_with_site_statuses_not_loaded.site_statuses)
             .to receive(:findable).and_return([])
 
@@ -1837,9 +1837,9 @@ describe Course do
         findable_course
         suspended_course_with_new_site
 
-        expect(Course.not_new.count).to eq(2)
-        expect(Course.not_new.first.sites.count).to eq(1)
-        expect(Course.not_new.second.sites.count).to eq(1)
+        expect(described_class.not_new.count).to eq(2)
+        expect(described_class.not_new.first.sites.count).to eq(1)
+        expect(described_class.not_new.second.sites.count).to eq(1)
       end
     end
 
@@ -1854,7 +1854,7 @@ describe Course do
       let!(:old_course) { create(:course, age: 1.hour.ago) }
       let!(:course) { create(:course, age: 1.hour.ago) }
 
-      subject { Course.changed_since(nil) }
+      subject { described_class.changed_since(nil) }
 
       it { is_expected.to include course }
       it { is_expected.to include old_course }
@@ -1866,7 +1866,7 @@ describe Course do
 
       before { course.touch }
 
-      subject { Course.changed_since(10.minutes.ago) }
+      subject { described_class.changed_since(10.minutes.ago) }
 
       it { is_expected.to include course }
       it { is_expected.not_to include old_course }
@@ -1876,7 +1876,7 @@ describe Course do
       let(:timestamp) { 5.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp + 0.001.seconds) }
 
-      subject { Course.changed_since(timestamp) }
+      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.to include course }
     end
@@ -1885,7 +1885,7 @@ describe Course do
       let(:timestamp) { 10.minutes.ago }
       let(:course) { create(:course, changed_at: timestamp) }
 
-      subject { Course.changed_since(timestamp) }
+      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.not_to include course }
     end
@@ -2343,7 +2343,7 @@ describe Course do
 
   describe 'self.get_by_codes' do
     it 'returns the found course' do
-      expect(Course.get_by_codes(
+      expect(described_class.get_by_codes(
                course.recruitment_cycle.year,
                course.provider.provider_code,
                course.course_code
@@ -2663,7 +2663,7 @@ describe Course do
     end
 
     context 'when age_range_in_years not set' do
-      subject { Course.new }
+      subject { described_class.new }
 
       it 'returns nil' do
         expect(subject.age_minimum).to be_nil
@@ -2679,7 +2679,7 @@ describe Course do
     end
 
     context 'when age_range_in_years not set' do
-      subject { Course.new }
+      subject { described_class.new }
 
       it 'returns nil' do
         expect(subject.age_maximum).to be_nil

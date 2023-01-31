@@ -45,7 +45,7 @@ describe AccessRequest do
       let!(:access_request4) { create(:access_request, :approved) }
       let!(:access_request5) { create(:access_request, :completed) }
 
-      subject { AccessRequest.requested }
+      subject { described_class.requested }
 
       it { is_expected.to include access_request1, access_request2 }
       it { is_expected.not_to include access_request3, access_request4, access_request5 }
@@ -57,8 +57,8 @@ describe AccessRequest do
     let!(:access_request2) { create(:access_request, request_date_utc: 2.minutes.ago.utc) }
 
     it 'returns the new enrichment first' do
-      expect(AccessRequest.by_request_date.first).to eq access_request2
-      expect(AccessRequest.by_request_date.last).to eq access_request1
+      expect(described_class.by_request_date.first).to eq access_request2
+      expect(described_class.by_request_date.last).to eq access_request1
     end
   end
 
@@ -100,7 +100,7 @@ describe AccessRequest do
         access_request2.discard
       end
 
-      subject { AccessRequest.all }
+      subject { described_class.all }
 
       it { is_expected.to include access_request1, access_request3 }
     end

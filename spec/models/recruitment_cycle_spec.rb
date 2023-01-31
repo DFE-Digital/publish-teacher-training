@@ -54,7 +54,7 @@ describe RecruitmentCycle do
 
     describe '.current_recruitment_cycle' do
       it 'returns the first cycle, ordered by year' do
-        expect(RecruitmentCycle.current_recruitment_cycle).to eq(current_cycle)
+        expect(described_class.current_recruitment_cycle).to eq(current_cycle)
       end
     end
 
@@ -70,7 +70,7 @@ describe RecruitmentCycle do
 
     describe '.next_recruitment_cycle' do
       it 'returns the next cycle after the current one' do
-        expect(RecruitmentCycle.next_recruitment_cycle).to eq(next_cycle)
+        expect(described_class.next_recruitment_cycle).to eq(next_cycle)
       end
     end
 

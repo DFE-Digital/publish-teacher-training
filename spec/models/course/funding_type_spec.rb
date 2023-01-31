@@ -35,7 +35,7 @@ RSpec.describe Course do
     end
 
     describe 'Default' do
-      subject { Course.new(provider: create(:provider)) }
+      subject { described_class.new(provider: create(:provider)) }
 
       its(:funding_type) { is_expected.to be_nil }
     end

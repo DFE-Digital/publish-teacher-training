@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe VacancyHelper do
-  include VacancyHelper
+  include described_class
 
   describe '#vacancy_available_for_course_site_status' do
     let(:vacancy_study_mode) { nil }

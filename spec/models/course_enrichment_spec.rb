@@ -64,7 +64,7 @@ describe CourseEnrichment do
     let!(:new_enrichment) { create(:course_enrichment, :published) }
 
     it 'orders by created_at descending' do
-      expect(CourseEnrichment.most_recent).to eq([new_enrichment, old_enrichment])
+      expect(described_class.most_recent).to eq([new_enrichment, old_enrichment])
     end
   end
 

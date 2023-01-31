@@ -15,7 +15,7 @@ describe API::V3::SerializableCourse do
     jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V3::SerializableCourse
+        Course: described_class
       }
     ).to_json
   end
@@ -49,7 +49,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -73,7 +73,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Subject: API::V3::SerializableSubject,
           PrimarySubject: API::V3::SerializableSubject
         },
@@ -93,7 +93,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -112,7 +112,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -131,7 +131,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [

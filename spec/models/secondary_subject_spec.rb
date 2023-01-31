@@ -9,16 +9,16 @@ describe SecondarySubject do
     end
 
     it 'returns the modern language subject' do
-      expect(SecondarySubject.modern_languages).to eq(modern_languages)
+      expect(described_class.modern_languages).to eq(modern_languages)
     end
 
     it 'memoises the subject object' do
-      SecondarySubject.modern_languages
+      described_class.modern_languages
 
-      allow(SecondarySubject).to receive(:find_by)
+      allow(described_class).to receive(:find_by)
 
-      expect(SecondarySubject.modern_languages).to eq(modern_languages)
-      expect(SecondarySubject).not_to have_received(:find_by)
+      expect(described_class.modern_languages).to eq(modern_languages)
+      expect(described_class).not_to have_received(:find_by)
     end
   end
 
@@ -28,16 +28,16 @@ describe SecondarySubject do
     end
 
     it 'returns the physics subject' do
-      expect(SecondarySubject.physics).to eq(physics)
+      expect(described_class.physics).to eq(physics)
     end
 
     it 'memoises the subject object' do
-      SecondarySubject.physics
+      described_class.physics
 
-      allow(SecondarySubject).to receive(:find_by)
+      allow(described_class).to receive(:find_by)
 
-      expect(SecondarySubject.physics).to eq(physics)
-      expect(SecondarySubject).not_to have_received(:find_by)
+      expect(described_class.physics).to eq(physics)
+      expect(described_class).not_to have_received(:find_by)
     end
   end
 end

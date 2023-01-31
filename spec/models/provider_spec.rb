@@ -62,7 +62,7 @@ describe Provider do
 
       it 'validates the presence of a ukprn' do
         # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
-        expect { provider }.to change { Provider.count }.by(1)
+        expect { provider }.to change { described_class.count }.by(1)
         expect(provider).not_to be_valid
       end
     end
@@ -140,7 +140,7 @@ describe Provider do
       it 'orders the providers by name in ascending order' do
         provider_a
         provider_b
-        expect(Provider.by_name_ascending).to eq([provider_a, provider_b])
+        expect(described_class.by_name_ascending).to eq([provider_a, provider_b])
       end
     end
 
@@ -148,7 +148,7 @@ describe Provider do
       it 'orders the providers by name in descending order' do
         provider_a
         provider_b
-        expect(Provider.by_name_descending).to eq([provider_b, provider_a])
+        expect(described_class.by_name_descending).to eq([provider_b, provider_a])
       end
     end
 
@@ -156,7 +156,7 @@ describe Provider do
       it 'orders the providers by name in descending order' do
         provider_a
         provider_b
-        expect(Provider.by_provider_name(provider_b.provider_name)).to eq([provider_b, provider_a])
+        expect(described_class.by_provider_name(provider_b.provider_name)).to eq([provider_b, provider_a])
       end
     end
   end
@@ -165,7 +165,7 @@ describe Provider do
     context 'with a provider that has been changed after the given timestamp' do
       let(:provider) { create(:provider, changed_at: 5.minutes.ago) }
 
-      subject { Provider.changed_since(10.minutes.ago) }
+      subject { described_class.changed_since(10.minutes.ago) }
 
       it { is_expected.to include provider }
     end
@@ -174,7 +174,7 @@ describe Provider do
       let(:timestamp) { 5.minutes.ago }
       let(:provider) { create(:provider, changed_at: timestamp + 0.001.seconds) }
 
-      subject { Provider.changed_since(timestamp) }
+      subject { described_class.changed_since(timestamp) }
 
       it { is_expected.to include provider }
     end
@@ -183,7 +183,7 @@ describe Provider do
       let(:publish_time) { 10.minutes.ago }
       let(:provider) { create(:provider, changed_at: publish_time) }
 
-      subject { Provider.changed_since(publish_time) }
+      subject { described_class.changed_since(publish_time) }
 
       it { is_expected.not_to include provider }
     end
@@ -191,7 +191,7 @@ describe Provider do
     context 'with a provider that has been changed before the given timestamp' do
       let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
-      subject { Provider.changed_since(10.minutes.ago) }
+      subject { described_class.changed_since(10.minutes.ago) }
 
       it { is_expected.not_to include provider }
     end
@@ -317,7 +317,7 @@ describe Provider do
       end
 
       context 'with .include_courses_counts' do
-        let(:provider_with_included) { Provider.include_courses_counts.first }
+        let(:provider_with_included) { described_class.include_courses_counts.first }
 
         it 'return course count using included_courses_count' do
           allow(provider_with_included).to receive(:included_courses_count).and_return(1)
@@ -330,7 +330,7 @@ describe Provider do
       end
 
       context 'with .include_accredited_courses_counts' do
-        let(:provider_with_included) { Provider.include_accredited_courses_counts(provider.provider_code).first }
+        let(:provider_with_included) { described_class.include_accredited_courses_counts(provider.provider_code).first }
 
         it 'return course count using included_accredited_courses_count' do
           allow(provider_with_included).to receive(:included_accredited_courses_count).and_return(1)
