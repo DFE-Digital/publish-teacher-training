@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 describe ContactPolicy do
+  subject { described_class }
+
   let(:user) { create(:user) }
   let(:provider) { create(:provider) }
   let(:contact) { create(:contact, provider:) }
-
-  subject { described_class }
 
   permissions :show?, :update? do
     context 'a user that belongs to the provider' do

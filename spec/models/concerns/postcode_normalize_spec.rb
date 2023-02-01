@@ -4,9 +4,9 @@ require 'rails_helper'
 
 describe PostcodeNormalize do
   # TODO: Create a test object to use this on instead.
-  let(:object) { Site.new }
-
   subject { object }
+
+  let(:object) { Site.new }
 
   describe '#postcode' do
     let(:postcode) { 'sw1a1aa' }

@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers', :with_publish_constraint do
+  subject do
+    perform_request
+
+    response
+  end
+
   let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 
   let!(:provider) do
@@ -18,12 +24,6 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers', :with_pub
 
   def perform_request
     get request_path
-  end
-
-  subject do
-    perform_request
-
-    response
   end
 
   describe 'JSON generated for a providers' do

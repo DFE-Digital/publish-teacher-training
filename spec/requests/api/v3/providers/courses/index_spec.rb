@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_code/courses', :with_publish_constraint do
+  subject { response }
+
   let(:course_subject_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
 
   let(:current_cycle) { find_or_create :recruitment_cycle }
@@ -46,8 +48,6 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
   let(:site_status)    { findable_open_course.site_statuses.first }
   let(:site)           { site_status.site }
 
-  subject { response }
-
   describe 'GET index' do
     def perform_request
       findable_open_course
@@ -57,9 +57,9 @@ describe 'GET v3/recruitment_cycle/:recruitment_cycle_year/providers/:provider_c
 
     describe 'JSON generated for courses' do
       context 'with a specified provider' do
-        let(:request_path) { "/api/v3/recruitment_cycles/#{current_cycle.year}/providers/#{provider.provider_code}/courses" }
-
         subject { perform_request }
+
+        let(:request_path) { "/api/v3/recruitment_cycles/#{current_cycle.year}/providers/#{provider.provider_code}/courses" }
 
         it { is_expected.to have_http_status(:success) }
 

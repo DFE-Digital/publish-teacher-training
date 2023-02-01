@@ -9,7 +9,7 @@ RSpec.describe PageTitle do
 
   context 'given a string that is not in the format of an i18n path' do
     it 'constructs a page title using the provided value' do
-      component = PageTitle.new(title: 'Some title')
+      component = described_class.new(title: 'Some title')
       page_title = component.build_page_title
       expect(page_title).to eq('Some title - Cool Service - GOV.UK')
     end
@@ -17,7 +17,7 @@ RSpec.describe PageTitle do
 
   context 'when has_errors is true' do
     it 'constructs a page title value with an error' do
-      component = PageTitle.new(title: 'Some title', has_errors: true)
+      component = described_class.new(title: 'Some title', has_errors: true)
       page_title = component.build_page_title
       expect(page_title).to eq('Error: Some title - Cool Service - GOV.UK')
     end
@@ -29,7 +29,7 @@ RSpec.describe PageTitle do
     end
 
     it 'constructs a page title value' do
-      component = PageTitle.new(title: 'sign_in.index')
+      component = described_class.new(title: 'sign_in.index')
       page_title = component.build_page_title
       expect(page_title).to eq('Sign in - Cool Service - GOV.UK')
     end

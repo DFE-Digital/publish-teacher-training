@@ -811,11 +811,11 @@ describe CourseDecorator do
   end
 
   describe '#cycle_range' do
+    subject { course.decorate.cycle_range }
+
     let(:expected_cycle_range) do
       "#{current_recruitment_cycle.year} to #{current_recruitment_cycle.year.to_i + 1}"
     end
-
-    subject { course.decorate.cycle_range }
 
     it 'states the correct cycle range' do
       expect(subject).to eq(expected_cycle_range)

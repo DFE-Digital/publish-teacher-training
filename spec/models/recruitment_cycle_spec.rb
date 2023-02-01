@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 describe RecruitmentCycle do
+  subject { current_cycle }
+
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
-
-  subject { current_cycle }
 
   its(:to_s) { is_expected.to eq('2023/24') }
 
@@ -54,7 +54,7 @@ describe RecruitmentCycle do
 
     describe '.current_recruitment_cycle' do
       it 'returns the first cycle, ordered by year' do
-        expect(RecruitmentCycle.current_recruitment_cycle).to eq(current_cycle)
+        expect(described_class.current_recruitment_cycle).to eq(current_cycle)
       end
     end
 
@@ -70,7 +70,7 @@ describe RecruitmentCycle do
 
     describe '.next_recruitment_cycle' do
       it 'returns the next cycle after the current one' do
-        expect(RecruitmentCycle.next_recruitment_cycle).to eq(next_cycle)
+        expect(described_class.next_recruitment_cycle).to eq(next_cycle)
       end
     end
 

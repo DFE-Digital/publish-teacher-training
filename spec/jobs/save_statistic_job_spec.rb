@@ -4,12 +4,12 @@ require 'rails_helper'
 describe SaveStatisticJob do
   include ActiveJob::TestHelper
 
+  subject(:job) { described_class.perform_later }
+
   after do
     clear_enqueued_jobs
     clear_performed_jobs
   end
-
-  subject(:job) { described_class.perform_later }
 
   it 'queues the job' do
     expect { job }

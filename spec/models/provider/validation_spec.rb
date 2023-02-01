@@ -76,10 +76,10 @@ describe Provider do
     end
 
     describe '#train_with_us' do
+      subject { build(:provider, train_with_us:) }
+
       let(:word_count) { 250 }
       let(:train_with_us) { Faker::Lorem.sentence(word_count:) }
-
-      subject { build(:provider, train_with_us:) }
 
       context 'word count within limit' do
         it { is_expected.to be_valid }
@@ -93,10 +93,10 @@ describe Provider do
     end
 
     describe '#train_with_disability' do
+      subject { build(:provider, train_with_disability:) }
+
       let(:word_count) { 250 }
       let(:train_with_disability) { Faker::Lorem.sentence(word_count:) }
-
-      subject { build(:provider, train_with_disability:) }
 
       context 'word count within limit' do
         it { is_expected.to be_valid }
@@ -111,6 +111,11 @@ describe Provider do
 
     context 'no accrediting_providers' do
       describe '#accrediting_provider_providers' do
+        subject do
+          provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+          provider
+        end
+
         let(:word_count) { 100 }
 
         let(:accrediting_provider_enrichments) do
@@ -127,11 +132,6 @@ describe Provider do
 
         let(:provider) do
           create(:provider)
-        end
-
-        subject do
-          provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-          provider
         end
 
         context 'word count within limit' do
@@ -152,6 +152,11 @@ describe Provider do
 
     context 'with accrediting_providers' do
       describe '#accrediting_provider_providers' do
+        subject do
+          provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+          provider
+        end
+
         let(:word_count) { 100 }
 
         let(:accrediting_providers) do
@@ -179,11 +184,6 @@ describe Provider do
 
         let(:provider) do
           create(:provider, courses:)
-        end
-
-        subject do
-          provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-          provider
         end
 
         context 'word count within limit' do

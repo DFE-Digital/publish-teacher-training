@@ -4,6 +4,8 @@ require 'rails_helper'
 
 describe Course do
   describe '#enrichments' do
+    subject { course.reload.enrichments }
+
     let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
     let(:another_course) do
       create(:course, enrichments: [
@@ -16,8 +18,6 @@ describe Course do
     let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
     let(:course) { create(:course, enrichments:) }
 
-    subject { course.reload.enrichments }
-
     its(:size) { is_expected.to eq(3) }
 
     it "doesn't overlap with enrichments from another course" do
@@ -26,9 +26,9 @@ describe Course do
   end
 
   describe '#content_status' do
-    let(:course) { create(:course, enrichments:) }
-
     subject { course }
+
+    let(:course) { create(:course, enrichments:) }
 
     context 'for a course without any enrichments' do
       let(:enrichments) { [] }
@@ -75,18 +75,18 @@ describe Course do
     end
 
     context 'on a course with only a draft enrichment' do
+      subject do
+        create(:course,
+               changed_at: 10.minutes.ago,
+               enrichments:)
+      end
+
       let(:enrichments) do
         [build(:course_enrichment, :initial_draft,
                created_at: 1.day.ago,
                updated_at: 20.minutes.ago)]
       end
       let(:enrichment) { subject.enrichments.first }
-
-      subject do
-        create(:course,
-               changed_at: 10.minutes.ago,
-               enrichments:)
-      end
 
       its(:changed_at) { is_expected.to be_within(1.second).of Time.now.utc }
 
@@ -108,6 +108,8 @@ describe Course do
     end
 
     context 'on a course with a draft enrichment and previously-published enrichments' do
+      subject { create(:course, enrichments:) }
+
       let(:enrichments) do
         [
           build(:course_enrichment, :published, created_at: 5.days.ago),
@@ -115,8 +117,6 @@ describe Course do
           build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago)
         ]
       end
-
-      subject { create(:course, enrichments:) }
 
       it 'publishes the draft' do
         subject.enrichments.each do |enrichment|

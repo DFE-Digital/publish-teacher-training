@@ -156,7 +156,7 @@ class Course < ApplicationRecord
   end
 
   has_one :latest_published_enrichment, -> { published.order('created_at DESC, id DESC').limit(1) },
-          class_name: 'CourseEnrichment'
+          class_name: 'CourseEnrichment', inverse_of: :course
 
   scope :within, lambda { |range, origin:|
     joins(site_statuses: :site).merge(SiteStatus.where(status: :running)).merge(Site.within(range, origin:))
@@ -914,7 +914,7 @@ class Course < ApplicationRecord
   def validate_applications_open_from
     if applications_open_from.blank? || applications_open_from.is_a?(Struct)
       errors.add(:applications_open_from, :blank)
-    elsif !valid_date_range.include?(applications_open_from)
+    elsif valid_date_range.exclude?(applications_open_from)
       chosen_date = short_date(applications_open_from)
       start_date = short_date(recruitment_cycle.application_start_date)
       end_date = short_date(recruitment_cycle.application_end_date)

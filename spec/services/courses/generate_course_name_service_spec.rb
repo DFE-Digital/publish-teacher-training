@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 describe Courses::GenerateCourseNameService do
+  subject(:generated_title) { described_class.call(course:) }
+
   let(:subjects) { [] }
   let(:is_send) { false }
   let(:level) { 'primary' }
   let(:campaign_name) { 'no_campaign' }
   let(:course) { Course.new(level:, subjects:, is_send:, campaign_name:) }
   let(:modern_languages) { find_or_create(:secondary_subject, :modern_languages) }
-
-  subject(:generated_title) { described_class.call(course:) }
 
   before do
     SecondarySubject.clear_cache

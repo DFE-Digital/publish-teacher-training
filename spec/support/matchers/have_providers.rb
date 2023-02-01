@@ -4,7 +4,7 @@ RSpec::Matchers.define :have_providers do |*expected_providers|
   expected_providers = expected_providers.flatten
   def provider_codes(server_response_body)
     json = JSON.parse(server_response_body)
-    json.map { |provider| provider['institution_code'] }
+    json.pluck('institution_code')
   end
 
   match do |server_response_body|

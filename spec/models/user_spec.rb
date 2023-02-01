@@ -49,11 +49,11 @@ describe User do
       its(:admin?) { is_expected.to be_truthy }
 
       it 'shows up in User.admins' do
-        expect(User.admins).to eq([subject])
+        expect(described_class.admins).to eq([subject])
       end
 
       it "doesn't show up in User.non_admins" do
-        expect(User.non_admins).to be_empty
+        expect(described_class.non_admins).to be_empty
       end
     end
 
@@ -64,11 +64,11 @@ describe User do
         its(:admin?) { is_expected.to be_falsey }
 
         it 'is a non-admin user' do
-          expect(User.non_admins).to eq([subject])
+          expect(described_class.non_admins).to eq([subject])
         end
 
         it 'is not an admin' do
-          expect(User.admins).to be_empty
+          expect(described_class.admins).to be_empty
         end
       end
     end
@@ -79,7 +79,7 @@ describe User do
     let!(:active_user) { create(:user, accept_terms_date_utc: Date.yesterday) }
 
     it 'includes active users and excludes inactive users' do
-      expect(User.active).to eq([active_user])
+      expect(described_class.active).to eq([active_user])
     end
   end
 
@@ -121,10 +121,10 @@ describe User do
 
     describe '#associated_with_accredited_body?' do
       context 'user is associated with accredited body' do
+        subject { create(:user, providers: [accredited_body]) }
+
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
         let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
-
-        subject { create(:user, providers: [accredited_body]) }
 
         it 'returns true' do
           expect(subject.associated_with_accredited_body?).to be true
@@ -175,11 +175,11 @@ describe User do
       its(:discarded?) { is_expected.to be false }
 
       it 'is in kept' do
-        expect(User.kept).to eq([subject])
+        expect(described_class.kept).to eq([subject])
       end
 
       it 'is not in discarded' do
-        expect(User.discarded).to be_empty
+        expect(described_class.discarded).to be_empty
       end
     end
 
@@ -191,11 +191,11 @@ describe User do
       its(:discarded?) { is_expected.to be true }
 
       it 'is not in kept' do
-        expect(User.kept).to be_empty
+        expect(described_class.kept).to be_empty
       end
 
       it 'is in discarded' do
-        expect(User.discarded).to eq([subject])
+        expect(described_class.discarded).to eq([subject])
       end
     end
   end
@@ -254,7 +254,7 @@ describe User do
       end
 
       it 'returns users who are subscribed to course update notifications for a given accredited body' do
-        expect(User.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+        expect(described_class.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
       end
     end
 
@@ -287,7 +287,7 @@ describe User do
       end
 
       it 'includes user who are subscribed to course publish notifications for a given accredited body' do
-        expect(User.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+        expect(described_class.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
       end
     end
   end
@@ -304,7 +304,7 @@ describe User do
     end
 
     it 'orders alphabetically by first_name then last name' do
-      expect(User.in_name_order).to eq([user1, user4, user2, user3])
+      expect(described_class.in_name_order).to eq([user1, user4, user2, user3])
     end
   end
 end

@@ -111,9 +111,9 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
     end
 
     describe '#json_output' do
-      let(:document) { Openapi3Parser.load(spec) }
-
       subject { described_class.new(nil, document) }
+
+      let(:document) { Openapi3Parser.load(spec) }
 
       it 'renders first anyOf reference example' do
         schema = document.paths['/widgets'].get.node_data['responses']['200']['content']['application/json']['schema']

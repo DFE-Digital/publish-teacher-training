@@ -4,7 +4,7 @@ class AddProviderRefToProviderEnrichment < ActiveRecord::Migration[5.2]
   def up
     add_reference :provider_enrichment, :provider, index: true, type: :int
 
-    execute <<-SQL
+    execute <<-SQL.squish
     UPDATE provider_enrichment
     SET    provider_id =
            (

@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 describe Sites::CodeGenerator do
-  let(:provider) { create(:provider) }
-
   subject { described_class.call(provider:) }
+
+  let(:provider) { create(:provider) }
 
   it 'generates a UCAS style code (one of A-Z, 0-9 or -)' do
     expect(subject).to match(/\A[A-Z0-9-]{1}\z/)

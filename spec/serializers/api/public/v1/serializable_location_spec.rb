@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 describe API::Public::V1::SerializableLocation do
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
+
   let(:location) { create(:site) }
   let(:resource) { described_class.new(object: location) }
 
   it 'sets type to locations' do
     expect(resource.jsonapi_type).to eq(:locations)
   end
-
-  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   it { is_expected.to have_type 'locations' }
 

@@ -3,14 +3,14 @@
 require 'rails_helper'
 
 describe API::V3::SerializableRecruitmentCycle do
+  subject { JSON.parse(resource.as_jsonapi.to_json) }
+
   let(:recruitment_cycle) { create(:recruitment_cycle) }
   let(:resource) { described_class.new object: recruitment_cycle }
 
   it 'sets type to recruitment_cycles' do
     expect(resource.jsonapi_type).to eq :recruitment_cycles
   end
-
-  subject { JSON.parse(resource.as_jsonapi.to_json) }
 
   it { is_expected.to have_type 'recruitment_cycles' }
   it { is_expected.to have_attribute(:year).with_value(recruitment_cycle.year) }

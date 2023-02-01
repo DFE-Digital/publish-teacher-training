@@ -4,7 +4,7 @@ class AddCourseRefToCourseEnrichment < ActiveRecord::Migration[5.2]
   def up
     add_reference :course_enrichment, :course, index: true, type: :int
 
-    execute <<-SQL
+    execute <<-SQL.squish
     UPDATE course_enrichment
     SET    course_id =
            (

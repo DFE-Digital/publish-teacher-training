@@ -2,8 +2,10 @@
 
 class AddStructuredDegreeColumnsToTheCourseTable < ActiveRecord::Migration[6.1]
   def change
-    add_column :course, :degree_grade, :integer
-    add_column :course, :additional_degree_subject_requirements, :boolean
-    add_column :course, :degree_subject_requirements, :string
+    change_table :course, bulk: true do |t|
+      t.column :degree_grade, :integer
+      t.column :additional_degree_subject_requirements, :boolean
+      t.column :degree_subject_requirements, :string
+    end
   end
 end
