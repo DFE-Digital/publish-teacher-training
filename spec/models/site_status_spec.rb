@@ -7,7 +7,7 @@ RSpec.describe SiteStatus do
 
   RSpec::Matchers.define :have_vacancies do
     match do |actual|
-      described_class.with_vacancies.include?(actual)
+      SiteStatus.with_vacancies.include?(actual)
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe SiteStatus do
   end
 
   describe 'findable scope' do
-    subject { described_class.findable }
+    subject { SiteStatus.findable }
 
     context 'with a course discontinued on UCAS' do
       it { is_expected.not_to include(create(:site_status, :discontinued)) }
@@ -162,7 +162,7 @@ RSpec.describe SiteStatus do
   end
 
   describe 'default_vac_status_given' do
-    subject { described_class }
+    subject { SiteStatus }
 
     it 'returns correct default_vac_status' do
       expect(subject.default_vac_status_given(study_mode: 'full_time')).to eq :full_time_vacancies
