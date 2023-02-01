@@ -4,13 +4,13 @@ module Publish
   module SubjectHelper
     def primary_form_options(subjects = primary_subjects)
       subjects.map do |subject|
-        PrimarySubjectInput.new(1 + subject.subject_code.to_i, subject.subject_name)
+        PrimarySubjectInput.new(subject.id, subject.subject_name)
       end
     end
 
     private
 
-    PrimarySubjectInput = Struct.new(:code, :name)
+    PrimarySubjectInput = Struct.new(:id, :name)
 
     def primary_subjects
       Subject.where(type: 'PrimarySubject')

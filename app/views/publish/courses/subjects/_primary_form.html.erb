@@ -10,7 +10,7 @@
     </legend>
     <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
     <% primary_form_options.each do |opt| %>
-      <%= form.govuk_radio_button :master_subject_id, opt.code, label: { text: opt.name } %>
+      <%= form.govuk_radio_button :master_subject_id, opt.id, label: { text: opt.name } %>
     <% end %>
   </fieldset>
 <% end %>
