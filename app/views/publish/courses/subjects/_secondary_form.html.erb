@@ -15,8 +15,8 @@
       <%= govuk_link_to "Learn more about the bursaries and scholarships", "https://www.gov.uk/government/publications/funding-initial-teacher-training-itt/funding-initial-teacher-training-itt-academic-year-2023-to-2024#postgraduate-bursaries-and-scholarships" %>
     </p>
     <div class="govuk-form-group">
-      <%= form.label :master_subject_id, "First Subject", class: "govuk-label" %>
-      <%= form.select :master_subject_id, options_for_select(course.selectable_subjects, course.master_subject_id || course.selected_subject_ids.first), { include_blank: true }, data: { qa: "course__master_subject" }, class: "govuk-select" %>
+    <%= form.label :master_subject_id, "First Subject", class: "govuk-label" %>
+    <%= form.select :master_subject_id, options_for_select(course.selectable_subjects, course.master_subject_id || course.selected_subject_ids.first), { include_blank: true }, data: { qa: "course__master_subject" }, class: "govuk-select" %>
     </div>
 
     <div class="govuk-form-group">
