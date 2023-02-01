@@ -246,7 +246,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def selected_subject_ids
-    selectable_subject_ids = course.subjects.map { |subject| subject['id'] }
+    selectable_subject_ids = course.subjects.pluck('id')
     selected_subject_ids = subjects.map(&:id)
 
     selectable_subject_ids & selected_subject_ids

@@ -69,7 +69,7 @@ RSpec::Matchers.define :have_cell_containing do |text|
     elsif @at_row
       text_table[@at_row]
     elsif @at_column
-      text_table.map { |row| row[@at_column] }
+      text_table.pluck(@at_column)
     end
   end
 

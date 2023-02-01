@@ -52,7 +52,7 @@ class ProviderPolicy
   def can_show_training_provider?
     return true if user.admin?
 
-    accredited_bodies_codes = provider.accredited_bodies.map { |ab| ab[:provider_code] }
+    accredited_bodies_codes = provider.accredited_bodies.pluck(:provider_code)
     user_provider_codes = user.providers.pluck(:provider_code)
 
     !(accredited_bodies_codes & user_provider_codes).compact.empty?

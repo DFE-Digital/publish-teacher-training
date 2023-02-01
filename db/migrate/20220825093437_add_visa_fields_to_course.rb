@@ -2,9 +2,11 @@
 
 class AddVisaFieldsToCourse < ActiveRecord::Migration[7.0]
   def change
-    add_column :course, :can_sponsor_skilled_worker_visa, :boolean, default: false
-    add_column :course, :can_sponsor_student_visa, :boolean, default: false
-    add_index :course, :can_sponsor_skilled_worker_visa
-    add_index :course, :can_sponsor_student_visa
+    change_table :course, bulk: true do |t|
+      t.column :can_sponsor_skilled_worker_visa, :boolean, default: false
+      t.column :can_sponsor_student_visa, :boolean, default: false
+      t.index :can_sponsor_skilled_worker_visa
+      t.index :can_sponsor_student_visa
+    end
   end
 end
