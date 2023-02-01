@@ -1,4 +1,4 @@
-<%= content_for :page_title, "#{@number_of_courses_string} found" %>
+<%= content_for :page_title, Find::ResultSummaryService.call(results: @results_view) %>
 
 <%= render Find::Results::ResultsComponent.new(
   results: @results_view,
