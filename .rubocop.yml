@@ -28,7 +28,35 @@ Naming/PredicateName:
 
 # Remove after we fix offences
 Rails/I18nLocaleTexts:
-  Enabled: false
+  Exclude:
+    - "app/controllers/publish/access_requests_controller.rb"
+    - "app/controllers/publish/courses/draft_rollover_controller.rb"
+    - "app/controllers/publish/courses_controller.rb"
+    - "app/controllers/publish/providers/locations_controller.rb"
+    - "app/controllers/publish/users_check_controller.rb"
+    - "app/controllers/support/providers/users_controller.rb"
+    - "app/forms/publish/about_your_organisation_form.rb"
+    - "app/forms/publish/degree_grade_form.rb"
+    - "app/forms/publish/degree_start_form.rb"
+    - "app/forms/publish/gcse_requirements_form.rb"
+    - "app/forms/publish/initial_request_form.rb"
+    - "app/forms/publish/location_form.rb"
+    - "app/forms/publish/notification_form.rb"
+    - "app/forms/publish/provider_contact_form.rb"
+    - "app/forms/publish/provider_skilled_worker_visa_form.rb"
+    - "app/forms/publish/provider_student_visa_form.rb"
+    - "app/forms/publish/provider_visa_form.rb"
+    - "app/forms/publish/repeat_request_form.rb"
+    - "app/forms/publish/subject_requirement_form.rb"
+    - "app/models/provider.rb"
+    - "app/models/site.rb"
+    - "app/models/site.rb"
+    - "app/models/user.rb"
+    - "spec/validators/reference_number_format_validator_spec.rb"
+    - "app/controllers/publish/users_edit_check_controller.rb"
+    - "app/controllers/support/courses_controller.rb"
+    - "app/controllers/support/locations_controller.rb"
+    - "app/controllers/support/providers/users_check_controller.rb"
 
 Style/HashSyntax:
   Exclude:
