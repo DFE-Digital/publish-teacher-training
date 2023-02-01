@@ -10,7 +10,6 @@ inherit_from:
   - ./config/rubocop/rails.yml
   - ./config/rubocop/rspec.yml
   - ./config/rubocop/style.yml
-  - .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
