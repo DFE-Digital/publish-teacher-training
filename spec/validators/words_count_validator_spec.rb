@@ -5,10 +5,6 @@ require 'rails_helper'
 describe WordsCountValidator do
   maximum = 10
 
-  subject! do
-    model.valid?
-  end
-
   before do
     stub_const('Validatable', Class.new).class_eval do
       include ActiveModel::Validations
@@ -25,6 +21,10 @@ describe WordsCountValidator do
   end
 
   let(:expected_errors) { ['^Reduce the word count for some words'] }
+
+  subject! do
+    model.valid?
+  end
 
   context 'with max valid number of words' do
     let(:some_words_field) { (%w[word] * maximum).join(' ') }

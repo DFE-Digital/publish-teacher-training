@@ -12,6 +12,14 @@ RSpec/ContextWording:
 RSpec/LetSetup:
   Enabled: false
 
+RSpec/DescribedClass:
+  Exclude:
+    - 'spec/controllers/concerns/error_handlers_base_spec.rb'
+
+RSpec/LeadingSubject:
+  Exclude:
+    - 'spec/validators/words_count_validator_spec.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
