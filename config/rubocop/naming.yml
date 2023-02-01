@@ -2,3 +2,19 @@ Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: optional
   Exclude:
   - "spec/**/*"
+
+Naming/AccessorMethodName:
+  Exclude:
+    - 'app/models/course.rb'
+
+Naming/MethodName:
+  Exclude:
+    - 'app/models/accrediting_provider_enrichment.rb'
+
+Naming/VariableNumber:
+  Exclude:
+    - 'app/controllers/api/v3/application_controller.rb'
+    - 'app/serializers/api/public/v1/serializable_location.rb'
+    - 'app/serializers/api/public/v1/serializable_provider.rb'
+    - 'spec/requests/api/v3/courses/index_spec.rb'
+    - 'spec/serializers/api/public/v1/serializable_location_spec.rb'

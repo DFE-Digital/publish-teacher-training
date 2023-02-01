@@ -68,3 +68,6 @@ Naming/BlockForwarding:
 RSpec/NoExpectationExample:
   Exclude:
     - 'spec/features/**/*'
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 29
