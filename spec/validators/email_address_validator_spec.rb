@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe EmailAddressValidator do
+  subject { instance.valid?(:no_context) }
+
   let(:model) do
     Class.new do
       include ActiveRecord::Validations
@@ -19,8 +21,6 @@ describe EmailAddressValidator do
     instance.validate(:no_context)
     instance.email = email_string
   end
-
-  subject { instance.valid?(:no_context) }
 
   shared_examples 'an invalid email address' do |value|
     let(:email_string) { value }

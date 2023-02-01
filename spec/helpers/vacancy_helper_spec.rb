@@ -3,11 +3,9 @@
 require 'rails_helper'
 
 describe VacancyHelper do
-  include VacancyHelper
+  include described_class
 
   describe '#vacancy_available_for_course_site_status' do
-    let(:vacancy_study_mode) { nil }
-
     subject do
       vacancy_available_for_course_site_status?(
         course,
@@ -15,6 +13,8 @@ describe VacancyHelper do
         vacancy_study_mode
       )
     end
+
+    let(:vacancy_study_mode) { nil }
 
     context 'with a full time or part time course' do
       let(:course) { double(:course, study_mode: 'full_time_or_part_time') }

@@ -13,7 +13,7 @@ module Support
     subject { described_class.new(course) }
 
     it 'can initalise an instance of itself' do
-      expect(subject).to be_instance_of(EditCourseForm)
+      expect(subject).to be_instance_of(described_class)
     end
 
     describe '#save' do

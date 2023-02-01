@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe API::V3::SerializableCourse do
+  subject { parsed_json['data'] }
+
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
   let(:draft_enrichment) { build(:course_enrichment) }
   let(:published_enrichment) { build(:course_enrichment, :published) }
@@ -15,13 +17,11 @@ describe API::V3::SerializableCourse do
     jsonapi_renderer.render(
       course,
       class: {
-        Course: API::V3::SerializableCourse
+        Course: described_class
       }
     ).to_json
   end
   let(:parsed_json) { JSON.parse(course_json) }
-
-  subject { parsed_json['data'] }
 
   it { is_expected.to have_type('courses') }
   it { is_expected.to have_attribute(:start_date).with_value(time_now.strftime('%B %Y')) }
@@ -49,7 +49,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -73,7 +73,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Subject: API::V3::SerializableSubject,
           PrimarySubject: API::V3::SerializableSubject
         },
@@ -93,7 +93,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -112,7 +112,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -131,7 +131,7 @@ describe API::V3::SerializableCourse do
       jsonapi_renderer.render(
         course,
         class: {
-          Course: API::V3::SerializableCourse,
+          Course: described_class,
           Provider: API::V3::SerializableProvider
         },
         include: [
@@ -194,10 +194,10 @@ describe API::V3::SerializableCourse do
   end
 
   context 'a new course' do
+    subject { parsed_json['data'] }
+
     let(:provider) { create(:provider) }
     let(:course) { Course.new(provider:) }
-
-    subject { parsed_json['data'] }
 
     it { is_expected.to have_attribute(:start_date).with_value(nil) }
   end

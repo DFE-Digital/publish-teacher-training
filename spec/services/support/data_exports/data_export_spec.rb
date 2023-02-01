@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Support::DataExports::DataExport do
-  subject { Support::DataExports::DataExport }
+  subject { described_class }
 
   describe '#all' do
     it 'returns all export types' do

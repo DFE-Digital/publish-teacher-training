@@ -4,6 +4,8 @@ require 'rails_helper'
 
 describe AuthenticationService do
   describe '#execute' do
+    subject { service.execute(token) }
+
     let(:user) { create(:user) }
     let(:email) { user.email }
     let(:first_name) { user.first_name }
@@ -21,8 +23,6 @@ describe AuthenticationService do
     let(:token) { build_jwt(:apiv2, payload:) }
 
     let(:service) { described_class.new(logger: logger_spy) }
-
-    subject { service.execute(token) }
 
     context 'with a valid DfE-SignIn ID and email' do
       let(:first_name) { "#{user.first_name}_new" }

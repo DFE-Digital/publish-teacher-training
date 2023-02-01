@@ -4,6 +4,8 @@ require 'rails_helper'
 
 describe UserNotificationPreferences do
   describe '#enabled' do
+    subject { described_class.new(user_id: user.id) }
+
     let(:user) { create(:user) }
     let(:preference) { false }
     let(:user_notification) do
@@ -14,8 +16,6 @@ describe UserNotificationPreferences do
         course_update: preference
       )
     end
-
-    subject { described_class.new(user_id: user.id) }
 
     describe 'enabled?' do
       context 'when there are no user notifications' do

@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 describe Publish::CourseFundingForm, type: :model do
+  subject { described_class.new(course, params:) }
+
   let(:course) { create(:course, :fee_type_based) }
   let(:course_store) { double(Stores::CourseStore) }
   let(:params) { {} }
-
-  subject { described_class.new(course, params:) }
 
   before do
     allow(course_store).to receive(:get).and_return(nil)
@@ -161,8 +161,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('fee').to('apprenticeship')
-              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('fee').to('apprenticeship')
+              .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
               .and change { course.enrichments.last.fee_details }.to(nil)
               .and change { course.enrichments.last.fee_international }.to(nil)
               .and change { course.enrichments.last.fee_uk_eu }.to(nil)
@@ -175,8 +175,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('fee').to('salary')
-              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('fee').to('salary')
+              .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
               .and change { course.enrichments.last.fee_details }.to(nil)
               .and change { course.enrichments.last.fee_international }.to(nil)
               .and change { course.enrichments.last.fee_uk_eu }.to(nil)
@@ -193,8 +193,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('salary').to('apprenticeship')
-              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('salary').to('apprenticeship')
+              .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
               .and change { course.enrichments.last.fee_details }.to(nil)
               .and change { course.enrichments.last.fee_international }.to(nil)
               .and change { course.enrichments.last.fee_uk_eu }.to(nil)
@@ -207,8 +207,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('salary').to('fee')
-              .and change { course.can_sponsor_student_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('salary').to('fee')
+              .and change(course, :can_sponsor_student_visa).from(false).to(true)
               .and change { course.enrichments.last.salary_details }.to(nil)
           end
         end
@@ -222,8 +222,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('apprenticeship').to('salary')
-              .and change { course.can_sponsor_skilled_worker_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('apprenticeship').to('salary')
+              .and change(course, :can_sponsor_skilled_worker_visa).from(false).to(true)
               .and change { course.enrichments.last.fee_details }.to(nil)
               .and change { course.enrichments.last.fee_international }.to(nil)
               .and change { course.enrichments.last.fee_uk_eu }.to(nil)
@@ -236,8 +236,8 @@ describe Publish::CourseFundingForm, type: :model do
 
           it 'updates the course with the new details' do
             expect { subject.save! }
-              .to change { course.funding_type }.from('apprenticeship').to('fee')
-              .and change { course.can_sponsor_student_visa }.from(false).to(true)
+              .to change(course, :funding_type).from('apprenticeship').to('fee')
+              .and change(course, :can_sponsor_student_visa).from(false).to(true)
               .and change { course.enrichments.last.salary_details }.to(nil)
           end
         end
@@ -248,7 +248,7 @@ describe Publish::CourseFundingForm, type: :model do
 
         it 'does not update the course with invalid details' do
           expect { subject.save! }
-            .not_to(change { course.funding_type })
+            .not_to(change(course, :funding_type))
         end
       end
 
@@ -257,7 +257,7 @@ describe Publish::CourseFundingForm, type: :model do
 
         it 'does not update the course with invalid details' do
           expect { subject.save! }
-            .not_to(change { course.can_sponsor_student_visa })
+            .not_to(change(course, :can_sponsor_student_visa))
         end
       end
 
@@ -267,7 +267,7 @@ describe Publish::CourseFundingForm, type: :model do
 
         it 'does not update the course with invalid details' do
           expect { subject.save! }
-            .not_to(change { course.can_sponsor_skilled_worker_visa })
+            .not_to(change(course, :can_sponsor_skilled_worker_visa))
         end
       end
     end

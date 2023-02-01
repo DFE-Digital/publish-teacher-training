@@ -5,9 +5,9 @@ require 'rails_helper'
 describe Site do
   include ActiveJob::TestHelper
 
-  let(:provider) { create(:provider) }
-
   subject { create(:site, provider_id: provider.id) }
+
+  let(:provider) { create(:provider) }
 
   describe 'auditing' do
     it { is_expected.to be_audited.associated_with(:provider) }
@@ -53,10 +53,10 @@ describe Site do
   end
 
   describe 'discarded behaviour for code' do
+    subject { create(:site, provider_id: provider.id, code: 'B') }
+
     let(:existing_code) { 'AB' }
     let(:site_with_code) { create(:site, code: existing_code, provider_id: provider.id) }
-
-    subject { create(:site, provider_id: provider.id, code: 'B') }
 
     before do
       site_with_code.discard!
@@ -88,10 +88,10 @@ describe Site do
   end
 
   describe 'after running validation' do
+    subject { site }
+
     let(:site) { build(:site, provider:, code: nil) }
     let(:provider) { build(:provider) }
-
-    subject { site }
 
     it 'is assigned a valid code by default' do
       expect { subject.valid? }.to change { subject.code.blank? }.from(true).to(false)

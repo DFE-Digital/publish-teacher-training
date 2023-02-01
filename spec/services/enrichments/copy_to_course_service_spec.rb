@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe Enrichments::CopyToCourseService do
+  subject { new_course.enrichments }
+
   let(:service) { described_class.new }
   let(:course) { create(:course) }
   let(:new_course) { create(:course) }
@@ -11,8 +13,6 @@ describe Enrichments::CopyToCourseService do
   end
 
   before { service.execute(enrichment: published_enrichment, new_course:) }
-
-  subject { new_course.enrichments }
 
   its(:length) { is_expected.to eq 1 }
 

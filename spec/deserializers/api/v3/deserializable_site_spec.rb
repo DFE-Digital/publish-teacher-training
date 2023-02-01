@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe API::V3::DeserializableSite do
+  subject { described_class.new(site_jsonapi).to_h }
+
   let(:site) { build(:site) }
   let(:site_jsonapi) do
     JSON.parse(jsonapi_renderer.render(
@@ -13,8 +15,6 @@ describe API::V3::DeserializableSite do
     ).to_json)['data']
   end
   let(:jsonapi_renderer) { JSONAPI::Serializable::Renderer.new }
-
-  subject { described_class.new(site_jsonapi).to_h }
 
   describe 'attributes' do
     it { is_expected.to include(address1: site.address1) }

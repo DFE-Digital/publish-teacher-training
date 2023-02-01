@@ -7,18 +7,18 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
 
   describe '#call' do
     context 'when adding to a single organisation' do
-      let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
-
-      let(:new_accredited_body) { create(:provider, :accredited_body, provider_code: 'AAA') }
-
-      let(:action_mailer) { double }
-
       subject do
         described_class.call(
           provider: new_accredited_body,
           user:
         )
       end
+
+      let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
+
+      let(:new_accredited_body) { create(:provider, :accredited_body, provider_code: 'AAA') }
+
+      let(:action_mailer) { double }
 
       before do
         allow(NewUserAddedBySupportTeamMailer).to receive(:user_added_to_provider_email).and_return(action_mailer)

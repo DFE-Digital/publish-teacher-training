@@ -45,9 +45,9 @@ RSpec.describe Course do
       end
 
       context 'a SCITTs self accredited courses' do
-        let(:provider) { build(:provider, :scitt) }
-
         subject { create(:course, provider:) }
+
+        let(:provider) { build(:provider, :scitt) }
 
         its(:program_type) do
           is_expected.to eq('scitt_programme')
@@ -55,9 +55,9 @@ RSpec.describe Course do
       end
 
       context 'a HEIs self accredited courses' do
-        let(:provider) { build(:provider, :university) }
-
         subject { create(:course, provider:) }
+
+        let(:provider) { build(:provider, :university) }
 
         its(:program_type) { is_expected.to eq('higher_education_programme') }
       end

@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 describe Support::UserForm, type: :model do
+  subject { described_class.new(user, model, params:) }
+
   let(:user) { create(:user) }
   let(:model) { create(:user) }
   let(:user_store) { double(Stores::UserStore) }
   let(:params) { { email: 'foo@bar.com', first_name: 'Foo', last_name: 'Bar' } }
-
-  subject { described_class.new(user, model, params:) }
 
   before do
     allow(user_store).to receive(:get).and_return(nil)
@@ -55,9 +55,9 @@ describe Support::UserForm, type: :model do
     context 'valid form' do
       it 'updates the provider user with the new details' do
         expect { subject.save! }
-          .to change { model.first_name }.to('Foo')
-                                         .and change { model.last_name }.to('Bar')
-                                                                        .and change { model.email }.to('foo@bar.com')
+          .to change(model, :first_name).to('Foo')
+                                        .and change(model, :last_name).to('Bar')
+                                                                      .and change(model, :email).to('foo@bar.com')
       end
     end
 
@@ -66,7 +66,7 @@ describe Support::UserForm, type: :model do
 
       it 'does not update the provider user with invalid details' do
         expect { subject.save! }
-          .not_to(change { model.email })
+          .not_to(change(model, :email))
       end
     end
 
@@ -75,7 +75,7 @@ describe Support::UserForm, type: :model do
 
       it 'does not update the provider user with invalid details' do
         expect { subject.save! }
-          .not_to(change { model.first_name })
+          .not_to(change(model, :first_name))
       end
     end
 
@@ -84,7 +84,7 @@ describe Support::UserForm, type: :model do
 
       it 'does not update the provider user with invalid details' do
         expect { subject.save! }
-          .not_to(change { model.last_name })
+          .not_to(change(model, :last_name))
       end
     end
   end

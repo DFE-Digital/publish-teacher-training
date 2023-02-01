@@ -3,9 +3,9 @@
 require 'spec_helper_smoke'
 
 describe 'V1 Public API Smoke Tests', :aggregate_failures, smoke: true do
-  let(:base_url) { Settings.publish_api_url }
-
   subject(:response) { HTTParty.get(url) }
+
+  let(:base_url) { Settings.publish_api_url }
 
   context 'courses' do
     describe 'GET /api/public/v1/recruitment_cycles/:recruitment_year/courses' do
