@@ -170,6 +170,10 @@ RSpec/MessageChain:
     - 'spec/services/publish_reporting_service_spec.rb'
     - 'spec/services/send_welcome_email_service_spec.rb'
 
+RSpec/LeakyConstantDeclaration:
+  Exclude:
+    - 'spec/lib/time_format_spec.rb'
+
 
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
