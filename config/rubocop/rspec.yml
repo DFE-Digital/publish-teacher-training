@@ -184,6 +184,10 @@ RSpec/RepeatedDescription:
     - 'spec/models/course_spec.rb'
     - 'spec/mailers/course_vacancies/updated_mailer_spec.rb'
 
+RSpec/MultipleDescribes:
+  Exclude:
+    - 'spec/requests/api/v3/courses/index_spec.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
