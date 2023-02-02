@@ -1,9 +1,3 @@
-# Offense count: 316
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: have_received, receive
-RSpec/MessageSpies:
-  Enabled: false
-
 # Offense count: 1
 RSpec/MultipleDescribes:
   Exclude:
