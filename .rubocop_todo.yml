@@ -73,10 +73,6 @@ RSpec/MultipleDescribes:
   Exclude:
     - 'spec/requests/api/v3/courses/index_spec.rb'
 
-# Offense count: 140
-RSpec/NestedGroups:
-  Max: 7
-
 # Offense count: 2
 RSpec/OverwritingSetup:
   Exclude:
