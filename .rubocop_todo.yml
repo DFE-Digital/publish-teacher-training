@@ -9,18 +9,6 @@ Naming/PredicateName:
     - 'app/validators/phone_validator.rb'
     - 'spec/support/parse_text_table.rb'
 
-# Offense count: 8
-RSpec/EmptyExampleGroup:
-  Exclude:
-    - 'spec/docs/courses_spec.rb'
-    - 'spec/docs/provider_suggestions_spec.rb'
-    - 'spec/docs/providers/courses/locations_spec.rb'
-    - 'spec/docs/providers/courses_spec.rb'
-    - 'spec/docs/providers/locations_spec.rb'
-    - 'spec/docs/providers_spec.rb'
-    - 'spec/docs/subject_areas_spec.rb'
-    - 'spec/docs/subjects_spec.rb'
-
 # Offense count: 21
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
 # Include: **/*_spec*rb*, **/spec/**/*

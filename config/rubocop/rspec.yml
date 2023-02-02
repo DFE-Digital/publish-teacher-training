@@ -126,6 +126,18 @@ RSpec/AnyInstance:
     - 'spec/support/stubbed_publish_constraint.rb'
     - 'spec/support/stubbed_find_constraint.rb'
 
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/docs/subjects_spec.rb'
+    - 'spec/docs/subject_areas_spec.rb'
+    - 'spec/docs/providers_spec.rb'
+    - 'spec/docs/providers/locations_spec.rb'
+    - 'spec/docs/providers/courses_spec.rb'
+    - 'spec/docs/providers/courses/locations_spec.rb'
+    - 'spec/docs/provider_suggestions_spec.rb'
+    - 'spec/docs/courses_spec.rb'
+
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
