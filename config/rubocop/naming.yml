@@ -18,6 +18,7 @@ Naming/VariableNumber:
     - 'app/serializers/api/public/v1/serializable_provider.rb'
     - 'spec/requests/api/v3/courses/index_spec.rb'
     - 'spec/serializers/api/public/v1/serializable_location_spec.rb'
+    - 'spec/serializers/api/public/v1/serializable_provider_spec.rb'
 
 Naming/PredicateName:
   Exclude:
