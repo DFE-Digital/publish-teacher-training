@@ -4,11 +4,11 @@ require 'rails_helper'
 
 describe 'TestDataCache' do
   context 'cache pre-filled' do
-    before(:each) do
+    before do
       TestDataCache.create_and_cache_test_records
     end
 
-    after(:each) do
+    after do
       TestDataCache.clear
     end
 
@@ -62,11 +62,11 @@ describe 'TestDataCache' do
   end
 
   context 'cache empty' do
-    before(:each) do
+    before do
       TestDataCache.clear
     end
 
-    after(:each) do
+    after do
       TestDataCache.clear
     end
 
