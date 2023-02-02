@@ -28,7 +28,7 @@ module Find
         end
 
         def subject_knowledge_enhancement_content?(course)
-          course.subjects.any? { |subject| subject.subject_code if SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
+          course.subjects.any? { |subject| subject.subject_code.in?(SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES) }
         end
 
         def primary_with_mathematics_subject?(course)
