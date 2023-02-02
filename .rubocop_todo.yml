@@ -9,13 +9,6 @@ Naming/PredicateName:
     - 'app/validators/phone_validator.rb'
     - 'spec/support/parse_text_table.rb'
 
-
-# Offense count: 3
-RSpec/AnyInstance:
-  Exclude:
-    - 'spec/requests/api/v3/courses/index_spec.rb'
-    - 'spec/support/with_stubbed_stdout.rb'
-
 # Offense count: 8
 RSpec/EmptyExampleGroup:
   Exclude:

@@ -119,6 +119,13 @@ RSpec/NestedGroups:
     - 'spec/components/find/courses/financial_support/scholarship_and_bursary_component/view_spec.rb'
     - 'spec/controllers/api/public/v1/providers/courses_controller_spec.rb'
 
+RSpec/AnyInstance:
+  Exclude:
+    - 'spec/requests/api/v3/courses/index_spec.rb'
+    - 'spec/support/with_stubbed_stdout.rb'
+    - 'spec/support/stubbed_publish_constraint.rb'
+    - 'spec/support/stubbed_find_constraint.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
