@@ -1,5 +1,0 @@
-# Offense count: 1
-# Configuration parameters: MinBranchesCount.
-Style/HashLikeCase:
-  Exclude:
-    - 'app/models/concerns/with_qualifications.rb'
