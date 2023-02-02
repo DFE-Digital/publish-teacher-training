@@ -16,12 +16,6 @@ RSpec/AnyInstance:
     - 'spec/requests/api/v3/courses/index_spec.rb'
     - 'spec/support/with_stubbed_stdout.rb'
 
-# Offense count: 4
-RSpec/BeforeAfterAll:
-  Exclude:
-    - 'spec/test_setup_specs/test_data_cache_spec.rb'
-    - 'spec/support/reference_data.rb'
-
 # Offense count: 8
 RSpec/EmptyExampleGroup:
   Exclude:
