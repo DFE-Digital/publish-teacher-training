@@ -32,7 +32,7 @@ describe Provider do
 
   describe 'validations' do
     describe 'urn validations' do
-      context 'when provider_type is lead_schools' do
+      context 'when provider_type is lead_school' do
         let(:invalid_provider) { build(:provider, urn: '1') }
         let(:valid) { build(:provider, urn: '12345') }
 

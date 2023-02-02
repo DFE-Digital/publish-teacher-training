@@ -14,7 +14,7 @@ describe Provider do
   end
 
   describe 'validation' do
-    describe 'on update' do
+    describe 'update' do
       let(:provider) { build(:provider) }
 
       describe 'email' do
