@@ -21,6 +21,37 @@ RSpec/LeadingSubject:
   Exclude:
     - 'spec/validators/words_count_validator_spec.rb'
 
+RSpec/VerifiedDoubles:
+  Exclude:
+    - 'spec/view_objects/notifications_view_spec.rb'
+    - 'spec/support/matchers/method_to_delegate_to_service.rb'
+    - 'spec/services/serialize_course_service_spec.rb'
+    - 'spec/services/serialize_course_service_spec.rb'
+    - 'spec/services/send_welcome_email_service_spec.rb'
+    - 'spec/services/record_first_login_service_spec.rb'
+    - 'spec/services/providers/copy_to_recruitment_cycle_service_spec.rb'
+    - 'spec/services/notification_service/course_withdrawn_spec.rb'
+    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
+    - 'spec/services/notification_service/course_updated_spec.rb'
+    - 'spec/services/notification_service/course_subjects_updated_spec.rb'
+    - 'spec/services/notification_service/course_published_spec.rb'
+    - 'spec/services/courses/copy_to_provider_service_spec.rb'
+    - 'spec/services/courses/copy_to_provider_service_spec.rb'
+    - 'spec/services/courses/assignable_subject_service_spec.rb'
+    - 'spec/services/courses/assignable_master_subjects_service_spec.rb'
+    - 'spec/services/course_serializers_service_spec.rb'
+    - 'spec/policies/user_notification_preferences_policy_spec.rb'
+    - 'spec/models/course_spec.rb'
+    - 'spec/lib/find_constraint_spec.rb'
+    - 'spec/lib/big_query/request_event_spec.rb'
+    - 'spec/helpers/vacancy_helper_spec.rb'
+    - 'spec/forms/support/user_form_spec.rb'
+    - 'spec/forms/publish/course_funding_form_spec.rb'
+    - 'spec/controllers/api/public/v1/subject_areas_controller_spec.rb'
+    - 'spec/components/paginator_spec.rb'
+    - 'spec/components/gcse_row_content_spec.rb'
+    - 'spec/services/notification_service/course_sites_updated_spec.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
@@ -29,6 +60,9 @@ RSpec/PredicateMatcher:
   Enabled: false
 
 RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/NamedSubject:
   Enabled: false
 
 RSpec/Capybara/FeatureMethods:

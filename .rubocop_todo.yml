@@ -73,11 +73,6 @@ RSpec/MultipleDescribes:
   Exclude:
     - 'spec/requests/api/v3/courses/index_spec.rb'
 
-# Offense count: 549
-# Configuration parameters: IgnoreSharedExamples.
-RSpec/NamedSubject:
-  Enabled: false
-
 # Offense count: 140
 RSpec/NestedGroups:
   Max: 7
@@ -131,11 +126,6 @@ RSpec/StubbedMock:
     - 'spec/services/notification_service/course_withdrawn_spec.rb'
     - 'spec/services/provider_reporting_service_spec.rb'
     - 'spec/services/publish_reporting_service_spec.rb'
-
-# Offense count: 39
-# Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
-RSpec/VerifiedDoubles:
-  Enabled: false
 
 # Offense count: 2
 # Configuration parameters: Include.
