@@ -1,9 +1,4 @@
 # Offense count: 2
-RSpec/ScatteredSetup:
-  Exclude:
-    - 'spec/controllers/api/public/v1/providers/courses_controller_spec.rb'
-
-# Offense count: 2
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
 Rails/HasAndBelongsToMany:

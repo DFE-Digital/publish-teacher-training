@@ -45,10 +45,6 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     end
 
     context 'with pagination' do
-      before do
-        provider.courses << build_list(:course, 5, provider:)
-      end
-
       let!(:courses) { create_list(:course, 3, provider:) }
       let(:pagination) do
         {
@@ -58,6 +54,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       before do
+        provider.courses << build_list(:course, 5, provider:)
+
         get :index, params: {
           recruitment_cycle_year: recruitment_cycle.year,
           provider_code: provider.provider_code,
