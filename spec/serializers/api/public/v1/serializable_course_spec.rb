@@ -47,7 +47,6 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:fee_details).with_value(course.latest_published_enrichment.fee_details) }
   it { is_expected.to have_attribute(:fee_international).with_value(course.latest_published_enrichment.fee_international) }
   it { is_expected.to have_attribute(:fee_domestic).with_value(course.latest_published_enrichment.fee_uk_eu) }
-  it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
   it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
   it { is_expected.to have_attribute(:funding_type).with_value('apprenticeship') }
   it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }

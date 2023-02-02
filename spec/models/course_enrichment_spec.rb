@@ -228,7 +228,6 @@ describe CourseEnrichment do
 
     context 'fee based course' do
       it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
-      it { is_expected.to validate_presence_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to validate_numericality_of(:fee_uk_eu).on(:publish) }
       it { is_expected.to validate_numericality_of(:fee_international).on(:publish) }
 

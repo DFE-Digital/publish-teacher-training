@@ -179,7 +179,6 @@ describe API::V3::SerializableCourse do
     subject { parsed_json['data']['attributes'] }
 
     it { expect(subject['about_course']).to               eq(published_enrichment.about_course) }
-    it { expect(subject['about_course']).to               eq published_enrichment.about_course }
     it { expect(subject['course_length']).to              eq published_enrichment.course_length }
     it { expect(subject['fee_details']).to                eq published_enrichment.fee_details }
     it { expect(subject['fee_international']).to          eq published_enrichment.fee_international }

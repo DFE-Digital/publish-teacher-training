@@ -9,13 +9,6 @@ RSpec/OverwritingSetup:
     - 'spec/requests/api/v2/providers/update_accrediting_providers_spec.rb'
 
 # Offense count: 6
-RSpec/RepeatedExample:
-  Exclude:
-    - 'spec/models/course_enrichment_spec.rb'
-    - 'spec/serializers/api/public/v1/serializable_course_spec.rb'
-    - 'spec/serializers/api/v3/serializable_course_spec.rb'
-
-# Offense count: 6
 RSpec/RepeatedExampleGroupDescription:
   Exclude:
     - 'spec/models/course_spec.rb'
