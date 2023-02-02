@@ -52,6 +52,22 @@ RSpec/VerifiedDoubles:
     - 'spec/components/gcse_row_content_spec.rb'
     - 'spec/services/notification_service/course_sites_updated_spec.rb'
 
+RSpec/StubbedMock:
+  Exclude:
+    - 'spec/services/publish_reporting_service_spec.rb'
+    - 'spec/services/provider_reporting_service_spec.rb'
+    - 'spec/services/notification_service/course_withdrawn_spec.rb'
+    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
+    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
+    - 'spec/services/notification_service/course_updated_spec.rb'
+    - 'spec/services/notification_service/course_updated_spec.rb'
+    - 'spec/services/notification_service/course_subjects_updated_spec.rb'
+    - 'spec/services/notification_service/course_sites_updated_spec.rb'
+    - 'spec/services/notification_service/course_published_spec.rb'
+    - 'spec/services/course_search_service_spec.rb'
+    - 'spec/services/course_reporting_service_spec.rb'
+    - 'spec/controllers/api/public/v1/providers/courses_controller_spec.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
