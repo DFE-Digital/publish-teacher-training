@@ -4,6 +4,12 @@ module Find
   module Courses
     module EntryRequirementsComponent
       class ViewPreview < ViewComponent::Preview
+        def with_ske_subject
+          course = Course.new(subjects: [subject_name: 'Biology', subject_code: 'C1'] )
+          
+          render Find::Courses::EntryRequirementsComponent::View.new(course: course.decorate)
+        end
+
         def qualifications_needed_only
           course = Course.new(course_code: 'FIND',
                               name: 'Super cool awesome course',
@@ -48,7 +54,8 @@ module Find
             additional_gcse_equivalencies: 'much much more',
             personal_qualities: 'Personal Qualities Text Goes Here',
             other_requirements: 'Other Requirements Text Goes Here',
-            computed_subject_name_or_names: 'Biology' }
+            computed_subject_name_or_names: 'Biology',
+            subjects: [subject_name: 'Biology', subject_code: 'C1']}
         end
 
         def mock_course
@@ -57,7 +64,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :computed_subject_name_or_names, :campaign_name)
+          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :computed_subject_name_or_names, :campaign_name, :subjects, :subject_name)
 
           def enrichment_attribute(params)
             send(params)

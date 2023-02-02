@@ -25,7 +25,7 @@ module Find
           }
 
           degree_grade_hash[course.degree_grade]
-        end
+        end      
 
         def subject_knowledge_enhancement_content?(course)
           course.subjects.any? { |subject| subject.subject_code if SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
