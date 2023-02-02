@@ -9,8 +9,8 @@
       </h1>
     </legend>
     <%= render "publish/shared/error_messages", error_keys: [:subjects] %>
-    <% primary_form_options.each do |opt| %>
-      <%= form.govuk_radio_button :master_subject_id, opt.code, label: { text: opt.name } %>
+    <% course.selectable_subjects.each do |name, id| %>
+      <%= form.govuk_radio_button :master_subject_id, id, label: { text: name } %>
     <% end %>
   </fieldset>
 <% end %>
