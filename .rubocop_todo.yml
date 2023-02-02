@@ -9,12 +9,6 @@ Naming/PredicateName:
     - 'app/validators/phone_validator.rb'
     - 'spec/support/parse_text_table.rb'
 
-# Offense count: 21
-# Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
-# Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
-  Enabled: false
-
 # Offense count: 4
 RSpec/IteratedExpectation:
   Exclude:
