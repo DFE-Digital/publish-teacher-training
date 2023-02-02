@@ -111,10 +111,10 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
           <% row.key { "Location".pluralize(course.sites.length) } %>
           <% row.value do %>
-            <% if course.object.sites.nil? || course.object.sites.empty? %>
+            <% if course.sites.nil? || course.sites.empty? %>
               <span class="app-!-colour-muted">None</span>
-            <% elsif course.object.sites.size == 1 %>
-              <%= course.object.sites.first.location_name %>
+            <% elsif course.sites.size == 1 %>
+              <%= course.sites.first.location_name %>
             <% else %>
               <ul class="govuk-list">
                 <% course.alphabetically_sorted_sites.each do |site| %>
@@ -192,7 +192,7 @@
 
         <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
           <% row.key { "Title" } %>
-          <% row.value { course.object.generate_name } %>
+          <% row.value { course.generate_name } %>
           <% row.action %>
         <% end %>
 
@@ -240,7 +240,7 @@
         <%= govuk_inset_text do %>
           <h3 class="govuk-heading-m" data-qa="course__name">
             <span class="govuk-heading-s govuk-!-margin-bottom-0"><%= @provider.provider_name %></span>
-            <%= course.object.generate_name %>
+            <%= course.generate_name %>
           </h3>
           <p class="govuk-body" data-qa="course__description">Course: <%= course.description %></p>
         <% end %>
