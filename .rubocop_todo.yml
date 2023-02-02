@@ -23,14 +23,6 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/validators/phone_validator_spec.rb'
     - 'spec/validators/reference_number_format_validator_spec.rb'
 
-# Offense count: 16
-RSpec/MessageChain:
-  Exclude:
-    - 'spec/services/course_reporting_service_spec.rb'
-    - 'spec/services/provider_reporting_service_spec.rb'
-    - 'spec/services/publish_reporting_service_spec.rb'
-    - 'spec/services/send_welcome_email_service_spec.rb'
-
 # Offense count: 316
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: have_received, receive

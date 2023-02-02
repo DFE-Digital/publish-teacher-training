@@ -163,6 +163,13 @@ RSpec/FilePath:
     - 'spec/controllers/concerns/error_handlers_base_spec.rb'
     - 'spec/services/user_store_spec.rb'
 
+RSpec/MessageChain:
+  Exclude:
+    - 'spec/services/course_reporting_service_spec.rb'
+    - 'spec/services/provider_reporting_service_spec.rb'
+    - 'spec/services/publish_reporting_service_spec.rb'
+    - 'spec/services/send_welcome_email_service_spec.rb'
+
 
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
