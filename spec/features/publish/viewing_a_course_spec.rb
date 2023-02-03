@@ -89,6 +89,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_partial
       and_i_should_see_the_rollover_button
+      and_there_are_change_links
       when_i_click_the_rollover_button
       then_i_should_see_the_rollover_form_page
       when_i_click_the_rollover_course_button
@@ -128,7 +129,18 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       when_i_visit_the_course_page
       then_i_should_see_the_course_button_panel
       and_i_should_see_the_course_withdrawn_date_and_preview_link
+      and_there_is_no_change_links
     end
+  end
+
+  private
+
+  def and_there_are_change_links
+    expect(page.find_all('.govuk-summary-list__actions a').all? { |actions| actions.text.include?('Change ') }).to be(true)
+  end
+
+  def and_there_is_no_change_links
+    expect(page.find_all('.govuk-summary-list__actions a').any?).to be(false)
   end
 
   def then_i_should_see_the_rolled_over_course_show_page
@@ -154,8 +166,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def when_i_click_the_rollover_course_button
     rollover_form_page.rollover_course_button.click
   end
-
-  def when_i_visit_the_rollover_form_page; end
 
   def then_i_should_see_the_rollover_form_page
     rollover_form_page.load(
