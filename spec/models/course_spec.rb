@@ -2037,7 +2037,7 @@ describe Course do
       its(:gcse_subjects_required) { is_expected.to eq(%w[maths english]) }
     end
 
-    context 'with secondary level' do
+    context 'with further education level' do
       subject { create(:course, level: 'further_education') }
 
       its(:level) { is_expected.to eq('further_education') }

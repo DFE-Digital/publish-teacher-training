@@ -119,9 +119,7 @@ describe Course do
       end
 
       it 'publishes the draft' do
-        subject.enrichments.each do |enrichment|
-          expect(enrichment).to be_published
-        end
+        expect(subject.enrichments).to all(be_published)
       end
     end
   end

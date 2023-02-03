@@ -2,3 +2,53 @@ Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: optional
   Exclude:
   - "spec/**/*"
+
+Naming/AccessorMethodName:
+  Exclude:
+    - 'app/models/course.rb'
+
+Naming/MethodName:
+  Exclude:
+    - 'app/models/accrediting_provider_enrichment.rb'
+
+Naming/VariableNumber:
+  Exclude:
+    - 'app/controllers/api/v3/application_controller.rb'
+    - 'app/serializers/api/public/v1/serializable_location.rb'
+    - 'app/serializers/api/public/v1/serializable_provider.rb'
+    - 'spec/requests/api/v3/courses/index_spec.rb'
+    - 'spec/serializers/api/public/v1/serializable_location_spec.rb'
+    - 'spec/serializers/api/public/v1/serializable_provider_spec.rb'
+
+Naming/PredicateName:
+  Exclude:
+    - 'spec/support/parse_text_table.rb'
+    - 'spec/support/page_objects/publish/courses/new_modern_languages.rb'
+    - 'spec/support/page_objects/publish/courses/modern_languages_edit.rb'
+    - 'spec/components/find/courses/sumary_component/view_preview.rb'
+    - 'spec/components/find/courses/financial_support/fees_and_financial_support_component/view_preview.rb'
+    - 'spec/components/find/courses/financial_support/fees_and_financial_support_component/view_preview.rb'
+    - 'spec/components/find/courses/financial_support/fees_and_financial_support_component/view_preview.rb'
+    - 'spec/components/find/courses/contents_component/view_preview.rb'
+    - 'spec/components/find/courses/contents_component/view_preview.rb'
+    - 'app/view_objects/find/results_view.rb'
+    - 'app/view_objects/find/result_filters/filters_view.rb'
+    - 'app/validators/phone_validator.rb'
+    - 'app/services/courses/generate_course_name_service.rb'
+    - 'app/services/course_search_service.rb'
+    - 'app/services/course_search_service.rb'
+    - 'app/models/user.rb'
+    - 'app/models/site_status.rb'
+    - 'app/models/course_enrichment.rb'
+    - 'app/models/course_enrichment.rb'
+    - 'app/models/course.rb'
+    - 'app/helpers/provider_helper.rb'
+    - 'app/forms/publish/course_funding_form.rb'
+    - 'app/decorators/course_decorator.rb'
+    - 'app/controllers/publish/courses/modern_languages_controller.rb'
+    - 'app/controllers/publish/courses/engineers_teach_physics_controller.rb'
+    - 'app/controllers/api/public/v1/providers_controller.rb'
+    - 'app/components/gcse_requirements.rb'
+    - 'app/components/find/results/search_result_component.rb'
+    - 'app/components/degree_row_content.rb'
+
