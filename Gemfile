@@ -145,6 +145,9 @@ gem 'data_migrate'
 # For outgoing http requests
 gem 'http'
 
+# For configuring domains and assets
+gem 'rack-cors'
+
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 end

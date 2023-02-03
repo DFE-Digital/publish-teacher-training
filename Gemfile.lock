@@ -500,6 +500,8 @@ GEM
     raabro (1.4.0)
     racc (1.6.2)
     rack (2.2.6.2)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-oauth2 (1.21.3)
       activesupport
       attr_required
@@ -805,6 +807,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 6.0)
   pundit
+  rack-cors
   rails (= 7.0.4.2)
   rails-controller-testing
   rails-erd
