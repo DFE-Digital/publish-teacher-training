@@ -1,11 +1,20 @@
 <% content_for :page_title, title_with_error_prefix("Pick all the languages for #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(
-    details_publish_provider_recruitment_cycle_course_path(
-      course.provider_code, course.recruitment_cycle_year, course.course_code
-    )
-  ) %>
+
+  <% if params[:course][:subjects_ids].first == "29" %>
+    <%= govuk_back_link_to(
+      engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids, master_subject_id: SecondarySubject.physics.id.to_s }
+      )
+    ) %>
+  <% else %>
+    <%= govuk_back_link_to(
+      subjects_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code
+      )
+    ) %>
+  <% end %>
 <% end %>
 
 <%= render "publish/shared/errors" %>
