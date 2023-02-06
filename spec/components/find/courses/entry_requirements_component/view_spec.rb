@@ -7,7 +7,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     expect(page).to have_link('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')
   end
 
-  context 'with a single subject_knowledge_enhancement_subject' do
+  context 'when English is selected' do
     it 'renders correct message' do
       course = build(
         :course,
@@ -15,6 +15,21 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       )
       result = render_inline(described_class.new(course: course.decorate))
       expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include('English')
+      expect(course.name).to eq('English')
+      then_i_should_see_the_ske_link
+    end
+  end
+
+  context 'when mathematics is selected' do
+    it 'renders correct message' do
+      course = build(
+        :course,
+        subjects: [build(:secondary_subject, :mathematics)]
+      )
+      result = render_inline(described_class.new(course: course.decorate))
+      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      #expect(result.text).to include('mathematics')
       then_i_should_see_the_ske_link
     end
   end

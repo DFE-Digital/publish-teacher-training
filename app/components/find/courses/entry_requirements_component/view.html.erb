@@ -29,7 +29,7 @@
 
     <% if subject_knowledge_enhancement_content?(course).present? %>
       <p class="govuk-body">
-        If your degree is not in <%= course.name %>, or you’ve not used your subject knowledge in a while, you may be asked to complete a
+        If your degree is not in <%= course.name.include?("English") ? course.name : course.name.downcase %>, or you’ve not used your subject knowledge in a while, you may be asked to complete a
         <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
       </p>
       <% elsif primary_with_mathematics_subject?(course) %>
