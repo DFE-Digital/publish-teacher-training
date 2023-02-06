@@ -11,7 +11,7 @@ module Find
         :enrichments,
         subjects: [:financial_incentive],
         site_statuses: [:site]
-      ).find_by!(course_code: params[:course_code]).decorate
+      ).find_by!(course_code: params[:course_code]&.upcase).decorate
     end
   end
 end

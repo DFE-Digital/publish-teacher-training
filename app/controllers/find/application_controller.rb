@@ -22,7 +22,7 @@ module Find
     private
 
     def provider
-      @provider ||= RecruitmentCycle.current.providers.find_by(provider_code: params[:provider_code])
+      @provider ||= RecruitmentCycle.current.providers.find_by(provider_code: params[:provider_code]&.upcase)
     end
 
     def redirect_to_maintenance_page_if_flag_is_active
