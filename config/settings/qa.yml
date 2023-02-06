@@ -33,4 +33,4 @@ features:
   send_request_data_to_bigquery: true
 
 find_valid_referers:
-  - https://qa2.find-postgraduate-teacher-training.service.gov.uk
+  - https://qa.find-postgraduate-teacher-training.service.gov.uk

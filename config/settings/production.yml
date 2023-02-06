@@ -34,3 +34,6 @@ google_tag_manager:
 
 features:
   send_request_data_to_bigquery: true
+
+find_valid_referers:
+  - https://www.find-postgraduate-teacher-training.service.gov.uk
