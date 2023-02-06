@@ -14,10 +14,8 @@ Rails.application.routes.draw do
     match '/(*path)' => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
   end
 
-  unless Rails.env.production?
-    constraints(FindConstraint.new) do
-      draw(:find)
-    end
+  constraints(FindConstraint.new) do
+    draw(:find)
   end
 
   constraints(PublishConstraint.new) do
