@@ -88,7 +88,7 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_course_outcome_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/outcome/new#{further_education_level_selected_params}")
-    expect(page).to have_content('Pick a course outcome')
+    expect(page).to have_content('Qualification')
   end
 
   def then_i_am_met_with_errors

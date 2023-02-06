@@ -63,7 +63,7 @@ feature 'selecting an age range', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_course_outcome_page(age_range)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/outcome/new#{selected_params(age_range)}")
-    expect(page).to have_content('Pick a course outcome')
+    expect(page).to have_content('Qualification')
   end
 
   def then_i_am_met_with_errors

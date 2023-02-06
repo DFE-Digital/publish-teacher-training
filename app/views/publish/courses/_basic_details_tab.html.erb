@@ -60,7 +60,7 @@
     end
 
     summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row|
-      row.key { "Outcome" }
+      row.key { "Qualification" }
       row.value { course.outcome }
       if course.is_withdrawn?
         row.action
