@@ -196,12 +196,6 @@
           <% row.action %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__description" } }) do |row| %>
-          <% row.key { "Description" } %>
-          <% row.value { course.description } %>
-          <% row.action %>
-        <% end %>
-
         <% if course.gcse_subjects_required.any? && @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
           <% summary_list.row(html_attributes: { data: { qa: "course__entry_requirements" } }) do |row| %>
             <% row.key { "UCAS Apply: GCSE requirements for applicants" } %>
