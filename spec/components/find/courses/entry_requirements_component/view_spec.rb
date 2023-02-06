@@ -16,7 +16,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
       expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
       expect(result.text).to include('English')
-      expect(course.name).to eq('English')
       then_i_should_see_the_ske_link
     end
   end
@@ -29,7 +28,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       )
       result = render_inline(described_class.new(course: course.decorate))
       expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
-      #expect(result.text).to include('mathematics')
+      expect(result.text).to include('mathematics')
       then_i_should_see_the_ske_link
     end
   end
