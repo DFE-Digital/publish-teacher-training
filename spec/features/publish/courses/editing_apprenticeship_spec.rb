@@ -14,6 +14,11 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
       when_i_select(:no)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
+      when_i_go_back
+      then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
+      when_i_select(:no)
+      and_i_continue
+      then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
       then_i_should_see_a_success_message_for('Student')
     end
@@ -26,13 +31,28 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
       when_i_select(:yes)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+      when_i_go_back
+      then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
+      when_i_select(:yes)
+      and_i_continue
+      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored
       then_i_should_see_a_success_message_for('Skilled Worker')
     end
   end
 
+  private
+
+  def when_i_go_back
+    click_link('Back')
+  end
+
+  def then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/apprenticeship")
+  end
+
   def and_i_am_authenticated_as_a_lead_school_provider_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider)]))
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
   end
 
   def given_there_is_fee_course
