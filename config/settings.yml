@@ -108,6 +108,8 @@ features:
   user_management: true
 
 cookies:
+  session:
+    name: _teacher_training_courses_session
   consent:
     name: _consented_to_analytics_cookies
     expire_after_days: 182

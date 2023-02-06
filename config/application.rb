@@ -40,7 +40,7 @@ module ManageCoursesBackend
     config.action_mailer.deliver_later_queue_name = 'mailers'
     config.action_controller.action_on_unpermitted_parameters = :raise
 
-    config.session_store :cookie_store, key: '_publish_teacher_training_courses_session', expire_after: 3.days
+    config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true
 
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
     config.skylight.logger = SemanticLogger[Skylight]
