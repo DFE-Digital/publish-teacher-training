@@ -228,18 +228,6 @@
         <% end %>
       <% end %>
 
-      <div class="govuk-!-margin-top-8" data-qa="course__preview">
-        <h2 class="govuk-heading-m">Preview</h2>
-        <p class="govuk-body">See how this course will appear when it’s published on Find postgraduate teacher training:</p>
-        <%= govuk_inset_text do %>
-          <h3 class="govuk-heading-m" data-qa="course__name">
-            <span class="govuk-heading-s govuk-!-margin-bottom-0"><%= @provider.provider_name %></span>
-            <%= course.generate_name %>
-          </h3>
-          <p class="govuk-body" data-qa="course__description">Course: <%= course.description %></p>
-        <% end %>
-      </div>
-
       <%= f.govuk_submit "Add course", data: { qa: "course__save" } %>
       <p class="govuk-body">Saving this course will not publish it.</p>
     <% end %>
