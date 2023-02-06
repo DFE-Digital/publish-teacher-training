@@ -120,12 +120,12 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
 
   def then_i_am_met_with_the_age_range_page(level, subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{params_with_etp(level, subject_type)}")
-    expect(page).to have_content('Specify an age range')
+    expect(page).to have_content('Age range')
   end
 
   def then_i_am_met_with_the_age_range_page_with_latin(level, subject_type)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new?#{form_params_with_latin(level, subject_type)}")
-    expect(page).to have_content('Specify an age range')
+    expect(page).to have_content('Age range')
   end
 
   def then_i_am_met_with_the_modern_languages_page
