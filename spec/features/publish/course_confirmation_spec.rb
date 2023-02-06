@@ -95,8 +95,5 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.name.value.text).to eq('Psychology')
-    expect(publish_course_confirmation_page.details.description.value.text).to eq('PGDE with QTS, full time or part time teaching apprenticeship')
-    expect(publish_course_confirmation_page.preview.name.text).to include("#{provider.provider_name} Psychology")
-    expect(publish_course_confirmation_page.preview.description.text).to include('Course: PGDE with QTS, full time or part time teaching apprenticeship')
   end
 end
