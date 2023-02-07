@@ -395,7 +395,7 @@ class CourseDecorator < ApplicationDecorator
 
   def find_max_funding_for(attribute)
     subject_funding_amounts = object.subjects.map do |s|
-      s.financial_incentive.public_send(attribute.to_sym).to_i if s.financial_incentive.attributes[attribute].present?
+      s.financial_incentive.public_send(attribute.to_sym).to_i if s.financial_incentive.present? && s.financial_incentive.attributes[attribute].present?
     end
 
     subject_funding_amounts.compact.max.to_s
