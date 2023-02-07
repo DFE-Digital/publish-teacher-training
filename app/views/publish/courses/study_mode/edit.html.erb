@@ -25,9 +25,7 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= render CaptionText.new(text: course.name_and_code) %>
-
-      <%= f.govuk_radio_buttons_fieldset(:study_mode, legend: { text: "Full time or part time?", tag: "h1", size: "l" }) do %>
+      <%= f.govuk_radio_buttons_fieldset(:study_mode, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Full time or part time?".html_safe, tag: "h1", size: "l" }) do %>
         <% course.edit_course_options["study_modes"].each_with_index do |study_mode, index| %>
           <%= f.govuk_radio_button(
             :study_mode,

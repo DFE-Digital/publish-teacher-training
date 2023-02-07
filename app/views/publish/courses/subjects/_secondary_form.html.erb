@@ -4,6 +4,8 @@
       <h1 class="govuk-fieldset__heading" data-qa="page-heading">
         <% if course.course_code %>
           <%= render CaptionText.new(text: course.name_and_code) %>
+        <% else %>
+          <%= render CaptionText.new(text: t("course.add_course")) %>
         <% end %>
         <%= course.subject_page_title %>
       </h1>

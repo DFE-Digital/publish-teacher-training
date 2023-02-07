@@ -16,7 +16,11 @@ module Courses
 
       update_subjects
 
+      old_course_name = course.name
       course.name = course.generate_name
+
+      # This was added to fix a bug where the course name was missing in the legend if no subjects were chosen
+      course.name = old_course_name if course.name.blank?
       course
     end
 
