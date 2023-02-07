@@ -1,5 +1,10 @@
 <%= render "publish/shared/error_wrapper", error_keys: %i[funding_type program_type], data_qa: "course__funding_type" do %>
   <h1 class="govuk-heading-l">
+    <% if course.course_code %>
+      <%= render CaptionText.new(text: course.name_and_code) %>
+    <% else %>
+      <%= render CaptionText.new(text: t("course.add_course")) %>
+    <% end %>
     Teaching apprenticeship
   </h1>
 
