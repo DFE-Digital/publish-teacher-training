@@ -13,11 +13,17 @@ module Courses
 
     def call
       course.errors.add(:subjects, :duplicate) if request_has_duplicate_subject_ids?
-
+      course.errors.add(:subjects, :course_creation) unless secondary_or_primary_subject_not_present?
       update_subjects
 
       course.name = course.generate_name
       course
+
+      binding.pry
+      return course if course.errors.present?
+      # update_subjects
+      # course.name = course.generate_name
+      # course
     end
 
     private
@@ -26,7 +32,12 @@ module Courses
       @subjects ||= Subject.find(@subject_ids)
     end
 
+    def secondary_or_primary_subject_not_present?
+      subjects.present? unless course.further_education_course?
+    end
+
     def update_subjects
+      ## something in here is broken
       if course.further_education_course?
         update_further_education_fields
 

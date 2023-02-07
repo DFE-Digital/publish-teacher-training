@@ -15,7 +15,7 @@ module Publish
     attr_reader :previous_subject_names, :previous_course_name
 
     def valid?
-      super && assign_subjects_service.valid?
+      super && assign_subjects_service.valid? && (subject_ids.present? unless course.further_education_course?)
     end
 
     def compute_fields
