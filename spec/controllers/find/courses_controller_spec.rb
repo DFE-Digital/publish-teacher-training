@@ -30,5 +30,16 @@ module Find
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
       end
     end
+
+    describe '#show' do
+      it 'renders the not found page' do
+        get :show, params: {
+          provider_code: 'ABC',
+          course_code: '123'
+        }
+
+        expect(response).to render_template('errors/not_found')
+      end
+    end
   end
 end
