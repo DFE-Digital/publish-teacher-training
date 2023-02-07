@@ -123,6 +123,18 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
+  context 'with a none subject_knowledge subject as the first subject and a subject_knowledge subject as the second' do
+    it 'renders correct message' do
+      course = build(
+        :course,
+        subjects: [build(:secondary_subject, :art_and_design), build(:secondary_subject, :english)]
+      )
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).not_to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+    end
+  end
+
   context 'with a primary maths subject_knowledge_enhancement_subject' do
     it 'renders correct message' do
       course = build(
