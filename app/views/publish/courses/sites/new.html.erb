@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Select the locations for this course", @errors && @errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Locations", @errors && @errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(@back_link_path) %>
@@ -15,7 +15,7 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading" data-qa="page-heading">
             <%= render CaptionText.new(text: t("course.add_course")) %>
-            Select the locations for this course
+            Locations
           </h1>
         </legend>
         <%= render "publish/shared/error_messages", error_keys: [:sites] %>

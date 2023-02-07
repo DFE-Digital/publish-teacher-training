@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Select the locations for this course – #{course.name_and_code}", @course_location_form.errors.present?) %>
+<% content_for :page_title, title_with_error_prefix("Locations – #{course.name_and_code}", @course_location_form.errors.present?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -21,7 +21,7 @@
 
 <h1 class="govuk-heading-l">
   <%= render CaptionText.new(text: course.name_and_code) %>
-  Select the locations for this course
+  Locations
 </h1>
 
 <div class="govuk-grid-row">
