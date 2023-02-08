@@ -51,7 +51,7 @@ feature 'selecting a teaching apprenticeship', { can_edit_current_and_next_cycle
 
   def then_i_am_met_with_the_full_or_part_time_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/full-part-time/new", ignore_query: true)
-    expect(page).to have_content('Full time or part time?')
+    expect(page).to have_content('Full time or part time')
   end
 
   def then_i_am_met_with_errors
