@@ -21,9 +21,11 @@
           If your degree is not engineering or a related subject, please apply to our physics course.
         </p>
       <% else %>
-        <p class="govuk-body">
-          <%= secondary_advisory(course) %>
-        </p>
+        <%unless subject_knowledge_enhancement_content?(course).present? || primary_with_mathematics_subject?(course)%>
+          <p class="govuk-body">
+            <%= secondary_advisory(course) %>
+          </p>
+        <%end%>
       <% end %>
     <% end %>
 
@@ -37,7 +39,8 @@
         If you need to improve your primary mathematics knowledge, you may be asked to complete a
         <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
       </p>
-    <% end %>
+    <% end %> 
+
 
     <p class="govuk-body">
       <%= required_gcse_content(course) %>
