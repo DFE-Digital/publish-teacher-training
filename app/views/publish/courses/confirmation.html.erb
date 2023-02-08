@@ -89,7 +89,7 @@
         <% if @provider.accredited_body? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
             <% row.key { "Apprenticeship" } %>
-            <% row.value { course.apprenticeship? } %>
+            <% row.value { course.apprenticeship } %>
             <% row.action(
               href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
               visually_hidden_text: "if apprenticeship"
