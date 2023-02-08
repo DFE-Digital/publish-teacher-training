@@ -10,9 +10,7 @@ module Find
     before_action :redirect_to_cycle_has_ended_if_find_is_down
     before_action :redirect_to_maintenance_page_if_flag_is_active
 
-    rescue_from ActiveRecord::RecordNotFound do |_exception|
-      render_not_found
-    end
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     def render_feedback_component
       @render_feedback_component = true
