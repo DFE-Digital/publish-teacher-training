@@ -4,6 +4,8 @@ module Find
   class CoursesController < ApplicationController
     include ApplyRedirect
 
+    before_action -> { render_not_found if provider.nil? }
+
     before_action :render_feedback_component, only: :show
 
     def show
