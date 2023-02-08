@@ -83,9 +83,9 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_it_displays_correctly
-    expect(page.title).to start_with('Check your answers before confirming')
+    expect(page.title).to start_with('Check your answers')
 
-    expect(publish_course_confirmation_page.title).to have_content('Check your answers before confirming')
+    expect(publish_course_confirmation_page.title).to have_content('Check your answers')
     expect(publish_course_confirmation_page.details.level.value.text).to eq('Secondary')
     expect(publish_course_confirmation_page.details.is_send.value.text).to eq('No')
     expect(publish_course_confirmation_page.details.subjects.value.text).to include('Psychology')

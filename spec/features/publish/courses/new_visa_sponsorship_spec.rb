@@ -134,6 +134,6 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
   end
 
   def then_i_should_be_back_on_the_publish_course_confirmation_page
-    expect(page).to have_text('Check your answers before confirming')
+    expect(page).to have_text('Check your answers')
   end
 end
