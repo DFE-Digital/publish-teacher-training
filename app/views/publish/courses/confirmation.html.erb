@@ -21,6 +21,12 @@
         except_keys: [] %>
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
+          <% row.key { "Course title" } %>
+          <% row.value { course.generate_name } %>
+          <% row.action %>
+        <% end %>
+
         <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
           <% row.key { "Level" } %>
           <% row.value { course.level.humanize } %>
@@ -188,12 +194,6 @@
             href: new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "date course starts"
           ) %>
-        <% end %>
-
-        <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
-          <% row.key { "Title" } %>
-          <% row.value { course.generate_name } %>
-          <% row.action %>
         <% end %>
 
         <% if course.gcse_subjects_required.any? && @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
