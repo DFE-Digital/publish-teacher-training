@@ -26,7 +26,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body govuk-body govuk-!-margin-bottom-6"><%= govuk_link_to "Manage all your locations", publish_provider_recruitment_cycle_locations_path(@provider.provider_code), data: { qa: "course__manage_provider_locations_link" } %> to add to or edit this list.</p>
+    <div class="govuk-hint">Select all that apply</div>
 
     <%= form_with(
       model: @course_location_form,
