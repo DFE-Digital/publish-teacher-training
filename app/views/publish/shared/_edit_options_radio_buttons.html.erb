@@ -6,7 +6,7 @@
     <%= legend %>
     <%= render "publish/shared/error_messages", error_keys: [field] %>
     <div class="govuk-radios govuk-!-margin-top-2">
-      <% @course.edit_course_options[key].each_with_index do |value| %>
+      <% @course.edit_course_options[key].sort.each_with_index do |value| %>
         <% help = t("edit_options.#{key}.#{value}.help") %>
         <% label = t("edit_options.#{key}.#{value}.label") %>
         <div class="govuk-radios__item">
