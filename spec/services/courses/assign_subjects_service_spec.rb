@@ -20,6 +20,20 @@ describe Courses::AssignSubjectsService do
     end
   end
 
+  context 'no subject' do
+    let(:course) { create(:course) }
+    let(:subject_ids) { [] }
+
+    it 'have creation subject errors' do
+      expect(subject.errors[:subjects].first).to include('^Select at least one subject')
+    end
+
+    it 'have not updated course name' do
+      expect { subject }
+        .to not_change(course, :name)
+    end
+  end
+
   context 'primary course' do
     let(:subject_ids) { [primary_subject.id] }
     let(:course) { Course.new(level: :primary) }
