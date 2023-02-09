@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Who is the accredited body? – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Accredited body – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -9,7 +9,7 @@
 <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
-      Who is the accredited body?
+      Accredited body
     </h1>
   </legend>
 
