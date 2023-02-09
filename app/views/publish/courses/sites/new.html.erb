@@ -28,7 +28,7 @@
                 <div class="govuk-checkboxes__item">
                   <%= sfields.check_box "selected", checked: course.has_site?(site), class: "govuk-checkboxes__input" %>
                   <%= sfields.label "selected", class: "govuk-label govuk-checkboxes__label"  do %>
-                    <strong data-qa="site__name"><%= site.location_name %></strong>
+                    <%= site.location_name %>
                   <% end %>
                   <span class="govuk-hint govuk-checkboxes__hint">
                     <%= site.full_address %>
