@@ -26,6 +26,11 @@ feature 'Searching by location' do
     and_the_location_radio_button_is_selected
   end
 
+  scenario 'searching for a location with no results' do
+    when_i_enter_an_invalid_location_with_some_options
+    then_should_see_the_no_results_text
+  end
+
   private
 
   def given_i_visit_the_start_page
@@ -69,5 +74,16 @@ feature 'Searching by location' do
 
   def and_the_location_radio_button_is_selected
     expect(find_courses_by_location_or_training_provider_page.by_city_town_or_postcode_radio).to be_checked
+  end
+
+  def when_i_enter_an_invalid_location_with_some_options
+    find_courses_by_location_or_training_provider_page.location.set('invalid location')
+    find_courses_by_location_or_training_provider_page.continue.click
+    choose 'Further education'
+    click_button 'Continue'
+  end
+
+  def then_should_see_the_no_results_text
+    expect(page).to have_content('No courses found')
   end
 end
