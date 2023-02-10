@@ -7,7 +7,7 @@
           Applications open date
         </h1>
       </legend>
-      <div class="govuk-radios__item">
+      <div class="govuk-radios__item govuk-!-margin-top-4">
         <%= form.radio_button :applications_open_from, @recruitment_cycle.application_start_date,
               class: "govuk-radios__input", data: { qa: "applications_open_from" } %>
         <%= form.label :applications_open_from, course.applications_open_from_message_for(@recruitment_cycle),
@@ -21,7 +21,7 @@
               aria: { controls: "other-container" }, data: { qa: "applications_open_from_other" } %>
         <%= form.label :applications_open_from,
               for: "course_applications_open_from_other",
-              value: "On a specific date",
+              value: "Another date",
               class: "govuk-label govuk-radios__label",
               data: { qa: "applications_open_field_from_other_label" } %>
       </div>
