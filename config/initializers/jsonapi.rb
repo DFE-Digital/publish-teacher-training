@@ -10,17 +10,17 @@ end
 
 JSONAPI::Rails.configure do |config|
   # Set a default serializable class mapping.
-  config.jsonapi_class = Hash.new do |h, k|
-    names = k.to_s.split('::')
-    klass = names.pop
+  # config.jsonapi_class = Hash.new do |h, k|
+  #   names = k.to_s.split('::')
+  #   klass = names.pop
 
-    h[k] = [
-      "API::V3::Serializable#{klass}",
-      [*names, klass].join('::')
-    ].lazy
-           .map(&:safe_constantize)
-           .detect(&:present?)
-  end
+  #   h[k] = [
+  #     "API::Public::V1::Serializable#{klass}",
+  #     [*names, klass].join('::')
+  #   ].lazy
+  #          .map(&:safe_constantize)
+  #          .detect(&:present?)
+  # end
 
   # # Set a default serializable class mapping for errors.
   # config.jsonapi_errors_class = Hash.new { |h, k|
