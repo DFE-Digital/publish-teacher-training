@@ -78,7 +78,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   def then_i_am_met_with_the_age_range_page(with_invalid_params: false)
     params = selected_params(with_subjects: with_invalid_params)
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/age-range/new#{params}")
-    expect(page).to have_content('Specify an age range')
+    expect(page).to have_content('Age range')
   end
 
   def then_i_am_met_with_errors

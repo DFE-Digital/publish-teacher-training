@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Who is the accredited body? – #{course.name_and_code}", @errors && @errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Accredited body – #{course.name_and_code}", @errors && @errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(@back_link_path) %>
@@ -10,7 +10,7 @@
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
       <%= render CaptionText.new(text: t("course.add_course")) %>
-      Who is the accredited body?
+      Accredited body
     </h1>
   </legend>
 
@@ -25,7 +25,7 @@
           <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_body_code] do |fields| %>
             <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
               <% if @provider.accredited_bodies.length > 0 %>
-                <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies, locals: { form: fields } %>
+                <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
 
                 <div class="govuk-radios__divider">or</div>
 
@@ -41,7 +41,7 @@
                     value: false,
                     class: "govuk-label govuk-radios__label" %>
                 </div>
-
+                <br>
                 <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
                   <%= render "provider_search_field", form: fields %>
                 </div>

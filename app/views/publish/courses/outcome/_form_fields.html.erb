@@ -6,7 +6,7 @@
       <% else %>
         <%= render CaptionText.new(text: t("course.add_course")) %>
       <% end %>
-      Pick a course outcome
+      Qualification
     </h1>
   </legend>
 <% end %>
@@ -15,5 +15,4 @@
            form:,
            legend:,
            key: "qualifications",
-           field: :qualification,
-           bold_labels: true %>
+           field: :qualification %>

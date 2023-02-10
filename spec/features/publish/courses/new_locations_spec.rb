@@ -50,7 +50,7 @@ feature 'selection locations', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_accredited_body_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/accredited-body/new", ignore_query: true)
-    expect(page).to have_content('Who is the accredited body?')
+    expect(page).to have_content('Accredited body')
   end
 
   def then_i_am_met_with_errors
