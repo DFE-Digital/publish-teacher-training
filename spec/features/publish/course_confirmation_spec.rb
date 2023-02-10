@@ -3,28 +3,82 @@
 require 'rails_helper'
 
 feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
-  before do
-    given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_publish_course_confirmation_page
+  context 'lead school' do
+    before do
+      given_i_am_authenticated_as_a_provider_user
+      when_i_visit_the_publish_course_confirmation_page
+    end
+
+    scenario 'creating course' do
+      and_i_click_continue
+
+      then_i_am_met_with_the_publish_provider_courses_index_page
+    end
+
+    scenario 'it displays the correct information' do
+      then_it_displays_correctly
+    end
+
+    scenario 'changing subject to modern languages' do
+      when_i_click_change_subject
+      and_i_select_modern_languages_and_maths
+      and_i_click_continue
+      and_i_select_some_languages
+      and_i_click_continue
+      then_subjects_list_correctly_on_confirmation_page
+    end
+
+    scenario 'changing funding_type to fee' do
+      when_i_click_change_funding_type
+      and_i_select_funding_type(:fee)
+      and_i_click_continue
+      and_i_should_see_the_title_as('Student visas')
+      and_i_click_continue
+      then_i_should_be_on_the_confirmation_page
+    end
+
+    scenario 'changing funding_type to apprenticeship' do
+      when_i_click_change_funding_type
+      and_i_select_funding_type(:apprenticeship)
+      and_i_click_continue
+      and_i_should_see_the_title_as('Skilled Worker visas')
+      and_i_click_continue
+      then_i_should_be_on_the_confirmation_page
+    end
+
+    scenario 'changing funding_type to salary' do
+      when_i_click_change_funding_type
+      and_i_select_funding_type(:salary)
+      and_i_click_continue
+      and_i_should_see_the_title_as('Skilled Worker visas')
+      and_i_click_continue
+      then_i_should_be_on_the_confirmation_page
+    end
   end
 
-  scenario 'creating course' do
-    and_i_click_continue
+  context 'accredited body' do
+    before do
+      given_i_am_authenticated_as_a_provider_user(:accredited_body)
+      when_i_visit_the_publish_course_confirmation_page
+    end
 
-    then_i_am_met_with_the_publish_provider_courses_index_page
-  end
+    scenario 'changing to yes' do
+      when_i_click_change_apprenticeship
+      and_i_select(:yes)
+      and_i_click_continue
+      and_i_should_see_the_title_as('Skilled Worker visas')
+      and_i_click_continue
+      then_i_should_be_on_the_confirmation_page
+    end
 
-  scenario 'it displays the correct information' do
-    then_it_displays_correctly
-  end
-
-  scenario 'changing subject to modern languages' do
-    when_i_click_change_subject
-    and_i_select_modern_languages_and_maths
-    and_i_continue
-    and_i_select_some_languages
-    and_i_click_continue
-    then_subjects_list_correctly_on_confirmation_page
+    scenario 'changing to no' do
+      when_i_click_change_apprenticeship
+      and_i_select(:no)
+      and_i_click_continue
+      and_i_should_see_the_title_as('Student visas')
+      and_i_click_continue
+      then_i_should_be_on_the_confirmation_page
+    end
   end
 
   private
@@ -33,9 +87,33 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     publish_course_confirmation_page.details.subjects.change_link.click
   end
 
+  def when_i_click_change_funding_type
+    publish_course_confirmation_page.details.funding_type.change_link.click
+  end
+
+  def when_i_click_change_apprenticeship
+    publish_course_confirmation_page.details.apprenticeship.change_link.click
+  end
+
+  def and_i_select_funding_type(funding_type)
+    publish_courses_new_funding_type_page.funding_type_fields.send(funding_type).click
+  end
+
+  def and_i_select(choice)
+    publish_courses_new_apprenticeship_page.send(choice).click
+  end
+
   def and_i_select_modern_languages_and_maths
     publish_courses_new_subjects_page.master_subject_fields.select('Modern Languages').click
     publish_courses_new_subjects_page.subordinate_subjects_fields.select('Mathematics').click
+  end
+
+  def and_i_should_see_the_title_as(title)
+    expect(page.title).to have_text(title)
+  end
+
+  def then_i_should_be_on_the_confirmation_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation", ignore_query: true)
   end
 
   def and_i_select_some_languages
@@ -43,16 +121,22 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_modern_languages_page.language_checkbox('Italian').click
   end
 
-  def and_i_continue
-    publish_courses_new_subjects_page.continue.click
+  def and_i_click_continue
+    page.find('[data-qa="course__save"]').click
   end
 
   def then_subjects_list_correctly_on_confirmation_page
     expect(publish_course_confirmation_page.details.subjects.value).to have_content('Modern LanguagesGermanItalianMathematics')
   end
 
-  def given_i_am_authenticated_as_a_provider_user
-    @user = create(:user, providers: [build(:provider, sites: [build(:site)])])
+  def given_i_am_authenticated_as_a_provider_user(provider_trait = nil)
+    providers = if provider_trait.present?
+                  [build(:provider, provider_trait, sites: [build(:site)])]
+                else
+                  [build(:provider, sites: [build(:site)])]
+                end
+
+    @user = create(:user, providers:)
     @user.providers.first.courses << create(:course, :with_accrediting_provider)
     given_i_am_authenticated(user: @user)
   end
@@ -63,10 +147,6 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       recruitment_cycle_year: Settings.current_recruitment_cycle_year,
       query: confirmation_params(provider)
     )
-  end
-
-  def and_i_click_continue
-    publish_course_confirmation_page.save_button.click
   end
 
   def provider
