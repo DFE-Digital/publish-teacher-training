@@ -10,7 +10,7 @@
       <div class="govuk-radios__item govuk-!-margin-top-4">
         <%= form.radio_button :applications_open_from, @recruitment_cycle.application_start_date,
               class: "govuk-radios__input", data: { qa: "applications_open_from" } %>
-        <%= form.label :applications_open_from, course.applications_open_from_message_for(@recruitment_cycle),
+        <%= form.label :applications_open_from, course.applications_open_first_label(@recruitment_cycle),
               for: "course_applications_open_from_#{@recruitment_cycle.application_start_date}",
               class: "govuk-label govuk-radios__label" %>
       </div>

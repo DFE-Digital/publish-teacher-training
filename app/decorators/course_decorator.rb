@@ -231,13 +231,12 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
-  def applications_open_from_message_for(recruitment_cycle)
+  def applications_open_first_label(recruitment_cycle)
     if current_cycle?
       'As soon as the course is on Find - recommended'
     else
-      year = recruitment_cycle.year.to_i
-      day_month = recruitment_cycle.application_start_date.strftime('%-d %B')
-      "On #{day_month} when applications for the #{year - 1} to #{year} cycle open"
+      application_start_date = recruitment_cycle.application_start_date.strftime('%-d %B %Y')
+      "On #{application_start_date} when Apply opens - recommended"
     end
   end
 
