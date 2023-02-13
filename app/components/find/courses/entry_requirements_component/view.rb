@@ -28,7 +28,11 @@ module Find
         end
 
         def subject_knowledge_enhancement_content?(course)
-          SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
+          if course.subjects.first.subject_code.nil?
+            course.subjects.any? { |subject| SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
+          else
+            SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
+          end
         end
 
         def primary_with_mathematics_subject?(course)
