@@ -78,7 +78,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   context 'with a none subject_knowledge subject as the first subject and a subject_knowledge subject as the second' do
     let(:subjects) { [build(:secondary_subject, :art_and_design), build(:secondary_subject, :english)] }
 
-    it 'renders correct message' do
+    it 'does not render the ske message' do
       expect(result.text).not_to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
     end
   end
@@ -92,6 +92,24 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct course case' do
       expect(result.text).to include('primary mathematics')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+    end
+  end
+
+  context 'with a modern language subject' do
+    let(:course_subject) { build(:secondary_subject, :modern_languages) }
+    let(:subjects) { [course_subject, build(:modern_languages_subject, :french)] }
+
+    it 'renders correct message' do
+      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('French')
     end
 
     it 'renders the correct link' do
