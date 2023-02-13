@@ -19,13 +19,13 @@ This repo is home to three services:
 
 ## Environments
 
-### New Find (while the migration is in progress)
+### Find
 
 | Name        | URL                                                                    | Description
 | ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------
-| Production  | [www](https://www2.find-postgraduate-teacher-training.service.gov.uk)   | Public site
-| Staging     | [staging](https://staging2.find-postgraduate-teacher-training.service.gov.uk)| For internal use by DfE to test deploys
-| QA          | [qa](https://qa2.find-postgraduate-teacher-training.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
+| Production  | [www](https://www.find-postgraduate-teacher-training.service.gov.uk)   | Public site
+| Staging     | [staging](https://staging.find-postgraduate-teacher-training.service.gov.uk)| For internal use by DfE to test deploys
+| QA          | [qa](https://qa.find-postgraduate-teacher-training.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
 
 ### Publish
 
