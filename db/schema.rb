@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_12_150146) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_13_123157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -264,6 +264,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_150146) do
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
+  end
+
+  create_table "provider_synonym", force: :cascade do |t|
+    t.text "provider_code", null: false
+    t.text "synonym"
+    t.text "match_synonym"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "provider_ucas_preference", force: :cascade do |t|
