@@ -47,7 +47,7 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
 
   def then_i_am_met_with_the_applications_open_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/applications-open/new", ignore_query: true)
-    expect(page).to have_content('When will applications open?')
+    expect(page).to have_content('Applications open date')
   end
 
   def then_i_am_met_with_errors

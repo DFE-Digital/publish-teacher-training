@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("When will applications open? – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Applications open date – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
