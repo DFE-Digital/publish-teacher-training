@@ -23,7 +23,7 @@
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
         <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
-          <% row.key { "Course title" } %>
+          <% row.key { "Course name" } %>
           <% row.value { course.generate_name } %>
           <% row.action %>
         <% end %>
