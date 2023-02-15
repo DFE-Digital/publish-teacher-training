@@ -31,6 +31,11 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     and_i_select_an_option
     and_i_click_continue
     then_i_am_met_with_the_edit_modern_languages_page
+    when_i_go_back
+    then_i_return_to_the_edit_engineers_teach_physics_with_languages_page
+    when_i_go_back
+    then_i_return_to_the_edit_course_subject_page
+
     # TODO: success message?
   end
 
@@ -94,6 +99,10 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     publish_courses_subjects_edit_page.continue.click
   end
 
+  def when_i_go_back
+    click_link('Back')
+  end
+
   def provider
     @provider ||= @user.providers.first
   end
@@ -104,6 +113,14 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
 
   def then_i_am_met_with_course_details_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
+  end
+
+  def then_i_return_to_the_edit_course_subject_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/subjects")
+  end
+
+  def then_i_return_to_the_edit_engineers_teach_physics_with_languages_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/engineers_teach_physics?#{course_subject_ids}")
   end
 
   def then_i_am_met_with_the_publish_courses_edit_engineers_teach_physics_page
@@ -141,6 +158,11 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
     subordinate_subject = course_subject(:modern_languages)
     course_subject = course_subject(:physics)
     "course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
+  end
+
+  def course_subject_ids
+    master_subject = course_subject(:physics)
+    "course%5Bmaster_subject_id%5D=#{master_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course.subject_ids.first}"
   end
 
   def modern_languages_subject_ids

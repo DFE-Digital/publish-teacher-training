@@ -41,6 +41,7 @@ module Publish
           end
 
         elsif form_params[:subjects_ids]&.include?(modern_languages_id)
+          course.update(campaign_name: form_params[:campaign_name])
           redirect_to(
             modern_languages_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,

@@ -14,6 +14,11 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
       when_i_select_a_funding_type(:salary)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+      when_i_go_back
+      then_i_should_be_on_the_publish_courses_funding_type_edit_page
+      when_i_select_a_funding_type(:salary)
+      and_i_continue
+      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored
       then_i_should_see_a_success_message_for('Skilled Worker')
       and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
@@ -39,6 +44,11 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
       when_i_select_a_funding_type(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
+      when_i_go_back
+      then_i_should_be_on_the_publish_courses_funding_type_edit_page
+      when_i_select_a_funding_type(:fee)
+      and_i_continue
+      then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
       then_i_should_see_a_success_message_for('Student')
       and_the_course_should_have_updated_to_fee_and_sponsor_student_visa
@@ -55,6 +65,16 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
       and_i_cancel
       then_the_course_should_should_still_be_salaried
     end
+  end
+
+  private
+
+  def when_i_go_back
+    click_link('Back')
+  end
+
+  def then_i_should_be_on_the_publish_courses_funding_type_edit_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/funding-type")
   end
 
   def and_i_am_authenticated_as_a_lead_school_provider_user

@@ -1,7 +1,19 @@
 <% content_for :page_title, title_with_error_prefix("Engineers Teach Physics", @errors && @errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <% if params[:skip_languages_goto_confirmation].present? %>
+    <%= govuk_back_link_to(
+      details_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code
+      )
+    ) %>
+  <% else %>
+    <%= govuk_back_link_to(
+      subjects_publish_provider_recruitment_cycle_course_path(
+        course.provider_code, course.recruitment_cycle_year, course.course_code
+      )
+    ) %>
+  <% end %>
 <% end %>
 
 <%= render "publish/shared/errors" %>
@@ -18,7 +30,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
     </p>
   </div>
 </div>

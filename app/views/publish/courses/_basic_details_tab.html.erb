@@ -159,7 +159,7 @@
         row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
         if course.changeable?
           row.action(
-            href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
             visually_hidden_text: "can sponsor student visa"
           )
         else
@@ -172,7 +172,7 @@
         row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
         if course.changeable?
           row.action(
-            href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+            href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
             visually_hidden_text: "can sponsor skilled_worker visa"
           )
         else
@@ -227,6 +227,7 @@
       row.value { course.course_code }
       row.action
     end
+
     if course.next_cycle? && course.has_fees?
       summary_list.row(html_attributes: { data: { qa: "course__allocations" } }) do |row|
         row.key { "Allocations" }
