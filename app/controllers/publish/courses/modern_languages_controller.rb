@@ -37,7 +37,7 @@ module Publish
         authorize(provider)
 
         if course_subjects_form.save!
-          flash[:success] = I18n.t('success.saved')
+          course_updated_message('Subjects')
           redirect_to(
             details_publish_provider_recruitment_cycle_course_path(
               @course.provider_code,

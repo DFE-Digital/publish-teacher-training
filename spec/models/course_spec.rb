@@ -688,7 +688,7 @@ describe Course do
         it 'does not validate if the subject is not of that level' do
           course.subjects = [find_or_create(:primary_subject, :primary_with_mathematics)]
           expect(course.valid?).to be_falsey
-          expect(course.errors[:subjects]).to eq(['must be secondary'])
+          expect(course.errors[:subjects]).to eq(['Subject must be secondary'])
         end
 
         it 'validates if there are only 2 subjects' do
@@ -715,7 +715,7 @@ describe Course do
         it 'does not validate if the subject is not of that level' do
           course.subjects = [find_or_create(:secondary_subject, :mathematics)]
           expect(course.valid?).to be_falsey
-          expect(course.errors[:subjects]).to eq(['must be primary'])
+          expect(course.errors[:subjects]).to eq(['Subject must be primary'])
         end
 
         it 'does not validate if there is more than one subject' do
@@ -736,7 +736,7 @@ describe Course do
         it 'does not validate if the subject is not of that level' do
           course.subjects = [find_or_create(:secondary_subject, :biology)]
           expect(course.valid?).to be_falsey
-          expect(course.errors[:subjects]).to eq(['must be further education'])
+          expect(course.errors[:subjects]).to eq(['Subject must be further education'])
         end
 
         it 'does not validate if there is more than one subject' do

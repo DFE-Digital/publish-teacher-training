@@ -51,7 +51,7 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.value_saved', value: 'full or part time'))
+    expect(page).to have_content(I18n.t('success.saved', value: 'Full time or part time'))
   end
 
   def and_the_course_study_mode_is_updated

@@ -69,7 +69,7 @@ feature 'selecting an age range', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.value_saved', value: 'age range'))
+    expect(page).to have_content(I18n.t('success.saved', value: 'Age range'))
   end
 
   def and_the_course_age_range_is_updated(age_range)

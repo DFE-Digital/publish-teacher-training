@@ -16,7 +16,7 @@ module Publish
 
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
         if @course_study_mode_form.save!
-          course_description_success_message('full or part time')
+          course_updated_message('Full time or part time')
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

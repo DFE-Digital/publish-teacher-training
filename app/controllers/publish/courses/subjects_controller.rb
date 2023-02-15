@@ -41,8 +41,7 @@ module Publish
           )
 
         elsif course_subjects_form.save!
-          value = @course.is_primary? ? 'primary subject' : 'secondary subject'
-          course_details_success_message(value)
+          course_updated_message(section_key)
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
           course.update(name: course.generate_name)
@@ -116,6 +115,10 @@ module Publish
 
       def available_languages_ids
         @course.edit_course_options[:modern_languages].map(&:id).map(&:to_s)
+      end
+
+      def section_key
+        'Subject'.pluralize(selected_subject_ids.count)
       end
     end
   end

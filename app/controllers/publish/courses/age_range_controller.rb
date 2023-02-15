@@ -14,7 +14,7 @@ module Publish
 
       def update
         if form_object.valid?
-          course_details_success_message('age range')
+          course_updated_message('Age range')
 
           update_age_range_param
 

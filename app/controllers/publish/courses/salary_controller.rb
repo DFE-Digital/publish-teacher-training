@@ -16,7 +16,7 @@ module Publish
         @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
 
         if @course_salary_form.save!
-          flash[:success] = I18n.t('success.saved')
+          course_updated_message('Course length and salary')
 
           redirect_to publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

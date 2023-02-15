@@ -127,7 +127,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.saved'))
+    expect(page).to have_content(I18n.t('success.saved', value: 'Personal qualities and other requirements'))
   end
 
   def and_the_course_requirements_are_updated

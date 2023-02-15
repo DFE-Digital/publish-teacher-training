@@ -968,11 +968,11 @@ class Course < ApplicationRecord
 
     case level
     when 'primary'
-      errors.add(:subjects, 'must be primary') unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, 'Subject must be primary') unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     when 'secondary'
-      errors.add(:subjects, 'must be secondary') unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, 'Subject must be secondary') unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     when 'further_education'
-      errors.add(:subjects, 'must be further education') unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, 'Subject must be further education') unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
     end
   end
 

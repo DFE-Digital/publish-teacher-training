@@ -112,7 +112,7 @@ feature 'Editing course information', { can_edit_current_and_next_cycles: false 
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content('Changes to course information saved')
+    expect(page).to have_content(I18n.t('success.saved', value: 'Course information'))
   end
 
   def and_the_course_information_is_updated
