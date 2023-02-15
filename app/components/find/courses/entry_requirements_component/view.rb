@@ -27,7 +27,7 @@ module Find
           degree_grade_hash[course.degree_grade]
         end
 
-        def subject_knowledge_enhancement_content?(course)
+        def subject_knowledge_enhancement_content?
           if course.subjects.first.subject_code.nil?
             course.subjects.any? { |subject| SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }
           else
@@ -35,7 +35,7 @@ module Find
           end
         end
 
-        def primary_with_mathematics_subject?(course)
+        def primary_with_mathematics_subject?
           PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
         end
 
