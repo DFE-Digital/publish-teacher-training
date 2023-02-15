@@ -19,7 +19,7 @@
       <%= render(partial: "primary_form", locals: { form: }) if @course.primary_course? %>
       <%= render(partial: "secondary_form", locals: { form: }) if @course.secondary_course? %>
 
-      <%= form.submit course.is_published? ? "Save and publish" : "Save",
+      <%= form.submit course.is_published? ? "Update subject" : "Save",
         class: "govuk-button", data: { qa: "course__save" } %>
     <% end %>
 
