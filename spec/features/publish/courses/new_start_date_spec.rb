@@ -38,6 +38,6 @@ feature 'choosing a start date', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_confirmation_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation", ignore_query: true)
-    expect(page).to have_content('Check your answers before confirming')
+    expect(page).to have_content('Check your answers')
   end
 end

@@ -1,4 +1,4 @@
-<% page_title = "Check your answers before confirming" %>
+<% page_title = "Check your answers" %>
 <% content_for :page_title, title_with_error_prefix(page_title, course.errors.any?) %>
 
 <div class="govuk-grid-row">
@@ -12,6 +12,7 @@
       <%= render "publish/shared/errors" %>
 
       <h1 class="govuk-heading-l">
+        <%= render CaptionText.new(text: t("course.add_course")) %>
         <%= page_title %>
       </h1>
 
@@ -21,6 +22,12 @@
         except_keys: [] %>
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
+        <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
+          <% row.key { "Course name" } %>
+          <% row.value { course.generate_name } %>
+          <% row.action %>
+        <% end %>
+
         <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
           <% row.key { "Level" } %>
           <% row.value { course.level.humanize } %>
@@ -82,7 +89,7 @@
         <% if @provider.accredited_body? %>
           <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
             <% row.key { "Apprenticeship" } %>
-            <% row.value { course.apprenticeship? } %>
+            <% row.value { course.apprenticeship } %>
             <% row.action(
               href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
               visually_hidden_text: "if apprenticeship"
@@ -190,18 +197,6 @@
           ) %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
-          <% row.key { "Title" } %>
-          <% row.value { course.generate_name } %>
-          <% row.action %>
-        <% end %>
-
-        <% summary_list.row(html_attributes: { data: { qa: "course__description" } }) do |row| %>
-          <% row.key { "Description" } %>
-          <% row.value { course.description } %>
-          <% row.action %>
-        <% end %>
-
         <% if course.gcse_subjects_required.any? && @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
           <% summary_list.row(html_attributes: { data: { qa: "course__entry_requirements" } }) do |row| %>
             <% row.key { "UCAS Apply: GCSE requirements for applicants" } %>
@@ -234,20 +229,11 @@
         <% end %>
       <% end %>
 
-      <div class="govuk-!-margin-top-8" data-qa="course__preview">
-        <h2 class="govuk-heading-m">Preview</h2>
-        <p class="govuk-body">See how this course will appear when it’s published on Find postgraduate teacher training:</p>
-        <%= govuk_inset_text do %>
-          <h3 class="govuk-heading-m" data-qa="course__name">
-            <span class="govuk-heading-s govuk-!-margin-bottom-0"><%= @provider.provider_name %></span>
-            <%= course.generate_name %>
-          </h3>
-          <p class="govuk-body" data-qa="course__description">Course: <%= course.description %></p>
-        <% end %>
-      </div>
-
       <%= f.govuk_submit "Add course", data: { qa: "course__save" } %>
-      <p class="govuk-body">Saving this course will not publish it.</p>
     <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+    </p>
   </div>
 </div>

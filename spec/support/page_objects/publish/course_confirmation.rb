@@ -28,13 +28,7 @@ module PageObjects
         section :applications_open, SummaryList, '[data-qa=course__applications_open]'
         section :start_date, SummaryList, '[data-qa=course__start_date]'
         section :name, SummaryList, '[data-qa=course__name]'
-        section :description, SummaryList, '[data-qa=course__description]'
         section :entry_requirements, SummaryList, '[data-qa=course__entry_requirements]'
-      end
-
-      section :preview, '[data-qa=course__preview]' do
-        element :name, '[data-qa=course__name]'
-        element :description, '[data-qa=course__description]'
       end
 
       element :save_button, '[data-qa=course__save]'

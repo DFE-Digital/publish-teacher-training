@@ -163,9 +163,9 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_it_displays_correctly
-    expect(page.title).to start_with('Check your answers before confirming')
+    expect(page.title).to start_with('Check your answers')
 
-    expect(publish_course_confirmation_page.title).to have_content('Check your answers before confirming')
+    expect(publish_course_confirmation_page.title).to have_content('Check your answers')
     expect(publish_course_confirmation_page.details.level.value.text).to eq('Secondary')
     expect(publish_course_confirmation_page.details.is_send.value.text).to eq('No')
     expect(publish_course_confirmation_page.details.subjects.value.text).to include('Psychology')
@@ -175,8 +175,5 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.name.value.text).to eq('Psychology')
-    expect(publish_course_confirmation_page.details.description.value.text).to eq('PGDE with QTS, full time or part time teaching apprenticeship')
-    expect(publish_course_confirmation_page.preview.name.text).to include("#{provider.provider_name} Psychology")
-    expect(publish_course_confirmation_page.preview.description.text).to include('Course: PGDE with QTS, full time or part time teaching apprenticeship')
   end
 end
