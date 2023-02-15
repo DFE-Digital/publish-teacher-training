@@ -6,12 +6,15 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   let(:course) { build(:course, subjects:) }
   let(:subjects) { [build(:secondary_subject, subject_name)] }
   let(:result) { render_inline(described_class.new(course: course.decorate)) }
+  let(:ske_text) { 'or you’ve not used your subject knowledge in a while, you may be asked to complete a' }
+  let(:ske_url_name) { 'subject knowledge enhancement (SKE) course.' }
+  let(:ske_url) { 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement' }
 
   context 'when english is selected' do
     let(:subject_name) { :english }
 
     it 'renders correct message' do
-      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include(ske_text)
     end
 
     it 'renders the correct course case' do
@@ -20,7 +23,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
@@ -28,7 +31,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subject_name) { :mathematics }
 
     it 'renders the correct message' do
-      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include(ske_text)
     end
 
     it 'renders the correct course case' do
@@ -37,7 +40,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
@@ -45,7 +48,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [build(:secondary_subject, :german), build(:secondary_subject, :spanish)] }
 
     it 'renders correct message' do
-      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include(ske_text)
     end
 
     it 'renders the correct course case' do
@@ -54,7 +57,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
@@ -62,7 +65,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [build(:secondary_subject, :mathematics), build(:secondary_subject, :english)] }
 
     it 'renders correct message' do
-      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include(ske_text)
     end
 
     it 'renders the correct course case' do
@@ -71,7 +74,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
@@ -79,7 +82,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [build(:secondary_subject, :art_and_design), build(:secondary_subject, :english)] }
 
     it 'does not render the ske message' do
-      expect(result.text).not_to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).not_to include(ske_text)
     end
   end
 
@@ -96,7 +99,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
@@ -105,7 +108,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [course_subject, build(:modern_languages_subject, :french)] }
 
     it 'renders correct message' do
-      expect(result.text).to include('or you’ve not used your subject knowledge in a while, you may be asked to complete a')
+      expect(result.text).to include(ske_text)
     end
 
     it 'renders the correct course case' do
@@ -114,7 +117,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(page.has_link?('subject knowledge enhancement (SKE) course.', href: 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement')).to be true
+      expect(result).to have_link(ske_url_name, href: ske_url)
     end
   end
 
