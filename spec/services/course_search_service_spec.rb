@@ -666,11 +666,12 @@ RSpec.describe CourseSearchService do
       end
 
       context 'when not a string' do
-        let(:filter) { { 'hello' => 'there' } }
+        let(:filter) { { subjects: { '0' => '22', '1' => 'W1', '2' => 'C1' } } }
+        let(:expected_scope) { double }
 
-        it "doesn't add the scope" do
-          expect(scope).not_to receive(:with_subjects)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
+        it 'adds the subject scope' do
+          expect(scope).to receive(:with_subjects).with(%w[22 W1 C1]).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
