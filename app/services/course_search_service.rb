@@ -199,6 +199,9 @@ class CourseSearchService
   def qualifications
     return [] if filter[:qualification].blank?
 
+    filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
+    filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)
+
     if filter[:qualification].include?('pgce pgde')
       filter[:qualification] -= ['pgce pgde']
       filter[:qualification] |= %w[pgce pgde]
@@ -206,7 +209,7 @@ class CourseSearchService
 
     filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?('pgce_with_qts')
 
-    filter[:qualification].split(',')
+    filter[:qualification]
   end
 
   def has_vacancies?

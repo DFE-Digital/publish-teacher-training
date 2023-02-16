@@ -306,6 +306,23 @@ RSpec.describe CourseSearchService do
           expect(subject).to eq(expected_scope)
         end
       end
+
+      context 'when qualification given as a hash' do
+        let(:filter) { { qualification: { '0' => 'qts', '1' => 'pgce_with_qts', '2' => 'pgce pgde' } } }
+        let(:expected_scope) { double }
+
+        it 'adds the with_qualifications scope' do
+          expect(scope)
+            .to receive(:with_qualifications)
+            .with(%w[qts pgce_with_qts pgce pgde pgde_with_qts])
+            .and_return(course_ids_scope)
+
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+
+          expect(subject).to eq(expected_scope)
+        end
+      end
     end
 
     describe 'filter[with_vacancies]' do
