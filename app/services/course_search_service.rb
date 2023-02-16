@@ -263,6 +263,7 @@ class CourseSearchService
   def subject_codes
     return [] if filter[:subjects].blank?
     return filter[:subjects] if filter[:subjects].is_a? Array
+    return filter[:subjects].values if filter[:subjects].is_a?(Hash)
 
     filter[:subjects].split(',')
   end
