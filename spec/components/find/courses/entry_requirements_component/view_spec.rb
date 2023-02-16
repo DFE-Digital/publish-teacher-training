@@ -3,6 +3,124 @@
 require 'rails_helper'
 
 describe Find::Courses::EntryRequirementsComponent::View, type: :component do
+  let(:course) { build(:course, subjects:) }
+  let(:subjects) { [build(:secondary_subject, subject_name)] }
+  let(:result) { render_inline(described_class.new(course: course.decorate)) }
+  let(:ske_text) { 'or you’ve not used your subject knowledge in a while, you may be asked to complete a' }
+  let(:ske_url_name) { 'subject knowledge enhancement (SKE) course.' }
+  let(:ske_url) { 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement' }
+
+  context 'when english is selected' do
+    let(:subject_name) { :english }
+
+    it 'renders correct message' do
+      expect(result.text).to include(ske_text)
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('English')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
+  context 'when mathematics is selected' do
+    let(:subject_name) { :mathematics }
+
+    it 'renders the correct message' do
+      expect(result.text).to include(ske_text)
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('mathematics')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
+  context 'with multiple subject_knowledge_enhancement_subjects' do
+    let(:subjects) { [build(:secondary_subject, :german), build(:secondary_subject, :spanish)] }
+
+    it 'renders correct message' do
+      expect(result.text).to include(ske_text)
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('German with Spanish')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
+  context 'with english as the second subject_knowledge_enhancement_subject' do
+    let(:subjects) { [build(:secondary_subject, :mathematics), build(:secondary_subject, :english)] }
+
+    it 'renders correct message' do
+      expect(result.text).to include(ske_text)
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('mathematics with English')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
+  context 'with a none subject_knowledge subject as the first subject and a subject_knowledge subject as the second' do
+    let(:subjects) { [build(:secondary_subject, :art_and_design), build(:secondary_subject, :english)] }
+
+    it 'does not render the ske message' do
+      expect(result.text).not_to include(ske_text)
+    end
+  end
+
+  context 'with a primary maths subject_knowledge_enhancement_subject' do
+    let(:subjects) { [build(:primary_subject, :primary_with_mathematics)] }
+
+    it 'renders correct message' do
+      expect(result.text).to include('If you need to improve your primary mathematics knowledge, you may be asked to complete a')
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('primary mathematics')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
+  context 'with a modern language subject' do
+    let(:course_subject) { build(:secondary_subject, :modern_languages) }
+    let(:subjects) { [course_subject, build(:modern_languages_subject, :french)] }
+
+    it 'renders correct message' do
+      expect(result.text).to include(ske_text)
+    end
+
+    it 'renders the correct course case' do
+      expect(result.text).to include('French')
+    end
+
+    it 'renders the correct link' do
+      render_inline(described_class.new(course: course.decorate))
+      expect(result).to have_link(ske_url_name, href: ske_url)
+    end
+  end
+
   context 'when the provider accepts pending GCSEs' do
     it 'renders correct message' do
       course = build(
