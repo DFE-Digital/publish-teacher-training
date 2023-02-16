@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("When does the course start? – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Course start date – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -7,7 +7,7 @@
 <%= render "publish/shared/errors" %>
 
 <h1 class="govuk-heading-l">
-  When does the course start?
+  Course start date
 </h1>
 
 <div class="govuk-grid-row">
