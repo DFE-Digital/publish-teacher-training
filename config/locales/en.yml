@@ -279,7 +279,7 @@ en:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"
             start_date:
-              blank: "Start date cannot have blank values"
+              blank: "Select a course start date"
             name:
               blank: "Course title cannot be blank"
             level:
