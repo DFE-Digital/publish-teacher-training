@@ -26,7 +26,9 @@ feature 'choosing a start date', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: start_date_params(provider))
   end
 
-  def when_i_select_september; end
+  def when_i_select_september
+    publish_courses_new_start_date_page.choose("September #{Settings.current_recruitment_cycle_year}")
+  end
 
   def and_i_click_continue
     publish_courses_new_start_date_page.continue.click
