@@ -4,6 +4,21 @@ module Find
   module Courses
     module InternationalStudentsComponent
       class View < ViewComponent::Base
+        SUBJECTS_WITH_RELOCATION_ENTITLEMENT = %w[
+          A1
+          A2
+          15
+          17
+          18
+          19
+          A0
+          20
+          24
+          21
+          22
+          F3
+        ].freeze
+
         attr_reader :course
 
         delegate :apprenticeship?, to: :course
@@ -27,6 +42,10 @@ module Find
 
         def sponsorship_availability
           @sponsorship_availability ||= course.public_send("can_sponsor_#{visa_type}") ? :available : :not_available
+        end
+
+        def course_has_relocation_entitlement?
+          course.subjects.any? { |subject| SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(subject.subject_code) }
         end
       end
     end

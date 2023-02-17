@@ -20,9 +20,11 @@
 
     <%= t("find.international_candidates.#{visa_type}.#{sponsorship_availability}.html") %>
 
-    <p class="govuk-body">Alternatively, check if you’re eligible for a different type of visa, such as a Graduate or Family visa, that allows you to train to be a teacher without being sponsored.</p>
+    <% if course_has_relocation_entitlement? %>
+      <%= t("find.international_candidates.entitlement.html") %>
+    <% end %>
 
-    <p class="govuk-body">Find out more about <%= govuk_link_to("training to teach in England", "https://www.gov.uk/government/publications/train-to-teach-in-england-non-uk-applicants/train-to-teach-in-england-if-youre-a-non-uk-citizen") %>.</p>
+    <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as an international student", "https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student") %>.</p>
 
     <h3 class="govuk-heading-m">International qualifications</h3>
     <p class="govuk-body">If your qualifications come from a non-UK institution, we may want to see a ‘statement of comparability’ from UK ENIC. This will show us how they compare to UK qualifications.</p>

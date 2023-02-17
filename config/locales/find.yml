@@ -72,10 +72,10 @@ en:
       skilled_worker_visa:
         not_available:
           html:
-            <p class="govuk-body">If you do not already have the right to work in the UK, you may need to apply for a visa. The main visa for salaried courses is the Skilled Worker visa.</p>
-            <p class="govuk-body">To apply for a Skilled Worker visa you need to be sponsored by your employer.</p>
-            <p class="govuk-body">Sponsorship is not available for this course.</p>
+            <p class="govuk-body">If you do not already have the right to work in the UK, you may need to apply for a visa. The main visa for salaried courses is the <a class="govuk-link" href="https://www.gov.uk/skilled-worker-visa">Skilled Worker visa.</a></p>
+            <p class="govuk-body">Sponsorship for a Skilled Worker visa is not available for this course.</p>
             <p class="govuk-body">If you need a visa, filter your course search to find courses with visa sponsorship.</p>
+            <p class="govuk-body">You can also <a class="govuk-link" href="https://www.gov.uk/government/publications/train-to-teach-in-england-non-uk-applicants/train-to-teach-in-england-if-youre-a-non-uk-citizen#studying-and-working-as-a-teacher-in-the-uk-without-a-skilled-worker-visa-or-a-student-visa">learn more about different types of visa</a>  which allow you to train to be a teacher without being sponsored.</p>
         available:
           html:
             <p class="govuk-body">If you do not already have the right to work in the UK for the duration of this course, you may need to apply for a Skilled Worker visa.</p>
@@ -84,15 +84,18 @@ en:
       student_visa:
         not_available:
           html:
-            <p class="govuk-body">If you do not already have the right to study in the UK, you may need to apply for a visa. The main visa for fee-paying courses (those that you have to pay for) is the Student visa.</p>
-            <p class="govuk-body">To apply for a Student visa, you’ll need to be sponsored by your training provider.</p>
-            <p class="govuk-body">Sponsorship is not available for this course.</p>
+            <p class="govuk-body">If you do not already have the right to study in the UK, you may need to apply for a visa.</p>
+            <p class="govuk-body">Sponsorship for a student visa is not available for this course.</p>
             <p class="govuk-body">If you need a visa, filter your course search to find courses with visa sponsorship.</p>
+            <p class="govuk-body">You can also <a class="govuk-link" href="https://www.gov.uk/government/publications/train-to-teach-in-england-non-uk-applicants/train-to-teach-in-england-if-youre-a-non-uk-citizen#studying-and-working-as-a-teacher-in-the-uk-without-a-skilled-worker-visa-or-a-student-visa">learn more about different types of visa</a>  which allow you to train to be a teacher without being sponsored.</p>
         available:
           html:
             <p class="govuk-body">If you do not already have the right to study in the UK for the duration of this course, you may need to apply for a Student visa.</p>
             <p class="govuk-body">To do this, you’ll need to be sponsored by your training provider.</p>
             <p class="govuk-body">Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
+      entitlement:
+        html:
+          <p class="govuk-body">You may be entitled  to £10,000 from the UK government to help with the financial costs of moving to England.</p>
     get_into_teaching:
       tel: 0800 389 2500
       opening_times: "Monday to Friday, 8.30am to 5.30pm"

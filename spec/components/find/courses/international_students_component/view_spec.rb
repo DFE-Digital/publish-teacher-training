@@ -18,7 +18,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'tells candidates sponsorship is not available' do
-      expect(page).to have_text('Sponsorship is not available for this course')
+      expect(page).to have_text('Sponsorship for a student visa is not available for this course')
     end
   end
 
@@ -83,7 +83,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'tells candidates visa sponsorship is not available' do
-      expect(page).to have_text('Sponsorship is not available for this course')
+      expect(page).to have_text('Sponsorship for a Skilled Worker visa is not available for this course')
     end
 
     it 'does not tell candidates the 3-year residency rule' do
@@ -110,6 +110,21 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
 
     it 'tells candidates about settled and pre-settled status' do
       expect(page).to have_text('EEA nationals with settled or pre-settled status under the')
+    end
+  end
+
+  context 'when course has a subject with relocation entitlement' do
+    before do
+      course = build(
+        :course,
+        funding_type: 'fee',
+        subjects: [build(:secondary_subject, :french)]
+      )
+      render_inline(described_class.new(course: CourseDecorator.new(course)))
+    end
+
+    it 'tells candidates they may be eligible for relocation support' do
+      expect(page).to have_text('You may be entitled  to £10,000 from the UK government to help with the financial costs of moving to England.')
     end
   end
 end
