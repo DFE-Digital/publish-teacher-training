@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module ViewHelper
+  include DfE::Autocomplete::ApplicationHelper
+
   def govuk_back_link_to(url = :back, body = 'Back')
     render GovukComponent::BackLinkComponent.new(
       text: body,
