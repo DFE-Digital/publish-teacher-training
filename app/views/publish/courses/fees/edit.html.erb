@@ -72,7 +72,7 @@
         max_words: 250,
         data: { qa: "course_financial_support" }) %>
 
-      <%= f.govuk_submit @course.only_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">

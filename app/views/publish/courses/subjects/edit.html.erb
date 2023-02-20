@@ -1,4 +1,5 @@
-<% content_for :page_title, title_with_error_prefix("Change subjects – #{course.name_and_code}", course.errors.any?) %>
+<% page_title = "Change subjects" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -19,7 +20,7 @@
       <%= render(partial: "primary_form", locals: { form: }) if @course.primary_course? %>
       <%= render(partial: "secondary_form", locals: { form: }) if @course.secondary_course? %>
 
-      <%= form.submit course.is_published? ? "Update subject" : "Save",
+      <%= form.submit "Update subjects",
         class: "govuk-button", data: { qa: "course__save" } %>
     <% end %>
 
