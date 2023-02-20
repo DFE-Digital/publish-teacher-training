@@ -265,6 +265,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_16_112522) do
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
+    t.index ["synonyms"], name: "index_provider_on_synonyms", using: :gin
   end
 
   create_table "provider_ucas_preference", force: :cascade do |t|
