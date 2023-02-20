@@ -124,7 +124,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'tells candidates they may be eligible for relocation support' do
-      expect(page).to have_text('You may be entitled  to £10,000 from the UK government to help with the financial costs of moving to England.')
+      expect(page).to have_text('You may be entitled to £10,000 from the UK government to help with the financial costs of moving to England.')
     end
   end
 end
