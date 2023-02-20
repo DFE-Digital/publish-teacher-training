@@ -15,6 +15,17 @@ GIT
       request_store_rails (~> 2)
 
 GIT
+  remote: https://github.com/DFE-Digital/dfe-autocomplete.git
+  revision: 36d80e6b5bba67c92cd9ec6982a4e536d1889aed
+  specs:
+    dfe-autocomplete (0.1.0)
+      actionview (>= 7.0.2.3)
+      activemodel (>= 7.0.2.3)
+      govuk-components
+      rails (>= 7.0.2.3)
+      view_component
+
+GIT
   remote: https://github.com/DFE-Digital/jsonapi-rails.git
   revision: 359d794d916caebc2ea2cf907477227279b4fac3
   specs:
@@ -761,6 +772,7 @@ DEPENDENCIES
   data_migrate
   database_cleaner
   dfe-analytics!
+  dfe-autocomplete!
   discard
   draper
   dry-container

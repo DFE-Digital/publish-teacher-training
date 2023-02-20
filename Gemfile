@@ -148,6 +148,9 @@ gem 'http'
 # For configuring domains and assets
 gem 'rack-cors'
 
+# a library built on top of accessible-autocomplete from govuk
+gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
+
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 end
