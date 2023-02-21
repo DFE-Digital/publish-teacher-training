@@ -521,7 +521,7 @@ describe Course do
         it 'Requires a program type to have been specified' do
           error = errors[:program_type]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select a program type')
+          expect(error.first).to include('Select a funding type')
         end
 
         it 'Requires a study mode' do

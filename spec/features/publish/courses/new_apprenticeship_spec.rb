@@ -56,6 +56,6 @@ feature 'selecting a teaching apprenticeship', { can_edit_current_and_next_cycle
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a program type')
+    expect(page).to have_content('Select a funding type')
   end
 end

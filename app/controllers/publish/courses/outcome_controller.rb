@@ -68,7 +68,7 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :qualification) ? {} : { qualification: ['Pick a qualification'] }
+        params.dig(:course, :qualification) ? {} : { qualification: ['Select a qualification'] }
       end
     end
   end
