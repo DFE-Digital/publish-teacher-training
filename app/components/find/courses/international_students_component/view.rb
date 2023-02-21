@@ -45,7 +45,13 @@ module Find
         end
 
         def course_has_relocation_entitlement?
-          course.subjects.any? { |subject| SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(subject.subject_code) }
+          return course_subject_codes.any? { |code| SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(code) } if course.is_modern_language_course?
+
+          SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(course_subject_codes.first)
+        end
+
+        def course_subject_codes
+          @course_subject_codes ||= course.subjects.pluck(:subject_code).compact
         end
       end
     end

@@ -544,6 +544,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def is_modern_language_course?
+    subjects.any? { |s| s == SecondarySubject.modern_languages }
+  end
+
   def sites=(desired_sites)
     existing_sites = sites
 
