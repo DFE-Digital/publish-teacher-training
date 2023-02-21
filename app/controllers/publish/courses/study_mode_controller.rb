@@ -41,7 +41,7 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: ['Pick full time, part time or full time and part time'] }
+        params.dig(:course, :study_mode) ? {} : { study_mode: ['Select full time or part time'] }
       end
     end
   end

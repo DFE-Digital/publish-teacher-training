@@ -506,7 +506,7 @@ en:
         publish/course_study_mode_form:
           attributes:
             study_mode:
-              blank: "Pick full time, part time or full time and part time"
+              blank: "Select full time or part time"
         publish/course_withdrawal_form:
           attributes:
             confirm_course_code:
