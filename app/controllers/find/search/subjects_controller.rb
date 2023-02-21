@@ -34,9 +34,29 @@ module Find
         params
           .require(:find_subjects_form)
           .permit(
-            :query, :c, :lat, :latitude, :lng, :long, :longitude, :loc, :lq, :rad, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses,
-            :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, 'provider.provider_name',
-            :degree_required, :can_sponsor_visa, :funding, qualification: [], subjects: [], study_type: [], c: []
+            *legacy_paramater_keys,
+            :age_group,
+            :c,
+            :can_sponsor_visa,
+            :degree_required,
+            :engineers_teach_physics,
+            :funding,
+            :has_vacancies,
+            :l,
+            :latitude,
+            :loc,
+            :long,
+            :longitude,
+            :lq,
+            :radius,
+            :send_courses,
+            :sortby,
+            'provider.provider_name',
+            c: [],
+            qualification: [],
+            qualifications: [],
+            study_type: [],
+            subjects: []
           )
       end
 

@@ -38,4 +38,25 @@ module FilterParameters
   def remove_previous_parameters(all_parameters)
     all_parameters.reject { |key, _value| key.start_with? PREVIOUS_PARAMETER_PREFIX }
   end
+
+  def legacy_paramater_keys
+    %i[
+      fulltime
+      hasvacancies
+      lat
+      lng
+      parttime
+      prev_l
+      prev_lat
+      prev_lng
+      prev_loc
+      prev_lq
+      prev_query
+      prev_rad
+      qualifications
+      query
+      rad
+      senCourses
+    ]
+  end
 end
