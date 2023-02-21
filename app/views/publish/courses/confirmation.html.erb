@@ -2,7 +2,7 @@
 <% content_for :page_title, title_with_error_prefix(page_title, course.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(request.referer) %>
+  <%= govuk_back_link_to(new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true))) %>
 <% end %>
 
 <div class="govuk-grid-row">
