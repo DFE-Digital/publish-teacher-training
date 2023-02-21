@@ -8,8 +8,8 @@ feature 'choosing a start date', { can_edit_current_and_next_cycles: false } do
     when_i_visit_the_publish_courses_new_start_date_page
   end
 
-  scenario 'selecting september' do
-    when_i_select_september
+  scenario 'selecting january' do
+    when_i_select_january
     and_i_click_continue
     then_i_am_met_with_the_confirmation_page
   end
@@ -26,8 +26,8 @@ feature 'choosing a start date', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_start_date_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: start_date_params(provider))
   end
 
-  def when_i_select_september
-    publish_courses_new_start_date_page.choose("September #{Settings.current_recruitment_cycle_year}")
+  def when_i_select_january
+    publish_courses_new_start_date_page.choose("January #{Settings.current_recruitment_cycle_year.to_i + 1}")
   end
 
   def and_i_click_continue
