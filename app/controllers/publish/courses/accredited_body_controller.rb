@@ -119,7 +119,7 @@ module Publish
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
           errors = { accredited_body: ['Accredited body search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_body_code: ['Pick an accredited body'] }
+          errors = { accredited_body_code: ['Select an accredited body'] }
         end
 
         errors

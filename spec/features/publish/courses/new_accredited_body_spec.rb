@@ -52,6 +52,6 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Pick an accredited body')
+    expect(page).to have_content('Select an accredited body')
   end
 end
