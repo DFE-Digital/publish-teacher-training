@@ -63,7 +63,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   private
 
   def then_i_see_an_error_message
-    expect(page).to have_content('Select an option')
+    expect(page).to have_content('Select if this course is part of the Engineers teach physics programme')
   end
 
   def and_i_select_an_option

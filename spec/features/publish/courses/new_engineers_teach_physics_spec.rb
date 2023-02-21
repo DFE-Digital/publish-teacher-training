@@ -91,7 +91,7 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content('Select an option')
+    expect(page).to have_content('Select if this course is part of the Engineers teach physics programme')
   end
 
   def and_i_select_subordinate_subject(subject_type)
