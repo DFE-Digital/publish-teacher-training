@@ -521,7 +521,7 @@ describe Course do
         it 'Requires a program type to have been specified' do
           error = errors[:program_type]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select a funding type')
+          expect(error.first).to include('Select if this is a teaching apprenticeship')
         end
 
         it 'Requires a study mode' do
@@ -534,7 +534,7 @@ describe Course do
           it 'Empty' do
             error = errors[:applications_open_from]
             expect(error).not_to be_empty
-            expect(error.first).to include('Select when applications will open and enter the date if applicable')
+            expect(error.first).to include('Select an applications open date')
           end
 
           it 'A date outside of the current recruitment cycle' do
@@ -549,7 +549,7 @@ describe Course do
         it 'Requires at least one location' do
           error = errors[:sites]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select at least one location')
+          expect(error.first).to include('Select a location')
         end
       end
 
