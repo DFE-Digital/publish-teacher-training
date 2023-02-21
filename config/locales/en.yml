@@ -283,7 +283,7 @@ en:
             name:
               blank: "Course title cannot be blank"
             level:
-              blank: "^Select a course level"
+              blank: "^Select a subject level"
             qualification:
               blank: "^Select an outcome"
             maths:
@@ -302,7 +302,7 @@ en:
               blank: "^Select a program type"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
-              course_creation: "^Select at least one subject"
+              course_creation: "^Select a subject"
               duplicate: "^You have already selected this subject. You can only select a subject once"
             modern_languages_subjects:
               select_a_language: "^Select at least one language"
