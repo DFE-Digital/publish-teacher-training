@@ -495,7 +495,7 @@ describe Course do
           it 'Requires a language to be selected' do
             error = errors[:modern_languages_subjects]
             expect(error).not_to be_empty
-            expect(error.first).to include('Select at least one language')
+            expect(error.first).to include('Select a language')
           end
 
           it 'Does not add an error if a language is selected' do
