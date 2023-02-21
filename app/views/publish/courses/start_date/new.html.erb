@@ -6,11 +6,6 @@
 
 <%= render "publish/shared/errors" %>
 
-<h1 class="govuk-heading-l">
-  <%= render CaptionText.new(text: t("course.add_course")) %>
-  Course start date
-</h1>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: course,
