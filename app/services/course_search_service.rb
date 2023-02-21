@@ -250,7 +250,7 @@ class CourseSearchService
       not_required: 'not_required'
     }
 
-    accepted_degrees[degree_required_parameter].split(',')
+    (accepted_degrees[degree_required_parameter] || accepted_degrees[:show_all_courses]).split(',')
   end
 
   def degree_grades
