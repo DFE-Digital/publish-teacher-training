@@ -299,7 +299,7 @@ en:
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
-              blank: "^Select a funding type"
+              blank: "^Select if this is a teaching apprenticeship"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
               course_creation: "^Select a subject"
