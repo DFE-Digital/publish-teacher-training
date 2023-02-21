@@ -55,6 +55,6 @@ feature 'selection locations', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select at least one location for this course')
+    expect(page).to have_content('Select a location')
   end
 end
