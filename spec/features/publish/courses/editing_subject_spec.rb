@@ -13,7 +13,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     when_i_select_a_primary_subject('Primary with English')
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message('primary subject')
+    and_i_should_see_a_success_message
   end
 
   scenario 'updating secondary subject' do
@@ -22,7 +22,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     when_i_select_a_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_course_details_page
-    and_i_should_see_a_success_message('secondary subject')
+    and_i_should_see_a_success_message
   end
 
   scenario 'updating secondary subject modern languages' do
@@ -35,8 +35,8 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
 
   private
 
-  def and_i_should_see_a_success_message(value)
-    expect(page).to have_content(I18n.t('success.value_saved', value:))
+  def and_i_should_see_a_success_message
+    expect(page).to have_content(I18n.t('success.saved', value: 'Subject'))
   end
 
   def given_i_am_authenticated_as_a_provider_user

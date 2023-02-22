@@ -38,7 +38,7 @@ module Publish
         @location_form = LocationForm.new(site, params: site_params)
 
         if @location_form.save!
-          flash[:success] = I18n.t('success.value_published', value: 'location details')
+          course_updated_message('Location details')
 
           redirect_to publish_provider_recruitment_cycle_locations_path(
             @location_form.provider_code, @location_form.recruitment_cycle_year

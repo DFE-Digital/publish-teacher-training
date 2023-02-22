@@ -31,7 +31,7 @@ module Publish
 
         @course_location_form = CourseLocationForm.new(@course, params: location_params)
         if @course_location_form.save!
-          course_details_success_message('course locations')
+          course_updated_message(section_key)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -85,6 +85,10 @@ module Publish
 
       def build_course
         @course = provider.courses.find_by!(course_code: params[:code])
+      end
+
+      def section_key
+        'Location'.pluralize(location_params[:site_ids].compact_blank.count)
       end
     end
   end

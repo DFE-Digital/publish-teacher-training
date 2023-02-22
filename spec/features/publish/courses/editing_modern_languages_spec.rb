@@ -40,7 +40,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.saved'))
+    expect(page).to have_content(I18n.t('success.saved', value: 'Subjects'))
   end
 
   def modern_languages_subject

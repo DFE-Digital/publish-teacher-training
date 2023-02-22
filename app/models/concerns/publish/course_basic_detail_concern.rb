@@ -30,7 +30,8 @@ module Publish
       return render :edit if @errors.present?
 
       if @course.update(course_params)
-        flash[:success] = I18n.t('success.saved')
+        course_updated_message(section_key)
+
         redirect_to(
           details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
