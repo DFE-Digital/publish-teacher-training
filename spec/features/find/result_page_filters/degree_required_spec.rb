@@ -30,15 +30,15 @@ RSpec.feature 'Degree required filter' do
   end
 
   def when_i_select_the_two_two_degree_radio
-    find_results_page.degree_grade.two_two.choose
+    page.choose('2:2')
   end
 
   def when_i_select_the_third_degree_radio
-    find_results_page.degree_grade.third_class.choose
+    page.choose('Third')
   end
 
   def when_i_select_the_pass_degree_radio
-    find_results_page.degree_grade.not_required.choose
+    page.choose('Pass (Ordinary degree)')
   end
 
   def then_i_see_that_the_two_two_degree_radio_is_selected
