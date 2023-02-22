@@ -11,5 +11,15 @@ module Find
     end
 
     SelectProvider = Struct.new('SelectProvider', :id, :name)
+
+    def dfe_select_provider_options(providers)
+      providers.map do |provider|
+        value = provider.provider_name
+        option = "#{value} (#{provider.provider_code})"
+        DfESelectProvider.new(value, option, provider.synonyms)
+      end
+    end
+
+    DfESelectProvider = Struct.new('DfeSelectProvider', :id, :name, :synonyms)
   end
 end

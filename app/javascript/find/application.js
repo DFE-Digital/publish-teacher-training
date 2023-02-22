@@ -1,6 +1,7 @@
 // Entry point for the build script in your package.json
 import 'babel-polyfill'
 import jQuery from 'jquery'
+import dfeAutocomplete from 'dfe-autocomplete'
 import { initAll } from 'govuk-frontend'
 
 import { FilterToggleButton } from './filter-toggle-button'
@@ -11,6 +12,9 @@ window.jQuery = jQuery
 window.$ = jQuery
 
 initAll()
+
+dfeAutocomplete({ rawAttribute: false, confirmOnBlur: false })
+
 CookieBanner.init()
 
 initAutocomplete({

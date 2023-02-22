@@ -28,7 +28,7 @@ module Find
       private
 
       def providers
-        @providers ||= RecruitmentCycle.current.providers.by_name_ascending
+        @providers ||= RecruitmentCycle.current.providers.all
       end
 
       def build_results_filter_query_parameters

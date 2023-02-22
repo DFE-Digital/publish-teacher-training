@@ -14,7 +14,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <%= form_with url: find_locations_path, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
+    <%= form_with url: find_locations_path, model: Provider.new, method: :post, data: { "ga-event-form" => "Location" } do |form| %>
 
       <%= render "find/shared/hidden_fields", exclude_keys: %w[l provider.provider_name radius], form: %>
       <%= render "find/shared/hidden_previous_fields", form: %>
@@ -104,7 +104,18 @@
                   <% end %>
                   <% aria_described_by = "provider-hint" %>
                   <% aria_described_by += " provider-error" if provider_error? %>
-                   <%= form.govuk_collection_select "provider.provider_name", select_provider_options(@providers), :id, :name, label: { text: "School, university or other training provider" }, hint: { text: "Enter the name or provider code" } %>
+
+                  <%= render DfE::Autocomplete::View.new(
+                    form,
+                    attribute_name: :provider_name,
+                    form_field: form.govuk_select(
+                      :name,
+                      dfe_autocomplete_options(dfe_select_provider_options(@providers)),
+                      label: { text: "foo", size: 'l' },
+                      hint: { text: "bar" },
+                      ),
+                    ) %>
+
                 <% else %>
                   <%= form.label "provider.provider_name", { class: "govuk-label", for: "provider" } do %>
                     School, university or other training provider
