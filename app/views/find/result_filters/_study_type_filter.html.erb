@@ -15,7 +15,7 @@
         "full_time",
         nil
       ) %>
-      <%= form.label :full_time, class: "govuk-label govuk-checkboxes__label" do %>
+      <%= form.label :full_time, { for: "study_type_full_time" }, class: "govuk-label govuk-checkboxes__label" do %>
         Full time (12 months)
       <% end %>
     </div>
@@ -32,7 +32,7 @@
         "part_time",
         nil
       ) %>
-      <%= form.label :part_time, class: "govuk-label govuk-checkboxes__label" do %>
+      <%= form.label :part_time, { for: "study_type_part_time" }, class: "govuk-label govuk-checkboxes__label" do %>
         Part time (18 to 24 months)
       <% end %>
     </div>
