@@ -49,6 +49,8 @@ module Find
       return unless @request_params['qualifications']
 
       @request_params['qualification'] = @request_params.delete('qualifications')
+      @request_params['qualification'] = @request_params['qualification'].split(',') if @request_params['qualification'].is_a?(String)
+
       QAULIFICATION_FILTERS.each do |k, v|
         if @request_params['qualification'].include?(k)
           @request_params['qualification'] -= [k]
