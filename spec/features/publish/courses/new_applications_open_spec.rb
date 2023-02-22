@@ -62,7 +62,7 @@ feature 'choosing an application open from date', { can_edit_current_and_next_cy
 
   def then_i_am_met_with_the_start_date_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/start-date/new", ignore_query: true)
-    expect(page).to have_content('When does the course start?')
+    expect(page).to have_content('Course start date')
   end
 
   def then_i_am_met_with_errors

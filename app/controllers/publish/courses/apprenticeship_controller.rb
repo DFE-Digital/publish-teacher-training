@@ -12,6 +12,10 @@ module Publish
       def current_step
         :apprenticeship
       end
+
+      def section_key
+        'Teaching apprenticeship'
+      end
     end
   end
 end

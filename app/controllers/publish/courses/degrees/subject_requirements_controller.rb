@@ -22,7 +22,7 @@ module Publish
           @subject_requirements_form = SubjectRequirementForm.new(subject_requirements_params)
 
           if @subject_requirements_form.save(@course)
-            course_description_success_message('degree requirements')
+            course_updated_message('Degree requirements')
 
             redirect_to publish_provider_recruitment_cycle_course_path
           else

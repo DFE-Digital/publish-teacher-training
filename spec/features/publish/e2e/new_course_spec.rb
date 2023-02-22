@@ -214,9 +214,9 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def select_start_date(course_creation_params)
-    course_creation_params[:start_date] = "September #{recruitment_cycle.year}"
+    course_creation_params[:start_date] = "January #{recruitment_cycle.year.to_i + 1}"
 
-    publish_courses_new_start_date_page.select "September #{recruitment_cycle.year}"
+    publish_courses_new_start_date_page.choose "January #{recruitment_cycle.year.to_i + 1}"
     publish_courses_new_start_date_page.continue.click
 
     # Addressable, the gem site-prism relies on, cannot match parameters containing a +

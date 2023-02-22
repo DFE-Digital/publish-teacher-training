@@ -708,32 +708,6 @@ describe CourseDecorator do
   #   end
   # end
 
-  describe 'return_start_date' do
-    context 'when the course has a start date' do
-      it "returns the course's start date" do
-        expect(decorated_course.return_start_date).to eq(course.start_date)
-      end
-    end
-
-    context 'when the course has no start date', { can_edit_current_and_next_cycles: false } do
-      let(:start_date) { nil }
-
-      it 'returns the September of the current cycle' do
-        expect(decorated_course.return_start_date).to eq("September #{current_recruitment_cycle.year}")
-      end
-    end
-
-    context 'during rollover' do
-      let(:start_date) { nil }
-
-      before { allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true) }
-
-      it 'returns the September of the next cycle' do
-        expect(decorated_course.return_start_date).to eq("September #{current_recruitment_cycle.year.to_i + 1}")
-      end
-    end
-  end
-
   describe '#other_course_length?' do
     before do
       allow(course.enrichments).to receive(:most_recent).and_return([course_enrichment])

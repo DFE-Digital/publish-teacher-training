@@ -16,7 +16,7 @@ module Publish
           @grade_form = DegreeGradeForm.new(grade: grade_params)
 
           if course.is_primary? && @grade_form.save(course)
-            course_description_success_message('minimum degree classification')
+            course_updated_message('Minimum degree classification')
 
             redirect_to publish_provider_recruitment_cycle_course_path
           elsif @grade_form.save(course)

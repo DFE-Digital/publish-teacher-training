@@ -28,6 +28,8 @@ module Publish
         if form_params[:skip_languages_goto_confirmation].present?
 
           if @engineers_teach_physics_form.save!
+            course_updated_message(section_key)
+
             course.update(name: course.generate_name)
             redirect_to(
               details_publish_provider_recruitment_cycle_course_path(
@@ -51,6 +53,7 @@ module Publish
             )
           )
         elsif @engineers_teach_physics_form.save!
+          course_updated_message(section_key)
           course.update(name: course.generate_name)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
@@ -118,6 +121,10 @@ module Publish
             :skip_languages_goto_confirmation,
             subjects_ids: []
           )
+      end
+
+      def section_key
+        'Engineers Teach Physics'
       end
     end
   end

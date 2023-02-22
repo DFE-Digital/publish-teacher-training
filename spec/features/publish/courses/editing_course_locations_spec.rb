@@ -66,7 +66,7 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_a_success_message
-    expect(page).to have_content(I18n.t('success.value_saved', value: 'course locations'))
+    expect(page).to have_content(I18n.t('success.saved', value: 'Location'))
   end
 
   def and_the_course_locations_are_updated

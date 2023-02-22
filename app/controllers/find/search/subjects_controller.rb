@@ -30,15 +30,7 @@ module Find
         form_params['subjects'].compact_blank!
       end
 
-      def form_params
-        params
-          .require(:find_subjects_form)
-          .permit(
-            :query, :c, :lat, :latitude, :lng, :long, :longitude, :loc, :lq, :rad, :radius, :sortby, :age_group, :has_vacancies, :l, :send_courses,
-            :prev_l, :prev_lat, :prev_lng, :prev_loc, :prev_lq, :prev_query, :prev_rad, 'provider.provider_name',
-            :degree_required, :can_sponsor_visa, :funding, qualification: [], subjects: [], study_type: [], c: []
-          )
-      end
+      def form_name = :find_subjects_form
 
       def build_backlink_query_parameters
         @backlink_query_parameters = ResultsView.new(query_parameters: request.query_parameters)
