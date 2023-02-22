@@ -128,5 +128,19 @@
       </fieldset>
       <%= form.submit local_assigns[:submit_button_text], name: nil, class: "govuk-button", data: { qa: "find-courses" } %>
     <% end %>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Meet local teacher training providers</h2>
+
+    <p class="govuk-body">Visit a Get Into Teaching event where you can:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>get advice on your application</li>
+      <li>talk to existing teachers</li>
+      <li>connect with people like you who are interested in teaching</li>
+    </ul>
+
+    <%= govuk_link_to("Talk to teacher training providers at an event near you", t("find.get_into_teaching.url_events"), class: "govuk-body") %>.
   </div>
 </div>
