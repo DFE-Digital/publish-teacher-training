@@ -7,7 +7,7 @@ describe Courses::EditOptions::StartDateConcern do
 
   let(:year) { example_model.provider.recruitment_cycle.year.to_i }
 
-  context 'non presisted course' do
+  context 'non persisted course' do
     context 'start_date_options' do
       it 'returns the correct options for the recruitment_cycle' do
         expect(example_model.start_date_options).to eq(
@@ -38,7 +38,7 @@ describe Courses::EditOptions::StartDateConcern do
     end
   end
 
-  context 'presisted course' do
+  context 'persisted course' do
     let(:example_model) { build(:course) }
     let(:month) { [*1..12].sample }
     let(:expected_starting_options) do
