@@ -20,7 +20,7 @@ RSpec.feature 'Funding filter' do
   end
 
   def when_i_select_the_salary_checkbox
-    find_results_page.funding.checkbox.check
+    page.check('Only show courses that come with a salary')
   end
 
   def then_i_see_that_the_salary_checkbox_is_selected
