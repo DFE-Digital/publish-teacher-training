@@ -1,4 +1,21 @@
-<%= render "publish/shared/form_field",
-  form:, field: :start_date, label: { text: "Course start date", class: "govuk-label govuk-label--s" }  do |field, options| %>
-  <%= form.select field, options_for_select(@course.edit_course_options["start_dates"], course.return_start_date), { include_blank: true }, data: { qa: "start_date" }, class: "govuk-select" %>
+<%= render "publish/shared/error_wrapper", error_keys: [:start_date], data_qa: "course__start_date" do %>
+  <fieldset class="govuk-fieldset">
+    <h1 class="govuk-heading-l">
+        <%= render CaptionText.new(text: course.course_code.present? ? course.name_and_code : t("course.add_course")) %>
+      Course start date
+    </h1>
+    <%= render "publish/shared/error_messages", error_keys: [:start_date] %>
+      <% @course.edit_course_options["start_dates"].each do |value| %>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :start_date,
+                value,
+                checked: course.start_date == value,
+                class: "govuk-radios__input" %>
+          <%= form.label :start_date,
+                value,
+                value:,
+                class: "govuk-label govuk-radios__label" %>
+        </div>
+    <% end %>
+  </fieldset>
 <% end %>
