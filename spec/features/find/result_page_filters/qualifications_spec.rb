@@ -37,8 +37,8 @@ RSpec.feature 'Qualifications filter' do
   end
 
   def when_i_unselect_the_pgce_and_further_education_qualification_checkboxes
-    find_results_page.qualifications.pgce_with_qts.uncheck
-    find_results_page.qualifications.other.uncheck
+    page.uncheck('PGCE (or PGDE) with QTS')
+    page.uncheck('Further education (PGCE or PGDE without QTS)')
   end
 
   def and_the_qts_checkbox_is_selected
@@ -90,19 +90,19 @@ RSpec.feature 'Qualifications filter' do
   end
 
   def when_i_select_the_pgce_checkbox
-    find_results_page.qualifications.pgce_with_qts.check
+    page.check('PGCE (or PGDE) with QTS')
   end
 
   def when_i_select_the_further_education_checkbox
-    find_results_page.qualifications.other.check
+    page.check('Further education (PGCE or PGDE without QTS)')
   end
 
   def and_i_deselect_the_qts_checkbox
-    find_results_page.qualifications.qts.uncheck
+    page.uncheck('QTS only')
   end
 
   def and_i_deselect_the_pgce_checkbox
-    find_results_page.qualifications.pgce_with_qts.uncheck
+    page.uncheck('PGCE (or PGDE) with QTS')
   end
 
   def then_i_see_that_the_qts_and_further_education_checkboxes_are_still_unselected
