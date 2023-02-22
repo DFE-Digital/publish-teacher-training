@@ -59,4 +59,34 @@ module FilterParameters
       senCourses
     ]
   end
+
+  def form_params
+    params
+      .require(form_name)
+      .permit(
+        *legacy_paramater_keys,
+        :age_group,
+        :c,
+        :can_sponsor_visa,
+        :degree_required,
+        :engineers_teach_physics,
+        :funding,
+        :has_vacancies,
+        :l,
+        :latitude,
+        :loc,
+        :long,
+        :longitude,
+        :lq,
+        :radius,
+        :send_courses,
+        :sortby,
+        'provider.provider_name',
+        c: [],
+        qualification: [],
+        qualifications: [],
+        study_type: [],
+        subjects: []
+      )
+  end
 end

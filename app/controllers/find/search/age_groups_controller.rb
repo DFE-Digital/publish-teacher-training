@@ -32,35 +32,7 @@ module Find
         filter_params[:find_age_groups_form].merge(age_group: @age_groups_form.age_group, subjects: ['41'])
       end
 
-      def form_params
-        params
-          .require(:find_age_groups_form)
-          .permit(
-            *legacy_paramater_keys,
-            :age_group,
-            :c,
-            :can_sponsor_visa,
-            :degree_required,
-            :engineers_teach_physics,
-            :funding,
-            :has_vacancies,
-            :l,
-            :latitude,
-            :loc,
-            :long,
-            :longitude,
-            :lq,
-            :radius,
-            :send_courses,
-            :sortby,
-            'provider.provider_name',
-            c: [],
-            qualification: [],
-            qualifications: [],
-            study_type: [],
-            subjects: []
-          )
-      end
+      def form_name = :find_age_groups_form
 
       def build_backlink_query_parameters
         @backlink_query_parameters = ResultsView.new(query_parameters: request.query_parameters)
