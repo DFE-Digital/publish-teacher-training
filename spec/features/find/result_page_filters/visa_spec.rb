@@ -20,7 +20,7 @@ RSpec.feature 'Visa filter' do
   end
 
   def when_i_select_the_visa_checkbox
-    page.check('Only show courses with visa sponsorship')
+    check('Only show courses with visa sponsorship')
   end
 
   def then_i_see_that_the_visa_checkbox_is_selected

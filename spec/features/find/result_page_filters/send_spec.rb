@@ -20,7 +20,7 @@ RSpec.feature 'SEND filter' do
   end
 
   def when_i_select_the_send_checkbox
-    page.check('Only show courses with a SEND specialism')
+    check('Only show courses with a SEND specialism')
   end
 
   def then_i_see_that_the_send_checkbox_is_selected

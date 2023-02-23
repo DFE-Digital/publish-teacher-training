@@ -29,7 +29,7 @@ RSpec.feature 'Study type filter' do
   end
 
   def when_i_unselect_the_part_time_study_checkbox
-    page.uncheck('Part time (18 to 24 months)')
+    uncheck('Part time (18 to 24 months)')
   end
 
   def then_i_see_that_the_full_time_study_checkbox_is_still_selected
@@ -48,7 +48,7 @@ RSpec.feature 'Study type filter' do
   end
 
   def when_i_unselect_the_full_time_study_checkbox
-    page.uncheck('Full time (12 months)')
+    uncheck('Full time (12 months)')
   end
 
   def and_i_select_the_part_time_study_checkbox
