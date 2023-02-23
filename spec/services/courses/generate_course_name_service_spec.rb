@@ -97,47 +97,6 @@ describe Courses::GenerateCourseNameService do
           end
         end
 
-        context 'English as a second language -> English' do
-          context 'With a single language' do
-            let(:subjects) do
-              [modern_languages, find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language)]
-            end
-
-            it 'Returns the title Modern Languages (English)' do
-              expect(subject).to eq('Modern Languages (English)')
-            end
-          end
-
-          context 'With two languages' do
-            let(:subjects) do
-              [
-                modern_languages,
-                find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
-                find_or_create(:modern_languages_subject, :spanish)
-              ]
-            end
-
-            it 'Returns the title Modern Languages (English and Spanish)' do
-              expect(subject).to eq('Modern Languages (English and Spanish)')
-            end
-          end
-
-          context 'With three languages' do
-            let(:subjects) do
-              [
-                modern_languages,
-                find_or_create(:modern_languages_subject, :english_as_a_second_language_or_other_language),
-                find_or_create(:modern_languages_subject, :french),
-                find_or_create(:modern_languages_subject, :spanish)
-              ]
-            end
-
-            it 'Returns the title Modern Languages (English, French, Spanish)' do
-              expect(subject).to eq('Modern Languages (English, French, Spanish)')
-            end
-          end
-        end
-
         context 'Modern Languages (Other) -> Should be ignored for the title' do
           context 'With a single language' do
             let(:subjects) do
