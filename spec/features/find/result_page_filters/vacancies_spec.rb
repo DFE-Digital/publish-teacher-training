@@ -20,7 +20,7 @@ RSpec.feature 'Results page new vacancies filter' do
   end
 
   def when_i_unselect_the_vacancies_checkbox
-    find_results_page.vacancies.checkbox.uncheck
+    uncheck('Only show courses with vacancies')
   end
 
   def then_i_see_that_the_vacancies_checkbox_is_still_unselected
