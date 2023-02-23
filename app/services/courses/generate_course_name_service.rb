@@ -92,7 +92,6 @@ module Courses
     def format_subject_name(subject)
       {
         'communication and media studies' => 'Media studies',
-        'english as a second or other language' => 'English',
         'physics' => course.is_engineers_teach_physics? ? ENGINEERS_TEACH_PHYSICS_TITLE : subject.to_s
       }[subject.subject_name.downcase] || subject.to_s
     end
