@@ -78,6 +78,8 @@ module Subjects
       ]
 
       # old 2019 DfE subjects
+      # English as a second or other language was removed because it is not an actual modern language and is not entitled to the financial incentives
+
       discontinued = [
         { subject_name: 'Humanities' },
         { subject_name: 'Balanced Science' },
