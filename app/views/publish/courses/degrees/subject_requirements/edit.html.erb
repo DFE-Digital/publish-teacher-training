@@ -31,7 +31,7 @@
 
       <%= render partial: "publish/courses/degrees/additional_degree_subject_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
 
-      <%= f.govuk_submit "Update Degree requirements", data: { qa: "degree_subject_requirements__save" } %>
+      <%= f.govuk_submit "Update degree requirements", data: { qa: "degree_subject_requirements__save" } %>
 
     <% end %>
   </div>
