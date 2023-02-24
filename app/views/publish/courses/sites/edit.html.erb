@@ -1,4 +1,5 @@
-<% content_for :page_title, title_with_error_prefix("Locations – #{course.name_and_code}", @course_location_form.errors.present?) %>
+<% page_title = "Locations" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_location_form.errors.present?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -45,7 +46,7 @@
        <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
 
     <p class="govuk-body">

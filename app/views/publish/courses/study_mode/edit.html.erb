@@ -1,4 +1,5 @@
-<% content_for :page_title, title_with_error_prefix("Full time or part time – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
+<% page_title = "Full time or part time" %>
+<% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -36,7 +37,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit course.is_published? ? "Save and publish" : "Save" %>
+      <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
 
     <p class="govuk-body">
