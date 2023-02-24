@@ -31,14 +31,7 @@
         <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
           <% row.key { "Level" } %>
           <% row.value { course.level.humanize } %>
-          <% if course.is_further_education? %>
-            <% row.action %>
-          <% else %>
-            <% row.action(
-              href: new_publish_provider_recruitment_cycle_courses_level_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "level"
-            ) %>
-          <% end %>
+          <% row.action %>
         <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
