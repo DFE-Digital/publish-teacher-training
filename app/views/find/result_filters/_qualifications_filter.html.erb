@@ -16,7 +16,7 @@
         "qts",
         false
       ) %>
-      <%= form.label :qualification, value: "QtsOnly", class: "govuk-label govuk-checkboxes__label" do %>
+      <%= form.label :qualification, { for: "qualification_qts" }, value: "QtsOnly", class: "govuk-label govuk-checkboxes__label" do %>
         QTS only
       <% end %>
     </div>
@@ -33,7 +33,7 @@
         "pgce_with_qts",
         false
       ) %>
-      <%= form.label :qualification, value: "PgdePgceWithQts", class: "govuk-label govuk-checkboxes__label" do %>
+      <%= form.label :qualification, { for: "qualification_pgce_with_qts" }, value: "PgdePgceWithQts", class: "govuk-label govuk-checkboxes__label" do %>
         PGCE (or PGDE) with QTS
       <% end %>
     </div>
@@ -50,7 +50,7 @@
         ["pgce pgde"],
         false
       ) %>
-      <%= form.label :qualification, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
+      <%= form.label :qualification, { for: "qualification_pgce_pgde" }, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
         Further education (PGCE or PGDE without QTS)
       <% end %>
     </div>
