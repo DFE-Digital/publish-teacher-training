@@ -40,7 +40,7 @@
 
         <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
           <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
-          <% row.value %>
+          <% row.value { course.is_send? } %>
           <% row.action %>
         <% end %>
 
