@@ -174,6 +174,5 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.locations.value.text).to have_content(site.location_name)
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
-    expect(publish_course_confirmation_page.details.name.value.text).to eq('Psychology')
   end
 end

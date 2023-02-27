@@ -22,10 +22,6 @@ module PageObjects
       section :accredited_body, Sections::SummaryList, '[data-qa="course__accredited_body"]'
       section :applications_open, Sections::SummaryList, '[data-qa="course__applications_open"]'
       section :start_date, Sections::SummaryList, '[data-qa="course__start_date"]'
-      section :name, Sections::SummaryList, '[data-qa="course__name"]'
-      section :description, Sections::SummaryList, '[data-qa="course__description"]'
-      section :course_code, Sections::SummaryList, '[data-qa="course__course_code"]'
-      section :allocations, Sections::SummaryList, '[data-qa="course__allocations"]'
       section :contact_support_link, Sections::SummaryList, '[data-qa="course__contact_support_link"]'
       section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'
 

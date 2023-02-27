@@ -135,15 +135,7 @@ feature 'Course show' do
     expect(publish_provider_courses_details_page.start_date).to have_content(
       'Academic year 2021 to 2022'
     )
-    expect(publish_provider_courses_details_page.name).to have_content(
-      course.name
-    )
-    expect(publish_provider_courses_details_page.description).to have_content(
-      course.description
-    )
-    expect(publish_provider_courses_details_page.course_code).to have_content(
-      course.course_code
-    )
+
     expect(publish_provider_courses_details_page.locations).to have_content(
       course.sites.first.location_name
     )

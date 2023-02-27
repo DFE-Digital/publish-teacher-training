@@ -26,20 +26,15 @@
         except_keys: [] %>
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
-        <% summary_list.row(html_attributes: { data: { qa: "course__name" } }) do |row| %>
-          <% row.key { "Course name" } %>
-          <% row.value { course.generate_name } %>
-          <% row.action %>
-        <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
-          <% row.key { "Level" } %>
+          <% row.key { "Subject level" } %>
           <% row.value { course.level.humanize } %>
           <% row.action %>
         <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
-          <% row.key { raw("<abbr class=\"app-!-text-decoration-underline-dotted\" title=\"Special educational needs and disability\">SEND</abbr>") } %>
+          <% row.key { "Special educational needs and disability (SEND)" } %>
           <% row.value { course.is_send? } %>
           <% row.action %>
         <% end %>
@@ -172,7 +167,7 @@
         <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
-          <% row.key { "Applications open" } %>
+          <% row.key { "Applications open date" } %>
           <% row.value do %>
             <% if course.applications_open_from == @recruitment_cycle.application_start_date %>
               As soon as the course is on Find (recommended)
@@ -187,7 +182,7 @@
         <% end %>
 
         <% summary_list.row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
-          <% row.key { "Course starts" } %>
+          <% row.key { "Course start date" } %>
           <% row.value { course.start_date.present? ? l(course.start_date&.to_date, format: :short) : nil } %>
           <% row.action(
             href: new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
