@@ -15,14 +15,11 @@
                   method: :get do |form| %>
 
       <%= render "publish/courses/new_fields_holder", form:, except_keys: [] do |fields| %>
-        <%#= render "publish/shared/error_wrapper", error_keys: [:program_type], data_qa: "course__funding_type" do %>
-          <%#= render "publish/shared/error_messages", error_keys: [:program_type] %>
-          <%= render(
-            "form_fields",
-            form: fields,
-            program_types: %i[pg_teaching_apprenticeship school_direct_training_programme school_direct_salaried_training_programme]
-          ) %>
-        <%# end %>
+        <%= render(
+          "form_fields",
+          form: fields,
+          program_types: %i[pg_teaching_apprenticeship school_direct_training_programme school_direct_salaried_training_programme]
+        ) %>
       <% end %>
     <% end %>
 
