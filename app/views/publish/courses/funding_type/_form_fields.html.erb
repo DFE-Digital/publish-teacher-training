@@ -11,7 +11,7 @@
       </h1>
     </legend>
 
-    <%= render "publish/shared/error_messages", error_keys: [:funding_type, :program_type] %>
+    <%= render "publish/shared/error_messages", error_keys: %i[funding_type program_type] %>
     <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
       <div class="govuk-radios__item">
         <%= form.radio_button :funding_type,
