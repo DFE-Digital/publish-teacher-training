@@ -5,12 +5,16 @@ import { initAll } from 'govuk-frontend'
 
 import { FilterToggleButton } from './filter-toggle-button'
 import initAutocomplete from './autocomplete'
+import dfeAutocomplete from './dfe-autocomplete'
 import CookieBanner from '../cookie_banner'
 
 window.jQuery = jQuery
 window.$ = jQuery
 
 initAll()
+
+dfeAutocomplete({ rawAttribute: false, confirmOnBlur: false })
+
 CookieBanner.init()
 
 initAutocomplete({
