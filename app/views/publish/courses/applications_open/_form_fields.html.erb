@@ -1,5 +1,6 @@
 <div class="govuk-form-group">
   <div class="govuk-radios govuk-!-margin-top-2 govuk-radios--conditional" data-module="govuk-radios">
+  <%= render "publish/shared/error_wrapper", error_keys: [:applications_open_from], data_qa: "course__study_mode" do %>
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading" id="applications_open_from-error">
@@ -7,6 +8,9 @@
           Applications open date
         </h1>
       </legend>
+
+      <%= render "publish/shared/error_messages", error_keys: [:applications_open_from] %>
+
       <div class="govuk-radios__item govuk-!-margin-top-4">
         <%= form.radio_button :applications_open_from, @recruitment_cycle.application_start_date,
               class: "govuk-radios__input", data: { qa: "applications_open_from" } %>
@@ -56,6 +60,7 @@
             </div>
           </div>
         </fieldset>
+        <% end %>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-<%= render "publish/shared/error_wrapper", error_keys: [:campaign_name], data_qa: "course__engineers_teach_physics" do %>
+<%#= render "publish/shared/error_wrapper", error_keys: [:campaign_name], data_qa: "course__engineers_teach_physics" do %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h1 class="govuk-fieldset__heading">
@@ -16,6 +16,9 @@
     <p class="govuk-body">
       For more information, email <%= govuk_mail_to(Settings.campaign_email, subject: "Engineers Teach Physics", class: "govuk-link") %>
     </p>
+
+    <%= render "publish/shared/error_wrapper", error_keys: [:campaign_name], data_qa: "course__engineers_teach_physics" do %>
+
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
       <h1 class="govuk-fieldset__heading">
         Is this course part of the Engineers Teach Physics programme?
@@ -37,5 +40,6 @@
         </div>
       <% end %>
     </div>
+    <% end %>
   </fieldset>
-<% end %>
+
