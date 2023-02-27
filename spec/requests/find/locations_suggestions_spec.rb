@@ -11,7 +11,7 @@ module Find
         get '/location-suggestions'
 
         expect(response).to have_http_status(:bad_request)
-        expect(JSON.parse(response.body)).to eq('error' => 'Bad request')
+        expect(response.parsed_body).to eq('error' => 'Bad request')
       end
     end
 

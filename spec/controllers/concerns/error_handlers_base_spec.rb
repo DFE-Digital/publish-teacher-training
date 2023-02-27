@@ -30,7 +30,7 @@ describe ErrorHandlers::Base do
     it 'renders some nice json' do
       get :error
       expect(response.content_type).to include 'application/json'
-      expect(JSON.parse(response.body)).to match(
+      expect(response.parsed_body).to match(
         'errors' => [
           'status' => 500,
           'title' => a_string_including('ERROR'),

@@ -16,7 +16,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it 'returns empty array of data' do
-        expect(JSON.parse(response.body)['data']).to eql([])
+        expect(response.parsed_body['data']).to eql([])
       end
     end
 
@@ -31,12 +31,12 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
 
       it 'returns correct number of courses' do
-        expect(JSON.parse(response.body)['data'].size).to be(3)
+        expect(response.parsed_body['data'].size).to be(3)
       end
 
       context 'course count' do
         it 'returns the course count in a meta object' do
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
           meta = json_response['meta']
 
           expect(meta['count']).to be(3)
@@ -160,12 +160,12 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         end
 
         it 'returns the provider and accrediting body connected to the course' do
-          expect(JSON.parse(response.body)['data'][0]['relationships'].keys).to include('provider')
-          expect(JSON.parse(response.body)['data'][0]['relationships'].keys).to include('accredited_body')
-          expect(JSON.parse(response.body)['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)
-          expect(JSON.parse(response.body)['included'][0]['type']).to eql('providers')
-          expect(JSON.parse(response.body)['included'][1]['id']).to eql(provider.id.to_s)
-          expect(JSON.parse(response.body)['included'][1]['type']).to eql('providers')
+          expect(response.parsed_body['data'][0]['relationships'].keys).to include('provider')
+          expect(response.parsed_body['data'][0]['relationships'].keys).to include('accredited_body')
+          expect(response.parsed_body['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)
+          expect(response.parsed_body['included'][0]['type']).to eql('providers')
+          expect(response.parsed_body['included'][1]['id']).to eql(provider.id.to_s)
+          expect(response.parsed_body['included'][1]['type']).to eql('providers')
         end
       end
 
@@ -179,7 +179,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         end
 
         it "doesn't include subjects" do
-          expect(JSON.parse(response.body)['data'][0]['relationships'].keys).not_to include('subjects')
+          expect(response.parsed_body['data'][0]['relationships'].keys).not_to include('subjects')
         end
       end
     end
@@ -199,7 +199,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
       it 'returns the course' do
         expect(response).to be_successful
-        expect(JSON.parse(response.body)['data']['id']).to eql(course.id.to_s)
+        expect(response.parsed_body['data']['id']).to eql(course.id.to_s)
       end
     end
 
@@ -222,13 +222,13 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       it 'returns the course with includes' do
         expect(response).to be_successful
 
-        expect(JSON.parse(response.body)['data']['id']).to eql(course.id.to_s)
+        expect(response.parsed_body['data']['id']).to eql(course.id.to_s)
 
-        expect(JSON.parse(response.body)['included'][0]['id']).to eql(accredited_body.id.to_s)
-        expect(JSON.parse(response.body)['included'][0]['type']).to eql('providers')
+        expect(response.parsed_body['included'][0]['id']).to eql(accredited_body.id.to_s)
+        expect(response.parsed_body['included'][0]['type']).to eql('providers')
 
-        expect(JSON.parse(response.body)['included'][1]['id']).to eql(provider.id.to_s)
-        expect(JSON.parse(response.body)['included'][1]['type']).to eql('providers')
+        expect(response.parsed_body['included'][1]['id']).to eql(provider.id.to_s)
+        expect(response.parsed_body['included'][1]['type']).to eql('providers')
       end
     end
 

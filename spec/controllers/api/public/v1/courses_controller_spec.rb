@@ -229,7 +229,7 @@ RSpec.describe API::Public::V1::CoursesController do
             recruitment_cycle_year: recruitment_cycle.year
           }
 
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
           meta = json_response['meta']
 
           expect(meta['count']).to be(2)

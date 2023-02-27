@@ -415,7 +415,7 @@ RSpec.describe API::Public::V1::ProvidersController do
       end
 
       it 'returns the provider count in a meta object' do
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
         meta = json_response['meta']
 
         expect(meta['count']).to be(4)

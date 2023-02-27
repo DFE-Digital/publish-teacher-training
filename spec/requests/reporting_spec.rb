@@ -184,6 +184,6 @@ describe 'GET /reporting' do
     previous_recruitment_cycle
     get '/reporting'
     expect(response).to have_http_status(:ok)
-    expect(JSON.parse(response.body)).to eq(expected)
+    expect(response.parsed_body).to eq(expected)
   end
 end
