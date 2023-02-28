@@ -105,7 +105,6 @@
                   <% aria_described_by = "provider-hint" %>
                   <% aria_described_by += " provider-error" if provider_error? %>
                   <%= render Find::AutocompleteComponent.new(
-                                                  attribute_name: "provider.provider_name",
                                                   form_field: form.govuk_select(
                                                     "provider.provider_name",
                                                     dfe_autocomplete_options(dfe_select_provider_options(@providers)),

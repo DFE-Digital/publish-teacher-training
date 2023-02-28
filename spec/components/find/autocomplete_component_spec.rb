@@ -7,7 +7,7 @@ module Find
     context 'when sending classes to parent container' do
       before do
         render_inline(
-          described_class.new(attribute_name: :provider, form_field:, classes: 'test-css-class')
+          described_class.new(form_field:, classes: 'test-css-class')
         )
       end
 
@@ -28,7 +28,6 @@ module Find
       before do
         render_inline(
           described_class.new(
-            attribute_name: :country,
             form_field:,
             html_attributes: { 'test-attribute' => 'my-custom-attribute' }
           )
@@ -44,7 +43,6 @@ module Find
       before do
         render_inline(
           described_class.new(
-            attribute_name: :grade,
             form_field:,
             html_attributes: { 'test-attribute' => 'my-custom-attribute' }
           )
