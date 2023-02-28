@@ -65,7 +65,7 @@ describe 'heartbeat requests' do
       it 'sets the sidekiq queue to false' do
         get '/healthcheck'
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['checks']['sidekiq_processes']).to be false
       end
@@ -85,7 +85,7 @@ describe 'heartbeat requests' do
       it 'sets the sidekiq queue to false' do
         get '/healthcheck'
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['checks']).to include('redis' => false)
       end
@@ -106,7 +106,7 @@ describe 'heartbeat requests' do
       it 'sets the sidekiq queue to false' do
         get '/healthcheck'
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
 
         expect(json_response['checks']).to include('database' => false)
       end

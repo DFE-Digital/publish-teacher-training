@@ -59,7 +59,6 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
       context 'location count' do
         it 'returns the location count in a meta object' do
-          json_response = JSON.parse(response.body)
           meta = json_response['meta']
 
           expect(meta['count']).to be(5)
