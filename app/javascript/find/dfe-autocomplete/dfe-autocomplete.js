@@ -64,10 +64,14 @@ export const setupAccessibleAutoComplete = (component, libraryOptions = {}) => {
   // as "course_details[subject_raw]"
   const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
 
-  if (autocompleteOptions.rawAttribute) {
-    autocompleteOptions.name = `${matches[1]}[${matches[2]}_raw]`
+  if (matches != null) {
+    if (autocompleteOptions.rawAttribute) {
+      autocompleteOptions.name = `${matches[1]}[${matches[2]}_raw]`
+    } else {
+      autocompleteOptions.name = `${matches[1]}[${matches[2]}]`
+    }
   } else {
-    autocompleteOptions.name = `${matches[1]}[${matches[2]}]`
+    autocompleteOptions.name = 'provider.provider_name'
   }
 
   accessibleAutocomplete.enhanceSelectElement(autocompleteOptions)

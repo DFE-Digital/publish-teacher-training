@@ -15,7 +15,7 @@ module Find
     def dfe_select_provider_options(providers)
       providers.map do |provider|
         value = provider.provider_name
-        option = "#{value} (#{provider.provider_code})"
+        option = value
         DfESelectProvider.new(value, option, provider.synonyms)
       end
     end
