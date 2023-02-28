@@ -134,12 +134,99 @@ jobs:
         SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+  lint:
+    name: Lint
+    needs: [build]
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tests: [rubocop, erblint, dfe_analytics, yarn_lint_and_test]
+        include:
+          - tests: rubocop
+            command: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
+          - tests: erblint
+            command: docker-compose exec -T web /bin/sh -c 'bundle exec erblint app'
+          - tests: dfe_analytics
+            command: |
+              docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+              docker-compose exec -T web /bin/sh -c 'bundle exec rake dfe:analytics:check'
+          - tests: yarn_lint_and_test
+            command: |
+              docker-compose exec -T web /bin/sh -c "yarn add jest@28.1.3"
+              docker-compose exec -T web /bin/sh -c "yarn run standard $(git ls-files '**.js' | tr '\n' ' ')"
+              docker-compose exec -T web /bin/sh -c 'yarn run test'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set environment variables
+        run: |
+          echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
+      - name: Pull docker images
+        run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+
+      - name: Setup container
+        run: |
+          docker-compose up --no-build -d
+          docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+          docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+
+      - name: ${{ matrix.tests }}
+        run: ${{ env.COMMAND }}
+        env:
+          COMMAND: ${{ matrix.command }}
+      - name: Notify Slack channel on job failure
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: twd_findpub_tech
+          SLACK_USERNAME: Publish Teacher Training CI
+          SLACK_TITLE: Lint failure
+          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training ${{ matrix.tests }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: failure
+          SLACK_FOOTER: Sent from lint job in build workflow
+
   test:
     name: Test
     needs: [build]
     outputs:
       image_tag: ${{ needs.build.outputs.image_tag }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
+        include:
+          - tests: unit_models
+            include-pattern: spec/models/.*_spec.rb
+          - tests: unit_services
+            include-pattern: spec/services/.*_spec.rb
+          - tests: unit_forms
+            include-pattern: spec/forms/.*_spec.rb
+          - tests: unit_components
+            include-pattern: spec/components/.*_spec.rb
+          - tests: unit_other
+            include-pattern: spec/.*_spec.rb
+            exclude-pattern: spec/(features|smoke|models|services|forms|components)/.*_spec.rb
+          - tests: integration_auth
+            include-pattern: spec/features/auth/.*_spec.rb
+          - tests: integration_find
+            include-pattern: spec/features/find/.*_spec.rb
+          - tests: integration_publish
+            include-pattern: spec/features/publish/.*_spec.rb
+          - tests: integration_support
+            include-pattern: spec/features/support/.*_spec.rb
+          - tests: integration_other
+            include-pattern: spec/features/.*_spec.rb
+            exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
 
     steps:
     - name: Checkout
@@ -156,32 +243,19 @@ jobs:
       run: |
         docker-compose up --no-build -d
         docker-compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-        docker-compose exec -T web /bin/sh -c "yarn add jest@28.1.3"
+        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
         docker-compose exec -T web /bin/sh -c "bundle exec rails db:setup"
+        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
         docker-compose exec -T web /bin/sh -c "apk --no-cache add curl"
 
-    - name: Run Javascript Linter
-      run: docker-compose exec -T web /bin/sh -c "yarn run standard $(git ls-files '**.js' | tr '\n' ' ')"
-
-    - name: Run Ruby Linter
-      run: docker-compose exec -T web /bin/sh -c 'bundle exec rubocop --format clang'
-
-    - name: Run ERB Linter
-      run: docker-compose exec -T web /bin/sh -c 'bundle exec erblint app'
-
-    - name: Run DfE Analytics checks
-      run: docker-compose exec -T web /bin/sh -c 'bundle exec rake dfe:analytics:check'
-
-    - name: Run Rspec tests
+    - name: ${{ matrix.tests }} tests
       run: |
-        docker-compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker-compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-        docker-compose exec -T web /bin/sh -c 'COVERAGE=true bundle exec rake "parallel:spec[,, -O .azure_parallel]"'
+        docker-compose exec -T web /bin/sh -c 'bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"'
       env:
         IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-
-    - name: Run Javascript tests
-      run: docker-compose exec -T web /bin/sh -c 'yarn run test'
+        INCLUDE_PATTERN: ${{ matrix.include-pattern }}
+        EXCLUDE_PATTERN: ${{ matrix.exclude-pattern || ' ' }}
+        TEST_MATRIX_NODE_NAME: ${{ matrix.tests }}
 
     - name: Upload coverage results
       if: always()
@@ -197,7 +271,7 @@ jobs:
         SLACK_CHANNEL: twd_findpub_tech
         SLACK_COLOR: '#ef5343'
         SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Publish Teacher Training
+        SLACK_USERNAME: Publish Teacher Training CI
         SLACK_TITLE: Test failure
         SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Test failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
