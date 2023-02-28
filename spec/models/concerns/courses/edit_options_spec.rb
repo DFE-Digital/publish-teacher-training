@@ -14,7 +14,6 @@ describe Course do
         match_array(
           [
             find(:modern_languages_subject, :french),
-            find(:modern_languages_subject, :english_as_a_second_language_or_other_language),
             find(:modern_languages_subject, :german),
             find(:modern_languages_subject, :italian),
             find(:modern_languages_subject, :japanese),

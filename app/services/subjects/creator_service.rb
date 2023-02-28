@@ -64,7 +64,6 @@ module Subjects
 
       modern_languages = [
         { subject_name: 'French', subject_code: '15' },
-        { subject_name: 'English as a second or other language', subject_code: '16' },
         { subject_name: 'German', subject_code: '17' },
         { subject_name: 'Italian', subject_code: '18' },
         { subject_name: 'Japanese', subject_code:  '19' },
@@ -79,9 +78,12 @@ module Subjects
       ]
 
       # old 2019 DfE subjects
+      # English as a second or other language was removed because it is not an actual modern language and is not entitled to the financial incentives
+
       discontinued = [
         { subject_name: 'Humanities' },
-        { subject_name: 'Balanced Science' }
+        { subject_name: 'Balanced Science' },
+        { subject_name: 'English as a second or other language' }
       ]
 
       primary.each do |subject|
