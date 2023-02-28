@@ -1,5 +1,5 @@
 module Find
-  class Autocomplete < GovukComponent::Base
+  class AutocompleteComponent < GovukComponent::Base
     def initialize(attribute_name:, form_field:, classes: [], html_attributes: {})
       @attribute_name = attribute_name
       @form_field = form_field
