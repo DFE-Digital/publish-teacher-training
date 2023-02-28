@@ -149,7 +149,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
 
   def then_i_am_met_with_the_edit_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/modern-languages?#{modern_languages_subject_ids}")
-    expect(page).to have_content('Pick all the languages for this course')
+    expect(page).to have_content('Languages')
   end
 
   def and_i_select_a_language
