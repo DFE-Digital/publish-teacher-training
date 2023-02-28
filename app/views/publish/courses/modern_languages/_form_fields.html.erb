@@ -6,9 +6,12 @@
         <% if course.course_code %>
           <span class="govuk-caption-l"><%= course.name_and_code %></span>
         <% end %>
-        Pick all the languages for this&nbsp;course
-      </h1>
+        Languages
+      </h1>    
     </legend>
+    <span class="govuk-hint">
+      Select all that apply
+    </span>
     <%= render "publish/shared/error_messages", error_keys: [:modern_languages_subjects] %>
 
     <div class="govuk-form-group govuk-!-margin-top-2" data-qa="course__languages">
