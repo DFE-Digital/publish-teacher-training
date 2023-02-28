@@ -1,3 +1,3 @@
-import  dfeAutocomplete from './wrapper'
+import dfeAutocomplete from './wrapper'
 
 export default dfeAutocomplete

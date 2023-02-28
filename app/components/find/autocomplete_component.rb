@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Find
   class AutocompleteComponent < GovukComponent::Base
     def initialize(attribute_name:, form_field:, classes: [], html_attributes: {})
       @attribute_name = attribute_name
       @form_field = form_field
-      super(classes: classes, html_attributes: html_attributes)
+      super(classes:, html_attributes:)
     end
 
     private

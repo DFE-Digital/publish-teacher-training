@@ -111,7 +111,8 @@
                                                     dfe_autocomplete_options(dfe_select_provider_options(@providers)),
                                                     label: { text: "School, university or other training provider" },
                                                     hint: { text: "Enter the name or provider code" }
-                                                  )) %>
+                                                  )
+                                                ) %>
                 <% else %>
                   <%= form.label "provider.provider_name", { class: "govuk-label", for: "provider" } do %>
                     School, university or other training provider
