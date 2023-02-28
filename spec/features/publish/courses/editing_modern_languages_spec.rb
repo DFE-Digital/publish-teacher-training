@@ -96,7 +96,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a language')
+    expect(page).to have_content('Select at least one language')
   end
 
   def selected_params(with_subjects: false)
