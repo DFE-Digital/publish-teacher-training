@@ -14,6 +14,7 @@ namespace :support do
       end
       resources :courses, only: %i[index edit update]
       resources :locations
+      resources :multiple_locations, path: 'locations/multiple'
     end
     resources :users do
       scope module: :users do
