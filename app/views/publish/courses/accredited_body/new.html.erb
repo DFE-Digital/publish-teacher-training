@@ -5,7 +5,6 @@
 <% end %>
 
 <%= render "publish/shared/errors" %>
-<%= render "publish/shared/error_wrapper", error_keys: [:accredited_body_code], data_qa: "course__accredited_body" do %>
 <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
@@ -23,6 +22,7 @@
                     method: :get do |form| %>
 
           <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_body_code] do |fields| %>
+          <%= render "publish/shared/error_wrapper", error_keys: [:accredited_body_code], data_qa: "course__accredited_body" do %>
             <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
               <% if @provider.accredited_bodies.length > 0 %>
                 <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
@@ -36,7 +36,7 @@
                     data: { "aria-controls" => "other-container" },
                     checked: @errors && @errors[:accredited_body]&.any? %>
                   <%= fields.label :accredited_body_code,
-                    "A new accredited body you’re working with",
+                    "Another accredited body",
                     for: "course_accredited_body_code_other",
                     value: false,
                     class: "govuk-label govuk-radios__label" %>
@@ -53,12 +53,13 @@
           <% end %>
         <% end %>
 
-      <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-      </p>
+      
 
       </div>
     </div>
   </div>
 </fieldset>
 <% end %>
+<p class="govuk-body">
+  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+</p>
