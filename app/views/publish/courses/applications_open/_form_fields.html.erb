@@ -9,7 +9,6 @@
         </h1>
       </legend>
       <%= render "publish/shared/error_messages", error_keys: [:applications_open_from] %>
-      
       <div class="govuk-radios__item govuk-!-margin-top-4">
         <%= form.radio_button :applications_open_from, @recruitment_cycle.application_start_date,
               class: "govuk-radios__input", data: { qa: "applications_open_from" } %>
@@ -17,9 +16,7 @@
               for: "course_applications_open_from_#{@recruitment_cycle.application_start_date}",
               class: "govuk-label govuk-radios__label" %>
       </div>
-
       <div class="govuk-radios__divider">or</div>
-
       <div class="govuk-radios__item">
         <%= form.radio_button :applications_open_from, "other",
               class: "govuk-radios__input",
