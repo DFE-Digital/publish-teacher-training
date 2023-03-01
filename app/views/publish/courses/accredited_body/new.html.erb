@@ -5,61 +5,60 @@
 <% end %>
 
 <%= render "publish/shared/errors" %>
-<fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-    <h1 class="govuk-fieldset__heading">
-      <%= render CaptionText.new(text: t("course.add_course")) %>
-      Accredited body
-    </h1>
-  </legend>
-<%= render "publish/shared/error_messages", error_keys: [:accredited_body_code] %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <%= form_with url: continue_publish_provider_recruitment_cycle_courses_accredited_body_path(
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+  <%= form_with url: continue_publish_provider_recruitment_cycle_courses_accredited_body_path(
                       @provider.provider_code,
                       @provider.recruitment_cycle_year
                     ),
                     method: :get do |form| %>
+    <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_body_code] do |fields| %>
+      <%= render "publish/shared/error_wrapper", error_keys: [:accredited_body_code], data_qa: "course__accredited_body" do %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">
+            <%= render CaptionText.new(text: t("course.add_course")) %>
+            Accredited body
+          </h1>
+        </legend>
+        <%= render "publish/shared/error_messages", error_keys: [:accredited_body_code] %>
 
-          <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_body_code] do |fields| %>
-          <%= render "publish/shared/error_wrapper", error_keys: [:accredited_body_code], data_qa: "course__accredited_body" do %>
-            <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
-              <% if @provider.accredited_bodies.length > 0 %>
-                <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
+        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_body">
+          <% if @provider.accredited_bodies.length > 0 %>
+            <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
 
-                <div class="govuk-radios__divider">or</div>
+            <div class="govuk-radios__divider">or</div>
 
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button :accredited_body_code,
-                    "other",
-                    class: "govuk-radios__input",
-                    data: { "aria-controls" => "other-container" },
-                    checked: @errors && @errors[:accredited_body]&.any? %>
-                  <%= fields.label :accredited_body_code,
-                    "Another accredited body",
-                    for: "course_accredited_body_code_other",
-                    value: false,
-                    class: "govuk-label govuk-radios__label" %>
-                </div>
-                <br>
-                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
-                  <%= render "provider_search_field", form: fields %>
-                </div>
-              <% else %>
-                <%= fields.hidden_field :accredited_body_code, value: :other %>
-                <%= render "provider_search_field", form: fields %>
-              <% end %>
+            <div class="govuk-radios__item">
+              <%= fields.radio_button :accredited_body_code,
+                "other",
+                class: "govuk-radios__input",
+                data: { "aria-controls" => "other-container" },
+                checked: @errors && @errors[:accredited_body]&.any? %>
+              <%= fields.label :accredited_body_code,
+                "Another accredited body",
+                for: "course_accredited_body_code_other",
+                value: false,
+                class: "govuk-label govuk-radios__label" %>
             </div>
+            <br>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
+              <%= render "provider_search_field", form: fields %>
+            </div>
+          <% else %>
+            <%= fields.hidden_field :accredited_body_code, value: :other %>
+            <%= render "provider_search_field", form: fields %>
           <% end %>
-        <% end %>
-
-      
-
-      </div>
-    </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+          <p class="govuk-body">
+            <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+          </p>
+        </div>
+      </fieldset>
   </div>
-</fieldset>
-<% end %>
-<p class="govuk-body">
-  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_courses_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-</p>
+</div>
+
+
