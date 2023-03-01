@@ -18,6 +18,9 @@
               for: "course_applications_open_from_#{@recruitment_cycle.application_start_date}",
               class: "govuk-label govuk-radios__label" %>
       </div>
+
+      <div class="govuk-radios__divider">or</div>
+      
       <div class="govuk-radios__item">
         <%= form.radio_button :applications_open_from, "other",
               class: "govuk-radios__input",
