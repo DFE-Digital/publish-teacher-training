@@ -7,12 +7,7 @@
 <%= render "publish/shared/errors" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-  <%= form_with url: continue_publish_provider_recruitment_cycle_courses_accredited_body_path
-  (
-    @provider.provider_code,
-    @provider.recruitment_cycle_year
-  ),
-  method: :get do |form| %>
+  <%= form_with url: continue_publish_provider_recruitment_cycle_courses_accredited_body_path(@provider.provider_code, @provider.recruitment_cycle_year), method: :get do |form| %>
     <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_body_code] do |fields| %>
       <%= render "publish/shared/error_wrapper", error_keys: [:accredited_body_code], data_qa: "course__accredited_body" do %>
       <fieldset class="govuk-fieldset">
