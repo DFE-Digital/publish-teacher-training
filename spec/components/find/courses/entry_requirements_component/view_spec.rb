@@ -6,7 +6,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   let(:course) { build(:course, subjects:) }
   let(:subjects) { [build(:secondary_subject, subject_name)] }
   let(:result) { render_inline(described_class.new(course: course.decorate)) }
-  let(:ske_text) { 'or you’ve not used your subject knowledge in a while, you may be asked to complete a' }
+  let(:ske_text) { 'If you need to improve your subject knowledge, you may be asked to complete a' }
   let(:ske_url_name) { 'subject knowledge enhancement (SKE) course.' }
   let(:ske_url) { 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement' }
 
@@ -34,10 +34,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       expect(result.text).to include(ske_text)
     end
 
-    it 'renders the correct course case' do
-      expect(result.text).to include('mathematics')
-    end
-
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
       expect(result).to have_link(ske_url_name, href: ske_url)
@@ -51,10 +47,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       expect(result.text).to include(ske_text)
     end
 
-    it 'renders the correct course case' do
-      expect(result.text).to include('German with Spanish')
-    end
-
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
       expect(result).to have_link(ske_url_name, href: ske_url)
@@ -66,10 +58,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders correct message' do
       expect(result.text).to include(ske_text)
-    end
-
-    it 'renders the correct course case' do
-      expect(result.text).to include('mathematics with English')
     end
 
     it 'renders the correct link' do
@@ -109,10 +97,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders correct message' do
       expect(result.text).to include(ske_text)
-    end
-
-    it 'renders the correct course case' do
-      expect(result.text).to include('French')
     end
 
     it 'renders the correct link' do
@@ -182,9 +166,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       expect(result.text).to include(
         'Grade 5 (C) or above in English and maths, or equivalent qualification.'
       )
-      expect(result.text).to include(
-        "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
-      )
     end
 
     context 'when the campaign_name is set to engineers_teach_physics' do
@@ -200,7 +181,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         result = render_inline(described_class.new(course:))
 
         expect(result.text).to include(
-          'Your degree subject should be in engineering, materials science or a related subject, otherwise you’ll need to prove your subject knowledge in some other way.'
+          'This Engineers teach physics course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.'
         )
       end
     end
