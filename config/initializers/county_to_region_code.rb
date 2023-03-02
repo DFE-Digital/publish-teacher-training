@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 # Taken from https://gist.github.com/radiac/d91d2ed1b971c03d49e9b7bd85e23f1c
+
+# rubocop:disable Metrics/CollectionLiteralLength
 UK_COUNTIES_AND_REGIONS = [
   ['Guernsey', 'Crown Dependencies'],
   ['IOM', 'Crown Dependencies'],
@@ -534,6 +536,8 @@ UK_COUNTIES_AND_REGIONS = [
   ['West Yorkshire', 'Yorkshire and the Humber'],
   ['York', 'Yorkshire and the Humber']
 ].freeze
+
+# rubocop:enable Metrics/CollectionLiteralLength
 
 def remove_unused_regions(list)
   regions_to_remove = ['Crown Dependencies', 'Northern Ireland']
