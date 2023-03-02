@@ -68,12 +68,12 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{params_with_subject(:secondary, :modern_languages)}")
-    expect(page).to have_content('Pick all the languages for this course')
+    expect(page).to have_content('Languages')
   end
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select at least one subject')
+    expect(page).to have_content('Select a subject')
   end
 
   def course_subject(subject_type)

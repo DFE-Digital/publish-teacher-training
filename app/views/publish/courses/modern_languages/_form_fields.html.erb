@@ -1,13 +1,17 @@
 <%= render "publish/shared/error_wrapper", error_keys: [:modern_languages_subjects], data_qa: "course__modern_languages_subjects" do %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <%= render CaptionText.new(text: t("course.add_course")) %>
       <h1 class="govuk-fieldset__heading" data-qa="page-heading">
         <% if course.course_code %>
           <span class="govuk-caption-l"><%= course.name_and_code %></span>
         <% end %>
-        Pick all the languages for this&nbsp;course
+        Languages
       </h1>
     </legend>
+    <span class="govuk-hint">
+      Select all that apply
+    </span>
     <%= render "publish/shared/error_messages", error_keys: [:modern_languages_subjects] %>
 
     <div class="govuk-form-group govuk-!-margin-top-2" data-qa="course__languages">

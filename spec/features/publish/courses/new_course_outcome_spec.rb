@@ -61,7 +61,7 @@ feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false 
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Pick a qualification')
+    expect(page).to have_content('Select a qualification')
   end
 
   def selected_params(outcome)

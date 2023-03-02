@@ -67,6 +67,6 @@ feature 'choosing an application open from date', { can_edit_current_and_next_cy
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select when applications will open and enter the date if applicable')
+    expect(page).to have_content('Select an applications open date')
   end
 end

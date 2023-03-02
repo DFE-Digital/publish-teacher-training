@@ -219,6 +219,6 @@ feature 'Edit provider course details' do
     expect(support_provider_course_edit_page.error_summary.text).to include('Course code cannot be blank')
     expect(support_provider_course_edit_page.error_summary.text).to include('Course title cannot be blank')
     expect(support_provider_course_edit_page.error_summary.text).to include('Select a course start date')
-    expect(support_provider_course_edit_page.error_summary.text).to include('Select when applications will open and enter the date if applicable')
+    expect(support_provider_course_edit_page.error_summary.text).to include('Select an applications open date')
   end
 end

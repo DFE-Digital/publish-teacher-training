@@ -25,7 +25,7 @@ describe Courses::AssignSubjectsService do
     let(:subject_ids) { [] }
 
     it 'have creation subject errors' do
-      expect(subject.errors[:subjects].first).to include('^Select at least one subject')
+      expect(subject.errors[:subjects].first).to include('^Select a subject')
     end
 
     it 'have not updated course name' do

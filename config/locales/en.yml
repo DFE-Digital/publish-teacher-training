@@ -274,7 +274,7 @@ en:
         course:
           attributes:
             campaign_name:
-              inclusion: "Select an Option"
+              inclusion: "Select if this course is part of the Engineers teach physics programme"
             course_code:
               taken: "Course code is already taken"
               blank: "Course code cannot be blank"
@@ -283,7 +283,7 @@ en:
             name:
               blank: "Course title cannot be blank"
             level:
-              blank: "^Select a course level"
+              blank: "^Select a subject level"
             qualification:
               blank: "^Select an outcome"
             maths:
@@ -295,21 +295,21 @@ en:
             enrichments:
               blank: "^Complete your course information before publishing"
             sites:
-              blank: "^Select at least one location for this course"
+              blank: "^Select at least one location"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
-              blank: "^Select a program type"
+              blank: "^Select a funding type"
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
-              course_creation: "^Select at least one subject"
+              course_creation: "^Select a subject"
               duplicate: "^You have already selected this subject. You can only select a subject once"
             modern_languages_subjects:
               select_a_language: "^Select at least one language"
             study_mode:
               blank: "^Select a study mode"
             applications_open_from:
-              blank: "^Select when applications will open and enter the date if applicable"
+              blank: "^Select an applications open date"
             base:
               duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "Select if visas can be sponsored"
@@ -388,7 +388,7 @@ en:
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
-              inclusion: "Select an option"
+              inclusion: "Select if this course is part of the Engineers teach physics programme"
         publish/course_rollover_form:
           attributes:
             course_is_rollable:
@@ -506,7 +506,7 @@ en:
         publish/course_study_mode_form:
           attributes:
             study_mode:
-              blank: "Pick full time, part time or full time and part time"
+              blank: "Select full time or part time"
         publish/course_withdrawal_form:
           attributes:
             confirm_course_code:

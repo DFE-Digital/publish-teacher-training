@@ -91,7 +91,7 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_see_an_error_message
-    expect(page).to have_content('Select an option')
+    expect(page).to have_content('Select if this course is part of the Engineers teach physics programme')
   end
 
   def and_i_select_subordinate_subject(subject_type)
@@ -130,12 +130,12 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
-    expect(page).to have_content('Pick all the languages for this course')
+    expect(page).to have_content('Languages')
   end
 
   def then_i_am_met_with_the_modern_languages_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/modern-languages/new?#{modern_languages_with_form_params(:secondary, :physics)}")
-    expect(page).to have_content('Pick all the languages for this course')
+    expect(page).to have_content('Languages')
   end
 
   def provider

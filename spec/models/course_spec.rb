@@ -460,7 +460,7 @@ describe Course do
     it {
       expect(subject).to validate_presence_of(:level)
         .on(:publish)
-        .with_message('^Select a course level')
+        .with_message('^Select a subject level')
     }
 
     it 'validates scoped to provider_id and only on create and update' do
@@ -480,13 +480,13 @@ describe Course do
         it 'Requires a level' do
           error = errors[:level]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select a course level')
+          expect(error.first).to include('Select a subject level')
         end
 
         it 'Requires a subject' do
           error = errors[:subjects]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select at least one subject')
+          expect(error.first).to include('Select a subject')
         end
 
         context 'With modern languages as a subject' do
@@ -521,7 +521,7 @@ describe Course do
         it 'Requires a program type to have been specified' do
           error = errors[:program_type]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select a program type')
+          expect(error.first).to include('Select a funding type')
         end
 
         it 'Requires a study mode' do
@@ -534,7 +534,7 @@ describe Course do
           it 'Empty' do
             error = errors[:applications_open_from]
             expect(error).not_to be_empty
-            expect(error.first).to include('Select when applications will open and enter the date if applicable')
+            expect(error.first).to include('Select an applications open date')
           end
 
           it 'A date outside of the current recruitment cycle' do
@@ -658,7 +658,7 @@ describe Course do
         end
 
         it 'gives an error for the subjects' do
-          expect(subject.errors.full_messages).to include('Select at least one subject')
+          expect(subject.errors.full_messages).to include('Select a subject')
         end
       end
 

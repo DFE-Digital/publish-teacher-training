@@ -93,7 +93,7 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select a course level')
+    expect(page).to have_content('Select a subject level')
   end
 
   def then_with_send_is_in_params
