@@ -15,24 +15,14 @@
     <% if course.secondary_course? %>
       <% if course.engineers_teach_physics? %>
         <p class="govuk-body">
-          Your degree subject should be in engineering, materials science or a related subject, otherwise you’ll need to prove your subject knowledge in some other way.
+          This <%= govuk_link_to "Engineers teach physics", "https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics"  %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
         </p>
-        <p class="govuk-body">
-          If your degree is not engineering or a related subject, please apply to our physics course.
-        </p>
-      <% else %>
-        <% unless subject_knowledge_enhancement_content? || primary_with_mathematics_subject? %>
-          <p class="govuk-body">
-            <%= secondary_advisory(course) %>
-          </p>
-        <% end %>
       <% end %>
     <% end %>
 
     <% if subject_knowledge_enhancement_content? %>
       <p class="govuk-body">
-        If your degree is not in <%= course.computed_subject_name_or_names %>, or you’ve not used your subject knowledge in a while, you may be asked to complete a
-        <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+        If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
       </p>
       <% elsif primary_with_mathematics_subject? %>
       <p class="govuk-body">
