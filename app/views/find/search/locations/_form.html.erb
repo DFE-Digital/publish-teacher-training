@@ -103,13 +103,13 @@
                 <% aria_described_by = "provider-hint" %>
                 <% aria_described_by += " provider-error" if provider_error? %>
                 <%= render Find::AutocompleteComponent.new(
-                                                form_field: form.govuk_select(
-                                                  "provider.provider_name",
-                                                  provider_autocomplete_options(@providers),
-                                                  label: { text: "School, university or other training provider" },
-                                                  hint: { text: "Enter the name or provider code" }
-                                                )
-                                              ) %>
+                  form_field: form.govuk_select(
+                    "provider.provider_name",
+                     provider_autocomplete_options(@providers),
+                     label: { text: "School, university or other training provider" },
+                     hint: { text: "Enter the name or provider code" }
+                  )
+                ) %>
               </div>
             </div>
           </div>
