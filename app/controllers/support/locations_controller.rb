@@ -11,6 +11,7 @@ module Support
     end
 
     def new
+      #binding.pry
       @site = provider.sites.build
     end
 
