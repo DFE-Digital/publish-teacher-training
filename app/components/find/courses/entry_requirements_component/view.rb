@@ -6,7 +6,7 @@ module Find
       class View < ViewComponent::Base
         attr_accessor :course
 
-        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22].freeze
+        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22 24].freeze
         PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES = %w[03].freeze
 
         def initialize(course:)
