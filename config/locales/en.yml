@@ -152,6 +152,8 @@ en:
             index: "Locations"
             new: "Add a location"
             edit: "Edit location details"
+          multiple_locations:
+            new: "Add locations"
           users:
             new: "Add user"
             check: "Check your answers"
@@ -449,6 +451,8 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/multiple_locations_form:
+          blank: "Enter location details"
         publish/course_information_form:
           attributes:
             about_course:
