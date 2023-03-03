@@ -13,7 +13,7 @@ module Find
         name = "#{value} (#{provider.provider_code})"
 
         [name, value, data]
-      end.unshift([nil, nil, nil])
+      end.unshift(Array.new(3))
     end
   end
 end
