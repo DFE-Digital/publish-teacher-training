@@ -32,6 +32,7 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
         let(:value) { nil }
 
         if described_class == Stores::UserStore
+          # TECH DEBT: [Stores::UserStore] This is error prone
           let(:redis_key) { "#{identifier_model.id}_#{form_store_key}" }
         else
           let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
@@ -63,6 +64,7 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
     let(:form_store_key) { store_key }
 
     if described_class == Stores::UserStore
+      # TECH DEBT: [Stores::UserStore] This is error prone
       let(:redis_key) { "#{identifier_model.id}_#{form_store_key}" }
     else
       let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
