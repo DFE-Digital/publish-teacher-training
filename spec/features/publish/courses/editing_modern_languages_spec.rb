@@ -69,7 +69,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def language
     @language ||= %i[
-      french english_as_a_second_language_or_other_language german
+      french german
       italian japanese mandarin russian spanish modern_languages_other
     ].sample
   end
