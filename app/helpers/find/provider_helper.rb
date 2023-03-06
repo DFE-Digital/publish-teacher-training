@@ -2,14 +2,18 @@
 
 module Find
   module ProviderHelper
-    def select_provider_options(providers)
-      [SelectProvider.new('', 'Select a provider')] + providers.map do |provider|
-        value = provider.provider_name
-        option = "#{value} (#{provider.provider_code})"
-        SelectProvider.new(value, option)
-      end
-    end
+    def provider_autocomplete_options(providers)
+      providers.sort_by(&:provider_name).map do |provider|
+        data = {
+          'data-synonyms' => provider.synonyms.join('|'),
+          'data-boost' => 1.5
+        }
 
-    SelectProvider = Struct.new('SelectProvider', :id, :name)
+        value = provider.provider_name
+        name = "#{value} (#{provider.provider_code})"
+
+        [name, value, data]
+      end.unshift(Array.new(3))
+    end
   end
 end
