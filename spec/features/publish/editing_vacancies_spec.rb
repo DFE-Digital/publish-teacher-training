@@ -218,7 +218,7 @@ feature 'Editing vacancies', { can_edit_current_and_next_cycles: false } do
   def then_i_should_see_a_checkbox_for_each_running_site
     expect(publish_course_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_course_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_course_vacancies_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
+    expect(publish_course_vacancies_edit_page.vacancy_names).to contain_exactly('Site 1', 'Site 2')
   end
 
   def then_i_should_see_the_course_as_having_no_vacancies
@@ -231,9 +231,7 @@ feature 'Editing vacancies', { can_edit_current_and_next_cycles: false } do
   def then_i_should_see_a_checkbox_for_each_study_mode
     expect(publish_course_vacancies_edit_page).to have_vacancies_radio_choice
     expect(publish_course_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_course_vacancies_edit_page.vacancy_names).to match_array(
-      ['Uni full and part time 1 (Full time)', 'Uni full and part time 1 (Part time)']
-    )
+    expect(publish_course_vacancies_edit_page.vacancy_names).to contain_exactly('Uni full and part time 1 (Full time)', 'Uni full and part time 1 (Part time)')
     expect(publish_course_vacancies_edit_page.vacancy_checked_values).to all(be_truthy)
   end
 
@@ -263,7 +261,7 @@ feature 'Editing vacancies', { can_edit_current_and_next_cycles: false } do
 
   def and_i_uncheck_the_sites
     expect(publish_course_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_course_vacancies_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
+    expect(publish_course_vacancies_edit_page.vacancy_names).to contain_exactly('Site 1', 'Site 2')
 
     publish_course_vacancies_edit_page.vacancies.each(&:uncheck)
   end
@@ -296,7 +294,7 @@ feature 'Editing vacancies', { can_edit_current_and_next_cycles: false } do
 
   def and_i_choose_to_remove_all_vacancies
     expect(publish_course_vacancies_edit_page.vacancies_radio_has_some_vacancies).to be_checked
-    expect(publish_course_vacancies_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
+    expect(publish_course_vacancies_edit_page.vacancy_names).to contain_exactly('Site 1', 'Site 2')
 
     publish_course_vacancies_edit_page.vacancies_radio_no_vacancies.choose
   end

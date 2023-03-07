@@ -11,18 +11,7 @@ describe Course do
 
     it 'returns modern languages subjects' do
       expect(course.modern_languages).to(
-        match_array(
-          [
-            find(:modern_languages_subject, :french),
-            find(:modern_languages_subject, :german),
-            find(:modern_languages_subject, :italian),
-            find(:modern_languages_subject, :japanese),
-            find(:modern_languages_subject, :mandarin),
-            find(:modern_languages_subject, :russian),
-            find(:modern_languages_subject, :spanish),
-            find(:modern_languages_subject, :modern_languages_other)
-          ]
-        )
+        contain_exactly(find(:modern_languages_subject, :french), find(:modern_languages_subject, :german), find(:modern_languages_subject, :italian), find(:modern_languages_subject, :japanese), find(:modern_languages_subject, :mandarin), find(:modern_languages_subject, :russian), find(:modern_languages_subject, :spanish), find(:modern_languages_subject, :modern_languages_other))
       )
     end
   end
@@ -38,17 +27,7 @@ describe Course do
     let(:secondary_course) { create(:course, level: 'secondary', subjects: []) }
 
     it 'returns the subjects the user can choose according to their level' do
-      expect(course.potential_subjects).to match_array(
-        [
-          find(:primary_subject, :primary),
-          find(:primary_subject, :primary_with_english),
-          find(:primary_subject, :primary_with_geography_and_history),
-          find(:primary_subject, :primary_with_mathematics),
-          find(:primary_subject, :primary_with_modern_languages),
-          find(:primary_subject, :primary_with_physical_education),
-          find(:primary_subject, :primary_with_science)
-        ]
-      )
+      expect(course.potential_subjects).to contain_exactly(find(:primary_subject, :primary), find(:primary_subject, :primary_with_english), find(:primary_subject, :primary_with_geography_and_history), find(:primary_subject, :primary_with_mathematics), find(:primary_subject, :primary_with_modern_languages), find(:primary_subject, :primary_with_physical_education), find(:primary_subject, :primary_with_science))
     end
 
     it 'sorts the potentinal subject by their name' do

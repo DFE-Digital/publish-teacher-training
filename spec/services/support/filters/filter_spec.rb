@@ -20,7 +20,7 @@ describe Support::Filter do
         end
 
         it 'filters the provider out' do
-          expect(subject).to match_array([provider])
+          expect(subject).to contain_exactly(provider)
         end
       end
 
@@ -80,7 +80,7 @@ describe Support::Filter do
         end
 
         it 'filters the provider out' do
-          expect(subject).to match_array([provider, provider2])
+          expect(subject).to contain_exactly(provider, provider2)
         end
       end
     end
