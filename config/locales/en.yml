@@ -452,7 +452,7 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
-        support/multiple_locations_form:
+        support/raw_csv_schools_form:
           blank: "Enter location details"
         publish/course_information_form:
           attributes:
