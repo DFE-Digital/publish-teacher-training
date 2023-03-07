@@ -8,6 +8,7 @@ module Support
     end
 
     def edit
+      @site = Site.new
       provider
       @multiple_locations_form = MultipleLocationsForm.new(current_user, user)
     end
