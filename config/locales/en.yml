@@ -152,8 +152,6 @@ en:
             index: "Locations"
             new: "Add a location"
             edit: "Edit location details"
-          multiple_locations:
-            new: "Add locations"
           users:
             new: "Add user"
             check: "Check your answers"
@@ -231,6 +229,8 @@ en:
         new: "Add user"
         edit: "Update user"
         check: "Check your answers"
+      multiple_locations:
+        new: "Add locations"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"

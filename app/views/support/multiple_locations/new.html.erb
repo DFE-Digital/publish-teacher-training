@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: "support.providers.multiple_locations.new") %>
+<%= render PageTitle.new(title: t("support.providers.multiple_locations.new")) %>
 
     <% content_for :before_content do %>
       <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_path) %>
@@ -14,7 +14,7 @@
 
       <span class="govuk-caption-l"><%= @provider.provider_name %></span>
 
-      <h1 class="govuk-heading-l"><%= t("components.page_titles.support.providers.multiple_locations.new") %></h1>
+      <h1 class="govuk-heading-l"><%= t("support.providers.multiple_locations.new") %></h1>
       <div class="govuk-form-group">
         <%= f.govuk_text_area(
               :location_details,
