@@ -8,7 +8,7 @@ feature 'Multiple locations' do
   end
 
   scenario 'submitting an empty form' do
-    given_the_multiple_locations_feature_flag_is_active
+    and_the_multiple_locations_feature_flag_is_active
     when_i_visit_a_provider_locations_page
     then_i_click_add_multiple_locations
 
@@ -29,7 +29,7 @@ feature 'Multiple locations' do
     @provider ||= create(:provider, sites: [build(:site)])
   end
 
-  def given_the_multiple_locations_feature_flag_is_active
+  def and_the_multiple_locations_feature_flag_is_active
     allow(Settings.features).to receive(:add_multiple_locations).and_return(true)
   end
 
