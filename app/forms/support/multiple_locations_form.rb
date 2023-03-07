@@ -15,8 +15,6 @@ module Support
     end
 
     # will change in follow up PR
-    def form_store_key
-      :user
-    end
+    def form_store_key = :user
   end
 end
