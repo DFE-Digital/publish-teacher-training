@@ -101,7 +101,7 @@
     end
 
     summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row|
-      row.key { "Full or part time" }
+      row.key { "Full time or part time" }
       row.value { course.study_mode&.humanize }
       if course.is_withdrawn?
         row.action
