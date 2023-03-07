@@ -10,7 +10,7 @@
     <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
     <h1 class="govuk-heading-l"><%= t("support.providers.multiple_locations.edit") %></h1>
 
-    <%= form_with(model: @multiple_locations_form,
+    <%= form_with(model: @site,
                   url: support_recruitment_cycle_provider_multiple_locations_path,
                   local: true) do |f| %>
       <%= f.govuk_error_summary %>
