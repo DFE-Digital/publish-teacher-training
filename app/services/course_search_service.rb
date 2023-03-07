@@ -225,6 +225,8 @@ class CourseSearchService
     return [] if filter[:study_type].blank?
     return filter[:study_type] if filter[:study_type].is_a? Array
 
+    filter[:study_type] = filter[:study_type].values if filter[:study_type].is_a?(Hash)
+
     filter[:study_type].split(',')
   end
 
