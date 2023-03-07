@@ -7,6 +7,11 @@ module Support
       provider
     end
 
+    def edit
+      provider
+      @multiple_locations_form = MultipleLocationsForm.new(current_user, user)
+    end
+
     def create
       provider
       @multiple_locations_form = MultipleLocationsForm.new(current_user, user, params: user_params)
