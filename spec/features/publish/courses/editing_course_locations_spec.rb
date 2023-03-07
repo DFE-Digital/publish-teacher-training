@@ -52,7 +52,7 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_a_list_of_locations
-    expect(publish_course_location_edit_page.vacancy_names).to match_array(['Site 1', 'Site 2'])
+    expect(publish_course_location_edit_page.vacancy_names).to contain_exactly('Site 1', 'Site 2')
   end
 
   def when_i_update_the_course_locations
@@ -70,7 +70,7 @@ feature 'Editing course locations', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_the_course_locations_are_updated
-    expect(course.reload.sites.map(&:location_name)).to match_array(['Site 1'])
+    expect(course.reload.sites.map(&:location_name)).to contain_exactly('Site 1')
   end
 
   def then_i_should_see_an_error_message
