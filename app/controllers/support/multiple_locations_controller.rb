@@ -10,11 +10,11 @@ module Support
     def create
       provider
       @multiple_locations_form = MultipleLocationsForm.new(current_user, user, params: user_params)
-      if @multiple_locations_form.stash
-        redirect_to support_recruitment_cycle_provider_locations_path # will change in follow up PR
-      else
-        render(:new)
-      end
+      # if @multiple_locations_form.stash
+      #   redirect_to support_recruitment_cycle_provider_locations_path # will change in follow up PR
+      # else
+      #   render(:new)
+      # end
     end
 
     def provider
