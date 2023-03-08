@@ -1,0 +1,51 @@
+# frozen_string_literal: true
+
+require 'csv'
+
+module CSVImports
+  class GiasImport
+    def initialize(csv_path)
+      @csv_path = csv_path
+    end
+
+    def execute
+      upserted = 0
+      errors = []
+
+      CSV.foreach(@csv_path, headers: true).with_index(2) do |school, row_number|
+        next if %w[1 3].exclude?(school['EstablishmentStatus (code)']) ||
+                school['PhaseOfEducation (code)'] == '1' ||
+                %w[3 6].include?(school['EstablishmentTypeGroup (code)'])
+
+        begin
+          GiasSchool.find_or_initialize_by(urn: school['URN'])
+                    .update!(
+                      name: school['EstablishmentName'],
+                      type_code: school['TypeOfEstablishment (code)'],
+                      group_code: school['EstablishmentTypeGroup (code)'],
+                      status_code: school['EstablishmentStatus (code)'],
+                      phase_code: school['PhaseOfEducation (code)'],
+                      minimum_age: school['StatutoryLowAge'],
+                      maximum_age: school['StatutoryHighAge'],
+                      ukprn: school['UKPRN'],
+                      address1: school['Street'],
+                      address2: school['Locality'],
+                      address3: school['Address3'],
+                      town: school['Town'],
+                      county: school['County (name)'],
+                      postcode: school['Postcode'],
+                      website: school['SchoolWebsite'],
+                      telephone: school['TelephoneNum']
+                    )
+        rescue ActiveRecord::RecordInvalid => e
+          errors << e.record.errors.messages
+          errors << row_number
+        else
+          upserted += 1
+        end
+      end
+      Rails.logger.info "Done! #{upserted} schools upserted"
+      Rails.logger.info "Errors - #{errors.inspect}" if errors.any?
+    end
+  end
+end
