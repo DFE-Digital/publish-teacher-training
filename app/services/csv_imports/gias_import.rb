@@ -13,9 +13,7 @@ module CSVImports
       errors = []
 
       CSV.foreach(@csv_path, headers: true).with_index(2) do |school, row_number|
-        next if %w[1 3].exclude?(school['EstablishmentStatus (code)']) ||
-                school['PhaseOfEducation (code)'] == '1' ||
-                %w[3 6].include?(school['EstablishmentTypeGroup (code)'])
+        next if school_excluded?(school)
 
         begin
           GiasSchool.find_or_initialize_by(urn: school['URN'])
@@ -46,6 +44,14 @@ module CSVImports
       end
       Rails.logger.info "Done! #{upserted} schools upserted"
       Rails.logger.info "Errors - #{errors.inspect}" if errors.any?
+    end
+
+    private
+
+    def school_excluded?(school)
+      %w[1 3].exclude?(school['EstablishmentStatus (code)']) ||
+        school['PhaseOfEducation (code)'] == '1' ||
+        %w[3 6].include?(school['EstablishmentTypeGroup (code)'])
     end
   end
 end
