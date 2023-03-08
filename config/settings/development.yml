@@ -15,3 +15,6 @@ find_valid_referers:
 base_url: https://publish.localhost
 find_url: https://find.localhost
 use_ssl: true
+
+features:
+  add_multiple_locations: true
