@@ -19,6 +19,14 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       then_it_displays_correctly
     end
 
+    scenario 'updating a section returns to confirmation' do
+      and_i_click_to_update_the_locations
+      and_i_am_met_with_the_publish_courses_new_locations_page
+      and_i_update_the_locations
+      and_i_click_continue
+      then_i_am_met_with_the_publish_course_confirmation_page
+    end
+
     scenario 'changing subject to modern languages' do
       when_i_click_change_subject
       and_i_select_modern_languages_and_maths
@@ -133,7 +141,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     providers = if provider_trait.present?
                   [build(:provider, provider_trait, sites: [build(:site)])]
                 else
-                  [build(:provider, sites: [build(:site)])]
+                  [build(:provider, sites: [build(:site), build(:site)])]
                 end
 
     @user = create(:user, providers:)
@@ -174,5 +182,21 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.locations.value.text).to have_content(site.location_name)
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
+  end
+
+  def and_i_click_to_update_the_locations
+    publish_course_confirmation_page.details.locations.change_link.click
+  end
+
+  def and_i_am_met_with_the_publish_courses_new_locations_page
+    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/locations/new")
+  end
+
+  def and_i_update_the_locations
+    publish_courses_new_locations_page.locations.first.checkbox.check
+  end
+
+  def then_i_am_met_with_the_publish_course_confirmation_page
+    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/confirmation")
   end
 end

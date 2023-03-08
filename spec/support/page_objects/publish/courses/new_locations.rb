@@ -8,6 +8,11 @@ module PageObjects
 
         element :title, '[data-qa="page-heading"]'
 
+        sections :locations, '.govuk-checkboxes__item' do
+          element :name, '.govuk-checkboxes__label'
+          element :checkbox, '.govuk-checkboxes__input'
+        end
+
         element :continue, '[data-qa="course__save"]'
       end
     end
