@@ -112,7 +112,7 @@ module Publish
     end
 
     def continue_step
-      if params[:goto_confirmation] && %i[subjects apprenticeship funding_type].none?(current_step)
+      if go_to_confirmation_params && %i[subjects apprenticeship funding_type].none?(current_step)
         :confirmation
       else
         CourseCreationStepService.new.execute(current_step:, course: @course)[:next]
@@ -129,7 +129,7 @@ module Publish
 
     def addtional_params
       {
-        goto_confirmation: params[:goto_confirmation],
+        goto_confirmation: go_to_confirmation_params,
         goto_visa: params[:goto_visa]
       }.compact
     end
@@ -139,7 +139,7 @@ module Publish
     end
 
     def back_step
-      if params[:goto_confirmation]
+      if go_to_confirmation_params
         {
           modern_languages: :subjects,
           can_sponsor_student_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type),
@@ -210,6 +210,10 @@ module Publish
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
+    end
+
+    def go_to_confirmation_params
+      params[:goto_confirmation] || params.dig(:course, :goto_confirmation)
     end
   end
 end
