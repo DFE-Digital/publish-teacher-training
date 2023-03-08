@@ -61,6 +61,7 @@ module FilterParameters
   end
 
   def form_params
+    # Some legacy keys are whitelisted here as they can accept multiple values
     params
       .require(form_name)
       .permit(
@@ -84,9 +85,10 @@ module FilterParameters
         'provider.provider_name',
         c: [],
         qualification: [],
-        qualifications: [],
+        qualifications: [], # Legacy
         study_type: [],
-        subjects: []
+        subjects: [],
+        subject_codes: [] # Legacy
       )
   end
 end
