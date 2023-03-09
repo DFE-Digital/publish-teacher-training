@@ -20,11 +20,11 @@ feature 'Multiple locations' do
     and_the_multiple_locations_feature_flag_is_active
     when_i_visit_the_multiple_locations_new_page
     and_i_submit_the_form_with_two_locations
-    and_i_see_the_text_1_of_2
+    and_i_see_the_text_one_of_two
     then_i_should_see_that_the_text_field_has_been_prepopulated('Name', 'A')
 
     given_i_submit_a_valid_form
-    and_i_see_the_text_2_of_2
+    and_i_see_the_text_two_of_two
     and_i_see_that_the_text_field_has_been_prepopulated('Name', 'B')
     and_i_submit_a_valid_form
     then_i_should_be_redirected_to_the_provider_location_page
