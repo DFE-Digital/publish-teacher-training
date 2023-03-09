@@ -231,7 +231,7 @@ en:
         check: "Check your answers"
       multiple_locations:
         new: "Add locations"
-        edit: "Add location (1 of 1)"
+        show: "Add location (%{position} of %{max})"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
