@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: t("support.providers.multiple_locations.edit")) %>
+<%= render PageTitle.new(title: t("support.providers.multiple_locations.show", position: params[:position], max: @max)) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
