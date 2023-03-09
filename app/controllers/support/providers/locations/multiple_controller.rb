@@ -6,6 +6,7 @@ module Support
       class MultipleController < SupportController
         def new
           @multiple_locations_form = MultipleLocationsForm.new(current_user, user)
+          @multiple_locations_form.clear_stash
           provider
         end
 
