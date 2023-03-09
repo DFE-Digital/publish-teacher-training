@@ -49,11 +49,11 @@ feature 'Multiple locations' do
     click_continue
   end
 
-  def and_i_see_the_text_1_of_2
+  def and_i_see_the_text_one_of_two
     expect(page).to have_text 'Add location (1 of 2)'
   end
 
-  def and_i_see_the_text_2_of_2
+  def and_i_see_the_text_two_of_two
     expect(page).to have_text 'Add location (2 of 2)'
   end
 
