@@ -4,7 +4,7 @@ module Stores
   class ProviderStore < BaseStore
     FORM_STORE_KEYS = %i[
       raw_csv_schools
-      parsed_csv_school_details
+      parsed_csv_schools
     ].freeze
 
     def store_keys
