@@ -43,7 +43,7 @@ module Support
         end
 
         def sites
-          [Site.new(location_name: 'A'), Site.new(location_name: 'B'), Site.new(location_name: 'C')]
+          [Site.new(location_name: 'A'), Site.new(location_name: 'B')]
         end
 
         def max
