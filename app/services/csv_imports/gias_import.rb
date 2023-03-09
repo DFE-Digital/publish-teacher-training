@@ -10,9 +10,10 @@ module CSVImports
 
     def execute
       upserted = 0
+      rows = 0
       errors = []
 
-      CSV.foreach(@csv_path, headers: true).with_index(2) do |school, row_number|
+      CSV.foreach(@csv_path, headers: true, encoding: 'iso-8859-1:utf-8').with_index(2) do |school, row_number|
         next if school_excluded?(school)
 
         begin
@@ -41,8 +42,10 @@ module CSVImports
         else
           upserted += 1
         end
+        rows += 1
       end
       Rails.logger.info "Done! #{upserted} schools upserted"
+      Rails.logger.info "Failures #{rows - upserted}"
       Rails.logger.info "Errors - #{errors.inspect}" if errors.any?
     end
 
