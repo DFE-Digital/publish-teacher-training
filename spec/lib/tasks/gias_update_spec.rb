@@ -12,7 +12,7 @@ describe 'gias_update' do
   let(:csv_path) { 'spec/fixtures/test_schools.csv' }
 
   it 'calls GiasImport service' do
-    expect(CSVImports::GiasImport).to receive(:new).with(csv_path).and_call_original
+    expect(CSVImports::GiasImport).to receive(:call).with(csv_path)
     subject
   end
 end

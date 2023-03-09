@@ -4,11 +4,13 @@ require 'csv'
 
 module CSVImports
   class GiasImport
+    include ServicePattern
+
     def initialize(csv_path)
       @csv_path = csv_path
     end
 
-    def execute
+    def call
       upserted = 0
       rows = 0
       errors = []

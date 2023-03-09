@@ -41,4 +41,6 @@ describe GiasSchool do
     subject.postcode = ''
     expect(subject).not_to be_valid
   end
+
+  it { is_expected.to validate_uniqueness_of(:urn).case_insensitive }
 end
