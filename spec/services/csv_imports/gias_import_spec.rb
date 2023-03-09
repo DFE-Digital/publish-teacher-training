@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CSVImports::GiasImport do
   subject do
-    described_class.new('spec/fixtures/test_schools.csv').execute
+    described_class.call('spec/fixtures/test_schools.csv')
   end
 
   it 'upserts the correct schools' do
