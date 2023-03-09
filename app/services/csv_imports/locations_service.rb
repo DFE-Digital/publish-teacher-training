@@ -12,10 +12,11 @@ module CSVImports
     end
 
     def call
-      csv_content_with_header = "#{HEADERS.join(',')}\n#{csv_content}"
-
-      CSV.new(csv_content_with_header, headers: true, header_converters: :symbol)
-         .map { |row| Site.new(row.to_h.merge(provider_id: provider.id)) }
+      CSV.new(csv_content).map do |row|
+        attributes = { provider_id: provider.id }
+        HEADERS.each_with_index { |k, i| attributes[k] = row[i] }
+        Site.new(attributes)
+      end
     end
 
     private

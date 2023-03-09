@@ -7,22 +7,32 @@ module Support
         def show
           site
           max
-          provider
-          @multiple_locations_form = MultipleLocationsForm.new(current_user, current_user)
         end
 
         def update
           site.assign_attributes(site_params)
-          site.provider = provider
 
-          if site.valid? && params[:position].to_i < max
-            redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: params[:position].to_i + 1)
-          elsif params[:position].to_i == max
-            redirect_to support_recruitment_cycle_provider_locations_path
+          if site.valid?
+
+            school_details[current_site_index] = site
+
+            ParsedCSVSchoolsForm.new(provider, params: { school_details: }).stash
+
+            if position < max
+              redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: position + 1)
+            elsif position == max
+              redirect_to support_recruitment_cycle_provider_locations_path
+            end
           else
             max
             render(:show)
           end
+        end
+
+        private
+
+        def parased_csv_school_form
+          @parased_csv_school_form ||= ParsedCSVSchoolsForm.new(provider)
         end
 
         def site_params
@@ -42,20 +52,24 @@ module Support
           @provider ||= recruitment_cycle.providers.find(params[:provider_id])
         end
 
-        def sites
-          [Site.new(location_name: 'A'), Site.new(location_name: 'B')]
+        def school_details
+          @school_details ||= parased_csv_school_form.school_details.map { |s| Site.new(s) }
         end
 
         def max
-          @max ||= sites.count
+          @max ||= school_details.count
         end
 
         def site
-          @site ||= sites[array_index]
+          @site ||= school_details[current_site_index]
         end
 
-        def array_index
-          params[:position].to_i - 1
+        def current_site_index
+          @current_site_index = position - 1
+        end
+
+        def position
+          @position ||= params[:position].to_i
         end
       end
     end

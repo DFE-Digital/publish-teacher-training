@@ -5,37 +5,29 @@ module Support
     module Locations
       class MultipleController < SupportController
         def new
-          @multiple_locations_form = MultipleLocationsForm.new(current_user, user)
-          @multiple_locations_form.clear_stash
-          provider
-        end
-
-        def edit
-          @site = Site.new
-          provider
-          @multiple_locations_form = MultipleLocationsForm.new(current_user, user)
+          @raw_csv_schools_form = RawCSVSchoolsForm.new(provider)
         end
 
         def create
-          provider
-          @multiple_locations_form = MultipleLocationsForm.new(current_user, user, params: user_params)
-          if @multiple_locations_form.stash
+          @raw_csv_schools_form = RawCSVSchoolsForm.new(provider, params: form_params)
+          if @raw_csv_schools_form.stash
+
+            school_details = CSVImports::LocationsService.call(csv_content: @raw_csv_schools_form.school_details, provider:)
+            ParsedCSVSchoolsForm.new(provider, params: { school_details: }).stash
             redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: 1)
           else
             render(:new)
           end
         end
 
+        private
+
         def provider
           @provider ||= recruitment_cycle.providers.find(params[:provider_id])
         end
 
-        def user
-          User.find_or_initialize_by(email: params.dig(:support_multiple_locations_form, :email)&.downcase) # will change in follow up PR
-        end
-
-        def user_params
-          params.require(:support_multiple_locations_form).permit(:location_details)
+        def form_params
+          params.require(:support_raw_csv_schools_form).permit(:school_details)
         end
       end
     end

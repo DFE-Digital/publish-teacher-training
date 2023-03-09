@@ -4,7 +4,7 @@
       <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_path) %>
     <% end %>
 
-    <%= form_with(model: @multiple_locations_form,
+    <%= form_with(model: @raw_csv_schools_form,
                   url: support_recruitment_cycle_provider_locations_multiple_path,
                   local: true) do |f| %>
       <%= f.govuk_error_summary %>
@@ -17,7 +17,7 @@
       <h1 class="govuk-heading-l"><%= t("support.providers.multiple_locations.new") %></h1>
       <div class="govuk-form-group">
         <%= f.govuk_text_area(
-              :location_details,
+              :school_details,
               hint: {
                 text: "Enter the location name, unique reference number and address. Separate each
                 location item with a tab or comma and use a new line for each location. You can also copy and
