@@ -79,6 +79,27 @@ shared:
     - created_at
     - updated_at
     - subject_knowledge_enhancement_course_available
+  gias_school:
+    - id
+    - urn
+    - name
+    - type_code
+    - group_code
+    - status_code
+    - phase_code
+    - minimum_age
+    - maximum_age
+    - ukprn
+    - address1
+    - address2
+    - address3
+    - town
+    - county
+    - postcode
+    - website
+    - telephone
+    - created_at
+    - updated_at
   interrupt_page_acknowledgement:
     - id
     - page
