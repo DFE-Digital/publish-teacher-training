@@ -35,7 +35,8 @@ class HeartbeatController < ActionController::API
   end
 
   def redis_alive?
-    Sidekiq.redis_info
+    Sidekiq.redis(&:ping)
+
     true
   rescue StandardError
     false

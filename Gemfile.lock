@@ -557,7 +557,10 @@ GEM
       ffi (~> 1.0)
     rb-readline (0.5.5)
     redcarpet (3.6.0)
-    redis (4.8.1)
+    redis (5.0.2)
+      redis-client (~> 0.7)
+    redis-client (0.11.2)
+      connection_pool
     regexp_parser (2.7.0)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -640,10 +643,11 @@ GEM
     shellany (0.0.1)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
-    sidekiq (6.5.7)
-      connection_pool (>= 2.2.5)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.0.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     sidekiq-cron (1.10.0)
       fugit (~> 1.8)
       globalid (>= 1.0.1)
@@ -814,6 +818,7 @@ DEPENDENCIES
   rails_semantic_logger
   rb-readline
   redcarpet
+  redis
   request_store
   rspec-its
   rspec-rails (= 6.0.1)
@@ -828,8 +833,8 @@ DEPENDENCIES
   sentry-ruby
   sentry-sidekiq
   shoulda-matchers (~> 5.3)
-  sidekiq
-  sidekiq-cron
+  sidekiq (~> 7)
+  sidekiq-cron (~> 1.9)
   simplecov (< 0.23)
   site_prism (~> 3.7)
   skylight

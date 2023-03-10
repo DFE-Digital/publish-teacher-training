@@ -25,7 +25,7 @@ describe 'heartbeat requests' do
       allow(process).to receive(:[]).with('queues').and_return([queue_name])
 
       allow(ActiveRecord::Base.connection).to receive(:active?).and_return(true)
-      allow(Sidekiq).to receive(:redis_info).and_return({})
+      allow(Sidekiq).to receive(:redis).and_return({})
     end
 
     context 'when everything is ok' do
@@ -73,7 +73,7 @@ describe 'heartbeat requests' do
 
     context "there's no Redis connection" do
       before do
-        allow(Sidekiq).to receive(:redis_info).and_raise(Errno::ECONNREFUSED)
+        allow(Sidekiq).to receive(:redis).and_raise(Errno::ECONNREFUSED)
       end
 
       it('returns 503') do
