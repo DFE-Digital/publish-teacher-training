@@ -31,8 +31,8 @@ module Support
 
         private
 
-        def parased_csv_school_form
-          @parased_csv_school_form ||= ParsedCSVSchoolsForm.new(provider)
+        def parsed_csv_school_form
+          @parsed_csv_school_form ||= ParsedCSVSchoolsForm.new(provider)
         end
 
         def site_params
@@ -53,7 +53,7 @@ module Support
         end
 
         def school_details
-          @school_details ||= parased_csv_school_form.school_details.map { |s| Site.new(s) }
+          @school_details ||= parsed_csv_school_form.school_details.map { |s| Site.new(s) }
         end
 
         def max
