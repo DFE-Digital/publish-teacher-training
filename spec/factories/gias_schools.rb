@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :gias_school do
-    urn { '100000' }
-    name { 'school name' }
-    address1 { 'the address' }
-    town { 'anytown' }
-    postcode { 'postcode' }
+    urn { Faker::Number.unique.number(digits: 6).to_s }
+    name { Faker::University.name }
+    address1 { Faker::Address.street_address }
+    town { Faker::Address.city }
+    postcode { Faker::Address.postcode }
   end
 end
