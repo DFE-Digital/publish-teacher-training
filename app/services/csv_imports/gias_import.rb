@@ -46,6 +46,7 @@ module CSVImports
         end
         rows += 1
       end
+      Rails.logger = Logger.new($stdout)
       Rails.logger.info "Done! #{upserted} schools upserted"
       Rails.logger.info "Failures #{rows - upserted}"
       Rails.logger.info "Errors - #{errors.inspect}" if errors.any?
