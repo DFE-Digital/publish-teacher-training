@@ -117,7 +117,7 @@ I, [2023-03-10T13:35:43.052223 #7966]  INFO -- : Errors - [{:town=>["can't be bl
 You can check the `GiasSchool.count` in the database is correct.
 
 Once the file is merged to main, you can run the process in the required environment.
-Use the following sequence to allow the above console output to display, chaining the commands does update the databse but does not display the console ouptut.
+Use the following sequence to allow the above console output to display, chaining the commands does update the database but does not display the console ouptut.
 
 ```
 cf target -s ${space}
