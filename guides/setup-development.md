@@ -101,9 +101,9 @@ The `rails gias_update` command takes an optional filename, the default is set i
 
 You can then run `rails gias_update` or `rails 'gias_update[csv/<file_name>]'` where <file_name> is the csv filename.
 
-2. You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory as a local merge and pushed to master.
+2. You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory as a local commit and pushed to main.
 
-Ensure the default `CSV_PATH` in lib/tasks/gias_update.rake includes the name of the new csv file.
+Ensure the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the new csv file if required.
 
 Test the import function locally with `rails 'gias_update[csv/<file_name>]'`
 You should see console output on completion similar to:
