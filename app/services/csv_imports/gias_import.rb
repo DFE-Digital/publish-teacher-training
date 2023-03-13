@@ -8,6 +8,7 @@ module CSVImports
 
     def initialize(csv_path)
       @csv_path = csv_path
+      @logger = Logger.new($stdout)
     end
 
     def call
@@ -46,9 +47,9 @@ module CSVImports
         end
         rows += 1
       end
-      Rails.logger.info "Done! #{upserted} schools upserted"
-      Rails.logger.info "Failures #{rows - upserted}"
-      Rails.logger.info "Errors - #{errors.inspect}" if errors.any?
+      @logger.info "Done! #{upserted} schools upserted"
+      @logger.info "Failures #{rows - upserted}"
+      @logger.info "Errors - #{errors.inspect}" if errors.any?
     end
 
     private
