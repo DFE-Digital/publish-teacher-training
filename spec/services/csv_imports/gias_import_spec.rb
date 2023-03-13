@@ -13,9 +13,11 @@ RSpec.describe CSVImports::GiasImport do
 
   it 'logs messages to STDOUT' do
     expect { subject }.to output(
-      match(/2 schools upserted/)
+      match(/Done! 2 schools upserted/)
       .and(match(/Failures 1/))
-      .and(match(/[{:name=>["can't belk]}, 2]/))
+      .and(match(/Errors - /))
+      .and(match(/:name=>/))
+      .and(match(/"can't be blank"/))
     ).to_stdout
   end
 end

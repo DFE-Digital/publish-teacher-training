@@ -95,7 +95,13 @@ psql manage_courses_backend_development < ~/Downloads/backup_sanitised.sql
 
 ## Seeding GiasSchool Data
 
-You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory.
+The `rails gias_update` command takes an optional filename, the default is set in lib/tasks/gias_update.rake.
+
+1. With existing csv file e.g 'csv/edubasealldata20230306.csv'. Check the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the csv file.
+
+You can then run `rails gias_update` or `rails 'gias_update[csv/<file_name>]'` where <file_name> is the csv filename.
+
+2. You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory as a local merge and pushed to master.
 
 Ensure the default `CSV_PATH` in lib/tasks/gias_update.rake includes the name of the new csv file.
 
