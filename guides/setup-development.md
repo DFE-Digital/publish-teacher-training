@@ -123,7 +123,7 @@ Use the following sequence to allow the above console output to display, chainin
 cf target -s ${space}
 cf ssh publish-teacher-training-${paas_env}
 cd /app
-/usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'"
+/usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'
 ```
 
 ## Configuring local domains
