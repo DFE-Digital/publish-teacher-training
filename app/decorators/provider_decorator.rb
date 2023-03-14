@@ -19,6 +19,10 @@ class ProviderDecorator < ApplicationDecorator
     address_lines.map { |line| ERB::Util.html_escape(line) }.join('<br> ').html_safe
   end
 
+  def name_and_code
+    "#{object.provider_name} (#{object.provider_code})"
+  end
+
   private
 
   def address_lines
