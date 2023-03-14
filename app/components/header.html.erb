@@ -8,14 +8,14 @@
 
   <% if current_user.present? %>
     <% if current_user.admin? %>
-      <% header.navigation_item(text: "Support console", href: support_path, active: false) %>
-      <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
+      <% header.with_navigation_item(text: "Support console", href: support_path, active: false) %>
+      <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
       <% if current_user.associated_with_accredited_body? %>
-        <% header.navigation_item(text: "Notifications", href: publish_notifications_path, active: false) %>
+        <% header.with_navigation_item(text: "Notifications", href: publish_notifications_path, active: false) %>
       <% end %>
-      <% header.navigation_item(text: "Sign out", href: sign_out_path) %>
-      <% header.navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
+      <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
+      <% header.with_navigation_item(text: "(#{current_user.first_name} #{current_user.last_name})", href: Settings.dfe_signin.profile) %>
     <% end %>
   <% end %>
 <% end %>
