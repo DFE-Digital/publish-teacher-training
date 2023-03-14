@@ -41,7 +41,7 @@
             title_id: "success-message",
             html_attributes: { role: "alert" }
           ) do |notification_banner| %>
-            <% notification_banner.heading(text: flash[:success]) %>
+            <% notification_banner.with_heading(text: flash[:success]) %>
           <% end %>
         <% end %>
 
