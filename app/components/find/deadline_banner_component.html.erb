@@ -1,13 +1,13 @@
 <% if cycle_timetable.show_apply_1_deadline_banner? %>
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
-    <% notification_banner.heading(text: "Apply now to get on a course starting in the #{cycle_timetable.cycle_year_range} academic year") %>
+    <% notification_banner.with_heading(text: "Apply now to get on a course starting in the #{cycle_timetable.cycle_year_range} academic year") %>
     <p class="govuk-body">Courses can fill up at any time, so you should apply as soon as you can.</p>
     <p class="govuk-body">If you’re applying for the first time since applications opened in <%= cycle_timetable.find_opens.to_fs(:month_and_year) %>, apply no later than <%= apply_1_deadline %>.</p>
     <p class="govuk-body">If your application did not lead to a place and you’re applying again, apply no later than <%= apply_2_deadline %>.</p>
   <% end %>
 <% elsif cycle_timetable.show_apply_2_deadline_banner? %>
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
-    <% notification_banner.heading(text: "If you’re applying for the first time since applications opened in #{find_opens}") %>
+    <% notification_banner.with_heading(text: "If you’re applying for the first time since applications opened in #{find_opens}") %>
     <p class="govuk-body">It’s no longer possible to apply for teacher training starting in the <%= cycle_timetable.cycle_year_range %> academic year.</p>
     <p class="govuk-body">You can <%= govuk_link_to("start or continue your application", Settings.apply_base_url) %> to get it ready for courses starting in the <%= cycle_timetable.cycle_year_range(cycle_timetable.next_year) %> academic year.</p>
     <p class="govuk-body">You’ll be able to find courses from <%= find_reopens %> and submit your application from <%= apply_reopens %>.</p>
@@ -17,7 +17,7 @@
   <% end %>
 <% elsif cycle_timetable.show_cycle_closed_banner? %>
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
-    <% notification_banner.heading(text: "Courses are currently closed but you can get your application ready") %>
+    <% notification_banner.with_heading(text: "Courses are currently closed but you can get your application ready") %>
     <p class="govuk-body">Courses starting in the <%= cycle_timetable.cycle_year_range %> academic year are closed.</p>
     <p class="govuk-body">You can <%= govuk_link_to("start or continue your application", Settings.apply_base_url) %> to get it ready for courses starting in the <%= cycle_timetable.next_cycle_year_range %> academic year.</p>
     <p class="govuk-body">You’ll be able to find courses from <%= cycle_timetable.find_reopens.to_fs(:govuk_date_and_time) %> and submit your application from <%= cycle_timetable.apply_reopens.to_fs(:govuk_date_and_time) %>.</p>
