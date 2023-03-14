@@ -6,7 +6,7 @@ module Find
       class View < ViewComponent::Base
         attr_accessor :course
 
-        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22].freeze
+        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22 24].freeze
         PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES = %w[03].freeze
 
         def initialize(course:)
@@ -46,10 +46,6 @@ module Find
           when 'secondary'
             "Grade #{course.gcse_grade_required} (C) or above in English and maths, or equivalent qualification."
           end
-        end
-
-        def secondary_advisory(course)
-          "Your degree subject should be in #{course.computed_subject_name_or_names} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way."
         end
 
         def pending_gcse_content(course)

@@ -10,7 +10,7 @@ module Publish
         authorize(@provider, :can_create_course?)
         return if has_physics_subject?
 
-        if params[:goto_confirmation] && modern_languages_present?
+        if go_to_confirmation_params && modern_languages_present?
           redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
           return
         end

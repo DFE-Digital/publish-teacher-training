@@ -1,6 +1,7 @@
 require:
   - rubocop-rails
   - rubocop-rspec
+  - rubocop-capybara
 
 inherit_from:
   - ./config/rubocop/layout.yml

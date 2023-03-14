@@ -16,7 +16,7 @@ describe RecruitmentCyclePolicy do
       next_recruitment_cycle
 
       expect(Pundit.policy_scope(user, RecruitmentCycle.all))
-        .to match_array [current_recruitment_cycle, next_recruitment_cycle]
+        .to contain_exactly(current_recruitment_cycle, next_recruitment_cycle)
     end
   end
 

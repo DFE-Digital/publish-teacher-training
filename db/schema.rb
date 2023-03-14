@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_24_180842) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_09_161636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -192,6 +192,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_180842) do
     t.datetime "updated_at", null: false
     t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
+  end
+
+  create_table "gias_school", force: :cascade do |t|
+    t.text "urn", null: false
+    t.text "name", null: false
+    t.text "type_code"
+    t.text "group_code"
+    t.text "status_code"
+    t.text "phase_code"
+    t.text "minimum_age"
+    t.text "maximum_age"
+    t.text "ukprn"
+    t.text "address1", null: false
+    t.text "address2"
+    t.text "address3"
+    t.text "town", null: false
+    t.text "county"
+    t.text "postcode", null: false
+    t.text "website"
+    t.text "telephone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["urn"], name: "index_gias_school_on_urn", unique: true
   end
 
   create_table "interrupt_page_acknowledgement", force: :cascade do |t|

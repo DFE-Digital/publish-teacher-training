@@ -444,6 +444,18 @@ RSpec.describe CourseSearchService do
           expect(subject).to eq(expected_scope)
         end
       end
+
+      context 'when provided as a hash' do
+        let(:filter) { { study_type: { '0' => 'full_time', '1' => 'part_time' } } }
+        let(:expected_scope) { double }
+
+        it 'adds the with_study_modes scope with an array of both arguments' do
+          expect(scope).to receive(:with_study_modes).with(%w[full_time part_time]).and_return(course_ids_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
+        end
+      end
     end
 
     describe 'filter[funding_type]' do

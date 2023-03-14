@@ -229,6 +229,8 @@ en:
         new: "Add user"
         edit: "Update user"
         check: "Check your answers"
+      multiple_locations:
+        new: "Add locations"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
@@ -449,6 +451,8 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/multiple_locations_form:
+          blank: "Enter location details"
         publish/course_information_form:
           attributes:
             about_course:

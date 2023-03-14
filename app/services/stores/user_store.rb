@@ -13,6 +13,7 @@ module Stores
     private
 
     def identifier_id
+      # TECH DEBT: [Stores::UserStore] This is error prone
       identifier_model.id
     end
   end

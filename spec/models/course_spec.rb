@@ -441,7 +441,7 @@ describe Course do
   describe '#modern_languages_subjects' do
     it 'gets modern language subjects' do
       course = create(:course, level: 'secondary', subjects: [modern_languages, french])
-      expect(course.modern_languages_subjects).to match_array([french])
+      expect(course.modern_languages_subjects).to contain_exactly(french)
     end
   end
 
@@ -822,7 +822,7 @@ describe Course do
         courses_within_range = described_class.within(16, origin: [0, 0])
 
         expect(courses_within_range.count).to eq(1)
-        expect(described_class.within(16, origin: [0, 0])).to match_array([course1])
+        expect(described_class.within(16, origin: [0, 0])).to contain_exactly(course1)
       end
     end
 

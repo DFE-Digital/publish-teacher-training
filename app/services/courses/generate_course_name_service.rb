@@ -64,7 +64,7 @@ module Courses
     end
 
     def generate_modern_language_title
-      return unless is_modern_language_course?
+      return unless course.is_modern_language_course?
 
       title = SecondarySubject.modern_languages.to_s
       official_languages = languages.reject { |language| language.subject_name.casecmp?('Modern languages (other)') }
@@ -83,10 +83,6 @@ module Courses
       when 3
         title + " (#{language_names.join(', ')})"
       end
-    end
-
-    def is_modern_language_course?
-      subjects.any? { |s| s == SecondarySubject.modern_languages }
     end
 
     def format_subject_name(subject)

@@ -33,6 +33,7 @@ FactoryBot.define do
     accrediting_provider_enrichments { nil }
     can_sponsor_student_visa { [true, false].sample }
     can_sponsor_skilled_worker_visa { [true, false].sample }
+    synonyms { Faker::Lorem.words(number: 0..3) }
 
     trait :with_name do
       provider_name { 'Test Name' }

@@ -207,7 +207,7 @@ describe Provider do
       let(:provider_code) { 'A01' }
 
       it 'returns the correct list of providers' do
-        expect(subject).to match_array([provider])
+        expect(subject).to contain_exactly(provider)
       end
     end
   end
@@ -222,7 +222,7 @@ describe Provider do
       let(:provider_name) { 'FOR' }
 
       it 'returns the correct list of providers' do
-        expect(subject).to match_array([provider, provider2])
+        expect(subject).to contain_exactly(provider, provider2)
       end
     end
   end
@@ -237,7 +237,7 @@ describe Provider do
       let(:course_code) { '2VVZ' }
 
       it 'returns the correct list of providers' do
-        expect(subject).to match_array([provider, provider2])
+        expect(subject).to contain_exactly(provider, provider2)
       end
     end
   end

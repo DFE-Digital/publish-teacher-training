@@ -4,7 +4,6 @@ Clone the repo:
 
     git clone git@github.com:DFE-Digital/publish-teacher-training.git
 
-
 ## Setup the application
 
 Run the following commands:
@@ -16,7 +15,6 @@ bundle exec rails db:setup
 ```
 
 ## Start the server
-
 
 You can use [Foreman](https://github.com/ddollar/foreman) or [Overmind](https://github.com/DarthSim/overmind) to run all the processes needed for local dev. Once you have either of the two, you can run:
 
@@ -95,6 +93,39 @@ Then run the following command to populate the database:
 psql manage_courses_backend_development < ~/Downloads/backup_sanitised.sql
 ```
 
+## Seeding GiasSchool Data
+
+The `rails gias_update` command takes an optional filename, the default is set in lib/tasks/gias_update.rake.
+
+1. With existing csv file e.g 'csv/edubasealldata20230306.csv'. Check the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the csv file.
+
+You can then run `rails gias_update` or `rails 'gias_update[csv/<file_name>]'` where <file_name> is the csv filename.
+
+2. You can obtain an updated csv from https://www.get-information-schools.service.gov.uk/Downloads the `establishment fields CSV` checkbox. This can be uploaded to the `csv` directory as a local commit and pushed to main.
+
+Ensure the default `CSV_PATH` in lib/tasks/gias_update.rake matches the name of the new csv file if required.
+
+Test the import function locally with `rails 'gias_update[csv/<file_name>]'`
+You should see console output on completion similar to:
+
+```
+I, [2023-03-10T13:35:43.050939 #7966]  INFO -- : Done! 22843 schools upserted
+I, [2023-03-10T13:35:43.051021 #7966]  INFO -- : Failures 483
+I, [2023-03-10T13:35:43.052223 #7966]  INFO -- : Errors - [{:town=>["can't be blank"]} ...
+```
+
+You can check the `GiasSchool.count` in the database is correct.
+
+Once the file is merged to main, you can run the process in the required environment.
+Use the following sequence to allow the above console output to display, chaining the commands does update the database but does not display the console ouptut.
+
+```
+cf target -s ${space}
+cf ssh publish-teacher-training-${paas_env}
+cd /app
+/usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'
+```
+
 ## Configuring local domains
 
 This app is setup to serve two domains for two live services. In order to develop locally you will need to configure your local machine to resolve these domains to `localhost`. You can use [Caddy](https://caddyserver.com/) to do this.
@@ -112,4 +143,3 @@ find.localhost {
 ```
 
 Then make sure to run `caddy start` in the root of the project. You should now be able to access the app at `https://publish.localhost` and `https://find.localhost`.
-

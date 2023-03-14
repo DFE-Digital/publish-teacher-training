@@ -34,7 +34,7 @@ describe Courses::AssignableSubjectService do
 
     it 'returns subjects other than modern language', without_subjects: true do
       course = build(:course, level: 'secondary', infer_subjects?: false)
-      expect(service.execute(course:)).to match_array([biology, arabic])
+      expect(service.execute(course:)).to contain_exactly(biology, arabic)
     end
   end
 
