@@ -3,6 +3,7 @@
 module Support
   class LocationsController < SupportController
     def index
+      reset_csv_schools_forms
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
     rescue ActiveRecord::RecordNotFound
@@ -68,6 +69,11 @@ module Support
 
     def site
       @site ||= provider.sites.find(params[:id])
+    end
+
+    def reset_csv_schools_forms
+      ParsedCSVSchoolsForm.new(provider).clear_stash
+      RawCSVSchoolsForm.new(provider).clear_stash
     end
   end
 end
