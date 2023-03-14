@@ -8,7 +8,7 @@
   }
 ) do |cookie_banner| %>
   <%= cookie_banner.with_message(heading_text: t("cookies.heading", service_name:),
-                            text: t("cookies.message_html")) do |message| %>
+                                 text: t("cookies.message_html")) do |message| %>
     <% message.with_action do %>
       <button value="accepted" type="button" name="cookies" class="govuk-button app-js-only" data-module="govuk-button">
         <%= t("cookies.accept") %>
