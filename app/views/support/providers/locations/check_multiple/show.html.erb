@@ -1,0 +1,55 @@
+<% page_title = t("support.providers.multiple_locations.check") %>
+<%= content_for :page_title, page_title %>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model:  @raw_csv_schools_form, url: support_recruitment_cycle_provider_locations_multiple_check_path(provider_code: @provider.provider_code, recruitment_cycle_year: 2023), method: :put, local: true) do |f| %>
+
+      <div class="govuk-summary-card__content">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= "#{@provider.decorate.name_and_code}" %></span>
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.multiple_locations.check") %> </h1> </legend>
+
+<% if false %>
+
+        <%= render GovukComponent::SummaryListComponent.new(borders: true, actions: false, html_attributes: {class: "govuk-summary-card__title-wrapper"}) do |component|
+
+          component.row do |row|
+            row.key { "Name" }
+            row.value(text:  "foo")
+          end
+
+          component.row do |row|
+            row.key { "Unique reference number (URN)" }
+            row.value(text: "foo")
+          end
+
+          component.row do |row|
+            row.key { "Address" }
+            row.value(text:  "foo")
+          end
+
+        end %>
+
+        <%= f.govuk_submit("Add locations") %>
+      </div>
+    <% end %>
+
+    <%#= render Utility::SummaryCardWithHeaderComponent.new %>
+
+<% end %>
+
+    <%= govuk_summary_card(title: "Araquanid") do |card|
+      card.with_action { govuk_link_to("Status", "#") }
+      card.with_action { govuk_link_to("Choose", "#") }
+      card.with_summary_list(rows: araquanid_data)
+
+    end %>
+    <%= govuk_summary_list(card: { title: "Emboar", actions: "foo" }, rows: "bar") %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), root_path) %>
+    </p>
+  </div>
+</div>
+
