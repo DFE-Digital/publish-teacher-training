@@ -33,7 +33,7 @@ gem 'active_model_serializers'
 gem 'kaminari'
 
 # Pagination for API
-gem 'pagy', '~> 5.10'
+gem 'pagy', '~> 6.0'
 
 # JSON:API Ruby Client
 gem 'jsonapi-rails', github: 'DFE-Digital/jsonapi-rails'
@@ -117,8 +117,8 @@ gem 'pg_search'
 gem 'skylight'
 
 # govuk styling
-gem 'govuk-components'
-gem 'govuk_design_system_formbuilder'
+gem 'govuk-components', '~> 4.0.0a2'
+gem 'govuk_design_system_formbuilder', '~> 4.0.0a1'
 
 # DfE Sign-In
 gem 'omniauth', '~> 2.1'
