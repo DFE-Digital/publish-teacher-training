@@ -1,32 +1,32 @@
 <%= render GovukComponent::SummaryListComponent.new do |component|
-      component.row do |row|
-        row.key { "First name" }
-        row.value(text: @user.first_name, html_attributes: { id: "first_name" })
-        row.action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "first name")
+      component.with_row do |row|
+        row.with_key { "First name" }
+        row.with_value(text: @user.first_name, html_attributes: { id: "first_name" })
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "first name")
       end
 
-      component.row do |row|
-        row.key { "Last name" }
-        row.value(text: @user.last_name, html_attributes: { id: "last_name" })
-        row.action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "last name")
+      component.with_row do |row|
+        row.with_key { "Last name" }
+        row.with_value(text: @user.last_name, html_attributes: { id: "last_name" })
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "last name")
       end
 
-      component.row do |row|
-        row.key { "Email" }
-        row.value(text: @user.email, html_attributes: { id: "email" })
-        row.action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "email")
+      component.with_row do |row|
+        row.with_key { "Email" }
+        row.with_value(text: @user.email, html_attributes: { id: "email" })
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "email")
       end
 
-      component.row do |row|
-        row.key { "Admin?" }
-        row.value(text: @user.admin?.to_s.capitalize, html_attributes: { id: "admin_status" })
-        row.action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "admin")
+      component.with_row do |row|
+        row.with_key { "Admin?" }
+        row.with_value(text: @user.admin?.to_s.capitalize, html_attributes: { id: "admin_status" })
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "admin")
       end
 
-      component.row do |row|
-        row.key { "Last login date" }
-        row.value { @user.last_login_date_utc.to_s }
-        row.action
+      component.with_row do |row|
+        row.with_key { "Last login date" }
+        row.with_value { @user.last_login_date_utc.to_s }
+        row.with_action
       end
     end %>
 

@@ -14,22 +14,22 @@
           <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.users.check") %> </h1> </legend>
 
     <%= render GovukComponent::SummaryListComponent.new do |component|
-          component.row do |row|
-            row.key { t("support.providers.users.first_name") }
-            row.value(text:  @user_form.first_name)
-            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
+          component.with_row do |row|
+            row.with_key { t("support.providers.users.first_name") }
+            row.with_value(text:  @user_form.first_name)
+            row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
           end
 
-          component.row do |row|
-            row.key { t("support.providers.users.last_name") }
-            row.value(text: @user_form.last_name)
-            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
+          component.with_row do |row|
+            row.with_key { t("support.providers.users.last_name") }
+            row.with_value(text: @user_form.last_name)
+            row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
           end
 
-          component.row do |row|
-            row.key { t("support.providers.users.email") }
-            row.value(text: @user_form.email)
-            row.action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
+          component.with_row do |row|
+            row.with_key { t("support.providers.users.email") }
+            row.with_value(text: @user_form.email)
+            row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
           end
         end %>
 
