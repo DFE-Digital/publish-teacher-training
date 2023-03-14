@@ -91,10 +91,10 @@
       action_visually_hidden_text: "details of financial support you offer"
     ) %>
 
-    <% summary_list.row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
-      <% row.key { "Financial support from the government" } %>
-      <% row.value { course.financial_incentive_details } %>
-      <% row.action %>
+    <% summary_list.with_row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
+      <% row.with_key { "Financial support from the government" } %>
+      <% row.with_value { course.financial_incentive_details } %>
+      <% row.with_action %>
     <% end %>
   <% else %>
     <% enrichment_summary(
