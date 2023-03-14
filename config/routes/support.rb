@@ -17,6 +17,7 @@ namespace :support do
       resource :locations do
         resource :multiple, only: %i[new create], on: :member, controller: 'providers/locations/multiple' do
           resources :new, param: :position, only: %i[show update], controller: 'providers/locations/new_multiple'
+          resource :check, only: %i[show update], controller: 'providers/locations/check_multiple'
         end
       end
     end
