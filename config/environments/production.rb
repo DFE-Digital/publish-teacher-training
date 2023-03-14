@@ -41,7 +41,6 @@ Rails.application.configure do
 
   # Logging
   config.rails_semantic_logger.add_file_appender = false
-  config.log_format = :json
 
   config.active_record.logger = nil # Don't log SQL in production
 
