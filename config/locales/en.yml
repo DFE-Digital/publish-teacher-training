@@ -1,11 +1,6 @@
 en:
   cycles:
     updated: "Cycle schedule updated"
-  helpers:
-    hint:
-      site:
-        urn_html: |-
-          Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
   service_name:
     publish: "Publish teacher training courses"
     find: "Find postgraduate teacher training"
@@ -268,10 +263,10 @@ en:
         site:
           attributes:
             location_name:
-              blank: "Enter a site location name"
+              blank: "Enter a location name"
               taken: "is in use by another location"
             address1:
-              blank: "Enter a building and street"
+              blank: "Enter address line 1"
             postcode:
               blank: "Enter a postcode"
         course:
@@ -568,6 +563,8 @@ en:
     gov_design_accessibility: "https://design-system.service.gov.uk/accessibility/"
     ico_complaint: "https://ico.org.uk/make-a-complaint/"
     eu_settlement_scheme: "https://www.gov.uk/settled-status-eu-citizens-families"
+    urn_html: |-
+      Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
   edit_options:
     qualifications:
       qts:

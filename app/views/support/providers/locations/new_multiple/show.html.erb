@@ -4,42 +4,43 @@
   <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
 <% end %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds-from-desktop">
+<%= form_with(model: @site,
+              method: :patch,
+              url: support_recruitment_cycle_provider_locations_multiple_new_path,
+              local: true) do |f| %>
 
-    <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
-    <h1 class="govuk-heading-l"><%= t("support.providers.multiple_locations.show", position: params[:position], max: @max) %></h1>
+  <%= f.govuk_error_summary %>
 
-    <%= form_with(model: @site,
-                  method: :patch,
-                  url: support_recruitment_cycle_provider_locations_multiple_new_path,
-                  local: true) do |f| %>
-      <%= f.govuk_error_summary %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
+      <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+      <h1 class="govuk-heading-l"><%= t("support.providers.multiple_locations.show", position: params[:position], max: @max) %></h1>
 
-      <%= f.govuk_text_field(:urn,
-                             label: { text: "Unique reference number (URN) (optional)", size: "s" },
-                             width: 10) %>
+        <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
 
-      <p class="govuk-body">
-        Find URNs on <%= govuk_link_to "Get information about schools (opens in new tab)", t("links.get_information_schools") %>
-      </p>
+        <%= f.govuk_text_field(:urn,
+                               label: { text: "Unique reference number (URN) (optional)", size: "s" },
+                               width: 10) %>
 
-      <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
-        <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+          <%= t("links.urn_html").html_safe %>
+        </p>
 
-        <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)", size: "s" }) %>
+        <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+          <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
 
-        <%= f.govuk_text_field(:address3, label: { text: "Town or city", size: "s" }, width: "two-thirds") %>
+          <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)", size: "s" }) %>
 
-        <%= f.govuk_text_field(:address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds") %>
+          <%= f.govuk_text_field(:address3, label: { text: "Town or city", size: "s" }, width: "two-thirds") %>
 
-        <%= f.govuk_text_field(:postcode, label: { size: "s" }, width: 10) %>
-      <% end %>
+          <%= f.govuk_text_field(:address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds") %>
 
-      <%= f.govuk_submit(t("continue")) %>
-    <% end %>
+          <%= f.govuk_text_field(:postcode, label: { size: "s" }, width: 10) %>
+        <% end %>
+
+        <%= f.govuk_submit(t("continue")) %>
+<% end %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), new_support_recruitment_cycle_provider_locations_multiple_path) %>
