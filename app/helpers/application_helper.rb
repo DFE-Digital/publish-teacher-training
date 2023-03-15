@@ -53,13 +53,13 @@ module ApplicationHelper
 
     value = raw('<span class="app-!-colour-muted">Empty</span>') if value.blank?
 
-    summary_list.row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
-      row.key { key.html_safe }
-      row.value(classes: classes || ['govuk-summary-list__value']) { value }
+    summary_list.with_row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
+      row.with_key { key.html_safe }
+      row.with_value(classes: classes || ['govuk-summary-list__value']) { value }
       if action
-        row.action(**action)
+        row.with_action(**action)
       else
-        row.action
+        row.with_action
       end
     end
   end

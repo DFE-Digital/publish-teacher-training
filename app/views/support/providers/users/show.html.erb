@@ -15,34 +15,34 @@
     </h1>
 
     <%= render GovukComponent::SummaryListComponent.new do |component|
-          component.row do |row|
-            row.key { "First name" }
-            row.value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
-            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
+          component.with_row do |row|
+            row.with_key { "First name" }
+            row.with_value(text: @provider_user.first_name, html_attributes: { id: "first_name" })
+            row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "first_name", visually_hidden_text: t("support.providers.users.first_name"))
           end
 
-          component.row do |row|
-            row.key { "Last name" }
-            row.value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
-            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
+          component.with_row do |row|
+            row.with_key { "Last name" }
+            row.with_value(text: @provider_user.last_name, html_attributes: { id: "last_name" })
+            row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "last_name", visually_hidden_text: t("support.providers.users.last_name"))
           end
 
-          component.row do |row|
-            row.key { "Email address" }
-            row.value(text: @provider_user.email, html_attributes: { id: "email" })
-            row.action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
+          component.with_row do |row|
+            row.with_key { "Email address" }
+            row.with_value(text: @provider_user.email, html_attributes: { id: "email" })
+            row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), classes: "email", visually_hidden_text: t("support.providers.users.email"))
           end
 
-          component.row do |row|
-            row.key { "Organisations" }
-            row.value(text: sanitize(@provider_user.providers.in_cycle(@recruitment_cycle).pluck(:provider_name).sort.join(tag.br)), html_attributes: { id: "organisations" })
-            row.action
+          component.with_row do |row|
+            row.with_key { "Organisations" }
+            row.with_value(text: sanitize(@provider_user.providers.in_cycle(@recruitment_cycle).pluck(:provider_name).sort.join(tag.br)), html_attributes: { id: "organisations" })
+            row.with_action
           end
 
-          component.row do |row|
-            row.key { "Date last signed in" }
-            row.value(text: @provider_user.last_login_date_utc&.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
-            row.action
+          component.with_row do |row|
+            row.with_key { "Date last signed in" }
+            row.with_value(text: @provider_user.last_login_date_utc&.strftime("%d %B %Y at %I:%M%p"), html_attributes: { id: "date_last_signed_in" })
+            row.with_action
           end
         end %>
 

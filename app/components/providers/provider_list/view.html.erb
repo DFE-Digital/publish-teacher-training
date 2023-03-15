@@ -1,31 +1,31 @@
 <%= render GovukComponent::SummaryListComponent.new do |component|
-      component.row do |row|
-        row.key { "Name" }
-        row.value { @provider.provider_name }
-        row.action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider name")
+      component.with_row do |row|
+        row.with_key { "Name" }
+        row.with_value { @provider.provider_name }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider name")
       end
 
-      component.row do |row|
-        row.key { "Code" }
-        row.value { @provider.provider_code }
-        row.action
+      component.with_row do |row|
+        row.with_key { "Code" }
+        row.with_value { @provider.provider_code }
+        row.with_action
       end
 
-      component.row do |row|
-        row.key { "Accredited provider" }
-        row.value { formatted_accrediting_provider }
-        row.action
+      component.with_row do |row|
+        row.with_key { "Accredited provider" }
+        row.with_value { formatted_accrediting_provider }
+        row.with_action
       end
 
-      component.row do |row|
-        row.key { "Provider type" }
-        row.value { formatted_provider_type }
-        row.action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider type")
+      component.with_row do |row|
+        row.with_key { "Provider type" }
+        row.with_value { formatted_provider_type }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider type")
       end
 
-      component.row do |row|
-        row.key { "Last updated" }
-        row.value { gov_uk_format(@provider.updated_at) }
-        row.action
+      component.with_row do |row|
+        row.with_key { "Last updated" }
+        row.with_value { gov_uk_format(@provider.updated_at) }
+        row.with_action
       end
     end %>
