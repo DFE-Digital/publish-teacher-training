@@ -21,7 +21,7 @@ module Support
             if position < max
               redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: position + 1)
             elsif position == max
-              redirect_to support_recruitment_cycle_provider_locations_path
+              redirect_to support_recruitment_cycle_provider_locations_multiple_check_path
             end
           else
             max
