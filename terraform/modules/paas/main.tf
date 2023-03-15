@@ -83,13 +83,6 @@ resource cloudfoundry_route web_app_publish_gov_uk_route {
   hostname = each.value
 }
 
-resource cloudfoundry_route web_app_find_gov_uk_route {
-  for_each = toset(var.find_gov_uk_host_names)
-  domain   = data.cloudfoundry_domain.find_service_gov_uk.id
-  space    = data.cloudfoundry_space.space.id
-  hostname = each.value
-}
-
 resource cloudfoundry_route find_web_app_cloudapps_digital_route {
   count = var.enable_find == true ? 1 : 0
 
