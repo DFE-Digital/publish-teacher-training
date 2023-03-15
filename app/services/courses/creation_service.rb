@@ -47,7 +47,7 @@ module Courses
     end
 
     def sites
-      @sites ||= provider.sites.find(site_ids)
+      @sites ||= provider.sites.find(site_ids.compact_blank)
     end
 
     def subject_ids

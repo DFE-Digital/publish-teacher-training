@@ -3,11 +3,12 @@
 module Publish
   module Courses
     class SitesController < PublishController
-      before_action :build_course_params, only: %i[continue]
+      # before_action :build_course_params, only: %i[continue]
 
       include CourseBasicDetailConcern
 
       def continue
+        params[:course][:sites_ids].compact_blank!
         super
       end
 
