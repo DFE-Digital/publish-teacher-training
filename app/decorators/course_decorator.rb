@@ -7,6 +7,10 @@ class CourseDecorator < ApplicationDecorator
 
   LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
 
+  def sites_ids
+    object.site_ids.compact_blank
+  end
+
   def name_and_code
     "#{object.name} (#{object.course_code})"
   end
