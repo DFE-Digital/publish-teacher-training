@@ -2,6 +2,8 @@
 
 require_relative 'boot'
 
+require 'rails_semantic_logger/active_job/log_subscriber'
+
 require 'rails/all'
 require 'active_support/core_ext/integer/time'
 require 'view_component/compile_cache'
