@@ -1,7 +1,11 @@
 <%= render PageTitle.new(title: t("support.providers.multiple_locations.show", position: params[:position], max: @max)) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
+  <% if params[:position] == "1" %>
+    <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
+  <% else %>
+    <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_multiple_new_path(position: params[:position].to_i - 1)) %>
+  <% end %>
 <% end %>
 
 <%= form_with(model: @site,
