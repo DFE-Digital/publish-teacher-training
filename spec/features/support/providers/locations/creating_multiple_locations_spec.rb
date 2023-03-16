@@ -65,6 +65,39 @@ feature 'Multiple locations' do
     and_i_should_be_on_the_provider_locations_page
   end
 
+  scenario 'cancel from multiple locations new page' do
+    given_the_multiple_locations_feature_flag_is_active
+    and_i_visit_the_multiple_locations_new_page
+
+    when_i_click_cancel
+    then_i_should_be_on_the_provider_locations_page
+  end
+
+  scenario 'cancel from multiple locations new page for a location' do
+    given_the_multiple_locations_feature_flag_is_active
+    and_i_visit_the_multiple_locations_new_page
+    and_i_submit_the_form_with_two_locations
+    and_i_see_the_text_one_of_two
+    and_i_should_see_that_the_text_field_has_been_prepopulated('Name', 'Tottenham')
+
+    when_i_click_cancel
+    then_i_should_be_on_the_provider_locations_page
+  end
+
+  scenario 'cancel from multiple location confirm page' do
+    given_the_multiple_locations_feature_flag_is_active
+    and_i_visit_the_multiple_locations_new_page
+    and_i_submit_the_form_with_two_locations
+    and_i_submit_a_valid_form
+    and_i_see_the_text_two_of_two
+    and_i_see_that_the_text_field_has_been_prepopulated('Name', 'Tottenham Hotspur')
+    and_i_submit_a_valid_form
+    and_i_am_redirected_to_the_multiple_location_confirm_page
+
+    when_i_click_cancel
+    then_i_should_be_on_the_provider_locations_page
+  end
+
   scenario 'feature flag off' do
     when_i_visit_a_provider_locations_page
     then_i_should_not_see_the_add_multiple_locations_link
@@ -145,6 +178,10 @@ feature 'Multiple locations' do
     click_link 'Back'
   end
 
+  def when_i_click_cancel
+    click_link 'Cancel'
+  end
+
   def given_i_add_the_locations
     click_button 'Add locations'
   end
@@ -169,6 +206,7 @@ feature 'Multiple locations' do
   alias_method :and_the_database_should_not_have_updated_with_the_new_location, :then_the_database_should_not_have_updated_with_the_new_location
   alias_method :given_the_multiple_locations_feature_flag_is_active, :and_the_multiple_locations_feature_flag_is_active
 
+  alias_method :then_i_should_be_on_the_provider_locations_page, :when_i_am_redirected_to_the_locations_page
   alias_method :and_i_should_be_on_the_provider_locations_page, :when_i_am_redirected_to_the_locations_page
   alias_method :and_i_submit_a_valid_form, :given_i_submit_a_valid_form
   alias_method :and_i_see_that_the_text_field_has_been_prepopulated, :then_i_should_see_that_the_text_field_has_been_prepopulated
