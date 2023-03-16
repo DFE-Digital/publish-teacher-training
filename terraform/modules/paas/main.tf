@@ -40,6 +40,7 @@ resource cloudfoundry_app worker_app {
   health_check_type    = "process"
   instances            = var.worker_app_instances
   memory               = var.worker_app_memory
+  disk_quota           = 1500
   docker_image         = var.docker_image
   strategy             = local.deployment_strategy
   command              = local.worker_app_start_command
