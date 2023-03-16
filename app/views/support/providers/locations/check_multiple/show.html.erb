@@ -10,14 +10,14 @@
     <%= form_with(model: @parsed_csv_school_form, url: support_recruitment_cycle_provider_locations_multiple_check_path(provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year), method: :put, local: true) do |f| %>
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= "Add locations - #{@provider.decorate.name_and_code}" %></span>
         <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.multiple_locations.check") %> </h1> </legend>
-        <% @school_details.each_with_index do |school_detail, index| %>
-          <%= govuk_summary_card(title: "Location #{index + 1}") do |card|
-                card.with_action { govuk_link_to("Change", "https://trello.com/c/BiPYisS2/1109-bulk-uploads-changing-locations-on-csv-confirm-page") }
+        <% @school_details.each.with_index(1) do |school_detail, position| %>
+          <%= govuk_summary_card(title: "Location #{position}") do |card|
+                card.with_action { govuk_link_to("Change", support_recruitment_cycle_provider_locations_multiple_new_path(position:)) }
                 card.with_summary_list(rows: [{ key: { text: "Name" }, value: { text: school_detail.location_name } },
                                               { key: { text: "Unique reference number (URN)" }, value: { classes: ("govuk-hint" if school_detail.urn.blank?), text: (school_detail.urn.presence || "Not entered") } },
                                               { key: { text: "Address" }, value: { text: school_detail.decorate.full_address_on_seperate_lines } }])
               end %>
-      <% end %>
+        <% end %>
       <%= f.govuk_submit("Add locations") %>
     <% end %>
 
