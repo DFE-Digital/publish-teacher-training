@@ -19,15 +19,20 @@
     "test": "jest"
   },
   "standard": {
-    "envs": ["jest", "browser"],
-    "globals": ["$", "google"]
-
+    "envs": [
+      "jest",
+      "browser"
+    ],
+    "globals": [
+      "$",
+      "google"
+    ]
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.1",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
-    "govuk-frontend": "^3.9.1",
+    "govuk-frontend": "^4.5.0",
     "jquery": "^3.6.0",
     "lodash.throttle": "^4.1.1",
     "set-value": "^4.0.1"
