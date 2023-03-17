@@ -267,6 +267,8 @@ en:
               taken: "is in use by another location"
             address1:
               blank: "Enter address line 1"
+            address3:
+              blank: "Enter a town or city"
             postcode:
               blank: "Enter a postcode"
         course:
