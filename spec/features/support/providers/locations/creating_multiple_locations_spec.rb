@@ -45,6 +45,7 @@ feature 'Multiple locations' do
 
   def given_i_submit_a_valid_form
     fill_in 'Address line 1', with: '1 amazing street'
+    fill_in 'Town or city', with: 'London'
     fill_in 'Postcode', with: 'BN1 1AA'
     click_continue
   end
