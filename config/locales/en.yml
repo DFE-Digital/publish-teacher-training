@@ -553,6 +553,7 @@ en:
   success:
     published: "Your changes have been published"
     saved: "%{value} updated"
+    added: "%{items_added} added"
     changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
     visa_partner_warning: "Changing your answer will not change visa information for courses you or your training partners have already created."
     visa_warning: "Changing your answer will not change visa information for courses you have already created."

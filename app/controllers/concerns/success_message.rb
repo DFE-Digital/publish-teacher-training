@@ -8,4 +8,9 @@ module SuccessMessage
 
     flash[:success] = I18n.t('success.saved', value:)
   end
+
+  def schools_added_message(locations)
+    items_added = locations.size > 1 ? "#{locations.size} locations" : "Location #{locations.first.location_name}"
+    flash[:success] = I18n.t('success.added', items_added:)
+  end
 end
