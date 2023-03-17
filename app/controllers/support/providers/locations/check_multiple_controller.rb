@@ -4,6 +4,8 @@ module Support
   module Providers
     module Locations
       class CheckMultipleController < SupportController
+        include SuccessMessage
+
         def show
           school_details
         end
@@ -24,6 +26,8 @@ module Support
 
           parsed_csv_school_form.clear_stash
           raw_csv_school_form.clear_stash
+
+          schools_added_message(school_details)
         end
 
         def parsed_csv_school_form
