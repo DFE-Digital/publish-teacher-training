@@ -7,17 +7,17 @@
 <%= render partial: "pages/performance_dashboard/initial_performance_indicators" %>
 
 <%= govuk_tabs(title: "Contents", classes: "app-tabs") do |tabs| %>
-  <%= tabs.tab(label: "Providers") do %>
+  <%= tabs.with_tab(label: "Providers") do %>
     <%= render partial: "pages/performance_dashboard/providers_tab" %>
   <% end %>
-  <%= tabs.tab(label: "Courses") do %>
+  <%= tabs.with_tab(label: "Courses") do %>
     <%= render partial: "pages/performance_dashboard/courses_tab" %>
   <% end %>
-  <%= tabs.tab(label: "Users") do %>
+  <%= tabs.with_tab(label: "Users") do %>
     <%= render partial: "pages/performance_dashboard/users_tab" %>
   <% end %>
   <% if FeatureService.enabled?("rollover.can_edit_current_and_next_cycles") %>
-    <%= tabs.tab(label: "Rollover") do %>
+    <%= tabs.with_tab(label: "Rollover") do %>
       <%= render partial: "pages/performance_dashboard/rollover_tab" %>
     <% end %>
   <% end %>
