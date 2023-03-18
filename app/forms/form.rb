@@ -53,16 +53,7 @@ class Form < BaseForm
     []
   end
 
-<<<<<<< HEAD
-=======
->>>>>>> main
-=======
->>>>>>> 86ac7ae3d592435f7a02a4b57392c32832df1ed5
   def fields_to_ignore_before_save
     []
-  end
-
-  def assign_attributes_to_model
-    model.assign_attributes(fields.except(*fields_to_ignore_before_save))
   end
 end
