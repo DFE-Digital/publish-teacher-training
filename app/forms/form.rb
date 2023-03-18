@@ -27,7 +27,6 @@ class Form < BaseForm
 
   def after_save; end
 
-<<<<<<< HEAD
   def store
     @store ||= identifier_store.new(identifier_model)
   end
@@ -54,8 +53,11 @@ class Form < BaseForm
     []
   end
 
+<<<<<<< HEAD
 =======
 >>>>>>> main
+=======
+>>>>>>> 86ac7ae3d592435f7a02a4b57392c32832df1ed5
   def fields_to_ignore_before_save
     []
   end
