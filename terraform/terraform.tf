@@ -58,7 +58,6 @@ module "paas" {
   redis_service_plan             = var.paas_redis_service_plan
   app_environment_variables      = local.paas_app_environment_variables
   publish_gov_uk_host_names      = var.publish_gov_uk_host_names
-  find_gov_uk_host_names         = var.find_gov_uk_host_names
   find_app_gov_uk_host_names     = var.find_app_gov_uk_host_names
   enable_find                    = var.enable_find
   restore_from_db_guid           = var.paas_restore_from_db_guid

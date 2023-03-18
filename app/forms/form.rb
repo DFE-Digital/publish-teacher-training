@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
-class Form
+class Form < BaseForm
   include ActiveModel::Model
   include ActiveModel::AttributeAssignment
   include ActiveModel::Validations::Callbacks
 
-  attr_accessor :identifier_model, :model, :params, :fields
+  attr_accessor :model
 
   def initialize(identifier_model, model, params: {})
-    @identifier_model = identifier_model
     @model = model
-    @params = params
-    @fields = compute_fields
-    assign_attributes(fields)
+    super(identifier_model, params:)
   end
 
   def save!
@@ -26,18 +23,11 @@ class Form
     end
   end
 
-  def clear_stash
-    store.clear_stash(form_store_key)
-  end
-
-  def stash
-    store.stash(form_store_key, fields.except(*fields_to_ignore_before_stash)) if valid?
-  end
-
   private
 
   def after_save; end
 
+<<<<<<< HEAD
   def store
     @store ||= identifier_store.new(identifier_model)
   end
@@ -64,25 +54,13 @@ class Form
     []
   end
 
+=======
+>>>>>>> main
   def fields_to_ignore_before_save
     []
   end
 
-  def new_attributes
-    fields_from_store.merge(params).symbolize_keys
-  end
-
-  def validation_error_details
-    errors.messages.map do |field, messages|
-      [field, { messages:, value: public_send(field) }]
-    end
-  end
-
-  def fields_from_store
-    store.get(form_store_key).presence || {}
-  end
-
-  def form_store_key
-    self.class.name.underscore.chomp('_form').split('/').last.to_sym
+  def assign_attributes_to_model
+    model.assign_attributes(fields.except(*fields_to_ignore_before_save))
   end
 end

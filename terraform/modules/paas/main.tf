@@ -5,7 +5,7 @@ resource cloudfoundry_app web_app {
   health_check_http_endpoint = "/ping"
   instances                  = var.web_app_instances
   memory                     = var.web_app_memory
-  disk_quota                 = 1500
+  disk_quota                 = 2000
   docker_image               = var.docker_image
   strategy                   = local.deployment_strategy
   timeout                    = 300
@@ -40,6 +40,7 @@ resource cloudfoundry_app worker_app {
   health_check_type    = "process"
   instances            = var.worker_app_instances
   memory               = var.worker_app_memory
+  disk_quota           = 1500
   docker_image         = var.docker_image
   strategy             = local.deployment_strategy
   command              = local.worker_app_start_command
@@ -79,13 +80,6 @@ resource cloudfoundry_route web_app_service_gov_uk_route {
 resource cloudfoundry_route web_app_publish_gov_uk_route {
   for_each = toset(var.publish_gov_uk_host_names)
   domain   = data.cloudfoundry_domain.publish_service_gov_uk.id
-  space    = data.cloudfoundry_space.space.id
-  hostname = each.value
-}
-
-resource cloudfoundry_route web_app_find_gov_uk_route {
-  for_each = toset(var.find_gov_uk_host_names)
-  domain   = data.cloudfoundry_domain.find_service_gov_uk.id
   space    = data.cloudfoundry_space.space.id
   hostname = each.value
 }
