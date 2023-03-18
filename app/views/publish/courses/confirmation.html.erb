@@ -27,90 +27,90 @@
 
       <%= govuk_summary_list(html_attributes: { data: { qa: "course__details" } }) do |summary_list| %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
-          <% row.key { "Subject level" } %>
-          <% row.value { course.level.humanize } %>
-          <% row.action %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__level" } }) do |row| %>
+          <% row.with_key { "Subject level" } %>
+          <% row.with_value { course.level.humanize } %>
+          <% row.with_action %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
-          <% row.key { "Special educational needs and disability (SEND)" } %>
-          <% row.value { course.is_send? } %>
-          <% row.action %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__is_send" } }) do |row| %>
+          <% row.with_key { "Special educational needs and disability (SEND)" } %>
+          <% row.with_value { course.is_send? } %>
+          <% row.with_action %>
         <% end %>
 
         <% unless course.is_further_education? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
-            <% row.key { "Subject".pluralize(course.subjects.length) } %>
-            <% row.value { course.chosen_subjects } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__subjects" } }) do |row| %>
+            <% row.with_key { "Subject".pluralize(course.subjects.length) } %>
+            <% row.with_value { course.chosen_subjects } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_subjects_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "subjects"
             ) %>
           <% end %>
 
           <% if course.applicable_for_engineers_teach_physics? %>
-            <% summary_list.row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
-              <% row.key { "Engineers Teach Physics" } %>
-              <% row.value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
-              <% row.action(
+            <% summary_list.with_row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row| %>
+              <% row.with_key { "Engineers Teach Physics" } %>
+              <% row.with_value { course.is_engineers_teach_physics? ? "Yes" : "No" } %>
+              <% row.with_action(
                 href: new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(skip_languages_goto_confirmation: true)),
                 visually_hidden_text: "Engineers Teach Physics"
               ) %>
             <% end %>
           <% end %>
 
-          <% summary_list.row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
-            <% row.key { "Age range" } %>
-            <% row.value { course.age_range } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__age_range" } }) do |row| %>
+            <% row.with_key { "Age range" } %>
+            <% row.with_value { course.age_range } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_age_range_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "age range"
             ) %>
           <% end %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
-          <% row.key { "Qualification" } %>
-          <% row.value { course.outcome } %>
-          <% row.action(
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__outcome" } }) do |row| %>
+          <% row.with_key { "Qualification" } %>
+          <% row.with_value { course.outcome } %>
+          <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_outcome_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "outcome"
           ) %>
         <% end %>
 
         <% if @provider.accredited_body? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
-            <% row.key { "Apprenticeship" } %>
-            <% row.value { course.apprenticeship } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
+            <% row.with_key { "Apprenticeship" } %>
+            <% row.with_value { course.apprenticeship } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
               visually_hidden_text: "if apprenticeship"
             ) %>
           <% end %>
         <% else %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
-            <% row.key { "Funding type" } %>
-            <% row.value { course.funding } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+            <% row.with_key { "Funding type" } %>
+            <% row.with_value { course.funding } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
               visually_hidden_text: "if funding type"
             ) %>
           <% end %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
-          <% row.key { "Full time or part time" } %>
-          <% row.value { course.study_mode&.humanize } %>
-          <% row.action(
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
+          <% row.with_key { "Full time or part time" } %>
+          <% row.with_value { course.study_mode&.humanize } %>
+          <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_study_mode_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "if full or part time"
           ) %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
-          <% row.key { "Location".pluralize(course.sites.length) } %>
-          <% row.value do %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
+          <% row.with_key { "Location".pluralize(course.sites.length) } %>
+          <% row.with_value do %>
             <% if course.sites.nil? || course.sites.empty? %>
               <span class="app-!-colour-muted">None</span>
             <% elsif course.sites.size == 1 %>
@@ -124,20 +124,20 @@
             <% end %>
           <% end %>
           <% if @course.provider.sites.count > 1 %>
-            <% row.action(
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_locations_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "locations"
             ) %>
           <% else %>
-            <% row.action %>
+            <% row.with_action %>
           <% end %>
         <% end %>
 
         <% unless @provider.accredited_body? || course.is_further_education? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__accredited_body" } }) do |row| %>
-            <% row.key { "Accredited body" } %>
-            <% row.value { course.accrediting_provider.provider_name } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__accredited_body" } }) do |row| %>
+            <% row.with_key { "Accredited body" } %>
+            <% row.with_value { course.accrediting_provider.provider_name } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_accredited_body_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "accredited body"
             ) %>
@@ -145,10 +145,10 @@
         <% end %>
 
         <% if course.is_fee_based? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
-            <% row.key { "Student visas" } %>
-            <% row.value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
+            <% row.with_key { "Student visas" } %>
+            <% row.with_value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "student visa sponsorship"
             ) %>
@@ -156,44 +156,44 @@
         <% end %>
 
         <% if course.school_direct_salaried_training_programme? || course.pg_teaching_apprenticeship? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__skilled_worker_visa_sponsorship" } }) do |row| %>
-            <% row.key { "Skilled Worker visas" } %>
-            <% row.value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
-            <% row.action(
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__skilled_worker_visa_sponsorship" } }) do |row| %>
+            <% row.with_key { "Skilled Worker visas" } %>
+            <% row.with_value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
+            <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "skilled worker visa sponsorship"
             ) %>
           <% end %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
-          <% row.key { "Applications open date" } %>
-          <% row.value do %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row| %>
+          <% row.with_key { "Applications open date" } %>
+          <% row.with_value do %>
             <% if course.applications_open_from == @recruitment_cycle.application_start_date %>
               As soon as the course is on Find (recommended)
             <% else %>
               <%= l(course.applications_open_from&.to_date) %>
             <% end %>
           <% end %>
-          <% row.action(
+          <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_applications_open_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "date applications open"
           ) %>
         <% end %>
 
-        <% summary_list.row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
-          <% row.key { "Course start date" } %>
-          <% row.value { course.start_date.present? ? l(course.start_date&.to_date, format: :short) : nil } %>
-          <% row.action(
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__start_date" } }) do |row| %>
+          <% row.with_key { "Course start date" } %>
+          <% row.with_value { course.start_date.present? ? l(course.start_date&.to_date, format: :short) : nil } %>
+          <% row.with_action(
             href: new_publish_provider_recruitment_cycle_courses_start_date_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
             visually_hidden_text: "date course starts"
           ) %>
         <% end %>
 
         <% if course.gcse_subjects_required.any? && @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__entry_requirements" } }) do |row| %>
-            <% row.key { "UCAS Apply: GCSE requirements for applicants" } %>
-            <% row.value do %>
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__entry_requirements" } }) do |row| %>
+            <% row.with_key { "UCAS Apply: GCSE requirements for applicants" } %>
+            <% row.with_value do %>
               <% course.gcse_subjects_required.each do |subject| %>
                 <%= render(
                   partial: "publish/courses/entry_requirements",
@@ -204,7 +204,7 @@
                 ) %>
               <% end %>
             <% end %>
-            <% row.action({
+            <% row.with_action({
               href: new_provider_recruitment_cycle_courses_entry_requirements_path(course.provider.provider_code, course.recruitment_cycle_year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "entry requirements"
             }) %>
@@ -212,12 +212,12 @@
         <% end %>
 
         <% if course.next_cycle? && course.has_fees? %>
-          <% summary_list.row(html_attributes: { data: { qa: "course__allocations" } }) do |row| %>
-            <% row.key { "Allocations" } %>
-            <% row.value do %>
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__allocations" } }) do |row| %>
+            <% row.with_key { "Allocations" } %>
+            <% row.with_value do %>
               Recruitment is not restricted
             <% end %>
-            <% row.action %>
+            <% row.with_action %>
           <% end %>
         <% end %>
       <% end %>

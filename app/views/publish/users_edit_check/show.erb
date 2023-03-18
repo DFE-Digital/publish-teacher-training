@@ -13,22 +13,22 @@
           <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %></h1> </legend>
 
         <%= render GovukComponent::SummaryListComponent.new do |component|
-          component.row do |row|
-            row.key { t("users.first_name") }
-            row.value(text:  @user_form.first_name)
-            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
+          component.with_row do |row|
+            row.with_key { t("users.first_name") }
+            row.with_value(text:  @user_form.first_name)
+            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
           end
 
-          component.row do |row|
-            row.key { t("users.last_name") }
-            row.value(text: @user_form.last_name)
-            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
+          component.with_row do |row|
+            row.with_key { t("users.last_name") }
+            row.with_value(text: @user_form.last_name)
+            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
           end
 
-          component.row do |row|
-            row.key { t("users.email") }
-            row.value(text:  @user_form.email)
-            row.action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "email", visually_hidden_text: t("users.email").downcase)
+          component.with_row do |row|
+            row.with_key { t("users.email") }
+            row.with_value(text:  @user_form.email)
+            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "email", visually_hidden_text: t("users.email").downcase)
           end
         end %>
 

@@ -3,11 +3,10 @@
 module Publish
   module Courses
     class SitesController < PublishController
-      before_action :build_course_params, only: %i[continue]
-
       include CourseBasicDetailConcern
 
       def continue
+        params[:course][:sites_ids].compact_blank!
         super
       end
 
@@ -65,16 +64,6 @@ module Publish
       def set_default_site
         params['course'] ||= {}
         params['course']['sites_ids'] = [@provider.sites.first.id]
-      end
-
-      def build_course_params
-        selected_site_ids = params.dig(:course, :site_statuses_attributes)
-                                  .values
-                                  .select { |field| field['selected'] == '1' }
-                                  .pluck('id')
-
-        params['course']['sites_ids'] = selected_site_ids
-        params['course'].delete('site_statuses_attributes')
       end
 
       def location_params
