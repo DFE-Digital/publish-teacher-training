@@ -222,6 +222,17 @@ en:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     providers:
+      locations:
+        new: "Add location"
+        added: "Location added"
+        another: "Save location and add another"
+        location_name: "Location name"
+        urn: "Unique reference number (URN)"
+        address1: "Address line 1"
+        address2: "Address line 2"
+        address3: "Town or city"
+        address4: "County"
+        postcode: "Postcode"
       users:
         first_name: "First name"
         last_name: "Last name"

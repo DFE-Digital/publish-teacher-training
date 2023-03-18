@@ -13,6 +13,7 @@ namespace :support do
         end
       end
       resources :courses, only: %i[index edit update]
+      resource :check_location, only: %i[show update], controller: 'providers/locations_check', path: 'locations/check'
       resources :locations
       resources :multiple_locations, path: 'locations/multiple'
     end

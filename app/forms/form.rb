@@ -47,6 +47,8 @@ class Form
       Stores::UserStore
     elsif identifier_model.instance_of?(Course) || identifier_model.instance_of?(CourseDecorator)
       Stores::CourseStore
+    else
+      Stores::ProviderStore
     end
   end
 

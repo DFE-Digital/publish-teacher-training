@@ -5,28 +5,36 @@ module Support
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
+      # check this is correct
+      @site = provider.sites.build
+      @location_form = LocationForm.new(provider, @site)
+      @location_form.clear_stash
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = 'Provider not found'
       redirect_to support_providers_path
     end
 
     def new
-      #binding.pry
       @site = provider.sites.build
+      provider
+      @location_form = LocationForm.new(provider, @site)
+      @location_form.clear_stash
     end
 
     def edit
-      provider
-      site
+      # provider
+      @location_form = LocationForm.new(provider, site)
     end
 
     def create
-      @site = provider.sites.build(site_params)
+      provider
+      @site = provider.sites.build
 
-      if @site.save
-        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.created', resource: flash_resource) }
+      @location_form = LocationForm.new(provider, @site, params: site_params)
+      if @location_form.stash
+        redirect_to support_recruitment_cycle_provider_check_location_path
       else
-        render :new
+        render(:new)
       end
     end
 
@@ -55,7 +63,7 @@ module Support
     end
 
     def site_params
-      params.require(:site).permit(
+      params.require(:support_location_form).permit(
         :location_name,
         :urn,
         :code,

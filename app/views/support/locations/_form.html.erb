@@ -1,11 +1,10 @@
-<%= form_with model: [:support, site], local: true, url: form_url, class: "location-form" do |f| %>
-
+<%= form_with model: @location_form, local: true, url: form_url, class: "location-form" do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_text_field :location_name, label: { text: "Name", size: "m" } %>
 
   <%= f.govuk_text_field(:urn,
-    label: { text: "Unique Reference Number (URN)", size: "m" },
+    label: { text: "Unique Reference Number (URN) (optional)", size: "m" },
     hint:
       {
         text: safe_join(
@@ -18,21 +17,20 @@
             )
           ]
         )
-      },
-    ) %>
+      }) %>
 
   <% if site.persisted? %>
     <%= f.govuk_text_field(:code, label: { text: "Location code", size: "m" }, width: 10) %>
   <% end %>
 
   <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
-    <%= f.govuk_text_field(:address1, label: { text: "Building and street" }) %>
+    <%= f.govuk_text_field(:address1, label: { text: "Address line 1" }) %>
 
-    <%= f.govuk_text_field(:address2, label: { hidden: true }) %>
+    <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)" }) %>
 
     <%= f.govuk_text_field(:address3, label: { text: "Town or city" }, width: "two-thirds") %>
 
-    <%= f.govuk_text_field(:address4, label: { text: "County" }, width: "two-thirds") %>
+    <%= f.govuk_text_field(:address4, label: { text: "County (optional)" }, width: "two-thirds") %>
 
     <%= f.govuk_text_field(:postcode, width: 10) %>
   <% end %>
