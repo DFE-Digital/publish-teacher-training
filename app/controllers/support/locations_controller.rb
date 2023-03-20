@@ -72,8 +72,7 @@ module Support
     end
 
     def reset_csv_schools_forms
-      ParsedCSVSchoolsForm.new(provider).clear_stash
-      RawCSVSchoolsForm.new(provider).clear_stash
+      [ParsedCSVSchoolsForm.new(provider), RawCSVSchoolsForm.new(provider)].each(&:clear_stash)
     end
   end
 end
