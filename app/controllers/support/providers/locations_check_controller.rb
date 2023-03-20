@@ -9,9 +9,9 @@ module Support
       end
 
       def update
-        # binding.pry
         @site = provider.sites.build
         @location_form = LocationForm.new(provider, @site)
+        # Should we do something else here?
         return unless @location_form.save!
 
         if params.keys.include?('another')
