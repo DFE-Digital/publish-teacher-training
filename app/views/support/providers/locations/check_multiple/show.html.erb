@@ -12,7 +12,7 @@
         <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.multiple_locations.check") %> </h1> </legend>
         <% @school_details.each.with_index(1) do |school_detail, position| %>
           <%= govuk_summary_card(title: "Location #{position}") do |card|
-                card.with_action { govuk_link_to("Change", support_recruitment_cycle_provider_locations_multiple_new_path(position:)) }
+                card.with_action { govuk_link_to("Change", support_recruitment_cycle_provider_locations_multiple_new_path(position:, goto_confirmation: true)) }
                 card.with_summary_list(rows: [{ key: { text: "Name" }, value: { text: school_detail.location_name } },
                                               { key: { text: "Unique reference number (URN)" }, value: { classes: ("govuk-hint" if school_detail.urn.blank?), text: (school_detail.urn.presence || "Not entered") } },
                                               { key: { text: "Address" }, value: { text: school_detail.decorate.full_address_on_seperate_lines } }])

@@ -13,15 +13,14 @@ module Support
           site.assign_attributes(site_params)
 
           if site.valid?
-
             school_details[current_site_index] = site
 
             ParsedCSVSchoolsForm.new(provider, params: { school_details: }).stash
 
-            if position < max
-              redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: position + 1)
-            elsif position == max
+            if position == max || goto_confirmation?
               redirect_to support_recruitment_cycle_provider_locations_multiple_check_path
+            elsif position < max
+              redirect_to support_recruitment_cycle_provider_locations_multiple_new_path(position: position + 1)
             end
           else
             max
@@ -36,16 +35,18 @@ module Support
         end
 
         def site_params
-          params.require(:site).permit(
-            :location_name,
-            :urn,
-            :code,
-            :address1,
-            :address2,
-            :address3,
-            :address4,
-            :postcode
-          )
+          params.require(:site)
+                .except(:goto_confirmation)
+                .permit(
+                  :location_name,
+                  :urn,
+                  :code,
+                  :address1,
+                  :address2,
+                  :address3,
+                  :address4,
+                  :postcode
+                )
         end
 
         def provider
@@ -71,6 +72,8 @@ module Support
         def position
           @position ||= params[:position].to_i
         end
+
+        def goto_confirmation? = params.dig(:site, :goto_confirmation) == 'true'
       end
     end
   end
