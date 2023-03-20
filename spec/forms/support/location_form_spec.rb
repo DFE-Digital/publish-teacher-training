@@ -11,6 +11,7 @@ describe Support::LocationForm, type: :model do
     {
       location_name: 'The location',
       address1: 'My street',
+      address3: 'My town',
       postcode: 'TR1 1UN'
     }
   end
@@ -20,6 +21,7 @@ describe Support::LocationForm, type: :model do
 
     it { is_expected.to validate_presence_of(:location_name).with_message('Enter a name') }
     it { is_expected.to validate_presence_of(:address1).with_message('Enter address line 1') }
+    it { is_expected.to validate_presence_of(:address3).with_message('Enter a town or city') }
     it { is_expected.to validate_presence_of(:postcode).with_message('Enter a postcode') }
 
     it { is_expected.not_to allow_values('tr', 'tr11', 'tr11u').for(:postcode).with_message('Enter a real postcode') }
@@ -32,6 +34,7 @@ describe Support::LocationForm, type: :model do
         {
           location_name: location.location_name,
           address1: 'My street',
+          address3: 'My town',
           postcode: 'TR1 1UN'
         }
       end
@@ -49,6 +52,7 @@ describe Support::LocationForm, type: :model do
         expect { subject.save! }
           .to change(location, :location_name).to('The location')
           .and change(location, :address1).to('My street')
+          .and change(location, :address3).to('My town')
           .and change(location, :postcode).to('TR1 1UN')
       end
     end
@@ -60,6 +64,7 @@ describe Support::LocationForm, type: :model do
         expect { subject.save! }.not_to(change(location, :postcode))
         expect { subject.save! }.not_to(change(location, :location_name))
         expect { subject.save! }.not_to(change(location, :address1))
+        expect { subject.save! }.not_to(change(location, :address3))
       end
     end
   end
@@ -77,6 +82,7 @@ describe Support::LocationForm, type: :model do
         {
           location_name: '',
           address1: 'My street',
+          address3: 'My town',
           postcode: 'TR1 1UN'
         }
       end

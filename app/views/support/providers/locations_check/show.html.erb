@@ -12,22 +12,22 @@
       </legend>
 
       <%= render GovukComponent::SummaryListComponent.new do |component|
-            component.row do |row|
-              row.key { t("support.providers.locations.location_name") }
-              row.value(text:  @location_form.location_name)
-              row.action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "location_name", visually_hidden_text: t("support.providers.locations.location_name"))
+            component.with_row do |row|
+              row.with_key { t("support.providers.locations.location_name") }
+              row.with_value(text:  @location_form.location_name)
+              row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "location_name", visually_hidden_text: t("support.providers.locations.location_name"))
             end
 
-            component.row do |row|
-              row.key { t("support.providers.locations.urn") }
-              row.value(text: @location_form.urn)
-              row.action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "urn", visually_hidden_text: t("support.providers.locations.urn"))
+            component.with_row do |row|
+              row.with_key { t("support.providers.locations.urn") }
+              row.with_value(text: @location_form.urn)
+              row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "urn", visually_hidden_text: t("support.providers.locations.urn"))
             end
 
-            component.row do |row|
-              row.key { t("support.providers.locations.address") }
-              row.value(text: @location_form.full_address)
-              row.action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "address", visually_hidden_text: t("support.providers.locations.address"))
+            component.with_row do |row|
+              row.with_key { t("support.providers.locations.address") }
+              row.with_value(text: @location_form.full_address)
+              row.with_action(text: t("change"), href: new_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider), classes: "address", visually_hidden_text: t("support.providers.locations.address"))
             end
           end %>
     </fieldset>

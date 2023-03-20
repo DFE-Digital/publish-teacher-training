@@ -16,6 +16,7 @@ module Support
 
     validates :location_name,
               :address1,
+              :address3,
               :postcode,
               presence: true
     validates :postcode, postcode: true
