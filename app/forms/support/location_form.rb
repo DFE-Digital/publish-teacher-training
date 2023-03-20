@@ -14,9 +14,13 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    validates :location_name, presence: true
-    validates :address1, presence: true
-    validates :postcode, presence: true
+    validates :location_name,
+              :address1,
+              :postcode,
+              presence: true
+    validates :postcode, postcode: true
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: I18n.t('activemodel.errors.models.support/location_form.attributes.urn.format') }
+    validate :site_name_is_unique
 
     # Do we want to do this?
     # def display_urn
@@ -28,6 +32,12 @@ module Support
     end
 
     private
+
+    def site_name_is_unique
+      return unless Site.exists?(location_name:)
+
+      errors.add(:location_name, 'Name is taken')
+    end
 
     def form_store_key
       :location_details

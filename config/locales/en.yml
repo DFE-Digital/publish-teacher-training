@@ -458,6 +458,17 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/location_form:
+          attributes:
+            location_name:
+              blank: "Enter a name"
+            address1:
+              blank: "Enter address line 1"
+            postcode:
+              blank: "Enter a postcode"
+              invalid: "Enter a real postcode"
+            urn:
+              format: "Site URN must be 5 or 6 numbers"
         support/raw_csv_schools_form:
           blank: "Enter location details"
         publish/course_information_form:
