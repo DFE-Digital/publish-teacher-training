@@ -17,7 +17,7 @@ namespace :support do
       resource :locations do
         scope module: :providers do
           scope module: :locations do
-            resource :multiple, only: %i[new create], on: :member, controller: 'multiple'  do
+            resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
               resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
               resource :check, only: %i[show update], controller: 'check_multiple'
             end
