@@ -48,6 +48,13 @@ feature 'Multiple locations' do
     and_i_see_that_the_text_field_has_been_prepopulated('Name', 'Tottenham Hotspur')
     and_i_submit_a_valid_form
     and_i_am_redirected_to_the_multiple_location_confirm_page
+    and_i_click_change
+    and_the_text_field_is_prepopulated
+    and_i_click_back
+    and_i_am_redirected_to_the_multiple_location_confirm_page
+    and_i_click_back
+    and_i_submit_the_form
+    and_i_am_redirected_to_the_multiple_location_confirm_page
     and_the_database_should_not_have_updated_with_the_new_location
 
     when_i_click_back
@@ -101,6 +108,14 @@ feature 'Multiple locations' do
   scenario 'feature flag off' do
     when_i_visit_a_provider_locations_page
     then_i_should_not_see_the_add_multiple_locations_link
+  end
+
+  def and_i_click_change
+    page.all('.govuk-summary-card__action')[1].click_link
+  end
+
+  def and_the_text_field_is_prepopulated
+    expect(page).to have_field('Name', with: 'Tottenham Hotspur')
   end
 
   def then_the_database_should_have_updated_with_the_new_locations
@@ -211,4 +226,5 @@ feature 'Multiple locations' do
   alias_method :and_i_submit_a_valid_form, :given_i_submit_a_valid_form
   alias_method :and_i_see_that_the_text_field_has_been_prepopulated, :then_i_should_see_that_the_text_field_has_been_prepopulated
   alias_method :click_continue, :given_i_submit_an_empty_form
+  alias_method :and_i_submit_the_form, :given_i_submit_an_empty_form
 end
