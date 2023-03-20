@@ -66,6 +66,7 @@ feature "Managing a provider's locations" do
     support_provider_location_create_page.location_form.location_name.set('Acre woods')
     support_provider_location_create_page.location_form.urn.set('12345')
     support_provider_location_create_page.location_form.building_and_street.set('100 Acre Woods')
+    support_provider_location_create_page.location_form.town_or_city.set('London')
     support_provider_location_create_page.location_form.postcode.set('BN1 1AA')
   end
 
