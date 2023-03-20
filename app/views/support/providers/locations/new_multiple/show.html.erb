@@ -14,8 +14,8 @@
               method: :patch,
               url: support_recruitment_cycle_provider_locations_multiple_new_path,
               local: true) do |f| %>
-              
-  <%= f.hidden_field(:goto_confirmation, value: params.dig(:goto_confirmation))%>
+
+  <%= f.hidden_field(:goto_confirmation, value: params[:goto_confirmation]) %>
 
   <%= f.govuk_error_summary %>
 
