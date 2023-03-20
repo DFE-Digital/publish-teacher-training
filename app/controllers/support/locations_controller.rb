@@ -2,8 +2,9 @@
 
 module Support
   class LocationsController < SupportController
+    before_action :reset_csv_schools_forms, only: %i[index]
+
     def index
-      reset_csv_schools_forms
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
     rescue ActiveRecord::RecordNotFound
