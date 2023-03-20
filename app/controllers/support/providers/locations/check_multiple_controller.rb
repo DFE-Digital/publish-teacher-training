@@ -22,7 +22,7 @@ module Support
         end
 
         def save
-          school_details.each(&:save)
+          school_details.each(&:save!)
 
           parsed_csv_school_form.clear_stash
           raw_csv_school_form.clear_stash
