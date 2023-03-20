@@ -104,13 +104,13 @@ feature 'Multiple locations' do
   end
 
   def then_the_database_should_have_updated_with_the_new_locations
-    expect(Site.find_by(location_name: 'Tottenham').present?).to be true
-    expect(Site.find_by(location_name: 'Tottenham Hotspur').present?).to be true
+    expect(Site.exists?(location_name: 'Tottenham')).to be true
+    expect(Site.exists?(location_name: 'Tottenham Hotspur')).to be true
   end
 
   def then_the_database_should_not_have_updated_with_the_new_location
-    expect(Site.find_by(location_name: 'Tottenham').present?).to be false
-    expect(Site.find_by(location_name: 'Tottenham Hotspur').present?).to be false
+    expect(Site.exists?(location_name: 'Tottenham')).to be false
+    expect(Site.exists?(location_name: 'Tottenham Hotspur')).to be false
   end
 
   def and_i_see_the_text_two_locations_added
