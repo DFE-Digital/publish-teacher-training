@@ -45,6 +45,7 @@ feature "Managing a provider's locations", { can_edit_current_and_next_cycles: f
 
     publish_location_new_page.name_field.set 'Some place'
     publish_location_new_page.address1_field.set '123 Test Street'
+    publish_location_new_page.address3_field.set 'London'
     publish_location_new_page.postcode_field.set 'KT8 9AU'
     publish_location_new_page.submit.click
 

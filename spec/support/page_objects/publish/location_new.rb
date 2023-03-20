@@ -12,6 +12,7 @@ module PageObjects
 
       element :name_field, '#publish-location-form-location-name-field'
       element :address1_field, '#publish-location-form-address1-field'
+      element :address3_field, '#publish-location-form-address3-field'
       element :postcode_field, '#publish-location-form-postcode-field'
 
       element :submit, 'button.govuk-button[type="submit"]'
