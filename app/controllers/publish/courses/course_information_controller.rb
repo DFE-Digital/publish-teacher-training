@@ -19,7 +19,12 @@ module Publish
 
         @course_information_form = CourseInformationForm.new(course_enrichment, params: course_information_params)
 
-        if @course_information_form.save!
+        if @course_information_form.save! && goto_preview?
+          course_updated_message('Course information')
+
+          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
+
+        elsif @course_information_form.save! && !goto_preview?
           course_updated_message('Course information')
 
           redirect_to publish_provider_recruitment_cycle_course_path(
@@ -41,6 +46,7 @@ module Publish
       def course_information_params
         params
           .require(:publish_course_information_form)
+          .except(:goto_preview)
           .permit(
             CourseInformationForm::FIELDS
           )
@@ -49,6 +55,8 @@ module Publish
       def course_enrichment
         @course_enrichment ||= course.enrichments.find_or_initialize_draft
       end
+
+      def goto_preview? = params.dig(:publish_course_information_form, :goto_preview) == 'true'
     end
   end
 end

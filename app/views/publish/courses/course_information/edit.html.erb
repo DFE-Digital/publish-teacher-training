@@ -117,6 +117,8 @@
         max_words: 350,
         rows: 15) %>
 
+      <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>
+
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
   </div>
