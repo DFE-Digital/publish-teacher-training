@@ -4,7 +4,7 @@ module PageObjects
   module Publish
     module Courses
       class NewLocations < PageObjects::Base
-        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/locations/new{?query*}'
+        set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/schools/new{?query*}'
 
         element :title, '[data-qa="page-heading"]'
 

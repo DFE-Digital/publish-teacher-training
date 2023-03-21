@@ -6,7 +6,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
       model: @location_form,
-      url: publish_provider_recruitment_cycle_location_path(@location_form.provider_code, @location_form.recruitment_cycle_year, @location_form.site.id),
+      url: publish_provider_recruitment_cycle_school_path(@location_form.provider_code, @location_form.recruitment_cycle_year, @location_form.site.id),
       method: :patch
     ) do |f| %>
 

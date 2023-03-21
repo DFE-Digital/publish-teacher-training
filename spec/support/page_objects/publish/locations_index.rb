@@ -5,7 +5,7 @@ require_relative '../sections/location'
 module PageObjects
   module Publish
     class LocationsIndex < PageObjects::Base
-      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/locations'
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/schools'
 
       sections :locations, Sections::Location, '.location-row'
 

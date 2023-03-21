@@ -189,7 +189,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_am_met_with_the_publish_courses_new_locations_page
-    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/locations/new")
+    expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/schools/new")
   end
 
   def and_i_update_the_locations

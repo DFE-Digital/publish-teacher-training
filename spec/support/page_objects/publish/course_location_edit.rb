@@ -5,7 +5,7 @@ require_relative '../sections/vacancy'
 module PageObjects
   module Publish
     class CourseLocationEdit < PageObjects::Base
-      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/locations'
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/schools'
 
       sections :vacancies, Sections::Vacancy, '.govuk-checkboxes__item'
 

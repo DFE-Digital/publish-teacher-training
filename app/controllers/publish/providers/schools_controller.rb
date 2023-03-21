@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class LocationsController < PublishController
+    class SchoolsController < PublishController
       def index
         authorize provider, :can_list_sites?
 
@@ -25,7 +25,7 @@ module Publish
         @location_form = LocationForm.new(provider.sites.new, params: site_params)
         if @location_form.save!
           flash[:success] = 'Your location has been created'
-          redirect_to publish_provider_recruitment_cycle_locations_path(
+          redirect_to publish_provider_recruitment_cycle_schools_path(
             @location_form.provider_code, @location_form.recruitment_cycle_year
           )
         else
@@ -40,7 +40,7 @@ module Publish
         if @location_form.save!
           course_updated_message('Location details')
 
-          redirect_to publish_provider_recruitment_cycle_locations_path(
+          redirect_to publish_provider_recruitment_cycle_schools_path(
             @location_form.provider_code, @location_form.recruitment_cycle_year
           )
         else

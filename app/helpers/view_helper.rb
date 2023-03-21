@@ -136,9 +136,9 @@ module ViewHelper
       'Select if skilled worker visas can be sponsored' =>
         skilled_worker_visa_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       'You must provide a Unique Reference Number (URN) for all course locations' =>
-        locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
+        schools_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
       'Enter a Unique Reference Number (URN) for all course locations' =>
-        locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
+        schools_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
       'You must provide a UK provider reference number (UKPRN)' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       'You must provide a UK provider reference number (UKPRN) and URN' =>

@@ -55,7 +55,7 @@ feature 'selecting full time or part time or full or part time', { can_edit_curr
   end
 
   def then_i_am_met_with_the_locations_page(study_mode)
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/locations/new#{selected_params(study_mode)}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/schools/new#{selected_params(study_mode)}")
     expect(page).to have_content('Locations')
   end
 

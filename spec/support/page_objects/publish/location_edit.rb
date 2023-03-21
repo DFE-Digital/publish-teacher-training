@@ -5,7 +5,7 @@ require_relative '../sections/location_form'
 module PageObjects
   module Publish
     class LocationEdit < PageObjects::Base
-      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/locations/{location_id}/edit'
+      set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/schools/{location_id}/edit'
       element :error_summary, '.govuk-error-summary'
 
       section :location_form, Sections::LocationForm, '.location-form'

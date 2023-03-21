@@ -106,7 +106,7 @@ module Publish
     def render_locations_messages
       flash[:error] = { id: 'locations-error', message: 'You need to create at least one location before creating a course' }
 
-      redirect_to new_publish_provider_recruitment_cycle_location_path(provider.provider_code, provider.recruitment_cycle_year)
+      redirect_to new_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle_year)
     end
 
     def fetch_course
