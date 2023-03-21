@@ -4,7 +4,7 @@
     <% if course.about_course.present? %>
       <%= markdown(course.about_course) %>
     <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
-      <%= render Find::CoursePreviewMissingInformationComponent.new("Enter course summary", root_path) %>
+      <%= render Find::CoursePreviewMissingInformationComponent.new("Enter course summary", about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
     <% end %>
   </div>
 </div>
