@@ -46,7 +46,7 @@ feature 'Adding location to provider as an admin', { can_edit_current_and_next_c
       given_i_visit_the_support_provider_locations_new_page
       and_i_continue
 
-      # then_it_should_display_the_correct_error_messages
+      then_it_should_display_the_correct_error_messages
     end
   end
 
