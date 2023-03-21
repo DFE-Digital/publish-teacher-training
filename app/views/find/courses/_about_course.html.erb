@@ -3,7 +3,7 @@
   <div data-qa="course__about_course">
     <% if course.about_course.present? %>
       <%= markdown(course.about_course) %>
-    <% else %>
+    <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
       <%= render Find::CoursePreviewMissingInformationComponent.new("Enter course summary", root_path) %>
     <% end %>
   </div>
