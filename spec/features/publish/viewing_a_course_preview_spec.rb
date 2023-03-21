@@ -201,8 +201,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.address4
     )
 
-    expect(publish_course_preview_page).to have_choose_a_training_location_table
-    expect(publish_course_preview_page.choose_a_training_location_table).not_to have_content(
+    expect(publish_course_preview_page).to have_choose_a_training_school_table
+    expect(publish_course_preview_page.choose_a_training_school_table).not_to have_content(
       'Suspended site with vacancies'
     )
 
@@ -214,10 +214,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     ].each.with_index(1) do |site, index|
       name, has_vacancies_string = site
 
-      expect(publish_course_preview_page.choose_a_training_location_table)
+      expect(publish_course_preview_page.choose_a_training_school_table)
         .to have_selector("tbody tr:nth-child(#{index}) strong", text: name)
 
-      expect(publish_course_preview_page.choose_a_training_location_table)
+      expect(publish_course_preview_page.choose_a_training_school_table)
         .to have_selector("tbody tr:nth-child(#{index}) td", text: has_vacancies_string)
     end
 

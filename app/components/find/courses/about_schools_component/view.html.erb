@@ -20,32 +20,32 @@
       <%= markdown(course.how_school_placements_work) %>
 
       <% if course.site_statuses.map(&:site).uniq.many? %>
-          <h3 class="govuk-heading-m">Locations</h3>
-          <p class="govuk-body">You can select one of the following locations when you apply to indicate a preferred placement.</p>
-          <table class="govuk-table app-table--vertical-align-middle" data-qa="course__choose_a_training_location">
-            <caption class="govuk-visually-hidden">List of locations and vacancies</caption>
-            <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">Location</th>
-              <th class="govuk-table__header" scope="col">Vacancies</th>
-            </tr>
-            </thead>
+        <h3 class="govuk-heading-m">Schools</h3>
+        <p class="govuk-body">You can select one of the following schools to indicate a preferred placement when you apply.</p>
+        <table class="govuk-table app-table--vertical-align-middle" data-qa="course__choose_a_training_school">
+          <caption class="govuk-visually-hidden">List of schools and vacancies</caption>
+          <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">School</th>
+            <th class="govuk-table__header" scope="col">Vacancies</th>
+          </tr>
+          </thead>
 
-            <tbody class="govuk-table__body">
-            <% course.preview_site_statuses.each do |site_status| %>
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                  <strong><%= smart_quotes(site_status.site.location_name) %></strong>
-                  <br>
-                  <%= smart_quotes(site_status.site.decorate.full_address) %>
-                </td>
-                <td class="govuk-table__cell">
-                  <%= site_status.has_vacancies? ? "Yes" : "No" %>
-                </td>
-              </tr>
-            <% end %>
-            </tbody>
-          </table>
+          <tbody class="govuk-table__body">
+          <% course.preview_site_statuses.each do |site_status| %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <strong><%= smart_quotes(site_status.site.location_name) %></strong>
+                <br>
+                <%= smart_quotes(site_status.site.decorate.full_address) %>
+              </td>
+              <td class="govuk-table__cell">
+                <%= site_status.has_vacancies? ? "Yes" : "No" %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
       <% end %>
 
     <% else %>
