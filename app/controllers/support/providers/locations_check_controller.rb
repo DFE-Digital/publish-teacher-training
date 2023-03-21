@@ -3,14 +3,11 @@
 module Support
   module Providers
     class LocationsCheckController < SupportController
-      def show
-        site = provider.sites.build
-        @location_form = LocationForm.new(provider, site)
-      end
+      before_action :build_site_and_form
+
+      def show; end
 
       def update
-        @site = provider.sites.build
-        @location_form = LocationForm.new(provider, @site)
         if @location_form.save!
           if params.keys.include?('another')
             redirect_to new_support_recruitment_cycle_provider_location_path
@@ -24,6 +21,11 @@ module Support
       end
 
       private
+
+      def build_site_and_form
+        site = provider.sites.build
+        @location_form = LocationForm.new(provider, site)
+      end
 
       def provider
         @provider ||= Provider.find(params[:provider_id])

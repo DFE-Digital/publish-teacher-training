@@ -2,35 +2,25 @@
 
 module Support
   class LocationsController < SupportController
+    before_action :build_site, only: %i[index new create]
+    before_action :new_form, only: %i[index new]
+
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
-      # check this is correct
-      @site = provider.sites.build
-      @location_form = LocationForm.new(provider, @site)
-      @location_form.clear_stash
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = 'Provider not found'
       redirect_to support_providers_path
     end
 
-    def new
-      @site = provider.sites.build
-      provider
-      @location_form = LocationForm.new(provider, @site)
-      @location_form.clear_stash
-    end
+    def new; end
 
     def edit
       site
       provider
-      # @location_form = LocationForm.new(provider, site)
     end
 
     def create
-      provider
-      @site = provider.sites.build
-
       @location_form = LocationForm.new(provider, @site, params: site_params)
       if @location_form.stash
         redirect_to support_recruitment_cycle_provider_check_location_path
@@ -88,6 +78,15 @@ module Support
         :address4,
         :postcode
       )
+    end
+
+    def build_site
+      @site = provider.sites.build
+    end
+
+    def new_form
+      @location_form = LocationForm.new(provider, @site)
+      @location_form.clear_stash
     end
 
     def site
