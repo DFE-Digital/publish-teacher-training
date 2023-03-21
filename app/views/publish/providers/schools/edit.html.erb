@@ -1,12 +1,12 @@
-<% page_title = @location_form.site.location_name %>
-<% content_for :page_title, title_with_error_prefix(page_title, @location_form.errors.any?) %>
+<% page_title = @school_form.site.location_name %>
+<% content_for :page_title, title_with_error_prefix(page_title, @school_form.errors.any?) %>
 <%= content_for :before_content, render_breadcrumbs(:edit_site) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-      model: @location_form,
-      url: publish_provider_recruitment_cycle_school_path(@location_form.provider_code, @location_form.recruitment_cycle_year, @location_form.site.id),
+      model: @school_form,
+      url: publish_provider_recruitment_cycle_school_path(@school_form.provider_code, @school_form.recruitment_cycle_year, @school_form.site.id),
       method: :patch
     ) do |f| %>
 
@@ -16,9 +16,9 @@
         <%= page_title %>
       </h1>
 
-      <p class="govuk-body">When you’ve added a location, you can assign it to a course in the ‘Basic details’ tab of the course. Candidates will see a list of locations on the course page on Find.</p>
+      <p class="govuk-body">When you’ve added a school, you can assign it to a course in the ‘Basic details’ tab of the course. Candidates will see a list of schools on the course page on Find.</p>
       <%= render "form", f: %>
-      <%= f.govuk_submit "Save and publish", data: { qa: "location__publish-changes" } %>
+      <%= f.govuk_submit "Save and publish" %>
     <% end %>
   </div>
 </div>

@@ -6,27 +6,27 @@ module Publish
       def index
         authorize provider, :can_list_sites?
 
-        @locations = provider.sites.sort_by(&:location_name)
+        @schools = provider.sites.sort_by(&:location_name)
       end
 
       def new
         authorize provider, :can_create_sites?
-        @location_form = LocationForm.new(provider.sites.new)
+        @school_form = SchoolForm.new(provider.sites.new)
       end
 
       def edit
         authorize site, :update?
-        @location_form = LocationForm.new(site)
+        @school_form = SchoolForm.new(site)
       end
 
       def create
         authorize provider, :can_create_sites?
 
-        @location_form = LocationForm.new(provider.sites.new, params: site_params)
-        if @location_form.save!
-          flash[:success] = 'Your location has been created'
+        @school_form = SchoolForm.new(provider.sites.new, params: site_params)
+        if @school_form.save!
+          flash[:success] = 'Your school has been created'
           redirect_to publish_provider_recruitment_cycle_schools_path(
-            @location_form.provider_code, @location_form.recruitment_cycle_year
+            @school_form.provider_code, @school_form.recruitment_cycle_year
           )
         else
           render :new
@@ -35,13 +35,13 @@ module Publish
 
       def update
         authorize provider, :update?
-        @location_form = LocationForm.new(site, params: site_params)
+        @school_form = SchoolForm.new(site, params: site_params)
 
-        if @location_form.save!
-          course_updated_message('Location details')
+        if @school_form.save!
+          course_updated_message('School details')
 
           redirect_to publish_provider_recruitment_cycle_schools_path(
-            @location_form.provider_code, @location_form.recruitment_cycle_year
+            @school_form.provider_code, @school_form.recruitment_cycle_year
           )
         else
           render :edit
@@ -55,7 +55,7 @@ module Publish
       end
 
       def site_params
-        params.require(:publish_location_form).permit(LocationForm::FIELDS)
+        params.require(:publish_school_form).permit(SchoolForm::FIELDS)
       end
     end
   end

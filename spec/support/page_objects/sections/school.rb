@@ -4,7 +4,7 @@ require_relative 'base'
 
 module PageObjects
   module Sections
-    class Location < PageObjects::Sections::Base
+    class School < PageObjects::Sections::Base
       element :name, '.name'
       element :code, '.code'
       element :urn, '.urn'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class LocationForm < BaseModelForm
+  class SchoolForm < BaseModelForm
     FIELDS = %i[
       location_name
       urn

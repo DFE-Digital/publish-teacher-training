@@ -41,7 +41,7 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_see_the_locations_link
-    expect(publish_primary_nav_page).to have_locations
+    expect(publish_primary_nav_page).to have_schools
   end
 
   def and_i_should_see_the_courses_link

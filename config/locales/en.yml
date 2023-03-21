@@ -52,7 +52,7 @@ en:
       expired: "Magic link has expired, please request a new one"
   navigation_bar:
     courses: "Courses"
-    locations: "Locations"
+    schools: "Schools"
     users: "Users"
     accredited_bodies: "Accredited bodies"
     organisation_details: "Organisation details"

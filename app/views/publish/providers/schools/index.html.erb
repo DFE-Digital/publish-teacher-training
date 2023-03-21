@@ -1,4 +1,4 @@
-<% page_title = "Locations" %>
+<% page_title = "Schools" %>
 
 <% content_for :page_title, page_title %>
 <%= content_for :before_content, render_breadcrumbs(:sites) %>
@@ -9,28 +9,28 @@
       <%= page_title %>
     </h1>
 
-<p class="govuk-body">You can assign locations to a course by going to the ‘Basic details’ tab in ‘Courses’.</p>
+<p class="govuk-body">You can assign schools to a course by going to the ‘Basic details’ tab in ‘Courses’.</p>
 
-    <p class="govuk-body">Once a location has been assigned to a course, candidates will be able to:</p>
+    <p class="govuk-body">Once a school has been assigned to a course, candidates will be able to:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>see a list of assigned locations on the course page on Find</li>
-      <li>select their preferred location when applying for a course</li>
+      <li>see a list of assigned schools on the course page on Find</li>
+      <li>select their preferred school when applying for a course</li>
     </ul>
 
     <table class="govuk-table app-table--vertical-align-middle">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Name</th>
-          <th class="govuk-table__header" scope="col">Location code</th>
+          <th class="govuk-table__header" scope="col">School code</th>
           <% if urn_required?(@recruitment_cycle.year.to_i) %>
             <th class="govuk-table__header" scope="col">URN</th>
           <% end %>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        <%= render partial: "location", collection: @locations %>
+        <%= render partial: "school", collection: @schools %>
       </tbody>
     </table>
-    <%= govuk_button_link_to "Add location", new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
+    <%= govuk_button_link_to "Add school", new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
   </div>
 </div>

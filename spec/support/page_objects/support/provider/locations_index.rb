@@ -8,7 +8,7 @@ module PageObjects
 
         element :add_location, '.govuk-button', text: 'Add location'
 
-        sections :locations, Sections::Location, '.location-row'
+        sections :locations, Sections::School, '.location-row'
       end
     end
   end
