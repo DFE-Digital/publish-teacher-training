@@ -16,6 +16,21 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  context 'with empty sections' do
+    before do
+      allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
+    end
+
+    scenario 'blank course summary' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_enter_course_summary
+      and_i_submit_a_valid_form
+      and_i_see_the_correct_banner_and_text
+      then_i_should_be_back_on_the_preview_page
+    end
+  end
+
   context 'bursaries and scholarships is not announced' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated(user: user_with_fee_based_course)
@@ -260,10 +275,66 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
   end
 
+  def user_with_no_course_enrichments
+    site1 = build(:site, location_name: 'Running site with vacancies')
+
+    site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
+
+    sites = [site1]
+    site_statuses = [site_status1]
+
+    accrediting_provider = build(:provider)
+
+    course_subject = find_or_create(:secondary_subject, :mathematics)
+
+    course = build(
+      :course, :secondary, :fee_type_based, accrediting_provider:,
+                                            site_statuses:, enrichments: [],
+                                            degree_grade: 'two_one',
+                                            degree_subject_requirements: 'Maths A level',
+                                            subjects: [course_subject]
+    )
+    accrediting_provider_enrichment = {
+      'UcasProviderCode' => accrediting_provider.provider_code,
+      'Description' => Faker::Lorem.sentence
+    }
+
+    provider = build(
+      :provider, sites:, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+    )
+
+    create(
+      :user,
+      providers: [
+        provider
+      ]
+    )
+  end
+
   def when_i_visit_the_publish_course_preview_page
     publish_course_preview_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
+  end
+
+  def and_i_click_enter_course_summary
+    click_link 'Enter course summary'
+  end
+
+  def and_i_see_the_correct_banner_and_text
+    expect(page).to have_text 'This is a preview of how your course will appear on Find.'
+    expect(page).to have_text 'great course'
+  end
+
+  def then_i_should_be_back_on_the_preview_page
+    expect(page).to have_current_path "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/preview"
+  end
+
+  def and_i_submit_a_valid_form
+    fill_in 'About this course',   with: 'great course'
+    fill_in 'School placements',   with: 'great placement'
+
+    click_button 'Update course information'
   end
 
   def provider
