@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 feature 'Viewing a findable course' do
+  include PublishHelper
+
   before do
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
   end
@@ -288,7 +290,7 @@ feature 'Viewing a findable course' do
     expect(find_course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
 
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
-      expect(find_course_show_page).to have_content(site.decorate.full_address)
+      expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
     end
 
     expect(find_course_show_page).to have_course_advice
