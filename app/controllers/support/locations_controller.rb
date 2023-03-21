@@ -2,6 +2,8 @@
 
 module Support
   class LocationsController < SupportController
+    before_action :reset_csv_schools_forms, only: %i[index]
+
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
@@ -68,6 +70,10 @@ module Support
 
     def site
       @site ||= provider.sites.find(params[:id])
+    end
+
+    def reset_csv_schools_forms
+      [ParsedCSVSchoolsForm.new(provider), RawCSVSchoolsForm.new(provider)].each(&:clear_stash)
     end
   end
 end
