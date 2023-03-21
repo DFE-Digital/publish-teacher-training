@@ -22,8 +22,9 @@ module Support
     end
 
     def edit
-      # provider
-      @location_form = LocationForm.new(provider, site)
+      site
+      provider
+      # @location_form = LocationForm.new(provider, site)
     end
 
     def create
@@ -39,7 +40,7 @@ module Support
     end
 
     def update
-      if site.update(site_params)
+      if site.update(edit_site_params)
         redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: flash_resource) }
       else
         render :edit
@@ -64,6 +65,20 @@ module Support
 
     def site_params
       params.require(:support_location_form).permit(
+        :location_name,
+        :urn,
+        :code,
+        :address1,
+        :address2,
+        :address3,
+        :address4,
+        :postcode
+      )
+    end
+
+    # TODO: remove this when we align the edit form
+    def edit_site_params
+      params.require(:site).permit(
         :location_name,
         :urn,
         :code,

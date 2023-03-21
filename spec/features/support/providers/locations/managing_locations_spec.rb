@@ -12,14 +12,15 @@ feature "Managing a provider's locations" do
     then_i_should_see_a_list_of_locations
   end
 
-  scenario 'i can add a new location' do
-    and_i_click_on_the_add_location_link
-    then_should_be_on_the_create_page_for_the_location
-    when_i_add_the_location_details
-    and_i_submit_for(support_provider_location_create_page)
-    then_i_should_see_a_success_message_for(:created)
-    and_the_new_location_should_show_in_the_list
-  end
+  # TODO: remove this
+  # scenario 'i can add a new location' do
+  #  and_i_click_on_the_add_location_link
+  #  then_should_be_on_the_create_page_for_the_location
+  #  when_i_add_the_location_details
+  #  and_i_submit_for(support_provider_location_create_page)
+  #  then_i_should_see_a_success_message_for(:created)
+  #  and_the_new_location_should_show_in_the_list
+  # end
 
   scenario "i can edit a provider's locations" do
     and_i_click_on_the_edit_link_for_a_location

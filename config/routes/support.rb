@@ -13,8 +13,8 @@ namespace :support do
         end
       end
       resources :courses, only: %i[index edit update]
-      resource :check_location, only: %i[show update], controller: 'providers/locations_check', path: 'locations/check'
       resources :locations
+      # resource :check_location, only: %i[show update], controller: 'providers/locations_check', path: 'locations/check'
       resource :locations do
         resource :multiple, only: %i[new create], on: :member, controller: 'providers/locations/multiple' do
           resources :new, param: :position, only: %i[show update], controller: 'providers/locations/new_multiple'
