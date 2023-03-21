@@ -2,6 +2,7 @@
 
 module Support
   class LocationForm < Form
+    MAIN_SITE = 'main site'
     FIELDS = %i[
       location_name
       urn
@@ -30,7 +31,12 @@ module Support
     # end
 
     def full_address
-      [address1, address2, address3, address4, postcode].select(&:present?).join('<br>').html_safe
+      address = [address1, address2, address3, address4, postcode]
+      address.unshift(location_name) unless location_name.downcase == MAIN_SITE
+
+      return '' if address.all?(&:blank?)
+
+      address.select(&:present?).join('<br>').html_safe
     end
 
     private
