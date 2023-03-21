@@ -1,6 +1,10 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-about">Course summary</h2>
   <div data-qa="course__about_course">
-    <%= render Find::CoursePreviewMissingInformationComponent.new("Enter course summary", root_path) %>
+    <% if course.about_course.present? %>
+      <%= markdown(course.about_course) %>
+    <% else %>
+      <%= render Find::CoursePreviewMissingInformationComponent.new("Enter course summary", root_path) %>
+    <% end %>
   </div>
 </div>
