@@ -31,6 +31,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_see_the_correct_banner_and_text
       then_i_should_be_back_on_the_preview_page
     end
+
+    scenario 'blank school placements' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_enter_details_about_school_placements
+      and_i_click_back
+      and_i_click_enter_details_about_school_placements
+      and_i_submit_a_valid_form
+      and_i_see_the_correct_banner_and_text
+      then_i_should_be_back_on_the_preview_page
+    end
   end
 
   context 'bursaries and scholarships is not announced' do
@@ -321,6 +332,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_enter_course_summary
     click_link 'Enter course summary'
+  end
+
+  def and_i_click_enter_details_about_school_placements
+    click_link 'Enter details about school placements'
   end
 
   def and_i_see_the_correct_banner_and_text
