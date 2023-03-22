@@ -1,13 +1,21 @@
 <%= render PageTitle.new(title: t("support.providers.multiple_locations.show", position: params[:position], max: @max)) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
+  <% if params.dig(:goto_confirmation) %>
+    <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_multiple_check_path) %>
+  <% elsif params[:position] == "1" %>
+    <%= govuk_back_link_to(new_support_recruitment_cycle_provider_locations_multiple_path) %>
+  <% else %>
+    <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_multiple_new_path(position: params[:position].to_i - 1)) %>
+  <% end %>
 <% end %>
 
 <%= form_with(model: @site,
               method: :patch,
               url: support_recruitment_cycle_provider_locations_multiple_new_path,
               local: true) do |f| %>
+
+  <%= f.hidden_field(:goto_confirmation, value: params[:goto_confirmation]) %>
 
   <%= f.govuk_error_summary %>
 
@@ -24,7 +32,7 @@
                                width: 10) %>
 
         <p class="govuk-body govuk-!-margin-bottom-7">
-          <%= t("links.urn_html").html_safe %>
+          <%= t("links.urn_html") %>
         </p>
 
         <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
@@ -43,7 +51,7 @@
 <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), new_support_recruitment_cycle_provider_locations_multiple_path) %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_locations_path) %>
     </p>
   </div>
 </div>
