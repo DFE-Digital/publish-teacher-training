@@ -23,9 +23,12 @@ class Site < ApplicationRecord
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,
             :address1,
-            :address3,
             :postcode,
             presence: true
+
+  # NOTE: Existing dataset causing cascading issues (from site_status/course) hence it is enforced independently differently
+  validates :address3, presence: true, on: %i[create]
+
   validates :postcode, postcode: true
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false, conditions: -> { where(discarded_at: nil) } },
                    format: { with: /\A[A-Z0-9-]+\z/, message: 'Site code must contain only A-Z, 0-9 or -' },
