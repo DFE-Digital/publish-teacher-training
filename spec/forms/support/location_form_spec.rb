@@ -6,7 +6,7 @@ describe Support::LocationForm, type: :model do
   subject { described_class.new(provider, location, params:) }
 
   let(:provider) { create(:provider) }
-  let(:location) { create(:site) }
+  let(:location) { provider.sites.build }
   let(:params) do
     {
       location_name: 'The location',
@@ -29,10 +29,11 @@ describe Support::LocationForm, type: :model do
 
     it { is_expected.not_to allow_values('12', '123', '1234', 'qwert').for(:urn).with_message('Site URN must be 5 or 6 numbers') }
 
-    context 'with existing Site name' do
+    context 'with existing provider.sites location_name' do
+      let!(:location1) { create(:site, provider:, location_name: 'Hogwarts') }
       let(:params) do
         {
-          location_name: location.location_name,
+          location_name: location1.location_name,
           address1: 'My street',
           address3: 'My town',
           postcode: 'TR1 1UN'
