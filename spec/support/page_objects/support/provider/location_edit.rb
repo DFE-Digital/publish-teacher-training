@@ -7,7 +7,7 @@ module PageObjects
         set_url '/support/{recruitment_cycle_year}/providers/{provider_id}/locations/{location_id}/edit'
         element :error_summary, '.govuk-error-summary'
 
-        section :location_form, Sections::LocationForm, '.location-form'
+        section :location_form, Sections::EditLocationForm, '.location-form'
 
         element :submit, 'button.govuk-button[type="submit"]', text: 'Update'
         element :delete_record, 'button.govuk-button[type="submit"]', text: 'Delete this location'

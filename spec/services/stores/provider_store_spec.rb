@@ -6,6 +6,6 @@ require_relative 'shared_examples/store'
 
 module Stores
   describe ProviderStore do
-    include_examples 'store', :provider, %i[raw_csv_schools parsed_csv_schools]
+    include_examples 'store', :provider, %i[raw_csv_schools parsed_csv_schools location_details]
   end
 end

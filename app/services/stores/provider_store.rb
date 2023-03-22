@@ -5,6 +5,7 @@ module Stores
     FORM_STORE_KEYS = %i[
       raw_csv_schools
       parsed_csv_schools
+      location_details
     ].freeze
 
     def store_keys
