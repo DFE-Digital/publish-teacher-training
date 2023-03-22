@@ -18,3 +18,4 @@ use_ssl: true
 
 features:
   add_multiple_locations: true
+  course_preview_missing_information: true
