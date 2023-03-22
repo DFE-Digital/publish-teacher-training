@@ -248,6 +248,7 @@ en:
       delete: "Delete this %{resource}"
     update_record: "Update"
     create_record: "Create"
+    continue: "Continue"
   activerecord:
     attributes:
       course:
