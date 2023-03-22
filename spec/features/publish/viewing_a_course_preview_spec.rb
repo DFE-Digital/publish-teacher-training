@@ -25,6 +25,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
       and_i_click_enter_course_summary
+      and_i_click_back
+      and_i_click_enter_course_summary
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner_and_text
       then_i_should_be_back_on_the_preview_page
@@ -335,6 +337,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     fill_in 'School placements',   with: 'great placement'
 
     click_button 'Update course information'
+  end
+
+  def and_i_click_back
+    click_link 'Back'
   end
 
   def provider
