@@ -57,5 +57,9 @@ module ManageCoursesBackend
 
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
+
+    config.to_prepare do
+      require_dependency 'rails_semantic_logger/active_job/log_subscriber'
+    end
   end
 end
