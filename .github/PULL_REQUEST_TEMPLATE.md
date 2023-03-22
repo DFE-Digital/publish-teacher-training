@@ -11,3 +11,4 @@
 - [ ] Rebased main
 - [ ] Cleaned commit history
 - [ ] Tested by running locally
+- [ ] Inform data insights team due to database changes
