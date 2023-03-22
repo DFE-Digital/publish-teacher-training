@@ -121,7 +121,7 @@
         max_words: 350,
         rows: 15) %>
 
-      <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>
+      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_course_information_form, :goto_preview)) %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
