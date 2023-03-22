@@ -3,7 +3,7 @@
 module Support
   module Providers
     class LocationsCheckController < SupportController
-      before_action :build_site_and_form
+      before_action :new_form
 
       def show; end
 
@@ -22,9 +22,12 @@ module Support
 
       private
 
-      def build_site_and_form
-        site = provider.sites.build
+      def new_form
         @location_form = LocationForm.new(provider, site)
+      end
+
+      def site
+        @site ||= provider.sites.build
       end
 
       def provider

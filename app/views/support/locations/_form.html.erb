@@ -1,10 +1,10 @@
 <%= form_with model: @location_form, local: true, url: form_url, class: "location-form" do |f| %>
   <%= f.govuk_error_summary %>
 
-  <%= f.govuk_text_field :location_name, label: { text: "Name", size: "m" } %>
+  <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
 
   <%= f.govuk_text_field(:urn,
-    label: { text: "Unique Reference Number (URN) (optional)", size: "m" },
+    label: { text: "Unique Reference Number (URN) (optional)", size: "s" },
     hint:
       {
         text: safe_join(
@@ -20,10 +20,10 @@
       }) %>
 
   <% if site.persisted? %>
-    <%= f.govuk_text_field(:code, label: { text: "Location code", size: "m" }, width: 10) %>
+    <%= f.govuk_text_field(:code, label: { text: "Location code", size: "s" }, width: 10) %>
   <% end %>
 
-  <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+  <%= f.govuk_fieldset legend: { text: "Address", size: "s" } do %>
     <%= f.govuk_text_field(:address1, label: { text: "Address line 1" }) %>
 
     <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)" }) %>

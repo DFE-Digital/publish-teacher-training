@@ -23,12 +23,6 @@ module Support
     validates :postcode, postcode: true
     validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: I18n.t('activemodel.errors.models.support/location_form.attributes.urn.format') }
     validate :site_name_is_unique
-    # should the URN also be unique?
-
-    # Do we want to do this?
-    # def display_urn
-    #  urn.present? ? urn.to_s : 'Not entered'
-    # end
 
     def full_address
       address = [address1, address2, address3, address4, postcode]
@@ -42,9 +36,9 @@ module Support
     private
 
     def site_name_is_unique
-      return unless Site.exists?(location_name:)
+      return unless @identifier_model.sites.exists?(location_name:)
 
-      errors.add(:location_name, 'Name is taken')
+      errors.add(:location_name, I18n.t('activemodel.errors.models.support/location_form.attributes.location_name.taken'))
     end
 
     def form_store_key

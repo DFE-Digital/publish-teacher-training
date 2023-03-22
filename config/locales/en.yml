@@ -145,8 +145,9 @@ en:
             edit: "Edit course details"
           locations:
             index: "Locations"
-            new: "Add a location"
+            new: "Add location"
             edit: "Edit location details"
+            check: "Check your answers"
           users:
             new: "Add user"
             check: "Check your answers"
@@ -464,6 +465,7 @@ en:
           attributes:
             location_name:
               blank: "Enter a name"
+              taken: "Name is taken"
             address1:
               blank: "Enter address line 1"
             address3:
