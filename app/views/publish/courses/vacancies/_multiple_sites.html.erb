@@ -10,7 +10,7 @@
   <%= f.govuk_radio_button(:has_vacancies,
                            true,
                            label: { text: "There are some vacancies", size: "s" },
-                           hint: { text: "Select the locations with vacancies" },
+                           hint: { text: "Select the schools with vacancies" },
                            link_errors: true) do %>
 
     <% @site_statuses.sort_by { |status| status.site.location_name }.each do |site_status| %>

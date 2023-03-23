@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 module CSVImports
-  describe LocationsService do
+  describe SchoolsService do
     let(:csv_content) do
       <<~CSV
         All Saints Catholic College,139735,Birch Lane,,Dukinfield,,SK16 5AP

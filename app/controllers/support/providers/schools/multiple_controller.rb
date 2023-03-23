@@ -12,7 +12,7 @@ module Support
           @raw_csv_schools_form = RawCSVSchoolsForm.new(provider, params: form_params)
           if @raw_csv_schools_form.stash
 
-            school_details = CSVImports::LocationsService.call(csv_content: @raw_csv_schools_form.school_details, provider:)
+            school_details = CSVImports::SchoolsService.call(csv_content: @raw_csv_schools_form.school_details, provider:)
             ParsedCSVSchoolsForm.new(provider, params: { school_details: }).stash
             redirect_to support_recruitment_cycle_provider_schools_multiple_new_path(position: 1)
           else

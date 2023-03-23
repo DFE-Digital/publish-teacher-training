@@ -3,7 +3,7 @@
 require 'csv'
 
 module CSVImports
-  class LocationsService
+  class SchoolsService
     include ServicePattern
 
     def initialize(csv_content:, provider:)

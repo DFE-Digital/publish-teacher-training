@@ -39,7 +39,7 @@ module BreadcrumbHelper
 
   def sites_breadcrumb
     path = publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year)
-    recruitment_cycle_breadcrumb.merge({ 'Locations' => path })
+    recruitment_cycle_breadcrumb.merge({ 'Schools' => path })
   end
 
   def organisation_details_breadcrumb
