@@ -28,7 +28,29 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_click_back
       and_i_click_enter_course_summary
       and_i_submit_a_valid_form
-      and_i_see_the_correct_banner_and_text
+      and_i_see_the_correct_banner
+      and_i_see_the_new_course_text
+      then_i_should_be_back_on_the_preview_page
+    end
+
+    scenario 'blank degree requirements' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_enter_degree_requirements
+      and_i_am_on_the_degree_requirements_page
+      and_i_click_back
+      then_i_should_be_back_on_the_preview_page
+    end
+
+    scenario 'blank gcse requirements' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_enter_enter_gcse_and_equivalency_test_requirements
+      and_i_click_back
+      and_i_click_enter_enter_gcse_and_equivalency_test_requirements
+      and_i_choose_no_and_submit
+      and_i_see_the_correct_banner
+      and_i_see_the_correct_gcse_text
       then_i_should_be_back_on_the_preview_page
     end
 
@@ -289,31 +311,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def user_with_no_course_enrichments
-    site1 = build(:site, location_name: 'Running site with vacancies')
-
-    site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
-
-    sites = [site1]
-    site_statuses = [site_status1]
-
-    accrediting_provider = build(:provider)
-
-    course_subject = find_or_create(:secondary_subject, :mathematics)
-
     course = build(
-      :course, :secondary, :fee_type_based, accrediting_provider:,
-                                            site_statuses:, enrichments: [],
-                                            degree_grade: 'two_one',
-                                            degree_subject_requirements: 'Maths A level',
-                                            subjects: [course_subject]
+      :course, :secondary, degree_grade: nil
     )
-    accrediting_provider_enrichment = {
-      'UcasProviderCode' => accrediting_provider.provider_code,
-      'Description' => Faker::Lorem.sentence
-    }
 
     provider = build(
-      :provider, sites:, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+      :provider, courses: [course]
     )
 
     create(
@@ -338,9 +341,35 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     click_link 'Enter details about school placements'
   end
 
-  def and_i_see_the_correct_banner_and_text
+  def and_i_click_enter_degree_requirements
+    click_link 'Enter degree requirements'
+  end
+
+  def and_i_am_on_the_degree_requirements_page
+    expect(page).to have_text 'Do you require a minimum degree classification?'
+  end
+
+  def and_i_click_enter_enter_gcse_and_equivalency_test_requirements
+    click_link 'Enter GCSE and equivalency test requirements'
+  end
+
+  def and_i_see_the_correct_gcse_text
+    expect(page).to have_text 'We will not consider candidates with pending GCSEs.'
+    expect(page).to have_text 'We will not consider candidates who need to take a GCSE equivalency test.'
+  end
+
+  def and_i_choose_no_and_submit
+    page.all('.govuk-radios__item')[1].choose
+    page.all('.govuk-radios__item')[3].choose
+    click_button 'Update GCSEs and equivalency tests'
+  end
+
+  def and_i_see_the_correct_banner
     expect(page).to have_text 'This is a preview of how your course will appear on Find.'
-    expect(page).to have_text 'great course'
+  end
+
+  def and_i_see_the_new_course_text
+    expect(page).to have_text('great course')
   end
 
   def then_i_should_be_back_on_the_preview_page
