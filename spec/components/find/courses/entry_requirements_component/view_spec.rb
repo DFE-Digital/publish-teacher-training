@@ -109,10 +109,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     it 'renders correct message' do
       course = build(
         :course,
-        accept_pending_gcse: true
+        accept_pending_gcse: true,
+        accept_gcse_equivalency: false
       )
       result = render_inline(described_class.new(course: course.decorate))
-
       expect(result.text).to include(
         'We’ll consider candidates with pending GCSEs'
       )
@@ -123,7 +123,8 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     it 'renders correct message' do
       course = build(
         :course,
-        accept_pending_gcse: false
+        accept_pending_gcse: false,
+        accept_gcse_equivalency: false
       )
       result = render_inline(described_class.new(course: course.decorate))
 
@@ -210,6 +211,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       course = build(
         :course,
         accept_gcse_equivalency: false,
+        accept_pending_gcse: false,
         accept_english_gcse_equivalency: false,
         accept_maths_gcse_equivalency: false,
         accept_science_gcse_equivalency: false
@@ -227,6 +229,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       course = build(
         :course,
         accept_gcse_equivalency: true,
+        accept_pending_gcse: false,
         accept_english_gcse_equivalency: false,
         accept_maths_gcse_equivalency: true,
         accept_science_gcse_equivalency: true
