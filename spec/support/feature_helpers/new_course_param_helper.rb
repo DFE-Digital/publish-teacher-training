@@ -54,7 +54,7 @@ module FeatureHelpers
       }
     end
 
-    def locations_params
+    def schools_params
       {
         'course[age_range_in_years]' => ['3_to_7'],
         'course[funding_type]' => ['fee'],

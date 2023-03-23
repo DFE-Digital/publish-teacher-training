@@ -101,7 +101,7 @@ namespace :publish, as: :publish do
         resource :level, on: :member, only: %i[new], controller: 'courses/level' do
           get 'continue'
         end
-        resource :schools, on: :member, only: %i[new], controller: 'courses/sites' do
+        resource :schools, on: :member, only: %i[new], controller: 'courses/schools' do
           get 'back'
           get 'continue'
         end
@@ -176,8 +176,8 @@ namespace :publish, as: :publish do
         get '/rollover', on: :member, to: 'courses/draft_rollover#edit'
         post '/rollover', on: :member, to: 'courses/draft_rollover#update'
 
-        get '/schools', on: :member, to: 'courses/sites#edit'
-        put '/schools', on: :member, to: 'courses/sites#update'
+        get '/schools', on: :member, to: 'courses/schools#edit'
+        put '/schools', on: :member, to: 'courses/schools#update'
 
         get '/preview', on: :member, to: 'courses#preview'
 

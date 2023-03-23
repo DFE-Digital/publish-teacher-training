@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 module Publish
-  describe CourseLocationForm, type: :model do
+  describe CourseSchoolForm, type: :model do
     let(:params) { {} }
     let(:site1) { build(:site, location_name: 'location 1') }
     let(:site2) { build(:site, location_name: 'location 2') }
@@ -18,7 +18,7 @@ module Publish
       before { subject.valid? }
 
       it 'validates :site_ids' do
-        expect(subject.errors[:site_ids]).to include(I18n.t('activemodel.errors.models.publish/course_location_form.attributes.site_ids.no_locations'))
+        expect(subject.errors[:site_ids]).to include(I18n.t('activemodel.errors.models.publish/course_school_form.attributes.site_ids.no_schools'))
       end
     end
 

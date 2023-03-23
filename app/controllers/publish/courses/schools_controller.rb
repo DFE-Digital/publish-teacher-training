@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class SitesController < PublishController
+    class SchoolsController < PublishController
       include CourseBasicDetailConcern
 
       def continue
@@ -14,22 +14,22 @@ module Publish
         authorize(@provider, :edit?)
         return unless @provider.sites.count == 1
 
-        set_default_site
+        set_default_school
         redirect_to next_step
       end
 
       def edit
         authorize(provider)
 
-        @course_location_form = CourseLocationForm.new(@course)
-        @course_location_form.valid? if show_errors_on_publish?
+        @course_school_form = CourseSchoolForm.new(@course)
+        @course_school_form.valid? if show_errors_on_publish?
       end
 
       def update
         authorize(provider)
 
-        @course_location_form = CourseLocationForm.new(@course, params: location_params)
-        if @course_location_form.save!
+        @course_school_form = CourseSchoolForm.new(@course, params: school_params)
+        if @course_school_form.save!
           course_updated_message(section_key)
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
@@ -54,22 +54,22 @@ module Publish
       private
 
       def current_step
-        :location
+        :school
       end
 
       def error_keys
         [:sites]
       end
 
-      def set_default_site
+      def set_default_school
         params['course'] ||= {}
         params['course']['sites_ids'] = [@provider.sites.first.id]
       end
 
-      def location_params
-        return { site_ids: nil } if params[:publish_course_location_form][:site_ids].all?(&:empty?)
+      def school_params
+        return { site_ids: nil } if params[:publish_course_school_form][:site_ids].all?(&:empty?)
 
-        params.require(:publish_course_location_form).permit(site_ids: [])
+        params.require(:publish_course_school_form).permit(site_ids: [])
       end
 
       def build_course
@@ -77,7 +77,7 @@ module Publish
       end
 
       def section_key
-        'Location'.pluralize(location_params[:site_ids].compact_blank.count)
+        'School'.pluralize(school_params[:site_ids].compact_blank.count)
       end
     end
   end

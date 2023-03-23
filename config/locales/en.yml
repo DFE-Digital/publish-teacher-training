@@ -309,7 +309,7 @@ en:
             enrichments:
               blank: "^Complete your course information before publishing"
             sites:
-              blank: "^Select at least one location"
+              blank: "^Select at least one school"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
@@ -515,10 +515,10 @@ en:
             salary_details:
               blank: "Enter details about the salary for this course"
               too_long: "Reduce the word count for salary details"
-        publish/course_location_form:
+        publish/course_school_form:
           attributes:
             site_ids:
-              no_locations: "Select at least one location"
+              no_schools: "Select at least one school"
         publish/course_vacancies_form:
           attributes:
             change_vacancies_confirmation:

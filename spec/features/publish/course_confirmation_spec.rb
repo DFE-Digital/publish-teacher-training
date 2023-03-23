@@ -20,9 +20,9 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     end
 
     scenario 'updating a section returns to confirmation' do
-      and_i_click_to_update_the_locations
-      and_i_am_met_with_the_publish_courses_new_locations_page
-      and_i_update_the_locations
+      and_i_click_to_update_the_schools
+      and_i_am_met_with_the_publish_courses_new_schools_page
+      and_i_update_the_schools
       and_i_click_continue
       then_i_am_met_with_the_publish_course_confirmation_page
     end
@@ -179,21 +179,21 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.subjects.value.text).to include('Psychology')
     expect(publish_course_confirmation_page.details.age_range.value.text).to eq('14 to 19')
     expect(publish_course_confirmation_page.details.study_mode.value.text).to eq('Full time or part time')
-    expect(publish_course_confirmation_page.details.locations.value.text).to have_content(site.location_name)
+    expect(publish_course_confirmation_page.details.schools.value.text).to have_content(site.location_name)
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
   end
 
-  def and_i_click_to_update_the_locations
-    publish_course_confirmation_page.details.locations.change_link.click
+  def and_i_click_to_update_the_schools
+    publish_course_confirmation_page.details.schools.change_link.click
   end
 
-  def and_i_am_met_with_the_publish_courses_new_locations_page
+  def and_i_am_met_with_the_publish_courses_new_schools_page
     expect(page.current_url).to include("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/schools/new")
   end
 
-  def and_i_update_the_locations
-    publish_courses_new_locations_page.locations.first.checkbox.check
+  def and_i_update_the_schools
+    publish_courses_new_schools_page.schools.first.checkbox.check
   end
 
   def then_i_am_met_with_the_publish_course_confirmation_page

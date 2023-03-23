@@ -136,7 +136,7 @@ feature 'Course show' do
       'Academic year 2021 to 2022'
     )
 
-    expect(publish_provider_courses_details_page.locations).to have_content(
+    expect(publish_provider_courses_details_page.schools).to have_content(
       course.sites.first.location_name
     )
 
@@ -174,11 +174,11 @@ feature 'Course show' do
   end
 
   def then_i_see_the_correct_change_links
-    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'locations')
+    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'schools')
   end
 
   def then_i_see_the_correct_change_links_for_the_next_cycle
-    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'locations', 'can sponsor skilled_worker visa')
+    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'schools', 'can sponsor skilled_worker visa')
   end
 
   def provider

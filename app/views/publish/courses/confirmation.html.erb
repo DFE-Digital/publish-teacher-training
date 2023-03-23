@@ -108,8 +108,8 @@
           ) %>
         <% end %>
 
-        <% summary_list.with_row(html_attributes: { data: { qa: "course__locations" } }) do |row| %>
-          <% row.with_key { "Location".pluralize(course.sites.length) } %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row| %>
+          <% row.with_key { "School".pluralize(course.sites.length) } %>
           <% row.with_value do %>
             <% if course.sites.nil? || course.sites.empty? %>
               <span class="app-!-colour-muted">None</span>
@@ -126,7 +126,7 @@
           <% if @course.provider.sites.count > 1 %>
             <% row.with_action(
               href: new_publish_provider_recruitment_cycle_courses_schools_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "locations"
+              visually_hidden_text: "schools"
             ) %>
           <% else %>
             <% row.with_action %>

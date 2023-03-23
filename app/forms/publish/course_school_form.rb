@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Publish
-  class CourseLocationForm < BaseCourseForm
+  class CourseSchoolForm < BaseCourseForm
     FIELDS = %i[site_ids].freeze
 
     attr_accessor(*FIELDS)
 
-    validate :no_locations_selected
+    validate :no_schools_selected
 
     def initialize(model, params: {})
       @previous_site_names = model.sites.map(&:location_name)
@@ -50,10 +50,10 @@ module Publish
       { site_ids: course.site_ids }.merge(new_attributes)
     end
 
-    def no_locations_selected
+    def no_schools_selected
       return if params[:site_ids].present?
 
-      errors.add(:site_ids, :no_locations)
+      errors.add(:site_ids, :no_schools)
     end
 
     def site_status_attributes

@@ -63,7 +63,7 @@ module Courses
 
       course.sites = sites if site_ids.any?
 
-      course.errors.add(:sites, message: 'Select at least one location') if site_ids.empty?
+      course.errors.add(:sites, message: 'Select at least one school') if site_ids.empty?
     end
   end
 end
