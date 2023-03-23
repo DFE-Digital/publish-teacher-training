@@ -40,22 +40,24 @@
       <%= required_gcse_content(course) %>
     </p>
 
-    <p class="govuk-body">
-      <%= pending_gcse_content(course) %>
-    </p>
+    <% if course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil %>
 
-    <p class="govuk-body">
-      <%= gcse_equivalency_content(course) %>
-    </p>
+      <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
+                                                                gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
+    <% else %>
+      <p class="govuk-body">
+        <%= pending_gcse_content(course) %>
+      </p>
+
+      <p class="govuk-body">
+        <%= gcse_equivalency_content(course) %>
+      </p>
+    <% end %>
 
     <% if course.additional_gcse_equivalencies.present? %>
       <p class="govuk-body">
         <%= helpers.markdown(course.additional_gcse_equivalencies) %>
       </p>
-    <% elsif !course.additional_gcse_equivalencies.present? && FeatureService.enabled?(:course_preview_missing_information) && params[:action] == "preview" %>
-
-      <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
-                                                                gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
     <% end %>
   </div>
 
