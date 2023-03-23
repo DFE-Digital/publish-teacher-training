@@ -19,7 +19,6 @@ module Publish
 
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
-
         if @gcse_requirements_form.valid? && goto_preview?
           @gcse_requirements_form.save(course)
           redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
