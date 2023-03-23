@@ -6,7 +6,7 @@ module Find
       class ViewPreview < ViewComponent::Preview
         def hei_minimum
           course = Course.new(course_code: 'FIND',
-                              provider: Provider.new(provider_code: 'DFE'),
+                              provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
                               program_type: 'higher_education_programme',
                               level: 'further_education').decorate
           render Find::Courses::AboutSchoolsComponent::View.new(course)
@@ -14,7 +14,7 @@ module Find
 
         def scitt_minimum
           course = Course.new(course_code: 'FIND',
-                              provider: Provider.new(provider_code: 'DFE'),
+                              provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
                               program_type: 'scitt_programme',
                               level: 'secondary').decorate
           render Find::Courses::AboutSchoolsComponent::View.new(course)
