@@ -19,9 +19,13 @@ module Publish
 
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
-        if @gcse_requirements_form.save(course)
-          course_updated_message('GCSE requirements')
 
+        if @gcse_requirements_form.valid? && goto_preview?
+          @gcse_requirements_form.save(course)
+          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
+        elsif @gcse_requirements_form.valid? && !goto_preview?
+          course_updated_message('GCSE requirements')
+          @gcse_requirements_form.save(course)
           redirect_to publish_provider_recruitment_cycle_course_path
         else
           @errors = @gcse_requirements_form.errors.messages
@@ -73,6 +77,8 @@ module Publish
           value == 'true'
         end
       end
+
+      def goto_preview? = params.dig(:publish_gcse_requirements_form, :goto_preview) == 'true'
     end
   end
 end
