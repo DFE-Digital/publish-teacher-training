@@ -61,7 +61,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_click_back
       and_i_click_enter_details_about_school_placements
       and_i_submit_a_valid_form
-      and_i_see_the_correct_banner_and_text
+      and_i_see_the_correct_banner
       then_i_should_be_back_on_the_preview_page
     end
   end
