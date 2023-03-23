@@ -50,15 +50,18 @@ module Publish
       end
 
       def publish_gcse_requirements_form_params
-        @publish_gcse_requirements_form_params ||= params.require(:publish_gcse_requirements_form).permit(
-          :accept_pending_gcse,
-          :accept_english_gcse_equivalency,
-          :accept_gcse_equivalency,
-          { accept_english_gcse_equivalency: [] },
-          { accept_maths_gcse_equivalency: [] },
-          { accept_science_gcse_equivalency: [] },
-          :additional_gcse_equivalencies
-        )
+        @publish_gcse_requirements_form_params ||= params
+                                                   .require(:publish_gcse_requirements_form)
+                                                   .except(:goto_preview)
+                                                   .permit(
+                                                     :accept_pending_gcse,
+                                                     :accept_english_gcse_equivalency,
+                                                     :accept_gcse_equivalency,
+                                                     { accept_english_gcse_equivalency: [] },
+                                                     { accept_maths_gcse_equivalency: [] },
+                                                     { accept_science_gcse_equivalency: [] },
+                                                     :additional_gcse_equivalencies
+                                                   )
       end
 
       def translate_params(value)

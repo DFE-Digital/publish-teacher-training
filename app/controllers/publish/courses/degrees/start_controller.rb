@@ -40,7 +40,9 @@ module Publish
         def grade_required_params
           return if params[:publish_degree_start_form].blank?
 
-          params.require(:publish_degree_start_form).permit(:degree_grade_required)[:degree_grade_required]
+          params.require(:publish_degree_start_form)
+                .except(:goto_preview)
+                .permit(:degree_grade_required)[:degree_grade_required]
         end
       end
     end

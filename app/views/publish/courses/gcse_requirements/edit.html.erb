@@ -3,7 +3,11 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @errors && @errors.any?) %>
 
 <% content_for :before_content do %>
+  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_gcse_requirements_form, :goto_preview) %>
+    <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% else %>
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% end %>
 <% end %>
 
 <% if params[:copy_from].present? %>
@@ -32,6 +36,8 @@
     </h1>
 
      <%= render partial: "publish/courses/gcse_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
+
+      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_gcse_requirements_form, :goto_preview)) %>
 
       <%= f.submit "Update #{page_title}", class: "govuk-button", data: { qa: "gcse_requirements__save" } %>
     <% end %>
