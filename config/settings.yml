@@ -106,7 +106,7 @@ features:
     can_edit_current_and_next_cycles: false
     show_next_cycle_recruitment_page: false
   user_management: true
-  add_multiple_locations: true
+  add_multiple_schools: true
   course_preview_missing_information: false
 
 cookies:

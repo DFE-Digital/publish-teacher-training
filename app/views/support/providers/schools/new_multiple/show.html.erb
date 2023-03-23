@@ -1,0 +1,57 @@
+<%= render PageTitle.new(title: t("support.providers.multiple_schools.show", position: params[:position], max: @max)) %>
+
+<% content_for :before_content do %>
+  <% if params.dig(:goto_confirmation) == "true" || params.dig(:site, :goto_confirmation) == "true" %>
+    <%= govuk_back_link_to(support_recruitment_cycle_provider_schools_multiple_check_path) %>
+  <% elsif params[:position] == "1" %>
+    <%= govuk_back_link_to(new_support_recruitment_cycle_provider_schools_multiple_path) %>
+  <% else %>
+    <%= govuk_back_link_to(support_recruitment_cycle_provider_schools_multiple_new_path(position: params[:position].to_i - 1)) %>
+  <% end %>
+<% end %>
+
+<%= form_with(model: @site,
+              method: :patch,
+              url: support_recruitment_cycle_provider_schools_multiple_new_path,
+              local: true) do |f| %>
+
+  <%= f.hidden_field(:goto_confirmation, value: params[:goto_confirmation] || params.dig(:site, :goto_confirmation)) %>
+
+  <%= f.govuk_error_summary %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+      <h1 class="govuk-heading-l"><%= t("support.providers.multiple_schools.show", position: params[:position], max: @max) %></h1>
+
+        <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
+
+        <%= f.govuk_text_field(:urn,
+                               label: { text: "Unique reference number (URN) (optional)", size: "s" },
+                               width: 10) %>
+
+        <p class="govuk-body govuk-!-margin-bottom-7">
+          <%= t("links.urn_html") %>
+        </p>
+
+        <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+          <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
+
+          <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)", size: "s" }) %>
+
+          <%= f.govuk_text_field(:address3, label: { text: "Town or city", size: "s" }, width: "two-thirds") %>
+
+          <%= f.govuk_text_field(:address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds") %>
+
+          <%= f.govuk_text_field(:postcode, label: { size: "s" }, width: 10) %>
+        <% end %>
+
+        <%= f.govuk_submit(t("continue")) %>
+<% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
+    </p>
+  </div>
+</div>

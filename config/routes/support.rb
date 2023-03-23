@@ -13,11 +13,11 @@ namespace :support do
         end
       end
       resources :courses, only: %i[index edit update]
-      resource :check_location, only: %i[show update], controller: 'providers/locations_check', path: 'locations/check'
-      resources :locations
-      resource :locations do
+      resource :check_school, only: %i[show update], controller: 'providers/schools_check', path: 'schools/check'
+      resources :schools
+      resource :schools do
         scope module: :providers do
-          scope module: :locations do
+          scope module: :schools do
             resource :multiple, only: %i[new create], on: :member, controller: 'multiple' do
               resources :new, param: :position, only: %i[show update], controller: 'new_multiple'
               resource :check, only: %i[show update], controller: 'check_multiple'

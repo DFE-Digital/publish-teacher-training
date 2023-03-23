@@ -7,7 +7,7 @@ module PageObjects
     class SchoolsIndex < PageObjects::Base
       set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/schools'
 
-      sections :schools, Sections::School, '.location-row'
+      sections :schools, Sections::School, '.school-row'
 
       element :add_school, '.govuk-button', text: 'Add school'
     end

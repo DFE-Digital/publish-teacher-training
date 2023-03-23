@@ -55,7 +55,7 @@ Rails/I18nLocaleTexts:
     - "spec/validators/reference_number_format_validator_spec.rb"
     - "app/controllers/publish/users_edit_check_controller.rb"
     - "app/controllers/support/courses_controller.rb"
-    - "app/controllers/support/locations_controller.rb"
+    - "app/controllers/support/schools_controller.rb"
     - "app/controllers/support/providers/users_check_controller.rb"
 
 Style/HashSyntax:

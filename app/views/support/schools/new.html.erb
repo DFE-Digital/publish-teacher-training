@@ -1,0 +1,26 @@
+<%= render PageTitle.new(title: "support.providers.schools.new") %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+    Add school
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= render partial: "support/schools/form", locals: { site: @site, form_url: support_recruitment_cycle_provider_schools_path } %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
+    </p>
+
+    <% if @site.persisted? %>
+      <p class="govuk-body">
+        <%= govuk_button_to t("support.actions.delete", resource: "school"),
+            support_provider_school_path(@provider, @site),
+            method: :delete,
+            class: "govuk-button govuk-button--warning" %>
+      </p>
+    <% end %>
+
+  </div>
+</div>
