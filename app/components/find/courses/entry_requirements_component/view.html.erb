@@ -10,9 +10,9 @@
       <p class="govuk-body"><%= degree_grade_content(course) %></p>
 
         <% if course.degree_subject_requirements.present? %>
-        <p class="govuk-body">
-          <%= helpers.markdown(course.degree_subject_requirements) %>
-        </p>
+          <p class="govuk-body">
+            <%= helpers.markdown(course.degree_subject_requirements) %>
+          </p>
       <% end %>
      <% end %>
     </p>
