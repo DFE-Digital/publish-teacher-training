@@ -2,7 +2,11 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @grade_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(degrees_start_publish_provider_recruitment_cycle_course_path) %>
+  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_degree_grade_form, :goto_preview) %>
+    <%= govuk_back_link_to(degrees_start_publish_provider_recruitment_cycle_course_path(goto_preview: true)) %>
+  <% else %>
+    <%= govuk_back_link_to(degrees_start_publish_provider_recruitment_cycle_course_path) %>
+  <% end %>
 <% end %>
 
 <div class="govuk-grid-row">

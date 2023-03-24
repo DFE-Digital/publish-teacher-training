@@ -55,9 +55,15 @@ module Publish
         def set_backlink
           @backlink = if course.degree_grade == 'not_required'
                         degrees_start_publish_provider_recruitment_cycle_course_path
+                      elsif gobackto_preview?
+                        degrees_grade_publish_provider_recruitment_cycle_course_path(goto_preview: true)
                       else
                         degrees_grade_publish_provider_recruitment_cycle_course_path
                       end
+        end
+
+        def gobackto_preview?
+          params.dig(:goto_preview) == 'true' || params.dig(:publish_subject_requirement_form, :goto_preview)
         end
 
         def redirect_to_course_details_page_if_course_is_primary
