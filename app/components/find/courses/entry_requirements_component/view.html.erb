@@ -2,20 +2,20 @@
   <h2 class="govuk-heading-l" id="section-entry">Entry requirements</h2>
   <h3 class="govuk-heading-m">Qualifications needed</h3>
   <div data-qa="course__required_qualifications">
-    <p class="govuk-body">
-    <% if degree_grade_content(course).blank? && FeatureService.enabled?(:course_preview_missing_information) %>
+
+    <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? && FeatureService.enabled?(:course_preview_missing_information) %>
       <%= render CoursePreview::MissingInformationComponent.new("Enter degree requirements",
       degrees_start_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
     <% else %>
-     ' <%= degree_grade_content(course) %>'
+     <%= degree_grade_content(course) %>
+
+        <% if course.degree_subject_requirements.present? %>
+        <p class="govuk-body">
+          <%= helpers.markdown(course.degree_subject_requirements) %>
+        </p>
+      <% end %>
      <% end %>
     </p>
-
-    <% if course.degree_subject_requirements.present? %>
-      <p class="govuk-body">
-        <%= helpers.markdown(course.degree_subject_requirements) %>
-      </p>
-    <% end %>
 
     <% if course.secondary_course? %>
       <% if course.engineers_teach_physics? %>
