@@ -50,9 +50,11 @@ module Support
 
     def update
       @location_form = LocationForm.new(provider, site, params: site_params)
-      if site.update(site_params)
+      if @location_form.valid?
+        site.update(site_params)
         redirect_to support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, site)
       else
+        # binding.pry
         render(:edit)
       end
     end
