@@ -105,11 +105,6 @@ feature 'Multiple locations' do
     then_i_should_be_on_the_provider_locations_page
   end
 
-  scenario 'feature flag off' do
-    when_i_visit_a_provider_locations_page
-    then_i_should_not_see_the_add_multiple_locations_link
-  end
-
   def and_i_click_change
     page.all('.govuk-summary-card__action')[1].click_link
   end
@@ -179,10 +174,6 @@ feature 'Multiple locations' do
 
   def then_i_click_add_multiple_locations
     click_link 'Add multiple locations'
-  end
-
-  def then_i_should_not_see_the_add_multiple_locations_link
-    expect(page).not_to have_link('Add multiple locations')
   end
 
   def given_i_submit_an_empty_form

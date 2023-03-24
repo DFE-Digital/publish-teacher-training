@@ -31,7 +31,6 @@ basic_auth:
 
 features:
   send_request_data_to_bigquery: true
-  add_multiple_locations: true
 
 find_valid_referers:
   - https://qa.find-postgraduate-teacher-training.service.gov.uk
