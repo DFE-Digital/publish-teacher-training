@@ -7,7 +7,7 @@
       <%= render CoursePreview::MissingInformationComponent.new("Enter degree requirements",
       degrees_start_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
     <% else %>
-     <%= degree_grade_content(course) %>
+      <p class="govuk-body"><%= degree_grade_content(course) %></p>
 
         <% if course.degree_subject_requirements.present? %>
         <p class="govuk-body">
