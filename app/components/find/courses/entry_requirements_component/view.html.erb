@@ -14,27 +14,27 @@
             <%= helpers.markdown(course.degree_subject_requirements) %>
           </p>
       <% end %>
-     <% end %>
-    </p>
 
-    <% if course.secondary_course? %>
-      <% if course.engineers_teach_physics? %>
+      <% if course.secondary_course? %>
+        <% if course.engineers_teach_physics? %>
+          <p class="govuk-body">
+            This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+          </p>
+        <% end %>
+      <% end %>
+
+      <% if subject_knowledge_enhancement_content? %>
         <p class="govuk-body">
-          This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+          If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+        </p>
+      <% elsif primary_with_mathematics_subject? %>
+        <p class="govuk-body">
+          If you need to improve your primary mathematics knowledge, you may be asked to complete a
+          <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
         </p>
       <% end %>
-    <% end %>
-
-    <% if subject_knowledge_enhancement_content? %>
-      <p class="govuk-body">
-        If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
-      </p>
-      <% elsif primary_with_mathematics_subject? %>
-      <p class="govuk-body">
-        If you need to improve your primary mathematics knowledge, you may be asked to complete a
-        <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
-      </p>
-    <% end %>
+     <% end %>
+    </p>
 
     <% if (course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil) && FeatureService.enabled?(:course_preview_missing_information) %>
 
