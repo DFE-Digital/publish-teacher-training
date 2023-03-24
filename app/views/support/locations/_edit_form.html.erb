@@ -3,20 +3,12 @@
   <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
   <%= f.govuk_text_field(:urn,
     label: { text: "Unique Reference Number (URN)", size: "s" },
-    hint:
-      {
-        text: safe_join(
-          [
-            "Find URNs on ", tag.a(
-              t("links.get_information_schools"),
-              href: t("links.get_information_schools"),
-              target: "_blank",
-              class: "govuk-link"
-            )
-          ]
-        )
-      },
     width: 10) %>
+
+    <p class="govuk-body govuk-!-margin-bottom-7">
+    Find URNs on <%= govuk_link_to t("links.get_information_schools"), t("links.get_information_schools"), target: "_blank" %>
+   </p>
+
   <% if site.persisted? %>
     <%= f.govuk_text_field(:code, label: { text: "Location code", size: "s" }, width: 10) %>
   <% end %>

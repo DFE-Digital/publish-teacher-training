@@ -14,9 +14,7 @@ namespace :support do
       end
       resources :courses, only: %i[index edit update]
       resource :check_location, only: %i[show update], controller: 'providers/locations_check', path: 'locations/check'
-      resources :locations do
-        get 'confirm', on: :member
-      end
+      resources :locations
       resource :locations do
         scope module: :providers do
           scope module: :locations do

@@ -14,21 +14,32 @@ module Support
       redirect_to support_providers_path
     end
 
-    def new; end
-
-    def edit
+    def show
       site
       provider
     end
 
-    def confirm
-      site
-      provider
+    def new; end
+
+    def edit
+      # site
+      # provider
+      @location_form = LocationForm.new(provider, site, params: site.attributes.except(
+        'id',
+        'provider_id',
+        'region_code',
+        'latitude',
+        'longitude',
+        'uuid',
+        'created_at',
+        'updated_at',
+        'discarded_at'
+      ))
     end
 
     def create
       # TODO: revert site_params when we align the edit form
-      @location_form = LocationForm.new(provider, @site, params: site_params(:support_location_form))
+      @location_form = LocationForm.new(provider, @site, params: site_params)
       # binding.pry
       if @location_form.stash
         redirect_to support_recruitment_cycle_provider_check_location_path
@@ -38,10 +49,9 @@ module Support
     end
 
     def update
-      # @location_form = LocationForm.new(provider, site, params: site_params(:site))
-      # binding.pry
-      if site.update(site_params(:site))
-        redirect_to confirm_support_recruitment_cycle_provider_location_path
+      @location_form = LocationForm.new(provider, site, params: site_params)
+      if site.update(site_params)
+        redirect_to support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, site)
       else
         render(:edit)
       end
@@ -64,8 +74,8 @@ module Support
     end
 
     # TODO: revert this when we align the edit form
-    def site_params(param_form_key)
-      params.require(param_form_key).permit(
+    def site_params
+      params.require(:support_location_form).permit(
         :location_name,
         :urn,
         :code,
