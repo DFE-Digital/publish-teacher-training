@@ -63,7 +63,7 @@ module Publish
         end
 
         def gobackto_preview?
-          params.dig(:goto_preview) == 'true' || params.dig(:publish_subject_requirement_form, :goto_preview)
+          params[:goto_preview] == 'true' || params.dig(:publish_subject_requirement_form, :goto_preview)
         end
 
         def redirect_to_course_details_page_if_course_is_primary
