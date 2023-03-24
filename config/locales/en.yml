@@ -222,7 +222,8 @@ en:
         new: "Add location"
         added: "Location added"
         another: "Save location and add another"
-        location_name: "Location name"
+        location_name: "Name"
+        code: "Location code"
         urn: "Unique reference number (URN)"
         address1: "Address line 1"
         address2: "Address line 2"
@@ -246,6 +247,7 @@ en:
       deleted: "%{resource} successfully deleted"
     actions:
       delete: "Delete this %{resource}"
+      remove_location: "Remove location"
     update_record: "Update"
     create_record: "Create"
     continue: "Continue"
@@ -278,7 +280,7 @@ en:
           attributes:
             location_name:
               blank: "Enter a location name"
-              taken: "is in use by another location"
+              taken: "Name is in use by another location"
             address1:
               blank: "Enter address line 1"
             address3:

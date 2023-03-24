@@ -67,6 +67,13 @@ class Site < ApplicationRecord
     address.select(&:present?).join(', ')
   end
 
+  def confirm_full_address
+    address = [address1, address2, address3, address4, postcode]
+    return '' if address.all?(&:blank?)
+
+    address.select(&:present?).join('<br /> ').html_safe
+  end
+
   def address_changed?
     saved_change_to_location_name? ||
       saved_change_to_address1? ||

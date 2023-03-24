@@ -6,6 +6,7 @@ module Support
     FIELDS = %i[
       location_name
       urn
+      code
       address1
       address2
       address3
@@ -15,14 +16,15 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    validates :location_name,
-              :address1,
-              :address3,
-              :postcode,
-              presence: true
-    validates :postcode, postcode: true
-    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: I18n.t('activemodel.errors.models.support/location_form.attributes.urn.format') }
-    validate :site_name_is_unique
+    # validates :location_name,
+    # :address1,
+    # :address3,
+    # :postcode,
+    # presence: true
+    # validates :postcode, postcode: true
+    ## validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: I18n.t('activemodel.errors.models.support/location_form.attributes.urn.format') }
+    # validate :site_name_is_unique
+    validate :validate_site
 
     def full_address
       address = [address1, address2, address3, address4, postcode]
@@ -34,6 +36,22 @@ module Support
     end
 
     private
+
+    def validate_site
+      return if site.valid?
+
+      promote_errors(site.errors)
+    end
+
+    def promote_errors(site_errors)
+      site_errors.each do |site_error|
+        errors.add(site_error.attribute, site_error.message)
+      end
+    end
+
+    def site
+      @site ||= @identifier_model.sites.build(fields)
+    end
 
     def site_name_is_unique
       return unless @identifier_model.sites.exists?(location_name:)

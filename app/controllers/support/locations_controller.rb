@@ -21,9 +21,15 @@ module Support
       provider
     end
 
+    def confirm
+      site
+      provider
+    end
+
     def create
       # TODO: revert site_params when we align the edit form
       @location_form = LocationForm.new(provider, @site, params: site_params(:support_location_form))
+      # binding.pry
       if @location_form.stash
         redirect_to support_recruitment_cycle_provider_check_location_path
       else
@@ -32,11 +38,12 @@ module Support
     end
 
     def update
-      # TODO: revert site_params when we align the edit form
+      # @location_form = LocationForm.new(provider, site, params: site_params(:site))
+      # binding.pry
       if site.update(site_params(:site))
-        redirect_to support_recruitment_cycle_provider_locations_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: flash_resource) }
+        redirect_to confirm_support_recruitment_cycle_provider_location_path
       else
-        render :edit
+        render(:edit)
       end
     end
 
