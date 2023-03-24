@@ -36,15 +36,16 @@
       </p>
     <% end %>
 
-    <p class="govuk-body">
-      <%= required_gcse_content(course) %>
-    </p>
-
     <% if course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil %>
 
       <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
                                                                 gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
     <% else %>
+
+      <p class="govuk-body">
+        <%= required_gcse_content(course) %>
+      </p>
+
       <p class="govuk-body">
         <%= pending_gcse_content(course) %>
       </p>
