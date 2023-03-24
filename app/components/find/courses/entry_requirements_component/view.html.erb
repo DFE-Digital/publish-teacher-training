@@ -36,7 +36,7 @@
       </p>
     <% end %>
 
-    <% if course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil %>
+    <% if (course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil) && FeatureService.enabled?(:course_preview_missing_information) %>
 
       <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
                                                                 gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
