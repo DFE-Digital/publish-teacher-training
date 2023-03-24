@@ -40,6 +40,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_am_on_the_degree_requirements_page
       and_i_click_back
       then_i_should_be_back_on_the_preview_page
+      and_i_click_enter_degree_requirements
+      and_i_submit_and_continue_through_the_two_forms
+      then_i_should_see_the_updated_content_on_the_preview_page
     end
 
     scenario 'blank gcse requirements' do
@@ -312,7 +315,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def user_with_no_course_enrichments
     course = build(
-      :course, :secondary, degree_grade: nil
+      :course, :secondary, degree_grade: nil, additional_degree_subject_requirements: nil
     )
 
     provider = build(
@@ -343,6 +346,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_enter_degree_requirements
     click_link 'Enter degree requirements'
+  end
+
+  def then_i_should_see_the_updated_content_on_the_preview_page
+    expect(page).to have_content('An undergraduate degree, or equivalent.')
+  end
+
+  def and_i_submit_and_continue_through_the_two_forms
+    choose('No')
+    click_button('Continue')
+    choose('No')
+    click_button('Update degree requirements')
   end
 
   def and_i_am_on_the_degree_requirements_page
