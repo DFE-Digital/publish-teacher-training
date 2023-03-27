@@ -5,6 +5,7 @@ module Support
     before_action :build_site, only: %i[index new create]
     before_action :new_form, only: %i[index new]
     before_action :reset_csv_schools_forms, only: %i[index]
+    before_action :site, only: %i[edit show delete]
 
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
@@ -14,33 +15,14 @@ module Support
       redirect_to support_providers_path
     end
 
-    def show
-      site
-      provider
-    end
+    def show; end
 
     def new; end
 
-    def edit
-      # site
-      # provider
-      @location_form = LocationForm.new(provider, site, params: site.attributes.except(
-        'id',
-        'provider_id',
-        'region_code',
-        'latitude',
-        'longitude',
-        'uuid',
-        'created_at',
-        'updated_at',
-        'discarded_at'
-      ))
-    end
+    def edit; end
 
     def create
-      # TODO: revert site_params when we align the edit form
-      @location_form = LocationForm.new(provider, @site, params: site_params)
-      # binding.pry
+      @location_form = LocationForm.new(provider, @site, params: site_params(:support_location_form))
       if @location_form.stash
         redirect_to support_recruitment_cycle_provider_check_location_path
       else
@@ -49,14 +31,15 @@ module Support
     end
 
     def update
-      @location_form = LocationForm.new(provider, site, params: site_params)
-      if @location_form.valid?
-        site.update(site_params)
+      if site.update(site_params(:site))
         redirect_to support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, site)
       else
-        # binding.pry
         render(:edit)
       end
+    end
+
+    def delete
+      provider
     end
 
     def destroy
@@ -75,9 +58,8 @@ module Support
       @flash_resource ||= 'Location'
     end
 
-    # TODO: revert this when we align the edit form
-    def site_params
-      params.require(:support_location_form).permit(
+    def site_params(param_form_key)
+      params.require(param_form_key).permit(
         :location_name,
         :urn,
         :code,

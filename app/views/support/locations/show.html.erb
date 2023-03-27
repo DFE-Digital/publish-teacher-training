@@ -36,8 +36,7 @@
 
           <p class="govuk-body">
             <%= govuk_link_to t("support.actions.remove_location", resource: "location"),
-                support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site),
-                method: :delete,
+                delete_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site),
                 class: "app-link--destructive" %>
           </p>
     </fieldset>

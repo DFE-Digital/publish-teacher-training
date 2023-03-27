@@ -4,6 +4,7 @@ module Support
   class LocationForm < Form
     MAIN_SITE = 'main site'
     FIELDS = %i[
+      id
       location_name
       urn
       code
@@ -38,13 +39,20 @@ module Support
     private
 
     def validate_site
+      skip = []
       return if site.valid?
 
-      promote_errors(site.errors)
+      sites = @identifier_model.sites.where.not(id: nil)
+      skip << :location_name unless sites.exists?(location_name:) || location_name.blank?
+      skip << :code unless sites.exists?(code:)
+
+      promote_errors(site.errors, skip)
     end
 
-    def promote_errors(site_errors)
+    def promote_errors(site_errors, skip)
       site_errors.each do |site_error|
+        next if skip.include?(site_error.attribute)
+
         errors.add(site_error.attribute, site_error.message)
       end
     end

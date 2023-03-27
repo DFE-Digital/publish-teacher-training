@@ -6,21 +6,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %> </span>
+    <!-- Need a helper here to catch location_name change? -->
           <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= @site.location_name %></h1>
     </legend>
 
-    <%= render partial: "support/locations/form", locals: { site: @site, form_url: support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), method: "put" } %>
+    <%= render partial: "support/locations/form", locals: { model: @site, site: @site, form_url: support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), method: "put" } %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_locations_path) %>
     </p>
-
-    <p class="govuk-body">
-      <%= govuk_button_to t("support.actions.delete", resource: "location"),
-          support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site),
-          method: :delete,
-          class: "govuk-button govuk-button--warning" %>
-    </p>
-
   </div>
 </div>

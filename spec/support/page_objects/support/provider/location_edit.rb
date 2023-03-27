@@ -10,7 +10,6 @@ module PageObjects
         section :location_form, Sections::EditLocationForm, '.location-form'
 
         element :submit, 'button.govuk-button[type="submit"]', text: 'Update'
-        element :delete_record, 'button.govuk-button[type="submit"]', text: 'Delete this location'
 
         def errors
           within(error_summary) do

@@ -148,6 +148,8 @@ en:
             new: "Add location"
             edit: "Edit location details"
             check: "Check your answers"
+            show: "Show school"
+            delete: "Are you sure you want to remove this school?"
           users:
             new: "Add user"
             check: "Check your answers"
