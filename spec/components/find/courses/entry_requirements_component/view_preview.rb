@@ -8,7 +8,7 @@ module Find
           course = Course.new(course_code: 'FIND',
                               subjects: [Subject.new(subject_name: 'Foo', subject_code: '1')],
                               name: 'Super cool awesome course',
-                              provider: Provider.new(provider_code: 'DFE'),
+                              provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
                               additional_degree_subject_requirements: true,
                               degree_subject_requirements: 'Degree Subject Requirements Text',
                               level: 'secondary',

@@ -19,9 +19,12 @@ module Publish
 
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
-        if @gcse_requirements_form.save(course)
+        if @gcse_requirements_form.valid? && goto_preview?
+          @gcse_requirements_form.save(course)
+          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
+        elsif @gcse_requirements_form.valid? && !goto_preview?
           course_updated_message('GCSE requirements')
-
+          @gcse_requirements_form.save(course)
           redirect_to publish_provider_recruitment_cycle_course_path
         else
           @errors = @gcse_requirements_form.errors.messages
@@ -50,15 +53,18 @@ module Publish
       end
 
       def publish_gcse_requirements_form_params
-        @publish_gcse_requirements_form_params ||= params.require(:publish_gcse_requirements_form).permit(
-          :accept_pending_gcse,
-          :accept_english_gcse_equivalency,
-          :accept_gcse_equivalency,
-          { accept_english_gcse_equivalency: [] },
-          { accept_maths_gcse_equivalency: [] },
-          { accept_science_gcse_equivalency: [] },
-          :additional_gcse_equivalencies
-        )
+        @publish_gcse_requirements_form_params ||= params
+                                                   .require(:publish_gcse_requirements_form)
+                                                   .except(:goto_preview)
+                                                   .permit(
+                                                     :accept_pending_gcse,
+                                                     :accept_english_gcse_equivalency,
+                                                     :accept_gcse_equivalency,
+                                                     { accept_english_gcse_equivalency: [] },
+                                                     { accept_maths_gcse_equivalency: [] },
+                                                     { accept_science_gcse_equivalency: [] },
+                                                     :additional_gcse_equivalencies
+                                                   )
       end
 
       def translate_params(value)
@@ -70,6 +76,8 @@ module Publish
           value == 'true'
         end
       end
+
+      def goto_preview? = params.dig(:publish_gcse_requirements_form, :goto_preview) == 'true'
     end
   end
 end

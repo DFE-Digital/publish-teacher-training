@@ -2,46 +2,58 @@
   <h2 class="govuk-heading-l" id="section-entry">Entry requirements</h2>
   <h3 class="govuk-heading-m">Qualifications needed</h3>
   <div data-qa="course__required_qualifications">
-    <p class="govuk-body">
-      <%= degree_grade_content(course) %>
-    </p>
 
-    <% if course.degree_subject_requirements.present? %>
-      <p class="govuk-body">
-        <%= helpers.markdown(course.degree_subject_requirements) %>
-      </p>
-    <% end %>
+    <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? && FeatureService.enabled?(:course_preview_missing_information) %>
+      <%= render CoursePreview::MissingInformationComponent.new("Enter degree requirements",
+      degrees_start_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
+    <% else %>
+      <p class="govuk-body"><%= degree_grade_content(course) %></p>
 
-    <% if course.secondary_course? %>
-      <% if course.engineers_teach_physics? %>
+        <% if course.degree_subject_requirements.present? %>
+          <p class="govuk-body">
+            <%= helpers.markdown(course.degree_subject_requirements) %>
+          </p>
+      <% end %>
+
+      <% if course.secondary_course? %>
+        <% if course.engineers_teach_physics? %>
+          <p class="govuk-body">
+            This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+          </p>
+        <% end %>
+      <% end %>
+
+      <% if subject_knowledge_enhancement_content? %>
         <p class="govuk-body">
-          This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+          If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+        </p>
+      <% elsif primary_with_mathematics_subject? %>
+        <p class="govuk-body">
+          If you need to improve your primary mathematics knowledge, you may be asked to complete a
+          <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
         </p>
       <% end %>
-    <% end %>
+     <% end %>
+    </p>
 
-    <% if subject_knowledge_enhancement_content? %>
+    <% if (course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil) && FeatureService.enabled?(:course_preview_missing_information) %>
+
+      <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
+                                                                gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
+    <% else %>
+
       <p class="govuk-body">
-        If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+        <%= required_gcse_content(course) %>
       </p>
-      <% elsif primary_with_mathematics_subject? %>
+
       <p class="govuk-body">
-        If you need to improve your primary mathematics knowledge, you may be asked to complete a
-        <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+        <%= pending_gcse_content(course) %>
+      </p>
+
+      <p class="govuk-body">
+        <%= gcse_equivalency_content(course) %>
       </p>
     <% end %>
-
-    <p class="govuk-body">
-      <%= required_gcse_content(course) %>
-    </p>
-
-    <p class="govuk-body">
-      <%= pending_gcse_content(course) %>
-    </p>
-
-    <p class="govuk-body">
-      <%= gcse_equivalency_content(course) %>
-    </p>
 
     <% if course.additional_gcse_equivalencies.present? %>
       <p class="govuk-body">

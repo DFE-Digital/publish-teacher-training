@@ -18,6 +18,10 @@ module Find
           super
           @course = course
         end
+
+        def preview?
+          params[:action] == 'preview'
+        end
       end
     end
   end
