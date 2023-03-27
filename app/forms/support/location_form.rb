@@ -17,14 +17,6 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    # validates :location_name,
-    # :address1,
-    # :address3,
-    # :postcode,
-    # presence: true
-    # validates :postcode, postcode: true
-    ## validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: I18n.t('activemodel.errors.models.support/location_form.attributes.urn.format') }
-    # validate :site_name_is_unique
     validate :validate_site
 
     def full_address
