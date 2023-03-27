@@ -9,7 +9,9 @@
 <% end %>
 
 <h1 class="govuk-heading-xl">
-  <span class="govuk-heading-l govuk-!-margin-bottom-0" data-qa="course__provider_name"><%= course.provider.provider_name %></span>
+  <span class="govuk-caption-xl" data-qa="course__provider_name">
+    <%= course.provider.provider_name %>
+  </span>
   <%= course.name_and_code %>
 </h1>
 
