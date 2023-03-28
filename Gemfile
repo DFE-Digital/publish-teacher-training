@@ -230,9 +230,6 @@ group :development do
   gem 'guard'
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
-
-  # For Ruby LSP & IDE
-  gem 'ruby-lsp', require: false
 end
 
 group :test do
