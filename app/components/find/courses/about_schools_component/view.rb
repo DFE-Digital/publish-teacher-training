@@ -21,7 +21,8 @@ module Find
           how_school_placements_work.present? ||
             program_type == 'higher_education_programme' ||
             program_type == 'scitt_programme' ||
-            site_statuses.map(&:site).uniq.many?
+            site_statuses.map(&:site).uniq.many? ||
+            FeatureService.enabled?(:course_preview_missing_information)
         end
       end
     end

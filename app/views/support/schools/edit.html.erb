@@ -1,0 +1,20 @@
+<%= render PageTitle.new(title: "support.providers.schools.edit") %>
+
+<h1 class="govuk-heading-l">Edit school details</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= render partial: "edit_form", locals: { site: @site, form_url: support_recruitment_cycle_provider_school_path } %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_button_to t("support.actions.delete", resource: "school"),
+          support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site),
+          method: :delete,
+          class: "govuk-button govuk-button--warning" %>
+    </p>
+  </div>
+</div>

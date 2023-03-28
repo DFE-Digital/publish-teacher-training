@@ -2,7 +2,7 @@
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_information_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <% if params.dig(:goto_preview) == 'true' %>
+  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_course_information_form, :goto_preview) %>
     <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
   <% else %>
       <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>

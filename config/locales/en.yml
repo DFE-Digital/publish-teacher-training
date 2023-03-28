@@ -52,7 +52,7 @@ en:
       expired: "Magic link has expired, please request a new one"
   navigation_bar:
     courses: "Courses"
-    locations: "Locations"
+    schools: "Schools"
     users: "Users"
     accredited_bodies: "Accredited bodies"
     organisation_details: "Organisation details"
@@ -143,10 +143,10 @@ en:
           courses:
             index: "Courses"
             edit: "Edit course details"
-          locations:
-            index: "Locations"
-            new: "Add location"
-            edit: "Edit location details"
+          schools:
+            index: "Schools"
+            new: "Add school"
+            edit: "Edit school details"
             check: "Check your answers"
             show: "Show school"
             delete: "Are you sure you want to remove this school?"
@@ -220,12 +220,11 @@ en:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     providers:
-      locations:
-        new: "Add location"
-        added: "Location added"
-        another: "Save location and add another"
-        location_name: "Name"
-        code: "Location code"
+      schools:
+        new: "Add school"
+        added: "School added"
+        another: "Save school and add another"
+        location_name: "School name"
         urn: "Unique reference number (URN)"
         address1: "Address line 1"
         address2: "Address line 2"
@@ -239,9 +238,9 @@ en:
         new: "Add user"
         edit: "Update user"
         check: "Check your answers"
-      multiple_locations:
-        new: "Add locations"
-        show: "Add location (%{position} of %{max})"
+      multiple_schools:
+        new: "Add schools"
+        show: "Add school (%{position} of %{max})"
         check: "Check your answers"
     flash:
       created: "%{resource} successfully created"
@@ -281,8 +280,8 @@ en:
         site:
           attributes:
             location_name:
-              blank: "Enter a location name"
-              taken: "Name is in use by another location"
+              blank: "Enter a school name"
+              taken: "is in use by another school"
             address1:
               blank: "Enter address line 1"
             address3:
@@ -313,7 +312,7 @@ en:
             enrichments:
               blank: "^Complete your course information before publishing"
             sites:
-              blank: "^Select at least one location"
+              blank: "^Select at least one school"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
@@ -329,7 +328,7 @@ en:
             applications_open_from:
               blank: "^Select an applications open date"
             base:
-              duplicate: "This course already exists. You should add further locations for this course to the existing profile in Publish"
+              duplicate: "This course already exists. You should add further schools for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "Select if visas can be sponsored"
               provider_ukprn_not_publishable: "Enter a UK Provider Reference Number (UKPRN)"
               provider_ukprn_and_urn_not_publishable: "Enter a UK Provider Reference Number (UKPRN) and URN"
@@ -467,7 +466,7 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
-        support/location_form:
+        support/school_form:
           attributes:
             location_name:
               blank: "Enter a name"
@@ -482,7 +481,7 @@ en:
             urn:
               format: "Site URN must be 5 or 6 numbers"
         support/raw_csv_schools_form:
-          blank: "Enter location details"
+          blank: "Enter school details"
         publish/course_information_form:
           attributes:
             about_course:
@@ -519,10 +518,10 @@ en:
             salary_details:
               blank: "Enter details about the salary for this course"
               too_long: "Reduce the word count for salary details"
-        publish/course_location_form:
+        publish/course_school_form:
           attributes:
             site_ids:
-              no_locations: "Select at least one location"
+              no_schools: "Select at least one school"
         publish/course_vacancies_form:
           attributes:
             change_vacancies_confirmation:

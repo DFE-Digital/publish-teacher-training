@@ -38,8 +38,8 @@ module BreadcrumbHelper
   end
 
   def sites_breadcrumb
-    path = publish_provider_recruitment_cycle_locations_path(@provider.provider_code, @recruitment_cycle.year)
-    recruitment_cycle_breadcrumb.merge({ 'Locations' => path })
+    path = publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year)
+    recruitment_cycle_breadcrumb.merge({ 'Schools' => path })
   end
 
   def organisation_details_breadcrumb
@@ -53,12 +53,12 @@ module BreadcrumbHelper
   end
 
   def edit_site_breadcrumb
-    path = edit_publish_provider_recruitment_cycle_location_path(@provider.provider_code, @recruitment_cycle.year, @site.id)
+    path = edit_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @recruitment_cycle.year, @site.id)
     sites_breadcrumb.merge({ @site.location_name.dup => path })
   end
 
   def new_site_breadcrumb
-    path = new_publish_provider_recruitment_cycle_location_path(@provider.provider_code)
+    path = new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)
     sites_breadcrumb.merge({ 'Add a location' => path })
   end
 

@@ -1,0 +1,41 @@
+<%= render PageTitle.new(title: "support.providers.schools.index") %>
+
+<%= govuk_link_to("Add school", new_support_recruitment_cycle_provider_school_path, class: "govuk-button govuk-!-margin-bottom-3") %>
+
+<%= govuk_link_to("Add multiple schools", new_support_recruitment_cycle_provider_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") if FeatureService.enabled?(:add_multiple_schools) %>
+
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">School code</th>
+      <th scope="col" class="govuk-table__header">URN</th>
+    </tr>
+  </thead>
+
+  <tbody class="govuk-table__body">
+    <% if @sites.any? %>
+      <% @sites.each do |site| %>
+        <tr class="govuk-table__row school-row">
+          <td class="govuk-table__cell name">
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+              <%= govuk_link_to site.location_name, support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, site) %>
+            </span>
+          </td>
+          <td class="govuk-table__cell code">
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+              <%= site.code %> <%= site.code == "-" ? "(dash)" : "" %>
+            </span>
+          </td>
+          <td class="govuk-table__cell urn">
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+              <%= site.urn.presence || "<strong class='govuk-error-message govuk-!-display-inline'>(Missing)</strong>".html_safe %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render Paginator.new(scope: @sites) %>

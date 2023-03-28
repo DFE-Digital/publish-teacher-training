@@ -549,7 +549,7 @@ describe Course do
         it 'Requires at least one location' do
           error = errors[:sites]
           expect(error).not_to be_empty
-          expect(error.first).to include('Select at least one location')
+          expect(error.first).to include('Select at least one school')
         end
       end
 

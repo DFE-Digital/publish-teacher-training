@@ -3,7 +3,11 @@
 <% content_for :page_title, title_with_error_prefix(page_title, @start_form.errors.present?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path) %>
+  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_degree_start_form, :goto_preview) %>
+  <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% else %>
+    <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path) %>
+  <% end %>
 <% end %>
 
 <%= render CaptionText.new(text: @course.name_and_code) %>
@@ -20,11 +24,12 @@
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
-
       <%= f.govuk_radio_buttons_fieldset :degree_grade_required, legend: { text: page_title, size: "l", tag: "h1" }, hint: { text: "If you specify a minimum (for example, 2:1), candidates will be discouraged but not blocked from applying if they do not meet this level." } do %>
         <%= f.govuk_radio_button :degree_grade_required, true, label: { text: "Yes" }, data: { qa: "start__yes_radio" }, link_errors: true %>
         <%= f.govuk_radio_button :degree_grade_required, false, label: { text: "No" }, data: { qa: "start__no_radio" } %>
       <% end %>
+
+      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_degree_start_form, :goto_preview)) %>
 
       <%= f.govuk_submit @course.is_primary? ? "Save" : "Continue", data: { qa: "start__save" } %>
     <% end %>

@@ -58,7 +58,7 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        sites: "#{base}/locations?display_errors=true"
+        sites: "#{base}/schools?display_errors=true"
       }.with_indifferent_access[field]
     end
   end
@@ -135,10 +135,10 @@ module ViewHelper
         student_visa_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       'Select if skilled worker visas can be sponsored' =>
         skilled_worker_visa_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
-      'You must provide a Unique Reference Number (URN) for all course locations' =>
-        locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
-      'Enter a Unique Reference Number (URN) for all course locations' =>
-        locations_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
+      'You must provide a Unique Reference Number (URN) for all course schools' =>
+        schools_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
+      'Enter a Unique Reference Number (URN) for all course schools' =>
+        schools_publish_provider_recruitment_cycle_course_path(provider_code, course.recruitment_cycle_year, course.course_code),
       'You must provide a UK provider reference number (UKPRN)' =>
         contact_publish_provider_recruitment_cycle_path(provider_code, course.recruitment_cycle_year),
       'You must provide a UK provider reference number (UKPRN) and URN' =>
