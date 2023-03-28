@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: "support.providers.locations.show") %>
+<%= render PageTitle.new(title: "support.providers.schools.show") %>
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_recruitment_cycle_provider_schools_path) %>
 <% end %>
@@ -10,27 +10,27 @@
       </legend>
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
-              row.with_key { t("support.providers.locations.location_name") }
+              row.with_key { t("support.providers.schools.location_name") }
               row.with_value(text:  @site.location_name)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "location_name", visually_hidden_text: t("support.providers.locations.location_name"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "location_name", visually_hidden_text: t("support.providers.schools.location_name"))
             end
 
             component.with_row do |row|
-              row.with_key { t("support.providers.locations.code") }
+              row.with_key { t("support.providers.schools.code") }
               row.with_value(text: @site.code)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "code", visually_hidden_text: t("support.providers.locations.code"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "code", visually_hidden_text: t("support.providers.schools.code"))
             end
 
             component.with_row do |row|
-              row.with_key { t("support.providers.locations.urn") }
+              row.with_key { t("support.providers.schools.urn") }
               row.with_value(text: @site.urn)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "urn", visually_hidden_text: t("support.providers.locations.urn"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "urn", visually_hidden_text: t("support.providers.schools.urn"))
             end
 
             component.with_row do |row|
-              row.with_key { t("support.providers.locations.address") }
+              row.with_key { t("support.providers.schools.address") }
               row.with_value(text: @site.confirm_full_address)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.locations.address"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.schools.address"))
             end
           end %>
 
