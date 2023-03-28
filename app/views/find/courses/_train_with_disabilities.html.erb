@@ -1,6 +1,10 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-train-with-disabilities">Training with disabilities and other needs</h2>
   <div data-qa="course__train_with_disabilities">
-    <%= markdown(course.provider.train_with_disability) %>
+    <% if course.provider.train_with_disability.present? %>
+      <%= markdown(course.provider.train_with_disability) %>
+    <% else %>
+      <%= render CoursePreview::MissingInformationComponent.new("Enter details about training with disabilities and other needs", about_publish_provider_recruitment_cycle_path(@provider.provider_code, @course.recruitment_cycle_year) + "#train-with-disability") %>
+    <% end %>
   </div>
 </div>

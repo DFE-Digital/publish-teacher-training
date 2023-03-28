@@ -51,9 +51,7 @@
 
     <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
 
-    <% if course.provider.train_with_disability.present? %>
       <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
-    <% end %>
 
     <%= render Find::Courses::ContactDetailsComponent::View.new(course) %>
 
