@@ -21,7 +21,6 @@ module Support
 
     def full_address
       address = [address1, address2, address3, address4, postcode]
-      address.unshift(location_name) unless location_name.downcase == MAIN_SITE
 
       return '' if address.all?(&:blank?)
 

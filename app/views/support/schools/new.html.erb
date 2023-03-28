@@ -1,4 +1,7 @@
 <%= render PageTitle.new(title: "support.providers.schools.new") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to %>
+<% end %>
 
 <h1 class="govuk-heading-l">
   <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
