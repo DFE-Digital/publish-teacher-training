@@ -1,4 +1,4 @@
-<%= form_with model: @school_form, local: true, url: form_url, class: "school-form" do |f| %>
+<%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>

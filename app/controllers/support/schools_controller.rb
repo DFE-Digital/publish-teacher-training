@@ -32,7 +32,7 @@ module Support
 
     def update
       if site.update(site_params(:site))
-        redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: flash_resource) }
+        redirect_to support_recruitment_cycle_provider_school_path(provider.recruitment_cycle_year, provider, site)
       else
         render(:edit)
       end

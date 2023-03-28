@@ -7,7 +7,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= render partial: "support/schools/form", locals: { site: @site, form_url: support_recruitment_cycle_provider_schools_path } %>
+    <%= render partial: "support/schools/form", locals: { model: @school_form, site: @site, form_url: support_recruitment_cycle_provider_schools_path } %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>

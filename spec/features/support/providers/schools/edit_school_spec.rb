@@ -10,21 +10,21 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
 
   describe 'Updating school' do
     scenario 'With valid details' do
-      given_i_visit_the_support_provider_locations_index_page
+      given_i_visit_the_support_provider_schools_index_page
       and_i_click_the_edit_link
-      then_i_am_on_the_locations_show_page
+      then_i_am_on_the_schools_show_page
       and_i_click_change_name
-      then_i_am_on_the_locations_edit_page
-      and_i_change_location_details
+      then_i_am_on_the_schools_edit_page
+      and_i_change_school_details
       and_i_click_update
-      then_i_am_on_the_locations_show_page
+      then_i_am_on_the_schools_show_page
       and_the_school_is_updated
       and_i_click_back
       then_i_am_on_the_index_page
     end
 
     scenario 'With invalid details' do
-      and_i_visit_the_support_provider_location_edit_page
+      and_i_visit_the_support_provider_school_edit_page
       and_i_set_invalid_details
       and_i_click_update
       then_i_see_an_error_message
@@ -33,7 +33,7 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
   end
 
   def then_i_am_on_the_index_page
-    expect(support_provider_locations_index_page).to be_displayed
+    expect(support_provider_schools_index_page).to be_displayed
   end
 
   def and_i_click_back
@@ -46,18 +46,18 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
   end
 
   def then_i_see_an_error_message
-    expect(support_provider_location_edit_page.error_summary).to have_text('Enter a location name')
+    expect(support_provider_school_edit_page.error_summary).to have_text('Enter a school name')
   end
 
   def and_i_set_invalid_details
-    support_provider_location_edit_page
-      .location_form
+    support_provider_school_edit_page
+      .school_form
       .location_name
       .set('')
   end
 
-  def and_i_visit_the_support_provider_location_edit_page
-    support_provider_location_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id, location_id: @site.id)
+  def and_i_visit_the_support_provider_school_edit_page
+    support_provider_school_edit_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id, id: @site.id)
   end
 
   def and_the_school_is_updated
@@ -70,31 +70,31 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
     click_button 'Update'
   end
 
-  def and_i_change_location_details
-    support_provider_location_edit_page
-      .location_form
+  def and_i_change_school_details
+    support_provider_school_edit_page
+      .school_form
       .location_name
       .set('Test name')
   end
 
-  def then_i_am_on_the_locations_edit_page
-    expect(support_provider_location_edit_page).to be_displayed
+  def then_i_am_on_the_schools_edit_page
+    expect(support_provider_school_edit_page).to be_displayed
   end
 
   def and_i_click_change_name
-    support_provider_location_show_page.change_name.click
+    support_provider_school_show_page.change_name.click
   end
 
-  def then_i_am_on_the_locations_show_page
-    expect(support_provider_location_show_page).to be_displayed
+  def then_i_am_on_the_schools_show_page
+    expect(support_provider_school_show_page).to be_displayed
   end
 
   def and_i_click_the_edit_link
-    support_provider_locations_index_page.locations.first.edit_link.click
+    support_provider_schools_index_page.schools.first.edit_link.click
   end
 
-  def given_i_visit_the_support_provider_locations_index_page
-    support_provider_locations_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
+  def given_i_visit_the_support_provider_schools_index_page
+    support_provider_schools_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
   end
 
   def and_there_is_a_provider_site
