@@ -248,7 +248,7 @@ en:
       deleted: "%{resource} successfully deleted"
     actions:
       delete: "Delete this %{resource}"
-      remove_location: "Remove location"
+      remove_school: "Remove school"
     update_record: "Update"
     create_record: "Create"
     continue: "Continue"

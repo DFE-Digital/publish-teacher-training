@@ -6,17 +6,17 @@ feature 'Delete school under provider as an admin', { can_edit_current_and_next_
   before do
     given_i_am_authenticated_as_an_admin_user
     and_there_is_a_provider_site
-    and_i_visit_the_support_provider_location_show_page
+    and_i_visit_the_support_provider_school_show_page
   end
 
   describe 'Deleting a school' do
     scenario do
-      when_i_click_remove_location_link
-      then_i_am_on_the_location_delete_page
+      when_i_click_remove_school_link
+      then_i_am_on_the_school_delete_page
       when_i_click_cancel
-      then_i_am_on_the_location_show_page
+      then_i_am_on_the_school_show_page
 
-      when_i_click_remove_location_link
+      when_i_click_remove_school_link
       and_i_click_remove_school_button
       then_i_am_on_the_index_page
       and_the_school_is_deleted
@@ -28,32 +28,32 @@ feature 'Delete school under provider as an admin', { can_edit_current_and_next_
   end
 
   def then_i_am_on_the_index_page
-    expect(support_provider_locations_index_page).to be_displayed
-    expect(page).to have_text 'Location successfully deleted'
+    expect(support_provider_schools_index_page).to be_displayed
+    expect(page).to have_text 'School successfully deleted'
   end
 
   def and_i_click_remove_school_button
     click_button 'Remove school'
   end
 
-  def then_i_am_on_the_location_show_page
-    expect(support_provider_location_show_page).to be_displayed
+  def then_i_am_on_the_school_show_page
+    expect(support_provider_school_show_page).to be_displayed
   end
 
   def when_i_click_cancel
     click_link 'Cancel'
   end
 
-  def then_i_am_on_the_location_delete_page
-    expect(support_provider_location_delete_page).to be_displayed
+  def then_i_am_on_the_school_delete_page
+    expect(support_provider_school_delete_page).to be_displayed
   end
 
-  def when_i_click_remove_location_link
-    click_link 'Remove location'
+  def when_i_click_remove_school_link
+    click_link 'Remove school'
   end
 
-  def and_i_visit_the_support_provider_location_show_page
-    support_provider_location_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id, id: @site.id)
+  def and_i_visit_the_support_provider_school_show_page
+    support_provider_school_show_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id, id: @site.id)
   end
 
   def and_there_is_a_provider_site

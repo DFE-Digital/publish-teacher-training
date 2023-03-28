@@ -1,21 +1,21 @@
-<%= render PageTitle.new(title: "support.providers.locations.delete") %>
+<%= render PageTitle.new(title: "support.providers.schools.delete") %>
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site)) %>
+  <%= govuk_back_link_to(support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site)) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= "#{@site.location_name} - #{@provider.provider_name}(#{@provider.provider_code})" %></span>
-        <%= t("components.page_titles.support.providers.locations.delete") %>
+        <%= t("components.page_titles.support.providers.schools.delete") %>
     </h1>
     <%= govuk_button_to "Remove school",
-        delete_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site),
+        delete_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site),
         method: :delete,
         class: "govuk-button--warning" %>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Cancel", support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site)) %>
+      <%= govuk_link_to("Cancel", support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site)) %>
     </p>
   </div>
 </div>

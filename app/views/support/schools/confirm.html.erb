@@ -1,6 +1,6 @@
 <%= render PageTitle.new(title: "support.providers.locations.confirm") %>
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(support_recruitment_cycle_provider_locations_path) %>
+  <%= govuk_back_link_to(support_recruitment_cycle_provider_schools_path) %>
 <% end %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -12,31 +12,31 @@
             component.with_row do |row|
               row.with_key { t("support.providers.locations.location_name") }
               row.with_value(text:  @site.location_name)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), classes: "location_name", visually_hidden_text: t("support.providers.locations.location_name"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "location_name", visually_hidden_text: t("support.providers.locations.location_name"))
             end
 
             component.with_row do |row|
               row.with_key { t("support.providers.locations.code") }
               row.with_value(text: @site.code)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), classes: "code", visually_hidden_text: t("support.providers.locations.code"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "code", visually_hidden_text: t("support.providers.locations.code"))
             end
 
             component.with_row do |row|
               row.with_key { t("support.providers.locations.urn") }
               row.with_value(text: @site.urn)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), classes: "urn", visually_hidden_text: t("support.providers.locations.urn"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "urn", visually_hidden_text: t("support.providers.locations.urn"))
             end
 
             component.with_row do |row|
               row.with_key { t("support.providers.locations.address") }
               row.with_value(text: @site.confirm_full_address)
-              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.locations.address"))
+              row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.locations.address"))
             end
           end %>
 
           <p class="govuk-body">
-            <%= govuk_link_to t("support.actions.remove_location", resource: "location"),
-                support_recruitment_cycle_provider_location_path(@provider.recruitment_cycle_year, @provider, @site),
+            <%= govuk_link_to t("support.actions.remove_school", resource: "location"),
+                support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site),
                 method: :delete,
                 class: "app-link--destructive" %>
           </p>
