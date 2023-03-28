@@ -249,7 +249,7 @@ en:
     actions:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
-    update_record: "Update"
+    update_record: "Update school"
     create_record: "Create"
     continue: "Continue"
   activerecord:

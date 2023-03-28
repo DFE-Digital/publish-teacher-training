@@ -67,7 +67,7 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
   end
 
   def and_i_click_update
-    click_button 'Update'
+    click_button 'Update school'
   end
 
   def and_i_change_school_details

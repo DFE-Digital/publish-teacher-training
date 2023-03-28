@@ -3,16 +3,16 @@
 
   <%= f.govuk_text_field :location_name, label: { text: "School name", size: "s" } %>
 
+  <% if site.persisted? %>
+    <%= f.govuk_text_field(:code, readonly: true, label: { text: "School code", size: "s" }, width: 10) %>
+  <% end %>
+
   <%= f.govuk_text_field :urn,
-    label: { text: "Unique Reference Number (URN) (optional)", size: "s" }, width: 10 %>
+    label: { text: "Unique reference number (URN) (optional)", size: "s" }, width: 10 %>
 
    <p class="govuk-body govuk-!-margin-bottom-7">
     <%= t("links.urn_html") %>
    </p>
-
-  <% if site.persisted? %>
-    <%= f.govuk_text_field(:code, label: { text: "School code", size: "s" }, width: 10) %>
-  <% end %>
 
   <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
     <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
