@@ -23,7 +23,7 @@ describe Support::SchoolForm, type: :model do
       it 'is invalid' do
         params['location_name'] = ''
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ location_name: ['Enter a location name'] })
+        expect(subject.errors.messages).to eq({ location_name: ['Enter a school name'] })
       end
     end
 
@@ -106,7 +106,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'is invalid' do
         expect(subject).not_to be_valid
-        expect(subject.errors[:location_name]).to include('Name is in use by another location')
+        expect(subject.errors[:location_name]).to include('Name is in use by another school')
       end
     end
   end
@@ -154,7 +154,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'returns nil' do
         expect(subject.stash).to be_nil
-        expect(subject.errors.messages).to eq({ location_name: ['Enter a location name'] })
+        expect(subject.errors.messages).to eq({ location_name: ['Enter a school name'] })
       end
     end
   end
