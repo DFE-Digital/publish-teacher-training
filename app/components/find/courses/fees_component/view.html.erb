@@ -35,5 +35,7 @@
         <%= markdown(fee_details) %>
       </div>
     <% end %>
+  <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
+    <%= render CoursePreview::MissingInformationComponent.new("Enter details about fees and financial support", "#{fees_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.recruitment_cycle_year, course.course_code, goto_preview: true)}#fee-uk") %>
   <% end %>
 </div>
