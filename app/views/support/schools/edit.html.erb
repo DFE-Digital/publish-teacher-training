@@ -1,6 +1,8 @@
 <%= render PageTitle.new(title: "support.providers.schools.edit") %>
-
-<h1 class="govuk-heading-l">Edit school details</h1>
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+    Edit school
+</h1>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">

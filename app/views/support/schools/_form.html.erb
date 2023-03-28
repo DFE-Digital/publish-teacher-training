@@ -1,7 +1,7 @@
 <%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
   <%= f.govuk_error_summary %>
 
-  <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
+  <%= f.govuk_text_field :location_name, label: { text: "School name", size: "s" } %>
 
   <%= f.govuk_text_field :urn,
     label: { text: "Unique Reference Number (URN) (optional)", size: "s" }, width: 10 %>
