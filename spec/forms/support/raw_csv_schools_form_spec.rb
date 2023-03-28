@@ -16,7 +16,7 @@ module Support
         let(:params) { { school_details: nil } }
 
         it 'is invalid' do
-          expect(subject.errors[:school_details]).to include('Enter location details')
+          expect(subject.errors[:school_details]).to include('Enter school details')
           expect(subject.valid?).to be(false)
         end
       end

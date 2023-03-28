@@ -22,8 +22,8 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
     course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_apprenticeship_page)
     course_creation_params = select_apprenticeship(course_creation_params, next_page: publish_courses_new_study_mode_page)
-    course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_locations_page)
-    course_creation_params = select_location(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
+    course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
+    course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
     course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
     course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)
@@ -183,13 +183,13 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     course_creation_params
   end
 
-  def select_location(course_creation_params, next_page:)
+  def select_school(course_creation_params, next_page:)
     course_creation_params[:sites_ids] = [sites.first.id.to_s, sites.second.id.to_s]
 
-    publish_courses_new_locations_page.check(sites.first.location_name)
-    publish_courses_new_locations_page.check(sites.second.location_name)
+    publish_courses_new_schools_page.check(sites.first.location_name)
+    publish_courses_new_schools_page.check(sites.second.location_name)
 
-    publish_courses_new_locations_page.continue.click
+    publish_courses_new_schools_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,

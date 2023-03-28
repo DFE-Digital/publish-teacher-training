@@ -76,7 +76,7 @@ namespace :publish, as: :publish do
 
     get '/request-access', on: :member, to: 'providers/access_requests#new'
     post '/request-access', on: :member, to: 'providers/access_requests#create'
-    get 'locations'
+    get 'schools'
 
     resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '', only: [:show] do
       get '/about', on: :member, to: 'providers#about'
@@ -101,7 +101,7 @@ namespace :publish, as: :publish do
         resource :level, on: :member, only: %i[new], controller: 'courses/level' do
           get 'continue'
         end
-        resource :locations, on: :member, only: %i[new], controller: 'courses/sites' do
+        resource :schools, on: :member, only: %i[new], controller: 'courses/schools' do
           get 'back'
           get 'continue'
         end
@@ -176,8 +176,8 @@ namespace :publish, as: :publish do
         get '/rollover', on: :member, to: 'courses/draft_rollover#edit'
         post '/rollover', on: :member, to: 'courses/draft_rollover#update'
 
-        get '/locations', on: :member, to: 'courses/sites#edit'
-        put '/locations', on: :member, to: 'courses/sites#update'
+        get '/schools', on: :member, to: 'courses/schools#edit'
+        put '/schools', on: :member, to: 'courses/schools#update'
 
         get '/preview', on: :member, to: 'courses#preview'
 
@@ -219,7 +219,7 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
-        resources :locations, except: %i[destroy show]
+        resources :schools, except: %i[destroy show]
 
         get '/contact', on: :member, to: 'contacts#edit'
         put '/contact', on: :member, to: 'contacts#update'

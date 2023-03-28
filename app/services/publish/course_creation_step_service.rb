@@ -38,7 +38,7 @@ module Publish
         level
         outcome
         full_or_part_time
-        location
+        school
         applications_open
         start_date
         confirmation
@@ -56,7 +56,7 @@ module Publish
         outcome
         funding_type
         full_or_part_time
-        location
+        school
         accredited_body
         can_sponsor_student_visa
         can_sponsor_skilled_worker_visa
@@ -77,7 +77,7 @@ module Publish
         outcome
         apprenticeship
         full_or_part_time
-        location
+        school
         can_sponsor_student_visa
         can_sponsor_skilled_worker_visa
         applications_open

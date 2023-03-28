@@ -29,7 +29,7 @@ module Publish
 
     def new
       authorize(provider, :can_create_course?)
-      return render_locations_messages unless provider.sites&.any?
+      return render_schools_messages unless provider.sites&.any?
 
       redirect_to new_publish_provider_recruitment_cycle_courses_level_path(params[:provider_code], @recruitment_cycle.year)
     end
@@ -103,10 +103,10 @@ module Publish
       end
     end
 
-    def render_locations_messages
-      flash[:error] = { id: 'locations-error', message: 'You need to create at least one location before creating a course' }
+    def render_schools_messages
+      flash[:error] = { id: 'schools-error', message: 'You need to create at least one school before creating a course' }
 
-      redirect_to new_publish_provider_recruitment_cycle_location_path(provider.provider_code, provider.recruitment_cycle_year)
+      redirect_to new_publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle_year)
     end
 
     def fetch_course

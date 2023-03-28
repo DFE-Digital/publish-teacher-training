@@ -160,8 +160,8 @@ module Publish
 
     def course_back_path_for(page)
       case page
-      when :location
-        back_publish_provider_recruitment_cycle_courses_locations_path(path_params)
+      when :school
+        back_publish_provider_recruitment_cycle_courses_schools_path(path_params)
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
@@ -183,8 +183,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
       when :apprenticeship
         new_publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
-      when :location
-        new_publish_provider_recruitment_cycle_courses_locations_path(path_params)
+      when :school
+        new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
       when :entry_requirements
         new_publish_provider_recruitment_cycle_courses_entry_requirements_path(path_params)
       when :outcome
