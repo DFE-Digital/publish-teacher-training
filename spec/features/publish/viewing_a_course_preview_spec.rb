@@ -67,6 +67,18 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_see_the_correct_banner
       then_i_should_be_back_on_the_preview_page
     end
+
+    scenario 'blank fees uk eu' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_enter_details_about_fees_and_financial_support
+      and_i_click_back
+      and_i_click_enter_details_about_fees_and_financial_support
+      and_i_submit_a_valid_course_fees
+      and_i_see_the_correct_banner
+      and_i_see_the_the_course_fee
+      then_i_should_be_back_on_the_preview_page
+    end
   end
 
   context 'bursaries and scholarships is not announced' do
@@ -315,7 +327,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def user_with_no_course_enrichments
     course = build(
-      :course, :secondary, degree_grade: nil, additional_degree_subject_requirements: nil
+      :course, :secondary, :fee_type_based, degree_grade: nil, additional_degree_subject_requirements: nil
     )
 
     provider = build(
@@ -344,12 +356,20 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     click_link 'Enter details about school placements'
   end
 
+  def and_i_click_enter_details_about_fees_and_financial_support
+    click_link 'Enter details about fees and financial support'
+  end
+
   def and_i_click_enter_degree_requirements
     click_link 'Enter degree requirements'
   end
 
   def then_i_should_see_the_updated_content_on_the_preview_page
     expect(page).to have_content('An undergraduate degree, or equivalent.')
+  end
+
+  def and_i_see_the_the_course_fee
+    expect(page).to have_text "The course fees for UK students in #{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1} are £100."
   end
 
   def and_i_submit_and_continue_through_the_two_forms
@@ -395,6 +415,13 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     fill_in 'School placements',   with: 'great placement'
 
     click_button 'Update course information'
+  end
+
+  def and_i_submit_a_valid_course_fees
+    choose '1 year'
+    fill_in 'Fee for UK students', with: '100'
+
+    click_button 'Update course length and fees'
   end
 
   def and_i_click_back

@@ -2,7 +2,11 @@
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_fee_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_course_fee_form, :goto_preview) %>
+    <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% else %>
+    <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
+  <% end %>
 <% end %>
 
 <% if params[:copy_from].present? %>
@@ -71,6 +75,8 @@
         rows: 15,
         max_words: 250,
         data: { qa: "course_financial_support" }) %>
+
+      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_course_fee_form, :goto_preview)) %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>

@@ -16,7 +16,9 @@ module Publish
       end
 
       def funding_type_params
-        params.require(funding_type).permit(*funding_type_fields)
+        params.require(funding_type)
+              .except(:goto_preview)
+              .permit(*funding_type_fields)
       end
 
       def formatted_params
@@ -36,6 +38,8 @@ module Publish
       def funding_type_fields
         raise NotImplementedError
       end
+
+      def goto_preview? = params.dig(funding_type, :goto_preview) == 'true'
     end
   end
 end

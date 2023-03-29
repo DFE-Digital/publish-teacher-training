@@ -20,13 +20,18 @@ module Publish
         @course_fee_form = CourseFeeForm.new(course_enrichment, params: formatted_params)
 
         if @course_fee_form.save!
-          course_updated_message('Course length and fees')
+          if goto_preview?
+            redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, course.course_code)
+          else
+            course_updated_message('Course length and fees')
 
-          redirect_to publish_provider_recruitment_cycle_course_path(
-            provider.provider_code,
-            recruitment_cycle.year,
-            course.course_code
-          )
+            redirect_to publish_provider_recruitment_cycle_course_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              course.course_code
+            )
+          end
+
         else
           render :edit
         end
