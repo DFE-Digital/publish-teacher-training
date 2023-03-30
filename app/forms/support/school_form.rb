@@ -2,9 +2,8 @@
 
 module Support
   class SchoolForm < Form
-    MAIN_SITE = 'main site'
+    # MAIN_SITE = 'main site'
     FIELDS = %i[
-      id
       location_name
       urn
       code
