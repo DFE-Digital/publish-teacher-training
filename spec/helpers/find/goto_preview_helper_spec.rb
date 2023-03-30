@@ -65,5 +65,47 @@ module Find
         end
       end
     end
+
+    describe '#back_link_path' do
+      let(:course) { build(:course) }
+
+      subject do
+        back_link_path(param_form_key:,
+                       params:,
+                       provider_code: course.provider.provider_code,
+                       recruitment_cycle_year: course.recruitment_cycle_year,
+                       course_code: course.course_code)
+      end
+
+      context 'params is empty' do
+        let(:params) { {} }
+
+        it 'returns publish course url' do
+          expect(subject).to eq(
+            "/publish/organisations/#{course.provider.provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}"
+          )
+        end
+      end
+
+      context 'params has goto_preview set to "true"' do
+        let(:params) { { goto_preview: 'true' } }
+
+        it 'returns preview course url' do
+          expect(subject).to eq(
+            "/publish/organisations/#{course.provider.provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}/preview"
+          )
+        end
+      end
+
+      context 'params has param_form_key with goto_preview set to "true"' do
+        let(:params) { { param_form_key: { goto_preview: 'true' } } }
+
+        it 'returns preview course url' do
+          expect(subject).to eq(
+            "/publish/organisations/#{course.provider.provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}/preview"
+          )
+        end
+      end
+    end
   end
 end

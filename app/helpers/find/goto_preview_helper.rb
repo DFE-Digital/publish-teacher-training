@@ -9,5 +9,13 @@ module Find
     def goto_preview?(param_form_key:, params:)
       goto_preview_value(param_form_key:, params:) == 'true'
     end
+
+    def back_link_path(param_form_key:, params:, provider_code:, recruitment_cycle_year:, course_code:)
+      if goto_preview?(param_form_key:, params:)
+        preview_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code)
+      else
+        publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code)
+      end
+    end
   end
 end
