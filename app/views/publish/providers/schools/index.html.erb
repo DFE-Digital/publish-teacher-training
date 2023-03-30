@@ -23,7 +23,11 @@
           <th class="govuk-table__header" scope="col">Name</th>
           <th class="govuk-table__header" scope="col">School code</th>
           <% if urn_required?(@recruitment_cycle.year.to_i) %>
-            <th class="govuk-table__header" scope="col">URN</th>
+            <th class="govuk-table__header" scope="col">
+              <abbr class="app-!-text-decoration-underline-dotted" title="Unique reference number">
+                URN
+              </abbr>
+            </th>
           <% end %>
         </tr>
       </thead>
