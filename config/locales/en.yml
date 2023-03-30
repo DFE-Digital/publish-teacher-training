@@ -148,6 +148,8 @@ en:
             new: "Add school"
             edit: "Edit school details"
             check: "Check your answers"
+            show: "Show school"
+            delete: "Are you sure you want to remove this school?"
           users:
             new: "Add user"
             check: "Check your answers"
@@ -246,7 +248,8 @@ en:
       deleted: "%{resource} successfully deleted"
     actions:
       delete: "Delete this %{resource}"
-    update_record: "Update"
+      remove_school: "Remove school"
+    update_record: "Update school"
     create_record: "Create"
     continue: "Continue"
   activerecord:
@@ -278,7 +281,7 @@ en:
           attributes:
             location_name:
               blank: "Enter a school name"
-              taken: "is in use by another school"
+              taken: "Name is in use by another school"
             address1:
               blank: "Enter address line 1"
             address3:

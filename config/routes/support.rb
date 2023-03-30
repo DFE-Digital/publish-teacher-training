@@ -14,7 +14,12 @@ namespace :support do
       end
       resources :courses, only: %i[index edit update]
       resource :check_school, only: %i[show update], controller: 'providers/schools_check', path: 'schools/check'
-      resources :schools
+      resources :schools do
+        member do
+          get :delete
+          delete :delete, to: 'schools#destroy'
+        end
+      end
       resource :schools do
         scope module: :providers do
           scope module: :schools do

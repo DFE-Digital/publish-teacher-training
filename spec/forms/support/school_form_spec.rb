@@ -19,15 +19,79 @@ describe Support::SchoolForm, type: :model do
   describe 'validations' do
     it { is_expected.to be_valid }
 
-    it { is_expected.to validate_presence_of(:location_name).with_message('Enter a name') }
-    it { is_expected.to validate_presence_of(:address1).with_message('Enter address line 1') }
-    it { is_expected.to validate_presence_of(:address3).with_message('Enter a town or city') }
-    it { is_expected.to validate_presence_of(:postcode).with_message('Enter a postcode') }
+    context 'with missing location_name' do
+      it 'is invalid' do
+        params['location_name'] = ''
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ location_name: ['Enter a school name'] })
+      end
+    end
 
-    it { is_expected.not_to allow_values('tr', 'tr11', 'tr11u').for(:postcode).with_message('Enter a real postcode') }
-    it { is_expected.to allow_value('tr11un').for(:postcode) }
+    context 'with missing address1' do
+      it 'is invalid' do
+        params['address1'] = ''
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ address1: ['Enter address line 1'] })
+      end
+    end
 
-    it { is_expected.not_to allow_values('12', '123', '1234', 'qwert').for(:urn).with_message('Site URN must be 5 or 6 numbers') }
+    context 'with missing address3' do
+      it 'is invalid' do
+        params['address3'] = ''
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ address3: ['Enter a town or city'] })
+      end
+    end
+
+    context 'with missing postcode' do
+      it 'is invalid' do
+        params['postcode'] = ''
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ postcode: ['Enter a postcode', 'Postcode is not valid (for example, BN1 1AA)'] })
+      end
+    end
+
+    context 'with invalid postcodes' do
+      it 'is invalid' do
+        params['postcode'] = 'tr1'
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+
+        params['postcode'] = 'tr11'
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+
+        params['postcode'] = 'tr11u'
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+      end
+    end
+
+    context 'with valid postcode' do
+      it 'is valid' do
+        params['postcode'] = 'tr11un'
+        expect(subject).to be_valid
+      end
+    end
+
+    context 'with invalid urns' do
+      it 'is invalid' do
+        params['urn'] = '123'
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ urn: ['Site URN must be 5 or 6 numbers'] })
+
+        params['urn'] = 'qwert'
+        expect(subject).not_to be_valid
+        expect(subject.errors.messages).to eq({ urn: ['Site URN must be 5 or 6 numbers'] })
+      end
+    end
+
+    context 'with valid urn' do
+      it 'is valid' do
+        params['urn'] = '12345'
+        expect(subject).to be_valid
+      end
+    end
 
     context 'with existing provider.sites location_name' do
       let!(:location1) { create(:site, provider:, location_name: 'Hogwarts') }
@@ -42,7 +106,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'is invalid' do
         expect(subject).not_to be_valid
-        expect(subject.errors[:location_name]).to include('Name is taken')
+        expect(subject.errors[:location_name]).to include('Name is in use by another school')
       end
     end
   end
@@ -90,7 +154,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'returns nil' do
         expect(subject.stash).to be_nil
-        expect(subject.errors.messages).to eq({ location_name: ['Enter a name'] })
+        expect(subject.errors.messages).to eq({ location_name: ['Enter a school name'] })
       end
     end
   end

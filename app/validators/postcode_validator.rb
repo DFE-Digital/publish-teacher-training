@@ -5,6 +5,6 @@ class PostcodeValidator < ActiveModel::EachValidator
     return unless value
 
     postcode = UKPostcode.parse(value)
-    record.errors.add(attribute, message: options[:message] || 'is not valid (for example, BN1 1AA)') unless postcode.full_valid?
+    record.errors.add(attribute, message: options[:message] || 'Postcode is not valid (for example, BN1 1AA)') unless postcode.full_valid?
   end
 end

@@ -5,6 +5,7 @@ module Support
     before_action :build_site, only: %i[index new create]
     before_action :new_form, only: %i[index new]
     before_action :reset_csv_schools_forms, only: %i[index]
+    before_action :site, only: %i[edit show delete]
 
     def index
       @sites = provider.sites.order(:location_name).page(params[:page] || 1)
@@ -14,15 +15,13 @@ module Support
       redirect_to support_providers_path
     end
 
+    def show; end
+
     def new; end
 
-    def edit
-      site
-      provider
-    end
+    def edit; end
 
     def create
-      # TODO: revert site_params when we align the edit form
       @school_form = SchoolForm.new(provider, @site, params: site_params(:support_school_form))
       if @school_form.stash
         redirect_to support_recruitment_cycle_provider_check_school_path
@@ -32,12 +31,15 @@ module Support
     end
 
     def update
-      # TODO: revert site_params when we align the edit form
       if site.update(site_params(:site))
-        redirect_to support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: flash_resource) }
+        redirect_to support_recruitment_cycle_provider_school_path(provider.recruitment_cycle_year, provider, site)
       else
-        render :edit
+        render(:edit)
       end
+    end
+
+    def delete
+      provider
     end
 
     def destroy
@@ -56,7 +58,6 @@ module Support
       @flash_resource ||= 'School'
     end
 
-    # TODO: revert this when we align the edit form
     def site_params(param_form_key)
       params.require(param_form_key).permit(
         :location_name,

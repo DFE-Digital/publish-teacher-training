@@ -1,18 +1,20 @@
-<%= form_with model: @school_form, local: true, url: form_url, class: "school-form" do |f| %>
+<%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
   <%= f.govuk_error_summary %>
 
-  <%= f.govuk_text_field :location_name, label: { text: "Name", size: "s" } %>
-
-  <%= f.govuk_text_field :urn,
-    label: { text: "Unique Reference Number (URN) (optional)", size: "s" } %>
-
-   <p class="govuk-body govuk-!-margin-bottom-7">
-    Find URNs on <%= govuk_link_to t("links.get_information_schools"), t("links.get_information_schools"), target: "_blank" %>
-   </p>
+  <%= f.govuk_text_field :location_name, label: { text: "School name", size: "s" } %>
 
   <% if site.persisted? %>
-    <%= f.govuk_text_field(:code, label: { text: "School code", size: "s" }, width: 10) %>
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+      School code
+    </p>
+    <p class="govuk-body"><%= site.code %></p>
   <% end %>
+
+  <%= f.govuk_text_field :urn,
+    label: { text: "Unique reference number (URN) (optional)", size: "s" }, width: 10 %>
+
+   <p class=" govuk-body govuk-
+    <%= t("links.urn_html") %>
 
   <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
     <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
