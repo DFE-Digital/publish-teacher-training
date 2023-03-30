@@ -29,7 +29,7 @@
 
             component.with_row do |row|
               row.with_key { t("support.providers.schools.address") }
-              row.with_value(text: @site.confirm_full_address)
+              row.with_value(text: @site.decorate.full_address_on_seperate_lines)
               row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.schools.address"))
             end
           end %>
