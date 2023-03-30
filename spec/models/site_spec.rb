@@ -158,32 +158,6 @@ describe Site do
       end
     end
 
-    describe '#confirm_full_address' do
-      context "location name is 'Whatever High School'" do
-        before do
-          site.location_name = 'Whatever High School'
-        end
-
-        it 'excludes location name in full address' do
-          expect(site.confirm_full_address).to eq('Long Lane<br /> Holbury<br /> Southampton<br /> SO45 2PA')
-        end
-      end
-
-      context 'address is missing' do
-        before do
-          site.location_name = ''
-          site.address1 = ''
-          site.address2 = ''
-          site.address3 = ''
-          site.postcode = ''
-        end
-
-        it 'returns an empty string' do
-          expect(site.confirm_full_address).to eq('')
-        end
-      end
-    end
-
     describe '#skip_geocoding' do
       before do
         site.provider = create(:provider, latitude: 'foo', longitude: 'bar')

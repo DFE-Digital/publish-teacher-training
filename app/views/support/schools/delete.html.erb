@@ -6,7 +6,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <span class="govuk-caption-l"><%= "#{@site.location_name} - #{@provider.provider_name}(#{@provider.provider_code})" %></span>
+      <span class="govuk-caption-l"><%= "#{@site.location_name} - #{@provider.decorate.name_and_code}" %></span>
         <%= t("components.page_titles.support.providers.schools.delete") %>
     </h1>
     <%= govuk_button_to "Remove school",

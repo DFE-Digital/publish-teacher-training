@@ -5,7 +5,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %> </span>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= @provider.decorate.name_and_code %> </span>
         <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= @site.location_name %></h1>
       </legend>
       <%= render GovukComponent::SummaryListComponent.new do |component|
@@ -29,7 +29,7 @@
 
             component.with_row do |row|
               row.with_key { t("support.providers.schools.address") }
-              row.with_value(text: @site.confirm_full_address)
+              row.with_value(text: @site.decorate.full_address_on_seperate_lines)
               row.with_action(text: t("change"), href: edit_support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, @site), classes: "address", visually_hidden_text: t("support.providers.schools.address"))
             end
           end %>

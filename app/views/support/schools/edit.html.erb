@@ -3,7 +3,7 @@
   <%= govuk_back_link_to(support_recruitment_cycle_provider_schools_path) %>
 <% end %>
 <h1 class="govuk-heading-l">
-  <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+  <span class="govuk-caption-l"><%= @provider.decorate.name_and_code %></span>
   <%= @site.location_name_was %>
 </h1>
 

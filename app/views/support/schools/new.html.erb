@@ -4,7 +4,7 @@
 <% end %>
 
 <h1 class="govuk-heading-l">
-  <span class="govuk-caption-l"><%= "#{@provider.provider_name} (#{@provider.provider_code})" %></span>
+  <span class="govuk-caption-l"><%= @provider.decorate.name_and_code %></span>
     Add school
 </h1>
 
