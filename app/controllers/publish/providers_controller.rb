@@ -116,6 +116,7 @@ module Publish
     def provider_params
       params
         .fetch(:publish_about_your_organisation_form, {})
+        .except(:goto_preview, :course_code)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
           accredited_bodies: %i[provider_name provider_code description]
