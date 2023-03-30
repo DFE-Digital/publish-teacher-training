@@ -2,14 +2,6 @@
 
 <% content_for :page_title, title_with_error_prefix(page_title, @errors && @errors.any?) %>
 
-<% content_for :before_content do %>
-  <% if params.dig(:goto_preview) == 'true' || params.dig(:publish_gcse_requirements_form, :goto_preview) %>
-    <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
-  <% else %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)) %>
-  <% end %>
-<% end %>
-
 <% if params[:copy_from].present? %>
   <%= render partial: "publish/courses/copy_content_warning", locals: { copied_fields: @copied_fields } %>
 <% end %>
@@ -27,6 +19,10 @@
       method: :put,
       builder: GOVUKDesignSystemFormBuilder::FormBuilder
     ) do |f| %>
+
+    <% content_for :before_content do %>
+      <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+    <% end %>
 
     <%= f.govuk_error_summary %>
 
