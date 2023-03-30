@@ -29,7 +29,7 @@
         <%= f.govuk_radio_button :degree_grade_required, false, label: { text: "No" }, data: { qa: "start__no_radio" } %>
       <% end %>
 
-      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_degree_start_form, :goto_preview)) %>
+      <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
 
       <%= f.govuk_submit @course.is_primary? ? "Save" : "Continue", data: { qa: "start__save" } %>
     <% end %>
