@@ -9,7 +9,11 @@
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header">Name</th>
       <th scope="col" class="govuk-table__header">School code</th>
-      <th scope="col" class="govuk-table__header">URN</th>
+      <th scope="col" class="govuk-table__header">
+        <abbr class="app-!-text-decoration-underline-dotted" title="Unique reference number">
+          URN
+        </abbr>
+      </th>
     </tr>
   </thead>
 
@@ -29,7 +33,7 @@
           </td>
           <td class="govuk-table__cell urn">
             <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= site.urn.presence || "<strong class='govuk-error-message govuk-!-display-inline'>(Missing)</strong>".html_safe %>
+              <%= course_value_provided?(site.urn) %>
             </span>
           </td>
         </tr>
