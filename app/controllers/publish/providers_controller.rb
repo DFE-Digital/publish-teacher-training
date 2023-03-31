@@ -61,13 +61,13 @@ module Publish
 
       @about_form = AboutYourOrganisationForm.new(provider, params: provider_params)
 
-      if @about_form.save!
+      if @about_form.valid? && goto_preview?
+        @about_form.save!
+        redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params.dig(:course_code) || params.dig(:publish_about_your_organisation_form, :course_code)))
+      elsif @about_form.valid? && !goto_preview?
+        @about_form.save!
         flash[:success] = I18n.t('success.published')
-        redirect_to(
-          details_publish_provider_recruitment_cycle_path(
-            provider.provider_code,
-            provider.recruitment_cycle_year
-          )
+        redirect_to(details_publish_provider_recruitment_cycle_path(provider.provider_code,provider.recruitment_cycle_year)
         )
       else
         @errors = @about_form.errors.messages
@@ -122,5 +122,7 @@ module Publish
           accredited_bodies: %i[provider_name provider_code description]
         )
     end
+
+    def goto_preview? = params.dig(:publish_about_your_organisation_form, :goto_preview) == 'true'
   end
 end
