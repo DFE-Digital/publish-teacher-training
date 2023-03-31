@@ -209,6 +209,9 @@ restore-postgres: set-restore-variables deploy ##  make qa restore-postgres IMAG
 publish:
 	$(eval include global_config/publish-domain.sh)
 
+find:
+	$(eval include global_config/find-domain.sh)
+
 set-azure-account:
 	echo "Logging on to ${AZURE_SUBSCRIPTION}"
 	az account set -s $(AZURE_SUBSCRIPTION)
