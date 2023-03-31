@@ -3,8 +3,7 @@
   <div data-qa="course__train_with_disabilities">
     <% if course.provider.train_with_disability.present? %>
       <%= markdown(course.provider.train_with_disability) %>
-    <% else %>
-      <% puts "@course.recruitment_cycle_year: #{@course.recruitment_cycle_year}" %>
+    <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
       <%= render CoursePreview::MissingInformationComponent.new("Enter details about training with disabilities and other needs", about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year, course_code: @course.course_code, goto_preview: true) + "#train-with-disability") %>
     <% end %>
   </div>
