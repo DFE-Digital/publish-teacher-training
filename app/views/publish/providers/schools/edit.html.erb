@@ -4,6 +4,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+        <%= @site.location_name_was %>
+      </h1>
+
     <%= form_with(
       model: @school_form,
       url: publish_provider_recruitment_cycle_school_path(@school_form.provider_code, @school_form.recruitment_cycle_year, @school_form.site.id),
@@ -12,13 +16,11 @@
 
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= page_title %>
-      </h1>
-
-      <p class="govuk-body">When you’ve added a school, you can assign it to a course in the ‘Basic details’ tab of the course. Candidates will see a list of schools on the course page on Find.</p>
       <%= render "form", f: %>
-      <%= f.govuk_submit "Save and publish" %>
+      <%= f.govuk_submit(@site.persisted? ? t("support.update_record") : t("support.continue")) %>
     <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    </p>
   </div>
 </div>

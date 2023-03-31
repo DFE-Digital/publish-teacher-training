@@ -13,8 +13,9 @@
   <%= f.govuk_text_field :urn,
     label: { text: "Unique reference number (URN) (optional)", size: "s" }, width: 10 %>
 
-   <p class=" govuk-body govuk-
+  <p class="govuk-body govuk-!-margin-bottom-7">
     <%= t("links.urn_html") %>
+  </p>
 
   <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
     <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
