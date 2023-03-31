@@ -4,6 +4,8 @@ module Publish
   module Courses
     module Degrees
       class StartController < PublishController
+        include GotoPreview
+
         def edit
           authorize(provider)
 
@@ -41,18 +43,16 @@ module Publish
 
         private
 
-        def goto_preview?
-          params.dig(:publish_degree_start_form, :goto_preview) == 'true'
-        end
+        def param_form_key = :publish_degree_start_form
 
         def course
           @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
         end
 
         def grade_required_params
-          return if params[:publish_degree_start_form].blank?
+          return if params[param_form_key].blank?
 
-          params.require(:publish_degree_start_form)
+          params.require(param_form_key)
                 .except(:goto_preview)
                 .permit(:degree_grade_required)[:degree_grade_required]
         end

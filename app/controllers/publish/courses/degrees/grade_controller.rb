@@ -4,6 +4,8 @@ module Publish
   module Courses
     module Degrees
       class GradeController < PublishController
+        include GotoPreview
+
         def edit
           authorize(provider)
 
@@ -43,14 +45,14 @@ module Publish
         end
 
         def grade_params
-          return if params[:publish_degree_grade_form].blank?
+          return if params[param_form_key].blank?
 
-          params.require(:publish_degree_grade_form)
+          params.require(param_form_key)
                 .except(:goto_preview)
                 .permit(:grade)[:grade]
         end
 
-        def goto_preview? = params.dig(:publish_degree_grade_form, :goto_preview) == 'true'
+        def param_form_key = :publish_degree_grade_form
       end
     end
   end
