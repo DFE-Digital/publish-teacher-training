@@ -6,28 +6,28 @@ module Publish
       before_action :pundit
 
       def index
-        #authorize provider, :can_list_sites?
+        # authorize provider, :can_list_sites?
 
         @schools = provider.sites.sort_by(&:location_name)
       end
 
       def show
-       # authorize provider, :can_list_sites?
+        # authorize provider, :can_list_sites?
         site
       end
 
       def new
-        #authorize provider, :can_create_sites?
+        # authorize provider, :can_create_sites?
         @school_form = SchoolForm.new(provider.sites.new)
       end
 
       def edit
-       # authorize site, :update?
+        # authorize site, :update?
         @school_form = SchoolForm.new(site)
       end
 
       def create
-        #authorize provider, :can_create_sites?
+        # authorize provider, :can_create_sites?
 
         @school_form = SchoolForm.new(provider.sites.new, params: site_params)
         if @school_form.save!
@@ -41,7 +41,7 @@ module Publish
       end
 
       def update
-       # authorize provider, :update?
+        # authorize provider, :update?
         @school_form = SchoolForm.new(site, params: site_params)
 
         if @school_form.save!
@@ -56,15 +56,15 @@ module Publish
       end
 
       def delete
-        #authorize provider, :destroy?
+        # authorize provider, :destroy?
         site
       end
 
       def destroy
-        #authorize provider, :destroy?
+        # authorize provider, :destroy?
         site.destroy!
-        flash[:success] = "School removed" 
-        redirect_to publish_provider_recruitment_cycle_schools_path 
+        flash[:success] = 'School removed'
+        redirect_to publish_provider_recruitment_cycle_schools_path
       end
 
       private
