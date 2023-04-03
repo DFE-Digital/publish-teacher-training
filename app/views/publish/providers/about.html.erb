@@ -1,14 +1,6 @@
 <% page_title = "About your organisation" %>
 <% content_for :page_title, title_with_error_prefix(page_title, @errors.present?) %>
 
-<% content_for :before_content do %>
-  <% if (params.dig(:goto_preview) == 'true' || params.dig(:publish_about_your_organisation_form, :goto_preview)) && (params.dig(:course_code).present? || params.dig(:publish_about_your_organisation_form, :course_code).present?) %>
-    <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, (params.dig(:course_code) || params.dig(:publish_about_your_organisation_form, :course_code)))) %>
-  <% else %>
-      <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-  <% end %>
-<% end %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -16,6 +8,10 @@
       url: about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
       method: :put
     ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params: params, provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: (params.dig(:course_code) || params.dig(:publish_about_your_organisation_form, :course_code)))) %>
+      <% end %>
 
       <%= f.govuk_error_summary %>
 
@@ -87,7 +83,8 @@
         max_words: 250,
         rows: 15) %>
         
-      <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_about_your_organisation_form, :goto_preview)) %>
+      <%# <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_about_your_organisation_form, :goto_preview)) %> %>
+      <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
       <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(:publish_about_your_organisation_form, :course_code)) %>
 
       <%= f.govuk_submit "Save and publish" %>
