@@ -21,11 +21,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
     end
 
-    scenario 'blank raining with disabilities and other needs' do
+    scenario 'blank training with disabilities and other needs' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
       and_i_click_enter_details_about_training_with_disabilities_and_other_needs
       then_i_should_be_on_about_your_organisation_page
+      and_i_click_back
+      then_i_should_be_back_on_the_preview_page
+      and_i_click_enter_details_about_training_with_disabilities_and_other_needs
+      and_i_submit_a_valid_about_your_organisation
+      then_i_should_be_back_on_the_preview_page
+      and_i_should_see_the_updated_content
     end
 
     scenario 'blank course summary' do
@@ -338,7 +344,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     provider = build(
-      :provider, courses: [course]
+      :provider, courses: [course], train_with_disability: nil
     )
 
     create(
@@ -373,6 +379,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_enter_degree_requirements
     click_link 'Enter degree requirements'
+  end
+
+  def and_i_should_see_the_updated_content
+    expect(page).to have_content('test training with disabilities')
   end
 
   def then_i_should_see_the_updated_content_on_the_preview_page
@@ -423,6 +433,13 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_be_back_on_the_preview_page
     expect(page).to have_current_path "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/preview"
+  end
+
+  def and_i_submit_a_valid_about_your_organisation
+    fill_in 'Training with your organisation', with: 'test training with disabilities'
+    fill_in 'Training with disabilities and other needs', with: 'test training with disabilities'
+
+    click_button 'Save and publish'
   end
 
   def and_i_submit_a_valid_form
