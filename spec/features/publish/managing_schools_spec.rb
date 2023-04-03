@@ -85,7 +85,6 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def then_i_am_on_the_school_delete_page
-    # binding.pry
     expect(publish_school_delete_page).to be_displayed
   end
 
