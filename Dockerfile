@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.2-alpine3.17
+FROM ruby:3.1-alpine3.15
 
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
@@ -23,6 +23,9 @@ RUN apk add --update --no-cache tzdata && \
 
 RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses shared-mime-info
+
+# Remove once the base image ruby:3.1-alpine3.15 has been updated with the below pkgs
+RUN apk add --no-cache libcrypto1.1=1.1.1t-r3
 
 ENV APP_HOME /app
 
@@ -54,6 +57,5 @@ RUN ls /app/public/ && \
 
 ARG COMMIT_SHA
 ENV COMMIT_SHA=${COMMIT_SHA}
-ENV RUBY_YJIT_ENABLE=1
 
 CMD bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0

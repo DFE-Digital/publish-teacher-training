@@ -2,7 +2,7 @@
   "name": "teacher-training-api",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   },
   "scripts": {
     "build": "yarn run build:css && yarn run build:js",
