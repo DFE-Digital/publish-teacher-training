@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../sections/school_form'
+require_relative '../sections/edit_school_form'
 
 module PageObjects
   module Publish
@@ -8,7 +8,7 @@ module PageObjects
       set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/schools/{school_id}/edit'
       element :error_summary, '.govuk-error-summary'
 
-      section :school_form, Sections::SchoolForm, '.school-form'
+      section :school_form, Sections::EditSchoolForm, '.school-form'
 
       element :name_field, '#publish-school-form-location-name-field'
       element :address1_field, '#publish-school-form-address1-field'

@@ -3,15 +3,155 @@
 require 'rails_helper'
 
 feature "Managing a provider's schools", { can_edit_current_and_next_cycles: false } do
-  scenario "i can view and update a provider's schools" do
+  before do
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_schools_page
     then_i_should_see_a_list_of_schools
+  end
 
-    when_i_click_add_a_school
-    then_i_can_add_a_school
-    when_i_click_on_a_school
-    then_i_can_update_its_details
+  describe 'add school' do
+    scenario 'with valid details' do
+      when_i_click_add_a_school
+      then_i_can_add_a_school
+    end
+  end
+
+  describe 'edit school' do
+    scenario 'with valid details' do
+      when_i_click_on_a_school
+      then_i_am_on_the_school_show_page
+      and_i_click_change_name
+      then_i_am_on_the_school_edit_page
+      and_i_change_school_details
+      and_i_click_update
+      then_i_am_on_the_school_show_page
+      and_the_school_is_updated
+      and_i_click_back
+      then_i_am_on_the_index_page
+    end
+
+    scenario 'with invalid details' do
+      when_i_visit_the_publish_school_edit_page
+      and_i_set_invalid_details
+      and_i_click_update
+      then_i_see_an_error_message
+      and_the_school_is_not_updated
+    end
+  end
+
+  describe 'delete school' do
+    scenario 'with no associated courses' do
+      when_i_visit_the_publish_school_show_page
+      and_i_click_remove_school_link
+      then_i_am_on_the_school_delete_page
+      when_i_click_cancel
+      then_i_am_on_the_school_show_page
+
+      and_i_click_remove_school_link
+      and_i_click_remove_school_button
+      then_i_am_on_the_index_page
+      and_the_school_is_deleted
+    end
+
+    scenario 'with associcated course' do
+      given_there_is_an_associated_course
+      when_i_visit_the_publish_school_show_page
+      and_i_click_remove_school_link
+      then_i_am_on_the_school_delete_page
+      and_i_cannot_delete_the_school
+    end
+  end
+
+  def and_i_cannot_delete_the_school
+    expect(publish_school_delete_page).to have_text('You cannot remove this school')
+    expect(publish_school_delete_page).not_to have_remove_school_button
+  end
+
+  def given_there_is_an_associated_course
+    @course = create(:course, provider:)
+    @course.sites << @site
+  end
+
+  def and_the_school_is_deleted
+    expect(provider.sites.count).to eq 0
+  end
+
+  def and_i_click_remove_school_button
+    click_button 'Remove school'
+  end
+
+  def when_i_click_cancel
+    click_link 'Cancel'
+  end
+
+  def then_i_am_on_the_school_delete_page
+    # binding.pry
+    expect(publish_school_delete_page).to be_displayed
+  end
+
+  def and_i_click_remove_school_link
+    click_link 'Remove school'
+  end
+
+  def when_i_visit_the_publish_school_show_page
+    publish_school_show_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, school_id: @site.id)
+  end
+
+  def and_the_school_is_not_updated
+    @site.reload
+    expect(@site.location_name).to include 'Main Site'
+  end
+
+  def then_i_see_an_error_message
+    expect(publish_school_edit_page.error_summary).to have_text('Enter a name')
+  end
+
+  def and_i_set_invalid_details
+    publish_school_edit_page
+      .school_form
+      .location_name
+      .set('')
+  end
+
+  def when_i_visit_the_publish_school_edit_page
+    publish_school_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, school_id: @site.id)
+  end
+
+  def then_i_am_on_the_index_page
+    expect(publish_schools_index_page).to be_displayed
+  end
+
+  def and_i_click_back
+    click_link 'Back'
+  end
+
+  def and_the_school_is_updated
+    expect(page).to have_text 'Test name'
+    @site.reload
+    expect(@site.location_name).to eq 'Test name'
+  end
+
+  def and_i_click_update
+    click_button 'Update school'
+  end
+
+  def and_i_change_school_details
+    publish_school_edit_page
+      .school_form
+      .location_name
+      .set('Test name')
+  end
+
+  def then_i_am_on_the_school_edit_page
+    expect(publish_school_edit_page).to be_displayed
+  end
+
+  def and_i_click_change_name
+    publish_school_show_page.change_name.click
+  end
+
+  def then_i_am_on_the_school_show_page
+    expect(publish_school_show_page).to be_displayed
   end
 
   def given_i_am_authenticated_as_a_provider_user

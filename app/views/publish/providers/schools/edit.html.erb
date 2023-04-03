@@ -13,7 +13,8 @@
     <%= form_with(
       model: @school_form,
       url: publish_provider_recruitment_cycle_school_path(@school_form.provider_code, @school_form.recruitment_cycle_year, @school_form.site.id),
-      method: :patch
+      method: :patch,
+      class: "school-form"
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
