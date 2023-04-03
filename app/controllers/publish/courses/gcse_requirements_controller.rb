@@ -4,6 +4,8 @@ module Publish
   module Courses
     class GcseRequirementsController < PublishController
       include CopyCourseContent
+      include GotoPreview
+
       decorates_assigned :source_course
 
       def edit
@@ -54,7 +56,7 @@ module Publish
 
       def publish_gcse_requirements_form_params
         @publish_gcse_requirements_form_params ||= params
-                                                   .require(:publish_gcse_requirements_form)
+                                                   .require(param_form_key)
                                                    .except(:goto_preview)
                                                    .permit(
                                                      :accept_pending_gcse,
@@ -77,7 +79,7 @@ module Publish
         end
       end
 
-      def goto_preview? = params.dig(:publish_gcse_requirements_form, :goto_preview) == 'true'
+      def param_form_key = :publish_gcse_requirements_form
     end
   end
 end

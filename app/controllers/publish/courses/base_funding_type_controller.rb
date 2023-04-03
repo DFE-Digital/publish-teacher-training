@@ -4,6 +4,7 @@ module Publish
   module Courses
     class BaseFundingTypeController < PublishController
       include SuccessMessage
+      include GotoPreview
 
       private
 
@@ -39,7 +40,7 @@ module Publish
         raise NotImplementedError
       end
 
-      def goto_preview? = params.dig(funding_type, :goto_preview) == 'true'
+      def param_form_key = funding_type
     end
   end
 end

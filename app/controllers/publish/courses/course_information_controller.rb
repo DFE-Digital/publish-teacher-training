@@ -4,6 +4,7 @@ module Publish
   module Courses
     class CourseInformationController < PublishController
       include CopyCourseContent
+      include GotoPreview
 
       def edit
         authorize(provider)
@@ -44,7 +45,7 @@ module Publish
 
       def course_information_params
         params
-          .require(:publish_course_information_form)
+          .require(param_form_key)
           .except(:goto_preview)
           .permit(
             CourseInformationForm::FIELDS
@@ -55,7 +56,7 @@ module Publish
         @course_enrichment ||= course.enrichments.find_or_initialize_draft
       end
 
-      def goto_preview? = params.dig(:publish_course_information_form, :goto_preview) == 'true'
+      def param_form_key = :publish_course_information_form
     end
   end
 end

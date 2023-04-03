@@ -5,6 +5,8 @@ module Publish
     module Degrees
       class SubjectRequirementsController < PublishController
         include CopyCourseContent
+        include GotoPreview
+
         decorates_assigned :source_course
         before_action :redirect_to_course_details_page_if_course_is_primary
 
@@ -37,9 +39,7 @@ module Publish
 
         private
 
-        def goto_preview?
-          params.dig(:publish_subject_requirement_form, :goto_preview) == 'true'
-        end
+        def param_form_key = :publish_subject_requirement_form
 
         def course
           @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
@@ -47,7 +47,7 @@ module Publish
 
         def subject_requirements_params
           params
-            .require(:publish_subject_requirement_form)
+            .require(param_form_key)
             .except(:goto_preview)
             .permit(:additional_degree_subject_requirements, :degree_subject_requirements)
         end
@@ -63,7 +63,7 @@ module Publish
         end
 
         def gobackto_preview?
-          params[:goto_preview] == 'true' || params.dig(:publish_subject_requirement_form, :goto_preview)
+          params[:goto_preview] == 'true' || params.dig(param_form_key, :goto_preview)
         end
 
         def redirect_to_course_details_page_if_course_is_primary
