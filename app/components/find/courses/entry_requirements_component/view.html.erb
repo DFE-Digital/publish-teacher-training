@@ -3,9 +3,8 @@
   <h3 class="govuk-heading-m">Qualifications needed</h3>
   <div data-qa="course__required_qualifications">
 
-    <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? && FeatureService.enabled?(:course_preview_missing_information) %>
-      <%= render CoursePreview::MissingInformationComponent.new("Enter degree requirements",
-      degrees_start_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
+    <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? %>
+        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree) %>
     <% else %>
       <p class="govuk-body"><%= degree_grade_content(course) %></p>
 
@@ -36,10 +35,8 @@
      <% end %>
     </p>
 
-    <% if (course.accept_pending_gcse == nil || course.accept_gcse_equivalency == nil) && FeatureService.enabled?(:course_preview_missing_information) %>
-
-      <%= render CoursePreview::MissingInformationComponent.new("Enter GCSE and equivalency test requirements",
-                                                                gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(course.provider.provider_code, course.provider.recruitment_cycle_year, course.course_code, goto_preview: true)) %>
+    <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse) %>
     <% else %>
 
       <p class="govuk-body">
