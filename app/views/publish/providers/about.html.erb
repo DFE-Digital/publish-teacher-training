@@ -10,7 +10,7 @@
     ) do |f| %>
 
       <% content_for :before_content do %>
-        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params: params, provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: (params.dig(:course_code) || params.dig(:publish_about_your_organisation_form, :course_code)))) %>
+        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: (params[:course_code] || params[f.object_name.to_sym][:course_code]))) %>
       <% end %>
 
       <%= f.govuk_error_summary %>
@@ -82,10 +82,8 @@
         label: { text: "Training with disabilities and other needs", size: "s" },
         max_words: 250,
         rows: 15) %>
-        
-      <%# <%= f.hidden_field(:goto_preview, value: params[:goto_preview] || params.dig(:publish_about_your_organisation_form, :goto_preview)) %> %>
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
-      <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(:publish_about_your_organisation_form, :course_code)) %>
+      <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
 
       <%= f.govuk_submit "Save and publish" %>
     <% end %>

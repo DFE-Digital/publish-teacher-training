@@ -3,6 +3,7 @@
 module Publish
   class ProvidersController < PublishController
     include RolloverHelper
+    include GotoPreview
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     decorates_assigned :provider
 
@@ -63,7 +64,7 @@ module Publish
 
       if @about_form.valid? && goto_preview?
         @about_form.save!
-        redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params[:course_code] || params.dig(:publish_about_your_organisation_form, :course_code)))
+        redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params[:course_code] || params.dig(param_form_key, :course_code)))
       elsif @about_form.valid? && !goto_preview?
         @about_form.save!
         flash[:success] = I18n.t('success.published')
@@ -114,7 +115,7 @@ module Publish
 
     def provider_params
       params
-        .fetch(:publish_about_your_organisation_form, {})
+        .require(param_form_key)
         .except(:goto_preview, :course_code)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
@@ -122,6 +123,6 @@ module Publish
         )
     end
 
-    def goto_preview? = params.dig(:publish_about_your_organisation_form, :goto_preview) == 'true'
+    def param_form_key = :publish_about_your_organisation_form
   end
 end
