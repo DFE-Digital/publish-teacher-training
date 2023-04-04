@@ -12,7 +12,20 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   describe 'add school' do
     scenario 'with valid details' do
       when_i_click_add_a_school
-      then_i_can_add_a_school
+      then_i_am_on_the_school_new_page
+      and_i_set_valid_new_details
+      and_i_am_on_the_schools_check_page
+      and_i_click_add_school
+      then_i_am_on_the_index_page
+      and_the_school_is_added
+    end
+
+    scenario 'with invalid details' do
+      when_i_click_add_a_school
+      then_i_am_on_the_school_new_page
+      and_i_set_invalid_new_details
+      then_i_see_an_error_message
+      and_the_school_is_not_added
     end
   end
 
@@ -62,6 +75,43 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
     end
   end
 
+  def and_the_school_is_not_added
+    expect(Site.count).to eq(1)
+  end
+
+  def and_the_school_is_added
+    expect(publish_schools_index_page.schools.size).to eq(2)
+    expect(publish_schools_index_page.schools.last.name).to have_text('Some place')
+  end
+
+  def and_i_click_add_school
+    click_button 'Add school'
+  end
+
+  def and_i_am_on_the_schools_check_page
+    expect(publish_provider_schools_check_page).to be_displayed
+  end
+
+  def and_i_set_invalid_new_details
+    publish_school_new_page.name_field.set ''
+    publish_school_new_page.address1_field.set '123 Test Street'
+    publish_school_new_page.address3_field.set 'London'
+    publish_school_new_page.postcode_field.set 'KT8 9AU'
+    publish_school_new_page.submit.click
+  end
+
+  def and_i_set_valid_new_details
+    publish_school_new_page.name_field.set 'Some place'
+    publish_school_new_page.address1_field.set '123 Test Street'
+    publish_school_new_page.address3_field.set 'London'
+    publish_school_new_page.postcode_field.set 'KT8 9AU'
+    publish_school_new_page.submit.click
+  end
+
+  def then_i_am_on_the_school_new_page
+    expect(publish_school_new_page).to be_displayed
+  end
+
   def and_i_cannot_delete_the_school
     expect(publish_school_delete_page).to have_text('You cannot remove this school')
     expect(publish_school_delete_page).not_to have_remove_school_button
@@ -102,7 +152,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def then_i_see_an_error_message
-    expect(publish_school_edit_page.error_summary).to have_text('Enter a name')
+    expect(page).to have_text('Enter a name')
   end
 
   def and_i_set_invalid_details

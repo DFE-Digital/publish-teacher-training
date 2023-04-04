@@ -219,6 +219,7 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
+        resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do
             get :delete

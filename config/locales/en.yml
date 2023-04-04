@@ -282,7 +282,7 @@ en:
         site:
           attributes:
             location_name:
-              blank: "Enter a school name"
+              blank: "Enter a name"
               taken: "Name is in use by another school"
             address1:
               blank: "Enter address line 1"

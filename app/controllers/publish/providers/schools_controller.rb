@@ -13,7 +13,10 @@ module Publish
       def show; end
 
       def new
-        @school_form = SchoolForm.new(provider.sites.new)
+        # @school_form = SchoolForm.new(provider.sites.new)
+        @site = provider.sites.build
+        @school_form = ::Support::SchoolForm.new(provider, @site)
+        @school_form.clear_stash
       end
 
       def edit
@@ -21,19 +24,21 @@ module Publish
       end
 
       def create
-        @school_form = SchoolForm.new(provider.sites.new, params: site_params)
-        if @school_form.save!
-          flash[:success] = 'Your school has been created'
-          redirect_to publish_provider_recruitment_cycle_schools_path(
-            @school_form.provider_code, @school_form.recruitment_cycle_year
-          )
+        @site = provider.sites.build
+        @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
+        if @school_form.stash
+          redirect_to publish_provider_recruitment_cycle_check_school_path
+          # flash[:success] = 'Your school has been created'
+          # redirect_to publish_provider_recruitment_cycle_schools_path(
+          # @school_form.provider_code, @school_form.recruitment_cycle_year
+          # )
         else
           render :new
         end
       end
 
       def update
-        @school_form = SchoolForm.new(site, params: site_params)
+        @school_form = SchoolForm.new(site, params: site_params(:publish_school_form))
 
         if @school_form.save!
           course_updated_message('School')
@@ -64,8 +69,8 @@ module Publish
         @site ||= provider.sites.find(params[:id])
       end
 
-      def site_params
-        params.require(:publish_school_form).permit(SchoolForm::FIELDS)
+      def site_params(param_form_key)
+        params.require(param_form_key).permit(SchoolForm::FIELDS)
       end
     end
   end
