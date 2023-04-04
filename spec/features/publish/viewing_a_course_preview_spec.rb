@@ -31,7 +31,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_click_enter_details_about_training_with_disabilities_and_other_needs
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
-      and_i_should_see_the_updated_content
+      then_i_should_see_the_updated_content
     end
 
     scenario 'blank course summary' do
@@ -381,7 +381,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     click_link 'Enter degree requirements'
   end
 
-  def and_i_should_see_the_updated_content
+  def then_i_should_see_the_updated_content
     expect(page).to have_content('test training with disabilities')
   end
 
