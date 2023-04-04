@@ -63,12 +63,11 @@ module Publish
 
       if @about_form.valid? && goto_preview?
         @about_form.save!
-        redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params.dig(:course_code) || params.dig(:publish_about_your_organisation_form, :course_code)))
+        redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params[:course_code] || params.dig(:publish_about_your_organisation_form, :course_code)))
       elsif @about_form.valid? && !goto_preview?
         @about_form.save!
         flash[:success] = I18n.t('success.published')
-        redirect_to(details_publish_provider_recruitment_cycle_path(provider.provider_code,provider.recruitment_cycle_year)
-        )
+        redirect_to(details_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year))
       else
         @errors = @about_form.errors.messages
         render :about
