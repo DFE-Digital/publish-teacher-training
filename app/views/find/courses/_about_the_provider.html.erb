@@ -4,8 +4,8 @@
     <div data-qa="course__about_provider">
       <%= markdown(course.provider.train_with_us) %>
     </div>
-    <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
-      <%= render CoursePreview::MissingInformationComponent.new("Enter details about the training provider", "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_preview: true)}#train-with-us") %>
+    <% else %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us) %>
   <% end %>
 
   <% if course.accrediting_provider.present? %>
@@ -15,10 +15,8 @@
       <div data-qa="course__about_accrediting_body">
         <%= markdown(course.about_accrediting_body) %>
       </div>
-    <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
-      <%= render CoursePreview::MissingInformationComponent.new("Enter details about the accredited body",
-      "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_preview: true)}#accrediting-provider-#{course.accrediting_provider.provider_code}")
-      %>
+    <% else %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_accrediting_body) %>
     <% end %>
   <% end %>
 </div>
