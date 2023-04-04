@@ -8,14 +8,16 @@ module CoursePreview
 
     context 'when the course is incomplete' do
       let(:provider) { build(:provider) }
-      let(:course) { Course.new(provider:, course_code:) }
+      let(:accrediting_provider) { build(:provider) }
+      let(:course) { Course.new(provider:, course_code:, accrediting_provider:) }
       let(:provider_code) { provider.provider_code }
       let(:recruitment_cycle_year) { provider.recruitment_cycle_year }
       let(:course_code) { '4GET' }
 
       let(:hrefs) do
-        { about_course:
-        about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
+        {
+          about_course:
+       about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           degree:
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           fee_uk_eu:
@@ -23,7 +25,14 @@ module CoursePreview
           gcse:
         gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           how_school_placements_work:
-        "#{about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)}#how-school-placements-work" }
+        "#{about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)}#how-school-placements-work",
+          train_with_disability:
+        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-disability",
+          train_with_us:
+        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-us",
+          about_accrediting_body:
+        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#accrediting-provider-#{accrediting_provider.provider_code}"
+        }
       end
 
       shared_examples 'course with missing information' do |information_type, text|
@@ -34,8 +43,7 @@ module CoursePreview
         it "renders link for missing #{information_type}" do
           render_inline(described_class.new(course:, information_type:))
 
-          href = hrefs[information_type]
-          expect(page).to have_link(text, href:)
+          expect(page).to have_link(text, href: hrefs[information_type])
         end
       end
 
@@ -44,6 +52,9 @@ module CoursePreview
       include_examples 'course with missing information', :fee_uk_eu, 'Enter details about fees and financial support'
       include_examples 'course with missing information', :gcse, 'Enter GCSE and equivalency test requirements'
       include_examples 'course with missing information', :how_school_placements_work, 'Enter details about school placements'
+      include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
+      include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
+      include_examples 'course with missing information', :about_accrediting_body, 'Enter details about the accredited body'
     end
   end
 end
