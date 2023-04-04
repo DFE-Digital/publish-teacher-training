@@ -10,7 +10,7 @@
     ) do |f| %>
 
       <% content_for :before_content do %>
-        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: (params[:course_code] || params[f.object_name.to_sym][:course_code]))) %>
+        <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: (params[:course_code] || params.dig(f.object_name.to_sym, :course_code)))) %>
       <% end %>
 
       <%= f.govuk_error_summary %>
