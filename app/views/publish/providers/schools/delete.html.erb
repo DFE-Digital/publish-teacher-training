@@ -7,7 +7,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
       <span class="govuk-caption-l"><%= @site.location_name %></span>
-    <% if site_has_no_course?(@site) %>
+    <% if @site.has_no_course? %>
       <%= t("components.page_titles.publish.providers.schools.delete") %>
     </h1>
     <%= govuk_button_to "Remove school",

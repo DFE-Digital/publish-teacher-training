@@ -70,6 +70,25 @@ describe Site do
     end
   end
 
+  describe '#has_no_course?' do
+    let(:site) { create(:site) }
+
+    context 'with no course' do
+      it 'is true if no associcated course' do
+        expect(site.has_no_course?).to be true
+      end
+    end
+
+    context 'with an associated course' do
+      let(:course) { create(:course) }
+
+      it 'is false with associcated course' do
+        course.sites << site
+        expect(site.has_no_course?).to be false
+      end
+    end
+  end
+
   describe '#touch_provider' do
     let(:site) { create(:site) }
 
