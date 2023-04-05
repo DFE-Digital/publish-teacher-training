@@ -13,7 +13,6 @@ module Publish
       def show; end
 
       def new
-        # @school_form = SchoolForm.new(provider.sites.new)
         @site = provider.sites.build
         @school_form = ::Support::SchoolForm.new(provider, @site)
         @school_form.clear_stash
@@ -28,10 +27,6 @@ module Publish
         @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @school_form.stash
           redirect_to publish_provider_recruitment_cycle_check_school_path
-          # flash[:success] = 'Your school has been created'
-          # redirect_to publish_provider_recruitment_cycle_schools_path(
-          # @school_form.provider_code, @school_form.recruitment_cycle_year
-          # )
         else
           render :new
         end

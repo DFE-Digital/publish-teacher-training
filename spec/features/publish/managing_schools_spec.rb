@@ -227,36 +227,8 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
     publish_schools_index_page.add_school.click
   end
 
-  def then_i_can_add_a_school
-    expect(page).to have_current_path publish_school_new_page.url(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year
-    )
-
-    publish_school_new_page.name_field.set 'Some place'
-    publish_school_new_page.address1_field.set '123 Test Street'
-    publish_school_new_page.address3_field.set 'London'
-    publish_school_new_page.postcode_field.set 'KT8 9AU'
-    publish_school_new_page.submit.click
-
-    expect(publish_schools_index_page.schools.size).to eq(2)
-    expect(publish_schools_index_page.schools.last.name).to have_text('Some place')
-  end
-
   def when_i_click_on_a_school
     publish_schools_index_page.schools.last.edit_link.click
-  end
-
-  def then_i_can_update_its_details
-    expect(page).to have_current_path publish_school_edit_page.url(
-      provider_code: provider.provider_code,
-      recruitment_cycle_year: provider.recruitment_cycle_year,
-      school_id: Site.last.id
-    )
-
-    publish_school_edit_page.name_field.set 'Renamed place'
-    publish_school_new_page.submit.click
-    expect(publish_schools_index_page.schools.size).to eq(2)
-    expect(publish_schools_index_page.schools.last.name).to have_text('Renamed place')
   end
 
   private
