@@ -11,7 +11,7 @@
 
       <% content_for :before_content do %>
        <% if goto_preview?(param_form_key: f.object_name.to_sym, params:) %>
-        <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, (params[:course_code] || params.dig(f.object_name.to_sym, :course_code))))  %>
+        <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, (params[:course_code] || params.dig(f.object_name.to_sym, :course_code)))) %>
         <% else %>
           <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
         <% end %>
