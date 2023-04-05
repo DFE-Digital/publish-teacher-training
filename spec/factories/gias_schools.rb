@@ -7,5 +7,10 @@ FactoryBot.define do
     address1 { Faker::Address.street_address }
     town { Faker::Address.city }
     postcode { Faker::Address.postcode }
+    status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
+
+    trait :closed do
+      status_code { nil }
+    end
   end
 end

@@ -108,6 +108,7 @@ features:
   user_management: true
   add_multiple_schools: true
   course_preview_missing_information: false
+  gias_search: false
 
 cookies:
   session:

@@ -35,6 +35,10 @@
         <%= render partial: "school", collection: @schools %>
       </tbody>
     </table>
-    <%= govuk_button_link_to "Add school", new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
+    <% if FeatureService.enabled?(:gias_search) %>
+      <%= govuk_button_link_to "Add school", search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
+    <% else %>
+      <%= govuk_button_link_to "Add school", new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
+    <% end %>
   </div>
 </div>

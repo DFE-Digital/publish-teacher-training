@@ -1,4 +1,15 @@
 en:
+  publish:
+    providers:
+      school_search:
+        new:
+          title: Enter a school, university, college, URN or postcode
+          caption: Add school
+          cannot_find: I cannot find the school - enter manually
+    schools:
+      search_result_title_component:
+        add_school: Add school
+        many_results_html: Showing the first 15 results. %{link} if the school you're looking for is not listed.
   cycles:
     updated: "Cycle schedule updated"
   service_name:
@@ -609,6 +620,15 @@ en:
           attributes:
             consent:
               blank: Select yes if you want to accept Google Analytics cookies
+        publish/schools/search_form:
+          attributes:
+            query:
+              blank: Enter a school, university, college, URN or postcode
+              too_short: Enter at least two characters
+        publish/schools/select_form:
+          attributes:
+            school_id:
+              blank: Select a school
         find/confirm_environment:
           attributes:
             environment:
