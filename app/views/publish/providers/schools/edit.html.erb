@@ -1,24 +1,29 @@
 <% page_title = @school_form.site.location_name %>
 <% content_for :page_title, title_with_error_prefix(page_title, @school_form.errors.any?) %>
-<%= content_for :before_content, render_breadcrumbs(:edit_site) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id)) %>
+<% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+        <%= @site.location_name_was %>
+      </h1>
+
     <%= form_with(
       model: @school_form,
       url: publish_provider_recruitment_cycle_school_path(@school_form.provider_code, @school_form.recruitment_cycle_year, @school_form.site.id),
-      method: :patch
+      method: :patch,
+      class: "school-form"
     ) do |f| %>
 
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">
-        <%= page_title %>
-      </h1>
-
-      <p class="govuk-body">When you’ve added a school, you can assign it to a course in the ‘Basic details’ tab of the course. Candidates will see a list of schools on the course page on Find.</p>
       <%= render "form", f: %>
-      <%= f.govuk_submit "Save and publish" %>
+      <%= f.govuk_submit(@site.persisted? ? t("publish.providers.schools.update") : t("support.continue")) %>
     <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    </p>
   </div>
 </div>

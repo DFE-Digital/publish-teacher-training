@@ -7,8 +7,13 @@
     <%= form_with(model: @school_form, url: support_recruitment_cycle_provider_check_school_path(@provider.recruitment_cycle_year, @provider), method: :put, local: true) do |f| %>
 
     <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> <span class="govuk-caption-l"><%= t("support.providers.schools.new") %> - <%= @provider.decorate.name_and_code %> </span>
-        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("support.providers.users.check") %></h1>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <span class="govuk-caption-l">
+          <%= t("support.providers.schools.new") %> - <%= @provider.decorate.name_and_code %>
+        </span>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3">
+          <%= t("support.providers.users.check") %>
+        </h1>
       </legend>
 
       <%= render GovukComponent::SummaryListComponent.new do |component|

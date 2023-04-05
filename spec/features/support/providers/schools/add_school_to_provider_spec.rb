@@ -51,7 +51,7 @@ feature 'Adding school to provider as an admin', { can_edit_current_and_next_cyc
   end
 
   def then_it_should_display_the_correct_error_messages
-    expect(support_provider_school_create_page.error_summary).to have_text('Enter a school name')
+    expect(support_provider_school_create_page.error_summary).to have_text('Enter a name')
     expect(support_provider_school_create_page.error_summary).to have_text('Enter address line 1')
     expect(support_provider_school_create_page.error_summary).to have_text('Enter a town or city')
     expect(support_provider_school_create_page.error_summary).to have_text('Enter a postcode')

@@ -1,0 +1,31 @@
+<%= render PageTitle.new(title: "publish.providers.schools.delete") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @site.location_name %></span>
+    <% if @site.has_no_course? %>
+      <%= t("components.page_titles.publish.providers.schools.delete") %>
+    </h1>
+    <%= govuk_button_to "Remove school",
+        delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id),
+        method: :delete,
+        class: "govuk-button--warning" %>
+    <% else %>
+      <%= t("components.page_titles.publish.providers.schools.no_delete") %>
+    </h1>
+    <p class="govuk-body">
+      <%= "#{@site.location_name} is a school for courses run by #{@provider.provider_name}." %>
+    </p>
+    <p class="govuk-body">
+      To remove <%= @site.location_name.to_s %>, you must first remove the school from those courses.
+    </p>
+    <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to("Cancel", publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id)) %>
+    </p>
+  </div>
+</div>

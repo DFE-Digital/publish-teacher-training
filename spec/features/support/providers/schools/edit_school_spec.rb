@@ -46,7 +46,7 @@ feature 'Edit school under provider as an admin', { can_edit_current_and_next_cy
   end
 
   def then_i_see_an_error_message
-    expect(support_provider_school_edit_page.error_summary).to have_text('Enter a school name')
+    expect(support_provider_school_edit_page.error_summary).to have_text('Enter a name')
   end
 
   def and_i_set_invalid_details

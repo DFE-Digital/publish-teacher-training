@@ -1,0 +1,42 @@
+<%= content_for :page_title, @site.location_name %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= @site.location_name %></h1>
+      </legend>
+        <%= render GovukComponent::SummaryListComponent.new do |component|
+              component.with_row do |row|
+                row.with_key { t("publish.providers.schools.location_name") }
+                row.with_value(text:  @site.location_name)
+                row.with_action(text: t("change"), href: edit_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), classes: "location_name", visually_hidden_text: t("publish.providers.schools.location_name"))
+              end
+
+              component.with_row do |row|
+                row.with_key { t("publish.providers.schools.code") }
+                row.with_value(text: @site.code)
+                row.with_action
+              end
+
+              component.with_row do |row|
+                row.with_key { t("publish.providers.schools.urn") }
+                row.with_value(text: course_value_provided?(@site.urn))
+                row.with_action(text: t("change"), href: edit_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), classes: "urn", visually_hidden_text: t("publish.providers.schools.urn"))
+              end
+
+              component.with_row do |row|
+                row.with_key { t("publish.providers.schools.address") }
+                row.with_value(text: @site.decorate.full_address_on_seperate_lines)
+                row.with_action(text: t("change"), href: edit_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), classes: "address", visually_hidden_text: t("publish.providers.schools.address"))
+              end
+            end %>
+        <p class="govuk-body">
+          <%= govuk_link_to t("support.actions.remove_school", resource: "location"), delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id), class: "app-link--destructive" %>
+        </p>
+    </fieldset>
+  </div>
+</div>

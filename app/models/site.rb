@@ -47,6 +47,10 @@ class Site < ApplicationRecord
   delegate :recruitment_cycle, :provider_code, to: :provider, allow_nil: true
   delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
+  def has_no_course?
+    Course.includes(:sites).where(sites: { id: }).none?
+  end
+
   def geocode_site
     GeocodeJob.perform_later('Site', id) if needs_geolocation?
   end

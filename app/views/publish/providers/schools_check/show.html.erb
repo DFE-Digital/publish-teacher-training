@@ -1,0 +1,46 @@
+<%= render PageTitle.new(title: "support.providers.schools.check") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_publish_provider_recruitment_cycle_school_path) %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(model: @school_form, url: publish_provider_recruitment_cycle_check_school_path(recruitment_cycle_year: @provider.recruitment_cycle_year), method: :put, local: true) do |f| %>
+
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <span class="govuk-caption-l">
+          <%= t("publish.providers.schools.new") %>
+        </span>
+        <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3">
+          <%= t("support.providers.users.check") %>
+        </h1>
+      </legend>
+
+      <%= render GovukComponent::SummaryListComponent.new do |component|
+            component.with_row do |row|
+              row.with_key { t("publish.providers.schools.location_name") }
+              row.with_value(text:  @school_form.location_name)
+              row.with_action(text: t("change"), href: new_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @provider.recruitment_cycle_year), classes: "school_name", visually_hidden_text: t("publish.providers.schools.location_name"))
+            end
+
+            component.with_row do |row|
+              row.with_key { t("publish.providers.schools.urn") }
+              row.with_value(text: @school_form.urn)
+              row.with_action(text: t("change"), href: new_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @provider.recruitment_cycle_year), classes: "urn", visually_hidden_text: t("publish.providers.schools.urn"))
+            end
+
+            component.with_row do |row|
+              row.with_key { t("publish.providers.schools.address") }
+              row.with_value(text: @school_form.full_address)
+              row.with_action(text: t("change"), href: new_publish_provider_recruitment_cycle_school_path(@provider.provider_code, @provider.recruitment_cycle_year), classes: "address", visually_hidden_text: t("publish.providers.schools.address"))
+            end
+          end %>
+    </fieldset>
+      <%= f.govuk_submit(t("publish.providers.schools.new")) %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    </p>
+  </div>
+</div>

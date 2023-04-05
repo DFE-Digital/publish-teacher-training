@@ -219,7 +219,13 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
-        resources :schools, except: %i[destroy show]
+        resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
+        resources :schools do
+          member do
+            get :delete
+            delete :delete, to: 'schools#destroy'
+          end
+        end
 
         get '/contact', on: :member, to: 'contacts#edit'
         put '/contact', on: :member, to: 'contacts#update'
