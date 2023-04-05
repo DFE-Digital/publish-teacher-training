@@ -1,7 +1,7 @@
 <% page_title = "School details - Add School" %>
 <% content_for :page_title, title_with_error_prefix(page_title, @school_form.errors.any?) %>
 <%= content_for :before_content do %>
-  <%= govuk_back_link_to %> <!-- TODO: back to js search? -->
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
 <% end %>
 
 <div class="govuk-grid-row">

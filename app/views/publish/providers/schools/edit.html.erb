@@ -20,7 +20,7 @@
       <%= f.govuk_error_summary %>
 
       <%= render "form", f: %>
-      <%= f.govuk_submit(@site.persisted? ? t("support.update_record") : t("support.continue")) %>
+      <%= f.govuk_submit(@site.persisted? ? t("publish.providers.schools.update") : t("support.continue")) %>
     <% end %>
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>

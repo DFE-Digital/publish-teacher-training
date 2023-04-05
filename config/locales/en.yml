@@ -133,6 +133,16 @@ en:
         index: "Sign in"
         new: "User not found"
         personas: Teacher Training API Personas
+      publish:
+        providers:
+          schools:
+            index: "Schools"
+            new: "Add school"
+            edit: "Edit school details"
+            check: "Check your answers"
+            show: "Show school"
+            delete: "Are you sure you want to remove this school?"
+            no_delete: "You cannot remove this school"
       support:
         rollover:
           index: "Recruitment Cycles"
@@ -214,6 +224,21 @@ en:
     email: "Email address"
     add: "Add user"
     update: "Update user"
+  publish:
+    providers:
+      schools:
+        new: "Add school"
+        update: "Update school"
+        added: "School added"
+        another: "Save school and add another"
+        location_name: "Name"
+        code: "School code"
+        urn: "Unique reference number (URN)"
+        address1: "Address line 1"
+        address2: "Address line 2"
+        address3: "Town or city"
+        address4: "County"
+        postcode: "Postcode"
   support:
     data_exports:
       index:
@@ -223,6 +248,7 @@ en:
     providers:
       schools:
         new: "Add school"
+        update: "Update school"
         added: "School added"
         another: "Save school and add another"
         location_name: "Name"
@@ -251,7 +277,7 @@ en:
     actions:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
-    update_record: "Update school"
+    update_record: "Update"
     create_record: "Create"
     continue: "Continue"
   activerecord:

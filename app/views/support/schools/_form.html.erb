@@ -29,5 +29,5 @@
     <%= f.govuk_text_field(:postcode, label: { text: "Postcode", size: "s" }, width: 10) %>
   <% end %>
 
-  <%= f.govuk_submit(site.persisted? ? t("support.update_record") : t("support.continue")) %>
+  <%= f.govuk_submit(site.persisted? ? t("support.providers.schools.update") : t("support.continue")) %>
 <% end %>

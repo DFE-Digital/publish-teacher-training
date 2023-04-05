@@ -11,7 +11,7 @@ module Publish
       def update
         if @school_form.save!
           redirect_to publish_provider_recruitment_cycle_schools_path
-          flash[:success] = t('support.providers.schools.added')
+          flash[:success] = t('publish.providers.schools.added')
         else
           render template: 'publish/providers/schools/new'
         end
@@ -29,11 +29,6 @@ module Publish
 
       def site
         @site ||= provider.sites.build
-      end
-
-      def provider
-        recruitment_cycle_id = RecruitmentCycle.find_by(year: params[:recruitment_cycle_year]).id
-        @provider ||= Provider.find_by(provider_code: params[:provider_code], recruitment_cycle_id:)
       end
     end
   end
