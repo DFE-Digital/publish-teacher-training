@@ -94,7 +94,7 @@ google_tag_manager:
   tracking_id: change_me
 
 feedback:
-  link: https://docs.google.com/forms/d/e/1FAIpQLSfZNWa6zx30SkF_1EAwqNPZHOgK8qYcVQ7uDyhi0P6oPm71zg/viewform
+  link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
 
 features:
   send_request_data_to_bigquery: false
