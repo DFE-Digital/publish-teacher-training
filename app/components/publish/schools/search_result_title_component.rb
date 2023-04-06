@@ -20,10 +20,10 @@ module Publish
       end
 
       def results_text
-        return many_results_text if @results_count > results_limit
-        return "#{change_your_search_link}.".html_safe if @results_count.zero?
+        return many_results_text if results_count > results_limit
+        return "#{change_your_search_link}.".html_safe if results_count.zero?
 
-        "#{change_your_search_link} if the school you're looking for is not listed.".html_safe
+        "#{change_your_search_link} if the school you’re looking for is not listed.".html_safe
       end
 
       private
@@ -31,19 +31,19 @@ module Publish
       attr_reader :query, :results_limit, :results_count, :return_path
 
       def count_text
-        return @results_count if @results_count >= 1
+        return results_count if results_count >= 1
 
         'No'
       end
 
       def found_text
-        return 'result found' if @results_count == 1
+        return 'result found' if results_count == 1
 
         'results found'
       end
 
       def query_text
-        return "for '#{query}'" if query.present?
+        return "for ‘#{query}’" if query.present?
 
         'for your search'
       end

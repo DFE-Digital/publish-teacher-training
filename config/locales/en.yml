@@ -1,15 +1,4 @@
 en:
-  publish:
-    providers:
-      school_search:
-        new:
-          title: Enter a school, university, college, URN or postcode
-          caption: Add school
-          cannot_find: I cannot find the school - enter manually
-    schools:
-      search_result_title_component:
-        add_school: Add school
-        many_results_html: Showing the first 15 results. %{link} if the school you're looking for is not listed.
   cycles:
     updated: "Cycle schedule updated"
   service_name:
@@ -256,7 +245,9 @@ en:
   publish:
     providers:
       schools:
-        new: "Add school"
+        index:
+          add_school: &add_school "Add school"
+        new: *add_school
         update: "Update school"
         added: "School added"
         another: "Save school and add another"
@@ -269,6 +260,15 @@ en:
         town: "Town or city"
         address4: "County"
         postcode: "Postcode"
+      school_search:
+        new:
+          title: Enter a school, university, college, URN or postcode
+          caption: *add_school
+          cannot_find: I cannot find the school - enter manually
+    schools:
+      search_result_title_component:
+        add_school: *add_school
+        many_results_html: Showing the first 15 results. %{link} if the school you're looking for is not listed.
   support:
     data_exports:
       index:

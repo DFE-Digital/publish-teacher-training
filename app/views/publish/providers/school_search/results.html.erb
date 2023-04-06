@@ -25,6 +25,7 @@
           <% end %>
         <% end %>
 
+        <%= f.hidden_field :query, value: query %>
         <%= f.govuk_submit t("continue") %>
       <% end %>
 

@@ -12,7 +12,7 @@ module Publish
       end
 
       def create
-        @school_search_form = Schools::SearchForm.new(query: school_search_params[:query])
+        @school_search_form = Schools::SearchForm.new(query:)
 
         if @school_search_form.valid?
           @school_select_form = Schools::SelectForm.new
@@ -42,17 +42,20 @@ module Publish
       end
 
       def query
-        @school_search_form&.query
+        # Order is important here so the query persists across each step.
+        @school_search_form&.query || school_search_params[:query] || school_select_params[:query]
       end
 
       def school_search_params
+        return {} unless params.key?(:publish_schools_search_form)
+
         params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS)
       end
 
       def school_select_params
         return {} unless params.key?(:publish_schools_select_form)
 
-        params.require(:publish_schools_select_form).permit(*Schools::SelectForm::FIELDS)
+        params.require(:publish_schools_select_form).permit(*Schools::SelectForm::FIELDS, *Schools::SearchForm::FIELDS)
       end
 
       def search_result_title_component
