@@ -18,7 +18,7 @@
     <li><%= govuk_link_to "Interview process", "#section-interviews" %></li>
   <% end %>
   <li><%= govuk_link_to "International candidates", "#section-international-students" %></li>
-  <% if provider.train_with_disability.present? %>
+  <% if provider.train_with_disability.present? || (preview? && FeatureService.enabled?(:course_preview_missing_information)) %>
     <li><%= govuk_link_to "Training with disabilities and other needs", "#section-train-with-disabilities" %></li>
   <% end %>
   <li><%= govuk_link_to "Contact this training provider", "#section-contact" %></li>
