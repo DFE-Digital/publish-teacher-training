@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_09_161636) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_06_225627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -320,7 +320,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_161636) do
 
   create_table "site", id: :serial, force: :cascade do |t|
     t.text "address2"
-    t.text "address3"
+    t.text "town"
     t.text "address4"
     t.text "code", null: false
     t.text "location_name"

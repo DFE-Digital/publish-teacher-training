@@ -236,7 +236,7 @@ en:
         urn: "Unique reference number (URN)"
         address1: "Address line 1"
         address2: "Address line 2"
-        address3: "Town or city"
+        town: "Town or city"
         address4: "County"
         postcode: "Postcode"
   support:
@@ -256,7 +256,7 @@ en:
         urn: "Unique reference number (URN)"
         address1: "Address line 1"
         address2: "Address line 2"
-        address3: "Town or city"
+        town: "Town or city"
         address4: "County"
         postcode: "Postcode"
       users:
@@ -294,7 +294,7 @@ en:
       site:
         location_name: "Name"
         address1: "Building and street"
-        address3: "Town or city"
+        town: "Town or city"
     errors:
       models:
         contact:
@@ -312,7 +312,7 @@ en:
               taken: "Name is in use by another school"
             address1:
               blank: "Enter address line 1"
-            address3:
+            town:
               blank: "Enter a town or city"
             postcode:
               blank: "Enter a postcode"
@@ -401,7 +401,7 @@ en:
               blank: "^Enter a valid telephone number"
             address1:
               blank: "^Enter building or street"
-            address3:
+            town:
               blank: "^Enter town or city"
             address4:
               blank: "^Enter county"
@@ -501,7 +501,7 @@ en:
               taken: "Name is taken"
             address1:
               blank: "Enter address line 1"
-            address3:
+            town:
               blank: "Enter a town or city"
             postcode:
               blank: "Enter a postcode"

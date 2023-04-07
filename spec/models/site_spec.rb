@@ -15,7 +15,7 @@ describe Site do
 
   it { is_expected.to validate_presence_of(:location_name) }
   it { is_expected.to validate_presence_of(:address1) }
-  it { is_expected.to validate_presence_of(:address3).on(:create) }
+  it { is_expected.to validate_presence_of(:town).on(:create) }
   it { is_expected.to validate_presence_of(:postcode) }
   it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }
   it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
@@ -139,7 +139,7 @@ describe Site do
             location_name: 'Southampton High School',
             address1: 'Long Lane',
             address2: 'Holbury',
-            address3: 'Southampton',
+            town: 'Southampton',
             address4: nil,
             postcode: 'SO45 2PA')
     end
@@ -166,7 +166,7 @@ describe Site do
           site.location_name = ''
           site.address1 = ''
           site.address2 = ''
-          site.address3 = ''
+          site.town = ''
           site.address4 = ''
           site.postcode = ''
         end
@@ -233,7 +233,7 @@ describe Site do
                  location_name: 'Southampton High School',
                  address1: 'Long Lane',
                  address2: 'Holbury',
-                 address3: 'Southampton',
+                 town: 'Southampton',
                  address4: nil,
                  postcode: 'SO45 2PA')
         end

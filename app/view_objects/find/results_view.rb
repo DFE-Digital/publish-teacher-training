@@ -160,7 +160,7 @@ module Find
       [
         nearest_address.address1,
         nearest_address.address2,
-        nearest_address.address3,
+        nearest_address.town,
         nearest_address.address4,
         nearest_address.postcode
       ].select(&:present?).join(', ').html_safe
@@ -244,7 +244,7 @@ module Find
               .reject do |site|
         # Sites that have no address details whatsoever are not to be considered
         # when calculating '#nearest_address' or '#site_distance'
-        [site.address1, site.address2, site.address3, site.address4, site.postcode].all?(&:blank?)
+        [site.address1, site.address2, site.town, site.address4, site.postcode].all?(&:blank?)
       end
 
       sites.reject do |site|

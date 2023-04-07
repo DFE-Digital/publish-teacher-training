@@ -14,7 +14,7 @@ describe API::Public::V1::SerializableLocation do
 
   it { is_expected.to have_type 'locations' }
 
-  it { is_expected.to have_attribute(:city).with_value(location.address3) }
+  it { is_expected.to have_attribute(:city).with_value(location.town) }
   it { is_expected.to have_attribute(:code).with_value(location.code) }
   it { is_expected.to have_attribute(:county).with_value(location.address4) }
   it { is_expected.to have_attribute(:latitude).with_value(location.latitude) }

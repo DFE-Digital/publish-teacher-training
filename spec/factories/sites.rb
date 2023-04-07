@@ -5,7 +5,7 @@ FactoryBot.define do
     location_name { "Main Site#{rand(1_000_000)}" }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
-    address3 { Faker::Address.city }
+    town { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }
     region_code { 'london' }

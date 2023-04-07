@@ -8,7 +8,7 @@ module Support
       code
       address1
       address2
-      address3
+      town
       address4
       postcode
     ].freeze
@@ -18,7 +18,7 @@ module Support
     validate :validate_site
 
     def full_address
-      address = [address1, address2, address3, address4, postcode]
+      address = [address1, address2, town, address4, postcode]
 
       return '' if address.all?(&:blank?)
 

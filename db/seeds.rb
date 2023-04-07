@@ -54,7 +54,7 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
     location_name: Faker::Company.name,
     address1: Faker::Address.building_number,
     address2: Faker::Address.street_name,
-    address3: Faker::Address.city,
+    town: Faker::Address.city,
     address4: Faker::Address.state,
     postcode: Faker::Address.postcode,
     urn: Faker::Number.number(digits: [5, 6].sample)

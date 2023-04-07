@@ -9,7 +9,7 @@ module PageObjects
       element :urn, '#site-urn-field'
       element :code, '#site-code-field'
       element :building_and_street, '#site-address1-field'
-      element :town_or_city, '#site-address3-field'
+      element :town_or_city, '#site-town-field'
       element :postcode, '#site-postcode-field'
     end
   end
