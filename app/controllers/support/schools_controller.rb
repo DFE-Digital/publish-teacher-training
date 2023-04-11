@@ -59,16 +59,7 @@ module Support
     end
 
     def site_params(param_form_key)
-      params.require(param_form_key).permit(
-        :location_name,
-        :urn,
-        :code,
-        :address1,
-        :address2,
-        :town,
-        :address4,
-        :postcode
-      )
+      params.require(param_form_key).permit(SchoolForm::FIELDS)
     end
 
     def build_site
