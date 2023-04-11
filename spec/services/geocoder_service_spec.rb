@@ -9,6 +9,7 @@ describe GeocoderService do
              location_name: 'Fun Academy',
              address1: 'Long Lane',
              address2: 'Holbury',
+             address3: '',
              town: 'Southampton',
              address4: 'UK',
              postcode: 'SO45 2PA',
