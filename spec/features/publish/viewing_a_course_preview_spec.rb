@@ -21,6 +21,32 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
     end
 
+    scenario 'blank about the accredited body' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_link('Enter details about the accredited body')
+      then_i_should_be_on_about_your_organisation_page
+      and_i_click_link('Back')
+      then_i_should_be_back_on_the_preview_page
+      and_i_click_link('Enter details about the accredited body')
+      and_i_submit_a_valid_about_your_organisation
+      then_i_should_be_back_on_the_preview_page
+      then_i_should_see_the_updated_content('test accredited provider')
+    end
+
+    scenario 'blank about the training provider' do
+      given_i_am_authenticated(user: user_with_no_course_enrichments)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_link('Enter details about the training provider')
+      then_i_should_be_on_about_your_organisation_page
+      and_i_click_link('Back')
+      then_i_should_be_back_on_the_preview_page
+      and_i_click_link('Enter details about the training provider')
+      and_i_submit_a_valid_about_your_organisation
+      then_i_should_be_back_on_the_preview_page
+      then_i_should_see_the_updated_content('test training with your organisation')
+    end
+
     scenario 'blank training with disabilities and other needs' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
@@ -340,11 +366,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def user_with_no_course_enrichments
     course = build(
-      :course, :secondary, :fee_type_based, degree_grade: nil, additional_degree_subject_requirements: nil
+      :course, :secondary, :fee_type_based, :with_accrediting_provider, degree_grade: nil, additional_degree_subject_requirements: nil
     )
 
     provider = build(
-      :provider, courses: [course], train_with_disability: nil
+      :provider, courses: [course], train_with_disability: nil, train_with_us: nil
     )
 
     create(
@@ -410,8 +436,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_a_valid_about_your_organisation
-    fill_in 'Training with your organisation', with: 'test training with disabilities'
+    fill_in 'Training with your organisation', with: 'test training with your organisation'
     fill_in 'Training with disabilities and other needs', with: 'test training with disabilities'
+    fill_in "#{accrediting_provider.provider_name} (optional)", with: 'test accredited provider'
 
     click_button 'Save and publish'
   end
