@@ -24,22 +24,22 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank training with disabilities and other needs' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_details_about_training_with_disabilities_and_other_needs
+      and_i_click_link('Enter details about training with disabilities and other needs')
       then_i_should_be_on_about_your_organisation_page
-      and_i_click_back
+      and_i_click_link('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_enter_details_about_training_with_disabilities_and_other_needs
+      and_i_click_link('Enter details about training with disabilities and other needs')
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
-      then_i_should_see_the_updated_content
+      then_i_should_see_the_updated_content('test training with disabilities')
     end
 
     scenario 'blank course summary' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_course_summary
-      and_i_click_back
-      and_i_click_enter_course_summary
+      and_i_click_link('Enter course summary')
+      and_i_click_link('Back')
+      and_i_click_link('Enter course summary')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       and_i_see_the_new_course_text
@@ -49,21 +49,21 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank degree requirements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_degree_requirements
+      and_i_click_link('Enter degree requirements')
       and_i_am_on_the_degree_requirements_page
-      and_i_click_back
+      and_i_click_link('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_enter_degree_requirements
+      and_i_click_link('Enter degree requirements')
       and_i_submit_and_continue_through_the_two_forms
-      then_i_should_see_the_updated_content_on_the_preview_page
+      then_i_should_see_the_updated_content('An undergraduate degree, or equivalent.')
     end
 
     scenario 'blank gcse requirements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_enter_gcse_and_equivalency_test_requirements
-      and_i_click_back
-      and_i_click_enter_enter_gcse_and_equivalency_test_requirements
+      and_i_click_link('Enter GCSE and equivalency test requirements')
+      and_i_click_link('Back')
+      and_i_click_link('Enter GCSE and equivalency test requirements')
       and_i_choose_no_and_submit
       and_i_see_the_correct_banner
       and_i_see_the_correct_gcse_text
@@ -73,9 +73,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank school placements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_details_about_school_placements
-      and_i_click_back
-      and_i_click_enter_details_about_school_placements
+      and_i_click_link('Enter details about school placements')
+      and_i_click_link('Back')
+      and_i_click_link('Enter details about school placements')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       then_i_should_be_back_on_the_preview_page
@@ -84,9 +84,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank fees uk eu' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_enter_details_about_fees_and_financial_support
-      and_i_click_back
-      and_i_click_enter_details_about_fees_and_financial_support
+      and_i_click_link('Enter details about fees and financial support')
+      and_i_click_link('Back')
+      and_i_click_link('Enter details about fees and financial support')
       and_i_submit_a_valid_course_fees
       and_i_see_the_correct_banner
       and_i_see_the_the_course_fee
@@ -361,32 +361,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def and_i_click_enter_details_about_training_with_disabilities_and_other_needs
-    click_link 'Enter details about training with disabilities and other needs'
-  end
+  alias_method :and_i_click_link, :click_link
 
-  def and_i_click_enter_course_summary
-    click_link 'Enter course summary'
-  end
-
-  def and_i_click_enter_details_about_school_placements
-    click_link 'Enter details about school placements'
-  end
-
-  def and_i_click_enter_details_about_fees_and_financial_support
-    click_link 'Enter details about fees and financial support'
-  end
-
-  def and_i_click_enter_degree_requirements
-    click_link 'Enter degree requirements'
-  end
-
-  def then_i_should_see_the_updated_content
-    expect(page).to have_content('test training with disabilities')
-  end
-
-  def then_i_should_see_the_updated_content_on_the_preview_page
-    expect(page).to have_content('An undergraduate degree, or equivalent.')
+  def then_i_should_see_the_updated_content(text)
+    expect(page).to have_content(text)
   end
 
   def and_i_see_the_the_course_fee
@@ -402,10 +380,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_am_on_the_degree_requirements_page
     expect(page).to have_text 'Do you require a minimum degree classification?'
-  end
-
-  def and_i_click_enter_enter_gcse_and_equivalency_test_requirements
-    click_link 'Enter GCSE and equivalency test requirements'
   end
 
   def and_i_see_the_correct_gcse_text
@@ -454,10 +428,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     fill_in 'Fee for UK students', with: '100'
 
     click_button 'Update course length and fees'
-  end
-
-  def and_i_click_back
-    click_link 'Back'
   end
 
   def provider

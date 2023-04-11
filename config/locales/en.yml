@@ -189,6 +189,24 @@ en:
         not_yet_available: "Information not yet available"
         bursary_and_scholarship: "Scholarships of %{scholarship} and bursaries of %{bursary_amount} are available"
         bursary: "Bursaries of %{amount} available"
+    course_preview:
+      missing_information:
+        about_course:
+          text: "Enter course summary"
+        degree:
+          text: "Enter degree requirements"
+        fee_uk_eu:
+          text: "Enter details about fees and financial support"
+        gcse:
+          text: "Enter GCSE and equivalency test requirements"
+        how_school_placements_work:
+          text: "Enter details about school placements"
+        train_with_disability:
+          text: "Enter details about training with disabilities and other needs"
+        train_with_us:
+          text: "Enter details about the training provider"
+        about_accrediting_body:
+          text: "Enter details about the accredited body"
   course:
     add_course: "Add course"
     value_not_entered: "Not entered"
