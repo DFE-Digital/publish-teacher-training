@@ -30,7 +30,7 @@ module Stores
     private
 
     def identifier_id
-      raise NotImplementedError
+      "#{self.class.name}_#{identifier_model.id}"
     end
 
     def identifier(store_key)

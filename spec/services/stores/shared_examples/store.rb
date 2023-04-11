@@ -28,15 +28,8 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
     form_store_keys.each do |store_key|
       context "when form_store_key is #{store_key}" do
         let(:form_store_key) { store_key }
-
         let(:value) { nil }
-
-        if described_class == Stores::UserStore
-          # TECH DEBT: [Stores::UserStore] This is error prone
-          let(:redis_key) { "#{identifier_model.id}_#{form_store_key}" }
-        else
-          let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
-        end
+        let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
 
         before do
           allow(RedisClient).to receive(:current).and_return(redis)
@@ -62,13 +55,7 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
 
   form_store_keys.each do |store_key|
     let(:form_store_key) { store_key }
-
-    if described_class == Stores::UserStore
-      # TECH DEBT: [Stores::UserStore] This is error prone
-      let(:redis_key) { "#{identifier_model.id}_#{form_store_key}" }
-    else
-      let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
-    end
+    let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
 
     describe '#stash' do
       subject do
