@@ -24,6 +24,7 @@ describe API::Public::V1::SerializableLocation do
   it { is_expected.to have_attribute(:region_code).with_value(location.region_code) }
   it { is_expected.to have_attribute(:street_address_1).with_value(location.address1) }
   it { is_expected.to have_attribute(:street_address_2).with_value(location.address2) }
+  it { is_expected.to have_attribute(:street_address_3).with_value(location.address3) }
 
   context 'relationships' do
     context 'default' do

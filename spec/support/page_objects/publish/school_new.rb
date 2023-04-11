@@ -10,7 +10,7 @@ module PageObjects
 
       element :name_field, '#support-school-form-location-name-field'
       element :address1_field, '#support-school-form-address1-field'
-      element :address3_field, '#support-school-form-town-field'
+      element :town_field, '#support-school-form-town-field'
       element :postcode_field, '#support-school-form-postcode-field'
 
       element :submit, 'button.govuk-button[type="submit"]'

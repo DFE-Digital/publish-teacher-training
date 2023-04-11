@@ -137,8 +137,9 @@ describe Site do
     let(:site) do
       build(:site,
             location_name: 'Southampton High School',
-            address1: 'Long Lane',
-            address2: 'Holbury',
+            address1: '5',
+            address2: 'Long Lane',
+            address3: 'Holbury',
             town: 'Southampton',
             address4: nil,
             postcode: 'SO45 2PA')
@@ -147,7 +148,7 @@ describe Site do
     describe '#full_address' do
       context "location name is not 'Main site'" do
         it 'includes location name in full address' do
-          expect(site.full_address).to eq('Southampton High School, Long Lane, Holbury, Southampton, SO45 2PA')
+          expect(site.full_address).to eq('Southampton High School, 5, Long Lane, Holbury, Southampton, SO45 2PA')
         end
       end
 
@@ -157,7 +158,7 @@ describe Site do
         end
 
         it 'excludes location name in full address' do
-          expect(site.full_address).to eq('Long Lane, Holbury, Southampton, SO45 2PA')
+          expect(site.full_address).to eq('5, Long Lane, Holbury, Southampton, SO45 2PA')
         end
       end
 
@@ -166,6 +167,7 @@ describe Site do
           site.location_name = ''
           site.address1 = ''
           site.address2 = ''
+          site.address3 = ''
           site.town = ''
           site.address4 = ''
           site.postcode = ''

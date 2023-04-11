@@ -51,6 +51,10 @@ module API
         attribute :street_address_2 do
           @object.address2
         end
+
+        attribute :street_address_3 do
+          @object.address3
+        end
       end
     end
   end

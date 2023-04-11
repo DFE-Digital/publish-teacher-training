@@ -62,7 +62,7 @@ class Site < ApplicationRecord
   end
 
   def full_address
-    address = [address1, address2, town, address4, postcode]
+    address = [address1, address2, address3, town, address4, postcode]
 
     address.unshift(location_name) unless location_name.downcase == MAIN_SITE
 
@@ -75,6 +75,7 @@ class Site < ApplicationRecord
     saved_change_to_location_name? ||
       saved_change_to_address1? ||
       saved_change_to_address2? ||
+      saved_change_to_address3? ||
       saved_change_to_town? ||
       saved_change_to_address4? ||
       saved_change_to_postcode?

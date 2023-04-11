@@ -36,6 +36,7 @@ module CSVImports
       urn
       address1
       address2
+      address3
       town
       address4
       postcode
