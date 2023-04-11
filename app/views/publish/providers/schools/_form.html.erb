@@ -21,6 +21,11 @@
     label: { text: "Address line 2 (optional)", size: "s" },
     autocomplete: "address-line2",
     data: { qa: "address2" }) %>
+  
+  <%= f.govuk_text_field(:address3,
+    label: { text: "Address line 3 (optional)", size: "s" },
+    autocomplete: "address-line3",
+    data: { qa: "address3" }) %>
 
   <%= f.govuk_text_field(:town,
     label: { text: "Town or city", size: "s" },

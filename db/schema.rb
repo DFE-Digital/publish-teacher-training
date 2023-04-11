@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_06_225627) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_085021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -335,6 +335,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_06_225627) do
     t.string "urn"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.datetime "discarded_at", precision: nil
+    t.text "address3"
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true

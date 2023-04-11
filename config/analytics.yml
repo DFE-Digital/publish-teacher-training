@@ -159,6 +159,7 @@ shared:
     - longitude
     - urn
     - town
+    - address3
   statistic:
     - id
     - json_data
