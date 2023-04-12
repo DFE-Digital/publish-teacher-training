@@ -2,14 +2,31 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">How to use this service</h1>
+    <h1 class="govuk-heading-l">How to use this service</h1>
+
+    <p class="govuk-body">
+      Publish teacher training courses (Publish) gives initial teacher training providers a way to create courses and publish them to Find postgraduate teacher training (Find).
+    </p>
+
+    <p class="govuk-body">Candidates can then use Find to search for courses and apply to them.</p>
+
+    <h2 class="govuk-heading-m">Your account</h2>
+
     <ul class="govuk-list govuk-list--spaced">
+      <li><%= govuk_link_to "Add an organisation", root_path %></li>
+      <li><%= govuk_link_to "Add and remove users", root_path %></li>
+      <li><%= govuk_link_to "Change an accredited provider relationship", root_path %></li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Managing courses</h2>
+
+    <ul class="govuk-list govuk-list--spaced">
+      <li><%= govuk_link_to "Roll over courses to a new recruitment cycle", root_path %></li>
       <li>
-        <%= govuk_link_to "Course summary examples", course_summary_examples_path %>
+        <%= govuk_link_to "Help writing course descriptions",
+                          writing_descriptions_for_publish_teacher_training_courses_path %>
       </li>
-      <li>
-        <%= govuk_link_to "Writing descriptions for Publish teacher training courses", writing_descriptions_for_publish_teacher_training_courses_path %>
-      </li>
+      <li><%= govuk_link_to "Course summary examples", course_summary_examples_path %></li>
     </ul>
   </div>
 </div>
