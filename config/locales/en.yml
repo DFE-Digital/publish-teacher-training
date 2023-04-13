@@ -248,18 +248,18 @@ en:
         index:
           add_school: &add_school "Add school"
         new: *add_school
-        update: "Update school"
-        added: "School added"
-        another: "Save school and add another"
-        location_name: "Name"
-        code: "School code"
-        urn: "Unique reference number (URN)"
-        address1: "Address line 1"
-        address2: "Address line 2"
-        address3: "Address line 3"
-        town: "Town or city"
-        address4: "County"
-        postcode: "Postcode"
+        update: &update_school "Update school"
+        added: &scool_added "School added"
+        location_name: &school_name "School Name"
+        code: &school_code "School code"
+        urn: &school_urn "Unique reference number (URN)"
+        address: &school_address Address
+        address1: &school_address_1 "Address line 1"
+        address2: &school_address_2 "Address line 2"
+        address3: &school_town "Town or city"
+        town: &school_town "Town or city"
+        address4: &school_county "County"
+        postcode: &school_postcode "Postcode"
       school_search:
         new:
           title: Enter a school, university, college, URN or postcode
@@ -277,19 +277,20 @@ en:
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     providers:
       schools:
-        new: "Add school"
-        update: "Update school"
-        added: "School added"
+        new: *add_school
+        update: *update_school
+        added: *scool_added
         another: "Save school and add another"
-        location_name: "Name"
-        code: "School code"
-        urn: "Unique reference number (URN)"
-        address1: "Address line 1"
-        address2: "Address line 2"
-        address3: "Address line 3"
-        town: "Town or city"
-        address4: "County"
-        postcode: "Postcode"
+        location_name: *school_name
+        code: *school_code
+        urn: *school_urn
+        address: *school_address
+        address1: *school_address_1
+        address2: *school_address_2
+        address3: *school_town
+        town: *school_town
+        address4: *school_county
+        postcode: *school_postcode
       users:
         first_name: "First name"
         last_name: "Last name"
@@ -310,7 +311,6 @@ en:
       remove_school: "Remove school"
     update_record: "Update"
     create_record: "Create"
-    continue: "Continue"
   activerecord:
     attributes:
       course:

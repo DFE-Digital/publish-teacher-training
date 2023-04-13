@@ -7,21 +7,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-        <%= @site.location_name_was %>
-      </h1>
+      <%= @site.location_name_was %>
+    </h1>
 
-    <%= form_with(
-      model: @school_form,
-      url: publish_provider_recruitment_cycle_school_path(@school_form.provider_code, @school_form.recruitment_cycle_year, @school_form.site.id),
-      method: :patch,
-      class: "school-form"
-    ) do |f| %>
+    <%= render partial: "form", locals: { model: @school_form, site: @site, form_url: publish_provider_recruitment_cycle_school_path } %>
 
-      <%= f.govuk_error_summary %>
-
-      <%= render "form", f: %>
-      <%= f.govuk_submit(@site.persisted? ? t("publish.providers.schools.update") : t("support.continue")) %>
-    <% end %>
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
     </p>

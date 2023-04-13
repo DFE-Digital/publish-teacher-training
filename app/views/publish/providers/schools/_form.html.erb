@@ -1,47 +1,37 @@
-<%= f.govuk_text_field(:location_name,
-  label: { text: "Name", size: "s" },
-  data: { qa: "location_name" }) %>
+<%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
+  <%= f.govuk_error_summary %>
 
-<%= f.govuk_text_field(:urn,
-  label: { text: "Unique Reference Number (URN) (optional)", size: "s" },
-  width: 10) %>
+  <%= f.govuk_text_field :location_name, label: { text: "School name", size: "s" } %>
 
-<p class="govuk-body govuk-!-margin-bottom-7">
-  <%= t("links.urn_html") %>
-</p>
+  <% if site.persisted? %>
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+      School code
+    </p>
+    <p class="govuk-body"><%= site.code %></p>
+  <% end %>
 
-<%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+  <%= f.govuk_text_field :urn,
+    label: { text: "Unique reference number (URN) (optional)", size: "s" },
+    form_group: { class: "govuk-!-margin-bottom-2" },
+    width: 10 %>
 
-  <%= f.govuk_text_field(:address1,
-  label: { text: "Address line 1", size: "s" },
-  autocomplete: "address-line1",
-  data: { qa: "address1" }) %>
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    <%= t("links.urn_html") %>
+  </p>
 
-  <%= f.govuk_text_field(:address2,
-    label: { text: "Address line 2 (optional)", size: "s" },
-    autocomplete: "address-line2",
-    data: { qa: "address2" }) %>
+  <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+    <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
 
-  <%= f.govuk_text_field(:address3,
-    label: { text: "Address line 3 (optional)", size: "s" },
-    autocomplete: "address-line3",
-    data: { qa: "address3" }) %>
+    <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)", size: "s" }) %>
 
-  <%= f.govuk_text_field(:town,
-    label: { text: "Town or city", size: "s" },
-    width: "two-thirds",
-    autocomplete: "address-level2",
-    data: { qa: "town" }) %>
+    <%= f.govuk_text_field(:address3, label: { text: "Address line 3 (optional)", size: "s" }, autocomplete: "address-line3", data: { qa: "address3" }) %>
 
-  <%= f.govuk_text_field(:address4,
-    label: { text: "County", size: "s" },
-    width: "two-thirds",
-    autocomplete: "address-level1",
-    data: { qa: "address4" }) %>
+    <%= f.govuk_text_field(:town, label: { text: "Town or city", size: "s" }, width: "two-thirds", autocomplete: "address-level2", data: { qa: "town" }) %>
 
-  <%= f.govuk_text_field(:postcode,
-    label: { text: "Postcode", size: "s" },
-    width: 10,
-    autocomplete: "postal-code",
-    data: { qa: "postcode" }) %>
+    <%= f.govuk_text_field(:address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds") %>
+
+    <%= f.govuk_text_field(:postcode, label: { text: "Postcode", size: "s" }, width: 10) %>
+  <% end %>
+
+  <%= f.govuk_submit(site.persisted? ? t("publish.providers.schools.update") : t("continue")) %>
 <% end %>

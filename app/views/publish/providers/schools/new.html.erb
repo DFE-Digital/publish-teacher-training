@@ -12,7 +12,7 @@
         School details
       </h1>
 
-    <%= render partial: "support/schools/form", locals: { model: @school_form, site: @site, form_url: publish_provider_recruitment_cycle_schools_path } %>
+    <%= render partial: "form", locals: { model: @school_form, site: @site, form_url: publish_provider_recruitment_cycle_schools_path } %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
