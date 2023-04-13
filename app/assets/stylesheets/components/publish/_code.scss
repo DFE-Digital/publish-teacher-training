@@ -1,0 +1,26 @@
+.app-code--style {
+  font-size: govuk-font(19);
+  margin-left: 0;
+  background-color: #f3f2f1;
+  direction: ltr;
+  text-align: left;
+  word-break: normal;
+  white-space: pre;
+  word-spacing: normal;
+  hyphens: none;
+  tab-size: 2;
+}
+
+.preformatted-text {
+  margin: 15px 0 25px 0;
+  overflow-x: scroll;
+  outline: 1px solid rgba(177, 180, 182, 0.5);
+  background-color: #f3f2f1;
+  direction: ltr;
+  text-align: left;
+  word-break: normal;
+  white-space: pre;
+  word-spacing: normal;
+  hyphens: none;
+  tab-size: 2;
+}
