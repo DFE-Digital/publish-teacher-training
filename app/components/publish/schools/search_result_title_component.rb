@@ -3,6 +3,8 @@
 module Publish
   module Schools
     class SearchResultTitleComponent < ViewComponent::Base
+      include ActiveSupport::NumberHelper
+
       def initialize(query:, results_limit:, results_count:, return_path:)
         @query = query
         @results_limit = results_limit
@@ -31,7 +33,7 @@ module Publish
       attr_reader :query, :results_limit, :results_count, :return_path
 
       def count_text
-        return results_count if results_count >= 1
+        return number_to_delimited(results_count) if results_count >= 1
 
         'No'
       end

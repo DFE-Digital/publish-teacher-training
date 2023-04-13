@@ -12,7 +12,7 @@ module Publish
       it 'renders many results text when result is more than limit' do
         render_component(10_000)
 
-        expect(page).to have_text("10000 results found for ‘#{query}’")
+        expect(page).to have_text("10,000 results found for ‘#{query}’")
         expect(page).to have_link('Try narrowing down your search', href: '/test')
       end
 
