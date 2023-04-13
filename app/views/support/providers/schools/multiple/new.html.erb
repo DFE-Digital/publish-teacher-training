@@ -26,62 +26,76 @@
               label: { text: "School details", class: "govuk-label--s" }
             ) %>
         <%= f.govuk_submit %>
+      </div>
     <% end %>
 
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
-    </p>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_schools_path) %>
+      </p>
+
+      <h2 class="govuk-heading-m">How to format the data</h2>
+
+      <p class="govuk-body">
+        Enter the school name, unique reference number and address. The order is important. You need to include:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>school name</li>
+        <li>unique reference number</li>
+        <li>address line 1</li>
+        <li>address line 2</li>
+        <li>address line 3</li>
+        <li>town or city</li>
+        <li>county</li>
+        <li>postcode</li>
+      </ul>
+
+      <h3 class="govuk-heading-s">Copying from a <abbr title="comma separated values">CSV</abbr></h3>
+
+      <p class="govuk-body govuk-!-margin-bottom-0">
+        Separate each school item with a comma and use a new line for each school. For example:
+      </p>
     </div>
-
-    <h2 class="govuk-heading-m">How to format the data</h2>
-
-    <p class="govuk-body">
-      Enter the school name, unique reference number and address. The order is important. You need to include:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>school name</li>
-      <li>unique reference number</li>
-      <li>address line 1</li>
-      <li>address line 2</li>
-      <li>address line 3</li>
-      <li>town or city</li>
-      <li>county</li>
-      <li>postcode</li>
-    </ul>
-
-    <h3 class="govuk-heading-s">Copying from a <abbr title="comma separated values">CSV</abbr></h3>
-
-    <p class="govuk-body">
-      Separate each school item with a comma and use a new line for each school. For example:
-    </p>
-
-    <pre class="preformatted-text"><code class="app-code--style">
-  All Saints Catholic College,139735,Birch Lane,,,Dukinfield,,SK16 5AP
-  Blessed Thomas Holford Catholic College,106376,Urban Road,,,Altrincham,,WA15 8HT
-  Halton Lodge Primary School,111229,Grangeway,,,Runcorn,,WA7 5LU
-  Loreto Grammar School,138464,Dunham Road,,,Altrincham,Cheshire,WA14 4AH
-  Oasis Academy Oldham,136027,Hollins Road,,,Oldham,,OL8 4JZ
-  Our Lady of Lourdes Catholic Primary School,106346,Lock Lane,,Partington,Manchester,,M31 4PJ
-  St Clement's Catholic Primary School,111320,Oxford Road,,,Runcorn,Cheshire,WA7 4NX
-  St Peter's RC High School,131880,Kirkmanshulme Lane,,,Manchester,,M12 4WB
-  St Vincent's Catholic Primary School,136087,Orchard Road,,,Altrincham,Cheshire,WA15 8EY
-    </code></pre>
-
-    <p class="govuk-body">
-      If any data is missing, you need to include a blank item in its place using a double comma.
-    </p>
-
-    <p class="govuk-body">Do not include commas in school names. They can be added in the next step, if needed.</p>
-
-    <h3 class="govuk-heading-s">Copying from a spreadsheet</h3>
-
-    <p class="govuk-body">
-      You can also copy and paste directly from a spreadsheet. Your spreadsheet needs to look like this example:
-    </p>
-
-    <%= image_tag("schools-spreadsheet.png", class: "govuk-!-width-full govuk-!-margin-bottom-3") %>
-
-    <p class="govuk-body">When copying the spreadsheet, ignore the first line if it contains headings.</p>
   </div>
-</div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <pre>
+        <code>
+      All Saints Catholic College,139735,Birch Lane,,,Dukinfield,,SK16 5AP
+      Blessed Thomas Holford Catholic College,106376,Urban Road,,,Altrincham,,WA15 8HT
+      Halton Lodge Primary School,111229,Grangeway,,,Runcorn,,WA7 5LU
+      Loreto Grammar School,138464,Dunham Road,,,Altrincham,Cheshire,WA14 4AH
+      Oasis Academy Oldham,136027,Hollins Road,,,Oldham,,OL8 4JZ
+      Our Lady of Lourdes Catholic Primary School,106346,Lock Lane,,Partington,Manchester,,M31 4PJ
+      St Clement's Catholic Primary School,111320,Oxford Road,,,Runcorn,Cheshire,WA7 4NX
+      St Peter's RC High School,131880,Kirkmanshulme Lane,,,Manchester,,M12 4WB
+      St Vincent's Catholic Primary School,136087,Orchard Road,,,Altrincham,Cheshire,WA15 8EY
+        </code>
+      </pre>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">
+        If any data is missing, you need to include a blank item in its place using a double comma.
+      </p>
+
+      <p class="govuk-body">Do not include commas in school names. They can be added in the next step, if needed.</p>
+
+      <h3 class="govuk-heading-s">Copying from a spreadsheet</h3>
+
+      <p class="govuk-body">
+        You can also copy and paste directly from a spreadsheet. Your spreadsheet needs to look like this example:
+      </p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= image_tag("schools-spreadsheet.png", class: "govuk-!-width-full govuk-!-margin-bottom-3") %>
+
+      <p class="govuk-body">When copying the spreadsheet, ignore the first line if it contains headings.</p>
+    </div>
+  </div>
