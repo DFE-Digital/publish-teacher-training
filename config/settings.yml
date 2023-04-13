@@ -109,6 +109,7 @@ features:
   add_multiple_schools: true
   course_preview_missing_information: false
   gias_search: false
+  support_new_provider_creation_flow: false
 
 cookies:
   session:

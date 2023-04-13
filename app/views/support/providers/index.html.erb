@@ -5,7 +5,7 @@
 <%= render "support/menu" %>
 
 <%= govuk_link_to("Add provider",
-      new_support_recruitment_cycle_provider_path,
+      FeatureService.enabled?(:support_new_provider_creation_flow) ? new_provider_support_recruitment_cycle_providers_path : new_support_recruitment_cycle_provider_path,
       class: "govuk-button govuk-!-margin-bottom-6") %>
 
 <%= render PaginatedFilter.new(filter_params: @filter_params, collection: @providers) do %>
