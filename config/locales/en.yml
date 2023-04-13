@@ -514,6 +514,29 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/provider_form:
+          attributes:
+            provider_name:
+              blank: "Enter a provider name"
+              too_long: "Enter a provider name that is 100 characters or fewer"
+            provider_code:
+              blank: "Enter a provider code"
+              invalid: "Enter a valid provider code"
+              taken: "Provider code already taken"
+            ukprn:
+              blank: "Enter a UK provider reference number (UKPRN)"
+              invalid: "Enter a valid UK provider reference number (UKPRN)"
+            accredited_provider:
+              blank: "Select if the organisation is an accredited provider"
+            provider_type:
+              blank: "Select a provider type"
+              school_is_an_invalid_accredited_provider: "Accredited provider cannot be a school"
+            accredited_provider_id:
+              blank: "Enter an accredited provider ID"
+              invalid: "Enter a valid accredited provider ID"
+            urn:
+              blank: "Enter a unique reference number (URN)"
+              invalid: "Enter a valid unique reference number (URN)"
         support/school_form:
           attributes:
             location_name:
