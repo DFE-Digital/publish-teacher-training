@@ -8,6 +8,7 @@ class PagesController < ApplicationController
     terms
     add_an_organisation
     add_and_remove_users
+    change_an_accredited_provider_relationship
     how_to_use_this_service
     course_summary_examples
     writing_descriptions_for_publish_teacher_training_courses
@@ -25,6 +26,7 @@ class PagesController < ApplicationController
 
   def add_an_organisation; end
   def add_and_remove_users; end
+  def change_an_accredited_provider_relationship; end
   def how_to_use_this_service; end
   def course_summary_examples; end
   def writing_descriptions_for_publish_teacher_training_courses; end
