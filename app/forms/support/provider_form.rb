@@ -14,6 +14,10 @@ module Support
       urn
     ].freeze
 
+    UNIVERSITY_ACCREDITED_PROVIDER_ID_FORMAT = /\A1\d{3}\z/
+    SCITT_ACCREDITED_PROVIDER_ID_FORMAT = /\A5\d{3}\z/
+    ACCREDITED_PROVIDER_ID_FORMAT = /\A[15]\d{3}\z/
+
     attr_accessor(*FIELDS, :recruitment_cycle)
 
     def initialize(identifier_model, recruitment_cycle:, params: {})
@@ -74,11 +78,11 @@ module Support
         errors.add(:accredited_provider_id, :blank)
       else
         regex = if university?
-                  /\A1\d{3}\z/
+                  UNIVERSITY_ACCREDITED_PROVIDER_ID_FORMAT
                 elsif scitt?
-                  /\A5\d{3}\z/
+                  SCITT_ACCREDITED_PROVIDER_ID_FORMAT
                 else
-                  /\A[15]\d{3}\z/
+                  ACCREDITED_PROVIDER_ID_FORMAT
                 end
 
         errors.add(:accredited_provider_id, :invalid) unless regex.match?(accredited_provider_id)

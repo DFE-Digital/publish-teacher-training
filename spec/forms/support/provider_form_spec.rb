@@ -146,6 +146,7 @@ describe Support::ProviderForm, type: :model do
     end
 
     invalid_accredited_provider_id_message = 'Enter a valid accredited provider ID'
+
     %w[a aaaa 12345 54321 abcde 1 5].each do |invalid_accredited_provider_id|
       include_examples 'accredited provider id validation', nil, invalid_accredited_provider_id, invalid_accredited_provider_id_message
       include_examples 'accredited provider id validation', :scitt, invalid_accredited_provider_id, invalid_accredited_provider_id_message
