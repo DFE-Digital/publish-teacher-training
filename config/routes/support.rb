@@ -5,6 +5,8 @@ namespace :support do
 
   resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     resources :providers, except: %i[destroy] do
+      get '/new-provider', on: :collection, to: 'providers#new_provider'
+      post '/new-provider', on: :collection, to: 'providers#create_provider'
       resource :check_user, only: %i[show update], controller: 'providers/users_check', path: 'users/check'
       resources :users, controller: 'providers/users' do
         member do
