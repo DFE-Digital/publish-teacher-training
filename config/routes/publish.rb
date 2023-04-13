@@ -27,8 +27,8 @@ get '/how-to-use-this-service/add-an-organisation', to: 'pages#add_an_organisati
 get '/how-to-use-this-service/add-and-remove-users', to: 'pages#add_and_remove_users', as: :add_and_remove_users
 get '/how-to-use-this-service/change-an-accredited-provider-relationship', to: 'pages#change_an_accredited_provider_relationship', as: :change_an_accredited_provider_relationship
 get '/how-to-use-this-service/roll-over-courses-to-a-new-recruitment-cycle', to: 'pages#roll_over_courses_to_a_new_recruitment_cycle', as: :roll_over_courses_to_a_new_recruitment_cycle
+get '/how-to-use-this-service/help-writing-course-descriptions', to: 'pages#help_writing_course_descriptions', as: :help_writing_course_descriptions
 get '/how-to-use-this-service/course-summary-examples', to: 'pages#course_summary_examples', as: :course_summary_examples
-get '/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses', to: 'pages#writing_descriptions_for_publish_teacher_training_courses', as: :writing_descriptions_for_publish_teacher_training_courses
 
 resource :cookie_preferences, only: %i[show update], path: '/cookies', as: :cookies
 

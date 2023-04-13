@@ -10,9 +10,9 @@ class PagesController < ApplicationController
     add_and_remove_users
     change_an_accredited_provider_relationship
     roll_over_courses_to_a_new_recruitment_cycle
+    help_writing_course_descriptions
     how_to_use_this_service
     course_summary_examples
-    writing_descriptions_for_publish_teacher_training_courses
   ]
 
   def accessibility; end
@@ -29,7 +29,7 @@ class PagesController < ApplicationController
   def add_and_remove_users; end
   def change_an_accredited_provider_relationship; end
   def roll_over_courses_to_a_new_recruitment_cycle; end
+  def help_writing_course_descriptions; end
   def how_to_use_this_service; end
   def course_summary_examples; end
-  def writing_descriptions_for_publish_teacher_training_courses; end
 end
