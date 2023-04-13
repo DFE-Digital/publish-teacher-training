@@ -149,6 +149,7 @@ en:
         providers:
           index: "Providers"
           new: "Add a provider"
+          new_provider: "Organisation details"
           show: "View a provider"
           courses:
             index: "Courses"
