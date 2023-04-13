@@ -24,6 +24,7 @@ get '/privacy', to: 'pages#privacy', as: :privacy
 get '/terms-conditions', to: 'pages#terms', as: :terms
 get '/how-to-use-this-service', to: 'pages#how_to_use_this_service'
 get '/how-to-use-this-service/add-an-organisation', to: 'pages#add_an_organisation', as: :add_an_organisation
+get '/how-to-use-this-service/add-and-remove-users', to: 'pages#add_and_remove_users', as: :add_and_remove_users
 get '/how-to-use-this-service/course-summary-examples', to: 'pages#course_summary_examples', as: :course_summary_examples
 get '/how-to-use-this-service/writing-descriptions-for-publish-teacher-training-courses', to: 'pages#writing_descriptions_for_publish_teacher_training_courses', as: :writing_descriptions_for_publish_teacher_training_courses
 

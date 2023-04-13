@@ -682,6 +682,7 @@ en:
     user_removed: "User removed"
   links:
     find_website_url: "https://www.find-postgraduate-teacher-training.service.gov.uk/"
+    dfe_signin: https://services.signin.education.gov.uk
     get_information_schools: "https://www.get-information-schools.service.gov.uk/"
     ability_net: "https://mcmw.abilitynet.org.uk/"
     equality_advisory_service: "https://www.equalityadvisoryservice.com/"

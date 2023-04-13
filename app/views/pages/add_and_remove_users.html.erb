@@ -1,0 +1,50 @@
+<% content_for :page_title, "Add and remove users " %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">How to use this service</span>
+        Add and remove users
+    </h1>
+
+    <p class="govuk-body">
+       Once an <%= govuk_link_to("organisation has been added to Publish", add_an_organisation_path) %>, any user can add other users. This means that more people can have access to the organisation’s courses to view and manage them.
+    </p>
+
+    <p class="govuk-body">
+      It might also be useful if you’re a training partner and want to give your accredited provider access.
+    </p>
+
+    <p class="govuk-body">
+      To add a new user, they must already have a <%= govuk_link_to("DfE Sign-in account", t("links.dfe_signin")) %>. You can then add the user to your organisation.
+    </p>
+
+    <h2 class="govuk-heading-m">Adding a user</h2>
+
+    <p class="govuk-body">To add a user:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>go to the ‘Users’ tab</li>
+      <li>select ‘Add user’</li>
+      <li>enter the user’s details - the email address must match the user’s DfE Sign-in account</li>
+    </ul>
+
+    <p class="govuk-body">
+      The user will be sent an email to let them know they’ve been added to the organisation.
+    </p>
+
+    <h2 class="govuk-heading-m">Removing a user</h2>
+
+    <p class="govuk-body">To remove a user:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>go to the ‘Users’ tab</li>
+      <li>select the name of the user you want to remove from the alphabetically ordered list</li>
+      <li>select ‘Remove user’</li>
+    </ul>
+
+    <p class="govuk-body">
+      The user will be sent an email to let them know they’ve been removed from the organisation.
+    </p>
+  </div>
+</div>
