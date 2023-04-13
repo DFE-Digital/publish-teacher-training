@@ -11,11 +11,5 @@ module Stores
     def store_keys
       FORM_STORE_KEYS
     end
-
-    private
-
-    def identifier_id
-      "#{self.class.name}_#{identifier_model.id}"
-    end
   end
 end
