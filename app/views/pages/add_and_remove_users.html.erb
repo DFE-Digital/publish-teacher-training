@@ -1,7 +1,18 @@
-<% content_for :page_title, "Add and remove users " %>
+<% content_for :page_title, "Add and remove users" %>
+
+<%= content_for(:before_content) do %>
+
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
+      govuk_breadcrumb_link_to("Add and remove users", add_and_remove_users_path)
+    ]) %>
+
+  <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
     <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">How to use this service</span>
         Add and remove users
