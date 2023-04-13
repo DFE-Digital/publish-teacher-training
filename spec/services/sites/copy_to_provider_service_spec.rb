@@ -51,7 +51,7 @@ describe Sites::CopyToProviderService do
       before do
         provider
         site.update_columns address1: ''
-        site.update_columns address3: ''
+        site.update_columns town: ''
         site.update_columns postcode: ''
         site.update_columns location_name: ''
       end

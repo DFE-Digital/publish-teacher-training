@@ -511,7 +511,8 @@ module Find
           location_name: 'Main Site',
           address1: '10 Windy Way',
           address2: 'Witham',
-          address3: 'Essex',
+          address3: '',
+          town: 'Essex',
           address4: 'UK',
           postcode: 'CM8 2SD'
         )
@@ -526,7 +527,8 @@ module Find
           longitude: nil,
           address1: '10 Windy Way',
           address2: 'Witham',
-          address3: 'Essex',
+          address3: '',
+          town: 'Essex',
           address4: 'UK',
           postcode: 'CM8 2SD',
           location_name: 'no latitude long'
@@ -539,7 +541,8 @@ module Find
           longitude: 0.1367,
           address1: '10 Windy Way',
           address2: 'Witham',
-          address3: 'Essex',
+          address3: '',
+          town: 'Essex',
           address4: 'UK',
           postcode: 'CM8 2SD',
           location_name: 'suspended'
@@ -553,7 +556,8 @@ module Find
           longitude: 0.1358,
           address1: 'No vacancies road',
           address2: 'Witham',
-          address3: 'Essex',
+          address3: '',
+          town: 'Essex',
           address4: 'UK',
           postcode: 'CM8 2SD'
         )

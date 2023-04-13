@@ -11,7 +11,7 @@ describe Support::SchoolForm, type: :model do
     {
       location_name: 'The location',
       address1: 'My street',
-      address3: 'My town',
+      town: 'My town',
       postcode: 'TR1 1UN'
     }
   end
@@ -35,11 +35,11 @@ describe Support::SchoolForm, type: :model do
       end
     end
 
-    context 'with missing address3' do
+    context 'with missing town' do
       it 'is invalid' do
-        params['address3'] = ''
+        params['town'] = ''
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ address3: ['Enter a town or city'] })
+        expect(subject.errors.messages).to eq({ town: ['Enter a town or city'] })
       end
     end
 
@@ -99,7 +99,7 @@ describe Support::SchoolForm, type: :model do
         {
           location_name: location1.location_name,
           address1: 'My street',
-          address3: 'My town',
+          town: 'My town',
           postcode: 'TR1 1UN'
         }
       end
@@ -117,7 +117,7 @@ describe Support::SchoolForm, type: :model do
         expect { subject.save! }
           .to change(location, :location_name).to('The location')
           .and change(location, :address1).to('My street')
-          .and change(location, :address3).to('My town')
+          .and change(location, :town).to('My town')
           .and change(location, :postcode).to('TR1 1UN')
       end
     end
@@ -129,7 +129,7 @@ describe Support::SchoolForm, type: :model do
         expect { subject.save! }.not_to(change(location, :postcode))
         expect { subject.save! }.not_to(change(location, :location_name))
         expect { subject.save! }.not_to(change(location, :address1))
-        expect { subject.save! }.not_to(change(location, :address3))
+        expect { subject.save! }.not_to(change(location, :town))
       end
     end
   end
@@ -147,7 +147,7 @@ describe Support::SchoolForm, type: :model do
         {
           location_name: '',
           address1: 'My street',
-          address3: 'My town',
+          town: 'My town',
           postcode: 'TR1 1UN'
         }
       end

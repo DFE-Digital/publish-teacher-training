@@ -15,7 +15,7 @@ describe GeocodeJob do
     build(:site,
           address1: 'Long Lane',
           address2: 'Holbury',
-          address3: 'Southampton',
+          town: 'Southampton',
           address4: nil,
           postcode: 'SO45 2PA')
   end

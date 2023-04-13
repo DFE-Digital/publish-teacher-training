@@ -23,6 +23,6 @@ module CSVImports
 
     attr_reader :csv_content, :provider
 
-    HEADERS = %i[location_name urn address1 address2 address3 address4 postcode].freeze
+    HEADERS = %i[location_name urn address1 address2 address3 town address4 postcode].freeze
   end
 end

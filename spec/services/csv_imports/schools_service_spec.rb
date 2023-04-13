@@ -37,6 +37,7 @@ module CSVImports
       address1
       address2
       address3
+      town
       address4
       postcode
     ].each_with_index do |attribute_name, index|

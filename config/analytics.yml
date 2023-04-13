@@ -146,7 +146,6 @@ shared:
   site:
     - id
     - address2
-    - address3
     - address4
     - code
     - location_name
@@ -159,6 +158,8 @@ shared:
     - latitude
     - longitude
     - urn
+    - town
+    - address3
   statistic:
     - id
     - json_data

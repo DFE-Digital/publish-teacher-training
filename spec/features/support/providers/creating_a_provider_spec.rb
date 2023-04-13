@@ -48,7 +48,7 @@ feature 'Creating a provider' do
     support_provider_new_page.site_location_name.set('The Green Academy')
     support_provider_new_page.site_address1.set('Poplar Drive')
     support_provider_new_page.site_address2.set('Blurton')
-    support_provider_new_page.site_address3.set('Stoke-on-Trent')
+    support_provider_new_page.site_town.set('Stoke-on-Trent')
     support_provider_new_page.site_address4.set('Staffordshire')
     support_provider_new_page.site_postcode.set('ST3 3AZ')
   end

@@ -48,7 +48,7 @@ module IntegrationSeeds
           # the DfE building, which would be nice and predictable.
           # address1: "#{provider_code} DfE",
           # address2: "#{provider_code} Great Smith St",
-          # address3: "#{provider_code} Westminster",
+          # town: "#{provider_code} Westminster",
           # address4: "#{provider_code} London",
           # postcode: "SW1 #{provider_code}",
           # region_code: "london",

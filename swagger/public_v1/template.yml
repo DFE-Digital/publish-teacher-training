@@ -113,6 +113,10 @@ components:
           type: string
           description: "Building or street address line two."
           example: "Wath-upon-Dearne"
+        street_address_3:
+          type: string
+          description: "Building or street address line three."
+          example: "Newington"
         city:
           type: string
           description: "Town or city."
@@ -135,7 +139,7 @@ components:
         longitude:
           type: number
           description: "The longitude of the location."
-          example: -1.3603394  
+          example: -1.3603394
         uuid:
           type: string
           description: "The unique identifier of the location."
@@ -257,7 +261,7 @@ components:
         included:
           type: array
           items:
-            $ref: "#/components/schemas/RecruitmentCycleResource"          
+            $ref: "#/components/schemas/RecruitmentCycleResource"
         jsonapi:
           $ref: "#/components/schemas/JSONAPI"
     ProviderSuggestion:
@@ -425,4 +429,3 @@ components:
           type: string
           description: "A more detailed description of what could have caused the error."
           example: "The request could not be fulfilled due to some incorrect syntax of the request."
-    

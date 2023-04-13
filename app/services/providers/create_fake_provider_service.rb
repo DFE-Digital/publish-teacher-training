@@ -44,7 +44,7 @@ module Providers
         location_name: 'Site 1',
         address1: provider.address1,
         address2: provider.address2,
-        address3: provider.address3,
+        town: provider.address3,
         address4: provider.address4,
         postcode: provider.postcode,
         region_code: provider.region_code,

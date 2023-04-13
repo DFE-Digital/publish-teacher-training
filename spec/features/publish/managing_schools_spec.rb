@@ -95,7 +95,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   def and_i_set_invalid_new_details
     publish_school_new_page.name_field.set ''
     publish_school_new_page.address1_field.set '123 Test Street'
-    publish_school_new_page.address3_field.set 'London'
+    publish_school_new_page.town_field.set 'London'
     publish_school_new_page.postcode_field.set 'KT8 9AU'
     publish_school_new_page.submit.click
   end
@@ -103,7 +103,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   def and_i_set_valid_new_details
     publish_school_new_page.name_field.set 'Some place'
     publish_school_new_page.address1_field.set '123 Test Street'
-    publish_school_new_page.address3_field.set 'London'
+    publish_school_new_page.town_field.set 'London'
     publish_school_new_page.postcode_field.set 'KT8 9AU'
     publish_school_new_page.submit.click
   end

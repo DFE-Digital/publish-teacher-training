@@ -9,7 +9,8 @@ describe GeocoderService do
              location_name: 'Fun Academy',
              address1: 'Long Lane',
              address2: 'Holbury',
-             address3: 'Southampton',
+             address3: '',
+             town: 'Southampton',
              address4: 'UK',
              postcode: 'SO45 2PA',
              region_code: nil)
@@ -27,6 +28,7 @@ describe GeocoderService do
                    address1: '',
                    address2: '',
                    address3: '',
+                   town: '',
                    address4: '',
                    postcode: '',
                    region_code: nil)
