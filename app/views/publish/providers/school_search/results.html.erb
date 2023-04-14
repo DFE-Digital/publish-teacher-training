@@ -1,0 +1,40 @@
+
+<% content_for :page_title, search_result_title_component.title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(search_publish_provider_recruitment_cycle_schools_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(
+        model: @school_select_form,
+        url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
+        method: :put
+      ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= render search_result_title_component %>
+
+      <% unless @school_search.schools.empty? %>
+        <%= f.govuk_radio_buttons_fieldset(:school_id, legend: { text: "School", size: "m" }) do %>
+          <% @school_search.schools.each_with_index do |school, index| %>
+            <%= f.govuk_radio_button :school_id, school.id, label: { text: school.name }, link_errors: index.zero?, hint: { text: school_urn_and_location(school) } %>
+          <% end %>
+        <% end %>
+
+        <%= f.hidden_field :query, value: query %>
+        <%= f.govuk_submit t("continue") %>
+      <% end %>
+
+    <% end %>
+
+     <% unless @school_search.schools.empty? %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+      </p>
+    <% end %>
+  </div>
+</div>

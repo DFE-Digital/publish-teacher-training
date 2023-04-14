@@ -225,6 +225,10 @@ namespace :publish, as: :publish do
             get :delete
             delete :delete, to: 'schools#destroy'
           end
+
+          get '/search', on: :collection, to: 'school_search#new'
+          post '/search', on: :collection, to: 'school_search#create'
+          put '/search', on: :collection, to: 'school_search#update'
         end
 
         get '/contact', on: :member, to: 'contacts#edit'

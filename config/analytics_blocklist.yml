@@ -78,3 +78,5 @@
   :course:
   - master_subject_id
   - campaign_name
+  :gias_school:
+  - searchable

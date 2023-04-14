@@ -9,13 +9,11 @@
       <%= page_title %>
     </h1>
 
-<p class="govuk-body">You can assign schools to a course by going to the ‘Basic details’ tab in ‘Courses’.</p>
-
-    <p class="govuk-body">Once a school has been assigned to a course, candidates will be able to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>see a list of assigned schools on the course page on Find</li>
-      <li>select their preferred school when applying for a course</li>
-    </ul>
+    <% if FeatureService.enabled?(:gias_search) %>
+      <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
+    <% else %>
+      <%= govuk_button_link_to t(".add_school"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
+    <% end %>
 
     <table class="govuk-table app-table--vertical-align-middle">
       <thead class="govuk-table__head">
@@ -35,6 +33,5 @@
         <%= render partial: "school", collection: @schools %>
       </tbody>
     </table>
-    <%= govuk_button_link_to "Add school", new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
   </div>
 </div>

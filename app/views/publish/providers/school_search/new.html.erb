@@ -1,0 +1,37 @@
+
+<% content_for :page_title, title_with_error_prefix(t(".title"), @school_search_form.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(
+        model: @school_search_form,
+        url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
+        method: :post,
+        html: { data: { module: "app-schools-autocomplete" } }
+      ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field(
+        :query,
+        label: { text: t(".title"), size: "l", tag: "h1" },
+        caption: { text: t(".caption"), size: "l" }
+      ) %>
+
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
+      </p>
+
+      <%= f.govuk_submit t("continue") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    </p>
+  </div>
+</div>
