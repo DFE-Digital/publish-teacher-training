@@ -136,6 +136,7 @@ shared:
     - can_sponsor_skilled_worker_visa
     - can_sponsor_student_visa
     - synonyms
+    - accredited_provider_id
   recruitment_cycle:
     - id
     - year
