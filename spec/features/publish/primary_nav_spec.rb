@@ -10,8 +10,7 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
     and_i_should_see_the_schools_link
     and_i_should_see_the_courses_link
     and_i_should_see_the_users_link
-    and_i_should_not_see_the_accredited_bodies_link
-    and_i_should_not_see_the_accredited_bodies_link
+    and_i_should_not_see_the_training_partners_link
   end
 
   scenario 'view page as Susy - user with accredited body' do
@@ -21,7 +20,7 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
     and_i_should_see_the_schools_link
     and_i_should_see_the_courses_link
     and_i_should_see_the_users_link
-    and_i_should_see_the_accredited_bodies_link
+    and_i_should_see_the_training_partners_link
   end
 
   def and_i_am_authenticated_as_a_provider_user
@@ -52,15 +51,15 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
     expect(publish_primary_nav_page).to have_users
   end
 
-  def and_i_should_see_the_accredited_bodies_link
-    expect(publish_primary_nav_page).to have_accredited_bodies
+  def and_i_should_see_the_training_partners_link
+    expect(publish_primary_nav_page).to have_training_partners
   end
 
-  def and_i_should_not_see_the_accredited_bodies_link
-    expect(publish_primary_nav_page).not_to have_accredited_bodies
+  def and_i_should_not_see_the_training_partners_link
+    expect(publish_primary_nav_page).not_to have_training_partners
   end
 
-  def and_i_should_not_see_the_accredited_bodies_link
+  def and_i_should_not_see_the_training_partners_link
     expect(page).not_to have_text 'Change organisation'
   end
 end
