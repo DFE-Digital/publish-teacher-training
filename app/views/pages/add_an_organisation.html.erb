@@ -1,0 +1,61 @@
+<% content_for :page_title, "Add an organisation" %>
+
+<%= content_for(:before_content) do %>
+
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
+      govuk_breadcrumb_link_to("Add an organisation", add_an_organisation_path)
+    ]) %>
+
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">How to use this service</span>
+        Add an organisation
+    </h1>
+
+    <p class="govuk-body">
+        If you are a new initial teacher training (ITT) provider, we can set up your organisation on Publish teacher
+        training courses (Publish). You’ll then be able to publish courses to
+        <%= govuk_link_to("Find postgraduate teacher training courses (Find)", t("links.find_website_url")) %>.
+    </p>
+
+    <p class="govuk-body">To do this:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        contact us at
+          <a class="govuk-link" href="mailto:<%= Settings.support_email %>">
+          <%= Settings.support_email %></a> and we will send you a link to a form to complete
+      </li>
+      <li>enter the details and submit the form</li>
+      <li>look out for a welcome email from us that will be sent to the first user you specified on the form</li>
+    </ul>
+
+    <p class="govuk-body">
+      Once your organisation has been added, you’ll be able to add other users and create courses.
+    </p>
+
+    <p class="govuk-body">
+      We'll also add your organisation to
+      <a class="govuk-link" href="<%= Settings.apply_base_url %>/provider">
+        Manage teacher training applications (Manage)
+      </a>
+      at the same time.
+    </p>
+
+    <p class="govuk-body">
+      If you need to remove an organisation from Publish or Manage, contact us at
+      <a class="govuk-link" href="mailto:<%= Settings.support_email %>"><%= Settings.support_email %></a>.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to("Read more information about providing initial teacher training",
+                      t("links.initial_teacher_training_guidance")) %>.
+    </p>
+  </div>
+</div>

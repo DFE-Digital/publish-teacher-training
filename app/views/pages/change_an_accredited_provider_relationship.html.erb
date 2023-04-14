@@ -1,0 +1,65 @@
+<% content_for :page_title, "Change an accredited provider relationship" %>
+
+<%= content_for(:before_content) do %>
+
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
+      govuk_breadcrumb_link_to("Change an accredited provider relationship",
+                              change_an_accredited_provider_relationship_path)
+    ]) %>
+
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">How to use this service</span>
+        Change an accredited provider relationship
+    </h1>
+
+    <p class="govuk-body">
+      If you’re a training partner (non-accredited provider), we need to know who you work with to run your courses.
+    </p>
+
+    <h2 class="govuk-heading-m">Adding and deleting an accredited provider</h2>
+
+    <p class="govuk-body">
+        You need to select which accredited provider ratifies a course before you can publish it. You’ll also need to write a short description about the accredited provider. It’s a good idea to ask the accredited provider to check this content and approve it.
+    </p>
+
+    <p class="govuk-body">Go to the ‘Accredited providers’ tab in your account to:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>add new accredited providers</li>
+      <li>update descriptions</li>
+      <li>remove accredited providers from your account (unpublished courses only)</li>
+    </ul>
+
+    <p class="govuk-body">
+      You’ll be asked to specify which accredited provider you’re working with for each course before you can publish it.
+    </p>
+
+    <p class="govuk-body">
+      If you want to give people at the accredited provider organisation access to your courses, you can <%= govuk_link_to("add them as a user", add_and_remove_users_path) %>.
+    </p>
+
+    <h2 class="govuk-heading-m">Changing your accredited provider</h2>
+
+    <p class="govuk-body">
+        If the organisation you were working with is no longer an accredited provider, you’ll need to select a different provider before publishing any new courses. You’ll be prompted to do this when <%= govuk_link_to("publishing rolled over courses", roll_over_courses_to_a_new_recruitment_cycle_path) %>.
+    </p>
+
+    <p class="govuk-body">
+      If you need to change an accredited provider for a course that has already been published on Find, contact us at
+        <a class="govuk-link" href="mailto:<%= Settings.support_email %>">
+        <%= Settings.support_email %></a>.
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to("Read more about forming partnerships to provide initial teacher training (ITT)", t("links.initial_teacher_training_forming_partnerships")) %>.
+    </p>
+
+  </div>
+</div>

@@ -1,5 +1,15 @@
 <% content_for :page_title, "Course summary examples" %>
 
+<%= content_for(:before_content) do %>
+
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
+      govuk_breadcrumb_link_to("Course summary examples", course_summary_examples_path),
+    ]) %>
+
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
@@ -13,12 +23,12 @@
         <%= govuk_link_to "Example 1 - secondary art and design course provided by a university", "#example-1" %>
       </li>
       <li>
-        <%= govuk_link_to "Example 2 - primary course provided by a SCITT", "#example-2" %>
+        <%= govuk_link_to "Example 2 - primary course provided by a school centred initial teacher training", "#example-2" %>
       </li>
     </ul>
 
     <p class="govuk-body">
-      Based on our research into how candidates read course descriptions and our <%= govuk_link_to "guidance on writing descriptions for Publish", writing_descriptions_for_publish_teacher_training_courses_path %>, here are some ‘Course summary’ examples.
+      Based on our research into how candidates read course descriptions and our <%= govuk_link_to "guidance on writing descriptions for Publish teacher training courses", help_writing_course_descriptions_path %>, here are some ‘Course summary’ examples.
     </p>
     <p class="govuk-body">
       The examples are based on real descriptions that are currently live on Find postgraduate teacher training.
@@ -84,7 +94,7 @@
     </p>
 
     <h2 id="example-2" class="govuk-heading-m">
-      Example 2 - primary course provided by a SCITT
+      Example 2 - primary course provided by a school centred initial teacher training
     </h2>
 
     <p class="govuk-body">
@@ -97,11 +107,12 @@
     <h3 class="govuk-heading-s">Primary (264 words)</h3>
 
     <p class="govuk-body">
-      The Becoming a Teacher (BAT) primary course leads to Qualified Teacher Status (QTS) and a Post-Graduate Certificate in Education (PGCE). You will train across the 5-11 age range, where you will learn from experienced practitioners, particularly your personal mentor.
-    </p>
+      The Becoming a Teacher (BAT) primary course leads to Qualified Teacher Status (QTS) and a 
+      Post-Graduate Certificate in Education (PGCE). You will train across the 5-11 age range, where you will learn 
+      from experienced practitioners, particularly your personal mentor.
 
-    <p class="govuk-body">
-      You’ll spend four days per week on placement in our partnership schools. In addition, you will join the rest of your cohort one day per week for training with the BAT SCITT.
+      You’ll spend four days per week on placement in our partnership schools. In addition, you will join the rest of 
+      your cohort one day per week for training with the BAT SCITT.
     </p>
 
     <p class="govuk-body">Our curriculum has six areas:</p>
