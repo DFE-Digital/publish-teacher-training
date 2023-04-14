@@ -117,7 +117,7 @@ gem 'pg_search'
 gem 'skylight'
 
 # govuk styling
-gem 'govuk-components', '~> 4.0.0a2'
+gem 'govuk-components', '~> 4.0.0rc1'
 gem 'govuk_design_system_formbuilder', '~> 4.0.0a1'
 
 # DfE Sign-In
