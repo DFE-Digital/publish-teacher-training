@@ -7,7 +7,7 @@ module PageObjects
       element :schools, :link, 'Schools'
       element :courses, :link, 'Courses'
       element :users, :link, 'Users'
-      element :accredited_bodies, :link, 'Accredited bodies'
+      element :training_partners, :link, 'Training partners'
     end
   end
 end
