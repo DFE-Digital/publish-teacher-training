@@ -42,6 +42,7 @@ review:
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
 	$(eval space=bat-qa)
 	$(eval paas_env=pr-$(APP_NAME))
+	$(eval PLATFORM=paas)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
 
@@ -51,6 +52,7 @@ qa: ## Set DEPLOY_ENV to qa
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
 	$(eval space=bat-qa)
 	$(eval paas_env=qa)
+	$(eval PLATFORM=paas)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
 .PHONY: staging
@@ -59,6 +61,7 @@ staging: ## Set DEPLOY_ENV to staging
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
 	$(eval space=bat-staging)
 	$(eval paas_env=staging)
+	$(eval PLATFORM=paas)
 
 .PHONY: sandbox
 sandbox: ## Set DEPLOY_ENV to sandbox
@@ -66,6 +69,7 @@ sandbox: ## Set DEPLOY_ENV to sandbox
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
 	$(eval space=bat-prod)
 	$(eval paas_env=sandbox)
+	$(eval PLATFORM=paas)
 
 .PHONY: production
 production: ## Set DEPLOY_ENV to production
@@ -74,6 +78,7 @@ production: ## Set DEPLOY_ENV to production
 	$(if $(CONFIRM_PRODUCTION), , $(error Production can only run with CONFIRM_PRODUCTION))
 	$(eval space=bat-prod)
 	$(eval paas_env=prod)
+	$(eval PLATFORM=paas)
 	$(eval PARTIAL_HOSTNAME=www)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION)
 
@@ -83,6 +88,7 @@ loadtest: ## Set DEPLOY_ENV to loadtest
 	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
 	$(eval space=bat-prod)
 	$(eval paas_env=loadtest)
+	$(eval PLATFORM=paas)
 
 .PHONY: pentest
 pentest: ## Set DEPLOY_ENV to pentest
@@ -100,18 +106,17 @@ deploy-init:
 	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_app_secrets_file=./workspace_variables/app_secrets.yml)
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
-	cd terraform && \
-		terraform init -reconfigure -backend-config=workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
+	terraform -chdir=terraform/$(PLATFORM) init -reconfigure -upgrade -backend-config=./workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 
 deploy-plan: deploy-init
-	cd terraform && terraform plan -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json
+	terraform -chdir=terraform/$(PLATFORM) plan -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json
 
 deploy: deploy-init
-	cd terraform && terraform apply -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
+	terraform -chdir=terraform/$(PLATFORM) apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
 
 destroy: deploy-init
-	cd terraform &&	terraform destroy -var-file=workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
+	terraform -chdir=terraform/$(PLATFORM) destroy -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
 
 install-fetch-config:
 	[ ! -f bin/fetch_config.rb ] \
@@ -123,9 +128,9 @@ read-deployment-config:
 	$(eval export postgres_database_name=publish-teacher-training-postgres-${paas_env})
 
 read-keyvault-config:
-	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
-	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
-	$(eval key_vault_infra_secret_name=$(shell jq -r '.key_vault_infra_secret_name' terraform/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval export key_vault_name=$(shell jq -r '.key_vault_name' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_app_secret_name=$(shell jq -r '.key_vault_app_secret_name' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval key_vault_infra_secret_name=$(shell jq -r '.key_vault_infra_secret_name' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 
 edit-app-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \
@@ -197,7 +202,7 @@ rename-postgres-service: ## make qa rename-postgres-service
 	cf rename-service publish-teacher-training-postgres-${paas_env} publish-teacher-training-postgres-${paas_env}-old
 
 remove-postgres-tf-state: deploy-init ## make qa remove-postgres-tf-state PASSCODE=xxxx
-	cd terraform && terraform state rm module.paas.cloudfoundry_service_instance.postgres
+	terraform -chdir=terraform/$(PLATFORM) state rm module.paas.cloudfoundry_service_instance.postgres
 
 set-restore-variables:
 	$(if $(IMAGE_TAG), , $(error can only run with an IMAGE_TAG))

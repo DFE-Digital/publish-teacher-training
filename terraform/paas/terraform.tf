@@ -37,11 +37,11 @@ provider "cloudfoundry" {
 }
 
 provider "statuscake" {
-  api_token  = local.infra_secrets.STATUSCAKE_PASSWORD
+  api_token = local.infra_secrets.STATUSCAKE_PASSWORD
 }
 
 module "paas" {
-  source = "./modules/paas"
+  source = "../modules/paas"
 
   cf_space                       = var.cf_space
   app_environment                = var.paas_app_environment
@@ -66,7 +66,7 @@ module "paas" {
 }
 
 module "statuscake" {
-  source = "./modules/statuscake"
+  source = "../modules/statuscake"
 
   alerts = var.statuscake_alerts
 }

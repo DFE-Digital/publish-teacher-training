@@ -42,7 +42,7 @@ runs:
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
         fi;
 
-        tf_vars_file=terraform/workspace_variables/${{ inputs.environment }}.tfvars.json
+        tf_vars_file=terraform/paas/workspace_variables/${{ inputs.environment }}.tfvars.json
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
