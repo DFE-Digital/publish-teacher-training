@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 feature 'Creating a provider' do
-  let(:user) { create(:user, :admin) }
-
   before do
     given_i_am_authenticated(user:)
     when_i_visit_the_new_provider_page
@@ -30,6 +28,10 @@ feature 'Creating a provider' do
   end
 
   private
+
+  def user
+    @user ||= create(:user, :admin)
+  end
 
   def and_a_success_message_is_displayed
     expect(page).to have_content('Provider was successfully created')
