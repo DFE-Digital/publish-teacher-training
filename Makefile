@@ -84,6 +84,10 @@ loadtest: ## Set DEPLOY_ENV to loadtest
 	$(eval space=bat-prod)
 	$(eval paas_env=loadtest)
 
+.PHONY: pentest
+pentest: ## Set DEPLOY_ENV to pentest
+	$(eval DEPLOY_ENV=pentest)
+
 .PHONY: ci
 ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
