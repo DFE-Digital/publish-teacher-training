@@ -311,7 +311,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
       view_component (~> 3.0.0rc6)
-    govuk_design_system_formbuilder (4.0.0a1)
+    govuk_design_system_formbuilder (4.0.0rc1)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -401,7 +401,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    loofah (2.19.1)
+    loofah (2.20.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.2.8)
@@ -765,7 +765,7 @@ DEPENDENCIES
   geokit-rails
   google-cloud-bigquery
   govuk-components (~> 4.0.0rc1)
-  govuk_design_system_formbuilder (~> 4.0.0a1)
+  govuk_design_system_formbuilder (~> 4.0.0rc1)
   govuk_notify_rails
   guard
   guard-rspec
