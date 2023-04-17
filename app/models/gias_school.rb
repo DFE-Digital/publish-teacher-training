@@ -21,6 +21,20 @@ class GiasSchool < ApplicationRecord
 
   scope :open, -> { where(status_code: ESTABLISHMENT_OPEN_STATUS_CODE) }
 
+  def school_attributes
+    {
+      location_name: name,
+      urn:,
+      code: urn,
+      address1:,
+      address2:,
+      address3:,
+      town:,
+      address4: county,
+      postcode:
+    }
+  end
+
   private
 
   # The below generates a query like:

@@ -24,4 +24,22 @@ describe GiasSchool do
       )
     end
   end
+
+  describe '#school_attributes' do
+    it 'returns a hash of attributes that can be used to build a school' do
+      school = build(:gias_school)
+
+      expect(school.school_attributes).to eq(
+        location_name: school.name,
+        urn: school.urn,
+        code: school.urn,
+        address1: school.address1,
+        address2: school.address2,
+        address3: school.address3,
+        town: school.town,
+        address4: school.county,
+        postcode: school.postcode
+      )
+    end
+  end
 end
