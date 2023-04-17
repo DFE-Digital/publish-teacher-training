@@ -45,7 +45,7 @@ feature 'View providers' do
   end
 
   def then_i_am_on_the_new_provider_page
-    expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/new-provider")
+    expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/new")
   end
 
   def then_i_am_on_the_old_new_provider_page

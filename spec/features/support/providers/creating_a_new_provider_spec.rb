@@ -38,7 +38,7 @@ feature 'Creating a provider' do
   end
 
   def when_i_visit_the_new_provider_page
-    visit "/support/#{Settings.current_recruitment_cycle_year}/providers/new-provider"
+    visit "/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/new"
   end
 
   def when_i_fill_in_a_valid_provider_details(provider_type:)

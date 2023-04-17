@@ -149,7 +149,6 @@ en:
         providers:
           index: "Providers"
           new: "Add a provider"
-          new_provider: "Organisation details"
           show: "View a provider"
           courses:
             index: "Courses"
@@ -167,6 +166,8 @@ en:
             check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
+          onboardings:
+            new: "Organisation details"
         users:
           index: "Users"
           show: "User overview"

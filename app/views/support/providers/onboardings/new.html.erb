@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: "support.providers.new_provider") %>
+<%= render PageTitle.new(title: "support.providers.onboardings.new") %>
 
 <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
@@ -7,7 +7,7 @@
     ) %>
 <% end %>
 
-<%= form_with model: @provider, url: new_provider_support_recruitment_cycle_providers_path, local: true do |f| %>
+<%= form_with model: @provider, url: support_recruitment_cycle_providers_onboarding_path, local: true do |f| %>
 
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
