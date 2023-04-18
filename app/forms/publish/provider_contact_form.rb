@@ -14,7 +14,7 @@ module Publish
     validates :email, email_address: { message: 'Enter an email address in the correct format, like name@example.com' }
     validates :telephone, phone: { message: 'Enter a valid telephone number' }
     validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }, if: :lead_school?
-    validates :ukprn, ukprn_format: { allow_blank: true }
+    validates :ukprn, ukprn_format: { allow_blank: false }
 
     private
 
