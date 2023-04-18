@@ -47,7 +47,7 @@ describe UkprnFormatValidator do
 
       it 'adds an error' do
         expect(model).to be_invalid
-        expect(model.errors.first.type.to_s == 'start_with_one').to be(true)
+        expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
 
@@ -56,7 +56,7 @@ describe UkprnFormatValidator do
 
       it 'adds an error' do
         expect(model).to be_invalid
-        expect(model.errors.first.type.to_s == 'contains_eight_numbers').to be(true)
+        expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
 
@@ -65,7 +65,7 @@ describe UkprnFormatValidator do
 
       it 'adds an error' do
         expect(model).to be_invalid
-        expect(model.errors.first.type.to_s == 'contains_eight_numbers').to be(true)
+        expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
 
@@ -74,7 +74,7 @@ describe UkprnFormatValidator do
 
       it 'adds an error' do
         expect(model).to be_invalid
-        expect(model.errors.first.type.to_s == 'contains_eight_numbers').to be(true)
+        expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
   end
