@@ -166,6 +166,8 @@ en:
             check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
+          onboardings:
+            new: "Organisation details"
         users:
           index: "Users"
           show: "User overview"
@@ -694,6 +696,8 @@ en:
     initial_teacher_training_forming_partnerships: https://www.gov.uk/government/publications/initial-teacher-training-itt-forming-partnerships
     urn_html: |-
       Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
+    ukprn_html: |-
+      Find UKPRNs on the <a class="govuk-link" href="https://www.ukrlp.co.uk/" target="_blank">UK register of learning providers (opens in new tab)</a>
   edit_options:
     qualifications:
       qts:
