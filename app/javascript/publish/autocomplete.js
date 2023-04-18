@@ -44,7 +44,7 @@ export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) 
     source: request(path),
     templates: {
       inputValue: inputValueTemplate,
-      suggestion: result => result && `${result.name} (${result.code})`
+      suggestion: inputValueTemplate
     },
     onConfirm: option => ($input.value = option ? option.code : ''),
     confirmOnBlur: false,

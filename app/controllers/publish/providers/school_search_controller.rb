@@ -5,7 +5,15 @@ module Publish
     class SchoolSearchController < PublishController
       helper_method :query, :search_result_title_component
 
-      before_action :authorize_provider
+      before_action :authorize_provider, except: %i[index]
+
+      def index
+        authorize :provider, :index?
+        return render(json: { error: 'Bad request' }, status: :bad_request) if params_invalid?
+
+        schools = Schools::SearchService.call(query: params[:query]).schools
+        render json: schools
+      end
 
       def new
         @school_search_form = Schools::SearchForm.new
@@ -36,6 +44,10 @@ module Publish
       end
 
       private
+
+      def params_invalid?
+        params[:query].nil?
+      end
 
       def authorize_provider
         authorize provider, :can_create_sites?

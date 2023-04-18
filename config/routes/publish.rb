@@ -60,6 +60,8 @@ namespace :publish, as: :publish do
   get '/accept-terms', to: 'terms#edit', as: :accept_terms
   patch '/accept-terms', to: 'terms#update'
 
+  get '/suggestions', to: '/publish/providers/school_search#index'
+
   resources :notifications, path: '/notifications', controller: 'notifications', only: %i[index update]
 
   resources :access_requests, path: '/access-requests', controller: 'access_requests', only: %i[new index create] do
