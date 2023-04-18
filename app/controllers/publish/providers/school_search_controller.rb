@@ -5,9 +5,9 @@ module Publish
     class SchoolSearchController < PublishController
       helper_method :query, :search_result_title_component
 
-      before_action :authorize_provider, except: %i[index]
+      before_action :authorize_provider, except: %i[suggest]
 
-      def index
+      def suggest
         authorize :provider, :index?
         return render(json: { error: 'Bad request' }, status: :bad_request) if params_invalid?
 
