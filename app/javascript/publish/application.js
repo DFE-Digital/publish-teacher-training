@@ -26,12 +26,16 @@ try {
   const schoolAutocomplete = document.getElementById('school-autocomplete')
   const schoolInput = document.getElementById('publish-schools-search-form-query-field')
   const schoolTemplate = (result) => result && `${result.name}`
+  const schoolSuggestions = (result) => result && `${result.name} (${result.town}, ${result.postcode})` 
 
   if (autocomplete && providerInput) {
     initAutocomplete(autocomplete, providerInput, providerTemplate)
   }
   if (schoolAutocomplete && schoolInput) {
-    initAutocomplete(schoolAutocomplete, schoolInput, schoolTemplate, {path: '/publish/suggestions'})
+    initAutocomplete(schoolAutocomplete, schoolInput, schoolTemplate, {
+      path: '/publish/suggestions',
+      suggestionTemplate: schoolSuggestions,
+    })
   }
 } catch (err) {
   console.error('Failed to initialise provider autocomplete:', err)
