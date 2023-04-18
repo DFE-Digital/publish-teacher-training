@@ -75,6 +75,7 @@
   - contact_name
   - email
   - telephone
+  - searchable
   :course:
   - master_subject_id
   - campaign_name
