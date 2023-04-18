@@ -444,6 +444,9 @@ en:
               blank: "^Enter details about training with you"
             train_with_disability:
               blank: "^Enter details about training with a disability"
+            ukprn:
+              start_with_one: "UKPRN must start with 1"
+              contains_eight_numbers: "UKPRN must contain 8 numbers"
         organisation:
           attributes:
             name:
