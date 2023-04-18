@@ -147,7 +147,7 @@ class Provider < ApplicationRecord
 
   validates :telephone, phone: { message: 'Enter a valid telephone number' }, if: :telephone_changed?
 
-  validates :ukprn, ukprn_format: { allow_blank: true }
+  validates :ukprn, ukprn_format: { allow_blank: false }, on: :update
 
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: :lead_school?
 
