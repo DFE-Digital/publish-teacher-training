@@ -445,6 +445,7 @@ en:
             train_with_disability:
               blank: "^Enter details about training with a disability"
             ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
         organisation:
           attributes:
@@ -664,6 +665,7 @@ en:
         publish/provider_contact_form:
           attributes:
             ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
   errors:
     messages:
