@@ -32,13 +32,7 @@
                               value: params[:query],
                               class: "govuk-input",
                               data: { qa: "schools-search" } %>
-
-      <%#= f.govuk_text_field(
-        :query,
-        label: { text: t(".title"), size: "l", tag: "h1" },
-        caption: { text: t(".caption"), size: "l" }
-      ) %>
-      <div id="school-autocomplete" class="govuk-body"></div>
+        <div id="school-autocomplete" class="govuk-body"></div>
       </div>
       <p class="govuk-body govuk-!-margin-bottom-7">
         <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
