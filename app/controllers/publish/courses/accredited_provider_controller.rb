@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class AccreditedBodyController < PublishController
+    class AccreditedProviderController < PublishController
       before_action :build_course_params, only: :continue
       include CourseBasicDetailConcern
 
@@ -22,7 +22,7 @@ module Publish
           render :new
         elsif other_selected_with_no_autocompleted_code?(code)
           redirect_to(
-            search_new_publish_provider_recruitment_cycle_courses_accredited_body_path(
+            search_new_publish_provider_recruitment_cycle_courses_accredited_provider_path(
               query: @accredited_body,
               course: course_params
             )

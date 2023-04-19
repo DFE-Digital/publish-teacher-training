@@ -138,7 +138,7 @@
             <% row.with_key { "Accredited provider" } %>
             <% row.with_value { course.accrediting_provider.provider_name } %>
             <% row.with_action(
-              href: new_publish_provider_recruitment_cycle_courses_accredited_body_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+              href: new_publish_provider_recruitment_cycle_courses_accredited_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
               visually_hidden_text: "accredited provider"
             ) %>
           <% end %>

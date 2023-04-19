@@ -135,7 +135,7 @@ namespace :publish, as: :publish do
         resource :apprenticeship, on: :member, only: %i[new], controller: 'courses/apprenticeship' do
           get 'continue'
         end
-        resource :accredited_body, on: :member, only: %i[new], controller: 'courses/accredited_body', path: 'accredited-body' do
+        resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
           get 'continue'
           get 'search_new'
         end
