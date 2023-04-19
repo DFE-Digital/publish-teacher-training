@@ -12,6 +12,7 @@ class Provider < ApplicationRecord
 
   CHANGES_INTRODUCED_IN_2022_CYCLE = 2022
 
+  before_save :update_searchable, if: :accredited_body?
   before_create :set_defaults
 
   has_associated_audits
@@ -362,11 +363,13 @@ class Provider < ApplicationRecord
     [
       ukprn,
       provider_name,
-      StripPunctuationService.call(string: provider_name), # name_normalised
+      name_normalised,
       postcode,
       postcode&.delete(' ')
     ].join(' ')
   end
+
+  def name_normalised = StripPunctuationService.call(string: provider_name)
 
   def accrediting_provider_enrichment(provider_code)
     accrediting_provider_enrichments&.find do |enrichment|

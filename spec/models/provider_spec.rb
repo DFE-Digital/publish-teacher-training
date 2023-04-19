@@ -30,6 +30,30 @@ describe Provider do
     it { is_expected.to have_many(:user_notifications) }
   end
 
+  context 'callbacks' do
+    context 'provider is accredited' do
+      it 'updates the tsvector column with relevant info when the provider is accredited and updated' do
+        provider = create(:provider, :accredited_body)
+
+        expect do
+          provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
+        end.to change { provider.reload.searchable }.to(
+          "'12345678':1 '1aa':13 'and':5,9 'leo':3 'leos':8 'provider':11 's':4 'southmead':10 'southmead/provider':6 'st':2,7 'sw1a':12 'sw1a1aa':14"
+        )
+      end
+    end
+
+    context 'provider is not accredited' do
+      it 'does not update the tsvector column when the provider is updated' do
+        provider = create(:provider, searchable: nil)
+
+        expect do
+          provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
+        end.not_to(change { provider.reload.searchable })
+      end
+    end
+  end
+
   describe 'validations' do
     describe 'urn validations' do
       context 'when provider_type is lead_school' do

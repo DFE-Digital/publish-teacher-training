@@ -40,31 +40,6 @@ module VectorSearchable
 
   private
 
-  # The below generates a query like:
-  #
-  #      TO_TSVECTOR(
-  #        'pg_catalog.simple',
-  #        '1000000 St Mary''s School ec3a 5de ec3a5de London'
-  #      );
-  #
-  # and assigns the result to the "searchable" field, which is used by pg_search_scope above.
-  # This creates a space seperated string with all the searchable info about a school such as:
-  #   "1000000 St Marys School ec3a 5de ec3a5de London"
-  #
-  # Special characters are stripped off in the search to ensure that a search matches with
-  # or without them, for example, searching by "mary's" or "marys" will have results including
-  # St Mary's
-  #
-  # The reason for mentioning the postcode twice is that postgres will split text up by spaces
-  # into "words" when converting it into a tsvector. We would like someone to be able to type
-  # a postcode without spaces and still get a result. Without doing this, the searchable
-  # vector would look like this:
-  #   "'100000':1 '5de':6 'aldgate':3 'ec3a':5 'london':8 'school':4 'the':2"
-  #
-  # searching for ec3a5de would not match any results as it only matches if a query term is exact, or
-  # a prefix of a word. With the above query we end up with a vector like this:
-  #   "'100000':1 '5de':6 'aldgate':3 'ec3a':5 'ec3a5de':7 'london':8 'school':4 'the':2"
-  #
   def update_searchable
     to_tsvector = Arel::Nodes::NamedFunction.new(
       'TO_TSVECTOR', [

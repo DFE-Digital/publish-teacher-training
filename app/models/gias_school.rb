@@ -40,10 +40,12 @@ class GiasSchool < ApplicationRecord
     [
       urn,
       name,
-      StripPunctuationService.call(string: name), # name_normalised
+      name_normalised,
       postcode,
       postcode&.delete(' '),
       town
     ].join(' ')
   end
+
+  def name_normalised = StripPunctuationService.call(string: name)
 end
