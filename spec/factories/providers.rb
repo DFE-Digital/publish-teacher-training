@@ -23,7 +23,7 @@ FactoryBot.define do
     website { Faker::Internet.url }
     provider_type { :lead_school }
     urn { Faker::Number.number(digits: [5, 6].sample) }
-    ukprn { Faker::Number.within(range: 10000000..19999999) }
+    ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accrediting_provider { 'N' }
     region_code { 'london' }
     association :recruitment_cycle, strategy: :find_or_create
