@@ -175,7 +175,7 @@ describe UniqueCourseValidator do
       include_examples 'a duplicate course'
     end
 
-    context 'Different accredited body' do
+    context 'Different accredited provider' do
       before do
         new_course.accrediting_provider = accredited_body_two
       end

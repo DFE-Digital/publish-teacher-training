@@ -580,7 +580,7 @@ describe Provider do
                                            findable_course_with_accrediting_provider.accrediting_provider)
       end
 
-      context 'when the provider is the accredited body for a course' do
+      context 'when the provider is the accredited provider for a course' do
         before do
           findable_course_with_accrediting_provider
           non_findable_course_with_accrediting_provider

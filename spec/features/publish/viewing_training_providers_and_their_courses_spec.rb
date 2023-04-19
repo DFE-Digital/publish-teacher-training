@@ -2,19 +2,19 @@
 
 require 'rails_helper'
 
-feature 'Viewing courses as an accredited body', { can_edit_current_and_next_cycles: false } do
+feature 'Viewing courses as an accredited provider', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_accredited_body_user
     and_some_courses_exist_with_one_i_accredit
     when_i_visit_the_publish_training_provider_index_page
   end
 
-  scenario 'i can see who lists me as their accredited body' do
+  scenario 'i can see who lists me as their accredited provider' do
     then_i_should_see_a_list_of_training_providers
     and_i_should_see_a_count_of_the_courses_i_accredit
   end
 
-  scenario 'i can see which courses i am the accredited body for' do
+  scenario 'i can see which courses i am the accredited provider for' do
     and_i_click_on_a_training_provider
     then_i_see_the_courses_i_accredit_for
   end

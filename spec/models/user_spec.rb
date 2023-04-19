@@ -120,7 +120,7 @@ describe User do
     end
 
     describe '#associated_with_accredited_body?' do
-      context 'user is associated with accredited body' do
+      context 'user is associated with accredited provider' do
         subject { create(:user, providers: [accredited_body]) }
 
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
@@ -131,7 +131,7 @@ describe User do
         end
       end
 
-      context 'user is not associated with an accredited body' do
+      context 'user is not associated with an accredited provider' do
         it 'returns false' do
           expect(subject.associated_with_accredited_body?).to be false
         end
@@ -253,7 +253,7 @@ describe User do
         )
       end
 
-      it 'returns users who are subscribed to course update notifications for a given accredited body' do
+      it 'returns users who are subscribed to course update notifications for a given accredited provider' do
         expect(described_class.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
       end
     end
@@ -286,7 +286,7 @@ describe User do
         )
       end
 
-      it 'includes user who are subscribed to course publish notifications for a given accredited body' do
+      it 'includes user who are subscribed to course publish notifications for a given accredited provider' do
         expect(described_class.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
       end
     end

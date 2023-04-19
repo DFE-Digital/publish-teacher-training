@@ -104,7 +104,7 @@ describe CoursePolicy do
       it { is_expected.to contain_exactly(course) }
     end
 
-    context 'user not from the accredited body' do
+    context 'user not from the accredited provider' do
       let(:accredited_body) { create(:provider, :accredited_body) }
 
       it { is_expected.to be_empty }

@@ -24,7 +24,7 @@ module Find
         end
 
         context 'a course has an accrediting provider that is not the provider' do
-          it 'renders the accredited body' do
+          it 'renders the accredited provider' do
             course = build(
               :course,
               provider: build(:provider),
@@ -34,13 +34,13 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include(
-              'Accredited body'
+              'Accredited provider'
             )
           end
         end
 
         context 'the course provider and accrediting provider are the same' do
-          it 'does not render the accredited body' do
+          it 'does not render the accredited provider' do
             provider = build(:provider)
 
             course = build(
@@ -52,7 +52,7 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include(
-              'Accredited body'
+              'Accredited provider'
             )
           end
         end

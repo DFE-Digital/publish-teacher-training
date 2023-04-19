@@ -213,7 +213,7 @@ en:
         train_with_us:
           text: "Enter details about the training provider"
         about_accrediting_body:
-          text: "Enter details about the accredited body"
+          text: "Enter details about the accredited provider"
   course:
     add_course: "Add course"
     value_not_entered: "Not entered"

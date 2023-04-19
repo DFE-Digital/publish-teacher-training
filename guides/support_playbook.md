@@ -53,12 +53,12 @@ course.enrichments.max_by(&:created_at).update(fee_details: nil, fee_uk_eu: nil,
 
 Change `provider_type` to the preferred value on the provider record.
 
-## Changing accredited body of courses
+## Changing accredited provider of courses
 
 To change the accrediting body of a course, you can do the following:
 
 ```ruby
-# Grab the courses for a provider and update the courses' accredited body
+# Grab the courses for a provider and update the courses' accredited provider
 p = RecruitmentCycle.current.providers.find_by(provider_code: "1YP")
 p.courses.update(accredited_body_code: "1YK")
 ```
@@ -140,7 +140,7 @@ copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToC
 provider.courses.published.filter { |c| c.content_status != :withdrawn }.each do |course|
   new_course = copier.execute(course:, new_provider: provider_to_copy_to)
 
-  # Set the accredited body if needed
+  # Set the accredited provider if needed
   new_course.update(accredited_body_code: "2N2")
 end
 ```

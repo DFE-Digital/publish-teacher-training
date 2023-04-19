@@ -8,19 +8,19 @@ RSpec.describe Providers::ProviderList::View do
   let(:university_provider) { create(:provider, provider_type: 'university', accrediting_provider: 'accredited_body') }
 
   describe '#formatted_accrediting_provider' do
-    context 'provider is an accredited body and scitt' do
+    context 'provider is an accredited provider and scitt' do
       it 'renders the correct value' do
         expect(described_class.new(provider: scitt_provider).formatted_accrediting_provider).to eq('Yes')
       end
     end
 
-    context 'provider is not an accredited body and lead school' do
+    context 'provider is not an accredited provider and lead school' do
       it 'renders the correct value' do
         expect(described_class.new(provider: lead_school_provider).formatted_accrediting_provider).to eq('No')
       end
     end
 
-    context 'provider is an accredited body and university' do
+    context 'provider is an accredited provider and university' do
       it 'renders the correct value' do
         expect(described_class.new(provider: university_provider).formatted_accrediting_provider).to eq('Yes')
       end

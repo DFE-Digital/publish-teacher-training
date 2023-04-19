@@ -341,7 +341,7 @@ feature 'Viewing a findable course' do
       :scitt,
       provider_name: 'Provider 1',
       accrediting_provider_enrichments: [{
-        'Description' => 'Something great about the accredited body',
+        'Description' => 'Something great about the accredited provider',
         'UcasProviderCode' => accrediting_provider.provider_code
       }]
     )

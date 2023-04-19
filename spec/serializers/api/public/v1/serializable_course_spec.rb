@@ -15,7 +15,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   it { is_expected.to have_type('courses') }
 
-  context 'when there is an accredited body with enrichments' do
+  context 'when there is an accredited provider with enrichments' do
     before do
       course.provider.update(accrediting_provider_enrichments: [{ Description: 'foo', UcasProviderCode: course.accrediting_provider.provider_code }])
     end

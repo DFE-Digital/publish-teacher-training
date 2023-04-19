@@ -66,7 +66,7 @@ module Providers
     end
 
     def attempting_to_make_lead_school_accredited_body?
-      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited body." if @provider_type == 'lead_school' && @is_accredited_body
+      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited provider." if @provider_type == 'lead_school' && @is_accredited_body
     end
   end
 end

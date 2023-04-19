@@ -111,7 +111,7 @@ describe UserNotificationPreferences do
         user.providers << [accredited_body1, accredited_body2]
       end
 
-      it 'creates user notification preference for each accredited body' do
+      it 'creates user notification preference for each accredited provider' do
         user_notification_preferences = described_class.new(user_id: user.id).update(enable_notifications: true)
 
         expect(user_notification_preferences.enabled?).to be(true)
@@ -138,7 +138,7 @@ describe UserNotificationPreferences do
           user.providers << previous_accredited_body
         end
 
-        it "doesn't create a user notification preference for that accredited body" do
+        it "doesn't create a user notification preference for that accredited provider" do
           expect(UserNotification.where(provider_code: previous_accredited_body.provider_code))
             .to be_empty
         end
@@ -204,8 +204,8 @@ describe UserNotificationPreferences do
       end
     end
 
-    context 'user has changed accredited body associations' do
-      context 'accredited body removed' do
+    context 'user has changed accredited provider associations' do
+      context 'accredited provider removed' do
         before do
           user
           other_user
@@ -214,7 +214,7 @@ describe UserNotificationPreferences do
           user_notification2
         end
 
-        it 'removes the unassociated accredited body UserNotification' do
+        it 'removes the unassociated accredited provider UserNotification' do
           described_class.new(user_id: user.id).update(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 
@@ -224,7 +224,7 @@ describe UserNotificationPreferences do
         end
       end
 
-      context 'accredited body added' do
+      context 'accredited provider added' do
         let(:accredited_body3) { create(:provider, :accredited_body) }
 
         before do
@@ -235,7 +235,7 @@ describe UserNotificationPreferences do
           user_notification2
         end
 
-        it 'creates a UserNotification for the new accredited body notification' do
+        it 'creates a UserNotification for the new accredited provider notification' do
           described_class.new(user_id: user.id).update(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 

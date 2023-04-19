@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Accredited body – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Accredited provider – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -9,7 +9,7 @@
 <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
-      Accredited body
+      Accredited provider
     </h1>
   </legend>
 
@@ -32,7 +32,7 @@
                 data: { "aria-controls" => "other-container" },
                 checked: @errors && @errors[:accredited_body]&.any? %>
               <%= form.label :accredited_body_code,
-                "Another accredited body",
+                "Another accredited provider",
                 for: "course_accredited_body_code_other",
                 value: false,
                 class: "govuk-label govuk-radios__label" %>

@@ -54,7 +54,7 @@ module CoursePreview
       include_examples 'course with missing information', :how_school_placements_work, 'Enter details about school placements'
       include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
       include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
-      include_examples 'course with missing information', :about_accrediting_body, 'Enter details about the accredited body'
+      include_examples 'course with missing information', :about_accrediting_body, 'Enter details about the accredited provider'
     end
   end
 end

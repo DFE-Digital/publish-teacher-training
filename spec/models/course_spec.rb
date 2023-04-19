@@ -1259,7 +1259,7 @@ describe Course do
     end
 
     describe '.with_accredited_bodies' do
-      context 'course with an accredited body' do
+      context 'course with an accredited provider' do
         subject { described_class.with_accredited_bodies(accredited_provider.provider_code) }
 
         let!(:provider) { create(:provider) }
@@ -1267,7 +1267,7 @@ describe Course do
         let!(:accredited_provider) { create(:provider, :accredited_body) }
         let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
-        it 'returns courses for which the provider is the accredited body' do
+        it 'returns courses for which the provider is the accredited provider' do
           expect(subject).to contain_exactly(accredited_course)
         end
       end

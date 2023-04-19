@@ -42,7 +42,7 @@ RSpec.describe Providers::CreateFakeProviderService do
 
     it 'does not complete' do
       expect(service.execute).not_to be(true)
-      expect(service.errors).to eq ['Provider Fake Provider (123) cannot be both a lead school and an accredited body.']
+      expect(service.errors).to eq ['Provider Fake Provider (123) cannot be both a lead school and an accredited provider.']
     end
   end
 
