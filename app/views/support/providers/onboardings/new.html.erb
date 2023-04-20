@@ -1,13 +1,13 @@
-<%= render PageTitle.new(title: "support.providers.onboardings.new") %>
+<%= render PageTitle.new(title: "support.providers.onboardings.new", has_errors: @provider_form.errors.present?) %>
 
 <%= content_for(:breadcrumbs) do %>
-    <%= render GovukComponent::BackLinkComponent.new(
-      text: "Back",
-      href: support_recruitment_cycle_providers_path
-    ) %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: support_recruitment_cycle_providers_path
+  ) %>
 <% end %>
 
-<%= form_with model: @provider, url: support_recruitment_cycle_providers_onboarding_path, local: true do |f| %>
+<%= form_with model: @provider_form, url: support_recruitment_cycle_providers_onboarding_path, local: true do |f| %>
 
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
