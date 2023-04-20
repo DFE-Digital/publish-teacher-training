@@ -20,6 +20,8 @@ class SearchResultTitleComponent < ViewComponent::Base
     ].compact.join(' ')
   end
 
+  def caption_text = "Add #{resource_name}"
+
   def results_text
     return many_results_text if results_count > results_limit
     return "#{change_your_search_link}.".html_safe if results_count.zero?

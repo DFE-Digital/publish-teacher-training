@@ -110,6 +110,7 @@ features:
   course_preview_missing_information: true
   gias_search: false
   support_new_provider_creation_flow: false
+  accredited_provider_search: false
 
 cookies:
   session:
