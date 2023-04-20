@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-feature 'Creating a provider' do
+feature 'Onboarding a new provider' do
   before do
     given_i_am_authenticated(user:)
-    when_i_visit_the_new_provider_page
+    when_i_visit_the_onboarding_a_new_provider_page
   end
 
   %i[university lead_school scitt].each do |provider_type|
@@ -37,7 +37,7 @@ feature 'Creating a provider' do
     expect(page).to have_content('Provider was successfully created')
   end
 
-  def when_i_visit_the_new_provider_page
+  def when_i_visit_the_onboarding_a_new_provider_page
     visit "/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/new"
   end
 
@@ -72,6 +72,7 @@ feature 'Creating a provider' do
   def when_i_click_the_back_link
     click_on 'Back'
   end
+
 
   def then_i_am_redirected_back_to_the_support_providers_index_page
     expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers")
