@@ -116,7 +116,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     aes_key_wrap (1.1.0)
     amazing_print (1.4.0)
@@ -653,11 +653,11 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    site_prism (3.7.3)
-      addressable (~> 2.6)
-      capybara (~> 3.15)
-      site_prism-all_there (>= 0.3.1, < 1.0)
-    site_prism-all_there (0.3.2)
+    site_prism (4.0)
+      addressable (~> 2.8)
+      capybara (~> 3.27)
+      site_prism-all_there (~> 2.0)
+    site_prism-all_there (2.0)
     skylight (5.3.4)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
@@ -821,7 +821,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-cron
   simplecov (< 0.23)
-  site_prism (~> 3.7)
+  site_prism (~> 4.0)
   skylight
   spring
   spring-commands-rspec
