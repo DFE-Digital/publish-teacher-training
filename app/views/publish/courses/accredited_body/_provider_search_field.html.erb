@@ -2,9 +2,7 @@
   <%= form.label :accredited_body,
     for: "course_accredited_body",
     class: "govuk-label" do %>
-    Name of accredited body
-    <%= render "publish/shared/error_messages", error_keys: [:accredited_body] %>
-    <span class="govuk-hint">Enter the name or provider code</span>
+      Enter the provider name or code <%= render "publish/shared/error_messages", error_keys: [:accredited_body] %>
   <% end %>
   <%= form.text_field :accredited_body,
     autocomplete: "off",

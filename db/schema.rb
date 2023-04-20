@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_13_112141) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -285,6 +285,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_112141) do
     t.boolean "can_sponsor_student_visa"
     t.string "synonyms", default: [], array: true
     t.integer "accredited_provider_id"
+    t.tsvector "searchable"
+    t.index ["accrediting_provider"], name: "index_provider_on_accrediting_provider", where: "(accrediting_provider = 'Y'::text)"
     t.index ["can_sponsor_student_visa"], name: "index_provider_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true
     t.index ["discarded_at"], name: "index_provider_on_discarded_at"
@@ -292,6 +294,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_112141) do
     t.index ["provider_code"], name: "index_provider_on_provider_code", using: :gin
     t.index ["provider_name"], name: "index_provider_on_provider_name", using: :gin
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
+    t.index ["searchable"], name: "index_provider_on_searchable", using: :gin
     t.index ["synonyms"], name: "index_provider_on_synonyms", using: :gin
   end
 

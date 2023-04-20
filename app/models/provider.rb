@@ -8,9 +8,11 @@ class Provider < ApplicationRecord
   include ChangedAt
   include Discard::Model
   include PgSearch::Model
+  include VectorSearchable
 
   CHANGES_INTRODUCED_IN_2022_CYCLE = 2022
 
+  before_save :update_searchable, if: :accredited_body?
   before_create :set_defaults
 
   has_associated_audits
@@ -145,15 +147,9 @@ class Provider < ApplicationRecord
 
   validates :telephone, phone: { message: 'Enter a valid telephone number' }, if: :telephone_changed?
 
-  # TODO: Remove this validation once the 2021 recruitment cycle is over
-  validates :ukprn, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: 'UKPRN must be 8 numbers' }
+  validates :ukprn, ukprn_format: { allow_blank: false }, on: :update
 
-  validates :ukprn, reference_number_format: { allow_blank: false, minimum: 8, maximum: 8, message: 'UKPRN must be 8 numbers' }, if: -> { recruitment_cycle.after_2021? }, on: :update
-
-  # TODO: Remove this validation once the 2021 recruitment cycle is over
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: :lead_school?
-
-  validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: -> { lead_school? && recruitment_cycle.after_2021? }, on: :update
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?
@@ -179,6 +175,15 @@ class Provider < ApplicationRecord
   pg_search_scope :provider_name_search,
                   against: %i[provider_name],
                   using: { tsearch: { prefix: true } }
+
+  pg_search_scope :accredited_provider_search,
+                  against: %i[ukprn provider_name postcode],
+                  using: {
+                    tsearch: {
+                      prefix: true,
+                      tsvector_column: 'searchable'
+                    }
+                  }
 
   accepts_nested_attributes_for :sites
   accepts_nested_attributes_for :organisations
@@ -347,6 +352,18 @@ class Provider < ApplicationRecord
   private
 
   scope :course_code_search, ->(course_code) { joins(:courses).merge(Course.case_insensitive_search(course_code)) }
+
+  def searchable_vector_value
+    [
+      ukprn,
+      provider_name,
+      name_normalised,
+      postcode,
+      postcode&.delete(' ')
+    ].join(' ')
+  end
+
+  def name_normalised = StripPunctuationService.call(string: provider_name)
 
   def accrediting_provider_enrichment(provider_code)
     accrediting_provider_enrichments&.find do |enrichment|

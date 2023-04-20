@@ -166,6 +166,8 @@ en:
             check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
+          onboardings:
+            new: "Organisation details"
         users:
           index: "Users"
           show: "User overview"
@@ -442,6 +444,9 @@ en:
               blank: "^Enter details about training with you"
             train_with_disability:
               blank: "^Enter details about training with a disability"
+            ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
         organisation:
           attributes:
             name:
@@ -535,8 +540,8 @@ en:
               invalid: "Enter a valid provider code"
               taken: "Provider code already taken"
             ukprn:
-              blank: "Enter a UK provider reference number (UKPRN)"
-              invalid: "Enter a valid UK provider reference number (UKPRN)"
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
             accredited_provider:
               blank: "Select if the organisation is an accredited provider"
             provider_type:
@@ -657,6 +662,11 @@ en:
             environment:
               blank: Enter the environment to proceed
               invalid_environment: "That's not %{environment}"
+        publish/provider_contact_form:
+          attributes:
+            ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
@@ -694,6 +704,8 @@ en:
     initial_teacher_training_forming_partnerships: https://www.gov.uk/government/publications/initial-teacher-training-itt-forming-partnerships
     urn_html: |-
       Find URNs on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk" target="_blank">Get information about schools (opens in new tab)</a>
+    ukprn_html: |-
+      Find UKPRNs on the <a class="govuk-link" href="https://www.ukrlp.co.uk/" target="_blank">UK register of learning providers (opens in new tab)</a>
   edit_options:
     qualifications:
       qts:

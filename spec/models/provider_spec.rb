@@ -30,6 +30,30 @@ describe Provider do
     it { is_expected.to have_many(:user_notifications) }
   end
 
+  context 'callbacks' do
+    context 'provider is accredited' do
+      it 'updates the tsvector column with relevant info when the provider is accredited and updated' do
+        provider = create(:provider, :accredited_body)
+
+        expect do
+          provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
+        end.to change { provider.reload.searchable }.to(
+          "'12345678':1 '1aa':13 'and':5,9 'leo':3 'leos':8 'provider':11 's':4 'southmead':10 'southmead/provider':6 'st':2,7 'sw1a':12 'sw1a1aa':14"
+        )
+      end
+    end
+
+    context 'provider is not accredited' do
+      it 'does not update the tsvector column when the provider is updated' do
+        provider = create(:provider, searchable: nil)
+
+        expect do
+          provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
+        end.not_to(change { provider.reload.searchable })
+      end
+    end
+  end
+
   describe 'validations' do
     describe 'urn validations' do
       context 'when provider_type is lead_school' do
@@ -48,22 +72,6 @@ describe Provider do
         it 'validates that a urn contains digits only' do
           expect(invalid_provider).not_to be_valid
         end
-      end
-    end
-
-    context 'when the provider updates their ukprn in the 2022 cycle' do
-      let(:provider) do
-        create(
-          :provider,
-          ukprn: '',
-          recruitment_cycle: create(:recruitment_cycle, year: '2022')
-        )
-      end
-
-      it 'validates the presence of a ukprn' do
-        # this means that rollover happens successfully; the record is created but it will be invalid on update, because of no ukprn
-        expect { provider }.to change(described_class, :count).by(1)
-        expect(provider).not_to be_valid
       end
     end
 

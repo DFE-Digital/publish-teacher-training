@@ -15,7 +15,7 @@ module Publish
       def new
         binding.pry
         @site = provider.sites.build
-        @school_form = ::Support::SchoolForm.new(provider, @site)
+        @school_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
         @school_form.clear_stash
       end
 
@@ -67,6 +67,16 @@ module Publish
 
       def site_params(param_form_key)
         params.require(param_form_key).permit(SchoolForm::FIELDS)
+      end
+
+      def gias_school_params
+        return {} unless params[:school_id]
+
+        gias_school.school_attributes
+      end
+
+      def gias_school
+        @gias_school ||= GiasSchool.find(params[:school_id])
       end
     end
   end
