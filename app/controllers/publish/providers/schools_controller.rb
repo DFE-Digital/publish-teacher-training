@@ -13,7 +13,6 @@ module Publish
       def show; end
 
       def new
-        binding.pry
         @site = provider.sites.build
         @school_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
         @school_form.clear_stash

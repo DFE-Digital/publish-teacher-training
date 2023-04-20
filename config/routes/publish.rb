@@ -59,7 +59,7 @@ namespace :publish, as: :publish do
 
   get '/accept-terms', to: 'terms#edit', as: :accept_terms
   patch '/accept-terms', to: 'terms#update'
-  get '/suggestions', to: '/publish/providers/school_search#suggest'
+  get '/suggestions', to: '/api/public/v1/school_suggestions#index'
 
   resources :notifications, path: '/notifications', controller: 'notifications', only: %i[index update]
 
