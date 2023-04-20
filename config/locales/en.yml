@@ -444,6 +444,9 @@ en:
               blank: "^Enter details about training with you"
             train_with_disability:
               blank: "^Enter details about training with a disability"
+            ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
         organisation:
           attributes:
             name:
@@ -537,8 +540,8 @@ en:
               invalid: "Enter a valid provider code"
               taken: "Provider code already taken"
             ukprn:
-              blank: "Enter a UK provider reference number (UKPRN)"
-              invalid: "Enter a valid UK provider reference number (UKPRN)"
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
             accredited_provider:
               blank: "Select if the organisation is an accredited provider"
             provider_type:
@@ -659,6 +662,11 @@ en:
             environment:
               blank: Enter the environment to proceed
               invalid_environment: "That's not %{environment}"
+        publish/provider_contact_form:
+          attributes:
+            ukprn:
+              blank: Enter a UK provider reference number (UKPRN)
+              contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"

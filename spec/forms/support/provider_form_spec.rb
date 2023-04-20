@@ -84,7 +84,7 @@ describe Support::ProviderForm, type: :model do
       it 'validates the ukprn' do
         expect(subject).not_to be_valid
 
-        expect(subject.errors[:ukprn]).to match_array('Enter a valid UK provider reference number (UKPRN)')
+        expect(subject.errors[:ukprn]).to match_array('Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678')
       end
     end
 

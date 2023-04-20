@@ -34,7 +34,7 @@ module Support
     validates :accredited_provider, presence: true
     validate :validate_accredited_provider_id
 
-    validates :ukprn, presence: true, reference_number_format: { allow_blank: true, minimum: 8, maximum: 8, message: :invalid }
+    validates :ukprn, ukprn_format: { allow_blank: false }
 
     validates :provider_type, presence: true
     validate :provider_type_school_is_an_invalid_accredited_provider
