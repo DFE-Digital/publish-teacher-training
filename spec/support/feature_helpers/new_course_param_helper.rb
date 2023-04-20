@@ -2,7 +2,7 @@
 
 module FeatureHelpers
   module NewCourseParam
-    def accredited_body_params
+    def accredited_provider_params
       {
         'course[qualification]' => 'qts',
         'course[funding_type]' => ['fee'],
@@ -68,7 +68,7 @@ module FeatureHelpers
 
     def confirmation_params(provider)
       {
-        'course[accredited_body_code]' => provider.courses.first.accrediting_provider.provider_code,
+        'course[accredited_provider_code]' => provider.courses.first.accrediting_provider.provider_code,
         'course[age_range_in_years]' => '14_to_19',
         'course[applications_open_from]' => "#{provider.recruitment_cycle_year.to_i - 1}-10-12",
         'course[funding_type]' => 'apprenticeship',
@@ -85,7 +85,7 @@ module FeatureHelpers
     def start_date_params(provider)
       {
         'course[qualification]' => 'qts',
-        'course[accredited_body_code]' => provider.courses.first.accrediting_provider.provider_code,
+        'course[accredited_provider_code]' => provider.courses.first.accrediting_provider.provider_code,
         'course[funding_type]' => ['fee'],
         'course[level]' => 'secondary',
         'course[is_send]' => ['0'],

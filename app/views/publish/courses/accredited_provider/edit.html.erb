@@ -26,14 +26,14 @@
             <div class="govuk-radios__divider">or</div>
 
             <div class="govuk-radios__item">
-              <%= form.radio_button :accredited_body_code,
+              <%= form.radio_button :accredited_provider_code,
                 "other",
                 class: "govuk-radios__input",
                 data: { "aria-controls" => "other-container" },
                 checked: @errors && @errors[:accredited_provider]&.any? %>
               <%= form.label :accredited_provider_code,
                 "Another accredited provider",
-                for: "course_accredited_body_code_other",
+                for: "course_accredited_provider_code_other",
                 value: false,
                 class: "govuk-label govuk-radios__label" %>
             </div>
@@ -42,7 +42,7 @@
               <%= render "provider_search_field", form: %>
             </div>
           <% else %>
-            <%= form.hidden_field :accredited_body_code, value: :other %>
+            <%= form.hidden_field :accredited_provider_code, value: :other %>
             <%= render "provider_search_field", form: %>
           <% end %>
         </div>

@@ -25,7 +25,7 @@ module Find
         private
 
         def mock_secondary_course
-          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_provider', provider_type: 'university')
+          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_body', provider_type: 'university')
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
                          accrediting_provider:,
                          has_bursary: false,
@@ -40,7 +40,7 @@ module Find
         end
 
         def mock_primary_course
-          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_provider', provider_type: 'university')
+          accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_body', provider_type: 'university')
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
                          accrediting_provider:,
                          has_bursary: false,

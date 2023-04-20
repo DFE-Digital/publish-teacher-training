@@ -72,7 +72,7 @@ describe CoursePolicy do
     context 'when non admin user' do
       it 'returns new course attributes' do
         expected_attributes = %i[
-          accredited_body_code
+          accredited_provider_code
           age_range_in_years
           applications_open_from
           funding_type

@@ -25,7 +25,7 @@ module API
         belongs_to :provider
         belongs_to :recruitment_cycle
 
-        attributes :accredited_body_code,
+        attributes :accredited_provider_code,
                    :age_maximum,
                    :age_minimum,
                    :bursary_amount,

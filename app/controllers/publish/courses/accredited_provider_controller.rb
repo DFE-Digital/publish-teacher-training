@@ -13,8 +13,8 @@ module Publish
       def continue
         authorize(@provider, :can_create_course?)
 
-        code = course_params[:accredited_body_code]
-        query = @accredited_body
+        code = course_params[:accredited_provider_code]
+        query = @accredited_provider
 
         @errors = errors_for_search_query(code, query)
 
@@ -23,12 +23,12 @@ module Publish
         elsif other_selected_with_no_autocompleted_code?(code)
           redirect_to(
             search_new_publish_provider_recruitment_cycle_courses_accredited_provider_path(
-              query: @accredited_body,
+              query: @accredited_provider,
               course: course_params
             )
           )
         else
-          params[:course][:accredited_body_code] = @autocompleted_provider_code if @autocompleted_provider_code.present?
+          params[:course][:accredited_provider_code] = @autocompleted_provider_code if @autocompleted_provider_code.present?
           super
         end
       end
@@ -54,7 +54,7 @@ module Publish
         @errors = errors_for_search_query(code, query)
         return render :edit if @errors.present?
 
-        if update_params[:accredited_body_code] == 'other'
+        if update_params[:accredited_provider_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
           redirect_to_update_successful
@@ -79,7 +79,7 @@ module Publish
       end
 
       def error_keys
-        [:accredited_body_code]
+        [:accredited_provider_code]
       end
 
       def redirect_to_provider_search
@@ -119,7 +119,7 @@ module Publish
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
           errors = { accredited_provider: ['Accredited provider search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_body_code: ['Select an accredited provider'] }
+          errors = { accredited_provider_code: ['Select an accredited provider'] }
         end
 
         errors
@@ -144,10 +144,10 @@ module Publish
 
       def update_params
         autocompleted_code = update_course_params[:autocompleted_provider_code]
-        code = update_course_params[:accredited_body_code]
+        code = update_course_params[:accredited_provider_code]
 
         {
-          accredited_body_code: autocompleted_code.presence || code
+          accredited_provider_code: autocompleted_code.presence || code
         }
       end
 

@@ -73,7 +73,7 @@ module NotificationService
     end
 
     def users
-      User.course_publish_subscribers(course.accredited_body_code)
+      User.course_publish_subscribers(course.accredited_provider_code)
     end
 
     def notify_accredited_provider?

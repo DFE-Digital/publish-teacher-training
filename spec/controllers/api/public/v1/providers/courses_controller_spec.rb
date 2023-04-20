@@ -214,7 +214,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           code: course.course_code,
-          include: 'provider,accredited_provider,recruitment_cycle'
+          include: 'provider,accredited_body,recruitment_cycle'
         }
       end
 

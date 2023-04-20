@@ -134,7 +134,7 @@
             "description": "Short factual summary of the course.",
             "example": "The Secondary PGCE consists of three core modules: two Master's-level modules, which are assessed through written assignments, and the Professional Practice module, which is assessed by the observation of practical teaching in placement schools."
           },
-          "accredited_body_code": {
+          "accredited_provider_code": {
             "type": "string",
             "description": "Unique provider-code for the accredited provider of this course. Only present if the provider delivering the course is not the accredited provider.",
             "maxLength": 3,

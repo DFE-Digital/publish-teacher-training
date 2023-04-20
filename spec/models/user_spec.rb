@@ -254,7 +254,7 @@ describe User do
       end
 
       it 'returns users who are subscribed to course update notifications for a given accredited provider' do
-        expect(described_class.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+        expect(described_class.course_update_subscribers(course.accredited_provider_code)).to eq([subscribed_user])
       end
     end
 
@@ -287,7 +287,7 @@ describe User do
       end
 
       it 'includes user who are subscribed to course publish notifications for a given accredited provider' do
-        expect(described_class.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+        expect(described_class.course_publish_subscribers(course.accredited_provider_code)).to eq([subscribed_user])
       end
     end
   end

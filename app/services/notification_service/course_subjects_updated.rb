@@ -33,7 +33,7 @@ module NotificationService
     attr_reader :course, :previous_subject_names, :previous_course_name
 
     def users
-      User.course_update_subscribers(course.accredited_body_code)
+      User.course_update_subscribers(course.accredited_provider_code)
     end
 
     def notify_accredited_provider?

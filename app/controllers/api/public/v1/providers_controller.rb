@@ -69,7 +69,6 @@ module API
           @providers = @providers.with_can_sponsor_skilled_worker_visa(true) if can_sponsor_skilled_worker_visa?
           @providers = @providers.with_can_sponsor_student_visa(true) if can_sponsor_student_visa?
           @providers = @providers.accredited_provider if is_accredited_provider?
-
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending
                        else

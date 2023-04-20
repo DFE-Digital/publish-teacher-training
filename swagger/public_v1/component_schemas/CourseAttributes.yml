@@ -25,7 +25,7 @@ properties:
       assignments, and the Professional Practice module, which is
       assessed by the observation of practical teaching in placement
       schools.
-  accredited_body_code:
+  accredited_provider_code:
     type: string
     description: >-
       Unique provider-code for the accredited provider of this course. Only

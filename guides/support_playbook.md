@@ -60,7 +60,7 @@ To change the accrediting body of a course, you can do the following:
 ```ruby
 # Grab the courses for a provider and update the courses' accredited provider
 p = RecruitmentCycle.current.providers.find_by(provider_code: "1YP")
-p.courses.update(accredited_body_code: "1YK")
+p.courses.update(accredited_provider_code: "1YK")
 ```
 
 ## Transfer courses to another provider
@@ -141,7 +141,7 @@ provider.courses.published.filter { |c| c.content_status != :withdrawn }.each do
   new_course = copier.execute(course:, new_provider: provider_to_copy_to)
 
   # Set the accredited provider if needed
-  new_course.update(accredited_body_code: "2N2")
+  new_course.update(accredited_provider_code: "2N2")
 end
 ```
 

@@ -236,7 +236,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
         context 'default fields' do
           let(:fields) do
-            %w[ accredited_body_code
+            %w[ accredited_provider_code
                 age_maximum
                 age_minimum
                 bursary_amount

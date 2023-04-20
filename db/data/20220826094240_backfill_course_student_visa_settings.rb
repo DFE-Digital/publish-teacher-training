@@ -6,7 +6,7 @@ class BackfillCourseStudentVisaSettings < ActiveRecord::Migration[7.0]
 
     Course.where(provider: heis_who_can_sponsor_student_visa).or(
       Course.where(
-        accredited_body_code: heis_who_can_sponsor_student_visa.select(:provider_code)
+        accredited_provider_code: heis_who_can_sponsor_student_visa.select(:provider_code)
       )
     ).update_all(can_sponsor_student_visa: true)
   end

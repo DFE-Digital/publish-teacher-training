@@ -32,11 +32,11 @@ class User < ApplicationRecord
   scope :last_login_since, lambda { |timestamp|
     where('last_login_date_utc > ?', timestamp)
   }
-  scope :course_update_subscribers, lambda { |accredited_body_code|
-    joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_body_code))
+  scope :course_update_subscribers, lambda { |accredited_provider_code|
+    joins(:user_notifications).merge(UserNotification.course_update_notification_requests(accredited_provider_code))
   }
-  scope :course_publish_subscribers, lambda { |accredited_body_code|
-    joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_body_code))
+  scope :course_publish_subscribers, lambda { |accredited_provider_code|
+    joins(:user_notifications).merge(UserNotification.course_publish_notification_requests(accredited_provider_code))
   }
 
   scope :in_name_order, -> { order('LOWER(first_name), LOWER(last_name)') }

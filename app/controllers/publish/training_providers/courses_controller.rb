@@ -19,7 +19,7 @@ module Publish
         training_provider
           .courses
           .includes(:enrichments, :site_statuses, provider: [:recruitment_cycle])
-          .where(accredited_body_code: provider.provider_code)
+          .where(accredited_provider_code: provider.provider_code)
           .order(:name)
           .map(&:decorate)
       end
