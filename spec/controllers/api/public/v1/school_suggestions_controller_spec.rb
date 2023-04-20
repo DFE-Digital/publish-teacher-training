@@ -30,6 +30,7 @@ RSpec.describe API::Public::V1::SchoolSuggestionsController do
       end
 
       it 'responds with a SchoolSuggestionListResponse' do
+        expect(json_response.size).to eq 2
         expect(json_response[0]['id']).to eql(site1.id)
         expect(json_response[0]['name']).to eql(site1.name)
         expect(json_response[1]['id']).to eql(site2.id)
