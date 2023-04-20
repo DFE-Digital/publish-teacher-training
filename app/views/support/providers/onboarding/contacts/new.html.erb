@@ -1,0 +1,38 @@
+<%= render PageTitle.new(title: "support.providers.onboarding.contacts.new", has_errors: @provider_contact_form.errors.present?) %>
+
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: new_support_recruitment_cycle_providers_onboarding_path
+  ) %>
+<% end %>
+
+<%= form_with model: @provider_contact_form, url: support_recruitment_cycle_providers_onboarding_contacts_path, local: true do |f| %>
+
+  <%= f.govuk_error_summary %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      <%= f.govuk_fieldset legend: { text: "Contact details", size: "l", tag: "h1" }, caption: { text: "Add organisation", size: "l" } do %>
+        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" } %>
+        <%= f.govuk_text_field :telephone, label: { text: "Telephone number", size: "s" } %>
+        <%= f.govuk_text_field :website, label: { text: "Website", size: "s" } %>
+
+        <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+          <%= f.govuk_text_field :address1, label: { text: "Address line 1", size: "s" } %>
+          <%= f.govuk_text_field :address2, label: { text: "Address line 2 (optional)", size: "s" } %>
+          <%= f.govuk_text_field :address3, label: { text: "Address line 3 (optional)", size: "s" } %>
+          <%= f.govuk_text_field :town, label: { text: "Town or city", size: "s" } %>
+          <%= f.govuk_text_field :address4, label: { text: "County (optional)", size: "s" } %>
+
+          <%= f.govuk_text_field :postcode, label: { text: "Postcode", size: "s" }, width: 10 %>
+        <% end %>
+      <% end %>
+
+      <%= f.govuk_submit %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), support_recruitment_cycle_providers_path) %>
+      </p>
+    </div>
+  </div>
+<% end %>

@@ -168,6 +168,9 @@ en:
             delete: "Are you sure you want to remove this user?"
           onboardings:
             new: "Organisation details"
+          onboarding:
+            contacts:
+              new: "Contact details"
         users:
           index: "Users"
           show: "User overview"
