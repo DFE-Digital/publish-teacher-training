@@ -3,28 +3,29 @@
 require 'rails_helper'
 
 feature 'Onboarding a new provider' do
-  before do
-    given_i_am_authenticated(user:)
-    when_i_visit_the_onboarding_a_new_provider_page
-  end
-
-  %i[university lead_school scitt].each do |provider_type|
-    scenario "add a new #{provider_type} provider" do
-      when_i_fill_in_a_valid_provider_details(provider_type:)
-      and_i_click_the_continue_button
-      then_i_am_redirected_back_to_the_support_providers_index_page
-      and_a_success_message_is_displayed
+  describe 'adding provider details' do
+    before do
+      given_i_am_authenticated(user:)
+      when_i_visit_the_onboarding_a_new_provider_page
     end
-  end
 
-  scenario 'with invalid details' do
-    when_i_click_the_continue_button
-    then_i_see_the_error_summary
-  end
+    %i[university lead_school scitt].each do |provider_type|
+      scenario "add a new #{provider_type} provider" do
+        when_i_fill_in_a_valid_provider_details(provider_type:)
+        and_i_click_the_continue_button
+        then_i_am_redirected_to_the_onboarding_contacts_page
+      end
+    end
 
-  scenario 'back link return to correct page' do
-    when_i_click_the_back_link
-    then_i_am_redirected_back_to_the_support_providers_index_page
+    scenario 'with invalid details' do
+      when_i_click_the_continue_button
+      then_i_see_the_error_summary
+    end
+
+    scenario 'back link return to correct page' do
+      when_i_click_the_back_link
+      then_i_am_redirected_back_to_the_support_providers_index_page
+    end
   end
 
   private
@@ -73,6 +74,9 @@ feature 'Onboarding a new provider' do
     click_on 'Back'
   end
 
+  def then_i_am_redirected_to_the_onboarding_contacts_page
+    expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/contacts/new")
+  end
 
   def then_i_am_redirected_back_to_the_support_providers_index_page
     expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers")
