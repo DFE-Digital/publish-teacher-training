@@ -23,7 +23,12 @@ feature 'Onboarding a new provider' do
     end
 
     scenario 'back link return to correct page' do
-      when_i_click_the_back_link
+      when_i_click_on 'Back'
+      then_i_am_redirected_back_to_the_support_providers_index_page
+    end
+
+    scenario 'cancel link return to correct page' do
+      when_i_click_on 'Cancel'
       then_i_am_redirected_back_to_the_support_providers_index_page
     end
   end
@@ -70,10 +75,6 @@ feature 'Onboarding a new provider' do
     click_button 'Continue'
   end
 
-  def when_i_click_the_back_link
-    click_on 'Back'
-  end
-
   def then_i_am_redirected_to_the_onboarding_contacts_page
     expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/contacts/new")
   end
@@ -87,4 +88,5 @@ feature 'Onboarding a new provider' do
   end
 
   alias_method :when_i_click_the_continue_button, :and_i_click_the_continue_button
+  alias_method :when_i_click_on, :click_on
 end
