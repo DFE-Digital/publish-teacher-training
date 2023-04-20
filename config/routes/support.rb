@@ -5,6 +5,9 @@ namespace :support do
 
   resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     namespace :providers do
+      namespace :onboarding do
+        resource :contacts, only: %i[new create]
+      end
       resource :onboarding, only: %i[new create]
     end
     resources :providers, except: %i[destroy] do
