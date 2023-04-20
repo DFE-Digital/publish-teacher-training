@@ -1,0 +1,40 @@
+
+<% content_for :page_title, search_result_title_component.title %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(search_support_recruitment_cycle_provider_accredited_providers_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(
+        model: @accredited_provider_select_form,
+        url: search_support_recruitment_cycle_provider_accredited_providers_path,
+        method: :put
+      ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= render search_result_title_component %>
+
+      <% unless @accredited_provider_search.providers.empty? %>
+        <%= f.govuk_radio_buttons_fieldset(:school_id, legend: { text: "Accredited provider", size: "m" }) do %>
+          <% @accredited_provider_search.providers.each_with_index do |provider, index| %>
+            <%= f.govuk_radio_button :provider_id, provider.id, label: { text: provider.provider_name }, link_errors: index.zero?, hint: { text: provider_short_address(provider) } %>
+          <% end %>
+        <% end %>
+
+        <%= f.hidden_field :query, value: query %>
+        <%= f.govuk_submit t("continue") %>
+      <% end %>
+
+    <% end %>
+
+     <% unless @accredited_provider_search.providers.empty? %>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
+      </p>
+    <% end %>
+  </div>
+</div>

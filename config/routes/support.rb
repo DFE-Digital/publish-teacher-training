@@ -33,6 +33,14 @@ namespace :support do
           end
         end
       end
+
+      scope module: :providers do
+        resources :accredited_providers do
+          get '/search', on: :collection, to: 'accredited_provider_search#new'
+          post '/search', on: :collection, to: 'accredited_provider_search#create'
+          put '/search', on: :collection, to: 'accredited_provider_search#update'
+        end
+      end
     end
     resources :users do
       scope module: :users do

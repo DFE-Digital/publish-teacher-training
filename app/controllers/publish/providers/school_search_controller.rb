@@ -69,11 +69,12 @@ module Publish
       end
 
       def search_result_title_component
-        @search_result_title_component ||= Publish::Schools::SearchResultTitleComponent.new(
+        @search_result_title_component ||= SearchResultTitleComponent.new(
           query:,
           results_limit: @school_search.limit,
           results_count: @school_search.schools.unscope(:limit).count,
-          return_path: search_publish_provider_recruitment_cycle_schools_path
+          return_path: search_publish_provider_recruitment_cycle_schools_path,
+          resource_name: 'school'
         )
       end
     end

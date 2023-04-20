@@ -44,6 +44,10 @@ module ProviderHelper
     end
   end
 
+  def provider_short_address(provider)
+    [provider.address3, provider.postcode].select(&:present?).join(', ')
+  end
+
   private
 
   def visa_sponsorship_call_to_action(provider)
