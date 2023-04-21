@@ -241,8 +241,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.train_with_us
     )
 
-    expect(publish_course_preview_page.about_accrediting_body).to have_content(
-      decorated_course.about_accrediting_body
+    expect(publish_course_preview_page.about_accrediting_provider).to have_content(
+      decorated_course.about_accrediting_provider
     )
 
     expect(publish_course_preview_page.train_with_disability).to have_content(

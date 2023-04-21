@@ -7,7 +7,7 @@
     <li><%= govuk_link_to course.placements_heading, "#section-schools" %></li>
   <% end %>
   <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
-  <% if provider.train_with_us.present? || about_accrediting_body.present? || (preview? && FeatureService.enabled?(:course_preview_missing_information)) %>
+  <% if provider.train_with_us.present? || about_accrediting_provider.present? || (preview? && FeatureService.enabled?(:course_preview_missing_information)) %>
     <li><%= govuk_link_to "About the training provider", "#section-about-provider" %></li>
   <% end %>
   <% if salaried? %>

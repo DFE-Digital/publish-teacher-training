@@ -263,8 +263,8 @@ feature 'Viewing a findable course' do
       provider.train_with_us
     )
 
-    expect(find_course_show_page.about_accrediting_body).to have_content(
-      @course.decorate.about_accrediting_body
+    expect(find_course_show_page.about_accrediting_provider).to have_content(
+      @course.decorate.about_accrediting_provider
     )
 
     expect(find_course_show_page.train_with_disability).to have_content(

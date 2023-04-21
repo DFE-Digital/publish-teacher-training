@@ -158,7 +158,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           }
         end
 
-        it 'returns the provider and accrediting body connected to the course' do
+        it 'returns the provider and accredited provider connected to the course' do
           expect(json_response['data'][0]['relationships'].keys).to include('provider')
           expect(json_response['data'][0]['relationships'].keys).to include('accredited_provider')
           expect(json_response['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)

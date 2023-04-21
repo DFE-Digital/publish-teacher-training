@@ -32,7 +32,7 @@ module PageObjects
       element :personal_qualities, '[data-qa=course__personal_qualities]'
       element :other_requirements, '[data-qa=course__other_requirements]'
       element :train_with_us, '[data-qa=course__about_provider]'
-      element :about_accrediting_body, '[data-qa=course__about_accrediting_body]'
+      element :about_accrediting_provider, '[data-qa=course__about_accrediting_provider]'
       element :train_with_disability, '[data-qa=course__train_with_disabilities]'
       element :contact_email, '[data-qa=provider__email]'
       element :contact_telephone, '[data-qa=provider__telephone]'

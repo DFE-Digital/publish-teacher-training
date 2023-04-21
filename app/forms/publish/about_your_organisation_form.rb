@@ -39,7 +39,7 @@ module Publish
     end
 
     def accredited_provider(provider_name:, provider_code:, description:)
-      AccreditedBody.new(
+      AccreditedProvider.new(
         provider_name:,
         provider_code:,
         description: params_description(provider_code) || description
@@ -73,7 +73,7 @@ module Publish
       end
     end
 
-    class AccreditedBody
+    class AccreditedProvider
       include ActiveModel::Model
       validates :description, words_count: { maximum: 100, message: lambda do |object, _data|
         "Reduce the word count for #{object.provider_name}"

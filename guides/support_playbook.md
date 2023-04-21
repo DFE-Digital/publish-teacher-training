@@ -55,7 +55,7 @@ Change `provider_type` to the preferred value on the provider record.
 
 ## Changing accredited provider of courses
 
-To change the accrediting body of a course, you can do the following:
+To change the accrediting provider of a course, you can do the following:
 
 ```ruby
 # Grab the courses for a provider and update the courses' accredited provider

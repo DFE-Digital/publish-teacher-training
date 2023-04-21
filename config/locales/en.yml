@@ -212,7 +212,7 @@ en:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:
           text: "Enter details about the training provider"
-        about_accrediting_body:
+        about_accrediting_provider:
           text: "Enter details about the accredited provider"
   course:
     add_course: "Add course"
