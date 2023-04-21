@@ -36,7 +36,7 @@ try {
   }
   if (schoolAutocomplete && schoolInput) {
     initAutocomplete(schoolAutocomplete, schoolInput, schoolTemplate, {
-      path: '/publish/suggestions',
+      path: '/api/school_suggestions',
       template: schoolSuggestionsTemplate
     })
   }
