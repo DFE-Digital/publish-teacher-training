@@ -8,7 +8,6 @@ FactoryBot.define do
     town { Faker::Address.city }
     postcode { Faker::Address.postcode }
     status_code { GiasSchool::ESTABLISHMENT_OPEN_STATUS_CODE }
-    searchable { %w[name urn postcode] }
 
     trait :closed do
       status_code { nil }
