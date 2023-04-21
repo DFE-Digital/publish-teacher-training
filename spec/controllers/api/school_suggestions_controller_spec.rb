@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe API::Public::V1::SchoolSuggestionsController do
+RSpec.describe API::SchoolSuggestionsController do
   describe '#index' do
     let!(:site1) { create(:gias_school, name: 'claydon school') }
     let!(:site2) { create(:gias_school, name: 'claytown high school') }
