@@ -16,7 +16,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= form_with model: course,
-                    url: accredited_body_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+                    url: accredited_provider_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                     method: :put do |form| %>
 
         <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">

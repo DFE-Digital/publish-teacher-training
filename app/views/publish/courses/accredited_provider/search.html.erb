@@ -15,7 +15,7 @@
     <p class="govuk-body">You searched for ‘<%= @query %>’.</p>
 
     <%= form_with model: course,
-                  url: accredited_body_provider_recruitment_cycle_course_path(params[:provider_code], params[:recruitment_cycle_year], params[:code]),
+                  url: accredited_provider_provider_recruitment_cycle_course_path(params[:provider_code], params[:recruitment_cycle_year], params[:code]),
                   method: :put do |form| %>
 
       <% if @provider_suggestions.any? %>
