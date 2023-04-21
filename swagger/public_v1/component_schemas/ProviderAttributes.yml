@@ -5,7 +5,7 @@ required:
   - code
   - name
 properties:
-  accredited_body:
+  accredited_provider:
     type: boolean
     description: "Is this provider an accredited provider for other provider's courses."
     example: "true"

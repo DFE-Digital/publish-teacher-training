@@ -7,7 +7,7 @@ module PageObjects
 
       element :sub_title, '[data-qa=course__provider_name]'
       element :description, '[data-qa=course__description]'
-      element :accredited_body, '[data-qa=course__accredited_body]'
+      element :accredited_provider, '[data-qa=course__accredited_provider]'
       element :qualifications, '[data-qa=course__qualifications]'
       element :funding_option, '[data-qa=course__funding_option]'
       element :length, '[data-qa=course__length]'

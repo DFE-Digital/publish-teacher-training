@@ -6,7 +6,7 @@ required:
   - age_maximum
   - age_minimum
 properties:
-  about_accredited_body:
+  about_accredited_provider:
     type: string
     nullable: true
     format: markdown

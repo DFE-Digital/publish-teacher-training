@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Viewing courses as an accredited provider', { can_edit_current_and_next_cycles: false } do
   before do
-    given_i_am_authenticated_as_an_accredited_body_user
+    given_i_am_authenticated_as_an_accredited_provider_user
     and_some_courses_exist_with_one_i_accredit
     when_i_visit_the_publish_training_provider_index_page
   end
@@ -19,8 +19,8 @@ feature 'Viewing courses as an accredited provider', { can_edit_current_and_next
     then_i_see_the_courses_i_accredit_for
   end
 
-  def given_i_am_authenticated_as_an_accredited_body_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
+  def given_i_am_authenticated_as_an_accredited_provider_user
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_provider)]))
   end
 
   def and_some_courses_exist_with_one_i_accredit

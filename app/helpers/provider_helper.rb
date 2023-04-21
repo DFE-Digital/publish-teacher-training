@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ProviderHelper
-  def course_accredited_body_name(course)
+  def course_accredited_provider_name(course)
     # TODO: Handle rollover
     RecruitmentCycle.current.providers.find_by(provider_code: course.accredited_body_code)&.provider_name
   end

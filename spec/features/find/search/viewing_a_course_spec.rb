@@ -152,7 +152,7 @@ feature 'Viewing a findable course' do
       provider.provider_name
     )
 
-    expect(find_course_show_page.accredited_body).to have_content(
+    expect(find_course_show_page.accredited_provider).to have_content(
       accrediting_provider.provider_name
     )
 
@@ -350,7 +350,7 @@ feature 'Viewing a findable course' do
   def accrediting_provider
     @accrediting_provider ||= create(
       :provider,
-      :accredited_body,
+      :accredited_provider,
       provider_name: 'Accrediting Provider 1'
     )
   end

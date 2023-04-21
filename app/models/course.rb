@@ -182,7 +182,7 @@ class Course < ApplicationRecord
 
   scope :descending_course_canonical_order, -> { order(name: :desc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
 
-  scope :accredited_body_order, lambda { |provider_name|
+  scope :accredited_provider_order, lambda { |provider_name|
     joins(:provider).merge(Provider.by_provider_name(provider_name))
   }
 
@@ -608,7 +608,7 @@ class Course < ApplicationRecord
   end
 
   def is_uni_or_scitt?
-    provider.accredited_body?
+    provider.accredited_provider?
   end
 
   def is_school_direct?
@@ -616,7 +616,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    provider.accredited_body?
+    provider.accredited_provider?
   end
 
   def to_s

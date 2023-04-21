@@ -7,15 +7,15 @@ module NotificationService
     let(:subscribed_user1) { create(:user) }
     let(:subscribed_user2) { create(:user) }
     let(:non_subscribed_user) { create(:user) }
-    let(:accredited_body) { create(:provider, :accredited_body) }
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
 
     let(:user_notifications) do
-      create(:user_notification, user: subscribed_user1, provider: accredited_body, course_publish: true)
-      create(:user_notification, user: subscribed_user2, provider: accredited_body, course_publish: true)
-      create(:user_notification, user: non_subscribed_user, provider: accredited_body, course_publish: false)
+      create(:user_notification, user: subscribed_user1, provider: accredited_provider, course_publish: true)
+      create(:user_notification, user: subscribed_user2, provider: accredited_provider, course_publish: true)
+      create(:user_notification, user: non_subscribed_user, provider: accredited_provider, course_publish: false)
     end
 
-    let(:course) { create(:course, accrediting_provider: accredited_body) }
+    let(:course) { create(:course, accrediting_provider: accredited_provider) }
     let(:vacancy_statuses) do
       [
         { id: 123_456, status: 'no_vacancies' }
@@ -42,7 +42,7 @@ module NotificationService
 
     context 'with a course that is not in the current cycle' do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
+      let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code, provider:) }
 
       before { setup_notifications }
 
@@ -155,7 +155,7 @@ module NotificationService
             { id: second_site_status_id, status: 'part_time_vacancies' }
           ]
         end
-        let(:course) { create(:course, accrediting_provider: accredited_body, site_statuses: [first_site_status, second_site_status]) }
+        let(:course) { create(:course, accrediting_provider: accredited_provider, site_statuses: [first_site_status, second_site_status]) }
 
         before do
           first_site_status

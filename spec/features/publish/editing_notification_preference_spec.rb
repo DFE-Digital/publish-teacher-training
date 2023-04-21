@@ -4,8 +4,8 @@ require 'rails_helper'
 
 feature 'Opting into notifications' do
   before do
-    given_i_am_authenticated_as_an_accredited_body_user
-    when_i_visit_accredited_body_page
+    given_i_am_authenticated_as_an_accredited_provider_user
+    when_i_visit_accredited_provider_page
     and_i_click_on_notifications_link
     then_the_publish_notification_page_is_displayed
     and_the_notifications_link_has_an_active_state
@@ -23,11 +23,11 @@ feature 'Opting into notifications' do
     then_i_should_see_an_error_message
   end
 
-  def given_i_am_authenticated_as_an_accredited_body_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
+  def given_i_am_authenticated_as_an_accredited_provider_user
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_provider)]))
   end
 
-  def when_i_visit_accredited_body_page
+  def when_i_visit_accredited_provider_page
     publish_provider_courses_index_page.load(id: accrediting_provider.provider_code)
   end
 

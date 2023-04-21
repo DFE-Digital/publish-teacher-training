@@ -35,14 +35,14 @@ describe ProviderReportingService do
           open: open_providers_count,
           closed: closed_providers_count
         },
-        accredited_body: {
+        accredited_provider: {
           open: {
-            accredited_body: 1,
-            not_an_accredited_body: 2
+            accredited_provider: 1,
+            not_an_accredited_provider: 2
           },
           closed: {
-            accredited_body: 0,
-            not_an_accredited_body: 0
+            accredited_provider: 0,
+            not_an_accredited_provider: 0
           }
         },
         provider_type: {
@@ -113,7 +113,7 @@ describe ProviderReportingService do
 
         expect(open_providers_accrediting_provider_scope).to receive(:count)
           .and_return(
-            { 'accredited_body' => 1, 'not_an_accredited_body' => 2 }
+            { 'accredited_provider' => 1, 'not_an_accredited_provider' => 2 }
           )
 
         expect(open_providers_scope).to receive(:group).with(:provider_type).and_return(open_providers_provider_type_scope)

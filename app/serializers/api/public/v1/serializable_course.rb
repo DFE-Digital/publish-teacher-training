@@ -18,7 +18,7 @@ module API
 
         type 'courses'
 
-        belongs_to :accredited_body do
+        belongs_to :accredited_provider do
           data { @object.accrediting_provider }
         end
 
@@ -52,7 +52,7 @@ module API
                    :can_sponsor_student_visa,
                    :campaign_name
 
-        attribute :about_accredited_body do
+        attribute :about_accredited_provider do
           @object.accrediting_provider_description
         end
 

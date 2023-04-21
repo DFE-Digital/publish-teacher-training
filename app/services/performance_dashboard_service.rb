@@ -38,7 +38,7 @@ class PerformanceDashboardService
   end
 
   def providers_accredited_bodies
-    number_with_delimiter(reporting[:providers][:training_providers][:accredited_body][:open][:accredited_body])
+    number_with_delimiter(reporting[:providers][:training_providers][:accredited_provider][:open][:accredited_provider])
   end
 
   def courses_total_open

@@ -71,10 +71,10 @@ class User < ApplicationRecord
     self.providers = providers - next_cycle_providers
   end
 
-  def associated_with_accredited_body?
+  def associated_with_accredited_provider?
     providers
       .in_current_cycle
-      .accredited_body
+      .accredited_provider
       .count
       .positive?
   end

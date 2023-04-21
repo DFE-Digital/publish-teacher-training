@@ -10,7 +10,7 @@ module NotificationService
     end
 
     def call
-      return false unless notify_accredited_body?
+      return false unless notify_accredited_provider?
 
       if all_vacancies_closed?
         send_course_vacancies_updated_notification(vacancies_filled: true)
@@ -76,7 +76,7 @@ module NotificationService
       User.course_publish_subscribers(course.accredited_body_code)
     end
 
-    def notify_accredited_body?
+    def notify_accredited_provider?
       return false if course.self_accredited?
       return false unless course.in_current_cycle?
 

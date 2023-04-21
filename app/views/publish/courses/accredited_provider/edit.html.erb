@@ -19,7 +19,7 @@
                     url: accredited_body_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                     method: :put do |form| %>
 
-        <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_body">
+        <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">
           <% if provider.accredited_bodies.length > 0 %>
             <%= render partial: "provider_suggestion", collection: provider.accredited_bodies, locals: { form: } %>
 
@@ -30,8 +30,8 @@
                 "other",
                 class: "govuk-radios__input",
                 data: { "aria-controls" => "other-container" },
-                checked: @errors && @errors[:accredited_body]&.any? %>
-              <%= form.label :accredited_body_code,
+                checked: @errors && @errors[:accredited_provider]&.any? %>
+              <%= form.label :accredited_provider_code,
                 "Another accredited provider",
                 for: "course_accredited_body_code_other",
                 value: false,

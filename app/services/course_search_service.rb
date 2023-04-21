@@ -44,7 +44,7 @@ class CourseSearchService
 
     if provider_name.present?
       outer_scope = outer_scope
-                    .accredited_body_order(provider_name)
+                    .accredited_provider_order(provider_name)
                     .ascending_provider_canonical_order
     elsif sort_by_provider_ascending?
       outer_scope = outer_scope.ascending_provider_canonical_order

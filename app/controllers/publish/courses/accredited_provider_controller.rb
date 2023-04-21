@@ -48,8 +48,8 @@ module Publish
 
       def update
         build_provider
-        code = update_course_params[:accredited_body_code]
-        query = update_course_params[:accredited_body]
+        code = update_course_params[:accredited_provider_code]
+        query = update_course_params[:accredited_provider]
 
         @errors = errors_for_search_query(code, query)
         return render :edit if @errors.present?
@@ -84,11 +84,11 @@ module Publish
 
       def redirect_to_provider_search
         redirect_to(
-          accredited_body_search_provider_recruitment_cycle_course_path(
+          accredited_provider_search_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code,
-            query: update_course_params[:accredited_body]
+            query: update_course_params[:accredited_provider]
           )
         )
       end
@@ -105,11 +105,11 @@ module Publish
       end
 
       def current_step
-        :accredited_body
+        :accredited_provider
       end
 
       def build_course_params
-        @accredited_body = params[:course].delete(:accredited_body)
+        @accredited_provider = params[:course].delete(:accredited_provider)
         @autocompleted_provider_code = params[:course].delete(:autocompleted_provider_code)
       end
 
@@ -117,7 +117,7 @@ module Publish
         errors = {}
 
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
-          errors = { accredited_body: ['Accredited provider search too short, enter 2 or more characters'] }
+          errors = { accredited_provider: ['Accredited provider search too short, enter 2 or more characters'] }
         elsif code.blank?
           errors = { accredited_body_code: ['Select an accredited provider'] }
         end
@@ -137,8 +137,8 @@ module Publish
       def update_course_params
         params.require(:course).permit(
           :autocompleted_provider_code,
-          :accredited_body_code,
-          :accredited_body
+          :accredited_provider_code,
+          :accredited_provider
         )
       end
 

@@ -8,7 +8,7 @@ module PageObjects
       element :title, '.govuk-heading-xl'
       element :sub_title, '[data-qa=course__provider_name]'
       element :extended_qualification_descriptions, '[data-qa=course__extended_qualification_descriptions]'
-      element :accredited_body, '[data-qa=course__accredited_body]'
+      element :accredited_provider, '[data-qa=course__accredited_provider]'
       element :qualifications, '[data-qa=course__qualifications]'
       element :funding_option, '[data-qa=course__funding_option]'
       element :length, '[data-qa=course__length]'

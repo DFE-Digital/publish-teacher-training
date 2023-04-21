@@ -154,13 +154,13 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
-            include: 'provider,accredited_body'
+            include: 'provider,accredited_provider'
           }
         end
 
         it 'returns the provider and accrediting body connected to the course' do
           expect(json_response['data'][0]['relationships'].keys).to include('provider')
-          expect(json_response['data'][0]['relationships'].keys).to include('accredited_body')
+          expect(json_response['data'][0]['relationships'].keys).to include('accredited_provider')
           expect(json_response['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)
           expect(json_response['included'][0]['type']).to eql('providers')
           expect(json_response['included'][1]['id']).to eql(provider.id.to_s)
@@ -207,14 +207,14 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         create(:course, :with_accrediting_provider, provider:)
       end
 
-      let(:accredited_body) { course.accrediting_provider }
+      let(:accredited_provider) { course.accrediting_provider }
 
       before do
         get :show, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           code: course.course_code,
-          include: 'provider,accredited_body,recruitment_cycle'
+          include: 'provider,accredited_provider,recruitment_cycle'
         }
       end
 
@@ -223,7 +223,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
         expect(json_response['data']['id']).to eql(course.id.to_s)
 
-        expect(json_response['included'][0]['id']).to eql(accredited_body.id.to_s)
+        expect(json_response['included'][0]['id']).to eql(accredited_provider.id.to_s)
         expect(json_response['included'][0]['type']).to eql('providers')
 
         expect(json_response['included'][1]['id']).to eql(provider.id.to_s)

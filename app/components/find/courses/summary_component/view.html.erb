@@ -1,7 +1,7 @@
 <dl class="app-description-list govuk-!-margin-bottom-8">
   <% if accrediting_provider.present? && (accrediting_provider.provider_code != provider.provider_code) %>
     <dt class="app-description-list__label">Accredited provider</dt>
-    <dd data-qa="course__accredited_body"><%= accrediting_provider.provider_name %></dd>
+    <dd data-qa="course__accredited_provider"><%= accrediting_provider.provider_name %></dd>
   <% end %>
   <dt class="app-description-list__label">Financial support</dt>
   <dd data-qa="course__funding_option"><%= funding_option %></dd>

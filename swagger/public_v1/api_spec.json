@@ -120,7 +120,7 @@
           "age_minimum"
         ],
         "properties": {
-          "about_accredited_body": {
+          "about_accredited_provider": {
             "type": "string",
             "nullable": true,
             "format": "markdown",
@@ -809,7 +809,7 @@
           "recruitment_cycle": {
             "$ref": "#/components/schemas/RecruitmentCycleRelationship"
           },
-          "accredited_body": {
+          "accredited_provider": {
             "$ref": "#/components/schemas/AccreditedBodyRelationship"
           },
           "provider": {
@@ -1099,7 +1099,7 @@
           "name"
         ],
         "properties": {
-          "accredited_body": {
+          "accredited_provider": {
             "type": "boolean",
             "description": "Is this provider an accredited provider for other provider's courses.",
             "example": "true"
@@ -1263,7 +1263,7 @@
             "type": "boolean",
             "example": true
           },
-          "is_accredited_body": {
+          "is_accredited_provider": {
             "description": "Only return providers that are accredited bodies.",
             "type": "boolean",
             "example": true
@@ -1957,7 +1957,7 @@
             "description": "The associated data for this resource.",
             "schema": {
               "enum": [
-                "accredited_body",
+                "accredited_provider",
                 "provider",
                 "recruitment_cycle"
               ]
@@ -2196,7 +2196,7 @@
             "description": "The associated data for this resource.",
             "schema": {
               "enum": [
-                "accredited_body",
+                "accredited_provider",
                 "provider",
                 "recruitment_cycle"
               ]
@@ -2273,7 +2273,7 @@
             "description": "The associated data for this resource.",
             "schema": {
               "enum": [
-                "accredited_body",
+                "accredited_provider",
                 "provider",
                 "recruitment_cycle"
               ]

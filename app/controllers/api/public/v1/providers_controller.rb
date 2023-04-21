@@ -55,8 +55,8 @@ module API
           @can_sponsor_student_visa ||= params.dig(:filter, :can_sponsor_student_visa)&.to_s&.downcase == 'true'
         end
 
-        def is_accredited_body?
-          @is_accredited_body ||= params.dig(:filter, :is_accredited_body)&.to_s&.downcase == 'true'
+        def is_accredited_provider?
+          @is_accredited_provider ||= params.dig(:filter, :is_accredited_provider)&.to_s&.downcase == 'true'
         end
 
         def providers
@@ -68,8 +68,7 @@ module API
           @providers = @providers.with_region_codes(region_codes) if region_codes.present?
           @providers = @providers.with_can_sponsor_skilled_worker_visa(true) if can_sponsor_skilled_worker_visa?
           @providers = @providers.with_can_sponsor_student_visa(true) if can_sponsor_student_visa?
-
-          @providers = @providers.accredited_body if is_accredited_body?
+          @providers = @providers.accredited_provider if is_accredited_provider?
 
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending

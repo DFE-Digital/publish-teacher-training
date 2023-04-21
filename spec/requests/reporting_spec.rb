@@ -16,14 +16,14 @@ describe 'GET /reporting' do
             open: 0,
             closed: 0
           },
-          accredited_body: {
+          accredited_provider: {
             open: {
-              accredited_body: 0,
-              not_an_accredited_body: 0
+              accredited_provider: 0,
+              not_an_accredited_provider: 0
             },
             closed: {
-              accredited_body: 0,
-              not_an_accredited_body: 0
+              accredited_provider: 0,
+              not_an_accredited_provider: 0
             }
           },
           provider_type: {

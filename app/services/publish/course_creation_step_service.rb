@@ -57,7 +57,7 @@ module Publish
         funding_type
         full_or_part_time
         school
-        accredited_body
+        accredited_provider
         can_sponsor_student_visa
         can_sponsor_skilled_worker_visa
         applications_open

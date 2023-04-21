@@ -15,7 +15,7 @@ module Providers
       end
 
       def formatted_accrediting_provider
-        @provider.accredited_body? ? 'Yes' : 'No'
+        @provider.accredited_provider? ? 'Yes' : 'No'
       end
     end
   end

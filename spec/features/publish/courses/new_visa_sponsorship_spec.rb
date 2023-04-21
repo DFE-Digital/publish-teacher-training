@@ -68,7 +68,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
   end
 
   def scitt_or_uni_provider
-    build(:provider, :accredited_body, sites: [build(:site)])
+    build(:provider, :accredited_provider, sites: [build(:site)])
   end
 
   def given_i_am_authenticated_as_a_provider_user(provider = lead_school_provider)

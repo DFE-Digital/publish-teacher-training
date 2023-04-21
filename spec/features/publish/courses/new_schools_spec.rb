@@ -12,7 +12,7 @@ feature 'selection schools', { can_edit_current_and_next_cycles: false } do
   scenario 'selecting multiple schools' do
     when_i_select_a_school
     and_i_click_continue
-    then_i_am_met_with_the_accredited_body_page
+    then_i_am_met_with_the_accredited_provider_page
   end
 
   scenario 'invalid entries' do
@@ -48,7 +48,7 @@ feature 'selection schools', { can_edit_current_and_next_cycles: false } do
     @provider ||= @user.providers.first
   end
 
-  def then_i_am_met_with_the_accredited_body_page
+  def then_i_am_met_with_the_accredited_provider_page
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/accredited-provider/new", ignore_query: true)
     expect(page).to have_content('Accredited provider')
   end

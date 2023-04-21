@@ -23,8 +23,8 @@ module API
                    :can_sponsor_skilled_worker_visa,
                    :can_sponsor_student_visa
 
-        attribute :accredited_body do
-          @object.accredited_body?
+        attribute :accredited_provider do
+          @object.accredited_provider?
         end
 
         attribute :changed_at do

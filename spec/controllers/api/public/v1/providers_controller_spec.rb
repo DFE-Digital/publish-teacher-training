@@ -289,7 +289,7 @@ RSpec.describe API::Public::V1::ProvidersController do
                 train_with_disability
                 train_with_us
                 website
-                accredited_body
+                accredited_provider
                 changed_at
                 city
                 code
@@ -388,8 +388,8 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
-        context 'passing in is_accredited_body param' do
-          let(:filter) { { is_accredited_body: true } }
+        context 'passing in is_accredited_provider param' do
+          let(:filter) { { is_accredited_provider: true } }
 
           it 'only returns the second provider' do
             expect(provider_names_in_response).to eq([provider2.provider_name])
@@ -465,7 +465,7 @@ RSpec.describe API::Public::V1::ProvidersController do
             'train_with_disability' => provider.train_with_disability,
             'train_with_us' => provider.train_with_us,
             'website' => provider.website,
-            'accredited_body' => provider.accredited_body?,
+            'accredited_provider' => provider.accredited_provider?,
             'changed_at' => provider.changed_at.iso8601,
             'city' => provider.address3,
             'county' => provider.address4,

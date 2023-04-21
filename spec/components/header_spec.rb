@@ -36,9 +36,9 @@ describe Header do
   end
 
   context 'for a non-admin user' do
-    it 'links to the notifications section if associated_with_accredited_body' do
+    it 'links to the notifications section if associated_with_accredited_provider' do
       user = build(:user)
-      allow(user).to receive(:associated_with_accredited_body?).and_return true
+      allow(user).to receive(:associated_with_accredited_provider?).and_return true
 
       render_inline(described_class.new(service_name: 'Test Service', current_user: user))
 

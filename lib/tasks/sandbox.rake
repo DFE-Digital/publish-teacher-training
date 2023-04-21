@@ -52,7 +52,7 @@ namespace :sandbox do
     Accepts a csv file path of providers to be added to the sandbox environment.
     The file is expected to be in the following format:
 
-    name,code,type,accredited_body
+    name,code,type,accredited_provider
     Provider one,ABC,scitt,true
     Provider two,DEF,lead_school,false
 

@@ -51,7 +51,7 @@ module Find
         end
       end
 
-      def accredited_body
+      def accredited_provider
         return nil if course.accrediting_provider.blank?
 
         "QTS ratified by #{helpers.smart_quotes(course.accrediting_provider.provider_name)}"

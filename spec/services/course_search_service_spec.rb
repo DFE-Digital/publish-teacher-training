@@ -227,14 +227,14 @@ RSpec.describe CourseSearchService do
       context 'when provider name is present' do
         let(:filter) { { 'provider.provider_name': 'University of Warwick' } }
         let(:expected_scope) { double }
-        let(:accredited_body_scope) { double }
+        let(:accredited_provider_scope) { double }
         let(:order_scope) { double }
 
         it 'adds some scope' do
           expect(scope).to receive(:with_provider_name).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).with(:id).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(accredited_body_scope)
-          expect(accredited_body_scope).to receive(:accredited_body_order).and_return(order_scope)
+          expect(course_with_includes).to receive(:where).and_return(accredited_provider_scope)
+          expect(accredited_provider_scope).to receive(:accredited_provider_order).and_return(order_scope)
           expect(order_scope).to receive(:ascending_provider_canonical_order).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end

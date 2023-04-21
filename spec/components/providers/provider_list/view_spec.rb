@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Providers::ProviderList::View do
-  let(:scitt_provider) { create(:provider, provider_type: 'scitt', accrediting_provider: 'accredited_body') }
-  let(:lead_school_provider) { create(:provider, provider_type: 'lead_school', accrediting_provider: 'not_an_accredited_body') }
-  let(:university_provider) { create(:provider, provider_type: 'university', accrediting_provider: 'accredited_body') }
+  let(:scitt_provider) { create(:provider, provider_type: 'scitt', accrediting_provider: 'accredited_provider') }
+  let(:lead_school_provider) { create(:provider, provider_type: 'lead_school', accrediting_provider: 'not_an_accredited_provider') }
+  let(:university_provider) { create(:provider, provider_type: 'university', accrediting_provider: 'accredited_provider') }
 
   describe '#formatted_accrediting_provider' do
     context 'provider is an accredited provider and scitt' do

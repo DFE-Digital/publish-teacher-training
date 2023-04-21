@@ -66,7 +66,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
 
   context 'accredited provider' do
     before do
-      given_i_am_authenticated_as_a_provider_user(:accredited_body)
+      given_i_am_authenticated_as_a_provider_user(:accredited_provider)
       when_i_visit_the_publish_course_confirmation_page
     end
 

@@ -72,7 +72,7 @@
       end
     end
 
-    if @provider.accredited_body?
+    if @provider.accredited_provider?
       summary_list.with_row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row|
         row.with_key { "Apprenticeship" }
         row.with_value { course.apprenticeship }
@@ -138,8 +138,8 @@
       end
     end
 
-    unless @provider.accredited_body?
-      summary_list.with_row(html_attributes: { data: { qa: "course__accredited_body" } }) do |row|
+    unless @provider.accredited_provider?
+      summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row|
         row.with_key { "Accredited provider" }
         row.with_value { course.accrediting_provider&.provider_name }
         if course.is_published? || course.is_withdrawn?

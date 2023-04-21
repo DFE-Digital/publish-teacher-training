@@ -1,10 +1,10 @@
-<%= render "publish/shared/error_wrapper", error_keys: [:accredited_body], data_qa: "course__provider_search" do %>
-  <%= form.label :accredited_body,
-    for: "course_accredited_body",
+<%= render "publish/shared/error_wrapper", error_keys: [:accredited_provider], data_qa: "course__provider_search" do %>
+  <%= form.label :accredited_provider,
+    for: "course_accredited_provider",
     class: "govuk-label" do %>
-      Enter the provider name or code <%= render "publish/shared/error_messages", error_keys: [:accredited_body] %>
+      Enter the provider name or code <%= render "publish/shared/error_messages", error_keys: [:accredited_provider] %>
   <% end %>
-  <%= form.text_field :accredited_body,
+  <%= form.text_field :accredited_provider,
     autocomplete: "off",
     class: "govuk-input govuk-!-width-two-thirds" %>
   <div id="provider-autocomplete" class="govuk-!-width-two-thirds"></div>

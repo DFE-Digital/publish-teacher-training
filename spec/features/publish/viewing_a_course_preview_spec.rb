@@ -157,7 +157,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.provider_name
     )
 
-    expect(publish_course_preview_page.accredited_body).to have_content(
+    expect(publish_course_preview_page.accredited_provider).to have_content(
       accrediting_provider.provider_name
     )
 

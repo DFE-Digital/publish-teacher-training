@@ -35,7 +35,7 @@ feature 'View provider users' do
   private
 
   def and_there_is_a_provider
-    @provider = create(:provider, provider_name: 'Provider 1', provider_type: 'scitt', accrediting_provider: 'accredited_body')
+    @provider = create(:provider, provider_name: 'Provider 1', provider_type: 'scitt', accrediting_provider: 'accredited_provider')
   end
 
   def when_i_visit_the_support_provider_show_page

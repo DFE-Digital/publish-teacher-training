@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Courses::CopyToProviderService do
-  let(:accrediting_provider) { create(:provider, :accredited_body) }
+  let(:accrediting_provider) { create(:provider, :accredited_provider) }
   let(:provider) { create(:provider, courses: [course]) }
   let(:published_course_enrichment) { build(:course_enrichment, :published) }
   let(:maths) { create(:secondary_subject, :mathematics) }

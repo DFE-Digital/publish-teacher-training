@@ -20,7 +20,7 @@ module Publish
 
     def accredited_bodies
       @accredited_bodies ||= provider.accredited_bodies.map do |ab|
-        accredited_body(**ab)
+        accredited_provider(**ab)
       end
     end
 
@@ -38,7 +38,7 @@ module Publish
       public_send(attribute) != provider.public_send(attribute)
     end
 
-    def accredited_body(provider_name:, provider_code:, description:)
+    def accredited_provider(provider_name:, provider_code:, description:)
       AccreditedBody.new(
         provider_name:,
         provider_code:,
@@ -51,10 +51,10 @@ module Publish
     end
 
     def accrediting_provider_enrichments
-      accredited_bodies.map do |accredited_body|
+      accredited_bodies.map do |accredited_provider|
         {
-          UcasProviderCode: accredited_body.provider_code,
-          Description: accredited_body.description
+          UcasProviderCode: accredited_provider.provider_code,
+          Description: accredited_provider.description
         }
       end
     end
@@ -68,8 +68,8 @@ module Publish
     end
 
     def add_enrichment_errors
-      accredited_bodies&.each_with_index do |accredited_body, _index|
-        errors.add :accredited_bodies, accredited_body.errors[:description].first if accredited_body.invalid?
+      accredited_bodies&.each_with_index do |accredited_provider, _index|
+        errors.add :accredited_bodies, accredited_provider.errors[:description].first if accredited_provider.invalid?
       end
     end
 
