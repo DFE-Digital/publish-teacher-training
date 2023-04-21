@@ -18,6 +18,16 @@ module Publish
           @school_select_form = Schools::SelectForm.new
           @school_search = Schools::SearchService.call(query:)
 
+          if @school_search.schools.size == 1
+            @school_select_form = Schools::SelectForm.new(school_id: @school_search.schools[0].id)
+            if @school_select_form.valid?
+              redirect_to new_publish_provider_recruitment_cycle_school_path(
+                provider_code: provider.provider_code,
+                school_id: @school_select_form.school_id
+              ) and return
+            end
+          end
+
           render :results
         else
           render :new

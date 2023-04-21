@@ -17,12 +17,23 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_text_field(
-        :query,
-        label: { text: t(".title"), size: "l", tag: "h1" },
-        caption: { text: t(".caption"), size: "l" }
-      ) %>
-
+      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+        <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-schools-search-form-query-field" } do %>
+          <span class="govuk-caption-l">Add school</span>
+          <%= I18n.t("publish.providers.school_search.new.title") %>
+          <% if f.object.errors.present? %>
+            <span class="govuk-error-message" id="publish-schools-search-form-query-field-error" data-qa="provider-error">
+              <%= f.object.errors.first.message %>
+            </span>
+          <% end %>
+        <% end %>
+        <%= f.text_field :query,
+                              id: "publish-schools-search-form-query-field",
+                              value: params[:query],
+                              class: "govuk-input",
+                              data: { qa: "schools-search" } %>
+        <div id="school-autocomplete" class="govuk-body"></div>
+      </div>
       <p class="govuk-body govuk-!-margin-bottom-7">
         <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
       </p>

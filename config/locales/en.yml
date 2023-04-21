@@ -238,6 +238,9 @@ en:
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
+  school_suggestion:
+    errors:
+      bad_request: "Unknown school name, urn or postcode, please check the query string."
   users:
     first_name: "First name"
     last_name: "Last name"
