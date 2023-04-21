@@ -32,7 +32,8 @@ export const request = endpoint => {
 }
 
 export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) => {
-  const path = options.path || '/publish/providers/suggest'
+  const path = options.path
+  const suggestionTemplate = options.template
 
   accessibleAutocomplete({
     element: $el,
@@ -44,7 +45,7 @@ export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) 
     source: request(path),
     templates: {
       inputValue: inputValueTemplate,
-      suggestion: options.suggestionTemplate || inputValueTemplate
+      suggestion: suggestionTemplate
     },
     onConfirm: option => ($input.value = option ? option.code : ''),
     confirmOnBlur: false,
