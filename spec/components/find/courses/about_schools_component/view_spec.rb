@@ -19,14 +19,13 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
   end
 
   context 'invalid program type' do
-    it 'does not render' do
+    it 'renders the component' do
       provider = build(:provider)
       course = build(:course,
                      provider:).decorate
 
       result = render_inline(described_class.new(course))
-
-      expect(result.text).not_to include(course.placements_heading)
+      expect(result.text).to include('Enter details about school placements')
     end
   end
 
@@ -54,10 +53,9 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
                      site_statuses: [
                        build(:site_status, site: build(:site))
                      ]).decorate
-
       result = render_inline(described_class.new(course))
 
-      expect(result.text).not_to include(course.placements_heading)
+      expect(result.text).to include('Enter details about school placements')
     end
   end
 
