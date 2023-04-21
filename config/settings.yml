@@ -107,7 +107,7 @@ features:
     show_next_cycle_recruitment_page: false
   user_management: true
   add_multiple_schools: true
-  course_preview_missing_information: false
+  course_preview_missing_information: true
   gias_search: false
   support_new_provider_creation_flow: false
 
