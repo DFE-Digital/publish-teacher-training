@@ -137,6 +137,7 @@ shared:
     - synonyms
     - accredited_provider_id
     - town
+    - address3
   recruitment_cycle:
     - id
     - year

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_24_081028) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_24_160722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -286,6 +286,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_24_081028) do
     t.string "synonyms", default: [], array: true
     t.integer "accredited_provider_id"
     t.tsvector "searchable"
+    t.text "address3"
     t.index ["accrediting_provider"], name: "index_provider_on_accrediting_provider", where: "(accrediting_provider = 'Y'::text)"
     t.index ["can_sponsor_student_visa"], name: "index_provider_on_can_sponsor_student_visa"
     t.index ["changed_at"], name: "index_provider_on_changed_at", unique: true

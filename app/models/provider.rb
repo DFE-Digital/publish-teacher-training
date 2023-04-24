@@ -203,7 +203,7 @@ class Provider < ApplicationRecord
   end
 
   def full_address
-    address = [provider_name, address1, address2, town, address4, postcode]
+    address = [provider_name, address1, address2, address3, town, address4, postcode]
 
     return '' if address.all?(&:blank?)
 
@@ -211,13 +211,14 @@ class Provider < ApplicationRecord
   end
 
   def full_address_with_breaks
-    [address1, address2, town, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
+    [address1, address2, address3, town, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
   end
 
   def address_changed?
     saved_change_to_provider_name? ||
       saved_change_to_address1? ||
       saved_change_to_address2? ||
+      saved_change_to_address3? ||
       saved_change_to_town? ||
       saved_change_to_address4? ||
       saved_change_to_postcode?
