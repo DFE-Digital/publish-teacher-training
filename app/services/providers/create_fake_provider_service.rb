@@ -6,7 +6,7 @@ module Providers
 
     DEFAULT_PROVIDER_ATTRIBUTES = {
       address1: '1 Test Street',
-      address3: 'Town',
+      town: 'Town',
       address4: 'County',
       postcode: 'M1 1JG',
       region_code: 'north_west',
@@ -44,7 +44,7 @@ module Providers
         location_name: 'Site 1',
         address1: provider.address1,
         address2: provider.address2,
-        town: provider.address3,
+        town: provider.town,
         address4: provider.address4,
         postcode: provider.postcode,
         region_code: provider.region_code,

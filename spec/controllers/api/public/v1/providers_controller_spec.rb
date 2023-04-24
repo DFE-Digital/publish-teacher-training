@@ -467,7 +467,7 @@ RSpec.describe API::Public::V1::ProvidersController do
             'website' => provider.website,
             'accredited_body' => provider.accredited_body?,
             'changed_at' => provider.changed_at.iso8601,
-            'city' => provider.address3,
+            'city' => provider.town,
             'county' => provider.address4,
             'created_at' => provider.created_at.iso8601,
             'street_address_1' => provider.address1,

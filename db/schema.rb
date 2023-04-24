@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_24_081028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -264,7 +264,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
     t.text "website"
     t.text "address1"
     t.text "address2"
-    t.text "address3"
+    t.text "town"
     t.text "email"
     t.text "telephone"
     t.integer "region_code"

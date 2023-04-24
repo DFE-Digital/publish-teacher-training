@@ -203,7 +203,7 @@ class Provider < ApplicationRecord
   end
 
   def full_address
-    address = [provider_name, address1, address2, address3, address4, postcode]
+    address = [provider_name, address1, address2, town, address4, postcode]
 
     return '' if address.all?(&:blank?)
 
@@ -211,14 +211,14 @@ class Provider < ApplicationRecord
   end
 
   def full_address_with_breaks
-    [address1, address2, address3, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
+    [address1, address2, town, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
   end
 
   def address_changed?
     saved_change_to_provider_name? ||
       saved_change_to_address1? ||
       saved_change_to_address2? ||
-      saved_change_to_address3? ||
+      saved_change_to_town? ||
       saved_change_to_address4? ||
       saved_change_to_postcode?
   end
@@ -233,7 +233,7 @@ class Provider < ApplicationRecord
   # def contact_info
   #   self
   #     .attributes_before_type_cast
-  #     .slice('address1', 'address2', 'address3', 'address4', 'postcode', 'region_code', 'telephone', 'email')
+  #     .slice('address1', 'address2', 'town', 'address4', 'postcode', 'region_code', 'telephone', 'email')
   # end
 
   # This is used by the providers index; it is a replacement for `.includes(:courses)`,

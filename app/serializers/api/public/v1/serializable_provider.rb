@@ -32,7 +32,7 @@ module API
         end
 
         attribute :city do
-          @object.address3
+          @object.town
         end
 
         attribute :code do

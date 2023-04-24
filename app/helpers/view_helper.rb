@@ -73,7 +73,7 @@ module ViewHelper
       'website' => "#{base}/contact?display_errors=true#provider_website",
       'telephone' => "#{base}/contact?display_errors=true#provider_telephone",
       'address1' => "#{base}/contact?display_errors=true#provider_address1",
-      'address3' => "#{base}/contact?display_errors=true#provider_address3",
+      'town' => "#{base}/contact?display_errors=true#provider_town",
       'address4' => "#{base}/contact?display_errors=true#provider_address4",
       'postcode' => "#{base}/contact?display_errors=true#provider_postcode"
     }[field]

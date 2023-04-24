@@ -29,7 +29,7 @@ class ProviderDecorator < ApplicationDecorator
     [
       object.address1,
       object.address2,
-      object.address3,
+      object.town,
       object.address4,
       object.postcode
     ].compact_blank

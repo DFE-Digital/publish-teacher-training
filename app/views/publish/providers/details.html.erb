@@ -150,7 +150,7 @@
         :provider,
         "Contact address",
         @provider.full_address_with_breaks,
-        %w[address1 address2 address3 address4 postcode],
+        %w[address1 address2 town address4 postcode],
         action_path: "#{contact_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#address",
         action_visually_hidden_text: "contact address"
       ) %>
