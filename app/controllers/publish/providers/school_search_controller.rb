@@ -74,7 +74,7 @@ module Publish
           results_limit: @school_search.limit,
           results_count: @school_search.schools.unscope(:limit).count,
           return_path: search_publish_provider_recruitment_cycle_schools_path,
-          resource_name: 'school'
+          search_resource: 'school'
         )
       end
     end
