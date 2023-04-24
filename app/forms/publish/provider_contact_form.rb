@@ -4,7 +4,7 @@ module Publish
   class ProviderContactForm < BaseProviderForm
     FIELDS = %i[
       email telephone urn website ukprn
-      address1 address2 town address4 postcode region_code
+      address1 address2 address3 town address4 postcode region_code
     ].freeze
 
     attr_accessor(*FIELDS)

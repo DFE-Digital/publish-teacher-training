@@ -234,7 +234,7 @@ class Provider < ApplicationRecord
   # def contact_info
   #   self
   #     .attributes_before_type_cast
-  #     .slice('address1', 'address2', 'town', 'address4', 'postcode', 'region_code', 'telephone', 'email')
+  #     .slice('address1', 'address2', 'address3', 'town', 'address4', 'postcode', 'region_code', 'telephone', 'email')
   # end
 
   # This is used by the providers index; it is a replacement for `.includes(:courses)`,

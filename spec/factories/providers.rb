@@ -14,6 +14,7 @@ FactoryBot.define do
 
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.community }
+    address3 { Faker::Address.street_name }
     town { Faker::Address.city }
     address4 { Faker::Address.state }
     postcode { Faker::Address.postcode }

@@ -298,6 +298,7 @@ RSpec.describe API::Public::V1::ProvidersController do
                 name
                 street_address_1
                 street_address_2
+                street_address_3
                 latitude
                 longitude
                 telephone
@@ -472,6 +473,7 @@ RSpec.describe API::Public::V1::ProvidersController do
             'created_at' => provider.created_at.iso8601,
             'street_address_1' => provider.address1,
             'street_address_2' => provider.address2,
+            'street_address_3' => provider.address3,
             'latitude' => provider.latitude,
             'longitude' => provider.longitude,
             'telephone' => provider.telephone,

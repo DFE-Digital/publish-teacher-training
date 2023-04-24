@@ -284,7 +284,7 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page.contact_address).to have_content(
-      [@provider.address1, @provider.address2, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
+      [@provider.address1, @provider.address2, @provider.address3, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
     )
 
     expect(find_course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
