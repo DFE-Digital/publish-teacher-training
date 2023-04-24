@@ -271,7 +271,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.address2
     )
     expect(publish_course_preview_page.contact_address).to have_content(
-      provider.address3
+      provider.town
     )
     expect(publish_course_preview_page.contact_address).to have_content(
       provider.address4

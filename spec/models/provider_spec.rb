@@ -773,7 +773,7 @@ describe Provider do
           provider.provider_name = ''
           provider.address1 = ''
           provider.address2 = ''
-          provider.address3 = ''
+          provider.town = ''
           provider.address4 = ''
           provider.postcode = ''
         end
