@@ -13,20 +13,22 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= f.govuk_fieldset legend: { text: "Contact details", size: "l", tag: "h1" }, caption: { text: "Add organisation", size: "l" } do %>
-        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: "two-thirds" %>
-        <%= f.govuk_text_field :telephone, label: { text: "Telephone number", size: "s" }, width: "two-thirds" %>
-        <%= f.govuk_text_field :website, label: { text: "Website", size: "s" }, width: "two-thirds" %>
+      <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Add organisation</span>
+        Contact details
+      </h1>
+      <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :telephone, label: { text: "Telephone number", size: "s" }, width: "two-thirds" %>
+      <%= f.govuk_text_field :website, label: { text: "Website", size: "s" }, width: "two-thirds" %>
 
-        <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
-          <%= f.govuk_text_field :address1, label: { text: "Address line 1", size: "s" } %>
-          <%= f.govuk_text_field :address2, label: { text: "Address line 2 (optional)", size: "s" } %>
-          <%= f.govuk_text_field :address3, label: { text: "Address line 3 (optional)", size: "s" } %>
-          <%= f.govuk_text_field :town, label: { text: "Town or city", size: "s" }, width: "two-thirds" %>
-          <%= f.govuk_text_field :address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds" %>
+      <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+        <%= f.govuk_text_field :address1, label: { text: "Address line 1", size: "s" } %>
+        <%= f.govuk_text_field :address2, label: { text: "Address line 2 (optional)", size: "s" } %>
+        <%= f.govuk_text_field :address3, label: { text: "Address line 3 (optional)", size: "s" } %>
+        <%= f.govuk_text_field :town, label: { text: "Town or city", size: "s" }, width: "two-thirds" %>
+        <%= f.govuk_text_field :address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds" %>
 
-          <%= f.govuk_text_field :postcode, label: { text: "Postcode", size: "s" }, width: 10 %>
-        <% end %>
+        <%= f.govuk_text_field :postcode, label: { text: "Postcode", size: "s" }, width: 10 %>
       <% end %>
 
       <%= f.govuk_submit %>
