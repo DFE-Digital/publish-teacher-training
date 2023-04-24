@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe SearchResultTitleComponent, type: :component do
   let(:query) { 'test' }
-  let(:resource_name) { 'school' }
+  let(:search_resource) { 'school' }
   let(:return_path) { '/test' }
   let(:results_limit) { 15 }
 
@@ -20,7 +20,7 @@ describe SearchResultTitleComponent, type: :component do
 
     expect(page).to have_text("10 results found for ‘#{query}’")
     expect(page).to have_link('Change your search', href: '/test')
-    expect(page).to have_text("if the #{resource_name} you’re looking for is not listed.")
+    expect(page).to have_text("if the #{search_resource} you’re looking for is not listed.")
   end
 
   it 'renders one result text when there is only one result' do
@@ -28,7 +28,7 @@ describe SearchResultTitleComponent, type: :component do
 
     expect(page).to have_text("1 result found for ‘#{query}’")
     expect(page).to have_link('Change your search', href: '/test')
-    expect(page).to have_text("if the #{resource_name} you’re looking for is not listed.")
+    expect(page).to have_text("if the #{search_resource} you’re looking for is not listed.")
   end
 
   it 'renders no results text when there are no results' do
@@ -36,7 +36,7 @@ describe SearchResultTitleComponent, type: :component do
 
     expect(page).to have_text("No results found for ‘#{query}’")
     expect(page).to have_link('Change your search', href: '/test')
-    expect(page).not_to have_text("if the #{resource_name} you’re looking for is not listed.")
+    expect(page).not_to have_text("if the #{search_resource} you’re looking for is not listed.")
   end
 
   def render_component(results_count)
@@ -46,7 +46,7 @@ describe SearchResultTitleComponent, type: :component do
         results_limit:,
         results_count:,
         return_path:,
-        resource_name:
+        search_resource:
       )
     )
   end

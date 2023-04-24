@@ -35,7 +35,7 @@ namespace :support do
       end
 
       scope module: :providers do
-        resources :accredited_providers do
+        resources :accredited_providers, path: 'accredited-providers' do
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
