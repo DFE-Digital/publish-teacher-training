@@ -4,7 +4,7 @@ type: object
 properties:
   recruitment_cycle:
     $ref: "#/components/schemas/RecruitmentCycleRelationship"
-  accredited_provider:
+  accredited_body:
     $ref: "#/components/schemas/AccreditedBodyRelationship"
   provider:
     $ref: "#/components/schemas/ProviderRelationship"

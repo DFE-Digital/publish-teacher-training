@@ -10,8 +10,8 @@ properties:
     description: "Only return providers that can sponsor a Student visa."
     type: boolean
     example: true
-  is_accredited_provider:
-    description: "Only return providers that are accredited bodies."
+  is_accredited_body:
+    description: "Only return providers that are accredited providers."
     type: boolean
     example: true
   provider_name:

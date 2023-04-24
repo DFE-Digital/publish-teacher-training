@@ -15,17 +15,17 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   it { is_expected.to have_type('courses') }
 
-  context 'when there is an accredited provider with enrichments' do
+  context 'when there is an accredited body with enrichments' do
     before do
       course.provider.update(accrediting_provider_enrichments: [{ Description: 'foo', UcasProviderCode: course.accrediting_provider.provider_code }])
     end
 
-    it { is_expected.to have_attribute(:about_accredited_provider).with_value(course.provider.accrediting_provider_enrichments.first.Description) }
+    it { is_expected.to have_attribute(:about_accredited_body).with_value(course.provider.accrediting_provider_enrichments.first.Description) }
   end
 
-  it { is_expected.to have_attribute(:about_accredited_provider).with_value(nil) }
+  it { is_expected.to have_attribute(:about_accredited_body).with_value(nil) }
   it { is_expected.to have_attribute(:about_course).with_value(course.latest_published_enrichment.about_course) }
-  it { is_expected.to have_attribute(:accredited_provider_code).with_value(course.accredited_provider_code) }
+  it { is_expected.to have_attribute(:accredited_body_code).with_value(course.accredited_provider_code) }
   it { is_expected.to have_attribute(:age_minimum).with_value(3) }
   it { is_expected.to have_attribute(:age_maximum).with_value(7) }
   it { is_expected.to have_attribute(:applications_open_from).with_value(course.applications_open_from.iso8601) }

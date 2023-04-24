@@ -18,15 +18,14 @@ module API
 
         type 'courses'
 
-        belongs_to :accredited_provider do
+        belongs_to :accredited_body do
           data { @object.accrediting_provider }
         end
 
         belongs_to :provider
         belongs_to :recruitment_cycle
 
-        attributes :accredited_provider_code,
-                   :age_maximum,
+        attributes :age_maximum,
                    :age_minimum,
                    :bursary_amount,
                    :bursary_requirements,
@@ -52,8 +51,12 @@ module API
                    :can_sponsor_student_visa,
                    :campaign_name
 
-        attribute :about_accredited_provider do
+        attribute :about_accredited_body do
           @object.accrediting_provider_description
+        end
+
+        attribute :accredited_body_code do
+          @object.accredited_provider_code
         end
 
         attribute :applications_open_from do

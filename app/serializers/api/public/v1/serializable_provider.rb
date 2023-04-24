@@ -23,7 +23,7 @@ module API
                    :can_sponsor_skilled_worker_visa,
                    :can_sponsor_student_visa
 
-        attribute :accredited_provider do
+        attribute :accredited_body do
           @object.accredited_provider?
         end
 

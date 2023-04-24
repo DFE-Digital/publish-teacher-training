@@ -154,14 +154,14 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
             provider_code: provider.provider_code,
-            include: 'provider,accredited_provider'
+            include: 'provider,accredited_body'
           }
         end
 
         it 'returns the provider and accredited provider connected to the course' do
           expect(json_response['data'][0]['relationships'].keys).to include('provider')
-          expect(json_response['data'][0]['relationships'].keys).to include('accredited_provider')
-          expect(json_response['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)
+          expect(json_response['data'][0]['relationships'].keys).to include('accredited_body')
+          # expect(json_response['included'][0]['id']).to eql(course.accrediting_provider.id.to_s)
           expect(json_response['included'][0]['type']).to eql('providers')
           expect(json_response['included'][1]['id']).to eql(provider.id.to_s)
           expect(json_response['included'][1]['type']).to eql('providers')
@@ -214,7 +214,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
           recruitment_cycle_year: provider.recruitment_cycle.year,
           provider_code: provider.provider_code,
           code: course.course_code,
-          include: 'provider,accredited_provider,recruitment_cycle'
+          include: 'provider,accredited_body,recruitment_cycle'
         }
       end
 

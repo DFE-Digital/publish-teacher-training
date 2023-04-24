@@ -155,7 +155,7 @@ RSpec.describe API::Public::V1::CoursesController do
           provider_id = relationships.dig('provider', 'data', 'id').to_i
 
           expect(json_response['data'][0]['relationships'].keys.sort).to eq(
-            %w[accredited_provider provider recruitment_cycle]
+            %w[accredited_body provider recruitment_cycle]
           )
 
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
@@ -236,7 +236,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
         context 'default fields' do
           let(:fields) do
-            %w[ accredited_provider_code
+            %w[ accredited_body_code
                 age_maximum
                 age_minimum
                 bursary_amount
@@ -259,7 +259,7 @@ RSpec.describe API::Public::V1::CoursesController do
                 accept_maths_gcse_equivalency
                 accept_science_gcse_equivalency
                 additional_gcse_equivalencies
-                about_accredited_provider
+                about_accredited_body
                 applications_open_from
                 changed_at
                 code
