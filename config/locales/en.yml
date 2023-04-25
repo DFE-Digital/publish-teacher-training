@@ -168,6 +168,9 @@ en:
             delete: "Are you sure you want to remove this user?"
           onboardings:
             new: "Organisation details"
+          onboarding:
+            contacts:
+              new: "Contact details"
         users:
           index: "Users"
           show: "User overview"
@@ -533,6 +536,22 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/provider_contact_form:
+          attributes:
+            email:
+              blank: "Enter an email address"
+            telephone:
+              blank: "Enter a telephone number"
+              invalid_phone_number: "Enter a real telephone number"
+            website:
+              blank: "Enter a website address"
+              url: "Enter a website address in the correct format, like https://www.example.com"
+            address1:
+              blank: "Enter address line 1"
+            town:
+              blank: "Enter a town or city"
+            postcode:
+              blank: "Enter a postcode"
         support/provider_form:
           attributes:
             provider_name:

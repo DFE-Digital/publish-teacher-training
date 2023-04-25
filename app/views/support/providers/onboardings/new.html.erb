@@ -1,33 +1,35 @@
-<%= render PageTitle.new(title: "support.providers.onboardings.new") %>
+<%= render PageTitle.new(title: "support.providers.onboardings.new", has_errors: @provider_form.errors.present?) %>
 
 <%= content_for(:breadcrumbs) do %>
-    <%= render GovukComponent::BackLinkComponent.new(
-      text: "Back",
-      href: support_recruitment_cycle_providers_path
-    ) %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: support_recruitment_cycle_providers_path
+  ) %>
 <% end %>
 
-<%= form_with model: @provider, url: support_recruitment_cycle_providers_onboarding_path, local: true do |f| %>
+<%= form_with model: @provider_form, url: support_recruitment_cycle_providers_onboarding_path, local: true do |f| %>
 
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Add organisation</span>
+        Organisation details
+      </h1>
+      <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
+      <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" }, width: 10 %>
 
-      <%= f.govuk_fieldset legend: { text: "Organisation details", size: "l", tag: "h1" }, caption: { text: "Add organisation", size: "l" } do %>
-        <%= f.govuk_text_field :provider_name, label: { text: "Provider name", size: "s" } %>
-        <%= f.govuk_text_field :provider_code, label: { text: "Provider code", size: "s" }, width: 10 %>
+      <%= f.govuk_text_field :ukprn, form_group: { class: "govuk-!-margin-bottom-2" }, label: { text: "UK provider reference number (UKPRN)", size: "s" }, width: 10 %>
+      <p class="govuk-body govuk-!-margin-bottom-5">
+        <%= t("links.ukprn_html") %>
+      </p>
 
-        <%= f.govuk_text_field :ukprn, form_group: { class: "govuk-!-margin-bottom-2" }, label: { text: "UK provider reference number (UKPRN)", size: "s" }, width: 10 %>
-        <p class="govuk-body govuk-!-margin-bottom-5">
-          <%= t("links.ukprn_html") %>
-        </p>
-
-        <%= f.govuk_radio_buttons_fieldset(:accredited_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" }) do %>
-          <%= f.govuk_radio_button :accredited_provider, :accredited_body, label: { text: "Yes" }, link_errors: true  do %>
-            <%= f.govuk_text_field :accredited_provider_id,
-                                  width: 10,
-                                  label: { text: "Accredited provider ID" },
-                                  autocomplete: :disabled %>
+      <%= f.govuk_radio_buttons_fieldset(:accredited_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" }) do %>
+        <%= f.govuk_radio_button :accredited_provider, :accredited_body, label: { text: "Yes" }, link_errors: true  do %>
+          <%= f.govuk_text_field :accredited_provider_id,
+                                width: 10,
+                                label: { text: "Accredited provider ID" },
+                                autocomplete: :disabled %>
 
           <% end %>
           <%= f.govuk_radio_button :accredited_provider, :not_an_accredited_body, label: { text: "No" }, link_errors: true %>
@@ -46,7 +48,6 @@
             </p>
           <% end %>
         <% end %>
-      <% end %>
 
       <%= f.govuk_submit %>
       <p class="govuk-body">
