@@ -274,7 +274,7 @@ en:
           cannot_find: I cannot find the school - enter manually
   search_result_title_component:
     add_school: *add_school
-    many_results_html: Showing the first 15 results. %{link} if the %{search_resource} you're looking for is not listed.
+    many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
   support:
     data_exports:
       index:

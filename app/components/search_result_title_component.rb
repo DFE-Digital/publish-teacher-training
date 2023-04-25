@@ -51,7 +51,7 @@ class SearchResultTitleComponent < ViewComponent::Base
   end
 
   def many_results_text
-    t('.many_results_html', link: govuk_link_to('Try narrowing down your search', return_path), search_resource:)
+    t('.many_results_html', results_limit:, link: govuk_link_to('Try narrowing down your search', return_path), search_resource:)
   end
 
   def change_your_search_link
