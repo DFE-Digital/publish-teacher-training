@@ -108,6 +108,10 @@ properties:
     type: string
     description: "Building or street line two."
     example: "1st floor, 86 Long Rd"
+  street_address_3:
+    type: string
+    description: "Building or street line three."
+    example: "Newington"
   train_with_disability:
     type: string
     format: markdown
