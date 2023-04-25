@@ -58,7 +58,7 @@ describe Course do
 
     it do
       expect(subject).to belong_to(:accrediting_provider)
-        .with_foreign_key(:accredited_body_code)
+        .with_foreign_key(:accredited_provider_code)
         .with_primary_key(:provider_code)
         .optional
     end
@@ -383,8 +383,8 @@ describe Course do
       end
     end
 
-    describe 'accredited_body_order' do
-      subject { described_class.accredited_body_order(provider.provider_name) }
+    describe 'accredited_provider_order' do
+      subject { described_class.accredited_provider_order(provider.provider_name) }
 
       let(:provider) { create(:provider) }
       let(:delivered_course) { create(:course, provider:) }
@@ -1229,7 +1229,7 @@ describe Course do
       let(:course) { create(:course, provider:) }
       let(:provider_name) { 'ACME' }
       let(:accredited_provider_name) { 'University of Awesome' }
-      let(:accredited_provider) { build(:provider, :accredited_body, provider_name: accredited_provider_name) }
+      let(:accredited_provider) { build(:provider, :accredited_provider, provider_name: accredited_provider_name) }
       let(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
       before do
@@ -1259,15 +1259,15 @@ describe Course do
     end
 
     describe '.with_accredited_bodies' do
-      context 'course with an accredited body' do
+      context 'course with an accredited provider' do
         subject { described_class.with_accredited_bodies(accredited_provider.provider_code) }
 
         let!(:provider) { create(:provider) }
         let!(:course) { create(:course, provider:) }
-        let!(:accredited_provider) { create(:provider, :accredited_body) }
+        let!(:accredited_provider) { create(:provider, :accredited_provider) }
         let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
-        it 'returns courses for which the provider is the accredited body' do
+        it 'returns courses for which the provider is the accredited provider' do
           expect(subject).to contain_exactly(accredited_course)
         end
       end
@@ -2490,7 +2490,7 @@ describe Course do
     subject { create(:course, provider:) }
 
     context 'when self accredited' do
-      let(:provider) { build(:provider, :accredited_body) }
+      let(:provider) { build(:provider, :accredited_provider) }
 
       its(:self_accredited?) { is_expected.to be_truthy }
     end

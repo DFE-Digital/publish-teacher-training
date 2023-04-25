@@ -24,7 +24,7 @@ module API
                    :can_sponsor_student_visa
 
         attribute :accredited_body do
-          @object.accredited_body?
+          @object.accredited_provider?
         end
 
         attribute :changed_at do

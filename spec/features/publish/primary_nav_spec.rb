@@ -13,8 +13,8 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
     and_i_should_not_see_the_training_partners_link
   end
 
-  scenario 'view page as Susy - user with accredited body' do
-    given_i_am_authenticated_as_an_accredited_body_user
+  scenario 'view page as Susy - user with accredited provider' do
+    given_i_am_authenticated_as_an_accredited_provider_user
     when_i_visit_the_courses_index_page
     then_i_should_see_the_organisation_details_link
     and_i_should_see_the_schools_link
@@ -27,8 +27,8 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  def given_i_am_authenticated_as_an_accredited_body_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
+  def given_i_am_authenticated_as_an_accredited_provider_user
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_provider)]))
   end
 
   def when_i_visit_the_courses_index_page

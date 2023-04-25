@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_20_162940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -90,7 +90,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
     t.datetime "created_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.datetime "changed_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
-    t.text "accredited_body_code"
+    t.text "accredited_provider_code"
     t.datetime "discarded_at", precision: nil
     t.string "age_range_in_years"
     t.date "applications_open_from"
@@ -110,7 +110,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_112219) do
     t.boolean "can_sponsor_student_visa", default: false
     t.integer "master_subject_id"
     t.integer "campaign_name"
-    t.index ["accredited_body_code"], name: "index_course_on_accredited_body_code"
+    t.index ["accredited_provider_code"], name: "index_course_on_accredited_provider_code"
     t.index ["campaign_name"], name: "index_course_on_campaign_name"
     t.index ["can_sponsor_skilled_worker_visa"], name: "index_course_on_can_sponsor_skilled_worker_visa"
     t.index ["can_sponsor_student_visa"], name: "index_course_on_can_sponsor_student_visa"

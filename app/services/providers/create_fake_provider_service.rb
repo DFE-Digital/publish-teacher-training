@@ -13,27 +13,27 @@ module Providers
       ukprn: '12345678'
     }.freeze
 
-    def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_body:)
+    def initialize(recruitment_cycle:, provider_name:, provider_code:, provider_type:, is_accredited_provider:)
       raise 'Can only be run in sandbox or development' unless Rails.env.sandbox? || Rails.env.development? || Rails.env.test?
 
       @recruitment_cycle = recruitment_cycle
       @provider_name = provider_name
       @provider_code = provider_code
       @provider_type = provider_type
-      @is_accredited_body = is_accredited_body
+      @is_accredited_provider = is_accredited_provider
 
       @errors = []
     end
 
     def execute
       return false if provider_already_exists?
-      return false if attempting_to_make_lead_school_accredited_body?
+      return false if attempting_to_make_lead_school_accredited_provider?
 
       provider = @recruitment_cycle.providers.build({
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
-        accrediting_provider: @is_accredited_body ? 'accredited_body' : 'not_an_accredited_body'
+        accrediting_provider: @is_accredited_provider ? 'accredited_provider' : 'not_an_accredited_provider'
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 
       organisation = Organisation.new(name: @provider_name)
@@ -65,8 +65,8 @@ module Providers
       end
     end
 
-    def attempting_to_make_lead_school_accredited_body?
-      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited body." if @provider_type == 'lead_school' && @is_accredited_body
+    def attempting_to_make_lead_school_accredited_provider?
+      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited provider." if @provider_type == 'lead_school' && @is_accredited_provider
     end
   end
 end

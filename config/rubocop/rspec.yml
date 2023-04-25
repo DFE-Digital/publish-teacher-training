@@ -93,7 +93,7 @@ RSpec/NestedGroups:
     - 'spec/models/recruitment_cycle_spec.rb'
     - 'spec/models/provider_spec.rb'
     - 'spec/models/provider/validation_spec.rb'
-    - 'spec/models/provider/accredited_bodies_spec.rb'
+    - 'spec/models/provider/accredited_providers_spec.rb'
     - 'spec/models/course_spec.rb'
     - 'spec/models/course_enrichment_spec.rb'
     - 'spec/models/course/update_valid_spec.rb'

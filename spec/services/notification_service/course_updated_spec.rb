@@ -7,19 +7,19 @@ module NotificationService
     let(:subscribed_user1) { create(:user) }
     let(:subscribed_user2) { create(:user) }
     let(:non_subscribed_user) { create(:user) }
-    let(:accredited_body) { create(:provider, :accredited_body) }
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
 
     let(:user_notifications) do
-      create(:user_notification, user: subscribed_user1, provider: accredited_body, course_update: true)
-      create(:user_notification, user: subscribed_user2, provider: accredited_body, course_update: true)
-      create(:user_notification, user: non_subscribed_user, provider: accredited_body, course_update: false)
+      create(:user_notification, user: subscribed_user1, provider: accredited_provider, course_update: true)
+      create(:user_notification, user: subscribed_user2, provider: accredited_provider, course_update: true)
+      create(:user_notification, user: non_subscribed_user, provider: accredited_provider, course_update: false)
     end
 
     let(:course) do
       create(
         :course,
         age_range_in_years: '3_to_7',
-        accrediting_provider: accredited_body,
+        accrediting_provider: accredited_provider,
         english: 'expect_to_achieve_before_training_begins',
         maths: 'expect_to_achieve_before_training_begins'
       )
@@ -48,7 +48,7 @@ module NotificationService
 
     context 'with a course that is not in the current cycle' do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
+      let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code, provider:) }
 
       before { setup_notifications }
 

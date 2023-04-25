@@ -72,7 +72,7 @@ describe CoursePolicy do
     context 'when non admin user' do
       it 'returns new course attributes' do
         expected_attributes = %i[
-          accredited_body_code
+          accredited_provider_code
           age_range_in_years
           applications_open_from
           funding_type
@@ -95,17 +95,17 @@ describe CoursePolicy do
   describe CoursePolicy::Scope do
     subject { described_class.new(user, Course).resolve }
 
-    let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
+    let(:accredited_provider) { create(:provider, :accredited_provider, users: [user]) }
     let(:training_provider) { create(:provider) }
-    let!(:course) { create(:course, provider: training_provider, accrediting_provider: accredited_body) }
+    let!(:course) { create(:course, provider: training_provider, accrediting_provider: accredited_provider) }
     let!(:other_course) { create(:course) }
 
-    context 'user from the accredited_body' do
+    context 'user from the accredited_provider' do
       it { is_expected.to contain_exactly(course) }
     end
 
-    context 'user not from the accredited body' do
-      let(:accredited_body) { create(:provider, :accredited_body) }
+    context 'user not from the accredited provider' do
+      let(:accredited_provider) { create(:provider, :accredited_provider) }
 
       it { is_expected.to be_empty }
     end

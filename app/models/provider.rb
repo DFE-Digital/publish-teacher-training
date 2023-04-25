@@ -12,7 +12,7 @@ class Provider < ApplicationRecord
 
   CHANGES_INTRODUCED_IN_2022_CYCLE = 2022
 
-  before_save :update_searchable, if: :accredited_body?
+  before_save :update_searchable, if: :accredited_provider?
   before_create :set_defaults
 
   has_associated_audits
@@ -23,8 +23,8 @@ class Provider < ApplicationRecord
   # Once the underlying the data discreptives has been amended.
   # Validation can be added to enforce compliance.
   # The `scitt` & `university` provider types can be used to denote
-  # that they are an `accredited_body` for accrediting providers
-  # therefore `lead_school` is a `not_an_accredited_body`.
+  # that they are an `accredited_provider` for accrediting providers
+  # therefore `lead_school` is a `not_an_accredited_provider`.
   enum provider_type: {
     scitt: 'B',
     lead_school: 'Y',
@@ -32,8 +32,8 @@ class Provider < ApplicationRecord
   }
 
   enum accrediting_provider: {
-    accredited_body: 'Y',
-    not_an_accredited_body: 'N'
+    accredited_provider: 'Y',
+    not_an_accredited_provider: 'N'
   }
 
   belongs_to :recruitment_cycle
@@ -58,7 +58,7 @@ class Provider < ApplicationRecord
   has_many :accredited_courses, # use current_accredited_courses to filter to courses in the same cycle as this provider
            -> { where(discarded_at: nil) },
            class_name: 'Course',
-           foreign_key: :accredited_body_code,
+           foreign_key: :accredited_provider_code,
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
@@ -113,7 +113,7 @@ class Provider < ApplicationRecord
 
   scope :with_findable_courses, lambda {
     where(id: Course.findable.select(:provider_id))
-      .or(where(provider_code: Course.findable.select(:accredited_body_code)))
+      .or(where(provider_code: Course.findable.select(:accredited_provider_code)))
   }
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
@@ -260,7 +260,7 @@ class Provider < ApplicationRecord
           SELECT b.provider_id, COUNT(*) courses_count
           FROM course b
           WHERE b.discarded_at IS NULL
-          AND b.accredited_body_code = #{ActiveRecord::Base.connection.quote(provider_code)}
+          AND b.accredited_provider_code = #{ActiveRecord::Base.connection.quote(provider_code)}
           GROUP BY b.provider_id
         ) a ON a.provider_id = provider.id
       EOSQL
@@ -290,9 +290,9 @@ class Provider < ApplicationRecord
   def provider_type=(new_value)
     super
     self.accrediting_provider = if scitt? || university?
-                                  :accredited_body
+                                  :accredited_provider
                                 else
-                                  :not_an_accredited_body
+                                  :not_an_accredited_provider
                                 end
   end
 

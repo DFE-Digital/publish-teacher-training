@@ -30,7 +30,7 @@ describe Provider do
     context 'with no accrediting provider (via courses)' do
       it { is_expected.to be_empty }
 
-      context 'with an old accredited body enrichment' do
+      context 'with an old accredited provider enrichment' do
         let(:accrediting_provider_enrichments) do
           [{
             'Description' => description,
@@ -49,7 +49,7 @@ describe Provider do
 
       its(:length) { is_expected.to be(1) }
 
-      describe 'the returned accredited body' do
+      describe 'the returned accredited provider' do
         subject { provider.accredited_bodies.first }
 
         its([:description]) { is_expected.to eq('') }
@@ -57,7 +57,7 @@ describe Provider do
         its([:provider_name]) { is_expected.to eq(accrediting_provider.provider_name) }
       end
 
-      context 'with an accredited body enrichment' do
+      context 'with an accredited provider enrichment' do
         let(:accrediting_provider_enrichments) do
           [{
             'Description' => description,
@@ -67,7 +67,7 @@ describe Provider do
 
         its(:length) { is_expected.to be(1) }
 
-        describe 'the returned accredited body' do
+        describe 'the returned accredited provider' do
           subject { provider.accredited_bodies.first }
 
           its([:description]) { is_expected.to eq(description) }
@@ -76,7 +76,7 @@ describe Provider do
         end
       end
 
-      context 'with a corrupt accredited body enrichment' do
+      context 'with a corrupt accredited provider enrichment' do
         let(:accrediting_provider_enrichments) do
           [{
             'Description' => description
@@ -86,7 +86,7 @@ describe Provider do
 
         its(:length) { is_expected.to be(1) }
 
-        describe 'the returned accredited body' do
+        describe 'the returned accredited provider' do
           subject { provider.accredited_bodies.first }
 
           its([:description]) { is_expected.to eq('') }

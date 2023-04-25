@@ -36,7 +36,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
       user: create(
         :user,
         providers: [
-          create(:provider, :accredited_body, sites: [build(:site), build(:site)])
+          create(:provider, :accredited_provider, sites: [build(:site), build(:site)])
         ]
       )
     )

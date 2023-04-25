@@ -29,7 +29,7 @@ FactoryBot.define do
     end
 
     trait :with_accredited_provider do
-      providers { [create(:provider, :accredited_body)] }
+      providers { [create(:provider, :accredited_provider)] }
     end
 
     trait :inactive do

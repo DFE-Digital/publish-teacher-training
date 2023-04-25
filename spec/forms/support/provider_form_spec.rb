@@ -52,7 +52,7 @@ module Support
 
       context 'accredited_provider is set to accredited_body' do
         let(:params) do
-          { accredited_provider: :accredited_body }
+          { accredited_provider: :accredited_provider }
         end
 
         include_examples 'blank validation', :accredited_provider_id, 'Enter an accredited provider ID'
@@ -107,7 +107,7 @@ module Support
         let(:params) do
           {
             provider_type: :lead_school,
-            accredited_provider: :accredited_body
+            accredited_provider: :accredited_provider
           }
         end
 
@@ -123,7 +123,7 @@ module Support
           let(:params) do
             {
               provider_type:,
-              accredited_provider: :accredited_body,
+              accredited_provider: :accredited_provider,
               accredited_provider_id:
             }
           end

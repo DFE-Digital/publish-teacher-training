@@ -193,8 +193,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
       when :applications_open
         new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
-      when :accredited_body
-        new_publish_provider_recruitment_cycle_courses_accredited_body_path(path_params)
+      when :accredited_provider
+        new_publish_provider_recruitment_cycle_courses_accredited_provider_path(path_params)
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa

@@ -19,7 +19,7 @@ module PageObjects
       section :funding, Sections::SummaryList, '[data-qa="course__funding"]'
       section :study_mode, Sections::SummaryList, '[data-qa="course__study_mode"]'
       section :schools, Sections::SummaryList, '[data-qa="course__schools"]'
-      section :accredited_body, Sections::SummaryList, '[data-qa="course__accredited_body"]'
+      section :accredited_provider, Sections::SummaryList, '[data-qa="course__accredited_provider"]'
       section :applications_open, Sections::SummaryList, '[data-qa="course__applications_open"]'
       section :start_date, Sections::SummaryList, '[data-qa="course__start_date"]'
       section :contact_support_link, Sections::SummaryList, '[data-qa="course__contact_support_link"]'

@@ -11,7 +11,7 @@ properties:
     type: boolean
     example: true
   is_accredited_body:
-    description: "Only return providers that are accredited bodies."
+    description: "Only return providers that are accredited providers."
     type: boolean
     example: true
   provider_name:

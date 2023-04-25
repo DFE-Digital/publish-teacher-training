@@ -28,7 +28,7 @@ class ProviderReportingService
           open: @open_providers.count,
           closed: @closed_providers.count
         },
-        accredited_body: { **group_by_count(:accrediting_provider) },
+        accredited_provider: { **group_by_count(:accrediting_provider) },
         provider_type: { **group_by_count(:provider_type) },
         region_code: { **group_by_count(:region_code) }
       }

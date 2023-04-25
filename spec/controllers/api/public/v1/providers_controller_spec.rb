@@ -465,7 +465,7 @@ RSpec.describe API::Public::V1::ProvidersController do
             'train_with_disability' => provider.train_with_disability,
             'train_with_us' => provider.train_with_us,
             'website' => provider.website,
-            'accredited_body' => provider.accredited_body?,
+            'accredited_body' => provider.accredited_provider?,
             'changed_at' => provider.changed_at.iso8601,
             'city' => provider.address3,
             'county' => provider.address4,

@@ -54,12 +54,12 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
   def then_i_can_edit_info_about_our_accredited_bodies
     click_link "Change details about #{@accrediting_provider.provider_name}"
 
-    publish_provider_details_edit_page.accredited_body_description_field.set 'Updated: accredited body description'
+    publish_provider_details_edit_page.accredited_provider_description_field.set 'Updated: accredited provider description'
     publish_provider_details_edit_page.save_and_publish.click
 
     expect(page).to have_content 'Your changes have been published'
     within_summary_row @accrediting_provider.provider_name do
-      expect(page).to have_content 'Updated: accredited body description'
+      expect(page).to have_content 'Updated: accredited provider description'
     end
   end
 

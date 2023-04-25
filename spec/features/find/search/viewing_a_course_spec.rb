@@ -152,7 +152,7 @@ feature 'Viewing a findable course' do
       provider.provider_name
     )
 
-    expect(find_course_show_page.accredited_body).to have_content(
+    expect(find_course_show_page.accredited_provider).to have_content(
       accrediting_provider.provider_name
     )
 
@@ -263,8 +263,8 @@ feature 'Viewing a findable course' do
       provider.train_with_us
     )
 
-    expect(find_course_show_page.about_accrediting_body).to have_content(
-      @course.decorate.about_accrediting_body
+    expect(find_course_show_page.about_accrediting_provider).to have_content(
+      @course.decorate.about_accrediting_provider
     )
 
     expect(find_course_show_page.train_with_disability).to have_content(
@@ -341,7 +341,7 @@ feature 'Viewing a findable course' do
       :scitt,
       provider_name: 'Provider 1',
       accrediting_provider_enrichments: [{
-        'Description' => 'Something great about the accredited body',
+        'Description' => 'Something great about the accredited provider',
         'UcasProviderCode' => accrediting_provider.provider_code
       }]
     )
@@ -350,7 +350,7 @@ feature 'Viewing a findable course' do
   def accrediting_provider
     @accrediting_provider ||= create(
       :provider,
-      :accredited_body,
+      :accredited_provider,
       provider_name: 'Accrediting Provider 1'
     )
   end

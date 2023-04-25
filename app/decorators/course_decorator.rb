@@ -362,7 +362,7 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:course_length)
   end
 
-  def about_accrediting_body
+  def about_accrediting_provider
     object.accrediting_provider_description
   end
 

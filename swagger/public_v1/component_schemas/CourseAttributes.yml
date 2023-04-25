@@ -10,7 +10,7 @@ properties:
     type: string
     nullable: true
     format: markdown
-    description: Description of the accredited body for this course.
+    description: Description of the accredited provider for this course.
     example: >-
       UCL Institute of Education is the world’s leading centre for
       research and teaching in education and related social sciences.
@@ -25,10 +25,10 @@ properties:
       assignments, and the Professional Practice module, which is
       assessed by the observation of practical teaching in placement
       schools.
-  accredited_body_code:
+  accredited_provider_code:
     type: string
     description: >-
-      Unique provider-code for the accredited body of this course. Only
+      Unique provider-code for the accredited provider of this course. Only
       present if the provider delivering the course is not the accredited
       body.
     maxLength: 3

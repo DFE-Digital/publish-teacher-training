@@ -44,7 +44,7 @@
 
     <%= render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @provider.train_with_us.present? || @course.about_accrediting_body.present? %>
+    <% if @provider.train_with_us.present? || @course.about_accrediting_provider.present? %>
       <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
     <% end %>
 

@@ -5,11 +5,11 @@ require 'rails_helper'
 feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    when_i_visit_the_new_accredited_bodies_page
+    when_i_visit_the_new_accredited_providers_page
   end
 
   scenario 'selecting multiple accredited_bodies' do
-    when_i_select_an_accredited_body
+    when_i_select_an_accredited_provider
     and_i_click_continue
     then_i_am_met_with_the_applications_open_page
   end
@@ -24,21 +24,21 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
     course = create(:course, :with_accrediting_provider)
-    @accredited_body_code = course.accredited_body_code
+    @accredited_provider_code = course.accredited_provider_code
     @user.providers.first.courses << course
     given_i_am_authenticated(user: @user)
   end
 
-  def when_i_visit_the_new_accredited_bodies_page
-    publish_courses_new_accredited_body_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_body_params)
+  def when_i_visit_the_new_accredited_providers_page
+    publish_courses_new_accredited_provider_page.load(provider_code: provider.provider_code, recruitment_cycle_year: Settings.current_recruitment_cycle_year, query: accredited_provider_params)
   end
 
-  def when_i_select_an_accredited_body
-    publish_courses_new_accredited_body_page.find("#course_accredited_body_code_#{@accredited_body_code.downcase}").click
+  def when_i_select_an_accredited_provider
+    publish_courses_new_accredited_provider_page.find("#course_accredited_provider_code_#{@accredited_provider_code.downcase}").click
   end
 
   def and_i_click_continue
-    publish_courses_new_accredited_body_page.continue.click
+    publish_courses_new_accredited_provider_page.continue.click
   end
 
   def provider
@@ -52,6 +52,6 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('Select an accredited body')
+    expect(page).to have_content('Select an accredited provider')
   end
 end

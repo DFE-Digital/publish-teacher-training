@@ -33,7 +33,7 @@ describe Provider do
   context 'callbacks' do
     context 'provider is accredited' do
       it 'updates the tsvector column with relevant info when the provider is accredited and updated' do
-        provider = create(:provider, :accredited_body)
+        provider = create(:provider, :accredited_provider)
 
         expect do
           provider.update(ukprn: '12345678', provider_name: "St Leo's and Southmead/Provider", postcode: 'sw1a 1aa')
@@ -287,19 +287,19 @@ describe Provider do
     it "sets 'accrediting_provider' correctly for SCITTs" do
       expect { subject.provider_type = 'scitt' }
         .to change(subject, :accrediting_provider)
-        .from(nil).to('accredited_body')
+        .from(nil).to('accredited_provider')
     end
 
     it "sets 'accrediting_provider' correctly for universities" do
       expect { subject.provider_type = 'university' }
         .to change(subject, :accrediting_provider)
-        .from(nil).to('accredited_body')
+        .from(nil).to('accredited_provider')
     end
 
     it "sets 'accrediting_provider' correctly for universities" do
       expect { subject.provider_type = 'lead_school' }
         .to change(subject, :accrediting_provider)
-        .from(nil).to('not_an_accredited_body')
+        .from(nil).to('not_an_accredited_provider')
     end
   end
 
@@ -309,7 +309,7 @@ describe Provider do
     expect(subject)
       .to define_enum_for('accrediting_provider')
       .backed_by_column_of_type(:text)
-      .with_values('accredited_body' => 'Y', 'not_an_accredited_body' => 'N')
+      .with_values('accredited_provider' => 'Y', 'not_an_accredited_provider' => 'N')
   end
 
   describe 'courses' do
@@ -379,7 +379,7 @@ describe Provider do
   describe 'training_providers' do
     subject { accredited_provider.training_providers }
 
-    let(:accredited_provider) { create(:provider, :accredited_body) }
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
     let(:training_provider1) { create(:provider) }
     let(:training_provider2) { create(:provider) }
 
@@ -511,7 +511,7 @@ describe Provider do
   describe '#accredited_courses' do
     subject { provider.accredited_courses }
 
-    let(:provider) { create(:provider, :accredited_body) }
+    let(:provider) { create(:provider, :accredited_provider) }
     let!(:findable_course) do
       create(:course, name: 'findable-course',
                       accrediting_provider: provider,
@@ -580,7 +580,7 @@ describe Provider do
                                            findable_course_with_accrediting_provider.accrediting_provider)
       end
 
-      context 'when the provider is the accredited body for a course' do
+      context 'when the provider is the accredited provider for a course' do
         before do
           findable_course_with_accrediting_provider
           non_findable_course_with_accrediting_provider

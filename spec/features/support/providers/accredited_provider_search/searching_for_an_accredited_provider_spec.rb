@@ -32,9 +32,9 @@ feature 'Searching for an accredited provider' do
   end
 
   def and_there_are_accredited_providers_in_the_database
-    @accredited_provider = create(:provider, :accredited_body, provider_name: 'UCL')
-    @accredited_provider_two = create(:provider, :accredited_body, provider_name: 'Accredited provider two')
-    @accredited_provider_three = create(:provider, :accredited_body, provider_name: 'Accredited provider three')
+    @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL')
+    @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
+    @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')
   end
 
   def when_i_visit_the_accredited_provider_search_page

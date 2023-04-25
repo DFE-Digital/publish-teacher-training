@@ -21,7 +21,7 @@ class HeaderPreview < ViewComponent::Preview
 
   def mock_user
     # rubocop:disable Style/OpenStructUse
-    OpenStruct.new(admin?: false, associated_with_accredited_body?: true)
+    OpenStruct.new(admin?: false, associated_with_accredited_provider?: true)
     # rubocop:enable Style/OpenStructUse
   end
 end
