@@ -300,6 +300,10 @@ class Provider < ApplicationRecord
     "#{provider_name} (#{provider_code}) [#{recruitment_cycle}]"
   end
 
+  def name_and_code
+    "#{provider_name} (#{provider_code})"
+  end
+
   def accredited_bodies
     accrediting_providers.map do |ap|
       accrediting_provider_enrichment = accrediting_provider_enrichment(ap.provider_code)
