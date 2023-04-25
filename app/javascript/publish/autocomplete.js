@@ -1,35 +1,6 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
-
-export const getPath = (endpoint, query) => {
-  return `${endpoint}?query=${query}`
-}
-
-export const request = endpoint => {
-  let xhr = null // Hoist this call so that we can abort previous requests.
-
-  return (query, callback) => {
-    if (xhr && xhr.readyState !== XMLHttpRequest.DONE) {
-      xhr.abort()
-    }
-    const path = getPath(endpoint, query)
-
-    xhr = new XMLHttpRequest()
-    xhr.addEventListener('load', evt => {
-      let results = []
-      try {
-        results = JSON.parse(xhr.responseText)
-      } catch (err) {
-        console.error(
-          `Failed to parse results from endpoint ${path}, error is:`,
-          err
-        )
-      }
-      callback(results)
-    })
-    xhr.open('GET', path)
-    xhr.send()
-  }
-}
+import debounce from 'lodash.debounce'
+import { request } from '../utils/request_helper'
 
 export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) => {
   const path = options.path
@@ -42,12 +13,12 @@ export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) 
     name: $input.name,
     defaultValue: $input.value,
     minLength: 3,
-    source: request(path),
+    source: debounce(request(path), 900),
     templates: {
       inputValue: inputValueTemplate,
       suggestion: suggestionTemplate
     },
-    onConfirm: option => ($input.value = option ? option.code : ''),
+    onConfirm: (option) => ($input.value = option ? option.code : ''),
     confirmOnBlur: false,
     autoselect: true
   })
