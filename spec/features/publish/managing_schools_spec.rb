@@ -12,7 +12,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   describe 'add school' do
     scenario 'with valid details' do
       when_i_click_add_a_school
-      and_click_to_enter_a_school_manually
+      and_i_click_the_link_to_enter_a_school_manually
       and_i_set_valid_new_details
       and_i_am_on_the_schools_check_page
       and_i_click_add_school
@@ -22,7 +22,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
 
     scenario 'with invalid details' do
       when_i_click_add_a_school
-      and_click_to_enter_a_school_manually
+      and_i_click_the_link_to_enter_a_school_manually
       and_i_set_invalid_new_details
       then_i_see_an_error_message
       and_the_school_is_not_added
@@ -108,7 +108,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
     publish_school_new_page.submit.click
   end
 
-  def and_click_to_enter_a_school_manually
+  def and_i_click_the_link_to_enter_a_school_manually
     click_link 'I cannot find the school - enter manually'
   end
 
