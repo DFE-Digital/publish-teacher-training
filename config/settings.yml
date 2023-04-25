@@ -108,7 +108,7 @@ features:
   user_management: true
   add_multiple_schools: true
   course_preview_missing_information: true
-  gias_search: false
+  gias_search: true
   support_new_provider_creation_flow: false
 
 cookies:
