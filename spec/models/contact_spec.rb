@@ -42,7 +42,7 @@ describe Contact do
         contact.telephone = ''
         contact.valid?
 
-        expect(contact.errors[:telephone]).to include('^Enter a valid telephone number')
+        expect(contact.errors[:telephone]).to include('Enter your telephone number')
       end
 
       it 'Correctly validates valid phone numbers' do
@@ -53,7 +53,19 @@ describe Contact do
       it 'Correctly invalidates invalid phone numbers' do
         contact.telephone = '123foo456'
         expect(contact.valid?).to be false
-        expect(contact.errors[:telephone]).to include('^Enter a valid telephone number')
+        expect(contact.errors[:telephone]).to include('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192')
+      end
+
+      it 'Correctly invalidates short phone numbers' do
+        contact.telephone = '1234567'
+        expect(contact.valid?).to be false
+        expect(contact.errors[:telephone]).to include('Telephone number must contain 8 numbers or more')
+      end
+
+      it 'Correctly invalidates long phone numbers' do
+        contact.telephone = '123456791123456789'
+        expect(contact.valid?).to be false
+        expect(contact.errors[:telephone]).to include('Telephone number must contain 15 numbers or fewer')
       end
     end
 

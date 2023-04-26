@@ -44,7 +44,7 @@ describe Provider do
           provider.telephone = ''
           provider.valid? :update
 
-          expect(provider.errors[:telephone]).to include('Enter a valid telephone number')
+          expect(provider.errors[:telephone]).to include('Enter your telephone number')
         end
 
         it 'Correctly validates valid phone numbers' do
@@ -55,7 +55,19 @@ describe Provider do
         it 'Correctly invalidates invalid phone numbers' do
           provider.telephone = '123cat456'
           expect(provider.valid?(:update)).to be false
-          expect(provider.errors[:telephone]).to include('Enter a valid telephone number')
+          expect(provider.errors[:telephone]).to include('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192')
+        end
+
+        it 'Correctly invalidates short phone numbers' do
+          provider.telephone = '1234567'
+          expect(provider.valid?(:update)).to be false
+          expect(provider.errors[:telephone]).to include('Telephone number must contain 8 numbers or more')
+        end
+
+        it 'Correctly invalidates long phone numbers' do
+          provider.telephone = '123456791123456789'
+          expect(provider.valid?(:update)).to be false
+          expect(provider.errors[:telephone]).to include('Telephone number must contain 15 numbers or fewer')
         end
 
         it 'Does not validate the telephone if it is not present' do

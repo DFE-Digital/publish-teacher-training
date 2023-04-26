@@ -12,7 +12,7 @@ module Publish
     delegate :recruitment_cycle_year, :provider_code, :provider_name, :lead_school?, to: :provider
 
     validates :email, email_address: { message: 'Enter an email address in the correct format, like name@example.com' }
-    validates :telephone, phone: { message: 'Enter a valid telephone number' }
+    validates :telephone, phone: true
     validates :website, presence: true, url: { message: 'Enter a website address in the correct format, like https://www.example.com' }
     validates :urn, reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }, if: :lead_school?
     validates :ukprn, ukprn_format: { allow_blank: false }
