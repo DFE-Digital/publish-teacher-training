@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   before do
-    and_i_am_authenticated_as_accredited_body_provider_user
+    and_i_am_authenticated_as_accredited_provider_provider_user
   end
 
   context 'apprenticeship to non apprenticeship course' do
@@ -51,8 +51,8 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/apprenticeship")
   end
 
-  def and_i_am_authenticated_as_accredited_body_provider_user
-    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_body)]))
+  def and_i_am_authenticated_as_accredited_provider_provider_user
+    given_i_am_authenticated(user: create(:user, providers: [create(:provider, :accredited_provider)]))
   end
 
   def given_there_is_fee_course

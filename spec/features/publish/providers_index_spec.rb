@@ -99,10 +99,10 @@ feature 'Providers index' do
 
   def and_i_am_authenticated_as_a_multi_provider_user
     current_recruitment_cycle = find_or_create(:recruitment_cycle)
-    accredited_body = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle, provider_name: 'Bat School')
-    accredited_body1 = create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle)
-    organisation = create(:organisation, providers: [accredited_body, accredited_body1])
-    given_i_am_authenticated(user: create(:user, providers: [accredited_body, accredited_body1], organisations: [organisation]))
+    accredited_provider = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle, provider_name: 'Bat School')
+    accredited_provider1 = create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle)
+    organisation = create(:organisation, providers: [accredited_provider, accredited_provider1])
+    given_i_am_authenticated(user: create(:user, providers: [accredited_provider, accredited_provider1], organisations: [organisation]))
   end
 
   def and_i_am_authenticated_as_an_admin_user

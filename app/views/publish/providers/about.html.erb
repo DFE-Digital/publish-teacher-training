@@ -48,22 +48,22 @@
         rows: 15) %>
 
       <% if @about_form.accredited_bodies.present? %>
-        <% accredited_body = "accredited body".pluralize(@about_form.accredited_bodies.count) %>
+        <% accredited_provider = "accredited provider".pluralize(@about_form.accredited_bodies.count) %>
 
         <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-        <h2 class="govuk-heading-m">About your <%= accredited_body %></h2>
+        <h2 class="govuk-heading-m">About your <%= accredited_provider %></h2>
 
-        <p class="govuk-body">Tell candidates about your <%= accredited_body %> – you could mention their academic specialities and achievements.</p>
+        <p class="govuk-body">Tell candidates about your <%= accredited_provider %> – you could mention their academic specialities and achievements.</p>
         <p class="govuk-body">Be specific with the claims you make, and support them with evidence.</p>
 
-        <% @about_form.accredited_bodies.each do |accredited_body| %>
-          <%= f.fields_for :accredited_bodies, accredited_body, index: nil do |abf| %>
+        <% @about_form.accredited_bodies.each do |accredited_provider| %>
+          <%= f.fields_for :accredited_bodies, accredited_provider, index: nil do |abf| %>
             <%= abf.hidden_field :provider_name %>
             <%= abf.hidden_field :provider_code %>
             <%= abf.govuk_text_area(:description,
-              form_group: { id: "accrediting-provider-#{accredited_body.provider_code}" },
-              label: { text: "#{accredited_body.provider_name} (optional)", size: "s" },
+              form_group: { id: "accrediting-provider-#{accredited_provider.provider_code}" },
+              label: { text: "#{accredited_provider.provider_name} (optional)", size: "s" },
               max_words: 100,
               rows: 10) %>
           <% end %>

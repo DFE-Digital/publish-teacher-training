@@ -81,7 +81,7 @@ class Course < ApplicationRecord
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
              class_name: 'Provider',
-             foreign_key: :accredited_body_code,
+             foreign_key: :accredited_provider_code,
              primary_key: :provider_code,
              inverse_of: :accredited_courses,
              optional: true
@@ -182,7 +182,7 @@ class Course < ApplicationRecord
 
   scope :descending_course_canonical_order, -> { order(name: :desc).joins(:provider).merge(Provider.by_name_ascending).order(course_code: :asc) }
 
-  scope :accredited_body_order, lambda { |provider_name|
+  scope :accredited_provider_order, lambda { |provider_name|
     joins(:provider).merge(Provider.by_provider_name(provider_name))
   }
 
@@ -236,8 +236,8 @@ class Course < ApplicationRecord
     where(qualification: qualifications)
   }
 
-  scope :with_accredited_bodies, lambda { |accredited_body_codes|
-    where(accredited_body_code: accredited_body_codes)
+  scope :with_accredited_bodies, lambda { |accredited_provider_codes|
+    where(accredited_provider_code: accredited_provider_codes)
   }
 
   scope :with_provider_name, lambda { |provider_name|
@@ -245,7 +245,7 @@ class Course < ApplicationRecord
       provider_id: Provider.where(provider_name:)
     ).or(
       where(
-        accredited_body_code: Provider.where(provider_name:)
+        accredited_provider_code: Provider.where(provider_name:)
                                        .select(:provider_code)
       )
     )
@@ -324,7 +324,7 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
-  validate :accredited_body_exists_in_current_cycle, on: :publish, unless: -> { self_accredited? }
+  validate :accredited_provider_exists_in_current_cycle, on: :publish, unless: -> { self_accredited? }
   validates_with UniqueCourseValidator, on: :new
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
@@ -608,7 +608,7 @@ class Course < ApplicationRecord
   end
 
   def is_uni_or_scitt?
-    provider.accredited_body?
+    provider.accredited_provider?
   end
 
   def is_school_direct?
@@ -616,7 +616,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    provider.accredited_body?
+    provider.accredited_provider?
   end
 
   def to_s
@@ -1003,9 +1003,9 @@ class Course < ApplicationRecord
     end
   end
 
-  def accredited_body_exists_in_current_cycle
-    return unless accredited_body_code
+  def accredited_provider_exists_in_current_cycle
+    return unless accredited_provider_code
 
-    errors.add(:base, "The Accredited Body #{accredited_body_code} does not exist in this cycle") unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_body_code)
+    errors.add(:base, "The Accredited provider #{accredited_provider_code} does not exist in this cycle") unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_provider_code)
   end
 end

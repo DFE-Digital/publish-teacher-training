@@ -23,7 +23,7 @@ module Publish
       attr_reader :query, :limit
 
       def providers
-        providers = RecruitmentCycle.current.providers.accredited_body
+        providers = RecruitmentCycle.current.providers.accredited_provider
         providers = providers.accredited_provider_search(query) if query
         providers = providers.limit(limit) if limit
         providers.reorder(:provider_name)

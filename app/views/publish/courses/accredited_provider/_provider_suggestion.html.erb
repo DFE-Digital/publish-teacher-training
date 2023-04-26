@@ -1,9 +1,9 @@
-<div class="govuk-radios__item" data-qa="course__accredited_body_option">
-  <%= form.radio_button :accredited_body_code,
+<div class="govuk-radios__item" data-qa="course__accredited_provider_option">
+  <%= form.radio_button :accredited_provider_code,
     provider_suggestion[:provider_code],
     checked: provider_suggestion[:provider_code] == @course.accrediting_provider&.provider_code,
     class: "govuk-radios__input" %>
-  <%= form.label :accredited_body_code,
+  <%= form.label :accredited_provider_code,
     provider_suggestion[:provider_name],
     value: provider_suggestion[:provider_code],
     class: "govuk-label govuk-radios__label" %>

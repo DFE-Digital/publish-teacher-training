@@ -53,7 +53,7 @@ describe 'API', :with_publish_constraint do
                 required: false,
                 description: 'The associated data for this resource.',
                 schema: {
-                  enum: %w[accredited_body provider recruitment_cycle]
+                  enum: %w[accredited_provider provider recruitment_cycle]
                 },
                 example: 'recruitment_cycle,provider'
 

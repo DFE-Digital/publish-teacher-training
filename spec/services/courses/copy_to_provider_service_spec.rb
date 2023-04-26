@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Courses::CopyToProviderService do
-  let(:accrediting_provider) { create(:provider, :accredited_body) }
+  let(:accrediting_provider) { create(:provider, :accredited_provider) }
   let(:provider) { create(:provider, courses: [course]) }
   let(:published_course_enrichment) { build(:course_enrichment, :published) }
   let(:maths) { create(:secondary_subject, :mathematics) }
@@ -40,7 +40,7 @@ RSpec.describe Courses::CopyToProviderService do
     service.execute(course:, new_provider:)
 
     expect(new_course).not_to be_nil
-    expect(new_course.accredited_body_code).to eq course.accredited_body_code
+    expect(new_course.accredited_provider_code).to eq course.accredited_provider_code
     expect(new_course.subjects.count).to eq course.subjects.count
     expect(new_course.subjects.first.id).to eq course.subjects.first.id
     expect(new_course.subjects.first.type).to eq course.subjects.first.type

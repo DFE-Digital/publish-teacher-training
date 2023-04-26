@@ -30,7 +30,7 @@ module CoursePreview
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-disability",
           train_with_us:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-us",
-          about_accrediting_body:
+          about_accrediting_provider:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#accrediting-provider-#{accrediting_provider.provider_code}"
         }
       end
@@ -54,7 +54,7 @@ module CoursePreview
       include_examples 'course with missing information', :how_school_placements_work, 'Enter details about school placements'
       include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
       include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
-      include_examples 'course with missing information', :about_accrediting_body, 'Enter details about the accredited body'
+      include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the accredited provider'
     end
   end
 end

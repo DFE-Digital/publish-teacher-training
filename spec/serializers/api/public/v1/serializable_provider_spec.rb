@@ -21,7 +21,7 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_attribute(:train_with_us).with_value(provider.train_with_us) }
   it { is_expected.to have_attribute(:website).with_value(provider.website) }
 
-  it { is_expected.to have_attribute(:accredited_body).with_value(provider.accredited_body?) }
+  it { is_expected.to have_attribute(:accredited_body).with_value(provider.accredited_provider?) }
   it { is_expected.to have_attribute(:changed_at).with_value(provider.changed_at.iso8601) }
   it { is_expected.to have_attribute(:city).with_value(provider.town) }
   it { is_expected.to have_attribute(:code).with_value(provider.provider_code) }

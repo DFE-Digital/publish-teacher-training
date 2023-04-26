@@ -144,11 +144,11 @@ FactoryBot.define do
     end
 
     trait :self_accredited do
-      association(:provider, factory: %i[provider accredited_body])
+      association(:provider, factory: %i[provider accredited_provider])
     end
 
     trait :with_accrediting_provider do
-      association(:accrediting_provider, factory: %i[provider accredited_body])
+      association(:accrediting_provider, factory: %i[provider accredited_provider])
     end
 
     trait :with_higher_education do

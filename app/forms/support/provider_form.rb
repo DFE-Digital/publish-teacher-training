@@ -39,7 +39,7 @@ module Support
     validates :provider_type, presence: true
     validate :provider_type_school_is_an_invalid_accredited_provider
 
-    validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited_body? && lead_school? }
+    validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited_provider? && lead_school? }
 
     alias compute_fields new_attributes
 
@@ -47,8 +47,8 @@ module Support
 
     delegate :providers, to: :recruitment_cycle
 
-    def accredited_body?
-      accredited_provider&.to_sym == :accredited_body
+    def accredited_provider?
+      accredited_provider&.to_sym == :accredited_provider
     end
 
     def lead_school?
@@ -68,11 +68,11 @@ module Support
     end
 
     def provider_type_school_is_an_invalid_accredited_provider
-      errors.add(:provider_type, :school_is_an_invalid_accredited_provider) if accredited_body? && lead_school?
+      errors.add(:provider_type, :school_is_an_invalid_accredited_provider) if accredited_provider? && lead_school?
     end
 
     def validate_accredited_provider_id
-      return unless accredited_body?
+      return unless accredited_provider?
 
       if accredited_provider_id.blank?
         errors.add(:accredited_provider_id, :blank)

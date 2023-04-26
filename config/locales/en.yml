@@ -166,8 +166,13 @@ en:
             check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
+          accredited_providers:
+            index: Accredited providers
           onboardings:
             new: "Organisation details"
+          onboarding:
+            contacts:
+              new: "Contact details"
         users:
           index: "Users"
           show: "User overview"
@@ -207,8 +212,8 @@ en:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:
           text: "Enter details about the training provider"
-        about_accrediting_body:
-          text: "Enter details about the accredited body"
+        about_accrediting_provider:
+          text: "Enter details about the accredited provider"
   course:
     add_course: "Add course"
     value_not_entered: "Not entered"
@@ -270,10 +275,9 @@ en:
           title: Enter a school, university, college, URN or postcode
           caption: *add_school
           cannot_find: I cannot find the school - enter manually
-    schools:
-      search_result_title_component:
-        add_school: *add_school
-        many_results_html: Showing the first 15 results. %{link} if the school you're looking for is not listed.
+  search_result_title_component:
+    add_school: *add_school
+    many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
   support:
     data_exports:
       index:
@@ -307,6 +311,10 @@ en:
         new: "Add schools"
         show: "Add school (%{position} of %{max})"
         check: "Check your answers"
+      accredited_provider_search:
+        new:
+          title: Enter a provider name, UKPRN or postcode
+          caption: "Add accredited provider - %{provider_name} (%{code})"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
@@ -469,6 +477,15 @@ en:
   activemodel:
     errors:
       models:
+        accredited_provider_search_form:
+          attributes:
+            query:
+              blank: Enter a provider name, UKPRN or postcode
+              too_short: Enter at least two characters
+        accredited_provider_select_form:
+          attributes:
+            provider_id:
+              blank: Select an accredited provider
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
@@ -533,6 +550,22 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/provider_contact_form:
+          attributes:
+            email:
+              blank: "Enter an email address"
+            telephone:
+              blank: "Enter a telephone number"
+              invalid_phone_number: "Enter a real telephone number"
+            website:
+              blank: "Enter a website address"
+              url: "Enter a website address in the correct format, like https://www.example.com"
+            address1:
+              blank: "Enter address line 1"
+            town:
+              blank: "Enter a town or city"
+            postcode:
+              blank: "Enter a postcode"
         support/provider_form:
           attributes:
             provider_name:

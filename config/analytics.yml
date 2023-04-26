@@ -28,7 +28,7 @@ shared:
     - created_at
     - updated_at
     - changed_at
-    - accredited_body_code
+    - accredited_provider_code
     - discarded_at
     - age_range_in_years
     - applications_open_from

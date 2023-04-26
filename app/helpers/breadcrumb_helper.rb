@@ -64,7 +64,7 @@ module BreadcrumbHelper
 
   def training_providers_breadcrumb
     path = publish_provider_recruitment_cycle_training_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)
-    provider_breadcrumb.merge({ 'Courses as an accredited body' => path })
+    provider_breadcrumb.merge({ 'Courses as an Accredited provider' => path })
   end
 
   def training_provider_courses_breadcrumb

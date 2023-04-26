@@ -21,14 +21,14 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
     end
 
-    scenario 'blank about the accredited body' do
+    scenario 'blank about the accredited provider' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter details about the accredited body')
+      and_i_click_link('Enter details about the accredited provider')
       then_i_should_be_on_about_your_organisation_page
       and_i_click_link('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_link('Enter details about the accredited body')
+      and_i_click_link('Enter details about the accredited provider')
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
       then_i_should_see_the_updated_content('test accredited provider')
@@ -157,7 +157,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.provider_name
     )
 
-    expect(publish_course_preview_page.accredited_body).to have_content(
+    expect(publish_course_preview_page.accredited_provider).to have_content(
       accrediting_provider.provider_name
     )
 
@@ -241,8 +241,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.train_with_us
     )
 
-    expect(publish_course_preview_page.about_accrediting_body).to have_content(
-      decorated_course.about_accrediting_body
+    expect(publish_course_preview_page.about_accrediting_provider).to have_content(
+      decorated_course.about_accrediting_provider
     )
 
     expect(publish_course_preview_page.train_with_disability).to have_content(

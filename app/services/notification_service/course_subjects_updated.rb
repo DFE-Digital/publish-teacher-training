@@ -15,7 +15,7 @@ module NotificationService
     end
 
     def call
-      return false unless notify_accredited_body?
+      return false unless notify_accredited_provider?
       return false unless course.in_current_cycle?
 
       users.each do |user|
@@ -33,10 +33,10 @@ module NotificationService
     attr_reader :course, :previous_subject_names, :previous_course_name
 
     def users
-      User.course_update_subscribers(course.accredited_body_code)
+      User.course_update_subscribers(course.accredited_provider_code)
     end
 
-    def notify_accredited_body?
+    def notify_accredited_provider?
       return false if course.self_accredited?
       return false unless course.findable?
 

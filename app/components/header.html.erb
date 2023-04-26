@@ -11,7 +11,7 @@
       <% header.with_navigation_item(text: "Support console", href: support_path, active: false) %>
       <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
-      <% if current_user.associated_with_accredited_body? %>
+      <% if current_user.associated_with_accredited_provider? %>
         <% header.with_navigation_item(text: "Notifications", href: publish_notifications_path, active: false) %>
       <% end %>
       <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>

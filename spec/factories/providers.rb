@@ -52,7 +52,7 @@ FactoryBot.define do
       urn { nil }
     end
 
-    trait :accredited_body do
+    trait :accredited_provider do
       provider_type { %i[university scitt].sample }
       accrediting_provider { 'Y' }
       urn { nil }

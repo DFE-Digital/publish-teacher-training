@@ -25,6 +25,8 @@ shared_examples 'store' do |identifier_model_type, form_store_keys|
       end
     end
 
+    it { expect(described_class::FORM_STORE_KEYS).to match_array(form_store_keys) }
+
     form_store_keys.each do |store_key|
       context "when form_store_key is #{store_key}" do
         let(:form_store_key) { store_key }

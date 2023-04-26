@@ -37,7 +37,7 @@ module IntegrationSeeds
         provider = FactoryBot.find_or_create(
           :provider,
           :with_anonymised_data,
-          :accredited_body,
+          :accredited_provider,
           recruitment_cycle: current_recruitment_cycle,
           organisations: [organisation],
           provider_code:,

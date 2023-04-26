@@ -16,14 +16,14 @@ module CSVImports
         provider_name = row['name']
         provider_code = row['code']
         provider_type = row['type']
-        is_accredited_body = ActiveModel::Type::Boolean.new.cast(row['accredited_body'])
+        is_accredited_provider = ActiveModel::Type::Boolean.new.cast(row['accredited_provider'])
 
         service = Providers::CreateFakeProviderService.new(
           recruitment_cycle: RecruitmentCycle.current,
           provider_name:,
           provider_code:,
           provider_type:,
-          is_accredited_body:
+          is_accredited_provider:
         )
 
         @results << if service.execute

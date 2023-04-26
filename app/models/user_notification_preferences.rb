@@ -25,7 +25,7 @@ class UserNotificationPreferences
       rollback_on_error do
         UserNotification.where(user_id: id).destroy_all
 
-        user_accredited_body_codes.each do |provider_code|
+        user_accredited_provider_codes.each do |provider_code|
           UserNotification.create(
             user_id: id,
             course_publish: enable_notifications,
@@ -45,8 +45,8 @@ class UserNotificationPreferences
 
   private
 
-  def user_accredited_body_codes
-    user.providers.accredited_body.in_current_cycle.distinct.pluck(:provider_code)
+  def user_accredited_provider_codes
+    user.providers.accredited_provider.in_current_cycle.distinct.pluck(:provider_code)
   end
 
   def user_notifications

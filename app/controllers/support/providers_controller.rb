@@ -3,6 +3,7 @@
 module Support
   class ProvidersController < SupportController
     def index
+      [ProviderForm.new(current_user, recruitment_cycle:), ProviderContactForm.new(current_user)].each(&:clear_stash) if flash.key?(:success) && FeatureService.enabled?(:support_new_provider_creation_flow)
       @providers = filtered_providers
     end
 

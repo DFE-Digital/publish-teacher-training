@@ -9,7 +9,7 @@
           course.course_code
         )
       ) %>
-  <% elsif @provider.accredited_body? %>
+  <% elsif @provider.accredited_provider? %>
     <%= govuk_back_link_to(
       apprenticeship_publish_provider_recruitment_cycle_course_path(
           course.provider_code,

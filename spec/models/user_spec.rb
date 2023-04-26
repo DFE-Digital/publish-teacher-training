@@ -119,21 +119,21 @@ describe User do
       end
     end
 
-    describe '#associated_with_accredited_body?' do
-      context 'user is associated with accredited body' do
-        subject { create(:user, providers: [accredited_body]) }
+    describe '#associated_with_accredited_provider?' do
+      context 'user is associated with accredited provider' do
+        subject { create(:user, providers: [accredited_provider]) }
 
         let(:current_recruitment_cycle) { find_or_create(:recruitment_cycle) }
-        let(:accredited_body) { create(:provider, :accredited_body, recruitment_cycle: current_recruitment_cycle) }
+        let(:accredited_provider) { create(:provider, :accredited_provider, recruitment_cycle: current_recruitment_cycle) }
 
         it 'returns true' do
-          expect(subject.associated_with_accredited_body?).to be true
+          expect(subject.associated_with_accredited_provider?).to be true
         end
       end
 
-      context 'user is not associated with an accredited body' do
+      context 'user is not associated with an accredited provider' do
         it 'returns false' do
-          expect(subject.associated_with_accredited_body?).to be false
+          expect(subject.associated_with_accredited_provider?).to be false
         end
       end
     end
@@ -212,9 +212,9 @@ describe User do
   end
 
   describe 'notification subscribers' do
-    let(:accredited_body) { create(:provider, :accredited_body) }
-    let(:other_accredited_body) { create(:provider, :accredited_body) }
-    let(:course) { create(:course, accredited_body_code: accredited_body.provider_code) }
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:other_accredited_provider) { create(:provider, :accredited_provider) }
+    let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code) }
     let(:subscribed_user) { create(:user) }
     let(:non_subscribed_user) { create(:user) }
     let(:user_subscribed_to_other_provider) { create(:user) }
@@ -231,7 +231,7 @@ describe User do
           :user_notification,
           user: subscribed_user,
           course_update: true,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -240,7 +240,7 @@ describe User do
           :user_notification,
           user: non_subscribed_user,
           course_update: false,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -249,12 +249,12 @@ describe User do
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_publish: true,
-          provider_code: other_accredited_body.provider_code
+          provider_code: other_accredited_provider.provider_code
         )
       end
 
-      it 'returns users who are subscribed to course update notifications for a given accredited body' do
-        expect(described_class.course_update_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+      it 'returns users who are subscribed to course update notifications for a given accredited provider' do
+        expect(described_class.course_update_subscribers(course.accredited_provider_code)).to eq([subscribed_user])
       end
     end
 
@@ -264,7 +264,7 @@ describe User do
           :user_notification,
           user: subscribed_user,
           course_publish: true,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -273,7 +273,7 @@ describe User do
           :user_notification,
           user: non_subscribed_user,
           course_publish: false,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -282,12 +282,12 @@ describe User do
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_update: true,
-          provider_code: other_accredited_body.provider_code
+          provider_code: other_accredited_provider.provider_code
         )
       end
 
-      it 'includes user who are subscribed to course publish notifications for a given accredited body' do
-        expect(described_class.course_publish_subscribers(course.accredited_body_code)).to eq([subscribed_user])
+      it 'includes user who are subscribed to course publish notifications for a given accredited provider' do
+        expect(described_class.course_publish_subscribers(course.accredited_provider_code)).to eq([subscribed_user])
       end
     end
   end

@@ -15,7 +15,7 @@ module Find
                          about_course: 'foo',
                          how_school_placements_work: 'bar',
                          placements_heading: 'School placements',
-                         about_accrediting_body: 'foo',
+                         about_accrediting_provider: 'foo',
                          salaried: true,
                          interview_process: 'bar',
                          has_vacancies: true)
@@ -23,7 +23,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_body, :salaried, :interview_process, :has_vacancies)
+          attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :has_vacancies)
 
           def has_bursary?
             has_bursary

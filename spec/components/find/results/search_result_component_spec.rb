@@ -78,7 +78,7 @@ module Find
       it 'renders correct message' do
         course = build(
           :course,
-          accrediting_provider: build(:provider, :accredited_body, provider_name: 'ACME SCITT A1')
+          accrediting_provider: build(:provider, :accredited_provider, provider_name: 'ACME SCITT A1')
         )
         result = render_inline(described_class.new(course:))
 

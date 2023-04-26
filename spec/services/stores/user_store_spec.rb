@@ -6,6 +6,6 @@ require_relative 'shared_examples/store'
 
 module Stores
   describe UserStore do
-    include_examples 'store', :user, %i[user]
+    include_examples 'store', :user, %i[user provider provider_contact]
   end
 end

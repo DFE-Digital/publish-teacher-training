@@ -9,14 +9,14 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
     context 'when adding to a single organisation' do
       subject do
         described_class.call(
-          provider: new_accredited_body,
+          provider: new_accredited_provider,
           user:
         )
       end
 
-      let(:accredited_body) { create(:provider, :accredited_body, users: [user]) }
+      let(:accredited_provider) { create(:provider, :accredited_provider, users: [user]) }
 
-      let(:new_accredited_body) { create(:provider, :accredited_body, provider_code: 'AAA') }
+      let(:new_accredited_provider) { create(:provider, :accredited_provider, provider_code: 'AAA') }
 
       let(:action_mailer) { double }
 
@@ -36,7 +36,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
           create(
             :user_notification,
             user:,
-            provider: accredited_body,
+            provider: accredited_provider,
             course_publish: true,
             course_update: true
           )
@@ -46,7 +46,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
           create(
             :user_notification,
             user:,
-            provider: new_accredited_body,
+            provider: new_accredited_provider,
             course_publish: true,
             course_update: true
           )
@@ -59,8 +59,8 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         it 'creates user_permissions association' do
           subject
 
-          expect(new_accredited_body.users).to eq([user])
-          expect(user.providers).to include(accredited_body, new_accredited_body)
+          expect(new_accredited_provider.users).to eq([user])
+          expect(user.providers).to include(accredited_provider, new_accredited_provider)
         end
 
         it 'creates user_notifications association with the previous enabled value' do
@@ -75,8 +75,8 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         it 'creates user_permissions association' do
           subject
 
-          expect(new_accredited_body.users).to eq([user])
-          expect(user.providers).to include(accredited_body, new_accredited_body)
+          expect(new_accredited_provider.users).to eq([user])
+          expect(user.providers).to include(accredited_provider, new_accredited_provider)
         end
 
         it "doesn't create user_notifications association" do
@@ -95,15 +95,15 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         )
       end
 
-      let(:accredited_body) { create(:provider, :accredited_body) }
-      let!(:provider1) { create(:provider, :accredited_body) }
+      let(:accredited_provider) { create(:provider, :accredited_provider) }
+      let!(:provider1) { create(:provider, :accredited_provider) }
 
       context 'when user have saved notification preferences' do
         let(:user_notification) do
           create(
             :user_notification,
             user:,
-            provider: accredited_body,
+            provider: accredited_provider,
             course_publish: true,
             course_update: true
           )

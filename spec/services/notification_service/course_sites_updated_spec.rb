@@ -5,9 +5,9 @@ require 'rails_helper'
 module NotificationService
   describe CourseSitesUpdated do
     describe '#call' do
-      let(:accredited_body) { create(:provider, :accredited_body) }
-      let(:other_accredited_body) { create(:provider, :accredited_body) }
-      let(:course) { create(:course, accrediting_provider: accredited_body) }
+      let(:accredited_provider) { create(:provider, :accredited_provider) }
+      let(:other_accredited_provider) { create(:provider, :accredited_provider) }
+      let(:course) { create(:course, accrediting_provider: accredited_provider) }
       let(:previous_site_names) { ['location 1', 'location 2'] }
       let(:updated_site_names) { ['location 3', 'location 4'] }
 
@@ -20,7 +20,7 @@ module NotificationService
           :user_notification,
           user: subscribed_user,
           course_update: true,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -29,7 +29,7 @@ module NotificationService
           :user_notification,
           user: non_subscribed_user,
           course_update: false,
-          provider_code: accredited_body.provider_code
+          provider_code: accredited_provider.provider_code
         )
       end
 
@@ -38,7 +38,7 @@ module NotificationService
           :user_notification,
           user: user_subscribed_to_other_provider,
           course_update: true,
-          provider_code: other_accredited_body.provider_code
+          provider_code: other_accredited_provider.provider_code
         )
       end
       let(:self_accredited) { false }
@@ -69,7 +69,7 @@ module NotificationService
 
       context 'with a course that is not in the current cycle' do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
-        let(:course) { create(:course, accredited_body_code: accredited_body.provider_code, provider:) }
+        let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code, provider:) }
 
         before { setup_notifications }
 

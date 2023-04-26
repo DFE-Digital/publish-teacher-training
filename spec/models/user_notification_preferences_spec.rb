@@ -70,8 +70,8 @@ describe UserNotificationPreferences do
   end
 
   describe '#update' do
-    let(:accredited_body1) { create(:provider, :accredited_body) }
-    let(:accredited_body2) { create(:provider, :accredited_body) }
+    let(:accredited_provider1) { create(:provider, :accredited_provider) }
+    let(:accredited_provider2) { create(:provider, :accredited_provider) }
 
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
@@ -82,7 +82,7 @@ describe UserNotificationPreferences do
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body1.provider_code
+        provider_code: accredited_provider1.provider_code
       )
     end
 
@@ -92,7 +92,7 @@ describe UserNotificationPreferences do
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body2.provider_code
+        provider_code: accredited_provider2.provider_code
       )
     end
 
@@ -102,16 +102,16 @@ describe UserNotificationPreferences do
         user: other_user,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_body1.provider_code
+        provider_code: accredited_provider1.provider_code
       )
     end
 
     context 'user has no notifications' do
       before do
-        user.providers << [accredited_body1, accredited_body2]
+        user.providers << [accredited_provider1, accredited_provider2]
       end
 
-      it 'creates user notification preference for each accredited body' do
+      it 'creates user notification preference for each accredited provider' do
         user_notification_preferences = described_class.new(user_id: user.id).update(enable_notifications: true)
 
         expect(user_notification_preferences.enabled?).to be(true)
@@ -119,7 +119,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.count).to eq(2)
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
-        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_body1.provider_code, accredited_body2.provider_code)
+        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_provider1.provider_code, accredited_provider2.provider_code)
       end
 
       context 'when the user has duplicate provider associations' do
@@ -132,14 +132,14 @@ describe UserNotificationPreferences do
       end
 
       context 'when the user has an association from a previous recruitment cycle' do
-        let(:previous_accredited_body) { create(:provider, :accredited_body, :previous_recruitment_cycle) }
+        let(:previous_accredited_provider) { create(:provider, :accredited_provider, :previous_recruitment_cycle) }
 
         before do
-          user.providers << previous_accredited_body
+          user.providers << previous_accredited_provider
         end
 
-        it "doesn't create a user notification preference for that accredited body" do
-          expect(UserNotification.where(provider_code: previous_accredited_body.provider_code))
+        it "doesn't create a user notification preference for that accredited provider" do
+          expect(UserNotification.where(provider_code: previous_accredited_provider.provider_code))
             .to be_empty
         end
       end
@@ -149,7 +149,7 @@ describe UserNotificationPreferences do
       before do
         user
         other_user
-        user.providers << [accredited_body1, accredited_body2]
+        user.providers << [accredited_provider1, accredited_provider2]
         user_notification1
         user_notification2
         other_users_notification
@@ -164,7 +164,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
         expect(user_notifications.map(&:provider_code))
-          .to contain_exactly(accredited_body1.provider_code, accredited_body2.provider_code)
+          .to contain_exactly(accredited_provider1.provider_code, accredited_provider2.provider_code)
       end
 
       it 'resets enabled after update' do
@@ -204,47 +204,47 @@ describe UserNotificationPreferences do
       end
     end
 
-    context 'user has changed accredited body associations' do
-      context 'accredited body removed' do
+    context 'user has changed accredited provider associations' do
+      context 'accredited provider removed' do
         before do
           user
           other_user
-          user.providers = [accredited_body1]
+          user.providers = [accredited_provider1]
           user_notification1
           user_notification2
         end
 
-        it 'removes the unassociated accredited body UserNotification' do
+        it 'removes the unassociated accredited provider UserNotification' do
           described_class.new(user_id: user.id).update(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 
           expect(user_notifications.count).to eq(1)
           expect(user_notifications.map(&:provider_code))
-            .to contain_exactly(accredited_body1.provider_code)
+            .to contain_exactly(accredited_provider1.provider_code)
         end
       end
 
-      context 'accredited body added' do
-        let(:accredited_body3) { create(:provider, :accredited_body) }
+      context 'accredited provider added' do
+        let(:accredited_provider3) { create(:provider, :accredited_provider) }
 
         before do
           user
           other_user
-          user.providers << [accredited_body1, accredited_body2, accredited_body3]
+          user.providers << [accredited_provider1, accredited_provider2, accredited_provider3]
           user_notification1
           user_notification2
         end
 
-        it 'creates a UserNotification for the new accredited body notification' do
+        it 'creates a UserNotification for the new accredited provider notification' do
           described_class.new(user_id: user.id).update(enable_notifications: true)
           user_notifications = UserNotification.where(user_id: user.id)
 
           expect(user_notifications.count).to eq(3)
           expect(user_notifications.map(&:provider_code))
             .to contain_exactly(
-              accredited_body1.provider_code,
-              accredited_body2.provider_code,
-              accredited_body3.provider_code
+              accredited_provider1.provider_code,
+              accredited_provider2.provider_code,
+              accredited_provider3.provider_code
             )
         end
       end

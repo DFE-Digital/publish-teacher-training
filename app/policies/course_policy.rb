@@ -17,7 +17,7 @@ class CoursePolicy
       else
         scope
           .where(provider_id: user.providers.pluck(:id))
-          .or(Course.where(accredited_body_code: user.providers.pluck(:provider_code)))
+          .or(Course.where(accredited_provider_code: user.providers.pluck(:provider_code)))
       end
     end
   end
@@ -64,7 +64,7 @@ class CoursePolicy
 
   def permitted_new_course_attributes
     %i[
-      accredited_body_code
+      accredited_provider_code
       age_range_in_years
       applications_open_from
       funding_type

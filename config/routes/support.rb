@@ -5,6 +5,9 @@ namespace :support do
 
   resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     namespace :providers do
+      namespace :onboarding do
+        resource :contacts, only: %i[new create]
+      end
       resource :onboarding, only: %i[new create]
     end
     resources :providers, except: %i[destroy] do
@@ -31,6 +34,14 @@ namespace :support do
               resource :check, only: %i[show update], controller: 'check_multiple'
             end
           end
+        end
+      end
+
+      scope module: :providers do
+        resources :accredited_providers, path: 'accredited-providers' do
+          get '/search', on: :collection, to: 'accredited_provider_search#new'
+          post '/search', on: :collection, to: 'accredited_provider_search#create'
+          put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
       end
     end

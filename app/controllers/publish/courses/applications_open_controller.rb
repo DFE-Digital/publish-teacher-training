@@ -33,7 +33,7 @@ module Publish
                 :subjects_ids,
                 :goto_confirmation,
                 :skip_languages_goto_confirmation,
-                :accredited_body_code,
+                :accredited_provider_code,
                 :campaign_name,
                 :master_subject_id
               )

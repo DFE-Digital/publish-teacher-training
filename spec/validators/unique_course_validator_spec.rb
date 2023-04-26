@@ -5,8 +5,8 @@ require 'rails_helper'
 describe UniqueCourseValidator do
   let(:service) { described_class.new }
   let(:provider) { create(:provider, sites: [site_one, site_two]) }
-  let(:accredited_body_one) { create(:provider, :accredited_body) }
-  let(:accredited_body_two) { create(:provider, :accredited_body) }
+  let(:accredited_provider_one) { create(:provider, :accredited_provider) }
+  let(:accredited_provider_two) { create(:provider, :accredited_provider) }
   let(:site_one) { create(:site) }
   let(:site_two) { create(:site) }
 
@@ -23,7 +23,7 @@ describe UniqueCourseValidator do
            english: 'not_required',
            science: 'not_required',
            sites: [site_one],
-           accrediting_provider: accredited_body_one,
+           accrediting_provider: accredited_provider_one,
            is_send: false)
   end
 
@@ -175,9 +175,9 @@ describe UniqueCourseValidator do
       include_examples 'a duplicate course'
     end
 
-    context 'Different accredited body' do
+    context 'Different accredited provider' do
       before do
-        new_course.accrediting_provider = accredited_body_two
+        new_course.accrediting_provider = accredited_provider_two
       end
 
       include_examples 'a unique course'

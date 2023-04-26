@@ -7,7 +7,7 @@ required:
 properties:
   accredited_body:
     type: boolean
-    description: "Is this provider an accredited body for other provider's courses."
+    description: "Is this provider an accredited provider for other provider's courses."
     example: "true"
   city:
     type: string
