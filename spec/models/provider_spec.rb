@@ -758,7 +758,8 @@ describe Provider do
             provider_name: 'Southampton High School',
             address1: 'Long Lane',
             address2: 'Holbury',
-            address3: 'Southampton',
+            address3: nil,
+            town: 'Southampton',
             address4: nil,
             postcode: 'SO45 2PA')
     end
@@ -774,6 +775,7 @@ describe Provider do
           provider.address1 = ''
           provider.address2 = ''
           provider.address3 = ''
+          provider.town = ''
           provider.address4 = ''
           provider.postcode = ''
         end
@@ -813,7 +815,7 @@ describe Provider do
                  provider_name: 'Southampton High School',
                  address1: 'Long Lane',
                  address2: 'Holbury',
-                 address3: 'Southampton',
+                 town: 'Southampton',
                  address4: nil,
                  postcode: 'SO45 2PA')
         end

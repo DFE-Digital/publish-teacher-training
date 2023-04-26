@@ -90,6 +90,7 @@ class ProviderPolicy
       address1
       address2
       address3
+      town
       address4
       postcode
       region_code

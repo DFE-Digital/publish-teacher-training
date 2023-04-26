@@ -23,61 +23,67 @@
 
       <%= f.govuk_text_field(:email,
         form_group: { id: "email" },
-        label: { text: "Email address", size: "m" },
+        label: { text: "Email address", size: "s" },
         autocomplete: "email",
         spellcheck: false,
         data: { qa: "email" }) %>
 
       <%= f.govuk_text_field(:telephone,
         form_group: { id: "telephone" },
-        label: { text: "Telephone number", size: "m" },
+        label: { text: "Telephone number", size: "s" },
         width: 20,
         autocomplete: "tel",
         data: { qa: "telephone" }) %>
 
       <%= f.govuk_text_field(:website,
         form_group: { id: "website" },
-        label: { size: "m" },
+        label: { size: "s" },
         data: { qa: "website" }) %>
 
       <%= f.govuk_text_field(:ukprn,
         form_group: { id: "ukprn" },
-        label: { size: "m" },
+        label: { text: "UK provider reference number (UKPRN)", size: "s" },
         width: 10,
         data: { qa: "ukprn" }) %>
 
       <% if @provider_contact_form.provider.provider_type == "lead_school" %>
         <%= f.govuk_text_field(:urn,
           form_group: { id: "urn" },
-          label: { size: "m" },
+          label: { text: "Unique reference number (URN)", size: "s" },
           width: 10,
           data: { qa: "urn" }) %>
       <% end %>
 
-      <%= f.govuk_fieldset legend: { text: "Contact address", size: "m" }, id: "address" do %>
+      <%= f.govuk_fieldset legend: { text: "Address", size: "m" }, id: "address" do %>
         <%= f.govuk_text_field(:address1,
-          label: -> { safe_join(["Building and street", " ", tag.span("line 1 of 2", class: "govuk-visually-hidden")]) },
+          label: { text: "Address line 1", size: "s" },
           autocomplete: "address-line1",
           data: { qa: "address1" }) %>
 
         <%= f.govuk_text_field(:address2,
-          label: { hidden: true },
+          label: { text: "Address line 2 (optional)", size: "s" },
           autocomplete: "address-line2",
           data: { qa: "address2" }) %>
 
         <%= f.govuk_text_field(:address3,
-          label: { text: "Town or city" },
-          width: "two-thirds",
-          autocomplete: "address-level2",
+          label: { text: "Address line 3 (optional)", size: "s" },
+          autocomplete: "address-line3",
           data: { qa: "address3" }) %>
 
+        <%= f.govuk_text_field(:town,
+          label: { text: "Town or city", size: "s" },
+          width: "two-thirds",
+          autocomplete: "address-level2",
+          data: { qa: "town" }) %>
+
         <%= f.govuk_text_field(:address4,
-          label: { text: "County" },
+          label: { text: "County (optional)", size: "s" },
           width: "two-thirds",
           autocomplete: "address-level1",
           data: { qa: "address4" }) %>
 
         <%= f.govuk_text_field(:postcode,
+          label: { size: "s" },
           width: 10,
           autocomplete: "postal-code",
           data: { qa: "postcode" }) %>

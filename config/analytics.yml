@@ -118,7 +118,6 @@ shared:
     - website
     - address1
     - address2
-    - address3
     - region_code
     - created_at
     - updated_at
@@ -137,6 +136,8 @@ shared:
     - can_sponsor_student_visa
     - synonyms
     - accredited_provider_id
+    - town
+    - address3
   recruitment_cycle:
     - id
     - year

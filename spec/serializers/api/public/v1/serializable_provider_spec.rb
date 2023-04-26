@@ -23,13 +23,14 @@ describe API::Public::V1::SerializableProvider do
 
   it { is_expected.to have_attribute(:accredited_body).with_value(provider.accredited_provider?) }
   it { is_expected.to have_attribute(:changed_at).with_value(provider.changed_at.iso8601) }
-  it { is_expected.to have_attribute(:city).with_value(provider.address3) }
+  it { is_expected.to have_attribute(:city).with_value(provider.town) }
   it { is_expected.to have_attribute(:code).with_value(provider.provider_code) }
   it { is_expected.to have_attribute(:county).with_value(provider.address4) }
   it { is_expected.to have_attribute(:created_at).with_value(provider.created_at.iso8601) }
   it { is_expected.to have_attribute(:name).with_value(provider.provider_name) }
   it { is_expected.to have_attribute(:street_address_1).with_value(provider.address1) }
   it { is_expected.to have_attribute(:street_address_2).with_value(provider.address2) }
+  it { is_expected.to have_attribute(:street_address_3).with_value(provider.address3) }
   it { is_expected.to have_attribute(:latitude).with_value(provider.latitude) }
   it { is_expected.to have_attribute(:longitude).with_value(provider.longitude) }
   it { is_expected.to have_attribute(:telephone).with_value(provider.telephone) }
