@@ -703,6 +703,14 @@ en:
             ukprn:
               blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
+            website:
+              blank: "Enter a website"
+            address1:
+              blank: "Enter address line 1"
+            town:
+              blank: "Enter a town or city"
+            postcode:
+              blank: "Enter a postcode"
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
