@@ -6,13 +6,15 @@ require_relative '../shared_examples/blank_validation'
 
 module Support
   describe ProviderForm, type: :model do
-    subject { described_class.new(user, recruitment_cycle:, params:) }
+    let(:provider_form) { described_class.new(user, recruitment_cycle:, params:) }
 
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:user) { create(:user) }
     let(:params) { {} }
 
     describe 'validations' do
+      subject { provider_form }
+
       it {
         expect(subject).to validate_length_of(:provider_name)
           .is_at_most(100)
