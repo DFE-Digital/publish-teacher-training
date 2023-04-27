@@ -2,14 +2,15 @@
 
 module CoursePreview
   class MissingInformationComponent < ViewComponent::Base
-    attr_accessor :information_type, :course
+    attr_accessor :information_type, :course, :is_preview
 
     delegate :course_code, :recruitment_cycle_year, :provider_code, :accrediting_provider, to: :course
 
-    def initialize(course:, information_type:)
+    def initialize(course:, information_type:, is_preview:)
       super
       @information_type = information_type
       @course = course
+      @is_preview = is_preview
     end
 
     def text
@@ -21,7 +22,7 @@ module CoursePreview
     end
 
     def render?
-      FeatureService.enabled?(:course_preview_missing_information)
+      FeatureService.enabled?(:course_preview_missing_information) && @is_preview
     end
 
     private

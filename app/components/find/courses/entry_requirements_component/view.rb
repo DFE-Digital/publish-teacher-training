@@ -4,6 +4,8 @@ module Find
   module Courses
     module EntryRequirementsComponent
       class View < ViewComponent::Base
+        include PreviewHelper
+
         attr_accessor :course
 
         SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22 24].freeze
