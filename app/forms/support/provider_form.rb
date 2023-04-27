@@ -49,10 +49,6 @@ module Support
                     .merge(recruitment_cycle:)
     end
 
-    private
-
-    delegate :providers, to: :recruitment_cycle
-
     def accredited_provider?
       accredited_provider&.to_sym == :accredited_provider
     end
@@ -60,6 +56,10 @@ module Support
     def lead_school?
       provider_type&.to_sym == :lead_school
     end
+
+    private
+
+    delegate :providers, to: :recruitment_cycle
 
     def scitt?
       provider_type&.to_sym == :scitt

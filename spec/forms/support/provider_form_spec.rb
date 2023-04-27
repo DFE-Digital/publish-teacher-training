@@ -23,6 +23,54 @@ module Support
 
     subject { provider_form }
 
+    describe '#accredited_provider?' do
+      subject { provider_form.accredited_provider? }
+
+      context 'params accredited_provider is set to accredited_provider' do
+        let(:params) do
+          { accredited_provider: :accredited_provider }
+        end
+
+        it 'returns true' do
+          expect(subject).to be_truthy
+        end
+      end
+
+      context 'params accredited_provider is set to a not_an_accredited_provider' do
+        let(:params) do
+          { accredited_provider: :not_an_accredited_provider }
+        end
+
+        it 'returns false' do
+          expect(subject).to be_falsey
+        end
+      end
+    end
+
+    describe '#lead_school?' do
+      subject { provider_form.lead_school? }
+
+      context 'params provider_type is set to lead_school' do
+        let(:params) do
+          { provider_type: :lead_school }
+        end
+
+        it 'returns true' do
+          expect(subject).to be_truthy
+        end
+      end
+
+      context 'params provider_type is set to a non lead_school' do
+        let(:params) do
+          { provider_type: %i[university scitt].sample }
+        end
+
+        it 'returns false' do
+          expect(subject).to be_falsey
+        end
+      end
+    end
+
     describe '#attributes_to_save' do
       subject { provider_form.attributes_to_save }
       let(:expected_attributes) do
