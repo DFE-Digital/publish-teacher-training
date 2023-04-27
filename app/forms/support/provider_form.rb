@@ -43,6 +43,12 @@ module Support
 
     alias compute_fields new_attributes
 
+    def attributes_to_save
+      new_attributes.transform_keys { |key| key == :accredited_provider ? :accrediting_provider : key }
+                    .merge(organisations_attributes: [{ name: provider_name }])
+                    .merge(recruitment_cycle:)
+    end
+
     private
 
     delegate :providers, to: :recruitment_cycle

@@ -7,7 +7,6 @@ require_relative '../shared_examples/blank_validation'
 module Support
   describe ProviderForm, type: :model do
     let(:provider_form) { described_class.new(user, recruitment_cycle:, params:) }
-
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:user) { create(:user) }
     let(:params) do
@@ -24,6 +23,18 @@ module Support
 
     subject { provider_form }
 
+    describe '#attributes_to_save' do
+      subject { provider_form.attributes_to_save }
+      let(:expected_attributes) do
+        params.transform_keys { |key| key == :accredited_provider ? :accrediting_provider : key }
+              .merge(organisations_attributes: [{ name: params[:provider_name] }])
+              .merge(recruitment_cycle:)
+      end
+
+      it 'matches the expected attributes' do
+        expect(subject).to match(expected_attributes)
+      end
+    end
 
     describe 'validations' do
       it {
