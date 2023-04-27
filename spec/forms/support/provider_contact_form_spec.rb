@@ -24,6 +24,22 @@ module Support
 
     subject { provider_contact_form }
 
+    describe '#full_address' do
+      subject { provider_contact_form.full_address }
+      let(:expected_full_address) do
+        params.slice(:address1,
+                     :address2,
+                     :address3,
+                     :town,
+                     :address4,
+                     :postcode).values.join('<br> ')
+      end
+
+      it 'matches the expected full address' do
+        expect(subject).to eql(expected_full_address)
+      end
+    end
+
     describe '#attributes_to_save' do
       subject { provider_contact_form.attributes_to_save }
       let(:expected_params) { params }
