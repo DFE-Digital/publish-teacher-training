@@ -42,10 +42,10 @@ module Support
 
     describe '#attributes_to_save' do
       subject { provider_contact_form.attributes_to_save }
-      let(:expected_params) { params }
+      let(:expected_attributes) { params }
 
-      it 'matches the expected params' do
-        expect(subject).to match(expected_params)
+      it 'matches the expected attributes' do
+        expect(subject).to match(expected_attributes)
       end
     end
 
