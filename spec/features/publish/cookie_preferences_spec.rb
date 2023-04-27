@@ -22,7 +22,7 @@ feature 'Updating cookie preferences' do
   end
 
   def when_i_give_consent_and_submit
-    publish_cookie_preferences_page.yes_option.choose
+    publish_cookie_preferences_page.analytics_cookie_accept.choose
     when_i_submit
   end
 
