@@ -49,7 +49,7 @@ feature 'Updating cookie preferences' do
   end
 
   def service_name
-    'Find postgraduate teacher training (Find)'
+    'Find postgraduate teacher training'
   end
 
   def find_cookie_preferences_page
