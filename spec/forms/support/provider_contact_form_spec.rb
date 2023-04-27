@@ -6,12 +6,28 @@ require_relative '../shared_examples/blank_validation'
 
 module Support
   describe ProviderContactForm, type: :model do
-    subject { described_class.new(user, params:) }
+    let(:provider_contact_form) { described_class.new(user, params:) }
 
     let(:user) { create(:user) }
-    let(:params) { {} }
+
+    let(:params) do
+      build(:provider).attributes.symbolize_keys.slice(
+        :email,
+        :telephone,
+        :website,
+        :address1,
+        :address2,
+        :address3,
+        :town,
+        :address4,
+        :postcode
+      )
+    end
+
+    subject { provider_contact_form }
 
     describe 'validations' do
+      subject { provider_contact_form }
       include_examples 'blank validation', :email, 'Enter an email address'
       include_examples 'blank validation', :telephone, 'Enter a telephone number'
       include_examples 'blank validation', :website, 'Enter a website address'
@@ -44,6 +60,16 @@ module Support
           expect(subject).not_to be_valid
 
           expect(subject.errors[:website]).to match_array('Enter a website address in the correct format, like https://www.example.com')
+        end
+      end
+    end
+
+    describe '#stash' do
+      context 'valid details' do
+        it 'returns true' do
+          expect(subject.stash).to be true
+
+          expect(subject.errors.messages).to be_blank
         end
       end
     end
