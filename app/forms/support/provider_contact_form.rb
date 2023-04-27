@@ -24,5 +24,7 @@ module Support
     attr_accessor(*FIELDS)
 
     alias compute_fields new_attributes
+
+    def attributes_to_save = new_attributes
   end
 end

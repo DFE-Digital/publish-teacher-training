@@ -7,9 +7,7 @@ require_relative '../shared_examples/blank_validation'
 module Support
   describe ProviderContactForm, type: :model do
     let(:provider_contact_form) { described_class.new(user, params:) }
-
     let(:user) { create(:user) }
-
     let(:params) do
       build(:provider).attributes.symbolize_keys.slice(
         :email,
@@ -25,6 +23,15 @@ module Support
     end
 
     subject { provider_contact_form }
+
+    describe '#attributes_to_save' do
+      subject { provider_contact_form.attributes_to_save }
+      let(:expected_params) { params }
+
+      it 'matches the expected params' do
+        expect(subject).to match(expected_params)
+      end
+    end
 
     describe 'validations' do
       subject { provider_contact_form }
