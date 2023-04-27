@@ -1,6 +1,8 @@
 ifndef VERBOSE
 .SILENT:
 endif
+SERVICE_SHORT=ptt
+SERVICE_NAME=publish
 
 help:
 	echo "Environment setup targets:"
@@ -45,6 +47,33 @@ review:
 	$(eval PLATFORM=paas)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
+
+review_aks:
+	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
+	$(eval include global_config/review_aks.sh)
+	$(eval DEPLOY_ENV=review_aks)
+	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
+	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
+	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
+	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
+	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
+
+dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1
+	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
+	$(if $(CLUSTER), , $(error Missing environment variable "CLUSTER", Please specify a dev cluster name (eg 'cluster1')))
+	$(eval export DISABLE_PASSCODE=1)
+	$(eval include global_config/dv_review_aks.sh)
+	$(eval DEPLOY_ENV=dv_review_aks)
+	$(eval backend_key=-backend-config=key=$(APP_NAME).tfstate)
+	$(eval export TF_VAR_cluster=$(CLUSTER))
+	$(eval export TF_VAR_app_name=$(APP_NAME))
+	$(eval export TF_VAR_app_suffix=$(APP_NAME))
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+# 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).development.teacherservices.cloud will be created in aks
+#	$(eval APP_NAME_SUFFIX=dv-review-$(APP_NAME))
+#	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
+#	$(eval export TF_VAR_app_name_suffix=pr-$(APP_NAME))
 
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
@@ -109,13 +138,13 @@ deploy-init:
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 
 deploy-plan: deploy-init
-	terraform -chdir=terraform/$(PLATFORM) plan -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json
+	terraform -chdir=terraform/$(PLATFORM) plan -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS}
 
 deploy: deploy-init
-	terraform -chdir=terraform/$(PLATFORM) apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
+	terraform -chdir=terraform/$(PLATFORM) apply -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 
 destroy: deploy-init
-	terraform -chdir=terraform/$(PLATFORM) destroy -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json $(AUTO_APPROVE)
+	terraform -chdir=terraform/$(PLATFORM) destroy -var-file=./workspace_variables/$(DEPLOY_ENV).tfvars.json ${TF_VARS} $(AUTO_APPROVE)
 
 install-fetch-config:
 	[ ! -f bin/fetch_config.rb ] \
@@ -207,7 +236,7 @@ set-restore-variables:
 	$(if $(IMAGE_TAG), , $(error can only run with an IMAGE_TAG))
 	$(if $(DB_INSTANCE_GUID), , $(error can only run with DB_INSTANCE_GUID, get it by running `make ${space} get-postgres-instance-guid`))
 	$(if $(SNAPSHOT_TIME), , $(error can only run with BEFORE_TIME, eg SNAPSHOT_TIME="2021-09-14 16:00:00"))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
+	$(eval export TF_VAR_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	$(eval export TF_VAR_paas_restore_from_db_guid=$(DB_INSTANCE_GUID))
 	$(eval export TF_VAR_paas_db_backup_before_point_in_time=$(SNAPSHOT_TIME))
 	echo "Restoring publish-teacher-training from $(TF_VAR_paas_restore_from_db_guid) before $(TF_VAR_paas_db_backup_before_point_in_time)"
@@ -221,8 +250,8 @@ find:
 	$(eval include global_config/find-domain.sh)
 
 set-azure-account:
-	echo "Logging on to ${AZURE_SUBSCRIPTION}"
-	az account set -s $(AZURE_SUBSCRIPTION)
+	echo "Logging on to ${AZ_SUBSCRIPTION}"
+	az account set -s $(AZ_SUBSCRIPTION)
 
 set-azure-resource-group-tags: ##Tags that will be added to resource group on its creation in ARM template
 	$(eval RG_TAGS=$(shell echo '{"Portfolio": "Early Years and Schools Group", "Parent Business":"Teacher Training and Qualifications", "Product" : "Find postgraduate teacher training", "Service Line": "Teaching Workforce", "Service": "Teacher services", "Service Offering": "Find postgraduate teacher training", "Environment" : "$(ENV_TAG)"}' | jq . ))
@@ -230,8 +259,19 @@ set-azure-resource-group-tags: ##Tags that will be added to resource group on it
 set-azure-template-tag:
 	$(eval ARM_TEMPLATE_TAG=1.1.0)
 
+base-resources: set-azure-account set-azure-template-tag set-azure-resource-group-tags
+	az deployment sub create --name "resourcedeploy-tsc-$(shell date +%Y%m%d%H%M%S)" \
+		-l "UK South" --template-uri "https://raw.githubusercontent.com/DFE-Digital/tra-shared-services/${ARM_TEMPLATE_TAG}/azure/resourcedeploy.json" \
+		--parameters "resourceGroupName=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-rg" 'tags=${RG_TAGS}' \
+			"tfStorageAccountName=${AZURE_RESOURCE_PREFIX}${SERVICE_SHORT}tfstate${CONFIG_SHORT}sa" "tfStorageContainerName=${SERVICE_SHORT}-tfstate" \
+			"keyVaultName=${AZURE_RESOURCE_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-kv" ${WHAT_IF}
+
+validate-base-resources: set-what-if base-resources
+
+deploy-base-resources: check-auto-approve base-resources
+
 set-production-subscription:
-	$(eval AZURE_SUBSCRIPTION=s189-teacher-services-cloud-production)
+	$(eval AZ_SUBSCRIPTION=s189-teacher-services-cloud-production)
 
 set-what-if:
 	$(eval WHAT_IF=--what-if)
