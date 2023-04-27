@@ -10,11 +10,22 @@ module Support
 
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:user) { create(:user) }
-    let(:params) { {} }
+    let(:params) do
+      build(:provider).attributes.symbolize_keys.slice(
+        :accrediting_provider,
+        :accredited_provider_id,
+        :provider_code,
+        :provider_name,
+        :provider_type,
+        :ukprn,
+        :urn
+      ).transform_keys { |key| key == :accrediting_provider ? :accredited_provider : key }
+    end
+
+    subject { provider_form }
+
 
     describe 'validations' do
-      subject { provider_form }
-
       it {
         expect(subject).to validate_length_of(:provider_name)
           .is_at_most(100)
@@ -160,16 +171,6 @@ module Support
 
     describe '#stash' do
       context 'valid details' do
-        let(:provider) do
-          build(:provider)
-        end
-
-        let(:params) do
-          provider.attributes.symbolize_keys.slice(:provider_code, :provider_name, :provider_type, :accrediting_provider, :urn, :ukprn).transform_keys do |key|
-            key == :accrediting_provider ? :accredited_provider : key
-          end
-        end
-
         it 'returns true' do
           expect(subject.stash).to be true
 
