@@ -12,7 +12,7 @@ module Support
           @provider_contact_form = ProviderContactForm.new(current_user, params: provider_form_params)
 
           if @provider_contact_form.stash
-            redirect_to support_recruitment_cycle_providers_path(recruitment_cycle.year), flash: { success: 'Provider was successfully created' }
+            redirect_to support_recruitment_cycle_providers_onboarding_check_path
           else
             render :new
           end

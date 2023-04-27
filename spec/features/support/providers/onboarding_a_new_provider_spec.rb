@@ -46,8 +46,7 @@ feature 'Onboarding a new provider' do
       scenario 'add a new provider contact details' do
         when_i_fill_in_a_valid_provider_contact_details
         and_i_click_the_continue_button
-        then_i_am_redirected_back_to_the_support_providers_index_page
-        and_a_success_message_is_displayed
+        then_i_am_redirected_to_check_your_answer_page
       end
 
       scenario 'with invalid details' do
@@ -141,6 +140,10 @@ feature 'Onboarding a new provider' do
 
   def and_i_click_the_continue_button
     click_button 'Continue'
+  end
+
+  def then_i_am_redirected_to_check_your_answer_page
+    expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/onboarding/check")
   end
 
   def then_i_am_redirected_to_the_onboarding_contacts_page
