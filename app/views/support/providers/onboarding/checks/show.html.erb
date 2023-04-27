@@ -1,0 +1,96 @@
+<%= render PageTitle.new(title: "support.providers.onboarding.checks.show") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_support_recruitment_cycle_providers_onboarding_contacts_path) %>
+<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(url: support_recruitment_cycle_providers_onboarding_check_path, method: :put, local: true) do |f| %>
+
+      <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Add organisation</span>
+         Check your answers
+      </h1>
+      <%= render GovukComponent::SummaryListComponent.new do |component|
+            component.with_row do |row|
+              row.with_key { "Provider name" }
+              row.with_value { @provider_form.provider_name }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "provider name")
+            end
+
+            component.with_row do |row|
+              row.with_key { "Provider code" }
+              row.with_value { @provider_form.provider_code }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "provider code")
+            end
+
+            component.with_row do |row|
+              row.with_key { "UK provider reference number (UKPRN)" }
+              row.with_value { @provider_form.ukprn }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "UKPRN")
+            end
+
+            component.with_row do |row|
+              row.with_key { "Is the organisation an accredited provider?" }
+              row.with_value { @provider_form.accredited_provider? ? "Yes" : "No" }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "accredited provider")
+            end
+
+            if @provider_form.accredited_provider?
+              component.with_row do |row|
+                row.with_key { "Accredited provider ID" }
+                row.with_value { @provider_form.accredited_provider_id }
+                row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "accredited provider ID")
+              end
+            end
+
+            component.with_row do |row|
+              row.with_key { "Provider type" }
+              row.with_value { t("support.providers.provider_type.#{@provider_form.provider_type}") }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "provider type")
+            end
+
+            if @provider_form.lead_school?
+              component.with_row do |row|
+                row.with_key { "Unique reference number (URN)" }
+                row.with_value { @provider_form.urn }
+                row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "URN")
+              end
+            end
+          end %>
+
+    <h2 class="govuk-heading-m">Contact details</h2>
+
+    <%= render GovukComponent::SummaryListComponent.new do |component|
+          component.with_row do |row|
+            row.with_key { "Email address" }
+            row.with_value { @provider_contact_form.email }
+            row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_contacts_path(goto_confirmation: true), visually_hidden_text: "email address")
+          end
+
+          component.with_row do |row|
+            row.with_key { "Telephone number" }
+            row.with_value { @provider_contact_form.telephone }
+            row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_contacts_path(goto_confirmation: true), visually_hidden_text: "telephone number")
+          end
+
+          component.with_row do |row|
+            row.with_key { "Website" }
+            row.with_value { @provider_contact_form.website }
+            row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_contacts_path(goto_confirmation: true), visually_hidden_text: "website")
+          end
+
+          component.with_row do |row|
+            row.with_key { "Address" }
+            row.with_value { @provider_contact_form.full_address }
+            row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_contacts_path(goto_confirmation: true), visually_hidden_text: "address")
+          end
+        end %>
+
+    <%= f.govuk_submit(t("support.providers.add")) %>
+  <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_providers_path) %>
+    </p>
+  </div>
+</div>

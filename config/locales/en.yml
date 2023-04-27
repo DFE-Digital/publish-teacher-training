@@ -173,6 +173,8 @@ en:
           onboarding:
             contacts:
               new: "Contact details"
+            checks:
+              show: "Check your answers"
         users:
           index: "Users"
           show: "User overview"
@@ -285,6 +287,7 @@ en:
           name: "Only users affiliated with a provider"
           description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
     providers:
+      add: "Add organisation"
       schools:
         new: *add_school
         update: *update_school
@@ -315,6 +318,10 @@ en:
         new:
           title: Enter a provider name, UKPRN or postcode
           caption: "Add accredited provider - %{provider_name} (%{code})"
+      provider_type:
+        lead_school: "School"
+        scitt: "School centred initial teacher training (SCITT)"
+        university: "Higher education institution (HEI)"
     flash:
       created: "%{resource} successfully created"
       updated: "%{resource} successfully updated"
