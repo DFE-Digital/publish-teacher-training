@@ -15,37 +15,29 @@ describe PhoneValidator do
     PhoneValidatorTest.new
   end
 
-  describe 'With nil phone number address' do
+  context 'when nil' do
     before do
       model.phone_number = nil
       model.validate(:no_context)
     end
 
-    it 'Returns invalid' do
+    it 'returns invalid' do
       expect(model.valid?(:no_context)).to be false
-    end
-
-    it 'Returns the correct error message' do
-      expect(model.errors[:phone_number]).to include('^Enter a valid telephone number')
     end
   end
 
-  describe 'With empty phone number address supplied' do
+  context 'when empty' do
     before do
       model.phone_number = ''
       model.validate(:no_context)
     end
 
-    it 'Returns invalid' do
+    it 'returns invalid' do
       expect(model.valid?(:no_context)).to be false
-    end
-
-    it 'Returns the correct error message' do
-      expect(model.errors[:phone_number]).to include('^Enter a valid telephone number')
     end
   end
 
-  describe 'With an phone number address in an invalid format' do
+  context 'when invalid' do
     let(:invalid_telephone_numbers) do
       [
         '12 3 4 cat',
@@ -53,7 +45,7 @@ describe PhoneValidator do
       ]
     end
 
-    it 'Correctly invalidates invalid phone numbers' do
+    it 'returns invalid' do
       invalid_telephone_numbers.each do |number|
         model.phone_number = number
         expect(model.valid?(:no_context)).to(be(false), "Expected phone number #{number} to be invalid")
@@ -61,13 +53,15 @@ describe PhoneValidator do
     end
   end
 
-  describe 'With a valid phone number address' do
+  context 'when valid' do
     let(:valid_telephone_numbers) do
       [
         '+447123 123 123',
+        '+407123 123 123',
+        '+1 7123 123 123',
         '+447123123123',
         '07123123123',
-        '01234 123 123 ext123',
+        '01234 123 123 --()+ ',
         '01234 123 123 ext 123',
         '01234 123 123 x123',
         '(01234) 123123',
@@ -90,11 +84,33 @@ describe PhoneValidator do
       ]
     end
 
-    it 'Correctly validates valid phone numbers' do
+    it 'returns valid' do
       valid_telephone_numbers.each do |number|
         model.phone_number = number
         expect(model.valid?(:no_context)).to(be(true), "Expected phone number #{number} to be valid")
       end
+    end
+  end
+
+  context 'when over 15 numbers' do
+    before do
+      model.phone_number = '123456791123456789'
+      model.validate(:no_context)
+    end
+
+    it 'returns invalid' do
+      expect(model.valid?(:no_context)).to be false
+    end
+  end
+
+  context 'when 7 numbers or less' do
+    before do
+      model.phone_number = '1234567'
+      model.validate(:no_context)
+    end
+
+    it 'returns invalid' do
+      expect(model.valid?(:no_context)).to be false
     end
   end
 end

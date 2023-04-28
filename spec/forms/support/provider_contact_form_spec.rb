@@ -29,7 +29,49 @@ module Support
         it 'validates the telephone' do
           expect(subject).not_to be_valid
 
-          expect(subject.errors[:telephone]).to match_array('Enter a real telephone number')
+          expect(subject.errors[:telephone]).to match_array('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192')
+        end
+      end
+
+      context 'telephone set to nil' do
+        let(:params) do
+          {
+            telephone: nil
+          }
+        end
+
+        it 'validates the telephone' do
+          expect(subject).not_to be_valid
+
+          expect(subject.errors[:telephone]).to match_array('Enter a telephone number')
+        end
+      end
+
+      context 'telephone set to long number' do
+        let(:params) do
+          {
+            telephone: '123456791123456789'
+          }
+        end
+
+        it 'validates the telephone' do
+          expect(subject).not_to be_valid
+
+          expect(subject.errors[:telephone]).to match_array('Telephone number must contain 15 numbers or fewer')
+        end
+      end
+
+      context 'telephone set to short number' do
+        let(:params) do
+          {
+            telephone: '1234567'
+          }
+        end
+
+        it 'validates the telephone' do
+          expect(subject).not_to be_valid
+
+          expect(subject.errors[:telephone]).to match_array('Telephone number must contain 8 numbers or more')
         end
       end
 

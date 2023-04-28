@@ -348,7 +348,10 @@ en:
             name:
               blank: "^Enter name"
             telephone:
-              blank: "^Enter a valid telephone number"
+              blank: Enter a telephone number
+              invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+              too_long: Telephone number must contain 15 numbers or fewer
+              too_short: Telephone number must contain 8 numbers or more
         site:
           attributes:
             location_name:
@@ -442,7 +445,10 @@ en:
             website:
               blank: "^Enter website"
             telephone:
-              blank: "^Enter a valid telephone number"
+              blank: Enter a telephone number
+              invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+              too_long: Telephone number must contain 15 numbers or fewer
+              too_short: Telephone number must contain 8 numbers or more
             address1:
               blank: "^Enter building or street"
             town:
@@ -555,8 +561,10 @@ en:
             email:
               blank: "Enter an email address"
             telephone:
-              blank: "Enter a telephone number"
-              invalid_phone_number: "Enter a real telephone number"
+              blank: Enter a telephone number
+              invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+              too_long: Telephone number must contain 15 numbers or fewer
+              too_short: Telephone number must contain 8 numbers or more
             website:
               blank: "Enter a website address"
               url: "Enter a website address in the correct format, like https://www.example.com"
@@ -711,6 +719,11 @@ en:
               blank: "Enter a town or city"
             postcode:
               blank: "Enter a postcode"
+            telephone:
+              blank: Enter a telephone number
+              invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+              too_long: Telephone number must contain 15 numbers or fewer
+              too_short: Telephone number must contain 8 numbers or more
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
