@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Publish
-  module CourseHelper
-    def course_value_provided?(value)
+module Support
+  module ValueHelper
+    def value_provided?(value)
       value.presence || tag.span(t('value_not_entered'), class: 'govuk-hint').html_safe
     end
   end

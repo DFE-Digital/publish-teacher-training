@@ -150,6 +150,8 @@ en:
           index: "Providers"
           new: "Add a provider"
           show: "View a provider"
+          edit: "Edit a provider"
+          edit_contact: "Edit provider contact details"
           courses:
             index: "Courses"
             edit: "Edit course details"
@@ -214,9 +216,9 @@ en:
           text: "Enter details about the training provider"
         about_accrediting_provider:
           text: "Enter details about the accredited provider"
+  value_not_entered: "Not entered"
   course:
     add_course: "Add course"
-    value_not_entered: "Not entered"
     update_email:
       name: "title"
       age_range_in_years: "age range"
@@ -323,6 +325,7 @@ en:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
     update_record: "Update"
+    update_resource: "Update %{resource}"
     create_record: "Create"
   activerecord:
     attributes:
