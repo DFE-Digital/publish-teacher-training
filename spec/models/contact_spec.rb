@@ -42,7 +42,7 @@ describe Contact do
         contact.telephone = ''
         contact.valid?
 
-        expect(contact.errors[:telephone]).to include('Enter your telephone number')
+        expect(contact.errors[:telephone]).to include('Enter a telephone number')
       end
 
       it 'Correctly validates valid phone numbers' do

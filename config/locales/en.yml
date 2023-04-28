@@ -348,7 +348,7 @@ en:
             name:
               blank: "^Enter name"
             telephone:
-              blank: Enter your telephone number
+              blank: Enter a telephone number
               invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
               too_long: Telephone number must contain 15 numbers or fewer
               too_short: Telephone number must contain 8 numbers or more
@@ -445,7 +445,7 @@ en:
             website:
               blank: "^Enter website"
             telephone:
-              blank: Enter your telephone number
+              blank: Enter a telephone number
               invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
               too_long: Telephone number must contain 15 numbers or fewer
               too_short: Telephone number must contain 8 numbers or more
@@ -561,7 +561,7 @@ en:
             email:
               blank: "Enter an email address"
             telephone:
-              blank: Enter your telephone number
+              blank: Enter a telephone number
               invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
               too_long: Telephone number must contain 15 numbers or fewer
               too_short: Telephone number must contain 8 numbers or more
@@ -720,7 +720,7 @@ en:
             postcode:
               blank: "Enter a postcode"
             telephone:
-              blank: Enter your telephone number
+              blank: Enter a telephone number
               invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
               too_long: Telephone number must contain 15 numbers or fewer
               too_short: Telephone number must contain 8 numbers or more

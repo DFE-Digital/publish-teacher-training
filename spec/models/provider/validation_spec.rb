@@ -44,7 +44,7 @@ describe Provider do
           provider.telephone = ''
           provider.valid? :update
 
-          expect(provider.errors[:telephone]).to include('Enter your telephone number')
+          expect(provider.errors[:telephone]).to include('Enter a telephone number')
         end
 
         it 'Correctly validates valid phone numbers' do

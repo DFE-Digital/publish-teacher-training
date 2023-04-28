@@ -13,7 +13,7 @@ module Support
 
     describe 'validations' do
       include_examples 'blank validation', :email, 'Enter an email address'
-      include_examples 'blank validation', :telephone, 'Enter your telephone number'
+      include_examples 'blank validation', :telephone, 'Enter a telephone number'
       include_examples 'blank validation', :website, 'Enter a website address'
       include_examples 'blank validation', :address1, 'Enter address line 1'
       include_examples 'blank validation', :town, 'Enter a town or city'
@@ -43,7 +43,7 @@ module Support
         it 'validates the telephone' do
           expect(subject).not_to be_valid
 
-          expect(subject.errors[:telephone]).to match_array('Enter your telephone number')
+          expect(subject.errors[:telephone]).to match_array('Enter a telephone number')
         end
       end
 
