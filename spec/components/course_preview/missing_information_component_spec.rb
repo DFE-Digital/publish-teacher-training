@@ -41,7 +41,7 @@ module CoursePreview
         end
 
         it "renders link for missing #{information_type}" do
-          render_inline(described_class.new(course:, information_type:))
+          render_inline(described_class.new(course:, information_type:, is_preview: true))
 
           expect(page).to have_link(text, href: hrefs[information_type])
         end

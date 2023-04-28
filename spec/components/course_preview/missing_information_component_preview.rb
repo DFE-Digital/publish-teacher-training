@@ -14,7 +14,7 @@ module CoursePreview
         provider = Provider.new(provider_code: 'BAT', recruitment_cycle: RecruitmentCycle.current)
         accrediting_provider = Provider.new(provider_code: 'CAT', recruitment_cycle: RecruitmentCycle.current)
         course = Course.new(provider:, course_code: '2KT', accrediting_provider:)
-        render CoursePreview::MissingInformationComponent.new(course:, information_type:)
+        render CoursePreview::MissingInformationComponent.new(course:, information_type:, is_preview: true)
       end
     end
   end

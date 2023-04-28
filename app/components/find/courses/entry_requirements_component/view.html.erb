@@ -4,7 +4,7 @@
   <div data-qa="course__required_qualifications">
 
     <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? %>
-        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree) %>
+        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree, is_preview: preview?(params)) %>
     <% else %>
       <p class="govuk-body"><%= degree_grade_content(course) %></p>
 
@@ -36,7 +36,7 @@
     </p>
 
     <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>
     <% else %>
 
       <p class="govuk-body">

@@ -5,6 +5,7 @@ module Find
     module AboutSchoolsComponent
       class View < ViewComponent::Base
         include PublishHelper
+        include PreviewHelper
 
         attr_reader :course
 
