@@ -145,7 +145,7 @@ class Provider < ApplicationRecord
 
   validates :provider_type, presence: true
 
-  validates :telephone, phone: { message: 'Enter a valid telephone number' }, if: :telephone_changed?
+  validates :telephone, phone: true, if: :telephone_changed?
 
   validates :ukprn, ukprn_format: { allow_blank: false }, on: :update
 

@@ -4,7 +4,7 @@
     <% if course.provider.train_with_disability.present? %>
       <%= markdown(course.provider.train_with_disability) %>
     <% elsif FeatureService.enabled?(:course_preview_missing_information) %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_disability) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_disability, is_preview: preview?(params)) %>
     <% end %>
   </div>
 </div>

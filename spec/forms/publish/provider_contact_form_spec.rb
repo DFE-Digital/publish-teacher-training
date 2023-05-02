@@ -59,7 +59,7 @@ module Publish
         it 'validates the telephone' do
           expect(subject).not_to be_valid
 
-          expect(subject.errors[:telephone]).to match_array('Enter a valid telephone number')
+          expect(subject.errors[:telephone]).to match_array('Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192')
         end
       end
 

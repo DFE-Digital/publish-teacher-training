@@ -16,7 +16,7 @@ module Support
     ].freeze
 
     validates :email, presence: true, email_address: true
-    validates :telephone, presence: true, phone: { message: :invalid_phone_number }
+    validates :telephone, phone: true
     validates :website, presence: true, url: true
     validates :address1, :town, presence: true
     validates :postcode, presence: true, postcode: true

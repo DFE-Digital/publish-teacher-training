@@ -49,7 +49,7 @@
       <% end %>
 
     <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
     <% end %>
   </div>
 </div>

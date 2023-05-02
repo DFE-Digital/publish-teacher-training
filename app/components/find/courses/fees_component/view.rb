@@ -5,6 +5,8 @@ module Find
     module FeesComponent
       class View < ViewComponent::Base
         include PublishHelper
+        include PreviewHelper
+
         attr_reader :course
 
         delegate :fee_uk_eu,

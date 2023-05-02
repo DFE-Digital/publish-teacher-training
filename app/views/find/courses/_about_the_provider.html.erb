@@ -5,7 +5,7 @@
       <%= markdown(course.provider.train_with_us) %>
     </div>
     <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
   <% end %>
 
   <% if course.accrediting_provider.present? %>
@@ -16,7 +16,7 @@
         <%= markdown(course.about_accrediting_provider) %>
       </div>
     <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_accrediting_provider) %>
+      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_accrediting_provider, is_preview: preview?(params)) %>
     <% end %>
   <% end %>
 </div>

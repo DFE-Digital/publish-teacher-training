@@ -36,6 +36,6 @@
       </div>
     <% end %>
   <% else %>
-    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :fee_uk_eu) %>
+    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :fee_uk_eu, is_preview: preview?(params)) %>
   <% end %>
 </div>
