@@ -56,6 +56,7 @@ en:
     users: "Users"
     training_partners: "Training partners"
     organisation_details: "Organisation details"
+    accredited_provider: "Accredited providers"
   edit_options:
     entry_requirements:
       must_have_qualification_at_application_time:

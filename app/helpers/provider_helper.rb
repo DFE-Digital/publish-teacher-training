@@ -45,7 +45,7 @@ module ProviderHelper
   end
 
   def no_accredited_providers?(provider)
-    !RecruitmentCycle.current.providers.find_by(provider_code: provider.provider_code).accrediting_providers.any?
+    RecruitmentCycle.current.providers.find_by(provider_code: provider.provider_code).accrediting_providers.none?
   end
 
   private

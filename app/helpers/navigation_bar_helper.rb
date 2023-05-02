@@ -7,13 +7,29 @@ module NavigationBarHelper
       provider.recruitment_cycle
   end
 
-  def navigation_items(provider)
-    [
-      { name: t('navigation_bar.courses'), url: publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year) },
-      { name: t('navigation_bar.schools'), url: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year) },
-      { name: t('navigation_bar.users'), url: publish_provider_users_path(provider_code: provider.provider_code), additional_url: request_access_publish_provider_path(provider.provider_code) },
-      *([name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year)] if provider.accredited_provider?),
-      { name: t('navigation_bar.organisation_details'), url: details_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year) }
-    ]
+  if FeatureService.enabled?(:accredited_provider_search)
+
+    def navigation_items(provider)
+      [
+        { name: t('navigation_bar.courses'), url: publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year) },
+        { name: t('navigation_bar.schools'), url: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year) },
+        { name: t('navigation_bar.users'), url: publish_provider_users_path(provider_code: provider.provider_code), additional_url: request_access_publish_provider_path(provider.provider_code) },
+        *([name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year)] if provider.accredited_provider?),
+        *([name: t('navigation_bar.accredited_provider'), url: publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)] if provider.provider_type == 'lead_school'),
+        { name: t('navigation_bar.organisation_details'), url: details_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year) }
+      ]
+    end
+
+  else
+
+    def navigation_items(provider)
+      [
+        { name: t('navigation_bar.courses'), url: publish_provider_recruitment_cycle_courses_path(provider.provider_code, provider.recruitment_cycle_year) },
+        { name: t('navigation_bar.schools'), url: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year) },
+        { name: t('navigation_bar.users'), url: publish_provider_users_path(provider_code: provider.provider_code), additional_url: request_access_publish_provider_path(provider.provider_code) },
+        *([name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year)] if provider.accredited_provider?),
+        { name: t('navigation_bar.organisation_details'), url: details_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year) }
+      ]
+    end
   end
 end
