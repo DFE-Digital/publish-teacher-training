@@ -6,7 +6,6 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   before do
     given_i_am_a_lead_school_provider_user
     and_the_accredited_provider_search_feature_is_on
-    and_my_provider_has_accredited_providers
   end
 
   scenario 'i can view the accredited providers tab when there are none' do
@@ -38,6 +37,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     @provider = @current_user.providers.first
   end
 
+  # This method will be used in a follow up PR where the comment will be removed.
   def and_my_provider_has_accredited_providers
     @provider.courses << create(:course, :with_accrediting_provider)
     @accrediting_provider = @provider.accrediting_providers.first
