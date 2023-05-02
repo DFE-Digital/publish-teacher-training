@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-module Support
+module Publish
   describe ValueHelper do
     describe '#value_provided?' do
       it 'returns a default text when value is nil' do

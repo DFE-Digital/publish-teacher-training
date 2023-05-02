@@ -4,7 +4,7 @@ module Providers
   module ProviderList
     class View < ApplicationComponent
       include Support::TimeHelper
-      include Support::ValueHelper
+      include Publish::ValueHelper
 
       def initialize(provider:, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
