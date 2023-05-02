@@ -6,15 +6,15 @@
 
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-xl">Cookies</h1>
+      <h1 class="govuk-heading-l">Cookies on <%= t("service_name.publish") %></h1>
 
       <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
 
-      <p class="govuk-body">We use cookies to make <%= t("service_name.publish") %> (Publish) work and collect information about how you use our service.</p>
+      <p class="govuk-body">We use cookies to make <%= t("service_name.publish") %> work and collect information about how you use our service.</p>
 
       <h2 class="govuk-heading-m">Essential cookies</h3>
 
-      <p class="govuk-body">Essential cookies keep your information secure while you use Publish.</p>
+      <p class="govuk-body">Essential cookies keep your information secure while you use ‘<%= t("service_name.publish") %>’. We do not need to ask permission to use them.</p>
 
       <table class="govuk-table app-table--vertical-align-middle" aria-describedby="essential_cookies_desc">
         <thead class="govuk-table__header">
@@ -27,8 +27,8 @@
         <tbody class="govuk-table__body">
           <tr scope="row" class="govuk-table__row">
             <td class="govuk-table__cell "><span class="break-word"><%= Settings.cookies.session.name %></span></td>
-            <td class="govuk-table__cell ">Remembers your identity when you are signed in</td>
-            <td class="govuk-table__cell ">After 6 hours or on signing out</td>
+            <td class="govuk-table__cell ">Stores encrypted session data</td>
+            <td class="govuk-table__cell ">When you close your browser</td>
           </tr>
           <tr scope="row" class="govuk-table__row">
             <td class="govuk-table__cell"><%= Settings.cookies.analytics.name %></td>
@@ -38,16 +38,16 @@
         </tbody>
       </table>
 
-      <h2 class="govuk-heading-m">Measuring website usage (Google Analytics)</h2>
+      <h2 class="govuk-heading-m">Cookies that measure website use (analytics)</h2>
 
-      <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use Publish. This information helps us improve our service.</p>
+      <p class="govuk-body">With your permission, we use Google Analytics to collect data about how you use ‘<%= t("service_name.publish") %>’. This information helps us improve our service.</p>
 
       <p class="govuk-body">Google is not allowed to use or share our analytics data with anyone.</p>
 
       <p class="govuk-body">Google Analytics stores anonymised information about:</p>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li>how you got to Publish</li>
+        <li>how you got to ‘<%= t("service_name.publish") %>’</li>
         <li>the pages you visit on this site and how long you spend on them</li>
         <li>what you click on while you’re visiting the site</li>
       </ul>
@@ -80,7 +80,12 @@
                                           :last,
                                           inline: true,
                                           legend: { text: "Do you want to accept Google Analytics cookies?", size: "s" } %>
+
       <%= f.govuk_submit("Save cookie settings") %>
+
+      <p class="govuk-body">Read more about who we are, how you can contact us and how we process personal data in our <%= govuk_link_to("privacy notice", find_privacy_path) %>.</p>
+
+      <p class="govuk-body">You can also <%= govuk_link_to("find out more about cookies in Google’s Privacy and Terms", t("google_privacy_policy_url"), target: "_blank") %>.</p>
     <% end %>
   </div>
 </div>
