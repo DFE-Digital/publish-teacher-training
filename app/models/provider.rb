@@ -156,7 +156,7 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  validates :accredited_provider_id, accredited_provider_id_format: { allow_blank: false }, on: :update, if: :accredited_provider?
+  validates :accredited_provider_id, accredited_provider_id_format: { allow_blank: true }, on: :update, if: :accredited_provider?
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 
