@@ -7,8 +7,8 @@
       </h1>
 
       <%= govuk_button_link_to("Add accredited provider",
-      root_path(provider_code: @provider.provider_code,
-                recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
+      new_publish_provider_recruitment_cycle_accredited_provider_path(provider_code: @provider.provider_code,
+                                                                      recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
 
     <p class="govuk-body">
       <% if @provider.accrediting_providers.none? %>
