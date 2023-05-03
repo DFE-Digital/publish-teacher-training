@@ -1,0 +1,17 @@
+default: &default
+  RAILS_SERVE_STATIC_FILES: true
+
+review:
+  <<: *default
+  RAILS_ENV: review
+  RACK_ENV: review
+
+review_aks:
+  <<: *default
+  RAILS_ENV: review_aks
+  RACK_ENV: review_aks
+
+dv_review_aks:
+  <<: *default
+  RAILS_ENV: review_aks
+  RACK_ENV: review_aks

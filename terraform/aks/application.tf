@@ -34,7 +34,7 @@ module "web_application" {
 
   namespace    = var.namespace
   environment  = local.environment
-  service_name = local.service_name
+  service_name = "${local.service_name}"
 
   cluster_configuration_map = module.cluster_data.configuration_map
 
@@ -42,9 +42,11 @@ module "web_application" {
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
   docker_image           = var.docker_image
-  command                = ["/bin/sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
+  # command                = ["/bin/sh", "-c", "bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0"]
+  command                = ["/bin/sh", "-c", "bundle exec rails db:setup && bundle exec rails server -b 0.0.0.0"]
   web_external_hostnames = []
   max_memory             = "512Mi"
+  probe_path             = "/ping"
 }
 
 module "worker_application" {
@@ -55,7 +57,7 @@ module "worker_application" {
 
   namespace    = var.namespace
   environment  = local.environment
-  service_name = local.service_name
+  service_name = "${local.service_name}-worker"
 
   cluster_configuration_map = module.cluster_data.configuration_map
 
@@ -63,7 +65,10 @@ module "worker_application" {
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
   docker_image = var.docker_image
-  command      = ["bundle", "exec", "sidekiq", "-c", "5", "-C", "./config/sidekiq.yml"]
-  # external_hostnames = null
+  command      = ["/bin/sh", "-c", "bundle exec sidekiq -C config/sidekiq.yml"]
+  # command      = ["/bin/sh", "-c 5", "bundle exec sidekiq -C config/sidekiq.yml"] failed
+  # command      = ["/bin/sh", "bundle exec sidekiq -c 5 -C config/sidekiq.yml"]
+  # command      = ["/bin/sh", "bundle exec sidekiq -c 5 -C config/sidekiq.yml"] failed
   max_memory = "512Mi"
+  probe_command = ["pgrep", "-f", "sidekiq"]
 }
