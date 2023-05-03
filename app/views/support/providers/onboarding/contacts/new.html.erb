@@ -1,13 +1,12 @@
-<%= render PageTitle.new(title: "support.providers.onboarding.contacts.new", has_errors: @provider_contact_form.errors.present?) %>
+<%= render PageTitle.new(title: "support.providers.onboarding.contacts.new", has_errors: @support_provider_contact_form.errors.present?) %>
 
-<%= content_for(:breadcrumbs) do %>
-  <%= render GovukComponent::BackLinkComponent.new(
-    text: "Back",
-    href: new_support_recruitment_cycle_providers_onboarding_path
-  ) %>
-<% end %>
-
-<%= form_with model: @provider_contact_form, url: support_recruitment_cycle_providers_onboarding_contacts_path, local: true do |f| %>
+<%= form_with model: @support_provider_contact_form, url: support_recruitment_cycle_providers_onboarding_contacts_path, local: true do |f| %>
+  <%= content_for(:breadcrumbs) do %>
+    <%= render GovukComponent::BackLinkComponent.new(
+      text: "Back",
+      href: back_link_for_onboarding_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year)
+    ) %>
+  <% end %>
 
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
@@ -30,6 +29,8 @@
 
         <%= f.govuk_text_field :postcode, label: { text: "Postcode", size: "s" }, width: 10 %>
       <% end %>
+
+      <%= f.hidden_field(:goto_confirmation, value: goto_confirmation_value(param_form_key: f.object_name.to_sym, params:)) %>
 
       <%= f.govuk_submit %>
       <p class="govuk-body">

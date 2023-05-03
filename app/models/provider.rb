@@ -290,6 +290,8 @@ class Provider < ApplicationRecord
 
   def provider_type=(new_value)
     super
+    return if FeatureService.enabled?(:support_new_provider_creation_flow)
+
     self.accrediting_provider = if scitt? || university?
                                   :accredited_provider
                                 else

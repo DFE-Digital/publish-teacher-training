@@ -24,5 +24,24 @@ module Support
     attr_accessor(*FIELDS)
 
     alias compute_fields new_attributes
+
+    def attributes_to_save = new_attributes
+
+    def full_address
+      address_lines.map { |line| ERB::Util.html_escape(line) }.join('<br> ').html_safe
+    end
+
+    private
+
+    def address_lines
+      [
+        address1,
+        address2,
+        address3,
+        town,
+        address4,
+        postcode
+      ].compact_blank
+    end
   end
 end
