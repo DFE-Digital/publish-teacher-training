@@ -44,10 +44,6 @@ module ProviderHelper
     end
   end
 
-  def no_accredited_providers?(provider)
-    RecruitmentCycle.current.providers.find_by(provider_code: provider.provider_code).accrediting_providers.none?
-  end
-
   private
 
   def visa_sponsorship_call_to_action(provider)

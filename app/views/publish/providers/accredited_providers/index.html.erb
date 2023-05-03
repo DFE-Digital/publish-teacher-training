@@ -11,7 +11,7 @@
                 recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
 
     <p class="govuk-body">
-      <% if no_accredited_providers?(@provider) %>
+      <% if @provider.accrediting_providers.none? %>
           There are no accredited providers for <%= @provider.provider_name %>.
       <% end %>
     </div>

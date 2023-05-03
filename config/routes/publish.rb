@@ -95,10 +95,6 @@ namespace :publish, as: :publish do
         resources :courses, only: [:index], controller: 'training_providers/courses'
       end
 
-      resources :accredited_providers, path: '/accredited-providers', only: [:index], param: :code do
-        resources :courses, only: [:index], controller: 'accredited_providers'
-      end
-
       resource :courses, only: %i[create] do
         resource :outcome, on: :member, only: %i[new], controller: 'courses/outcome' do
           get 'continue'
@@ -230,6 +226,7 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
+        resources :accredited_providers, only: [:index], path: '/accredited-providers'
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do
