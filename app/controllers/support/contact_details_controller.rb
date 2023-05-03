@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class ProvidersContactDetailsController < SupportController
+  class ContactDetailsController < SupportController
     def edit
       provider
     end
@@ -17,7 +17,7 @@ module Support
     private
 
     def provider
-      @provider ||= recruitment_cycle.providers.find(params[:id])
+      @provider ||= recruitment_cycle.providers.find(params[:provider_id])
     end
 
     def update_provider_params

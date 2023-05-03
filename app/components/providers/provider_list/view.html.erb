@@ -42,24 +42,24 @@
       component.with_row do |row|
         row.with_key { "Email address" }
         row.with_value { value_provided?(@provider.email) }
-        row.with_action(text: "Change", href: edit_support_recruitment_cycle_providers_contact_detail_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider email")
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider email")
       end
 
       component.with_row do |row|
         row.with_key { "Telephone number" }
         row.with_value { value_provided?(@provider.telephone) }
-        row.with_action(text: "Change", href: edit_support_recruitment_cycle_providers_contact_detail_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider phone")
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider phone")
       end
 
       component.with_row do |row|
         row.with_key { "Website" }
         row.with_value { value_provided?(@provider.website) }
-        row.with_action(text: "Change", href: edit_support_recruitment_cycle_providers_contact_detail_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider website")
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider website")
       end
 
       component.with_row do |row|
         row.with_key { "Address" }
         row.with_value { @provider.decorate.full_address }
-        row.with_action(text: "Change", href: edit_support_recruitment_cycle_providers_contact_detail_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider address")
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider address")
       end
     end %>

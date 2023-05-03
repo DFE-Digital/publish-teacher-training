@@ -54,7 +54,7 @@ feature 'View provider users' do
   private
 
   def and_there_is_a_provider
-    @provider = create(:provider, provider_name: 'Provider 1', provider_type: 'scitt', accrediting_provider: 'accredited_provider')
+    @provider = create(:provider, :accredited_provider, provider_name: 'Provider 1', provider_type: 'scitt')
   end
 
   def when_i_visit_the_support_provider_show_page
@@ -80,7 +80,7 @@ feature 'View provider users' do
   end
 
   def then_i_am_on_the_support_provider_edit_contact_details_page
-    expect(URI(current_url).path).to eq("/support/#{Settings.current_recruitment_cycle_year}/providers_contact_details/#{@provider.id}/edit")
+    expect(URI(current_url).path).to eq("/support/#{Settings.current_recruitment_cycle_year}/providers/#{@provider.id}/contact-details/edit")
   end
 
   def when_i_fill_in_a_valid_email
@@ -109,7 +109,7 @@ feature 'View provider users' do
 
   def and_the_provider_details_are_updated
     expect(support_provider_show_page).to have_text('Provider 2')
-    expect(support_provider_show_page).to have_text('No')
+    expect(support_provider_show_page).to have_text('Yes')
     expect(support_provider_show_page).to have_text('Lead school')
   end
 

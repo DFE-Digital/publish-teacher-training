@@ -467,6 +467,9 @@ en:
             ukprn:
               blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
+            accredited_provider_id:
+              blank: Enter the accredited provider ID
+              format: Enter a valid accredited provider ID - it must be 4 digits starting with a 1 or a 5
         organisation:
           attributes:
             name:

@@ -7,7 +7,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @provider, url: support_recruitment_cycle_providers_contact_detail_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
+    <%= form_with model: @provider, url: support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
 
       <%= f.govuk_error_summary %>
 
@@ -44,7 +44,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_path) %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_path(id: @provider.id)) %>
     </p>
   </div>
 </div>

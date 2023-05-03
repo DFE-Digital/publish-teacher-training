@@ -10,8 +10,9 @@ namespace :support do
       end
       resource :onboarding, only: %i[new create]
     end
-    resources :providers_contact_details, only: %i[edit update]
+    # resources :providers_contact_details, only: %i[edit update]
     resources :providers, except: %i[destroy] do
+      resource :contact_details, only: %i[edit update], path: 'contact-details'
       resource :check_user, only: %i[show update], controller: 'providers/users_check', path: 'users/check'
       resources :users, controller: 'providers/users' do
         member do
