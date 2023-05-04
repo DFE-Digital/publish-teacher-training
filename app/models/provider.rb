@@ -310,13 +310,18 @@ class Provider < ApplicationRecord
   end
 
   def accredited_bodies
-    accrediting_providers.map do |ap|
-      accrediting_provider_enrichment = accrediting_provider_enrichment(ap.provider_code)
-      {
-        provider_name: ap.provider_name,
-        provider_code: ap.provider_code,
-        description: accrediting_provider_enrichment&.Description || ''
-      }
+    accrediting_provider_enrichments.filter_map do |accrediting_provider_enrichment|
+      provider_code = accrediting_provider_enrichment.UcasProviderCode
+
+      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
+
+      if accredited_provider.present?
+        {
+          provider_name: accredited_provider.provider_name,
+          provider_code: accredited_provider.provider_code,
+          description: accrediting_provider_enrichment.Description || ''
+        }
+      end
     end
   end
 
@@ -374,18 +379,14 @@ class Provider < ApplicationRecord
 
   def name_normalised = StripPunctuationService.call(string: provider_name)
 
-  def accrediting_provider_enrichment(provider_code)
-    accrediting_provider_enrichments&.find do |enrichment|
-      enrichment.UcasProviderCode == provider_code
-    end
-  end
-
   def add_enrichment_errors
     accrediting_provider_enrichments&.each do |item|
-      accrediting_provider = accrediting_providers.find { |ap| ap.provider_code == item.UcasProviderCode }
+      provider_code = item.UcasProviderCode
 
-      if accrediting_provider.present? && item.invalid?
-        message = "^Reduce the word count for #{accrediting_provider.provider_name}"
+      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
+
+      if accredited_provider.present? && item.invalid?
+        message = "^Reduce the word count for #{accredited_provider.provider_name}"
         errors.add :accredited_bodies, message
       end
     end

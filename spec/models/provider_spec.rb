@@ -924,4 +924,38 @@ describe Provider do
       it { is_expected.to contain_exactly(matching_provider) }
     end
   end
+
+  describe '#accredited_bodies' do
+    it 'returns empty array' do
+      expect(subject.accredited_bodies).to match([])
+    end
+
+    context 'with accredited provider' do
+      let(:accredited_provider_one) { create(:provider, provider_code: 'AP1') }
+      let(:accredited_provider_two) { create(:provider, :previous_recruitment_cycle, provider_code: 'AP2') }
+      let(:accredited_provider_three) { create(:provider, provider_code: 'AP3') }
+
+      let(:accrediting_provider_enrichments) do
+        [{ UcasProviderCode: accredited_provider_one.provider_code,
+           Description: 'about the accredited provider' },
+         { UcasProviderCode: accredited_provider_two.provider_code },
+         { UcasProviderCode: accredited_provider_three.provider_code }]
+      end
+
+      it 'returns the current recruitment accredited bodies' do
+        expect(subject.accredited_bodies).to match([
+                                                     {
+                                                       provider_name: accredited_provider_one.provider_name,
+                                                       provider_code: accredited_provider_one.provider_code,
+                                                       description: 'about the accredited provider'
+                                                     },
+                                                     {
+                                                       provider_name: accredited_provider_three.provider_name,
+                                                       provider_code: accredited_provider_three.provider_code,
+                                                       description: ''
+                                                     }
+                                                   ])
+      end
+    end
+  end
 end
