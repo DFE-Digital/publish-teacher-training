@@ -6,18 +6,18 @@ module Publish
       helper_method :query, :search_result_title_component
 
       def index
-        authorize :provider, :index?
+        authorize_provider
         provider
       end
 
       def new
-        authorize :provider, :new?
+        authorize_provider
         provider
         @accredited_provider_search_form = AccreditedProviderSearchForm.new
       end
 
       def create
-        authorize :provider, :create?
+        authorize_provider
 
         @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
 
@@ -62,6 +62,10 @@ module Publish
           search_resource: 'accredited provider',
           caption_text: "Add accredited provider - #{provider.name_and_code}"
         )
+      end
+
+      def authorize_provider
+        authorize(provider)
       end
     end
   end
