@@ -227,6 +227,7 @@ namespace :publish, as: :publish do
 
       scope module: :providers do
         resources :accredited_providers, only: [:index], path: '/accredited-providers'
+        resource :accredited_providers, only: [:new, :create, :update], path: '/accredited-providers'
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do
