@@ -9,8 +9,6 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    delegate :recruitment_cycle_year, :provider_code, :provider_name, :lead_school?, to: :provider
-
     validates :email, presence: true, email_address: true
     validates :telephone, phone: true
     validates :website, presence: true, url: true
