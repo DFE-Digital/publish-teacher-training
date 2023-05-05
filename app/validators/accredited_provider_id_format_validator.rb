@@ -7,9 +7,9 @@ class AccreditedProviderIdFormatValidator < ActiveModel::EachValidator
     if record.lead_school?
       record.errors.add(:provider_type, :format)
     elsif record.scitt?
-      record.errors.add(attribute, :format) if value.to_s[0] != '5' || !value.to_s.match?(/\A\d{4}\Z/)
+      record.errors.add(attribute, :format) unless value.to_s.match?(/\A5\d{3}\Z/)
     elsif record.university?
-      record.errors.add(attribute, :format) if value.to_s[0] != '1' || !value.to_s.match?(/\A\d{4}\Z/)
+      record.errors.add(attribute, :format) unless value.to_s.match?(/\A1\d{3}\Z/)
     end
   end
 end

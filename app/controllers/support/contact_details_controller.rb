@@ -3,7 +3,6 @@
 module Support
   class ContactDetailsController < SupportController
     def edit
-      # provider
       @provider_contact_form = ContactDetailsForm.new(provider)
     end
 
@@ -16,12 +15,6 @@ module Support
       else
         render :edit
       end
-
-      # if provider.update(update_provider_params)
-      #  redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
-      # else
-      #  render :edit
-      # end
     end
 
     private
