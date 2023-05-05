@@ -371,15 +371,25 @@ describe Provider do
     end
   end
 
-  describe 'accrediting_providers' do
-    let(:provider) { create(:provider, accrediting_provider: 'N') }
+  describe '#accrediting_providers' do
+    let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
 
     let(:accrediting_provider) { create(:provider, accrediting_provider: 'Y') }
+    let(:accredited_provider) { accrediting_provider }
     let!(:course1) { create(:course, accrediting_provider:, provider:) }
     let!(:course2) { create(:course, accrediting_provider:, provider:) }
 
+    let(:accrediting_provider_enrichments) do
+      [{ UcasProviderCode: accredited_provider.provider_code },
+       { UcasProviderCode: accredited_provider.provider_code }]
+    end
+
     it "returns the course's accrediting provider" do
       expect(provider.accrediting_providers.first).to eq(accrediting_provider)
+    end
+
+    it 'is aliased' do
+      expect(provider.accrediting_providers).to eq(provider.accredited_providers)
     end
 
     it 'does not duplicate data' do

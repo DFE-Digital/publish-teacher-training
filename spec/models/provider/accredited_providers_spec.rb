@@ -46,6 +46,11 @@ describe Provider do
     context 'with an accrediting provider (via courses)' do
       let(:accrediting_provider) { build(:provider, provider_code: 'AP1') }
       let(:courses) { [build(:course, course_code: 'P33P', accrediting_provider:)] }
+      let(:accredited_provider) { accrediting_provider }
+
+      let(:accrediting_provider_enrichments) do
+        [{ UcasProviderCode: accredited_provider.provider_code }]
+      end
 
       its(:length) { is_expected.to be(1) }
 
@@ -84,15 +89,7 @@ describe Provider do
           }]
         end
 
-        its(:length) { is_expected.to be(1) }
-
-        describe 'the returned accredited provider' do
-          subject { provider.accredited_bodies.first }
-
-          its([:description]) { is_expected.to eq('') }
-          its([:provider_code]) { is_expected.to eq(accrediting_provider.provider_code) }
-          its([:provider_name]) { is_expected.to eq(accrediting_provider.provider_name) }
-        end
+        its(:length) { is_expected.to be(0) }
       end
     end
   end
