@@ -18,6 +18,7 @@ feature 'View provider users' do
       then_i_am_on_the_support_provider_edit_page
       when_i_fill_in_a_valid_provider_name
       and_i_choose_a_different_provider_type
+      and_i_fill_in_a_valid_id
       and_i_click_the_submit_button
       then_i_am_redirected_back_to_the_support_provider_show_page
       and_the_provider_details_are_updated
@@ -54,7 +55,7 @@ feature 'View provider users' do
   private
 
   def and_there_is_a_provider
-    @provider = create(:provider, :accredited_provider, provider_name: 'Provider 1', provider_type: 'scitt')
+    @provider = create(:provider, :accredited_provider, :scitt, provider_name: 'Provider 1', accredited_provider_id: 5432)
   end
 
   def when_i_visit_the_support_provider_show_page
@@ -93,6 +94,10 @@ feature 'View provider users' do
 
   def when_i_fill_in_a_valid_provider_name
     support_provider_edit_page.provider_name.set('Provider 2')
+  end
+
+  def and_i_fill_in_a_valid_id
+    fill_in 'provider-accredited-provider-id-field', with: '1234'
   end
 
   def and_i_choose_a_different_provider_type
