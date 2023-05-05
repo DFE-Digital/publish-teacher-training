@@ -1,51 +1,65 @@
-<%= render PageTitle.new(title: "support.providers.edit") %>
+<%= content_for :page_title, title_with_error_prefix(I18n.t("components.page_titles.support.providers.edit"), @provider.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider)) %>
 <% end %>
 
-<h1 class="govuk-heading-l"><%= @provider.provider_name_was %></h1>
+<%= form_with model: @provider, url: support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <%= f.govuk_error_summary %>
+  </div>
+</div>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @provider, url: support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
 
-      <%= f.govuk_error_summary %>
+    <h1 class="govuk-heading-l"><%= @provider.decorate.name_was_and_code %></h1>
 
-      <%= f.govuk_text_field :provider_name,
-      label: { text: "Provider name", size: "s" } %>
+  <%= f.govuk_text_field :provider_name,
+  label: { text: "Provider name", size: "s" } %>
 
-      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
-        Provider code
-      </p>
-      <p class="govuk-body"><%= @provider.provider_code %></p>
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+    Provider code
+  </p>
+  <p class="govuk-body"><%= @provider.provider_code %></p>
 
-      <%= f.govuk_text_field :ukprn,
-      label: { text: " UK provider reference number (UKPRN) ", size: "s" },
-      form_group: { class: "govuk-!-margin-bottom-2" },
-      width: 10 %>
+  <%= f.govuk_text_field :ukprn,
+  label: { text: " UK provider reference number (UKPRN) ", size: "s" },
+  form_group: { class: "govuk-!-margin-bottom-2" },
+  width: 10 %>
 
-      <p class="govuk-body govuk-!-margin-bottom-5">
-        <%= t("links.ukprn_html") %>
-      </p>
+  <p class="govuk-body govuk-!-margin-bottom-5">
+    <%= t("links.ukprn_html") %>
+  </p>
 
-      <%= f.govuk_radio_buttons_fieldset :accrediting_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
-        <%= f.govuk_radio_button :accrediting_provider, :accredited_provider, label: { text: "Yes", size: "s" } do %>
-          <%= f.govuk_text_field :accredited_provider_id,
-            label: { text: "Accredited provider ID " },
-            width: 10 %>
-        <% end %>
-        <%= f.govuk_radio_button :accrediting_provider, :not_an_accredited_provider, label: { text: "No", size: "s" } %>
-      <% end %>
-
-      <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: "Provider type", size: "s" } do %>
-        <%= f.govuk_radio_button :provider_type, :university, label: { text: "Higher education institute (HEI)" } %>
-        <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "School centred initial teacher training (SCITT) " } %>
-        <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "School" } %>
-      <% end %>
-
-      <%= f.govuk_submit t("support.update_resource", resource: "organisation details") %>
+  <%= f.govuk_radio_buttons_fieldset :accrediting_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
+    <%= f.govuk_radio_button :accrediting_provider, :accredited_provider, label: { text: "Yes", size: "s" } do %>
+      <%= f.govuk_text_field :accredited_provider_id,
+        label: { text: "Accredited provider ID" },
+        width: 10 %>
     <% end %>
+    <%= f.govuk_radio_button :accrediting_provider, :not_an_accredited_provider, label: { text: "No", size: "s" } %>
+  <% end %>
+
+  <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: "Provider type", size: "s" } do %>
+    <%= f.govuk_radio_button :provider_type, :university, label: { text: "Higher education institute (HEI)" } %>
+    <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "School centred initial teacher training (SCITT) " } %>
+    <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "School" } do %>
+      <%= f.govuk_text_field :urn,
+        label: { text: "Unique reference number (URN)" },
+        form_group: {},
+        width: 10 %>
+        <p class="govuk-body govuk-!-margin-top-2">
+          <%= t("links.urn_html") %>
+        </p>
+    <% end %>
+    
+  <% end %>
+
+  <%= f.govuk_submit t("support.update_resource", resource: "organisation details") %>
+<% end %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_path) %>

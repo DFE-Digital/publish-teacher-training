@@ -437,7 +437,7 @@ en:
           attributes:
             provider_name:
               too_long: "Enter a provider name that is 100 characters or fewer"
-              blank: "Enter provider name"
+              blank: "Enter a provider name"
             provider_code:
               blank: "Enter provider code"
               taken: "Provider code already taken"
@@ -470,6 +470,8 @@ en:
             accredited_provider_id:
               blank: Enter the accredited provider ID
               format: Enter a valid accredited provider ID - it must be 4 digits starting with a 1 or a 5
+            provider_type:
+              format: Accredited provider cannot be a school
         organisation:
           attributes:
             name:
