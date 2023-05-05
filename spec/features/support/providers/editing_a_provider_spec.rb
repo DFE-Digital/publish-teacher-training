@@ -84,11 +84,11 @@ feature 'View provider users' do
   end
 
   def when_i_fill_in_a_valid_email
-    fill_in 'provider-email-field', with: 'Jo@example.com'
+    fill_in 'support-contact-details-form-email-field', with: 'Jo@example.com'
   end
 
   def when_i_fill_in_an_invalid_email
-    fill_in 'provider-email-field', with: 'Jo@example'
+    fill_in 'support-contact-details-form-email-field', with: 'Jo@example'
   end
 
   def when_i_fill_in_a_valid_provider_name
@@ -96,7 +96,7 @@ feature 'View provider users' do
   end
 
   def and_i_choose_a_different_provider_type
-    choose 'School'
+    choose 'Higher education institute (HEI)'
   end
 
   def and_i_click_the_submit_button
@@ -110,7 +110,7 @@ feature 'View provider users' do
   def and_the_provider_details_are_updated
     expect(support_provider_show_page).to have_text('Provider 2')
     expect(support_provider_show_page).to have_text('Yes')
-    expect(support_provider_show_page).to have_text('Lead school')
+    expect(support_provider_show_page).to have_text('University')
   end
 
   def and_the_provider_contact_details_are_updated

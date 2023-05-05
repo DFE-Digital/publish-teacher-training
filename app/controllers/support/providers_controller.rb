@@ -32,7 +32,6 @@ module Support
     end
 
     def update
-      # binding.pry
       if provider.update(update_provider_params)
         redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
       else

@@ -4,7 +4,7 @@
   <%= govuk_back_link_to(support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider)) %>
 <% end %>
 
-<%= form_with model: @provider, url: support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
+<%= form_with model: @provider_contact_form, url: support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), local: true do |f| %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
