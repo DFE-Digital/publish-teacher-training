@@ -18,7 +18,7 @@ module Support
       include_examples 'blank validation', :town, 'Enter a town or city'
       include_examples 'blank validation', :postcode, 'Enter a postcode'
 
-      describe 'website' do
+      context 'website' do
         context 'set to blank' do
           let(:params) do
             {

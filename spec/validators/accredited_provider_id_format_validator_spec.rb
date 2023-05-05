@@ -11,7 +11,6 @@ class AccreditedProviderIdFormatValidatorTest
 end
 
 describe AccreditedProviderIdFormatValidator do
-  let(:provider) { create(:provider) }
   let(:accredited_provider) { create(:provider, :accredited_provider, :university) }
   let(:accredited_provider_id) { 1234 }
 
