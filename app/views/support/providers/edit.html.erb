@@ -14,7 +14,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <h1 class="govuk-heading-l"><%= @provider.decorate.name_was_and_code %></h1>
 
   <%= f.govuk_text_field :provider_name,
@@ -55,7 +54,6 @@
           <%= t("links.urn_html") %>
         </p>
     <% end %>
-    
   <% end %>
 
   <%= f.govuk_submit t("support.update_resource", resource: "organisation details") %>
