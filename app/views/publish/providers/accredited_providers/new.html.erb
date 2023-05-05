@@ -1,0 +1,31 @@
+<% content_for :page_title, title_with_error_prefix("Enter a provider name, UKPRN or postcode", @accredited_provider_search_form.errors) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+<% end %>
+
+<%= form_with(
+        model: @accredited_provider_search_form,
+        url: publish_provider_recruitment_cycle_accredited_providers_path,
+        method: :post
+      ) do |f| %>
+
+  <%= f.govuk_error_summary %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <%= f.govuk_text_field(
+        :query,
+        label: { text: "Enter a provider name, UKPRN or postcode", size: "l", tag: "h1" },
+        caption: { text: "Add accredited provider", size: "l" }
+      ) %>
+
+      <%= f.govuk_submit t("continue") %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      </p>
+    </div>
+  </div>
+<% end %>
