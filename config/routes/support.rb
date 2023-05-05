@@ -7,6 +7,7 @@ namespace :support do
     namespace :providers do
       namespace :onboarding do
         resource :contacts, only: %i[new create]
+        resource :check, only: %i[show update]
       end
       resource :onboarding, only: %i[new create]
     end

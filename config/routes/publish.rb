@@ -226,6 +226,7 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
+        resources :accredited_providers, only: [:index], path: '/accredited-providers'
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do

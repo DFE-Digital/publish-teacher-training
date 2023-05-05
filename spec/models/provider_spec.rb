@@ -301,6 +301,17 @@ describe Provider do
         .to change(subject, :accrediting_provider)
         .from(nil).to('not_an_accredited_provider')
     end
+
+    context 'support_new_provider_creation_flow is set to true' do
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:support_new_provider_creation_flow).and_return(true)
+      end
+
+      it "does not change 'accrediting_provider'" do
+        expect { subject.provider_type = 'scitt' }
+          .to not_change(subject, :accrediting_provider)
+      end
+    end
   end
 
   its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }

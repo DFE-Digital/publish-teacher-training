@@ -6,11 +6,83 @@ require_relative '../shared_examples/blank_validation'
 
 module Support
   describe ProviderForm, type: :model do
-    subject { described_class.new(user, recruitment_cycle:, params:) }
-
+    let(:provider_form) { described_class.new(user, recruitment_cycle:, params:) }
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:user) { create(:user) }
-    let(:params) { {} }
+    let(:params) do
+      build(:provider).attributes.symbolize_keys.slice(
+        :accrediting_provider,
+        :accredited_provider_id,
+        :provider_code,
+        :provider_name,
+        :provider_type,
+        :ukprn,
+        :urn
+      ).transform_keys { |key| key == :accrediting_provider ? :accredited_provider : key }
+    end
+
+    subject { provider_form }
+
+    describe '#accredited_provider?' do
+      subject { provider_form.accredited_provider? }
+
+      context 'params accredited_provider is set to accredited_provider' do
+        let(:params) do
+          { accredited_provider: :accredited_provider }
+        end
+
+        it 'returns true' do
+          expect(subject).to be_truthy
+        end
+      end
+
+      context 'params accredited_provider is set to a not_an_accredited_provider' do
+        let(:params) do
+          { accredited_provider: :not_an_accredited_provider }
+        end
+
+        it 'returns false' do
+          expect(subject).to be_falsey
+        end
+      end
+    end
+
+    describe '#lead_school?' do
+      subject { provider_form.lead_school? }
+
+      context 'params provider_type is set to lead_school' do
+        let(:params) do
+          { provider_type: :lead_school }
+        end
+
+        it 'returns true' do
+          expect(subject).to be_truthy
+        end
+      end
+
+      context 'params provider_type is set to a non lead_school' do
+        let(:params) do
+          { provider_type: %i[university scitt].sample }
+        end
+
+        it 'returns false' do
+          expect(subject).to be_falsey
+        end
+      end
+    end
+
+    describe '#attributes_to_save' do
+      subject { provider_form.attributes_to_save }
+      let(:expected_attributes) do
+        params.transform_keys { |key| key == :accredited_provider ? :accrediting_provider : key }
+              .merge(organisations_attributes: [{ name: params[:provider_name] }])
+              .merge(recruitment_cycle:)
+      end
+
+      it 'matches the expected attributes' do
+        expect(subject).to match(expected_attributes)
+      end
+    end
 
     describe 'validations' do
       it {
@@ -158,16 +230,6 @@ module Support
 
     describe '#stash' do
       context 'valid details' do
-        let(:provider) do
-          build(:provider)
-        end
-
-        let(:params) do
-          provider.attributes.symbolize_keys.slice(:provider_code, :provider_name, :provider_type, :accrediting_provider, :urn, :ukprn).transform_keys do |key|
-            key == :accrediting_provider ? :accredited_provider : key
-          end
-        end
-
         it 'returns true' do
           expect(subject.stash).to be true
 

@@ -1,0 +1,18 @@
+<% content_for :page_title, title_with_error_prefix("Accredited providers", nil) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        Accredited providers
+      </h1>
+
+      <%= govuk_button_link_to("Add accredited provider",
+      root_path(provider_code: @provider.provider_code,
+                recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
+
+    <p class="govuk-body">
+      <% if @provider.accrediting_providers.none? %>
+          There are no accredited providers for <%= @provider.provider_name %>.
+      <% end %>
+    </div>
+  </div>

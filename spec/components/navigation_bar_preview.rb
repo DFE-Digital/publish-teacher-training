@@ -9,12 +9,26 @@ class NavigationBarPreview < ViewComponent::Preview
     render NavigationBar.new(items:, current_path:, current_user: { first_name: 'Ted' })
   end
 
+  def with_a_organisation_that_has_accrediting_providers
+    render NavigationBar.new(items: ap_items, current_path:, current_user: { first_name: 'Ted' })
+  end
+
   private
 
   def items
     [
       { name: 'Home', url: 'root_path' },
       { name: 'Providers', url: '#', current: false }
+    ]
+  end
+
+  def ap_items
+    [
+      { name: 'Courses', url: 'root_path' },
+      { name: 'Schools', url: '#', current: false },
+      { name: 'Users', url: '#' },
+      { name: 'Accredited providers', url: '#' },
+      { name: 'Organisation details', url: '#' }
     ]
   end
 

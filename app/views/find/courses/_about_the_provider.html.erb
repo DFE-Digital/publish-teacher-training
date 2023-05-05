@@ -9,13 +9,13 @@
   <% end %>
 
   <% if course.accrediting_provider.present? %>
-    <h3 class="govuk-heading-m">About the accredited provider</h3>
-
     <% if course.about_accrediting_provider.present? %>
-      <div data-qa="course__about_accrediting_provider">
-        <%= markdown(course.about_accrediting_provider) %>
-      </div>
-    <% else %>
+        <h3 class="govuk-heading-m">About the accredited provider</h3>
+        <div data-qa="course__about_accrediting_provider">
+          <%= markdown(course.about_accrediting_provider) %>
+        </div>
+    <% elsif params[:action] == "preview" %>
+      <h3 class="govuk-heading-m">About the accredited provider</h3>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_accrediting_provider, is_preview: preview?(params)) %>
     <% end %>
   <% end %>
