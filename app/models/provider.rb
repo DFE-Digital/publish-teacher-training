@@ -326,7 +326,7 @@ class Provider < ApplicationRecord
           description: accrediting_provider_enrichment.Description || ''
         }
       end
-    end
+    end || []
   end
 
   def next_available_course_code
