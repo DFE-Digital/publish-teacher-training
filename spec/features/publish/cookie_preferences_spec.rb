@@ -45,6 +45,6 @@ feature 'Updating cookie preferences' do
   end
 
   def and_i_can_see_the_the_use_of_cookies_for_service
-    expect(publish_cookie_preferences_page).to have_content("We use cookies to make #{I18n.t('service_name.publish')} work and collect information about how you use our service.")
+    expect(publish_cookie_preferences_page).to have_content("We use cookies to make #{I18n.t('service_name.publish')} (Publish) work and collect information about how you use our service.")
   end
 end
