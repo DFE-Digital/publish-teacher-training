@@ -121,6 +121,6 @@ cookies:
 
 google_tag_manager:
   find_tracking_id: change_me
-  publish_tracking_id: GTM-TSK2T46
+  publish_tracking_id: change_me
 
 STATE_CHANGE_SLACK_URL: replace_me
