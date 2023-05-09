@@ -3,7 +3,11 @@
 module Support
   module Providers
     class AccreditedProvidersController < SupportController
+      include ClearStashable
+
       helper_method :accredited_provider_id
+
+      before_action :reset_accredited_provider_form, only: %i[index]
 
       def index
         @accredited_providers = provider.accrediting_providers.order(:provider_name).page(params[:page] || 1)
@@ -12,7 +16,7 @@ module Support
 
       def new
         provider
-        @accredited_provider_form = AccreditedProviderForm.new(current_user)
+        accredited_provider_form
       end
 
       def create
@@ -33,6 +37,10 @@ module Support
 
       def accredited_provider_id
         @accredited_provider_form.accredited_provider_id || params[:accredited_provider_id]
+      end
+
+      def accredited_provider_form
+        @accredited_provider_form ||= AccreditedProviderForm.new(current_user)
       end
 
       def accredited_provider_params
