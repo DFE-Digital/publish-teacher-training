@@ -2,6 +2,6 @@
 
 class PublishConstraint
   def matches?(request)
-    Settings.base_url&.include?(request.host) || Settings.publish_api_url&.include?(request.host) || request.host.include?('publish-teacher-training-pr') || request.host.include?('ptt-review')
+    Settings.base_url&.include?(request.host) || Settings.publish_api_url&.include?(request.host) || request.host.include?('ptt-review')
   end
 end
