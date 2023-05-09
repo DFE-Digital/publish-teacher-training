@@ -6,6 +6,7 @@ module Stores
       user
       provider
       provider_contact
+      accredited_provider
     ].freeze
 
     def store_keys

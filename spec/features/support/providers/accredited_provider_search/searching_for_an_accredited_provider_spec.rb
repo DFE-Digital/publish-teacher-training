@@ -22,7 +22,27 @@ feature 'Searching for an accredited provider' do
     and_i_should_still_see_the_provider_i_searched_for
 
     when_i_select_the_provider
+    and_i_continue_without_entering_a_description
+    then_i_should_see_an_error_message('Enter details about the accredited provider')
+
+    when_i_enter_a_description
+    and_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
+    and_i_should_see_a_success_message
+  end
+
+  scenario 'back links behaviour' do
+    when_i_am_on_the_confirm_page
+    and_i_click_the_change_link_for('accredited provider name')
+    then_i_should_be_taken_to_the_accredited_provider_search_page
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
+
+    when_i_am_on_the_confirm_page
+    and_i_click_the_change_link_for('accredited provider description')
+    then_i_should_be_taken_to_the_accredited_provider_description_page
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
   end
 
   private
@@ -60,6 +80,10 @@ feature 'Searching for an accredited provider' do
     click_continue
   end
 
+  def and_i_continue_without_entering_a_description
+    click_continue
+  end
+
   def then_i_should_be_taken_to_the_index_page
     expect(page).to have_current_path(
       support_recruitment_cycle_provider_accredited_providers_path(
@@ -88,8 +112,67 @@ feature 'Searching for an accredited provider' do
     expect(page).not_to have_content(@accredited_provider_three.provider_name)
   end
 
+  def when_i_enter_a_description
+    fill_in 'About the accredited provider', with: 'This is a description'
+    click_continue
+  end
+
+  def and_i_confirm_the_changes
+    click_on 'Add accredited provider'
+  end
+
+  def and_i_should_see_a_success_message
+    expect(page).to have_content('Accredited provider added')
+  end
+
   def click_continue
     click_on 'Continue'
+  end
+
+  def when_i_am_on_the_confirm_page
+    when_i_visit_the_accredited_provider_search_page
+    when_i_search_for_an_accredited_provider_with_a_valid_query
+    when_i_select_the_provider
+    when_i_enter_a_description
+  end
+
+  def and_i_click_the_change_link_for(field)
+    within '.govuk-summary-list' do
+      click_on "Change #{field}"
+    end
+  end
+
+  def then_i_should_be_taken_to_the_accredited_provider_search_page
+    expect(page).to have_current_path(
+      search_support_recruitment_cycle_provider_accredited_providers_path(
+        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        provider_id: provider.id,
+        goto_confirmation: true
+      )
+    )
+  end
+
+  def then_i_should_be_taken_to_the_accredited_provider_description_page
+    expect(page).to have_current_path(
+      new_support_recruitment_cycle_provider_accredited_provider_path(
+        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        provider_id: provider.id,
+        goto_confirmation: true
+      )
+    )
+  end
+
+  def when_i_click_the_back_link
+    click_on 'Back'
+  end
+
+  def then_i_should_be_taken_back_to_the_confirm_page
+    expect(page).to have_current_path(
+      check_support_recruitment_cycle_provider_accredited_providers_path(
+        recruitment_cycle_year: Settings.current_recruitment_cycle_year,
+        provider_id: provider.id
+      )
+    )
   end
 
   def provider
