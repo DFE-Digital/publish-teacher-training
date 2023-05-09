@@ -1,20 +1,34 @@
 <%= render GovukComponent::SummaryListComponent.new do |component|
       component.with_row do |row|
-        row.with_key { "Name" }
+        row.with_key { "Provider name" }
         row.with_value { @provider.provider_name }
         row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider name")
       end
 
       component.with_row do |row|
-        row.with_key { "Code" }
+        row.with_key { "Provider Code" }
         row.with_value { @provider.provider_code }
         row.with_action
       end
 
       component.with_row do |row|
-        row.with_key { "Accredited provider" }
+        row.with_key { "UK provider reference number (UKPRN) " }
+        row.with_value { @provider.ukprn }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider ukprn")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Is the organisation an accredited provider?" }
         row.with_value { formatted_accrediting_provider }
-        row.with_action
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "accredited provider")
+      end
+
+      if @provider.accredited_provider?
+        component.with_row do |row|
+          row.with_key { "Accredited provider ID" }
+          row.with_value { value_provided?(@provider.accredited_provider_id.to_s) }
+          row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "accredited provider id")
+        end
       end
 
       component.with_row do |row|
@@ -22,10 +36,32 @@
         row.with_value { formatted_provider_type }
         row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider type")
       end
+    end %>
+
+<h2 class="govuk-heading-m">Contact details</h2>
+
+<%= render GovukComponent::SummaryListComponent.new do |component|
+      component.with_row do |row|
+        row.with_key { "Email address" }
+        row.with_value { value_provided?(@provider.email) }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider email")
+      end
 
       component.with_row do |row|
-        row.with_key { "Last updated" }
-        row.with_value { gov_uk_format(@provider.updated_at) }
-        row.with_action
+        row.with_key { "Telephone number" }
+        row.with_value { value_provided?(@provider.telephone) }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider phone")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Website" }
+        row.with_value { value_provided?(@provider.website) }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider website")
+      end
+
+      component.with_row do |row|
+        row.with_key { "Address" }
+        row.with_value { @provider.decorate.full_address }
+        row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_contact_details_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "provider address")
       end
     end %>

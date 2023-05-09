@@ -12,6 +12,7 @@ namespace :support do
       resource :onboarding, only: %i[new create]
     end
     resources :providers, except: %i[destroy] do
+      resource :contact_details, only: %i[edit update], path: 'contact-details'
       resource :check_user, only: %i[show update], controller: 'providers/users_check', path: 'users/check'
       resources :users, controller: 'providers/users' do
         member do

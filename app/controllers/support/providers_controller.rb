@@ -63,7 +63,11 @@ module Support
     end
 
     def update_provider_params
-      params.require(:provider).permit(:provider_name, :provider_type)
+      params.require(:provider).permit(:provider_name,
+                                       :provider_type,
+                                       :ukprn,
+                                       :urn,
+                                       :accrediting_provider, :accredited_provider_id)
     end
 
     def create_provider_params

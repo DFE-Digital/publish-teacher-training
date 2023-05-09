@@ -23,6 +23,10 @@ class ProviderDecorator < ApplicationDecorator
     "#{object.provider_name} (#{object.provider_code})"
   end
 
+  def name_was_and_code
+    "#{object.provider_name_was} (#{object.provider_code})"
+  end
+
   private
 
   def address_lines

@@ -151,6 +151,8 @@ en:
           index: "Providers"
           new: "Add a provider"
           show: "View a provider"
+          edit: "Edit a provider"
+          edit_contact: "Edit provider contact details"
           courses:
             index: "Courses"
             edit: "Edit course details"
@@ -217,9 +219,9 @@ en:
           text: "Enter details about the training provider"
         about_accrediting_provider:
           text: "Enter details about the accredited provider"
+  value_not_entered: "Not entered"
   course:
     add_course: "Add course"
-    value_not_entered: "Not entered"
     update_email:
       name: "title"
       age_range_in_years: "age range"
@@ -331,6 +333,7 @@ en:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
     update_record: "Update"
+    update_resource: "Update %{resource}"
     create_record: "Create"
   activerecord:
     attributes:
@@ -442,7 +445,7 @@ en:
           attributes:
             provider_name:
               too_long: "Enter a provider name that is 100 characters or fewer"
-              blank: "Enter provider name"
+              blank: "Enter a provider name"
             provider_code:
               blank: "Enter provider code"
               taken: "Provider code already taken"
@@ -472,6 +475,11 @@ en:
             ukprn:
               blank: Enter a UK provider reference number (UKPRN)
               contains_eight_numbers_starting_with_one: Enter a valid UK provider reference number (UKPRN) - it must be 8 digits starting with a 1, like 12345678
+            accredited_provider_id:
+              blank: Enter the accredited provider ID
+              format: Enter a valid accredited provider ID - it must be 4 digits starting with a 1 or a 5
+            provider_type:
+              format: Accredited provider cannot be a school
         organisation:
           attributes:
             name:
@@ -582,6 +590,26 @@ en:
               blank: "Enter a town or city"
             postcode:
               blank: "Enter a postcode"
+        support/contact_details_form:
+          attributes:
+            email:
+              blank: Enter an email address
+              invalid: Enter an email address in the correct format, like name@example.com
+            telephone:
+              blank: Enter a telephone number
+              invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+              too_long: Telephone number must contain 15 numbers or fewer
+              too_short: Telephone number must contain 8 numbers or more
+            website:
+              blank: Enter a website address
+              url: Enter a website address in the correct format, like https://www.example.com
+            address1:
+              blank: Enter address line 1
+            town:
+              blank: Enter a town or city
+            postcode:
+              blank: Enter a postcode
+              invalid: Enter a real postcode
         support/provider_form:
           attributes:
             provider_name:

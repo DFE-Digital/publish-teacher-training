@@ -9,7 +9,7 @@ module PageObjects
       element :courses_tab, '.app-tab-navigation__link', text: 'Courses'
 
       element :edit_provider_name, 'a', text: 'Change'
-      element :edit_provider_type, 'a', text: 'Change'
+      element :edit_address, 'a', text: 'Change'
     end
   end
 end

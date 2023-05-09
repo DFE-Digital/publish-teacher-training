@@ -62,7 +62,7 @@ describe Provider do
 
         it 'validates a urn of length 5 - 6' do
           expect(invalid_provider).not_to be_valid
-          expect(provider).to be_valid
+          expect(valid).to be_valid
         end
       end
 
@@ -193,7 +193,7 @@ describe Provider do
       let(:publish_time) { 10.minutes.ago }
       let(:provider) { create(:provider, changed_at: publish_time) }
 
-      it { is_expected.not_to include provider }
+      it { expect(subject).not_to include provider }
     end
 
     context 'with a provider that has been changed before the given timestamp' do
@@ -201,7 +201,7 @@ describe Provider do
 
       let(:provider) { create(:provider, changed_at: 1.hour.ago) }
 
-      it { is_expected.not_to include provider }
+      it { expect(subject).not_to include provider }
     end
   end
 

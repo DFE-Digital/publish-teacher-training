@@ -53,8 +53,9 @@ FactoryBot.define do
     end
 
     trait :accredited_provider do
-      provider_type { %i[university scitt].sample }
+      provider_type { :university }
       accrediting_provider { 'Y' }
+      accredited_provider_id { Faker::Number.within(range: 1000..1999) }
       urn { nil }
     end
 
