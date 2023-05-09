@@ -64,4 +64,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.authentication_token = ENV.fetch('AUTHENTICATION_TOKEN', 'bats')
+
+  config.hosts << /[a-z0-9-.]+\.[a-z0-9-.]+\.development\.teacherservices\.cloud/
 end

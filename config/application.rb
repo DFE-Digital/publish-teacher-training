@@ -57,6 +57,5 @@ module ManageCoursesBackend
 
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
-    config.hosts = nil
   end
 end
