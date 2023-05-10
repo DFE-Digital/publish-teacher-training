@@ -9,10 +9,13 @@
       <%= govuk_button_link_to("Add accredited provider",
      new_publish_provider_recruitment_cycle_accredited_providers_path(provider_code: @provider.provider_code,
                                                                       recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
-
-    <p class="govuk-body">
-      <% if @provider.accrediting_providers.none? %>
-          There are no accredited providers for <%= @provider.provider_name %>.
-      <% end %>
     </div>
   </div>
+
+  <% if @provider.accrediting_providers.none? %>
+      There are no accredited providers for <%= @provider.provider_name %>.
+  <% else %>
+    <% @provider.accrediting_providers.each do |ap| %>
+      <%= render AccreditedProvider.new(provider_name: ap.provider_name, remove_path: root_path, about_accredited_provider: ap.train_with_us, change_about_accredited_provider_path: root_path) %>
+    <% end %>
+  <% end %>

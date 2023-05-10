@@ -14,6 +14,12 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_see_the_correct_text_for_no_accredited_providers
   end
 
+  scenario 'i can view accredited providers on the index page' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    then_i_should_see_the_accredited_provider_name_displayed
+  end
+
   scenario 'i can search for an accredited provider when they are searchable' do
     given_there_are_accredited_providers_in_the_database
     when_i_click_add_accredited_provider
@@ -92,6 +98,8 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     click_link 'Accredited provider'
   end
 
+  alias_method :and_i_click_on_the_accredited_provider_tab, :when_i_click_on_the_accredited_provider_tab
+
   def and_i_visit_the_root_path
     visit root_path
   end
@@ -111,5 +119,15 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def click_continue
     click_on 'Continue'
+  end
+
+  def and_my_provider_has_accrediting_providers
+    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
+
+    @provider.courses << course
+  end
+
+  def then_i_should_see_the_accredited_provider_name_displayed
+    expect(page).to have_selector('h2', text: 'Accrediting provider name')
   end
 end
