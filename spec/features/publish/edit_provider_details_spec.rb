@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'About Your Organisation section', { can_edit_current_and_next_cycles: false } do
   scenario 'Provider user edits provider details' do
     given_i_am_a_provider_user_as_a_provider_user
-    and_my_provider_has_accrediting_providers
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us
     then_i_can_edit_info_about_our_accredited_bodies
@@ -13,12 +12,13 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
   end
 
   def given_i_am_a_provider_user_as_a_provider_user
-    given_i_am_authenticated(user: create(:user, :with_provider))
-    @provider = @current_user.providers.first
-  end
+    @provider = create(:provider)
+    course = create(:course, :with_accrediting_provider, provider: @provider)
 
-  def and_my_provider_has_accrediting_providers
-    @provider.courses << create(:course, :with_accrediting_provider)
+    accredited_provider_code = course.accredited_provider_code
+    @provider.accrediting_provider_enrichments = [{ UcasProviderCode: accredited_provider_code }]
+
+    given_i_am_authenticated(user: create(:user, providers: [@provider]))
     @accrediting_provider = @provider.accrediting_providers.first
   end
 

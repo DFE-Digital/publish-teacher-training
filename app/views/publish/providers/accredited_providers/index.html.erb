@@ -12,10 +12,10 @@
     </div>
   </div>
 
-  <% if @provider.accrediting_providers.none? %>
+  <% if @provider.accredited_providers.none? %>
       There are no accredited providers for <%= @provider.provider_name %>.
   <% else %>
-    <% @provider.accrediting_providers.each do |ap| %>
+    <% @provider.accredited_providers.each do |ap| %>
       <%= render AccreditedProvider.new(provider_name: ap.provider_name, remove_path: root_path, about_accredited_provider: ap.train_with_us, change_about_accredited_provider_path: root_path) %>
     <% end %>
   <% end %>
