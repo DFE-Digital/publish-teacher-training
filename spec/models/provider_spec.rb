@@ -953,18 +953,20 @@ describe Provider do
       end
 
       it 'returns the current recruitment accredited bodies' do
-        expect(subject.accredited_bodies).to match([
-                                                     {
-                                                       provider_name: accredited_provider_one.provider_name,
-                                                       provider_code: accredited_provider_one.provider_code,
-                                                       description: 'about the accredited provider'
-                                                     },
-                                                     {
-                                                       provider_name: accredited_provider_three.provider_name,
-                                                       provider_code: accredited_provider_three.provider_code,
-                                                       description: ''
-                                                     }
-                                                   ])
+        expect(subject.accredited_bodies).to match(
+          [
+            {
+              provider_name: accredited_provider_one.provider_name,
+              provider_code: accredited_provider_one.provider_code,
+              description: 'about the accredited provider'
+            },
+            {
+              provider_name: accredited_provider_three.provider_name,
+              provider_code: accredited_provider_three.provider_code,
+              description: ''
+            }
+          ]
+        )
       end
     end
   end
