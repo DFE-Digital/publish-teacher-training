@@ -1,3 +1,13 @@
 <%= render PageTitle.new(title: "support.providers.accredited_providers.index") %>
 
 <%= govuk_link_to("Add accredited provider", search_support_recruitment_cycle_provider_accredited_providers_path, class: "govuk-button govuk-!-margin-bottom-3") %>
+
+<% @accredited_providers.each do |provider| %>
+<% # binding.pry %>
+  <%= render AccreditedProvider.new(
+    provider_name: provider.provider_name,
+    remove_path: root_path,
+    about_accredited_provider: provider.accrediting_provider_enrichments,
+    change_about_accredited_provider_path: root_path
+  ) %>
+<% end %>
