@@ -80,10 +80,6 @@ feature 'Searching for an accredited provider' do
     click_continue
   end
 
-  def and_i_continue_without_entering_a_description
-    click_continue
-  end
-
   def then_i_should_be_taken_to_the_index_page
     expect(page).to have_current_path(
       support_recruitment_cycle_provider_accredited_providers_path(
@@ -182,4 +178,6 @@ feature 'Searching for an accredited provider' do
   def form_title
     'Enter a provider name, UKPRN or postcode'
   end
+
+  alias_method :and_i_continue_without_entering_a_description, :click_continue
 end
