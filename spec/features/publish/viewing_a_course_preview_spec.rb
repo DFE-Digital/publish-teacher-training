@@ -368,13 +368,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def user_with_no_course_enrichments
-    course = build(
-      :course, :secondary, :fee_type_based, :with_accrediting_provider, degree_grade: nil, additional_degree_subject_requirements: nil
+    provider = create(
+      :provider, train_with_disability: nil, train_with_us: nil
     )
 
-    provider = build(
-      :provider, courses: [course], train_with_disability: nil, train_with_us: nil
+    course = create(
+      :course, :secondary, :fee_type_based, :with_accrediting_provider, provider:, degree_grade: nil, additional_degree_subject_requirements: nil
     )
+
+    accredited_provider_code = course.accredited_provider_code
+
+    provider.accrediting_provider_enrichments = [{ UcasProviderCode: accredited_provider_code }]
 
     create(
       :user,
