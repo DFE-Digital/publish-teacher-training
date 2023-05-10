@@ -125,6 +125,11 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
 
     @provider.courses << course
+    @provider.update(
+      accrediting_provider_enrichments: [{
+        'UcasProviderCode' => course.accrediting_provider.provider_code
+      }]
+    )
   end
 
   def then_i_should_see_the_accredited_provider_name_displayed
