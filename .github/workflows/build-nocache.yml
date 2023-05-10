@@ -23,7 +23,7 @@ jobs:
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
           # tag build to the review env for vars and secrets
-          tf_vars_file=terraform/workspace_variables/review.tfvars.json
+          tf_vars_file=terraform/paas/workspace_variables/review.tfvars.json
           echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
           echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
