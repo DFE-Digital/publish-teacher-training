@@ -15,12 +15,11 @@ module Support
       end
 
       def new
-        provider
         accredited_provider_form
       end
 
       def create
-        @accredited_provider_form = AccreditedProviderForm.new(current_user, params: accredited_provider_params)
+        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
         if @accredited_provider_form.stash
           redirect_to check_support_recruitment_cycle_provider_accredited_providers_path
         else
@@ -40,7 +39,7 @@ module Support
       end
 
       def accredited_provider_form
-        @accredited_provider_form ||= AccreditedProviderForm.new(current_user)
+        @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
       end
 
       def accredited_provider_params

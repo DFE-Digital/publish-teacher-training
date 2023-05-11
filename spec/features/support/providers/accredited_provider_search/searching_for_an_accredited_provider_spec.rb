@@ -29,6 +29,7 @@ feature 'Searching for an accredited provider' do
     and_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
     and_i_should_see_a_success_message
+    and_the_accredited_provider_is_saved_to_the_database
   end
 
   scenario 'back links behaviour' do
@@ -119,6 +120,12 @@ feature 'Searching for an accredited provider' do
 
   def and_i_should_see_a_success_message
     expect(page).to have_content('Accredited provider added')
+  end
+
+  def and_the_accredited_provider_is_saved_to_the_database
+    provider.reload
+    expect(provider.accredited_providers.count).to eq(1)
+    expect(provider.accredited_providers.first.id).to eq(@accredited_provider.id)
   end
 
   def click_continue
