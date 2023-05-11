@@ -27,6 +27,7 @@ namespace :api do
     end
   end
   get '/school_suggestions', to: 'school_suggestions#index'
+  get '/accredited_providers_suggestions', to: 'accredited_providers_suggestions#index'
 end
 
 get 'error_500', to: 'api_error#error500'

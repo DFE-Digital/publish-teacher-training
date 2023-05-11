@@ -28,6 +28,12 @@ try {
   const schoolTemplate = (result) => result && `${result.name}`
   const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
 
+  const accreditedProviderAutocomplete = document.getElementById('accredited-provider-autocomplete')
+  const accreditedProviderInput = document.getElementById('accredited-provider-search-form-query-field')
+  const accreditedProviderTemplate = (result) => result && `${result.provider_name}`
+  const accreditedProviderSuggestionsTemplate = (result) =>
+    result && `${result.provider_name} (${result.provider_code})`
+
   if (autocomplete && providerInput) {
     initAutocomplete(autocomplete, providerInput, providerTemplate, {
       path: '/publish/providers/suggest',
@@ -38,6 +44,12 @@ try {
     initAutocomplete(schoolAutocomplete, schoolInput, schoolTemplate, {
       path: '/api/school_suggestions',
       template: schoolSuggestionsTemplate
+    })
+  }
+  if (accreditedProviderAutocomplete && accreditedProviderInput) {
+    initAutocomplete(accreditedProviderAutocomplete, accreditedProviderInput, accreditedProviderTemplate, {
+      path: '/api/accredited_providers_suggestions',
+      template: accreditedProviderSuggestionsTemplate
     })
   }
 } catch (err) {

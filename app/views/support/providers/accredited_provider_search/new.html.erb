@@ -18,11 +18,22 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_text_field(
-        :query,
-        label: { text: t(".title"), size: "l", tag: "h1" },
-        caption: { text: t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code), size: "l" }
-      ) %>
+      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+        <%= f.label :query, { class: "govuk-label govuk-label--l", for: "accredited-provider-search-form-query-field" } do %>
+          <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
+          <%= t(".title") %>
+          <% if f.object.errors.present? %>
+            <span class="govuk-error-message" id="accredited-provider-search-form-query-field-error" data-qa="provider-error">
+              <%= f.object.errors.first.message %>
+            </span>
+          <% end %>
+        <% end %>
+        <%= f.text_field :query,
+                              id: "accredited-provider-search-form-query-field",
+                              value: params[:query],
+                              class: "govuk-input" %>
+        <div id="accredited-provider-autocomplete" class="govuk-body"></div>
+      </div>
 
       <%= f.govuk_submit t("continue") %>
     <% end %>
