@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { initAutocomplete } from './autocomplete'
+import initAutocomplete from './autocomplete'
 
 describe('Autocomplete', () => {
   describe('initAutocomplete', () => {
@@ -14,14 +14,12 @@ describe('Autocomplete', () => {
          </div>
        `
       const schoolTemplate = (result) => result && `${result.name}`
-      const schoolInput = document.getElementById('input')
-      const schoolAutocomplete = document.getElementById('autocomplete-container')
 
       initAutocomplete(
-        schoolAutocomplete,
-        schoolInput,
-        schoolTemplate,
-        { path: '/endpoint' }
+        'autocomplete-container',
+        'input',
+
+        { path: '/endpoint', template: { inputValue: schoolTemplate, suggestion: schoolTemplate } }
       )
     })
 
