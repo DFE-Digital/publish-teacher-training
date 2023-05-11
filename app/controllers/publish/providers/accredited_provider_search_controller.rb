@@ -33,8 +33,8 @@ module Publish
         @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: accredited_provider_select_params[:provider_id])
 
         if @accredited_provider_select_form.valid?
-          redirect_to publish_provider_recruitment_cycle_accredited_providers_path(provider_code: provider.provider_code,
-                                                                                   recruitment_cycle_year: provider.recruitment_cycle_year)
+          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(provider_code: provider.provider_code,
+                                                                                      recruitment_cycle_year: provider.recruitment_cycle_year)
         else
           @accredited_provider_search = AccreditedProviders::SearchService.call(query:)
           render :results
