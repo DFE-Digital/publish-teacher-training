@@ -44,6 +44,9 @@ namespace :support do
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+          get '/check', on: :collection, to: 'accredited_providers/checks#show'
+          put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
       end
     end

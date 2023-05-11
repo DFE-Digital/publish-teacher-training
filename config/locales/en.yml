@@ -320,7 +320,16 @@ en:
       accredited_provider_search:
         new:
           title: Enter a provider name, UKPRN or postcode
+          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+      accredited_providers:
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: "Add accredited provider - %{provider_name} (%{code})"
+        checks:
+          show:
+            caption: *accredited_provider_caption
+            add: Add accredited provider
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
@@ -647,6 +656,10 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "Site URN must be 5 or 6 numbers"
+        support/accredited_provider_form:
+          attributes:
+            description:
+              blank: Enter details about the accredited provider
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:
