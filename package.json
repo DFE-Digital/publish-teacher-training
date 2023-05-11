@@ -26,6 +26,9 @@
     "globals": [
       "$",
       "google"
+    ],
+    "ignore": [
+      "app/javascript/jestGlobalMocks.js"
     ]
   },
   "dependencies": {

@@ -16,10 +16,16 @@
     <%= favicon_link_tag "govuk-frontend/govuk/assets/images/govuk-apple-touch-icon-180x180.png", rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
     <%= stylesheet_link_tag "find_application" %>
     <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
+
+    <%= render("layouts/gtm", tracking_id: Settings.google_tag_manager.find_tracking_id, consented_to_analytics_cookie_value:) %>
   </head>
 
   <body class="govuk-template__body">
     <%= render "layouts/add_js_enabled_class_to_body" %>
+
+    <% if google_analytics_allowed? %>
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.find_tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <% end %>
 
     <% unless hide_cookie_banner? %>
       <%= render("layouts/cookie_banner", service_name: t("service_name.find"), cookies_path: find_cookies_path) %>

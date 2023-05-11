@@ -9,8 +9,8 @@ module PageObjects
 
       element :heading, 'h1'
 
-      element :yes_option, '#find-cookie-preferences-form-consent-accepted-field'
-      element :no_option, '#find-cookie-preferences-form-consent-rejected-field'
+      element :analytics_cookie_accept, '#find-cookie-preferences-form-analytics-consent-granted-field'
+      element :analytics_cookie_deny, '#find-cookie-preferences-form-analytics-consent-denied-field'
 
       element :submit, 'button.govuk-button[type="submit"]'
 
