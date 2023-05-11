@@ -19,7 +19,7 @@ module Publish
       def create
         @accredited_provider_form = AccreditedProviderForm.new(current_user, params: accredited_provider_params)
         if @accredited_provider_form.stash
-          redirect_to root_path
+          redirect_to check_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)
         else
           provider
           render :new

@@ -284,7 +284,12 @@ en:
         new:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider"
+          caption: Add accredited provider
+        checks:
+          show:
+            title:  Add accredited provider
+            caption: Add accredited provider
+            add: Add accredited provider
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
