@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Enter a provider name, UKPRN or postcode", @accredited_provider_search_form.errors) %>
+<% content_for :page_title, title_with_error_prefix("Enter a provider name, UKPRN or postcode", @accredited_provider_search_form.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
