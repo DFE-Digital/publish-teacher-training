@@ -16,8 +16,8 @@ const options = {
     suggestion: schoolSuggestionsTemplate
   },
   minLength: 3,
-  onConfirm: onConfirm,
-  input_name: 'course[autocompleted_provider_code]'
+  onConfirm,
+  inputName: 'course[autocompleted_provider_code]'
 }
 
 function init () {

@@ -19,7 +19,7 @@ describe('Autocomplete', () => {
         'autocomplete-container',
         'input',
 
-        { path: '/endpoint', template: { inputValue: schoolTemplate, suggestion: schoolTemplate } }
+        { path: '/endpoint', template: { inputValue: schoolTemplate, suggestion: schoolTemplate }, onConfirm: (input) => (option) => (input.value = option ? option.id : '') }
       )
     })
 

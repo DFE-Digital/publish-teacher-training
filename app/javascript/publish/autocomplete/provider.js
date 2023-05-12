@@ -10,8 +10,8 @@ const options = {
     suggestion: providerTemplate
   },
   minLength: 3,
-  onConfirm: onConfirm,
-  input_name: 'course[autocompleted_provider_code]'
+  onConfirm,
+  inputName: 'course[autocompleted_provider_code]'
 }
 
 function init () {
