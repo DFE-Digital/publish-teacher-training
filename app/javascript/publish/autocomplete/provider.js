@@ -1,7 +1,7 @@
 import initAutocomplete from './autocomplete'
 
 const providerTemplate = (result) => result && `${result.name} (${result.code})`
-const onConfirm = (option) => (input.value = option ? option.code : '')
+const onConfirm = (input) => (option) => (input.value = option ? option.code : '')
 
 const options = {
   path: '/publish/providers/suggest',

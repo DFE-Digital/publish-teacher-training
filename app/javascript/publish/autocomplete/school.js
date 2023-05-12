@@ -2,7 +2,7 @@ import initAutocomplete from './autocomplete'
 
 const schoolTemplate = (result) => result && `${result.name}`
 const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
-const schoolConfirmCallback = (input) =>  (option) => {
+const onConfirm = (input) =>  (option) => {
   if (option.id === undefined) {
     return
   }
@@ -15,8 +15,9 @@ const options = {
     inputValue: schoolTemplate,
     suggestion: schoolSuggestionsTemplate
   },
-  onConfirm: schoolConfirmCallback
-  }
+  minLength: 3,
+  onConfirm: onConfirm,
+  input_name: 'course[autocompleted_provider_code]'
 }
 
 function init () {

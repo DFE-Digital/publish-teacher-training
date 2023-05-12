@@ -23,17 +23,15 @@ const initAutocomplete = (elementId, inputId, options = {}) => {
           inputValue,
           suggestion
         },
-        onConfirm: onConfirm,
+        onConfirm: onConfirm(input),
         confirmOnBlur: false,
         autoselect: true
       })
 
-      if (input_name !== undefined) {
-        // Hijack the original input to submit the selected provider_code.
-        input.id = `old-${input.id}`
-        input.name = input_name,
-        input.type = 'hidden'
-      }
+      // Hijack the original input to submit the selected provider_code.
+      input.id = `old-${input.id}`
+      input.name = input_name,
+      input.type = 'hidden'
     }
   } catch (err) {
     console.error(`Failed to initialise autocomplete for ${elementId}:`, err)
