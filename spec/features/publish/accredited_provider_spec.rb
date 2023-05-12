@@ -34,18 +34,90 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_should_still_see_the_provider_i_searched_for
 
     when_i_select_the_provider
+    and_i_continue_without_entering_a_description
+    then_i_should_see_an_error_message('Enter details about the accredited provider')
+
+    when_i_input_some_information
+    then_i_should_see_the_information_i_added
+
+    when_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
+    and_i_should_see_a_success_message
+  end
+
+  scenario 'back links behaviour' do
+    given_i_am_on_the_confirm_page
+    when_i_click_the_change_link_for('accredited provider name')
+    then_i_should_be_taken_to_the_accredited_provider_search_page
+
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
+
+    when_i_click_the_change_link_for('accredited provider description')
+    then_i_should_be_taken_to_the_accredited_provider_description_page
+
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
   end
 
   private
 
-  def and_i_search_with_an_invalid_query
-    fill_in form_title, with: ''
-    click_continue
+  def then_i_should_be_taken_to_the_accredited_provider_description_page
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_provider_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))
+  end
+
+  def then_i_should_be_taken_back_to_the_confirm_page
+    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year))
+  end
+
+  def when_i_click_the_back_link
+    click_on 'Back'
+  end
+
+  def then_i_should_be_taken_to_the_accredited_provider_search_page
+    expect(page).to have_current_path(
+      search_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true)
+    )
+  end
+
+  def when_i_click_the_change_link_for(field)
+    within '.govuk-summary-list' do
+      click_on "Change #{field}"
+    end
+  end
+
+  def given_i_am_on_the_confirm_page
+    given_there_are_accredited_providers_in_the_database
+    when_i_click_add_accredited_provider
+    when_i_search_for_an_accredited_provider_with_a_valid_query
+    when_i_select_the_provider
+    when_i_input_some_information
+  end
+
+  def and_i_should_see_a_success_message
+    expect(page).to have_content('Accredited provider added')
   end
 
   def then_i_should_be_taken_to_the_index_page
     expect(page).to have_current_path(publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year))
+  end
+
+  def when_i_confirm_the_changes
+    click_on 'Add accredited provider'
+  end
+
+  def then_i_should_see_the_information_i_added
+    expect(page).to have_text('This is a description')
+  end
+
+  def when_i_input_some_information
+    fill_in 'About the accredited provider', with: 'This is a description'
+    click_continue
+  end
+
+  def and_i_search_with_an_invalid_query
+    fill_in form_title, with: ''
+    click_continue
   end
 
   def when_i_select_the_provider
@@ -120,6 +192,8 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   def click_continue
     click_on 'Continue'
   end
+
+  alias_method :and_i_continue_without_entering_a_description, :click_continue
 
   def and_my_provider_has_accrediting_providers
     course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
