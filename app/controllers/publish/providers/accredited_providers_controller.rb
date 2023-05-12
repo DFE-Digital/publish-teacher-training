@@ -35,7 +35,7 @@ module Publish
       end
 
       def accredited_provider_id
-        @accredited_provider_form.accredited_provider_id || RecruitmentCycle.current.providers.find_by(provider_code: params[:provider_code]).id
+        @accredited_provider_form.accredited_provider_id || params[:accredited_provider_id]
       end
 
       def accredited_provider_form
