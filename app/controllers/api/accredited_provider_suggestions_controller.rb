@@ -12,7 +12,7 @@ module API
 
     def accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
 
-    def results = AccreditedProviders::SearchService.call(query:)
+    def results = AccreditedProviders::SearchService.call(query:).providers
 
     delegate :invalid?, to: :accredited_provider_search_form
 

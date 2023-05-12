@@ -31,15 +31,12 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
       end
 
       it 'responds with providers' do
-        expect(json_response.keys).to match_array(%w[providers limit])
-
-        expect(json_response['limit']).to be(15)
-        expect(json_response['providers'][0]['id']).to eql(provider1.id)
-        expect(json_response['providers'][0]['provider_name']).to eql(provider1.provider_name)
-        expect(json_response['providers'][0]['provider_code']).to eql(provider1.provider_code)
-        expect(json_response['providers'][1]['id']).to eql(provider2.id)
-        expect(json_response['providers'][1]['provider_name']).to eql(provider2.provider_name)
-        expect(json_response['providers'][1]['provider_code']).to eql(provider2.provider_code)
+        expect(json_response[0]['id']).to eql(provider1.id)
+        expect(json_response[0]['provider_name']).to eql(provider1.provider_name)
+        expect(json_response[0]['provider_code']).to eql(provider1.provider_code)
+        expect(json_response[1]['id']).to eql(provider2.id)
+        expect(json_response[1]['provider_name']).to eql(provider2.provider_name)
+        expect(json_response[1]['provider_code']).to eql(provider2.provider_code)
       end
     end
   end
