@@ -117,7 +117,7 @@ feature 'Searching for an accredited provider' do
   def and_i_confirm_the_changes
     expect do
       click_on 'Add accredited provider'
-    end.to have_enqueued_email(::Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
+    end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
   def and_i_should_see_a_success_message
