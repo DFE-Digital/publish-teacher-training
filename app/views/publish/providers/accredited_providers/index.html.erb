@@ -13,6 +13,7 @@
   </div>
 
   <% if @provider.accredited_providers.none? %>
+  <!-- is this neccessary? if so it needs a style class? -->
       There are no accredited providers for <%= @provider.provider_name %>.
   <% else %>
     <% @provider.accredited_providers.each do |ap| %>
