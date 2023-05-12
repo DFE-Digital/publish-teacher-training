@@ -35,7 +35,7 @@ module Support
       end
 
       def accredited_provider_id
-        @accredited_provider_form.accredited_provider_id || params[:accredited_provider_id]
+        params[:accredited_provider_id] || @accredited_provider_form.accredited_provider_id
       end
 
       def accredited_provider_form

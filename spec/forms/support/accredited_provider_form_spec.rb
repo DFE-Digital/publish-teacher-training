@@ -28,7 +28,7 @@ module Support
     end
 
     describe '#save!' do
-      let(:accredited_provider) { create(:provider, :accredited_provider) }
+      let(:accredited_provider) { create(:provider, :accredited_provider, users: [create(:user)]) }
       let(:params) do
         {
           accredited_provider_id: accredited_provider.id,
@@ -64,6 +64,16 @@ module Support
           expect(model.accrediting_provider_enrichments.last.UcasProviderCode).to eq(accredited_provider.provider_code)
           expect(model.accrediting_provider_enrichments.last.Description).to eq('Foo')
         end
+      end
+
+      it 'sends a notification email to the accredited provider users' do
+        expect(::Users::OrganisationMailer).to receive(:added_as_an_organisation_to_training_partner).with(
+          recipient: accredited_provider.users.first,
+          provider: model,
+          accredited_provider:
+        ).and_call_original
+
+        subject.save!
       end
     end
   end

@@ -35,5 +35,15 @@ module Support
         }
       )
     end
+
+    def after_save
+      accredited_provider.users.each do |user|
+        ::Users::OrganisationMailer.added_as_an_organisation_to_training_partner(
+          recipient: user,
+          provider: model,
+          accredited_provider:
+        ).deliver_later
+      end
+    end
   end
 end
