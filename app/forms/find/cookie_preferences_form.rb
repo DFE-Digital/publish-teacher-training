@@ -4,19 +4,23 @@ module Find
   class CookiePreferencesForm
     include ActiveModel::Model
 
-    attr_accessor :consent, :cookies, :cookie_name, :expiry_date
+    ACCEPTED_VALUES = %w[granted denied].freeze
 
-    validates :consent, presence: true, inclusion: { in: %w[accepted rejected] }
+    attr_accessor :analytics_consent, :cookies, :analytics_cookie_name, :expiry_date
+
+    validates :analytics_consent, presence: true, inclusion: { in: ACCEPTED_VALUES }
 
     def initialize(cookies, params = {})
       @cookies = cookies
-      @cookie_name = Settings.cookies.consent.name
-      @expiry_date = Settings.cookies.consent.expire_after_days.days.from_now
-      @consent = params[:consent] || cookies[cookie_name]
+      @analytics_cookie_name = Settings.cookies.analytics.name
+      @expiry_date = Settings.cookies.expire_after_days.days.from_now
+      @analytics_consent = params[:analytics_consent] || cookies[analytics_cookie_name]
     end
 
     def save
-      cookies[cookie_name] = { value: consent, expires: expiry_date } if valid?
+      return unless valid?
+
+      cookies[analytics_cookie_name] = { value: analytics_consent, expires: expiry_date }
     end
   end
 end

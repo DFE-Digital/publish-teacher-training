@@ -1,11 +1,11 @@
-<% content_for :page_title, title_with_error_prefix(t(".title"), @accredited_provider_search_form.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("About the accredited provider - Add accredited provider - #{@provider.name_and_code}", @accredited_provider_form.errors.present?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <%= form_with(
-        model: @accredited_provider_search_form,
-        url: search_support_recruitment_cycle_provider_accredited_providers_path,
+        model: @accredited_provider_form,
+        url: support_recruitment_cycle_provider_accredited_providers_path,
         method: :post
       ) do |f| %>
 
@@ -18,12 +18,16 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_text_field(
-        :query,
+      <%= f.govuk_text_area(
+        :description,
         label: { text: t(".title"), size: "l", tag: "h1" },
-        caption: { text: t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code), size: "l" }
+        hint: { text: t(".hint") },
+        caption: { text: t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code), size: "l" },
+        max_words: 100,
+        rows: 10
       ) %>
 
+      <%= f.hidden_field :accredited_provider_id, value: accredited_provider_id %>
       <%= f.govuk_submit t("continue") %>
     <% end %>
 

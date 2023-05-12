@@ -115,8 +115,12 @@ features:
 cookies:
   session:
     name: _teacher_training_courses_session
-  consent:
-    name: _consented_to_analytics_cookies
-    expire_after_days: 182
+  analytics:
+    name: _consented_to_anaytics_cookies
+  expire_after_days: 182
+
+google_tag_manager:
+  find_tracking_id: change_me
+  publish_tracking_id: change_me
 
 STATE_CHANGE_SLACK_URL: replace_me

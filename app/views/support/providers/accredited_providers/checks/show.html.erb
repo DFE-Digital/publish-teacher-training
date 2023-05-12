@@ -1,0 +1,42 @@
+
+<%= render PageTitle.new(
+  title: "Check your answers - #{t('.caption', provider_name: @provider.provider_name, code: @provider.provider_code)}"
+) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(new_support_recruitment_cycle_provider_accredited_provider_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= form_with(url: check_support_recruitment_cycle_provider_accredited_providers_path, method: :put, local: true) do |f| %>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
+        Check your answers
+      </h1>
+
+      <%= render GovukComponent::SummaryListComponent.new do |component|
+            component.with_row do |row|
+              row.with_key { "Accredited provider" }
+              row.with_value { @accredited_provider_form.provider_name }
+              row.with_action(text: "Change", href: search_support_recruitment_cycle_provider_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited provider name")
+            end
+
+            component.with_row do |row|
+              row.with_key { "About the accredited provider" }
+              row.with_value { @accredited_provider_form.description }
+              row.with_action(text: "Change", href: new_support_recruitment_cycle_provider_accredited_provider_path(goto_confirmation: true), visually_hidden_text: "accredited provider description")
+            end
+          end %>
+
+      <%= govuk_warning_text(text: "All users at #{@accredited_provider_form.provider_name} will be sent an email to let them know they’ve been added.") %>
+
+      <%= f.govuk_submit(t(".add")) %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
+    </p>
+  </div>
+</div>

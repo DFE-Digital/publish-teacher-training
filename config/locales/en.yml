@@ -320,7 +320,16 @@ en:
       accredited_provider_search:
         new:
           title: Enter a provider name, UKPRN or postcode
+          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+      accredited_providers:
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: "Add accredited provider - %{provider_name} (%{code})"
+        checks:
+          show:
+            caption: *accredited_provider_caption
+            add: Add accredited provider
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
@@ -647,6 +656,10 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "Site URN must be 5 or 6 numbers"
+        support/accredited_provider_form:
+          attributes:
+            description:
+              blank: Enter details about the accredited provider
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:
@@ -726,7 +739,7 @@ en:
               invalid: "Enter a valid email address"
         publish/cookie_preferences_form:
           attributes:
-            consent:
+            analytics_consent:
               blank: Select yes if you want to accept Google Analytics cookies
         publish/schools/search_form:
           attributes:
@@ -737,11 +750,6 @@ en:
           attributes:
             school_id:
               blank: Select a school
-        find/confirm_environment:
-          attributes:
-            environment:
-              blank: Enter the environment to proceed
-              invalid_environment: "That's not %{environment}"
         publish/provider_contact_form:
           attributes:
             ukprn:
@@ -760,6 +768,15 @@ en:
               invalid: Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
               too_long: Telephone number must contain 15 numbers or fewer
               too_short: Telephone number must contain 8 numbers or more
+        find/confirm_environment:
+          attributes:
+            environment:
+              blank: Enter the environment to proceed
+              invalid_environment: "That's not %{environment}"
+        find/cookie_preferences_form:
+          attributes:
+            analytics_consent:
+              blank: Select yes if you want to accept Google Analytics cookies
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
@@ -888,6 +905,8 @@ en:
     heading: Cookies on %{service_name}
     accept: Accept analytics cookies
     reject: Reject analytics cookies
+    preferences:
+      success: Your cookie preferences have been updated
     message_html:
       <p class="govuk-body">We use some essential cookies to make this service work.</p>
       <p class="govuk-body app-js-only">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
@@ -905,3 +924,4 @@ en:
     url_online_chat: https://getintoteaching.education.gov.uk/#talk-to-us
     url_ways_to_train: https://getintoteaching.education.gov.uk/ways-to-train
     url: https://getintoteaching.education.gov.uk
+  google_privacy_policy_url: "https://policies.google.com/technologies/cookies?hl=en-US#types-of-cookies"

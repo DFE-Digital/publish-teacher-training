@@ -19,18 +19,12 @@
     <%= stylesheet_link_tag "publish_application" %>
     <%= javascript_include_tag "publish/application", "data-turbo-track": "reload", defer: true %>
 
-    <% if google_analytics_allowed? %>
-      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','<%= Settings.google_tag_manager.tracking_id %>');</script>
-    <% end %>
+    <%= render("layouts/gtm", tracking_id: Settings.google_tag_manager.publish_tracking_id, consented_to_analytics_cookie_value:) %>
   </head>
 
   <body class="govuk-template__body <%= yield :body_class %>">
     <% if google_analytics_allowed? %>
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.publish_tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <% end %>
 
     <%= render "layouts/add_js_enabled_class_to_body" %>
