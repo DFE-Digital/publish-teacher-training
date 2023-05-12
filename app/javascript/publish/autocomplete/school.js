@@ -2,12 +2,12 @@ import initAutocomplete from './autocomplete'
 
 const schoolTemplate = (result) => result && `${result.name}`
 const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
-const schoolConfirmCallback = (input) =>  (schoolId) => {
-  if (schoolId === undefined) {
+const schoolConfirmCallback = (input) =>  (option) => {
+  if (option.id === undefined) {
     return
   }
 
-  input.value = schoolId
+  input.value = option.id
 }
 const options = {
   path: '/api/school_suggestions',
@@ -15,8 +15,7 @@ const options = {
     inputValue: schoolTemplate,
     suggestion: schoolSuggestionsTemplate
   },
-  onConfirm: (option) => {
-    schoolConfirmCallback(option.id)
+  onConfirm: schoolConfirmCallback
   }
 }
 

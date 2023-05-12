@@ -8,7 +8,7 @@ const initAutocomplete = (elementId, inputId, options = {}) => {
     const input = document.getElementById(inputId)
 
     if (element && input) {
-      const { path, template } = options
+      const { path, template, minLength, onConfirm, input_name } = options
       const { inputValue, suggestion } = template
 
       accessibleAutocomplete({
@@ -17,21 +17,23 @@ const initAutocomplete = (elementId, inputId, options = {}) => {
         showNoOptionsFound: true,
         name: input.name,
         defaultValue: input.value,
-        minLength: 3,
+        minLength: minLength,
         source: debounce(request(path), 900),
         templates: {
           inputValue,
           suggestion
         },
-        onConfirm: (option) => (input.value = option ? option.code : ''),
+        onConfirm: onConfirm,
         confirmOnBlur: false,
         autoselect: true
       })
 
-      // Hijack the original input to submit the selected provider_code.
-      input.id = `old-${input.id}`
-      input.name = 'course[autocompleted_provider_code]'
-      input.type = 'hidden'
+      if (input_name !== undefined) {
+        // Hijack the original input to submit the selected provider_code.
+        input.id = `old-${input.id}`
+        input.name = input_name,
+        input.type = 'hidden'
+      }
     }
   } catch (err) {
     console.error(`Failed to initialise autocomplete for ${elementId}:`, err)
