@@ -34,7 +34,7 @@ feature 'Searching for an accredited provider' do
   scenario 'I can search for an accredited provider by partial query' do
     when_i_visit_the_accredited_provider_search_page
     and_i_search_with_a_partial_query
-    then_i_am_on_the_new_page
+    then_i_see_a_single_provider_radio_list
   end
 
   scenario 'back links behaviour' do
@@ -75,14 +75,14 @@ feature 'Searching for an accredited provider' do
     click_continue
   end
 
-  def then_i_am_on_the_new_page
-    expect(page).to have_current_path("/support/2023/providers/#{@accredited_provider.id}/accredited-providers/new")
-  end
-
   def then_i_see_a_provider_radio_list
     expect(page).not_to have_content(@accredited_provider.provider_name)
     expect(page).to have_content(@accredited_provider_two.provider_name)
     expect(page).to have_content(@accredited_provider_three.provider_name)
+  end
+
+  def then_i_see_a_single_provider_radio_list
+    expect(page).to have_content(@accredited_provider.provider_name)
   end
 
   def when_i_select_the_provider
