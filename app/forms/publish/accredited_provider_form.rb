@@ -19,6 +19,16 @@ module Publish
       @accredited_provider ||= RecruitmentCycle.current.providers.find(accredited_provider_id)
     end
 
+    def after_save
+      accredited_provider.users.each do |ap_user|
+        ::Users::OrganisationMailer.added_as_an_organisation_to_training_partner(
+          recipient: ap_user,
+          provider: model,
+          accredited_provider:
+        ).deliver_later
+      end
+    end
+
     private
 
     def assign_attributes_to_model

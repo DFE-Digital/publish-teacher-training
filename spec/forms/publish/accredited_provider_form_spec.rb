@@ -66,5 +66,26 @@ module Publish
         end
       end
     end
+
+    describe '#after_save' do
+      let(:accredited_provider) { create(:provider, :accredited_provider, users: [create(:user)]) }
+      let(:params) do
+        {
+          accredited_provider_id: accredited_provider.id,
+          description: 'Accredited provider description'
+        }
+      end
+
+      subject { described_class.new(user, model, params:) }
+
+      it 'sends a notification email to all the users associated with the accredited provider' do
+        accredited_provider.users.each do |ap_user|
+          allow(::Users::OrganisationMailer).to receive(:added_as_an_organisation_to_training_partner).with(recipient: ap_user, provider: model, accredited_provider:).and_return(instance_double(ActionMailer::MessageDelivery, deliver_later: true))
+        end
+
+        expect(::Users::OrganisationMailer).to receive(:added_as_an_organisation_to_training_partner).exactly(accredited_provider.users.count).times
+        subject.after_save
+      end
+    end
   end
 end
