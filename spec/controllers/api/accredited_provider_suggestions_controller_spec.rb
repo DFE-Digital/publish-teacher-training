@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe API::AccreditedProvidersSuggestionsController do
+RSpec.describe API::AccreditedProviderSuggestionsController do
   describe '#index' do
     let!(:ap1) { create(:provider, :accredited_provider, provider_name: 'claydon') }
     let!(:ap2) { create(:provider, :accredited_provider, provider_name: 'claytown') }

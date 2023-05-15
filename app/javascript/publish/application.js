@@ -48,7 +48,7 @@ try {
   }
   if (accreditedProviderAutocomplete && accreditedProviderInput) {
     initAutocomplete(accreditedProviderAutocomplete, accreditedProviderInput, accreditedProviderTemplate, {
-      path: '/api/accredited_providers_suggestions',
+      path: '/api/accredited_provider_suggestions',
       template: accreditedProviderSuggestionsTemplate
     })
   }
