@@ -15,6 +15,8 @@ module Publish
         @school_search_form = Schools::SearchForm.new(query:)
 
         if @school_search_form.valid?
+          redirect_to_next_step and return if school_search_params[:school_id].present?
+
           @school_select_form = Schools::SelectForm.new
           @school_search = Schools::SearchService.call(query:)
 
@@ -59,7 +61,7 @@ module Publish
       def school_search_params
         return {} unless params.key?(:publish_schools_search_form)
 
-        params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS)
+        params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS, :school_id)
       end
 
       def school_select_params
@@ -75,6 +77,13 @@ module Publish
           results_count: @school_search.schools.unscope(:limit).count,
           return_path: search_publish_provider_recruitment_cycle_schools_path,
           search_resource: 'school'
+        )
+      end
+
+      def redirect_to_next_step
+        redirect_to new_publish_provider_recruitment_cycle_school_path(
+          provider_code: provider.provider_code,
+          school_id: school_search_params[:school_id]
         )
       end
     end

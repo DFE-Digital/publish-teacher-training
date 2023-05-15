@@ -312,7 +312,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (~> 6.0)
       view_component (~> 3.0.0)
-    govuk_design_system_formbuilder (4.0.0rc1)
+    govuk_design_system_formbuilder (4.0.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -473,10 +473,10 @@ GEM
     optimist (3.0.1)
     os (1.1.4)
     pagy (6.0.3)
-    parallel (1.22.1)
-    parallel_tests (4.2.0)
+    parallel (1.23.0)
+    parallel_tests (4.2.1)
       parallel
-    parser (3.2.2.0)
+    parser (3.2.2.1)
       ast (~> 2.4.1)
     patience_diff (1.2.0)
       optimist (~> 3.0)
@@ -597,7 +597,7 @@ GEM
     rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.50.2)
+    rubocop (1.51.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
@@ -607,7 +607,7 @@ GEM
       rubocop-ast (>= 1.28.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.28.0)
+    rubocop-ast (1.28.1)
       parser (>= 3.2.1.0)
     rubocop-capybara (2.17.1)
       rubocop (~> 1.41)
@@ -732,6 +732,7 @@ GEM
 PLATFORMS
   arm64-darwin-20
   arm64-darwin-21
+  arm64-darwin-22
   x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
@@ -771,7 +772,7 @@ DEPENDENCIES
   geokit-rails
   google-cloud-bigquery
   govuk-components (~> 4.0)
-  govuk_design_system_formbuilder (~> 4.0.0rc1)
+  govuk_design_system_formbuilder (~> 4.0)
   govuk_notify_rails
   guard
   guard-rspec

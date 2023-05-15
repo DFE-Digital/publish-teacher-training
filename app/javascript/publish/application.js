@@ -27,6 +27,15 @@ try {
   const schoolInput = document.getElementById('publish-schools-search-form-query-field')
   const schoolTemplate = (result) => result && `${result.name}`
   const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
+  const schoolHiddenIdInput = document.getElementById('school-id')
+
+  const schoolConfirmCallback = (schoolId) => {
+    if (schoolId === undefined) {
+      return
+    }
+
+    schoolHiddenIdInput.value = schoolId
+  }
 
   const accreditedProviderAutocomplete = document.getElementById('accredited-provider-autocomplete')
   const accreditedProviderInput = document.getElementById('accredited-provider-search-form-query-field')
@@ -43,7 +52,10 @@ try {
   if (schoolAutocomplete && schoolInput) {
     initAutocomplete(schoolAutocomplete, schoolInput, schoolTemplate, {
       path: '/api/school_suggestions',
-      template: schoolSuggestionsTemplate
+      template: schoolSuggestionsTemplate,
+      onConfirm: (option) => {
+        schoolConfirmCallback(option.id)
+      }
     })
   }
   if (accreditedProviderAutocomplete && accreditedProviderInput) {

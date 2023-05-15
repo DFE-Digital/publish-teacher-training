@@ -248,6 +248,9 @@ en:
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
+  accredited_provider_suggestion:
+    errors:
+      bad_request: "Unknown provider name, ukprn or postcode, please check the query string."
   school_suggestion:
     errors:
       bad_request: "Unknown school name, urn or postcode, please check the query string."
@@ -280,6 +283,16 @@ en:
           title: Enter a school, university, college, URN or postcode
           caption: *add_school
           cannot_find: I cannot find the school - enter manually
+      accredited_providers:
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: Add accredited provider
+        checks:
+          show:
+            title:  Add accredited provider
+            caption: Add accredited provider
+            add: Add accredited provider
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
@@ -572,6 +585,10 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        publish/accredited_provider_form:
+          attributes:
+            description:
+              blank: Enter details about the accredited provider
         support/user_form:
           attributes:
             email:
