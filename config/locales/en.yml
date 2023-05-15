@@ -248,6 +248,9 @@ en:
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
+  accredited_provider_suggestion:
+    errors:
+      bad_request: "Unknown provider name, ukprn or postcode, please check the query string."
   school_suggestion:
     errors:
       bad_request: "Unknown school name, urn or postcode, please check the query string."
