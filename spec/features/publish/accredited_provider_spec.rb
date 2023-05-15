@@ -42,7 +42,9 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
     when_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
+    and_the_accredited_provider_is_saved_to_the_database
     and_i_should_see_a_success_message
+    and_i_should_see_the_accredited_providers
   end
 
   scenario 'back links behaviour' do
@@ -61,6 +63,17 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   private
+
+  def and_i_should_see_the_accredited_providers
+    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_content(@accredited_provider.provider_name)
+  end
+
+  def and_the_accredited_provider_is_saved_to_the_database
+    @provider.reload
+    expect(@provider.accredited_providers.count).to eq(1)
+    expect(@provider.accredited_providers.first.id).to eq(@accredited_provider.id)
+  end
 
   def then_i_should_be_taken_to_the_accredited_provider_description_page
     expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_provider_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))

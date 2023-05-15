@@ -12,6 +12,7 @@ module Publish
         end
 
         def update
+          accredited_provider_form.save!
           accredited_provider_form.clear_stash
           redirect_to publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: 'Accredited provider added' }
         end
@@ -19,7 +20,7 @@ module Publish
         private
 
         def accredited_provider_form
-          @accredited_provider_form ||= AccreditedProviderForm.new(current_user)
+          @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
         end
 
         def provider
