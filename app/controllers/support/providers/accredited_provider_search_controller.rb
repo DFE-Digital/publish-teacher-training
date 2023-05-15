@@ -17,6 +17,13 @@ module Support
           @accredited_provider_select_form = AccreditedProviderSelectForm.new
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
 
+          if @accredited_provider_search.providers.size == 1
+            @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: @accredited_provider_search.providers[0].id)
+            redirect_to new_support_recruitment_cycle_provider_accredited_provider_path(
+              provider_id: @accredited_provider_search.providers[0].id
+            ) and return
+          end
+
           render :results
         else
           provider
