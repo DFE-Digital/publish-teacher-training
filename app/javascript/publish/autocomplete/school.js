@@ -2,7 +2,7 @@ import initAutocomplete from './autocomplete'
 
 const schoolTemplate = (result) => result && `${result.name}`
 const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
-const onConfirm = (input) =>  (option) => {
+const onConfirm = (input) => (option) => {
   if (option.id === undefined) {
     return
   }

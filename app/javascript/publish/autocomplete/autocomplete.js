@@ -28,7 +28,7 @@ const initAutocomplete = (elementId, inputId, options = {}) => {
         autoselect: true
       })
 
-      // Hijack the original input to submit the selected provider_code.
+      // Hijack the original input to submit the selected value.
       input.id = `old-${input.id}`
       input.name = inputName
       input.type = 'hidden'

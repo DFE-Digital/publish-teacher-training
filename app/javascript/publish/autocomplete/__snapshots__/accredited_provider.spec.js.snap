@@ -8,7 +8,7 @@ exports[`Accredited provider init should instantiate an autocomplete 1`] = `
            
   <input
     id="old-accredited-provider-search-form-query-field"
-    name="provider_id"
+    name="accredited_provider_id"
     type="hidden"
   />
   
