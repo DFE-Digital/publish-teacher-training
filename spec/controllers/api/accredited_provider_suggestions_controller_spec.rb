@@ -16,7 +16,6 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
       end
 
       it 'responds with 400 status' do
-        binding.pry
         expect(json_response['errors']).to eq(
           [{ 'status' => 400, 'title' => 'BAD REQUEST', 'detail' => 'Unknown provider name, ukprn or postcode, please check the query string.' }]
         )
