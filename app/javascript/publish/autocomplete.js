@@ -5,6 +5,7 @@ import { request } from '../utils/request_helper'
 export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) => {
   const path = options.path
   const suggestionTemplate = options.template
+  const onConfirmCallback = options.onConfirm || (() => {})
 
   accessibleAutocomplete({
     element: $el,
@@ -18,7 +19,10 @@ export const initAutocomplete = ($el, $input, inputValueTemplate, options = {}) 
       inputValue: inputValueTemplate,
       suggestion: suggestionTemplate
     },
-    onConfirm: (option) => ($input.value = option ? option.code : ''),
+    onConfirm: (option) => {
+      $input.value = option ? option.code : ''
+      onConfirmCallback(option)
+    },
     confirmOnBlur: false,
     autoselect: true
   })
