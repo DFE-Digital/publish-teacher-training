@@ -46,6 +46,10 @@ variable "service_short" {
   type = string
 }
 
+variable "service_name" {
+  type = string
+}
+
 variable "key_vault_name" {
   type = string
 }

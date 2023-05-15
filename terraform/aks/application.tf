@@ -27,14 +27,13 @@ module "application_configuration" {
 } */
 
 module "web_application" {
-  # source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
-  source = "/Users/SNeal@ai.baesystems.com/github/DFE-Digital/terraform-modules/aks/application"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
 
   is_web = true
 
   namespace    = var.namespace
   environment  = local.environment
-  service_name = "${local.service_name}"
+  service_name = var.service_name
 
   cluster_configuration_map = module.cluster_data.configuration_map
 
@@ -44,21 +43,20 @@ module "web_application" {
   docker_image           = var.docker_image
   # command                = ["/bin/sh", "-c", "bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0"]
   command                = ["/bin/sh", "-c", "bundle exec rails db:setup && bundle exec rails server -b 0.0.0.0"]
-  web_external_hostnames = ["ftt-review-7777.cluster3.development.teacherservices.cloud"]
+  web_external_hostnames = ["find-review-7777.cluster3.development.teacherservices.cloud"]
   max_memory             = "512Mi"
   probe_path             = "/ping"
 }
 
 module "worker_application" {
-  # source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
-  source = "/Users/SNeal@ai.baesystems.com/github/DFE-Digital/terraform-modules/aks/application"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
 
   name   = "worker"
   is_web = false
 
   namespace    = var.namespace
   environment  = local.environment
-  service_name = "${local.service_name}"
+  service_name = var.service_name
 
   cluster_configuration_map = module.cluster_data.configuration_map
 

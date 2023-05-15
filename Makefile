@@ -68,8 +68,7 @@ dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1
 	$(eval export TF_VAR_cluster=$(CLUSTER))
 	$(eval export TF_VAR_app_name=$(APP_NAME))
 	$(eval export TF_VAR_app_suffix=$(APP_NAME))
-	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
-# 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
 	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).development.teacherservices.cloud will be created in aks
 #	$(eval APP_NAME_SUFFIX=dv-review-$(APP_NAME))
 #	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
