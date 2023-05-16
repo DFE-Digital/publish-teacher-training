@@ -1,4 +1,6 @@
 en:
+  notification_banner:
+    success: "Success"
   cycles:
     updated: "Cycle schedule updated"
   service_name:
