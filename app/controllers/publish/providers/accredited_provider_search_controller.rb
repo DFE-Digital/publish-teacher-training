@@ -13,16 +13,22 @@ module Publish
 
       def create
         authorize_provider
-
-        @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
-
-        if @accredited_provider_search_form.valid?
-          @accredited_provider_select_form = AccreditedProviderSelectForm.new
-          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
-          render :results
+        if accredited_provider_id.present?
+          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(provider_code: provider.provider_code,
+                                                                                      recruitment_cycle_year: provider.recruitment_cycle_year,
+                                                                                      accredited_provider_id:)
         else
-          provider
-          render :new
+
+          @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
+
+          if @accredited_provider_search_form.valid?
+            @accredited_provider_select_form = AccreditedProviderSelectForm.new
+            @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
+            render :results
+          else
+            provider
+            render :new
+          end
         end
       end
 
@@ -39,6 +45,12 @@ module Publish
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
           render :results
         end
+      end
+
+      private
+
+      def accredited_provider_id
+        params[:accredited_provider_id]
       end
 
       def provider

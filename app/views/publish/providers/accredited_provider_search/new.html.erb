@@ -6,9 +6,9 @@
         method: :post
       ) do |f| %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
-<% end %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link_to(publish_back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
+  <% end %>
 
   <%= f.govuk_error_summary %>
 
@@ -20,6 +20,8 @@
         label: { text: "Enter a provider name, UKPRN or postcode", size: "l", tag: "h1" },
         caption: { text: "Add accredited provider", size: "l" }
       ) %>
+
+      <div id="accredited-provider-autocomplete" class="govuk-!-margin-bottom-7"></div>
 
       <%= f.govuk_submit t("continue") %>
 
