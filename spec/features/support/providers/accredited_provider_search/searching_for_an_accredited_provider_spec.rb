@@ -83,6 +83,8 @@ feature 'Searching for an accredited provider' do
 
   def then_i_see_a_single_provider_radio_list
     expect(page).to have_content(@accredited_provider.provider_name)
+    expect(page).not_to have_content(@accredited_provider_two.provider_name)
+    expect(page).not_to have_content(@accredited_provider_three.provider_name)
   end
 
   def when_i_select_the_provider
