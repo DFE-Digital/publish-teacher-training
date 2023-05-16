@@ -41,6 +41,27 @@ module Publish
         end
       end
 
+      def delete
+        @cannot_delete = provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
+      end
+
+      def destroy
+        return_if_cannot_delete
+
+        provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+        provider.save
+
+        flash[:success] = t('publish.providers.accredited_providers.delete.updated')
+
+        redirect_to publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)
+      end
+
+      private
+
+      def return_if_cannot_delete
+        return if @cannot_delete
+      end
+
       def accredited_provider
         @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
       end
@@ -65,6 +86,10 @@ module Publish
         params.require(:accredited_provider_form)
               .except(:goto_confirmation)
               .permit(AccreditedProviderForm::FIELDS)
+      end
+
+      def accrediting_provider_enrichments
+        provider.accrediting_provider_enrichments.reject { |enrichment| enrichment.UcasProviderCode == params['accredited_provider_code'] }
       end
     end
   end
