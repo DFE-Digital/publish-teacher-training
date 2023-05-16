@@ -1,5 +1,5 @@
 <%= govuk_summary_card(title: provider_name) do |card|
-      card.with_action { govuk_link_to("Remove", remove_path, class: "app-link--destructive") }
+      card.with_action { govuk_link_to("Remove", remove_path, class: "app-link--destructive govuk-!-font-weight-regular") }
       card.with_summary_list(rows: [{ key: { text: "About the accredited provider" },
                                       value: { text: about_accredited_provider },
                                       actions: [{ href: change_about_accredited_provider_path }] }])

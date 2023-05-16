@@ -11,7 +11,7 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    validates :description, presence: true
+    validates :description, presence: true, words_count: { maximum: 100, message: :too_long }
 
     alias compute_fields new_attributes
 

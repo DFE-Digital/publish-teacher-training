@@ -11,6 +11,19 @@ module Support
 
     describe 'validations' do
       it { is_expected.to validate_presence_of(:description) }
+
+      context 'word count' do
+        before do
+          subject.description = Faker::Lorem.sentence(word_count: 251)
+          subject.valid?
+        end
+
+        it 'validates the word count for the description' do
+          expect(subject).not_to be_valid
+          expect(subject.errors[:description])
+            .to include(I18n.t('activemodel.errors.models.support/accredited_provider_form.attributes.description.too_long'))
+        end
+      end
     end
 
     describe '#stash' do

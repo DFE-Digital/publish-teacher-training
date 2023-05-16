@@ -12,7 +12,6 @@ module Support
 
         def update
           accredited_provider_form.save!
-          reset_accredited_provider_form
 
           redirect_to support_recruitment_cycle_provider_accredited_providers_path(
             recruitment_cycle.year, provider.id
