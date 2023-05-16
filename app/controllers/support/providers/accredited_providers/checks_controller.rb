@@ -7,12 +7,11 @@ module Support
         include ClearStashable
 
         def show
-          provider
           accredited_provider_form
         end
 
         def update
-          reset_accredited_provider_form
+          accredited_provider_form.save!
 
           redirect_to support_recruitment_cycle_provider_accredited_providers_path(
             recruitment_cycle.year, provider.id
@@ -22,7 +21,7 @@ module Support
         private
 
         def accredited_provider_form
-          @accredited_provider_form ||= AccreditedProviderForm.new(current_user)
+          @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
         end
 
         def provider

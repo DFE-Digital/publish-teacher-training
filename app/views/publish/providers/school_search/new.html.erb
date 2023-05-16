@@ -35,8 +35,6 @@
         <div id="school-autocomplete"></div>
       </div>
 
-      <%= f.hidden_field :school_id, id: "school-id", value: nil %>
-
       <p class="govuk-body govuk-!-margin-bottom-7">
         <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
       </p>

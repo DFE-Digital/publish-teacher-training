@@ -14,8 +14,8 @@ feature 'Searching for an accredited provider' do
     and_i_search_with_an_invalid_query
     then_i_should_see_an_error_message
 
-    when_i_search_for_an_accredited_provider_with_a_multiple_query
-    then_i_see_a_provider_radio_list
+    when_i_search_for_an_accredited_provider_with_a_valid_query
+    then_i_see_the_provider_i_searched_for
 
     when_i_continue_without_selecting_an_accredited_provider
     then_i_should_see_an_error_message('Select an accredited provider')
@@ -29,12 +29,7 @@ feature 'Searching for an accredited provider' do
     and_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
     and_i_should_see_a_success_message
-  end
-
-  scenario 'I can search for an accredited provider by partial query' do
-    when_i_visit_the_accredited_provider_search_page
-    and_i_search_with_a_partial_query
-    then_i_am_on_the_new_page
+    and_i_should_see_the_accredited_providers
   end
 
   scenario 'back links behaviour' do
@@ -58,7 +53,7 @@ feature 'Searching for an accredited provider' do
   end
 
   def and_there_are_accredited_providers_in_the_database
-    @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCLA')
+    @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL', users: [create(:user)])
     @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
     @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')
   end
@@ -70,23 +65,19 @@ feature 'Searching for an accredited provider' do
     )
   end
 
-  def when_i_search_for_an_accredited_provider_with_a_multiple_query
-    fill_in form_title, with: 'Accredited provider'
+  def when_i_search_for_an_accredited_provider_with_a_valid_query
+    fill_in form_title, with: @accredited_provider.provider_name
     click_continue
   end
 
-  def then_i_am_on_the_new_page
-    expect(page).to have_current_path("/support/2023/providers/#{@accredited_provider.id}/accredited-providers/new")
-  end
-
-  def then_i_see_a_provider_radio_list
-    expect(page).not_to have_content(@accredited_provider.provider_name)
-    expect(page).to have_content(@accredited_provider_two.provider_name)
-    expect(page).to have_content(@accredited_provider_three.provider_name)
+  def then_i_see_the_provider_i_searched_for
+    expect(page).to have_content(@accredited_provider.provider_name)
+    expect(page).not_to have_content(@accredited_provider_two.provider_name)
+    expect(page).not_to have_content(@accredited_provider_three.provider_name)
   end
 
   def when_i_select_the_provider
-    choose @accredited_provider_two.provider_name
+    choose @accredited_provider.provider_name
     click_continue
   end
 
@@ -104,11 +95,6 @@ feature 'Searching for an accredited provider' do
     click_continue
   end
 
-  def and_i_search_with_a_partial_query
-    fill_in form_title, with: 'UCL'
-    click_continue
-  end
-
   def then_i_should_see_an_error_message(error_message = form_title)
     expect(page).to have_content(error_message)
   end
@@ -117,7 +103,11 @@ feature 'Searching for an accredited provider' do
     click_continue
   end
 
-  alias_method :and_i_should_still_see_the_provider_i_searched_for, :then_i_see_a_provider_radio_list
+  def and_i_should_still_see_the_provider_i_searched_for
+    expect(page).to have_content(@accredited_provider.provider_name)
+    expect(page).not_to have_content(@accredited_provider_two.provider_name)
+    expect(page).not_to have_content(@accredited_provider_three.provider_name)
+  end
 
   def when_i_enter_a_description
     fill_in 'About the accredited provider', with: 'This is a description'
@@ -125,11 +115,18 @@ feature 'Searching for an accredited provider' do
   end
 
   def and_i_confirm_the_changes
-    click_on 'Add accredited provider'
+    expect do
+      click_on 'Add accredited provider'
+    end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
   def and_i_should_see_a_success_message
     expect(page).to have_content('Accredited provider added')
+  end
+
+  def and_i_should_see_the_accredited_providers
+    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_content(@accredited_provider.provider_name)
   end
 
   def click_continue
@@ -138,7 +135,7 @@ feature 'Searching for an accredited provider' do
 
   def when_i_am_on_the_confirm_page
     when_i_visit_the_accredited_provider_search_page
-    when_i_search_for_an_accredited_provider_with_a_multiple_query
+    when_i_search_for_an_accredited_provider_with_a_valid_query
     when_i_select_the_provider
     when_i_enter_a_description
   end

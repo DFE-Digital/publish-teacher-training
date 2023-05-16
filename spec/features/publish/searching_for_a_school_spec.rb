@@ -14,7 +14,7 @@ feature 'Searching for a school from the GIAS list' do
     then_i_should_see_an_error_message
 
     when_i_search_for_a_school_with_a_valid_query
-    and_the_school_form_should_be_prefilled(@school)
+    then_i_should_see_a_single_radio_list
 
     when_i_visit_the_school_search_page
     when_i_search_for_a_school_with_a_partial_query
@@ -59,7 +59,14 @@ feature 'Searching for a school from the GIAS list' do
     click_continue
   end
 
+  def then_i_should_see_a_single_radio_list
+    expect(page).to have_content @school.name
+    expect(page).not_to have_content @school_two.name
+    expect(page).not_to have_content @school_three.name
+  end
+
   def then_i_should_see_a_radio_list
+    expect(page).not_to have_content @school.name
     expect(page).to have_content @school_two.name
     expect(page).to have_content @school_three.name
   end

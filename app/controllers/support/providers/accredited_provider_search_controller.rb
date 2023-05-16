@@ -11,18 +11,13 @@ module Support
       end
 
       def create
+        redirect_to_next_step and return if accredited_provider_id.present?
+
         @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
 
         if @accredited_provider_search_form.valid?
           @accredited_provider_select_form = AccreditedProviderSelectForm.new
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
-
-          if @accredited_provider_search.providers.size == 1
-            @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: @accredited_provider_search.providers[0].id)
-            redirect_to new_support_recruitment_cycle_provider_accredited_provider_path(
-              provider_id: @accredited_provider_search.providers[0].id
-            ) and return
-          end
 
           render :results
         else
@@ -44,6 +39,10 @@ module Support
 
       private
 
+      def accredited_provider_id
+        params[:accredited_provider_id]
+      end
+
       def query
         # Order is important here so the query persists across each step.
         @accredited_provider_search_form&.query || accredited_provider_search_params[:query] || accredited_provider_select_params[:query]
@@ -56,7 +55,7 @@ module Support
       def accredited_provider_search_params
         return {} unless params.key?(:accredited_provider_search_form)
 
-        params.require(:accredited_provider_search_form).permit(*AccreditedProviderSearchForm::FIELDS)
+        params.require(:accredited_provider_search_form).permit(*AccreditedProviderSearchForm::FIELDS, :accredited_provider_id)
       end
 
       def accredited_provider_select_params
@@ -74,6 +73,10 @@ module Support
           search_resource: 'accredited provider',
           caption_text: "Add accredited provider - #{provider.name_and_code}"
         )
+      end
+
+      def redirect_to_next_step
+        redirect_to new_support_recruitment_cycle_provider_accredited_provider_path(accredited_provider_id:)
       end
     end
   end

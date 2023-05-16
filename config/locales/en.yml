@@ -293,6 +293,10 @@ en:
             title:  Add accredited provider
             caption: Add accredited provider
             add: Add accredited provider
+      accredited_provider_search:
+        new:
+          title: &accredited_provider_title Enter a provider name, UKPRN or postcode
+          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
@@ -332,8 +336,8 @@ en:
         check: "Check your answers"
       accredited_provider_search:
         new:
-          title: Enter a provider name, UKPRN or postcode
-          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+          title: *accredited_provider_title
+          caption: *accredited_provider_caption
       accredited_providers:
         new:
           title: About the accredited provider
@@ -530,6 +534,11 @@ en:
           attributes:
             provider_id:
               blank: Select an accredited provider
+        accredited_provider_form:
+          attributes:
+            description:
+              blank: Enter details about the accredited provider
+              too_long: Reduce the word count for about the provider
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
@@ -673,10 +682,6 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "Site URN must be 5 or 6 numbers"
-        support/accredited_provider_form:
-          attributes:
-            description:
-              blank: Enter details about the accredited provider
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:
