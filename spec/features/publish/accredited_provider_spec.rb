@@ -21,7 +21,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   scenario 'i can search for an accredited provider when they are searchable' do
-    given_there_are_accredited_providers_in_the_database
+    given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
     and_i_search_with_an_invalid_query
     then_i_should_see_an_error_message
@@ -42,7 +42,9 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
     when_i_confirm_the_changes
     then_i_should_be_taken_to_the_index_page
+    and_the_accredited_provider_is_saved_to_the_database
     and_i_should_see_a_success_message
+    and_i_should_see_the_accredited_providers
   end
 
   scenario 'back links behaviour' do
@@ -61,6 +63,17 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   private
+
+  def and_i_should_see_the_accredited_providers
+    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_content(@accredited_provider.provider_name)
+  end
+
+  def and_the_accredited_provider_is_saved_to_the_database
+    @provider.reload
+    expect(@provider.accredited_providers.count).to eq(1)
+    expect(@provider.accredited_providers.first.id).to eq(@accredited_provider.id)
+  end
 
   def then_i_should_be_taken_to_the_accredited_provider_description_page
     expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_provider_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))
@@ -87,7 +100,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def given_i_am_on_the_confirm_page
-    given_there_are_accredited_providers_in_the_database
+    given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
     when_i_search_for_an_accredited_provider_with_a_valid_query
     when_i_select_the_provider
@@ -103,7 +116,9 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_confirm_the_changes
-    click_on 'Add accredited provider'
+    expect do
+      click_on 'Add accredited provider'
+    end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
   def then_i_should_see_the_information_i_added
@@ -147,8 +162,10 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     expect(page).not_to have_content(@accredited_provider_three.provider_name)
   end
 
-  def given_there_are_accredited_providers_in_the_database
+  def given_there_are_accredited_providers_in_the_database_with_users
+    user = create(:user)
     @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL')
+    @accredited_provider.users << user
     @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
     @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')
   end
