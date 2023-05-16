@@ -16,6 +16,9 @@ module Publish
         accredited_provider_form
       end
 
+      def edit
+      end
+
       def create
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
 
