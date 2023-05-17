@@ -20,6 +20,16 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_should_see_the_accredited_provider_name_displayed
   end
 
+  scenario 'i can edit accredited providers on the index page' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_change
+
+    when_i_input_some_different_information
+    then_i_should_see_the_different_information
+    and_i_see_the_success_message
+  end
+
   scenario 'i can search for an accredited provider when they are searchable' do
     given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
@@ -63,6 +73,10 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   private
+
+  def and_i_click_change
+    click_link('Change')
+  end
 
   def and_i_should_see_the_accredited_providers
     expect(page).to have_selector('.govuk-summary-card', count: 1)
@@ -111,6 +125,10 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     expect(page).to have_content('Accredited provider added')
   end
 
+  def and_i_see_the_success_message
+    expect(page).to have_content('About the accredited provider updated')
+  end
+
   def then_i_should_be_taken_to_the_index_page
     expect(page).to have_current_path(publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year))
   end
@@ -125,9 +143,20 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     expect(page).to have_text('This is a description')
   end
 
+  def then_i_should_see_the_different_information
+    expect(page).to have_text('updates to the AP description')
+  end
+
+  alias_method :then_i_should_see_the_description, :then_i_should_see_the_information_i_added
+
   def when_i_input_some_information
     fill_in 'About the accredited provider', with: 'This is a description'
     click_continue
+  end
+
+  def when_i_input_some_different_information
+    fill_in 'About the accredited provider', with: 'updates to the AP description'
+    click_on 'Update description'
   end
 
   def and_i_search_with_an_invalid_query
