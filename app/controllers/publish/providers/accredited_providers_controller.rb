@@ -18,7 +18,7 @@ module Publish
 
       def edit
         provider
-        @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
+        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
       end
 
       def create
