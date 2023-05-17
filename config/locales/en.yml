@@ -287,16 +287,16 @@ en:
         new:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: Add accredited provider
+          caption: &add_accredited_provider Add accredited provider
         checks:
           show:
-            title:  Add accredited provider
-            caption: Add accredited provider
-            add: Add accredited provider
+            title:  *add_accredited_provider
+            caption: *add_accredited_provider
+            add: *add_accredited_provider
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
-          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+          caption: *add_accredited_provider
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
@@ -337,12 +337,12 @@ en:
       accredited_provider_search:
         new:
           title: *accredited_provider_title
-          caption: *accredited_provider_caption
+          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
       accredited_providers:
         new:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
+          caption: *accredited_provider_caption
         checks:
           show:
             caption: *accredited_provider_caption

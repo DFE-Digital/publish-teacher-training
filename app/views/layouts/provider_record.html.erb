@@ -8,7 +8,7 @@
     ) %>
   <% end %>
 
-  <h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
+  <h1 class="govuk-heading-l"><%= @provider.name_and_code %></h1>
 
   <%= render TabNavigation.new(items: [
     { name: "Details", url: support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider) },

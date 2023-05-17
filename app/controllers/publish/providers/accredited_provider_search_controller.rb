@@ -85,7 +85,7 @@ module Publish
           results_count: @accredited_provider_search.providers.unscope(:limit).count,
           return_path: publish_provider_recruitment_cycle_accredited_providers_path,
           search_resource: 'accredited provider',
-          caption_text: "Add accredited provider - #{provider.name_and_code}"
+          caption_text: 'Add accredited provider'
         )
       end
 
