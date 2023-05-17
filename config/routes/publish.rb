@@ -226,7 +226,9 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
-        resources :accredited_providers, path: 'accredited-providers' do
+        resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update], path: 'accredited-providers' do
+          put '/', on: :collection, to: 'accredited_providers#update'
+
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
