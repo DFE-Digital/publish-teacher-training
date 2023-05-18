@@ -542,7 +542,7 @@ en:
           attributes:
             description:
               blank: Enter details about the accredited provider
-              too_long: Reduce the word count for about the provider
+              too_long: Description about the accredited provider must be 100 words or fewer
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
@@ -598,11 +598,6 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
-        publish/accredited_provider_form:
-          attributes:
-            description:
-              blank: Enter details about the accredited provider
-              too_long: Description about the accredited provider must be 100 words or fewer
         support/user_form:
           attributes:
             email:
