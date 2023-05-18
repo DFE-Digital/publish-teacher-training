@@ -294,7 +294,6 @@ en:
         edit: 
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "%{provider_name}"
           updated: About the accredited provider updated
 >>>>>>> 793d8fd99 ([1231] Enable editing accredited provider desc)
         checks:

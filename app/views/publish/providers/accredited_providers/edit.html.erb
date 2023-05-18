@@ -19,7 +19,7 @@
           :description,
           label: { text: t(".title"), size: "l", tag: "h1" },
           hint: { text: t(".hint") },
-          caption: { text: t(".caption", provider_name: @accredited_provider.provider_name), size: "l" },
+          caption: { text: @accredited_provider.provider_name, size: "l" },
           max_words: 100,
           rows: 10
         ) %>
