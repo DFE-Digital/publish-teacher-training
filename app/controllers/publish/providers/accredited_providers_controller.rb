@@ -15,6 +15,7 @@ module Publish
       end
 
       def edit
+        accredited_provider
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
       end
 
@@ -36,8 +37,13 @@ module Publish
 
           flash[:success] = t('publish.providers.accredited_providers.edit.updated')
         else
+          accredited_provider
           render(:edit)
         end
+      end
+
+      def accredited_provider
+        @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
       end
 
       def provider
