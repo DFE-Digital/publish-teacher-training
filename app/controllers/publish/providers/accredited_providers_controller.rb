@@ -5,19 +5,16 @@ module Publish
     class AccreditedProvidersController < PublishController
       helper_method :accredited_provider_id
 
-      before_action :authorize_provider
+      before_action :authorize_provider, :provider
 
-      def index
-        provider
+      def index  
       end
 
       def new
-        provider
         accredited_provider_form
       end
 
       def edit
-        provider
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
       end
 
@@ -27,13 +24,11 @@ module Publish
         if @accredited_provider_form.stash
           redirect_to check_publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)
         else
-          provider
           render :new
         end
       end
 
       def update
-        provider
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
 
         if @accredited_provider_form.save!
