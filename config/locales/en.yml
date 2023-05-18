@@ -606,6 +606,7 @@ en:
           attributes:
             description:
               blank: Enter details about the accredited provider
+              too_long: Description about the accredited provider must be 100 words or fewer
         support/user_form:
           attributes:
             email:
