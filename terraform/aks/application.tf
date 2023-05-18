@@ -1,12 +1,13 @@
 module "application_configuration" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application_configuration?ref=aks-application-configuration"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application_configuration?ref=main"
 
   namespace             = var.namespace
+  environment           = local.environment
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
   config_short          = var.config_short
 
-  key_vault_secret_name         = var.key_vault_app_secret_name
+  key_vault_secret_name = var.key_vault_app_secret_name
 
   secret_variables = {
     DATABASE_URL = module.postgres.url
@@ -27,7 +28,7 @@ module "application_configuration" {
 } */
 
 module "web_application" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=main"
 
   is_web = true
 
@@ -40,7 +41,7 @@ module "web_application" {
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
-  docker_image           = var.docker_image
+  docker_image = var.docker_image
   # command                = ["/bin/sh", "-c", "bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0"]
   command                = ["/bin/sh", "-c", "bundle exec rails db:setup && bundle exec rails server -b 0.0.0.0"]
   web_external_hostnames = ["find-review-7777.cluster3.development.teacherservices.cloud"]
@@ -49,7 +50,7 @@ module "web_application" {
 }
 
 module "worker_application" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=aks-application"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=main"
 
   name   = "worker"
   is_web = false
@@ -68,6 +69,6 @@ module "worker_application" {
   # command      = ["/bin/sh", "-c 5", "bundle exec sidekiq -C config/sidekiq.yml"] failed
   # command      = ["/bin/sh", "bundle exec sidekiq -c 5 -C config/sidekiq.yml"]
   # command      = ["/bin/sh", "bundle exec sidekiq -c 5 -C config/sidekiq.yml"] failed
-  max_memory = "512Mi"
+  max_memory    = "512Mi"
   probe_command = ["pgrep", "-f", "sidekiq"]
 }
