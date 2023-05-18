@@ -1,5 +1,5 @@
 module "redis_worker" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=testing"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=main"
 
   name = "worker"
   namespace             = var.namespace
@@ -15,7 +15,7 @@ module "redis_worker" {
 }
 
 module "redis_cache" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=testing"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=main"
 
   name = "cache"
   namespace             = var.namespace
@@ -30,20 +30,8 @@ module "redis_cache" {
   azure_enable_monitoring = var.enable_monitoring
 }
 
-resource "random_string" "postgres_username" {
-  length  = 16
-  special = false
-  upper   = false
-}
-
-resource "random_password" "postgres_password" {
-  length  = 12
-  special = false
-}
-
 module "postgres" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/postgres?ref=aks-postgres"
-#  source = "/Users/SNeal@ai.baesystems.com/github/DFE-Digital/terraform-modules/aks/postgres"
+  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/postgres?ref=main"
 
   namespace             = var.namespace
   environment           = local.environment
@@ -52,14 +40,6 @@ module "postgres" {
   config_short          = var.config_short
 
   cluster_configuration_map = module.cluster_data.configuration_map
-
-  /*   admin_username        = local.infra_secrets.POSTGRES_ADMIN_PASSWORD
-  admin_password        = local.infra_secrets.POSTGRES_ADMIN_USERNAME */
-
-# need to work out how to make this flip between the default for container postgres and
-# the admin user for the postgres module
-  admin_username = "postgres"
-  admin_password = random_password.postgres_password.result
 
   use_azure = var.deploy_azure_backing_services
 }
