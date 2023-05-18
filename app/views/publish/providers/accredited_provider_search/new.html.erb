@@ -15,13 +15,22 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <%= f.govuk_text_field(
-        :query,
-        label: { text: "Enter a provider name, UKPRN or postcode", size: "l", tag: "h1" },
-        caption: { text: "Add accredited provider", size: "l" }
-      ) %>
-
-      <div id="accredited-provider-autocomplete" class="govuk-!-margin-bottom-7"></div>
+      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+        <%= f.label :query, { class: "govuk-label govuk-label--l", for: "accredited-provider-search-form-query-field" } do %>
+          <span class="govuk-caption-l"><%= t(".caption") %></span>
+          <%= t(".title") %>
+          <% if f.object.errors.present? %>
+            <span class="govuk-error-message" id="accredited-provider-search-form-query-field-error" data-qa="provider-error">
+              <%= f.object.errors.first.message %>
+            </span>
+          <% end %>
+        <% end %>
+        <%= f.text_field :query,
+                              id: "accredited-provider-search-form-query-field",
+                              value: params[:query],
+                              class: "govuk-input" %>
+        <div id="accredited-provider-autocomplete" class="govuk-!-margin-bottom-7"></div>
+      </div>
 
       <%= f.govuk_submit t("continue") %>
 

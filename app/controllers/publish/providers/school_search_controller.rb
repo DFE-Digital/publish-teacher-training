@@ -12,23 +12,14 @@ module Publish
       end
 
       def create
+        redirect_to_next_step and return if school_id.present?
+
         @school_search_form = Schools::SearchForm.new(query:)
 
         if @school_search_form.valid?
-          redirect_to_next_step and return if school_search_params[:school_id].present?
 
           @school_select_form = Schools::SelectForm.new
           @school_search = Schools::SearchService.call(query:)
-
-          if @school_search.schools.size == 1
-            @school_select_form = Schools::SelectForm.new(school_id: @school_search.schools[0].id)
-            if @school_select_form.valid?
-              redirect_to new_publish_provider_recruitment_cycle_school_path(
-                provider_code: provider.provider_code,
-                school_id: @school_select_form.school_id
-              ) and return
-            end
-          end
 
           render :results
         else
@@ -51,6 +42,10 @@ module Publish
 
       def authorize_provider
         authorize provider, :can_create_sites?
+      end
+
+      def school_id
+        params[:school_id]
       end
 
       def query
@@ -83,7 +78,7 @@ module Publish
       def redirect_to_next_step
         redirect_to new_publish_provider_recruitment_cycle_school_path(
           provider_code: provider.provider_code,
-          school_id: school_search_params[:school_id]
+          school_id:
         )
       end
     end

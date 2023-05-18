@@ -8,7 +8,7 @@ exports[`school init should instantiate an autocomplete 1`] = `
            
   <input
     id="old-publish-schools-search-form-query-field"
-    name="course[autocompleted_provider_code]"
+    name="school_id"
     type="hidden"
   />
   

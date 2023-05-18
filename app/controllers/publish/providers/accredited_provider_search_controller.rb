@@ -14,9 +14,11 @@ module Publish
       def create
         authorize_provider
         if accredited_provider_id.present?
-          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(provider_code: provider.provider_code,
-                                                                                      recruitment_cycle_year: provider.recruitment_cycle_year,
-                                                                                      accredited_provider_id:)
+          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(
+            provider_code: provider.provider_code,
+            recruitment_cycle_year: provider.recruitment_cycle_year,
+            accredited_provider_id:
+          )
         else
 
           @accredited_provider_search_form = AccreditedProviderSearchForm.new(query:)
@@ -38,9 +40,11 @@ module Publish
         @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: accredited_provider_select_params[:provider_id])
 
         if @accredited_provider_select_form.valid?
-          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(provider_code: provider.provider_code,
-                                                                                      recruitment_cycle_year: provider.recruitment_cycle_year,
-                                                                                      accredited_provider_id: accredited_provider_select_params[:provider_id])
+          redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(
+            provider_code: provider.provider_code,
+            recruitment_cycle_year: provider.recruitment_cycle_year,
+            accredited_provider_id: accredited_provider_select_params[:provider_id]
+          )
         else
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
           render :results
@@ -81,7 +85,7 @@ module Publish
           results_count: @accredited_provider_search.providers.unscope(:limit).count,
           return_path: publish_provider_recruitment_cycle_accredited_providers_path,
           search_resource: 'accredited provider',
-          caption_text: "Add accredited provider - #{provider.name_and_code}"
+          caption_text: 'Add accredited provider'
         )
       end
 

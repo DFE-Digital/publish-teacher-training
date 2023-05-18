@@ -2,13 +2,7 @@ import initAutocomplete from './autocomplete'
 
 const schoolTemplate = (result) => result && `${result.name}`
 const schoolSuggestionsTemplate = (result) => result && `${result.name} (${result.town}, ${result.postcode})`
-const onConfirm = (input) => (option) => {
-  if (option.id === undefined) {
-    return
-  }
-
-  input.value = option.id
-}
+const onConfirm = (input) => (option) => (input.value = option ? option.id : '')
 const options = {
   path: '/api/school_suggestions',
   template: {
@@ -17,7 +11,7 @@ const options = {
   },
   minLength: 3,
   onConfirm,
-  inputName: 'course[autocompleted_provider_code]'
+  inputName: 'school_id'
 }
 
 function init () {

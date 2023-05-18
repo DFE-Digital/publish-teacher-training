@@ -2,20 +2,25 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">
-        Accredited providers
-      </h1>
+    <h1 class="govuk-heading-l">
+      Accredited providers
+    </h1>
 
-      <%= govuk_button_link_to("Add accredited provider",
-     search_publish_provider_recruitment_cycle_accredited_providers_path(provider_code: @provider.provider_code,
-                                                                         recruitment_cycle_year: @provider.recruitment_cycle_year)) %>
-    </div>
+    <%= govuk_button_link_to("Add accredited provider", search_publish_provider_recruitment_cycle_accredited_providers_path(
+      provider_code: @provider.provider_code,
+      recruitment_cycle_year: @provider.recruitment_cycle_year
+    )) %>
   </div>
+</div>
 
-  <% if @provider.accredited_bodies.none? %>
-      There are no accredited providers for <%= @provider.provider_name %>.
-  <% else %>
-    <% @provider.accredited_bodies.each do |accredited_body| %>
-      <%= render AccreditedProvider.new(provider_name: accredited_body[:provider_name], remove_path: root_path, about_accredited_provider: accredited_body[:description], change_about_accredited_provider_path: root_path) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <% if @provider.accredited_bodies.none? %>
+        <p class="govuk-body">There are no accredited providers for <%= @provider.provider_name %>.</p>
+    <% else %>
+      <% @provider.accredited_bodies.each do |accredited_body| %>
+        <%= render AccreditedProvider.new(provider_name: accredited_body[:provider_name], remove_path: root_path, about_accredited_provider: accredited_body[:description], change_about_accredited_provider_path: root_path) %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
+</div>
