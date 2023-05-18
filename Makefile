@@ -131,7 +131,7 @@ deploy-init:
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
 	$(eval export TF_VAR_cf_sso_passcode=$(PASSCODE))
-	$(eval export TF_VAR_paas_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
+	$(eval export TF_VAR_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
 	terraform -chdir=terraform/$(PLATFORM) init -reconfigure -upgrade -backend-config=./workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
