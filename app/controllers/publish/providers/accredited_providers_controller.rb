@@ -7,8 +7,7 @@ module Publish
 
       before_action :authorize_provider, :provider
 
-      def index  
-      end
+      def index; end
 
       def new
         accredited_provider_form
@@ -63,7 +62,7 @@ module Publish
       end
 
       def accredited_provider_params
-        params.require(:accredited_provider_form)
+        params.require(:publish_accredited_provider_form)
               .except(:goto_confirmation)
               .permit(AccreditedProviderForm::FIELDS)
       end
