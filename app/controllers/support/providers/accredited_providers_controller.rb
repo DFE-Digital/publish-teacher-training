@@ -18,6 +18,11 @@ module Support
         accredited_provider_form
       end
 
+      def edit
+        provider
+        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
+      end
+
       def create
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
         if @accredited_provider_form.stash
@@ -25,6 +30,23 @@ module Support
         else
           provider
           render :new
+        end
+      end
+
+      def update
+        provider
+        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
+
+        if @accredited_provider_form.save!
+          redirect_to
+          support_recruitment_cycle_provider_accredited_providers_path(
+            recruitment_cycle_year: @recruitment_cycle.year,
+            provider: @provider
+          )
+
+          flash[:success] = t('support.providers.accredited_providers.edit.updated')
+        else
+          render(:edit)
         end
       end
 

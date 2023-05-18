@@ -24,7 +24,13 @@ module Support
     def assign_attributes_to_model
       model.accrediting_provider_enrichments = [] if model.accrediting_provider_enrichments.nil?
 
-      model.accrediting_provider_enrichments << enrichment_params
+      accrediting_provider_enrichment = model.accrediting_provider_enrichments.find { |enrichment| enrichment.UcasProviderCode == accredited_provider.provider_code }
+
+      if accrediting_provider_enrichment
+        accrediting_provider_enrichment.Description = description
+      else
+        model.accrediting_provider_enrichments << enrichment_params
+      end
     end
 
     def enrichment_params

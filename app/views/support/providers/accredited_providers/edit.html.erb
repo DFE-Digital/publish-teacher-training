@@ -1,0 +1,41 @@
+<% content_for :page_title, title_with_error_prefix("About the accredited provider - Edit accredited provider - #{@provider.name_and_code}", @accredited_provider_form.errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+  <%= content_for(:breadcrumbs) do %>
+    <%= render GovukComponent::BackLinkComponent.new(
+      text: "Back",
+      href: support_recruitment_cycle_provider_accredited_providers_path(
+        recruitment_cycle_year: @recruitment_cycle.year,
+        provider: @provider
+      )
+    ) %>
+  <% end %>
+
+    <%= form_with(
+        model: @accredited_provider_form,
+        url: support_recruitment_cycle_provider_accredited_providers_path,
+        method: :put
+      ) do |f| %>
+
+      <%= f.govuk_text_area(
+          :description,
+          label: { text: t(".title"), size: "l", tag: "h1" },
+          hint: { text: t(".hint") },
+          caption: { text: t(".caption", provider_name: @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code]).provider_name), size: "l" },
+          max_words: 100,
+          rows: 10
+        ) %>
+      <%= f.hidden_field :accredited_provider_id, value: @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code]).id %>
+
+      <%= f.govuk_submit "Update description" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
+    </p>
+
+    <% end %>
+
+  </div>
+</div>

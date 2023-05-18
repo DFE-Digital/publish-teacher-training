@@ -5,12 +5,14 @@
 <% if @provider.accredited_bodies.none? %>
   <p class="govuk-body">There are no accredited providers for <%= @provider.provider_name %>.</p>
 <% else %>
-  <% @provider.accredited_bodies.each do |accredited_provider_hash| %>
+  <% @provider.accredited_bodies.each do |accredited_body| %>
     <%= render AccreditedProvider.new(
-      provider_name: accredited_provider_hash[:provider_name],
+      provider_name: accredited_body[:provider_name],
       remove_path: root_path,
-      about_accredited_provider: accredited_provider_hash[:description],
-      change_about_accredited_provider_path: root_path
+      about_accredited_provider: accredited_body[:description],
+      change_about_accredited_provider_path: edit_support_recruitment_cycle_provider_accredited_provider_path(
+        accredited_provider_code: accredited_body[:provider_code]
+      )
     ) %>
   <% end %>
 <% end %>
