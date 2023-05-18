@@ -62,7 +62,7 @@ module Publish
       end
 
       def accredited_provider_params
-        params.require(:publish_accredited_provider_form)
+        params.require(:accredited_provider_form)
               .except(:goto_confirmation)
               .permit(AccreditedProviderForm::FIELDS)
       end
