@@ -68,7 +68,7 @@ module Support
       end
 
       def accredited_provider_params
-        params.require(:accredited_provider_form)
+        params.require(:support_accredited_provider_form)
               .except(:goto_confirmation)
               .permit(AccreditedProviderForm::FIELDS)
       end
