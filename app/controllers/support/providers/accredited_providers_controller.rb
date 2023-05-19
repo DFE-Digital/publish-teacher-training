@@ -29,13 +29,11 @@ module Support
         if @accredited_provider_form.stash
           redirect_to check_support_recruitment_cycle_provider_accredited_providers_path
         else
-          # provider
           render :new
         end
       end
 
       def update
-        # provider
         @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
 
         if @accredited_provider_form.save!
