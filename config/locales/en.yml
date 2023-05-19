@@ -248,6 +248,9 @@ en:
   provider_suggestion:
     errors:
       bad_request: "Unknown provider code or name, please check the query string."
+  accredited_provider_suggestion:
+    errors:
+      bad_request: "Unknown provider name, ukprn or postcode, please check the query string."
   school_suggestion:
     errors:
       bad_request: "Unknown school name, urn or postcode, please check the query string."
@@ -280,6 +283,24 @@ en:
           title: Enter a school, university, college, URN or postcode
           caption: *add_school
           cannot_find: I cannot find the school - enter manually
+      accredited_providers:
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: &add_accredited_provider Add accredited provider
+        edit: 
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          updated: About the accredited provider updated
+        checks:
+          show:
+            title:  *add_accredited_provider
+            caption: *add_accredited_provider
+            add: *add_accredited_provider
+      accredited_provider_search:
+        new:
+          title: &accredited_provider_title Enter a provider name, UKPRN or postcode
+          caption: *add_accredited_provider
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
@@ -319,7 +340,7 @@ en:
         check: "Check your answers"
       accredited_provider_search:
         new:
-          title: Enter a provider name, UKPRN or postcode
+          title: *accredited_provider_title
           caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
       accredited_providers:
         new:
@@ -522,6 +543,11 @@ en:
           attributes:
             provider_id:
               blank: Select an accredited provider
+        accredited_provider_form:
+          attributes:
+            description:
+              blank: Enter details about the accredited provider
+              too_long: Description about the accredited provider must be 100 words or fewer
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
@@ -661,11 +687,14 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "Site URN must be 5 or 6 numbers"
+<<<<<<< HEAD
         support/accredited_provider_form:
           attributes:
             description:
               blank: Enter details about the accredited provider
               too_long: Reduce the word count for about the provider
+=======
+>>>>>>> main
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:

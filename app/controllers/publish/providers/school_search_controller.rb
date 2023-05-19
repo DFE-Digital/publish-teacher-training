@@ -12,21 +12,14 @@ module Publish
       end
 
       def create
+        redirect_to_next_step and return if school_id.present?
+
         @school_search_form = Schools::SearchForm.new(query:)
 
         if @school_search_form.valid?
+
           @school_select_form = Schools::SelectForm.new
           @school_search = Schools::SearchService.call(query:)
-
-          if @school_search.schools.size == 1
-            @school_select_form = Schools::SelectForm.new(school_id: @school_search.schools[0].id)
-            if @school_select_form.valid?
-              redirect_to new_publish_provider_recruitment_cycle_school_path(
-                provider_code: provider.provider_code,
-                school_id: @school_select_form.school_id
-              ) and return
-            end
-          end
 
           render :results
         else
@@ -51,6 +44,10 @@ module Publish
         authorize provider, :can_create_sites?
       end
 
+      def school_id
+        params[:school_id]
+      end
+
       def query
         # Order is important here so the query persists across each step.
         @school_search_form&.query || school_search_params[:query] || school_select_params[:query]
@@ -59,7 +56,7 @@ module Publish
       def school_search_params
         return {} unless params.key?(:publish_schools_search_form)
 
-        params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS)
+        params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS, :school_id)
       end
 
       def school_select_params
@@ -75,6 +72,13 @@ module Publish
           results_count: @school_search.schools.unscope(:limit).count,
           return_path: search_publish_provider_recruitment_cycle_schools_path,
           search_resource: 'school'
+        )
+      end
+
+      def redirect_to_next_step
+        redirect_to new_publish_provider_recruitment_cycle_school_path(
+          provider_code: provider.provider_code,
+          school_id:
         )
       end
     end

@@ -1,11 +1,7 @@
-<% content_for :page_title, title_with_error_prefix("Enter a provider name, UKPRN or postcode", @accredited_provider_search_form.errors) %>
+<% content_for :page_title, title_with_error_prefix("About the accredited provider - Add accredited provider - #{@provider.name_and_code}", @accredited_provider_form.errors.present?) %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-<% end %>
-
-<%= form_with(
-        model: @accredited_provider_search_form,
+ <%= form_with(
+        model: @accredited_provider_form,
         url: publish_provider_recruitment_cycle_accredited_providers_path,
         method: :post
       ) do |f| %>
@@ -15,16 +11,25 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <%= f.govuk_text_field(
-        :query,
-        label: { text: "Enter a provider name, UKPRN or postcode", size: "l", tag: "h1" },
-        caption: { text: "Add accredited provider", size: "l" }
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(publish_back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
+      <% end %>
+
+      <%= f.govuk_text_area(
+        :description,
+        label: { text: t(".title"), size: "l", tag: "h1" },
+        hint: { text: t(".hint") },
+        caption: { text: t(".caption"), size: "l" },
+        max_words: 100,
+        rows: 10
       ) %>
+
+      <%= f.hidden_field :accredited_provider_id, value: params[:accredited_provider_id] || @accredited_provider_form.accredited_provider_id %>
 
       <%= f.govuk_submit t("continue") %>
 
       <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path) %>
       </p>
     </div>
   </div>

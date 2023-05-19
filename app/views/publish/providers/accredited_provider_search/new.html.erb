@@ -1,26 +1,23 @@
-<% content_for :page_title, title_with_error_prefix(t(".title"), @accredited_provider_search_form.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Enter a provider name, UKPRN or postcode", @accredited_provider_search_form.errors.any?) %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    <%= form_with(
+<%= form_with(
         model: @accredited_provider_search_form,
-        url: search_support_recruitment_cycle_provider_accredited_providers_path,
+        url: search_publish_provider_recruitment_cycle_accredited_providers_path,
         method: :post
       ) do |f| %>
 
-      <%= content_for(:breadcrumbs) do %>
-        <%= render GovukComponent::BackLinkComponent.new(
-          text: "Back",
-          href: back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)
-        ) %>
-      <% end %>
+  <% content_for :before_content do %>
+    <%= govuk_back_link_to(publish_back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
+  <% end %>
 
-      <%= f.govuk_error_summary %>
+  <%= f.govuk_error_summary %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
       <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
         <%= f.label :query, { class: "govuk-label govuk-label--l", for: "accredited-provider-search-form-query-field" } do %>
-          <span class="govuk-caption-l"><%= t(".caption", provider_name: @provider.provider_name, code: @provider.provider_code) %></span>
+          <span class="govuk-caption-l"><%= t(".caption") %></span>
           <%= t(".title") %>
           <% if f.object.errors.present? %>
             <span class="govuk-error-message" id="accredited-provider-search-form-query-field-error" data-qa="provider-error">
@@ -36,10 +33,10 @@
       </div>
 
       <%= f.govuk_submit t("continue") %>
-    <% end %>
 
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
-    </p>
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      </p>
+    </div>
   </div>
-</div>
+<% end %>

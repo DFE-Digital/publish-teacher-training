@@ -70,11 +70,9 @@
     <div class="govuk-width-container">
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
-        <div class="govuk-width-container">
-          <%= render(FlashBanner.new(flash:)) %>
+        <%= render(FlashBanner.new(flash:)) %>
 
-          <%= yield %>
-        </div>
+        <%= yield %>
       </main>
     </div>
     <%= render partial: "layouts/footer" %>

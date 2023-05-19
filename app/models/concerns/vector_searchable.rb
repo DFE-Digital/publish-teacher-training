@@ -36,6 +36,7 @@ module VectorSearchable
 
   included do
     before_save :update_searchable
+    before_create :update_searchable
   end
 
   private
