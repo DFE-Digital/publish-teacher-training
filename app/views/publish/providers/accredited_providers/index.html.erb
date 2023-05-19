@@ -13,13 +13,6 @@
   </div>
 </div>
 
-<<<<<<< HEAD
-  <% if @provider.accredited_bodies.none? %>
-      <p class="govuk-body">There are no accredited providers for <%= @provider.provider_name %>.</p>
-  <% else %>
-    <% @provider.accredited_bodies.each do |accredited_body| %>
-      <%= render AccreditedProvider.new(provider_name: accredited_body[:provider_name], remove_path: root_path, about_accredited_provider: accredited_body[:description], change_about_accredited_provider_path: root_path) %>
-=======
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <% if @provider.accredited_bodies.none? %>
@@ -28,7 +21,6 @@
       <% @provider.accredited_bodies.each do |accredited_body| %>
         <%= render AccreditedProvider.new(provider_name: accredited_body[:provider_name], remove_path: root_path, about_accredited_provider: accredited_body[:description], change_about_accredited_provider_path: edit_publish_provider_recruitment_cycle_accredited_provider_path(accredited_provider_code: accredited_body[:provider_code])) %>
       <% end %>
->>>>>>> main
     <% end %>
   </div>
 </div>
