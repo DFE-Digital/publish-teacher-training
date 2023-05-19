@@ -21,11 +21,11 @@ module Support
       def edit
         provider
         accredited_provider
-        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
       end
 
       def create
-        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
         if @accredited_provider_form.stash
           redirect_to check_support_recruitment_cycle_provider_accredited_providers_path
         else
@@ -34,7 +34,7 @@ module Support
       end
 
       def update
-        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
 
         if @accredited_provider_form.save!
           redirect_to support_recruitment_cycle_provider_accredited_providers_path(
@@ -64,13 +64,13 @@ module Support
       end
 
       def accredited_provider_form
-        @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
+        @accredited_provider_form ||= ::AccreditedProviderForm.new(current_user, provider)
       end
 
       def accredited_provider_params
-        params.require(:support_accredited_provider_form)
+        params.require(:accredited_provider_form)
               .except(:goto_confirmation)
-              .permit(AccreditedProviderForm::FIELDS)
+              .permit(::AccreditedProviderForm::FIELDS)
       end
     end
   end
