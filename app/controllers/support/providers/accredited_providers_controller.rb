@@ -18,17 +18,42 @@ module Support
         accredited_provider_form
       end
 
+      def edit
+        provider
+        accredited_provider
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: provider.accredited_body(params[:accredited_provider_code]))
+      end
+
       def create
-        @accredited_provider_form = AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
         if @accredited_provider_form.stash
           redirect_to check_support_recruitment_cycle_provider_accredited_providers_path
         else
-          provider
           render :new
         end
       end
 
+      def update
+        @accredited_provider_form = ::AccreditedProviderForm.new(current_user, provider, params: accredited_provider_params)
+
+        if @accredited_provider_form.save!
+          redirect_to support_recruitment_cycle_provider_accredited_providers_path(
+            recruitment_cycle_year: @recruitment_cycle.year,
+            provider_id: @provider.id
+          )
+
+          flash[:success] = t('support.providers.accredited_providers.edit.updated')
+        else
+          accredited_provider
+          render(:edit)
+        end
+      end
+
       private
+
+      def accredited_provider
+        @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
+      end
 
       def provider
         @provider ||= recruitment_cycle.providers.find(params[:provider_id])
@@ -39,13 +64,13 @@ module Support
       end
 
       def accredited_provider_form
-        @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
+        @accredited_provider_form ||= ::AccreditedProviderForm.new(current_user, provider)
       end
 
       def accredited_provider_params
         params.require(:accredited_provider_form)
               .except(:goto_confirmation)
-              .permit(AccreditedProviderForm::FIELDS)
+              .permit(::AccreditedProviderForm::FIELDS)
       end
     end
   end

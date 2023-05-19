@@ -346,7 +346,12 @@ en:
         new:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: *accredited_provider_caption
+          caption: "Add accredited provider - %{provider_name} (%{code})"
+        edit: 
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: "%{provider_name}"
+          updated: About the accredited provider updated
         checks:
           show:
             caption: *accredited_provider_caption
