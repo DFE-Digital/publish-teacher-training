@@ -27,9 +27,7 @@ module Courses
       course.assign_attributes(course_attributes.except(:subjects_ids))
 
       update_sites(course)
-      if course.provider.accredited_bodies.length == 1
-        course.accrediting_provider = course.provider.accrediting_providers.first
-      end
+      course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
       AssignSubjectsService.call(course:, subject_ids:)

@@ -23,18 +23,17 @@ module Publish
     private
 
     def get_workflow_steps(course)
-      case
-      when course.provider.lead_school? && course.provider.accredited_bodies.length == 1
+      if course.provider.lead_school? && course.provider.accredited_bodies.length == 1
         school_direct_workflow_steps - [:accredited_provider]
-      when course.is_further_education?
+      elsif course.is_further_education?
         further_education_workflow_steps
-      when course.is_uni_or_scitt?
+      elsif course.is_uni_or_scitt?
         uni_or_scitt_workflow_steps - visas_to_remove(course)
-      when course.is_school_direct?
+      elsif course.is_school_direct?
         school_direct_workflow_steps - visas_to_remove(course)
       end
     end
-    
+
     def further_education_workflow_steps
       %i[
         courses_list
