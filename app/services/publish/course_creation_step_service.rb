@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'provider'
 
 module Publish
   class CourseCreationStepService

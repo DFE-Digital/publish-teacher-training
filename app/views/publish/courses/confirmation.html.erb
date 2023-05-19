@@ -137,11 +137,14 @@
           <% summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row| %>
             <% row.with_key { "Accredited provider" } %>
             <% row.with_value { course.accrediting_provider.provider_name } %>
-            <% unless @provider.accredited_bodies.length == 1 %>
+            <% if @provider.accredited_bodies.length > 1 %>
               <% row.with_action(
                 href: new_publish_provider_recruitment_cycle_courses_accredited_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
                 visually_hidden_text: "accredited provider"
               ) %>
+            <% else %>
+              <% row.with_action %>
+            <% end %>
             <% end %>  
           <% end %>
         <% end %>
