@@ -8,7 +8,9 @@
   <% @provider.accredited_bodies.each do |accredited_body| %>
     <%= render AccreditedProvider.new(
       provider_name: accredited_body[:provider_name],
-      remove_path: root_path,
+      remove_path: delete_support_recruitment_cycle_provider_accredited_provider_path(
+        accredited_provider_code: accredited_body[:provider_code]
+      ),
       about_accredited_provider: accredited_body[:description],
       change_about_accredited_provider_path: edit_support_recruitment_cycle_provider_accredited_provider_path(
         accredited_provider_code: accredited_body[:provider_code]
