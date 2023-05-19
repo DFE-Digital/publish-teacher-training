@@ -68,21 +68,26 @@ variable "resource_group_name" {
 
 # Below added to silence warnings
 variable "postgres_create_servicename_db" {
-  type = string
+  type    = string
   default = "value"
 }
 
 variable "db_sslmode" {
-  type = string
+  type    = string
   default = "value"
 }
 
 variable "env_config" {
-  type = string
+  type    = string
   default = "value"
 }
 
 variable "postgres_extensions" {
-  type = string
+  type    = string
   default = "value"
+}
+
+variable "app_config_file" {
+  type    = string
+  default = "./workspace_variables/app_config.yml"
 }

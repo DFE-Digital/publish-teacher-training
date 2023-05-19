@@ -10,9 +10,17 @@ module "application_configuration" {
   key_vault_secret_name = var.key_vault_app_secret_name
 
   secret_variables = {
-    DATABASE_URL = module.postgres.url
-    REDIS_URL    = module.redis_cache.url
+    DATABASE_URL     = module.postgres.url
+    REDIS_URL        = module.redis_cache.url
+    REDIS_CACHE_URL  = module.redis_cache.url
+    REDIS_WORKER_URL = module.redis_worker.url
   }
+
+  # config_variables = merge(
+  #   yamldecode(file(var.app_config_file))[var.app_environment],
+  #   { DB_SSLMODE = "prefer" }
+  # )
+  config_variables = yamldecode(file(var.app_config_file))[var.app_environment]
 }
 
 /* module "infrastructure_configuration" {

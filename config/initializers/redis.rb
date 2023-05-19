@@ -5,7 +5,7 @@ class RedisSetting
 
   def initialize(config = nil)
     @config = {
-      url: ENV.fetch('REDIS_URL', nil)
+      url: ENV.fetch('REDIS_CACHE_URL', nil)
     }.merge(parse_config(config))
   end
 
