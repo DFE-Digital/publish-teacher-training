@@ -46,7 +46,7 @@ module Publish
       end
 
       def destroy
-        return_if_cannot_delete
+        return if @cannot_delete
 
         provider.accrediting_provider_enrichments = accrediting_provider_enrichments
         provider.save
@@ -57,10 +57,6 @@ module Publish
       end
 
       private
-
-      def return_if_cannot_delete
-        return if @cannot_delete
-      end
 
       def accredited_provider
         @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
