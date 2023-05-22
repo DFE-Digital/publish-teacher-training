@@ -29,7 +29,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_return_to_the_index_page
     and_i_click_change
 
-    when_i_input_updated_information
+    when_i_input_updated_description
     then_i_should_see_the_updated_description
     and_i_see_the_success_message
   end
@@ -142,7 +142,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     expect(page).to have_text('update the AP description')
   end
 
-  def when_i_input_updated_information
+  def when_i_input_updated_description
     fill_in 'About the accredited provider', with: 'update the AP description'
     click_on 'Update description'
   end
