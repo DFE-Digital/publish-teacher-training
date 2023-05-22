@@ -46,6 +46,7 @@ shared:
     - additional_gcse_equivalencies
     - can_sponsor_skilled_worker_visa
     - can_sponsor_student_visa
+    - application_status
   course_site:
     - id
     - course_id

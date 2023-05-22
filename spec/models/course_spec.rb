@@ -2791,6 +2791,41 @@ describe Course do
     end
   end
 
+  describe 'application_status enum' do
+    subject(:course) do
+      create(
+        :course,
+        level: 'secondary',
+        name: 'Biology',
+        course_code: '3X9F',
+        subjects: [find_or_create(:secondary_subject, :biology)]
+      )
+    end
+
+    context 'default' do
+      it 'sets the value as closed' do
+        expect(course.application_status).to eq('closed')
+        expect(course).to be_closed
+      end
+    end
+
+    context 'open course' do
+      it 'sets the value as open' do
+        course.open!
+        expect(course.reload.application_status).to eq('open')
+        expect(course).to be_open
+      end
+    end
+
+    context 'closed course' do
+      it 'resets the value as closed' do
+        course.closed!
+        expect(course.reload.application_status).to eq('closed')
+        expect(course).to be_closed
+      end
+    end
+  end
+
   describe '#is_primary?' do
     context 'when course is primary' do
       subject { build(:course, level: :primary) }

@@ -23,6 +23,11 @@ class Course < ApplicationRecord
             presence: true,
             on: %i[create update]
 
+  enum application_status: {
+    closed: 0,
+    open: 1
+  }
+
   enum program_type: {
     higher_education_programme: 'HE',
     school_direct_training_programme: 'SD',
