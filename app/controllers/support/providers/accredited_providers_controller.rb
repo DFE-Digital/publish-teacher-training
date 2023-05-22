@@ -51,7 +51,6 @@ module Support
 
       def delete
         cannot_delete
-        # @cannot_delete = provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
       end
 
       def destroy
