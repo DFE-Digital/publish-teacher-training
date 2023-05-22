@@ -1,6 +1,11 @@
 <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__vacancies">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-    Vacancies<span class="govuk-visually-hidden"> filter</span>
+  <% if FeatureService.enabled?(:open_and_closed_course_flow)%>
+    Applications open
+  <% else %>
+    Vacancies
+  <% end %>
+    <span class="govuk-visually-hidden"> filter</span>
   </legend>
   <div class="govuk-checkboxes govuk-checkboxes--small">
     <div class="govuk-checkboxes__item">
@@ -14,7 +19,11 @@
         "false"
       ) %>
       <%= form.label(:hasvacancies_true, { for: "has_vacancies" }, class: "govuk-label govuk-checkboxes__label") do %>
-        Only show courses with vacancies
+        <% if FeatureService.enabled?(:open_and_closed_course_flow)%>
+          Only show courses open for applications 
+        <% else %>
+          Only show courses with vacancies
+        <% end %>
       <% end %>
     </div>
   </div>
