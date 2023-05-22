@@ -6,7 +6,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      <span class="govuk-caption-l"><%= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code]).provider_name %></span>
+      <span class="govuk-caption-l"><%= @accredited_provider.provider_name %></span>
         <%= t("support.providers.accredited_providers.delete.title") %>
     </h1>
 
