@@ -292,6 +292,10 @@ en:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           updated: About the accredited provider updated
+        delete: 
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+          updated: Accredited provider removed
         checks:
           show:
             title:  *add_accredited_provider

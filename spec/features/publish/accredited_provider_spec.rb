@@ -30,6 +30,21 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     and_i_see_the_success_message
   end
 
+  scenario 'i cannot delete accredited providers if they are attached to a course' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_remove
+    then_i_should_see_the_cannot_remove_ap_text
+  end
+
+  scenario 'i can delete accredited providers if they are not attached to a course' do
+    and_i_create_a_new_accredited_provider
+    and_i_click_remove
+    and_i_click_remove_ap
+    and_i_see_the_remove_success_message
+    then_i_should_be_taken_to_the_index_page
+  end
+
   scenario 'i can search for an accredited provider when they are searchable' do
     given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
@@ -73,6 +88,27 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   private
+
+  def and_i_click_remove_ap
+    click_button 'Remove accredited provider'
+  end
+
+  def then_i_should_see_the_cannot_remove_ap_text
+    expect(page).to have_selector('h1', text: 'You cannot remove this accredited provider')
+  end
+
+  def and_i_click_remove
+    click_link 'Remove'
+  end
+
+  def and_i_create_a_new_accredited_provider
+    given_there_are_accredited_providers_in_the_database_with_users
+    when_i_click_add_accredited_provider
+    when_i_search_for_an_accredited_provider_with_a_valid_query
+    when_i_select_the_provider
+    when_i_input_some_information
+    when_i_confirm_the_changes
+  end
 
   def and_i_click_change
     click_link('Change')
@@ -127,6 +163,10 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def and_i_see_the_success_message
     expect(page).to have_content('About the accredited provider updated')
+  end
+
+  def and_i_see_the_remove_success_message
+    expect(page).to have_content('Accredited provider removed')
   end
 
   def then_i_should_be_taken_to_the_index_page
