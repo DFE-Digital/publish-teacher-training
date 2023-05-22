@@ -50,11 +50,12 @@ module Support
       end
 
       def delete
-        @cannot_delete = provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
+        cannot_delete
+        # @cannot_delete = provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
       end
 
       def destroy
-        return if @cannot_delete
+        return if cannot_delete
 
         provider.accrediting_provider_enrichments = accrediting_provider_enrichments
         provider.save
@@ -68,6 +69,10 @@ module Support
       end
 
       private
+
+      def cannot_delete
+        @cannot_delete ||= provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
+      end
 
       def accrediting_provider_enrichments
         provider.accrediting_provider_enrichments.reject { |enrichment| enrichment.UcasProviderCode == params['accredited_provider_code'] }
