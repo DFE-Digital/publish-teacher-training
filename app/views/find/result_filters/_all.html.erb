@@ -7,7 +7,11 @@
   <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
     <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
     <%= render "find/result_filters/send_filter", form: %>
-    <%= render "find/result_filters/vacancy_filter", form: %>
+    <% if FeatureService.enabled?(:open_and_closed_course_flow) %>
+      <%= render "find/result_filters/applications_open_filter", form: %>
+    <% else %>
+      <%= render "find/result_filters/vacancy_filter", form: %>
+    <% end %>
     <%= render "find/result_filters/study_type_filter", form: %>
     <%= render "find/result_filters/qualifications_filter", form: %>
     <%= render "find/result_filters/degree_required_filter", form: %>

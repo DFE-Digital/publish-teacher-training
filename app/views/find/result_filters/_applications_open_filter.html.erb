@@ -1,6 +1,6 @@
 <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__vacancies">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-    Vacancies
+    Applications open
     <span class="govuk-visually-hidden"> filter</span>
   </legend>
   <div class="govuk-checkboxes govuk-checkboxes--small">
@@ -8,14 +8,14 @@
       <%= form.check_box(
         :has_vacancies, {
           checked: @filters_view.has_vacancies_checked? || @filters_view.default_with_vacancies_to_true,
-          data: { qa: "with_vacancies" },
+          data: { qa: "applications_open" },
           class: "govuk-checkboxes__input"
         },
         "true",
         "false"
       ) %>
       <%= form.label(:hasvacancies_true, { for: "has_vacancies" }, class: "govuk-label govuk-checkboxes__label") do %>
-        Only show courses with vacancies
+          Only show courses open for applications 
       <% end %>
     </div>
   </div>
