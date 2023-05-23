@@ -42,11 +42,11 @@ module Publish
       end
 
       def delete
-        @cannot_delete = provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
+        cannot_delete
       end
 
       def destroy
-        return if @cannot_delete
+        return if cannot_delete
 
         provider.accrediting_provider_enrichments = accrediting_provider_enrichments
         provider.save
@@ -57,6 +57,10 @@ module Publish
       end
 
       private
+
+      def cannot_delete
+        @cannot_delete ||= provider.courses.exists?(accredited_provider_code: accredited_provider.provider_code)
+      end
 
       def accredited_provider
         @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
