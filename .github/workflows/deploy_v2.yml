@@ -42,8 +42,8 @@ jobs:
       id: set_env_var
       shell: bash
       run: |
-        arm-access-key=${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }} >> $GITHUB_ENV
-        azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }} >> $GITHUB_ENV
+        echo "arm-access-key=${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}" >> $GITHUB_ENV
+        echo "azure-credentials=${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}" >> $GITHUB_ENV
         environment: ${{ inputs.environment }} >> $GITHUB_ENV
         pr-number: ${{ inputs.pr-number }} >> $GITHUB_ENV
         sha: ${{ inputs.sha }} >> $GITHUB_ENV
