@@ -2,6 +2,9 @@ name: Deploy v2
 concurrency: deploy_v2_${{ github.ref_name }}
 
 on:
+  push:
+    branches:
+      - 238-add-aks-review-apps
   workflow_dispatch:
     inputs:
       environment:
@@ -29,13 +32,10 @@ jobs:
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
       image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+      deploy-url: ${{ steps.set_env_var.outputs.deploy_url }}
     runs-on: ubuntu-latest
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-trainings
-
-# outputs:
-#   deploy-url:
-#     value: ${{ steps.set_env_var.outputs.deploy_url }}
 
     steps:
     - name: Set Environment variables
@@ -47,7 +47,6 @@ jobs:
         environment: ${{ inputs.environment }} >> $GITHUB_ENV
         pr-number: ${{ inputs.pr-number }} >> $GITHUB_ENV
         sha: ${{ inputs.sha }} >> $GITHUB_ENV
-        slack-webhook: ${{ inputs.slack-webhook }} >> $GITHUB_ENV
 
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
