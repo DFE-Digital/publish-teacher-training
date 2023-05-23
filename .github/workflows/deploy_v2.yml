@@ -44,9 +44,9 @@ jobs:
       run: |
         echo "arm-access-key=${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}" >> $GITHUB_ENV
         echo "azure-credentials=${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}" >> $GITHUB_ENV
-        environment: ${{ inputs.environment }} >> $GITHUB_ENV
-        pr-number: ${{ inputs.pr-number }} >> $GITHUB_ENV
-        sha: ${{ inputs.sha }} >> $GITHUB_ENV
+        echo "environment: ${{ inputs.environment }}" >> $GITHUB_ENV
+        echo "pr-number: ${{ inputs.pr-number }}" >> $GITHUB_ENV
+        echo "sha: ${{ inputs.sha }}" >> $GITHUB_ENV
 
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
