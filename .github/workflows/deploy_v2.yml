@@ -49,7 +49,7 @@ jobs:
         echo "sha: ${{ inputs.sha }}" >> $GITHUB_ENV
 
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
-        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/provider.tf | grep -o [0-9\.]*)
+        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
