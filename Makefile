@@ -50,13 +50,17 @@ review:
 
 review_aks:
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
+	$(eval export DISABLE_PASSCODE=1)
 	$(eval include global_config/review_aks.sh)
 	$(eval DEPLOY_ENV=review_aks)
+	$(eval export TF_VAR_app_name=$(APP_NAME))
+	$(eval export TF_VAR_app_suffix=$(APP_NAME))
 	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
-	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
+	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).teacherservices.cloud will be created in AKS
 
 dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
@@ -69,7 +73,7 @@ dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1
 	$(eval export TF_VAR_app_name=$(APP_NAME))
 	$(eval export TF_VAR_app_suffix=$(APP_NAME))
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
-	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).development.teacherservices.cloud will be created in aks
+	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).development.teacherservices.cloud will be created in AKS
 #	$(eval APP_NAME_SUFFIX=dv-review-$(APP_NAME))
 #	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 #	$(eval export TF_VAR_app_name_suffix=pr-$(APP_NAME))

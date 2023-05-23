@@ -16,10 +16,6 @@ module "application_configuration" {
     REDIS_WORKER_URL = module.redis_worker.url
   }
 
-  # config_variables = merge(
-  #   yamldecode(file(var.app_config_file))[var.app_environment],
-  #   { DB_SSLMODE = "prefer" }
-  # )
   config_variables = yamldecode(file(var.app_config_file))[var.app_environment]
 }
 
@@ -52,7 +48,7 @@ module "web_application" {
   docker_image = var.docker_image
   # command                = ["/bin/sh", "-c", "bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0"]
   command                = ["/bin/sh", "-c", "bundle exec rails db:setup && bundle exec rails server -b 0.0.0.0"]
-  web_external_hostnames = ["find-review-7777.cluster3.development.teacherservices.cloud"]
+  web_external_hostnames = var.gov_uk_host_names != [] ? local.review_additional_hostnames : var.gov_uk_host_names
   max_memory             = "512Mi"
   probe_path             = "/ping"
 }

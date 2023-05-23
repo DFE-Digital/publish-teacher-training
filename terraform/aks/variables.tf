@@ -91,3 +91,8 @@ variable "app_config_file" {
   type    = string
   default = "./workspace_variables/app_config.yml"
 }
+
+variable "gov_uk_host_names" {
+  default = []
+  type    = list(any)
+}
