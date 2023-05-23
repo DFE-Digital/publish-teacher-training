@@ -35,6 +35,9 @@ config/localhost/https/localhost.crt
 #ignore fetch_config.rb and use latest version from bat-platform-building-blocks
 bin/fetch_config.rb
 
+# Azure backend access script used in Makefile
+bin/konduit.sh
+
 *.patch
 *.swp
 

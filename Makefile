@@ -151,6 +151,13 @@ install-fetch-config:
 		&& chmod +x bin/fetch_config.rb \
 		|| true
 
+.PHONY: install-konduit
+install-konduit: ## Install the konduit script, for accessing backend services
+	[ ! -f bin/konduit.sh ] \
+		&& curl -s https://raw.githubusercontent.com/DFE-Digital/teacher-services-cloud/master/scripts/konduit.sh -o bin/konduit.sh \
+		&& chmod +x bin/konduit.sh \
+		|| true
+
 read-deployment-config:
 	$(eval export postgres_database_name=publish-teacher-training-postgres-${paas_env})
 
