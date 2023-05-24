@@ -18,7 +18,7 @@ class CourseSearchService
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.with_vacancies if has_vacancies? && !FeatureService.enabled?(:open_and_closed_course_flow)
-    scope = scope.application_status_open if has_vacancies? && FeatureService.enabled?(:open_and_closed_course_flow)
+    scope = scope.application_status_open if applications_open? && FeatureService.enabled?(:open_and_closed_course_flow)
     scope = scope.findable if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
@@ -215,6 +215,10 @@ class CourseSearchService
 
   def has_vacancies?
     filter[:has_vacancies].to_s.downcase == 'true'
+  end
+
+  def applications_open?
+    filter[:applications_open].to_s.downcase == 'true'
   end
 
   def findable?
