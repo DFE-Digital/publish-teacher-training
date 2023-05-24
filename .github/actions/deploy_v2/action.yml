@@ -132,12 +132,12 @@ runs:
       run: |
         bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
 
-    # - name: Run Smoke Tests for ${{ inputs.environment }}
-    #   uses: ./.github/actions/smoke-test/
-    #   with:
-    #     environment: ${{ inputs.environment }}
-    #     pr-number: ${{ inputs.pr-number }}
-    #     slack-webhook: ${{ inputs.slack-webhook }}
+    - name: Run Smoke Tests for ${{ inputs.environment }}
+      uses: ./.github/actions/smoke-test/
+      with:
+        environment: ${{ inputs.environment }}
+        pr-number: ${{ inputs.pr-number }}
+        slack-webhook: ${{ inputs.slack-webhook }}
 
     # - name: Alert on Failure
     #   if: ${{ failure() && github.ref == 'refs/heads/main' }}
