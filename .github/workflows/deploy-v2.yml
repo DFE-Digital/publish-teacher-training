@@ -2,9 +2,6 @@ name: Deploy v2
 concurrency: deploy_v2_${{ github.ref_name }}
 
 on:
-  push:
-    branches:
-      - 238-add-aks-review-apps
   workflow_dispatch:
     inputs:
       environment:
