@@ -322,6 +322,8 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
     needs: [build]
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Start review_aks-${{ github.event.pull_request.number }} Deployment
         uses: bobheadxi/deployments@v1
