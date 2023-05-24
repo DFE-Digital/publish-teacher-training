@@ -29,22 +29,25 @@ runs:
       id: set_env_var
       shell: bash
       run: |
+        echo "Input environment = ${inputs.environment}"
+        echo "Input pr-number = ${inputs.pr-number}"
+        echo "Input sha = ${inputs.sha}"
+
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
-        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
         echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-
         if [ -n "${{ inputs.pr-number }}" ]; then
           echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
           echo "deploy_url=https://publish-review-${{ inputs.pr-number }}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
-          aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})
+          aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
           hostname=$(jq -r '.gov_uk_host_names[0]' ${tf_vars_file})
           if [ ${{ inputs.environment }} == "production" ]; then
