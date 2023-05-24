@@ -60,7 +60,6 @@ runs:
             fi
           fi
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
-          # echo "worker_app_instances=$(jq -r '.worker_apps.worker.replicas' ${tf_vars_file})" >> $GITHUB_ENV
         fi;
 
     - name: Checkout
