@@ -44,7 +44,7 @@ runs:
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         if [ -n "${{ inputs.pr-number }}" ]; then
           echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
-          echo "deploy_url=https://publish-review-${{ inputs.pr-number }}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
+          echo "deploy_url=https://publish-review-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
           aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})
@@ -60,7 +60,7 @@ runs:
             fi
           fi
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
-          echo "worker_app_instances=$(jq -r '.worker_apps.worker.replicas' ${tf_vars_file})" >> $GITHUB_ENV
+          # echo "worker_app_instances=$(jq -r '.worker_apps.worker.replicas' ${tf_vars_file})" >> $GITHUB_ENV
         fi;
 
     - name: Checkout
