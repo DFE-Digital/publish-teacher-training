@@ -29,9 +29,9 @@ runs:
       id: set_env_var
       shell: bash
       run: |
-        echo "Input environment = ${inputs.environment}"
-        echo "Input pr-number = ${inputs.pr-number}"
-        echo "Input sha = ${inputs.sha}"
+        echo "Input environment = ${{inputs.environment}}"
+        echo "Input pr-number = ${{inputs.pr-number}}"
+        echo "Input sha = ${{inputs.sha}}"
 
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
