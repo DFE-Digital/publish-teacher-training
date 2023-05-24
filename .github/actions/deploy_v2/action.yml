@@ -133,7 +133,7 @@ runs:
         bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
 
     - name: Run Smoke Tests for ${{ inputs.environment }}
-      uses: ./.github/actions/smoke-test/
+      uses: ./.github/actions/smoke-test_v2/
       with:
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}
