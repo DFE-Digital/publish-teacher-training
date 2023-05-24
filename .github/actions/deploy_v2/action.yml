@@ -29,36 +29,15 @@ runs:
       id: set_env_var
       shell: bash
       run: |
-        echo "Input environment = ${{inputs.environment}}"
-        echo "Input pr-number = ${{inputs.pr-number}}"
-        echo "Input sha = ${{inputs.sha}}"
-
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
-        echo "tf_vars_file = ${tf_vars_file}"
-
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
-        echo "terraform_version = ${terraform_version}"
-
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "cluster = ${cluster}"
-
         echo "aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "aks_app_environment = ${aks_app_environment}"
-
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
-        echo "TERRAFORM_VERSION = ${TERRAFORM_VERSION}"
-
         echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "namespace = ${namespace}"
-
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_name = ${key_vault_name}"
-
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_app_secret_name = ${key_vault_app_secret_name}"
-
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_infra_secret_name = ${key_vault_infra_secret_name}"
 
         if [ -n "${{ inputs.pr-number }}" ]; then
           echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
@@ -139,34 +118,19 @@ runs:
         az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
         make install-konduit
 
-    - name: Get sanitised backup workflow run id
+    - name: Download Latest Sanitised Backup
       if: ${{ inputs.environment }} == "review_aks"
       shell: bash
       run: |
-        workflow_run_id=$(gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1)
-        echo "sanitised_backup_workflow_run_id=$workflow_run_id" >> $GITHUB_ENV
-
-    - name: Download Sanitised Backup
-      if: ${{ inputs.environment }} == "review_aks"
-      shell: bash
-      run: |
-        pwd
-        ls -lstr
-        gh run download $workflow_run_id
-        cd backup_sanitised
-        ls -lstr
-
-    - name: Set environment variable
-      if: ${{ inputs.environment }} == "review_aks"
-      shell: bash
-      run: echo "backup_file_name=backup_sanitised/backup_sanitised.sql" >> $GITHUB_ENV
+        sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1)
+        echo "Download artifact for workflow run ID: $sanitised_backup_workflow_run_id"
+        gh run download $sanitised_backup_workflow_run_id
 
     - name: Restore backup to aks env database
       if: ${{ inputs.environment }} == "review_aks"
       shell: bash
       run: |
-        bin/konduit.sh -i ${{ env.backup_file_name }} -t 7200 ${{ env.app_name }} -- psql
-
+        bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
 
     # - name: Run Smoke Tests for ${{ inputs.environment }}
     #   uses: ./.github/actions/smoke-test/
