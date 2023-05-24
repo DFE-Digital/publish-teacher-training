@@ -15,6 +15,9 @@
     <% end %>
   <% end %>
 
-  <%= govuk_link_to "Change vacancies", vacancies_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle.year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__has_vacancies" } %>
+  <% unless FeatureService.enabled?(:open_and_closed_course_flow) %>
+    <%= govuk_link_to "Change vacancies", vacancies_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle.year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__has_vacancies" } %>
+  <% end %>
+
   <%= govuk_link_to "Withdraw course", withdraw_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "app-link--destructive govuk-!-margin-right-2", data: { qa: "course__withdraw-link" } %>
 </div>
