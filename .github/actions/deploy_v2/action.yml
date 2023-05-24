@@ -153,6 +153,7 @@ runs:
         pwd
         ls -lstr
         gh run download $workflow_run_id
+        cd backup_sanitised
         ls -lstr
 
     - name: Set environment variable
