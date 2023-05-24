@@ -1,3 +1,16 @@
+terraform {
+  required_version = "~> 1.4"
+
+  backend "azurerm" {}
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.52"
+    }
+  }
+}
+
 locals {
   azure_credentials = try(jsondecode(var.azure_sp_credentials_json), null)
 }
