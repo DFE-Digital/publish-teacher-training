@@ -28,9 +28,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <!-- FeatureFlag -->
-    <% if @course.closed? %>
-      <%= render partial: "find/courses/course_closed" %>
+    <% if FeatureService.enabled?(:open_and_closed_course_flow) %>
+      <% if @course.closed? %>
+        <%= render partial: "find/courses/course_closed" %>
+      <% end %>
     <% end %>
     
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
@@ -67,11 +68,12 @@
 
     <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
-    <!-- FeatureFlag -->
-    <% if @course.closed? %>
-      <%= render partial: "find/courses/course_closed" %>
+    <% if FeatureService.enabled?(:open_and_closed_course_flow) %>
+      <% if @course.closed? %>
+        <%= render partial: "find/courses/course_closed" %>
+      <% end %>
     <% end %>
-
+    
     <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.has_vacancies? || !CycleTimetable.mid_cycle? %>
   </div>
 </div>
