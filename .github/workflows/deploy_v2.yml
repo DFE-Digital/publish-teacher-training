@@ -27,147 +27,46 @@ permissions:
   pull-requests: write
 
 jobs:
-  deploy:
-    name: Deploy v2
-    outputs:
-      docker_image: ${{ env.DOCKER_IMAGE }}
-      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
-      deploy-url: ${{ steps.set_env_var.outputs.deploy_url }}
+  deploy-v2-review-app:
+    name: Deployment To Review v2
+    concurrency: deploy_v2_review_${{ github.event.pull_request.number }}
+    # if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+    # needs: [build]
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-trainings
-
     steps:
-    - name: Set Environment variables
-      id: set_env_var
-      shell: bash
-      run: |
-        echo "arm-access-key=${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}" >> $GITHUB_ENV
-        echo "azure-credentials=${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}" >> $GITHUB_ENV
-        echo "environment: ${{ inputs.environment }}" >> $GITHUB_ENV
-        echo "pr-number: ${{ inputs.pr-number }}" >> $GITHUB_ENV
-        echo "sha: ${{ inputs.sha }}" >> $GITHUB_ENV
+      # - name: Start review_aks-${{ github.event.pull_request.number }} Deployment
+      #   uses: bobheadxi/deployments@v1
+      #   id:   deployment
+      #   with:
+      #     step: start
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     env:   review_aks-${{ github.event.pull_request.number }}
+      #     ref: ${{ github.head_ref }}
 
-        tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
-        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
-        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
-        echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
 
-        if [ -n "${{ inputs.pr-number }}" ]; then
-          echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
-          echo "deploy_url=https://publish-review-${{ inputs.pr-number }}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
-          echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
-        else
-          aks_app_environment=$(jq -r '.paas_app_environment' ${tf_vars_file})
-          echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
-          hostname=$(jq -r '.gov_uk_host_names[0]' ${tf_vars_file})
-          if [ ${{ inputs.environment }} == "production" ]; then
-            echo "deploy_url=https://api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
-          else
-            if [[ $cluster == 'production' ]]; then
-              echo "deploy_url=https://publish-${aks_app_environment}.teacherservices.cloud" >> $GITHUB_OUTPUT
-            else
-              echo "deploy_url=https://publish-${aks_app_environment}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
-            fi
-          fi
-          echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
-          echo "worker_app_instances=$(jq -r '.worker_apps.worker.replicas' ${tf_vars_file})" >> $GITHUB_ENV
-        fi;
+      - name: Deploy App to Review v2
+        id: deploy_v2_review
+        uses: ./.github/actions/deploy_v2/
+        with:
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
+          environment: review_aks
+          pr-number: ${{ inputs.pr-number }}
+  #         pr-number: ${{ github.event.pull_request.number }}
+  #         sha: ${{ needs.build.outputs.image_tag }}
+          sha: ${{ inputs.sha }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Setup Terraform ${{ env.TERRAFORM_VERSION }}
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: ${{ env.TERRAFORM_VERSION }}
-
-    - uses: azure/login@v1
-      with:
-        creds: ${{ env.azure-credentials }}
-
-    - name: Validate Azure Key Vault secrets
-      uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
-      with:
-        KEY_VAULT: ${{ env.key_vault_name }}
-        SECRETS: |
-          ${{ env.key_vault_app_secret_name }}
-          ${{ env.key_vault_infra_secret_name }}
-
-    - name: Terraform init, plan & apply
-      shell: bash
-      run: make ${{ inputs.environment }} ci deploy
-      env:
-        ARM_ACCESS_KEY:             ${{ env.arm-access-key }}
-        IMAGE_TAG:                  ${{ inputs.sha }}
-        TF_VAR_azure_credentials:   ${{ env.azure-credentials }}
-        CONFIRM_PRODUCTION:         yes
-
-    # Get this from the cluster data terraform module
-    - name: Set up environment variables
-      shell: bash
-      run: |
-        case ${{ env.cluster }} in
-          test)
-            echo "cluster_rg=s189t01-tsc-ts-rg" >> $GITHUB_ENV
-            echo "cluster_name=s189t01-tsc-test-aks" >> $GITHUB_ENV
-            ;;
-          production)
-            echo "cluster_rg=s189p01-tsc-pd-rg" >> $GITHUB_ENV
-            echo "cluster_name=s189p01-tsc-production-aks" >> $GITHUB_ENV
-            ;;
-          *)
-            echo "unknown cluster"
-            ;;
-        esac
-        echo "app_name=publish-${{ env.aks_app_environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
-
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: "v1.26.1" # default is latest stable
-
-    - name: K8 setup
-      shell: bash
-      run: |
-        az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
-        make install-konduit
-
-    - name: Download Sanitised Backup
-      if: ${{ inputs.environment }} == "review_aks"
-      uses: actions/download-artifact@v3
-      with:
-        name: backup_sanitised
-
-    - name: Set environment variable
-      shell: bash
-      run: echo "backup_file_name=backup_sanitized.sql.gz" >> $GITHUB_ENV
-
-    # - name: Restore backup to aks env database
-    #   shell: bash
-    #   run: |
-    #     bin/konduit.sh -i ${{ env.backup_file_name }} -c -t 7200 ${{ env.app_name }} -- psql
-
-    # - name: Run Smoke Tests for ${{ inputs.environment }}
-    #   uses: ./.github/actions/smoke-test/
-    #   with:
-    #     environment: ${{ inputs.environment }}
-    #     pr-number: ${{ inputs.pr-number }}
-    #     slack-webhook: ${{ inputs.slack-webhook }}
-
-    # - name: Alert on Failure
-    #   if: ${{ failure() && github.ref == 'refs/heads/main' }}
-    #   uses: rtCamp/action-slack-notify@master
-    #   env:
-    #     SLACK_CHANNEL: twd_findpub_tech
-    #     SLACK_COLOR: '#ef5343'
-    #     SLACK_ICON_EMOJI: ':github-logo:'
-    #     SLACK_USERNAME: Publish Teacher Training
-    #     SLACK_TITLE: Deploy to ${{ inputs.environment }} Failed
-    #     SLACK_MESSAGE: ':alert: <!channel> Deployment failure on ${{ inputs.environment }} :sadparrot:'
-    #     SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
+  #     - name: Update review_aks-${{ github.event.pull_request.number }} status
+  #       if:   always()
+  #       uses: bobheadxi/deployments@v1
+  #       with:
+  #         step:   finish
+  #         token:  ${{ secrets.GITHUB_TOKEN }}
+  #         env:    review_aks-${{ github.event.pull_request.number }}
+  #         status: ${{ job.status }}
+  #         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+  #         env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
+  #         ref: ${{ github.head_ref }}
