@@ -165,7 +165,7 @@ runs:
       if: ${{ inputs.environment }} == "review_aks"
       shell: bash
       run: |
-        bin/konduit.sh -i ${{ env.backup_file_name }} -c -t 7200 ${{ env.app_name }} -- psql
+        bin/konduit.sh -i ${{ env.backup_file_name }} -t 7200 ${{ env.app_name }} -- psql
 
 
     # - name: Run Smoke Tests for ${{ inputs.environment }}
