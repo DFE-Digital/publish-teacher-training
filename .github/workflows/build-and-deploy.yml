@@ -6,7 +6,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, reopened, labeled]
+    types: [opened, reopened, synchronize, labeled]
 
 permissions:
   contents: write

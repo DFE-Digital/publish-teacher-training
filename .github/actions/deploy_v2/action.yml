@@ -79,14 +79,14 @@ runs:
           ${{ env.key_vault_app_secret_name }}
           ${{ env.key_vault_infra_secret_name }}
 
-    # - name: Terraform init, plan & apply
-    #   shell: bash
-    #   run: make ${{ inputs.environment }} ci deploy
-    #   env:
-    #     ARM_ACCESS_KEY:             ${{ inputs.arm-access-key }}
-    #     IMAGE_TAG:                  ${{ inputs.sha }}
-    #     TF_VAR_azure_credentials:   ${{ inputs.azure-credentials }}
-    #     CONFIRM_PRODUCTION:         yes
+    - name: Terraform init, plan & apply
+      shell: bash
+      run: make ${{ inputs.environment }} ci deploy
+      env:
+        ARM_ACCESS_KEY:             ${{ inputs.arm-access-key }}
+        IMAGE_TAG:                  ${{ inputs.sha }}
+        TF_VAR_azure_credentials:   ${{ inputs.azure-credentials }}
+        CONFIRM_PRODUCTION:         yes
 
     # Get this from the cluster data terraform module
     - name: Set up environment variables
