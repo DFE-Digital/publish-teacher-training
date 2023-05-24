@@ -150,7 +150,10 @@ runs:
       if: ${{ inputs.environment }} == "review_aks"
       shell: bash
       run: |
+        pwd
+        ls -lstr
         gh run download $workflow_run_id
+        ls -lstr
 
     - name: Set environment variable
       shell: bash
