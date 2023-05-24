@@ -2805,23 +2805,20 @@ describe Course do
     context 'default' do
       it 'sets the value as closed' do
         expect(course.application_status).to eq('closed')
-        expect(course).to be_closed
       end
     end
 
     context 'open course' do
       it 'sets the value as open' do
-        course.open!
+        course.application_status_open!
         expect(course.reload.application_status).to eq('open')
-        expect(course).to be_open
       end
     end
 
     context 'closed course' do
       it 'resets the value as closed' do
-        course.closed!
+        course.application_status_closed!
         expect(course.reload.application_status).to eq('closed')
-        expect(course).to be_closed
       end
     end
   end
