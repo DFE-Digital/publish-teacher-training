@@ -148,9 +148,9 @@ runs:
 
     - name: Download Sanitised Backup
       if: ${{ inputs.environment }} == "review_aks"
-      uses: actions/download-artifact@v3
-      with:
-        workflow: env.sanitised_backup_workflow_run_id
+      shell: bash
+      run: |
+        gh run download $workflow_run_id
 
     - name: Set environment variable
       shell: bash
