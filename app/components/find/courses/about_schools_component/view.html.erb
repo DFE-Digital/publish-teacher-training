@@ -27,7 +27,6 @@
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">School</th>
-            <th class="govuk-table__header" scope="col">Vacancies</th>
           </tr>
           </thead>
 
@@ -38,9 +37,6 @@
                 <strong><%= smart_quotes(site_status.site.location_name) %></strong>
                 <br>
                 <%= smart_quotes(site_status.site.decorate.full_address) %>
-              </td>
-              <td class="govuk-table__cell">
-                <%= site_status.has_vacancies? ? "Yes" : "No" %>
               </td>
             </tr>
           <% end %>
