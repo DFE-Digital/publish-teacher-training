@@ -52,6 +52,8 @@ This repo is home to three services:
 - [Disaster Recovery Plan](/guides/disaster-recovery.md)
 - [ADRs](/guides/adr/index.md)
 - [Support Playbook](/guides/support_playbook.md)
+- [AKS Module Information](/guides/aks_modules.md)
+- [AKS Cheatsheet](/guides/aks-cheatsheet.md)
 
 
 ## License
