@@ -33,7 +33,7 @@
         <%= render partial: "find/courses/course_closed" %>
       <% end %>
     <% end %>
-    
+
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
     <% if @course.about_course.present? %>
@@ -73,7 +73,7 @@
         <%= render partial: "find/courses/course_closed" %>
       <% end %>
     <% end %>
-    
+
     <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.has_vacancies? || !CycleTimetable.mid_cycle? %>
   </div>
 </div>
