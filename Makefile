@@ -60,7 +60,7 @@ review_aks:
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${AZURE_RESOURCE_PREFIX})
-	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).$(CLUSTER).teacherservices.cloud will be created in AKS
+	echo https://$(SERVICE_SHORT)-review-$(APP_NAME).test.teacherservices.cloud will be created in AKS
 
 dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))

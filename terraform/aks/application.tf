@@ -16,7 +16,10 @@ module "application_configuration" {
     REDIS_WORKER_URL = module.redis_worker.url
   }
 
-  config_variables = yamldecode(file(var.app_config_file))[var.app_environment]
+  config_variables = merge(
+    yamldecode(file(var.app_config_file))[var.app_environment],
+    local.disable_database_environment_check
+  )
 }
 
 /* module "infrastructure_configuration" {
