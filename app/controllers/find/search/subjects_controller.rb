@@ -5,6 +5,7 @@ module Find
     class SubjectsController < Find::ApplicationController
       include FilterParameters
       include DefaultVacancies
+      include DefaultApplicationsOpen
       before_action :build_backlink_query_parameters
 
       def new
@@ -17,7 +18,8 @@ module Find
         if @subjects_form.valid?
           redirect_to find_results_path(form_params.merge(
                                           subjects: sanitised_subject_codes,
-                                          has_vacancies: default_vacancies
+                                          has_vacancies: default_vacancies,
+                                          applications_open: default_applications_open
                                         ))
         else
           render :new

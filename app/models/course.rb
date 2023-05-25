@@ -26,7 +26,7 @@ class Course < ApplicationRecord
   enum application_status: {
     closed: 0,
     open: 1
-  }
+  }, _prefix: :application_status
 
   enum program_type: {
     higher_education_programme: 'HE',
