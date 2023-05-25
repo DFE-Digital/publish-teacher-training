@@ -61,6 +61,10 @@ module Find
         params[:has_vacancies] == 'true'
       end
 
+      def has_applications_open_checked?
+        params[:applications_open] == 'true'
+      end
+
       def full_time_checked?
         return false if params[:study_type].nil?
 
@@ -81,6 +85,10 @@ module Find
 
       def default_with_vacancies_to_true
         params[:has_vacancies].nil?
+      end
+
+      def default_with_applications_open_to_true
+        params[:applications_open].nil?
       end
 
       def all_courses_radio_chosen?

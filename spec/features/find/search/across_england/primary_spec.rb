@@ -128,7 +128,7 @@ feature 'Searching across England' do
   end
 
   def then_i_should_see_the_find_results_page
-    expect(page).to have_current_path('/results?age_group=primary&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00')
+    expect(page).to have_current_path('/results?age_group=primary&applications_open=true&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00')
   end
 
   def and_i_should_see_the_correct_courses
