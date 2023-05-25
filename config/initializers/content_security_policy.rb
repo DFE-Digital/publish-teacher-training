@@ -17,7 +17,11 @@ Rails.application.configure do
 
     policy.default_src :self
     policy.font_src    :self, :data, *all_domains
-    policy.img_src     :self, :https, :data
+    policy.img_src     :self,
+                       :https,
+                       :data,
+                       "https://#{Settings.google_tag_manager.floodlight_id}.fls.doubleclick.net" # Floodlight
+
     policy.object_src  :none
     policy.script_src  :self,
                        'https://www.google-analytics.com',
@@ -33,7 +37,10 @@ Rails.application.configure do
 
     policy.style_src   :self, *all_domains
 
-    policy.frame_src   :self, 'https://www.googletagmanager.com', *local_domains
+    policy.frame_src   :self,
+                       'https://www.googletagmanager.com',
+                       "https://#{Settings.google_tag_manager.floodlight_id}.fls.doubleclick.net", # Floodlight
+                       *local_domains
 
     # Specify URI for violation reports
     # policy.report_uri "/csp-violation-report-endpoint"
