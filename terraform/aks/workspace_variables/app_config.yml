@@ -3,8 +3,8 @@ default: &default
 
 review:
   <<: *default
-  RAILS_ENV: review
-  RACK_ENV: review
+  RAILS_ENV: review_aks
+  RACK_ENV: review_aks
 
 review_aks:
   <<: *default
