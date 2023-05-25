@@ -40,7 +40,8 @@ runs:
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
         if [ -n "${{ inputs.pr-number }}" ]; then
-          echo "APP_NAME=${{ inputs.pr-number }}" >> $GITHUB_ENV
+          APP_NAME=${{ inputs.pr-number }}
+          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
           echo "deploy_url=https://publish-review-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
