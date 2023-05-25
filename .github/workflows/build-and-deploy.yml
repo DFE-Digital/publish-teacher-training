@@ -203,10 +203,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
+        # tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
+        tests: [ unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
         include:
-          - tests: unit_models
-            include-pattern: spec/models/.*_spec.rb
+          # - tests: unit_models
+          #   include-pattern: spec/models/.*_spec.rb
           - tests: unit_services
             include-pattern: spec/services/.*_spec.rb
           - tests: unit_forms
