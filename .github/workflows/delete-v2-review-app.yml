@@ -87,5 +87,5 @@ jobs:
         uses: bobheadxi/deployments@v1
         with:
           step:   delete-env
-          token:  ${{ secrets.GITHUB_TOKEN }}
+          token:  ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
           env:    review_aks-${{ env.PR_NUMBER }}
