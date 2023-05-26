@@ -1,8 +1,4 @@
 <h1 class="govuk-heading-l">
   <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-  <% if  @course.application_status_closed? %>
-  Are you sure you want to open this course?
-  <% else %>
-  Are you sure you want to close this course?
-  <% end %>
+  Are you sure you want to <%= (@course.application_status_closed? ? "open" : "close").to_s %> this course?
 </h1>
