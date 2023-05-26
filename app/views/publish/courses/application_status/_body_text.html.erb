@@ -1,0 +1,12 @@
+ <p class="govuk-body">
+  <% if  @course.application_status_closed? %>
+  If the course has vacancies, open it so that candidates will be able to apply.
+  <% else %>
+  If the course does not have vacancies, close it so that candidates will not be able to apply. You&lsquo;ll be able to open the course again if any places become available.
+  <% end %>
+</p>
+<p class="govuk-body">
+  <% if @course.application_status_open? %>
+  The course will still be visible on Find, but candidates will not have the option to apply to it.
+  <% end %>
+</p>

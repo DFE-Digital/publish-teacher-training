@@ -10,9 +10,14 @@ module Publish
       end
 
       def update
-        course.update(application_status: 'open')
+        if course.application_status_closed?
+          course.update(application_status: 'open')
+          flash[:success] = t('course.application_status.opened')
+        else
+          course.update(application_status: 'closed')
+          flash[:success] = t('course.application_status.closed')
+        end
         redirect_to publish_provider_recruitment_cycle_course_path
-        flash[:success] = t('course.application_status.opened')
       end
 
       private
