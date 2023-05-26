@@ -156,6 +156,9 @@ namespace :publish, as: :publish do
         get '/apply', on: :member, to: 'courses#apply', as: :apply
         get '/details', on: :member, to: 'courses#details'
 
+        get '/open', on: :member, to: 'courses/application_status#new'
+        post '/open', on: :member, to: 'courses/application_status#update'
+
         get '/engineers_teach_physics', on: :member, to: 'courses/engineers_teach_physics#edit'
         put '/engineers_teach_physics', on: :member, to: 'courses/engineers_teach_physics#update'
 

@@ -1,0 +1,45 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+feature 'Editing course application status', { can_edit_current_and_next_cycles: false } do
+  before do
+    given_i_am_authenticated_as_a_provider_user
+  end
+
+  scenario 'opening a course' do
+    and_there_is_a_closed_course_i_want_to_open
+    when_i_visit_the_open_applications_confirm_page
+    and_i_click_open_course
+    then_i_should_see_the_success_message
+    and_i_should_be_back_on_the_course_page
+  end
+
+  def and_i_should_be_back_on_the_course_page
+    expect(page).to have_current_path(publish_provider_recruitment_cycle_course_path(course.provider.provider_code,
+                                                                                     course.recruitment_cycle.year,
+                                                                                     course.course_code))
+  end
+
+  def then_i_should_see_the_success_message
+    expect(page).to have_text('Course opened')
+  end
+
+  def when_i_visit_the_open_applications_confirm_page
+    visit open_publish_provider_recruitment_cycle_course_path(course.provider.provider_code,
+                                                              course.recruitment_cycle.year,
+                                                              course.course_code)
+  end
+
+  def and_i_click_open_course
+    click_button 'Open course'
+  end
+
+  def given_i_am_authenticated_as_a_provider_user
+    given_i_am_authenticated(user: create(:user, :with_provider))
+  end
+
+  def and_there_is_a_closed_course_i_want_to_open
+    given_a_course_exists(name: 'Course', course_code: 'AAAA', application_status: 'open')
+  end
+end
