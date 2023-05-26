@@ -30,7 +30,7 @@ environment:
 render_json_errors: true
 
 google_tag_manager:
-  find_tracking_id: GTM-K6NSLCM
+  find_tracking_id: GTM-TP73392
   publish_tracking_id: GTM-W56GPKW
 
 features:

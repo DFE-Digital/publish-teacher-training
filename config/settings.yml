@@ -124,5 +124,6 @@ cookies:
 google_tag_manager:
   find_tracking_id: change_me
   publish_tracking_id: change_me
+  floodlight_id: 2673654
 
 STATE_CHANGE_SLACK_URL: replace_me
