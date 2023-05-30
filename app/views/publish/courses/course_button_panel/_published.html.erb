@@ -3,6 +3,10 @@
 </span>
 
 <div class="govuk-button-group">
+  <% if FeatureService.enabled?(:open_and_closed_course_flow) %>
+    <%= govuk_link_to course.application_status_closed? ? "Open course" : "Close course", application_status_publish_provider_recruitment_cycle_course_path, class: "govuk-button govuk-!-margin-right-2" %>
+  <% end %>
+
   <% if course.has_unpublished_changes? %>
     <%= govuk_button_to("Publish course", publish_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                         class: "govuk-!-margin-right-2",
