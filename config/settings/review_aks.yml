@@ -1,0 +1,21 @@
+skylight:
+  enable: false
+
+environment:
+  label: "Review"
+  name: "review"
+
+publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
+find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
+search_ui:
+  base_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+
+authentication:
+  secret: secret
+  mode: persona
+
+features:
+  support_new_provider_creation_flow: true
+  accredited_provider_search: true
+

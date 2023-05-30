@@ -1,0 +1,12 @@
+default: &default
+  ASSETS_PRECOMPILE: true
+  RAILS_SERVE_STATIC_FILES: true
+  RAILS_MAX_THREADS: 50
+  RAILS_ENV: review_aks
+  RACK_ENV: review_aks
+
+review_aks:
+  <<: *default
+
+dv_review_aks:
+  <<: *default
