@@ -8,7 +8,7 @@ feature 'Editing course application status', { can_edit_current_and_next_cycles:
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'opening a closed course' do
+  scenario 'opening a course' do
     and_there_is_a_closed_course_i_want_to_open
     when_i_visit_the_course_show_page
     and_i_click_open_course_link
