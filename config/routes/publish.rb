@@ -157,10 +157,7 @@ namespace :publish, as: :publish do
         get '/details', on: :member, to: 'courses#details'
 
         get '/application_status', on: :member, to: 'courses/application_status#new'
-        # get '/close', on: :member, to: 'courses/application_status#new'
-
         post '/application_status', on: :member, to: 'courses/application_status#update'
-        # post '/close', on: :member, to: 'courses/application_status#update'
 
         get '/engineers_teach_physics', on: :member, to: 'courses/engineers_teach_physics#edit'
         put '/engineers_teach_physics', on: :member, to: 'courses/engineers_teach_physics#update'
