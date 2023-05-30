@@ -11,7 +11,7 @@
 
     <%= render partial: "publish/courses/application_status/body_text" %>
 
-    <%= govuk_button_to(@course.application_status_closed? ? "Open course" : "Close course", open_publish_provider_recruitment_cycle_course_path) %>
+    <%= govuk_button_to(@course.application_status_closed? ? "Open course" : "Close course", application_status_publish_provider_recruitment_cycle_course_path) %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path) %>
