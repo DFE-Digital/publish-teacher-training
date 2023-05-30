@@ -10,7 +10,7 @@ variable paas_worker_app_instances {}
 
 variable paas_worker_app_memory {}
 
-variable paas_docker_image {}
+variable docker_image {}
 
 variable paas_postgres_service_plan {}
 
