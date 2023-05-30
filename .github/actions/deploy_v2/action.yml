@@ -60,25 +60,6 @@ runs:
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
         fi;
 
-    # Get this from the cluster data terraform module
-    - name: Set up cluster environment variables
-      shell: bash
-      run: |
-        case ${{ env.cluster }} in
-          test)
-            echo "cluster_rg=s189t01-tsc-ts-rg" >> $GITHUB_ENV
-            echo "cluster_name=s189t01-tsc-test-aks" >> $GITHUB_ENV
-            ;;
-          production)
-            echo "cluster_rg=s189p01-tsc-pd-rg" >> $GITHUB_ENV
-            echo "cluster_name=s189p01-tsc-production-aks" >> $GITHUB_ENV
-            ;;
-          *)
-            echo "unknown cluster"
-            ;;
-        esac
-        echo "app_name=publish-${{ env.aks_app_environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
-
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -98,6 +79,31 @@ runs:
         SECRETS: |
           ${{ env.key_vault_app_secret_name }}
           ${{ env.key_vault_infra_secret_name }}
+
+    - name: Set up environment variables
+      shell: bash
+      run: |
+        case ${{ env.cluster }} in
+          test)
+            echo "cluster_rg=s189t01-tsc-ts-rg" >> $GITHUB_ENV
+            echo "cluster_name=s189t01-tsc-test-aks" >> $GITHUB_ENV
+            ;;
+          production)
+            echo "cluster_rg=s189p01-tsc-pd-rg" >> $GITHUB_ENV
+            echo "cluster_name=s189p01-tsc-production-aks" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "unknown cluster"
+            ;;
+        esac
+
+        echo "app_name=publish-${{ env.aks_app_environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
+
+    - name: Print APP_NAME
+      shell: bash
+      run: |
+        echo "APP_NAME: ${{ env.APP_NAME}}"
+        echo "app_name: ${{ env.app_name}}"
 
     - name: Install kubectl
       if: ${{ inputs.environment == 'review_aks' }}
@@ -122,11 +128,10 @@ runs:
 
         if [ "$konduit_worked" = false ] || [ "$stats_count" == 'count|0' ]; then
           echo "Postgres container query failed or stats table has no records. Setup and restore sanitised database."
-          echo "setup_database=true" >> $GITHUB_ENV
+          echo "USE_DB_SETUP_COMMAND=true" >> $GITHUB_ENV
         else
-          echo "Database already created and restored. Set env var read by Makefile"
-          echo "setup_database=false" >> $GITHUB_ENV
-          echo "DISABLE_DB_SETUP=1" >> $GITHUB_ENV
+          echo "Database already created and restored."
+          echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
         fi
 
     - name: Terraform init, plan & apply
@@ -139,7 +144,7 @@ runs:
         CONFIRM_PRODUCTION: yes
 
     - name: Download Latest Sanitised Backup
-      if: ${{ inputs.environment == 'review_aks' && env.setup_database == 'true' }}
+      if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
       shell: bash
       run: |
         sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1)
@@ -147,7 +152,7 @@ runs:
         gh run download $sanitised_backup_workflow_run_id
 
     - name: Restore backup to aks env database
-      if: ${{ inputs.environment == 'review_aks' && env.setup_database == 'true' }}
+      if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
       shell: bash
       run: |
         bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
@@ -159,14 +164,14 @@ runs:
         pr-number: ${{ inputs.pr-number }}
         slack-webhook: ${{ inputs.slack-webhook }}
 
-    # - name: Alert on Failure
-    #   if: ${{ failure() && github.ref == 'refs/heads/main' }}
-    #   uses: rtCamp/action-slack-notify@master
-    #   env:
-    #     SLACK_CHANNEL: twd_findpub_tech
-    #     SLACK_COLOR: '#ef5343'
-    #     SLACK_ICON_EMOJI: ':github-logo:'
-    #     SLACK_USERNAME: Publish Teacher Training
-    #     SLACK_TITLE: Deploy to ${{ inputs.environment }} Failed
-    #     SLACK_MESSAGE: ':alert: <!channel> Deployment failure on ${{ inputs.environment }} :sadparrot:'
-    #     SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
+    - name: Alert on Failure
+      if: ${{ failure() && github.ref == 'refs/heads/main' }}
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: twd_findpub_tech
+        SLACK_COLOR: '#ef5343'
+        SLACK_ICON_EMOJI: ':github-logo:'
+        SLACK_USERNAME: Publish Teacher Training
+        SLACK_TITLE: Deploy to ${{ inputs.environment }} Failed
+        SLACK_MESSAGE: ':alert: <!channel> Deployment failure on ${{ inputs.environment }} :sadparrot:'
+        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
