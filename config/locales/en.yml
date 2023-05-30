@@ -222,7 +222,8 @@ en:
   value_not_entered: "Not entered"
   course:
     application_status:
-      opened: "Course opened"
+      open: "Course opened"
+      closed: "Course closed"
     add_course: "Add course"
     update_email:
       name: "title"
