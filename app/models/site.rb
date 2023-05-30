@@ -18,7 +18,14 @@ class Site < ApplicationRecord
   audited associated_with: :provider
 
   has_many :site_statuses, dependent: :destroy
+  has_many :study_site_placements, dependent: :destroy
+
   belongs_to :provider
+
+  enum site_type: {
+    school: 0,
+    study_site: 1
+  }
 
   validates :location_name, uniqueness: { scope: :provider_id }
   validates :location_name,

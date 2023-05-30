@@ -54,6 +54,12 @@ shared:
     - site_id
     - status
     - vac_status
+  study_site_placement:
+    - id
+    - course_id
+    - site_id
+    - created_at
+    - updated_at
   course_subject:
     - id
     - course_id
@@ -163,6 +169,7 @@ shared:
     - urn
     - town
     - address3
+    - site_type
   statistic:
     - id
     - json_data

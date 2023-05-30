@@ -970,4 +970,15 @@ describe Provider do
       end
     end
   end
+
+  describe '#study_sites' do
+    let(:school) { build(:site, :school) }
+    let(:study_site) { build(:site, :study_site) }
+
+    let(:provider) { create(:provider, sites: [school, study_site]) }
+
+    it 'returns only study sites' do
+      expect(provider.study_sites).to match([study_site])
+    end
+  end
 end
