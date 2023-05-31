@@ -9,14 +9,6 @@ module Publish
 
     subject { described_class.new(course, params:) }
 
-    describe 'validations' do
-      before { subject.valid? }
-
-      it 'validates :confirm_course_code' do
-        expect(subject.errors[:confirm_course_code]).to include(I18n.t('activemodel.errors.models.publish/course_withdrawal_form.attributes.confirm_course_code.invalid_code', course_code: course.course_code))
-      end
-    end
-
     describe '#save!' do
       let(:params) { { confirm_course_code: course.course_code } }
 

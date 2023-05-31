@@ -10,17 +10,9 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   scenario 'i can withdraw a course' do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_publish_courses_withdrawal_page
-    and_i_confirm_the_course_code
     and_i_submit
     then_i_should_see_a_success_message
     and_the_course_is_withdrawn
-  end
-
-  scenario 'wrong course code provided' do
-    and_there_is_a_course_i_want_to_withdraw
-    when_i_visit_the_course_publish_courses_withdrawal_page
-    and_i_submit_with_the_wrong_code
-    then_i_should_see_an_error_message
   end
 
   scenario 'course already withdrawn' do
@@ -60,15 +52,6 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def and_i_confirm_the_course_code
-    publish_courses_withdrawal_page.confirm_course_code.set(course.course_code)
-  end
-
-  def and_i_submit_with_the_wrong_code
-    publish_courses_withdrawal_page.confirm_course_code.set('random')
-    and_i_submit
-  end
-
   def and_i_submit
     publish_courses_withdrawal_page.submit.click
   end
@@ -86,12 +69,6 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
 
   def then_i_am_redirected_to_the_courses_page
     expect(publish_provider_courses_index_page).to be_displayed
-  end
-
-  def then_i_should_see_an_error_message
-    expect(publish_courses_withdrawal_page.error_messages).to include(
-      "Enter the course code #{course.course_code} to withdraw this course"
-    )
   end
 
   def and_i_see_the(message)

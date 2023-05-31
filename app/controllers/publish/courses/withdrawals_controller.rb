@@ -15,7 +15,7 @@ module Publish
       def update
         authorize(provider)
 
-        @course_withdrawal_form = CourseWithdrawalForm.new(course, params: withdrawal_params)
+        @course_withdrawal_form = CourseWithdrawalForm.new(course)
 
         if @course_withdrawal_form.save!
           flash[:success] = "#{course.name} (#{course.course_code}) has been withdrawn"
@@ -52,14 +52,6 @@ module Publish
 
       def course_withdrawn?
         course.content_status == :withdrawn
-      end
-
-      def withdrawal_params
-        return { course_code: nil } if params[:publish_course_withdrawal_form].blank?
-
-        params
-          .require(:publish_course_withdrawal_form)
-          .permit(CourseWithdrawalForm::FIELDS)
       end
     end
   end

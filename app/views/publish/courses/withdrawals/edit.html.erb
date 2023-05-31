@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Are you sure you want to withdraw #{@course.name_and_code})?", @course_withdrawal_form.errors.any?) %>
+<% content_for :page_title, "Are you sure you want to withdraw this course? - #{@course.name_and_code}" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
@@ -35,14 +35,14 @@
 
       <p class="govuk-body">Once you’ve withdrawn a course, you cannot publish it again this cycle.</p>
 
-      <h2 class="govuk-heading-m">Confirm withdrawal</h2>
-
-      <%= f.govuk_text_field :confirm_course_code, label: { text: "Enter the course code to confirm" }, width: 5 %>
-
-      <%= f.govuk_submit "Yes I’m sure – withdraw this course", class: "govuk-button govuk-button--warning" %>
+      <% if @course.application_status_open? && FeatureService.enabled?(:open_and_closed_course_flow) %>
+        <p class="govuk-body">If you want to stop new candidates from applying but do not want to withdraw any applications currently in progress, you can <%= govuk_link_to("close the course instead", application_status_publish_provider_recruitment_cycle_course_path) %>.
+        </p>
+      <% end %>
+      <%= f.govuk_submit "Withdraw course", class: "govuk-button govuk-button--warning" %>
     <% end %>
 
-    <p class="govuk-body govuk-!-margin-top-5">
+    <p class="govuk-body">
       <%= govuk_link_to(
         "Cancel",
         publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code),
