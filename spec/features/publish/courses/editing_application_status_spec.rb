@@ -49,11 +49,13 @@ feature 'Editing course application status', { can_edit_current_and_next_cycles:
   def and_the_course_is_open
     course.reload
     expect(course).to be_application_status_open
+    expect(page).to have_css('.govuk-tag--turquoise')
   end
 
   def and_the_course_is_closed
     course.reload
     expect(course).to be_application_status_closed
+    expect(page).to have_css('.govuk-tag--purple')
   end
 
   def then_i_should_see_the_success_message
