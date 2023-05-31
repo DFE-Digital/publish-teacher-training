@@ -399,3 +399,11 @@ properties:
     enum:
       - engineers_teach_physics
       - no_campaign
+  application_status:
+    type: string
+    nullable: false
+    description: "The courses application status, corresponding to whether applications are open or not"
+    example: "open"
+    enum:
+      - open
+      - closed
