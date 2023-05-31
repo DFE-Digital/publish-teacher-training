@@ -51,6 +51,8 @@ describe Site do
 
   describe 'associations' do
     it { is_expected.to belong_to(:provider) }
+
+    it { is_expected.to have_many(:study_site_placements) }
   end
 
   describe 'discarded behaviour for code' do
@@ -256,6 +258,26 @@ describe Site do
           it { is_expected.to be(true) }
         end
       end
+    end
+  end
+
+  describe 'site type' do
+    let(:site) { build(:site) }
+
+    it { is_expected.to define_enum_for(:site_type).with_values(%i[school study_site]) }
+
+    context 'default' do
+      it 'is school' do
+        expect(site.site_type).to eq('school')
+      end
+    end
+
+    context 'when site_type is a study site' do
+      subject { site.site_type }
+
+      before { site.study_site! }
+
+      it { is_expected.to eq('study_site') }
     end
   end
 end

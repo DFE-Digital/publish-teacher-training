@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_22_132741) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_30_125755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -346,8 +346,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_132741) do
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.datetime "discarded_at", precision: nil
     t.text "address3"
+    t.integer "site_type", default: 0, null: false
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
+    t.index ["site_type"], name: "index_site_on_site_type"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
   end
 
@@ -355,6 +357,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_132741) do
     t.jsonb "json_data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "study_site_placement", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "site_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_study_site_placement_on_course_id"
+    t.index ["site_id"], name: "index_study_site_placement_on_site_id"
   end
 
   create_table "subject", force: :cascade do |t|
@@ -413,12 +424,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_132741) do
     t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
-  add_foreign_key "access_request", "\"user\"", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
+  add_foreign_key "access_request", "user", column: "requester_id", name: "FK_access_request_user_requester_id", on_delete: :nullify
   add_foreign_key "contact", "provider", name: "fk_contact_provider"
   add_foreign_key "course", "provider", name: "FK_course_provider_provider_id", on_delete: :cascade
-  add_foreign_key "course_enrichment", "\"user\"", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
-  add_foreign_key "course_enrichment", "\"user\"", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
   add_foreign_key "course_enrichment", "course"
+  add_foreign_key "course_enrichment", "user", column: "created_by_user_id", name: "FK_course_enrichment_user_created_by_user_id"
+  add_foreign_key "course_enrichment", "user", column: "updated_by_user_id", name: "FK_course_enrichment_user_updated_by_user_id"
   add_foreign_key "course_site", "course", name: "FK_course_site_course_course_id", on_delete: :cascade
   add_foreign_key "course_site", "site", name: "FK_course_site_site_site_id", on_delete: :cascade
   add_foreign_key "course_subject", "course", name: "fk_course_subject__course"
@@ -426,14 +437,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_22_132741) do
   add_foreign_key "financial_incentive", "subject"
   add_foreign_key "organisation_provider", "organisation", name: "FK_organisation_provider_organisation_organisation_id"
   add_foreign_key "organisation_provider", "provider", name: "FK_organisation_provider_provider_provider_id"
-  add_foreign_key "organisation_user", "\"user\"", column: "user_id", name: "FK_organisation_user_user_user_id"
   add_foreign_key "organisation_user", "organisation", name: "FK_organisation_user_organisation_organisation_id"
+  add_foreign_key "organisation_user", "user", name: "FK_organisation_user_user_user_id"
   add_foreign_key "provider", "recruitment_cycle"
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
-  add_foreign_key "session", "\"user\"", column: "user_id", name: "FK_session_user_user_id", on_delete: :cascade
+  add_foreign_key "session", "user", name: "FK_session_user_user_id", on_delete: :cascade
   add_foreign_key "site", "provider", name: "FK_site_provider_provider_id", on_delete: :cascade
+  add_foreign_key "study_site_placement", "course"
+  add_foreign_key "study_site_placement", "site"
   add_foreign_key "subject", "subject_area", column: "type", primary_key: "typename", name: "fk_subject__subject_area"
-  add_foreign_key "user_notification", "\"user\"", column: "user_id"
-  add_foreign_key "user_permission", "\"user\"", column: "user_id"
+  add_foreign_key "user_notification", "user"
   add_foreign_key "user_permission", "provider"
+  add_foreign_key "user_permission", "user"
 end

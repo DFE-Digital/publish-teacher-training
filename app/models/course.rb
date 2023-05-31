@@ -121,10 +121,14 @@ class Course < ApplicationRecord
   has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
+  has_many :study_site_placements
   accepts_nested_attributes_for :site_statuses
+
   has_many :sites,
            -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
            through: :site_statuses
+
+  has_many :study_sites, through: :study_site_placements, source: :site
 
   has_many :modern_languages_subjects,
            through: :course_subjects,

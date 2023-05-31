@@ -45,7 +45,8 @@ class Provider < ApplicationRecord
   has_many :user_permissions
   has_many :users, -> { kept }, through: :user_permissions
 
-  has_many :sites, -> { kept }, inverse_of: :provider
+  has_many :sites, -> { where(site_type: :school).kept }, inverse_of: :provider
+  has_many :study_sites, -> { where(site_type: :study_site).kept }, inverse_of: :provider, class_name: 'Site'
 
   has_many :user_notifications,
            foreign_key: :provider_code,

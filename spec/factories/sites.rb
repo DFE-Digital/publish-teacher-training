@@ -12,6 +12,7 @@ FactoryBot.define do
     region_code { 'london' }
     urn { Faker::Number.number(digits: [5, 6].sample) }
     uuid { Faker::Internet.uuid }
+    site_type { 'school' }
 
     sequence(:code) { |n| "A#{n}" }
 
@@ -19,6 +20,10 @@ FactoryBot.define do
 
     transient do
       age { nil }
+    end
+
+    trait :study_site do
+      site_type { 'study_site' }
     end
 
     after(:build) do |site, evaluator|
