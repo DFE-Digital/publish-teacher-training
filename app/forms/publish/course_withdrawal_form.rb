@@ -4,12 +4,6 @@ module Publish
   class CourseWithdrawalForm < BaseCourseForm
     alias course model
 
-    FIELDS = %i[
-      confirm_course_code
-    ].freeze
-
-    attr_accessor(*FIELDS)
-
     def save!
       if valid?
         course.withdraw
