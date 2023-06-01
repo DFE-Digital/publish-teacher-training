@@ -29,12 +29,26 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     and_i_see_the(course_should_be_deleted_message)
   end
 
+  scenario 'i can close thecourse instead' do
+    given_the_open_and_closed_course_flow_feature_is_active
+    and_there_is_a_course_i_want_to_withdraw
+    when_i_visit_the_course_publish_courses_withdrawal_page
+    and_i_click_link('close the course instead')
+    then_i_should_be_on_the_close_confirmation_page
+  end
+
+  private
+
+  def given_the_open_and_closed_course_flow_feature_is_active
+    allow(Settings.features).to receive(:open_and_closed_course_flow).and_return(true)
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  def and_there_is_a_course_i_want_to_withdraw
-    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+  def and_there_is_a_course_i_want_to_withdraw(application_status: :open)
+    given_a_course_exists(application_status:, enrichments: [build(:course_enrichment, :published)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
 
@@ -94,4 +108,12 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   def course_name_and_code
     "#{course.name} (#{course.course_code})"
   end
+
+  def then_i_should_be_on_the_close_confirmation_page
+    expect(page.title).to have_content('Are you sure you want to close this course?')
+
+    expect(page.current_url).to end_with("publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/application_status?goto=withdraw")
+  end
+
+  alias_method :and_i_click_link, :click_link
 end

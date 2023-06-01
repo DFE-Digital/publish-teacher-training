@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Are you sure you want to open this course?", nil) %>
+<% content_for :page_title, title_with_error_prefix("Are you sure you want to #{@course.application_status_closed? ? 'open' : 'close'} this course?", nil) %>
 
 <% content_for :before_content do %>
   <% if params[:goto] == "withdraw" %>
