@@ -47,7 +47,7 @@
         max_words: 250,
         rows: 15) %>
 
-        <% if @provider.provider_type != 'lead_school' %>
+        <% unless FeatureService.enabled?(:accredited_provider_search) %>
           <% if @about_form.accredited_bodies.present? %>
             <% accredited_provider = "accredited provider".pluralize(@about_form.accredited_bodies.count) %>
 
