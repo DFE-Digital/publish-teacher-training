@@ -32,3 +32,8 @@ loadtest:
   <<: *default
   RAILS_ENV: loadtest
   RACK_ENV: loadtest
+
+rollover:
+  <<: *default
+  RAILS_ENV: rollover
+  RACK_ENV: rollover
