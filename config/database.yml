@@ -37,3 +37,6 @@ sandbox:
 
 loadtest:
   <<: *default
+
+rollover:
+  <<: *default

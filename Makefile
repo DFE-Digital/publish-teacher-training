@@ -94,6 +94,14 @@ loadtest: ## Set DEPLOY_ENV to loadtest
 pentest: ## Set DEPLOY_ENV to pentest
 	$(eval DEPLOY_ENV=pentest)
 
+.PHONY: rollover
+rollover: ## Set DEPLOY_ENV to rollover
+	$(eval DEPLOY_ENV=rollover)
+	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
+	$(eval space=bat-prod)
+	$(eval paas_env=rollover)
+	$(eval PLATFORM=paas)
+
 .PHONY: ci
 ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
