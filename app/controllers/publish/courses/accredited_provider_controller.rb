@@ -3,7 +3,9 @@
 module Publish
   module Courses
     class AccreditedProviderController < PublishController
+      before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: :continue
+
       include CourseBasicDetailConcern
 
       def edit
@@ -57,6 +59,7 @@ module Publish
         if update_params[:accredited_provider_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
+          course_updated_message('Accredited provider')
           redirect_to_update_successful
         else
           @errors = @course.errors.messages
@@ -94,9 +97,8 @@ module Publish
       end
 
       def redirect_to_update_successful
-        flash[:success] = I18n.t('success.saved')
         redirect_to(
-          details_provider_recruitment_cycle_course_path(
+          details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code
@@ -125,15 +127,6 @@ module Publish
         errors
       end
 
-      def build_course
-        @course = Course
-                  .where(recruitment_cycle_year: params[:recruitment_cycle_year])
-                  .where(provider_code: params[:provider_code])
-                  .includes(:accrediting_provider)
-                  .find(params[:code])
-                  .first
-      end
-
       def update_course_params
         params.require(:course).permit(
           :autocompleted_provider_code,
@@ -153,6 +146,11 @@ module Publish
 
       def other_selected_with_no_autocompleted_code?(code)
         code == 'other' && @autocompleted_provider_code.blank?
+      end
+
+      def build_course
+        super
+        authorize @course
       end
     end
   end

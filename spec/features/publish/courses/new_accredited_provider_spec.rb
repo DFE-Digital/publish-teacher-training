@@ -23,9 +23,11 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
 
   def given_i_am_authenticated_as_a_provider_user
     provider = create(:provider)
-    course = create(:course, :with_accrediting_provider, provider:)
-    @accredited_provider_code = course.accredited_provider_code
-    provider.accrediting_provider_enrichments = [{ UcasProviderCode: @accredited_provider_code }]
+    course_one = create(:course, :with_accrediting_provider, provider:)
+    course_two = create(:course, :with_accrediting_provider, provider:)
+    @accredited_provider_code = course_one.accredited_provider_code
+    accredited_provider_code_two = course_two.accredited_provider_code
+    provider.accrediting_provider_enrichments = [{ UcasProviderCode: @accredited_provider_code }, { UcasProviderCode: accredited_provider_code_two }]
     @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)

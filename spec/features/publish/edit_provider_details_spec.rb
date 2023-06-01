@@ -7,7 +7,6 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     given_i_am_a_provider_user_as_a_provider_user
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us
-    then_i_can_edit_info_about_our_accredited_bodies
     then_i_can_edit_info_about_disabilities_and_other_needs
   end
 
@@ -48,18 +47,6 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     expect(page).to have_content 'Your changes have been published'
     within_summary_row 'Training with your organisation' do
       expect(page).to have_content 'Updated: Training with you'
-    end
-  end
-
-  def then_i_can_edit_info_about_our_accredited_bodies
-    click_link "Change details about #{@accrediting_provider.provider_name}"
-
-    publish_provider_details_edit_page.accredited_provider_description_field.set 'Updated: accredited provider description'
-    publish_provider_details_edit_page.save_and_publish.click
-
-    expect(page).to have_content 'Your changes have been published'
-    within_summary_row @accrediting_provider.provider_name do
-      expect(page).to have_content 'Updated: accredited provider description'
     end
   end
 
