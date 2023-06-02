@@ -48,8 +48,8 @@ feature 'Searching across England' do
   private
 
   def given_there_are_primary_courses_in_england
-    @primary_course = create(:course, :published, :with_salary, site_statuses: [build(:site_status, :findable)])
-    create(:course, :secondary, :published, :with_salary, site_statuses: [build(:site_status, :findable)])
+    @primary_course = create(:course, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
+    create(:course, :secondary, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
   end
 
   def when_i_visit_the_start_page

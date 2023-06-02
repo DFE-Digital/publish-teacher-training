@@ -43,7 +43,7 @@ RSpec.feature 'Study type filter' do
   def and_the_full_time_study_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('has_vacancies=true&study_type[]=full_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
+      expect(uri.query).to eq('applications_open=true&study_type[]=full_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.feature 'Study type filter' do
   def and_the_part_time_study_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('has_vacancies=true&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
+      expect(uri.query).to eq('applications_open=true&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
     end
   end
 end

@@ -38,9 +38,9 @@ feature 'Searching across England' do
   private
 
   def given_there_are_secondary_courses_in_england
-    create(:course, :published, :with_salary, site_statuses: [build(:site_status, :findable)])
-    @secondary_biology_course = create(:course, :secondary, :published, :with_salary, site_statuses: [build(:site_status, :findable)], subjects: [find_or_create(:secondary_subject, :biology)])
-    @secondary_chemistry_course = create(:course, :secondary, :published, :with_salary, site_statuses: [build(:site_status, :findable)], subjects: [find_or_create(:secondary_subject, :chemistry)])
+    create(:course, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
+    @secondary_biology_course = create(:course, :secondary, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)], subjects: [find_or_create(:secondary_subject, :biology)])
+    @secondary_chemistry_course = create(:course, :secondary, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)], subjects: [find_or_create(:secondary_subject, :chemistry)])
   end
 
   def when_i_visit_the_start_page

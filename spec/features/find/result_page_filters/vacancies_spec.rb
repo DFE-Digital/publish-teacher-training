@@ -6,6 +6,7 @@ RSpec.feature 'Results page new vacancies filter' do
   include FiltersFeatureSpecsHelper
 
   scenario 'Candidate applies vacancies filter on results page' do
+    given_the_open_and_closed_course_flow_feature_is_deactivated
     when_i_visit_the_find_results_page
     then_i_see_the_vacancies_checkbox_is_selected
 
@@ -13,6 +14,10 @@ RSpec.feature 'Results page new vacancies filter' do
     and_apply_the_filters
     then_i_see_that_the_vacancies_checkbox_is_still_unselected
     and_the_vacancies_query_parameters_are_retained
+  end
+
+  def given_the_open_and_closed_course_flow_feature_is_deactivated
+    allow(Settings.features).to receive(:open_and_closed_course_flow).and_return(false)
   end
 
   def then_i_see_the_vacancies_checkbox_is_selected
