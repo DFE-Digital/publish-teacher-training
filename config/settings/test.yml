@@ -22,6 +22,3 @@ STATE_CHANGE_SLACK_URL: https://example.com/webhook
 
 find_valid_referers:
   - http://localhost:9000
-
-features:
-  accredited_provider_search: true

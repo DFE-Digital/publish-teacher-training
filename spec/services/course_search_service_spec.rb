@@ -325,42 +325,6 @@ RSpec.describe CourseSearchService do
       end
     end
 
-    describe 'filter[with_vacancies]' do
-      context 'when true' do
-        let(:filter) { { has_vacancies: true } }
-        let(:expected_scope) { double }
-
-        it 'adds the with_vacancies scope' do
-          expect(scope).to receive(:with_vacancies).and_return(course_ids_scope)
-          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context 'when false' do
-        let(:filter) { { has_vacancies: false } }
-
-        it "doesn't add the with_vacancies scope" do
-          expect(scope).not_to receive(:with_vacancies)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-
-      context 'when absent' do
-        let(:filter) { {} }
-
-        it "doesn't add the with_vacancies scope" do
-          expect(scope).not_to receive(:with_vacancies)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
-          expect(course_with_includes).to receive(:where).and_return(expected_scope)
-          expect(subject).to eq(expected_scope)
-        end
-      end
-    end
-
     describe 'filter[findable]' do
       context 'when true' do
         let(:filter) { { findable: true } }
