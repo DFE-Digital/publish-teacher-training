@@ -5,7 +5,7 @@ support_email: becomingateacher@digital.education.gov.uk
 campaign_email: itt.engagement@education.gov.uk
 
 search_ui:
-  base_url: http://localhost:3002
+  base_url: https://find.localhost
 notify:
   service_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534
   unregistered_user_template_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534/templates/9ecac443-8cfd-49ac-ac59-e7ffa0ab6278
