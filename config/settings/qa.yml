@@ -32,6 +32,7 @@ basic_auth:
 features:
   send_request_data_to_bigquery: true
   accredited_provider_search: true
+  support_new_provider_creation_flow: true
   open_and_closed_course_flow: true
 
 find_valid_referers:
