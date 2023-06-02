@@ -23,6 +23,7 @@
           <% if @provider.accredited_bodies.length > 0 %>
             <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
 
+            <!-- TODO: Remove this field once feature flag is removed -->
             <% unless FeatureService.enabled?(:accredited_provider_search) %>
               <div class="govuk-radios__divider">or</div>
 

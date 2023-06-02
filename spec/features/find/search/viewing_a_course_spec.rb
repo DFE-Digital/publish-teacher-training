@@ -86,6 +86,7 @@ feature 'Viewing a findable course' do
       additional_gcse_equivalencies: 'You need to work hard',
       can_sponsor_student_visa: true,
       can_sponsor_skilled_worker_visa: false,
+      application_status: 'open',
       provider:,
       accrediting_provider:,
       site_statuses: [
