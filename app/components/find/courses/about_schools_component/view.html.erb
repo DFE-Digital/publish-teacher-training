@@ -27,10 +27,6 @@
           <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">School</th>
-          <!-- TODO: to be removed with feature flag -->
-          <% unless FeatureService.enabled?(:open_and_closed_course_flow) %>
-            <th class="govuk-table__header" scope="col">Vacancies</th>
-           <% end %>
           </tr>
           </thead>
 
@@ -42,12 +38,6 @@
                 <br>
                 <%= smart_quotes(site_status.site.decorate.full_address) %>
               </td>
-            <!-- TODO: to be removed with feature flag -->
-            <% unless FeatureService.enabled?(:open_and_closed_course_flow) %>
-              <td class="govuk-table__cell">
-                <%= site_status.has_vacancies? ? "Yes" : "No" %>
-              </td>
-            <% end %>
             </tr>
           <% end %>
           </tbody>

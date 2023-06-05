@@ -21,9 +21,7 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def status_tags
-    if current_recruitment_cycle_year? && !FeatureService.enabled?(:open_and_closed_course_flow)
-      object.has_vacancies? ? status_tags_for_vacancies : status_tags_for_no_vacancies
-    elsif current_recruitment_cycle_year? && FeatureService.enabled?(:open_and_closed_course_flow)
+    if current_recruitment_cycle_year?
       object.application_status_open? ? status_tags_for_vacancies : status_tags_for_no_vacancies
     else
       status_tags_for_rolled_over_courses

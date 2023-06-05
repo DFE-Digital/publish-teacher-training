@@ -4,7 +4,6 @@ require 'rails_helper'
 
 feature 'Editing course application status', { can_edit_current_and_next_cycles: false } do
   before do
-    given_the_open_and_closed_course_flow_feature_is_active
     given_i_am_authenticated_as_a_provider_user
   end
 
@@ -80,10 +79,6 @@ feature 'Editing course application status', { can_edit_current_and_next_cycles:
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
-  end
-
-  def given_the_open_and_closed_course_flow_feature_is_active
-    allow(Settings.features).to receive(:open_and_closed_course_flow).and_return(true)
   end
 
   def and_there_is_a_closed_course_i_want_to_open

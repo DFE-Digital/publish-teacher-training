@@ -6,7 +6,6 @@ RSpec.feature 'Results page new application open filter' do
   include FiltersFeatureSpecsHelper
 
   scenario 'Candidate applies applications open filter on results page' do
-    given_the_open_and_closed_course_flow_feature_is_active
     when_i_visit_the_find_results_page
     then_i_see_the_applications_open_checkbox_is_selected
 
@@ -14,10 +13,6 @@ RSpec.feature 'Results page new application open filter' do
     and_apply_the_filters
     then_i_see_that_the_applications_open_checkbox_is_still_unselected
     and_the_applications_open_query_parameters_are_retained
-  end
-
-  def given_the_open_and_closed_course_flow_feature_is_active
-    allow(Settings.features).to receive(:open_and_closed_course_flow).and_return(true)
   end
 
   def then_i_see_the_applications_open_checkbox_is_selected

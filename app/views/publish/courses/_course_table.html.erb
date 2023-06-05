@@ -7,12 +7,6 @@
        Is it on <abbr class="app-!-text-decoration-underline-dotted" title="Find postgraduate teacher training">Find</abbr>?
       </th>
       <th class="govuk-table__header">Applications</th>
-      <!-- TODO: to be removed with feature flag -->
-      <% unless FeatureService.enabled?(:open_and_closed_course_flow) %>
-        <% if @recruitment_cycle.current_and_open? %>
-          <th class="govuk-table__header">Vacancies</th>
-        <% end %>
-      <% end %>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
