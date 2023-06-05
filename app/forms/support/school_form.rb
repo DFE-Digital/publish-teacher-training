@@ -12,10 +12,13 @@ module Support
       town
       address4
       postcode
+      site_type
     ].freeze
 
     attr_accessor(*FIELDS)
 
+    validate :validate_study_site_location_name
+    validate :validate_school_location_name
     validate :validate_site
 
     def full_address
@@ -27,6 +30,20 @@ module Support
     end
 
     private
+
+    def validate_study_site_location_name
+      return unless site_type == 'study_site'
+      return unless Site.study_site.exists?(location_name:)
+
+      errors.add(:location_name, 'Name is in use by another location')
+    end
+
+    def validate_school_location_name
+      return unless site_type == 'school'
+      return unless Site.school.exists?(location_name:)
+
+      errors.add(:location_name, 'Name is in use by another location')
+    end
 
     def validate_site
       skip = []

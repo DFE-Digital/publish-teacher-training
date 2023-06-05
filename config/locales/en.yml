@@ -53,6 +53,7 @@ en:
   navigation_bar:
     courses: "Courses"
     schools: "Schools"
+    study_sites: "Study sites"
     users: "Users"
     training_partners: "Training partners"
     organisation_details: "Organisation details"
@@ -265,6 +266,11 @@ en:
     update: "Update user"
   publish:
     providers:
+      study_sites:
+        index:
+          add_study_site: &add_study_site "Add study site"
+        new: *add_study_site
+        added: "Study site added"
       schools:
         index:
           add_school: &add_school "Add school"
@@ -283,9 +289,13 @@ en:
         postcode: &school_postcode "Postcode"
       school_search:
         new:
-          title: Enter a school, university, college, URN or postcode
+          title: &new_search Enter a school, university, college, URN or postcode
           caption: *add_school
-          cannot_find: I cannot find the school - enter manually
+          cannot_find: &cannot_find I cannot find the school - enter manually
+      study_site_search:
+        new:
+          title: *new_search
+          cannot_find: *cannot_find
       accredited_providers:
         new:
           title: About the accredited provider

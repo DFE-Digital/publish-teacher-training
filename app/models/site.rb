@@ -27,7 +27,7 @@ class Site < ApplicationRecord
     study_site: 1
   }
 
-  validates :location_name, uniqueness: { scope: :provider_id }
+  validates :location_name, uniqueness: { scope: %i[provider_id site_type] }
   validates :location_name,
             :address1,
             :postcode,
@@ -37,9 +37,10 @@ class Site < ApplicationRecord
   validates :town, presence: true, on: %i[create]
 
   validates :postcode, postcode: true
+  # we don't validate code for study_sites
   validates :code, uniqueness: { scope: :provider_id, case_sensitive: false, conditions: -> { where(discarded_at: nil) } },
                    format: { with: /\A[A-Z0-9-]+\z/, message: 'Site code must contain only A-Z, 0-9 or -' },
-                   presence: true
+                   presence: true, if: -> { school? }
 
   validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Site URN must be 5 or 6 numbers' }
 

@@ -1,0 +1,37 @@
+<%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
+  <%= f.govuk_error_summary %>
+
+  <%= f.govuk_text_field :location_name, label: { text: "Study site name", size: "s" } %>
+
+  <% if site.persisted? %>
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+      Study site code
+    </p>
+    <p class="govuk-body"><%= site.code %></p>
+  <% end %>
+
+  <%= f.govuk_text_field :urn,
+    label: { text: "Unique reference number (URN) (optional)", size: "s" },
+    form_group: { class: "govuk-!-margin-bottom-2" },
+    width: 10 %>
+
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    <%= t("links.urn_html") %>
+  </p>
+
+  <%= f.govuk_fieldset legend: { text: "Address", size: "m" } do %>
+    <%= f.govuk_text_field(:address1, label: { text: "Address line 1", size: "s" }) %>
+
+    <%= f.govuk_text_field(:address2, label: { text: "Address line 2 (optional)", size: "s" }) %>
+
+    <%= f.govuk_text_field(:address3, label: { text: "Address line 3 (optional)", size: "s" }) %>
+
+    <%= f.govuk_text_field(:town, label: { text: "Town or city", size: "s" }, width: "two-thirds") %>
+
+    <%= f.govuk_text_field(:address4, label: { text: "County (optional)", size: "s" }, width: "two-thirds") %>
+
+    <%= f.govuk_text_field(:postcode, label: { text: "Postcode", size: "s" }, width: 10) %>
+  <% end %>
+
+  <%= f.govuk_submit(site.persisted? ? t("publish.providers.schools.update") : t("continue")) %>
+<% end %>

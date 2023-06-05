@@ -1,0 +1,13 @@
+<tr class="govuk-table__row school-row">
+  <th class="govuk-table__header name" scope="row">
+    <%= govuk_link_to study_site.location_name, publish_provider_recruitment_cycle_study_site_path(@provider.provider_code, study_site.recruitment_cycle.year, study_site.id) %>
+  </th>
+  <td class="govuk-table__cell code">
+    <%= study_site.code %> <%= study_site.code == "-" ? "(dash)" : "" %>
+  </td>
+  <% if urn_required?(@recruitment_cycle.year.to_i) %>
+    <td class="govuk-table__cell urn">
+      <%= value_provided?(study_site.urn) %>
+    </td>
+  <% end %>
+</tr>

@@ -84,6 +84,7 @@ namespace :publish, as: :publish do
     get '/request-access', on: :member, to: 'providers/access_requests#new'
     post '/request-access', on: :member, to: 'providers/access_requests#create'
     get 'schools'
+    # get 'study-sites'
 
     resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '', only: [:show] do
       get '/about', on: :member, to: 'providers#about'
@@ -109,6 +110,10 @@ namespace :publish, as: :publish do
           get 'continue'
         end
         resource :schools, on: :member, only: %i[new], controller: 'courses/schools' do
+          get 'back'
+          get 'continue'
+        end
+        resource :study_sites, on: :member, only: %i[new], controller: 'courses/study_sites' do
           get 'back'
           get 'continue'
         end
@@ -253,6 +258,18 @@ namespace :publish, as: :publish do
           get '/search', on: :collection, to: 'school_search#new'
           post '/search', on: :collection, to: 'school_search#create'
           put '/search', on: :collection, to: 'school_search#update'
+        end
+
+        resource :check_study_site, only: %i[show update], controller: 'study_sites_check', path: 'study_sites/check'
+        resources :study_sites do
+          member do
+            get :delete
+            delete :delete, to: 'schools#destroy'
+          end
+
+          get '/search', on: :collection, to: 'study_site_search#new'
+          post '/search', on: :collection, to: 'study_site_search#create'
+          put '/search', on: :collection, to: 'study_site_search#update'
         end
 
         get '/contact', on: :member, to: 'contacts#edit'

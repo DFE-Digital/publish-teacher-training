@@ -42,6 +42,11 @@ module BreadcrumbHelper
     recruitment_cycle_breadcrumb.merge({ 'Schools' => path })
   end
 
+  def study_sites_breadcrumb
+    path = publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code, @recruitment_cycle.year)
+    recruitment_cycle_breadcrumb.merge({ 'Study sites' => path })
+  end
+
   def organisation_details_breadcrumb
     path = details_publish_provider_recruitment_cycle_path(@provider.provider_code, @recruitment_cycle.year)
     recruitment_cycle_breadcrumb.merge({ 'About your organisation' => path })
