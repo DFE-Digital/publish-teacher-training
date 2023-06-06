@@ -952,50 +952,6 @@ describe Course do
       end
     end
 
-    describe '.with_vacancies' do
-      subject { described_class.with_vacancies }
-
-      let(:test_course) { create(:course, site_statuses:) }
-
-      before { test_course }
-
-      context 'course has vacancies' do
-        let(:site_statuses) do
-          [
-            build(:site_status, :with_any_vacancy, :findable)
-          ]
-        end
-
-        it 'is returned' do
-          expect(subject).to contain_exactly(test_course)
-        end
-      end
-
-      context 'course has no vacancies' do
-        let(:site_statuses) do
-          [
-            build(:site_status, :no_vacancies, :findable)
-          ]
-        end
-
-        it 'is not returned' do
-          expect(subject).to be_empty
-        end
-      end
-
-      context 'course is not findable' do
-        let(:site_statuses) do
-          [
-            build(:site_status, :with_any_vacancy)
-          ]
-        end
-
-        it 'is not returned' do
-          expect(subject).to be_empty
-        end
-      end
-    end
-
     describe '.with_study_modes' do
       subject { described_class.with_study_modes(study_modes) }
 
@@ -1272,21 +1228,6 @@ describe Course do
         it 'returns courses for which the provider is the accredited provider' do
           expect(subject).to contain_exactly(accredited_course)
         end
-      end
-    end
-
-    context '::findable && ::with_vacancies' do
-      let(:course_in_scope) { create(:course) }
-      let(:course_not_in_scope) { create(:course) }
-
-      before do
-        create(:site_status, :published, :running, :full_time_vacancies, course: course_in_scope)
-        create(:site_status, :unpublished, :running, :full_time_vacancies, course: course_not_in_scope)
-        create(:site_status, :published, :running, :no_vacancies, course: course_not_in_scope)
-      end
-
-      it 'scopes are combined with AND and not OR' do
-        expect(described_class.findable.with_vacancies.to_a).to eql([course_in_scope])
       end
     end
 
