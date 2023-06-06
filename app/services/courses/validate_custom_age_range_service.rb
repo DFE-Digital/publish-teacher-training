@@ -3,7 +3,7 @@
 module Courses
   class ValidateCustomAgeRangeService
     def execute(age_range_in_years, course)
-      valid_age_range_regex = Regexp.new(/^(?<from>\d{1,2})_to_(?<to>\d{1,2})$/)
+      valid_age_range_regex = /^(?<from>\d{1,2})_to_(?<to>\d{1,2})$/
 
       if valid_age_range_regex.match(age_range_in_years)
         from_age = get_ages(age_range_in_years, valid_age_range_regex)['from']

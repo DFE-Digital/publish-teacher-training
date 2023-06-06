@@ -439,7 +439,7 @@ class Course < ApplicationRecord
 
   def has_vacancies?
     if site_statuses.loaded?
-      site_statuses.select(&:findable?).select(&:with_vacancies?).any?
+      site_statuses.select(&:findable?).any?(&:with_vacancies?)
     else
       site_statuses.findable.with_vacancies.any?
     end

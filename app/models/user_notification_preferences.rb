@@ -11,7 +11,7 @@ class UserNotificationPreferences
 
   def enabled
     # course_publish and course_update currently always have the same value
-    user_notifications.select(&:course_publish).any?
+    user_notifications.any?(&:course_publish)
   end
 
   def updated_at
