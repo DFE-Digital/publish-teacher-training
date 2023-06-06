@@ -272,6 +272,7 @@ en:
         new: *add_study_site
         update: Update study site
         added: "Study site added"
+        removed: "Study site removed"
         location_name: Study site name
         urn: "Unique reference number (URN)"
         address: Address

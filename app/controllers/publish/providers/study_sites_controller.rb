@@ -50,7 +50,7 @@ module Publish
 
       def destroy
         site.destroy!
-        flash[:success] = 'School removed'
+        flash[:success] = t('publish.providers.study_sites.update')
         redirect_to publish_provider_recruitment_cycle_study_sites_path
       end
 
