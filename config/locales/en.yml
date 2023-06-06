@@ -270,7 +270,17 @@ en:
         index:
           add_study_site: &add_study_site "Add study site"
         new: *add_study_site
+        update: Update study site
         added: "Study site added"
+        location_name: Study site name
+        urn: "Unique reference number (URN)"
+        address: Address
+        address1: "Address line 1"
+        address2: "Address line 2"
+        address3: "Town or city"
+        town: "Town or city"
+        address4: "County"
+        postcode: "Postcode"
       schools:
         index:
           add_school: &add_school "Add school"
@@ -388,6 +398,7 @@ en:
     actions:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
+      remove_study_site: "Remove study site"
     update_record: "Update"
     update_resource: "Update %{resource}"
     create_record: "Create"

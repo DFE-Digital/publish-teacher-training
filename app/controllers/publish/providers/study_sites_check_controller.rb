@@ -9,8 +9,6 @@ module Publish
       def show; end
 
       def update
-        #@study_site_form.model.site_type = 'study_site'
-        #binding.pry
         if @study_site_form.save!
           redirect_to publish_provider_recruitment_cycle_study_sites_path
           flash[:success] = t('publish.providers.study_sites.added')

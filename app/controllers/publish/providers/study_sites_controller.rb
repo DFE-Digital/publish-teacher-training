@@ -23,7 +23,6 @@ module Publish
       end
 
       def create
-        binding.pry
         @site = provider.sites.build(site_type: 'study_site')
         @study_site_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @study_site_form.stash
@@ -37,7 +36,7 @@ module Publish
         @study_site_form = SchoolForm.new(site, params: site_params(:publish_study_site_form))
 
         if @study_site_form.save!
-          course_updated_message('School')
+          course_updated_message('Study site')
 
           redirect_to publish_provider_recruitment_cycle_study_site_path(
             @study_site_form.provider_code, @study_site_form.recruitment_cycle_year, site.id
@@ -62,7 +61,7 @@ module Publish
       end
 
       def site
-        @site ||= provider.sites.find(params[:id])
+        @site ||= provider.study_sites.find(params[:id])
       end
 
       def site_params(param_form_key)
