@@ -17,9 +17,21 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    validate :validate_location_name
-    # validate :validate_school_location_name
+    delegate :provider, to: :site
+
+    def site
+      @model
+    end
+
+    validate :location_name_unique_to_provider
+    # what do we do with this?
     validate :validate_code
+    validates :location_name, presence: { message: 'Enter a name' }
+    validates :address1, presence: { message: 'Enter a building and street' }
+    validates :town, presence: { message: 'Enter a town or city' }
+    validates :postcode, presence: { message: 'Enter a postcode' }
+    validates :postcode, postcode: true
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }
 
     def full_address
       address = [address1, address2, address3, town, address4, postcode]
@@ -31,56 +43,24 @@ module Support
 
     private
 
-    def validate_location_name
-      if site_type == 'study_site'
-        errors.add(:location_name, 'Name is in use by another location') if Site.study_site.exists?(location_name:)
-      elsif Site.school.exists?(location_name:)
-        errors.add(:location_name, 'Name is in use by another location')
-      end
+    def location_name_unique_to_provider
+      sibling_sites = if site_type == 'study_type'
+                        provider.study_sites - [site]
+                      else
+                        provider.sites - [site]
+                      end
+      errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
     end
 
     def validate_code
       return if site_type == 'study_site'
 
-      errors.add(:code, 'Code has already been taken') if Site.school.exists?(code:)
+      errors.add(:code, 'Code has already been taken') if provider.sites.exists?(code:)
     end
 
-    def validate_study_site_location_name
-      return unless site_type == 'study_site'
-      return unless Site.study_site.exists?(location_name:)
-
-      errors.add(:location_name, 'Name is in use by another location')
-    end
-
-    def validate_school_location_name
-      return unless site_type == 'school'
-      return unless Site.school.exists?(location_name:)
-
-      errors.add(:location_name, 'Name is in use by another location')
-    end
-
-    def validate_site
-      skip = []
-      return if site.valid?
-
-      sites = @identifier_model.sites.where.not(id: nil)
-      # skip << :location_name unless sites.exists?(location_name:) || location_name.blank?
-      skip << :code unless sites.exists?(code:)
-
-      promote_errors(site.errors, skip)
-    end
-
-    def promote_errors(site_errors, skip)
-      site_errors.each do |site_error|
-        next if skip.include?(site_error.attribute)
-
-        errors.add(site_error.attribute, site_error.message)
-      end
-    end
-
-    def site
-      @site ||= @identifier_model.sites.build(fields)
-    end
+    # def site
+    #  @site ||= @identifier_model.sites.build(fields)
+    # end
 
     def form_store_key
       :location_details
