@@ -103,8 +103,8 @@ describe CourseReportingService do
         expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
         expect(distinct_courses_scope).to receive(:findable).and_return(findable_courses_scope)
 
-        expect(findable_courses_scope).to receive(:with_vacancies).and_return(open_courses_scope)
-        expect(findable_courses_scope).to receive_message_chain(:where, :not).and_return(closed_courses_scope)
+        expect(findable_courses_scope).to receive(:application_status_open).and_return(open_courses_scope)
+        expect(findable_courses_scope).to receive(:application_status_closed).and_return(closed_courses_scope)
 
         expect(findable_courses_scope).to receive(:count).and_return(findable_courses_count)
         expect(findable_courses_scope).to receive(:count).and_return(findable_courses_count)
