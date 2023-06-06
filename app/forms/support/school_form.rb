@@ -17,9 +17,9 @@ module Support
 
     attr_accessor(*FIELDS)
 
-    validate :validate_study_site_location_name
-    validate :validate_school_location_name
-    validate :validate_site
+    validate :validate_location_name
+    # validate :validate_school_location_name
+    validate :validate_code
 
     def full_address
       address = [address1, address2, address3, town, address4, postcode]
@@ -30,6 +30,20 @@ module Support
     end
 
     private
+
+    def validate_location_name
+      if site_type == 'study_site'
+        errors.add(:location_name, 'Name is in use by another location') if Site.study_site.exists?(location_name:)
+      elsif Site.school.exists?(location_name:)
+        errors.add(:location_name, 'Name is in use by another location')
+      end
+    end
+
+    def validate_code
+      return if site_type == 'study_type'
+
+      errors.add(:code, 'Code has already been taken') if Site.school.exists?(code:)
+    end
 
     def validate_study_site_location_name
       return unless site_type == 'study_site'
@@ -50,7 +64,7 @@ module Support
       return if site.valid?
 
       sites = @identifier_model.sites.where.not(id: nil)
-      skip << :location_name unless sites.exists?(location_name:) || location_name.blank?
+      # skip << :location_name unless sites.exists?(location_name:) || location_name.blank?
       skip << :code unless sites.exists?(code:)
 
       promote_errors(site.errors, skip)
