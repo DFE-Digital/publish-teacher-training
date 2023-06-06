@@ -23,7 +23,6 @@ module Publish
       end
 
       def create
-        # binding.pry
         @site = provider.sites.build
         @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @school_form.stash
