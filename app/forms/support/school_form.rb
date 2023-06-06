@@ -40,7 +40,7 @@ module Support
     end
 
     def validate_code
-      return if site_type == 'study_type'
+      return if site_type == 'study_site'
 
       errors.add(:code, 'Code has already been taken') if Site.school.exists?(code:)
     end
