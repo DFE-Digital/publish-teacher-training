@@ -44,7 +44,7 @@ module Support
     private
 
     def location_name_unique_to_provider
-      sibling_sites = if site_type == 'study_type'
+      sibling_sites = if site_type == 'study_site'
                         provider.study_sites - [site]
                       else
                         provider.sites - [site]
