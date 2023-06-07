@@ -24,7 +24,6 @@ module Support
     end
 
     validate :location_name_unique_to_provider
-    # what do we do with this?
     validate :validate_code
     validates :location_name, presence: true
     validates :address1, presence: true
