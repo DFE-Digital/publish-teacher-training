@@ -184,7 +184,7 @@ RSpec.describe Courses::CopyToProviderService do
     let!(:new_site) { create(:site, provider: new_provider, code: site.code) }
     let!(:site_status) do
       create(:site_status,
-             :with_no_vacancies,
+             :no_vacancies,
              course:,
              site:)
     end

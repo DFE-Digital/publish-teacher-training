@@ -92,9 +92,9 @@ feature 'Viewing a findable course' do
       site_statuses: [
         build(:site_status, :full_time_vacancies, :findable),
         build(:site_status, :full_time_vacancies, :suspended),
-        build(:site_status, :full_time_vacancies, :new),
-        build(:site_status, :with_no_vacancies, :new),
-        build(:site_status, :with_no_vacancies, :findable)
+        build(:site_status, :full_time_vacancies, :new_status),
+        build(:site_status, :no_vacancies, :new_status),
+        build(:site_status, :no_vacancies, :findable)
       ],
       enrichments: [
         build(
