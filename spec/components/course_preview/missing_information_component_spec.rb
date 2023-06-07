@@ -31,13 +31,14 @@ module CoursePreview
           train_with_us:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-us",
           about_accrediting_provider:
-        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#accrediting-provider-#{accrediting_provider.provider_code}"
+        "#{edit_publish_provider_recruitment_cycle_accredited_provider_path(provider_code, recruitment_cycle_year, accredited_provider_code: course.accredited_provider_code, goto_preview: true)}#accredited-provider-form-description-field"
         }
       end
 
       shared_examples 'course with missing information' do |information_type, text|
         before do
           allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
+          allow(Settings.features).to receive(:accredited_provider_search).and_return(true)
         end
 
         it "renders link for missing #{information_type}" do

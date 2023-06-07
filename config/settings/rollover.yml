@@ -1,0 +1,28 @@
+gcp_api_key: please_change_me
+publish_api_url: https://publish-teacher-training-rollover.london.cloudapps.digital
+publish_url: https://publish-rollover.london.cloudapps.digital
+find_url: https://find-rollover.london.cloudapps.digital
+#find_assets_url: https://sandbox-assets.find-postgraduate-teacher-training.service.gov.uk
+apply_base_url: https://apply-rollover.london.cloudapps.digital
+# apply-rollover doesnt exist
+
+environment:
+  label: "Rollover"
+  name: "rollover"
+
+search_ui:
+  base_url: https://find-rollover.london.cloudapps.digital
+
+base_url: https://publish-rollover.london.cloudapps.digital
+
+dfe_signin:
+  issuer: https://pp-oidc.signin.education.gov.uk
+  secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
+  profile: https://pp-profile.signin.education.gov.uk
+  user_search_url: https://pp-support.signin.education.gov.uk/users
+
+find_valid_referers:
+  - https://find-rollover.london.cloudapps.digital
+
+features:
+  send_request_data_to_bigquery: false

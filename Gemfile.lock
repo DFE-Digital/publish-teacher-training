@@ -176,7 +176,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.1.2)
       railties (>= 6.0.0)
-    data_migrate (9.0.0)
+    data_migrate (10.0.0)
       activerecord (>= 6.0)
       railties (>= 6.0)
     database_cleaner (2.0.2)
@@ -353,7 +353,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.13.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
@@ -377,7 +377,7 @@ GEM
       rspec-expectations
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
-    jsonb_accessor (1.3.8)
+    jsonb_accessor (1.3.10)
       activerecord (>= 5.0)
       activesupport (>= 5.0)
       pg (>= 0.18.1)
@@ -493,7 +493,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (5.0.1)
-    puma (6.2.2)
+    puma (6.3.0)
       nio4r (~> 2.0)
     pundit (2.3.0)
       activesupport (>= 3.0.0)
@@ -539,8 +539,9 @@ GEM
       activesupport (>= 4.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.5.0)
-      loofah (~> 2.19, >= 2.19.1)
+    rails-html-sanitizer (1.6.0)
+      loofah (~> 2.21)
+      nokogiri (~> 1.14)
     rails_semantic_logger (4.12.0)
       rack
       railties (>= 5.1)
@@ -586,7 +587,7 @@ GEM
     rspec-mocks (3.12.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-rails (6.0.2)
+    rspec-rails (6.0.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -803,7 +804,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
-  puma (~> 6.2)
+  puma (~> 6.3)
   pundit
   rack-cors
   rails (= 7.0.5)
@@ -814,7 +815,7 @@ DEPENDENCIES
   redcarpet
   request_store
   rspec-its
-  rspec-rails (= 6.0.2)
+  rspec-rails (= 6.0.3)
   rspec_junit_formatter
   rubocop
   rubocop-rails

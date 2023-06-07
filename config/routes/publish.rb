@@ -230,6 +230,9 @@ namespace :publish, as: :publish do
 
         get '/apprenticeship', on: :member, to: 'courses/apprenticeship#edit'
         put '/apprenticeship', on: :member, to: 'courses/apprenticeship#update'
+
+        get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
+        put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
       end
 
       scope module: :providers do

@@ -39,7 +39,7 @@
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with your organisation"
       ) %>
-      <% if @provider.accredited_bodies.present? %>
+      <% if !FeatureService.enabled?(:accredited_provider_search) && @provider.accredited_bodies.present? %>
         <% @provider.accredited_bodies.each do |accredited_provider| %>
           <% enrichment_summary(
             summary_list,
@@ -52,7 +52,6 @@
           ) %>
         <% end %>
       <% end %>
-
       <% enrichment_summary(
         summary_list,
         :provider,
