@@ -1,0 +1,94 @@
+name: Delete v2 Review App
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  deployments: write
+
+jobs:
+  delete-v2-review-app:
+    name: Delete v2 Review App ${{ github.event.pull_request.number }}
+    concurrency: deploy_v2_review_${{ github.event.pull_request.number }}
+    if: contains(github.event.pull_request.labels.*.name, 'deploy_v2')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Environment variables
+        run: |
+          terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=review_aks" >> $GITHUB_ENV
+          echo "TF_STATE_FILE=pr-$PR_NUMBER.tfstate" >> $GITHUB_ENV
+          echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
+          echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
+
+          pr_state_file=$(az storage blob list -c ptt-tfstate \
+           --connection-string $AZURE_STORAGE_CONNECTION_STRING \
+           --prefix pr-$PR_NUMBER.tfstate --query "[].name" -o tsv)
+
+          if [ ! -z "$pr_state_file" ]; then echo "TF_STATE_EXISTS=true" >> $GITHUB_ENV; fi;
+
+          tf_vars_file=terraform/aks/workspace_variables/review_aks.tfvars.json
+          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW_AKS }}
+
+      - name: Setup Terraform ${{ env.TERRAFORM_VERSION }}
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - uses: azure/login@v1
+        if: env.TF_STATE_EXISTS == 'true'
+        with:
+          creds: ${{ secrets[format('AZURE_CREDENTIALS_REVIEW_AKS')] }}
+
+      - name: Validate Azure Key Vault secrets
+        if: env.TF_STATE_EXISTS == 'true'
+        uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
+        with:
+          KEY_VAULT: ${{ env.key_vault_name }}
+          SECRETS: |
+            ${{ env.key_vault_app_secret_name }}
+            ${{ env.key_vault_infra_secret_name }}
+
+      - name: Terraform Destroy
+        if: env.TF_STATE_EXISTS == 'true'
+        run: make review_aks ci destroy
+        env:
+          ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
+          TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
+          APP_NAME:                   ${{ env.PR_NUMBER }}
+
+      - name: Delete tf state file
+        if: env.TF_STATE_EXISTS == 'true'
+        run: |
+            az storage blob delete -c ptt-tfstate --name ${{ env.TF_STATE_FILE }} \
+            --connection-string $AZURE_STORAGE_CONNECTION_STRING
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW_AKS }}
+
+      - name: Update ${{ matrix.environment }} status
+        id: deactivate-env
+        if:   ${{ always() && env.TF_STATE_EXISTS == 'true' }}
+        uses: bobheadxi/deployments@v1
+        with:
+          step:   deactivate-env
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    review_aks-${{ env.PR_NUMBER }}
+
+      - name: Delete review_aks-${{ env.PR_NUMBER }} environment
+        if:   always() && (steps.deactivate-env.outcome == 'success')
+        uses: bobheadxi/deployments@v1
+        with:
+          step:   delete-env
+          token:  ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
+          env:    review_aks-${{ env.PR_NUMBER }}

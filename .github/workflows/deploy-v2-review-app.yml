@@ -1,0 +1,62 @@
+name: Deploy v2 Review App
+concurrency: deploy_v2_${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        options:
+        - review_aks
+      pr-number:
+        description: PR number for the existing review app to deploy to
+        required: false
+      sha:
+        description: Commit sha of an existing build image to be deployed
+        required: true
+
+jobs:
+  deploy-v2-review-app:
+    name: Deployment To Review v2
+    concurrency: deploy_v2_review_${{ inputs.pr-number }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Start review_aks-${{ inputs.pr-number }} Deployment
+        uses: bobheadxi/deployments@v1
+        id:   deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env:   review_aks-${{ inputs.pr-number }}
+          ref: ${{ github.head_ref }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy App to Review v2
+        id: deploy_v2_review
+        uses: ./.github/actions/deploy_v2/
+        with:
+          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
+          environment: review_aks
+          pr-number: ${{ inputs.pr-number }}
+          sha: ${{ inputs.sha }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Update review_aks-${{ inputs.pr-number }} status
+        if:   always()
+        uses: bobheadxi/deployments@v1
+        with:
+          step:   finish
+          token:  ${{ secrets.GITHUB_TOKEN }}
+          env:    review_aks-${{ inputs.pr-number }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
+          ref: ${{ github.head_ref }}

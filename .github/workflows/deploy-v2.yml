@@ -1,0 +1,37 @@
+name: Deploy v2
+concurrency: build_and_deploy_v2_${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        default: qa_aks
+        options:
+        - qa_aks
+      sha:
+        description: Commit sha to be deployed
+        required: true
+
+jobs:
+  deploy:
+    name: Deployment to ${{ github.event.inputs.environment }}
+    environment:
+      name: ${{ github.event.inputs.environment }}
+      url: ${{ steps.deploy_app_v2.outputs.deploy-url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy App to ${{ github.event.inputs.environment }}
+        id: deploy_app_v2
+        uses: ./.github/actions/deploy_v2/
+        with:
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', github.event.inputs.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
+          environment: ${{ github.event.inputs.environment }}
+          sha: ${{ github.event.inputs.sha }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

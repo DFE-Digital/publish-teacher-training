@@ -33,7 +33,7 @@ services:
       - DB_PASSWORD=developmentpassword
       - CC_TEST_REPORTER_ID=${CC_TEST_REPORTER_ID}
       - AGENT_JOBSTATUS=${AGENT_JOBSTATUS}
-      - REDIS_URL=redis://redis:6379
+      - REDIS_WORKER_URL=redis://redis:6379
       - RAILS_ENV=test
     volumes:
       - ${PWD}/out:/app/coverage
@@ -50,4 +50,4 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=developmentpassword
       - SETTINGS__APPLICATION=teacher-training-api-bg
-      - REDIS_URL=redis://redis:6379
+      - REDIS_WORKER_URL=redis://redis:6379
