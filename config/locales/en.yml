@@ -719,7 +719,7 @@ en:
               blank: "Enter a postcode"
               invalid: "Enter a real postcode"
             urn:
-              format: "Site URN must be 5 or 6 numbers"
+              format: "URN must be 5 or 6 numbers"
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:

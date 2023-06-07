@@ -31,7 +31,7 @@ module Support
     validates :town, presence: true
     validates :postcode, presence: true
     validates :postcode, postcode: true
-    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6 }
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :format }
 
     def full_address
       address = [address1, address2, address3, town, address4, postcode]
