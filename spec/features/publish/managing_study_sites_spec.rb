@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature "Managing a provider's schools", { can_edit_current_and_next_cycles: false } do
+feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles: false } do
   before do
     given_the_study_sites_feature_is_active
     given_i_am_authenticated_as_a_provider_user
