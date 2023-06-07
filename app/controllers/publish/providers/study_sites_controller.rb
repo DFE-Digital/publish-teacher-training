@@ -5,6 +5,7 @@ module Publish
     class StudySitesController < PublishController
       before_action :pundit
       before_action :site, only: %i[show delete]
+      before_action :build_study_site, only: %i[new create]
 
       def index
         @study_sites = provider.study_sites.sort_by(&:location_name)
@@ -13,7 +14,6 @@ module Publish
       def show; end
 
       def new
-        @site = provider.study_sites.build
         @study_site_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
         @study_site_form.clear_stash
       end
@@ -23,7 +23,6 @@ module Publish
       end
 
       def create
-        @site = provider.study_sites.build
         @study_site_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @study_site_form.stash
           redirect_to publish_provider_recruitment_cycle_check_study_site_path
@@ -62,6 +61,10 @@ module Publish
 
       def site
         @site ||= provider.study_sites.find(params[:id])
+      end
+
+      def build_study_site
+        @site = provider.study_sites.build
       end
 
       def site_params(param_form_key)
