@@ -21,7 +21,7 @@ feature 'Viewing a findable course' do
 
     context 'end of cycle' do
       before do
-        Timecop.freeze(CycleTimetable.apply_2_deadline + 1.hour)
+        Timecop.freeze(CycleTimetable.find_closes - 1.hour)
 
         when_i_visit_the_course_page
       end
