@@ -40,7 +40,7 @@ module ApplicationHelper
   def enrichment_summary(summary_list, model, key, value, fields, truncate_value: true, action_path: nil, action_visually_hidden_text: nil)
     action = render_action(action_path, action_visually_hidden_text)
 
-    if fields.select { |field| @errors&.key? field.to_sym }.any?
+    if fields.any? { |field| @errors&.key? field.to_sym }
       errors = fields.map do |field|
         @errors[field.to_sym]&.map { |error| enrichment_error_link(model, field, error) }
       end.flatten
