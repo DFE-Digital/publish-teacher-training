@@ -189,30 +189,4 @@ RSpec.describe SiteStatus do
       end
     end
   end
-
-  describe '#vacancies_filled?' do
-    context 'vacancies filled' do
-      subject { create(:site_status, :running, :full_time_vacancies) }
-
-      before do
-        subject.assign_attributes(vac_status: 'no_vacancies')
-      end
-
-      it 'returns true' do
-        expect(subject.vacancies_filled?).to be(true)
-      end
-    end
-
-    context 'vacancies available' do
-      subject { create(:site_status, :running, :no_vacancies) }
-
-      before do
-        subject.assign_attributes(vac_status: 'full_time_vacancies')
-      end
-
-      it 'returns false' do
-        expect(subject.vacancies_filled?).to be(false)
-      end
-    end
-  end
 end
