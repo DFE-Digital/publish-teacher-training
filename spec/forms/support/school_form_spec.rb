@@ -47,7 +47,7 @@ describe Support::SchoolForm, type: :model do
       it 'is invalid' do
         params['postcode'] = ''
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ['Enter a postcode', 'Postcode is not valid (for example, BN1 1AA)'] })
+        expect(subject.errors.messages).to eq({ postcode: ['Enter a postcode', 'Enter a real postcode'] })
       end
     end
 
@@ -55,15 +55,15 @@ describe Support::SchoolForm, type: :model do
       it 'is invalid' do
         params['postcode'] = 'tr1'
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+        expect(subject.errors.messages).to eq({ postcode: ['Enter a real postcode'] })
 
         params['postcode'] = 'tr11'
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+        expect(subject.errors.messages).to eq({ postcode: ['Enter a real postcode'] })
 
         params['postcode'] = 'tr11u'
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ postcode: ['Postcode is not valid (for example, BN1 1AA)'] })
+        expect(subject.errors.messages).to eq({ postcode: ['Enter a real postcode'] })
       end
     end
 
@@ -78,11 +78,11 @@ describe Support::SchoolForm, type: :model do
       it 'is invalid' do
         params['urn'] = '123'
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ urn: ['Site URN must be 5 or 6 numbers'] })
+        expect(subject.errors.messages).to eq({ urn: ['URN must be 5 or 6 numbers'] })
 
         params['urn'] = 'qwert'
         expect(subject).not_to be_valid
-        expect(subject.errors.messages).to eq({ urn: ['Site URN must be 5 or 6 numbers'] })
+        expect(subject.errors.messages).to eq({ urn: ['URN must be 5 or 6 numbers'] })
       end
     end
 
@@ -106,7 +106,7 @@ describe Support::SchoolForm, type: :model do
 
       it 'is invalid' do
         expect(subject).not_to be_valid
-        expect(subject.errors[:location_name]).to include('Name is in use by another school')
+        expect(subject.errors[:location_name]).to include('Name is in use by another location')
       end
     end
   end

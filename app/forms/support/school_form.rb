@@ -26,12 +26,12 @@ module Support
     validate :location_name_unique_to_provider
     # what do we do with this?
     validate :validate_code
-    validates :location_name, presence: { message: 'Enter a name' }
-    validates :address1, presence: { message: 'Enter a building and street' }
-    validates :town, presence: { message: 'Enter a town or city' }
-    validates :postcode, presence: { message: 'Enter a postcode' }
+    validates :location_name, presence: true
+    validates :address1, presence: true
+    validates :town, presence: true
+    validates :postcode, presence: true
     validates :postcode, postcode: true
-    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6 }
 
     def full_address
       address = [address1, address2, address3, town, address4, postcode]

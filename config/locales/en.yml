@@ -435,7 +435,7 @@ en:
           attributes:
             location_name:
               blank: "Enter a name"
-              taken: "Name is in use by another school"
+              taken: "Name is in use by another location"
             address1:
               blank: "Enter address line 1"
             town:
