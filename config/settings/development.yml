@@ -17,7 +17,4 @@ find_url: https://find.localhost
 use_ssl: true
 
 features:
-  support_new_provider_creation_flow: true
-  accredited_provider_search: true
-  open_and_closed_course_flow: true
   study_sites: true

@@ -110,9 +110,9 @@ features:
   add_multiple_schools: true
   course_preview_missing_information: true
   gias_search: true
-  support_new_provider_creation_flow: false
-  accredited_provider_search: false
-  open_and_closed_course_flow: false
+  support_new_provider_creation_flow: true
+  accredited_provider_search: true
+  open_and_closed_course_flow: true
   study_sites: false
 
 cookies:
