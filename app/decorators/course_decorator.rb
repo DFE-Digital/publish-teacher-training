@@ -19,12 +19,6 @@ class CourseDecorator < ApplicationDecorator
     '24'
   end
 
-  def vacancies
-    content = object.has_vacancies? ? 'Yes' : 'No'
-    content += " (#{edit_vacancy_link})" unless object.is_withdrawn?
-    content.html_safe
-  end
-
   def find_url(provider = object.provider)
     h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code)
   end
@@ -379,12 +373,6 @@ class CourseDecorator < ApplicationDecorator
       'No - withdrawn'
     else
       'No'
-    end
-  end
-
-  def edit_vacancy_link
-    h.govuk_link_to(h.vacancies_publish_provider_recruitment_cycle_course_path(object.provider_code, object.recruitment_cycle.year, object.course_code)) do
-      h.raw("Change<span class=\"govuk-visually-hidden\"> vacancies for #{name_and_code}</span>")
     end
   end
 
