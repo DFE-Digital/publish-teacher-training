@@ -18,7 +18,7 @@
 
       <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
         <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-schools-search-form-query-field" } do %>
-          <span class="govuk-caption-l">Add study_site</span>
+          <span class="govuk-caption-l">Add study site</span>
           <%= I18n.t("publish.providers.study_site_search.new.title") %>
           <% if f.object.errors.present? %>
             <span class="govuk-error-message" id="publish-study_sites-search-form-query-field-error" data-qa="provider-error">

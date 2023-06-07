@@ -3,13 +3,6 @@
 
   <%= f.govuk_text_field :location_name, label: { text: "Study site name", size: "s" } %>
 
-  <% if site.persisted? %>
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
-      Study site code
-    </p>
-    <p class="govuk-body"><%= site.code %></p>
-  <% end %>
-
   <%= f.govuk_text_field :urn,
     label: { text: "Unique reference number (URN) (optional)", size: "s" },
     form_group: { class: "govuk-!-margin-bottom-2" },

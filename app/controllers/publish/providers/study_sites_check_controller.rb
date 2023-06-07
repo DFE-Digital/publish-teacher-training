@@ -28,7 +28,7 @@ module Publish
       end
 
       def site
-        @site ||= provider.sites.build(site_type: 'study_site')
+        @site ||= provider.study_sites.build
       end
     end
   end

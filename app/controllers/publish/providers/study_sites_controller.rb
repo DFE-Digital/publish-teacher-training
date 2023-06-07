@@ -13,7 +13,7 @@ module Publish
       def show; end
 
       def new
-        @site = provider.sites.build(site_type: 'study_site')
+        @site = provider.study_sites.build
         @study_site_form = ::Support::SchoolForm.new(provider, @site, params: gias_school_params)
         @study_site_form.clear_stash
       end
@@ -23,7 +23,7 @@ module Publish
       end
 
       def create
-        @site = provider.sites.build(site_type: 'study_site')
+        @site = provider.study_sites.build
         @study_site_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
         if @study_site_form.stash
           redirect_to publish_provider_recruitment_cycle_check_study_site_path

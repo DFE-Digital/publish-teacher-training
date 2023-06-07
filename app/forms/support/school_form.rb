@@ -58,10 +58,6 @@ module Support
       errors.add(:code, 'Code has already been taken') if provider.sites.exists?(code:)
     end
 
-    # def site
-    #  @site ||= @identifier_model.sites.build(fields)
-    # end
-
     def form_store_key
       :location_details
     end

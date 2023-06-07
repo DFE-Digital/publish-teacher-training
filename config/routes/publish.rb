@@ -84,7 +84,6 @@ namespace :publish, as: :publish do
     get '/request-access', on: :member, to: 'providers/access_requests#new'
     post '/request-access', on: :member, to: 'providers/access_requests#create'
     get 'schools'
-    # get 'study-sites'
 
     resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '', only: [:show] do
       get '/about', on: :member, to: 'providers#about'
