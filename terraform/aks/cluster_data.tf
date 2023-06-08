@@ -1,4 +1,4 @@
 module "cluster_data" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/cluster_data?ref=stable"
+  source = "./vendor/modules/aks//aks/cluster_data"
   name   = var.cluster
 }

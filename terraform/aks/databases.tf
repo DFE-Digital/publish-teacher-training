@@ -1,5 +1,5 @@
 module "redis_worker" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=main"
+  source = "./vendor/modules/aks//aks/redis"
 
   name                  = "worker"
   namespace             = var.namespace
@@ -17,7 +17,7 @@ module "redis_worker" {
 }
 
 module "redis_cache" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/redis?ref=main"
+  source = "./vendor/modules/aks//aks/redis"
 
   name                  = "cache"
   namespace             = var.namespace
@@ -34,7 +34,7 @@ module "redis_cache" {
 }
 
 module "postgres" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/postgres?ref=main"
+  source = "./vendor/modules/aks//aks/postgres"
 
   namespace             = var.namespace
   environment           = local.environment

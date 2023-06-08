@@ -1,5 +1,5 @@
 module "application_configuration" {
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application_configuration?ref=main"
+  source = "./vendor/modules/aks//aks/application_configuration"
 
   namespace             = var.namespace
   environment           = local.environment
@@ -14,7 +14,7 @@ module "application_configuration" {
 module "web_application" {
   for_each = var.main_app
 
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=main"
+  source = "./vendor/modules/aks//aks/application"
 
   is_web = true
 
@@ -37,7 +37,7 @@ module "web_application" {
 module "worker_application" {
   for_each = var.worker_apps
 
-  source = "git::https://github.com/DFE-Digital/terraform-modules.git//aks/application?ref=main"
+  source = "./vendor/modules/aks//aks/application"
 
   name   = "worker"
   is_web = false
