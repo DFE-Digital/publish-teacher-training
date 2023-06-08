@@ -113,6 +113,7 @@ features:
   support_new_provider_creation_flow: true
   accredited_provider_search: true
   open_and_closed_course_flow: true
+  study_sites: false
 
 cookies:
   session:

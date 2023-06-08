@@ -12,11 +12,25 @@ module Support
       town
       address4
       postcode
+      site_type
     ].freeze
 
     attr_accessor(*FIELDS)
 
-    validate :validate_site
+    delegate :provider, to: :site
+
+    def site
+      @model
+    end
+
+    validate :location_name_unique_to_provider
+    validate :validate_code
+    validates :location_name, presence: true
+    validates :address1, presence: true
+    validates :town, presence: true
+    validates :postcode, presence: true
+    validates :postcode, postcode: true
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :format }
 
     def full_address
       address = [address1, address2, address3, town, address4, postcode]
@@ -28,27 +42,19 @@ module Support
 
     private
 
-    def validate_site
-      skip = []
-      return if site.valid?
-
-      sites = @identifier_model.sites.where.not(id: nil)
-      skip << :location_name unless sites.exists?(location_name:) || location_name.blank?
-      skip << :code unless sites.exists?(code:)
-
-      promote_errors(site.errors, skip)
+    def location_name_unique_to_provider
+      sibling_sites = if site_type == 'study_site'
+                        provider.study_sites - [site]
+                      else
+                        provider.sites - [site]
+                      end
+      errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
     end
 
-    def promote_errors(site_errors, skip)
-      site_errors.each do |site_error|
-        next if skip.include?(site_error.attribute)
+    def validate_code
+      return if site_type == 'study_site'
 
-        errors.add(site_error.attribute, site_error.message)
-      end
-    end
-
-    def site
-      @site ||= @identifier_model.sites.build(fields)
+      errors.add(:code, 'Code has already been taken') if provider.sites.exists?(code:)
     end
 
     def form_store_key

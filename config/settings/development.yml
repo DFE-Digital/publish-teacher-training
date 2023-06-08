@@ -16,3 +16,5 @@ base_url: https://publish.localhost
 find_url: https://find.localhost
 use_ssl: true
 
+features:
+  study_sites: true

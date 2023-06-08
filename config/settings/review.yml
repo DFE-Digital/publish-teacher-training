@@ -15,3 +15,5 @@ authentication:
   secret: secret
   mode: persona
 
+features:
+  study_sites: true

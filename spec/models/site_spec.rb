@@ -17,9 +17,23 @@ describe Site do
   it { is_expected.to validate_presence_of(:address1) }
   it { is_expected.to validate_presence_of(:town).on(:create) }
   it { is_expected.to validate_presence_of(:postcode) }
-  it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id) }
-  it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
-  it { is_expected.to validate_presence_of(:code) }
+  it { is_expected.to validate_uniqueness_of(:location_name).scoped_to(:provider_id, :site_type) }
+
+  describe '#code' do
+    context 'with school' do
+      before { subject.school! }
+
+      it { is_expected.to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
+      it { is_expected.to validate_presence_of(:code) }
+    end
+
+    context 'with study_site' do
+      before { subject.study_site! }
+
+      it { is_expected.not_to validate_uniqueness_of(:code).case_insensitive.scoped_to(:provider_id) }
+      it { is_expected.not_to validate_presence_of(:code) }
+    end
+  end
 
   it 'validates that code can only contain A-Z, 0-9 or -' do
     subject.code = '22,A'

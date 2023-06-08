@@ -56,6 +56,7 @@ en:
   navigation_bar:
     courses: "Courses"
     schools: "Schools"
+    study_sites: "Study sites"
     users: "Users"
     training_partners: "Training partners"
     organisation_details: "Organisation details"
@@ -268,6 +269,22 @@ en:
     update: "Update user"
   publish:
     providers:
+      study_sites:
+        index:
+          add_study_site: &add_study_site "Add study site"
+        new: *add_study_site
+        update: Update study site
+        added: "Study site added"
+        removed: "Study site removed"
+        location_name: Study site name
+        urn: "Unique reference number (URN)"
+        address: Address
+        address1: "Address line 1"
+        address2: "Address line 2"
+        address3: "Town or city"
+        town: "Town or city"
+        address4: "County"
+        postcode: "Postcode"
       schools:
         index:
           add_school: &add_school "Add school"
@@ -286,9 +303,13 @@ en:
         postcode: &school_postcode "Postcode"
       school_search:
         new:
-          title: Enter a school, university, college, URN or postcode
+          title: &new_search Enter a school, university, college, URN or postcode
           caption: *add_school
-          cannot_find: I cannot find the school - enter manually
+          cannot_find: &cannot_find I cannot find the school - enter manually
+      study_site_search:
+        new:
+          title: *new_search
+          cannot_find: *cannot_find
       accredited_providers:
         new:
           title: About the accredited provider
@@ -381,6 +402,7 @@ en:
     actions:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
+      remove_study_site: "Remove study site"
     update_record: "Update"
     update_resource: "Update %{resource}"
     create_record: "Create"
@@ -416,7 +438,7 @@ en:
           attributes:
             location_name:
               blank: "Enter a name"
-              taken: "Name is in use by another school"
+              taken: "Name is in use by another location"
             address1:
               blank: "Enter address line 1"
             town:
@@ -700,7 +722,7 @@ en:
               blank: "Enter a postcode"
               invalid: "Enter a real postcode"
             urn:
-              format: "Site URN must be 5 or 6 numbers"
+              format: "URN must be 5 or 6 numbers"
         support/raw_csv_schools_form:
           blank: "Enter school details"
         publish/course_information_form:

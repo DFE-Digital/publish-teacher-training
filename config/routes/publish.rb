@@ -112,6 +112,10 @@ namespace :publish, as: :publish do
           get 'back'
           get 'continue'
         end
+        resource :study_sites, on: :member, only: %i[new], controller: 'courses/study_sites' do
+          get 'back'
+          get 'continue'
+        end
         resource :start_date, on: :member, only: %i[new], controller: 'courses/start_date', path: 'start-date' do
           get 'continue'
         end
@@ -256,6 +260,18 @@ namespace :publish, as: :publish do
           get '/search', on: :collection, to: 'school_search#new'
           post '/search', on: :collection, to: 'school_search#create'
           put '/search', on: :collection, to: 'school_search#update'
+        end
+
+        resource :check_study_site, only: %i[show update], controller: 'study_sites_check', path: 'study_sites/check'
+        resources :study_sites do
+          member do
+            get :delete
+            delete :delete, to: 'schools#destroy'
+          end
+
+          get '/search', on: :collection, to: 'study_site_search#new'
+          post '/search', on: :collection, to: 'study_site_search#create'
+          put '/search', on: :collection, to: 'study_site_search#update'
         end
 
         get '/contact', on: :member, to: 'contacts#edit'
