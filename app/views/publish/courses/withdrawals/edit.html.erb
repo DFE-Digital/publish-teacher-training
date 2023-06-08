@@ -35,7 +35,7 @@
 
       <p class="govuk-body">Once you’ve withdrawn a course, you cannot publish it again in this recruitment cycle.</p>
 
-      <% if @course.application_status_open? && FeatureService.enabled?(:open_and_closed_course_flow) %>
+      <% if @course.application_status_open? %>
         <p class="govuk-body">If you want to stop new candidates from applying but do not want to withdraw any applications currently in progress, you can <%= govuk_link_to("close the course instead", application_status_publish_provider_recruitment_cycle_course_path(goto: :withdraw)) %>.
         </p>
       <% end %>
