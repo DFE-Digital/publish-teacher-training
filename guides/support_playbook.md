@@ -21,7 +21,7 @@ course = RecruitmentCycle.current.providers.find_by(provider_code: "138459").cou
 course.enrichments.max_by(&:created_at).update(status: "published", last_published_timestamp_utc: Time.now.utc)
 
 course.site_statuses.each do |site_status|
-  site_status.update(vac_status: :no_vacancies, status: :running)
+  site_status.update(status: :running)
 end
 ```
 
@@ -34,7 +34,7 @@ course = RecruitmentCycle.current.providers.find_by(provider_code: "B72").course
 course.enrichments.max_by(&:created_at).update(status: "draft", last_published_timestamp_utc: nil)
 
 course.site_statuses.each do |site_status|
-  site_status.update(vac_status: :full_time_vacancies, status: :new_status, publish: :unpublished)
+  site_status.update(status: :new_status, publish: :unpublished)
 end
 ```
 
