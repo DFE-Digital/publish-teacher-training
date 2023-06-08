@@ -85,7 +85,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'F',
     publish: 'Y',
     course: primary_course,
     status: 'R'
@@ -113,7 +112,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: secondary_course1,
     status: 'N'
@@ -142,7 +140,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: secondary_course2,
     status: 'N'
@@ -170,7 +167,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: further_education_course,
     status: 'N'
@@ -199,7 +195,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: modern_language_course1,
     status: 'N'
@@ -228,7 +223,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: modern_language_course2,
     status: 'N'
@@ -260,7 +254,6 @@ def create_standard_provider_and_courses_for_cycle(recruitment_cycle, superuser)
 
   SiteStatus.create!(
     site: Site.last,
-    vac_status: 'B',
     publish: 'Y',
     course: modern_language_course3,
     status: 'N'
