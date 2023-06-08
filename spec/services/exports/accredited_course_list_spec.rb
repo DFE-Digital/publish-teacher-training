@@ -28,8 +28,7 @@ module Exports
           'Qualification' => course.outcome,
           'Status' => course.content_status&.to_s&.humanize,
           'View on Find' => course.find_url,
-          'Applications open from' => I18n.l(course.applications_open_from&.to_date),
-          'Vacancies' => 'Yes'
+          'Applications open from' => I18n.l(course.applications_open_from&.to_date)
         }
       end
 
