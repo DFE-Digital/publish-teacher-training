@@ -1,5 +1,5 @@
 <div class="govuk-!-margin-bottom-8" id="section-apply">
-  <% if CycleTimetable.mid_cycle? %>
+  <% if Find::CycleTimetable.mid_cycle? %>
     <% if has_vacancies? %>
       <p class="govuk-body">
         <%= govuk_start_button(
@@ -26,10 +26,10 @@
 
       <ul class="govuk-list govuk-list--bullet">
         <li>
-          find courses starting in the <%= CycleTimetable.next_cycle_year_range %>
-          academic year from <%= CycleTimetable.find_reopens.to_fs(:govuk_date_and_time) %>
+          find courses starting in the <%= Find::CycleTimetable.next_cycle_year_range %>
+          academic year from <%= Find::CycleTimetable.find_reopens.to_fs(:govuk_date_and_time) %>
         </li>
-        <li>submit your application from <%= CycleTimetable.apply_reopens.to_fs(:govuk_date_and_time) %></li>
+        <li>submit your application from <%= Find::CycleTimetable.apply_reopens.to_fs(:govuk_date_and_time) %></li>
       </ul>
     </div>
   <% end %>

@@ -23,22 +23,22 @@ module Find
         find_opens: Time.zone.local(2022, 10, 4, 9),
         apply_opens: Time.zone.local(2022, 10, 11, 9),
 
-        # NOTE: the dates from below here are not the finalised but are required
-        # for the current implementation
-        first_deadline_banner: Time.zone.local(2023, 7, 12, 9),
-        apply_1_deadline: Time.zone.local(2023, 9, 7, 18),
-        apply_2_deadline: Time.zone.local(2023, 9, 21, 18),
-        find_closes: Time.zone.local(2023, 10, 4, 23, 59, 59)
+        first_deadline_banner: Time.zone.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
+        apply_1_deadline: Time.zone.local(2023, 9, 5, 18), # First Tuesday of September
+        apply_2_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
+        find_closes: Time.zone.local(2023, 10, 2, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2024 => {
-        find_opens: Time.zone.local(2023, 10, 5, 9),
-        apply_opens: Time.zone.local(2023, 10, 12, 9),
-        first_deadline_banner: Time.zone.local(2024, 7, 12, 9),
-        apply_1_deadline: Time.zone.local(2024, 9, 7, 18),
-        apply_2_deadline: Time.zone.local(2024, 9, 21, 18),
-        find_closes: Time.zone.local(2024, 10, 4, 23, 59, 59)
+        find_opens: Time.zone.local(2023, 10, 3, 9), # First Tuesday of October
+        apply_opens: Time.zone.local(2023, 10, 10, 9), # Second Tuesday of October
+        first_deadline_banner: Time.zone.local(2024, 7, 30, 9), # 5 weeks before Apply 1 deadline
+        apply_1_deadline: Time.zone.local(2024, 9, 3, 18), # First Tuesday of September
+        apply_2_deadline: Time.zone.local(2024, 9, 17, 18), # 2 weeks after Apply 1 deadline
+        find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2025 => {
+        # NOTE: the dates from below here are not the finalised but are required
+        # for the current implementation
         find_opens: Time.zone.local(2024, 10, 5, 9),
         apply_opens: Time.zone.local(2024, 10, 12, 9),
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
@@ -68,6 +68,10 @@ module Find
 
     def self.next_year
       current_year + 1
+    end
+
+    def self.previous_year
+      current_year - 1
     end
 
     def self.find_closes
