@@ -4,8 +4,8 @@ class CourseReportingService
   def initialize(courses_scope: Course)
     @courses = courses_scope.distinct
     @findable_courses = @courses.findable
-    @open_courses = @findable_courses.with_vacancies
-    @closed_courses = @findable_courses.where.not(id: @open_courses)
+    @open_courses = @findable_courses.application_status_open
+    @closed_courses = @findable_courses.application_status_closed
   end
 
   class << self

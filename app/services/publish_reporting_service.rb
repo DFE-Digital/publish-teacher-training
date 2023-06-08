@@ -109,8 +109,8 @@ class PublishReportingService
     courses_changed_recently = @courses.changed_at_since(days_ago)
 
     findable_courses = courses_changed_recently.findable.distinct
-    open_courses = findable_courses.with_vacancies
-    closed_courses = findable_courses.where.not(id: open_courses)
+    open_courses = findable_courses.application_status_open
+    closed_courses = findable_courses.application_status_closed
 
     courses_changed_recently_count = courses_changed_recently.count
     findable_courses_count = findable_courses.count

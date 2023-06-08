@@ -102,8 +102,8 @@ describe PublishReportingService do
 
         expect(courses_scope).to receive(:changed_at_since).and_return(courses_changed_at_since_scope)
         expect(courses_changed_at_since_scope).to receive_message_chain(:findable, :distinct).and_return(courses_findable_scope)
-        expect(courses_findable_scope).to receive(:with_vacancies).and_return(open_courses_scope)
-        expect(courses_findable_scope).to receive_message_chain(:where, :not).with(id: open_courses_scope).and_return(closed_courses_scope)
+        expect(courses_findable_scope).to receive(:application_status_open).and_return(open_courses_scope)
+        expect(courses_findable_scope).to receive(:application_status_closed).and_return(closed_courses_scope)
         expect(courses_changed_at_since_scope).to receive(:count).and_return(courses_changed_at_since_count)
         expect(courses_findable_scope).to receive(:count).and_return(courses_findable_count)
         expect(open_courses_scope).to receive(:count).and_return(open_courses_count)

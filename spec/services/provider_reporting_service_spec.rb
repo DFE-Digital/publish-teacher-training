@@ -98,7 +98,7 @@ describe ProviderReportingService do
         expect(distinct_providers_scope).to receive(:where).with(id: Course.findable.select(:provider_id)).and_return(training_providers_scope)
 
         expect(distinct_providers_scope).to receive(:where)
-          .with(id: Course.findable.with_vacancies.select(:provider_id))
+          .with(id: Course.findable.application_status_open.select(:provider_id))
           .and_return(open_providers_scope)
 
         expect(training_providers_scope).to receive_message_chain(:where, :not).and_return(closed_providers_scope)
