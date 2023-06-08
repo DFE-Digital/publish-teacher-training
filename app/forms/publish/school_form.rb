@@ -26,10 +26,10 @@ module Publish
     validate :location_name_unique_to_provider
     validates :location_name, presence: true
     validates :address1, presence: true
-    validates :town, presence: { message: 'Enter a town or city' }
-    validates :postcode, presence: { message: 'Enter a postcode' }
-    validates :postcode, postcode: { message: 'Postcode is not valid (for example, BN1 1AA)' }
-    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }
+    validates :town, presence: true
+    validates :postcode, presence: true
+    validates :postcode, postcode: true
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :format }
 
     private
 
