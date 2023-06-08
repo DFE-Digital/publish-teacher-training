@@ -4,7 +4,7 @@ module Find
   class DeadlineBannerComponent < ViewComponent::Base
     attr_accessor :flash_empty
 
-    def initialize(flash_empty:, cycle_timetable: CycleTimetable)
+    def initialize(flash_empty:, cycle_timetable: Find::CycleTimetable)
       super
       @flash_empty = flash_empty
       @cycle_timetable = cycle_timetable

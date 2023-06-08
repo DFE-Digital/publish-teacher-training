@@ -7,7 +7,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
   context 'it is mid cycle' do
     before do
-      allow(CycleTimetable).to receive(:mid_cycle?).and_return(true)
+      allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(true)
     end
 
     it 'renders the apply button when there are vacancies' do
@@ -40,7 +40,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
   context 'it is not mid cycle' do
     it 'displays that courses are currently closed' do
-      allow(CycleTimetable).to receive(:mid_cycle?).and_return(false)
+      allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(false)
 
       course = build(:course, provider:, site_statuses: [create(:site_status, :unpublished, :running)])
 
