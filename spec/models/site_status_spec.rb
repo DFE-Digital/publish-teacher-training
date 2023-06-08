@@ -36,7 +36,7 @@ RSpec.describe SiteStatus do
     end
 
     describe 'if new on UCAS' do
-      subject { create(:site_status, :new) }
+      subject { create(:site_status, :new_status) }
 
       it { is_expected.not_to be_findable }
     end
@@ -66,7 +66,7 @@ RSpec.describe SiteStatus do
     end
 
     context 'if new on UCAS' do
-      it { is_expected.not_to include(create(:site_status, :new)) }
+      it { is_expected.not_to include(create(:site_status, :new_status)) }
     end
 
     describe 'if running but not published on UCAS' do
@@ -102,7 +102,7 @@ RSpec.describe SiteStatus do
     end
 
     describe 'if has no vacancies' do
-      subject { create(:site_status, :with_no_vacancies) }
+      subject { create(:site_status, :no_vacancies) }
 
       it { is_expected.not_to have_vacancies }
     end
@@ -180,7 +180,7 @@ RSpec.describe SiteStatus do
       it { is_expected.to be_unpublished_on_ucas }
     end
 
-    %i[new suspended discontinued].each do |status|
+    %i[new_status suspended discontinued].each do |status|
       describe "when starting a #{status}, unpublished site status" do
         subject { create(:site_status, status, :unpublished).tap(&:start!).reload }
 
@@ -204,7 +204,7 @@ RSpec.describe SiteStatus do
     end
 
     context 'vacancies available' do
-      subject { create(:site_status, :running, :with_no_vacancies) }
+      subject { create(:site_status, :running, :no_vacancies) }
 
       before do
         subject.assign_attributes(vac_status: 'full_time_vacancies')

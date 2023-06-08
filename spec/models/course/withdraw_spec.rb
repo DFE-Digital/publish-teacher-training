@@ -8,8 +8,8 @@ describe Course do
     let(:provider) { build(:provider) }
     let(:enrichment) { build(:course_enrichment) }
     let(:site_status1) { build(:site_status, :running, :published, :full_time_vacancies, site:) }
-    let(:site_status2) { build(:site_status, :new, :full_time_vacancies, site:) }
-    let(:site_status3) { build(:site_status, :suspended, :with_no_vacancies, site:) }
+    let(:site_status2) { build(:site_status, :new_status, :full_time_vacancies, site:) }
+    let(:site_status3) { build(:site_status, :suspended, :no_vacancies, site:) }
     let(:site) { build(:site, provider:) }
 
     before do

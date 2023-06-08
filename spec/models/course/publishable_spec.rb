@@ -8,7 +8,7 @@ describe Course do
 
     let(:course) { create(:course) }
     let(:site) { create(:site) }
-    let(:site_status) { create(:site_status, :new, site:) }
+    let(:site_status) { create(:site_status, :new_status, site:) }
 
     its(:publishable?) { is_expected.to be_falsey }
 

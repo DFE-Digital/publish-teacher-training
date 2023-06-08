@@ -571,7 +571,7 @@ module Find
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site3),
             build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site4, status: 'suspended'),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :with_no_vacancies, site: site5)
+            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :no_vacancies, site: site5)
           ]
         )
       end

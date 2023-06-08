@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Course do
   describe '#publish_sites' do
-    let(:published_new_site)            { create(:site_status, :published, :new) }
+    let(:published_new_site)            { create(:site_status, :published, :new_status) }
     let(:published_running_site)        { create(:site_status, :published, :running) }
     let(:published_discontinued_site)   { create(:site_status, :published, :discontinued) }
     let(:published_suspended_site)      { create(:site_status, :published, :suspended) }
-    let(:unpublished_new_site)          { create(:site_status, :unpublished, :new) }
+    let(:unpublished_new_site)          { create(:site_status, :unpublished, :new_status) }
     let(:unpublished_running_site)      { create(:site_status, :unpublished, :running) }
     let(:unpublished_discontinued_site) { create(:site_status, :unpublished, :discontinued) }
     let(:unpublished_suspended_site)    { create(:site_status, :unpublished, :suspended) }

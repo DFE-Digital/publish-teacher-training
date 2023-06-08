@@ -297,9 +297,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
     site_status2 = build(:site_status, :published, :full_time_vacancies, :suspended, site: site2)
-    site_status3 = build(:site_status, :published, :full_time_vacancies, :new, site: site3)
-    site_status4 = build(:site_status, :published, :with_no_vacancies, :new, site: site4)
-    site_status5 = build(:site_status, :published, :with_no_vacancies, :running, site: site5)
+    site_status3 = build(:site_status, :published, :full_time_vacancies, :new_status, site: site3)
+    site_status4 = build(:site_status, :published, :no_vacancies, :new_status, site: site4)
+    site_status5 = build(:site_status, :published, :no_vacancies, :running, site: site5)
 
     sites = [site1, site2, site3, site4, site5]
     site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]

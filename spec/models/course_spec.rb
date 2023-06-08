@@ -653,7 +653,7 @@ describe Course do
       context 'invalid subjects' do
         let(:initial_draft_enrichment) { build(:course_enrichment, :published) }
         # This skips validations to ensure we don't have any legacy data that could be published
-        let(:course) { create(:course, :skip_validate, level: :secondary, infer_subjects?: false, site_statuses: [create(:site_status, :new)], enrichments: [initial_draft_enrichment]) }
+        let(:course) { create(:course, :skip_validate, level: :secondary, infer_subjects?: false, site_statuses: [create(:site_status, :new_status)], enrichments: [initial_draft_enrichment]) }
 
         before do
           subject.publishable?
@@ -974,7 +974,7 @@ describe Course do
       context 'course has no vacancies' do
         let(:site_statuses) do
           [
-            build(:site_status, :with_no_vacancies, :findable)
+            build(:site_status, :no_vacancies, :findable)
           ]
         end
 
@@ -1282,7 +1282,7 @@ describe Course do
       before do
         create(:site_status, :published, :running, :full_time_vacancies, course: course_in_scope)
         create(:site_status, :unpublished, :running, :full_time_vacancies, course: course_not_in_scope)
-        create(:site_status, :published, :running, :with_no_vacancies, course: course_not_in_scope)
+        create(:site_status, :published, :running, :no_vacancies, course: course_not_in_scope)
       end
 
       it 'scopes are combined with AND and not OR' do
@@ -1407,7 +1407,7 @@ describe Course do
     end
 
     describe 'sites=' do
-      let(:new_site_status) { build(:site_status, :new, site: site_with_new_site_status) }
+      let(:new_site_status) { build(:site_status, :new_status, site: site_with_new_site_status) }
       let(:site_with_new_site_status) { build(:site, provider:) }
 
       before do
@@ -1466,18 +1466,18 @@ describe Course do
 
     let(:provider) { build(:provider, sites: [site]) }
     let(:site) { build(:site) }
-    let(:new_site_status) { build(:site_status, :new, site:) }
-    let(:new_site_status2) { build(:site_status, :new, site:) }
+    let(:new_site_status) { build(:site_status, :new_status, site:) }
+    let(:new_site_status2) { build(:site_status, :new_status, site:) }
     let(:findable) { build(:site_status, :findable, site:) }
     let(:suspended) { build(:site_status, :suspended, site:) }
     let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site:) }
     let(:default) { build(:site_status, site:) }
-    let(:site_status_with_no_vacancies) { build(:site_status, :with_no_vacancies, site:) }
-    let(:findable_without_vacancies) { build(:site_status, :findable, :with_no_vacancies, site:) }
+    let(:site_status_with_no_vacancies) { build(:site_status, :no_vacancies, site:) }
+    let(:findable_without_vacancies) { build(:site_status, :findable, :no_vacancies, site:) }
     let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
     let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
     let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
-    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :with_no_vacancies, site:) }
+    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :no_vacancies, site:) }
     let(:site_statuses) { [] }
 
     describe '#findable_site_statuses' do
@@ -1807,7 +1807,7 @@ describe Course do
       context 'with a new site_status' do
         subject { create(:course, site_statuses: [new]) }
 
-        let(:new) { build(:site_status, :new) }
+        let(:new) { build(:site_status, :new_status) }
 
         its(:ucas_status) { is_expected.to eq :new }
       end
@@ -2180,7 +2180,7 @@ describe Course do
     end
 
     context 'for new courses' do
-      let(:existing_site_status) { create(:site_status, :new, site: existing_site) }
+      let(:existing_site_status) { create(:site_status, :new_status, site: existing_site) }
 
       it 'sets the site to new when a new site is added' do
         expect { subject.sites = [existing_site, new_site] }.to change { subject.reload.site_statuses.size }.from(1).to(2)
@@ -2377,7 +2377,7 @@ describe Course do
         course = create(:course)
 
         site = create(:site)
-        create(:site_status, :new, site:, course:)
+        create(:site_status, :new_status, site:, course:)
 
         course
       end
