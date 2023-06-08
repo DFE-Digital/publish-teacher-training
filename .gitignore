@@ -38,6 +38,10 @@ bin/fetch_config.rb
 # Azure backend access script used in Makefile
 bin/konduit.sh
 
+# Downloaded terraform modules & terrafile
+bin/terrafile
+terraform/aks/vendor/
+
 *.patch
 *.swp
 

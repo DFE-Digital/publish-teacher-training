@@ -3,6 +3,7 @@ ifndef VERBOSE
 endif
 SERVICE_SHORT=ptt
 SERVICE_NAME=publish
+TERRAFILE_VERSION=0.8
 
 help:
 	echo "Environment setup targets:"
@@ -34,6 +35,12 @@ help:
 	echo "  Deploy an pre-built image to qa"
 	echo ""
 	echo "        make qa deploy IMAGE_TAG=GIT_REF PASSCODE=<CF_SSO_CODE>"
+
+install-terrafile: ## Install terrafile to manage terraform modules
+	[ ! -f bin/terrafile ] \
+		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
+		| tar xz -C ./bin terrafile \
+		|| true
 
 review:
 	$(eval DEPLOY_ENV=review)
@@ -141,12 +148,13 @@ ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
 	$(eval export AUTO_APPROVE=-auto-approve)
 
-deploy-init:
+deploy-init: install-terrafile
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
 	$(if $(or $(DISABLE_PASSCODE),$(PASSCODE)), , $(error Missing environment variable "PASSCODE", retrieve from https://login.london.cloud.service.gov.uk/passcode))
 	$(eval export TF_VAR_cf_sso_passcode=$(PASSCODE))
 	$(eval export TF_VAR_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
+	[ "${RUN_TERRAFILE}" = "yes" ] && ./bin/terrafile -p terraform/$(PLATFORM)/vendor/modules -f terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV)_Terrafile || true
 	terraform -chdir=terraform/$(PLATFORM) init -reconfigure -upgrade -backend-config=./workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
 	echo "🚀 DEPLOY_ENV is $(DEPLOY_ENV)"
 
@@ -259,7 +267,15 @@ restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # 
 	$(if $(CONFIRM_RESTORE), , $(error Restore can only run with CONFIRM_RESTORE))
 	bin/restore-nightly-backup ${space} ${postgres_database_name} ${paas_env}_backup- ${BACKUP_DATE}
 
-restore-sanitised-data-to-review: read-cluster-config set-azure-account # download and extract sanitised database to backup_sanitsed folder and restore
+delete_sanitised_backup_file:
+	@if [ -f backup_sanitised/backup_sanitised.sql ]; then \
+		rm backup_sanitised/backup_sanitised.sql; \
+		echo "Backup file deleted."; \
+	else \
+		echo "Backup file does not exist."; \
+	fi
+
+restore-sanitised-data-to-review-app: read-cluster-config set-azure-account delete_sanitised_backup_file install-konduit # download and extract sanitised database to backup_sanitsed folder and restore
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a pr number for your review app))
 	$(eval export sanitised_backup_workflow_run_id=$(shell gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1))
 	@echo Download latest artifact for Database Backup and Restore workflow with run ID: ${sanitised_backup_workflow_run_id}
