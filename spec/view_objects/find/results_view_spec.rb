@@ -603,8 +603,8 @@ module Find
       end
 
       describe '#sites_count' do
-        it 'returns the running or new sites with vacancies count' do
-          expect(results_view.sites_count(course)).to eq(2)
+        it 'returns the running or new sites with geo data count' do
+          expect(results_view.sites_count(course)).to eq(3)
         end
       end
 
