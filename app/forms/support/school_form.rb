@@ -43,7 +43,7 @@ module Support
     private
 
     def location_name_unique_to_provider
-      sibling_sites = if site_type == 'study_site'
+      sibling_sites = if site.study_site?
                         provider.study_sites - [site]
                       else
                         provider.sites - [site]
@@ -52,7 +52,7 @@ module Support
     end
 
     def validate_code
-      return if site_type == 'study_site'
+      return if site.study_site?
 
       errors.add(:code, 'Code has already been taken') if provider.sites.exists?(code:)
     end

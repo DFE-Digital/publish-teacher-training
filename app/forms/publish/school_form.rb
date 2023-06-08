@@ -11,6 +11,7 @@ module Publish
       town
       address4
       postcode
+      site_type
     ].freeze
 
     attr_accessor(*FIELDS)
@@ -23,12 +24,12 @@ module Publish
     end
 
     validate :location_name_unique_to_provider
-    validates :location_name, presence: { message: 'Enter a name' }
-    validates :address1, presence: { message: 'Enter a building and street' }
-    validates :town, presence: { message: 'Enter a town or city' }
-    validates :postcode, presence: { message: 'Enter a postcode' }
-    validates :postcode, postcode: { message: 'Postcode is not valid (for example, BN1 1AA)' }
-    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'URN must be 5 or 6 numbers' }
+    validates :location_name, presence: true
+    validates :address1, presence: true
+    validates :town, presence: true
+    validates :postcode, presence: true
+    validates :postcode, postcode: true
+    validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :format }
 
     private
 
@@ -41,8 +42,11 @@ module Publish
     end
 
     def location_name_unique_to_provider
-      sibling_sites = provider.sites - [site]
-
+      sibling_sites = if site.study_site?
+                        provider.study_sites - [site]
+                      else
+                        provider.sites - [site]
+                      end
       errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
     end
   end

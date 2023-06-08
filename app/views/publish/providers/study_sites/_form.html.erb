@@ -1,4 +1,4 @@
-<%= form_with model:, local: true, url: form_url, class: "school-form" do |f| %>
+<%= form_with model:, local: true, url: form_url, method: form_method, class: "school-form" do |f| %>
   <%= f.govuk_error_summary %>
 
   <%= f.govuk_text_field :location_name, label: { text: "Study site name", size: "s" } %>
@@ -26,5 +26,5 @@
     <%= f.govuk_text_field(:postcode, label: { text: "Postcode", size: "s" }, width: 10) %>
   <% end %>
 
-  <%= f.govuk_submit(site.persisted? ? t("publish.providers.schools.update") : t("continue")) %>
+  <%= f.govuk_submit(site.persisted? ? t("publish.providers.study_sites.update") : t("continue")) %>
 <% end %>

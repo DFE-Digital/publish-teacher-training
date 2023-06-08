@@ -32,6 +32,56 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     end
   end
 
+  describe 'edit study site' do
+    scenario 'with valid details' do
+      when_i_click_on_a_study_site
+      and_i_am_on_the_study_sites_show_page
+      and_i_click_a_change_link
+      and_i_change_the_name
+      and_the_updated_site_is_displayed
+      and_i_click_back
+      then_i_am_on_the_index_page
+      and_the_updated_site_is_displayed
+    end
+
+    scenario 'with invalid details' do
+      when_i_click_on_a_study_site
+      and_i_click_a_change_link
+      and_i_enter_invalid_details
+      then_i_see_an_error_message('Enter address line 1')
+    end
+  end
+
+  def and_i_click_back
+    click_link 'Back'
+  end
+
+  def and_i_enter_invalid_details
+    fill_in('Address line 1', with: '')
+    click_button 'Update study site'
+  end
+
+  def and_the_updated_site_is_displayed
+    expect(page).to have_text('Hogwarts')
+  end
+
+  def and_i_change_the_name
+    fill_in('Study site name', with: 'Hogwarts')
+    click_button 'Update study site'
+  end
+
+  def and_i_click_a_change_link
+    click_link(class: 'govuk-link location_name')
+  end
+
+  def and_i_am_on_the_study_sites_show_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study_sites/#{site.id}")
+  end
+
+  def when_i_click_on_a_study_site
+    click_link site.location_name
+  end
+
   def add_study_site_with_valid_details
     when_i_click_add_study_site
     and_i_click_the_link_to_enter_a_school_manually
