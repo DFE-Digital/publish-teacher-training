@@ -42,7 +42,7 @@ module Publish
     end
 
     def location_name_unique_to_provider
-      sibling_sites = if site_type == 'study_site'
+      sibling_sites = if site.study_site?
                         provider.study_sites - [site]
                       else
                         provider.sites - [site]
