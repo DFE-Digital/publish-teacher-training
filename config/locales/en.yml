@@ -725,6 +725,20 @@ en:
               format: "URN must be 5 or 6 numbers"
         support/raw_csv_schools_form:
           blank: "Enter school details"
+        publish/school_form:
+          attributes:
+            location_name:
+              blank: "Enter a name"
+              taken: "Name is taken"
+            address1:
+              blank: "Enter address line 1"
+            town:
+              blank: "Enter a town or city"
+            postcode:
+              blank: "Enter a postcode"
+              invalid: "Enter a real postcode"
+            urn:
+              format: "URN must be 5 or 6 numbers"
         publish/course_information_form:
           attributes:
             about_course:

@@ -32,7 +32,7 @@ module Publish
       end
 
       def update
-        @study_site_form = SchoolForm.new(site, params: site_params(:publish_study_site_form))
+        @study_site_form = SchoolForm.new(site, params: site_params(:publish_school_form))
 
         if @study_site_form.save!
           course_updated_message('Study site')

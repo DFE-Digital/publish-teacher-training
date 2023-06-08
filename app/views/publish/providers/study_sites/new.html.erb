@@ -12,7 +12,7 @@
         Study site details
       </h1>
 
-    <%= render partial: "publish/providers/study_sites/form", locals: { model: @study_site_form, site: @site, form_url: publish_provider_recruitment_cycle_study_sites_path } %>
+    <%= render partial: "publish/providers/study_sites/form", locals: { model: @study_site_form, site: @site, form_url: publish_provider_recruitment_cycle_study_sites_path, form_method: :post } %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_study_sites_path) %>
