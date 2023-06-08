@@ -691,7 +691,7 @@ class Course < ApplicationRecord
   def withdraw
     if is_published?
       site_statuses.each do |site_status|
-        site_status.update(vac_status: :no_vacancies, status: :suspended)
+        site_status.update(status: :suspended)
       end
 
       withdraw_latest_enrichment

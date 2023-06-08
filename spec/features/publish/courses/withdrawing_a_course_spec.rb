@@ -73,7 +73,6 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     enrichment = course.reload.enrichments.max_by(&:created_at)
 
     expect(enrichment).to be_withdrawn
-    expect(course.site_statuses.pluck(:vac_status)).to all(eq('no_vacancies'))
   end
 
   def then_i_am_redirected_to_the_courses_page
