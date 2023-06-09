@@ -34,7 +34,7 @@ Outline of the approach:
 - New Publish will typically only need to link back to Old Publish in the breadcrumbs. This will be handled via a custom helper method, along the lines of https://github.com/DFE-Digital/publish-teacher-training/pull/528/files#diff-20b0835bb2cec2d019f0fc54cbaa1457a740c573dba553c3333d7521de832092L10.
 - Once the sections are migrated, we implement both the organisations index page and the provider show page in New Publish.
 - When all pages are migrated, point www to New Publish
-- Finally, redirect any www2 requests to www
+- Finally redirect any www2 requests to www
 
 #### Pros
 
