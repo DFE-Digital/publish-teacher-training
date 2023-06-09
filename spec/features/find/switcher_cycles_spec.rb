@@ -94,6 +94,6 @@ feature 'switcher cycle' do
   end
 
   def and_i_should_see_the_correct_previous_recruitment_cycle_year
-    expect(page).to have_text("Previous cycle year #{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+    expect(page).to have_text("Previous cycle year#{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
   end
 end
