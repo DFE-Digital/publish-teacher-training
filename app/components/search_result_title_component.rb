@@ -25,7 +25,7 @@ class SearchResultTitleComponent < ViewComponent::Base
     return many_results_text if results_count > results_limit
     return "#{change_your_search_link}.".html_safe if results_count.zero?
 
-    "#{change_your_search_link} if the #{search_resource} you’re looking for is not listed.".html_safe
+    "#{change_your_search_link} if the #{search_resource.humanize(capitalize: false)} you’re looking for is not listed.".html_safe
   end
 
   private
