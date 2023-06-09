@@ -50,20 +50,20 @@ describe Find::Courses::ContentsComponent::View, type: :component do
     end
   end
 
-  context 'when the course has vacancies' do
+  context 'when the course is open' do
     it 'does render the apply link' do
       provider = build(:provider)
-      course = build(:course, site_statuses: [create(:site_status, :published, :running)], provider:).decorate
+      course = build(:course, :open, provider:).decorate
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include('Apply')
     end
   end
 
-  context 'when the course does not have vacancies' do
+  context 'when the course is not open' do
     it 'does not render the apply link' do
       provider = build(:provider)
-      course = build(:course, site_statuses: [create(:site_status, :unpublished, :running)], provider:).decorate
+      course = build(:course, :closed, provider:).decorate
 
       result = render_inline(described_class.new(course))
 

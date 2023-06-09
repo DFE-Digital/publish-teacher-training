@@ -18,19 +18,19 @@ module Find
                          about_accrediting_provider: 'foo',
                          salaried: true,
                          interview_process: 'bar',
-                         has_vacancies: true)
+                         application_status_open: true)
         end
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :has_vacancies)
+          attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :application_status_open)
 
           def has_bursary?
             has_bursary
           end
 
-          def has_vacancies?
-            has_vacancies
+          def application_status_open?
+            application_status_open
           end
 
           def salaried?
