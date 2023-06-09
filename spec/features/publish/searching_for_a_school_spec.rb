@@ -82,6 +82,10 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def then_i_should_be_taken_to_the_add_school_page
+    URI(current_url).then do |uri|
+      expect(uri.path).to eq("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/schools/new")
+      expect(uri.query).to eq("school_id=#{@school_two.id}")
+    end
     expect(page.current_url).to include("school_id=#{@school_two.id}")
   end
 
