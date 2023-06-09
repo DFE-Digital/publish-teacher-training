@@ -23,5 +23,5 @@
   <% end %>
   <li><%= govuk_link_to "Contact this training provider", "#section-contact" %></li>
   <li><%= govuk_link_to "Support and advice", "#section-advice" %></li>
-  <% if course.has_vacancies? %> <li><%= govuk_link_to "Apply", "#section-apply" %></li> <% end %>
+  <% if course.application_status_open? %> <li><%= govuk_link_to "Apply", "#section-apply" %></li> <% end %>
 </ul>

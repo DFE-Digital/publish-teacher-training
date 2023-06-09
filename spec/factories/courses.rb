@@ -228,5 +228,13 @@ FactoryBot.define do
     trait :engineers_teach_physics do
       campaign_name { :engineers_teach_physics }
     end
+
+    trait :open do
+      application_status { :open }
+    end
+
+    trait :closed do
+      application_status { :closed }
+    end
   end
 end

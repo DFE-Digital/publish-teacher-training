@@ -22,6 +22,8 @@
     <% end %>
   </td>
   <td class="govuk-table__cell" data-qa="courses-table__applications">
-    <%= course.application_status.titleize %>
+    <% if course.is_running? || course.is_withdrawn? %>
+      <%= course.open_or_closed_for_applications %>
+    <% end %>
   </td>
 </tr>

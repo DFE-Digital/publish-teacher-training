@@ -1619,10 +1619,12 @@ describe Course do
       let(:site_statuses) { [] }
 
       let(:applications_open_from) { Time.now.utc }
+      let(:application_status) { :open }
 
       let(:course) do
         create(:course,
                site_statuses:,
+               application_status:,
                applications_open_from:)
       end
 
@@ -1700,12 +1702,14 @@ describe Course do
 
           context 'findable course with no vacancies' do
             let(:site_statuses) { [findable_without_vacancies] }
+            let(:application_status) { :closed }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
 
           context 'non findable course with no vacancies' do
             let(:site_statuses) { [published_discontinued_with_no_vacancies] }
+            let(:application_status) { :closed }
 
             its(:open_for_applications?) { is_expected.to be false }
           end

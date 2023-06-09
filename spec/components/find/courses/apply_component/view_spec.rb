@@ -10,8 +10,8 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(true)
     end
 
-    it 'renders the apply button when there are vacancies' do
-      course = build(:course, provider:, site_statuses: [create(:site_status, :published, :running)])
+    it 'renders the apply button when the course is open' do
+      course = build(:course, :open, provider:)
 
       result = render_inline(described_class.new(course))
 
@@ -19,8 +19,8 @@ describe Find::Courses::ApplyComponent::View, type: :component do
     end
 
     context "using 'Find::CoursesController'" do
-      it 'renders the apply button when there are vacancies' do
-        course = build(:course, provider:, site_statuses: [create(:site_status, :published, :running)])
+      it 'renders the apply button when the course is open' do
+        course = build(:course, :open, provider:)
         result = with_controller_class(Find::CoursesController) do
           render_inline(described_class.new(course))
         end
@@ -29,12 +29,12 @@ describe Find::Courses::ApplyComponent::View, type: :component do
       end
     end
 
-    it "renders a 'no vacancies' warning when there are no vacancies" do
-      course = build(:course, provider:, site_statuses: [create(:site_status, :unpublished, :running)])
+    it "renders a 'closed for applications' warning when the course is closed" do
+      course = build(:course, :closed, provider:, site_statuses: [create(:site_status, :unpublished, :running)])
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You cannot apply for this course because it currently has no vacancies.')
+      expect(result.text).to include('You cannot apply for this course as it is closed for applications.')
     end
   end
 
@@ -42,7 +42,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
     it 'displays that courses are currently closed' do
       allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(false)
 
-      course = build(:course, provider:, site_statuses: [create(:site_status, :unpublished, :running)])
+      course = build(:course, :closed, provider:)
 
       result = render_inline(described_class.new(course))
 
