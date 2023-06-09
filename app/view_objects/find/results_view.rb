@@ -18,7 +18,6 @@ module Find
       query_parameters.except('utf8', 'authenticity_token')
                       .merge(qualifications_parameters)
                       .merge(study_type_parameters)
-                      .merge(has_vacancies_parameters)
                       .merge(sen_courses_parameters)
                       .merge(subject_parameters)
     end
@@ -58,18 +57,8 @@ module Find
       { 'study_type' => query_parameters['study_type'].presence || %w[full_time part_time] }
     end
 
-    def has_vacancies_parameters
-      { 'has_vacancies' => has_vacancies? }
-    end
-
     def sen_courses_parameters
       { 'send_courses' => sen_courses? }
-    end
-
-    def has_vacancies?
-      return true if query_parameters['has_vacancies'].nil?
-
-      query_parameters['has_vacancies'] == 'true'
     end
 
     def sen_courses?
