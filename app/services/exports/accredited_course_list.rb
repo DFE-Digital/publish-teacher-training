@@ -38,8 +38,7 @@ module Exports
           'Qualification' => c.outcome,
           'Status' => c.content_status&.to_s&.humanize,
           'View on Find' => c.find_url,
-          'Applications open from' => I18n.l(c.applications_open_from&.to_date),
-          'Vacancies' => c.has_vacancies? ? 'Yes' : 'No'
+          'Applications open from' => I18n.l(c.applications_open_from&.to_date)
         }
         if c.sites
           base_data.merge({ 'Campus Codes' => c.sites.pluck(:code).join(' ') })
