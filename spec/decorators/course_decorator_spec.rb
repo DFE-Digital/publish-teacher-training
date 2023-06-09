@@ -829,49 +829,6 @@ describe CourseDecorator do
   #   end
   # end
 
-  describe '#vacancies' do
-    subject { course.decorate.vacancies }
-
-    let(:link) do
-      "/publish/organisations/#{provider.provider_code}/#{current_recruitment_cycle.year}/courses/#{course.course_code}/vacancies"
-    end
-
-    before do
-      allow(course).to receive(:has_vacancies?).and_return(has_vacancies)
-      allow(course).to receive(:is_withdrawn?).and_return(is_withdrawn)
-    end
-
-    context 'has no vacancies' do
-      it 'has link' do
-        expect(subject).to eq "No (<a class=\"govuk-link\" href=\"#{link}\">Change<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
-      end
-
-      context 'has been withdrawn' do
-        let(:is_withdrawn) { true }
-
-        it 'does not have link' do
-          expect(subject).to eq 'No'
-        end
-      end
-    end
-
-    context 'has vacancies' do
-      let(:has_vacancies) { true }
-
-      it 'has link' do
-        expect(subject).to eq "Yes (<a class=\"govuk-link\" href=\"#{link}\">Change<span class=\"govuk-visually-hidden\"> vacancies for Mathematics (A1)</span></a>)"
-      end
-
-      context 'has been withdrawn' do
-        let(:is_withdrawn) { true }
-
-        it 'does not have link' do
-          expect(subject).to eq 'Yes'
-        end
-      end
-    end
-  end
-
   describe '#financial_incentive_details' do
     subject { course.decorate.financial_incentive_details }
 
