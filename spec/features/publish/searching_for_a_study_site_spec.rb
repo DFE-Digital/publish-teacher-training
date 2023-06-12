@@ -21,7 +21,7 @@ feature 'Searching for a study site from the GIAS list' do
     then_i_should_see_a_radio_list
 
     when_i_continue_without_selecting_a_school
-    then_i_should_see_an_error_message('Select a school')
+    then_i_should_see_an_error_message('Select a study site')
     and_i_should_still_see_the_school_i_searched_for
 
     when_i_select_the_school
