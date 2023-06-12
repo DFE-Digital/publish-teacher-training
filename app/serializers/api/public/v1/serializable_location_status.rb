@@ -11,10 +11,6 @@ module API
         attributes :publish,
                    :status
 
-        attribute :vacancy_status do
-          @object.vac_status
-        end
-
         attribute :has_vacancies do
           @object.has_vacancies?
         end
