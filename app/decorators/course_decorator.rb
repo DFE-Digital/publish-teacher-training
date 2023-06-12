@@ -222,11 +222,7 @@ class CourseDecorator < ApplicationDecorator
   alias year_range cycle_range
 
   def age_range
-    if object.age_range_in_years.present?
-      I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
-    else
-      "<span class='app-!-colour-muted'>Unknown</span>".html_safe
-    end
+    I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
   end
 
   def applications_open_first_label(recruitment_cycle)

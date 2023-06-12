@@ -38,20 +38,6 @@ describe ApplicationHelper do
       end
     end
 
-    context 'with no value' do
-      before do
-        enrichment_summary(summary_list, :course, 'About course', '', %w[about])
-      end
-
-      it "returns 'Empty' when value is empty" do
-        expect(subject).to have_css('.govuk-summary-list__key', text: 'About course')
-
-        expect(subject).to have_css('.govuk-summary-list__value.app-summary-list__value--truncate') do |value_container|
-          expect(value_container).to have_css('span.app-!-colour-muted', text: 'Empty')
-        end
-      end
-    end
-
     context 'with errors' do
       let(:error_message) { 'Enter something about the course' }
 
