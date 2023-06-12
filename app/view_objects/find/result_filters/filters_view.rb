@@ -83,10 +83,6 @@ module Find
         params[:study_type] == 'full_time_or_part_time'
       end
 
-      def default_with_vacancies_to_true
-        params[:has_vacancies].nil?
-      end
-
       def default_with_applications_open_to_true
         params[:applications_open].nil?
       end
