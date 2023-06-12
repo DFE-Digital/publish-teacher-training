@@ -174,6 +174,28 @@ RSpec/RepeatedDescription:
     - 'spec/models/provider_spec.rb'
     - 'spec/models/course_spec.rb'
 
+RSpec/IndexedLet:
+  Exclude:
+    - 'spec/view_objects/find/results_view_spec.rb'
+    - 'spec/support/shared_contexts/copy_courses.rb'
+    - 'spec/services/user_associations_service/delete_spec.rb'
+    - 'spec/services/support/data_exports/users_export_spec.rb'
+    - 'spec/services/notification_service/course_withdrawn_spec.rb'
+    - 'spec/services/notification_service/course_updated_spec.rb'
+    - 'spec/models/user_spec.rb'
+    - 'spec/models/user_notification_preferences_spec.rb'
+    - 'spec/models/provider_spec.rb'
+    - 'spec/models/course_spec.rb'
+    - 'spec/models/course/withdraw_spec.rb'
+    - 'spec/models/access_request_spec.rb'
+    - 'spec/forms/publish/course_school_form_spec.rb'
+    - 'spec/features/publish/courses/editing_degree_requirements_spec.rb'
+    - 'spec/features/publish/courses/editing_course_requirements_spec.rb'
+    - 'spec/features/publish/courses/editing_course_length_and_funding_type.rb'
+    - 'spec/controllers/api/school_suggestions_controller_spec.rb'
+    - 'spec/controllers/api/public/v1/providers_controller_spec.rb'
+    - 'spec/controllers/api/accredited_provider_suggestions_controller_spec.rb'
+
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
