@@ -1725,10 +1725,12 @@ describe Course do
       let(:site_statuses) { [] }
 
       let(:applications_open_from) { Time.now.utc }
+      let(:application_status) { :open }
 
       let(:course) do
         create(:course,
                site_statuses:,
+               application_status:,
                applications_open_from:)
       end
 
