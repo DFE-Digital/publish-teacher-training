@@ -13,7 +13,7 @@ describe 'V1 Public API Smoke Tests', :aggregate_failures, smoke: true do
       let(:url) { "#{base_url}/api/public/v1/recruitment_cycles/#{recruitment_year}/providers?[per_page]=1" }
 
       it 'returns a HTTP status code of 200' do
-        expect(response).to have_http_status(:ok)
+        expect(response.code).to eq(200)
       end
 
       it 'returns at least one record' do
