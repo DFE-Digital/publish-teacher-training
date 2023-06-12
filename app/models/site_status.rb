@@ -64,7 +64,7 @@ class SiteStatus < ApplicationRecord
   scope :new_or_running, -> { where(status: %i[running new_status]) }
 
   def with_vacancies?
-    !no_vacancies? && findable?
+    findable?
   end
 
   def has_vacancies?
