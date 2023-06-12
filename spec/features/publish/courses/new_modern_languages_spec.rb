@@ -87,7 +87,7 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
   end
 
   def selected_params(with_subjects: false)
-    params = '?course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=secondary'
+    params = '?course%5Bis_send%5D=0&course%5Blevel%5D=secondary'
     params += "&course%5Bsubjects_ids%5D%5B%5D=#{modern_languages_subject.id}" unless with_subjects
     params += "&course%5Bsubjects_ids%5D%5B%5D=#{language_subject.id}" unless with_subjects
     params

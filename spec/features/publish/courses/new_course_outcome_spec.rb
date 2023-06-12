@@ -65,6 +65,6 @@ feature 'selecting a course outcome', { can_edit_current_and_next_cycles: false 
   end
 
   def selected_params(outcome)
-    "?course%5Bage_range_in_years%5D=%5B%223_to_7%22%5D&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bqualification%5D=#{outcome}&course%5Bsubjects_ids%5D%5B%5D=2"
+    "?course%5Bage_range_in_years%5D=3_to_7&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bqualification%5D=#{outcome}&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 end

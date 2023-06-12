@@ -65,6 +65,6 @@ feature 'selecting full time or part time or full or part time', { can_edit_curr
   end
 
   def selected_params(study_mode)
-    "?course%5Bage_range_in_years%5D=%5B%223_to_7%22%5D&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bstudy_mode%5D=#{study_mode}&course%5Bsubjects_ids%5D%5B%5D=2"
+    "?course%5Bage_range_in_years%5D=3_to_7&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bstudy_mode%5D=#{study_mode}&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 end
