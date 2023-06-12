@@ -827,6 +827,10 @@ en:
           attributes:
             school_id:
               blank: Select a school
+        publish/study_sites/select_form:
+          attributes:
+            school_id:
+              blank: Select a study site
         publish/provider_contact_form:
           attributes:
             ukprn:

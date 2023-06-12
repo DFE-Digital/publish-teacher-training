@@ -18,7 +18,7 @@ module Publish
 
         if @study_site_search_form.valid?
 
-          @study_site_select_form = Schools::SelectForm.new
+          @study_site_select_form = StudySites::SelectForm.new
           @study_site_search = Schools::SearchService.call(query:)
 
           render :results
@@ -28,7 +28,7 @@ module Publish
       end
 
       def update
-        @study_site_select_form = Schools::SelectForm.new(school_id: study_site_select_params[:school_id])
+        @study_site_select_form = StudySites::SelectForm.new(school_id: study_site_select_params[:school_id])
 
         if @study_site_select_form.valid?
           redirect_to new_publish_provider_recruitment_cycle_study_site_path(provider_code: provider.provider_code, school_id: @study_site_select_form.school_id)
