@@ -127,10 +127,10 @@ GEM
       activerecord (>= 5.0, < 7.1)
       request_store (~> 1.2)
     awesome_print (1.9.2)
-    better_errors (2.9.1)
-      coderay (>= 1.0.0)
+    better_errors (2.10.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+      rouge (>= 1.0.0)
     better_html (2.0.1)
       actionview (>= 6.0)
       activesupport (>= 6.0)
@@ -572,6 +572,7 @@ GEM
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
     rexml (3.2.5)
+    rouge (4.1.2)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -624,6 +625,8 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubypants (0.7.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
     schema_to_scaffold (0.8.2)
       activesupport (~> 7)
     semantic_logger (4.13.0)
@@ -821,6 +824,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   rubypants
+  sassc
   schema_to_scaffold
   sentry-rails
   sentry-ruby

@@ -11,6 +11,10 @@ gem 'rails', '7.0.5'
 # Use PostgreSQL as the database for Active Record
 gem 'pg'
 
+# This library utilizes libsass to allow you to compile SCSS or SASS syntax to CSS
+
+gem 'sassc'
+
 # Authorisation
 gem 'pundit'
 
