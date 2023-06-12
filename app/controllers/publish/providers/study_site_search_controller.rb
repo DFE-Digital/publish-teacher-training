@@ -60,9 +60,9 @@ module Publish
       end
 
       def study_site_select_params
-        return {} unless params.key?(:publish_schools_select_form)
+        return {} unless params.key?(:publish_study_sites_select_form)
 
-        params.require(:publish_schools_select_form).permit(*Schools::SelectForm::FIELDS, *Schools::SearchForm::FIELDS)
+        params.require(:publish_study_sites_select_form).permit(*Schools::SelectForm::FIELDS, *Schools::SearchForm::FIELDS)
       end
 
       def search_result_title_component
