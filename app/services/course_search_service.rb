@@ -105,20 +105,7 @@ class CourseSearchService
 
   def site_statuses_criteria(site_statuses)
     # Only running and published site statuses
-    running_and_published_criteria = site_statuses[:status].eq(SiteStatus.statuses[:running]).and(site_statuses[:publish].eq(SiteStatus.publishes[:published]))
-
-    if has_vacancies?
-      # Only site statuses with vacancies
-      running_and_published_criteria
-        .and(site_statuses[:vac_status])
-        .eq_any([
-                  SiteStatus.vac_statuses[:full_time_vacancies],
-                  SiteStatus.vac_statuses[:part_time_vacancies],
-                  SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies]
-                ])
-    else
-      running_and_published_criteria
-    end
+    site_statuses[:status].eq(SiteStatus.statuses[:running]).and(site_statuses[:publish].eq(SiteStatus.publishes[:published]))
   end
 
   def has_been_geocoded_criteria(sites)
@@ -210,10 +197,6 @@ class CourseSearchService
     filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?('pgce_with_qts')
 
     filter[:qualification]
-  end
-
-  def has_vacancies?
-    filter[:has_vacancies].to_s.downcase == 'true'
   end
 
   def applications_open?
