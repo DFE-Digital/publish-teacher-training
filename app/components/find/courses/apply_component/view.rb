@@ -6,7 +6,7 @@ module Find
       class View < ViewComponent::Base
         attr_reader :course
 
-        delegate :has_vacancies?, :provider, to: :course
+        delegate :application_status_open?, :provider, to: :course
 
         def initialize(course)
           super

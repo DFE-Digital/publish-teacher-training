@@ -313,11 +313,15 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     course_subject = find_or_create(:secondary_subject, :mathematics)
 
     course = build(
-      :course, :secondary, :fee_type_based, accrediting_provider:,
-                                            site_statuses:, enrichments: [course_enrichment],
-                                            degree_grade: 'two_one',
-                                            degree_subject_requirements: 'Maths A level',
-                                            subjects: [course_subject]
+      :course,
+      :open,
+      :secondary,
+      :fee_type_based,
+      accrediting_provider:,
+      site_statuses:, enrichments: [course_enrichment],
+      degree_grade: 'two_one',
+      degree_subject_requirements: 'Maths A level',
+      subjects: [course_subject]
     )
     accrediting_provider_enrichment = {
       'UcasProviderCode' => accrediting_provider.provider_code,

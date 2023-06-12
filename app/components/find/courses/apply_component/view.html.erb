@@ -1,6 +1,6 @@
 <div class="govuk-!-margin-bottom-8" id="section-apply">
   <% if Find::CycleTimetable.mid_cycle? %>
-    <% if has_vacancies? %>
+    <% if application_status_open? %>
       <p class="govuk-body">
         <%= govuk_start_button(
               text: "Apply for this course",
@@ -11,7 +11,7 @@
             ) %>
       </p>
     <% else %>
-      <%= govuk_warning_text(text: "You cannot apply for this course because it currently has no vacancies. To find courses with vacancies, change your search settings to ‘Only show courses with vacancies’.") %>
+      <%= govuk_warning_text(text: "You cannot apply for this course as it is closed for applications. To find courses open for applications, change your search to ‘Only show courses open for applications’.") %>
     <% end %>
   <% else %>
     <div data-qa="course__end_of_cycle_notice">
