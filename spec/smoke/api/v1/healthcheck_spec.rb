@@ -11,7 +11,7 @@ describe 'V1 Public API Smoke Tests', :aggregate_failures, smoke: true do
     let(:url) { "#{base_url}/healthcheck" }
 
     it 'returns HTTP success' do
-      expect(response.code).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'returns JSON' do
