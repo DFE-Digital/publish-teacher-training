@@ -58,8 +58,6 @@ govuk_notify:
   course_withdraw_email_template_id: f7fee829-f0e7-40d1-9bd7-299f673e8c24
   course_sites_update_email_template_id: d5c8da46-9aa6-4c0a-8fad-ee782e89dbd3
   course_subjects_updated_email_template_id: b65aef1a-5847-44e6-90e0-88e0ea7898ec
-  course_vacancies_updated_email_template_id: 3ae884e9-8495-44cf-9928-907b89a9f356
-  course_vacancies_partially_updated_email_template_id: ccd54838-4266-497a-bf74-fca15ca05d27
   new_user_added_by_support_team_id: 4da327dd-907a-4619-abe6-45f348bb2fa3
   remove_user_from_organisation_id: e75ad04e-4efa-4b1a-ae65-b007758483f4
   user_added_as_organisation_to_training_partner_id: 47d3509f-eeac-49a5-a455-e4a911c93496

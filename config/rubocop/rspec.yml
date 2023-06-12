@@ -32,7 +32,6 @@ RSpec/VerifiedDoubles:
     - 'spec/services/record_first_login_service_spec.rb'
     - 'spec/services/providers/copy_to_recruitment_cycle_service_spec.rb'
     - 'spec/services/notification_service/course_withdrawn_spec.rb'
-    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
     - 'spec/services/notification_service/course_updated_spec.rb'
     - 'spec/services/notification_service/course_subjects_updated_spec.rb'
     - 'spec/services/notification_service/course_published_spec.rb'
@@ -58,8 +57,6 @@ RSpec/StubbedMock:
     - 'spec/services/publish_reporting_service_spec.rb'
     - 'spec/services/provider_reporting_service_spec.rb'
     - 'spec/services/notification_service/course_withdrawn_spec.rb'
-    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
-    - 'spec/services/notification_service/course_vacancies_updated_spec.rb'
     - 'spec/services/notification_service/course_updated_spec.rb'
     - 'spec/services/notification_service/course_updated_spec.rb'
     - 'spec/services/notification_service/course_subjects_updated_spec.rb'
@@ -176,7 +173,6 @@ RSpec/RepeatedDescription:
     - 'spec/services/providers/generate_course_code_service_spec.rb'
     - 'spec/models/provider_spec.rb'
     - 'spec/models/course_spec.rb'
-    - 'spec/mailers/course_vacancies/updated_mailer_spec.rb'
 
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:

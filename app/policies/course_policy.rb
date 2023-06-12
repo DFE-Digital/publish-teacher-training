@@ -35,10 +35,6 @@ class CoursePolicy
     user.admin? || user.providers.include?(course.provider)
   end
 
-  def send_vacancies_updated_notification?
-    user.present?
-  end
-
   def can_update_funding_type?
     course.draft_or_rolled_over?
   end

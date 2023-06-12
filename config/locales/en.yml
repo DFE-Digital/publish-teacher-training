@@ -315,11 +315,11 @@ en:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: &add_accredited_provider Add accredited provider
-        edit: 
+        edit:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           updated: About the accredited provider updated
-        delete: 
+        delete:
           title: Are you sure you want to remove this accredited provider?
           remove: Remove accredited provider
           updated: Accredited provider removed
@@ -378,12 +378,12 @@ en:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: "Add accredited provider - %{provider_name} (%{code})"
-        edit: 
+        edit:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: "%{provider_name}"
           updated: About the accredited provider updated
-        delete: 
+        delete:
           title: Are you sure you want to remove this accredited provider?
           remove: Remove accredited provider
           updated: Accredited provider removed
@@ -779,11 +779,6 @@ en:
           attributes:
             site_ids:
               no_schools: "Select at least one school"
-        publish/course_vacancies_form:
-          attributes:
-            change_vacancies_confirmation:
-              confirm_close_application: "Please confirm there are no vacancies to close applications"
-              confirm_reopen_application: "Please confirm there are vacancies to reopen applications"
         publish/course_requirement_form:
           attributes:
             required_qualifications:
