@@ -1416,9 +1416,9 @@ describe Course do
     let(:site_status_with_no_vacancies) { build(:site_status, :no_vacancies, site:) }
     let(:findable_without_vacancies) { build(:site_status, :findable, :no_vacancies, site:) }
     let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
-    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
-    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
-    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :no_vacancies, site:) }
+    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
+    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
+    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :discontinued, :no_vacancies, site:) }
     let(:site_statuses) { [] }
 
     describe '#findable_site_statuses' do
@@ -1487,6 +1487,7 @@ describe Course do
         it 'returns true' do
           allow(course).to receive(:findable_site_statuses).and_return([findable])
           expect(course.findable?).to be_truthy
+          expect(course.has_vacancies?).to be_truthy
         end
       end
 
@@ -1494,63 +1495,8 @@ describe Course do
         it 'returns false' do
           allow(course).to receive(:findable_site_statuses).and_return([])
           expect(course.findable?).to be_falsey
+          expect(course.has_vacancies?).to be_falsey
         end
-      end
-    end
-
-    describe '#has_vacancies?' do
-      context 'for a single site status that has vacancies' do
-        let(:site_statuses) { [findable, with_any_vacancy] }
-
-        its(:has_vacancies?) { is_expected.to be true }
-      end
-
-      context 'for a site status with vacancies and others without' do
-        let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
-
-        its(:has_vacancies?) { is_expected.to be true }
-      end
-
-      context 'when none of the sites have vacancies' do
-        let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
-
-        its(:has_vacancies?) { is_expected.to be false }
-      end
-
-      context 'when only discontinued and suspended site statuses have vacancies' do
-        let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
-
-        its(:has_vacancies?) { is_expected.to be false }
-      end
-    end
-
-    describe '#has_vacancies? (when site_statuses not loaded)' do
-      subject do
-        create(:course, site_statuses:).reload
-      end
-
-      context 'for a single site status that has vacancies' do
-        let(:site_statuses) { [findable, with_any_vacancy] }
-
-        its(:has_vacancies?) { is_expected.to be true }
-      end
-
-      context 'for a site status with vacancies and others without' do
-        let(:site_statuses) { [findable_with_vacancies, findable_without_vacancies] }
-
-        its(:has_vacancies?) { is_expected.to be true }
-      end
-
-      context 'when none of the sites have vacancies' do
-        let(:site_statuses) { [findable_without_vacancies, findable_without_vacancies] }
-
-        its(:has_vacancies?) { is_expected.to be false }
-      end
-
-      context 'when only discontinued and suspended site statuses have vacancies' do
-        let(:site_statuses) { [findable_without_vacancies, published_suspended_with_any_vacancy, published_discontinued_with_any_vacancy] }
-
-        its(:has_vacancies?) { is_expected.to be false }
       end
     end
 

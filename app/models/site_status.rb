@@ -60,7 +60,7 @@ class SiteStatus < ApplicationRecord
     status_running? && published_on_ucas?
   end
 
-  scope :with_vacancies, -> { where.not(vac_status: :no_vacancies).findable }
+  scope :with_vacancies, -> { findable }
   scope :new_or_running, -> { where(status: %i[running new_status]) }
 
   def with_vacancies?

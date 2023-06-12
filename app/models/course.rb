@@ -437,11 +437,7 @@ class Course < ApplicationRecord
   end
 
   def has_vacancies?
-    if site_statuses.loaded?
-      site_statuses.select(&:findable?).any?(&:with_vacancies?)
-    else
-      site_statuses.findable.with_vacancies.any?
-    end
+    findable?
   end
 
   def has_multiple_running_sites_or_study_modes?
