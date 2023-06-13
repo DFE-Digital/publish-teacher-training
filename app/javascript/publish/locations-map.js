@@ -68,12 +68,6 @@ const initLocationsMap = () => {
     closedContent.innerHTML = location.name
 
     const openContent = document.createElement('div')
-    if (location.vacancies) {
-      openContent.insertAdjacentHTML(
-        'beforeend',
-        `<div class="govuk-tag govuk-tag--no-content govuk-!-margin-bottom-2">${location.vacancies}</div>`
-      )
-    }
     if (location.address) {
       openContent.insertAdjacentHTML(
         'beforeend',
