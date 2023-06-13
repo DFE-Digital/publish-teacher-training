@@ -5,8 +5,10 @@ default: &default
   RAILS_ENV: review_aks
   RACK_ENV: review_aks
 
-review_aks:
+review:
   <<: *default
 
-dv_review_aks:
+qa:
   <<: *default
+  RAILS_ENV: qa_aks
+  RACK_ENV: qa_aks
