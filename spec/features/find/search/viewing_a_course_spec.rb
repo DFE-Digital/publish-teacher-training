@@ -90,11 +90,11 @@ feature 'Viewing a findable course' do
       provider:,
       accrediting_provider:,
       site_statuses: [
-        build(:site_status, :full_time_vacancies, :findable),
-        build(:site_status, :full_time_vacancies, :suspended),
-        build(:site_status, :full_time_vacancies, :new_status),
-        build(:site_status, :no_vacancies, :new_status),
-        build(:site_status, :no_vacancies, :findable)
+        build(:site_status, :findable),
+        build(:site_status, :suspended),
+        build(:site_status, :new_status),
+        build(:site_status, :non_findable),
+        build(:site_status, :non_findable)
       ],
       enrichments: [
         build(
