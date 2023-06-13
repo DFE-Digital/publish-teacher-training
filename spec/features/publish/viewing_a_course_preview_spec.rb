@@ -180,8 +180,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.website
     )
 
-    expect(publish_course_preview_page).not_to have_vacancies
-
     expect(publish_course_preview_page.about_course).to have_content(
       decorated_course.about_course
     )

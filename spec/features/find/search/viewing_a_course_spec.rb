@@ -189,8 +189,6 @@ feature 'Viewing a findable course' do
       provider.website
     )
 
-    expect(find_course_show_page).not_to have_vacancies
-
     expect(find_course_show_page.about_course).to have_content(
       @course.latest_published_enrichment.about_course
     )

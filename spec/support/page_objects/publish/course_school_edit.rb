@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../sections/vacancy'
+require_relative '../sections/edit_school'
 
 module PageObjects
   module Publish

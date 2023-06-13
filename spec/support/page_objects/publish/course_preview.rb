@@ -14,7 +14,6 @@ module PageObjects
       element :applications_open_from, '[data-qa=course__applications_open]'
       element :start_date, '[data-qa=course__start_date]'
       element :provider_website, '[data-qa=course__provider_website]'
-      element :vacancies, '[data-qa=course__vacancies]'
       element :about_course, '[data-qa=course__about_course]'
       element :interview_process, '[data-qa=course__interview_process]'
       element :school_placements, '[data-qa="course__about_schools"]'
