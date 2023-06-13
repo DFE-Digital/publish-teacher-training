@@ -2,9 +2,9 @@ variable "app_environment" {
   type = string
 }
 
-variable "app_suffix" {
+variable "app_name" {
   type    = string
-  default = ""
+  default = null
 }
 
 variable "azure_resource_prefix" {
@@ -89,7 +89,7 @@ variable "app_config_file" {
   default = "./workspace_variables/app_config.yml"
 }
 
-variable "gov_uk_host_names" {
+variable "additional_hostnames" {
   default = []
   type    = list(any)
 }
@@ -122,3 +122,7 @@ variable "use_db_setup_command" {
   type    = bool
   default = false
 }
+
+variable "postgres_enable_high_availability" { default = false }
+
+variable "azure_maintenance_window" { default = null }
