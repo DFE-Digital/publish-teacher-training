@@ -65,6 +65,6 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   end
 
   def selected_params(funding_type)
-    "?course%5Bage_range_in_years%5D=%5B%223_to_7%22%5D&course%5Bfunding_type%5D=#{funding_type}&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
+    "?course%5Bage_range_in_years%5D=3_to_7&course%5Bfunding_type%5D=#{funding_type}&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 end

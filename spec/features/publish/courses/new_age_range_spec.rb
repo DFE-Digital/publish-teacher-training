@@ -72,6 +72,6 @@ feature 'selecting an age range', { can_edit_current_and_next_cycles: false } do
   end
 
   def selected_params(age_range)
-    "?course%5Bage_range_in_years%5D=#{age_range}&course%5Bis_send%5D=%5B%220%22%5D&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
+    "?course%5Bage_range_in_years%5D=#{age_range}&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 end
