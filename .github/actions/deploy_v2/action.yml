@@ -30,14 +30,14 @@ runs:
       shell: bash
       run: |
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
-        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
-        echo "namespace=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+        terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
+        echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
 
         if [ -n "${{ inputs.pr-number }}" ]; then
           APP_NAME=${{ inputs.pr-number }}
@@ -45,9 +45,8 @@ runs:
           echo "deploy_url=https://publish-review-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
-          aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
-          hostname=$(jq -r '.gov_uk_host_names[0]' ${tf_vars_file})
+          hostname=$(jq -r '.additional_hostnames[0]' ${tf_vars_file})
           if [ ${{ inputs.environment }} == "production" ]; then
             echo "deploy_url=https://api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           else
@@ -99,12 +98,6 @@ runs:
 
         echo "app_name=publish-${{ env.aks_app_environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
 
-    - name: Print APP_NAME
-      shell: bash
-      run: |
-        echo "APP_NAME: ${{ env.APP_NAME}}"
-        echo "app_name: ${{ env.app_name}}"
-
     - name: Install kubectl
       if: ${{ inputs.environment == 'review_aks' }}
       uses: azure/setup-kubectl@v3
@@ -143,19 +136,13 @@ runs:
         TF_VAR_azure_credentials: ${{ inputs.azure-credentials }}
         CONFIRM_PRODUCTION: yes
 
-    - name: Download Latest Sanitised Backup
+    - name: Restore AKS database
       if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
-      shell: bash
-      run: |
-        sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1)
-        echo "Download artifact for workflow run ID: $sanitised_backup_workflow_run_id"
-        gh run download $sanitised_backup_workflow_run_id
-
-    - name: Restore backup to aks env database
-      if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
-      shell: bash
-      run: |
-        bin/konduit.sh -i backup_sanitised/backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
+      uses: ./.github/actions/restore/
+      with:
+        azure-credentials: ${{ inputs.azure-credentials }}
+        environment: ${{ inputs.environment }}
+        pr-number: ${{ inputs.pr-number }}
 
     - name: Run Smoke Tests for ${{ inputs.environment }}
       uses: ./.github/actions/smoke-test_v2/
