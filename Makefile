@@ -62,7 +62,6 @@ review_aks: ## make review_aks deploy APP_NAME=2222 USE_DB_SETUP_COMMAND=true
 	$(eval export DISABLE_PASSCODE=1)
 	$(eval include global_config/review_aks.sh)
 	$(eval export TF_VAR_app_name=$(APP_NAME))
-	$(eval export TF_VAR_app_suffix=$(APP_NAME))
 	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
 	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
 	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
@@ -80,12 +79,14 @@ dv_review_aks: ## make dv_review_aks deploy APP_NAME=2222 CLUSTER=cluster1 USE_D
 	$(eval backend_key=-backend-config=key=$(APP_NAME).tfstate)
 	$(eval export TF_VAR_cluster=$(CLUSTER))
 	$(eval export TF_VAR_app_name=$(APP_NAME))
-	$(eval export TF_VAR_app_suffix=$(APP_NAME))
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 	echo https://$(SERVICE_NAME)-review-$(APP_NAME).$(CLUSTER).development.teacherservices.cloud will be created in AKS
-#	$(eval APP_NAME_SUFFIX=dv-review-$(APP_NAME))
-#	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
-#	$(eval export TF_VAR_app_name_suffix=pr-$(APP_NAME))
+
+qa_aks:
+	$(eval include global_config/qa_aks.sh)
+	$(eval export DISABLE_PASSCODE=1)
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
+	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
@@ -337,9 +338,9 @@ arm-resources: set-azure-account set-azure-template-tag set-azure-resource-group
 			"tfStorageAccountName=${RESOURCE_NAME_PREFIX}${SERVICE_SHORT}tfstate${CONFIG_SHORT}sa" "tfStorageContainerName=${SERVICE_SHORT}-tfstate" \
 			"keyVaultName=${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-${CONFIG_SHORT}-kv" ${WHAT_IF}
 
-validate-arm-resources: set-what-if base-resources
+validate-arm-resources: set-what-if arm-resources
 
-deploy-arm-resources: check-auto-approve base-resources
+deploy-arm-resources: check-auto-approve arm-resources
 
 set-production-subscription:
 	$(eval AZ_SUBSCRIPTION=s189-teacher-services-cloud-production)
