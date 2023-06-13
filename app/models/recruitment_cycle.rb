@@ -60,7 +60,7 @@ class RecruitmentCycle < ApplicationRecord
   end
 
   def year_range
-    "#{year} to #{year.to_i + 1}"
+    "#{year.to_i - 1} to #{year}"
   end
 
   # TODO: remove once the 2022 rollover is complete
