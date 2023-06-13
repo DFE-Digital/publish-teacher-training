@@ -69,7 +69,6 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/services/courses/generate_course_name_service_spec.rb'
     - 'spec/validators/unique_course_validator_spec.rb'
-    - 'spec/services/vacancy_status_determination_service_spec.rb'
     - 'spec/services/user_associations_service/delete_spec.rb'
     - 'spec/services/user_associations_service/create_spec.rb'
     - 'spec/services/token/decode_service_spec.rb'
