@@ -10,10 +10,6 @@ module API
 
         attributes :publish,
                    :status
-
-        attribute :has_vacancies do
-          @object.has_vacancies?
-        end
       end
     end
   end
