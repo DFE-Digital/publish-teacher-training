@@ -52,6 +52,29 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     end
   end
 
+  describe 'delete study site' do
+    scenario 'with no associated courses' do
+      when_i_click_on_a_study_site
+      and_i_click_to_remove
+      then_i_am_on_the_study_sites_delete_page
+      when_i_click_cancel
+      then_i_am_on_the_study_site_show_page
+
+      and_i_click_to_remove
+      and_i_click_the_remove_study_site_button
+      then_i_am_on_the_index_page
+      and_the_study_site_is_deleted
+    end
+
+    scenario 'with associcated course' do
+      given_there_is_an_associated_course
+      when_i_click_on_a_study_site
+      and_i_click_to_remove
+      then_i_am_on_the_study_sites_delete_page
+      and_i_cannot_delete_the_study_site
+    end
+  end
+
   def and_i_click_back
     click_link 'Back'
   end
@@ -75,8 +98,9 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_am_on_the_study_sites_show_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study_sites/#{site.id}")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/#{site.id}")
   end
+  alias_method :then_i_am_on_the_study_site_show_page, :and_i_am_on_the_study_sites_show_page
 
   def when_i_click_on_a_study_site
     click_link site.location_name
@@ -111,7 +135,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def then_i_am_on_the_index_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study_sites")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites")
   end
 
   def and_i_click_add_study_site
@@ -119,7 +143,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_am_on_the_study_sites_check_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study_sites/check")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/check")
   end
 
   def and_i_click_the_link_to_enter_a_school_manually
@@ -174,6 +198,36 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     given_i_am_authenticated(
       user: create(:user, providers: [create(:provider, sites: [build(:site, :study_site)])])
     )
+  end
+
+  def and_i_click_to_remove
+    click_link 'Remove study site'
+  end
+
+  def then_i_am_on_the_study_sites_delete_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/#{site.id}/delete")
+  end
+
+  def when_i_click_cancel
+    click_link 'Cancel'
+  end
+
+  def and_i_click_the_remove_study_site_button
+    click_button 'Remove study site'
+  end
+
+  def and_the_study_site_is_deleted
+    expect(provider.study_sites.count).to eq 0
+  end
+
+  def given_there_is_an_associated_course
+    @course = create(:course, provider:)
+    @course.study_sites << @site
+  end
+
+  def and_i_cannot_delete_the_study_site
+    expect(page).to have_content('You cannot remove this study site')
+    expect(page).not_to have_button('Remove study site')
   end
 
   private

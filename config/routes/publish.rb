@@ -259,11 +259,11 @@ namespace :publish, as: :publish do
           put '/search', on: :collection, to: 'school_search#update'
         end
 
-        resource :check_study_site, only: %i[show update], controller: 'study_sites_check', path: 'study_sites/check'
-        resources :study_sites do
+        resource :check_study_site, only: %i[show update], controller: 'study_sites_check', path: 'study-sites/check'
+        resources :study_sites, path: 'study-sites' do
           member do
             get :delete
-            delete :delete, to: 'schools#destroy'
+            delete :delete, to: 'study_sites#destroy'
           end
 
           get '/search', on: :collection, to: 'study_site_search#new'
