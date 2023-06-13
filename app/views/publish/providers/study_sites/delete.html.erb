@@ -24,8 +24,7 @@
     <%= govuk_button_to "Remove study site",
       delete_publish_provider_recruitment_cycle_study_site_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id),
       method: :delete,
-      class: "govuk-button--warning"
-    %>
+      class: "govuk-button--warning" %>
     <% end %>
     <p class="govuk-body">
       <%= govuk_link_to("Cancel", publish_provider_recruitment_cycle_study_site_path(@provider.provider_code, @site.recruitment_cycle.year, @site.id)) %>
