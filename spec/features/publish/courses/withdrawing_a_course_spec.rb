@@ -44,7 +44,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
 
   def and_there_is_a_course_i_want_to_withdraw(application_status: :open)
     given_a_course_exists(application_status:, enrichments: [build(:course_enrichment, :published)])
-    given_a_site_exists(:full_time_vacancies, :findable)
+    given_a_site_exists(:findable)
   end
 
   def and_there_is_a_course_already_withdrawn
