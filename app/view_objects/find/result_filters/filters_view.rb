@@ -57,10 +57,6 @@ module Find
         params[:can_sponsor_visa] == 'true'
       end
 
-      def has_vacancies_checked?
-        params[:has_vacancies] == 'true'
-      end
-
       def has_applications_open_checked?
         params[:applications_open] == 'true'
       end
