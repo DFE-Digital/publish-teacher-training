@@ -1410,14 +1410,8 @@ describe Course do
     let(:new_site_status2) { build(:site_status, :new_status, site:) }
     let(:findable) { build(:site_status, :findable, site:) }
     let(:suspended) { build(:site_status, :suspended, site:) }
-    let(:with_any_vacancy) { build(:site_status, :with_any_vacancy, site:) }
     let(:default) { build(:site_status, site:) }
-    let(:site_status_with_no_vacancies) { build(:site_status, :no_vacancies, site:) }
-    let(:findable_without_vacancies) { build(:site_status, :findable, :no_vacancies, site:) }
-    let(:findable_with_vacancies) { build(:site_status, :findable, :with_any_vacancy, site:) }
-    let(:published_suspended_with_any_vacancy) { build(:site_status, :published, :suspended, :with_any_vacancy, site:) }
-    let(:published_discontinued_with_any_vacancy) { build(:site_status, :published, :discontinued, :with_any_vacancy, site:) }
-    let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :discontinued, :no_vacancies, site:) }
+    let(:non_findable) { build(:site_status, :published, :discontinued, site:) }
     let(:site_statuses) { [] }
 
     describe '#findable_site_statuses' do
@@ -1541,8 +1535,7 @@ describe Course do
 
         context 'with at least a single findable site statuses' do
           let(:site_statuses) do
-            [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
+            [default, findable, new_site_status, suspended]
           end
 
           context 'applications_open_from is in present or past' do
@@ -1558,8 +1551,7 @@ describe Course do
 
         context 'with no findable site statuses' do
           let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
+            [default, new_site_status, suspended]
           end
 
           context 'applications_open_from is in present or past' do
@@ -1572,27 +1564,27 @@ describe Course do
             its(:open_for_applications?) { is_expected.to be false }
           end
 
-          context 'findable course with vacancies' do
-            let(:site_statuses) { [findable_with_vacancies] }
+          context 'findable course' do
+            let(:site_statuses) { [findable] }
 
             its(:open_for_applications?) { is_expected.to be true }
           end
 
-          context 'non findable course with vacancies' do
-            let(:site_statuses) { [published_discontinued_with_any_vacancy] }
+          context 'non findable course' do
+            let(:site_statuses) { [non_findable] }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
 
-          context 'findable course with no vacancies' do
-            let(:site_statuses) { [findable_without_vacancies] }
+          context 'findable closed course' do
+            let(:site_statuses) { [findable] }
             let(:application_status) { :closed }
 
             its(:open_for_applications?) { is_expected.to be false }
           end
 
-          context 'non findable course with no vacancies' do
-            let(:site_statuses) { [published_discontinued_with_no_vacancies] }
+          context 'non findable closed course' do
+            let(:site_statuses) { [non_findable] }
             let(:application_status) { :closed }
 
             its(:open_for_applications?) { is_expected.to be false }
@@ -1648,7 +1640,7 @@ describe Course do
         context 'with at least a single findable site statuses' do
           let(:site_statuses) do
             [default, findable, new_site_status,
-             site_status_with_no_vacancies, suspended, with_any_vacancy]
+             suspended]
           end
 
           context 'applications_open_from is in present or past' do
@@ -1664,8 +1656,8 @@ describe Course do
 
         context 'with no findable site statuses' do
           let(:site_statuses) do
-            [default, new_site_status, site_status_with_no_vacancies,
-             suspended, with_any_vacancy]
+            [default, new_site_status,
+             suspended]
           end
 
           context 'applications_open_from is in present or past' do

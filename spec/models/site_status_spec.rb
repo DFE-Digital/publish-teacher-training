@@ -5,12 +5,6 @@ require 'rails_helper'
 RSpec.describe SiteStatus do
   it_behaves_like 'Touch course', :site_status
 
-  RSpec::Matchers.define :have_vacancies do
-    match do |actual|
-      SiteStatus.with_vacancies.include?(actual)
-    end
-  end
-
   describe 'auditing' do
     it { is_expected.to be_audited.associated_with(:course) }
   end
@@ -75,42 +69,6 @@ RSpec.describe SiteStatus do
 
     describe 'if running and published on UCAS' do
       it { is_expected.to include(create(:site_status, :running, :published)) }
-    end
-  end
-
-  describe 'has vacancies?' do
-    describe 'if has part-time vacancies' do
-      subject { create(:site_status, :findable, :part_time_vacancies, course:) }
-
-      let(:course) { build(:course, study_mode: :part_time) }
-
-      it { is_expected.to have_vacancies }
-    end
-
-    describe 'if has full-time vacancies' do
-      subject { create(:site_status, :findable, :full_time_vacancies) }
-
-      it { is_expected.to have_vacancies }
-    end
-
-    describe 'if has both full-time and part-time vacancies' do
-      subject { create(:site_status, :findable, :both_full_time_and_part_time_vacancies, course:) }
-
-      let(:course) { build(:course, study_mode: :full_time_or_part_time) }
-
-      it { is_expected.to have_vacancies }
-    end
-
-    describe 'if has no vacancies' do
-      subject { create(:site_status, :no_vacancies) }
-
-      it { is_expected.not_to have_vacancies }
-    end
-
-    describe 'if has no findable vacancies' do
-      subject { create(:site_status, :full_time_vacancies) }
-
-      it { is_expected.not_to have_vacancies }
     end
   end
 

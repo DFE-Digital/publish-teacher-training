@@ -9,12 +9,7 @@ FactoryBot.define do
     status { 'running' }
 
     transient do
-      any_vancancy { false }
       provider { build(:provider) }
-    end
-
-    trait :with_any_vacancy do
-      any_vancancy { true }
     end
 
     trait :findable do
