@@ -33,7 +33,6 @@ module Find
             'lng' => '456',
             'rad' => '50',
             'query' => 'provider name',
-            'hasvacancies' => 'false',
             'subject_codes' => ['W1']
           }
         )
@@ -47,7 +46,6 @@ module Find
             'longitude' => '456',
             'radius' => '50',
             'provider.provider_name' => 'provider name',
-            'has_vacancies' => 'false',
             'subjects' => ['W1']
           }
         )
