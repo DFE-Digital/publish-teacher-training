@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 module Publish
-  module Schools
+  module StudySites
     describe SelectForm, type: :model do
       subject { described_class.new }
 

@@ -78,7 +78,8 @@ module Publish
       end
 
       def gias_school
-        @gias_school ||= GiasSchool.find(params[:study_site_id])
+        id = params[:study_site_id] || params[:school_id]
+        @gias_school ||= GiasSchool.find(id)
       end
     end
   end
