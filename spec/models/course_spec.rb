@@ -1328,7 +1328,6 @@ describe Course do
     its(:site_statuses) { is_expected.to be_empty }
     its(:findable?) { is_expected.to be false }
     its(:open_for_applications?) { is_expected.to be false }
-    its(:has_vacancies?) { is_expected.to be false }
   end
 
   context 'with sites' do
@@ -1487,7 +1486,6 @@ describe Course do
         it 'returns true' do
           allow(course).to receive(:findable_site_statuses).and_return([findable])
           expect(course.findable?).to be_truthy
-          expect(course.has_vacancies?).to be_truthy
         end
       end
 
@@ -1495,7 +1493,6 @@ describe Course do
         it 'returns false' do
           allow(course).to receive(:findable_site_statuses).and_return([])
           expect(course.findable?).to be_falsey
-          expect(course.has_vacancies?).to be_falsey
         end
       end
     end
