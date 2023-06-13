@@ -9,6 +9,22 @@ Rails/SkipsModelValidations:
     - 'app/services/subjects/financial_incentive_set_subject_knowledge_enhancement_course_available_service.rb'
     - 'lib/tasks/migrate_user_organisation_to_user_permission.rake'
 
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - 'db/migrate/20190222063449_add_opted_in_to_provider.rb'
+    - 'db/migrate/20190812153252_add_is_send_to_course.rb'
+    - 'db/migrate/20191101115140_add_admin_to_users.rb'
+    - 'db/migrate/20200227105316_add_user_notifications_table.rb'
+    - 'db/migrate/20200312143851_add_course_create_to_user_notification.rb'
+    - 'db/migrate/20200930155031_add_permission_given_to_contacts.rb'
+    - 'db/migrate/20210527145331_add_visa_columns_to_the_database.rb'
+    - 'db/migrate/20210527145331_add_visa_columns_to_the_database.rb'
+    - 'db/migrate/20210609081246_add_structured_degree_columns_to_the_course_table.rb'
+    - 'db/migrate/20210614130500_add_structured_gcse_columns_to_course_table.rb'
+    - 'db/migrate/20210623150714_remove_structured_gcse_columns_from_course_table.rb'
+    - 'db/migrate/20210623150714_remove_structured_gcse_columns_from_course_table.rb'
+    - 'db/migrate/20220825093437_add_visa_fields_to_course.rb'
+
 Rails/HasAndBelongsToMany:
   Exclude:
     - 'app/models/provider.rb'
