@@ -18,11 +18,6 @@ module PageObjects
 
       class Send < SitePrism::Section
         element :checkbox, 'input[name="send_courses"]'
-      end
-
-      class Vacancies < SitePrism::Section
-        element :checkbox, 'input[name="has_vacancies"]'
-      end
 
       class ApplicationsOpen < SitePrism::Section
         element :checkbox, 'input[name="applications_open"]'
@@ -61,7 +56,6 @@ module PageObjects
 
       sections :courses, Courses, '[data-qa="course"]'
       section :send, Send, '[data-qa="filters__send"]'
-      section :vacancies, Vacancies, '[data-qa="filters__vacancies"]'
       section :applications_open, ApplicationsOpen, '[data-qa="filters__applications_open"]'
       section :study_type, StudyType, '[data-qa="filters__study_type"]'
       section :qualifications, Qualifications, '[data-qa="filters__qualifications"]'
