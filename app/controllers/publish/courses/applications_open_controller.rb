@@ -30,6 +30,7 @@ module Publish
                 :study_mode,
                 :age_range_in_years,
                 :sites_ids,
+                :study_sites_ids,
                 :subjects_ids,
                 :goto_confirmation,
                 :skip_languages_goto_confirmation,

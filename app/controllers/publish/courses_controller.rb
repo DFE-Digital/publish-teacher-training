@@ -96,7 +96,8 @@ module Publish
               .permit(
                 policy(Course.new).permitted_new_course_attributes,
                 sites_ids: [],
-                subjects_ids: []
+                subjects_ids: [],
+                study_sites_ids: []
               )
       else
         ActionController::Parameters.new({}).permit(:course)
