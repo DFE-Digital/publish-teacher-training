@@ -1,18 +1,22 @@
 # frozen_string_literal: true
 
-require_relative '../sections/edit_school'
+require_relative '../sections/vacancy'
 
 module PageObjects
   module Publish
     class CourseSchoolEdit < PageObjects::Base
       set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/schools'
 
-      sections :schools, Sections::EditSchool, '.govuk-checkboxes__item'
+      sections :vacancies, Sections::Vacancy, '.govuk-checkboxes__item'
 
       element :submit, 'button.govuk-button[type="submit"]'
 
-      def school_names
-        schools.map { |el| el.find('.govuk-label').text }
+      def vacancy_names
+        vacancies.map { |el| el.find('.govuk-label').text }
+      end
+
+      def vacancy_checked_values
+        vacancies.map(&:checked?)
       end
     end
   end

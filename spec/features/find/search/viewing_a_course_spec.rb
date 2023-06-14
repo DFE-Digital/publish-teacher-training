@@ -90,11 +90,11 @@ feature 'Viewing a findable course' do
       provider:,
       accrediting_provider:,
       site_statuses: [
-        build(:site_status, :findable),
-        build(:site_status, :suspended),
-        build(:site_status, :new_status),
-        build(:site_status, :non_findable),
-        build(:site_status, :non_findable)
+        build(:site_status, :full_time_vacancies, :findable),
+        build(:site_status, :full_time_vacancies, :suspended),
+        build(:site_status, :full_time_vacancies, :new_status),
+        build(:site_status, :no_vacancies, :new_status),
+        build(:site_status, :no_vacancies, :findable)
       ],
       enrichments: [
         build(
@@ -188,6 +188,8 @@ feature 'Viewing a findable course' do
     expect(find_course_show_page.provider_website).to have_content(
       provider.website
     )
+
+    expect(find_course_show_page).not_to have_vacancies
 
     expect(find_course_show_page.about_course).to have_content(
       @course.latest_published_enrichment.about_course
