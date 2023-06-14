@@ -21,5 +21,10 @@ FactoryBot.define do
       running
       published
     end
+
+    trait :non_findable do
+      status { %i[discontinued new_status suspended].sample }
+      publish { %i[published unpublished].sample }
+    end
   end
 end

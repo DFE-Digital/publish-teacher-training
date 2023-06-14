@@ -84,17 +84,17 @@ feature 'Course show' do
 
   def and_there_is_a_published_physics_course
     given_a_course_exists(:with_accrediting_provider, :secondary, master_subject_id: 29, campaign_name: 'engineers_teach_physics', start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
-    given_a_site_exists(:full_time_vacancies, :findable)
+    given_a_site_exists(:findable)
   end
 
   def and_there_is_a_withdrawn_course
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :withdrawn)])
-    given_a_site_exists(:full_time_vacancies, :findable)
+    given_a_site_exists(:findable)
   end
 
   def and_there_is_a_published_course
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :published)])
-    given_a_site_exists(:full_time_vacancies, :findable)
+    given_a_site_exists(:findable)
   end
 
   def when_i_visit_the_course_details_page

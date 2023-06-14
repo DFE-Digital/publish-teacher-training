@@ -180,8 +180,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.website
     )
 
-    expect(publish_course_preview_page).not_to have_vacancies
-
     expect(publish_course_preview_page.about_course).to have_content(
       decorated_course.about_course
     )
@@ -289,20 +287,16 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def user_with_fee_based_course
-    site1 = build(:site, location_name: 'Running site with vacancies')
-    site2 = build(:site, location_name: 'Suspended site with vacancies')
-    site3 = build(:site, location_name: 'New site with vacancies')
-    site4 = build(:site, location_name: 'New site with no vacancies')
-    site5 = build(:site, location_name: 'Running site with no vacancies')
+    site1 = build(:site, location_name: 'Running site')
+    site2 = build(:site, location_name: 'Suspended site')
+    site3 = build(:site, location_name: 'New site')
 
-    site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
-    site_status2 = build(:site_status, :published, :full_time_vacancies, :suspended, site: site2)
-    site_status3 = build(:site_status, :published, :full_time_vacancies, :new_status, site: site3)
-    site_status4 = build(:site_status, :published, :no_vacancies, :new_status, site: site4)
-    site_status5 = build(:site_status, :published, :no_vacancies, :running, site: site5)
+    site_status1 = build(:site_status, :published, :running, site: site1)
+    site_status2 = build(:site_status, :published, :suspended, site: site2)
+    site_status3 = build(:site_status, :published, :new_status, site: site3)
 
-    sites = [site1, site2, site3, site4, site5]
-    site_statuses = [site_status1, site_status2, site_status3, site_status4, site_status5]
+    sites = [site1, site2, site3]
+    site_statuses = [site_status1, site_status2, site_status3]
 
     course_enrichment = build(
       :course_enrichment, :published, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000

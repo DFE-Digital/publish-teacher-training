@@ -114,64 +114,6 @@ RSpec.describe SiteStatus do
     end
   end
 
-  describe 'vac_status' do
-    specs = [
-      {
-        course_study_mode: :full_time,
-        valid_states: %w[no_vacancies full_time_vacancies],
-        invalid_states: %w[part_time_vacancies both_full_time_and_part_time_vacancies]
-      },
-      {
-        course_study_mode: :part_time,
-        valid_states: %w[no_vacancies part_time_vacancies],
-        invalid_states: %w[full_time_vacancies both_full_time_and_part_time_vacancies]
-      },
-      {
-        course_study_mode: :full_time_or_part_time,
-        valid_states: %w[no_vacancies part_time_vacancies full_time_vacancies both_full_time_and_part_time_vacancies],
-        invalid_states: []
-      }
-    ].freeze
-
-    specs.each do |spec|
-      context "#{spec[:study_mode].to_s.humanize(capitalize: false)} course" do
-        let(:course) { build(:course, study_mode: spec[:course_study_mode]) }
-
-        spec[:valid_states].each do |state|
-          context "vac_status set to #{state}" do
-            subject { build(:site_status, vac_status: state, course:) }
-
-            it { is_expected.to be_valid }
-          end
-        end
-
-        spec[:invalid_states].each do |state|
-          context "vac_status set to #{state}" do
-            subject { build(:site_status, vac_status: state, course:) }
-
-            it { is_expected.not_to be_valid }
-
-            it 'has a validation error about vacancy status not matching study mode' do
-              subject.valid?
-              expect(subject.errors.full_messages).to include("Vac status (#{state}) must be consistent with course study mode #{course.study_mode}")
-            end
-          end
-        end
-      end
-    end
-  end
-
-  describe 'default_vac_status_given' do
-    subject { SiteStatus }
-
-    it 'returns correct default_vac_status' do
-      expect(subject.default_vac_status_given(study_mode: 'full_time')).to eq :full_time_vacancies
-      expect(subject.default_vac_status_given(study_mode: 'part_time')).to eq :part_time_vacancies
-      expect(subject.default_vac_status_given(study_mode: 'full_time_or_part_time')).to eq :both_full_time_and_part_time_vacancies
-      expect(subject.default_vac_status_given(study_mode: 'foo')).to eq :no_vacancies
-    end
-  end
-
   describe 'status changes' do
     describe 'when suspending a running, published site status' do
       subject { create(:site_status, :running, :published).tap(&:suspend!).reload }
@@ -186,32 +128,6 @@ RSpec.describe SiteStatus do
 
         it { is_expected.to be_status_running }
         it { is_expected.to be_published_on_ucas }
-      end
-    end
-  end
-
-  describe '#vacancies_filled?' do
-    context 'vacancies filled' do
-      subject { create(:site_status, :running, :full_time_vacancies) }
-
-      before do
-        subject.assign_attributes(vac_status: 'no_vacancies')
-      end
-
-      it 'returns true' do
-        expect(subject.vacancies_filled?).to be(true)
-      end
-    end
-
-    context 'vacancies available' do
-      subject { create(:site_status, :running, :no_vacancies) }
-
-      before do
-        subject.assign_attributes(vac_status: 'full_time_vacancies')
-      end
-
-      it 'returns false' do
-        expect(subject.vacancies_filled?).to be(false)
       end
     end
   end

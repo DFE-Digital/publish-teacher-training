@@ -5,7 +5,7 @@ require 'forwardable'
 
 module PageObjects
   module Sections
-    class Vacancy < PageObjects::Sections::Base
+    class EditSchool < PageObjects::Sections::Base
       extend Forwardable
 
       element :name, '.govuk-checkboxes__label'

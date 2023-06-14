@@ -52,11 +52,11 @@ feature 'Editing course schools', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_see_a_list_of_schools
-    expect(publish_course_school_edit_page.vacancy_names).to contain_exactly('Site 1', 'Site 2')
+    expect(publish_course_school_edit_page.school_names).to contain_exactly('Site 1', 'Site 2')
   end
 
   def when_i_update_the_course_schools
-    publish_course_school_edit_page.vacancies.find do |el|
+    publish_course_school_edit_page.schools.find do |el|
       el.find('.govuk-label').text == 'Site 1'
     end.check
   end

@@ -10,7 +10,6 @@ module Find
       'lng' => 'longitude',
       'rad' => 'radius',
       'query' => 'provider.provider_name',
-      'hasvacancies' => 'has_vacancies',
       'subject_codes' => 'subjects'
     }.freeze
 
