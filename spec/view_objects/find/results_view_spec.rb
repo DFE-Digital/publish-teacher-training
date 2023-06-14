@@ -386,7 +386,7 @@ module Find
       end
 
       let(:site_statuses) do
-        [build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1)]
+        [build(:site_status, :findable, site: site1)]
       end
 
       let(:course) do
@@ -443,8 +443,8 @@ module Find
           course = build(
             :course,
             site_statuses: [
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2)
+              build(:site_status, :findable, site: site1),
+              build(:site_status, :findable, site: site2)
             ]
           )
 
@@ -462,8 +462,8 @@ module Find
           course = build(
             :course,
             site_statuses: [
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2)
+              build(:site_status, :findable, site: site1),
+              build(:site_status, :findable, site: site2)
             ]
           )
 
@@ -480,7 +480,7 @@ module Find
           course = build(
             :course,
             site_statuses: [
-              build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1)
+              build(:site_status, :findable, site: site1)
             ]
           )
 
@@ -545,7 +545,7 @@ module Find
           :site,
           latitude: 51.4985,
           longitude: 0.1358,
-          address1: 'No vacancies road',
+          address1: 'None findable road',
           address2: 'Witham',
           address3: '',
           town: 'Essex',
@@ -558,11 +558,11 @@ module Find
         build(
           :course,
           site_statuses: [
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site1),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site2),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site3),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, site: site4, status: 'suspended'),
-            build(:site_status, :both_full_time_and_part_time_vacancies, :findable, :no_vacancies, site: site5)
+            build(:site_status, :findable, site: site1),
+            build(:site_status, :findable, site: site2),
+            build(:site_status, :findable, site: site3),
+            build(:site_status, :findable, site: site4, status: 'suspended'),
+            build(:site_status, :findable, :no_vacancies, site: site5)
           ]
         )
       end
@@ -572,7 +572,7 @@ module Find
       end
 
       describe '#nearest_address' do
-        it 'returns the address to the nearest site with vacancies' do
+        it 'returns the address to the nearest findable site' do
           allow(Geokit::LatLng).to receive(:new).and_return(geocoder)
           allow(geocoder).to receive(:distance_to)
           allow(geocoder).to receive(:distance_to).with('51.4985,0.1367')
@@ -600,7 +600,7 @@ module Find
       end
 
       describe '#site_distance' do
-        it 'returns the running or new sites with vacancies count' do
+        it 'returns the running or new sites count' do
           expect(results_view.site_distance(course)).to eq(0.1)
         end
       end
