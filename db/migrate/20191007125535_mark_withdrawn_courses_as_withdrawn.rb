@@ -2,7 +2,7 @@
 
 class MarkWithdrawnCoursesAsWithdrawn < ActiveRecord::Migration[6.0]
   def up
-    say_with_time 'Marking all courses with site statuses that have been suspended with no vacancies' do
+    say_with_time 'Marking all courses with site statuses that have been suspended' do
       courses = Course.where(site_statuses: SiteStatus.where(status: 'suspended'))
       published_courses = courses.select(&:is_published?)
       courses_with_all_suspended_sites = published_courses.select do |course|
