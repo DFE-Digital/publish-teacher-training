@@ -10,7 +10,6 @@ describe CourseDecorator do
   let(:biology) { build_stubbed(:secondary_subject, :biology) }
   let(:mathematics) { build_stubbed(:secondary_subject, :mathematics) }
   let(:subjects) { [english, mathematics] }
-  let(:has_vacancies) { false }
   let(:is_withdrawn) { false }
 
   let(:content_status) do
