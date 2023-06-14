@@ -266,7 +266,6 @@ RSpec.describe API::Public::V1::CoursesController do
                 findable
                 has_early_career_payments
                 has_scholarship
-                has_vacancies
                 is_send
                 last_published_at
                 open_for_applications

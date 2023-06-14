@@ -16,10 +16,6 @@ properties:
       - published
       - unpublished
     example: "published"
-  has_vacancies:
-    type: boolean
-    description: "Are there any vacancies for this course."
-    example: true
   vacancy_status:
     type: string
     description: "What type of vacancies are available."

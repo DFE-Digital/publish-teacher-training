@@ -88,10 +88,6 @@ module API
           @object.has_scholarship?
         end
 
-        attribute :has_vacancies do
-          @object.has_vacancies?
-        end
-
         attribute :is_send do
           @object.is_send?
         end

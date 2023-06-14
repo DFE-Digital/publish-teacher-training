@@ -148,10 +148,6 @@ properties:
     type: boolean
     description: "Are scholarships available for this course?"
     example: true
-  has_vacancies:
-    type: boolean
-    description: "Do any of the locations for this course have vacancies?"
-    example: true
   how_school_placements_work:
     type: string
     nullable: true

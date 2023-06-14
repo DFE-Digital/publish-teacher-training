@@ -53,7 +53,6 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
   it { is_expected.to have_attribute(:has_scholarship).with_value(course.has_scholarship?) }
-  it { is_expected.to have_attribute(:has_vacancies).with_value(course.has_vacancies?) }
   it { is_expected.to have_attribute(:how_school_placements_work).with_value(course.latest_published_enrichment.how_school_placements_work) }
   it { is_expected.to have_attribute(:interview_process).with_value(course.latest_published_enrichment.interview_process) }
   it { is_expected.to have_attribute(:is_send).with_value(course.is_send?) }

@@ -2,10 +2,6 @@ type: object
 example: ""
 description: "This schema is used to search within collections to return more specific results."
 properties:
-  has_vacancies:
-    description: "Return courses that only have vacancies?"
-    type: boolean
-    example: true
   findable:
     description: "Return courses that are currently available on the Find Postgraduate Teacher Training service"
     type: boolean

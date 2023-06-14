@@ -279,11 +279,6 @@
             "description": "Are scholarships available for this course?",
             "example": true
           },
-          "has_vacancies": {
-            "type": "boolean",
-            "description": "Do any of the locations for this course have vacancies?",
-            "example": true
-          },
           "how_school_placements_work": {
             "type": "string",
             "nullable": true,
@@ -577,11 +572,6 @@
         "example": "",
         "description": "This schema is used to search within collections to return more specific results.",
         "properties": {
-          "has_vacancies": {
-            "description": "Return courses that only have vacancies?",
-            "type": "boolean",
-            "example": true
-          },
           "findable": {
             "description": "Return courses that are currently available on the Find Postgraduate Teacher Training service",
             "type": "boolean",
@@ -1025,11 +1015,6 @@
               "unpublished"
             ],
             "example": "published"
-          },
-          "has_vacancies": {
-            "type": "boolean",
-            "description": "Are there any vacancies for this course.",
-            "example": true
           },
           "vacancy_status": {
             "type": "string",
@@ -1931,7 +1916,6 @@
             "required": false,
             "description": "Refine courses to return.",
             "example": {
-              "has_vacancies": true,
               "subjects": "00,01",
               "updated_since": "2020-11-13T11:21:55Z",
               "degree_grade": "two_two",
@@ -2170,7 +2154,6 @@
             "required": false,
             "description": "Refine courses to return.",
             "example": {
-              "has_vacancies": true,
               "subjects": "00,01",
               "updated_since": "2020-11-13T11:21:55Z",
               "degree_grade": "two_two",
