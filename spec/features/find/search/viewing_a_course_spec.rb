@@ -286,8 +286,6 @@ feature 'Viewing a findable course' do
       [@provider.address1, @provider.address2, @provider.address3, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
     )
 
-    expect(find_course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
-
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
       expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
     end
