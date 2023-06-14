@@ -22,7 +22,7 @@ class ApplicationDecorator < Draper::Decorator
 
   def status_tags
     if current_recruitment_cycle_year?
-      object.application_status_open? ? status_tags_for_application_status_open : status_tags_for_applocation_status_closed
+      object.application_status_open? ? status_tags_for_vacancies : status_tags_for_no_vacancies
     else
       status_tags_for_rolled_over_courses
     end
@@ -34,7 +34,7 @@ class ApplicationDecorator < Draper::Decorator
 
   private
 
-  def status_tags_for_application_status_open
+  def status_tags_for_vacancies
     {
       published: { text: 'Open', colour: 'turquoise' },
       withdrawn: { text: 'Withdrawn', colour: 'red' },
@@ -45,12 +45,12 @@ class ApplicationDecorator < Draper::Decorator
     }
   end
 
-  def status_tags_for_applocation_status_closed
-    status_tags_for_application_status_open.merge(published: { text: 'Closed', colour: 'purple' }, published_with_unpublished_changes: { text: 'Closed&nbsp;*', colour: 'purple' })
+  def status_tags_for_no_vacancies
+    status_tags_for_vacancies.merge(published: { text: 'Closed', colour: 'purple' }, published_with_unpublished_changes: { text: 'Closed&nbsp;*', colour: 'purple' })
   end
 
   def status_tags_for_rolled_over_courses
-    status_tags_for_application_status_open.merge(published: { text: 'Scheduled', colour: 'blue' }, published_with_unpublished_changes: { text: 'Scheduled&nbsp;*', colour: 'blue' })
+    status_tags_for_vacancies.merge(published: { text: 'Scheduled', colour: 'blue' }, published_with_unpublished_changes: { text: 'Scheduled&nbsp;*', colour: 'blue' })
   end
 
   def current_recruitment_cycle_year?

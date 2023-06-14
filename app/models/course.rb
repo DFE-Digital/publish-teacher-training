@@ -6,6 +6,7 @@ class Course < ApplicationRecord
   include ChangedAt
   include TouchProvider
   include Courses::EditOptions
+  include StudyModeVacancyMapper
   include TimeFormat
 
   after_initialize :set_defaults
@@ -226,7 +227,7 @@ class Course < ApplicationRecord
 
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: }) }
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
-
+  scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, -> { where(program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship]) }
   scope :with_study_modes, lambda { |study_modes|
     if study_modes.include? 'full_time_or_part_time'
@@ -437,7 +438,11 @@ class Course < ApplicationRecord
   end
 
   def has_vacancies?
-    findable?
+    if site_statuses.loaded?
+      site_statuses.select(&:findable?).any?(&:with_vacancies?)
+    else
+      site_statuses.findable.with_vacancies.any?
+    end
   end
 
   def has_multiple_running_sites_or_study_modes?
@@ -684,10 +689,16 @@ class Course < ApplicationRecord
     assign_program_type_service.execute(funding_type, self)
   end
 
+  def ensure_site_statuses_match_study_mode
+    site_statuses.not_no_vacancies.each do |site_status|
+      update_vac_status(study_mode, site_status)
+    end
+  end
+
   def withdraw
     if is_published?
       site_statuses.each do |site_status|
-        site_status.update(status: :suspended)
+        site_status.update(vac_status: :no_vacancies, status: :suspended)
       end
 
       withdraw_latest_enrichment

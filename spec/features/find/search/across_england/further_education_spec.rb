@@ -55,7 +55,7 @@ feature 'Searching across England' do
   end
 
   def then_i_should_see_the_find_results_page
-    expect(page).to have_current_path('/results?age_group=further_education&applications_open=true&l=2&subjects[]=41')
+    expect(page).to have_current_path('/results?age_group=further_education&applications_open=true&has_vacancies=true&l=2&subjects[]=41')
   end
 
   def and_i_should_see_the_correct_courses

@@ -44,6 +44,7 @@ RSpec/VerifiedDoubles:
     - 'spec/models/course_spec.rb'
     - 'spec/lib/find_constraint_spec.rb'
     - 'spec/lib/big_query/request_event_spec.rb'
+    - 'spec/helpers/vacancy_helper_spec.rb'
     - 'spec/forms/support/user_form_spec.rb'
     - 'spec/forms/publish/course_funding_form_spec.rb'
     - 'spec/controllers/api/public/v1/subject_areas_controller_spec.rb'
@@ -69,6 +70,7 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/services/courses/generate_course_name_service_spec.rb'
     - 'spec/validators/unique_course_validator_spec.rb'
+    - 'spec/services/vacancy_status_determination_service_spec.rb'
     - 'spec/services/user_associations_service/delete_spec.rb'
     - 'spec/services/user_associations_service/create_spec.rb'
     - 'spec/services/token/decode_service_spec.rb'
@@ -96,6 +98,7 @@ RSpec/NestedGroups:
     - 'spec/models/course/publishable_spec.rb'
     - 'spec/models/course/assign_program_type_spec.rb'
     - 'spec/models/contact_spec.rb'
+    - 'spec/helpers/vacancy_helper_spec.rb'
     - 'spec/helpers/find/subject_helper_spec.rb'
     - 'spec/forms/publish/course_funding_form_spec.rb'
     - 'spec/features/publish/managing_users_spec.rb'

@@ -207,6 +207,22 @@ module Find
         end
       end
 
+      describe '#has_vacancies_checked?' do
+        subject { described_class.new(params:).has_vacancies_checked? }
+
+        context 'when parameter is present' do
+          let(:params) { { has_vacancies: 'true' } }
+
+          it { is_expected.to be(true) }
+        end
+
+        context 'when parameter is not present' do
+          let(:params) { {} }
+
+          it { is_expected.to be(false) }
+        end
+      end
+
       describe '#full_time_checked?' do
         subject { described_class.new(params:).full_time_checked? }
 

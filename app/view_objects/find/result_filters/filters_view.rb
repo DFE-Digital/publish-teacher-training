@@ -57,6 +57,10 @@ module Find
         params[:can_sponsor_visa] == 'true'
       end
 
+      def has_vacancies_checked?
+        params[:has_vacancies] == 'true'
+      end
+
       def has_applications_open_checked?
         params[:applications_open] == 'true'
       end
@@ -77,6 +81,10 @@ module Find
         return true if params[:study_type].nil?
 
         params[:study_type] == 'full_time_or_part_time'
+      end
+
+      def default_with_vacancies_to_true
+        params[:has_vacancies].nil?
       end
 
       def default_with_applications_open_to_true
