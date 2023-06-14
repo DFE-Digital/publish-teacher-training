@@ -35,6 +35,7 @@ module Find
                          how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'Teaching placements',
                          program_type: 'scitt_programme',
+                         study_sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
         end
 
@@ -43,12 +44,17 @@ module Find
                          how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'Teaching placements',
                          program_type: 'higher_education_programme',
+                         study_sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
+        end
+
+        def fake_study_site
+          Site.new(id: 11_228_658, location_name: 'Study site', code: '1', address1: '1 Main Street', address2: 'Mainland', address3: 'Mainford', address4: 'Mainsville', postcode: 'MN1 1AA', region_code: 'london', site_type: :study_site)
         end
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :how_school_placements_work, :placements_heading, :program_type, :site_statuses)
+          attr_accessor(:provider, :how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
 
           def preview_site_statuses
             site_statuses.sort_by { |status| status.site.location_name }

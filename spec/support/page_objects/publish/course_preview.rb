@@ -40,7 +40,8 @@ module PageObjects
       element :contact_address, '[data-qa=provider__address]'
       element :course_advice, '#section-advice'
       element :course_apply, '#section-apply'
-      element :choose_a_training_school_table, '[data-qa=course__choose_a_training_school]'
+      element :study_sites_table, '#course_study_sites'
+      element :school_placements_table, '#course_school_placements'
       element :salary_details, '[data-qa=course__salary_details]'
       element :age_range_in_years, '[data-qa=course__age_range]'
     end

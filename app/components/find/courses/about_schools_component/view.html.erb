@@ -1,5 +1,5 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-schools"><%= course.placements_heading %></h2>
+  <h2 class="govuk-heading-l" id="training-locations">Training locations</h2>
   <div data-qa="course__about_schools">
     <% if course.program_type == "higher_education_programme" && course.provider.provider_code != "B31" %>
       <%= render Find::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
@@ -18,34 +18,48 @@
 
     <% if course.how_school_placements_work.present? %>
       <%= markdown(course.how_school_placements_work) %>
-
-      <% if course.site_statuses.map(&:site).uniq.many? %>
-        <h3 class="govuk-heading-m">Schools</h3>
-        <p class="govuk-body">We work with the following schools to provide your school placements.</p>
-        <table class="govuk-table app-table--vertical-align-middle" data-qa="course__choose_a_training_school">
-          <caption class="govuk-visually-hidden">List of schools</caption>
-          <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">School</th>
-          </tr>
-          </thead>
-
-          <tbody class="govuk-table__body">
-          <% course.preview_site_statuses.each do |site_status| %>
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                <strong><%= smart_quotes(site_status.site.location_name) %></strong>
-                <br>
-                <%= smart_quotes(site_status.site.decorate.full_address) %>
-              </td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      <% end %>
-
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
+    <% end %>
+
+    <% if course.study_sites.any? %>
+      <h3 class="govuk-heading-m">
+        Study sites
+      </h3>
+
+      <p class="govuk-body">
+        The theoretical learning part of your course will be at the following location.
+      </p>
+
+      <ul class="govuk-list govuk-list--spaced" id="course_study_sites">
+        <% course.study_sites.each do |study_site| %>
+          <li>
+            <strong><%= smart_quotes(study_site.location_name) %></strong>
+            <br>
+            <%= smart_quotes(study_site.decorate.full_address) %>
+          </li>
+      <% end %>
+      </ul>
+    <% end %>
+
+    <% if course.site_statuses.map(&:site).uniq.many? %>
+      <h3 class="govuk-heading-m">
+        School placements
+      </h3>
+
+      <p class="govuk-body">
+        We work with the following schools to provide your school placements.
+      </p>
+
+      <ul class="govuk-list govuk-list--spaced" id="course_school_placements">
+        <% course.preview_site_statuses.each do |site_status| %>
+          <li>
+            <strong><%= smart_quotes(site_status.site.location_name) %></strong>
+            <br>
+            <%= smart_quotes(site_status.site.decorate.full_address) %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
   </div>
 </div>

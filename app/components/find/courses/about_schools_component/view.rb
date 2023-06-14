@@ -11,6 +11,7 @@ module Find
 
         delegate :how_school_placements_work,
                  :program_type,
+                 :study_sites,
                  :site_statuses, to: :course
 
         def initialize(course)
@@ -22,6 +23,7 @@ module Find
           how_school_placements_work.present? ||
             program_type == 'higher_education_programme' ||
             program_type == 'scitt_programme' ||
+            study_sites.any? ||
             site_statuses.map(&:site).uniq.many? ||
             FeatureService.enabled?(:course_preview_missing_information)
         end
