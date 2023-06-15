@@ -45,7 +45,7 @@ feature 'Searching for a study site from the GIAS list' do
 
   def then_i_should_be_taken_to_the_add_study_site_page
     URI(current_url).then do |uri|
-      expect(uri.path).to eq("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study_sites/new")
+      expect(uri.path).to eq("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/study-sites/new")
       expect(uri.query).to eq("school_id=#{@school_two.id}")
     end
   end

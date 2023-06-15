@@ -148,6 +148,14 @@ en:
             show: "Show school"
             delete: "Are you sure you want to remove this school?"
             no_delete: "You cannot remove this school"
+          study_sites:
+            index: "Study sites"
+            new: "Add study site"
+            edit: "Edit study site details"
+            check: "Check your answers"
+            show: "Show study site"
+            delete: "Are you sure you want to remove this study site?"
+            no_delete: "You cannot remove this study site"
       support:
         rollover:
           index: "Recruitment Cycles"

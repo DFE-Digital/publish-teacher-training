@@ -16,6 +16,4 @@ authentication:
   mode: persona
 
 features:
-  support_new_provider_creation_flow: true
-  accredited_provider_search: true
-
+  study_sites: true
