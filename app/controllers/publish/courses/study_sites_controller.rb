@@ -18,14 +18,14 @@ module Publish
         redirect_to next_step
       end
 
-      def edit
+      def edit # TODO: will need updating
         authorize(provider)
 
         @course_school_form = CourseSchoolForm.new(@course)
         @course_school_form.valid? if show_errors_on_publish?
       end
 
-      def update
+      def update # TODO: will need updating
         authorize(provider)
 
         @course_school_form = CourseSchoolForm.new(@course, params: school_params)
