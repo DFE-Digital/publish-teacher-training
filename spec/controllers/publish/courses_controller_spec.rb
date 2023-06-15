@@ -13,6 +13,7 @@ module Publish
         :with_gcse_equivalency,
         enrichments: [build(:course_enrichment, :initial_draft)],
         sites: [create(:site, location_name: 'location 1')],
+        study_sites: [create(:site, :study_site)],
         provider:
       )
     end
