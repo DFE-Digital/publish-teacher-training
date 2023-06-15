@@ -24,6 +24,7 @@ module Publish
 
     describe '#Publish', { can_edit_current_and_next_cycles: false } do
       it 'calls NotificationService::CoursePublished when successful' do
+        binding.pry
         expect(NotificationService::CoursePublished).to receive(:call).with(course:)
 
         post :publish, params: {
