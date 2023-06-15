@@ -23,6 +23,7 @@ module PageObjects
         section :funding_type, SummaryList, '[data-qa=course__funding_type]'
         section :study_mode, SummaryList, '[data-qa=course__study_mode]'
         section :schools, SummaryList, '[data-qa=course__schools]'
+        section :study_sites, SummaryList, '[data-qa=course__study_sites]'
         section :accredited_provider, SummaryList, '[data-qa=course__accredited_provider]'
         section :applications_open, SummaryList, '[data-qa=course__applications_open]'
         section :start_date, SummaryList, '[data-qa=course__start_date]'

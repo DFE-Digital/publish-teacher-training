@@ -139,9 +139,9 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
 
   def given_i_am_authenticated_as_a_provider_user(provider_trait = nil)
     providers = if provider_trait.present?
-                  [build(:provider, provider_trait, sites: [build(:site)])]
+                  [build(:provider, provider_trait, sites: [build(:site)], study_sites: [build(:site, :study_site)])]
                 else
-                  [build(:provider, sites: [build(:site), build(:site)])]
+                  [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)])]
                 end
 
     @user = create(:user, providers:)
@@ -165,6 +165,10 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     @site ||= provider.sites.first
   end
 
+  def study_site
+    @study_site ||= provider.study_sites.first
+  end
+
   def then_i_am_met_with_the_publish_provider_courses_index_page
     expect(publish_provider_courses_index_page).to be_displayed
     expect(publish_provider_courses_index_page.success_summary).to have_content('Your course has been created')
@@ -180,6 +184,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_confirmation_page.details.age_range.value.text).to eq('14 to 19')
     expect(publish_course_confirmation_page.details.study_mode.value.text).to eq('Full time or part time')
     expect(publish_course_confirmation_page.details.schools.value.text).to have_content(site.location_name)
+    expect(publish_course_confirmation_page.details.study_sites.value.text).to have_content(study_site.location_name)
     expect(publish_course_confirmation_page.details.applications_open.value.text).to eq("12 October #{Settings.current_recruitment_cycle_year.to_i - 1}")
     expect(publish_course_confirmation_page.details.start_date.value.text).to eq("October #{Settings.current_recruitment_cycle_year.to_i - 1}")
   end
