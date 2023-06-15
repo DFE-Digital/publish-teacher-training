@@ -484,7 +484,7 @@ class Course < ApplicationRecord
   end
 
   def content_status
-    services[:content_status].execute(enrichment: latest_enrichment, recruitment_cycle:)
+    services[:content_status].execute(enrichment: latest_enrichment)
   end
 
   def ucas_status

@@ -46,7 +46,7 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.subjects.first.type).to eq course.subjects.first.type
     expect(new_course.subjects.first.subject_code).to eq course.subjects.first.subject_code
     expect(new_course.subjects.first.subject_name).to eq course.subjects.first.subject_name
-    expect(new_course.content_status).to eq :rolled_over
+    expect(new_course.content_status).to eq :draft
     expect(new_course.ucas_status).to eq :new
     expect(new_course.open_for_applications?).to be_falsey
     expect(new_course.can_sponsor_skilled_worker_visa).to eq course.can_sponsor_skilled_worker_visa
