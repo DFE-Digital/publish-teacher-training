@@ -31,6 +31,7 @@ describe WorkflowStepService do
           funding_type
           full_or_part_time
           school
+          study_site
           accredited_provider
           can_sponsor_skilled_worker_visa
           applications_open
@@ -65,6 +66,7 @@ describe WorkflowStepService do
           funding_type
           full_or_part_time
           school
+          study_site
           can_sponsor_skilled_worker_visa
           applications_open
           start_date
@@ -86,6 +88,7 @@ describe WorkflowStepService do
         outcome
         full_or_part_time
         school
+        study_site
         applications_open
         start_date
         confirmation
@@ -111,6 +114,7 @@ describe WorkflowStepService do
         apprenticeship
         full_or_part_time
         school
+        study_site
         can_sponsor_skilled_worker_visa
         applications_open
         start_date
