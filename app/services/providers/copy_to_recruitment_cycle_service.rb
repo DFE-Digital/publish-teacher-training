@@ -11,6 +11,7 @@ module Providers
     def execute(provider:, new_recruitment_cycle:, course_codes: nil)
       providers_count = 0
       sites_count = 0
+      study_sites_count = 0
       courses_count = 0
 
       if provider.rollable? || force
@@ -31,6 +32,7 @@ module Providers
           # Order is important here. Sites should be copied over before courses
           # so that courses can link up to the correct sites in the new provider.
           sites_count = copy_sites_to_new_provider(provider, rolled_over_provider)
+          study_sites_count = copy_study_sites_to_new_provider(provider, rolled_over_provider)
           courses_count = copy_courses_to_new_provider(rolled_over_provider, courses_to_copy(provider, course_codes))
         end
       end
@@ -38,6 +40,7 @@ module Providers
       {
         providers: providers_count,
         sites: sites_count,
+        study_sites: study_sites_count,
         courses: courses_count
       }
     end
@@ -97,6 +100,17 @@ module Providers
       end
 
       sites_count
+    end
+
+    def copy_study_sites_to_new_provider(provider, new_provider)
+      study_sites_count = 0
+
+      provider.study_sites.each do |site|
+        new_site = @copy_site_to_provider_service.execute(site:, new_provider:)
+        study_sites_count += 1 if new_site.present?
+      end
+
+      study_sites_count
     end
   end
 end

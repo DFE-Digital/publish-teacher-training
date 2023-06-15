@@ -10,7 +10,7 @@ describe RolloverService do
 
   before do
     allow(Courses::CopyToProviderService).to receive(:new).with(
-      sites_copy_to_course: instance_of(Sites::CopyToCourseService),
+      sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
       force:
     ).and_return(copy_course_to_provider_service)

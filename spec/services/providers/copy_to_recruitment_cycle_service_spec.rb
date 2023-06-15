@@ -4,7 +4,8 @@ require 'rails_helper'
 
 describe Providers::CopyToRecruitmentCycleService do
   describe '#execute' do
-    let(:site) { build(:site) }
+    let(:site) { build(:site, :school) }
+    let(:study_site) { build(:site, :study_site) }
     let(:published_course_enrichment) { build(:course_enrichment, :published) }
     let(:course_enrichments) { [published_course_enrichment] }
     let(:course) { create(:course, enrichments: course_enrichments, provider:) }
@@ -22,6 +23,7 @@ describe Providers::CopyToRecruitmentCycleService do
       create(:provider,
              :with_users,
              sites: [site],
+             study_sites: [study_site],
              ucas_preferences:,
              contacts:)
     end
@@ -160,6 +162,7 @@ describe Providers::CopyToRecruitmentCycleService do
       expect(output).to eq(
         providers: 1,
         sites: 1,
+        study_sites: 1,
         courses: 1
       )
     end
@@ -169,7 +172,7 @@ describe Providers::CopyToRecruitmentCycleService do
         create(:provider,
                :with_users,
                sites: [site],
-               ucas_preferences:,
+               study_sites: [study_site],
                contacts:)
       end
       let(:draft_course_enrichment) { build(:course_enrichment) }
