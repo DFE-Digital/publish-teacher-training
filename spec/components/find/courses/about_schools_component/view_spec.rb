@@ -13,7 +13,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
         result = render_inline(described_class.new(course))
 
-        expect(result.text).to include(course.placements_heading)
+        expect(result.text).to include('Training locations')
       end
     end
   end
@@ -56,7 +56,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include(course.placements_heading)
+      expect(result.text).to include('Study sites')
     end
   end
 
