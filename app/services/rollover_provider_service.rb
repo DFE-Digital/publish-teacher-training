@@ -46,7 +46,7 @@ class RolloverProviderService
 
   def copy_courses_to_provider_service
     @copy_courses_to_provider_service ||= Courses::CopyToProviderService.new(
-      sites_copy_to_course: Sites::CopyToCourseService.new,
+      sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
       force:
     )

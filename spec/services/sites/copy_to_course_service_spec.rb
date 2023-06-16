@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 describe Sites::CopyToCourseService do
-  let(:site) { create(:site) }
   let(:course) { create(:course, provider: new_provider) }
-  let(:service) { described_class.new }
   let(:new_provider) do
     create(:provider,
            recruitment_cycle: new_recruitment_cycle)
@@ -13,21 +11,38 @@ describe Sites::CopyToCourseService do
   let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
 
   before do
-    service.execute(new_site: site, new_course: course)
+    described_class.call(new_site: site, new_course: course)
   end
 
-  it 'copies the site' do
-    expect(course.sites.count).to eq(1)
+  context 'site is a school' do
+    let(:site) { create(:site, :school) }
+
+    it 'copies the site' do
+      expect(course.sites.count).to eq(1)
+    end
+
+    it 'has the same code as the original site' do
+      new_site = course.sites.last
+      expect(new_site.code).to eq(site.code)
+    end
+
+    describe "the new site's status" do
+      subject { course.site_statuses.first }
+
+      it { is_expected.to be_status_new_status }
+    end
   end
 
-  it 'has the same code as the original site' do
-    new_site = course.sites.last
-    expect(new_site.code).to eq(site.code)
-  end
+  context 'site is a study site' do
+    let(:site) { create(:site, :study_site) }
 
-  describe "the new site's status" do
-    subject { course.site_statuses.first }
+    it 'copies the study site' do
+      expect(course.study_sites.count).to eq(1)
+    end
 
-    it { is_expected.to be_status_new_status }
+    it 'has the same code as the original site' do
+      new_study_site = course.study_sites.last
+      expect(new_study_site.code).to eq(site.code)
+    end
   end
 end

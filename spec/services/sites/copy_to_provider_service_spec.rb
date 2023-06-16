@@ -4,13 +4,14 @@ require 'rails_helper'
 
 describe Sites::CopyToProviderService do
   describe '#copy_to_provider' do
-    let(:site) { build(:site) }
+    let(:site) { build(:site, :school) }
     let(:provider) { create(:provider, sites: [site]) }
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
     let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
     let(:next_provider) do
       create(:provider,
              sites: [],
+             study_sites: [],
              provider_code: provider.provider_code,
              recruitment_cycle: next_recruitment_cycle)
     end
@@ -61,6 +62,18 @@ describe Sites::CopyToProviderService do
 
         next_site = next_provider.reload.sites.find_by(code: site.code)
         expect(next_site).not_to be_nil
+      end
+    end
+
+    context 'the site is a study site' do
+      let(:site) { build(:site, :study_site) }
+      let(:provider) { create(:provider, study_sites: [site]) }
+
+      it 'sets the site type to study site' do
+        service.execute(site:, new_provider: next_provider)
+
+        next_site = next_provider.reload.study_sites.find_by(code: site.code)
+        expect(next_site).to be_a_study_site
       end
     end
   end

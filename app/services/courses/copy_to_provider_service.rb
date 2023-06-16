@@ -28,11 +28,8 @@ module Courses
 
         copy_latest_enrichment_to_course(course, new_course)
 
-        course.sites.each do |site|
-          new_site = new_provider.sites.find_by(code: site.code)
-
-          @sites_copy_to_course.execute(new_site:, new_course:) if new_site.present?
-        end
+        copy_schools(course:, new_provider:, new_course:)
+        copy_study_sites(course:, new_provider:, new_course:)
       end
       new_course
     end
@@ -58,6 +55,22 @@ module Courses
       return course.applications_open_from if next_cycle.blank?
 
       [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
+    end
+
+    def copy_schools(course:, new_provider:, new_course:)
+      course.sites.each do |site|
+        new_site = new_provider.sites.find_by(code: site.code)
+
+        @sites_copy_to_course.call(new_site:, new_course:) if new_site.present?
+      end
+    end
+
+    def copy_study_sites(course:, new_provider:, new_course:)
+      course.study_sites.each do |site|
+        new_site = new_provider.study_sites.find_by(code: site.code)
+
+        @sites_copy_to_course.call(new_site:, new_course:) if new_site.present?
+      end
     end
 
     def next_cycle

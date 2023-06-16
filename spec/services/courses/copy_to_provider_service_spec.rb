@@ -24,7 +24,7 @@ RSpec.describe Courses::CopyToProviderService do
     new_provider.reload.courses.find_by(course_code: course.course_code)
   end
 
-  let(:mocked_sites_copy_to_course_service) { double(execute: nil) }
+  let(:mocked_sites_copy_to_course_service) { double(call: nil) }
   let(:mocked_enrichments_copy_to_course_service) { double(execute: nil) }
   let(:service) do
     described_class.new(
@@ -144,7 +144,7 @@ RSpec.describe Courses::CopyToProviderService do
     it 'does not make a copy of the course' do
       service.execute(course:, new_provider:)
 
-      expect(mocked_sites_copy_to_course_service).not_to have_received(:execute)
+      expect(mocked_sites_copy_to_course_service).not_to have_received(:call)
     end
 
     it 'does not make a copy of the enrichments' do
@@ -169,7 +169,7 @@ RSpec.describe Courses::CopyToProviderService do
     it 'does not make a copy of the course' do
       service.execute(course:, new_provider:)
 
-      expect(mocked_sites_copy_to_course_service).not_to have_received(:execute)
+      expect(mocked_sites_copy_to_course_service).not_to have_received(:call)
     end
 
     it 'does not make a copy of the enrichments' do
@@ -179,9 +179,9 @@ RSpec.describe Courses::CopyToProviderService do
     end
   end
 
-  context 'the original course has sites' do
-    let(:site) { create(:site, provider:) }
-    let!(:new_site) { create(:site, provider: new_provider, code: site.code) }
+  context 'the original course has schools' do
+    let(:site) { create(:site, :school, provider:) }
+    let!(:new_site) { create(:site, :school, provider: new_provider, code: site.code) }
     let!(:site_status) do
       create(:site_status,
              :no_vacancies,
@@ -205,7 +205,31 @@ RSpec.describe Courses::CopyToProviderService do
     end
 
     it "copies over the course's sites" do
-      expect(mocked_sites_copy_to_course_service).to have_received(:execute).with(new_site:, new_course:)
+      expect(mocked_sites_copy_to_course_service).to have_received(:call).with(new_site:, new_course:)
+    end
+  end
+
+  context 'the original course has study sites' do
+    let(:site) { create(:site, :study_site, provider:) }
+    let!(:new_site) { create(:site, :study_site, provider: new_provider, code: site.code) }
+    let!(:study_site_placement) { create(:study_site_placement, course:, site:) }
+
+    before do
+      described_class.new(
+        sites_copy_to_course: mocked_sites_copy_to_course_service,
+        enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
+        force:
+      ).execute(course:, new_provider:)
+    end
+
+    describe 'the new course' do
+      subject { new_course }
+
+      its(:open_for_applications?) { is_expected.to be_falsey }
+    end
+
+    it "copies over the course's study sites" do
+      expect(mocked_sites_copy_to_course_service).to have_received(:call).with(new_site:, new_course:)
     end
   end
 
