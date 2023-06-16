@@ -12,3 +12,8 @@ qa:
   <<: *default
   RAILS_ENV: qa_aks
   RACK_ENV: qa_aks
+
+staging:
+  <<: *default
+  RAILS_ENV: staging_aks
+  RACK_ENV: staging_aks
