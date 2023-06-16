@@ -31,7 +31,7 @@ runs:
       run: |
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "aks_app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
@@ -45,16 +45,13 @@ runs:
           echo "deploy_url=https://publish-review-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
+          app_environment=$(jq -r '.app_environment' ${tf_vars_file})
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
           hostname=$(jq -r '.additional_hostnames[0]' ${tf_vars_file})
-          if [ ${{ inputs.environment }} == "production" ]; then
-            echo "deploy_url=https://api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
+          if [ ${app_environment} == "production" ]; then
+            echo "deploy_url=https://api2.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           else
-            if [[ $cluster == 'production' ]]; then
-              echo "deploy_url=https://publish-${aks_app_environment}.teacherservices.cloud" >> $GITHUB_OUTPUT
-            else
-              echo "deploy_url=https://publish-${aks_app_environment}.${cluster}.teacherservices.cloud" >> $GITHUB_OUTPUT
-            fi
+            echo "deploy_url=https://${app_environment}2.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           fi
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
         fi;
@@ -96,7 +93,10 @@ runs:
             ;;
         esac
 
-        echo "app_name=publish-${{ env.aks_app_environment }}-${{ inputs.pr-number }}" >> $GITHUB_ENV
+        if [ "${{ inputs.environment }}" == "review_aks" ] && [ "${{ inputs.pr-number }}" != "" ]; then
+          echo "Set the app name to include the review app PR number."
+          echo "app_name=publish-review-${{ inputs.pr-number }}" >> $GITHUB_ENV
+        fi
 
     - name: Install kubectl
       if: ${{ inputs.environment == 'review_aks' }}

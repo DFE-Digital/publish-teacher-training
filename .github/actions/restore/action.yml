@@ -11,6 +11,7 @@ inputs:
     options:
     - review_aks
     - qa_aks
+    - staging_aks
   pr-number:
     description: PR number for the review app
     required: false
@@ -18,7 +19,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Set KV environment variables for AKS
+    - name: Set environment variables for AKS
       shell: bash
       run: |
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
@@ -49,26 +50,22 @@ runs:
     - name: Set app name variable
       shell: bash
       run: |
-        modified_environment=$(echo "${{ inputs.environment }}" | sed 's/_aks//g')
-        echo "modified_environment: ${modified_environment}"
-
-        if [ "${{ inputs.environment }}" == "review_aks" ] && [ "${{ inputs.pr-number }}" != "" ]; then
+        if [ "${{ env.app_environment }}" == "review" ] && [ "${{ inputs.pr-number }}" != "" ]; then
           echo "Set the app name to include the review app PR number."
-          app_name_suffix=${modified_environment}-${{ inputs.pr-number }}
-          echo "app_name=publish-${app_name_suffix}" >> $GITHUB_ENV
+          echo "app_name=publish-review-${{ inputs.pr-number }}" >> $GITHUB_ENV
         else
           echo "Set the app name to the environent name"
-          echo "app_name=publish-${modified_environment}" >> $GITHUB_ENV
+          echo "app_name=publish-${{ env.app_environment }}" >> $GITHUB_ENV
         fi
 
     - name: Install kubectl
-      if: ${{ inputs.environment != 'review_aks' }}
+      if: ${{ env.app_environment != 'review' }}
       uses: azure/setup-kubectl@v3
       with:
         version: "v1.26.1" # default is latest stable
 
     - name: K8 setup
-      if: ${{ inputs.environment != 'review_aks' }}
+      if: ${{ env.app_environment != 'review' }}
       shell: bash
       run: |
         az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
@@ -78,7 +75,7 @@ runs:
       shell: bash
       run: |
         sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s completed --json databaseId --jq '.[].databaseId' -L 1)
-        echo "Download artifact for workflow run ID: $sanitised_backup_workflow_run_id"
+        echo "Download artifact for Database Backup and Restore workflow run ID: $sanitised_backup_workflow_run_id"
         gh run download $sanitised_backup_workflow_run_id
 
     - name: Restore backup to aks env database
