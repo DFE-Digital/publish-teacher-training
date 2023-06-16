@@ -1982,7 +1982,7 @@ describe Course do
       expect(course).to delegate_method_to_service(
         :content_status,
         'Courses::ContentStatusService'
-      ).with_arguments(enrichment: enrichment1, recruitment_cycle:)
+      ).with_arguments(enrichment: enrichment1)
     end
   end
 

@@ -4,8 +4,7 @@ require 'rails_helper'
 
 describe Courses::ContentStatusService do
   let(:service) { described_class.new }
-  let(:execute_service) { service.execute(enrichment:, recruitment_cycle:) }
-  let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
+  let(:execute_service) { service.execute(enrichment:) }
 
   context 'when the enrichment parameter is nil' do
     let(:enrichment) { nil }
@@ -14,7 +13,7 @@ describe Courses::ContentStatusService do
       let(:recruitment_cycle) { find_or_create(:recruitment_cycle, :next) }
 
       it 'returns rolled over' do
-        expect(execute_service).to eq :rolled_over
+        expect(execute_service).to eq :draft
       end
     end
 

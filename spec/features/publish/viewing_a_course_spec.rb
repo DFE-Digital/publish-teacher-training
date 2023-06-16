@@ -107,7 +107,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       when_i_click_the_rollover_course_button
       then_i_should_see_the_course_show_page_with_success_message
       when_i_click_the_view_rollover_link
-      then_i_should_see_the_rolled_over_course_show_page
+      then_i_should_see_the_draft_course_on_the_show_page
     end
   end
 
@@ -145,6 +145,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_the_rolled_over_course_show_page
     expect(page).to have_content 'Rolled over'
+  end
+
+  def then_i_should_see_the_draft_course_on_the_show_page
+    expect(page).to have_content 'Draft'
   end
 
   def then_i_should_see_the_course_show_page_with_success_message
