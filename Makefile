@@ -192,7 +192,7 @@ read-keyvault-config:
 read-cluster-config:
 	$(eval CLUSTER=$(shell jq -r '.cluster' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 	$(eval NAMESPACE=$(shell jq -r '.namespace' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
-	$(eval CONFIG_LONG=$(shell jq -r '.env_config' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval CONFIG_LONG=$(shell jq -r '.app_environment' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 
 edit-app-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \

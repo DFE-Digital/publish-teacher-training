@@ -77,11 +77,6 @@ variable "db_sslmode" {
   default = "value"
 }
 
-variable "env_config" {
-  type    = string
-  default = "value"
-}
-
 variable "postgres_version" { default = 13 }
 
 variable "app_config_file" {

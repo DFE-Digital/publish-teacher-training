@@ -41,7 +41,7 @@ runs:
       run: RAILS_ENV=${{ inputs.environment }} ./bin/bundle exec rspec spec/smoke --format documentation
 
     - name: 'Notify #twd_findpub_tech on failure'
-      if: ${{ failure() && inputs.environment != 'review' }}
+      if: ${{ failure() && inputs.environment != 'review_aks' }}
       uses: rtCamp/action-slack-notify@master
       env:
         SLACK_CHANNEL: twd_findpub_tech
