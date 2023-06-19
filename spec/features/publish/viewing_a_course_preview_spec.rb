@@ -267,7 +267,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.address4
     )
 
-    expect(publish_course_preview_page).to have_choose_a_training_school_table
+    expect(publish_course_preview_page).to have_study_sites_table
+    expect(publish_course_preview_page).to have_school_placements_table
 
     expect(publish_course_preview_page).to have_course_advice
 
@@ -294,6 +295,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     site3 = build(:site, location_name: 'New site with vacancies')
     site4 = build(:site, location_name: 'New site with no vacancies')
     site5 = build(:site, location_name: 'Running site with no vacancies')
+    study_site = build(:site, :study_site, location_name: 'Study site')
 
     site_status1 = build(:site_status, :published, :full_time_vacancies, :running, site: site1)
     site_status2 = build(:site_status, :published, :full_time_vacancies, :suspended, site: site2)
@@ -319,6 +321,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :fee_type_based,
       accrediting_provider:,
       site_statuses:, enrichments: [course_enrichment],
+      study_sites: [study_site],
       degree_grade: 'two_one',
       degree_subject_requirements: 'Maths A level',
       subjects: [course_subject]
@@ -329,7 +332,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     }
 
     provider = build(
-      :provider, sites:, courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
+      :provider, sites:, study_sites: [study_site], courses: [course], accrediting_provider_enrichments: [accrediting_provider_enrichment]
     )
 
     create(
@@ -423,8 +426,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_a_valid_form
-    fill_in 'About this course',   with: 'great course'
-    fill_in 'School placements',   with: 'great placement'
+    fill_in 'About this course', with: 'great course'
+    fill_in 'School placements', with: 'great placement'
 
     click_button 'Update course information'
   end

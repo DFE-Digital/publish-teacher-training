@@ -13,7 +13,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
         result = render_inline(described_class.new(course))
 
-        expect(result.text).to include(course.placements_heading)
+        expect(result.text).to include('Training locations')
       end
     end
   end
@@ -42,6 +42,21 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include(course.placements_heading)
+    end
+  end
+
+  context 'course with study sites' do
+    it 'renders the component' do
+      provider = build(:provider)
+      course = build(:course,
+                     provider:,
+                     study_sites: [
+                       build(:site, :study_site)
+                     ]).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).to include('Study sites')
     end
   end
 

@@ -4,7 +4,7 @@
     <li><%= govuk_link_to "Course summary", "#section-about" %></li>
   <% end %>
   <% if how_school_placements_work.present? || program_type == "higher_education_programme" || program_type == "scitt_programme" || (preview? && FeatureService.enabled?(:course_preview_missing_information)) %>
-    <li><%= govuk_link_to course.placements_heading, "#section-schools" %></li>
+    <li><%= govuk_link_to "Training locations", "#training-locations" %></li>
   <% end %>
   <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
   <% if provider.train_with_us.present? || about_accrediting_provider.present? || (preview? && FeatureService.enabled?(:course_preview_missing_information)) %>

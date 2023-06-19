@@ -738,24 +738,6 @@ describe CourseDecorator do
     end
   end
 
-  describe '#placements_heading' do
-    context 'when the subject is not further education' do
-      let(:course) { build_stubbed(:course) }
-
-      it 'returns school placements' do
-        expect(decorated_course.placements_heading).to eq('School placements')
-      end
-    end
-
-    context 'when the subject is further education' do
-      let(:course) { build_stubbed(:course, level: 'further_education') }
-
-      it 'returns teaching placements' do
-        expect(decorated_course.placements_heading).to eq('School placements')
-      end
-    end
-  end
-
   describe '#subject_page_title' do
     let(:subject_page_title) { course.decorate.subject_page_title }
 

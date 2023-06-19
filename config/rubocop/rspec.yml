@@ -196,7 +196,7 @@ RSpec/IndexedLet:
     - 'spec/controllers/api/public/v1/providers_controller_spec.rb'
     - 'spec/controllers/api/accredited_provider_suggestions_controller_spec.rb'
 
-Rspec/Rails/HaveHttpStatus:
+RSpec/Rails/HaveHttpStatus:
   Exclude:
     - 'spec/smoke/api/v1/courses_spec.rb'
     - 'spec/smoke/api/v1/healthcheck_spec.rb'
