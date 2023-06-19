@@ -22,6 +22,10 @@ feature 'selection schools', { can_edit_current_and_next_cycles: false } do
 
   private
 
+  def and_the_study_sites_feature_flag_is_active
+    allow(Settings.features).to receive(:study_sites).and_return(true)
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     @user = create(:user, :with_provider)
     given_i_am_authenticated(user: @user)
@@ -49,8 +53,8 @@ feature 'selection schools', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_met_with_the_accredited_provider_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/study-sites/new", ignore_query: true)
-    expect(page).to have_content('Study sites')
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/accredited-provider/new", ignore_query: true)
+    expect(page).to have_content('Accredited provider')
   end
 
   def then_i_am_met_with_errors

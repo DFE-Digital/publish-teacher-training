@@ -133,28 +133,30 @@
           <% end %>
         <% end %>
 
-        <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
-          <% row.with_key { "Study site".pluralize(course.study_sites.length) } %>
-          <% row.with_value do %>
-            <% if course.study_sites.nil? || course.study_sites.empty? %>
-              <span class="app-!-colour-muted">None</span>
-            <% elsif course.study_sites.size == 1 %>
-              <%= course.study_sites.first.location_name %>
-            <% else %>
-              <ul class="govuk-list">
-                <% course.alphabetically_sorted_study_sites.each do |site| %>
-                  <li><%= site.location_name %></li>
-                <% end %>
-              </ul>
+        <% if FeatureService.enabled?(:study_sites) %>
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
+            <% row.with_key { "Study site".pluralize(course.study_sites.length) } %>
+            <% row.with_value do %>
+              <% if course.study_sites.nil? || course.study_sites.empty? %>
+                <span class="app-!-colour-muted">None</span>
+              <% elsif course.study_sites.size == 1 %>
+                <%= course.study_sites.first.location_name %>
+              <% else %>
+                <ul class="govuk-list">
+                  <% course.alphabetically_sorted_study_sites.each do |site| %>
+                    <li><%= site.location_name %></li>
+                  <% end %>
+                </ul>
+              <% end %>
             <% end %>
-          <% end %>
-          <% if @course.provider.study_sites.count > 1 %>
-            <% row.with_action(
-              href: new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "study sites"
-            ) %>
-          <% else %>
-            <% row.with_action %>
+            <% if @course.provider.study_sites.count > 1 %>
+              <% row.with_action(
+                href: new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                visually_hidden_text: "study sites"
+              ) %>
+            <% else %>
+              <% row.with_action %>
+            <% end %>
           <% end %>
         <% end %>
 
