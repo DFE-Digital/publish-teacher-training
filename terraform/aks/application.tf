@@ -2,11 +2,11 @@ module "application_configuration" {
   source = "./vendor/modules/aks//aks/application_configuration"
 
   namespace             = var.namespace
-  environment           = local.environment
+  environment           = local.app_name_suffix
   azure_resource_prefix = var.azure_resource_prefix
   service_short         = var.service_short
   config_short          = var.config_short
-  key_vault_secret_name = var.key_vault_app_secret_name
+  secret_yaml_key       = var.key_vault_app_secret_name
   secret_variables      = local.app_secrets
   config_variables      = yamldecode(file(var.app_config_file))[var.env_config]
 }
@@ -19,7 +19,7 @@ module "web_application" {
   is_web = true
 
   namespace    = var.namespace
-  environment  = local.environment
+  environment  = local.app_name_suffix
   service_name = var.service_name
 
   cluster_configuration_map = module.cluster_data.configuration_map
@@ -29,7 +29,7 @@ module "web_application" {
 
   docker_image           = var.docker_image
   command                = var.use_db_setup_command ? local.db_setup_command : []
-  web_external_hostnames = var.app_environment == "review" ? local.review_additional_hostnames : var.gov_uk_host_names
+  web_external_hostnames = var.app_environment == "review" ? local.review_additional_hostnames : var.additional_hostnames
   max_memory             = each.value.max_memory
   probe_path             = "/ping"
 }
@@ -43,7 +43,7 @@ module "worker_application" {
   is_web = false
 
   namespace    = var.namespace
-  environment  = local.environment
+  environment  = local.app_name_suffix
   service_name = var.service_name
 
   cluster_configuration_map = module.cluster_data.configuration_map

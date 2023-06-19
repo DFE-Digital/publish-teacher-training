@@ -106,7 +106,7 @@ jobs:
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Push ${{ env.DOCKER_IMAGE }} images for review
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
+      if: ${{ github.event_name == 'pull_request' && (contains(github.event.pull_request.labels.*.name, 'deploy') || contains(github.event.pull_request.labels.*.name, 'deploy_v2')) }}
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Run Snyk to check Docker image for vulnerabilities
@@ -119,7 +119,7 @@ jobs:
         args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
 
     - name: Push ${{ env.DOCKER_IMAGE }} images
-      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
+      if: ${{ success() && (!contains(github.event.pull_request.labels.*.name, 'deploy') || !contains(github.event.pull_request.labels.*.name, 'deploy_v2')) }}
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Alert Build Failures
@@ -379,6 +379,33 @@ jobs:
       - name: Deploy App to ${{ matrix.environment }}
         id: deploy_app_before_production
         uses: ./.github/actions/deploy/
+        with:
+          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          environment: ${{ matrix.environment }}
+          sha: ${{ github.sha }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+
+  deploy-aks-before-production:
+    name: Parallel deployment before production v2
+    environment:
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy_app_before_production_v2.outputs.deploy-url }}
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [qa_aks]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy App to ${{ matrix.environment }} v2
+        id: deploy_app_before_production_v2
+        uses: ./.github/actions/deploy_v2/
         with:
           arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
