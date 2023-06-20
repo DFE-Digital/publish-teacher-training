@@ -1,0 +1,23 @@
+<% content_for :page_title, title_with_error_prefix("Study sites – #{course.name_and_code}", course.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">
+      <%= render CaptionText.new(text: course.name_and_code) %>
+      Study sites
+    </h1>
+  </legend>
+
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      </p>
+    </div>
+  </div>
+</fieldset>
+
