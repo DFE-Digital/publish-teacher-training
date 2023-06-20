@@ -174,7 +174,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.1.2)
+    cssbundling-rails (1.2.0)
       railties (>= 6.0.0)
     data_migrate (10.0.2)
       activerecord (>= 6.0)
@@ -416,7 +416,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.0)
+    minitest (5.18.1)
     mock_redis (0.36.0)
       ruby2_keywords
     msgpack (1.6.0)
@@ -762,7 +762,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   cloudfront-rails
   config
-  cssbundling-rails (~> 1.1)
+  cssbundling-rails (~> 1.2)
   custom_error_message!
   data_migrate
   database_cleaner
