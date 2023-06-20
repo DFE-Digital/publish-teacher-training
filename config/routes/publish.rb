@@ -231,8 +231,8 @@ namespace :publish, as: :publish do
         get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
         put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
 
-        get "/study-sites", on: :member, to: "courses/study_sites#edit"
-        put "/study-sites", on: :member, to: "courses/study_sites#update"
+        get '/study-sites', on: :member, to: 'courses/study_sites#edit'
+        put '/study-sites', on: :member, to: 'courses/study_sites#update'
       end
 
       scope module: :providers do
