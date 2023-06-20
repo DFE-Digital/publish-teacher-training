@@ -96,7 +96,8 @@ module Publish
               ).permit(
                 policy(Course.new).permitted_new_course_attributes,
                 sites_ids: [],
-                subjects_ids: []
+                subjects_ids: [],
+                study_sites_ids: []
               )
       else
         ActionController::Parameters.new({}).permit(:course)
@@ -162,6 +163,8 @@ module Publish
       case page
       when :school
         back_publish_provider_recruitment_cycle_courses_schools_path(path_params)
+      when :study_site
+        back_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
       when :modern_languages
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
@@ -185,6 +188,8 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_apprenticeship_path(path_params)
       when :school
         new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
+      when :study_site
+        new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
       when :entry_requirements
         new_publish_provider_recruitment_cycle_courses_entry_requirements_path(path_params)
       when :outcome

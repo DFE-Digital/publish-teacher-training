@@ -48,14 +48,16 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     given_a_course_exists(
       :with_gcse_equivalency,
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')]
+      sites: [create(:site, location_name: 'location 1')],
+      study_sites: [create(:site, :study_site)]
     )
   end
 
   def and_there_is_a_draft_course
     given_a_course_exists(
       enrichments: [build(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')]
+      sites: [create(:site, location_name: 'location 1')],
+      study_sites: [create(:site, :study_site)]
     )
   end
 

@@ -9,21 +9,30 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     # with the correct course being created
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_page
+    and_the_study_sites_feature_flag_is_active
     and_i_click_on_add_course
     then_i_can_create_the_course
   end
 
   private
 
+  def and_the_study_sites_feature_flag_is_active
+    allow(Settings.features).to receive(:study_sites).and_return(true)
+  end
+
   def then_i_can_create_the_course
     expect(publish_courses_new_level_page).to be_displayed
     course_creation_params = select_level({}, level: 'primary', level_selection: publish_courses_new_level_page.level_fields.primary, next_page: publish_courses_new_subjects_page)
+
     course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: publish_courses_new_age_range_page)
+
     course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
+
     course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_apprenticeship_page)
     course_creation_params = select_apprenticeship(course_creation_params, next_page: publish_courses_new_study_mode_page)
     course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
-    course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
+    course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_study_sites_page)
+    course_creation_params = select_study_site(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
     course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
     course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)
@@ -36,7 +45,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
       user: create(
         :user,
         providers: [
-          create(:provider, :accredited_provider, sites: [build(:site), build(:site)])
+          create(:provider, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
         ]
       )
     )
@@ -62,6 +71,10 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
 
   def sites
     @sites ||= provider.sites.sort_by(&:location_name)
+  end
+
+  def study_sites
+    @study_sites ||= provider.study_sites.sort_by(&:location_name)
   end
 
   def and_i_click_on_add_course
@@ -190,6 +203,22 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_schools_page.check(sites.second.location_name)
 
     publish_courses_new_schools_page.continue.click
+
+    expect_page_to_be_displayed_with_query(
+      page: next_page,
+      expected_query_params: course_creation_params
+    )
+
+    course_creation_params
+  end
+
+  def select_study_site(course_creation_params, next_page:)
+    course_creation_params[:study_sites_ids] = [study_sites.first.id.to_s, study_sites.second.id.to_s]
+
+    publish_courses_new_study_sites_page.check(study_sites.first.location_name)
+    publish_courses_new_study_sites_page.check(study_sites.second.location_name)
+
+    publish_courses_new_study_sites_page.continue.click
 
     expect_page_to_be_displayed_with_query(
       page: next_page,

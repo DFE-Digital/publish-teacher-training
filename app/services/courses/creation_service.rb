@@ -27,6 +27,7 @@ module Courses
       course.assign_attributes(course_attributes.except(:subjects_ids))
 
       update_sites(course)
+      update_study_sites(course)
       course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
@@ -50,6 +51,10 @@ module Courses
       @sites ||= provider.sites.find(site_ids.compact_blank)
     end
 
+    def study_sites
+      @study_sites ||= provider.study_sites.find(study_site_ids.compact_blank)
+    end
+
     def subject_ids
       @subject_ids ||= course_params['subjects_ids']
     end
@@ -58,12 +63,24 @@ module Courses
       @site_ids ||= course_params['sites_ids']
     end
 
+    def study_site_ids
+      @study_site_ids ||= course_params['study_sites_ids']
+    end
+
     def update_sites(course)
       return if site_ids.nil?
 
       course.sites = sites if site_ids.any?
 
       course.errors.add(:sites, message: 'Select at least one school') if site_ids.empty?
+    end
+
+    def update_study_sites(course)
+      return if study_site_ids.nil?
+
+      course.study_sites = study_sites if study_site_ids.any?
+
+      course.errors.add(:study_sites, message: 'Select at least one study site') if study_site_ids.empty?
     end
   end
 end

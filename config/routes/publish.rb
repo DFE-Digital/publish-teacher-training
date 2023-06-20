@@ -112,7 +112,7 @@ namespace :publish, as: :publish do
           get 'back'
           get 'continue'
         end
-        resource :study_sites, on: :member, only: %i[new], controller: 'courses/study_sites' do
+        resource :study_sites, on: :member, only: %i[new], controller: 'courses/study_sites', path: 'study-sites' do
           get 'back'
           get 'continue'
         end

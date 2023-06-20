@@ -8,6 +8,7 @@ describe Course do
 
     let(:course) { create(:course) }
     let(:site) { create(:site) }
+    let(:study_site) { create(:site, :study_site) }
     let(:site_status) { create(:site_status, :new_status, site:) }
 
     its(:publishable?) { is_expected.to be_falsey }
@@ -16,7 +17,7 @@ describe Course do
       let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
       let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
       let(:course) do
-        create(:course, :with_gcse_equivalency, :self_accredited, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status])
+        create(:course, :with_gcse_equivalency, :self_accredited, subjects: [primary_with_mathematics], enrichments: [enrichment], site_statuses: [site_status], study_sites: [study_site])
       end
 
       its(:publishable?) { is_expected.to be_truthy }
