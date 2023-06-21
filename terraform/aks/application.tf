@@ -31,6 +31,7 @@ module "web_application" {
   command                = var.use_db_setup_command ? local.db_setup_command : []
   web_external_hostnames = var.app_environment == "review" ? local.review_additional_hostnames : var.additional_hostnames
   max_memory             = each.value.max_memory
+  replicas               = each.value.replicas
   probe_path             = "/ping"
 }
 
@@ -54,5 +55,6 @@ module "worker_application" {
   docker_image  = var.docker_image
   command       = length("${each.value.startup_command}") > 0 ? each.value.startup_command : local.worker_startup_command
   max_memory    = each.value.max_memory
+  replicas      = each.value.replicas
   probe_command = ["pgrep", "-f", "sidekiq"]
 }
