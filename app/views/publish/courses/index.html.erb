@@ -1,6 +1,18 @@
 <% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
 
+<%= govuk_notification_banner(title_text: t("notification_banner.info")) do |notification_banner| %>
+  <% notification_banner.with_heading do %>
+    There is a problem with the connection between Publish and Apply for teacher training (Apply), preventing open and
+    closed courses from updating correctly.
+    <br><br>
+    Find postgraduate teacher training (Find) is still working as intended.
+    <br><br>
+    We’re urgently working to fix the problem with Apply.
+    If you need to make a change, contact <%= link_to Settings.support_email, "mailto:#{Settings.support_email}" %>
+  <% end %>
+<% end %>
+
 <h1 class="govuk-heading-l">Courses</h1>
 
   <%= govuk_button_link_to(
