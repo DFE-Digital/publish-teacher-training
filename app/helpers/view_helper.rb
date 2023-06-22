@@ -58,7 +58,8 @@ module ViewHelper
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
-        sites: "#{base}/schools?display_errors=true"
+        sites: "#{base}/schools?display_errors=true",
+        study_sites: "#{base}/study-sites"
       }.with_indifferent_access[field]
     end
   end
@@ -79,6 +80,7 @@ module ViewHelper
       'postcode' => "#{base}/contact?display_errors=true#provider_postcode"
     }[field]
   end
+
 
   # def environment_colour
   #  return "purple" if sandbox_mode?
