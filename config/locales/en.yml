@@ -479,7 +479,7 @@ en:
             sites:
               blank: "^Select at least one school"
             study_sites:
-              blank: "^Select at least one study site"
+              blank: "Select at least one study site"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
