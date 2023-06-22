@@ -81,7 +81,6 @@ module ViewHelper
     }[field]
   end
 
-
   # def environment_colour
   #  return "purple" if sandbox_mode?
 
