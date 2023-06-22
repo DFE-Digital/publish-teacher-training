@@ -144,7 +144,7 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.9.0'
 
 # For running data migrations
-gem 'data_migrate'
+gem 'data_migrate', '~> 9.0.0'
 
 # For outgoing http requests
 gem 'http'
