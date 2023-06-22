@@ -317,6 +317,7 @@ class Course < ApplicationRecord
 
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
+  validates :study_sites, presence: true, on: %i[publish new update], if: -> { recruitment_cycle_after_2023? }
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
@@ -343,6 +344,10 @@ class Course < ApplicationRecord
 
   def is_engineers_teach_physics?
     master_subject_id == SecondarySubject.physics.id && engineers_teach_physics?
+  end
+
+  def recruitment_cycle_after_2023?
+    provider.recruitment_cycle_year.to_i > 2023
   end
 
   def university_based?
