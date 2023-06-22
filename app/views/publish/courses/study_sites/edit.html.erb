@@ -6,31 +6,36 @@
 
 <%= render "publish/shared/errors" %>
 
-    <%= form_with(
-      model: course,
-      url: study_sites_publish_provider_recruitment_cycle_course_path(
-        course.provider_code,
-        course.recruitment_cycle_year,
-        course.course_code
-      ),
-      method: :put,
-      local: true
-    ) do |f| %>
+<%= form_with(
+  model: course,
+  url: study_sites_publish_provider_recruitment_cycle_course_path(
+    course.provider_code,
+    course.recruitment_cycle_year,
+    course.course_code
+  ),
+  method: :put,
+  local: true
+) do |f| %>
 
-      <%= f.govuk_error_summary %>
+  <%= f.govuk_error_summary %>
 
-      <%= f.govuk_check_boxes_fieldset :study_sites_ids, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
-         <div class="govuk-hint">Select all that apply</div>
-        <% @provider.study_sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                  <%= f.govuk_check_box :study_sites_ids,
-                      site.id,
-                      label: { text: site.location_name },
-                      hint: { text: site.full_address } %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <%= f.govuk_check_boxes_fieldset :study_sites_ids, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
+          <div class="govuk-hint">Select all that apply</div>
+          <% @provider.study_sites.sort_by(&:location_name).each_with_index do |site, index| %>
+                    <%= f.govuk_check_box :study_sites_ids,
+                        site.id,
+                        label: { text: site.location_name },
+                        hint: { text: site.full_address } %>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <%= f.govuk_submit "Update study sites" %>
-    <% end %>
+        <%= f.govuk_submit "Update study sites" %>
+      <% end %>
+      </div>
+    </div>
 
 <p class="govuk-body">
   <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
