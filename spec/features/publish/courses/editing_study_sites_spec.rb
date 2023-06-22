@@ -79,12 +79,12 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_check_the_first_study_site_and_submit
-    check('course-study-sites-ids-3-field', allow_label_click: true)
+    check(provider.study_sites.first.location_name)
     click_button 'Update study sites'
   end
 
   def and_i_uncheck_the_first_study_site_and_submit
-    uncheck('course-study-sites-ids-3-field', allow_label_click: true)
+    uncheck(provider.study_sites.first.location_name)
     click_button 'Update study sites'
   end
 
@@ -97,11 +97,11 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_the_previously_selected_study_site_is_still_checked
-    expect(page).to have_selector('#course-study-sites-ids-3-field[checked="checked"]')
+    expect(page).to have_checked_field('course-study-sites-ids-3-field')
   end
 
   def and_the_study_site_checkbox_is_not_checked
-    expect(page).not_to have_selector('#course-study-sites-ids-3-field[checked="checked"]')
+    expect(page).not_to have_checked_field('course-study-sites-ids-3-field')
   end
 
   alias_method :and_there_is_a_course_i_want_to_edit, :given_a_course_exists
