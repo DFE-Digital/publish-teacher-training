@@ -79,12 +79,12 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_check_the_first_study_site_and_submit
-    check('course-study-sites-ids-3-field')
+    check('course-study-sites-ids-3-field', allow_label_click: true)
     click_button 'Update study sites'
   end
 
   def and_i_uncheck_the_first_study_site_and_submit
-    uncheck('course-study-sites-ids-3-field')
+    uncheck('course-study-sites-ids-3-field', allow_label_click: true)
     click_button 'Update study sites'
   end
 
