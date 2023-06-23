@@ -36,4 +36,8 @@ module RecruitmentCycleHelper
   def current_recruitment_cycle?(provider)
     provider.recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year
   end
+
+  def recruitment_cycle_after_2023?(provider_or_course)
+    provider_or_course.recruitment_cycle_year.to_i > 2023
+  end
 end
