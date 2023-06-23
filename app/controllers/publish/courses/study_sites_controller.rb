@@ -41,7 +41,7 @@ module Publish
       private
 
       def update_course_study_sites
-        study_site_ids = params[:course][:study_sites_ids]
+        study_site_ids = params[:course][:study_sites]
         @study_sites ||= provider.study_sites.find(study_site_ids.compact_blank!)
 
         course.study_sites = @study_sites.select { |site| study_site_ids.include?(site.id.to_s) }

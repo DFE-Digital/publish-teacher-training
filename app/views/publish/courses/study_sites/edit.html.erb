@@ -22,13 +22,14 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-        <%= f.govuk_check_boxes_fieldset :study_sites_ids, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
+        <%= f.govuk_check_boxes_fieldset :study_sites, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
           <div class="govuk-hint">Select all that apply</div>
           <% @provider.study_sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                    <%= f.govuk_check_box :study_sites_ids,
+                    <%= f.govuk_check_box :study_sites,
                         site.id,
                         label: { text: site.location_name },
-                        hint: { text: site.full_address } %>
+                        hint: { text: site.full_address },
+                        checked: f.object.study_sites.include?(site) %>
           <% end %>
         <% end %>
 
