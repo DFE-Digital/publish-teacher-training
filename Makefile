@@ -98,6 +98,11 @@ sandbox_aks:
 	$(eval export DISABLE_PASSCODE=1)
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 
+production_aks:
+	$(eval include global_config/production_aks.sh)
+	$(eval export DISABLE_PASSCODE=1)
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
+
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
 	$(eval DEPLOY_ENV=qa)
