@@ -317,7 +317,6 @@ class Course < ApplicationRecord
 
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
-  validates :study_sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
