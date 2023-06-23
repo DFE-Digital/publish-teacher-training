@@ -1,0 +1,39 @@
+gcp_api_key: please_change_me
+publish_api_url: https://api3.publish-teacher-training-courses.service.gov.uk
+publish_url: https://www3.publish-teacher-training-courses.service.gov.uk
+find_url: https://www3.find-postgraduate-teacher-training.service.gov.uk
+
+STATE_CHANGE_SLACK_URL: replace_me
+
+search_ui:
+  base_url: https://www3.find-postgraduate-teacher-training.service.gov.uk
+
+base_url: https://www3.publish-teacher-training-courses.service.gov.uk
+
+dfe_signin:
+  issuer: https://oidc.signin.education.gov.uk
+  secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
+  profile: https://profile.signin.education.gov.uk
+  user_search_url: https://support.signin.education.gov.uk/users
+
+bg_jobs:
+  save_statistic:
+    cron: "0 0 * * *" # daily at midnight
+    class: "SaveStatisticJob"
+    queue: save_statistic
+skylight:
+  enable: false
+environment:
+  label: "Beta"
+  name: "beta"
+render_json_errors: true
+
+google_tag_manager:
+  find_tracking_id: GTM-TP73392
+  publish_tracking_id: GTM-W56GPKW
+
+features:
+  send_request_data_to_bigquery: false
+
+find_valid_referers:
+  - https://www3.find-postgraduate-teacher-training.service.gov.uk
