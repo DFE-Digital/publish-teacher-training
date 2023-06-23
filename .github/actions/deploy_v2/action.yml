@@ -49,7 +49,7 @@ runs:
           echo "DEPLOY_REF=${{ github.ref }}" >> $GITHUB_ENV
           hostname=$(jq -r '.additional_hostnames[0]' ${tf_vars_file})
           if [ ${app_environment} == "production" ]; then
-            echo "deploy_url=https://api2.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
+            echo "deploy_url=https://api3.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           else
             echo "deploy_url=https://${app_environment}2.api.publish-teacher-training-courses.service.gov.uk" >> $GITHUB_OUTPUT
           fi
