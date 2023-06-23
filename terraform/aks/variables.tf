@@ -71,13 +71,11 @@ variable "resource_group_name" {
   type = string
 }
 
-# Below added to silence warnings
-variable "db_sslmode" {
-  type    = string
-  default = "value"
-}
-
 variable "postgres_version" { default = 13 }
+
+variable "postgres_enable_high_availability" { default = false }
+
+variable "postgres_flexible_server_sku" { default = "B_Standard_B1ms" }
 
 variable "app_config_file" {
   type    = string
@@ -114,10 +112,9 @@ variable "main_app" {
 }
 
 variable "use_db_setup_command" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Where to set the startup command of the web app to use db:setup. Set to true for first deployment to an environment"
 }
 
-variable "postgres_enable_high_availability" { default = false }
-
-variable "azure_maintenance_window" { default = null }
+variable "postgres_azure_maintenance_window" { default = null }
