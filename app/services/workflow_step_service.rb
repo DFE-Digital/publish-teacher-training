@@ -9,14 +9,14 @@ class WorkflowStepService
 
   def call
     if course.is_further_education?
-      further_education_workflow_steps - remove_study_site_if_feature_flag_disabled
+      further_education_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
     elsif course.is_uni_or_scitt?
-      uni_or_scitt_workflow_steps - visas_to_remove(course) - remove_study_site_if_feature_flag_disabled
+      uni_or_scitt_workflow_steps - visas_to_remove(course) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
     elsif course.is_school_direct?
       if course.provider.accredited_bodies.length == 1
-        school_direct_workflow_steps - (visas_to_remove(course) + [:accredited_provider]) - remove_study_site_if_feature_flag_disabled
+        school_direct_workflow_steps - (visas_to_remove(course) + [:accredited_provider]) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
       else
-        school_direct_workflow_steps - visas_to_remove(course) - remove_study_site_if_feature_flag_disabled
+        school_direct_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
       end
     end
   end
@@ -94,7 +94,7 @@ class WorkflowStepService
     end
   end
 
-  def remove_study_site_if_feature_flag_disabled
-    FeatureService.enabled?(:study_sites) ? [] : [:study_site]
+  def remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
+    course.in_current_cycle? || !FeatureService.enabled?(:study_sites) ? [:study_site] : []
   end
 end
