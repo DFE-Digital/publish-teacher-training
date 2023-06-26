@@ -38,6 +38,15 @@ module Publish
         end
       end
 
+      def back
+        authorize(@provider, :edit?)
+        if @provider.study_sites.count > 1
+          redirect_to new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
+        else
+          redirect_to @back_link_path
+        end
+      end
+
       private
 
       def update_course_study_sites
