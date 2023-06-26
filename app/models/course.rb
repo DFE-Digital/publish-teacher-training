@@ -347,7 +347,7 @@ class Course < ApplicationRecord
   end
 
   def recruitment_cycle_after_2023?
-    provider.recruitment_cycle_year.to_i > 2023
+    recruitment_cycle_year.to_i > 2023
   end
 
   def university_based?

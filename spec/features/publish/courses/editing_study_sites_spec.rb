@@ -8,14 +8,14 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   scenario 'provider has no study sites' do
-    and_i_am_authenticated_as_a_provider_user
+    and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
     then_i_see_the_select_a_study_site_link
   end
 
   scenario 'user can add and remove study sites from a course' do
-    when_i_am_authenticated_as_a_provider_user_with_study_sites
+    when_i_am_authenticated_as_a_provider_user_in_the_next_cycle_with_study_sites
     and_visit_the_course_details_page
     and_i_click_add_study_site
     and_the_study_site_checkbox_is_not_checked
@@ -25,19 +25,30 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     given_i_click_change_study_sites
     and_the_previously_selected_study_site_is_still_checked
     and_i_uncheck_the_first_study_site_and_submit
-    then_i_see_the_select_a_study_site_link
+    then_i_see_the_error_message_select_one_study_site
   end
 
   def then_i_see_the_select_a_study_site_link
     expect(page).to have_link('Select a study site')
   end
 
+  def then_i_see_the_error_message_select_one_study_site
+    expect(page).to have_link('Select at least one study site')
+  end
+
   def given_the_study_sites_feature_flag_is_active
     allow(Settings.features).to receive(:study_sites).and_return(true)
   end
 
-  def and_i_am_authenticated_as_a_provider_user
-    given_i_am_authenticated(user: create(:user, :with_provider))
+  def and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+    given_i_am_authenticated(
+      user: create(
+        :user,
+        providers: [
+          create(:provider, :next_recruitment_cycle, sites: [build(:site)], courses: [build(:course)])
+        ]
+      )
+    )
   end
 
   def provider
@@ -56,11 +67,9 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     )
   end
 
-  def when_i_am_authenticated_as_a_provider_user_with_study_sites
-    providers = [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)])]
-
+  def when_i_am_authenticated_as_a_provider_user_in_the_next_cycle_with_study_sites
+    providers = [build(:provider, :next_recruitment_cycle, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider, applications_open_from: '2023-10-10', start_date: '2023-10-10')])]
     @user = create(:user, providers:)
-    @user.providers.first.courses << create(:course, :with_accrediting_provider)
     given_i_am_authenticated(user: @user)
   end
 

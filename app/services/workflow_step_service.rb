@@ -16,7 +16,7 @@ class WorkflowStepService
       if course.provider.accredited_bodies.length == 1
         school_direct_workflow_steps - (visas_to_remove(course) + [:accredited_provider]) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
       else
-        school_direct_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
+        school_direct_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course) - visas_to_remove(course)
       end
     end
   end
