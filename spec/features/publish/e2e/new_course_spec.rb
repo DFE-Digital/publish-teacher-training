@@ -14,15 +14,6 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     then_i_can_create_the_course
   end
 
-  scenario 'creates the correct course in the 2022 cycle' do
-    # this test is a duplicate of above and can be deleted when the
-    # 2022 cycle has finished and the study sites feature is active
-    given_i_am_authenticated_as_a_provider_user_in_the_current_cycle
-    when_i_visit_the_courses_page
-    and_i_click_on_add_course
-    then_i_can_create_the_course_in_the_current_cycle
-  end
-
   private
 
   def and_the_study_sites_feature_flag_is_active
@@ -66,17 +57,6 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     select_start_date(course_creation_params)
 
     save_course
-  end
-
-  def given_i_am_authenticated_as_a_provider_user_in_the_current_cycle
-    given_i_am_authenticated(
-      user: create(
-        :user,
-        providers: [
-          create(:provider, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
-        ]
-      )
-    )
   end
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
