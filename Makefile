@@ -88,6 +88,11 @@ qa_aks:
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
+staging_aks:
+	$(eval include global_config/staging_aks.sh)
+	$(eval export DISABLE_PASSCODE=1)
+	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
+
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
 	$(eval DEPLOY_ENV=qa)
@@ -192,7 +197,7 @@ read-keyvault-config:
 read-cluster-config:
 	$(eval CLUSTER=$(shell jq -r '.cluster' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 	$(eval NAMESPACE=$(shell jq -r '.namespace' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
-	$(eval CONFIG_LONG=$(shell jq -r '.env_config' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
+	$(eval CONFIG_LONG=$(shell jq -r '.app_environment' terraform/$(PLATFORM)/workspace_variables/$(DEPLOY_ENV).tfvars.json))
 
 edit-app-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_app_secret_name} \

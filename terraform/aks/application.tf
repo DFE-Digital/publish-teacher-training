@@ -8,7 +8,7 @@ module "application_configuration" {
   config_short          = var.config_short
   secret_yaml_key       = var.key_vault_app_secret_name
   secret_variables      = local.app_secrets
-  config_variables      = yamldecode(file(var.app_config_file))[var.env_config]
+  config_variables      = yamldecode(file(var.app_config_file))[var.app_environment]
 }
 
 module "web_application" {
