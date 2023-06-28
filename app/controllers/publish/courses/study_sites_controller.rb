@@ -38,10 +38,15 @@ module Publish
         end
       end
 
+      def back
+        authorize(@provider, :edit?)
+        redirect_to @provider.study_sites.many? ? new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params) : @back_link_path
+      end
+
       private
 
       def update_course_study_sites
-        study_site_ids = params[:course][:study_sites_ids]
+        study_site_ids = params[:course][:study_sites]
         @study_sites ||= provider.study_sites.find(study_site_ids.compact_blank!)
 
         course.study_sites = @study_sites.select { |site| study_site_ids.include?(site.id.to_s) }

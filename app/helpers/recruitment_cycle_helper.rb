@@ -32,4 +32,12 @@ module RecruitmentCycleHelper
   def hint_text_for_today_is_after_find_opens
     "#{I18n.t('find.cycles.today_is_after_find_opens.description')} (#{Find::CycleTimetable.find_reopens.to_fs(:govuk_date)})"
   end
+
+  def current_recruitment_cycle?(provider)
+    provider.recruitment_cycle_year.to_i == Settings.current_recruitment_cycle_year
+  end
+
+  def recruitment_cycle_after_2023?(provider_or_course)
+    provider_or_course.recruitment_cycle_year.to_i > 2023
+  end
 end

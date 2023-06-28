@@ -39,7 +39,8 @@ describe Course do
           let(:course) do
             create(:course,
                    provider:,
-                   applications_open_from: next_cycle.application_start_date)
+                   applications_open_from: next_cycle.application_start_date,
+                   study_sites: [build(:site, :study_site)])
           end
 
           its(:update_valid?) { is_expected.to be true }
@@ -82,6 +83,7 @@ describe Course do
           let(:course) do
             create(:course,
                    provider:,
+                   study_sites: [build(:site, :study_site)],
                    start_date: DateTime.new(next_year, 9, 1))
           end
 

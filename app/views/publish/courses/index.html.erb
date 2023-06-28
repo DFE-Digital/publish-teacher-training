@@ -3,6 +3,8 @@
 
 <h1 class="govuk-heading-l">Courses</h1>
 
+<% if (current_recruitment_cycle?(@provider) || @provider.study_sites.any? || !FeatureService.enabled?(:study_sites)) %>
+
   <%= govuk_button_link_to(
     "Add course",
     new_publish_provider_recruitment_cycle_course_path(
@@ -11,6 +13,18 @@
     ),
     class: "govuk-!-margin-bottom-6"
   ) %>
+
+<% else %>
+
+  <div class="govuk-inset-text">
+    <p class="govuk-body">Before adding a course, you need to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>
+          <%= govuk_link_to("Add a study site", publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+        </li>
+    </ul>
+  </div>
+<% end %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
