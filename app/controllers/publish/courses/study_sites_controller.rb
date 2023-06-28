@@ -56,6 +56,10 @@ module Publish
         :study_site
       end
 
+      def error_keys
+        [:study_sites]
+      end
+
       def set_default_study_site
         params['course'] ||= {}
         params['course']['study_sites_ids'] = [@provider.study_sites.first.id]
