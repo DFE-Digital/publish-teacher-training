@@ -32,7 +32,7 @@ module Publish
             provider.provider_code,
             recruitment_cycle.year,
             course.course_code
-          )
+          ), flash: { success: t('flash.updated', resource: 'Study sites') }
         else
           render :edit
         end
