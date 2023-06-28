@@ -2,7 +2,7 @@ name: Database Backup and Restore
 
 on:
   schedule: # 03:00 UTC
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
       overwriteThisMorningsBackup:
@@ -23,7 +23,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-        - 5432:5432
+          - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -51,10 +51,10 @@ jobs:
       - uses: DFE-Digital/github-actions/setup-cf-cli@master
         name: Setup cf cli
         with:
-         CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
-         CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD }}
-         CF_SPACE_NAME: ${{ env.paas_space_name }}
-         INSTALL_CONDUIT: true
+          CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
+          CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD }}
+          CF_SPACE_NAME: ${{ env.paas_space_name }}
+          INSTALL_CONDUIT: true
 
       - name: Backup Publish Teacher Training Prod Database
         run: |
@@ -98,7 +98,7 @@ jobs:
           echo "::endgroup::"
         env:
           DATABASE_NAME: teacher_training_api
-          PGUSER:  postgres
+          PGUSER: postgres
           PGPASSWORD: postgres
           PGHOST: localhost
           PGPORT: 5432
@@ -111,13 +111,13 @@ jobs:
           retention-days: 7
 
   restore:
-   needs: [backup]
-   runs-on: ubuntu-latest
-   strategy:
-     fail-fast: false
-     matrix:
-       environment: [qa, staging]
-   steps:
+    needs: [backup]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [qa, staging]
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -142,10 +142,10 @@ jobs:
       - uses: DFE-Digital/github-actions/setup-cf-cli@master
         name: Setup cf cli
         with:
-         CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
-         CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD  }}
-         CF_SPACE_NAME: ${{ env.paas_space_name }}
-         INSTALL_CONDUIT: true
+          CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
+          CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD  }}
+          CF_SPACE_NAME: ${{ env.paas_space_name }}
+          INSTALL_CONDUIT: true
 
       - name: Download Sanitised Backup
         uses: actions/download-artifact@v3
@@ -156,3 +156,22 @@ jobs:
         run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < backup_sanitised.sql
         env:
           POSTGRES_SERVICE_INSTANCE: publish-teacher-training-postgres-${{ matrix.environment }}
+
+  restore-aks:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [qa_aks, staging_aks]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Restore AKS database
+        id: restore_aks
+        uses: ./.github/actions/restore/
+        with:
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          environment: ${{ matrix.environment }}
