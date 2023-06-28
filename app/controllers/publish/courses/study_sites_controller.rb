@@ -40,11 +40,7 @@ module Publish
 
       def back
         authorize(@provider, :edit?)
-        if @provider.study_sites.count > 1
-          redirect_to new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params)
-        else
-          redirect_to @back_link_path
-        end
+        redirect_to @provider.study_sites.many? ? new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params) : @back_link_path
       end
 
       private
