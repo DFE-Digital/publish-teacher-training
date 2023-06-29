@@ -60,7 +60,7 @@ module ViewHelper
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
         sites: "#{base}/schools?display_errors=true",
-        study_sites: "#{course.provider.study_sites.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites"}"
+        study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s
       }.with_indifferent_access[field]
     end
   end

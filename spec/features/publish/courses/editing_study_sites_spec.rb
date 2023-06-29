@@ -12,7 +12,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
     then_i_see_the_add_a_study_site_link
-    
+
     given_i_attempt_to_publish_the_course
     when_i_click_add_at_lease_one_study_site
     then_i_should_be_on_the_study_sites_page
