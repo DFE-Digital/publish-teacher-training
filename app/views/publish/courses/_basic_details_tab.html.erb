@@ -72,31 +72,16 @@
       end
     end
 
-    if @provider.accredited_provider?
-      summary_list.with_row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row|
-        row.with_key { "Apprenticeship" }
-        row.with_value { course.apprenticeship }
-        if course.is_published? || course.is_withdrawn?
-          row.with_action
-        else
-          row.with_action(
-            href: course.draft_or_rolled_over? ? apprenticeship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-            visually_hidden_text: "if apprenticeship"
-          )
-        end
-      end
-    else
-      summary_list.with_row(html_attributes: { data: { qa: "course__funding" } }) do |row|
-        row.with_key { "Funding type" }
-        row.with_value { course.funding }
-        if course.is_published? || course.is_withdrawn?
-          row.with_action
-        else
-          row.with_action(
-            href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-            visually_hidden_text: "funding type"
-          )
-        end
+    summary_list.with_row(html_attributes: { data: { qa: "course__funding" } }) do |row|
+      row.with_key { "Funding type" }
+      row.with_value { course.funding }
+      if course.is_published? || course.is_withdrawn?
+        row.with_action
+      else
+        row.with_action(
+          href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+          visually_hidden_text: "funding type"
+        )
       end
     end
 

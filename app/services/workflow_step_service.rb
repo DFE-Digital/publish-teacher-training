@@ -70,7 +70,7 @@ class WorkflowStepService
       modern_languages
       age_range
       outcome
-      apprenticeship
+      funding_type
       full_or_part_time
       school
       study_site
