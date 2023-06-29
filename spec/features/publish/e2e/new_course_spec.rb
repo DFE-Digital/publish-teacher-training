@@ -28,30 +28,11 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
 
     course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
 
-    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_apprenticeship_page)
+    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_funding_type_page)
     course_creation_params = select_apprenticeship(course_creation_params, next_page: publish_courses_new_study_mode_page)
     course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
     course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_study_sites_page)
     course_creation_params = select_study_site(course_creation_params, next_page: publish_courses_new_student_visa_sponsorship_page)
-    course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
-    course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
-    select_start_date(course_creation_params)
-
-    save_course
-  end
-
-  def then_i_can_create_the_course_in_the_current_cycle
-    expect(publish_courses_new_level_page).to be_displayed
-    course_creation_params = select_level({}, level: 'primary', level_selection: publish_courses_new_level_page.level_fields.primary, next_page: publish_courses_new_subjects_page)
-
-    course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: publish_courses_new_age_range_page)
-
-    course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
-
-    course_creation_params = select_outcome(course_creation_params, qualification: 'qts', qualification_selection: publish_courses_new_outcome_page.qualification_fields.qts, next_page: publish_courses_new_apprenticeship_page)
-    course_creation_params = select_apprenticeship(course_creation_params, next_page: publish_courses_new_study_mode_page)
-    course_creation_params = select_study_mode(course_creation_params, next_page: publish_courses_new_schools_page)
-    course_creation_params = select_school(course_creation_params, next_page: publish_courses_new_study_sites_page)
     course_creation_params = select_visa_settings(course_creation_params, next_page: publish_courses_new_applications_open_page)
     course_creation_params = select_applications_open_from(course_creation_params, next_page: publish_courses_new_start_date_page)
     select_start_date(course_creation_params)

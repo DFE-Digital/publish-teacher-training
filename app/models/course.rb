@@ -30,9 +30,11 @@ class Course < ApplicationRecord
 
   enum program_type: {
     higher_education_programme: 'HE',
+    higher_education_salaried_programme: 'HES',
     school_direct_training_programme: 'SD',
     school_direct_salaried_training_programme: 'SS',
     scitt_programme: 'SC',
+    scitt_salaried_programme: 'SSC',
     pg_teaching_apprenticeship: 'TA'
   }
 
@@ -502,7 +504,7 @@ class Course < ApplicationRecord
   def funding_type
     return if program_type.nil?
 
-    if school_direct_salaried_training_programme?
+    if school_direct_salaried_training_programme? || scitt_salaried_programme? || higher_education_salaried_programme?
       'salary'
     elsif pg_teaching_apprenticeship?
       'apprenticeship'
@@ -690,7 +692,13 @@ class Course < ApplicationRecord
   end
 
   def funding_type=(funding_type)
-    assign_program_type_service = Courses::AssignProgramTypeService.new
+    assign_program_type_service = if recruitment_cycle_after_2023?
+                                    # this can be removed after the 2023 cycle ends
+                                    Courses::AssignProgramTypeCurrentCycleService.new
+                                  else
+                                    Courses::AssignProgramTypeService.new
+                                  end
+
     assign_program_type_service.execute(funding_type, self)
   end
 

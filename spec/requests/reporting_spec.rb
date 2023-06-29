@@ -90,14 +90,14 @@ describe 'GET /reporting' do
         },
         program_type: {
           open: {
-            higher_education_programme: 0, school_direct_training_programme: 0,
-            school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            pg_teaching_apprenticeship: 0
+            higher_education_programme: 0, higher_education_salaried_programme: 0,
+            school_direct_training_programme: 0, school_direct_salaried_training_programme: 0, scitt_programme: 0,
+            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0
           },
           closed: {
-            higher_education_programme: 0, school_direct_training_programme: 0,
-            school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            pg_teaching_apprenticeship: 0
+            higher_education_programme: 0, higher_education_salaried_programme: 0,
+            school_direct_training_programme: 0, school_direct_salaried_training_programme: 0, scitt_programme: 0,
+            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0
           }
         },
         study_mode: {

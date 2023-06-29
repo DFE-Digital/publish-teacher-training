@@ -6,8 +6,7 @@ module Find
       module FeesAndFinancialSupportComponent
         class ViewPreview < ViewComponent::Preview
           def salaried
-            course = Course.new(funding_type: 'salary').decorate
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course)
+            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(salaried_with_no_fees_course)
           end
 
           def salaried_with_fees
@@ -31,6 +30,18 @@ module Find
           end
 
           private
+
+          def salaried_with_no_fees_course
+            FakeCourse.new(salaried: true,
+                           excluded_from_bursary: false,
+                           bursary_only: false,
+                           has_scholarship_and_bursary: false,
+                           financial_support: false,
+                           fee_uk_eu: 99_999,
+                           fee_international: 9_000_000_000,
+                           cycle_range: '2022 to 2023',
+                           fee_details: 'The course fees for UK students in 2022 to 2023 are £9,250.')
+          end
 
           def salaried_with_fees_course
             FakeCourse.new(has_fees: true,
