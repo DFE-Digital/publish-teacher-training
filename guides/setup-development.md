@@ -4,37 +4,20 @@ Clone the repo:
 
     git clone git@github.com:DFE-Digital/publish-teacher-training.git
 
-## Setup the application
+## Setup the application libraries and dependencies
 
-Run the following commands:
+Run setup:
 
 ```bash
-yarn
-bundle
-bundle exec rails db:setup
+./bin/setup
 ```
 
 ## Start the server
 
-You can use [Foreman](https://github.com/ddollar/foreman) or [Overmind](https://github.com/DarthSim/overmind) to run all the processes needed for local dev. Once you have either of the two, you can run:
+To start all the processes run:
 
 ```bash
 ./bin/dev
-```
-
-Which will fire off the Rails server, watchers for JS/CSS changes and Sidekiq. You can also run them individually:
-
-```bash
-./bin/dev web
-```
-
-You don't have to use either of those tools. The script just wraps up the following commands:
-
-```bash
-yarn build --watch
-yarn build:css --watch
-bin/rails server -p 3001
-bundle exec sidekiq -t 25 -C config/sidekiq.yml
 ```
 
 ## Using Docker
