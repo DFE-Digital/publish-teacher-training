@@ -46,6 +46,7 @@ module ViewHelper
 
   def enrichment_error_url(provider_code:, course:, field:, message: nil)
     base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}"
+    provider_base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}"
 
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
@@ -59,7 +60,7 @@ module ViewHelper
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
         sites: "#{base}/schools?display_errors=true",
-        study_sites: "#{base}/study-sites"
+        study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s
       }.with_indifferent_access[field]
     end
   end

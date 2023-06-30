@@ -32,7 +32,7 @@ module Publish
             provider.provider_code,
             recruitment_cycle.year,
             course.course_code
-          )
+          ), flash: { success: t('flash.updated', resource: 'Study sites') }
         else
           render :edit
         end
@@ -54,6 +54,10 @@ module Publish
 
       def current_step
         :study_site
+      end
+
+      def error_keys
+        [:study_sites]
       end
 
       def set_default_study_site

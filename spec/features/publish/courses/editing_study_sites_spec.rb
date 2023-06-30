@@ -11,7 +11,11 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
-    then_i_see_the_select_a_study_site_link
+    then_i_see_the_add_a_study_site_link
+
+    given_i_attempt_to_publish_the_course
+    when_i_click_add_at_lease_one_study_site
+    then_i_should_be_on_the_study_sites_page
   end
 
   scenario 'user can add and remove study sites from a course' do
@@ -25,15 +29,15 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     given_i_click_change_study_sites
     and_the_previously_selected_study_site_is_still_checked
     and_i_uncheck_the_first_study_site_and_submit
-    then_i_see_the_error_message_select_one_study_site
+    then_i_see_the_error_message_add_one_study_site
   end
 
-  def then_i_see_the_select_a_study_site_link
-    expect(page).to have_link('Select a study site')
+  def then_i_see_the_add_a_study_site_link
+    expect(page).to have_link('Add at least one study site')
   end
 
-  def then_i_see_the_error_message_select_one_study_site
-    expect(page).to have_link('Select at least one study site')
+  def then_i_see_the_error_message_add_one_study_site
+    expect(page).to have_link('Add at least one study site')
   end
 
   def given_the_study_sites_feature_flag_is_active
@@ -111,6 +115,22 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
 
   def and_the_study_site_checkbox_is_not_checked
     expect(page).not_to have_field(checked: true)
+  end
+
+  def given_i_click_cancel
+    click_link 'Cancel'
+  end
+
+  def given_i_attempt_to_publish_the_course
+    click_button 'Publish course'
+  end
+
+  def when_i_click_add_at_lease_one_study_site
+    click_link 'Add at least one study site'
+  end
+
+  def then_i_should_be_on_the_study_sites_page
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{course.recruitment_cycle_year}/study-sites")
   end
 
   alias_method :and_there_is_a_course_i_want_to_edit, :given_a_course_exists

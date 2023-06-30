@@ -17,6 +17,8 @@ en:
   back: "Back"
   continue: "Continue"
   change_organisation: "Change organisation"
+  flash:
+      updated: "%{resource} updated"
   courses:
     generate_course_name_service:
       further_education_title: "Further education"
@@ -479,7 +481,7 @@ en:
             sites:
               blank: "^Select at least one school"
             study_sites:
-              blank: "Select at least one study site"
+              blank: "Add at least one study site"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
