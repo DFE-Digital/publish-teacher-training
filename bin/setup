@@ -19,7 +19,15 @@ FileUtils.chdir APP_ROOT do
   system("bundle check") || system!("bundle install")
 
   puts "\n== Copying development settings file =="
-  system! "sed 's/secret: secret/secret: persona/' config/settings/development.yml > config/settings/development.local.yml"
+  if OS.windows?
+    puts "ATTENTION WINDOWS USER!".red
+    puts
+    puts "Copy #{"config/settings/development.yml".yellow} to #{"config/settings/development.local.yml".yellow} and edit it:",
+      "Replace #{"'secret: secret'".blue} with #{"'mode: persona'".blue}"
+    puts
+  else
+    system! "sed 's/secret: secret/mode: persona/' config/settings/development.yml > config/settings/development.local.yml"
+  end
 
   puts "\n== Install process manager foreman =="
   system! "gem install foreman"
@@ -29,10 +37,6 @@ FileUtils.chdir APP_ROOT do
 
   puts "\n== Removing old logs and tempfiles =="
   system! "bin/rails log:clear tmp:clear"
-
-  puts "\n== Restarting application server =="
-  system! "bin/rails restart"
-
 
   puts "\n== Restarting application server =="
   system! "bin/rails restart"
