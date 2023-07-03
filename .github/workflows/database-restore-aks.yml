@@ -1,4 +1,4 @@
-name: Restore AKS Database
+name: Restore AKS Database from Sanitised Backup
 
 on:
   schedule: # 04:00 UTC

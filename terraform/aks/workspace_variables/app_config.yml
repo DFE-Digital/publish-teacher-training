@@ -17,3 +17,8 @@ staging:
   <<: *default
   RAILS_ENV: staging_aks
   RACK_ENV: staging_aks
+
+sandbox:
+  <<: *default
+  RAILS_ENV: sandbox_aks
+  RACK_ENV: sandbox_aks
