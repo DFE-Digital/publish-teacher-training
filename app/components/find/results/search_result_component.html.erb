@@ -26,8 +26,11 @@
       <% end %>
     <% end %>
 
-    <dt class="app-description-list__label">Financial support</dt>
-    <dd data-qa="course__funding_options"><%= course.funding_option %></dd>
+    <dt class="app-description-list__label">Fee or salary</dt>
+    <dd data-qa="course__funding_options"><%= course.funding %>
+      <br>
+      <p class="govuk-hint"><%= course.funding_option %>
+    </dd>
 
     <dt class="app-description-list__label">Degree required</dt>
     <dd data-qa="course__degree_required"><%= degree_required_status %></dd>

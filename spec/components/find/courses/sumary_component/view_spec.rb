@@ -13,7 +13,7 @@ module Find
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
-            'Financial support',
+            'Fee or salary',
             'Qualification',
             'Course length',
             'Qualification',
