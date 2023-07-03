@@ -129,6 +129,7 @@ en:
       url_subject_knowledge_enhancement: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement
       url_events: https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_start&utm_content=Spring23events
       url_train_to_teach_as_international_candidate: https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student
+      url_fund_your_training: https://getintoteaching.education.gov.uk/funding-and-support
     qualification:
       description_with_abbreviation:
         qts:
@@ -141,6 +142,8 @@ en:
           html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde:
           html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+    links:
+      national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
   activemodel:
     errors:
       models:
