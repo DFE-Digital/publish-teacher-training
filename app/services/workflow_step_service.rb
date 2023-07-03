@@ -23,12 +23,12 @@ class WorkflowStepService
     elsif course.is_further_education?
       further_education_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
     elsif course.is_uni_or_scitt?
-      uni_or_scitt_workflow_steps - visas_to_remove(course) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
+      uni_or_scitt_workflow_steps - visas_to_remove_2023cycle(course) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
     elsif course.is_school_direct?
       if course.provider.accredited_bodies.length == 1
-        school_direct_workflow_steps - (visas_to_remove(course) + [:accredited_provider]) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
+        school_direct_workflow_steps - (visas_to_remove_2023cycle(course) + [:accredited_provider]) - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
       else
-        school_direct_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course) - visas_to_remove(course)
+        school_direct_workflow_steps - remove_study_site_if_feature_flag_disabled_or_current_cycle(course) - visas_to_remove_2023cycle(course)
       end
     end
   end
@@ -131,6 +131,14 @@ class WorkflowStepService
   end
 
   def visas_to_remove(course)
+    if course.is_fee_based?
+      [:can_sponsor_skilled_worker_visa]
+    else
+      [:can_sponsor_student_visa]
+    end
+  end
+
+  def visas_to_remove_2023cycle(course)
     if course.funding_type.present?
       if course.is_fee_based?
         [:can_sponsor_skilled_worker_visa]
