@@ -693,10 +693,10 @@ class Course < ApplicationRecord
 
   def funding_type=(funding_type)
     assign_program_type_service = if recruitment_cycle_after_2023?
+                                    Courses::AssignProgramTypeService.new
+                                  else
                                     # this can be removed after the 2023 cycle ends
                                     Courses::AssignProgramTypeCurrentCycleService.new
-                                  else
-                                    Courses::AssignProgramTypeService.new
                                   end
 
     assign_program_type_service.execute(funding_type, self)
