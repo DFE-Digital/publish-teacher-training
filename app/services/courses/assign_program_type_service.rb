@@ -5,15 +5,15 @@ module Courses
     def execute(funding_type, course)
       case funding_type
       when 'salary'
-        course.program_type = if course.provider.provider_type == 'scitt'
+        course.program_type = if course.provider.scitt?
                                 :scitt_salaried_programme
-                              elsif course.provider.provider_type == 'university'
+                              elsif course.provider.university?
                                 :higher_education_salaried_programme
                               else
                                 :school_direct_salaried_training_programme
                               end
       when 'apprenticeship'
-        course.program_type = :pg_teaching_apprenticeship
+        course.pg_teaching_apprenticeship?
       when 'fee'
         course.program_type = calculate_fee_program(course)
       end
