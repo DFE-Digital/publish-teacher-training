@@ -39,7 +39,7 @@ feature 'results' do
       expect(first_course.provider_name.text).to be_present
       expect(first_course.qualification.text).to include('PGCE with QTS')
       expect(first_course.study_mode.text).to eq('Full time')
-      expect(first_course.funding_options.text).to eq('Salary')
+      expect(first_course.funding_options.text).to eq('Teaching apprenticeship - with salary')
     end
   end
 end

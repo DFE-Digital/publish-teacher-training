@@ -3,8 +3,13 @@
     <dt class="app-description-list__label">Accredited provider</dt>
     <dd data-qa="course__accredited_provider"><%= accrediting_provider.provider_name %></dd>
   <% end %>
-  <dt class="app-description-list__label">Financial support</dt>
-  <dd data-qa="course__funding_option"><%= funding_option %></dd>
+  <dt class="app-description-list__label">Fee or salary</dt>
+    <dd data-qa="course__funding_option"><%= course.funding %>
+      <br>
+      <p class="govuk-hint"><%= course.funding_option %>
+    </dd>
+  </dt>
+
   <dt class="app-description-list__label">Qualification</dt>
   <%= render Find::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
   <% if age_range_in_years.present? %>

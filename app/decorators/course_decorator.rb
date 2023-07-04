@@ -190,11 +190,10 @@ class CourseDecorator < ApplicationDecorator
     !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
 
-  # rubocop:disable Lint/DuplicateBranch: Duplicate branch body detected
   def funding_option
-    if salaried?
-      'Salary'
-    elsif excluded_from_bursary?
+    return if salaried?
+
+    if excluded_from_bursary?
       # Duplicate branch body detected
       'Student finance if you’re eligible'
     elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
@@ -203,10 +202,9 @@ class CourseDecorator < ApplicationDecorator
       'Bursaries and student finance are available if you’re eligible'
     else
       # Duplicate branch body detected
-      'Student finance if you’re eligible'
+      'Student finance is available if you’re eligible'
     end
   end
-  # rubocop:enable Lint/DuplicateBranch: Duplicate branch body detected
 
   def current_cycle?
     course.recruitment_cycle.year.to_i == Settings.current_recruitment_cycle_year
