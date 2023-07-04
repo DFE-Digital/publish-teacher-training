@@ -12,7 +12,6 @@ module Publish
 
       def new
         authorize(@provider, :edit?)
-        return unless @provider.study_sites.one?
 
         set_default_study_site
         redirect_to next_step
