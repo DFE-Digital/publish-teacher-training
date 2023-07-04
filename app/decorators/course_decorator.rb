@@ -191,9 +191,9 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def funding_option
-    if salaried?
-      nil
-    elsif excluded_from_bursary?
+    return if salaried?
+
+    if excluded_from_bursary?
       # Duplicate branch body detected
       'Student finance if you’re eligible'
     elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
