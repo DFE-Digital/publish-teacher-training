@@ -13,7 +13,7 @@ module Courses
                                 :school_direct_salaried_training_programme
                               end
       when 'apprenticeship'
-        course.pg_teaching_apprenticeship?
+        course.program_type = :pg_teaching_apprenticeship
       when 'fee'
         course.program_type = calculate_fee_program(course)
       end
