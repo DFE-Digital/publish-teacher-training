@@ -344,7 +344,7 @@ class CourseDecorator < ApplicationDecorator
   def published_how_school_placements_work
     return nil if no_published_enrichment?
 
-    object.current_published_enrichment[:interview_process]
+    object.current_published_enrichment[:how_school_placements_work]
   end
 
   def published_fee_uk_eu

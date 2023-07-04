@@ -1,6 +1,10 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="section-interviews">Interview process</h2>
   <div data-qa="course__interview_process">
-    <%= markdown(course.published_interview_process) %>
+    <% if course.published_interview_process %>
+      <%= markdown(course.published_interview_process) %>
+    <% else %>
+      <%= markdown(course.interview_process) %>
+    <% end %>
   </div>
 </div>

@@ -3,6 +3,8 @@
   <div data-qa="course__about_course">
     <% if course.published_about_course.present? %>
       <%= markdown(course.published_about_course) %>
+    <% elsif course.about_course.present? %>
+      <%= markdown(course.about_course) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_course, is_preview: preview?(params)) %>
     <% end %>
