@@ -43,9 +43,5 @@ module Publish
     def declared_fields
       FIELDS
     end
-
-    def student_visa_and_after_2023_cycle(course)
-      course.can_sponsor_student_visa? && recruitment_cycle_after_2023?(course)
-    end
   end
 end

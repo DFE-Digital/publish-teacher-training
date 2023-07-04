@@ -2,6 +2,7 @@
 
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
+  include RecruitmentCycleHelper
   enum status: { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
   jsonb_accessor :json_data,
@@ -41,6 +42,9 @@ class CourseEnrichment < ApplicationRecord
   validates :course_length, presence: true, on: :publish
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
+
+  validates :fee_international, presence: true, on: :publish, if: -> { is_fee_based? && student_visa_and_after_2023_cycle(course) }
+
   validates :fee_uk_eu,
             numericality: { allow_blank: true,
                             only_integer: true,
