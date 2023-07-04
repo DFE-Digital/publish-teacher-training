@@ -53,11 +53,14 @@ module Courses
 
     def self.get_present_fields_in_source_course(fields, source_course, course)
       fields.filter_map do |name, field|
-        source_value = source_course.enrichments.last[field]
-        if source_value.present?
-          course.enrichments.last[field] = source_value
-          [name, field]
-        end
+        source_value = source_course.enrichment_attribute(field)
+        next if source_value.blank?
+
+        enrichments_to_update = course.enrichments.most_recent&.first
+        enrichments_to_update.assign_attributes(field => source_value)
+        enrichments_to_update.save
+
+        [name, field]
       end
     end
 
