@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+# can be deleted after the 2023 cycle ends along with the service
+
 require 'rails_helper'
 
-describe Courses::AssignProgramTypeService do
+describe Courses::AssignProgramTypeCurrentCycleService do
   let(:service) { described_class.new }
   let(:course) { create(:course) }
   let(:execute_service) { service.execute(funding_type, course) }
@@ -20,24 +22,6 @@ describe Courses::AssignProgramTypeService do
 
       it 'returns :school_direct_salaried_training_programme' do
         expect(course.program_type).to eq('school_direct_salaried_training_programme')
-      end
-    end
-
-    context 'and the provider is a scitt' do
-      let(:provider) { create(:provider, :scitt) }
-      let(:course) { create(:course, provider:) }
-
-      it 'returns :scitt_salaried_programme' do
-        expect(course.program_type).to eq('scitt_salaried_programme')
-      end
-    end
-
-    context 'and the provider is a uni' do
-      let(:provider) { create(:provider, :university) }
-      let(:course) { create(:course, provider:) }
-
-      it 'returns :scitt_salaried_programme' do
-        expect(course.program_type).to eq('higher_education_salaried_programme')
       end
     end
   end
@@ -63,25 +47,23 @@ describe Courses::AssignProgramTypeService do
       end
     end
 
-    context 'the course is self accredited' do
+    context 'and they are a scitt' do
+      let(:trait) { :scitt }
       let(:provider) { build(:provider, trait) }
+      let(:course) { create(:course, provider:) }
 
-      context 'and they are a scitt' do
-        let(:trait) { :scitt }
-        let(:course) { create(:course, provider:) }
-
-        it 'returns :scitt_programme' do
-          expect(course.program_type).to eq('scitt_programme')
-        end
+      it 'returns :scitt_programme' do
+        expect(course.program_type).to eq('scitt_programme')
       end
+    end
 
-      context 'and they are a HEI' do
-        let(:trait) { :university }
-        let(:course) { create(:course, provider:) }
+    context 'and they are a HEI' do
+      let(:trait) { :university }
+      let(:provider) { build(:provider, trait) }
+      let(:course) { create(:course, provider:) }
 
-        it 'returns :higher_education_programme' do
-          expect(course.program_type).to eq('higher_education_programme')
-        end
+      it 'returns :higher_education_programme' do
+        expect(course.program_type).to eq('higher_education_programme')
       end
     end
 

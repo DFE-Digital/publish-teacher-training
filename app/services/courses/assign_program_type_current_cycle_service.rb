@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
 module Courses
-  class AssignProgramTypeService
+  class AssignProgramTypeCurrentCycleService
     def execute(funding_type, course)
       case funding_type
       when 'salary'
-        course.program_type = if course.provider.scitt?
-                                :scitt_salaried_programme
-                              elsif course.provider.university?
-                                :higher_education_salaried_programme
-                              else
-                                :school_direct_salaried_training_programme
-                              end
+        course.program_type = :school_direct_salaried_training_programme
       when 'apprenticeship'
         course.program_type = :pg_teaching_apprenticeship
       when 'fee'
