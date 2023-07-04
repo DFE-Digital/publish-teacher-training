@@ -329,6 +329,52 @@ class CourseDecorator < ApplicationDecorator
     object.enrichment_attribute(:financial_support)
   end
 
+  def published_about_course
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:about_course]
+  end
+
+  def published_interview_process
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:interview_process]
+  end
+
+  def published_how_school_placements_work
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:interview_process]
+  end
+
+  def published_fee_uk_eu
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:fee_uk_eu]
+  end
+
+  def published_fee_international
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:fee_international]
+  end
+
+  def published_fee_details
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:fee_details]
+  end
+
+  def published_financial_support
+    return nil if no_published_enrichment?
+
+    object.current_published_enrichment[:financial_support]
+  end
+
+  def no_published_enrichment?
+    object.current_published_enrichment.nil?
+  end
+
   def financial_incentive_details
     financial_incentive = object.financial_incentives.first
     bursary_amount = number_to_currency(financial_incentive&.bursary_amount)
