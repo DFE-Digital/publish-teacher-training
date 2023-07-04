@@ -19,7 +19,11 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     and_i_have_previously_published_a_course
     when_i_make_some_new_changes
     then_i_should_see_the_unpublished_changes_message
+    and_i_do_not_see_the_unpublished_content_on_find
+    when_i_return_to_publish
     and_i_should_see_the_publish_button
+    and_i_click_the_publish_link
+    then_i_see_the_content_on_find
   end
 
   scenario 'attempting to publish with errors' do
@@ -91,6 +95,25 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_the_unpublished_changes_message
     expect(page).to have_content('* Unpublished changes')
+  end
+
+  def and_i_do_not_see_the_unpublished_content_on_find
+    page.driver.header 'Host', 'find'
+    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    expect(page).not_to have_content('some new description')
+  end
+
+  def then_i_see_the_content_on_find
+    page.driver.header 'Host', 'find'
+    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    expect(page).to have_content('some new description')
+  end
+
+  def when_i_return_to_publish
+    page.driver.header 'Host', 'publish'
+    publish_provider_courses_show_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+    )
   end
 
   def and_i_should_see_the_publish_button
