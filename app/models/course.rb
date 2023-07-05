@@ -673,6 +673,8 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
+    return false if enrichments.one? && published?
+
     (published? && draft_enrichment.present?) || (last_published_at.present? && enrichment_not_withdrawn?)
   end
 
