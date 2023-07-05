@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   include Discard::Model
   include PgSearch::Model
-  include RolloverHelper
+  include RecruitmentCycleHelper
 
   before_save :downcase_email
 

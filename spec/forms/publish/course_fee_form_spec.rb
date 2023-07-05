@@ -55,6 +55,14 @@ module Publish
             .to include(I18n.t('activemodel.errors.models.publish/course_fee_form.attributes.financial_support.too_long'))
         end
       end
+
+      context 'after 2023 recruitment cycle and if can_sponsor_student_visa' do
+        let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+        let(:provider) { build(:provider, recruitment_cycle:) }
+        let(:course) { build(:course, :fee_type_based, can_sponsor_student_visa: true, provider:) }
+
+        it { is_expected.to validate_presence_of(:fee_international) }
+      end
     end
 
     context 'hydrating user set course length value' do

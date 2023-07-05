@@ -2,7 +2,7 @@
 
 module Publish
   class ProvidersController < PublishController
-    include RolloverHelper
+    include RecruitmentCycleHelper
     include GotoPreview
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     decorates_assigned :provider

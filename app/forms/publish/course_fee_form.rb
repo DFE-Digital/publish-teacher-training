@@ -2,6 +2,8 @@
 
 module Publish
   class CourseFeeForm < BaseModelForm
+    include RecruitmentCycleHelper
+
     alias course_enrichment model
 
     include FundingTypeFormMethods
@@ -19,6 +21,7 @@ module Publish
 
     validates :course_length, presence: true
     validates :fee_uk_eu, presence: true
+    validates :fee_international, presence: true, if: -> { student_visa_and_after_2023_cycle(course) }
 
     validates :fee_uk_eu,
               numericality: { allow_blank: true,

@@ -40,4 +40,12 @@ module RecruitmentCycleHelper
   def recruitment_cycle_after_2023?(provider_or_course)
     provider_or_course.recruitment_cycle_year.to_i > 2023
   end
+
+  def rollover_active?
+    FeatureService.enabled?('rollover.can_edit_current_and_next_cycles')
+  end
+
+  def student_visa_and_after_2023_cycle(course)
+    course.can_sponsor_student_visa? && recruitment_cycle_after_2023?(course)
+  end
 end
