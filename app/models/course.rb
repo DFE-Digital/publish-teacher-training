@@ -673,7 +673,7 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
-    (published? && draft_enrichment.present?) || last_published_at.present?
+    (published? && draft_enrichment.present?) || (last_published_at.present? && enrichment_not_withdrawn?)
   end
 
   def draft_enrichment
@@ -841,6 +841,10 @@ class Course < ApplicationRecord
 
   def published?
     current_published_enrichment.present?
+  end
+
+  def enrichment_not_withdrawn?
+    !enrichments.most_recent.first.withdrawn?
   end
 
   def assignable_after_publish(course_params, is_admin)
