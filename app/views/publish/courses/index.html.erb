@@ -3,27 +3,21 @@
 
 <h1 class="govuk-heading-l">Courses</h1>
 
-<% if (current_recruitment_cycle?(@provider) || @provider.study_sites.any? || !FeatureService.enabled?(:study_sites)) %>
+<% if recruitment_cycle_after_2023?(@provider) %>
 
-  <%= govuk_button_link_to(
-    "Add course",
-    new_publish_provider_recruitment_cycle_course_path(
-      provider_code: @provider.provider_code,
-      recruitment_cycle_year: @provider.recruitment_cycle_year
-    ),
-    class: "govuk-!-margin-bottom-6"
-  ) %>
+  <%= render AddCourseButton.new(provider: @provider) %>
 
 <% else %>
 
-  <div class="govuk-inset-text">
-    <p class="govuk-body">Before adding a course, you need to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>
-          <%= govuk_link_to("Add at least one study site", publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
-        </li>
-    </ul>
-  </div>
+  <%= govuk_button_link_to(
+      "Add course",
+      new_publish_provider_recruitment_cycle_course_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year
+      ),
+      class: "govuk-!-margin-bottom-6"
+    ) %>
+
 <% end %>
 
 <% if @self_accredited_courses %>
