@@ -673,7 +673,7 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
-    return false if enrichments.one? && published?
+    return false if all_enrichments_are_published?
 
     (published? && draft_enrichment.present?) || (last_published_at.present? && enrichment_not_withdrawn?)
   end
@@ -847,6 +847,10 @@ class Course < ApplicationRecord
 
   def enrichment_not_withdrawn?
     !enrichments.most_recent.first.withdrawn?
+  end
+
+  def all_enrichments_are_published?
+    (enrichments.one? && published?) || enrichments.flat_map(&:status).none?('draft')
   end
 
   def assignable_after_publish(course_params, is_admin)
