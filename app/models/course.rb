@@ -543,7 +543,7 @@ class Course < ApplicationRecord
   end
 
   def last_published_at
-    current_published_enrichment&.last_published_timestamp_utc
+    current_published_enrichment&.last_published_timestamp_utc || enrichment_attribute(:last_published_timestamp_utc)
   end
 
   def withdrawn_at
@@ -673,7 +673,7 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
-    published? && draft_enrichment.present?
+    (published? && draft_enrichment.present?) || last_published_at.present?
   end
 
   def draft_enrichment
