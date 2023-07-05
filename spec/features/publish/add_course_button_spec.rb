@@ -32,7 +32,7 @@ feature 'Add course button', { can_edit_current_and_next_cycles: true } do
   end
 
   def then_i_should_see_the_add_study_site_link
-    expect(page).to have_link('Add at least one study site', href: "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/study-sites")
+    expect(page).to have_link('Add a study site', href: "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/study-sites")
   end
 
   def and_i_should_not_see_the_add_course_button
@@ -48,7 +48,7 @@ feature 'Add course button', { can_edit_current_and_next_cycles: true } do
       user: create(
         :user,
         providers: [
-          create(:provider, :next_recruitment_cycle, sites: [build(:site)], courses: [build(:course)])
+          create(:provider, :accredited_provider, :next_recruitment_cycle, sites: [build(:site)], courses: [build(:course)])
         ]
       )
     )
@@ -70,7 +70,7 @@ feature 'Add course button', { can_edit_current_and_next_cycles: true } do
       user: create(
         :user,
         providers: [
-          create(:provider, :next_recruitment_cycle, sites: [build(:site, :study_site)], courses: [build(:course)])
+          create(:provider, :accredited_provider, :next_recruitment_cycle, sites: [build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course)])
         ]
       )
     )
