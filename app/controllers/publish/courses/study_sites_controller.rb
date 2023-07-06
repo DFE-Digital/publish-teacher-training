@@ -12,10 +12,6 @@ module Publish
 
       def new
         authorize(@provider, :edit?)
-        return unless @provider.study_sites.one?
-
-        set_default_study_site
-        redirect_to next_step
       end
 
       def edit
@@ -58,11 +54,6 @@ module Publish
 
       def error_keys
         [:study_sites]
-      end
-
-      def set_default_study_site
-        params['course'] ||= {}
-        params['course']['study_sites_ids'] = [@provider.study_sites.first.id]
       end
     end
   end
