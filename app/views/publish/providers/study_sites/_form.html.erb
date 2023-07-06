@@ -1,5 +1,11 @@
 <%= form_with model:, local: true, url: form_url, method: form_method, class: "school-form" do |f| %>
+
+  <div class="govuk-grid-column-full">
   <%= f.govuk_error_summary %>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+  <%= content_for :form_heading %>
 
   <%= f.govuk_text_field :location_name, label: { text: "Study site name", size: "s" } %>
 
@@ -27,4 +33,5 @@
   <% end %>
 
   <%= f.govuk_submit(site.persisted? ? t("publish.providers.study_sites.update") : t("continue")) %>
+  </div>
 <% end %>
