@@ -796,7 +796,7 @@ en:
         publish/course_study_site_form:
           attributes:
             study_site_ids:
-              blank: "Select at least one study site"
+              blank: "Add at least one study site"
         publish/course_requirement_form:
           attributes:
             required_qualifications:
