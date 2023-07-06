@@ -12,9 +12,6 @@ module Publish
 
       def new
         authorize(@provider, :edit?)
-
-        set_default_study_site
-        redirect_to next_step
       end
 
       def edit
