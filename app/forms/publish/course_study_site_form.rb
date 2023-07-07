@@ -6,18 +6,12 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validate :no_study_sites_selected
+    validates :study_site_ids, presence: true
 
     private
 
     def compute_fields
       { study_site_ids: course.study_site_ids }.merge(new_attributes)
-    end
-
-    def no_study_sites_selected
-      return if params[:study_site_ids].present?
-
-      errors.add(:study_site_ids, :blank)
     end
   end
 end
