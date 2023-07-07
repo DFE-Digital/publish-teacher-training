@@ -158,6 +158,7 @@ jobs:
           POSTGRES_SERVICE_INSTANCE: publish-teacher-training-postgres-${{ matrix.environment }}
 
   restore-aks:
+    needs: [backup]
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
