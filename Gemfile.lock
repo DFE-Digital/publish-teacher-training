@@ -254,7 +254,7 @@ GEM
     fakefs (2.5.0)
     faker (3.2.0)
       i18n (>= 1.8.11, < 2)
-    faraday (2.7.9)
+    faraday (2.7.10)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-follow_redirects (0.3.0)
