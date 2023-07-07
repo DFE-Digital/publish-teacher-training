@@ -4,12 +4,20 @@ class AddCourseButton < ViewComponent::Base
   include RecruitmentCycleHelper
   attr_reader :provider
 
+  Section = Struct.new(:name, :path)
+
   def initialize(provider:)
     @provider = provider
     super
   end
 
   private
+
+  def incomplete_sections
+    incomplete_sections_hash.keys.select { |section| send(section) }.map do |section|
+      Section.new("Add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", incomplete_sections_hash[section])
+    end
+  end
 
   def incomplete_sections_hash
     {

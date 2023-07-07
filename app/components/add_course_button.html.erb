@@ -10,17 +10,14 @@
 
 <% else %>
 
-<div class="govuk-inset-text">
+  <div class="govuk-inset-text">
     <p class="govuk-body">Before adding a course, you need to:</p>
-      <ul class="govuk-list govuk-list--bullet">
-
-        <% incomplete_sections_hash.each do |section, path| %>
-          <% if send(section) %>
-            <li>
-              <%= govuk_link_to("Add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", path) %>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
+    <ul class="govuk-list govuk-list--bullet">
+      <% incomplete_sections.each do |section| %>
+        <li>
+          <%= govuk_link_to(section.name, section.path) %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
