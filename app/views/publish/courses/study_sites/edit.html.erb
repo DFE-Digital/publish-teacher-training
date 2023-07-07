@@ -24,7 +24,7 @@
 
         <%= f.govuk_check_boxes_fieldset :study_site_ids, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
           <div class="govuk-hint">Select all that apply</div>
-          <% @provider.study_sites.sort_by(&:location_name).each_with_index do |study_site, index| %>
+          <% @provider.study_sites.sort_by(&:location_name).each do |study_site| %>
                     <%= f.govuk_check_box :study_site_ids,
                         study_site.id,
                         label: { text: study_site.location_name },
