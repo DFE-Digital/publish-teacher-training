@@ -6,44 +6,46 @@
 <% end %>
 
 <div class="govuk-grid-row">
+
+  <%= form_with(
+    model: @school_search_form,
+    url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
+    method: :post,
+    html: { data: { module: "app-schools-autocomplete" } }
+  ) do |f| %>
+
+  <div class="govuk-grid-column-full">
+  <%= f.govuk_error_summary %>
+  </div>
+
   <div class="govuk-grid-column-two-thirds">
-
-    <%= form_with(
-        model: @school_search_form,
-        url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code),
-        method: :post,
-        html: { data: { module: "app-schools-autocomplete" } }
-      ) do |f| %>
-
-      <%= f.govuk_error_summary %>
-
-      <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
-        <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-schools-search-form-query-field" } do %>
-          <span class="govuk-caption-l">Add school</span>
-          <%= I18n.t("publish.providers.school_search.new.title") %>
-          <% if f.object.errors.present? %>
-            <span class="govuk-error-message" id="publish-schools-search-form-query-field-error" data-qa="provider-error">
-              <%= f.object.errors.first.message %>
-            </span>
-          <% end %>
+    <div class="govuk-form-group<% if f.object.errors.present? %> govuk-form-group--error<% end %>">
+      <%= f.label :query, { class: "govuk-label govuk-label--l", for: "publish-schools-search-form-query-field" } do %>
+        <span class="govuk-caption-l">Add school</span>
+        <%= I18n.t("publish.providers.school_search.new.title") %>
+        <% if f.object.errors.present? %>
+          <span class="govuk-error-message" id="publish-schools-search-form-query-field-error" data-qa="provider-error">
+            <%= f.object.errors.first.message %>
+          </span>
         <% end %>
-        <%= f.text_field :query,
-                              id: "publish-schools-search-form-query-field",
-                              value: params[:query],
-                              class: "govuk-input",
-                              data: { qa: "schools-search" } %>
-        <div id="school-autocomplete"></div>
-      </div>
+      <% end %>
+      <%= f.text_field :query,
+        id: "publish-schools-search-form-query-field",
+        value: params[:query],
+        class: "govuk-input",
+        data: { qa: "schools-search" } %>
+      <div id="school-autocomplete"></div>
+    </div>
 
-      <p class="govuk-body govuk-!-margin-bottom-7">
-        <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
-      </p>
-
-      <%= f.govuk_submit t("continue") %>
-    <% end %>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+    <p class="govuk-body govuk-!-margin-bottom-7">
+    <%= govuk_link_to(t(".cannot_find"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code)) %>
     </p>
+
+    <%= f.govuk_submit t("continue") %>
+  <% end %>
   </div>
 </div>
+
+<p class="govuk-body">
+  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path) %>
+</p>

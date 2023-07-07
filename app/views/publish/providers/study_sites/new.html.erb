@@ -5,17 +5,16 @@
 <% end %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <% content_for :form_heading do %>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">Add study site</span>
+      Study site details
+    </h1>
+  <% end %>
 
-      <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">Add study site</span>
-        Study site details
-      </h1>
-
-    <%= render partial: "publish/providers/study_sites/form", locals: { model: @study_site_form, site: @site, form_url: publish_provider_recruitment_cycle_study_sites_path, form_method: :post } %>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_study_sites_path) %>
-    </p>
-  </div>
+  <%= render partial: "publish/providers/study_sites/form", locals: { model: @study_site_form, site: @site, form_url: publish_provider_recruitment_cycle_study_sites_path, form_method: :post } %>
 </div>
+
+<p class="govuk-body">
+  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_study_sites_path) %>
+</p>
