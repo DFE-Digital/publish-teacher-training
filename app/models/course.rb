@@ -543,7 +543,7 @@ class Course < ApplicationRecord
   end
 
   def last_published_at
-    current_published_enrichment&.last_published_timestamp_utc || enrichment_attribute(:last_published_timestamp_utc)
+    enrichments.maximum(:last_published_timestamp_utc)
   end
 
   def withdrawn_at
@@ -850,7 +850,7 @@ class Course < ApplicationRecord
   end
 
   def all_enrichments_are_published?
-    (enrichments.one? && published?) || enrichments.flat_map(&:status).none?('draft')
+    (enrichments.one? && published?) || enrichments.none? { |enrichment| %w[draft withdrawn].include?(enrichment.status) }
   end
 
   def assignable_after_publish(course_params, is_admin)
