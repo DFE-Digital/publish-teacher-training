@@ -151,19 +151,19 @@ class Course < ApplicationRecord
     def new_draft_attributes
       latest_published_enrichment = most_recent.published.first
 
-      if latest_published_enrichment.present?
-        latest_published_enrichment_attributes = latest_published_enrichment
-                                                 .dup
-                                                 .attributes
-                                                 .with_indifferent_access
-                                                 .except(:json_data)
+      new_enrichment_attributes = if latest_published_enrichment.present?
+                                    latest_published_enrichment
+                                      .dup
+                                      .attributes
+                                      .with_indifferent_access
+                                      .except(:json_data)
+                                  else
+                                    {}
+                                  end
 
-        latest_published_enrichment_attributes[:status] = :draft
-        latest_published_enrichment_attributes[:last_published_timestamp_utc] = nil
-        latest_published_enrichment_attributes
-      else
-        { status: :draft, last_published_timestamp_utc: nil }.with_indifferent_access
-      end
+      new_enrichment_attributes.merge(
+        { status: :draft, last_published_timestamp_utc: nil }
+      )
     end
   end
 
