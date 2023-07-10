@@ -31,10 +31,12 @@ namespace :find, path: '/' do
 
   scope module: :search do
     root to: 'locations#start'
-    get '/age-groups' => 'age_groups#new'
+    get '/age-groups' => 'age_groups#new', as: :age_groups
     get '/age-groups-submit' => 'age_groups#create', as: :age_groups_create
-    get '/subjects' => 'subjects#new'
+    get '/subjects' => 'subjects#new', as: :subjects
     get '/subjects-submit' => 'subjects#create', as: :subjects_create
+    get '/visa-status' => 'visa_status#new', as: :visa_status
+    get '/visa-status-submit' => 'visa_status#create', as: :visa_status_create
     resources :locations, path: '/'
   end
 
