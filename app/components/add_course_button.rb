@@ -15,7 +15,7 @@ class AddCourseButton < ViewComponent::Base
 
   def incomplete_sections
     incomplete_sections_hash.keys.select { |section| send(section) }.map do |section|
-      Section.new(name: "Add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", path: incomplete_sections_hash[section])
+      Section.new(name: "add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", path: incomplete_sections_hash[section])
     end
   end
 

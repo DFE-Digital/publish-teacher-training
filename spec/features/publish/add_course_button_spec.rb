@@ -30,7 +30,7 @@ feature 'Add course button', { can_edit_current_and_next_cycles: true } do
   end
 
   def then_i_should_see_the_add_study_site_link
-    expect(page).to have_link('Add a study site', href: "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/study-sites")
+    expect(page).to have_link('add a study site', href: "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/study-sites")
   end
 
   def and_i_should_not_see_the_add_course_button
