@@ -16,11 +16,7 @@ module Find
         @subjects_form = SubjectsForm.new(subjects: sanitised_subject_codes, age_group: form_params[:age_group])
 
         if @subjects_form.valid?
-          redirect_to find_results_path(form_params.merge(
-                                          subjects: sanitised_subject_codes,
-                                          has_vacancies: default_vacancies,
-                                          applications_open: default_applications_open
-                                        ))
+          redirect_to find_visa_status_path(filter_params[:find_subjects_form])
         else
           render :new
         end
