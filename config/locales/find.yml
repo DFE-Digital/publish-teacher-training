@@ -153,6 +153,10 @@ en:
           attributes:
             age_group:
               blank: "Select which age group you want to teach"
+        find/visa_status_form:
+          attributes:
+            visa_status:
+              blank: "Select if you have the right to work or study in the UK"
         find/subjects_form:
           blank: "Select at least one subject you want to teach"
           attributes:
