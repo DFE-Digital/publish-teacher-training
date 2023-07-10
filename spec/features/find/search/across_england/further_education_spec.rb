@@ -16,6 +16,10 @@ feature 'Searching across England' do
 
     when_i_select_the_further_education_radio_button
     and_i_click_continue
+    then_i_should_see_the_visa_status_page
+
+    when_i_select_my_visa_status
+    and_i_click_find_courses
     then_i_should_see_the_find_results_page
   end
 
@@ -54,8 +58,20 @@ feature 'Searching across England' do
     choose 'Further education'
   end
 
+  def then_i_should_see_the_visa_status_page
+    expect(page).to have_content('Do you already have the right to work or study in the UK?')
+  end
+
+  def when_i_select_my_visa_status
+    choose 'Yes'
+  end
+
+  def and_i_click_find_courses
+    click_button 'Find courses'
+  end
+
   def then_i_should_see_the_find_results_page
-    expect(page).to have_current_path('/results?age_group=further_education&applications_open=true&has_vacancies=true&l=2&subjects[]=41')
+    expect(page).to have_current_path('/results?age_group=further_education&applications_open=true&can_sponsor_visa=false&has_vacancies=true&l=2&subjects%5B%5D=41&visa_status=false')
   end
 
   def and_i_should_see_the_correct_courses

@@ -26,10 +26,14 @@ feature 'Searching across England' do
     when_i_click_continue
     then_i_should_see_the_subjects_form
 
-    when_i_click_find_courses
+    when_i_click_continue
     then_i_should_see_a_subjects_validation_error
 
     when_i_select_the_secondary_subject
+    and_i_click_continue
+    then_i_should_see_the_visa_status_page
+
+    when_i_select_my_visa_status
     and_i_click_find_courses
     then_i_should_see_the_find_results_page
     and_i_should_see_the_correct_courses
@@ -103,8 +107,16 @@ feature 'Searching across England' do
     check 'Biology'
   end
 
+  def then_i_should_see_the_visa_status_page
+    expect(page).to have_content('Do you already have the right to work or study in the UK?')
+  end
+
+  def when_i_select_my_visa_status
+    choose 'Yes'
+  end
+
   def then_i_should_see_the_find_results_page
-    expect(page).to have_current_path('/results?age_group=secondary&applications_open=true&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=C1')
+    expect(page).to have_current_path('/results?age_group=secondary&applications_open=true&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=C1&visa_status=false')
   end
 
   def and_i_should_see_the_correct_courses
