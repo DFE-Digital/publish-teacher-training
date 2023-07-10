@@ -59,6 +59,8 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    visa_status:
+      title: Do you already have the right to work or study in the UK?
     subjects:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
