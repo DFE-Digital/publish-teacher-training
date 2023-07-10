@@ -9,6 +9,7 @@ class PagesController < ApplicationController
     add_an_organisation
     add_and_remove_users
     change_an_accredited_provider_relationship
+    add_schools_and_study_sites
     roll_over_courses_to_a_new_recruitment_cycle
     help_writing_course_descriptions
     course_summary_examples
