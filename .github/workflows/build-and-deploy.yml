@@ -486,7 +486,7 @@ jobs:
       name: sandbox_aks
       url: ${{ steps.deploy_sandbox_v2.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
-    needs: [deploy-production]
+    needs: [deploy-aks-production]
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
