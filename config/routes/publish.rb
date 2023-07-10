@@ -28,6 +28,7 @@ scope path: 'how-to-use-this-service' do
   get '/add-an-organisation', to: 'pages#add_an_organisation', as: :add_an_organisation
   get '/add-and-remove-users', to: 'pages#add_and_remove_users', as: :add_and_remove_users
   get '/change-an-accredited-provider-relationship', to: 'pages#change_an_accredited_provider_relationship', as: :change_an_accredited_provider_relationship
+  get '/add-schools-and-study-sites', to: 'pages#add_schools_and_study_sites', as: :add_schools_and_study_sites
   get '/roll-over-courses-to-a-new-recruitment-cycle', to: 'pages#roll_over_courses_to_a_new_recruitment_cycle', as: :roll_over_courses_to_a_new_recruitment_cycle
   get '/help-writing-course-descriptions', to: 'pages#help_writing_course_descriptions', as: :help_writing_course_descriptions
   get '/course-summary-examples', to: 'pages#course_summary_examples', as: :course_summary_examples

@@ -28,6 +28,7 @@ class PagesController < ApplicationController
   def add_an_organisation; end
   def add_and_remove_users; end
   def change_an_accredited_provider_relationship; end
+  def add_schools_and_study_sites; end
   def roll_over_courses_to_a_new_recruitment_cycle; end
   def help_writing_course_descriptions; end
   def course_summary_examples; end

@@ -1,0 +1,113 @@
+<% content_for :page_title, "Add schools and study sites" %>
+
+<%= content_for(:before_content) do %>
+
+  <%= govuk_breadcrumbs(breadcrumbs: [
+      govuk_breadcrumb_link_to("Home", root_path),
+      govuk_breadcrumb_link_to("How to use this service", how_to_use_this_service_path),
+      govuk_breadcrumb_link_to("Course summary examples", add_schools_and_study_sites_path)
+    ]) %>
+
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">How to use this service</span>
+      Add schools and study sites
+    </h1>
+
+    <h2 class="govuk-heading-s">Contents</h2>
+
+    <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
+      <li><%= govuk_link_to "Adding a school", "#adding-a-school" %></li>
+      <li><%= govuk_link_to "Adding a study site", "#adding-a-study-site" %></li>
+      <li><%= govuk_link_to "Attaching schools and study sites to a course", "#attaching-schools-and-study-sites-to-a-course" %></li>
+      <li><%= govuk_link_to "Detaching schools and study sites from a course", "#detaching-schools-and-study-sites-from-a-course" %></li>
+    </ul>
+
+    <p class="govuk-body">
+      We know from our research with candidates that understanding where their initial teacher training (ITT) will take place is one of the most important factors when choosing a course.
+    </p>
+
+    <p class="govuk-body">
+      Over 80% of course searches on Find postgraduate teacher training (Find) are done by location, so it’s important that all location details have been added so courses can be found easily in searches.
+    </p>
+
+    <p class="govuk-body">To be able to publish a course, you’ll need to attach at least one school and at least one study site to it.</p>
+
+    <p class="govuk-body">
+      You can add all potential schools and study sites to your account in Publish teacher training courses (Publish) and then link them to a course.
+    </p>
+
+    <h2 id="adding-a-school" class="govuk-heading-m">Adding a school</h2>
+
+    <p class="govuk-body"> To add details about a school, go to the ‘Schools’ tab.</p>
+
+    <%= image_tag("add-school.png", class: "govuk-!-margin-bottom-3") %>
+
+    <p class="govuk-body">
+      Once you’ve entered the details, check they are correct and select ‘Add school’. If you cannot find the school, you can enter it manually.
+    </p>
+
+    <p class="govuk-body">You’ll see a list of all schools you’ve added, and you’ll be able to select the name of the school to edit or remove it.</p>
+
+    <p class="govuk-body govuk-inset-text">You will not be able to remove a school if it has been attached to a course. You’ll need to detach it from the course first before you can remove it.</p>
+
+    <p class="govuk-body">
+      If you are concerned about the time taken to add this information, especially if your organisation works with many placement schools, please email us at  <%= govuk_mail_to bat_contact_email_address %> and we can add the information for you.
+    </p>
+
+    <h2 id="adding-a-study-site" class="govuk-heading-m">Adding a study site</h2>
+
+    <p class="govuk-body">
+      A study site is the location where the trainee will do the theoretical part of their training, for example, a university campus. If you cannot find the study site, you can enter it manually.
+    </p>
+
+    <p class="govuk-body">You’ll need at least one study site attached to a course to be able to publish it, but you can add as many as you like.</p>
+
+    <p class="govuk-body">To add study sites, go to the study site tab.</p>
+
+    <%= image_tag("add-study-site.png", class: "govuk-!-margin-bottom-3") %>
+
+    <p class="govuk-body">Once you’ve entered the details, check they are correct and select ‘Add study site’.</p>
+
+    <p class="govuk-body govuk-inset-text">
+      You will not be able to remove a study site if it has been attached to a course. You’ll need to detach it from the course first before you can remove it.
+    </p>
+
+    <h2 id="attaching-schools-and-study-sites-to-a-course" class="govuk-heading-m">Attaching schools and study sites to a course</h2>
+    <p class="govuk-body">
+      Once you’ve added schools and study sites to your account, you can attach them to a course. Candidates will then be able to see a list of the school placements and study sites on the course page on Find.
+    </p>
+
+    <h3 class="govuk-heading-s">When adding a new course</h3>
+
+    <p class="govuk-body">When you add a new course, you’ll be asked to select all the school placements and study sites that apply.</p>
+
+    <%= image_tag("school-placements.png", class: "govuk-!-margin-bottom-3") %>
+
+    <h3 class="govuk-heading-s">When editing an existing course</h3>
+
+    <p class="govuk-body">Go to the ‘Basic details’ tab and select the ‘Change’ link next to ‘School placements’ or ‘Study sites’.</p>
+
+    <%= image_tag("course-basic-details.png", class: "govuk-!-margin-bottom-3") %>
+
+    <p class="govuk-body">On the next page, you can then tick the check box next to the school or study site you want to attach to the course.</p>
+
+    <h2 id="detaching-schools-and-study-sites-from-a-course" class="govuk-heading-m">Detaching schools and study sites from a course</h2>
+
+    <p class="govuk-body">
+      If you want to detach a school or study site from a course, you can select the change links as described, untick the check box and update.
+    </p>
+
+    <p class="govuk-body">
+      If there are no places left at a school or the study site is no longer available, you can detach it from a course. If a place becomes available, you can simply attach it again.
+    </p>
+
+    <p class="govuk-body">
+      If you need to remove a school or a study site from your account entirely, you’ll need to go to the ‘Schools’ or Study sites’ tab to do this.
+    </p>
+
+  </div>
+</div>

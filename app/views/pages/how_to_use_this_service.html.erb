@@ -30,12 +30,10 @@
     <h2 class="govuk-heading-m">Managing courses</h2>
 
     <ul class="govuk-list govuk-list--spaced">
+      <li><%= govuk_link_to "Add schools and study sites", add_schools_and_study_sites_path %></li>
       <li><%= govuk_link_to "Roll over courses to a new recruitment cycle", roll_over_courses_to_a_new_recruitment_cycle_path %></li>
-      <li>
-        <%= govuk_link_to "Help writing course descriptions",
-                          help_writing_course_descriptions_path %>
-      </li>
       <li><%= govuk_link_to "Course summary examples", course_summary_examples_path %></li>
+      <li><%= govuk_link_to "Help writing course descriptions", help_writing_course_descriptions_path %></li>
     </ul>
   </div>
 </div>
