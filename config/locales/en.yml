@@ -793,6 +793,10 @@ en:
           attributes:
             site_ids:
               no_schools: "Select at least one school"
+        publish/course_study_site_form:
+          attributes:
+            study_site_ids:
+              blank: "Add at least one study site"
         publish/course_requirement_form:
           attributes:
             required_qualifications:

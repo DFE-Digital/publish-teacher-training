@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Study sites – #{course.name_and_code}", course.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Study sites – #{course.name_and_code}", @course_study_site_form.errors.present?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
@@ -7,7 +7,7 @@
 <%= render "publish/shared/errors" %>
 
 <%= form_with(
-  model: course,
+  model: @course_study_site_form,
   url: study_sites_publish_provider_recruitment_cycle_course_path(
     course.provider_code,
     course.recruitment_cycle_year,
@@ -22,14 +22,13 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-        <%= f.govuk_check_boxes_fieldset :study_sites, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
+        <%= f.govuk_check_boxes_fieldset :study_site_ids, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Study sites".html_safe, tag: "h1", size: "l" } do %>
           <div class="govuk-hint">Select all that apply</div>
-          <% @provider.study_sites.sort_by(&:location_name).each_with_index do |site, index| %>
-                    <%= f.govuk_check_box :study_sites,
-                        site.id,
-                        label: { text: site.location_name },
-                        hint: { text: site.full_address },
-                        checked: f.object.study_sites.include?(site) %>
+          <% @provider.study_sites.sort_by(&:location_name).each do |study_site| %>
+                    <%= f.govuk_check_box :study_site_ids,
+                        study_site.id,
+                        label: { text: study_site.location_name },
+                        hint: { text: study_site.full_address } %>
           <% end %>
         <% end %>
 

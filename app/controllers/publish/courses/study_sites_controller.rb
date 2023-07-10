@@ -16,14 +16,16 @@ module Publish
 
       def edit
         authorize(provider)
+
+        @course_study_site_form = CourseStudySiteForm.new(@course)
       end
 
       def update
         authorize(provider)
 
-        update_course_study_sites
+        @course_study_site_form = CourseStudySiteForm.new(@course, params: study_site_params)
 
-        if course.save
+        if @course_study_site_form.save!
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
             recruitment_cycle.year,
@@ -54,6 +56,12 @@ module Publish
 
       def error_keys
         [:study_sites]
+      end
+
+      def study_site_params
+        return { study_site_ids: nil } if params[:publish_course_study_site_form][:study_site_ids].all?(&:empty?)
+
+        params.require(:publish_course_study_site_form).permit(study_site_ids: [])
       end
     end
   end
