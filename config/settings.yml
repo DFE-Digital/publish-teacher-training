@@ -110,7 +110,7 @@ features:
   gias_search: true
   support_new_provider_creation_flow: true
   accredited_provider_search: true
-  study_sites: false
+  study_sites: true
 
 cookies:
   session:
