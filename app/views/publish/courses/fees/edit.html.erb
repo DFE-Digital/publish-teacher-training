@@ -35,6 +35,7 @@
       <%= f.govuk_text_field(:fee_uk_eu,
         form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },
         label: { text: "Fee for UK students", size: "s" },
+        value: @copied_fields_values&.dig("fee_uk_eu"),
         prefix_text: "£",
         width: 5,
         data: { qa: "course_fee_uk_eu" }) %>
@@ -42,6 +43,7 @@
       <%= f.govuk_text_field(:fee_international,
         form_group: { id: "fee-international" },
         label: { text: student_visa_and_after_2023_cycle(@course) ? "Fee for international students" : "Fee for international students (optional)", size: "s" },
+        value: @copied_fields_values&.dig("fee_international"),
         prefix_text: "£",
         width: 5,
         data: { qa: "course_fee_international" }) %>
@@ -56,6 +58,7 @@
 
       <%= f.govuk_text_area(:fee_details,
         label: { text: "Fee details (optional)", size: "s" },
+        value: @copied_fields_values&.dig("fee_details"),
         rows: 15,
         max_words: 250,
         data: { qa: "course_fee_details" }) %>
@@ -68,6 +71,7 @@
 
       <%= f.govuk_text_area(:financial_support,
         label: { text: "Financial support you offer (optional)", size: "s" },
+        value: @copied_fields_values&.dig("financial_support"),
         rows: 15,
         max_words: 250,
         data: { qa: "course_financial_support" }) %>

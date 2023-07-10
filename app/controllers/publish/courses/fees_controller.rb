@@ -10,7 +10,10 @@ module Publish
         authorize(provider)
 
         @course_fee_form = CourseFeeForm.new(course_enrichment)
-        copy_content_check(::Courses::Copy::FEES_FIELDS)
+        @copied_fields = copy_content_check(::Courses::Copy::FEES_FIELDS)
+
+        @copied_fields_values = copied_fields_values if @copied_fields.present?
+
         @course_fee_form.valid? if show_errors_on_publish?
       end
 

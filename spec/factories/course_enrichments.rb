@@ -60,7 +60,7 @@ FactoryBot.define do
     # salaried or not. Maybe worth implementing this somehow at some point.
     salary_details do
       [
-        'Trainees should expcet to be paid as an Unqualified Teacher.',
+        'Trainees should expect to be paid as an Unqualified Teacher.',
         'For more information on salary please contact us',
         'Salary negotiable.',
         'Applicants will be paid as an unqualified teacher.',

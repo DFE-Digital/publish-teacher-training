@@ -19,10 +19,14 @@ RSpec.describe Courses::Copy do
       expect(new_course.enrichments.first.course_length).to be_nil
       expect(new_course.enrichments.first.about_course).to be_nil
 
-      described_class.get_present_fields_in_source_course(fields_to_copy, original_course, new_course)
+      updated_enrichments = described_class.get_present_fields_in_source_course(fields_to_copy, original_course, new_course)
 
-      expect(new_course.enrichments.first.reload.about_course).to eq original_course.enrichments.first.about_course
-      expect(new_course.enrichments.first.reload.salary_details).to eq original_course.enrichments.first.salary_details
+      expect(updated_enrichments.size).to eq(2)
+
+      updated_enrichments.each do |_name, field, enrichment_to_update|
+        expect(enrichment_to_update).to be_an_instance_of(CourseEnrichment)
+        expect(enrichment_to_update.send(field)).to eq(original_course.enrichments.first.send(field))
+      end
     end
 
     it 'skips attributes with blank source values' do

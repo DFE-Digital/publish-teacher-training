@@ -56,11 +56,10 @@ module Courses
         source_value = source_course.enrichment_attribute(field)
         next if source_value.blank?
 
-        enrichment_to_update = course.enrichments.most_recent&.first
+        enrichment_to_update = course.enrichments.most_recent&.first || course.course.enrichments.find_or_initialize_draft
         enrichment_to_update.assign_attributes(field => source_value)
-        enrichment_to_update.save
 
-        [name, field]
+        [name, field, enrichment_to_update]
       end
     end
 
