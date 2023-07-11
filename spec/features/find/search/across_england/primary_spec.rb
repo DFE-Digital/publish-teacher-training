@@ -44,6 +44,13 @@ feature 'Searching across England' do
     then_i_should_see_the_visa_status_page
 
 
+    when_i_click_find_courses
+    then_i_should_see_a_validation_error
+
+    when_i_click_back
+    then_i_should_see_the_subjects_form
+    and_i_click_continue
+
     when_i_select_my_visa_status
     and_i_click_find_courses
     then_i_should_see_the_find_results_page
@@ -138,6 +145,10 @@ feature 'Searching across England' do
 
   def when_i_select_my_visa_status
     choose 'Yes'
+  end
+
+  def then_i_should_see_a_validation_error
+    expect(page).to have_content('Select if you have the right to work or study in the UK')
   end
 
   def then_i_should_see_the_find_results_page
