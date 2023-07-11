@@ -16,7 +16,7 @@ describe AddCourseButton do
   context 'when the provider has not filled out any required sections' do
     it 'renders a study sites link' do
       expect(rendered_content).to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -26,7 +26,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -36,7 +36,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -50,7 +50,7 @@ describe AddCourseButton do
 
     it 'renders a study sites link' do
       expect(rendered_content).not_to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -60,7 +60,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -70,7 +70,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -84,7 +84,7 @@ describe AddCourseButton do
 
     it 'renders a study sites link' do
       expect(rendered_content).to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -94,7 +94,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).not_to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -104,7 +104,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -118,7 +118,7 @@ describe AddCourseButton do
 
     it 'renders a study sites link' do
       expect(rendered_content).to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -128,7 +128,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -138,7 +138,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).not_to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -152,7 +152,7 @@ describe AddCourseButton do
 
     it 'renders a study sites link' do
       expect(rendered_content).not_to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -162,7 +162,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -172,7 +172,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).not_to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -186,7 +186,7 @@ describe AddCourseButton do
 
     it 'renders a study sites link' do
       expect(rendered_content).not_to have_link(
-        'Add a study site',
+        'add a study site',
         href: publish_provider_recruitment_cycle_study_sites_path(
           provider.provider_code,
           provider.recruitment_cycle_year
@@ -196,7 +196,7 @@ describe AddCourseButton do
 
     it 'renders an accredited provider link' do
       expect(rendered_content).not_to have_link(
-        'Add an accredited provider',
+        'add an accredited provider',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -206,7 +206,7 @@ describe AddCourseButton do
 
     it 'renders a schools link' do
       expect(rendered_content).not_to have_link(
-        'Add a school',
+        'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
           provider.provider_code,
           provider.recruitment_cycle.year

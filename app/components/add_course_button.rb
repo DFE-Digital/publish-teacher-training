@@ -15,15 +15,15 @@ class AddCourseButton < ViewComponent::Base
 
   def incomplete_sections
     incomplete_sections_hash.keys.select { |section| send(section) }.map do |section|
-      Section.new(name: "Add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", path: incomplete_sections_hash[section])
+      Section.new(name: "add #{incomplete_section_article(section)} #{incomplete_section_label_suffix(section)}", path: incomplete_sections_hash[section])
     end
   end
 
   def incomplete_sections_hash
     {
+      site_not_present?: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year),
       study_site_not_present_and_feature_active?: publish_provider_recruitment_cycle_study_sites_path(provider.provider_code, provider.recruitment_cycle_year),
-      accredited_provider_not_present?: publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year),
-      site_not_present?: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year)
+      accredited_provider_not_present?: publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)
     }
   end
 
