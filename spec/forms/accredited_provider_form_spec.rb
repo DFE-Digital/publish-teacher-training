@@ -39,6 +39,22 @@ describe AccreditedProviderForm, type: :model do
     it { is_expected.to be_truthy }
   end
 
+  describe '#accredited_provider' do
+    subject { described_class.new(user, model, params:).accredited_provider }
+
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:params) do
+      {
+        accredited_provider_id: accredited_provider.id,
+        description: 'Foo'
+      }
+    end
+
+    it 'returns the accredited provider' do
+      expect(subject).to eq(accredited_provider)
+    end
+  end
+
   describe '#save!' do
     subject { described_class.new(user, model, params:) }
 
