@@ -11,8 +11,10 @@
                         data: { qa: "course__publish" }) %>
   <% end %>
 
-  <% unless course.has_unpublished_changes? %>
-    <%= govuk_link_to search_ui_course_page_url(provider_code: course.provider.provider_code, course_code: course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__is_findable" } do %>
+  <% if !course.has_unpublished_changes? && course.scheduled? %>
+    <%= govuk_link_to "Preview course", preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__preview-link" } %>
+  <% elsif !course.has_unpublished_changes? && !course.scheduled? %>
+     <%= govuk_link_to search_ui_course_page_url(provider_code: course.provider.provider_code, course_code: course.course_code), class: "govuk-!-margin-right-2", data: { qa: "course__is_findable" } do %>
       View on Find <span class="govuk-visually-hidden">postgraduate teacher training</span>
     <% end %>
   <% end %>
