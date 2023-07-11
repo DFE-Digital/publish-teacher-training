@@ -112,14 +112,15 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   describe 'rollover with an rolled over course' do
-    scenario 'i can see the success message and link' do
+    scenario 'i can see the success message, link and preview' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_rolled_over], funding_type: 'salary'))
       given_there_is_a_next_recruitment_cycle
       when_i_visit_the_rollover_form_page
       when_i_click_the_rollover_course_button
       then_i_should_see_the_course_show_page_with_success_message
       when_i_click_the_view_rollover_link
-      then_i_should_see_the_rolled_over_course_show_page
+      and_i_should_see_the_rolled_over_course_show_page
+      then_i_should_see_the_link_to_preview
     end
   end
 
@@ -135,6 +136,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   private
 
+  def then_i_should_see_the_link_to_preview
+    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
+      expect(course_button_panel).to have_preview_link
+    end
+  end
+
   def and_there_are_change_links
     expect(page.find_all('.govuk-summary-list__actions a').all? { |actions| actions.text.include?('Change ') }).to be(true)
   end
@@ -146,6 +153,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def then_i_should_see_the_rolled_over_course_show_page
     expect(page).to have_content 'Rolled over'
   end
+
+  alias_method :and_i_should_see_the_rolled_over_course_show_page, :then_i_should_see_the_rolled_over_course_show_page
 
   def then_i_should_see_the_draft_course_on_the_show_page
     expect(page).to have_content 'Draft'
