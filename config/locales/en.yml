@@ -602,6 +602,10 @@ en:
           attributes:
             campaign_name:
               inclusion: "Select if this course is part of the Engineers teach physics programme"
+        publish/subject_requirement_form:
+          attributes:
+            degree_subject_requirements:
+              too_long: "Reduce the word count for degree subject requirements"
         publish/course_rollover_form:
           attributes:
             course_is_rollable:
