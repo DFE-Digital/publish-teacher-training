@@ -397,3 +397,9 @@ domains-apply: domains-init # make publish qa domains-apply
 
 domains-destroy: domains-init # make publish qa domains-destroy
 	terraform -chdir=terraform/custom_domains/environment_domains destroy -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
+
+action-group-resources: set-azure-account # make env_aks action-group-resources ACTION_GROUP_EMAIL=notificationemail@domain.com . Must be run before setting enable_monitoring=true for each subscription
+	$(if $(ACTION_GROUP_EMAIL), , $(error Please specify a notification email for the action group))
+	echo ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg
+	az group create -l uksouth -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Find postgraduate teacher training" "Environment=Test" "Service Offering=Teacher services cloud"
+	az monitor action-group create -n ${RESOURCE_NAME_PREFIX}-${SERVICE_NAME} -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
