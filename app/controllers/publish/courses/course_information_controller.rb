@@ -10,7 +10,9 @@ module Publish
         authorize(provider)
 
         @course_information_form = CourseInformationForm.new(course_enrichment)
-        copy_content_check(::Courses::Copy::ABOUT_FIELDS)
+        @copied_fields = copy_content_check(::Courses::Copy::ABOUT_FIELDS)
+
+        @copied_fields_values = copied_fields_values if @copied_fields.present?
 
         @course_information_form.valid? if show_errors_on_publish?
       end

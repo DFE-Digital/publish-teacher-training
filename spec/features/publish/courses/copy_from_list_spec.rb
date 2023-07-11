@@ -7,21 +7,21 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
     before do
       given_i_am_authenticated_as_an_accredited_provider_user
       and_there_is_an_accredited_course_i_want_to_edit
+
       when_i_visit_the_publish_course_information_edit_page
+      then_i_see_the_current_course_information
     end
 
     include_context 'copy_courses'
 
     scenario 'the course does not display its own name in the copy list' do
-      publish_course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
-      )
+      when_i_visit_the_publish_course_information_edit_page
+      then_the_correct_courses_are_available_to_select
 
-      list_options = publish_course_information_edit_page.copy_content.copy_options
-      expect(Course.count).to eq 3
-      expect(list_options.size).to eq 3
-      expect(list_options.shift).to eq('Pick a course')
-      expect(list_options.any? { |x| x[@course.name] }).to be_falsey
+      when_i_select_a_course_to_copy
+      and_i_click_copy
+      then_i_see_an_alert_that_the_changes_are_not_saved_yet
+      and_i_can_see_the_new_content
     end
   end
 
@@ -35,15 +35,8 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
     include_context 'copy_courses'
 
     scenario 'the course does not display its own name in the copy list' do
-      publish_course_information_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
-      )
-
-      list_options = publish_course_information_edit_page.copy_content.copy_options
-      expect(Course.count).to eq 3
-      expect(list_options.size).to eq 3
-      expect(list_options.shift).to eq('Pick a course')
-      expect(list_options.any? { |x| x[@course.name] }).to be_falsey
+      when_i_visit_the_publish_course_information_edit_page
+      then_the_correct_courses_are_available_to_select
     end
   end
 
@@ -67,6 +60,43 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
     publish_course_information_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
+  end
+
+  def then_i_see_the_current_course_information
+    expect(page).to have_content(course.enrichments.first.about_course)
+    expect(page).to have_content(course.enrichments.first.interview_process)
+    expect(page).to have_content(course.enrichments.first.how_school_placements_work)
+  end
+
+  def then_the_correct_courses_are_available_to_select
+    list_options = publish_course_information_edit_page.copy_content.copy_options
+    expect(Course.count).to eq 3
+    expect(list_options.size).to eq 3
+    expect(list_options.shift).to eq('Pick a course')
+    expect(list_options.any? { |x| x[@course.name] }).to be_falsey
+  end
+
+  def when_i_select_a_course_to_copy
+    list_options = publish_course_information_edit_page.copy_content.copy_options
+    @course_to_copy = list_options.second
+    select @course_to_copy, from: 'Copy from'
+  end
+
+  def and_i_click_copy
+    click_button 'Copy content'
+  end
+
+  def then_i_see_an_alert_that_the_changes_are_not_saved_yet
+    expect(page).to have_content 'Your changes are not yet saved'
+    expect(page).to have_content "We’ve copied these fields from #{@course_to_copy}"
+  end
+
+  def and_i_can_see_the_new_content
+    copied_course_code = @course_to_copy.match(/\((.*?)\)/)[1]
+    @copied_course = Course.find_by(course_code: copied_course_code)
+    expect(page).to have_content(@copied_course.enrichments.first.about_course)
+    expect(page).to have_content(@copied_course.enrichments.first.interview_process)
+    expect(page).to have_content(@copied_course.enrichments.first.how_school_placements_work)
   end
 
   def provider

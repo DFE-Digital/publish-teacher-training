@@ -151,18 +151,19 @@ class Course < ApplicationRecord
     def new_draft_attributes
       latest_published_enrichment = most_recent.published.first
 
-      if latest_published_enrichment.present?
-        latest_published_enrichment_attributes = latest_published_enrichment
-                                                 .dup
-                                                 .attributes
-                                                 .with_indifferent_access
-                                                 .except(:json_data)
+      new_enrichment_attributes = if latest_published_enrichment.present?
+                                    latest_published_enrichment
+                                      .dup
+                                      .attributes
+                                      .with_indifferent_access
+                                      .except(:json_data)
+                                  else
+                                    {}
+                                  end
 
-        latest_published_enrichment_attributes[:status] = :draft
-        latest_published_enrichment_attributes
-      else
-        { status: :draft }.with_indifferent_access
-      end
+      new_enrichment_attributes.merge(
+        { status: :draft, last_published_timestamp_utc: nil }
+      )
     end
   end
 
@@ -542,7 +543,7 @@ class Course < ApplicationRecord
   end
 
   def last_published_at
-    latest_enrichment&.last_published_timestamp_utc
+    enrichments.maximum(:last_published_timestamp_utc)
   end
 
   def withdrawn_at
@@ -672,7 +673,13 @@ class Course < ApplicationRecord
   end
 
   def has_unpublished_changes?
-    content_status == :published_with_unpublished_changes
+    return false if all_enrichments_are_published?
+
+    (published? && draft_enrichment.present?) || (last_published_at.present? && enrichment_not_withdrawn?)
+  end
+
+  def draft_enrichment
+    enrichments.draft.most_recent.first
   end
 
   def is_running?
@@ -802,6 +809,10 @@ class Course < ApplicationRecord
     subjects.any? { |subject| subject.type == 'ModernLanguagesSubject' }
   end
 
+  def current_published_enrichment
+    enrichments.where(status: 'published').order(last_published_timestamp_utc: :desc).first
+  end
+
   private
 
   def add_site!(site:)
@@ -828,6 +839,18 @@ class Course < ApplicationRecord
     else
       enrichments.max_by(&:created_at)
     end
+  end
+
+  def published?
+    current_published_enrichment.present?
+  end
+
+  def enrichment_not_withdrawn?
+    !enrichments.most_recent.first.withdrawn?
+  end
+
+  def all_enrichments_are_published?
+    (enrichments.one? && published?) || enrichments.none? { |enrichment| %w[draft withdrawn].include?(enrichment.status) }
   end
 
   def assignable_after_publish(course_params, is_admin)

@@ -16,7 +16,9 @@
       <% end %>
     <% end %>
 
-    <% if course.how_school_placements_work.present? %>
+    <% if course.published_how_school_placements_work.present? %>
+      <%= markdown(course.published_how_school_placements_work) %>
+    <% elsif course.how_school_placements_work.present? %>
       <%= markdown(course.how_school_placements_work) %>
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>

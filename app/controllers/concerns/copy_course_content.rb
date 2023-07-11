@@ -3,6 +3,12 @@
 module CopyCourseContent
   extend ActiveSupport::Concern
 
+  def copied_fields_values
+    @copied_fields.each_with_object({}) do |(_, field, enrichment_to_update), values_to_write|
+      values_to_write[field] = enrichment_to_update.send(field)
+    end
+  end
+
   private
 
   def copy_content_check(fields)

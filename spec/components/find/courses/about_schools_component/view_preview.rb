@@ -32,7 +32,7 @@ module Find
 
         def mock_scitt_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
-                         how_school_placements_work: 'you will go on placement and learn more',
+                         published_how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'Teaching placements',
                          program_type: 'scitt_programme',
                          study_sites: [fake_study_site],
@@ -41,7 +41,7 @@ module Find
 
         def mock_hei_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
-                         how_school_placements_work: 'you will go on placement and learn more',
+                         published_how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'Teaching placements',
                          program_type: 'higher_education_programme',
                          study_sites: [fake_study_site],
@@ -54,7 +54,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
+          attr_accessor(:provider, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
 
           def preview_site_statuses
             site_statuses.sort_by { |status| status.site.location_name }

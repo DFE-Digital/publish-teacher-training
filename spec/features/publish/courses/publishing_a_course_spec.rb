@@ -19,7 +19,11 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
     and_i_have_previously_published_a_course
     when_i_make_some_new_changes
     then_i_should_see_the_unpublished_changes_message
+    and_i_do_not_see_the_unpublished_content_on_find
+    when_i_return_to_publish
     and_i_should_see_the_publish_button
+    and_i_click_the_publish_link
+    then_i_see_the_content_on_find
   end
 
   scenario 'attempting to publish with errors' do
@@ -33,7 +37,12 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    given_i_am_authenticated(user: create(:user, :with_provider))
+    @user = create(:user, :with_provider)
+    given_i_am_authenticated(user: @user)
+  end
+
+  def and_i_am_authed_again
+    given_i_am_authenticated(user: @user)
   end
 
   def and_i_have_previously_published_a_course
@@ -47,7 +56,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   def and_there_is_a_course_i_want_to_publish
     given_a_course_exists(
       :with_gcse_equivalency,
-      enrichments: [build(:course_enrichment, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
     )
@@ -55,14 +64,14 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def and_there_is_a_draft_course
     given_a_course_exists(
-      enrichments: [build(:course_enrichment, :initial_draft)],
+      enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
     )
   end
 
   def and_there_is_a_published_course
-    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+    given_a_course_exists(enrichments: [create(:course_enrichment, :published)])
   end
 
   def when_i_visit_the_course_page
@@ -91,6 +100,26 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def then_i_should_see_the_unpublished_changes_message
     expect(page).to have_content('* Unpublished changes')
+  end
+
+  def and_i_do_not_see_the_unpublished_content_on_find
+    page.driver.header 'Host', 'find'
+    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    expect(page).not_to have_content('some new description')
+  end
+
+  def then_i_see_the_content_on_find
+    page.driver.header 'Host', 'find'
+    visit "/course/#{provider.provider_code}/#{course.course_code}"
+    expect(page).to have_content('some new description')
+  end
+
+  def when_i_return_to_publish
+    page.driver.header 'Host', 'publish'
+    and_i_am_authed_again
+    publish_provider_courses_show_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+    )
   end
 
   def and_i_should_see_the_publish_button

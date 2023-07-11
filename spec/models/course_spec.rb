@@ -2328,7 +2328,7 @@ describe Course do
         end
 
         its(:id) { is_expected.to be_nil }
-        its(:last_published_timestamp_utc) { is_expected.to be_within(1.second).of published_enrichment.last_published_timestamp_utc }
+        its(:last_published_timestamp_utc) { is_expected.to be_nil }
         its(:status) { is_expected.to eq 'draft' }
       end
 

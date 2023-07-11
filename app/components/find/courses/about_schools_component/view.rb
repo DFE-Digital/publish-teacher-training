@@ -9,7 +9,7 @@ module Find
 
         attr_reader :course
 
-        delegate :how_school_placements_work,
+        delegate :published_how_school_placements_work,
                  :program_type,
                  :study_sites,
                  :site_statuses, to: :course
@@ -20,7 +20,7 @@ module Find
         end
 
         def render?
-          how_school_placements_work.present? ||
+          published_how_school_placements_work.present? ||
             program_type == 'higher_education_programme' ||
             program_type == 'scitt_programme' ||
             study_sites.any? ||

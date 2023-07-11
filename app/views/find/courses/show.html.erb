@@ -34,7 +34,7 @@
 
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
-    <% if @course.about_course.present? %>
+    <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
@@ -52,7 +52,7 @@
       <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
     <% end %>
 
-    <% if @course.interview_process.present? %>
+    <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
 
