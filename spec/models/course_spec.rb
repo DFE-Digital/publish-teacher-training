@@ -65,7 +65,7 @@ describe Course do
 
     it { is_expected.to have_many(:subjects).through(:course_subjects) }
     it { is_expected.to have_many(:site_statuses) }
-    it { is_expected.to have_many(:study_site_placements) }
+    it { is_expected.to have_many(:study_site_placements).dependent(:destroy) }
     it { is_expected.to have_many(:study_sites).through(:study_site_placements).source(:site) }
     it { is_expected.to have_many(:sites) }
     it { is_expected.to have_many(:enrichments) }

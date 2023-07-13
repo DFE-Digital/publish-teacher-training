@@ -123,7 +123,7 @@ class Course < ApplicationRecord
   has_many :subjects, through: :course_subjects
   has_many :financial_incentives, through: :subjects
   has_many :site_statuses
-  has_many :study_site_placements
+  has_many :study_site_placements, dependent: :destroy
   accepts_nested_attributes_for :site_statuses
 
   has_many :sites,
