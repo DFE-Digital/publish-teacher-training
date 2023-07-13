@@ -43,7 +43,6 @@ feature 'Searching across England' do
     and_i_click_continue
     then_i_should_see_the_visa_status_page
 
-
     when_i_click_find_courses
     then_i_should_see_a_validation_error
 
