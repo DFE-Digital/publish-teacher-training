@@ -24,7 +24,6 @@ module Support
     end
 
     validate :location_name_unique_to_provider
-    validate :validate_code
     validates :location_name, presence: true
     validates :address1, presence: true
     validates :town, presence: true
@@ -49,12 +48,6 @@ module Support
                         provider.sites - [site]
                       end
       errors.add(:location_name, 'Name is in use by another location') if location_name.in?(sibling_sites.pluck(:location_name))
-    end
-
-    def validate_code
-      return if site.study_site?
-
-      errors.add(:code, 'Code has already been taken') if provider.sites.exists?(code:)
     end
 
     def form_store_key
