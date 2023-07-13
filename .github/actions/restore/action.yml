@@ -84,19 +84,12 @@ runs:
         sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s success --json databaseId --jq '.[].databaseId' -L 1)
         echo "Download artifact for Database Backup and Restore workflow run ID: $sanitised_backup_workflow_run_id"
         gh run download $sanitised_backup_workflow_run_id
+        mv backup_sanitised/backup_sanitised.sql ./
 
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        if [ "${{ env.app_environment }}" == "review" ]; then
-          backup_file=backup_sanitised/backup_sanitised.sql
-          echo "backup_file: ${backup_file}"
-        else
-          backup_file=backup_sanitised.sql
-          echo "backup_file: ${backup_file}"
-        fi
-
-        bin/konduit.sh -i $backup_file -t 7200 ${{ env.app_name }} -- psql
+        bin/konduit.sh -i backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
 
     - name: Remove PaaS specific event triggers
       shell: bash
