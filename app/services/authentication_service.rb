@@ -113,7 +113,7 @@ class AuthenticationService
   end
 
   def user_sign_in_id_does_not_match_token?
-    return unless user
+    return false unless user
 
     user.sign_in_user_id != sign_in_user_id_from_token
   end
