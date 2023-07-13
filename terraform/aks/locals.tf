@@ -10,4 +10,7 @@ locals {
     REDIS_WORKER_URL = module.redis_worker.url
   }
   app_env_values = yamldecode(file(var.app_config_file))[var.app_environment]
+  infra_secrets  = yamldecode(module.secrets.map[var.key_vault_infra_secret_name])
+
+  statuscake_additional_hostnames = var.additional_hostnames != null ? tolist([for hostname in var.additional_hostnames : format("https://%s/ping", hostname)]) : null
 }
