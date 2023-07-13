@@ -44,8 +44,8 @@ en:
         across_england:
           radio: Across England
         by_school_uni_or_provider:
-          radio: By school, university or other training provider
-          text_field: School, university or other training provider
+          radio: By university or other training provider
+          text_field: University or other training provider
           hint_text: Enter the name or provider code
     age_groups:
       title: Which age group do you want to teach?
@@ -59,6 +59,8 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    visa_status:
+      title: Do you have the right to work or study in the UK?
     subjects:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
@@ -151,6 +153,10 @@ en:
           attributes:
             age_group:
               blank: "Select which age group you want to teach"
+        find/visa_status_form:
+          attributes:
+            visa_status:
+              blank: "Select if you have the right to work or study in the UK"
         find/subjects_form:
           blank: "Select at least one subject you want to teach"
           attributes:

@@ -18,7 +18,7 @@ module Find
 
         if @age_groups_form.valid?
           if form_params[:age_group] == 'further_education'
-            redirect_to find_results_path(further_education_params.merge(has_vacancies: default_vacancies, applications_open: default_applications_open))
+            redirect_to find_visa_status_path(further_education_params.merge(has_vacancies: default_vacancies, applications_open: default_applications_open))
           else
             redirect_to find_subjects_path(filter_params[:find_age_groups_form])
           end

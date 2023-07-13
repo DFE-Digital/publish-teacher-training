@@ -13,11 +13,13 @@ RSpec.feature 'Engineers teach physics' do
 
   scenario 'Candidate searches for physics subject' do
     given_i_choose_physics
+    and_i_provide_my_visa_status
     then_i_see_that_the_etp_checkbox_is_unchecked
   end
 
   scenario 'Candidate searches for any other subject' do
     given_i_choose_music
+    and_i_provide_my_visa_status
     then_i_dont_see_the_etp_checkbox
   end
 
@@ -43,6 +45,11 @@ RSpec.feature 'Engineers teach physics' do
   def given_i_choose_music
     check 'Chemistry'
     find_secondary_subjects_page.continue.click
+  end
+
+  def and_i_provide_my_visa_status
+    choose 'Yes'
+    click_button 'Find courses'
   end
 
   def then_i_see_that_the_etp_checkbox_is_unchecked

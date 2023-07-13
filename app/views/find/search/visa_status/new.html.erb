@@ -1,0 +1,32 @@
+<%= content_for :page_title, title_with_error_prefix(I18n.t("find.visa_status.title"), @visa_status_form.errors.any?) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: back_path(@backlink_query_parameters),
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
+
+    <%= form_with(model: @visa_status_form, url: find_visa_status_create_path, method: :get) do |f| %>
+      <%= f.govuk_error_summary %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <%= render Find::HiddenFieldsComponent.new(
+        query_params: request.query_parameters,
+        form: f,
+        form_name: :find_visa_status_form,
+        exclude_keys: ["visa_status"]
+      ) %>
+
+    <%= f.govuk_radio_buttons_fieldset :visa_status, legend: { text: I18n.t("find.visa_status.title"), size: "l", tag: "h1" } do %>
+        <%= f.govuk_radio_button :visa_status, "false", label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :visa_status, "true", label: { text: "Not yet" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Find courses" %>
+    <% end %>
+  </div>
+</div>

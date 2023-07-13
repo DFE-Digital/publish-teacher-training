@@ -66,6 +66,7 @@ module FilterParameters
       .require(form_name)
       .permit(
         *legacy_paramater_keys,
+        :visa_status,
         :age_group,
         :c,
         :can_sponsor_visa,

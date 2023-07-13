@@ -28,6 +28,7 @@ feature 'Searching by location' do
 
   scenario 'searching for a location with no results' do
     when_i_enter_an_invalid_location_with_some_options
+    and_i_provide_my_visa_status
     then_should_see_the_no_results_text
   end
 
@@ -81,6 +82,11 @@ feature 'Searching by location' do
     find_courses_by_location_or_training_provider_page.continue.click
     choose 'Further education'
     click_button 'Continue'
+  end
+
+  def and_i_provide_my_visa_status
+    choose 'Yes'
+    click_button 'Find courses'
   end
 
   def then_should_see_the_no_results_text
