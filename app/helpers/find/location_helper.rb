@@ -5,8 +5,7 @@ module Find
     def provider_error?
       return false if flash[:error].nil?
 
-      flash[:error].include?(t('find.location_filter.fields.provider')) ||
-        flash[:error].include?(t('find.location_filter.errors.blank_provider')) ||
+      flash[:error].include?(t('find.location_filter.errors.blank_provider')) ||
         flash[:error].include?(t('find.location_filter.errors.missing_provider'))
     end
 
