@@ -11,6 +11,7 @@ module "domains" {
   multiple_hosted_zones = var.multiple_hosted_zones
   null_host_header      = try(each.value.null_host_header, false)
   cached_paths          = try(each.value.cached_paths, [])
+  exclude_cnames        = try(each.value.exclude_cnames, [])
 }
 
 # Takes values from hosted_zone.domain_name.cnames (or txt_records, a-records). Use for domains which are not associated with front door.
