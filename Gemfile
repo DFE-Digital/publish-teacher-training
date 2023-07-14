@@ -89,9 +89,6 @@ gem 'govuk_notify_rails'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 
-# Semantic Logger makes logs pretty
-gem 'rails_semantic_logger'
-
 # Render nice markdown
 gem 'redcarpet'
 gem 'rubypants'
@@ -150,6 +147,9 @@ gem 'rack-cors'
 
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
+
+  # Semantic Logger makes logs pretty
+  gem 'rails_semantic_logger'
 end
 
 group :development, :test do
