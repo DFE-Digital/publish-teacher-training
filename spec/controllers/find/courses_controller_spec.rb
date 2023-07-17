@@ -19,15 +19,16 @@ module Find
 
     describe '#apply' do
       it 'redirects' do
-        expect(Rails.logger).to receive(:info).with("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}").once
-        expect(Rails.logger).to receive(:info)
+        with_logger_double do
+          expect(Rails.logger).to receive(:info).with("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}").once
 
-        get :apply, params: {
-          provider_code: provider.provider_code,
-          course_code: course.course_code
-        }
+          get :apply, params: {
+            provider_code: provider.provider_code,
+            course_code: course.course_code
+          }
 
-        expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
+          expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
+        end
       end
     end
 
