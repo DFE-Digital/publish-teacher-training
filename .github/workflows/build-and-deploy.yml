@@ -419,7 +419,7 @@ jobs:
       name: production
       url: ${{ steps.deploy_app.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
-    needs: [deploy-before-production]
+    needs: [deploy-before-production,deploy-aks-before-production]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
