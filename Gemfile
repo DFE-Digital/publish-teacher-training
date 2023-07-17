@@ -145,7 +145,7 @@ gem 'http'
 # For configuring domains and assets
 gem 'rack-cors'
 
-group :review_aks, :production, :qa, :sandbox, :staging do
+group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 
   # Semantic Logger makes logs pretty

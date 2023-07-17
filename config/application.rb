@@ -8,7 +8,8 @@ require 'view_component/compile_cache'
 require 'govuk/components'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+groups = Rails.env[/_aks/] ? Rails.groups + [:production] : Rails.groups
+Bundler.require(*groups)
 
 module ManageCoursesBackend
   class Application < Rails::Application
