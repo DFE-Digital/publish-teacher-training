@@ -420,6 +420,15 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           it "returns 'discarded' provider only" do
             expect(provider_names_in_response).to eq([discarded_provider.provider_name])
+            expect(Time.zone.parse(response.parsed_body.dig('data', 0, 'attributes', 'discarded_at'))).to be_within(1.second).of(discarded_provider.discarded_at)
+          end
+        end
+
+        context 'not passing in discarded param' do
+          let(:filter) { {} }
+
+          it 'returns provider attributes without discarded_at' do
+            expect(response.parsed_body.dig('data', 0, 'attributes')).not_to have_attribute('discarded_at')
           end
         end
       end
