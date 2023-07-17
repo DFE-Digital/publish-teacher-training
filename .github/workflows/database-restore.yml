@@ -116,7 +116,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [qa, staging]
+        environment: [staging]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
