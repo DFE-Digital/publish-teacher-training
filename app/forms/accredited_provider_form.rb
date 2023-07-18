@@ -15,7 +15,7 @@ class AccreditedProviderForm < Form
   alias compute_fields new_attributes
 
   def accredited_provider
-    @accredited_provider ||= model.recruitment_cycle.providers.find(accredited_provider_id)
+    @accredited_provider ||= Provider.find(accredited_provider_id)
   end
 
   private

@@ -42,6 +42,9 @@ describe AccreditedProviderForm, type: :model do
   describe '#accredited_provider' do
     subject { described_class.new(user, model, params:).accredited_provider }
 
+    let(:recruitment_cycle) { create(:recruitment_cycle) }
+    let(:next_recruitment_cycle) { create(:recruitment_cycle, :next) }
+    let(:model) { create(:provider, recruitment_cycle:) }
     let(:accredited_provider) { create(:provider, :accredited_provider) }
     let(:params) do
       {
@@ -52,6 +55,24 @@ describe AccreditedProviderForm, type: :model do
 
     it 'returns the accredited provider' do
       expect(subject).to eq(accredited_provider)
+    end
+
+    context 'when accredited provider is in the next recruitment cycle' do
+      let(:accredited_provider_in_next_cycle) { create(:provider, :accredited_provider, recruitment_cycle: next_recruitment_cycle) }
+      let(:params) do
+        {
+          accredited_provider_id: accredited_provider_in_next_cycle.id,
+          description: 'Foo'
+        }
+      end
+
+      before do
+        allow(RecruitmentCycle).to receive(:current).and_return(next_recruitment_cycle)
+      end
+
+      it 'returns the accredited provider from the next cycle' do
+        expect(subject).to eq(accredited_provider_in_next_cycle)
+      end
     end
   end
 
