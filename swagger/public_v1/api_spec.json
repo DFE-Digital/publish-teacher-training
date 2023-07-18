@@ -1260,6 +1260,13 @@
             "type": "boolean",
             "description": "Can this provider sponsor Student visas?",
             "example": "true"
+          },
+          "discarded_at": {
+            "type": "string",
+            "description": "Timestamp of when this provider was decomissioned",
+            "example": "2023-07-18T15:23:15Z",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -1321,6 +1328,11 @@
             "description": "Return providers that have been updated since the date (ISO 8601 date format)",
             "type": "string",
             "example": "2020-11-13T11:21:55Z"
+          },
+          "discarded": {
+            "description": "Return only providers that have been decommissioned. Using this filter will add the `discarded_at` property to the attributes of the returned providers.",
+            "type": "boolean",
+            "example": "true"
           }
         }
       },
