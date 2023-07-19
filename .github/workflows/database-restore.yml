@@ -110,53 +110,6 @@ jobs:
           path: backup_sanitised.sql
           retention-days: 7
 
-  restore:
-    needs: [backup]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        environment: [staging]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set KV environment variables
-        run: |
-          tf_vars_file=terraform/paas/workspace_variables/${{ matrix.environment }}.tfvars.json
-          echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "paas_space_name=$(jq -r '.cf_space' ${tf_vars_file})" >> $GITHUB_ENV
-
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
-
-      - uses: DFE-Digital/keyvault-yaml-secret@v1
-        id: get-secrets
-        with:
-          keyvault: ${{ env.key_vault_name }}
-          secret: ${{ env.key_vault_infra_secret_name }}
-          key: CF_USER,CF_PASSWORD
-
-      - uses: DFE-Digital/github-actions/setup-cf-cli@master
-        name: Setup cf cli
-        with:
-          CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
-          CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD  }}
-          CF_SPACE_NAME: ${{ env.paas_space_name }}
-          INSTALL_CONDUIT: true
-
-      - name: Download Sanitised Backup
-        uses: actions/download-artifact@v3
-        with:
-          name: backup_sanitised
-
-      - name: Restore backup to ${{ matrix.environment }}
-        run: cf conduit ${POSTGRES_SERVICE_INSTANCE} -- psql < backup_sanitised.sql
-        env:
-          POSTGRES_SERVICE_INSTANCE: publish-teacher-training-postgres-${{ matrix.environment }}
-
   restore-aks:
     needs: [backup]
     runs-on: ubuntu-latest
