@@ -334,6 +334,15 @@ RSpec.describe API::Public::V1::ProvidersController do
           end
         end
 
+        let(:discarded_provider) do
+          create(:provider,
+                 provider_code: '3wc',
+                 provider_name: 'Discarded',
+                 discarded_at: 1.minute.ago,
+                 organisations: [organisation],
+                 contacts: [contact])
+        end
+
         let(:provider_names_in_response) do
           json_response['data'].map do |provider|
             provider['attributes']['name']
@@ -342,6 +351,7 @@ RSpec.describe API::Public::V1::ProvidersController do
 
         before do
           provider2
+          discarded_provider
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
@@ -402,6 +412,23 @@ RSpec.describe API::Public::V1::ProvidersController do
 
           it "returns 'Second' provider only" do
             expect(provider_names_in_response).to eq([provider2.provider_name])
+          end
+        end
+
+        context 'passing in discarded param' do
+          let(:filter) { { discarded: 'true' } }
+
+          it "returns 'discarded' provider only" do
+            expect(provider_names_in_response).to eq([discarded_provider.provider_name])
+            expect(Time.zone.parse(response.parsed_body.dig('data', 0, 'attributes', 'discarded_at'))).to be_within(1.second).of(discarded_provider.discarded_at)
+          end
+        end
+
+        context 'not passing in discarded param' do
+          let(:filter) { {} }
+
+          it 'returns provider attributes without discarded_at' do
+            expect(response.parsed_body.dig('data', 0, 'attributes')).not_to have_attribute('discarded_at')
           end
         end
       end

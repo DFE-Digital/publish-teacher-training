@@ -24,6 +24,11 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+# Allows response.parsed_body to parse JSONAPI responses
+# Doesn't work by default with RSpec.
+# https://github.com/jsonapi-rb/jsonapi-rails/blob/master/lib/jsonapi/rails/railtie.rb#L47
+ActionDispatch::RequestEncoder.register_encoder :jsonapi, response_parser: ->(body) { JSON.parse(body) }
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end

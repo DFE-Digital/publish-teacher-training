@@ -4,6 +4,8 @@ module API
   module Public
     module V1
       class SerializableProvider < JSONAPI::Serializable::Resource
+        extend JSONAPI::Serializable::Resource::ConditionalFields
+
         type 'providers'
 
         belongs_to :recruitment_cycle
@@ -62,6 +64,8 @@ module API
         attribute :street_address_3 do
           @object.address3
         end
+
+        attribute :discarded_at, if: -> { @object.discarded? }
       end
     end
   end

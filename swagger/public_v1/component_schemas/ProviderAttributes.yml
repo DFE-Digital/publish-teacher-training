@@ -144,3 +144,9 @@ properties:
     type: boolean
     description: "Can this provider sponsor Student visas?"
     example: "true"
+  discarded_at:
+    type: string
+    description: "Timestamp of when this provider was decomissioned"
+    example: "2023-07-18T15:23:15Z"
+    format: date-time
+    nullable: true
