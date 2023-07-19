@@ -225,9 +225,11 @@ print-infra-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
 		-f yaml
 
-console:
+console: # make qa console OR make qa console WORKER=1 to connect to the worker app
+	$(if $(WORKER),$(eval export WORKER_NAME=worker-), )
 	cf target -s ${space}
-	cf ssh publish-teacher-training-${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
+	echo "service name: publish-teacher-training-${WORKER_NAME}${paas_env}"
+	cf ssh publish-teacher-training-${WORKER_NAME}${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
 
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 	az aks get-credentials --overwrite-existing -g ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER}-aks
