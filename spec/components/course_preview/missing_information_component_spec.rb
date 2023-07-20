@@ -31,7 +31,8 @@ module CoursePreview
           train_with_us:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-us",
           about_accrediting_provider:
-        "#{edit_publish_provider_recruitment_cycle_accredited_provider_path(provider_code, recruitment_cycle_year, accredited_provider_code: course.accredited_provider_code, goto_preview: true)}#accredited-provider-form-description-field"
+          publish_provider_recruitment_cycle_accredited_providers_path(provider_code,
+                                                                       recruitment_cycle_year)
         }
       end
 
