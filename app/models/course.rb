@@ -327,6 +327,7 @@ class Course < ApplicationRecord
   validate :validate_site_statuses_publishable, on: :publish
   validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
+  validate :validate_accredited_provider_is_accredited, on: :publish
   validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_gcse_requirements_publishable, on: :publish
   validate :validate_enrichment
@@ -902,6 +903,12 @@ class Course < ApplicationRecord
 
     latest_enrichment.valid?
     add_enrichment_errors(latest_enrichment)
+  end
+
+  def validate_accredited_provider_is_accredited
+    return if accrediting_provider.blank?
+
+    accrediting_provider.accredited? || errors.add(:accrediting_provider, :is_not_accredited)
   end
 
   def validate_enrichment_publishable

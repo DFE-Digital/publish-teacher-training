@@ -69,6 +69,7 @@ class Provider < ApplicationRecord
   end
 
   alias accrediting_providers accredited_providers
+  alias accredited? accredited_provider?
 
   delegate :year, to: :recruitment_cycle, prefix: true
 

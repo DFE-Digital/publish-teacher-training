@@ -56,6 +56,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   def and_there_is_a_course_i_want_to_publish
     given_a_course_exists(
       :with_gcse_equivalency,
+      :with_accrediting_provider,
       enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
@@ -64,6 +65,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def and_there_is_a_draft_course
     given_a_course_exists(
+      :with_accrediting_provider,
       enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
