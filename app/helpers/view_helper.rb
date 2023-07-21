@@ -61,7 +61,8 @@ module ViewHelper
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",
         sites: "#{base}/schools?display_errors=true",
-        study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s
+        study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
+        accrediting_provider: accredited_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
       }.with_indifferent_access[field]
     end
   end
