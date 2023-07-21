@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-feature 'adding an accredited provider to a an existing course', { can_edit_current_and_next_cycles: false } do
-  scenario 'adding and changing an accredited provider for an existing course without one' do
+feature 'unpublished course without accredited provider', { can_edit_current_and_next_cycles: false } do
+  scenario 'adding and changing an accredited provider' do
     given_i_am_authenticated_as_a_provider_user
     and_i_visit_the_course_details_page_of_a_course_without_an_accredited_provider
     and_i_click_the_add_accredited_provider_link
