@@ -67,7 +67,7 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def accredited_provider_not_present?
-    return if provider.accredited_provider?
+    return false if provider.accredited_provider?
 
     !accredited_provider_present?
   end
