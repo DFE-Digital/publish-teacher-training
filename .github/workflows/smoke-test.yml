@@ -3,13 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The environment to run tests against (staging, production, sandbox or review)'
-        default: staging
+        description: 'The environment to run tests against (production, sandbox or review)'
+        default: sandbox
         required: true
         type: choice
         options:
         - review
-        - staging
         - production
         - sandbox
       pr:
