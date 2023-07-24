@@ -31,7 +31,7 @@ module Subjects
         { subject_name: 'Biology', subject_code:  'C1' },
         { subject_name: 'Business studies', subject_code: '08' },
         { subject_name: 'Chemistry', subject_code: 'F1' },
-        { subject_name: 'Citizenship', subject_code:  '09' },
+        { subject_name: 'Citizenship', subject_code: '09' },
         { subject_name: 'Classics', subject_code: 'Q8' },
         { subject_name: 'Communication and media studies', subject_code: 'P3' },
         { subject_name: 'Computing', subject_code: '11' },

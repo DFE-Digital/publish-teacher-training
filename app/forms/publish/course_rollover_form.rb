@@ -15,7 +15,7 @@ module Publish
     private
 
     def course_is_rollable?
-      return if %i[draft empty rolled_over].include? course.content_status
+      return false if %i[draft empty rolled_over].include? course.content_status
 
       errors.add(:course_is_rollable)
     end
