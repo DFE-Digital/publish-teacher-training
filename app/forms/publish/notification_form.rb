@@ -31,7 +31,7 @@ module Publish
     end
 
     def preference_selected?
-      return false if user_notification_preferences.updated_at.blank?
+      return if user_notification_preferences.updated_at.blank?
 
       user_notification_preferences.enabled?
     end

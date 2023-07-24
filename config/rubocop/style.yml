@@ -3,3 +3,6 @@ Style/Documentation:
 Style/HashLikeCase:
   Exclude:
     - 'app/models/concerns/with_qualifications.rb'
+Style/ReturnNilInPredicateMethodDefinition:
+  Exclude: 
+    - 'app/forms/publish/notification_form.rb'
