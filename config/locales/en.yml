@@ -1021,6 +1021,7 @@ en:
     opening_times: "Monday to Friday, 8.30am to 5.30pm"
     url_get_an_advisor: https://getintoteaching.education.gov.uk/teacher-training-adviser/sign_up/identity
     url_online_chat: https://getintoteaching.education.gov.uk/help-and-support
-    url_ways_to_train: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
+    url_ways_to_train_no_degree: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/if-you-dont-have-a-degree
+    url_ways_to_train_experienced_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/assessment-only-route-to-qts
     url: https://getintoteaching.education.gov.uk
   google_privacy_policy_url: "https://policies.google.com/technologies/cookies?hl=en-US#types-of-cookies"
