@@ -10,8 +10,8 @@ describe ApplicationHelper do
   describe '#enrichment_error_link' do
     context 'with a course' do
       before do
-        @provider = Provider.new(build(:provider).attributes)
-        @course = Course.new(build(:course).attributes)
+        @provider = build(:provider)
+        @course = build(:course, provider: @provider)
       end
 
       it 'returns correct content' do
@@ -42,8 +42,8 @@ describe ApplicationHelper do
       let(:error_message) { 'Enter something about the course' }
 
       before do
-        @provider = Provider.new(build(:provider).attributes)
-        @course = Course.new(build(:course).attributes)
+        @provider = build_stubbed(:provider)
+        @course = build_stubbed(:course, provider: @provider)
         @errors = { about_course: [error_message] }
 
         enrichment_summary(summary_list, :course, 'About course', '', [:about_course])
