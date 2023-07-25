@@ -30,6 +30,7 @@ module PageObjects
       element :basic_details_link, 'a.govuk-link.govuk-tabs__tab', text: 'Basic details'
       element :content_status, '[data-qa="course__content-status"]'
       element :rolled_over_course_link, '[data-qa="course__rolled-over-link"]'
+      element :publish_button, 'button[type=submit]'
 
       def error_messages
         errors.map(&:text)
