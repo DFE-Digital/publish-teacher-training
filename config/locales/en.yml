@@ -1019,8 +1019,8 @@ en:
   get_into_teaching:
     tel: 0800 389 2500
     opening_times: "Monday to Friday, 8.30am to 5.30pm"
-    url_get_an_advisor: https://adviser-getintoteaching.education.gov.uk
-    url_online_chat: https://getintoteaching.education.gov.uk/#talk-to-us
+    url_get_an_advisor: https://getintoteaching.education.gov.uk/teacher-training-adviser/sign_up/identity
+    url_online_chat: https://getintoteaching.education.gov.uk/help-and-support
     url_ways_to_train: https://getintoteaching.education.gov.uk/ways-to-train
     url: https://getintoteaching.education.gov.uk
   google_privacy_policy_url: "https://policies.google.com/technologies/cookies?hl=en-US#types-of-cookies"
