@@ -38,7 +38,7 @@ module Find
         component = render_inline(
           described_class.new(results: results_view, courses:)
         )
-        expect(component.text).to include('event near you')
+        expect(component.text).to include('teacher training adviser')
       end
     end
 
@@ -93,7 +93,7 @@ module Find
             filtered_by_location: false
           )
         end
-        expect(component.text).to include('event near you')
+        expect(component.text).to include('teacher training adviser')
       end
     end
   end
