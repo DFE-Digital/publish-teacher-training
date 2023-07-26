@@ -11,6 +11,7 @@ module Publish
       create(
         :course,
         :with_gcse_equivalency,
+        :with_accrediting_provider,
         enrichments: [build(:course_enrichment, :initial_draft)],
         sites: [create(:site, location_name: 'location 1')],
         study_sites: [create(:site, :study_site)],

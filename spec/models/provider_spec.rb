@@ -942,4 +942,22 @@ describe Provider do
       expect(provider.study_sites).to match([study_site])
     end
   end
+
+  describe '#accredited?' do
+    context 'for an accredited provider' do
+      let(:provider) { create(:provider, :accredited_provider) }
+
+      it 'returns true' do
+        expect(provider).to be_accredited
+      end
+    end
+
+    context 'for an unaccredited provider' do
+      let(:provider) { create(:provider) }
+
+      it 'returns false' do
+        expect(provider).not_to be_accredited
+      end
+    end
+  end
 end

@@ -9,6 +9,8 @@ module PageObjects
         elements :suggested_accredited_bodies, '[data-qa="course__accredited_provider_option"]'
 
         element :continue, '[data-qa="course__save"]'
+        element :about_section_input, 'textarea'
+        element :submit, 'button[type="submit"]'
       end
     end
   end

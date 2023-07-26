@@ -50,11 +50,13 @@ module Publish
 
       def update
         build_provider
-        code = update_course_params[:accredited_provider_code]
-        query = update_course_params[:accredited_provider]
-
-        @errors = errors_for_search_query(code, query)
-        return render :edit if @errors.present?
+        begin
+          code = update_course_params[:accredited_provider_code]
+          query = update_course_params[:accredited_provider]
+        rescue ActionController::ParameterMissing
+          @errors = errors_for_search_query(code, query)
+          return render :edit if @errors.present?
+        end
 
         if update_params[:accredited_provider_code] == 'other'
           redirect_to_provider_search

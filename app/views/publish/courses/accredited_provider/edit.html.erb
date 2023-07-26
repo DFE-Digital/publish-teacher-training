@@ -25,6 +25,11 @@
         </div>
 
         <%= form.submit "Update accredited provider", class: "govuk-button govuk-!-margin-top-5", data: { qa: "course__save" } %>
+        <%= govuk_button_link_to(
+          "Add accredited provider",
+          publish_provider_recruitment_cycle_accredited_providers_path(course.provider_code, course.recruitment_cycle_year),
+          class: "govuk-!-margin-bottom-6 govuk-!-margin-top-5 govuk-button--secondary"
+        ) %>
       <% end %>
 
       <p class="govuk-body">
