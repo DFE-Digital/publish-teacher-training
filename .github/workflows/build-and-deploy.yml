@@ -431,37 +431,14 @@ jobs:
           sha: ${{ github.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
-  deploy-sandbox:
-    name: Sandbox deployment
-    environment:
-      name: sandbox
-      url: ${{ steps.deploy_sandbox.outputs.deploy-url }}
-    if: ${{ success() && github.ref == 'refs/heads/main' }}
-    needs: [deploy-production]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Deploy App to sandbox
-        id: deploy_sandbox
-        uses: ./.github/actions/deploy/
-        with:
-          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_SANDBOX }}
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_SANDBOX }}
-          environment: sandbox
-          sha: ${{ github.sha }}
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
-
   deploy-aks-sandbox:
     name: Sandbox deployment v2
     environment:
       name: sandbox_aks
       url: ${{ steps.deploy_sandbox_v2.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
-    needs: [deploy-aks-production]
+    needs: [deploy-aks-production,deploy-production]
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v3

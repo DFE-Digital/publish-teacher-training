@@ -3,14 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'The environment to run tests against (production, sandbox or review)'
-        default: sandbox
+        description: 'The environment to run tests against (production or review)'
+        default: production
         required: true
         type: choice
         options:
         - review
         - production
-        - sandbox
       pr:
         description: 'The PR number if the environment is review'
         required: false

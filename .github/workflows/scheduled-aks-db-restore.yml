@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [sandbox,production]
+        environment: [production]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
