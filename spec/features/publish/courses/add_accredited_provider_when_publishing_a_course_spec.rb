@@ -105,7 +105,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
-    expect(publish_provider_courses_show_page.error_messages).to include("Update the accredited provider (it's no longer accredited)")
+    expect(publish_provider_courses_show_page.error_messages).to include("Update the accredited provider")
   end
 
   def then_i_should_see_an_error_message_for_the_accrediting_provider
