@@ -1059,6 +1059,6 @@ class Course < ApplicationRecord
   def accredited_provider_exists_in_current_cycle
     return unless accredited_provider_code
 
-    errors.add(:base, "The Accredited provider #{accredited_provider_code} does not exist in this cycle") unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_provider_code)
+    errors.add(:accrediting_provider, :does_not_exist_in_cycle, accredited_provider_code:) unless RecruitmentCycle.current.providers.find_by(provider_code: accredited_provider_code)
   end
 end
