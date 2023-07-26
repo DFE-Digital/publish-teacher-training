@@ -31,8 +31,13 @@
                         hint: { text: study_site.full_address } %>
           <% end %>
         <% end %>
-
         <%= f.govuk_submit "Update study sites" %>
+        <%= govuk_button_link_to(
+          "Add study site",
+          publish_provider_recruitment_cycle_study_sites_path(course.provider_code, course.recruitment_cycle_year),
+          class: "govuk-!-margin-bottom-6 govuk-!-margin-top-0 govuk-button--secondary"
+        ) %>
+
       <% end %>
       </div>
     </div>
