@@ -498,8 +498,8 @@ en:
             applications_open_from:
               blank: "^Select an applications open date"
             accrediting_provider:
-              blank: "Select an accrediting provider"
-              is_not_accredited: "Update the accredited provider (it's no longer accredited)"
+              blank: "Select an accredited provider"
+              is_not_accredited: "Update the accredited provider"
             base:
               duplicate: "This course already exists. You should add further schools for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "Select if visas can be sponsored"
