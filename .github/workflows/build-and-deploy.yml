@@ -368,7 +368,6 @@ jobs:
     if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [test]
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
