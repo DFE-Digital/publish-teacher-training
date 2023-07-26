@@ -25,7 +25,7 @@ RUN apk add --update --no-cache --virtual runtime-dependances \
  postgresql-dev git ncurses shared-mime-info
 
 # Remove once the base image ruby:3.1-alpine3.15 has been updated with the below pkgs
-RUN apk add --no-cache ncurses=6.3_p20211120-r2 ncurses-libs=6.3_p20211120-r2 libcurl=8.1.2-r0 libcrypto1.1=1.1.1u-r1 pkgconf=1.8.1-r0
+RUN apk add --no-cache ncurses=6.3_p20211120-r2 ncurses-libs=6.3_p20211120-r2 libcurl=8.2.1-r0 libcrypto1.1=1.1.1u-r2 pkgconf=1.8.1-r0 nghttp2=1.46.0-r1 nghttp2-libs=1.46.0-r1
 
 ENV APP_HOME /app
 
