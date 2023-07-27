@@ -20,7 +20,6 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     when_i_click_the_error_message_link
     then_it_takes_me_to_the_accredited_providers_page
     when_i_click_add_an_accredited_provider
-    and_i_click_to_add_new_accredited_provider
     and_i_search_for_an_accredited_provider
     and_i_fill_in_the_accredited_provider_form
     and_i_confirm_creation_of_the_accredited_provider
@@ -121,14 +120,8 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def when_i_click_add_an_accredited_provider
-    publish_courses_accredited_providers_page.add_new_button.click
-    expect(publish_provider_accredited_providers_index_page).to be_displayed
-  end
-
-  def and_i_click_to_add_new_accredited_provider
-    publish_provider_accredited_providers_index_page.add_new_link.click
+    publish_courses_accredited_providers_page.add_new_link.click
     expect(publish_provider_accredited_providers_search_page).to be_displayed
-    # expect(page).to have_current_path(%r{accredited-providers/search})
   end
 
   def and_i_search_for_an_accredited_provider

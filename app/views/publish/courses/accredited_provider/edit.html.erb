@@ -29,7 +29,8 @@
           <%= govuk_link_to(
             "Add accredited provider",
             search_publish_provider_recruitment_cycle_accredited_providers_path(course.provider_code, course.recruitment_cycle_year),
-            class: "govuk-!-margin-bottom-6 govuk-!-margin-top-5"
+            class: "govuk-!-margin-bottom-6 govuk-!-margin-top-5",
+            data: { qa: "course__add" }
           ) %>
         </div>
       <% end %>
