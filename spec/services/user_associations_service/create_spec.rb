@@ -31,6 +31,17 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         expect(action_mailer).to have_received(:deliver_later)
       end
 
+      context 'during rollover', { can_edit_current_and_next_cycles: true } do
+        let!(:next_new_accredited_provider) { create(:provider, :accredited_provider, :next_recruitment_cycle, provider_code: 'AAA') }
+
+        it 'creates user_permissions association in both cycles' do
+          subject
+          expect(new_accredited_provider.users).to eq([user])
+          expect(next_new_accredited_provider.users).to eq([user])
+          expect(user.providers).to include(accredited_provider, new_accredited_provider, next_new_accredited_provider)
+        end
+      end
+
       context 'when user have saved notification preferences' do
         let(:user_notification) do
           create(
