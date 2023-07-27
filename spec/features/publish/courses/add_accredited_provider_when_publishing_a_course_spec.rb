@@ -105,11 +105,11 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
-    expect(publish_provider_courses_show_page.error_messages).to include("Update the accredited provider (it's no longer accredited)")
+    expect(publish_provider_courses_show_page.error_messages).to include('Update the accredited provider')
   end
 
   def then_i_should_see_an_error_message_for_the_accrediting_provider
-    expect(publish_provider_courses_show_page.error_messages).to include('Select an accrediting provider')
+    expect(publish_provider_courses_show_page.error_messages).to include('Select an accredited provider')
   end
 
   def when_i_click_the_error_message_link
@@ -157,7 +157,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def when_i_click_the_select_accredited_provider_error_message_link
-    page.click_on('Select an accrediting provider')
+    page.click_on('Select an accredited provider')
   end
 
   def and_i_choose_the_new_accredited_provider

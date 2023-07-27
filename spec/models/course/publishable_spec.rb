@@ -16,7 +16,7 @@ describe Course do
       expect(course).not_to be_publishable
       expect(course.errors.messages).to eq(
         { sites: ['^Select at least one school'],
-          accrediting_provider: ['Select an accrediting provider'],
+          accrediting_provider: ['Select an accredited provider'],
           about_course: ['^Enter details about this course'],
           how_school_placements_work: ['^Enter details about school placements'],
           course_length: ['^Enter a course length'],
