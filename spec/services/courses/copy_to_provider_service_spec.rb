@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Courses::CopyToProviderService do
-  let(:accrediting_provider) { create(:provider, :accredited_provider) }
-  let(:provider) { create(:provider, courses: [course]) }
+  let(:accrediting_provider) { create(:provider, :accredited_provider, recruitment_cycle:) }
+  let(:provider) { create(:provider, courses: [course], recruitment_cycle:) }
   let(:published_course_enrichment) { build(:course_enrichment, :published) }
   let(:maths) { create(:secondary_subject, :mathematics) }
   let(:course) do
@@ -63,6 +63,20 @@ RSpec.describe Courses::CopyToProviderService do
     context "when the original course's date is before the next cycle's start date" do
       before do
         course.applications_open_from = Date.new(provider.recruitment_cycle.year.to_i - 1, 10, 1)
+      end
+
+      it "sets the new course's applications open from date correctly" do
+        service.execute(course:, new_provider:)
+
+        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+      end
+    end
+
+    context "when the original course's date is at the beginning of the cycle" do
+      let(:new_recruitment_cycle) { create(:recruitment_cycle, :next, application_start_date: '2023-09-01') }
+
+      before do
+        course.applications_open_from = provider.recruitment_cycle.application_start_date
       end
 
       it "sets the new course's applications open from date correctly" do
