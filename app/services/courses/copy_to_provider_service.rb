@@ -54,7 +54,11 @@ module Courses
 
       return course.applications_open_from if next_cycle.blank?
 
-      [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
+      if course_start_is_same_as_current_cycle_start?(course)
+        Find::CycleTimetable.apply_reopens.to_date
+      else
+        [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
+      end
     end
 
     def copy_schools(course:, new_provider:, new_course:)
@@ -63,6 +67,10 @@ module Courses
 
         @sites_copy_to_course.call(new_site:, new_course:) if new_site.present?
       end
+    end
+
+    def course_start_is_same_as_current_cycle_start?(course)
+      course.applications_open_from == current_cycle.application_start_date
     end
 
     def copy_study_sites(course:, new_provider:, new_course:)
