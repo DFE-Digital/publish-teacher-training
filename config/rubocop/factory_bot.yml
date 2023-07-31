@@ -2,3 +2,9 @@ FactoryBot/CreateList:
   Enabled: false
 FactoryBot/AssociationStyle:
   Enabled: false
+FactoryAssociationWithStrategy:
+  Exclude:
+    - 'spec/factories/access_requests.rb'
+    - 'spec/factories/course_enrichments.rb'
+    - 'spec/factories/course_enrichments.rb'
+    - 'spec/factories/site_statuses.rb'
