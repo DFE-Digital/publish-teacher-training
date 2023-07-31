@@ -68,7 +68,7 @@ RSpec.describe Courses::CopyToProviderService do
       it "sets the new course's applications open from date correctly" do
         service.execute(course:, new_provider:)
 
-        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+        expect(new_course.applications_open_from).to eq(Find::CycleTimetable.apply_reopens.to_date)
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Courses::CopyToProviderService do
       it "sets the new course's applications open from date correctly" do
         service.execute(course:, new_provider:)
 
-        expect(new_course.applications_open_from).to eq(new_recruitment_cycle.application_start_date)
+        expect(new_course.applications_open_from).to eq(Find::CycleTimetable.apply_reopens.to_date)
       end
     end
   end

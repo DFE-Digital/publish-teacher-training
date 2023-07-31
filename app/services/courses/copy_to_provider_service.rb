@@ -55,7 +55,7 @@ module Courses
       return course.applications_open_from if next_cycle.blank?
 
       if course_start_is_same_as_current_cycle_start?(course)
-        next_cycle.application_start_date
+        Find::CycleTimetable.apply_reopens.to_date
       else
         [course.applications_open_from + year_differential.year, next_cycle.application_start_date].max
       end
