@@ -1,2 +1,4 @@
+# https://docs.rubocop.org/rubocop/cops_layout.html
+
 Layout/LineLength:
   Enabled: false
