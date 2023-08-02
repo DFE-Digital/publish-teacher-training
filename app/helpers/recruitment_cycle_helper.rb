@@ -48,4 +48,12 @@ module RecruitmentCycleHelper
   def student_visa_and_after_2023_cycle(course)
     course.can_sponsor_student_visa? && recruitment_cycle_after_2023?(course)
   end
+
+  def current_cycle_provider(provider)
+    RecruitmentCycle.current.providers.find_by(provider_code: provider.provider_code)
+  end
+
+  def next_cycle_provider(provider)
+    RecruitmentCycle.next.providers.find_by(provider_code: provider.provider_code)
+  end
 end
