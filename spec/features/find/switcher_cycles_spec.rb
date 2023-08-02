@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'switcher cycle' do
+  before do
+    Timecop.freeze(2022, 10, 12)
+  end
+
   scenario 'Navigate to /cycle' do
     when_i_visit_switcher_cycle_page
     then_i_should_see_the_page_title
@@ -94,6 +98,6 @@ feature 'switcher cycle' do
   end
 
   def and_i_should_see_the_correct_previous_recruitment_cycle_year
-    expect(page).to have_text("Previous cycle year#{RecruitmentCycle.current.year}") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+    expect(page).to have_text('Previous cycle year2023') # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
   end
 end
