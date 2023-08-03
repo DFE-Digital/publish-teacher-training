@@ -36,16 +36,21 @@ module UserAssociationsService
       end
     end
 
-    def add_user_to_provider_in_next_cycle
-      RecruitmentCycle.next.providers.find_by(provider_code: provider.provider_code).users << user
+    def add_user_to_provider_in_both_cycles
+      current_cycle_provider(provider).users << user unless current_cycle_provider(provider).users.include?(user)
+      next_cycle_provider(provider).users << user unless next_cycle_provider(provider).users.include?(user)
     end
 
     def add_user_to_a_single_provider
+      if rollover_active?
+        add_user_to_provider_in_both_cycles
+      else
+        add_user_to_provider
+      end
+    end
+
+    def add_user_to_provider
       provider.users << user
-
-      return unless rollover_active?
-
-      add_user_to_provider_in_next_cycle
     end
 
     def send_user_added_to_provider_email
