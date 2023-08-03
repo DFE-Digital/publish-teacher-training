@@ -176,7 +176,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.2.0)
       railties (>= 6.0.0)
-    data_migrate (9.1.0)
+    data_migrate (9.1.1)
       activerecord (>= 6.0)
       railties (>= 6.0)
     database_cleaner (2.0.2)
@@ -417,7 +417,7 @@ GEM
     memoist (0.16.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.1)
+    minitest (5.19.0)
     mock_redis (0.36.0)
       ruby2_keywords
     msgpack (1.6.0)
@@ -501,7 +501,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.7.1)
-    rack (2.2.7)
+    rack (2.2.8)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
     rack-oauth2 (2.2.0)
@@ -736,7 +736,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   arm64-darwin-20
@@ -765,7 +765,7 @@ DEPENDENCIES
   config
   cssbundling-rails (~> 1.2)
   custom_error_message!
-  data_migrate (~> 9.1.0)
+  data_migrate (~> 9.1.1)
   database_cleaner
   dfe-analytics!
   discard
