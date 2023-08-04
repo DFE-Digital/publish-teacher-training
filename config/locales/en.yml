@@ -496,7 +496,7 @@ en:
             study_mode:
               blank: "^Select a study mode"
             applications_open_from:
-              blank: "^Select an applications open date"
+              blank: "Select an applications open date"
             accrediting_provider:
               blank: "Select an accredited provider"
               is_not_accredited: "Update the accredited provider"
