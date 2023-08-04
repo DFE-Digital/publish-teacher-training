@@ -12,7 +12,72 @@
                   url: applications_open_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                   method: :put do |form| %>
 
-      <%= render "form_fields", form: %>
+  <div class="govuk-form-group">
+  <div class="govuk-radios govuk-!-margin-top-2 govuk-radios--conditional" data-module="govuk-radios">
+  <%= render "publish/shared/error_wrapper", error_keys: [:applications_open_from], data_qa: "course__applications_open_from" do %>
+
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <h1 class="govuk-fieldset__heading" id="applications_open_from-error">
+        <%= render CaptionText.new(text: course.name_and_code) %>
+        Applications open date
+      </h1>
+    </legend>
+    <%= render "publish/shared/error_messages", error_keys: [:applications_open_from] %>
+    <div class="govuk-radios__item govuk-!-margin-top-4">
+      <%= form.radio_button :applications_open_from, @recruitment_cycle.application_start_date,
+            class: "govuk-radios__input" %>
+      <%= form.label :applications_open_from, course.applications_open_first_label(@recruitment_cycle),
+            for: "course_applications_open_from_#{@recruitment_cycle.application_start_date}",
+            class: "govuk-label govuk-radios__label" %>
+    </div>
+    <div class="govuk-radios__divider">or</div>
+    <div class="govuk-radios__item">
+      <%= form.radio_button :applications_open_from, "other",
+            class: "govuk-radios__input",
+            checked: @course.applications_open_from.present? && @course.applications_open_from != @recruitment_cycle.application_start_date,
+            aria: { controls: "other-container" }, data: { qa: "applications_open_from_other" } %>
+      <%= form.label :applications_open_from,
+            for: "course_applications_open_from_other",
+            value: "Another date",
+            class: "govuk-label govuk-radios__label",
+            data: { qa: "applications_open_field_from_other_label" } %>
+    </div>
+
+    <div class="govuk-radios__conditional <%= "govuk-radios__conditional--hidden" unless @course.applications_open_from.present? && @course.applications_open_from != @recruitment_cycle.application_start_date %>" id="other-container">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            When will applications open?
+          </legend>
+          <span class="govuk-hint">
+            For example <%= @recruitment_cycle.application_start_date.to_s(:day_month_year) %>
+          </span>
+          <div class="govuk-date-input">
+            <div class="govuk-date-input__item">
+              <%= render "publish/shared/form_field",
+                form:, field: :day do |field, options| %>
+                <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-2") %>
+              <% end %>
+            </div>
+            <div class="govuk-date-input__item">
+              <%= render "publish/shared/form_field",
+                form:, field: :month do |field, options| %>
+                <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-2") %>
+              <% end %>
+            </div>
+            <div class="govuk-date-input__item">
+              <%= render "publish/shared/form_field",
+                form:, field: :year do |field, options| %>
+                <%= form.text_field field, options.merge(autocomplete: "off", class: "govuk-input govuk-input--width-4") %>
+              <% end %>
+            </div>
+          </div>
+        </fieldset>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
       <%= form.submit "Update applications open date", class: "govuk-button" %>
     <% end %>
