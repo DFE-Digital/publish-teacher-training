@@ -38,8 +38,7 @@ module CoursePreview
 
       shared_examples 'course with missing information' do |information_type, text|
         before do
-          allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
-          allow(Settings.features).to receive(:accredited_provider_search).and_return(true)
+          allow(Settings.features).to receive_messages(course_preview_missing_information: true, accredited_provider_search: true)
         end
 
         it "renders link for missing #{information_type}" do

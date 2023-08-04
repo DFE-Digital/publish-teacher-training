@@ -83,8 +83,7 @@ describe PublishReportingService do
       subject { described_class.call(recruitment_cycle_scope:) }
 
       before do
-        allow(recruitment_cycle_scope).to receive(:courses).and_return(courses_scope)
-        allow(recruitment_cycle_scope).to receive(:providers).and_return(providers_scope)
+        allow(recruitment_cycle_scope).to receive_messages(courses: courses_scope, providers: providers_scope)
       end
 
       it 'applies the scopes' do

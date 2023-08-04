@@ -46,7 +46,7 @@ describe UkprnFormatValidator do
       let(:ukprn) { '22345678' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
@@ -55,7 +55,7 @@ describe UkprnFormatValidator do
       let(:ukprn) { '1234' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
@@ -64,7 +64,7 @@ describe UkprnFormatValidator do
       let(:ukprn) { '123456789' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end
@@ -73,7 +73,7 @@ describe UkprnFormatValidator do
       let(:ukprn) { '1AAAAAA' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors.first.type.to_s == 'contains_eight_numbers_starting_with_one').to be(true)
       end
     end

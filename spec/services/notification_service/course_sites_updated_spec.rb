@@ -49,8 +49,7 @@ module NotificationService
         subscribed_notification
         non_subscribed_notification
         other_provider_notification
-        allow(course).to receive(:self_accredited?).and_return(self_accredited)
-        allow(course).to receive(:findable?).and_return(findable)
+        allow(course).to receive_messages(self_accredited?: self_accredited, findable?: findable)
       end
 
       context 'with a course that is in the current cycle' do

@@ -32,8 +32,7 @@ module Find
 
     context 'feature has never been updated' do
       it 'renders a message saying the feature flag has not been updated' do
-        allow(FeatureFlag).to receive(:active?).and_return(false)
-        allow(FeatureFlag).to receive(:last_updated).and_return(nil)
+        allow(FeatureFlag).to receive_messages(active?: false, last_updated: nil)
 
         result = render_inline(described_class.new(feature_name))
 

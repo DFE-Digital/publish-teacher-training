@@ -1,3 +1,5 @@
+# https://docs.rubocop.org/rubocop-rails/cops.html
+
 require: rubocop-rails
 
 Rails/SkipsModelValidations:

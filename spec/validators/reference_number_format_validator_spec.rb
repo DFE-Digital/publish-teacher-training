@@ -38,7 +38,7 @@ describe ReferenceNumberFormatValidator do
       let(:reference_number) { '1234567' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors[:reference_number]).to contain_exactly('error')
       end
     end
@@ -47,7 +47,7 @@ describe ReferenceNumberFormatValidator do
       let(:reference_number) { '123456789' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors[:reference_number]).to contain_exactly('error')
       end
     end
@@ -56,7 +56,7 @@ describe ReferenceNumberFormatValidator do
       let(:reference_number) { 'SSSSSSSS' }
 
       it 'adds an error' do
-        expect(model).to be_invalid
+        expect(model).not_to be_valid
         expect(model.errors[:reference_number]).to contain_exactly('error')
       end
     end
