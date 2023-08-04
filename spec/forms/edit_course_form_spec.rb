@@ -81,7 +81,7 @@ module Support
           expect(subject.errors.messages[:course_code]).to include('Course code cannot be blank')
           expect(subject.errors.messages[:name]).to include('Course title cannot be blank')
           expect(subject.errors.messages[:start_date]).to include('Select a course start date')
-          expect(subject.errors.messages[:applications_open_from]).to include('^Select an applications open date')
+          expect(subject.errors.messages[:applications_open_from]).to include('Select an applications open date')
         end
       end
 
