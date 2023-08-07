@@ -37,8 +37,14 @@ module UserAssociationsService
     end
 
     def add_user_to_provider_in_both_cycles
-      current_cycle_provider(provider).users << user unless current_cycle_provider(provider).users.include?(user)
-      next_cycle_provider(provider).users << user unless next_cycle_provider(provider).users.include?(user)
+      add_user_to_provider_if_provider_exists(current_cycle_provider(provider))
+      add_user_to_provider_if_provider_exists(next_cycle_provider(provider))
+    end
+
+    def add_user_to_provider_if_provider_exists(provider)
+      return if provider.blank?
+
+      provider.users << user unless provider.users.include?(user)
     end
 
     def add_user_to_a_single_provider
