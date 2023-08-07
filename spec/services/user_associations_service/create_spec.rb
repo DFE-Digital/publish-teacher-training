@@ -42,6 +42,22 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             expect(user.providers).to include(accredited_provider, new_accredited_provider, next_cycle_new_accredited_provider)
           end
         end
+
+        context 'when provider does not exist in the next cycle' do
+          subject do
+            described_class.call(
+              provider: current_cycle_provider,
+              user:
+            )
+          end
+
+          let!(:current_cycle_provider) { create(:provider, :accredited_provider, users: [user]) }
+
+          it 'adds user to provider in current cycle without error' do
+            expect { subject }.not_to raise_error
+            expect(current_cycle_provider.users).to eq([user])
+          end
+        end
       end
 
       context 'when only one recruitment cycle is active' do
