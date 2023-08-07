@@ -233,7 +233,7 @@
         raw("<p class=\"govuk-body\">#{l(course.start_date&.to_date, format: :short)} </p>
               <p class=\"govuk-hint govuk-!-margin-top-0\">Academic year #{course.academic_year} </p>")
       end
-      if course.edit_course_options[:show_start_date]
+      if course.changeable?
         row.with_action(href: start_date_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
                         visually_hidden_text: "date course starts")
       else
