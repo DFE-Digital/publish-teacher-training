@@ -16,7 +16,7 @@ module Publish
       end
 
       def section_key
-        "Course start date"
+        'Course start date'
       end
     end
   end
