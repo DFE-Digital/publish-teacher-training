@@ -5,6 +5,7 @@ class AccreditedProviderSearchForm
 
   FIELDS = %i[
     query
+    recruitment_cycle_year
   ].freeze
 
   attr_accessor(*FIELDS)

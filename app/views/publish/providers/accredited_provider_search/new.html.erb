@@ -25,6 +25,9 @@
             </span>
           <% end %>
         <% end %>
+
+        <%= f.hidden_field :recruitment_cycle_year, value: @recruitment_cycle.year %>
+
         <%= f.text_field :query,
                               id: "accredited-provider-search-form-query-field",
                               value: params[:query],

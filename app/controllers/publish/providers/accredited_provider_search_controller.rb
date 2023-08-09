@@ -25,7 +25,7 @@ module Publish
 
           if @accredited_provider_search_form.valid?
             @accredited_provider_select_form = AccreditedProviderSelectForm.new
-            @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
+            @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
             render :results
           else
             provider
@@ -46,7 +46,7 @@ module Publish
             accredited_provider_id: accredited_provider_select_params[:provider_id]
           )
         else
-          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
+          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
           render :results
         end
       end
