@@ -13,6 +13,13 @@ exports[`Accredited provider init should instantiate an autocomplete 1`] = `
   />
   
            
+  <input
+    id="accredited_provider_search_form_recruitment_cycle_year"
+    type="text"
+    value="2023"
+  />
+  
+           
   <div
     id="accredited-provider-autocomplete"
   >

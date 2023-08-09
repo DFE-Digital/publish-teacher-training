@@ -10,6 +10,7 @@ describe('Accredited provider', () => {
       document.body.innerHTML = `
          <div id="outer-container">
            <input type="text" id="accredited-provider-search-form-query-field">
+           <input type="text" id="accredited_provider_search_form_recruitment_cycle_year" value="2023">
            <div id="accredited-provider-autocomplete"></div>
          </div>
        `
