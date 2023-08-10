@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11.10
+        image: postgres:14.7
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -32,35 +32,29 @@ jobs:
 
       - name: Set KV environment variables
         run: |
-          tf_vars_file=terraform/paas/workspace_variables/production.tfvars.json
+          tf_vars_file=terraform/aks/workspace_variables/production_aks.tfvars.json
           echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
-          echo "paas_space_name=$(jq -r '.cf_space' ${tf_vars_file})" >> $GITHUB_ENV
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
 
-      - uses: DFE-Digital/keyvault-yaml-secret@v1
-        id: get-secrets
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
         with:
-          keyvault: ${{ env.key_vault_name }}
-          secret: ${{ env.key_vault_infra_secret_name }}
-          key: CF_USER,CF_PASSWORD
+          version: "v1.26.1" # default is latest stable
 
-      - uses: DFE-Digital/github-actions/setup-cf-cli@master
-        name: Setup cf cli
-        with:
-          CF_USERNAME: ${{ steps.get-secrets.outputs.CF_USER }}
-          CF_PASSWORD: ${{ steps.get-secrets.outputs.CF_PASSWORD }}
-          CF_SPACE_NAME: ${{ env.paas_space_name }}
-          INSTALL_CONDUIT: true
+      - name: K8 & konduit setup
+        shell: bash
+        run: |
+          az aks get-credentials -g s189p01-tsc-pd-rg -n s189p01-tsc-production-aks
+          make install-konduit
 
       - name: Backup Publish Teacher Training Prod Database
         run: |
           now=$(date +"%F")
           PROD_BACKUP=prod_backup-$now.sql
-          cf conduit publish-teacher-training-postgres-prod -- pg_dump --encoding utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
+          bin/konduit.sh publish-production -- pg_dump -E utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
           tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
           echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
 
@@ -72,7 +66,7 @@ jobs:
 
       - name: Upload Backup to Azure Storage
         run: |
-          az storage blob upload --container-name prod-db-backup \
+          az storage blob upload --container-name database-backup \
           --file ${PROD_BACKUP}.tar.gz --name ${PROD_BACKUP}.tar.gz \
           --connection-string '${{ env.STORAGE_CONN_STR }}'
 
