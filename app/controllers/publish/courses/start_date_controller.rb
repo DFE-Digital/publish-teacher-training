@@ -14,6 +14,10 @@ module Publish
       def error_keys
         [:start_date]
       end
+
+      def section_key
+        'Course start date'
+      end
     end
   end
 end

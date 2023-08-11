@@ -37,7 +37,7 @@ feature 'Course show' do
       scenario 'i can see the correct change links' do
         given_we_are_in_rollover
         and_i_am_authenticated_as_a_provider_user_for_next_cycle
-        and_there_is_a_published_course
+        and_there_is_a_scheduled_course
         when_i_visit_the_course_details_page
         then_i_see_the_correct_change_links_for_the_next_cycle
       end
@@ -96,6 +96,8 @@ feature 'Course show' do
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse('2022 January'), enrichments: [build(:course_enrichment, :published)])
     given_a_site_exists(:full_time_vacancies, :findable)
   end
+
+  alias_method :and_there_is_a_scheduled_course, :and_there_is_a_published_course
 
   def when_i_visit_the_course_details_page
     publish_provider_courses_details_page.load(
@@ -178,7 +180,7 @@ feature 'Course show' do
   end
 
   def then_i_see_the_correct_change_links_for_the_next_cycle
-    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'schools', 'can sponsor skilled_worker visa', 'date applications open')
+    expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly('subjects', 'age range', 'outcome', 'if full or part time', 'schools', 'can sponsor skilled_worker visa', 'date applications open', 'date course starts')
   end
 
   def provider
