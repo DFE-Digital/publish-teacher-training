@@ -234,6 +234,9 @@ namespace :publish, as: :publish do
 
         get '/study-sites', on: :member, to: 'courses/study_sites#edit'
         put '/study-sites', on: :member, to: 'courses/study_sites#update'
+
+        get '/applications-open', on: :member, to: 'courses/applications_open#edit'
+        put '/applications-open', on: :member, to: 'courses/applications_open#update'
       end
 
       scope module: :providers do

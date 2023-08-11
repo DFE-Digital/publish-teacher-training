@@ -81,6 +81,10 @@ module Publish
       def error_keys
         [:applications_open_from]
       end
+
+      def section_key
+        'Applications open date'
+      end
     end
   end
 end

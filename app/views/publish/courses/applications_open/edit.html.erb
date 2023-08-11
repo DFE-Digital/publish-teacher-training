@@ -1,7 +1,7 @@
 <% content_for :page_title, title_with_error_prefix("Applications open date – #{course.name_and_code}", course.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(details_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
 <% end %>
 
 <%= render "publish/shared/errors" %>
@@ -9,12 +9,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: course,
-                  url: applications_open_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+                  url: applications_open_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
                   method: :put do |form| %>
 
-      <%= render "form_fields", form: %>
+    <%= render "form_fields", form:, caption_text: CaptionText.new(text: course.name_and_code) %>
 
-      <%= form.submit course.is_running? ? "Save and publish changes" : "Save", class: "govuk-button", data: { qa: "course__save" } %>
+      <%= form.submit "Update applications open date", class: "govuk-button" %>
     <% end %>
+
+    <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      </p>
   </div>
 </div>

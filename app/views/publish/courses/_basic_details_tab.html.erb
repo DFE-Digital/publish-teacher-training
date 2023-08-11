@@ -219,11 +219,9 @@
     summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row|
       row.with_key { "Applications open date" }
       row.with_value { l(course.applications_open_from&.to_date) }
-      if course.edit_course_options[:show_applications_open]
-        row.with_action(**{
-                      # href: applications_open_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-                      # visually_hidden_text: "date applications open",
-                    })
+      if course.changeable?
+        row.with_action(href: applications_open_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+                        visually_hidden_text: "date applications open")
       else
         row.with_action
       end
