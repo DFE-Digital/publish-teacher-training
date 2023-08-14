@@ -12,10 +12,6 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
     then_i_see_the_add_a_study_site_link
-
-    given_i_attempt_to_publish_the_course
-    when_i_click_add_at_lease_one_study_site
-    then_i_should_be_on_the_study_sites_page
   end
 
   scenario 'user can add and remove study sites from a course' do
@@ -29,11 +25,15 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     given_i_click_change_study_sites
     and_the_previously_selected_study_site_is_still_checked
     and_i_uncheck_the_first_study_site_and_submit
-    then_i_see_the_error_message_add_one_study_site
+    then_i_see_the_success_message
+  end
+
+  def then_i_see_the_success_message
+    expect(page).to have_text('Study sites updated')
   end
 
   def then_i_see_the_add_a_study_site_link
-    expect(page).to have_link('Add at least one study site')
+    expect(page).to have_link('Add a study site')
   end
 
   def then_i_see_the_error_message_add_one_study_site
@@ -121,7 +121,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     click_link 'Cancel'
   end
 
-  def given_i_attempt_to_publish_the_course
+  def given_i_publish_the_course
     click_button 'Publish course'
   end
 
