@@ -11,7 +11,8 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
     context 'with invalid params' do
       before do
         get :index, params: {
-          query: 'cl'
+          query: 'cl',
+          recruitment_cycle_year: Settings.current_recruitment_cycle_year
         }
       end
 
@@ -25,7 +26,8 @@ RSpec.describe API::AccreditedProviderSuggestionsController do
     context 'with valid params' do
       before do
         get :index, params: {
-          query: 'cla'
+          query: 'cla',
+          recruitment_cycle_year: Settings.current_recruitment_cycle_year
         }
       end
 

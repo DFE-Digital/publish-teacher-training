@@ -17,7 +17,7 @@ module Support
 
         if @accredited_provider_search_form.valid?
           @accredited_provider_select_form = AccreditedProviderSelectForm.new
-          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
+          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
 
           render :results
         else
@@ -32,7 +32,7 @@ module Support
         if @accredited_provider_select_form.valid?
           redirect_to new_support_recruitment_cycle_provider_accredited_provider_path(accredited_provider_id: accredited_provider_select_params[:provider_id])
         else
-          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:)
+          @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
           render :results
         end
       end
