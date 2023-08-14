@@ -12,6 +12,9 @@ module Publish
 
       def new
         authorize(@provider, :edit?)
+
+        return if @provider.study_sites.any?
+        redirect_to next_step
       end
 
       def edit
