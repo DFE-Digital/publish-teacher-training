@@ -36,7 +36,7 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def required_organisation_details_present?
-    accredited_provider_present? && site_present?   
+    accredited_provider_present? && site_present?
   end
 
   def accredited_provider_present?
