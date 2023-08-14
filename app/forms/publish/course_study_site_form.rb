@@ -6,8 +6,6 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :study_site_ids, presence: true
-
     private
 
     def compute_fields
