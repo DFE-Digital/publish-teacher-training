@@ -90,7 +90,50 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  context 'study sites' do
+    scenario 'changing to none' do
+      given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+      when_i_visit_the_publish_course_confirmation_page_in_the_next_cycle
+      and_i_click_select_a_study_site
+      and_i_submit_without_selecting_a_study_site
+      then_i_should_be_back_on_the_confirmation_page
+    end
+  end
+
   private
+
+  def then_i_should_be_back_on_the_confirmation_page
+    expect(page).to have_current_path(%r{/publish/organisations/#{next_cycle_provider.provider_code}/#{next_cycle_provider.recruitment_cycle_year}/courses/confirmation})
+  end
+
+  def and_i_submit_without_selecting_a_study_site
+    click_button 'Continue'
+  end
+
+  def and_i_click_select_a_study_site
+    click_link 'Select a study site'
+  end
+
+  def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+    next_cycle_providers = [build(:provider, :next_recruitment_cycle, :accredited_provider,
+                                  courses: [create(:course, :with_accrediting_provider)],
+                                  sites: [build(:site), build(:site)],
+                                  study_sites: [build(:site, :study_site)])]
+    @next_cycle_user = create(:user, providers: next_cycle_providers)
+    given_i_am_authenticated(user: @next_cycle_user)
+  end
+
+  def next_cycle_provider
+    @next_cycle_provider ||= @next_cycle_user.providers.first
+  end
+
+  def when_i_visit_the_publish_course_confirmation_page_in_the_next_cycle
+    publish_course_confirmation_page.load(
+      provider_code: next_cycle_provider.provider_code,
+      recruitment_cycle_year: next_cycle_provider.recruitment_cycle_year,
+      query: confirmation_params(next_cycle_provider)
+    )
+  end
 
   def and_the_study_sites_feature_flag_is_active
     allow(Settings.features).to receive(:study_sites).and_return(true)
