@@ -320,7 +320,6 @@ class Course < ApplicationRecord
 
   validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
-  validates :study_sites, presence: true, on: %i[publish new], if: -> { recruitment_cycle_after_2023? }
   validates :subjects, presence: true, on: :publish
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? }
   validate :validate_enrichment_publishable, on: :publish
