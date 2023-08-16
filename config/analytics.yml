@@ -107,13 +107,6 @@ shared:
     - telephone
     - created_at
     - updated_at
-  interrupt_page_acknowledgement:
-    - id
-    - page
-    - recruitment_cycle_id
-    - user_id
-    - created_at
-    - updated_at
   provider:
     - id
     - address4
