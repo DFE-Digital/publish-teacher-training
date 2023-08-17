@@ -103,7 +103,6 @@ features:
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: true
-    show_next_cycle_recruitment_page: false
   user_management: true
   add_multiple_schools: true
   course_preview_missing_information: true

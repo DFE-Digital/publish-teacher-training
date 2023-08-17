@@ -18,7 +18,6 @@ class UserPolicy
 
   alias update? show?
   alias accept_transition_screen? update?
-  alias accept_rollover_screen? update?
   alias accept_terms? update?
   alias index? show?
   alias create? update?

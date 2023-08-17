@@ -55,8 +55,6 @@ namespace :publish, as: :publish do
   get '/organisations', to: 'providers#index', as: :root
   get '/providers/search', to: 'providers#search'
   get '/providers/suggest', to: 'providers#suggest'
-  get '/rollover-recruitment', to: 'rollover_recruitment#new', as: :rollover_recruitment
-  post '/rollover-recruitment', to: 'rollover_recruitment#create'
 
   get '/accept-terms', to: 'terms#edit', as: :accept_terms
   patch '/accept-terms', to: 'terms#update'

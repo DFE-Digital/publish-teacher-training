@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_30_125755) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_16_103429) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -220,17 +220,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_30_125755) do
     t.index ["searchable"], name: "index_gias_school_on_searchable", using: :gin
     t.index ["status_code"], name: "index_gias_school_on_status_code", where: "(status_code = '1'::text)"
     t.index ["urn"], name: "index_gias_school_on_urn", unique: true
-  end
-
-  create_table "interrupt_page_acknowledgement", force: :cascade do |t|
-    t.string "page", null: false
-    t.bigint "recruitment_cycle_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["page", "recruitment_cycle_id", "user_id"], name: "interrupt_page_all_column_idx", unique: true
-    t.index ["recruitment_cycle_id"], name: "index_interrupt_page_acknowledgement_on_recruitment_cycle_id"
-    t.index ["user_id"], name: "index_interrupt_page_acknowledgement_on_user_id"
   end
 
   create_table "organisation", id: :serial, force: :cascade do |t|

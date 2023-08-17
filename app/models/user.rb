@@ -24,8 +24,6 @@ class User < ApplicationRecord
            primary_key: :id,
            inverse_of: 'requester'
 
-  has_many :interrupt_page_acknowledgements
-
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
@@ -91,10 +89,6 @@ class User < ApplicationRecord
     accept_terms_date_utc.present?
   end
 
-  def current_rollover_recruitment_acceptance
-    current_page_acknowledgement_for('rollover_recruitment')
-  end
-
   def has_multiple_providers?
     providers.count > 1
   end
@@ -115,10 +109,5 @@ class User < ApplicationRecord
 
   def downcase_email
     email&.downcase!
-  end
-
-  def current_page_acknowledgement_for(page)
-    interrupt_page_acknowledgements
-      .includes(:recruitment_cycle).find_by(page:, recruitment_cycle: { year: Settings.current_recruitment_cycle_year })
   end
 end
