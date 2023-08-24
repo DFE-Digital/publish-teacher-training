@@ -1,14 +1,18 @@
-name: Smoke Tests
+name: Smoke Tests v2
 on:
   workflow_dispatch:
     inputs:
       environment:
         description: 'The environment to run tests against (review)'
-        default: review
+        default: qa_aks
         required: true
         type: choice
         options:
-        - review
+        - review_aks
+        - qa_aks
+        - staging_aks
+        - sandbox_aks
+        - production_aks
       pr:
         description: 'The PR number if the environment is review'
         required: false
@@ -22,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Run Smoke Tests for ${{ github.event.inputs.environment }}
-        uses: ./.github/actions/smoke-test/
+        uses: ./.github/actions/smoke-test_v2/
         with:
           environment: ${{ github.event.inputs.environment }}
           pr-number: ${{ github.event.inputs.pr }}
