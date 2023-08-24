@@ -15,17 +15,11 @@
       <%= govuk_button_link_to t(".add_study_site"), new_publish_provider_recruitment_cycle_study_site_path(@provider.provider_code) %>
     <% end %>
 
-    <% if @study_sites.none? %>
-      <p class="govuk-body">A study site, such as a university campus, is where trainees do theoretical training. Add study sites for your organisation and then attach one or more to a course from the ‘Basic details’ tab on the course page.</p>
+    <p class="govuk-body">A study site, such as a university campus, is where trainees do theoretical training. Add study sites for your organisation and then attach one or more to a course from the ‘Basic details’ tab on the course page.</p>
 
-      <p class="govuk-body">Candidates will see a list of the attached study sites in the ‘Training locations’ section on the course page on Find.</p>
+    <p class="govuk-body">Candidates will see a list of the attached study sites in the ‘Training locations’ section on the course page on Find.</p>
 
-    <% else %>
-
-     <p class="govuk-body">A study site, such as a university campus, is where trainees do theoretical training. Add study sites for your organisation and then attach one or more to a course from the ‘Basic details’ tab on the course page.</p>
-
-      <p class="govuk-body">Candidates will see a list of the attached study sites in the ‘Training locations’ section on the course page on Find.</p>
-
+    <% if @study_sites.any? %>
       <table class="govuk-table app-table--vertical-align-middle">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
