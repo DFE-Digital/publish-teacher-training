@@ -77,7 +77,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def given_i_see_the_schools_guidance_text
-    expect(page).to have_content('Add placement schools your organisation works with. You can then attach them to any of your courses from the ‘Basic details’ tab on the course page.')
+    expect(page).to have_content('A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.')
   end
 
   def and_the_school_is_not_added
