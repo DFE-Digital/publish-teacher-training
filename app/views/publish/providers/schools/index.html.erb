@@ -15,23 +15,29 @@
       <%= govuk_button_link_to t(".add_school"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
     <% end %>
 
-    <table class="govuk-table app-table--vertical-align-middle">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Name</th>
-          <th class="govuk-table__header" scope="col">School code</th>
-          <% if urn_required?(@recruitment_cycle.year.to_i) %>
-            <th class="govuk-table__header" scope="col">
-              <abbr class="app-!-text-decoration-underline-dotted" title="Unique reference number">
-                URN
-              </abbr>
-            </th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <%= render partial: "school", collection: @schools %>
-      </tbody>
-    </table>
+    <p class="govuk-body">A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.</p>
+
+    <p class="govuk-body">Candidates will see a list of the attached placements in the ‘Training locations’ section on the course page on Find to help them get a sense of the areas your organisation operates in.<p>
+
+    <% if @schools.any? %>
+      <table class="govuk-table app-table--vertical-align-middle">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+            <th class="govuk-table__header" scope="col">School code</th>
+            <% if urn_required?(@recruitment_cycle.year.to_i) %>
+              <th class="govuk-table__header" scope="col">
+                <abbr class="app-!-text-decoration-underline-dotted" title="Unique reference number">
+                  URN
+                </abbr>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <%= render partial: "school", collection: @schools %>
+        </tbody>
+      </table>
+    <% end %>
   </div>
 </div>

@@ -11,6 +11,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
 
   describe 'add school' do
     scenario 'with valid details' do
+      given_i_see_the_schools_guidance_text
       when_i_click_add_a_school
       and_i_click_the_link_to_enter_a_school_manually
       and_i_set_valid_new_details
@@ -73,6 +74,10 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
       then_i_am_on_the_school_delete_page
       and_i_cannot_delete_the_school
     end
+  end
+
+  def given_i_see_the_schools_guidance_text
+    expect(page).to have_content('A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.')
   end
 
   def and_the_school_is_not_added
