@@ -23,13 +23,13 @@ jobs:
           echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
           echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
           # tag build to the review env for vars and secrets
-          tf_vars_file=terraform/paas/workspace_variables/review.tfvars.json
+          tf_vars_file=terraform/aks/workspace_variables/review_aks.tfvars.json
           echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
           echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
 
       - name: Validate Azure Key Vault secrets
         uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
@@ -87,14 +87,14 @@ jobs:
         if: ${{ success() }}
         run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
-      - name: 'Notify #twd_findpub_tech on failure'
-        if: failure()
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: twd_findpub_tech
-          SLACK_COLOR: '#ef5343'
-          SLACK_ICON_EMOJI: ':github-logo:'
-          SLACK_USERNAME: Publish Teacher Training
-          SLACK_TITLE: Build failure on weekly rebuild cache workflow
-          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      # - name: 'Notify #twd_findpub_tech on failure'
+      #   if: failure()
+      #   uses: rtCamp/action-slack-notify@master
+      #   env:
+      #     SLACK_CHANNEL: twd_findpub_tech
+      #     SLACK_COLOR: '#ef5343'
+      #     SLACK_ICON_EMOJI: ':github-logo:'
+      #     SLACK_USERNAME: Publish Teacher Training
+      #     SLACK_TITLE: Build failure on weekly rebuild cache workflow
+      #     SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
