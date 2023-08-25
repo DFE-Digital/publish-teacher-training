@@ -1,1 +1,0 @@
-variable alerts { type = map }

@@ -42,19 +42,6 @@ install-terrafile: ## Install terrafile to manage terraform modules
 		| tar xz -C ./bin terrafile \
 		|| true
 
-review:
-	$(eval DEPLOY_ENV=review)
-	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
-	$(eval backend_key=-backend-config=key=pr-$(APP_NAME).tfstate)
-	$(eval export TF_VAR_paas_app_environment=review-$(APP_NAME))
-	$(eval export TF_VAR_paas_web_app_host_name=$(APP_NAME))
-	$(eval space=bat-qa)
-	$(eval paas_env=pr-$(APP_NAME))
-	$(eval PLATFORM=paas)
-	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
-	echo https://publish-teacher-training-pr-$(APP_NAME).london.cloudapps.digital will be created in bat-qa space
-
 review_aks: ## make review_aks deploy APP_NAME=2222 USE_DB_SETUP_COMMAND=true
 	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
 	$(if $(USE_DB_SETUP_COMMAND), , $(error Missing environment variable "USE_DB_SETUP_COMMAND", Set to true for first time deployments, otherwise false.))
@@ -106,46 +93,22 @@ production_aks:
 .PHONY: qa
 qa: ## Set DEPLOY_ENV to qa
 	$(eval DEPLOY_ENV=qa)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-development)
-	$(eval space=bat-qa)
-	$(eval paas_env=qa)
-	$(eval PLATFORM=paas)
-	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
 .PHONY: staging
 staging: ## Set DEPLOY_ENV to staging
 	$(eval DEPLOY_ENV=staging)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-test)
-	$(eval space=bat-staging)
-	$(eval paas_env=staging)
-	$(eval PLATFORM=paas)
 
 .PHONY: sandbox
 sandbox: ## Set DEPLOY_ENV to sandbox
 	$(eval DEPLOY_ENV=sandbox)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
-	$(eval space=bat-prod)
-	$(eval paas_env=sandbox)
-	$(eval PLATFORM=paas)
 
 .PHONY: production
 production: ## Set DEPLOY_ENV to production
 	$(eval DEPLOY_ENV=production)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
-	$(if $(CONFIRM_PRODUCTION), , $(error Production can only run with CONFIRM_PRODUCTION))
-	$(eval space=bat-prod)
-	$(eval paas_env=prod)
-	$(eval PLATFORM=paas)
-	$(eval PARTIAL_HOSTNAME=www)
-	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION)
 
 .PHONY: loadtest
 loadtest: ## Set DEPLOY_ENV to loadtest
 	$(eval DEPLOY_ENV=loadtest)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
-	$(eval space=bat-prod)
-	$(eval paas_env=loadtest)
-	$(eval PLATFORM=paas)
 
 .PHONY: pentest
 pentest: ## Set DEPLOY_ENV to pentest
@@ -154,10 +117,6 @@ pentest: ## Set DEPLOY_ENV to pentest
 .PHONY: rollover
 rollover: ## Set DEPLOY_ENV to rollover
 	$(eval DEPLOY_ENV=rollover)
-	$(eval AZ_SUBSCRIPTION=s121-findpostgraduateteachertraining-production)
-	$(eval space=bat-prod)
-	$(eval paas_env=rollover)
-	$(eval PLATFORM=paas)
 
 .PHONY: ci
 ci:	## Run in automation environment
@@ -225,12 +184,6 @@ print-infra-secrets: read-keyvault-config install-fetch-config
 	bin/fetch_config.rb -s azure-key-vault-secret:${key_vault_name}/${key_vault_infra_secret_name} \
 		-f yaml
 
-console: # make qa console OR make qa console WORKER=1 to connect to the worker app
-	$(if $(WORKER),$(eval export WORKER_NAME=worker-), )
-	cf target -s ${space}
-	echo "service name: publish-teacher-training-${WORKER_NAME}${paas_env}"
-	cf ssh publish-teacher-training-${WORKER_NAME}${paas_env} -t -c "cd /app && /usr/local/bin/bundle exec rails c"
-
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 	az aks get-credentials --overwrite-existing -g ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER}-aks
 
@@ -253,32 +206,6 @@ aks-ssh: get-cluster-credentials
 aks-worker-ssh: get-cluster-credentials
 	$(if $(APP_NAME), $(eval export APP_ID=review-$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID}-worker -- /bin/sh
-
-enable-maintenance: ## make qa enable-maintenance / make prod enable-maintenance CONFIRM_PRODUCTION=y
-	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
-	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
-	cf target -s ${space}
-	cd service_unavailable_page && cf push
-	eval cf map-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	cf map-route publish-unavailable find-postgraduate-teacher-training.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	echo Waiting 5s for route to be registered... && sleep 5
-	eval cf unmap-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	cf unmap-route publish-teacher-training-${DEPLOY_ENV} find-postgraduate-teacher-training.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-
-disable-maintenance: ## make qa disable-maintenance / make prod disable-maintenance CONFIRM_PRODUCTION=y
-	$(if $(PARTIAL_HOSTNAME), $(eval API_HOSTNAME_ARG=""), $(eval API_HOSTNAME_ARG="--hostname ${DEPLOY_ENV}"))
-	$(if $(PARTIAL_HOSTNAME), $(eval PUBLISH_HOSTNAME=${PARTIAL_HOSTNAME}), $(eval PUBLISH_HOSTNAME=${DEPLOY_ENV}))
-	cf target -s ${space}
-	eval cf map-route publish-teacher-training-${DEPLOY_ENV} api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf map-route publish-teacher-training-${DEPLOY_ENV} publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	cf map-route publish-teacher-training-${DEPLOY_ENV} find-postgraduate-teacher-training.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	echo Waiting 5s for route to be registered... && sleep 5
-	eval cf unmap-route publish-unavailable api.publish-teacher-training-courses.service.gov.uk ${API_HOSTNAME_ARG}
-	cf unmap-route publish-unavailable publish-teacher-training-courses.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	cf unmap-route publish-unavailable find-postgraduate-teacher-training.service.gov.uk --hostname ${PUBLISH_HOSTNAME}
-	cf delete -rf publish-unavailable
 
 restore-data-from-nightly-backup: read-deployment-config read-keyvault-config # make production restore-data-from-nightly-backup CONFIRM_PRODUCTION=YES CONFIRM_RESTORE=YES BACKUP_DATE="yyyy-mm-dd"
 	bin/download-nightly-backup ${backup_storage_secret_name} ${key_vault_name} ${paas_env}-db-backup ${paas_env}_backup- ${BACKUP_DATE}
@@ -309,14 +236,6 @@ backup-review-database: read-deployment-config # make review backup-review-datab
 get-image-tag:
 	$(eval export TAG=$(shell cf target -s ${space} 1> /dev/null && cf app publish-teacher-training-${paas_env} | awk -F : '$$1 == "docker image" {print $$3}'))
 	@echo ${TAG}
-
-get-postgres-instance-guid: ## Gets the postgres service instance's guid make qa get-postgres-instance-guid
-	$(eval export DB_INSTANCE_GUID=$(shell cf target -s ${space} 1> /dev/null && cf service publish-teacher-training-postgres-${paas_env} --guid))
-	@echo ${DB_INSTANCE_GUID}
-
-rename-postgres-service: ## make qa rename-postgres-service
-	cf target -s ${space} 1> /dev/null
-	cf rename-service publish-teacher-training-postgres-${paas_env} publish-teacher-training-postgres-${paas_env}-old
 
 remove-postgres-tf-state: deploy-init ## make qa remove-postgres-tf-state PASSCODE=xxxx
 	terraform -chdir=terraform/$(PLATFORM) state rm module.paas.cloudfoundry_service_instance.postgres
