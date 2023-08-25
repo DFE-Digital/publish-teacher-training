@@ -106,24 +106,32 @@ module Find
       Time.zone.now.between?(apply_2_deadline, find_closes)
     end
 
-    def self.find_down?
-      current_cycle_schedule == :today_is_after_find_closes || Time.zone.now.between?(find_closes, find_reopens)
+    def self.find_down? = phase_in_time?(:today_is_after_find_closes)
+
+    def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
+
+    def self.show_apply_1_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
+
+    def self.show_apply_2_deadline_banner? = phase_in_time?(:today_is_after_apply_1_deadline_passed)
+
+    def self.show_cycle_closed_banner? = phase_in_time?(:today_is_after_apply_2_deadline_passed)
+
+    def self.phases_in_time
+      {
+        today_is_after_find_closes: Time.zone.now.between?(find_closes, find_reopens),
+        today_is_after_find_opens: Time.zone.now.between?(find_opens, apply_2_deadline),
+        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_1_deadline),
+        today_is_after_apply_1_deadline_passed: Time.zone.now.between?(apply_1_deadline, apply_2_deadline),
+        today_is_after_apply_2_deadline_passed: Time.zone.now.between?(apply_2_deadline, find_closes)
+      }
     end
 
-    def self.mid_cycle?
-      current_cycle_schedule == :today_is_after_find_opens || Time.zone.now.between?(find_opens, apply_2_deadline)
-    end
-
-    def self.show_apply_1_deadline_banner?
-      current_cycle_schedule == :today_is_mid_cycle || Time.zone.now.between?(first_deadline_banner, apply_1_deadline)
-    end
-
-    def self.show_apply_2_deadline_banner?
-      current_cycle_schedule == :today_is_after_apply_1_deadline_passed || Time.zone.now.between?(apply_1_deadline, apply_2_deadline)
-    end
-
-    def self.show_cycle_closed_banner?
-      current_cycle_schedule == :today_is_after_apply_2_deadline_passed || Time.zone.now.between?(apply_2_deadline, find_closes)
+    def self.phase_in_time?(time_period)
+      if current_cycle_schedule == :real
+        phases_in_time[time_period]
+      else
+        current_cycle_schedule == time_period
+      end
     end
 
     def self.date(name, year = current_year)
