@@ -71,7 +71,7 @@ RSpec.feature 'Qualifications filter' do
   def and_the_qts_qualification_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('applications_open=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&degree_required=show_all_courses')
+      expect(uri.query).to eq('study_type[]=full_time&study_type[]=part_time&qualification[]=qts&degree_required=show_all_courses&applications_open=true')
     end
   end
 
