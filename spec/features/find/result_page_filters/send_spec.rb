@@ -30,7 +30,7 @@ RSpec.feature 'SEND filter' do
   def and_the_send_query_parameter_is_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('send_courses=true&applications_open=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
+      expect(uri.query).to eq('study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=true')
     end
   end
 end
