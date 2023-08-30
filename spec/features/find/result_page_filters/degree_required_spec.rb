@@ -63,7 +63,7 @@ RSpec.feature 'Degree required filter' do
   def and_the_third_degree_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('applications_open=true&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=third_class')
+      expect(uri.query).to eq('study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=third_class&applications_open=true')
     end
   end
 
