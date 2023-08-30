@@ -23,4 +23,9 @@ feature 'View pages' do
     expect(page).to have_selector('h1', text: 'Accessibility statement')
     expect(page).to have_text('This statement applies to the Find postgraduate teacher training service (Find)')
   end
+
+  scenario 'Redirect to /cycle-has-ended when cycle open' do
+    visit '/cycle-has-ended'
+    expect(page).to have_current_path(root_path)
+  end
 end

@@ -6,7 +6,9 @@ module Find
     skip_before_action :redirect_to_maintenance_page_if_flag_is_active, only: :maintenance
     before_action :redirect_to_homepage_unless_in_maintenance_mode, only: :maintenance
 
-    def cycle_has_ended; end
+    def cycle_has_ended
+      redirect_to root_path unless CycleTimetable.find_down?
+    end
 
     def accessibility; end
 

@@ -8,7 +8,7 @@
       <p class="govuk-body">Applications for courses starting in the <%= Find::CycleTimetable.cycle_year_range %> academic year are closed.</p>
 
       <p class="govuk-body">
-        You can <%= govuk_link_to("start or continue an application", Settings.apply_base_url) %>
+        You can <%= govuk_link_to("start or continue applying", Settings.apply_base_url) %>
         for courses starting in the <%= Find::CycleTimetable.next_cycle_year_range %>
         academic year.
       </p>
@@ -16,7 +16,7 @@
       <p class="govuk-body">You’ll be able to:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>find courses from <%= Find::CycleTimetable.find_reopens.to_fs(:govuk_date_and_time) %></li>
-        <li>submit your application from <%= Find::CycleTimetable.apply_reopens.to_fs(:govuk_date_and_time) %></li>
+        <li>submit your applications from <%= Find::CycleTimetable.apply_reopens.to_fs(:govuk_date_and_time) %></li>
       </ul>
     </div>
   </div>
