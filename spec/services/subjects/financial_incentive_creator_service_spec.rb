@@ -21,6 +21,6 @@ describe Subjects::FinancialIncentiveCreatorService do
   it 'creates subject financial incentive data unless subject financial incentive already exists' do
     service.execute
     expect(subject_spy).to have_received(:where).exactly(10).times
-    expect(financial_incentive_spy).to have_received(:find_or_create_by).exactly(30).times
+    expect(financial_incentive_spy).to have_received(:find_or_initialize_by).exactly(30).times
   end
 end
