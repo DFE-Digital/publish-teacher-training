@@ -298,7 +298,7 @@ feature 'Viewing a findable course' do
 
     ## expect(find_course_show_page.apply_link.text).to eq('Apply for this course')
 
-    expect(find_course_show_page.apply_link.text).to have_css('a[data-qa=course__apply_link]', count: 2)
+    expect(find_course_show_page.apply_link.text).to have_css('a[data-qa=course__apply_link]', :count => 2)
 
     expect(find_course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
 
