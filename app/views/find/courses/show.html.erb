@@ -34,6 +34,8 @@
 
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
+<%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
     <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
