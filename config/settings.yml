@@ -42,7 +42,7 @@ cookies:
     name: _consented_to_analytics_cookies
     expire_after_days: 182
 
-current_recruitment_cycle_year: 2023
+current_recruitment_cycle_year: 2024
 next_cycle_open_date: 2023-10-3
 
 govuk_notify:
@@ -98,7 +98,18 @@ features:
     # actually starting when it would be set to false
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
+<<<<<<< HEAD
     can_edit_current_and_next_cycles: true
+=======
+    can_edit_current_and_next_cycles: false
+  user_management: true
+  add_multiple_schools: true
+  course_preview_missing_information: true
+  gias_search: true
+  support_new_provider_creation_flow: true
+  accredited_provider_search: true
+  study_sites: true
+>>>>>>> 9e337a0da (Update RC and end rollover)
 
 cookies:
   session:
