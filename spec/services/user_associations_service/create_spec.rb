@@ -28,6 +28,11 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         end
 
         context 'when the user is added in the next cycle' do
+
+          before do
+            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+          end
+
           subject do
             described_class.call(
               provider: next_cycle_new_accredited_provider,
@@ -44,6 +49,11 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
         end
 
         context 'when provider does not exist in the next cycle' do
+
+          before do
+            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+          end
+          
           subject do
             described_class.call(
               provider: current_cycle_provider,

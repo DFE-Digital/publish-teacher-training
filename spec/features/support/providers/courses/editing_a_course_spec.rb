@@ -204,7 +204,7 @@ feature 'Edit provider course details' do
 
   def and_it_contains_invalid_value_errors
     expect(support_provider_course_edit_page.error_summary.text).to include('Course code is already taken')
-    expect(support_provider_course_edit_page.error_summary.text).to include("October 2026 is not in the #{Settings.current_recruitment_cycle_year} cycle")
+    expect(support_provider_course_edit_page.error_summary.text).to include("October #{Settings.current_recruitment_cycle_year + 3} is not in the #{Settings.current_recruitment_cycle_year} cycle")
   end
 
   def and_it_contains_start_date_format_error

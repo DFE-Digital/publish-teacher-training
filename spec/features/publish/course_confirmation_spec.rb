@@ -64,31 +64,6 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  context 'accredited provider' do
-    before do
-      given_i_am_authenticated_as_a_provider_user(:accredited_provider)
-      when_i_visit_the_publish_course_confirmation_page
-    end
-
-    scenario 'changing to yes' do
-      when_i_click_change_apprenticeship
-      and_i_select(:yes)
-      and_i_click_continue
-      and_i_should_see_the_title_as('Skilled Worker visas')
-      and_i_click_continue
-      then_i_should_be_on_the_confirmation_page
-    end
-
-    scenario 'changing to no' do
-      when_i_click_change_apprenticeship
-      and_i_select(:no)
-      and_i_click_continue
-      and_i_should_see_the_title_as('Student visas')
-      and_i_click_continue
-      then_i_should_be_on_the_confirmation_page
-    end
-  end
-
   context 'study sites' do
     scenario 'changing to none' do
       given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
