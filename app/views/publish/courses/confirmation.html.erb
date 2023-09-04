@@ -133,7 +133,7 @@
           <% end %>
         <% end %>
 
-        <% if FeatureService.enabled?(:study_sites) && recruitment_cycle_after_2023?(course) %>
+        <% if recruitment_cycle_after_2023?(course) %>
           <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
             <% row.with_key { "Study site".pluralize(course.study_sites.length) } %>
             <% row.with_value do %>

@@ -12,7 +12,7 @@ class WorkflowStepService
       workflow_for_recruitment_cycle_after2023
     else
       workflow_for_recruitment_cycle_before2023
-    end - remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
+    end - remove_study_site_if_current_cycle(course)
   end
 
   private
@@ -160,7 +160,7 @@ class WorkflowStepService
     end
   end
 
-  def remove_study_site_if_feature_flag_disabled_or_current_cycle(course)
-    course.in_current_cycle? || !FeatureService.enabled?(:study_sites) ? [:study_site] : []
+  def remove_study_site_if_current_cycle(course)
+    course.in_current_cycle? ? [:study_site] : []
   end
 end
