@@ -133,7 +133,7 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       query: confirmation_params(next_cycle_provider)
     )
   end
-  
+
   def when_i_click_change_subject
     publish_course_confirmation_page.details.subjects.change_link.click
   end
