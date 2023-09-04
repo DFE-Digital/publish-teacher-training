@@ -42,7 +42,7 @@
 
       <%= f.govuk_text_field(:fee_international,
         form_group: { id: "fee-international" },
-        label: { text: student_visa_and_after_2023_cycle(@course) ? "Fee for international students" : "Fee for international students (optional)", size: "s" },
+        label: { text: @course.can_sponsor_student_visa? ? "Fee for international students" : "Fee for international students (optional)", size: "s" },
         value: @copied_fields_values&.dig("fee_international"),
         prefix_text: "£",
         width: 5,
