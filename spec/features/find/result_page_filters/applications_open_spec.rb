@@ -30,7 +30,7 @@ RSpec.feature 'Results page new application open filter' do
   def and_the_applications_open_query_parameters_are_retained
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/results')
-      expect(uri.query).to eq('applications_open=false&study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses')
+      expect(uri.query).to eq('study_type[]=full_time&study_type[]=part_time&qualification[]=qts&qualification[]=pgce_with_qts&qualification[]=pgce+pgde&degree_required=show_all_courses&applications_open=false')
     end
   end
 end
