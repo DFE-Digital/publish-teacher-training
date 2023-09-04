@@ -79,24 +79,13 @@
           ) %>
         <% end %>
 
-        <% if @provider.accredited_provider? && !course.recruitment_cycle_after_2023? %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__apprenticeship" } }) do |row| %>
-            <% row.with_key { "Apprenticeship" } %>
-            <% row.with_value { course.apprenticeship } %>
-            <% row.with_action(
-              href: new_publish_provider_recruitment_cycle_courses_apprenticeship_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-              visually_hidden_text: "if apprenticeship"
-            ) %>
-          <% end %>
-        <% else %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
-            <% row.with_key { "Funding type" } %>
-            <% row.with_value { course.funding } %>
-            <% row.with_action(
-              href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
-              visually_hidden_text: "if funding type"
-            ) %>
-          <% end %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__funding_type" } }) do |row| %>
+          <% row.with_key { "Funding type" } %>
+          <% row.with_value { course.funding } %>
+          <% row.with_action(
+            href: new_publish_provider_recruitment_cycle_courses_funding_type_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_visa: true, goto_confirmation: true)),
+            visually_hidden_text: "if funding type"
+          ) %>
         <% end %>
 
         <% summary_list.with_row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>

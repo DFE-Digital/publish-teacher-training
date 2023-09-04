@@ -3,22 +3,7 @@
 
 <h1 class="govuk-heading-l">Courses</h1>
 
-<% if recruitment_cycle_after_2023?(@provider) %>
-
-  <%= render AddCourseButton.new(provider: @provider) %>
-
-<% else %>
-
-  <%= govuk_button_link_to(
-      "Add course",
-      new_publish_provider_recruitment_cycle_course_path(
-        provider_code: @provider.provider_code,
-        recruitment_cycle_year: @provider.recruitment_cycle_year
-      ),
-      class: "govuk-!-margin-bottom-6"
-    ) %>
-
-<% end %>
+<%= render AddCourseButton.new(provider: @provider) %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
