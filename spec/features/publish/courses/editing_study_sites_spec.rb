@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 feature 'updating study sites on a course', { can_edit_current_and_next_cycles: false } do
-  before do
-    given_the_study_sites_feature_flag_is_active
-  end
 
   scenario 'provider has no study sites' do
     and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
@@ -38,10 +35,6 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
 
   def then_i_see_the_error_message_add_one_study_site
     expect(page).to have_link('Add at least one study site')
-  end
-
-  def given_the_study_sites_feature_flag_is_active
-    allow(Settings.features).to receive(:study_sites).and_return(true)
   end
 
   def and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
