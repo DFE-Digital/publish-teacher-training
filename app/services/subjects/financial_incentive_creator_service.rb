@@ -10,6 +10,26 @@ module Subjects
 
     def subject_and_financial_incentives
       subject_and_financial_incentives = {
+        2024 => {
+          %w[Mathematics Physics Chemistry Computing] => {
+            bursary_amount: '28000',
+            scholarship: '31000'
+          },
+          %w[
+            French
+            German
+            Spanish
+          ] => {
+            bursary_amount: '25000',
+            scholarship: '29000'
+          },
+          ['Biology', 'Design and technology'] => {
+            bursary_amount: '25000'
+          },
+          ['English', 'Art and design', 'Citizenship', 'Music', 'Religious education'] => {
+            bursary_amount: '10000'
+          }
+        },
         2023 => {
           %w[Mathematics Physics Chemistry Computing] => {
             bursary_amount: '27000',
@@ -113,7 +133,8 @@ module Subjects
     def execute
       subject_and_financial_incentives.each do |subject_name, financial_incentive_attributes|
         @subject.where(subject_name:).each do |subject|
-          @financial_incentive.find_or_create_by(subject:, **financial_incentive_attributes)
+          financial_incentive_record = @financial_incentive.find_or_initialize_by(subject:)
+          financial_incentive_record.update(financial_incentive_attributes)
         end
       end
     end
