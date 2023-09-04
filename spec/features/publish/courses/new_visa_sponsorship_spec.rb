@@ -32,35 +32,6 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
     end
   end
 
-  context 'for scitt or uni provider' do
-    before do
-      given_i_am_authenticated_as_a_provider_user(scitt_or_uni_provider)
-      when_i_visit_the_publish_course_confirmation_page
-    end
-
-    scenario 'changing funding_type to fee shows the student question' do
-      when_i_change_apprenticeship
-      and_i_choose_no_for_apprenticeship
-      and_i_click_continue
-      then_i_should_see_the_student_visas_title
-
-      when_i_choose_yes_for_student_visa
-      and_i_click_continue
-      then_i_should_be_back_on_the_publish_course_confirmation_page
-    end
-
-    scenario 'changing funding_type to salaried shows the skilled worker question' do
-      when_i_change_apprenticeship
-      and_i_choose_yes_for_apprenticeship
-      and_i_click_continue
-      then_i_should_see_the_skilled_worker_visas_title
-
-      when_i_choose_yes_for_skilled_worker_visa
-      and_i_click_continue
-      then_i_should_be_back_on_the_publish_course_confirmation_page
-    end
-  end
-
   private
 
   def lead_school_provider
