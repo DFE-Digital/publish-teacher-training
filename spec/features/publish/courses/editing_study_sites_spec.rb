@@ -4,14 +4,14 @@ require 'rails_helper'
 
 feature 'updating study sites on a course', { can_edit_current_and_next_cycles: false } do
   scenario 'provider has no study sites' do
-    and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+    and_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
     then_i_see_the_add_a_study_site_link
   end
 
   scenario 'user can add and remove study sites from a course' do
-    when_i_am_authenticated_as_a_provider_user_in_the_next_cycle_with_study_sites
+    when_i_am_authenticated_as_a_provider_user_with_study_sites
     and_visit_the_course_details_page
     and_i_click_add_study_site
     and_the_study_site_checkbox_is_not_checked
@@ -36,12 +36,12 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     expect(page).to have_link('Add at least one study site')
   end
 
-  def and_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+  def and_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
         :user,
         providers: [
-          create(:provider, :next_recruitment_cycle, sites: [build(:site)], courses: [build(:course)])
+          create(:provider, sites: [build(:site)], courses: [build(:course)])
         ]
       )
     )
@@ -63,8 +63,8 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
     )
   end
 
-  def when_i_am_authenticated_as_a_provider_user_in_the_next_cycle_with_study_sites
-    providers = [build(:provider, :next_recruitment_cycle, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider, applications_open_from: '2023-10-10', start_date: '2023-10-10')])]
+  def when_i_am_authenticated_as_a_provider_user_with_study_sites
+    providers = [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider, applications_open_from: '2023-10-10', start_date: '2023-10-10')])]
     @user = create(:user, providers:)
     given_i_am_authenticated(user: @user)
   end

@@ -133,30 +133,28 @@
           <% end %>
         <% end %>
 
-        <% if recruitment_cycle_after_2023?(course) %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
-            <% row.with_key { "Study site".pluralize(course.study_sites.length) } %>
-            <% row.with_value do %>
-              <% if course.study_sites.any? %>
-                <ul class="govuk-list">
-                  <% course.alphabetically_sorted_study_sites.each do |site| %>
-                    <li><%= site.location_name %></li>
-                  <% end %>
-                </ul>
-              <% elsif @provider.study_sites.any? %>
-                <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select a study site', new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)))}</div>".html_safe %>
-              <% else %>
-                <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add a study site', publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe %>
-              <% end %>
-            <% end %>
+        <% summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row| %>
+          <% row.with_key { "Study site".pluralize(course.study_sites.length) } %>
+          <% row.with_value do %>
             <% if course.study_sites.any? %>
-              <% row.with_action(
-                href: new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-                visually_hidden_text: "study sites"
-              ) %>
+              <ul class="govuk-list">
+                <% course.alphabetically_sorted_study_sites.each do |site| %>
+                  <li><%= site.location_name %></li>
+                <% end %>
+              </ul>
+            <% elsif @provider.study_sites.any? %>
+              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select a study site', new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)))}</div>".html_safe %>
             <% else %>
-              <% row.with_action %>
+              <%= "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add a study site', publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe %>
             <% end %>
+          <% end %>
+          <% if course.study_sites.any? %>
+            <% row.with_action(
+              href: new_publish_provider_recruitment_cycle_courses_study_sites_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+              visually_hidden_text: "study sites"
+            ) %>
+          <% else %>
+            <% row.with_action %>
           <% end %>
         <% end %>
 
