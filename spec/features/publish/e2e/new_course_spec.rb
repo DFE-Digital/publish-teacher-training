@@ -7,18 +7,13 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     # This is intended to be a test which will go through the entire flow
     # and ensure that the correct page gets displayed at the end
     # with the correct course being created
-    given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+    given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_courses_page
-    and_the_study_sites_feature_flag_is_active
     and_i_click_on_add_course
     then_i_can_create_the_course
   end
 
   private
-
-  def and_the_study_sites_feature_flag_is_active
-    allow(Settings.features).to receive(:study_sites).and_return(true)
-  end
 
   def then_i_can_create_the_course
     expect(publish_courses_new_level_page).to be_displayed
@@ -40,12 +35,12 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     save_course
   end
 
-  def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+  def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(
       user: create(
         :user,
         providers: [
-          create(:provider, :next_recruitment_cycle, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
+          create(:provider, :accredited_provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
         ]
       )
     )

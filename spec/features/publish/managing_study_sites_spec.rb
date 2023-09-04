@@ -4,7 +4,6 @@ require 'rails_helper'
 
 feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles: false } do
   before do
-    given_the_study_sites_feature_is_active
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_study_sites_page
     then_i_should_see_a_list_of_study_sites
@@ -114,10 +113,6 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     and_i_click_add_study_site
     then_i_am_on_the_index_page
     and_the_study_site_is_added
-  end
-
-  def given_the_study_sites_feature_is_active
-    allow(Settings.features).to receive(:study_sites).and_return(true)
   end
 
   def and_the_study_site_is_not_added
