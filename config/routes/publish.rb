@@ -61,15 +61,6 @@ namespace :publish, as: :publish do
 
   resources :notifications, path: '/notifications', controller: 'notifications', only: %i[index update]
 
-  resources :access_requests, path: '/access-requests', controller: 'access_requests', only: %i[new index create] do
-    member do
-      post :approve
-      delete :destroy
-      get :confirm
-      get '/inform-publisher', to: 'access_requests#inform_publisher'
-    end
-  end
-
   resources :providers, path: 'organisations', param: :code, only: [:show] do
     resource :check_user, only: %i[show update], controller: 'users_check', path: 'users/check'
     resources :users, controller: 'users' do
