@@ -1,9 +1,4 @@
 shared:
-  access_request:
-    - id
-    - organisation
-    - request_date_utc
-    - status
   contact:
     - id
     - provider_id

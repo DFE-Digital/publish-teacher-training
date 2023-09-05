@@ -32,6 +32,10 @@ Rails/HasAndBelongsToMany:
     - 'app/models/provider.rb'
     - 'app/models/organisation.rb'
 
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20230905103742_delete_access_request_table.rb'
+
 Rails/OutputSafety:
   Enabled: false
 
