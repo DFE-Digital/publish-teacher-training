@@ -12,7 +12,6 @@ Site.destroy_all
 SiteStatus.destroy_all
 Provider.destroy_all
 User.destroy_all
-AccessRequest.destroy_all
 RecruitmentCycle.destroy_all
 
 current_recruitment_year = Settings.current_recruitment_cycle_year
@@ -291,20 +290,4 @@ create_standard_provider_and_courses_for_cycle(next_recruitment_cycle, superuser
 
   user.providers << provider
   superuser.providers << provider
-end
-
-access_requester_user = User.all.reject(&:admin?).sample
-
-10.times do
-  AccessRequest.create!(
-    email_address: Faker::Internet.unique.email,
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
-    requester: access_requester_user,
-    requester_email: access_requester_user.email,
-    request_date_utc: rand(1..20).days.ago,
-    status: %i[requested completed].sample,
-    reason: 'No reason',
-    organisation: Provider.first.provider_name
-  )
 end
