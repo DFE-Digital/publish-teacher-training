@@ -47,7 +47,7 @@ cookies:
     expire_after_days: 182
 
 current_recruitment_cycle_year: 2023
-next_cycle_open_date: 2023-10-4
+next_cycle_open_date: 2023-10-3
 
 govuk_notify:
   api_key: please_change_me
