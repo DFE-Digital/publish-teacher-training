@@ -4,7 +4,6 @@ require 'rails_helper'
 
 feature 'Adding user to organisation as a provider user', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive(:user_management).and_return(true)
     given_i_am_authenticated_as_a_provider_user
   end
 
