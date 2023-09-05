@@ -34,7 +34,8 @@ else
     scope: %i[email profile],
     path_prefix: '/auth',
     callback_path: '/auth/dfe/callback',
-    client_options:
+    client_options:,
+    issuer: ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
   }
 
   Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
