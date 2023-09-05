@@ -9,7 +9,6 @@ describe AddCourseButton do
   let(:provider) { build(:provider, recruitment_cycle:) }
 
   before do
-    allow(Settings.features).to receive(:study_sites).and_return(true)
     render_inline(described_class.new(provider:))
   end
 

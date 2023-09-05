@@ -6,7 +6,6 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   context 'lead school' do
     before do
       given_i_am_authenticated_as_a_provider_user
-      and_the_study_sites_feature_flag_is_active
       when_i_visit_the_publish_course_confirmation_page
     end
 
@@ -133,10 +132,6 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
       recruitment_cycle_year: next_cycle_provider.recruitment_cycle_year,
       query: confirmation_params(next_cycle_provider)
     )
-  end
-
-  def and_the_study_sites_feature_flag_is_active
-    allow(Settings.features).to receive(:study_sites).and_return(true)
   end
 
   def when_i_click_change_subject
