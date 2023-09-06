@@ -104,7 +104,6 @@ features:
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: true
   user_management: true
-  course_preview_missing_information: true
   gias_search: true
   support_new_provider_creation_flow: true
   accredited_provider_search: true
