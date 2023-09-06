@@ -24,7 +24,7 @@ module Find
             program_type == 'higher_education_programme' ||
             program_type == 'scitt_programme' ||
             study_sites.any? ||
-            site_statuses.map(&:site).uniq.many?
+            site_statuses.map(&:site).uniq.many? || preview?(params)
         end
       end
     end

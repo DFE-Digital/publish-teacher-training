@@ -27,9 +27,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render Find::Courses::ContentsComponent::View.new(course) %>
 
-    <% if course.about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: } %>
-    <% end %>
+    <%= render partial: "find/courses/about_course", locals: { course: } %>
 
     <%= render Find::Courses::AboutSchoolsComponent::View.new(course) %>
 
