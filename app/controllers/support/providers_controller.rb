@@ -12,23 +12,8 @@ module Support
       render layout: 'provider_record'
     end
 
-    def new
-      @provider = Provider.new
-      @provider.sites.build
-      @provider.organisations.build
-    end
-
     def edit
       provider
-    end
-
-    def create
-      @provider = Provider.new(create_provider_params)
-      if @provider.save
-        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: 'Provider was successfully created' }
-      else
-        render :new
-      end
     end
 
     def update
