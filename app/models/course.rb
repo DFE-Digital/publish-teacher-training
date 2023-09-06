@@ -324,7 +324,6 @@ class Course < ApplicationRecord
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? }
   validate :validate_enrichment_publishable, on: :publish
   validate :validate_site_statuses_publishable, on: :publish
-  validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_accredited_provider_is_accredited, on: :publish
   validate :validate_degree_requirements_publishable, on: :publish
@@ -929,10 +928,6 @@ class Course < ApplicationRecord
     site_statuses.each do |site_status|
       raise "Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}" unless site_status.valid?
     end
-  end
-
-  def validate_provider_visa_sponsorship_publishable
-    errors.add(:base, :visa_sponsorship_not_publishable) if provider.can_sponsor_student_visa.nil? || provider.can_sponsor_skilled_worker_visa.nil?
   end
 
   def validate_provider_urn_ukprn_publishable
