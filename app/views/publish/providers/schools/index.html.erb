@@ -9,11 +9,7 @@
       <%= page_title %>
     </h1>
 
-    <% if FeatureService.enabled?(:gias_search) %>
       <%= govuk_button_link_to t(".add_school"), search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code) %>
-    <% else %>
-      <%= govuk_button_link_to t(".add_school"), new_publish_provider_recruitment_cycle_school_path(@provider.provider_code) %>
-    <% end %>
 
     <p class="govuk-body">A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.</p>
 
