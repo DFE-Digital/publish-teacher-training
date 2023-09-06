@@ -22,7 +22,7 @@ module CoursePreview
     end
 
     def render?
-      FeatureService.enabled?(:course_preview_missing_information) && is_preview
+      is_preview
     end
 
     def accrediting_provider_present?(course)

@@ -17,10 +17,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   context 'with empty sections' do
-    before do
-      allow(Settings.features).to receive(:course_preview_missing_information).and_return(true)
-    end
-
     scenario 'blank about the training provider' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
