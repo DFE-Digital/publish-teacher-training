@@ -296,17 +296,6 @@ class Provider < ApplicationRecord
     organisations.first
   end
 
-  def provider_type=(new_value)
-    super
-    return if FeatureService.enabled?(:support_new_provider_creation_flow)
-
-    self.accrediting_provider = if scitt? || university?
-                                  :accredited_provider
-                                else
-                                  :not_an_accredited_provider
-                                end
-  end
-
   def to_s
     "#{provider_name} (#{provider_code}) [#{recruitment_cycle}]"
   end
