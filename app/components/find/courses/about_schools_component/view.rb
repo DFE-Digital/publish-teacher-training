@@ -24,8 +24,7 @@ module Find
             program_type == 'higher_education_programme' ||
             program_type == 'scitt_programme' ||
             study_sites.any? ||
-            site_statuses.map(&:site).uniq.many? ||
-            FeatureService.enabled?(:course_preview_missing_information)
+            site_statuses.map(&:site).uniq.many? || preview?(params)
         end
       end
     end
