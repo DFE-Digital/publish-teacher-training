@@ -8,7 +8,6 @@ feature 'Multiple schools' do
   end
 
   scenario 'submitting an empty form' do
-    and_the_multiple_schools_feature_flag_is_active
     when_i_visit_a_provider_schools_page
     then_i_click_add_multiple_schools
 
@@ -17,7 +16,6 @@ feature 'Multiple schools' do
   end
 
   scenario 'submitting a form with two schools' do
-    and_the_multiple_schools_feature_flag_is_active
     when_i_visit_the_multiple_schools_new_page
     and_i_submit_the_form_with_two_schools
     and_i_see_the_text_one_of_two
@@ -37,8 +35,7 @@ feature 'Multiple schools' do
   end
 
   scenario 'clicking back' do
-    given_the_multiple_schools_feature_flag_is_active
-    and_i_visit_the_multiple_schools_new_page
+    when_i_visit_the_multiple_schools_new_page
     and_i_submit_the_form_with_two_schools
     and_i_see_the_text_one_of_two
     and_i_should_see_that_the_text_field_has_been_prepopulated('Name', 'Tottenham')
@@ -73,16 +70,14 @@ feature 'Multiple schools' do
   end
 
   scenario 'cancel from multiple schools new page' do
-    given_the_multiple_schools_feature_flag_is_active
-    and_i_visit_the_multiple_schools_new_page
+    when_i_visit_the_multiple_schools_new_page
 
     when_i_click_cancel
     then_i_should_be_on_the_provider_schools_page
   end
 
   scenario 'cancel from multiple schools new page for a school' do
-    given_the_multiple_schools_feature_flag_is_active
-    and_i_visit_the_multiple_schools_new_page
+    when_i_visit_the_multiple_schools_new_page
     and_i_submit_the_form_with_two_schools
     and_i_see_the_text_one_of_two
     and_i_should_see_that_the_text_field_has_been_prepopulated('Name', 'Tottenham')
@@ -92,8 +87,7 @@ feature 'Multiple schools' do
   end
 
   scenario 'cancel from multiple school confirm page' do
-    given_the_multiple_schools_feature_flag_is_active
-    and_i_visit_the_multiple_schools_new_page
+    when_i_visit_the_multiple_schools_new_page
     and_i_submit_the_form_with_two_schools
     and_i_submit_a_valid_form
     and_i_see_the_text_two_of_two
@@ -168,10 +162,6 @@ feature 'Multiple schools' do
     @provider ||= create(:provider, sites: [build(:site)])
   end
 
-  def and_the_multiple_schools_feature_flag_is_active
-    allow(Settings.features).to receive(:add_multiple_schools).and_return(true)
-  end
-
   def then_i_click_add_multiple_schools
     click_link 'Add multiple schools'
   end
@@ -208,9 +198,7 @@ feature 'Multiple schools' do
 
   alias_method :then_i_see_the_text_two_of_two, :and_i_see_the_text_two_of_two
   alias_method :and_i_should_see_that_the_text_field_has_been_prepopulated, :then_i_should_see_that_the_text_field_has_been_prepopulated
-  alias_method :and_i_visit_the_multiple_schools_new_page, :when_i_visit_the_multiple_schools_new_page
   alias_method :and_the_database_should_not_have_updated_with_the_new_school, :then_the_database_should_not_have_updated_with_the_new_school
-  alias_method :given_the_multiple_schools_feature_flag_is_active, :and_the_multiple_schools_feature_flag_is_active
 
   alias_method :then_i_should_be_on_the_provider_schools_page, :when_i_am_redirected_to_the_schools_page
   alias_method :and_i_should_be_on_the_provider_schools_page, :when_i_am_redirected_to_the_schools_page

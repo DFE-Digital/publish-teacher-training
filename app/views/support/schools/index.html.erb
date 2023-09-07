@@ -2,7 +2,7 @@
 
 <%= govuk_link_to("Add school", new_support_recruitment_cycle_provider_school_path, class: "govuk-button govuk-!-margin-bottom-3") %>
 
-<%= govuk_link_to("Add multiple schools", new_support_recruitment_cycle_provider_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") if FeatureService.enabled?(:add_multiple_schools) %>
+<%= govuk_link_to("Add multiple schools", new_support_recruitment_cycle_provider_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
 
 <table class="govuk-table">
   <thead class="govuk-table__head">
