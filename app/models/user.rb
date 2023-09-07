@@ -19,11 +19,6 @@ class User < ApplicationRecord
   has_many :user_permissions
   has_many :providers, through: :user_permissions
 
-  has_many :access_requests,
-           foreign_key: :requester_id,
-           primary_key: :id,
-           inverse_of: 'requester'
-
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }

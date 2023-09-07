@@ -6,10 +6,6 @@ campaign_email: itt.engagement@education.gov.uk
 
 search_ui:
   base_url: https://find.localhost
-notify:
-  service_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534
-  unregistered_user_template_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534/templates/9ecac443-8cfd-49ac-ac59-e7ffa0ab6278
-  registered_user_template_url: https://www.notifications.service.gov.uk/services/022acc23-c40a-4077-bbd6-fc98b2155534/templates/4da327dd-907a-4619-abe6-45f348bb2fa3
 
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
@@ -103,7 +99,6 @@ features:
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: true
-  user_management: true
   accredited_provider_search: true
 
 cookies:
