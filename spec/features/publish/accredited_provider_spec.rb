@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_a_lead_school_provider_user
-    and_the_accredited_provider_search_feature_is_on
     and_i_visit_the_root_path
     when_i_click_on_the_accredited_provider_tab
   end
@@ -260,10 +259,6 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def and_i_visit_the_root_path
     visit root_path
-  end
-
-  def and_the_accredited_provider_search_feature_is_on
-    allow(Settings.features).to receive(:accredited_provider_search).and_return(true)
   end
 
   def given_i_am_a_lead_school_provider_user

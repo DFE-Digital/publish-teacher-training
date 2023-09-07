@@ -4,7 +4,6 @@ require 'rails_helper'
 
 feature 'Searching for an accredited provider' do
   before do
-    allow(Settings.features).to receive(:accredited_provider_search).and_return(true)
     given_i_am_authenticated_as_an_admin_user
     and_there_are_accredited_providers_in_the_database
   end
