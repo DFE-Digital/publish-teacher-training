@@ -22,28 +22,6 @@
         <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_provider">
           <% if @provider.accredited_bodies.length > 0 %>
             <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
-
-            <!-- TODO: Remove this field once feature flag is removed -->
-            <% unless FeatureService.enabled?(:accredited_provider_search) %>
-              <div class="govuk-radios__divider">or</div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button :accredited_provider_code,
-                  "other",
-                  class: "govuk-radios__input",
-                  data: { "aria-controls" => "other-container" },
-                  checked: @errors && @errors[:accredited_provider]&.any? %>
-                <%= fields.label :accredited_provider_code,
-                  "Another accredited provider",
-                  for: "course_accredited_provider_code_other",
-                  value: false,
-                  class: "govuk-label govuk-radios__label" %>
-              </div>
-              <br>
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="other-container">
-                <%= render "provider_search_field", form: fields %>
-              </div>
-            <% end %>
           <% else %>
             <%= fields.hidden_field :accredited_provider_code, value: :other %>
             <%= render "provider_search_field", form: fields %>
