@@ -3,7 +3,7 @@
 module FeatureHelpers
   module GovukComponents
     def within_summary_row(row_description, &block)
-      within(page.call('.govuk-summary-list__row').find { |row| row.has_text?(row_description) }) do
+      within(page.all('.govuk-summary-list__row').find { |row| row.has_text?(row_description) }) do
         block.call
       end
     end

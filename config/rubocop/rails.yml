@@ -48,3 +48,22 @@ Rails/UnknownEnv:
     - development
     - test
     - sandbox
+
+Rails/FindEach:
+  Exclude:
+    - 'app/services/subjects/financial_incentive_creator_service.rb'
+    - 'db/migrate/20190815091422_set_application_end_dates_on_recruitment_cycles.rb'
+    - 'db/migrate/20190909105439_provider_enrichment_user_not_null.rb'
+    - 'db/migrate/20190913125905_migrate_subjects.rb'
+    - 'db/migrate/20191016144506_copy_latest_provider_enrichment_data_to_provider.rb'
+    - 'db/migrate/20190711074433_change_course_accrediting_provider_id_to_code.rb'
+    - 'db/migrate/20190806102256_add_applications_open_from_to_courses.rb'
+    - 'lib/tasks/correct_subject_positions.rake'
+
+
+Rails/RedundantActiveRecordAllMethod:
+  Exclude:
+    - 'spec/services/support/data_exports/data_export_spec.rb'
+    - 'spec/services/support/data_exports/data_export_spec.rb'
+    - 'spec/support/feature_helpers/govuk_components.rb'
+

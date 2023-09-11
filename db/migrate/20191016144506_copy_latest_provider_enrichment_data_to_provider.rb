@@ -18,7 +18,7 @@ class CopyLatestProviderEnrichmentDataToProvider < ActiveRecord::Migration[6.0]
                           region_code
                           website]
 
-      Provider.includes(:enrichments, :recruitment_cycle).find_each do |provider|
+      Provider.includes(:enrichments, :recruitment_cycle).each do |provider|
         latest_updated_at = provider.enrichments.max_by { |e| [e.updated_at, e.id] }
 
         next if latest_updated_at.blank?
