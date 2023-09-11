@@ -94,7 +94,7 @@ RSpec.describe UserAssociationsService::Delete, { can_edit_current_and_next_cycl
         end
       end
 
-      context 'during rollover', { can_edit_current_and_next_cycles: true } do
+      context 'during rollover', :can_edit_current_and_next_cycles do
         let(:next_accredited_provider1) { create(:provider, :accredited_provider, :next_recruitment_cycle, provider_code: 'AAA') }
 
         it 'removes user_permissions association in both cycles' do
