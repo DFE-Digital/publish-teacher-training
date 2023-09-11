@@ -25,6 +25,6 @@ class MigrateSubjects < ActiveRecord::Migration[5.2]
 
   def down
     CourseSubject.connection.truncate :course_subject
-    Course.all.each { |c| c.update_column(:level, nil) }
+    Course.find_each { |c| c.update_column(:level, nil) }
   end
 end

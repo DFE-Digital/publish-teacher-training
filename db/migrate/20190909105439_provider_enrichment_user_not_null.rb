@@ -6,11 +6,11 @@ class ProviderEnrichmentUserNotNull < ActiveRecord::Migration[5.2]
     local_seeds_user = User.find_by(email: 'super.admin@education.gov.uk')
     local_development_user = User.first
     some_id = (production_user || local_seeds_user || local_development_user).id
-    ProviderEnrichment.where(created_by_user_id: nil).each do |pe|
+    ProviderEnrichment.where(created_by_user_id: nil).find_each do |pe|
       pe.created_by_user_id = some_id
       pe.save!
     end
-    ProviderEnrichment.where(updated_by_user_id: nil).each do |pe|
+    ProviderEnrichment.where(updated_by_user_id: nil).find_each do |pe|
       pe.updated_by_user_id = some_id
       pe.save!
     end
