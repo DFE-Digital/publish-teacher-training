@@ -37,10 +37,6 @@ module CoursePreview
       end
 
       shared_examples 'course with missing information' do |information_type, text|
-        before do
-          allow(Settings.features).to receive_messages(accredited_provider_search: true)
-        end
-
         it "renders link for missing #{information_type}" do
           render_inline(described_class.new(course:, information_type:, is_preview: true))
 

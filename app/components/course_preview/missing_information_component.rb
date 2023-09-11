@@ -40,13 +40,11 @@ module CoursePreview
     def train_with_us_link = about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true, anchor: 'train-with-us')
 
     def about_accrediting_provider_link
-      if FeatureService.enabled?(:accredited_provider_search) && accrediting_provider_present?(course)
+      if accrediting_provider_present?(course)
         edit_publish_provider_recruitment_cycle_accredited_provider_path(provider_code, recruitment_cycle_year, accredited_provider_code: @course.accredited_provider_code, goto_preview: true, anchor: 'accredited-provider-form-description-field')
-      elsif FeatureService.enabled?(:accredited_provider_search) && !accrediting_provider_present?(course)
+      else
         publish_provider_recruitment_cycle_accredited_providers_path(provider_code,
                                                                      recruitment_cycle_year)
-      else
-        about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true, anchor: "accrediting-provider-#{accrediting_provider.provider_code}")
       end
     end
   end
