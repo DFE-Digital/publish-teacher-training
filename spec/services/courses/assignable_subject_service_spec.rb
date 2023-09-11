@@ -32,7 +32,7 @@ describe Courses::AssignableSubjectService do
     let!(:biology) { find_or_create(:secondary_subject, subject_name: 'Biology', type: :SecondarySubject).becomes(SecondarySubject) }
     let!(:arabic) { find_or_create(:modern_languages_subject, subject_name: 'French').becomes(ModernLanguagesSubject) }
 
-    it 'returns subjects other than modern language', without_subjects: true do
+    it 'returns subjects other than modern language', :without_subjects do
       course = build(:course, level: 'secondary', infer_subjects?: false)
       expect(service.execute(course:)).to contain_exactly(biology, arabic)
     end

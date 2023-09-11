@@ -38,7 +38,7 @@ RSpec.configure do |config|
     TestDataCache.clear if ENV['TEST_DATA_CACHE']
   end
 
-  config.before(:each, without_subjects: true) do
+  config.before(:each, :without_subjects) do
     FinancialIncentive.delete_all
     Subject.delete_all
   end

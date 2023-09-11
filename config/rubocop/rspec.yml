@@ -133,7 +133,7 @@ RSpec/EmptyExampleGroup:
     - 'spec/docs/provider_suggestions_spec.rb'
     - 'spec/docs/courses_spec.rb'
 
-RSpec/FilePath:
+RSpec/SpecFilePathFormat:
   Exclude:
     - 'spec/services/support/filters/filter_spec.rb'
     - 'spec/services/subjects/populate_subject_areas_service_spec.rb'
@@ -197,6 +197,8 @@ RSpec/IndexedLet:
     - 'spec/controllers/api/school_suggestions_controller_spec.rb'
     - 'spec/controllers/api/public/v1/providers_controller_spec.rb'
     - 'spec/controllers/api/accredited_provider_suggestions_controller_spec.rb'
+    - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
+    - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
 
 RSpec/Rails/HaveHttpStatus:
   Exclude:

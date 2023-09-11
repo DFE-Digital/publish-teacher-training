@@ -2,7 +2,7 @@
 
 require 'spec_helper_smoke'
 
-describe 'V1 Public API Smoke Tests', :aggregate_failures, smoke: true do
+describe 'V1 Public API Smoke Tests', :aggregate_failures, :smoke do
   subject(:response) { HTTParty.get(url) }
 
   let(:base_url) { Settings.publish_api_url }

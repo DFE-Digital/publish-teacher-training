@@ -10,7 +10,7 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
 
   describe '#call' do
     context 'when adding to a single organisation' do
-      context 'when two recruitment cycles are active', { can_edit_current_and_next_cycles: true } do
+      context 'when two recruitment cycles are active', :can_edit_current_and_next_cycles do
         context 'when the user is added in the current cycle' do
           subject do
             described_class.call(
