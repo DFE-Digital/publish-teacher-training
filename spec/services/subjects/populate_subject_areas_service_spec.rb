@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-describe Subjects::SubjectAreaCreatorService do
+describe 'SubjectAreaCreatorService' do
   let(:subject_area_spy) { spy }
-  let(:service) { described_class.new(subject_area: subject_area_spy) }
+  let(:service) { Subjects::SubjectAreaCreatorService.new(subject_area: subject_area_spy) }
 
   it 'populates subject areas' do
     service.execute
