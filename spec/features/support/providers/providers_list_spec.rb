@@ -37,6 +37,6 @@ feature 'View providers' do
   end
 
   def and_i_click_on_add_provider
-    click_on('Add provider')
+    click_link('Add provider')
   end
 end

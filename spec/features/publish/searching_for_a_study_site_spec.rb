@@ -60,7 +60,7 @@ feature 'Searching for a study site from the GIAS list' do
   end
 
   def click_continue
-    click_on 'Continue'
+    click_button 'Continue'
   end
 
   def then_i_should_see_a_radio_list

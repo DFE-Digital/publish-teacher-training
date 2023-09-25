@@ -133,7 +133,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_the_back_link
-    click_on 'Back'
+    click_link 'Back'
   end
 
   def then_i_should_be_taken_to_the_accredited_provider_search_page
@@ -144,7 +144,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_click_the_change_link_for(field)
     within '.govuk-summary-list' do
-      click_on "Change #{field}"
+      click_link "Change #{field}"
     end
   end
 
@@ -174,7 +174,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_confirm_the_changes
     expect do
-      click_on 'Add accredited provider'
+      click_button 'Add accredited provider'
     end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
@@ -195,7 +195,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_input_some_different_information
     fill_in 'About the accredited provider', with: 'updates to the AP description'
-    click_on 'Update description'
+    click_button 'Update description'
   end
 
   def and_i_search_with_an_invalid_query
@@ -271,7 +271,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def click_continue
-    click_on 'Continue'
+    click_button 'Continue'
   end
 
   alias_method :and_i_continue_without_entering_a_description, :click_continue
