@@ -93,7 +93,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_cannot_remove_ap_text
-    expect(page).to have_selector('h1', text: 'You cannot remove this accredited provider')
+    expect(page).to have_css('h1', text: 'You cannot remove this accredited provider')
   end
 
   def and_i_click_remove
@@ -114,7 +114,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_should_see_the_accredited_providers
-    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_css('.govuk-summary-card', count: 1)
     expect(page).to have_content(@accredited_provider.provider_name)
   end
 
@@ -288,6 +288,6 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_accredited_provider_name_displayed
-    expect(page).to have_selector('h2', text: 'Accrediting provider name')
+    expect(page).to have_css('h2', text: 'Accrediting provider name')
   end
 end

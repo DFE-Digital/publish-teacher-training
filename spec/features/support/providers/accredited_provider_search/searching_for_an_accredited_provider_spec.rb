@@ -124,7 +124,7 @@ feature 'Searching for an accredited provider' do
   end
 
   def and_i_should_see_the_accredited_providers
-    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_css('.govuk-summary-card', count: 1)
     expect(page).to have_content(@accredited_provider.provider_name)
   end
 

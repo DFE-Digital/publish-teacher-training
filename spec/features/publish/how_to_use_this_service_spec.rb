@@ -41,7 +41,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_how_to_use_this_service
-    expect(page).to have_selector('h1', text: 'How to use this service')
+    expect(page).to have_css('h1', text: 'How to use this service')
   end
 
   def given_i_click_add_an_organisation
@@ -49,7 +49,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_add_an_organisation
-    expect(page).to have_selector('h1', text: 'Add an organisation')
+    expect(page).to have_css('h1', text: 'Add an organisation')
   end
 
   def given_i_click_on_the_how_to_use_this_service_breadcrumb
@@ -61,7 +61,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_add_and_remove_users
-    expect(page).to have_selector('h1', text: 'Add and remove users')
+    expect(page).to have_css('h1', text: 'Add and remove users')
   end
 
   def when_i_click_on_change_an_accredited_provider_relationship
@@ -69,7 +69,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_change_an_accredited_provider_relationship
-    expect(page).to have_selector('h1', text: 'Change an accredited provider relationship')
+    expect(page).to have_css('h1', text: 'Change an accredited provider relationship')
   end
 
   def when_i_click_on_roll_over_courses_to_a_new_recruitment_cycle
@@ -77,7 +77,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_roll_over_courses_to_a_new_recruitment_cycle
-    expect(page).to have_selector('h1', text: 'Roll over courses to a new recruitment cycle')
+    expect(page).to have_css('h1', text: 'Roll over courses to a new recruitment cycle')
   end
 
   def when_click_on_help_writing_course_descriptions
@@ -85,7 +85,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_help_writing_course_descriptions
-    expect(page).to have_selector('h1', text: 'Help writing course descriptions')
+    expect(page).to have_css('h1', text: 'Help writing course descriptions')
   end
 
   def when_i_click_on_course_summary_examples
@@ -93,6 +93,6 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def then_i_should_see_the_h1_course_summary_examples
-    expect(page).to have_selector('h1', text: 'Course summary examples')
+    expect(page).to have_css('h1', text: 'Course summary examples')
   end
 end

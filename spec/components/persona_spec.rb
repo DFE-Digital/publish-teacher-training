@@ -11,7 +11,7 @@ describe Persona do
   end
 
   it 'renders a govuk button' do
-    expect(component).to have_selector('.govuk-button')
+    expect(component).to have_css('.govuk-button')
   end
 
   it 'renders personas last name in the button text' do
