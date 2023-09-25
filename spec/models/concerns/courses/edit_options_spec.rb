@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Course do
+describe 'Course with edit options' do
   let(:course) { create(:course, level: 'primary', subjects: [subjects]) }
   let(:subjects) { find(:primary_subject, :primary) }
 

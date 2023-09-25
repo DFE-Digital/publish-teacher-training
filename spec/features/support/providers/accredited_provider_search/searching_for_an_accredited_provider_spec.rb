@@ -115,7 +115,7 @@ feature 'Searching for an accredited provider' do
 
   def and_i_confirm_the_changes
     expect do
-      click_on 'Add accredited provider'
+      click_button 'Add accredited provider'
     end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
@@ -124,12 +124,12 @@ feature 'Searching for an accredited provider' do
   end
 
   def and_i_should_see_the_accredited_providers
-    expect(page).to have_selector('.govuk-summary-card', count: 1)
+    expect(page).to have_css('.govuk-summary-card', count: 1)
     expect(page).to have_content(@accredited_provider.provider_name)
   end
 
   def click_continue
-    click_on 'Continue'
+    click_button 'Continue'
   end
 
   def when_i_am_on_the_confirm_page
@@ -141,7 +141,7 @@ feature 'Searching for an accredited provider' do
 
   def and_i_click_the_change_link_for(field)
     within '.govuk-summary-list' do
-      click_on "Change #{field}"
+      click_link "Change #{field}"
     end
   end
 
@@ -166,7 +166,7 @@ feature 'Searching for an accredited provider' do
   end
 
   def when_i_click_the_back_link
-    click_on 'Back'
+    click_link 'Back'
   end
 
   def then_i_should_be_taken_back_to_the_confirm_page

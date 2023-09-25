@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-describe Providers::GenerateUniqueCourseCodeService do
+describe 'GenerateUniqueCourseCodeService' do
   let(:existing_codes) { [] }
   let(:mocked_gen_code_service) { double }
   let(:service) do
-    described_class.new(
+    Providers::GenerateUniqueCourseCodeService.new(
       generate_course_code_service: mocked_gen_code_service
     )
   end

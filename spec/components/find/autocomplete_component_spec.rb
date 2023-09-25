@@ -12,15 +12,15 @@ module Find
       end
 
       it 'supports custom classes on the parent container' do
-        expect(page).to have_selector('.test-css-class')
+        expect(page).to have_css('.test-css-class')
       end
 
       it 'includes default classes' do
-        expect(page).to have_selector('.suggestions')
+        expect(page).to have_css('.suggestions')
       end
 
       it 'adds the data module' do
-        expect(page).to have_selector('[data-module="app-dfe-autocomplete"]')
+        expect(page).to have_css('[data-module="app-dfe-autocomplete"]')
       end
     end
 
@@ -35,7 +35,7 @@ module Find
       end
 
       it 'supports custom html attributes on the parent container' do
-        expect(page).to have_selector('[test-attribute="my-custom-attribute"]')
+        expect(page).to have_css('[test-attribute="my-custom-attribute"]')
       end
     end
 
@@ -50,7 +50,7 @@ module Find
       end
 
       it 'create empty default value' do
-        expect(page).to have_selector('[data-module="app-dfe-autocomplete"]')
+        expect(page).to have_css('[data-module="app-dfe-autocomplete"]')
       end
     end
 

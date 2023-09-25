@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Course do
+RSpec.describe 'AssignProgramType' do
   describe '#funding_type=' do
     before do
       subject.funding_type = funding_type

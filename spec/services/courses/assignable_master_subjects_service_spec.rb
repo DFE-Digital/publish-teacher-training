@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-describe Courses::AssignableMasterSubjectService do
+describe 'AssignableMasterSubjectService' do
   let(:service) do
-    described_class.new(
+    Courses::AssignableMasterSubjectService.new(
       primary_subject: primary_model,
       secondary_subject: secondary_model,
       further_education_subject: further_education_model

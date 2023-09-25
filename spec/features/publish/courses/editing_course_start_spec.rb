@@ -57,6 +57,6 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
   end
 
   def and_i_should_see_the_success_flash_message
-    expect(page).to have_selector('.govuk-notification-banner__heading', text: 'Course start date updated')
+    expect(page).to have_css('.govuk-notification-banner__heading', text: 'Course start date updated')
   end
 end

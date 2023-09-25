@@ -71,7 +71,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_input_new_information
     fill_in 'About the accredited provider', with: 'New AP description'
-    click_on 'Continue'
+    click_button 'Continue'
   end
 
   def and_i_select_the_provider
@@ -97,7 +97,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_cannot_remove_text
-    expect(page).to have_selector('h1', text: 'You cannot remove this accredited provider')
+    expect(page).to have_css('h1', text: 'You cannot remove this accredited provider')
   end
 
   def given_i_am_authenticated_as_an_admin_user
@@ -130,7 +130,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_the_back_link
-    click_on 'Back'
+    click_link 'Back'
   end
 
   def and_i_see_the_success_message
@@ -143,7 +143,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_input_updated_description
     fill_in 'About the accredited provider', with: 'update the AP description'
-    click_on 'Update description'
+    click_button 'Update description'
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
@@ -166,6 +166,6 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_accredited_provider_name_displayed
-    expect(page).to have_selector('h2', text: 'Accrediting provider name')
+    expect(page).to have_css('h2', text: 'Accrediting provider name')
   end
 end

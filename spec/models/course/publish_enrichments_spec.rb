@@ -2,27 +2,25 @@
 
 require 'rails_helper'
 
-describe Course do
-  describe '#enrichments' do
-    subject { course.reload.enrichments }
+describe '#enrichments' do
+  subject { course.reload.enrichments }
 
-    let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
-    let(:another_course) do
-      create(:course, enrichments: [
-               build(:course_enrichment, :published, created_at: 5.days.ago)
-             ])
-    end
-    let(:second_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
-    let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
+  let(:first_enrichment) { build(:course_enrichment, :published, created_at: 5.days.ago) }
+  let(:another_course) do
+    create(:course, enrichments: [
+             build(:course_enrichment, :published, created_at: 5.days.ago)
+           ])
+  end
+  let(:second_enrichment) { build(:course_enrichment, :published, created_at: 3.days.ago) }
+  let(:third_enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
 
-    let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
-    let(:course) { create(:course, enrichments:) }
+  let(:enrichments) { [first_enrichment, second_enrichment, third_enrichment] }
+  let(:course) { create(:course, enrichments:) }
 
-    its(:size) { is_expected.to eq(3) }
+  its(:size) { is_expected.to eq(3) }
 
-    it "doesn't overlap with enrichments from another course" do
-      expect(subject & another_course.enrichments).to be_empty
-    end
+  it "doesn't overlap with enrichments from another course" do
+    expect(subject & another_course.enrichments).to be_empty
   end
 
   describe '#content_status' do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ErrorHandlers::Base do
+describe 'Base' do
   controller(ActionController::Base) do
     include ErrorHandlers::Base
 

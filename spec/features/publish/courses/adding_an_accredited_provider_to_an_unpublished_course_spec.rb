@@ -41,11 +41,11 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
 
   def and_i_create_a_new_accredited_provider
     and_there_is_an_accredited_provider_in_the_database
-    and_i_click_add_accredited_provider
+    and_i_click_add_accredited_provider_link
     and_i_search_for_an_accredited_provider_with_a_valid_query
     and_i_select_the_provider
     and_i_input_some_information
-    and_i_click_add_accredited_provider
+    and_i_click_add_accredited_provider_button
   end
 
   def and_i_select_the_provider
@@ -68,7 +68,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def click_continue
-    click_on 'Continue'
+    click_button 'Continue'
   end
 
   def form_title
@@ -79,8 +79,12 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
     click_link 'Add at least one accredited provider'
   end
 
-  def and_i_click_add_accredited_provider
-    click_on 'Add accredited provider'
+  def and_i_click_add_accredited_provider_link
+    click_link 'Add accredited provider'
+  end
+
+  def and_i_click_add_accredited_provider_button
+    click_button 'Add accredited provider'
   end
 
   def given_i_am_authenticated_as_a_provider_user

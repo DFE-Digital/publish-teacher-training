@@ -13,7 +13,7 @@ module PageObjects
 
       def copy(course)
         select("#{course.name} (#{course.course_code})", from: 'Copy from')
-        click_on('Copy content')
+        click_button('Copy content')
       end
     end
   end

@@ -74,11 +74,11 @@ feature 'switcher cycle' do
   end
 
   def then_i_click_on_update_button
-    page.click_on('Update point in recruitment cycle')
+    page.click_button('Update point in recruitment cycle')
   end
 
   def and_i_should_see_the_success_banner
-    expect(page).to have_selector('h2', text: 'Success')
+    expect(page).to have_css('h2', text: 'Success')
   end
 
   def and_i_visit_find_results_page
@@ -90,7 +90,7 @@ feature 'switcher cycle' do
   end
 
   def and_i_see_deadline_banner(banner_text)
-    expect(page).to have_selector('.govuk-notification-banner__content', text: banner_text)
+    expect(page).to have_css('.govuk-notification-banner__content', text: banner_text)
   end
 
   def then_i_should_see_the_applications_closed_text
