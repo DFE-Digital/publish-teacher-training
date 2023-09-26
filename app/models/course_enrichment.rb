@@ -43,7 +43,7 @@ class CourseEnrichment < ApplicationRecord
 
   validates :fee_uk_eu, presence: true, on: :publish, if: :is_fee_based?
 
-  validates :fee_international, presence: true, on: :publish, if: -> { is_fee_based? && student_visa_and_after_2023_cycle(course) }
+  validates :fee_international, presence: true, on: :publish, if: -> { is_fee_based? && course.can_sponsor_student_visa? }
 
   validates :fee_uk_eu,
             numericality: { allow_blank: true,

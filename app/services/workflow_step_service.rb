@@ -8,11 +8,7 @@ class WorkflowStepService
   end
 
   def call
-    if course.recruitment_cycle_after_2023?
-      workflow_for_recruitment_cycle_after2023
-    else
-      workflow_for_recruitment_cycle_before2023
-    end - remove_study_site_if_current_cycle(course)
+    workflow_for_recruitment_cycle_after2023
   end
 
   private
@@ -130,16 +126,6 @@ class WorkflowStepService
     end
   end
 
-  def workflow_for_recruitment_cycle_before2023
-    if course.is_further_education?
-      further_education_workflow_steps
-    elsif course.is_uni_or_scitt?
-      uni_or_scitt_workflow_steps - visas_to_remove_2023cycle(course)
-    elsif course.is_school_direct?
-      school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove_2023cycle(course)
-    end
-  end
-
   def school_direct_workflow_steps_with_accredited_provider_check
     if course.provider.accredited_bodies.length == 1
       school_direct_workflow_steps - [:accredited_provider]
@@ -158,9 +144,5 @@ class WorkflowStepService
     else
       %i[can_sponsor_student_visa can_sponsor_skilled_worker_visa]
     end
-  end
-
-  def remove_study_site_if_current_cycle(course)
-    course.in_current_cycle? ? [:study_site] : []
   end
 end
