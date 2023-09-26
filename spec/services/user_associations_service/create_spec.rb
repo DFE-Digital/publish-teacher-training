@@ -35,6 +35,10 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
             )
           end
 
+          before do
+            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
+          end
+
           it 'creates user_permissions association in both cycles' do
             subject
             expect(next_cycle_new_accredited_provider.users).to eq([user])
@@ -49,6 +53,10 @@ RSpec.describe UserAssociationsService::Create, { can_edit_current_and_next_cycl
               provider: current_cycle_provider,
               user:
             )
+          end
+
+          before do
+            allow(Settings.features.rollover).to receive(:can_edit_current_and_next_cycles).and_return(true)
           end
 
           let!(:current_cycle_provider) { create(:provider, :accredited_provider, users: [user]) }
