@@ -3,11 +3,20 @@
 
   <div class="course-basicinfo">
     <dl class="app-description-list">
-      <% if course.provider.email.present? %>
-        <dt class="app-description-list__label">Email</dt>
+       <!-- Temporary stop gap for https://trello.com/c/vJRKI35V/614-stop-gap-ucl-is-moving-away-from-using-email. BIN it as soon as we have a better solution. -->
+      <% if course.provider.provider_code == "U80" %>
+        <% link = "https://www.ucl.ac.uk/prospective-students/graduate/admissions-enquiries" %>
+        <dt class="app-description-list__label">Contact form</dt>
         <dd data-qa="provider__email">
-          <%= govuk_mail_to course.provider.email, course.provider.email, title: "Send email to course contact", aria: { label: "Send email to course contact" } %>
+          <%= govuk_link_to link, link %>
         </dd>
+      <% else %>
+        <% if course.provider.email.present? %>
+          <dt class="app-description-list__label">Email</dt>
+          <dd data-qa="provider__email">
+            <%= govuk_mail_to course.provider.email, course.provider.email, title: "Send email to course contact", aria: { label: "Send email to course contact" } %>
+          </dd>
+        <% end %>
       <% end %>
 
       <% if course.provider.telephone.present? %>
