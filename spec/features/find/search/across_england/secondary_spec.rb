@@ -39,7 +39,51 @@ feature 'Searching across England' do
     and_i_should_see_the_correct_courses
   end
 
+  context 'Given the bursaries and scholarships announced feature flag' do
+    context 'when deactivated' do
+      before do
+        given_the_bursaries_and_scholarships_feature_flag_is_deactivated
+      end
+
+      scenario 'displays the financial support banner' do
+        when_i_visit_the_secondary_subjects_page
+        then_i_should_see_the_financial_support_banner
+      end
+    end
+
+    context 'when activated' do
+      before do
+        given_the_bursaries_and_scholarships_feature_flag_is_activated
+      end
+
+      scenario 'does not display the financial support banner' do
+        when_i_visit_the_secondary_subjects_page
+        then_i_should_not_see_the_financial_support_banner
+      end
+    end
+  end
+
   private
+
+  def given_the_bursaries_and_scholarships_feature_flag_is_deactivated
+    FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+  end
+
+  def given_the_bursaries_and_scholarships_feature_flag_is_activated
+    FeatureFlag.activate(:bursaries_and_scholarships_announced)
+  end
+
+  def then_i_should_see_the_financial_support_banner
+    expect(page).to have_css('.govuk-notification-banner__heading', text: 'Financial support')
+  end
+
+  def then_i_should_not_see_the_financial_support_banner
+    expect(page).not_to have_css('.govuk-notification-banner__heading', text: 'Financial support')
+  end
+
+  def when_i_visit_the_secondary_subjects_page
+    find_secondary_subjects_page.load
+  end
 
   def given_there_are_secondary_courses_in_england
     create(:course, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
