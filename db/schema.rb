@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_103742) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_01_190537) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -22,6 +22,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_103742) do
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: { type: :string, limit: 150 }, force: :cascade do |t|
     t.string "ProductVersion", limit: 32, null: false
+  end
+
+  create_table "access_request", id: :serial, force: :cascade do |t|
+    t.text "email_address"
+    t.text "first_name"
+    t.text "last_name"
+    t.text "organisation"
+    t.text "reason"
+    t.datetime "request_date_utc", precision: nil, null: false
+    t.integer "requester_id"
+    t.integer "status", null: false
+    t.text "requester_email"
+    t.datetime "discarded_at", precision: nil
+    t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
+    t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -257,8 +272,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_103742) do
     t.float "longitude"
     t.string "ukprn"
     t.string "urn"
-    t.boolean "can_sponsor_skilled_worker_visa"
-    t.boolean "can_sponsor_student_visa"
+    t.boolean "can_sponsor_skilled_worker_visa", default: false
+    t.boolean "can_sponsor_student_visa", default: false
     t.string "synonyms", default: [], array: true
     t.integer "accredited_provider_id"
     t.tsvector "searchable"
