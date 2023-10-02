@@ -20,10 +20,15 @@ module Find
           elsif financial_incentive.bursary_amount.present?
             financial_info = "Bursaries of £#{number_with_delimiter(financial_incentive.bursary_amount, delimiter: ',')} available"
           end
-        elsif !FeatureFlag.active?(:bursaries_and_scholarships_announced)
-          financial_info = nil
+        elsif !FeatureFlag.active?(:bursaries_and_scholarships_announced) && financial_incentive.present?
+          if financial_incentive.scholarship.present? && financial_incentive.bursary_amount.present?
+            financial_info = nil
+          elsif financial_incentive.scholarship.present?
+            financial_info = nil
+          elsif financial_incentive.bursary_amount.present?
+            financial_info = nil
+          end
         end
-      end
 
         SecondarySubjectInput.new(subject.subject_code, subject.subject_name, financial_info)
       end
