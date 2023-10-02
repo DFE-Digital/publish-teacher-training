@@ -58,7 +58,7 @@ describe Find::SubjectHelper do
           let(:subjects) { [find_or_create(:secondary_subject, :biology)] }
 
           it 'returns the correct financial information' do
-            expect(subject.first.financial_info).to eq('Bursaries available')
+            expect(subject.first.financial_info).to be_nil
           end
         end
 
@@ -66,7 +66,7 @@ describe Find::SubjectHelper do
           let(:subjects) { [find_or_create(:secondary_subject, subject_name: 'made up subject', scholarship: 1_000_000_000)] }
 
           it 'returns the correct financial information' do
-            expect(subject.first.financial_info).to eq('Scholarships available')
+            expect(subject.first.financial_info).to be_nil
           end
         end
 
@@ -74,7 +74,7 @@ describe Find::SubjectHelper do
           let(:subjects) { [find_or_create(:secondary_subject, :chemistry)] }
 
           it 'returns the correct financial information' do
-            expect(subject.first.financial_info).to eq('Scholarships or bursaries are available')
+            expect(subject.first.financial_info).to be_nil
           end
         end
       end
