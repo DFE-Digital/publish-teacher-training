@@ -2,7 +2,7 @@
 
 class DeleteAccessRequestTable < ActiveRecord::Migration[7.0]
   def change
-    create_table 'access_request', id: :serial, force: :cascade do |t|
+    drop_table 'access_request', id: :serial, force: :cascade do |t|
       t.text 'email_address'
       t.text 'first_name'
       t.text 'last_name'
