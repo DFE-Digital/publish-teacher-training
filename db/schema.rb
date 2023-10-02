@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_05_103742) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -257,8 +257,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_05_103742) do
     t.float "longitude"
     t.string "ukprn"
     t.string "urn"
-    t.boolean "can_sponsor_skilled_worker_visa"
-    t.boolean "can_sponsor_student_visa"
+    t.boolean "can_sponsor_skilled_worker_visa", default: false
+    t.boolean "can_sponsor_student_visa", default: false
     t.string "synonyms", default: [], array: true
     t.integer "accredited_provider_id"
     t.tsvector "searchable"
