@@ -123,8 +123,8 @@ GEM
     ast (2.4.2)
     attr_extras (7.1.0)
     attr_required (1.0.1)
-    audited (5.3.3)
-      activerecord (>= 5.0, < 7.1)
+    audited (5.4.0)
+      activerecord (>= 5.0, < 7.2)
       request_store (~> 1.2)
     awesome_print (1.9.2)
     base64 (0.1.1)
@@ -751,7 +751,7 @@ DEPENDENCIES
   aasm
   active_model_serializers
   amazing_print
-  audited (~> 5.3)
+  audited (~> 5.4)
   awesome_print
   better_errors
   binding_of_caller
