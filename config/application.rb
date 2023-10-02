@@ -42,8 +42,6 @@ module ManageCoursesBackend
 
     config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true
 
-    config.time_zone = 'London'
-
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
     config.skylight.logger = SemanticLogger[Skylight]
     config.skylight.log_level = :fatal
