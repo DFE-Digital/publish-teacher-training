@@ -360,7 +360,7 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
 
         context 'passing in updated_since param' do
-          let(:filter) { { updated_since: (provider2.changed_at - 1.second).iso8601 } }
+          let(:filter) { { updated_since: (provider2.changed_at - 2.hours).iso8601 } }
 
           it "returns 'Second' provider only" do
             expect(provider_names_in_response).to eq([provider2.provider_name])
