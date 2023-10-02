@@ -4,7 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
   <% unless FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
 
-
     <p class="govuk-inset-text">Details of financial support for courses starting in the <%= Find::CycleTimetable.next_cycle_year_range %> academic year will be released soon.
     <br>
     In the meantime, you can <%= govuk_link_to("view the bursaries and scholarships", t("get_into_teaching.url_bursaries_and_scholarships"), target: "_blank", rel: "noopener noreferrer") %>
