@@ -47,7 +47,7 @@ feature 'Searching across England' do
 
       scenario 'displays the financial support banner' do
         when_i_visit_the_secondary_subjects_page
-        then_i_should_see_the_financial_support_banner
+        then_i_should_see_the_financial_support_text
       end
     end
 
@@ -58,7 +58,7 @@ feature 'Searching across England' do
 
       scenario 'does not display the financial support banner' do
         when_i_visit_the_secondary_subjects_page
-        then_i_should_not_see_the_financial_support_banner
+        then_i_should_not_see_the_financial_support_text
       end
     end
   end
@@ -73,12 +73,12 @@ feature 'Searching across England' do
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
   end
 
-  def then_i_should_see_the_financial_support_banner
-    expect(page).to have_css('.govuk-notification-banner__heading', text: 'Financial support')
+  def then_i_should_see_the_financial_support_text
+    expect(page).to have_css('.govuk-inset-text')
   end
 
-  def then_i_should_not_see_the_financial_support_banner
-    expect(page).not_to have_css('.govuk-notification-banner__heading', text: 'Financial support')
+  def then_i_should_not_see_the_financial_support_text
+    expect(page).not_to have_css('.govuk-inset-text')
   end
 
   def when_i_visit_the_secondary_subjects_page
