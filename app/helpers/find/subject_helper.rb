@@ -23,10 +23,6 @@ module Find
         elsif !FeatureFlag.active?(:bursaries_and_scholarships_announced) && financial_incentive.present?
           if financial_incentive.scholarship.present? && financial_incentive.bursary_amount.present?
             financial_info = nil
-          elsif financial_incentive.scholarship.present?
-            financial_info = nil
-          elsif financial_incentive.bursary_amount.present?
-            financial_info = nil
           end
         end
 
