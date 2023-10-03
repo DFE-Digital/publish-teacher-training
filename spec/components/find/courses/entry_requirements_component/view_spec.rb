@@ -160,7 +160,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         :course,
         accept_gcse_equivalency: false,
         accept_pending_gcse: false,
-        provider: build(:provider, provider_code: 'U80'),
+        provider: build(:provider, provider_code: 'I30'),
         level: 'secondary'
       )
 
@@ -193,7 +193,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     context 'when the accrediting provider requires grade 5 and the course is secondary' do
       it 'renders correct message' do
-        accrediting_provider = build(:provider, provider_code: 'U80')
+        accrediting_provider = build(:provider, provider_code: 'I30')
         course = build(
           :course,
           accept_gcse_equivalency: false,
