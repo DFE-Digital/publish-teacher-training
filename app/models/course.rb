@@ -74,7 +74,7 @@ class Course < ApplicationRecord
 
   # Most providers require GCSE grade 4 ("C"),
   # but some require grade 5 ("strong C")
-  PROVIDERS_REQUIRING_GCSE_GRADE_5 = %w[U80 I30].freeze
+  PROVIDERS_REQUIRING_GCSE_GRADE_5 = %w[I30].freeze
 
   enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
   enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
