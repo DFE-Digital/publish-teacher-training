@@ -2,9 +2,9 @@
 
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
     <% notification_banner.with_heading(text: "Financial support") %>
-    <p class="govuk-body">Details of financial support for courses starting in the <%= Find::CycleTimetable.next_cycle_year_range %> academic year will be released soon.</p>
+    <p class="govuk-body">Details of financial support for courses starting in the 2024 to 2025 academic year will be released soon.</p>
     <p class="govuk-body">In the meantime, you can <%= govuk_link_to("view the bursaries and scholarships", t("get_into_teaching.url_bursaries_and_scholarships"), target: "_blank", rel: "noopener noreferrer") %>
- for courses starting between September <%= Find::CycleTimetable.current_year %> and July <%= Find::CycleTimetable.next_year %>.</p>
+ for courses starting between September September 2023 and July 2024.</p>
 
   <% end %>
 
