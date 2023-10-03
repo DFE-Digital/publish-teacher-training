@@ -19,7 +19,7 @@ FileUtils.chdir APP_ROOT do
   system("bundle check") || system!("bundle install")
 
   puts "\n== Copying development settings file =="
-  if OS.windows?
+  if Gem.win_platform?
     puts "ATTENTION WINDOWS USER!".red
     puts
     puts "Copy #{"config/settings/development.yml".yellow} to #{"config/settings/development.local.yml".yellow} and edit it:",
