@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'Maintenance mode' do
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   context 'given the maintenance_mode feature flag is active and i arrive at the site' do
     scenario 'sends me to the maintenance page' do
       FeatureFlag.activate(:maintenance_mode)

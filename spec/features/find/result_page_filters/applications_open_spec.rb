@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.feature 'Results page new application open filter' do
   include FiltersFeatureSpecsHelper
 
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   scenario 'Candidate applies applications open filter on results page' do
     when_i_visit_the_find_results_page
     then_i_see_the_applications_open_checkbox_is_selected

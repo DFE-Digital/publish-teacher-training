@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'Updating cookie preferences' do
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   scenario 'i can update my cookie preferences' do
     given_i_am_on_the_find_cookie_preferences_page
     and_i_can_see_the_heading

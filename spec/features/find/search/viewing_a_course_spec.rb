@@ -6,6 +6,7 @@ feature 'Viewing a findable course' do
   include PublishHelper
 
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
   end
 

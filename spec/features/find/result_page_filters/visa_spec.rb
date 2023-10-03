@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.feature 'Visa filter' do
   include FiltersFeatureSpecsHelper
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
 
   scenario 'Candidate applies visa filter' do
     when_i_visit_the_find_results_page

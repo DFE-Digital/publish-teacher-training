@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'results' do
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   scenario 'when I visit the results page with no courses' do
     when_i_visit_the_find_results_page
     i_see_the_no_results_message

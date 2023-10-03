@@ -5,6 +5,9 @@ require 'rails_helper'
 module Find
   describe '/location-suggestions', :with_find_constraint do
     include StubbedRequests::LocationSuggestions
+    before do
+      Timecop.travel(Find::CycleTimetable.mid_cycle)
+    end
 
     context 'when provider suggestion is blank' do
       it 'returns bad request (400)' do
