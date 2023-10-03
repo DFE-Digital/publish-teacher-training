@@ -8,7 +8,7 @@ describe RecruitmentCycle do
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
-  its(:to_s) { is_expected.to eq('2023/24') }
+  its(:to_s) { is_expected.to eq('2024/25') }
 
   it 'is valid with valid attributes' do
     expect(subject).to be_valid

@@ -350,10 +350,6 @@ class Course < ApplicationRecord
     master_subject_id == SecondarySubject.physics.id && engineers_teach_physics?
   end
 
-  def recruitment_cycle_after_2023?
-    recruitment_cycle_year.to_i > 2023
-  end
-
   def university_based?
     provider.provider_type == 'university'
   end
@@ -700,14 +696,7 @@ class Course < ApplicationRecord
   end
 
   def funding_type=(funding_type)
-    assign_program_type_service = if recruitment_cycle_after_2023?
-                                    Courses::AssignProgramTypeService.new
-                                  else
-                                    # this can be removed after the 2023 cycle ends
-                                    Courses::AssignProgramTypeCurrentCycleService.new
-                                  end
-
-    assign_program_type_service.execute(funding_type, self)
+    Courses::AssignProgramTypeService.new.execute(funding_type, self)
   end
 
   def ensure_site_statuses_match_study_mode

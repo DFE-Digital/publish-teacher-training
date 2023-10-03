@@ -42,8 +42,8 @@ cookies:
     name: _consented_to_analytics_cookies
     expire_after_days: 182
 
-current_recruitment_cycle_year: 2023
-next_cycle_open_date: 2023-10-3
+current_recruitment_cycle_year: 2024
+next_cycle_open_date: 2024-10-3
 
 govuk_notify:
   api_key: please_change_me
@@ -98,7 +98,7 @@ features:
     # actually starting when it would be set to false
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: true
+    can_edit_current_and_next_cycles: false
 
 cookies:
   session:
