@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.feature 'Degree required filter' do
   include FiltersFeatureSpecsHelper
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
 
   scenario 'Candidate applies required degree filters on results page' do
     when_i_visit_the_find_results_page

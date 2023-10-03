@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Searching across England' do
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_there_are_further_education_courses_in_england
   end
 

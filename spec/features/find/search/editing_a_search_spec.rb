@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'Editing a search' do
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   scenario 'Candidate edits their search' do
     when_i_execute_a_valid_search
     then_i_should_see_the_find_results_page

@@ -102,6 +102,10 @@ module Find
       date(:apply_opens, next_year)
     end
 
+    def self.mid_cycle
+      date(:find_opens, current_year) + 1.day
+    end
+
     def self.preview_mode?
       Time.zone.now.between?(apply_2_deadline, find_closes)
     end

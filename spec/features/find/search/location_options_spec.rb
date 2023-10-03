@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Searching by location' do
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     stub_geocoder_lookup
 
     given_i_visit_the_start_page

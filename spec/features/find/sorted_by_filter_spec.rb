@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'sorted by' do
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_there_are_courses
     and_i_visit_the_find_results_page
   end

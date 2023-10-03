@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Searching by provider' do
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_there_is_a_provider_with_courses
   end
 

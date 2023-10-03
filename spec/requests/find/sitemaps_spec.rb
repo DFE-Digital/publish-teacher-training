@@ -24,6 +24,7 @@ module Find
     let(:site1) { build(:site, location_name: 'location 1') }
 
     before do
+      Timecop.travel(Find::CycleTimetable.mid_cycle)
       course
 
       get '/sitemap.xml'

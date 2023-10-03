@@ -6,6 +6,7 @@ RSpec.feature 'Engineers teach physics' do
   include FiltersFeatureSpecsHelper
 
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_i_visit_the_search_by_location_or_provider_page
     given_i_choose_across_england
     given_i_choose_secondary

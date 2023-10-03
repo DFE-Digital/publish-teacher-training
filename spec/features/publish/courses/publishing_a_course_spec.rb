@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
     given_i_am_authenticated_as_a_provider_user
   end
 

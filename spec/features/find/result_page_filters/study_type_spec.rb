@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.feature 'Study type filter' do
   include FiltersFeatureSpecsHelper
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
 
   scenario 'Candidate applies study type filters on results page' do
     when_i_visit_the_find_results_page

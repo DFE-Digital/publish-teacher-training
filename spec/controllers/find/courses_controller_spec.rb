@@ -4,6 +4,10 @@ require 'rails_helper'
 
 module Find
   describe CoursesController do
+    before do
+      Timecop.travel(Find::CycleTimetable.mid_cycle)
+    end
+
     let(:user) { create(:user, :with_provider) }
     let(:provider) { user.providers.first }
 

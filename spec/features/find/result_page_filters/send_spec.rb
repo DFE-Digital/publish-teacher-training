@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.feature 'SEND filter' do
   include FiltersFeatureSpecsHelper
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
 
   scenario 'Candidate applies the SEND filter' do
     when_i_visit_the_find_results_page
