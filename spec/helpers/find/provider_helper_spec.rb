@@ -27,6 +27,18 @@ module Find
         expect(subject[2]).to eql(expected_provider_options[1])
         expect(subject[3]).to eql(expected_provider_options[2])
       end
+
+      context 'provider names have leading or trailing whitespace' do
+        let(:providers) do
+          [
+            build(:provider, provider_name: ' Provider 1 ')
+          ]
+        end
+
+        it 'strips the whitespace from the provider names' do
+          expect(subject[1][0]).to eq("Provider 1 (#{providers[0].provider_code})")
+        end
+      end
     end
   end
 end
