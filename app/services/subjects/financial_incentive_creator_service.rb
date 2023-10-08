@@ -13,7 +13,7 @@ module Subjects
         2024 => {
           %w[Mathematics Physics Chemistry Computing] => {
             bursary_amount: '28000',
-            scholarship: '31000'
+            scholarship: '30000'
           },
           %w[
             French
@@ -21,12 +21,21 @@ module Subjects
             Spanish
           ] => {
             bursary_amount: '25000',
-            scholarship: '29000'
+            scholarship: '27000'
           },
-          ['Biology', 'Design and technology'] => {
+          [
+            'Italian',
+            'Japanese',
+            'Mandarin',
+            'Modern languages (other)',
+            'Russian'
+          ] => {
             bursary_amount: '25000'
           },
-          ['English', 'Art and design', 'Citizenship', 'Music', 'Religious education'] => {
+          ['Biology', 'Design and technology', 'Geography'] => {
+            bursary_amount: '25000'
+          },
+          ['English', 'Art and design', 'Music', 'Religious education'] => {
             bursary_amount: '10000'
           }
         },
