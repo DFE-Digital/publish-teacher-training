@@ -9,7 +9,7 @@ module Find
           'data-boost' => 1.5
         }
 
-        value = provider.provider_name
+        value = provider.provider_name.strip
         name = "#{value} (#{provider.provider_code})"
 
         [name, value, data]
