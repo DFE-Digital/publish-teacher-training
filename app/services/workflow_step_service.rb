@@ -8,13 +8,12 @@ class WorkflowStepService
   end
 
   def call
-    if course.is_school_direct?
+    if course.is_further_education?
+      further_education_workflow_steps
+    elsif course.is_school_direct?
       school_direct_workflow_steps_with_accredited_provider_check - visas_to_remove(course)
     elsif course.is_uni_or_scitt?
       uni_or_scitt_workflow_steps - visas_to_remove(course)
-    else
-      course.is_further_education?
-      further_education_workflow_steps
     end
   end
 
