@@ -79,7 +79,9 @@ describe WorkflowStepService do
   end
 
   context 'when course.is_further_education?' do
-    let(:course) { create(:course, level: 'further_education', subjects: [find_or_create(:further_education_subject)]) }
+    let(:provider) { create(:provider, :accredited_provider) }
+
+    let(:course) { create(:course, provider:, level: 'further_education', subjects: [find_or_create(:further_education_subject)]) }
 
     it 'returns the expected workflow steps' do
       expected_steps = %i[
