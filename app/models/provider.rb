@@ -109,6 +109,8 @@ class Provider < ApplicationRecord
   scope :by_name_ascending, -> { order(provider_name: :asc) }
   scope :by_name_descending, -> { order(provider_name: :desc) }
 
+  scope :random_order, -> { order('RANDOM()') }
+
   scope :by_provider_name, lambda { |provider_name|
     order(
       Arel.sql(

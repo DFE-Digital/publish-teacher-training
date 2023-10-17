@@ -56,6 +56,8 @@ class CourseSearchService
       outer_scope = outer_scope.ascending_course_canonical_order
     elsif sort_by_course_descending?
       outer_scope = outer_scope.descending_course_canonical_order
+    elsif sort_by_random?
+      outer_scope = outer_scope.randomised_order
     elsif sort_by_distance?
       outer_scope = outer_scope.joins(courses_with_distance_from_origin)
       outer_scope = outer_scope.joins(:provider)
@@ -172,6 +174,10 @@ class CourseSearchService
 
   def sort_by_course_descending?
     sort == 'course_desc' || course_desc_requirement
+  end
+
+  def sort_by_random?
+    sort == 'course_rand'
   end
 
   def sort_by_provider_ascending?

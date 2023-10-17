@@ -198,6 +198,8 @@ class Course < ApplicationRecord
     joins(:provider).merge(Provider.by_provider_name(provider_name))
   }
 
+  scope :randomised_order, -> { order('RANDOM()').joins(:provider).merge(Provider.random_order) }
+
   scope :case_insensitive_search, lambda { |course_code|
     where('lower(course.course_code) = ?', course_code.downcase)
   }
