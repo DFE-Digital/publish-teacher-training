@@ -19,8 +19,6 @@
 
     <%= render Find::Results::NoResultsComponent.new(results:) %>
     <%= render Find::Results::SortByComponent.new(results:) %>
-    <!-- TODO suggestions -->
-    <%#= render Find::Results::SuggestedSearchesComponent.new(results:) %>
 
     <% if results.has_results? %>
       <ul class="app-search-results">
