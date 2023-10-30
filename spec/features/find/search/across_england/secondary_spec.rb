@@ -153,11 +153,11 @@ feature 'Searching across England' do
   end
 
   def then_i_should_see_the_visa_status_page
-    expect(page).to have_content('Do you have the right to work or study in the UK?')
+    expect(page).to have_content('Do you need visa sponsorship?')
   end
 
   def when_i_select_my_visa_status
-    choose 'Yes'
+    choose 'No'
   end
 
   def then_i_should_see_the_find_results_page
