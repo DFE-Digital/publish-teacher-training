@@ -40,7 +40,9 @@ module Support
         *EditCourseForm::FIELDS,
         :'start_date(3i)', :'start_date(2i)', :'start_date(1i)',
         :'applications_open_from(3i)', :'applications_open_from(2i)', :'applications_open_from(1i)',
-        :is_send
+        :is_send,
+        :can_sponsor_student_visa,
+        :can_sponsor_skilled_worker_visa
       ).transform_keys { |key| date_field_to_attribute(key) }
     end
 

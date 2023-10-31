@@ -19,6 +19,20 @@
         <% f.govuk_check_box :is_send, true, false, label: { text: "This course has an additional SEND specialism" }, multiple: false %>
       <% end %>
 
+      <% if @course.decorate.salaried? %>
+
+           <%= f.govuk_check_boxes_fieldset :can_sponsor_skilled_worker_visa, legend: { text: "Visa sponsorship" }, multiple: false do %>
+          <% f.govuk_check_box :can_sponsor_skilled_worker_visa, true, false, label: { text: "This course can sponsor a skilled worker visa" }, multiple: false %>
+        <% end %>
+
+      <% else %>
+
+     <%= f.govuk_check_boxes_fieldset :can_sponsor_student_visa, legend: { text: "Visa sponsorship" }, multiple: false do %>
+          <% f.govuk_check_box :can_sponsor_student_visa, true, false, label: { text: "This course can sponsor a student visa" }, multiple: false %>
+        <% end %>
+
+      <% end %>
+
       <%= f.govuk_submit t("support.update_record") %>
     <% end %>
 
