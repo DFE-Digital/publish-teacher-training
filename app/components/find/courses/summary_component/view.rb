@@ -19,7 +19,10 @@ module Find
                  :start_date,
                  :secondary_course?,
                  :level,
-                 :study_mode, to: :course
+                 :study_mode,
+                 :salaried?,
+                 :can_sponsor_student_visa,
+                 :can_sponsor_skilled_worker_visa, to: :course
 
         def initialize(course)
           super
@@ -36,6 +39,16 @@ module Find
 
         def course_length_with_study_mode_row
           "#{length} - #{study_mode.humanize.downcase}"
+        end
+
+        def visa_sponsorship_row
+          if !salaried? && can_sponsor_student_visa
+            'Student visas can be sponsored'
+          elsif salaried? && can_sponsor_skilled_worker_visa
+            'Skilled Worker visas can be sponsored'
+          else
+            'Visas cannot be sponsored'
+          end
         end
       end
     end
