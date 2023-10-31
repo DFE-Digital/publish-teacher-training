@@ -51,12 +51,13 @@ module Find
                          qualification: 'pgce',
                          funding_type: 'salaried',
                          subjects: nil,
-                         level: :primary)
+                         level: :primary,
+                         can_sponsor_student_visa: true)
         end
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :accrediting_provider, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding_type, :subjects, :level)
+          attr_accessor(:provider, :accrediting_provider, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding_type, :subjects, :level, :can_sponsor_student_visa)
 
           def has_bursary?
             has_bursary
