@@ -34,10 +34,12 @@ feature 'Searching across England' do
     and_i_click_continue
     then_i_should_see_the_visa_status_page
 
-    when_i_select_my_visa_status
+    when_i_choose_no_to_visa_sponsorship
+
     and_i_click_find_courses
     then_i_should_see_the_find_results_page
     and_i_should_see_the_correct_courses
+    and_i_see_that_the_visa_checkbox_is_not_checked
   end
 
   context 'Given the bursaries and scholarships announced feature flag' do
@@ -65,6 +67,10 @@ feature 'Searching across England' do
   end
 
   private
+
+  def and_i_see_that_the_visa_checkbox_is_not_checked
+    expect(page).not_to have_checked_field('Only show courses with visa sponsorship')
+  end
 
   def given_the_bursaries_and_scholarships_feature_flag_is_deactivated
     FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
@@ -153,11 +159,11 @@ feature 'Searching across England' do
   end
 
   def then_i_should_see_the_visa_status_page
-    expect(page).to have_content('Do you have the right to work or study in the UK?')
+    expect(page).to have_content('Do you need visa sponsorship?')
   end
 
-  def when_i_select_my_visa_status
-    choose 'Yes'
+  def when_i_choose_no_to_visa_sponsorship
+    choose 'No'
   end
 
   def then_i_should_see_the_find_results_page

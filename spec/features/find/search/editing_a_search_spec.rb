@@ -32,11 +32,16 @@ feature 'Editing a search' do
     and_i_click_continue
     and_i_select_the_primary_subject_checkbox
     and_i_click_continue
-    and_i_select_the_not_yet_visa_status_radio_button
+    and_i_choose_yes_to_visa_sponsorship
     and_i_click_find_courses
+    and_i_see_that_the_visa_checkbox_is_checked
   end
 
   private
+
+  def and_i_see_that_the_visa_checkbox_is_checked
+    expect(page).to have_checked_field('Only show courses with visa sponsorship')
+  end
 
   def when_i_visit_the_start_page
     find_courses_by_location_or_training_provider_page.load
@@ -67,8 +72,8 @@ feature 'Editing a search' do
     find_primary_subjects_page.primary.check
   end
 
-  def and_i_select_the_not_yet_visa_status_radio_button
-    choose 'Not yet'
+  def and_i_choose_yes_to_visa_sponsorship
+    choose 'Yes'
   end
 
   def then_i_should_see_the_find_results_page
