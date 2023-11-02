@@ -20,6 +20,9 @@ feature 'View filtered providers' do
     when_i_remove_the_provider_filter
     then_i_see_the_unfiltered_providers
 
+    when_filter_by_ukprn
+    then_i_see_providers_filtered_by_ukprn
+
     when_i_filter_by_course_code
     then_i_see_the_providers_filtered_by_course_code
 
@@ -33,9 +36,22 @@ feature 'View filtered providers' do
     then_i_see_the_unfiltered_providers
   end
 
+  def then_i_see_providers_filtered_by_ukprn
+    expect(page).to have_css('.qa-provider_row', count: 1)
+
+    within first('.qa-provider_row') { expect(page).to have_text('12345678') }
+
+    expect(page).to have_field('provider_search', with: '12345678')
+  end
+
+  def when_filter_by_ukprn
+    fill_in 'Provider name, code or UKPRN', with: '12345678'
+    click_button 'Apply filters'
+  end
+
   def and_there_are_providers
     create(:provider, provider_name: 'Really big school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')])
-    create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', courses: [build(:course, course_code: '2VVZ')])
+    create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', ukprn: '12345678', courses: [build(:course, course_code: '2VVZ')])
   end
 
   def when_i_visit_the_support_provider_index_page
@@ -49,18 +65,18 @@ feature 'View filtered providers' do
   alias_method :then_i_see_the_unfiltered_providers, :then_i_see_the_providers
 
   def when_i_filter_by_provider
-    fill_in 'Provider name or code', with: 'Really big school'
+    fill_in 'Provider name, code or UKPRN', with: 'Really big school'
     click_button 'Apply filters'
   end
 
   def when_i_filter_by_course_code
-    fill_in 'Provider name or code', with: ''
+    fill_in 'Provider name, code or UKPRN', with: ''
     fill_in 'Course code', with: '2VVZ'
     click_button 'Apply filters'
   end
 
   def when_i_filter_by_provider_code_and_course_code
-    fill_in 'Provider name or code', with: 'A01'
+    fill_in 'Provider name, code or UKPRN', with: 'A01'
     fill_in 'Course code', with: '2vvZ'
     click_button 'Apply filters'
   end
