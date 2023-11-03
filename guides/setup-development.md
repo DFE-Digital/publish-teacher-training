@@ -127,4 +127,6 @@ find.localhost {
 
 Then make sure to run `caddy start` in the root of the project. You should now be able to access the app at `http://publish.localhost` and `http://find.localhost`.
 
+> If using `bin/dev` then the URL is `http://find.localhost:3001` and `http://publish.localhost:3001`
+
 If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then try `caddy start`. 
