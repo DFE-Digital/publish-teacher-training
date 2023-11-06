@@ -418,7 +418,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
-    mock_redis (0.38.0)
+    mock_redis (0.39.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
