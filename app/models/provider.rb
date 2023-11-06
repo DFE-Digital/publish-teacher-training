@@ -172,7 +172,7 @@ class Provider < ApplicationRecord
   end
 
   pg_search_scope :provider_search,
-                  against: %i[provider_code provider_name],
+                  against: %i[provider_code provider_name ukprn],
                   using: { tsearch: { prefix: true } }
 
   pg_search_scope :course_search,

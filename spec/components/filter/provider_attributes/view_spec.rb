@@ -14,7 +14,7 @@ module Filters
       end
 
       it 'renders all the correct details' do
-        expect(component).to have_text('Provider name or code')
+        expect(component).to have_text('Provider name, code or UKPRN')
         expect(component).to have_text('Course code')
       end
     end

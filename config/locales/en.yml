@@ -202,7 +202,7 @@ en:
           index: "Data exports"
     filter:
       providers:
-        provider_search: "Provider name or code"
+        provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"
       users:
         text_search: "Name or email"
