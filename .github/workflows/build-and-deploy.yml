@@ -47,7 +47,6 @@ jobs:
         echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
     - name: Set KV environment variables
-      if: github.actor != 'dependabot[bot]'
       run: |
         # tag build to the review env for vars and secrets
         tf_vars_file=terraform/aks/workspace_variables/review_aks.tfvars.json
@@ -62,12 +61,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: azure/login@v1
-      if: github.actor != 'dependabot[bot]'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
 
     - uses: DFE-Digital/keyvault-yaml-secret@v1
-      if: github.actor != 'dependabot[bot]'
       id: get-secret
       with:
         keyvault: ${{ env.KEY_VAULT_NAME }}
@@ -110,7 +107,6 @@ jobs:
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Run Snyk to check Docker image for vulnerabilities
-      if: github.actor != 'dependabot[bot]'
       uses: snyk/actions/docker@master
       env:
         SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
