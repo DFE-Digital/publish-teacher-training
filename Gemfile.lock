@@ -123,7 +123,7 @@ GEM
     ast (2.4.2)
     attr_extras (7.1.0)
     attr_required (1.0.1)
-    audited (5.4.0)
+    audited (5.4.2)
       activerecord (>= 5.0, < 7.2)
       request_store (~> 1.2)
     awesome_print (1.9.2)
