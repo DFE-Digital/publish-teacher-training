@@ -24,7 +24,7 @@ RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
 
-RUN apk add --update --no-cache --virtual runtime-dependances \
+RUN apk add --update --no-cache --virtual runtime-dependencies \
  postgresql-dev git ncurses shared-mime-info
 
 # Remove once the base image ruby:3.1-alpine3.15 has been updated with the below pkgs
@@ -38,12 +38,12 @@ WORKDIR $APP_HOME
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
-RUN apk add --update --no-cache --virtual build-dependances \
+RUN apk add --update --no-cache --virtual build-dependencies \
  build-base && \
  apk add --update --no-cache libpq yarn && \
  bundle install --jobs=4 && \
  rm -rf /usr/local/bundle/cache && \
- apk del build-dependances
+ apk del build-dependencies
 
 COPY package.json yarn.lock ./
 RUN  yarn install --frozen-lockfile && \
