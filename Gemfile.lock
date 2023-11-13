@@ -472,7 +472,7 @@ GEM
       webfinger (~> 2.0)
     optimist (3.0.1)
     os (1.1.4)
-    pagy (6.1.0)
+    pagy (6.2.0)
     parallel (1.23.0)
     parallel_tests (4.3.0)
       parallel
@@ -804,7 +804,7 @@ DEPENDENCIES
   open_api-rswag-api
   open_api-rswag-specs!
   open_api-rswag-ui
-  pagy (~> 6.1)
+  pagy (~> 6.2)
   parallel_tests
   pg
   pg_search
