@@ -73,3 +73,5 @@
   - campaign_name
   :gias_school:
   - searchable
+  :data_migrations:
+  - version
