@@ -10,21 +10,6 @@ RecruitmentCycle.current.providers.find_by(provider_code: "1JJ").discard
 
 If the organisation has running courses, you will get a validation error. In this scenario you just need to make sure there aren't any users attached to it.
 
-## Republishing a withdrawn course
-
-To republish a course which has been withdrawn:
-
-```ruby
-# Find the course by code or urn
-course = RecruitmentCycle.current.providers.find_by(provider_code: "138459").courses.find_by(course_code: "3C2F")
-
-course.enrichments.max_by(&:created_at).update(status: "published", last_published_timestamp_utc: Time.now.utc)
-
-course.site_statuses.each do |site_status|
-  site_status.update(vac_status: :no_vacancies, status: :running)
-end
-```
-
 ## Unpublishing a published course
 
 Sometimes providers will accidentally publish a course and would like to unpublish it.
