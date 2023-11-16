@@ -1,0 +1,30 @@
+<%= render PageTitle.new(title: "Revert withdrawal") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(edit_support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider, @course)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @course.decorate.name_and_code %></span>
+        Are you sure you want to revert this withdrawal?
+    </h1>
+
+ <p class="govuk-body">Reverting this withdrawal will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Set the course to published</li>
+      <li>Mark the course as closed for applications</li>
+    </ul>
+  </p>
+
+    <%= govuk_button_to "Revert withdrawal",
+                        support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider, @course),
+        method: :patch,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), edit_support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider, @course)) %>
+    </p>
+  </div>
+</div>
