@@ -8,7 +8,10 @@ module Support
     end
 
     def update
-      redirect_to edit_support_recruitment_cycle_provider_course_path(provider.recruitment_cycle_year, provider, course), flash: { success: t('support.flash.updated', resource: 'Course status') }
+      Support::Courses::RevertWithdrawalService.new(course).call
+
+      redirect_to edit_support_recruitment_cycle_provider_course_path(provider.recruitment_cycle_year, provider, course),
+                  flash: { success: t('support.flash.updated', resource: 'Course status') }
     end
 
     private
