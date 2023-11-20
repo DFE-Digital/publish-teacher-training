@@ -199,7 +199,7 @@ group :development, :test do
   # Allow us to freeze time in tests
   gem 'timecop'
 
-  gem 'factory_bot_rails', '~> 6.2'
+  gem 'factory_bot_rails', '~> 6.4'
   gem 'fakefs', require: 'fakefs/safe'
   gem 'faker'
 end
