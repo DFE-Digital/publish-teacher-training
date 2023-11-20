@@ -20,7 +20,11 @@ namespace :support do
           delete :delete, to: 'providers/users#destroy'
         end
       end
-      resources :courses, only: %i[index edit update]
+
+      resources :courses do
+        resource :revert_withdrawal, only: %i[edit update], path: 'revert-withdrawal', controller: 'revert_withdrawal'
+      end
+
       resource :check_school, only: %i[show update], controller: 'providers/schools_check', path: 'schools/check'
       resources :schools do
         member do
