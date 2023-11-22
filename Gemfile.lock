@@ -128,7 +128,7 @@ GEM
       activerecord (>= 5.0, < 7.2)
       request_store (~> 1.2)
     awesome_print (1.9.2)
-    base64 (0.1.1)
+    base64 (0.2.0)
     better_errors (2.10.1)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
@@ -256,7 +256,7 @@ GEM
     fakefs (2.5.0)
     faker (3.2.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.7.11)
+    faraday (2.7.12)
       base64
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
