@@ -43,6 +43,10 @@ variable "enable_monitoring" {
   default = true
 }
 
+variable "alert_window_size" {
+  default = "PT5M"
+}
+
 variable "namespace" {
   type = string
 }
