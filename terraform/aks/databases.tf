@@ -32,7 +32,6 @@ module "redis_cache" {
 
   use_azure               = var.deploy_azure_backing_services
   azure_enable_monitoring = var.enable_monitoring
-  alert_window_size       = var.alert_window_size
   azure_patch_schedule    = [{ "day_of_week" : "Sunday", "start_hour_utc" : 02 }]
 }
 
@@ -50,7 +49,6 @@ module "postgres" {
 
   use_azure                      = var.deploy_azure_backing_services
   azure_enable_monitoring        = var.enable_monitoring
-  alert_window_size              = var.alert_window_size
   azure_extensions               = local.postgres_extensions
   azure_sku_name                 = var.postgres_flexible_server_sku
   azure_enable_high_availability = var.postgres_enable_high_availability
