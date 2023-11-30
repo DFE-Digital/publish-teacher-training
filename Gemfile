@@ -202,6 +202,8 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'fakefs', require: 'fakefs/safe'
   gem 'faker'
+
+  gem 'dotenv-rails'
 end
 
 group :development do
