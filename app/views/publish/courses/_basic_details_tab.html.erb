@@ -1,226 +1,226 @@
 <%= govuk_summary_list do |summary_list| %>
- <% summary_list.with_row(html_attributes: { data: { qa: "course__level" } }) do |row|
-      row.with_key { "Subject level" }
-      row.with_value { course.level.humanize }
-      row.with_action
-    end
+  <% summary_list.with_row(html_attributes: { data: { qa: "course__level" } }) do |row|
+       row.with_key { "Subject level" }
+       row.with_value { course.level.humanize }
+       row.with_action
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__is_send" } }) do |row|
-      row.with_key { "Special educational needs and disability (SEND)" }
-      row.with_value { course.is_send? }
-      if course.edit_course_options[:show_is_send] && !course.is_withdrawn?
-        row.with_action(
-          # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-          visually_hidden_text: "SEND"
-        )
-      else
-        row.with_action
-      end
-    end
+     summary_list.with_row(html_attributes: { data: { qa: "course__is_send" } }) do |row|
+       row.with_key { "Special educational needs and disability (SEND)" }
+       row.with_value { course.is_send? }
+       if course.edit_course_options[:show_is_send] && !course.is_withdrawn?
+         row.with_action(
+           # href: send_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+           visually_hidden_text: "SEND"
+         )
+       else
+         row.with_action
+       end
+     end
 
-    unless course.further_education_course?
-      summary_list.with_row(html_attributes: { data: { qa: "course__subjects" } }) do |row|
-        row.with_key { "Subject".pluralize(course.subjects.count) }
-        row.with_value { course.chosen_subjects }
-        if course.is_withdrawn?
-          row.with_action
-        else
-          row.with_action(
-            href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-            visually_hidden_text: "subjects"
-          )
-        end
-      end
-    end
+     unless course.further_education_course?
+       summary_list.with_row(html_attributes: { data: { qa: "course__subjects" } }) do |row|
+         row.with_key { "Subject".pluralize(course.subjects.count) }
+         row.with_value { course.chosen_subjects }
+         if course.is_withdrawn?
+           row.with_action
+         else
+           row.with_action(
+             href: subjects_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+             visually_hidden_text: "subjects"
+           )
+         end
+       end
+     end
 
-    if course.applicable_for_engineers_teach_physics?
-      summary_list.with_row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row|
-        row.with_key { "Engineers Teach Physics" }
-        row.with_value { course.engineers_teach_physics? ? "Yes" : "No" }
-        row.with_action(
-          href: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids }, skip_languages_goto_confirmation: true),
-          visually_hidden_text: "Engineers Teach Physics"
-        )
-      end
-    end
+     if course.applicable_for_engineers_teach_physics?
+       summary_list.with_row(html_attributes: { data: { qa: "course__engineers_teach_physics" } }) do |row|
+         row.with_key { "Engineers Teach Physics" }
+         row.with_value { course.engineers_teach_physics? ? "Yes" : "No" }
+         row.with_action(
+           href: engineers_teach_physics_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, course: { subjects_ids: course.subject_ids }, skip_languages_goto_confirmation: true),
+           visually_hidden_text: "Engineers Teach Physics"
+         )
+       end
+     end
 
-    unless course.further_education_course?
-      summary_list.with_row(html_attributes: { data: { qa: "course__age_range" } }) do |row|
-        row.with_key { "Age range" }
-        row.with_value { course.age_range }
-        if course.is_withdrawn?
-          row.with_action
-        else
-          row.with_action(
-            href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-            visually_hidden_text: "age range"
-          )
-        end
-      end
-    end
+     unless course.further_education_course?
+       summary_list.with_row(html_attributes: { data: { qa: "course__age_range" } }) do |row|
+         row.with_key { "Age range" }
+         row.with_value { course.age_range }
+         if course.is_withdrawn?
+           row.with_action
+         else
+           row.with_action(
+             href: age_range_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+             visually_hidden_text: "age range"
+           )
+         end
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__outcome" } }) do |row|
-      row.with_key { "Qualification" }
-      row.with_value { course.outcome }
-      if course.is_withdrawn?
-        row.with_action
-      else
-        row.with_action(
-          href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-          visually_hidden_text: "outcome"
-        )
-      end
-    end
+     summary_list.with_row(html_attributes: { data: { qa: "course__outcome" } }) do |row|
+       row.with_key { "Qualification" }
+       row.with_value { course.outcome }
+       if course.is_withdrawn?
+         row.with_action
+       else
+         row.with_action(
+           href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+           visually_hidden_text: "outcome"
+         )
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__funding" } }) do |row|
-      row.with_key { "Funding type" }
-      row.with_value { course.funding }
-      if course.is_published? || course.is_withdrawn?
-        row.with_action
-      else
-        row.with_action(
-          href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
-          visually_hidden_text: "funding type"
-        )
-      end
-    end
+     summary_list.with_row(html_attributes: { data: { qa: "course__funding" } }) do |row|
+       row.with_key { "Funding type" }
+       row.with_value { course.funding }
+       if course.is_published? || course.is_withdrawn?
+         row.with_action
+       else
+         row.with_action(
+           href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+           visually_hidden_text: "funding type"
+         )
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__study_mode" } }) do |row|
-      row.with_key { "Full time or part time" }
-      row.with_value { course.study_mode&.humanize }
-      if course.is_withdrawn?
-        row.with_action
-      else
-        row.with_action(
-          href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-          visually_hidden_text: "if full or part time"
-        )
-      end
-    end
+     summary_list.with_row(html_attributes: { data: { qa: "course__study_mode" } }) do |row|
+       row.with_key { "Full time or part time" }
+       row.with_value { course.study_mode&.humanize }
+       if course.is_withdrawn?
+         row.with_action
+       else
+         row.with_action(
+           href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+           visually_hidden_text: "if full or part time"
+         )
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
-      row.with_key { "School".pluralize(course.sites.length) }
-      row.with_value do
-        if course.sites.blank?
-          raw("<span class=\"app-!-colour-muted\">None</span>")
-        elsif course.sites.size == 1
-          course.sites.first.location_name
-        else
-          school_names = course.alphabetically_sorted_sites.map do |site|
-            "<li>#{site.location_name}</li>"
-          end
-          raw("<ul class=\"govuk-list\">#{school_names.join}</ul>")
-        end
-      end
+     summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
+       row.with_key { "School".pluralize(course.sites.length) }
+       row.with_value do
+         if course.sites.blank?
+           raw("<span class=\"app-!-colour-muted\">None</span>")
+         elsif course.sites.size == 1
+           course.sites.first.location_name
+         else
+           school_names = course.alphabetically_sorted_sites.map do |site|
+             "<li>#{site.location_name}</li>"
+           end
+           raw("<ul class=\"govuk-list\">#{school_names.join}</ul>")
+         end
+       end
 
-      if course.is_withdrawn?
-        row.with_action
-      else
-        row.with_action(
-          href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-          visually_hidden_text: "schools"
-        )
-      end
-    end
+       if course.is_withdrawn?
+         row.with_action
+       else
+         row.with_action(
+           href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+           visually_hidden_text: "schools"
+         )
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row|
-      row.with_key { "Study site" }
+     summary_list.with_row(html_attributes: { data: { qa: "course__study_sites" } }) do |row|
+       row.with_key { "Study site" }
 
-      if course.study_sites.any?
-        row.with_value do
-          content_tag(:ul, class: "govuk-list") do
-            course.alphabetically_sorted_study_sites.map { |study_site| content_tag(:li, study_site.location_name) }.join.html_safe
-          end
-        end
-      elsif @provider.study_sites.any?
-        row.with_value do
-          "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select a study site', study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
-        end
-      else
-        row.with_value do
-          "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add a study site', publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
-        end
-      end
+       if course.study_sites.any?
+         row.with_value do
+           content_tag(:ul, class: "govuk-list") do
+             course.alphabetically_sorted_study_sites.map { |study_site| content_tag(:li, study_site.location_name) }.join.html_safe
+           end
+         end
+       elsif @provider.study_sites.any?
+         row.with_value do
+           "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select a study site', study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
+         end
+       else
+         row.with_value do
+           "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add a study site', publish_provider_recruitment_cycle_study_sites_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
+         end
+       end
 
-      if course.study_sites.any?
-        row.with_action(href: study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
-                        visually_hidden_text: "study sites")
-      else
-        row.with_action
-      end
-    end
+       if course.study_sites.any?
+         row.with_action(href: study_sites_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+                         visually_hidden_text: "study sites")
+       else
+         row.with_action
+       end
+     end
 
-    unless @provider.accredited_provider?
-      summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row|
-        row.with_key { "Accredited provider" }
-        row.with_value { course.accrediting_provider&.provider_name }
-        if course.is_published? || course.is_withdrawn?
-          row.with_action
-        elsif !course.accrediting_provider.nil?
-          row.with_action(href: accredited_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-                          visually_hidden_text: "accredited provider")
-        elsif @provider.accredited_providers.any?
-          row.with_value do
-            "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select an accredited provider', accredited_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
-          end
-        else
-          row.with_value do
-            "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add at least one accredited provider', publish_provider_recruitment_cycle_accredited_providers_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
-          end
-        end
-      end
-    end
+     unless @provider.accredited_provider?
+       summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row|
+         row.with_key { "Accredited provider" }
+         row.with_value { course.accrediting_provider&.provider_name }
+         if course.is_published? || course.is_withdrawn?
+           row.with_action
+         elsif !course.accrediting_provider.nil?
+           row.with_action(href: accredited_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+                           visually_hidden_text: "accredited provider")
+         elsif @provider.accredited_providers.any?
+           row.with_value do
+             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Select an accredited provider', accredited_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code))}</div>".html_safe
+           end
+         else
+           row.with_value do
+             "<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--important\">#{govuk_link_to('Add at least one accredited provider', publish_provider_recruitment_cycle_accredited_providers_path(@course.provider_code, @course.recruitment_cycle_year))}</div>".html_safe
+           end
+         end
+       end
+     end
 
-    if course.is_fee_based?
-      summary_list.with_row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row|
-        row.with_key { "Student visas" }
-        row.with_value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
-        if course.changeable?
-          row.with_action(
-            href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
-            visually_hidden_text: "can sponsor student visa"
-          )
-        else
-          row.with_action
-        end
-      end
-    else
-      summary_list.with_row(html_attributes: { data: { qa: "course__can_sponsor_skilled_worker_visa" } }) do |row|
-        row.with_key { "Skilled Worker visas" }
-        row.with_value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
-        if course.changeable?
-          row.with_action(
-            href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
-            visually_hidden_text: "can sponsor skilled_worker visa"
-          )
-        else
-          row.with_action
-        end
-      end
-    end
+     if course.is_fee_based?
+       summary_list.with_row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row|
+         row.with_key { "Student visas" }
+         row.with_value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
+         if course.is_withdrawn?
+           row.with_action
+         else
+           row.with_action(
+             href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
+             visually_hidden_text: "can sponsor student visa"
+           )
+         end
+       end
+     else
+       summary_list.with_row(html_attributes: { data: { qa: "course__can_sponsor_skilled_worker_visa" } }) do |row|
+         row.with_key { "Skilled Worker visas" }
+         row.with_value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" }
+         if course.is_withdrawn?
+           row.with_action
+         else
+           row.with_action(
+             href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
+             visually_hidden_text: "can sponsor skilled_worker visa"
+           )
+         end
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row|
-      row.with_key { "Applications open date" }
-      row.with_value { l(course.applications_open_from&.to_date) }
-      if course.changeable?
-        row.with_action(href: applications_open_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-                        visually_hidden_text: "date applications open")
-      else
-        row.with_action
-      end
-    end
+     summary_list.with_row(html_attributes: { data: { qa: "course__applications_open" } }) do |row|
+       row.with_key { "Applications open date" }
+       row.with_value { l(course.applications_open_from&.to_date) }
+       if course.changeable?
+         row.with_action(href: applications_open_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+                         visually_hidden_text: "date applications open")
+       else
+         row.with_action
+       end
+     end
 
-    summary_list.with_row(html_attributes: { data: { qa: "course__start_date" } }) do |row|
-      row.with_key { "Course start date" }
-      row.with_value do
-        raw("<p class=\"govuk-body\">#{l(course.start_date&.to_date, format: :short)} </p>
-              <p class=\"govuk-hint govuk-!-margin-top-0\">Academic year #{course.academic_year} </p>")
-      end
-      if course.changeable?
-        row.with_action(href: start_date_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-                        visually_hidden_text: "date course starts")
-      else
-        row.with_action
-      end
-    end %>
+     summary_list.with_row(html_attributes: { data: { qa: "course__start_date" } }) do |row|
+       row.with_key { "Course start date" }
+       row.with_value do
+         raw("<p class=\"govuk-body\">#{l(course.start_date&.to_date, format: :short)} </p>
+               <p class=\"govuk-hint govuk-!-margin-top-0\">Academic year #{course.academic_year} </p>")
+       end
+       if course.changeable?
+         row.with_action(href: start_date_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+                         visually_hidden_text: "date course starts")
+       else
+         row.with_action
+       end
+     end %>
 <% end %>

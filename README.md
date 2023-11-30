@@ -35,7 +35,6 @@ This repo is home to three services:
 | Staging     | [staging](https://staging.publish-teacher-training-courses.service.gov.uk) | For internal use by DfE to test deploys
 | QA          | [qa](https://qa.publish-teacher-training-courses.service.gov.uk)  | For internal use by DfE for testing. Automatically deployed from main
 
-
 ## Guides
 
 - [Configuration](/guides/configuration.md)
@@ -54,7 +53,6 @@ This repo is home to three services:
 - [Support Playbook](/guides/support_playbook.md)
 - [AKS Module Information](/guides/aks_modules.md)
 - [AKS Cheatsheet](/guides/aks-cheatsheet.md)
-
 
 ## License
 
