@@ -6,7 +6,7 @@ module ApplyRedirect
   def apply
     course = RecruitmentCycle.current
                              .providers.find_by(provider_code: params[:provider_code])
-                             .courses.find_by(course_code: params["#{'course_' if find?}code".to_sym])
+                             .courses.find_by(course_code: params[:"#{'course_' if find?}code"])
 
     if find?
       Rails.logger.info("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}")

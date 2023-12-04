@@ -36,7 +36,7 @@ module Filters
     end
 
     def reload_path
-      send("support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path".to_sym)
+      send(:"support_recruitment_cycle_#{filter_model.to_s.downcase.pluralize}_path")
     end
   end
 end

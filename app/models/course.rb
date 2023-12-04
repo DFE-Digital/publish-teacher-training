@@ -849,7 +849,7 @@ class Course < ApplicationRecord
 
     return true if relevant_params.empty? || !is_published?
 
-    relevant_params.each do |field, _value|
+    relevant_params.each_key do |field|
       errors.add(field.to_sym, 'cannot be changed after publish')
     end
     false
@@ -861,7 +861,7 @@ class Course < ApplicationRecord
     invalid_params = relevant_params.select do |_subject, value|
       value && !ENTRY_REQUIREMENT_OPTIONS.key?(value.to_sym)
     end
-    invalid_params.each do |subject, _value|
+    invalid_params.each_key do |subject|
       errors.add(subject.to_sym, 'is invalid')
     end
 

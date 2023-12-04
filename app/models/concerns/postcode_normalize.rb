@@ -5,9 +5,9 @@ module PostcodeNormalize
   included do
     def postcode=(str)
       if str
-        super UKPostcode.parse(str).to_s
+        super(UKPostcode.parse(str).to_s)
       else
-        super str
+        super(str)
       end
     end
   end

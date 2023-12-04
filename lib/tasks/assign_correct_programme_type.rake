@@ -6,7 +6,9 @@ namespace :assign_programme_types do
     fee_funded_courses = Course.with_funding_types('fee')
 
     fee_funded_courses.find_each(batch_size: 500) do |course|
+      # rubocop:disable Lint/SelfAssignment
       course.funding_type = course.funding_type
+      # rubocop:enable Lint/SelfAssignment
     end
   end
 end

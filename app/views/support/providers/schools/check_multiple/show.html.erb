@@ -14,7 +14,7 @@
           <%= govuk_summary_card(title: "School #{position}") do |card|
                 card.with_action { govuk_link_to("Change", support_recruitment_cycle_provider_schools_multiple_new_path(position:, goto_confirmation: true)) }
                 card.with_summary_list(rows: [{ key: { text: "Name" }, value: { text: school_detail.location_name } },
-                                              { key: { text: "Unique reference number (URN)" }, value: { classes: ("govuk-hint" if school_detail.urn.blank?), text: (school_detail.urn.presence || "Not entered") } },
+                                              { key: { text: "Unique reference number (URN)" }, value: { classes: ("govuk-hint" if school_detail.urn.blank?), text: school_detail.urn.presence || "Not entered" } },
                                               { key: { text: "Address" }, value: { text: school_detail.decorate.full_address_on_seperate_lines } }])
               end %>
         <% end %>
