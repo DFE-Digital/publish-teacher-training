@@ -140,7 +140,7 @@ describe RequiredQualificationsSummary do
 
         course.update!(degree_grade: nil)
         summary = described_class.new(course).extract
-        mapping.each { |_, sentence| expect(summary).not_to include sentence }
+        mapping.each_value { |sentence| expect(summary).not_to include sentence }
       end
 
       it 'displays additional_degree_subject_requirements if there are any' do

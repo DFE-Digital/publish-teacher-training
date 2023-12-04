@@ -68,7 +68,7 @@ module GovukTechDocs
         schemas = []
         operations.compact.each_value do |operation|
           responses = operation.responses
-          responses.each do |_rkey, response|
+          responses.each_value do |response|
             next unless response.content['application/json']
 
             schema = response.content['application/json'].schema
