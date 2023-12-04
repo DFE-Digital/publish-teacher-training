@@ -114,10 +114,10 @@ The example below copies scheduled courses during rollover from one provider to 
 
 ```ruby
 # Find provider to copy courses from
-provider = RecruitmentCycle.current.next.providers.find_by(provider_code: "1TZ")
+provider = RecruitmentCycle.current.providers.find_by(provider_code: "1TZ")
 
 # Find the target provider to copy courses to
-provider_to_copy_to = RecruitmentCycle.current.next.providers.find_by(provider_code: "2A6")
+provider_to_copy_to = RecruitmentCycle.current.providers.find_by(provider_code: "2A6")
 
 copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToCourseService.new, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
 
