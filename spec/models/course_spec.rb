@@ -1129,33 +1129,38 @@ describe Course do
     describe '.with_salary' do
       subject { described_class.with_salary }
 
-      let(:course_higher_education_programme) do
+      let!(:course_higher_education_programme) do
         create(:course, program_type: :higher_education_programme)
       end
 
-      let(:course_school_direct_training_programme) do
+      let!(:course_scitt_salaried_programme) do
+        create(:course, program_type: :scitt_salaried_programme)
+      end
+
+      let!(:course_higher_education_salaried_programme) do
+        create(:course, program_type: :higher_education_salaried_programme)
+      end
+
+      let!(:course_school_direct_training_programme) do
         create(:course, program_type: :school_direct_training_programme)
       end
 
-      let(:course_school_direct_salaried_training_programme) do
+      let!(:course_school_direct_salaried_training_programme) do
         create(:course, program_type: :school_direct_salaried_training_programme)
       end
 
-      let(:course_scitt_programme) { create(:course, program_type: :scitt_programme) }
-      let(:course_pg_teaching_apprenticeship) do
+      let!(:course_scitt_programme) { create(:course, program_type: :scitt_programme) }
+      let!(:course_pg_teaching_apprenticeship) do
         create(:course, program_type: :pg_teaching_apprenticeship)
       end
 
-      before do
-        course_higher_education_programme
-        course_school_direct_training_programme
-        course_school_direct_salaried_training_programme
-        course_scitt_programme
-        course_pg_teaching_apprenticeship
-      end
-
       it 'only returns salaried training programme' do
-        expect(subject).to contain_exactly(course_school_direct_salaried_training_programme, course_pg_teaching_apprenticeship)
+        expect(subject).to contain_exactly(
+          course_scitt_salaried_programme,
+          course_higher_education_salaried_programme,
+          course_school_direct_salaried_training_programme,
+          course_pg_teaching_apprenticeship
+        )
       end
     end
 
