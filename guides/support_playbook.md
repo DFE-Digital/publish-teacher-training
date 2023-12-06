@@ -108,6 +108,49 @@ course = RecruitmentCycle.current.providers.find_by(provider_code: "1TZ").course
 copier.execute(course:, new_provider: provider_to_copy_to)
 ````
 
+### Copy some courses
+
+```ruby
+# Fill in these variables with appropriate information
+
+# Provider from which the courses will be copied
+provider_code = <put source provider code here>
+
+# Provider to whom the course will be copied
+provider_codes = %w[<put provider codes here>]
+
+# The courses to be copied
+course_codes = %w[<put course codes here]
+
+# Uncomment if it is different from the original course
+# accrediting_provider = <put accrediting provider code here>
+
+# Should the course sites be copied over too?
+copy_sites_too = <true | false>
+
+## ---- END OF INPUT ---- ##
+
+# Then paste this into the console
+
+sites_copy_to_course = copy_sites_too ? proc {} : Sites::CopyToCourseService.new
+defined?(accrediting_provider) || accrediting_provider = nil
+
+source_provider = RecruitmentCycle.current.providers.find_by(provider_code:)
+courses = source_provider.courses.where(course_code: course_codes)
+target_providers = RecruitmentCycle.current.providers.where(provider_code: provider_codes)
+
+copier = Courses::CopyToProviderService.new(sites_copy_to_course: , enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
+
+courses.each do |course|
+  target_providers.each do |new_provider|
+    copier.execute(course:, new_provider:).tap |course|
+      course.update(accrediting_provider:) if accrediting_provider
+    end
+  end
+end
+````
+
+
 ### Copying all courses
 
 The example below copies scheduled courses during rollover from one provider to another. It may need tweaking depending on the scenario but the structure and format of what to run should help.
