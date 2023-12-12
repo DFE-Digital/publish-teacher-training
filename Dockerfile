@@ -15,20 +15,14 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.1-alpine3.15
-
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.15/main" > /etc/apk/repositories && \
-    echo "http://dl-cdn.alpinelinux.org/alpine/v3.15/community" >> /etc/apk/repositories
+FROM ruby:3.1-alpine3.19
 
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
 
-RUN apk add --update --no-cache --virtual runtime-dependances \
+RUN apk add --update --no-cache \
  postgresql-dev git ncurses shared-mime-info
-
-# Remove once the base image ruby:3.1-alpine3.15 has been updated with the below pkgs
-RUN apk add --no-cache ncurses=6.3_p20211120-r2 ncurses-libs=6.3_p20211120-r2 libcurl=8.4.0-r0 pkgconf=1.8.1-r0 nghttp2=1.46.0-r2 nghttp2-libs=1.46.0-r2
 
 ENV APP_HOME /app
 
@@ -38,12 +32,12 @@ WORKDIR $APP_HOME
 ADD Gemfile $APP_HOME/Gemfile
 ADD Gemfile.lock $APP_HOME/Gemfile.lock
 
-RUN apk add --update --no-cache --virtual build-dependances \
+RUN apk add --update --no-cache --virtual build-dependencies \
  build-base && \
  apk add --update --no-cache libpq yarn && \
  bundle install --jobs=4 && \
  rm -rf /usr/local/bundle/cache && \
- apk del build-dependances
+ apk del build-dependencies
 
 COPY package.json yarn.lock ./
 RUN  yarn install --frozen-lockfile && \
