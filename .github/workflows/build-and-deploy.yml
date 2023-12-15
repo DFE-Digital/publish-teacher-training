@@ -253,7 +253,7 @@ jobs:
 
     - name: Upload coverage results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Coverage_report
         path: ${{ github.workspace }}/out/*
