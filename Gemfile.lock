@@ -674,11 +674,11 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    site_prism (4.0.3)
-      addressable (~> 2.8)
-      capybara (~> 3.27)
-      site_prism-all_there (~> 2.0)
-    site_prism-all_there (2.0.1)
+    site_prism (5.0)
+      addressable (~> 2.8, >= 2.8.1)
+      capybara (~> 3.31)
+      site_prism-all_there (> 2, < 5)
+    site_prism-all_there (3.0.2)
     skylight (6.0.1)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
@@ -846,7 +846,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-cron
   simplecov (< 0.23)
-  site_prism (~> 4.0)
+  site_prism (~> 5.0)
   skylight
   spring
   spring-commands-rspec
