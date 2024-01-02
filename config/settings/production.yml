@@ -22,6 +22,10 @@ bg_jobs:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
     queue: save_statistic
+  send_entity_table_checks_to_bigquery:
+    cron: "30 0 * * *"  # daily at 00:30
+    class: "DfE::Analytics::EntityTableCheckJob"
+    queue: low_priority
 skylight:
   enable: true
 environment:
