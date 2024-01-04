@@ -73,7 +73,7 @@ runs:
 
     - name: Download Sanitised Backup
       if: ${{ env.app_environment != 'review' }}
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: backup_sanitised
 
