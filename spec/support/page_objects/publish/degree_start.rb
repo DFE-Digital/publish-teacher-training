@@ -9,8 +9,8 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
-      element :yes_radio, '[data-qa="start__yes_radio"]'
-      element :no_radio, '[data-qa="start__no_radio"]'
+      element :radio_yes, '[data-qa="start__yes_radio"]'
+      element :radio_no, '[data-qa="start__no_radio"]'
 
       element :submit, 'button.govuk-button[type="submit"]'
 
