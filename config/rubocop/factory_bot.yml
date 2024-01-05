@@ -4,6 +4,8 @@ FactoryBot/CreateList:
   Enabled: false
 FactoryBot/AssociationStyle:
   Enabled: false
+FactoryBot/ExcessiveCreateList:
+  Enabled: false
 FactoryBot/FactoryAssociationWithStrategy:
   Exclude:
     - 'spec/factories/access_requests.rb'
