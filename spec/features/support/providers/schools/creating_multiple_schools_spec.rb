@@ -100,7 +100,7 @@ feature 'Multiple schools' do
   end
 
   def and_i_click_change
-    page.all('.govuk-summary-card__action')[1].click_link
+    page.all('.govuk-summary-card__action')[1].click_link_or_button
   end
 
   def and_the_text_field_is_prepopulated
@@ -163,23 +163,23 @@ feature 'Multiple schools' do
   end
 
   def then_i_click_add_multiple_schools
-    click_link 'Add multiple schools'
+    click_link_or_button 'Add multiple schools'
   end
 
   def given_i_submit_an_empty_form
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def when_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def when_i_click_cancel
-    click_link 'Cancel'
+    click_link_or_button 'Cancel'
   end
 
   def given_i_add_the_schools
-    click_button 'Add schools'
+    click_link_or_button 'Add schools'
   end
 
   def then_i_should_see_the_validation_error_message

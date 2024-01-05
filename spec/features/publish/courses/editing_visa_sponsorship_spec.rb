@@ -68,7 +68,7 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_continue_for(visa_type)
-    click_button "Update #{visa_type} visas"
+    click_link_or_button "Update #{visa_type} visas"
   end
 
   def provider

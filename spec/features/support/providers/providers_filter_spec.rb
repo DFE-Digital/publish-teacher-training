@@ -46,7 +46,7 @@ feature 'View filtered providers' do
 
   def when_filter_by_ukprn
     fill_in 'Provider name, code or UKPRN', with: '12345678'
-    click_button 'Apply filters'
+    click_link_or_button 'Apply filters'
   end
 
   def and_there_are_providers
@@ -66,19 +66,19 @@ feature 'View filtered providers' do
 
   def when_i_filter_by_provider
     fill_in 'Provider name, code or UKPRN', with: 'Really big school'
-    click_button 'Apply filters'
+    click_link_or_button 'Apply filters'
   end
 
   def when_i_filter_by_course_code
     fill_in 'Provider name, code or UKPRN', with: ''
     fill_in 'Course code', with: '2VVZ'
-    click_button 'Apply filters'
+    click_link_or_button 'Apply filters'
   end
 
   def when_i_filter_by_provider_code_and_course_code
     fill_in 'Provider name, code or UKPRN', with: 'A01'
     fill_in 'Course code', with: '2vvZ'
-    click_button 'Apply filters'
+    click_link_or_button 'Apply filters'
   end
 
   def then_i_see_providers_filtered_by_provider_name
@@ -95,15 +95,15 @@ feature 'View filtered providers' do
   end
 
   def when_i_remove_the_provider_filter
-    click_link 'Remove Really big school provider search filter'
+    click_link_or_button 'Remove Really big school provider search filter'
   end
 
   def when_i_remove_the_course_code_filter
-    click_link 'Remove 2VVZ course search filter'
+    click_link_or_button 'Remove 2VVZ course search filter'
   end
 
   def when_i_remove_the_provider_code_and_course_code_filter
-    click_link 'Remove A01 provider search filter'
-    click_link 'Remove 2vvZ course search filter'
+    click_link_or_button 'Remove A01 provider search filter'
+    click_link_or_button 'Remove 2vvZ course search filter'
   end
 end

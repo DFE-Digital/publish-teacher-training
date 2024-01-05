@@ -41,7 +41,7 @@ feature 'Editing visa sponsorship' do
   end
 
   def and_i_submit_the_form
-    click_button 'Update'
+    click_link_or_button 'Update'
   end
 
   def and_i_check_the_student_visa_check_box

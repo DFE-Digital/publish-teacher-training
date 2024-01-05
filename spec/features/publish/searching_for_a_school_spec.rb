@@ -32,7 +32,7 @@ feature 'Searching for a school from the GIAS list' do
   private
 
   def and_i_go_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -117,7 +117,7 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def provider

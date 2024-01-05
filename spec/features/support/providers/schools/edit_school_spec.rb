@@ -37,7 +37,7 @@ feature 'Edit school under provider as an admin', :with_publish_constraint, { ca
   end
 
   def and_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_the_school_is_not_updated
@@ -67,7 +67,7 @@ feature 'Edit school under provider as an admin', :with_publish_constraint, { ca
   end
 
   def and_i_click_update
-    click_button 'Update school'
+    click_link_or_button 'Update school'
   end
 
   def and_i_change_school_details

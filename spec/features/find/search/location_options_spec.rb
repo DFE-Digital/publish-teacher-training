@@ -71,7 +71,7 @@ feature 'Searching by location' do
   end
 
   def when_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_the_location_radio_button_is_selected
@@ -82,12 +82,12 @@ feature 'Searching by location' do
     find_courses_by_location_or_training_provider_page.location.set('invalid location')
     find_courses_by_location_or_training_provider_page.continue.click
     choose 'Further education'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_provide_my_visa_status
     choose 'Yes'
-    click_button 'Find courses'
+    click_link_or_button 'Find courses'
   end
 
   def then_should_see_the_no_results_text

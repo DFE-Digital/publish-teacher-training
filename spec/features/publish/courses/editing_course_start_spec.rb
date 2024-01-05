@@ -47,7 +47,7 @@ feature 'editing course start date', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_click_update
-    page.click_button('Update course start date')
+    page.click_link_or_button('Update course start date')
   end
 
   def then_i_should_see_the_december_start_date

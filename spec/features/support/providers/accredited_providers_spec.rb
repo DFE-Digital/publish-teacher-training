@@ -62,21 +62,21 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   def and_i_see_the_remove_success_message; end
 
   def and_i_click_remove_ap
-    click_button 'Remove accredited provider'
+    click_link_or_button 'Remove accredited provider'
   end
 
   def and_i_confirm_the_changes
-    click_button 'Add accredited provider'
+    click_link_or_button 'Add accredited provider'
   end
 
   def when_i_input_new_information
     fill_in 'About the accredited provider', with: 'New AP description'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_select_the_provider
     choose @accredited_provider.provider_name
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def form_title
@@ -85,15 +85,15 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def and_i_search_for_an_accredited_provider_with_a_valid_query
     fill_in form_title, with: @accredited_provider.provider_name
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_click_add_accredited_provider
-    click_link 'Add accredited provider'
+    click_link_or_button 'Add accredited provider'
   end
 
   def and_i_click_remove
-    click_link 'Remove'
+    click_link_or_button 'Remove'
   end
 
   def then_i_should_see_the_cannot_remove_text
@@ -126,11 +126,11 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_change
-    click_link('Change')
+    click_link_or_button('Change')
   end
 
   def when_i_click_the_back_link
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_i_see_the_success_message
@@ -143,7 +143,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_input_updated_description
     fill_in 'About the accredited provider', with: 'update the AP description'
-    click_button 'Update description'
+    click_link_or_button 'Update description'
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
@@ -151,7 +151,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_on_the_accredited_provider_tab
-    click_link 'Accredited provider'
+    click_link_or_button 'Accredited provider'
   end
 
   def and_my_provider_has_accrediting_providers

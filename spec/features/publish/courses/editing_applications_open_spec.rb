@@ -58,7 +58,7 @@ feature 'editing applications open date', { can_edit_current_and_next_cycles: fa
   end
 
   def when_i_click_update
-    page.click_button('Update applications open date')
+    page.click_link_or_button('Update applications open date')
   end
 
   def then_i_should_see_the_earliest_date_applications_can_open

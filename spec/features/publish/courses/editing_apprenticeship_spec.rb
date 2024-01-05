@@ -44,7 +44,7 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   private
 
   def when_i_go_back
-    click_link('Back')
+    click_link_or_button('Back')
   end
 
   def then_i_should_be_on_the_publish_courses_apprenticeship_edit_page

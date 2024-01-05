@@ -22,11 +22,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank about the training provider' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter details about the training provider')
+      and_i_click_link_or_button('Enter details about the training provider')
       then_i_should_be_on_about_your_organisation_page
-      and_i_click_link('Back')
+      and_i_click_link_or_button('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_link('Enter details about the training provider')
+      and_i_click_link_or_button('Enter details about the training provider')
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
       then_i_should_see_the_updated_content('test training with your organisation')
@@ -35,11 +35,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank training with disabilities and other needs' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter details about training with disabilities and other needs')
+      and_i_click_link_or_button('Enter details about training with disabilities and other needs')
       then_i_should_be_on_about_your_organisation_page
-      and_i_click_link('Back')
+      and_i_click_link_or_button('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_link('Enter details about training with disabilities and other needs')
+      and_i_click_link_or_button('Enter details about training with disabilities and other needs')
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
       then_i_should_see_the_updated_content('test training with disabilities')
@@ -48,9 +48,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank course summary' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter course summary')
-      and_i_click_link('Back')
-      and_i_click_link('Enter course summary')
+      and_i_click_link_or_button('Enter course summary')
+      and_i_click_link_or_button('Back')
+      and_i_click_link_or_button('Enter course summary')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       and_i_see_the_new_course_text
@@ -60,11 +60,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank degree requirements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter degree requirements')
+      and_i_click_link_or_button('Enter degree requirements')
       and_i_am_on_the_degree_requirements_page
-      and_i_click_link('Back')
+      and_i_click_link_or_button('Back')
       then_i_should_be_back_on_the_preview_page
-      and_i_click_link('Enter degree requirements')
+      and_i_click_link_or_button('Enter degree requirements')
       and_i_submit_and_continue_through_the_two_forms
       then_i_should_see_the_updated_content('An undergraduate degree, or equivalent.')
     end
@@ -72,9 +72,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank gcse requirements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter GCSE and equivalency test requirements')
-      and_i_click_link('Back')
-      and_i_click_link('Enter GCSE and equivalency test requirements')
+      and_i_click_link_or_button('Enter GCSE and equivalency test requirements')
+      and_i_click_link_or_button('Back')
+      and_i_click_link_or_button('Enter GCSE and equivalency test requirements')
       and_i_choose_no_and_submit
       and_i_see_the_correct_banner
       and_i_see_the_correct_gcse_text
@@ -84,9 +84,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank school placements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter details about school placements')
-      and_i_click_link('Back')
-      and_i_click_link('Enter details about school placements')
+      and_i_click_link_or_button('Enter details about school placements')
+      and_i_click_link_or_button('Back')
+      and_i_click_link_or_button('Enter details about school placements')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       then_i_should_be_back_on_the_preview_page
@@ -95,9 +95,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank fees uk eu' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link('Enter details about fees and financial support')
-      and_i_click_link('Back')
-      and_i_click_link('Enter details about fees and financial support')
+      and_i_click_link_or_button('Enter details about fees and financial support')
+      and_i_click_link_or_button('Back')
+      and_i_click_link_or_button('Enter details about fees and financial support')
       and_i_submit_a_valid_course_fees
       and_i_see_the_correct_banner
       and_i_see_the_the_course_fee
@@ -370,7 +370,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  alias_method :and_i_click_link, :click_link
+  alias_method :and_i_click_link_or_button, :click_link_or_button
 
   def then_i_should_see_the_updated_content(text)
     expect(page).to have_content(text)
@@ -382,9 +382,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_submit_and_continue_through_the_two_forms
     choose('No')
-    click_button('Continue')
+    click_link_or_button('Continue')
     choose('No')
-    click_button('Update degree requirements')
+    click_link_or_button('Update degree requirements')
   end
 
   def and_i_am_on_the_degree_requirements_page
@@ -399,7 +399,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def and_i_choose_no_and_submit
     page.all('.govuk-radios__item')[1].choose
     page.all('.govuk-radios__item')[3].choose
-    click_button 'Update GCSEs and equivalency tests'
+    click_link_or_button 'Update GCSEs and equivalency tests'
   end
 
   def and_i_see_the_correct_banner
@@ -422,21 +422,21 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     fill_in 'Training with your organisation', with: 'test training with your organisation'
     fill_in 'Training with disabilities and other needs', with: 'test training with disabilities'
 
-    click_button 'Save and publish'
+    click_link_or_button 'Save and publish'
   end
 
   def and_i_submit_a_valid_form
     fill_in 'About this course', with: 'great course'
     fill_in 'School placements', with: 'great placement'
 
-    click_button 'Update course information'
+    click_link_or_button 'Update course information'
   end
 
   def and_i_submit_a_valid_course_fees
     choose '1 year'
     fill_in 'Fee for UK students', with: '100'
 
-    click_button 'Update course length and fees'
+    click_link_or_button 'Update course length and fees'
   end
 
   def provider

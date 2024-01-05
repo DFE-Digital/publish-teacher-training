@@ -150,12 +150,12 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def when_i_click_the_select_accredited_provider_error_message_link
-    page.click_link('Select an accredited provider')
+    page.click_link_or_button('Select an accredited provider')
   end
 
   def and_i_choose_the_new_accredited_provider
     choose accredited_provider.provider_name
-    page.click_button('Update accredited provider')
+    page.click_link_or_button('Update accredited provider')
     expect(page).to have_content('Accredited provider updated')
   end
 

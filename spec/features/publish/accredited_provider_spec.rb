@@ -89,7 +89,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   private
 
   def and_i_click_remove_ap
-    click_button 'Remove accredited provider'
+    click_link_or_button 'Remove accredited provider'
   end
 
   def then_i_should_see_the_cannot_remove_ap_text
@@ -97,7 +97,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_remove
-    click_link 'Remove'
+    click_link_or_button 'Remove'
   end
 
   def and_i_create_a_new_accredited_provider
@@ -110,7 +110,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_change
-    click_link('Change')
+    click_link_or_button('Change')
   end
 
   def and_i_should_see_the_accredited_providers
@@ -133,7 +133,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_the_back_link
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def then_i_should_be_taken_to_the_accredited_provider_search_page
@@ -144,7 +144,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_click_the_change_link_for(field)
     within '.govuk-summary-list' do
-      click_link "Change #{field}"
+      click_link_or_button "Change #{field}"
     end
   end
 
@@ -174,7 +174,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_confirm_the_changes
     expect do
-      click_button 'Add accredited provider'
+      click_link_or_button 'Add accredited provider'
     end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
@@ -195,7 +195,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_input_some_different_information
     fill_in 'About the accredited provider', with: 'updates to the AP description'
-    click_button 'Update description'
+    click_link_or_button 'Update description'
   end
 
   def and_i_search_with_an_invalid_query
@@ -244,7 +244,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_add_accredited_provider
-    click_link 'Add accredited provider'
+    click_link_or_button 'Add accredited provider'
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
@@ -252,7 +252,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_on_the_accredited_provider_tab
-    click_link 'Accredited provider'
+    click_link_or_button 'Accredited provider'
   end
 
   alias_method :and_i_click_on_the_accredited_provider_tab, :when_i_click_on_the_accredited_provider_tab
@@ -271,7 +271,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   alias_method :and_i_continue_without_entering_a_description, :click_continue

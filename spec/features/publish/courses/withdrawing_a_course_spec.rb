@@ -32,7 +32,7 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
   scenario 'i can close the course instead' do
     and_there_is_a_course_i_want_to_withdraw
     when_i_visit_the_course_publish_courses_withdrawal_page
-    and_i_click_link('close the course instead')
+    and_i_click_link_or_button('close the course instead')
     then_i_should_be_on_the_close_confirmation_page
   end
 
@@ -110,5 +110,5 @@ feature 'Withdrawing courses', { can_edit_current_and_next_cycles: false } do
     expect(page.current_url).to end_with("publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/application_status?goto=withdraw")
   end
 
-  alias_method :and_i_click_link, :click_link
+  alias_method :and_i_click_link_or_button, :click_link_or_button
 end

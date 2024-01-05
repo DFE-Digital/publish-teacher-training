@@ -41,7 +41,7 @@ feature 'Searching across England' do
   end
 
   def and_i_click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def then_i_should_see_the_age_groups_form
@@ -68,7 +68,7 @@ feature 'Searching across England' do
   end
 
   def and_i_click_find_courses
-    click_button 'Find courses'
+    click_link_or_button 'Find courses'
   end
 
   def then_i_should_see_the_find_results_page

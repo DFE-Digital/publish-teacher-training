@@ -70,7 +70,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   private
 
   def when_i_go_back
-    click_link('Back')
+    click_link_or_button('Back')
   end
 
   def then_i_should_be_on_the_publish_courses_funding_type_edit_page
@@ -114,7 +114,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_cancel
-    click_link 'Cancel'
+    click_link_or_button 'Cancel'
   end
 
   def then_the_course_should_should_still_be_fee_paying

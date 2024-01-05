@@ -26,7 +26,7 @@ feature 'Authentication' do
   end
 
   def when_i_sign_in
-    click_button 'Sign in using DfE Sign-in'
+    click_link_or_button 'Sign in using DfE Sign-in'
   end
 
   def then_i_can_access_the_publish

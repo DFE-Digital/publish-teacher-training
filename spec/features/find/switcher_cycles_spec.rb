@@ -74,7 +74,7 @@ feature 'switcher cycle' do
   end
 
   def then_i_click_on_update_button
-    page.click_button('Update point in recruitment cycle')
+    page.click_link_or_button('Update point in recruitment cycle')
   end
 
   def and_i_should_see_the_success_banner

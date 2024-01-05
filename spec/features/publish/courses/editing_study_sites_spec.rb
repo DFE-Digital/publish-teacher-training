@@ -80,17 +80,17 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_i_click_add_study_site
-    click_link 'Select a study site'
+    click_link_or_button 'Select a study site'
   end
 
   def and_i_check_the_first_study_site_and_submit
     check(provider.study_sites.first.location_name)
-    click_button 'Update study sites'
+    click_link_or_button 'Update study sites'
   end
 
   def and_i_uncheck_the_first_study_site_and_submit
     uncheck(provider.study_sites.first.location_name)
-    click_button 'Update study sites'
+    click_link_or_button 'Update study sites'
   end
 
   def then_i_should_see_the_study_site_location_name
@@ -98,7 +98,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def given_i_click_change_study_sites
-    click_link 'Change study sites'
+    click_link_or_button 'Change study sites'
   end
 
   def and_the_previously_selected_study_site_is_still_checked
@@ -110,15 +110,15 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def given_i_click_cancel
-    click_link 'Cancel'
+    click_link_or_button 'Cancel'
   end
 
   def given_i_publish_the_course
-    click_button 'Publish course'
+    click_link_or_button 'Publish course'
   end
 
   def when_i_click_add_at_lease_one_study_site
-    click_link 'Add at least one study site'
+    click_link_or_button 'Add at least one study site'
   end
 
   def then_i_should_be_on_the_study_sites_page

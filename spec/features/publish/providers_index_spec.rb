@@ -69,7 +69,7 @@ feature 'Providers index' do
   end
 
   def when_i_click_on_the_current_cycle_link
-    click_link "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
+    click_link_or_button "#{Settings.current_recruitment_cycle_year.to_i - 1} to #{Settings.current_recruitment_cycle_year} - current"
   end
 
   def and_there_is_a_previous_recruitment_cycle
@@ -86,7 +86,7 @@ feature 'Providers index' do
   end
 
   def and_click_change_recruitment_cycle
-    click_link 'Change recruitment cycle'
+    click_link_or_button 'Change recruitment cycle'
   end
 
   def given_we_are_not_in_rollover
@@ -143,7 +143,7 @@ feature 'Providers index' do
   end
 
   def and_i_click_on_a_provider
-    click_link 'Bat School'
+    click_link_or_button 'Bat School'
   end
 
   def i_should_see_the_change_organisation_link
@@ -156,6 +156,6 @@ feature 'Providers index' do
   end
 
   def and_i_click_the_change_organisation_link
-    click_link 'Change organisation'
+    click_link_or_button 'Change organisation'
   end
 end

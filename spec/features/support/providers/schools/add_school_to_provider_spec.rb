@@ -78,11 +78,11 @@ feature 'Adding school to provider as an admin', :with_publish_constraint, { can
   end
 
   def and_i_click_save_and_add_another_school_button
-    click_button 'Save school and add another'
+    click_link_or_button 'Save school and add another'
   end
 
   def and_i_click_add_school_button
-    click_button 'Add school'
+    click_link_or_button 'Add school'
   end
 
   def then_i_should_see_the_school_name_listed
@@ -110,7 +110,7 @@ feature 'Adding school to provider as an admin', :with_publish_constraint, { can
   end
 
   def and_i_click_add_school
-    click_link 'Add school'
+    click_link_or_button 'Add school'
   end
 
   def and_i_fill_in_school_name

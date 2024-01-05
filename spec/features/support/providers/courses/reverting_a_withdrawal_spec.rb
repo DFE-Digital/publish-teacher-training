@@ -30,7 +30,7 @@ feature 'Reverting a withdrawal' do
   end
 
   def and_i_confirm
-    click_button 'Revert withdrawal'
+    click_link_or_button 'Revert withdrawal'
   end
 
   def when_i_navigate_to_the_withdrawn_course
@@ -38,7 +38,7 @@ feature 'Reverting a withdrawal' do
   end
 
   def and_i_click_revert_withdrawal
-    click_link 'Revert withdrawal'
+    click_link_or_button 'Revert withdrawal'
   end
 
   def given_i_am_authenticated_as_an_admin_user

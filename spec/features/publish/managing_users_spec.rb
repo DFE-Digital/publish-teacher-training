@@ -153,7 +153,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_i_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_am_on_the_check_page
@@ -244,13 +244,13 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_i_click_on_the_user
-    click_link 'Mr User'
+    click_link_or_button 'Mr User'
   end
 
   alias_method :when_i_click_on_the_user, :and_i_click_on_the_user
 
   def when_i_click_on_user_two
-    click_link 'Mr Cool'
+    click_link_or_button 'Mr Cool'
   end
 
   def i_should_be_on_the_publish_users_show_page
@@ -290,7 +290,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_i_click_update_user
-    click_button 'Update user'
+    click_link_or_button 'Update user'
   end
 
   def then_i_should_see_a_validation_error_message
