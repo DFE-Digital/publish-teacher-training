@@ -11,8 +11,8 @@ module PageObjects
       sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
       element :copy_content_warning, '[data-qa="copy-course-warning"]'
-      element :yes_radio, '[data-qa="degree_subject_requirements__yes_radio"]'
-      element :no_radio, '[data-qa="degree_subject_requirements__no_radio"]'
+      element :radio_yes, '[data-qa="degree_subject_requirements__yes_radio"]'
+      element :radio_no, '[data-qa="degree_subject_requirements__no_radio"]'
       element :requirements, '[data-qa="degree_subject_requirements__requirements"]'
       element :use_content, '[data-qa="course__use_content"]'
 

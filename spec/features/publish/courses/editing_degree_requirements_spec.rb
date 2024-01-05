@@ -130,8 +130,8 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
           expect(publish_degree_subject_requirement_page.copy_content_warning).to have_content(name)
         end
 
-        expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
-        expect(publish_degree_subject_requirement_page.no_radio).not_to be_checked
+        expect(publish_degree_subject_requirement_page.radio_yes).to be_checked
+        expect(publish_degree_subject_requirement_page.radio_no).not_to be_checked
         expect(publish_degree_subject_requirement_page.requirements.text).to eq(course2.degree_subject_requirements)
       end
 
@@ -174,12 +174,12 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
   end
 
   def and_i_require_a_classification
-    publish_degree_start_page.yes_radio.choose
+    publish_degree_start_page.radio_yes.choose
     and_i_submit
   end
 
   def and_i_do_not_require_a_classification
-    publish_degree_start_page.no_radio.choose
+    publish_degree_start_page.radio_no.choose
     and_i_submit
   end
 
@@ -199,7 +199,7 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
   def when_i_set_additional_requirements
     @some_additional_requiremet = 'Some additional requirement'
 
-    publish_degree_subject_requirement_page.yes_radio.choose
+    publish_degree_subject_requirement_page.radio_yes.choose
     publish_degree_subject_requirement_page.requirements.set(@some_additional_requiremet)
     and_i_submit
   end
@@ -224,7 +224,7 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
   end
 
   def then_the_start_page_should_show_the_selected_classification
-    expect(publish_degree_start_page.yes_radio).to be_checked
+    expect(publish_degree_start_page.radio_yes).to be_checked
   end
 
   def then_the_grade_page_should_show_the_selected_grade
@@ -232,7 +232,7 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
   end
 
   def then_the_subject_requirements_page_should_show_the_requirements
-    expect(publish_degree_subject_requirement_page.yes_radio).to be_checked
+    expect(publish_degree_subject_requirement_page.radio_yes).to be_checked
     expect(publish_degree_subject_requirement_page.requirements.value).to eq('Maths A Level')
   end
 
