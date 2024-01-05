@@ -133,7 +133,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   alias_method :when_i_visit_the_publish_users_index_page, :given_i_visit_the_publish_users_index_page
 
   def when_the_user_i_want_to_add_has_not_already_been_added
-    expect(publish_users_index_page).not_to have_text('willy.wonka@bat-school.com')
+    expect(publish_users_index_page).to have_no_text('willy.wonka@bat-school.com')
   end
 
   def and_i_click_add_user
@@ -205,7 +205,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_the_warning_email_text_should_not_be_displayed
-    expect(page).not_to have_text('Warning The user will be sent an email to tell them you’ve changed their email address')
+    expect(page).to have_no_text('Warning The user will be sent an email to tell them you’ve changed their email address')
   end
 
   def and_i_see_the_new_last_name_is_displayed
@@ -217,7 +217,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def then_i_should_not_see_any_change_links
-    expect(page).not_to have_link 'Change'
+    expect(page).to have_no_link 'Change'
   end
 
   def and_i_click_add_user
@@ -282,7 +282,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def then_the_user_should_be_deleted
-    expect(publish_provider_users_page).not_to have_text 'Mr Cool'
+    expect(publish_provider_users_page).to have_no_text 'Mr Cool'
   end
 
   def and_the_new_email_is_displayed

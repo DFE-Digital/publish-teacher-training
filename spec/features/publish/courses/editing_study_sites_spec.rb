@@ -106,7 +106,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def and_the_study_site_checkbox_is_not_checked
-    expect(page).not_to have_field(checked: true)
+    expect(page).to have_no_field(checked: true)
   end
 
   def given_i_click_cancel

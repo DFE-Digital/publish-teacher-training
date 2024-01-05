@@ -71,8 +71,8 @@ feature 'Searching for an accredited provider' do
 
   def then_i_see_the_provider_i_searched_for
     expect(page).to have_content(@accredited_provider.provider_name)
-    expect(page).not_to have_content(@accredited_provider_two.provider_name)
-    expect(page).not_to have_content(@accredited_provider_three.provider_name)
+    expect(page).to have_no_content(@accredited_provider_two.provider_name)
+    expect(page).to have_no_content(@accredited_provider_three.provider_name)
   end
 
   def when_i_select_the_provider
@@ -104,8 +104,8 @@ feature 'Searching for an accredited provider' do
 
   def and_i_should_still_see_the_provider_i_searched_for
     expect(page).to have_content(@accredited_provider.provider_name)
-    expect(page).not_to have_content(@accredited_provider_two.provider_name)
-    expect(page).not_to have_content(@accredited_provider_three.provider_name)
+    expect(page).to have_no_content(@accredited_provider_two.provider_name)
+    expect(page).to have_no_content(@accredited_provider_three.provider_name)
   end
 
   def when_i_enter_a_description

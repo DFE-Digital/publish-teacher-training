@@ -210,8 +210,8 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def then_i_should_still_see_the_provider_i_searched_for
     expect(page).to have_content(@accredited_provider.provider_name)
-    expect(page).not_to have_content(@accredited_provider_two.provider_name)
-    expect(page).not_to have_content(@accredited_provider_three.provider_name)
+    expect(page).to have_no_content(@accredited_provider_two.provider_name)
+    expect(page).to have_no_content(@accredited_provider_three.provider_name)
   end
 
   def and_i_should_see_an_error_message(error_message = form_title)
@@ -226,8 +226,8 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def then_i_see_the_provider_i_searched_for
     expect(page).to have_content(@accredited_provider.provider_name)
-    expect(page).not_to have_content(@accredited_provider_two.provider_name)
-    expect(page).not_to have_content(@accredited_provider_three.provider_name)
+    expect(page).to have_no_content(@accredited_provider_two.provider_name)
+    expect(page).to have_no_content(@accredited_provider_three.provider_name)
   end
 
   def given_there_are_accredited_providers_in_the_database_with_users

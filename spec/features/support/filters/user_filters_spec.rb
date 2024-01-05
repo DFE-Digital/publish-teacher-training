@@ -70,13 +70,13 @@ feature 'Filter users' do
   def the_correct_admin_user_shows
     expect(support_users_index_page.users.length).to eq(1)
     expect(support_users_index_page).to have_content(@admin_user.first_name)
-    expect(support_users_index_page).not_to have_content(@user.first_name)
+    expect(support_users_index_page).to have_no_content(@user.first_name)
   end
 
   def the_correct_provider_user_shows
     expect(support_users_index_page.users.length).to eq(1)
     expect(support_users_index_page).to have_content(@user.first_name)
-    expect(support_users_index_page).not_to have_content(@admin_user.first_name)
+    expect(support_users_index_page).to have_no_content(@admin_user.first_name)
   end
 
   def given_i_have_filters_selected

@@ -222,7 +222,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
 
   def and_i_cannot_delete_the_study_site
     expect(page).to have_content('You cannot remove this study site')
-    expect(page).not_to have_button('Remove study site')
+    expect(page).to have_no_button('Remove study site')
   end
 
   private

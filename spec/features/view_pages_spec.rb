@@ -6,7 +6,7 @@ feature 'View pages', :with_publish_constraint do
   scenario 'Environment label and class are read from settings' do
     visit '/cookies'
     expect(page).to have_css('.govuk-phase-banner__content__tag', text: Settings.environment.label)
-    expect(page).to have_selector(".app-header--#{Settings.environment.name}")
+    expect(page).to have_css(".app-header--#{Settings.environment.name}")
   end
 
   scenario 'Navigate to /cookies' do

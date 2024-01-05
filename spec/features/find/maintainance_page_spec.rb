@@ -15,7 +15,7 @@ feature 'Maintenance mode' do
       visit find_path
 
       expect(page).to have_current_path find_maintenance_path
-      expect(page).not_to have_content 'This service will be unavailable on'
+      expect(page).to have_no_content 'This service will be unavailable on'
     end
   end
 

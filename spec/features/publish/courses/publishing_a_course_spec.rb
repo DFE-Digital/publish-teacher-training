@@ -108,7 +108,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   def and_i_do_not_see_the_unpublished_content_on_find
     page.driver.header 'Host', 'find'
     visit "/course/#{provider.provider_code}/#{course.course_code}"
-    expect(page).not_to have_content('some new description')
+    expect(page).to have_no_content('some new description')
   end
 
   def then_i_see_the_content_on_find

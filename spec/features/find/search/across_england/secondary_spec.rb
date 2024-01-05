@@ -69,7 +69,7 @@ feature 'Searching across England' do
   private
 
   def and_i_see_that_the_visa_checkbox_is_not_checked
-    expect(page).not_to have_checked_field('Only show courses with visa sponsorship')
+    expect(page).to have_no_checked_field('Only show courses with visa sponsorship')
   end
 
   def given_the_bursaries_and_scholarships_feature_flag_is_deactivated
@@ -85,7 +85,7 @@ feature 'Searching across England' do
   end
 
   def then_i_should_not_see_the_financial_support_banner
-    expect(page).not_to have_css('.govuk-notification-banner__heading', text: 'Financial support')
+    expect(page).to have_no_css('.govuk-notification-banner__heading', text: 'Financial support')
   end
 
   def when_i_visit_the_secondary_subjects_page

@@ -14,7 +14,7 @@ describe TitleBar do
     end
 
     it 'does not render the provided title' do
-      expect(component).not_to have_text('BAT School')
+      expect(component).to have_no_text('BAT School')
     end
 
     it 'does not render the recruitment cycle link' do

@@ -19,7 +19,7 @@ feature 'Maintenance banner' do
 
       visit find_path
 
-      expect(page).not_to have_content 'This service will be unavailable on'
+      expect(page).to have_no_content 'This service will be unavailable on'
     end
   end
 end

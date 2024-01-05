@@ -36,7 +36,7 @@ describe SearchResultTitleComponent, type: :component do
 
     expect(page).to have_text("No results found for ‘#{query}’")
     expect(page).to have_link('Change your search', href: '/test')
-    expect(page).not_to have_text("if the #{search_resource} you’re looking for is not listed.")
+    expect(page).to have_no_text("if the #{search_resource} you’re looking for is not listed.")
   end
 
   def render_component(results_count)

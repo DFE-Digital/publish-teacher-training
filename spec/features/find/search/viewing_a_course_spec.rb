@@ -226,7 +226,7 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.financial_support_details).to have_content('Financial support from the training provider')
 
-    expect(find_course_show_page.required_qualifications).not_to have_content(
+    expect(find_course_show_page.required_qualifications).to have_no_content(
       @course.latest_published_enrichment.required_qualifications
     )
 
@@ -291,7 +291,7 @@ feature 'Viewing a findable course' do
       [@provider.address1, @provider.address2, @provider.address3, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
     )
 
-    expect(find_course_show_page.school_placements).not_to have_content('Suspended site with vacancies')
+    expect(find_course_show_page.school_placements).to have_no_content('Suspended site with vacancies')
 
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
       expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
@@ -303,7 +303,7 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.apply_link[:href]).to eq("/course/#{provider.provider_code}/#{@course.course_code}/apply")
 
-    expect(find_course_show_page).not_to have_content('When you apply you’ll need these codes for the Choices section of your application form')
+    expect(find_course_show_page).to have_no_content('When you apply you’ll need these codes for the Choices section of your application form')
 
     expect(find_course_show_page).not_to have_end_of_cycle_notice
 

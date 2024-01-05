@@ -61,12 +61,12 @@ feature 'Searching for a school from the GIAS list' do
 
   def then_i_should_see_a_single_radio_list
     expect(page).to have_content @school.name
-    expect(page).not_to have_content @school_two.name
-    expect(page).not_to have_content @school_three.name
+    expect(page).to have_no_content @school_two.name
+    expect(page).to have_no_content @school_three.name
   end
 
   def then_i_should_see_a_radio_list
-    expect(page).not_to have_content @school.name
+    expect(page).to have_no_content @school.name
     expect(page).to have_content @school_two.name
     expect(page).to have_content @school_three.name
   end

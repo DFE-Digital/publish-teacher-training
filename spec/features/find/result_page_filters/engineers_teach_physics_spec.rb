@@ -60,6 +60,6 @@ RSpec.feature 'Engineers teach physics' do
   end
 
   def then_i_dont_see_the_etp_checkbox
-    expect(find_results_page).not_to have_text('Only show Engineers teach physics courses')
+    expect(find_results_page).to have_no_text('Only show Engineers teach physics courses')
   end
 end

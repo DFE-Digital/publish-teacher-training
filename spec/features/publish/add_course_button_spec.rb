@@ -20,7 +20,7 @@ feature 'Add course button', :can_edit_current_and_next_cycles do
   end
 
   def and_i_should_not_see_the_add_course_button
-    expect(page).not_to have_link('Add course')
+    expect(page).to have_no_link('Add course')
   end
 
   def then_i_should_see_the_add_course_button

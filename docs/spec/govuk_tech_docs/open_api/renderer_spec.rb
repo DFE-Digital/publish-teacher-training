@@ -73,8 +73,8 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
       rendered = render.api_full
 
       rendered = Capybara::Node::Simple.new(rendered)
-      expect(rendered).not_to have_css('h2#servers')
-      expect(rendered).not_to have_css('div#server-list')
+      expect(rendered).to have_no_css('h2#servers')
+      expect(rendered).to have_no_css('div#server-list')
     end
 
     it 'renders a server with no description' do
@@ -89,7 +89,7 @@ RSpec.describe GovukTechDocs::OpenApi::Renderer do
       rendered = Capybara::Node::Simple.new(rendered)
       expect(rendered).to have_css('h2#servers')
       expect(rendered).to have_css('div#server-list>a', text: 'https://example.com')
-      expect(rendered).not_to have_css('div#server-list>p')
+      expect(rendered).to have_no_css('div#server-list>p')
     end
 
     it 'renders a list of servers' do

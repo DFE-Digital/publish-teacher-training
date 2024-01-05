@@ -40,7 +40,7 @@ feature 'Authentication with Personas' do
   end
 
   def and_i_do_not_see_persona_related_text
-    expect(auth_sign_in_page).not_to have_text('Use Personas to access an account.')
-    expect(auth_sign_in_page).not_to have_link('Sign in using a Persona')
+    expect(auth_sign_in_page).to have_no_text('Use Personas to access an account.')
+    expect(auth_sign_in_page).to have_no_link('Sign in using a Persona')
   end
 end

@@ -102,8 +102,8 @@ describe GcseRowContent, type: :component do
 
         render_inline(described_class.new(course: course.decorate))
 
-        expect(page).not_to have_content('Grade 4 (C) or above in English and maths, or equivalent qualification')
-        expect(page).not_to have_content('Grade 4 (C) or above in English, maths and science, or equivalent qualification')
+        expect(page).to have_no_content('Grade 4 (C) or above in English and maths, or equivalent qualification')
+        expect(page).to have_no_content('Grade 4 (C) or above in English, maths and science, or equivalent qualification')
       end
     end
 

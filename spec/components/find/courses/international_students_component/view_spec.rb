@@ -41,11 +41,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'does not tell candidates the 3-year residency rule' do
-      expect(page).not_to have_text('To apply for this teaching apprenticeship course, you’ll need to have lived in the UK for at least 3 years before the start of the course')
+      expect(page).to have_no_text('To apply for this teaching apprenticeship course, you’ll need to have lived in the UK for at least 3 years before the start of the course')
     end
 
     it 'does not tell candidates about settled and pre-settled status' do
-      expect(page).not_to have_text('EEA nationals with settled or pre-settled status under the')
+      expect(page).to have_no_text('EEA nationals with settled or pre-settled status under the')
     end
   end
 
@@ -87,11 +87,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'does not tell candidates the 3-year residency rule' do
-      expect(page).not_to have_text('To apply for this teaching apprenticeship course, you’ll need to have lived in the UK for at least 3 years before the start of the course')
+      expect(page).to have_no_text('To apply for this teaching apprenticeship course, you’ll need to have lived in the UK for at least 3 years before the start of the course')
     end
 
     it 'does not tell candidates about settled and pre-settled status' do
-      expect(page).not_to have_text('EEA nationals with settled or pre-settled status under the')
+      expect(page).to have_no_text('EEA nationals with settled or pre-settled status under the')
     end
   end
 

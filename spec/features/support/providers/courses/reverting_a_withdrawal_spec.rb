@@ -18,7 +18,7 @@ feature 'Reverting a withdrawal' do
   end
 
   def and_i_should_no_longer_see_the_revert_withdrawal_link
-    expect(page).not_to have_link('Revert withdrawal')
+    expect(page).to have_no_link('Revert withdrawal')
   end
 
   def then_i_should_see_the_published_and_closed_course

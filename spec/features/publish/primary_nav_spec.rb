@@ -60,6 +60,6 @@ feature 'Primary nav', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_should_not_see_the_training_partners_link
-    expect(page).not_to have_text 'Change organisation'
+    expect(page).to have_no_text 'Change organisation'
   end
 end

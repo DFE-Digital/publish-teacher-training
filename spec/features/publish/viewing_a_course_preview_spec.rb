@@ -465,7 +465,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page.scholarship_amount).to have_content('a scholarship of £26,000')
     expect(publish_course_preview_page.bursary_amount).to have_content('a bursary of £24,000')
 
-    expect(publish_course_preview_page).not_to have_content('Information not yet available')
+    expect(publish_course_preview_page).to have_no_content('Information not yet available')
   end
 
   def and_i_do_not_see_financial_support
