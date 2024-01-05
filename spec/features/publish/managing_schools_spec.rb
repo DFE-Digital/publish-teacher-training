@@ -90,7 +90,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_add_school
-    click_button 'Add school'
+    click_link_or_button 'Add school'
   end
 
   def and_i_am_on_the_schools_check_page
@@ -114,7 +114,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_the_link_to_enter_a_school_manually
-    click_link 'I cannot find the school - enter manually'
+    click_link_or_button 'I cannot find the school - enter manually'
   end
 
   def and_i_cannot_delete_the_school
@@ -132,11 +132,11 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_remove_school_button
-    click_button 'Remove school'
+    click_link_or_button 'Remove school'
   end
 
   def when_i_click_cancel
-    click_link 'Cancel'
+    click_link_or_button 'Cancel'
   end
 
   def then_i_am_on_the_school_delete_page
@@ -144,7 +144,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_remove_school_link
-    click_link 'Remove school'
+    click_link_or_button 'Remove school'
   end
 
   def when_i_visit_the_publish_school_show_page
@@ -176,7 +176,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_the_school_is_updated
@@ -186,7 +186,7 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def and_i_click_update
-    click_button 'Update school'
+    click_link_or_button 'Update school'
   end
 
   def and_i_change_school_details

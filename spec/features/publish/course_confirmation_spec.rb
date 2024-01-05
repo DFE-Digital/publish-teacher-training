@@ -81,11 +81,11 @@ feature 'course confirmation', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_without_selecting_a_study_site
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_click_select_a_study_site
-    click_link 'Select a study site'
+    click_link_or_button 'Select a study site'
   end
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle

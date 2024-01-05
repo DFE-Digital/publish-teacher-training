@@ -78,7 +78,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
       [
         'other requirements'
       ].each do |name|
-        expect(publish_course_requirement_edit_page.copy_content_warning).not_to have_content(name)
+        expect(publish_course_requirement_edit_page.copy_content_warning).to have_no_content(name)
       end
 
       expect(publish_course_requirement_edit_page.personal_qualities.value).to eq(course3_enrichment.personal_qualities)

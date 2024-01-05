@@ -32,7 +32,7 @@ feature 'Searching for a school from the GIAS list' do
   private
 
   def and_i_go_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -61,12 +61,12 @@ feature 'Searching for a school from the GIAS list' do
 
   def then_i_should_see_a_single_radio_list
     expect(page).to have_content @school.name
-    expect(page).not_to have_content @school_two.name
-    expect(page).not_to have_content @school_three.name
+    expect(page).to have_no_content @school_two.name
+    expect(page).to have_no_content @school_three.name
   end
 
   def then_i_should_see_a_radio_list
-    expect(page).not_to have_content @school.name
+    expect(page).to have_no_content @school.name
     expect(page).to have_content @school_two.name
     expect(page).to have_content @school_three.name
   end
@@ -117,7 +117,7 @@ feature 'Searching for a school from the GIAS list' do
   end
 
   def click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def provider

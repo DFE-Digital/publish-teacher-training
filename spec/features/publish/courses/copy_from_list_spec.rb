@@ -83,7 +83,7 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
   end
 
   def and_i_click_copy
-    click_button 'Copy content'
+    click_link_or_button 'Copy content'
   end
 
   def then_i_see_an_alert_that_the_changes_are_not_saved_yet

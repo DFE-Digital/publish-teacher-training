@@ -50,7 +50,7 @@ RSpec.feature 'Engineers teach physics' do
 
   def and_i_provide_my_visa_status
     choose 'Yes'
-    click_button 'Find courses'
+    click_link_or_button 'Find courses'
   end
 
   def then_i_see_that_the_etp_checkbox_is_unchecked
@@ -60,6 +60,6 @@ RSpec.feature 'Engineers teach physics' do
   end
 
   def then_i_dont_see_the_etp_checkbox
-    expect(find_results_page).not_to have_text('Only show Engineers teach physics courses')
+    expect(find_results_page).to have_no_text('Only show Engineers teach physics courses')
   end
 end

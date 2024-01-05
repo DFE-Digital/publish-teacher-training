@@ -82,7 +82,7 @@ feature 'Editing a search' do
   end
 
   def when_i_change_my_search_query
-    click_link 'Change'
+    click_link_or_button 'Change'
   end
 
   def then_i_should_see_the_start_page

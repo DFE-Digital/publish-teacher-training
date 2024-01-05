@@ -101,7 +101,7 @@ feature 'Editing course length and funding type' do
           'Fee details',
           'Financial support'
         ].each do |name|
-          expect(publish_course_fee_edit_page.copy_content_warning).not_to have_content(name)
+          expect(publish_course_fee_edit_page.copy_content_warning).to have_no_content(name)
         end
 
         expect(publish_course_fee_edit_page.course_length.other).to be_checked

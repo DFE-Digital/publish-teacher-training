@@ -69,11 +69,11 @@ feature 'View provider users' do
   end
 
   def when_i_click_on_the_change_link
-    click_link 'Change provider name'
+    click_link_or_button 'Change provider name'
   end
 
   def when_i_click_on_the_change_email_link
-    click_link 'Change provider email'
+    click_link_or_button 'Change provider email'
   end
 
   def then_i_am_on_the_support_provider_edit_page

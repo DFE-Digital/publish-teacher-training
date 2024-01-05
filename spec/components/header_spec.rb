@@ -19,7 +19,7 @@ describe Header do
 
   it "doesn't contain a sign out link if no current user" do
     render_inline(described_class.new(service_name: 'test'))
-    expect(component).not_to have_text('Sign out')
+    expect(component).to have_no_text('Sign out')
   end
 
   context 'for an admin user' do

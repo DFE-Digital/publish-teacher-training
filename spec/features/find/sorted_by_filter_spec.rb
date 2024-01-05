@@ -85,6 +85,6 @@ feature 'sorted by' do
   end
 
   def when_i_click_sort
-    click_button 'Sort'
+    click_link_or_button 'Sort'
   end
 end

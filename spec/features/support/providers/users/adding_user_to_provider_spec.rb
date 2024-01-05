@@ -83,7 +83,7 @@ feature 'Adding user to provider as an admin', :with_publish_constraint, { can_e
   end
 
   def and_the_user_i_want_to_add_has_not_already_been_added
-    expect(support_provider_user_users_check_page).not_to have_text('viola_fisher@boyle.io')
+    expect(support_provider_user_users_check_page).to have_no_text('viola_fisher@boyle.io')
   end
 
   def then_it_should_display_the_correct_error_messages

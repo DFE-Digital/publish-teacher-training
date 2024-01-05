@@ -11,7 +11,7 @@ describe SupportTitleBar do
     end
 
     it 'does not render the provided title' do
-      expect(component).not_to have_text("Recruitment cycle #{Settings.current_recruitment_cycle_year}")
+      expect(component).to have_no_text("Recruitment cycle #{Settings.current_recruitment_cycle_year}")
     end
 
     it 'does not render the recruitment cycle link' do

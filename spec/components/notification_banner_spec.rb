@@ -13,7 +13,7 @@ describe NotificationBanner do
     end
 
     it "doesn't add the success class" do
-      expect(component).not_to have_css('.govuk-notification-banner--success')
+      expect(component).to have_no_css('.govuk-notification-banner--success')
     end
 
     it "has a default title of 'Important'" do

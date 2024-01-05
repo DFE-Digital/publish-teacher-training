@@ -17,14 +17,14 @@ module Find
           allow(Settings.environment).to receive(:name).and_return(environment)
           render_inline(described_class.new)
 
-          expect(page).to have_selector(".govuk-phase-banner .govuk-tag--#{colour}")
+          expect(page).to have_css(".govuk-phase-banner .govuk-tag--#{colour}")
         end
       end
 
       context "when no value is passed in to 'no_border'" do
         it 'renders a border' do
           render_inline(described_class.new)
-          expect(page).not_to have_css('.app-phase-banner--no-border')
+          expect(page).to have_no_css('.app-phase-banner--no-border')
         end
       end
 

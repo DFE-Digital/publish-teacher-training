@@ -62,7 +62,7 @@ feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_not_see_any_visa_details
-    expect(page).not_to have_content('Visa sponsorship')
+    expect(page).to have_no_content('Visa sponsorship')
   end
 
   def then_i_should_see_visa_details

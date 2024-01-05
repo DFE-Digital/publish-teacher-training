@@ -75,12 +75,12 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_i_enter_invalid_details
     fill_in('Address line 1', with: '')
-    click_button 'Update study site'
+    click_link_or_button 'Update study site'
   end
 
   def and_the_updated_site_is_displayed
@@ -89,11 +89,11 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
 
   def and_i_change_the_name
     fill_in('Study site name', with: 'Hogwarts')
-    click_button 'Update study site'
+    click_link_or_button 'Update study site'
   end
 
   def and_i_click_a_change_link
-    click_link(class: 'govuk-link location_name')
+    click_link_or_button(class: 'govuk-link location_name')
   end
 
   def and_i_am_on_the_study_sites_show_page
@@ -102,7 +102,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   alias_method :then_i_am_on_the_study_site_show_page, :and_i_am_on_the_study_sites_show_page
 
   def when_i_click_on_a_study_site
-    click_link site.location_name
+    click_link_or_button site.location_name
   end
 
   def add_study_site_with_valid_details
@@ -134,7 +134,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_add_study_site
-    click_button 'Add study site'
+    click_link_or_button 'Add study site'
   end
 
   def and_i_am_on_the_study_sites_check_page
@@ -142,7 +142,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_the_link_to_enter_a_school_manually
-    click_link 'I cannot find the school - enter manually'
+    click_link_or_button 'I cannot find the school - enter manually'
   end
 
   def and_i_set_valid_new_details
@@ -150,7 +150,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     page.fill_in 'Address line 1', with: '123 Test Street'
     page.fill_in 'Town or city', with: 'London'
     page.fill_in 'Postcode', with: 'KT8 9AU'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_set_invalid_new_details
@@ -158,7 +158,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     page.fill_in 'Address line 1', with: '123 Test Street'
     page.fill_in 'Town or city', with: 'London'
     page.fill_in 'Postcode', with: 'KT8 9AU'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def and_i_set_existing_name_details
@@ -166,11 +166,11 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
     page.fill_in 'Address line 1', with: 'Another Test Street'
     page.fill_in 'Town or city', with: 'Manchester'
     page.fill_in 'Postcode', with: 'M16 0RA'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def when_i_click_add_study_site
-    click_link 'Add study site'
+    click_link_or_button 'Add study site'
   end
 
   def then_i_should_see_a_list_of_study_sites
@@ -186,7 +186,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_add_school
-    click_button 'Add school'
+    click_link_or_button 'Add school'
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -196,7 +196,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_to_remove
-    click_link 'Remove study site'
+    click_link_or_button 'Remove study site'
   end
 
   def then_i_am_on_the_study_sites_delete_page
@@ -204,11 +204,11 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
   end
 
   def when_i_click_cancel
-    click_link 'Cancel'
+    click_link_or_button 'Cancel'
   end
 
   def and_i_click_the_remove_study_site_button
-    click_button 'Remove study site'
+    click_link_or_button 'Remove study site'
   end
 
   def and_the_study_site_is_deleted
@@ -222,7 +222,7 @@ feature "Managing a provider's study_sites", { can_edit_current_and_next_cycles:
 
   def and_i_cannot_delete_the_study_site
     expect(page).to have_content('You cannot remove this study site')
-    expect(page).not_to have_button('Remove study site')
+    expect(page).to have_no_button('Remove study site')
   end
 
   private

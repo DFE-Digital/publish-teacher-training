@@ -58,15 +58,15 @@ feature 'Support index' do
   end
 
   def and_should_not_see_the_switch_cycle_link
-    expect(support_provider_index_page).not_to have_link 'Change recruitment cycle'
+    expect(support_provider_index_page).to have_no_link 'Change recruitment cycle'
   end
 
   def when_i_click_on_the_current_cycle
-    click_link "#{Settings.current_recruitment_cycle_year} - current"
+    click_link_or_button "#{Settings.current_recruitment_cycle_year} - current"
   end
 
   def and_click_on_the_next_cycle
-    click_link Settings.current_recruitment_cycle_year + 1
+    click_link_or_button Settings.current_recruitment_cycle_year + 1
   end
 
   def i_should_see_the_current_cycle_page
@@ -74,7 +74,7 @@ feature 'Support index' do
   end
 
   def when_click_the_switch_cycle_link
-    click_link 'Change recruitment cycle'
+    click_link_or_button 'Change recruitment cycle'
   end
 
   def i_should_be_on_the_next_cycle_page
@@ -86,6 +86,6 @@ feature 'Support index' do
   end
 
   def and_i_should_not_see_the_pe_allocations_tab
-    expect(support_provider_index_page).not_to have_link 'PE Allocations'
+    expect(support_provider_index_page).to have_no_link 'PE Allocations'
   end
 end

@@ -114,7 +114,7 @@ feature 'updating engineers teach physics', { can_edit_current_and_next_cycles: 
   end
 
   def when_i_go_back
-    click_link('Back')
+    click_link_or_button('Back')
   end
 
   def provider

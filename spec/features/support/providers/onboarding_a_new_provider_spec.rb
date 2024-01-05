@@ -204,11 +204,11 @@ feature 'Onboarding a new provider' do
   end
 
   def and_i_click_the_add_organisation_button
-    click_button 'Add organisation'
+    click_link_or_button 'Add organisation'
   end
 
   def and_i_click_the_continue_button
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def then_i_am_redirected_to_provider_page

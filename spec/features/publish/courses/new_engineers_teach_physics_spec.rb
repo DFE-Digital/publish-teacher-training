@@ -83,7 +83,7 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
   end
 
   def when_i_go_back
-    click_link('Back')
+    click_link_or_button('Back')
   end
 
   def and_i_select_an_option

@@ -67,7 +67,7 @@ feature 'Filter providers' do
   def the_correct_provider_shows
     expect(support_provider_index_page.providers.length).to eq(1)
     expect(support_provider_index_page).to have_content(@provider_one.provider_name)
-    expect(support_provider_index_page).not_to have_content(@provider_two.provider_name)
+    expect(support_provider_index_page).to have_no_content(@provider_two.provider_name)
   end
 
   def then_i_can_search_by_course_code

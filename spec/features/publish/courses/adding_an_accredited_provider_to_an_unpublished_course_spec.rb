@@ -19,7 +19,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def given_i_click_change_accredited_provider
-    click_link 'Change accredited provider'
+    click_link_or_button 'Change accredited provider'
   end
 
   def then_i_should_see_the_success_message
@@ -27,7 +27,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_click_update_accredited_provider
-    click_button 'Update accredited provider'
+    click_link_or_button 'Update accredited provider'
   end
 
   def and_i_choose_the_new_accredited_provider
@@ -36,7 +36,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def when_i_click_select_an_accredited_provider
-    click_link 'Select an accredited provider'
+    click_link_or_button 'Select an accredited provider'
   end
 
   def and_i_create_a_new_accredited_provider
@@ -68,7 +68,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def form_title
@@ -76,15 +76,15 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_click_the_add_accredited_provider_link
-    click_link 'Add at least one accredited provider'
+    click_link_or_button 'Add at least one accredited provider'
   end
 
   def and_i_click_add_accredited_provider_link
-    click_link 'Add accredited provider'
+    click_link_or_button 'Add accredited provider'
   end
 
   def and_i_click_add_accredited_provider_button
-    click_button 'Add accredited provider'
+    click_link_or_button 'Add accredited provider'
   end
 
   def given_i_am_authenticated_as_a_provider_user

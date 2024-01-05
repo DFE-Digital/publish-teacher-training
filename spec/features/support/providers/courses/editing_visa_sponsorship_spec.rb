@@ -41,7 +41,7 @@ feature 'Editing visa sponsorship' do
   end
 
   def and_i_submit_the_form
-    click_button 'Update'
+    click_link_or_button 'Update'
   end
 
   def and_i_check_the_student_visa_check_box
@@ -69,11 +69,11 @@ feature 'Editing visa sponsorship' do
   end
 
   def and_the_skilled_worker_visa_question_is_not_rendered
-    expect(page).not_to have_css('#support-edit-course-form-can-sponsor-skilled-worker-visa-true-field')
+    expect(page).to have_no_css('#support-edit-course-form-can-sponsor-skilled-worker-visa-true-field')
   end
 
   def and_the_student_visa_question_is_not_rendered
-    expect(page).not_to have_css('#support-edit-course-form-can-sponsor-student-visa-true-field')
+    expect(page).to have_no_css('#support-edit-course-form-can-sponsor-student-visa-true-field')
   end
 
   def given_i_am_authenticated_as_an_admin_user

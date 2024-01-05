@@ -34,11 +34,11 @@ feature 'Editing course application status', { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_open_course_link
-    click_link 'Open course'
+    click_link_or_button 'Open course'
   end
 
   def and_i_click_close_course_link
-    click_link 'Close course'
+    click_link_or_button 'Close course'
   end
 
   def and_i_should_be_back_on_the_course_page
@@ -70,11 +70,11 @@ feature 'Editing course application status', { can_edit_current_and_next_cycles:
   end
 
   def and_i_click_open_course
-    click_button 'Open course'
+    click_link_or_button 'Open course'
   end
 
   def and_i_click_close_course
-    click_button 'Close course'
+    click_link_or_button 'Close course'
   end
 
   def given_i_am_authenticated_as_a_provider_user

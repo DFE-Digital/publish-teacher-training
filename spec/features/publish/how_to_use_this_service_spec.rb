@@ -37,7 +37,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def when_i_click_how_to_use_this_service
-    click_link 'How to use this service'
+    click_link_or_button 'How to use this service'
   end
 
   def then_i_should_see_the_h1_how_to_use_this_service
@@ -45,7 +45,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def given_i_click_add_an_organisation
-    click_link 'Add an organisation'
+    click_link_or_button 'Add an organisation'
   end
 
   def then_i_should_see_the_h1_add_an_organisation
@@ -53,11 +53,11 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def given_i_click_on_the_how_to_use_this_service_breadcrumb
-    click_link 'How to use this service', match: :first
+    click_link_or_button 'How to use this service', match: :first
   end
 
   def when_i_click_on_add_and_remove_users
-    click_link 'Add and remove users'
+    click_link_or_button 'Add and remove users'
   end
 
   def then_i_should_see_the_h1_add_and_remove_users
@@ -65,7 +65,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def when_i_click_on_change_an_accredited_provider_relationship
-    click_link 'Change an accredited provider relationship'
+    click_link_or_button 'Change an accredited provider relationship'
   end
 
   def then_i_should_see_the_h1_change_an_accredited_provider_relationship
@@ -73,7 +73,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def when_i_click_on_roll_over_courses_to_a_new_recruitment_cycle
-    click_link 'Roll over courses to a new recruitment cycle'
+    click_link_or_button 'Roll over courses to a new recruitment cycle'
   end
 
   def then_i_should_see_the_h1_roll_over_courses_to_a_new_recruitment_cycle
@@ -81,7 +81,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def when_click_on_help_writing_course_descriptions
-    click_link 'Help writing course descriptions'
+    click_link_or_button 'Help writing course descriptions'
   end
 
   def then_i_should_see_the_h1_help_writing_course_descriptions
@@ -89,7 +89,7 @@ feature 'Guidance pages', :with_publish_constraint do
   end
 
   def when_i_click_on_course_summary_examples
-    click_link 'Course summary examples'
+    click_link_or_button 'Course summary examples'
   end
 
   def then_i_should_see_the_h1_course_summary_examples

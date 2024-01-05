@@ -85,7 +85,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
   end
 
   def and_i_click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def then_i_should_see_the_student_visas_title

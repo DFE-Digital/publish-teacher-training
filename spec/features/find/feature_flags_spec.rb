@@ -57,11 +57,11 @@ feature 'Feature flags' do
   end
 
   def when_i_activate_the_feature
-    within(feature_card) { click_link 'Confirm environment to make changes' }
+    within(feature_card) { click_link_or_button 'Confirm environment to make changes' }
     fill_in 'Type ‘test’ to confirm that you want to proceed', with: 'test'
-    click_button 'Continue'
+    click_link_or_button 'Continue'
 
-    within(feature_card) { click_button 'Activate' }
+    within(feature_card) { click_link_or_button 'Activate' }
   end
 
   def then_the_feature_is_activated
@@ -72,7 +72,7 @@ feature 'Feature flags' do
   end
 
   def when_i_deactivate_the_feature
-    within(feature_card) { click_button 'Deactivate' }
+    within(feature_card) { click_link_or_button 'Deactivate' }
   end
 
   def then_the_feature_is_deactivated

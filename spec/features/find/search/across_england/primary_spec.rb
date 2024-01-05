@@ -73,11 +73,11 @@ feature 'Searching across England' do
   end
 
   def and_i_click_continue
-    click_button 'Continue'
+    click_link_or_button 'Continue'
   end
 
   def when_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def when_i_click_continue
@@ -127,7 +127,7 @@ feature 'Searching across England' do
   end
 
   def and_i_click_find_courses
-    click_button 'Find courses'
+    click_link_or_button 'Find courses'
   end
   alias_method :when_i_click_find_courses, :and_i_click_find_courses
 

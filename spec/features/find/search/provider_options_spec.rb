@@ -70,7 +70,7 @@ feature 'Searching by provider' do
   end
 
   def when_i_click_back
-    click_link 'Back'
+    click_link_or_button 'Back'
   end
 
   def and_the_provider_radio_button_is_selected
