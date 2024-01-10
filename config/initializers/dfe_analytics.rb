@@ -30,6 +30,10 @@ DfE::Analytics.configure do |config|
   #
   config.bigquery_api_json_key = Settings.google.bigquery.api_json_key
 
+  # Enables the EntityTableCheckJob
+  #
+  config.entity_table_checks_enabled = true
+
   # Passed directly to the retries: option on the BigQuery client
   #
   # config.bigquery_retries = 3
