@@ -1,0 +1,8 @@
+shared:
+  where_you_will_train:
+    universities:
+      except_provider_codes:
+        - B31
+    scitt_programmes:
+      except_provider_codes:
+        - E65

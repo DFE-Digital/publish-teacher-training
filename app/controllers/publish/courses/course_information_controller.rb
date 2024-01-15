@@ -59,6 +59,25 @@ module Publish
       end
 
       def param_form_key = :publish_course_information_form
+
+      def course_information
+        @course_information ||= Rails.application.config_for('course_information').fetch(:where_you_will_train)
+      end
+
+      def show_scitt_guidance?
+        return false unless @course.scitt_programme?
+
+        codes = course_information.dig(:scitt_programmes, :except_provider_codes)
+        codes.exclude?(@course.provider.provider_code)
+      end
+
+      def show_universities_guidance?
+        return false unless @provider.university?
+
+        codes = course_information.dig(:universities, :except_provider_codes)
+        codes.exclude?(@course.provider.provider_code)
+      end
+      helper_method :show_scitt_guidance?, :show_universities_guidance?
     end
   end
 end
