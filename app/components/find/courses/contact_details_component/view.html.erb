@@ -33,7 +33,7 @@
         </dd>
       <% end %>
 
-      <% if course.provider.provider_code == "28T" && course.course_code == "X104" %>
+      <% if show_address? %>
         <dt class="app-description-list__label">Address</dt>
         <dd data-qa="provider__address">
           LSJS
