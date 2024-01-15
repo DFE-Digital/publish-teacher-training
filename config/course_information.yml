@@ -6,3 +6,6 @@ shared:
     scitt_programmes:
       except_provider_codes:
         - E65
+    higher_education:
+      except_provider_codes:
+        - B31
