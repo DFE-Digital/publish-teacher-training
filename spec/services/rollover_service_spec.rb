@@ -144,9 +144,9 @@ describe RolloverService do
       end
     end
 
-    def no_output(&)
+    def no_output(...)
       stderr = nil
-      output = with_stubbed_stdout(stderr:, &)
+      output = with_stubbed_stdout(...)
       [output, stderr]
     end
   end
