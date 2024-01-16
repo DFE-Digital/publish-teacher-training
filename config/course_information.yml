@@ -14,3 +14,5 @@ shared:
       - 28T
     only_course_codes:
       - X104
+  contact_forms:
+    U80: https://www.ucl.ac.uk/prospective-students/graduate/admissions-enquiries
