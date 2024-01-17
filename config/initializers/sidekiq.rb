@@ -7,7 +7,7 @@ if ENV.key?('VCAP_SERVICES') || ENV.key?('REDIS_WORKER_URL')
     }
     config.logger.level = Logger::WARN
 
-    Sidekiq::Cron::Job.load_from_hash Settings.bg_jobs if Settings.bg_jobs
+    Sidekiq::Cron::Job.load_from_hash(Settings.bg_jobs.to_h) if Settings.bg_jobs
   end
 
   Sidekiq.configure_client do |config|
@@ -29,7 +29,7 @@ else
       password: Settings.mcbg.redis_password
     }
 
-    Sidekiq::Cron::Job.load_from_hash Settings.bg_jobs if Settings.bg_jobs
+    Sidekiq::Cron::Job.load_from_hash(Settings.bg_jobs.to_h) if Settings.bg_jobs
   end
 
 end
