@@ -84,9 +84,14 @@ module API
         end
 
         def recruitment_cycle
-          @recruitment_cycle = RecruitmentCycle.find_by(
-            year: params[:recruitment_cycle_year]
-          ) || RecruitmentCycle.current_recruitment_cycle
+          year = params.require(:recruitment_cycle_year)
+
+          case year
+          when 'current'
+            RecruitmentCycle.current_recruitment_cycle
+          else
+            RecruitmentCycle.find_by!(year:)
+          end
         end
 
         def fields

@@ -15,7 +15,7 @@ describe 'API', :with_publish_constraint do
                 in: :path,
                 type: :string,
                 required: true,
-                description: 'The starting year of the recruitment cycle.',
+                description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle.',
                 example: '2020'
       parameter name: :sort,
                 in: :query,
@@ -79,7 +79,7 @@ describe 'API', :with_publish_constraint do
                 in: :path,
                 type: :string,
                 required: true,
-                description: 'The starting year of the recruitment cycle.',
+                description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle.',
                 example: '2020'
       parameter name: :provider_code,
                 in: :path,
@@ -111,7 +111,7 @@ describe 'API', :with_publish_constraint do
         run_test!
       end
 
-      response '404', 'The non existant provider.' do
+      response '404', 'The non-existent provider.' do
         let(:provider_code) { '999' }
         let(:include) { nil }
 
