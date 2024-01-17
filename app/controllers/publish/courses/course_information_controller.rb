@@ -65,15 +65,11 @@ module Publish
       end
 
       def show_scitt_guidance?
-        return false unless @course.scitt_programme?
-
-        course_information.show_placement_guidance?(:program_type, :scitt_programmes)
+        course_information.show_placement_guidance?(:program_type)
       end
 
       def show_universities_guidance?
-        return false unless @provider.university?
-
-        course_information.show_placement_guidance?(:provider_type, :universities)
+        course_information.show_placement_guidance?(:provider_type)
       end
       helper_method :show_scitt_guidance?, :show_universities_guidance?
     end

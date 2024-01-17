@@ -9,9 +9,6 @@ describe Configs::CourseInformation do
   let(:he_course) { build(:course, :with_higher_education, provider:, course_code:) }
   let(:scitt_course) { build(:course, :with_scitt, provider:, course_code:) }
 
-  let(:type) { :provider_type }
-  let(:subtype) { :program_type }
-
   let(:provider_code) { 'XXX' }
   let(:course_code) { 'XXX' }
 
@@ -19,7 +16,6 @@ describe Configs::CourseInformation do
     let(:course) { scitt_course }
     let(:provider) { university_provider }
     let(:type) { :provider_type }
-    let(:subtype) { :universities }
 
     context 'when University providers provider code is present' do
       let(:provider_code) { 'B31' }
@@ -27,7 +23,7 @@ describe Configs::CourseInformation do
       it 'returns false' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(false)
+        expect(obj.show_placement_guidance?(type)).to be(false)
       end
     end
 
@@ -35,32 +31,30 @@ describe Configs::CourseInformation do
       it 'returns true' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(true)
+        expect(obj.show_placement_guidance?(type)).to be(true)
       end
     end
 
     context 'when SCITT course with provider_code present' do
       let(:provider) { scitt_provider }
       let(:type) { :program_type }
-      let(:subtype) { :scitt_programmes }
       let(:provider_code) { 'E65' }
 
       it 'returns false' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(false)
+        expect(obj.show_placement_guidance?(type)).to be(false)
       end
     end
 
     context 'when SCITT course with provider_code absent' do
       let(:provider) { scitt_provider }
       let(:type) { :program_type }
-      let(:subtype) { :scitt_programmes }
 
       it 'returns true' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(true)
+        expect(obj.show_placement_guidance?(type)).to be(true)
       end
     end
 
@@ -68,13 +62,12 @@ describe Configs::CourseInformation do
       let(:course) { he_course }
       let(:provider) { scitt_provider }
       let(:type) { :program_type }
-      let(:subtype) { :higher_education }
       let(:provider_code) { 'B31' }
 
       it 'returns false' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(false)
+        expect(obj.show_placement_guidance?(type)).to be(false)
       end
     end
 
@@ -82,12 +75,11 @@ describe Configs::CourseInformation do
       let(:course) { he_course }
       let(:provider) { scitt_provider }
       let(:type) { :program_type }
-      let(:subtype) { :higher_education }
 
       it 'returns true' do
         obj = described_class.new(course)
 
-        expect(obj.show_placement_guidance?(type, subtype)).to be(true)
+        expect(obj.show_placement_guidance?(type)).to be(true)
       end
     end
   end

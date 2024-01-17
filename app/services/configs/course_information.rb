@@ -7,8 +7,15 @@ module Configs
       @course = course
     end
 
-    def show_placement_guidance?(type, subtype)
-      @db.dig(:placements, type, subtype, :except_provider_codes).exclude?(@course.provider.provider_code)
+    def show_placement_guidance?(type)
+      case type
+      when :provider_type
+        subtype = @course.provider.provider_type
+      when :program_type
+        subtype = @course.program_type
+      end
+
+      @db.dig(:placements, type, subtype.to_sym, :except_provider_codes)&.exclude?(@course.provider.provider_code)
     end
 
     def contact_form

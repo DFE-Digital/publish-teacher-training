@@ -29,13 +29,13 @@ module Find
         def show_higher_education_guidance?
           return false unless course.higher_education_programme?
 
-          course_information_config.show_placement_guidance?(:program_type, :higher_education)
+          course_information_config.show_placement_guidance?(:program_type)
         end
 
         def show_scitt_guidance?
           return false unless course.scitt_programme?
 
-          course_information_config.show_placement_guidance?(:program_type, :scitt_programmes)
+          course_information_config.show_placement_guidance?(:program_type)
         end
 
         private

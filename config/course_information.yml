@@ -1,14 +1,14 @@
 shared:
   placements:
     provider_type:
-      universities:
+      university:
         except_provider_codes:
           - B31
     program_type:
-      scitt_programmes:
+      scitt_programme:
         except_provider_codes:
           - E65
-      higher_education:
+      higher_education_programme:
         except_provider_codes:
           - B31
   show_address:
