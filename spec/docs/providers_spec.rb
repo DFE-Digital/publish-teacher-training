@@ -3,6 +3,9 @@
 require 'swagger_helper'
 
 describe 'API', :with_publish_constraint do
+  let(:recruitment_cycle) { create(:recruitment_cycle) }
+  let(:year) { recruitment_cycle.year }
+
   path '/recruitment_cycles/{year}/providers' do
     get 'Returns providers for the specified recruitment cycle.' do
       operationId :public_api_v1_provider_index
@@ -58,7 +61,6 @@ describe 'API', :with_publish_constraint do
                    command: 'curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers?page[page]=2'
 
       response '200', 'Collection of providers.' do
-        let(:year) { '2020' }
         let(:include) { 'recruitment_cycle' }
 
         schema({ '$ref' => '#/components/schemas/ProviderListResponse' })
@@ -100,8 +102,8 @@ describe 'API', :with_publish_constraint do
 
       response '200', 'The provider.' do
         let(:provider) { create(:provider, provider_code: '1AT') }
-        let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
+        let(:recruitment_cycle) { provider.recruitment_cycle }
         let(:include) { nil }
 
         schema({ '$ref' => '#/components/schemas/ProviderSingleResponse' })
@@ -110,7 +112,6 @@ describe 'API', :with_publish_constraint do
       end
 
       response '404', 'The non existant provider.' do
-        let(:year) { '2020' }
         let(:provider_code) { '999' }
         let(:include) { nil }
 

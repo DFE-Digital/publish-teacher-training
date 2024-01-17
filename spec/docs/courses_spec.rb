@@ -67,7 +67,8 @@ describe 'API', :with_publish_constraint do
                    command: 'curl -X GET "https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/courses?page\[per_page\]=10&filter\[latitude\]=51.8975918&filter\[longitude\]=-0.4910925&filter\[radius\]=10&sort=distance"'
 
       response '200', 'The collection of courses.' do
-        let(:year) { '2020' }
+        let(:recruitment_cycle) { create(:recruitment_cycle) }
+        let(:year) { recruitment_cycle.year }
         let(:include) { 'provider' }
 
         before do
