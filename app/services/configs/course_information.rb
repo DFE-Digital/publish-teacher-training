@@ -7,7 +7,7 @@ module Configs
       @course = course
     end
 
-    def placement(type, subtype)
+    def show_placement_guidance?(type, subtype)
       @db.dig(:placements, type, subtype, :except_provider_codes).exclude?(@course.provider.provider_code)
     end
 
