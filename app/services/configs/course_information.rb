@@ -7,8 +7,8 @@ module Configs
       @course = course
     end
 
-    def placement(*path)
-      @db.dig(*path)
+    def placement(type, subtype)
+      @db.dig(:placements, type, subtype, :except_provider_codes).exclude?(@course.provider.provider_code)
     end
 
     def contact_form

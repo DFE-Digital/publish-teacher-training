@@ -1,14 +1,16 @@
 shared:
-  where_you_will_train:
-    universities:
-      except_provider_codes:
-        - B31
-    scitt_programmes:
-      except_provider_codes:
-        - E65
-    higher_education:
-      except_provider_codes:
-        - B31
+  placements:
+    provider_type:
+      universities:
+        except_provider_codes:
+          - B31
+    program_type:
+      scitt_programmes:
+        except_provider_codes:
+          - E65
+      higher_education:
+        except_provider_codes:
+          - B31
   show_address:
     only_provider_codes:
       - 28T
