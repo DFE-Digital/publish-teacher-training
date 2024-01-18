@@ -1926,7 +1926,7 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
             "example": "2020",
             "schema": {
               "type": "string"
