@@ -56,6 +56,10 @@ module Find
           include ActiveModel::Model
           attr_accessor(:provider, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
 
+          def higher_education_programme?
+            true
+          end
+
           def preview_site_statuses
             site_statuses.sort_by { |status| status.site.location_name }
           end

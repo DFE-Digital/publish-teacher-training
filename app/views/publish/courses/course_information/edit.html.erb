@@ -98,14 +98,14 @@
         <li>how placement schools are selected</li>
       </ul>
 
-      <% if @provider.provider_type == 'university' && @provider.provider_code != 'B31' %>
+      <% if show_universities_guidance? %>
         <%= govuk_details(summary_text: "See the guidance we show in this section") do %>
           <h3 class="govuk-heading-m">Where you will train</h3>
           <p class="govuk-body">You’ll be placed in schools for most of your course. Your school placements will be within commuting distance.</p>
           <p class="govuk-body">You cannot pick which schools you want to be in, but your university will try to take your journey time into consideration.</p>
           <p class="govuk-body">Universities can work with over 100 potential placement schools. Most will be within 10 miles of the university, but sometimes they can cover a wider area, especially outside of cities.</p>
         <% end %>
-      <% elsif @course.program_type == 'scitt_programme' && @provider.provider_code != 'E65' %>
+      <% elsif show_scitt_guidance? %>
         <%= govuk_details(summary_text: "See the guidance we show in this section") do %>
           <h3 class="govuk-heading-m">Where you will train</h3>
           <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools you want to be in, but your training provider will place you in schools you can travel to.</p>

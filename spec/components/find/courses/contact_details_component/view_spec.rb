@@ -76,4 +76,16 @@ describe Find::Courses::ContactDetailsComponent::View, type: :component do
       expect(result.text).to include('LSJS', '44A Albert Road', 'London', 'NW4 2SJ')
     end
   end
+
+  context 'when the provider has a contact form in the config' do
+    it 'renders the Contact Form instead of Email' do
+      provider = build(:provider, provider_code: 'U80')
+      course = build(:course, course_code: 'X104', provider:).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).to include('Contact form')
+      expect(result.text).not_to include('Email')
+    end
+  end
 end

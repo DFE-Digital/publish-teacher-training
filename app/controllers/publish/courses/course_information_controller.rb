@@ -59,6 +59,19 @@ module Publish
       end
 
       def param_form_key = :publish_course_information_form
+
+      def course_information
+        @course_information ||= Configs::CourseInformation.new(@course)
+      end
+
+      def show_scitt_guidance?
+        course_information.show_placement_guidance?(:program_type)
+      end
+
+      def show_universities_guidance?
+        course_information.show_placement_guidance?(:provider_type)
+      end
+      helper_method :show_scitt_guidance?, :show_universities_guidance?
     end
   end
 end

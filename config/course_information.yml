@@ -1,0 +1,20 @@
+shared:
+  placements:
+    provider_type:
+      university:
+        except_provider_codes:
+          - B31
+    program_type:
+      scitt_programme:
+        except_provider_codes:
+          - E65
+      higher_education_programme:
+        except_provider_codes:
+          - B31
+  show_address:
+    only_provider_codes:
+      - 28T
+    only_course_codes:
+      - X104
+  contact_forms:
+    U80: https://www.ucl.ac.uk/prospective-students/graduate/admissions-enquiries
