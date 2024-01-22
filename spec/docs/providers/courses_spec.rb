@@ -13,7 +13,7 @@ describe 'API', :with_publish_constraint do
                 type: :string,
                 required: true,
                 description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle.',
-                example: '2020'
+                example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
@@ -97,7 +97,7 @@ describe 'API', :with_publish_constraint do
                 type: :string,
                 required: true,
                 description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle.',
-                example: '2020'
+                example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
                 in: :path,
                 type: :string,
