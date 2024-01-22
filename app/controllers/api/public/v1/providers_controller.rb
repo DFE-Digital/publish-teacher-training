@@ -83,17 +83,6 @@ module API
           @providers
         end
 
-        def recruitment_cycle
-          year = params.require(:recruitment_cycle_year)
-
-          case year
-          when 'current'
-            RecruitmentCycle.current_recruitment_cycle
-          else
-            RecruitmentCycle.find_by!(year:)
-          end
-        end
-
         def fields
           { providers: provider_fields } if provider_fields.present?
         end
