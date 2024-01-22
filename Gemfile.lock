@@ -680,7 +680,7 @@ GEM
       capybara (~> 3.31)
       site_prism-all_there (> 2, < 5)
     site_prism-all_there (3.0.2)
-    skylight (6.0.2)
+    skylight (6.0.3)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
     spring (4.1.3)
