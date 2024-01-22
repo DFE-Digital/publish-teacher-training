@@ -133,7 +133,7 @@ gem 'google-cloud-bigquery'
 gem 'oj'
 
 # Rails 7 CSS and JS Bundling
-gem 'cssbundling-rails', '~> 1.3'
+gem 'cssbundling-rails', '~> 1.4'
 gem 'jsbundling-rails', '~> 1.3'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
