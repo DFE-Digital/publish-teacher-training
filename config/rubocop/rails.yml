@@ -67,3 +67,7 @@ Rails/RedundantActiveRecordAllMethod:
     - 'spec/services/support/data_exports/data_export_spec.rb'
     - 'spec/support/feature_helpers/govuk_components.rb'
 
+Rails/Output:
+  Exclude:
+    - config/initializers/console.rb
+
