@@ -182,6 +182,36 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
         end
       end
     end
+
+    describe 'recruitment cycle' do
+      context 'when "current" is specified as the recruitment cycle' do
+        before do
+          create_list(:course, 3, provider:)
+
+          get :index, params: {
+            recruitment_cycle_year: 'current',
+            provider_code: provider.provider_code
+          }
+        end
+
+        it 'returns correct number of courses' do
+          expect(json_response['data'].size).to be(3)
+        end
+      end
+
+      context 'when a non-existent recruitment cycle is specified' do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: '1066',
+            provider_code: provider.provider_code
+          }
+        end
+
+        it 'returns a 404 error' do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
   end
 
   describe '#show' do
@@ -256,6 +286,39 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
       it 'returns 404' do
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    describe 'recruitment cycle' do
+      let!(:course) { create(:course, provider:) }
+
+      context 'when "current" is specified as the recruitment cycle' do
+        before do
+          get :show, params: {
+            recruitment_cycle_year: 'current',
+            provider_code: provider.provider_code,
+            code: course.course_code
+          }
+        end
+
+        it 'returns the course' do
+          expect(response).to be_successful
+          expect(json_response['data']['id']).to eql(course.id.to_s)
+        end
+      end
+
+      context 'when a non-existent recruitment cycle is specified' do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: '1066',
+            provider_code: provider.provider_code,
+            code: course.course_code
+          }
+        end
+
+        it 'returns a 404 error' do
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
   end

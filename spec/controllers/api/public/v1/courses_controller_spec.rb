@@ -24,13 +24,14 @@ RSpec.describe API::Public::V1::CoursesController do
         provider.courses << build_list(:course, 2, provider:)
       end
 
-      context 'with no recruitment cycle provided' do
+      context 'when "current" is specified as the recruitment cycle' do
         let(:next_cycle) { create(:recruitment_cycle, :next) }
 
         before do
           next_cycle
 
           get :index, params: {
+            recruitment_cycle_year: 'current',
             include: 'recruitment_cycle'
           }
         end
@@ -51,6 +52,18 @@ RSpec.describe API::Public::V1::CoursesController do
 
         it 'returns correct number of courses' do
           expect(json_response['data'].size).to be(2)
+        end
+      end
+
+      context 'when a non-existent recruitment cycle is specified' do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: '1066'
+          }
+        end
+
+        it 'returns a 404 error' do
+          expect(response).to have_http_status(:not_found)
         end
       end
 

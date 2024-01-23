@@ -1926,8 +1926,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2081,8 +2081,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": 2023,
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2155,8 +2155,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2268,7 +2268,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2340,8 +2340,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": 2023,
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2396,8 +2396,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle.",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2493,7 +2493,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2539,7 +2539,7 @@
             }
           },
           "404": {
-            "description": "The non existant provider.",
+            "description": "The non-existent provider.",
             "content": {
               "application/json": {
                 "schema": {
