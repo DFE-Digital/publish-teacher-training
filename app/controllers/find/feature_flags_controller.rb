@@ -10,7 +10,7 @@ module Find
     def update
       FeatureFlag.send(action, feature_name)
 
-      if Rails.env.production?
+      if Rails.env.production? || Settings.environment.name == 'beta'
         SlackNotificationJob.perform_now(
           ":flags: Feature ‘#{feature_name}‘ was #{action}d",
           find_feature_flags_path
