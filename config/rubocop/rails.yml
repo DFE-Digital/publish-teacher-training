@@ -44,7 +44,7 @@ Rails/HasManyOrHasOneDependent:
 
 Rails/UnknownEnv:
   Environments:
-    - production
+    - production_aks
     - development
     - test
     - sandbox

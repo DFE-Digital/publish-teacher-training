@@ -1,5 +1,5 @@
 <%= content_for :page_title, "Recruitment cycles" %>
-<% unless Rails.env.production? || Settings.environment.name == 'beta' %>
+<% unless Rails.env.production_aks? %>
   <h1 class="govuk-heading-xl">Recruitment cycles</h1>
   <%= form_with model: Find::ChangeCycleForm.new, url: find_switch_cycle_schedule_path, method: :post do |f| %>
     <%= f.govuk_radio_buttons_fieldset :cycle_schedule_name,
