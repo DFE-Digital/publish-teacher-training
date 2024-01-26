@@ -54,7 +54,7 @@ feature 'Support index' do
 
   def then_i_should_be_on_the_recruitment_cycle_switcher_page
     expect(support_recruitment_cycle_index_page).to have_link "#{Settings.current_recruitment_cycle_year} - current"
-    expect(support_recruitment_cycle_index_page).to have_link Settings.current_recruitment_cycle_year + 1
+    expect(support_recruitment_cycle_index_page).to have_link (Settings.current_recruitment_cycle_year + 1).to_s
   end
 
   def and_should_not_see_the_switch_cycle_link
@@ -66,7 +66,7 @@ feature 'Support index' do
   end
 
   def and_click_on_the_next_cycle
-    click_link_or_button Settings.current_recruitment_cycle_year + 1
+    click_link_or_button (Settings.current_recruitment_cycle_year + 1).to_s
   end
 
   def i_should_see_the_current_cycle_page

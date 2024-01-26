@@ -6,17 +6,16 @@
     ) %>
   <% end %>
 
-<!-- Uncomment this when more items are needed on the navigation bar.
-  <%# <%= content_for(:navigation_bar) do %> %>
-    <%# <%= render NavigationBar.new( %>
-      <%# items: [ %>
-        <%# { name: "Providers", url: support_providers_path, current: true }, %>
-      <%# ], %>
-      <%# current_path: request.path, %>
-      <%# current_user: @current_user, %>
-    <%# ) %> %>
-  <%# <% end %> %>
--->
+  <%= content_for(:navigation_bar) do %>
+    <%= render NavigationBar.new(
+      items: [
+        { name: "Providers", url: support_recruitment_cycle_providers_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) },
+        { name: "Users", url: support_recruitment_cycle_users_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) }
+      ],
+      current_path: request.path,
+      current_user: @current_user
+    ) %>
+  <% end %>
 
   <%= yield %>
 <% end %>
