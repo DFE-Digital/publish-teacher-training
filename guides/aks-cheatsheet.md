@@ -47,30 +47,11 @@ Example: Activate `s189-teacher-services-cloud-test`. It will be approved automa
 $ az login
 ```
 
-Select account for az:
-
-```
-$ az account set -s s189-teacher-services-cloud-test
-```
-
 Get access credentials for a managed Kubernetes cluster (passing the
-resource group and the name):
+environment name):
 
 ```
-$ az aks get-credentials -g s189t01-tsc-ts-rg -n s189t01-tsc-test-aks
-```
-
-When you have multiple cluster credentials loaded, you can switch between clusters
-
-Display current context (current cluster will have an asterisk next to it)
-
-```
-$ kubectl config get-contexts
-```
-
-Switch to production cluster
-```
-$ kubectl config use-context s189p01-tsc-production-aks
+$ make production_aks get-cluster-credentials
 ```
 
 ## Show namespaces
