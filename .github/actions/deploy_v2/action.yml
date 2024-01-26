@@ -2,8 +2,6 @@ name: deploy_v2
 description: deploys application to AKS
 
 inputs:
-  arm-access-key:
-    required: true
   azure-credentials:
     required: true
   environment:
@@ -104,11 +102,15 @@ runs:
       with:
         version: "v1.26.1" # default is latest stable
 
+    - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+      with:
+        azure-credentials: ${{ inputs.azure-credentials }}
+
     - name: K8 setup
       if: ${{ inputs.environment == 'review_aks' }}
       shell: bash
       run: |
-        az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
+        USE_DB_SETUP_COMMAND=false make ci review_aks get-cluster-credentials
         make install-konduit
 
     - name: Check whether we need to setup and restore the sanitised database
@@ -129,12 +131,9 @@ runs:
 
     - name: Terraform init, plan & apply
       shell: bash
-      run: make ${{ inputs.environment }} ci deploy
+      run: make ci ${{ inputs.environment }} deploy
       env:
-        ARM_ACCESS_KEY: ${{ inputs.arm-access-key }}
         IMAGE_TAG: ${{ inputs.sha }}
-        TF_VAR_azure_credentials: ${{ inputs.azure-credentials }}
-        CONFIRM_PRODUCTION: yes
 
     - name: Restore AKS database
       if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}

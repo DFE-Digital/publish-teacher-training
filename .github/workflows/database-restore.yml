@@ -47,7 +47,7 @@ jobs:
       - name: K8 & konduit setup
         shell: bash
         run: |
-          az aks get-credentials -g s189p01-tsc-pd-rg -n s189p01-tsc-production-aks
+          make ci production_aks get-cluster-credentials
           make install-konduit
 
       - name: Backup Publish Teacher Training Prod Database
