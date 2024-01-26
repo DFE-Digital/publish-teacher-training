@@ -188,7 +188,7 @@ group :development, :test do
   gem 'rspec-its'
 
   # Test framework
-  gem 'rspec-rails', '6.1.0'
+  gem 'rspec-rails', '6.1.1'
 
   # A Ruby static code analyzer and formatter
   gem 'rubocop', require: false
