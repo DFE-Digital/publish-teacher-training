@@ -86,6 +86,7 @@ sandbox_aks:
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 
 production_aks:
+	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))
 	$(eval include global_config/production_aks.sh)
 	$(eval export DISABLE_PASSCODE=1)
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
@@ -122,6 +123,7 @@ rollover: ## Set DEPLOY_ENV to rollover
 ci:	## Run in automation environment
 	$(eval export DISABLE_PASSCODE=true)
 	$(eval export AUTO_APPROVE=-auto-approve)
+	$(eval SKIP_CONFIRM=true)
 
 deploy-init: install-terrafile
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
@@ -186,6 +188,7 @@ print-infra-secrets: read-keyvault-config install-fetch-config
 
 get-cluster-credentials: read-cluster-config set-azure-account ## make <config> get-cluster-credentials [ENVIRONMENT=<clusterX>]
 	az aks get-credentials --overwrite-existing -g ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER}-aks
+	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
 
 aks-console: get-cluster-credentials
 	$(if $(APP_NAME), $(eval export APP_ID=review-$(APP_NAME)) , $(eval export APP_ID=$(CONFIG_LONG)))
