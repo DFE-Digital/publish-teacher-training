@@ -149,6 +149,9 @@ gem 'http'
 # For configuring domains and assets
 gem 'rack-cors'
 
+# Rails console colours
+gem 'colorize'
+
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 end
