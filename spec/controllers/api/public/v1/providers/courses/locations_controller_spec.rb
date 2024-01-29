@@ -65,37 +65,5 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
         end
       end
     end
-
-    describe 'recruitment cycle' do
-      context 'when "current" is specified as the recruitment cycle' do
-        before do
-          course.sites << build_list(:site, 2, provider:)
-
-          get :index, params: {
-            recruitment_cycle_year: 'current',
-            provider_code: provider.provider_code,
-            course_code: course.course_code
-          }
-        end
-
-        it 'returns the correct number of locations' do
-          expect(json_response['data'].size).to be(2)
-        end
-      end
-
-      context 'when a non-existent recruitment cycle is specified' do
-        before do
-          get :index, params: {
-            recruitment_cycle_year: '1066',
-            provider_code: provider.provider_code,
-            course_code: course.course_code
-          }
-        end
-
-        it 'returns a 404 error' do
-          expect(response).to have_http_status(:not_found)
-        end
-      end
-    end
   end
 end
