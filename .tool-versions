@@ -2,9 +2,8 @@ ruby 3.1.0
 bundler 2.3.20
 yarn 1.22.4
 nodejs 20.10.0
-terraform 1.2.3
+terraform 1.4.5
 adr-tools 3.0.0
-cf 7.4.0
 azure-cli 2.53.1
 jq 1.6
 make 4.2.1

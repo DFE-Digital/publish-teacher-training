@@ -103,8 +103,7 @@ Once the file is merged to main, you can run the process in the required environ
 Use the following sequence to allow the above console output to display, chaining the commands does update the database but does not display the console ouptut.
 
 ```
-cf target -s ${space}
-cf ssh publish-teacher-training-${paas_env}
+make <environment> aks-console
 cd /app
 /usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'
 ```
@@ -129,4 +128,4 @@ Then make sure to run `caddy start` in the root of the project. You should now b
 
 > If using `bin/dev` then the URL is `http://find.localhost:3001` and `http://publish.localhost:3001`
 
-If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then try `caddy start`. 
+If you're getting an error message, try `caddy stop` then try stopping the rails server `control C`. Then run `yarn build` followed by `yarn build:css`. Now restart the rails server `rails s` and then try `caddy start`.

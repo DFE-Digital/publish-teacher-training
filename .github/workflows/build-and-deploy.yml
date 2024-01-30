@@ -295,7 +295,6 @@ jobs:
         id: deploy_v2_review
         uses: ./.github/actions/deploy_v2/
         with:
-          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
           environment: review_aks
           pr-number: ${{ github.event.pull_request.number }}
@@ -334,7 +333,6 @@ jobs:
         id: deploy_app_before_production_v2
         uses: ./.github/actions/deploy_v2/
         with:
-          arm-access-key: ${{ secrets[format('ARM_ACCESS_KEY_{0}', matrix.environment)] }}
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
           environment: ${{ matrix.environment }}
           sha: ${{ github.sha }}
@@ -356,7 +354,6 @@ jobs:
         id: deploy_app_v2
         uses: ./.github/actions/deploy_v2/
         with:
-          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_PRODUCTION_AKS }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
           environment: production_aks
           sha: ${{ github.sha }}
@@ -378,7 +375,6 @@ jobs:
         id: deploy_sandbox_v2
         uses: ./.github/actions/deploy_v2/
         with:
-          arm-access-key: ${{ secrets.ARM_ACCESS_KEY_SANDBOX_AKS }}
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_SANDBOX_AKS }}
           environment: sandbox_aks
           sha: ${{ github.sha }}

@@ -68,7 +68,7 @@ runs:
       if: ${{ env.app_environment != 'review' }}
       shell: bash
       run: |
-        az aks get-credentials -g ${{ env.cluster_rg }} -n ${{ env.cluster_name }}
+        make ci ${{ env.app_environment }} get-cluster-credentials
         make install-konduit
 
     - name: Download Sanitised Backup
@@ -90,10 +90,3 @@ runs:
       shell: bash
       run: |
         bin/konduit.sh -i backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
-
-    - name: Remove PaaS specific event triggers
-      shell: bash
-      run: |
-        bin/konduit.sh ${{ env.app_name }} -- psql -c 'drop event trigger forbid_ddl_reader'
-        bin/konduit.sh ${{ env.app_name }} -- psql -c 'drop event trigger make_readable'
-        bin/konduit.sh ${{ env.app_name }} -- psql -c 'drop event trigger reassign_owned'

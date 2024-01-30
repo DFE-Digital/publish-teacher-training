@@ -60,13 +60,15 @@ jobs:
             ${{ env.key_vault_app_secret_name }}
             ${{ env.key_vault_infra_secret_name }}
 
+      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+        with:
+          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_REVIEW_AKS')] }}
+
       - name: Terraform Destroy
         if: env.TF_STATE_EXISTS == 'true'
-        run: make review_aks ci destroy
+        run: make ci review_aks destroy
         env:
-          ARM_ACCESS_KEY:             ${{ secrets.ARM_ACCESS_KEY_REVIEW_AKS }}
-          TF_VAR_azure_credentials:   ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
-          APP_NAME:                   ${{ env.PR_NUMBER }}
+          APP_NAME: ${{ env.PR_NUMBER }}
 
       - name: Delete tf state file
         if: env.TF_STATE_EXISTS == 'true'
