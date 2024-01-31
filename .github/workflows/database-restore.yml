@@ -44,6 +44,10 @@ jobs:
         with:
           version: "v1.26.1" # default is latest stable
 
+      - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
+        with:
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
+
       - name: K8 & konduit setup
         shell: bash
         run: |
