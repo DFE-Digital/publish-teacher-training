@@ -91,7 +91,7 @@ class Provider < ApplicationRecord
 
   # the providers that this provider is an accredited_provider for
   def training_providers
-    Provider.where(id: current_accredited_courses.pluck(:provider_id))
+    Provider.where.not(provider_code:).where(id: current_accredited_courses.pluck(:provider_id))
   end
 
   def current_accredited_courses
