@@ -30,23 +30,6 @@ runs:
       with:
         creds: ${{ inputs.azure-credentials }}
 
-    - name: Set cluster env vars
-      shell: bash
-      run: |
-        case ${{ env.cluster }} in
-           test)
-             echo "cluster_rg=s189t01-tsc-ts-rg" >> $GITHUB_ENV
-             echo "cluster_name=s189t01-tsc-test-aks" >> $GITHUB_ENV
-             ;;
-           production)
-             echo "cluster_rg=s189p01-tsc-pd-rg" >> $GITHUB_ENV
-             echo "cluster_name=s189p01-tsc-production-aks" >> $GITHUB_ENV
-             ;;
-           *)
-             echo "unknown cluster"
-             ;;
-         esac
-
     - name: Set app name variable
       shell: bash
       run: |
