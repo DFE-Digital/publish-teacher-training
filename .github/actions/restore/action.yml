@@ -72,7 +72,7 @@ runs:
       if: ${{ env.app_environment != 'review' }}
       shell: bash
       run: |
-        make ci ${{ env.app_environment }} get-cluster-credentials
+        make ci ${{ inputs.environment }} get-cluster-credentials
         make install-konduit
 
     - name: Download Sanitised Backup
