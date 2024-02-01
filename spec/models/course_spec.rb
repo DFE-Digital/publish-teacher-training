@@ -559,12 +559,21 @@ describe Course do
         let(:course) { create(:course, :without_validation, age_range_in_years: nil) }
         let(:errors) { course.errors.messages }
 
-        before { course.valid?(:publish) }
+        before do
+          course.applications_open_from = course.recruitment_cycle.application_start_date - 1
+          course.valid?(:publish)
+        end
 
         it 'requires age_range_in_years' do
           error = errors[:age_range_in_years]
           expect(error).not_to be_empty
           expect(error.first).to include('Select an age range')
+        end
+
+        it 'requires a applications_open_from date inside of the current recruitment cycle' do
+          error = course.errors.messages[:applications_open_from]
+          expect(error).not_to be_empty
+          expect(error.first).to include("is not valid for the #{Settings.current_recruitment_cycle_year} cycle. A valid date must be between")
         end
       end
 

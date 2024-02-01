@@ -336,7 +336,7 @@ class Course < ApplicationRecord
   validate :validate_enrichment
   validate :validate_qualification, on: %i[update new]
   validate :validate_start_date, on: :update, if: -> { provider.present? && start_date.present? }
-  validate :validate_applications_open_from, on: %i[update new], if: -> { provider.present? }
+  validate :validate_applications_open_from, on: %i[publish update new], if: -> { provider.present? }
   validate :validate_modern_languages
   validate :validate_has_languages, if: :has_the_modern_languages_secondary_subject_type?
   validate :validate_subject_count
