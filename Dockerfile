@@ -1,5 +1,5 @@
 FROM ruby:2.7.5-alpine3.15 AS middleman
-RUN apk add --no-cache libxml2=2.11.7-r0
+RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
