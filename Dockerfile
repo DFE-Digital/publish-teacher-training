@@ -1,5 +1,5 @@
 FROM ruby:2.7.5-alpine3.15 AS middleman
-
+RUN apk add --no-cache libxml2
 RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
@@ -16,6 +16,8 @@ RUN bundle exec middleman build --build-dir=../public
 ###
 
 FROM ruby:3.1-alpine3.19
+
+RUN apk add --no-cache libxml2
 
 RUN apk add --update --no-cache tzdata && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
