@@ -9,7 +9,7 @@
 $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
 
-@import "govuk-frontend/govuk/all";
+@import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
 
 $moj-images-path: "@ministryofjustice/frontend/moj/assets/images/";
