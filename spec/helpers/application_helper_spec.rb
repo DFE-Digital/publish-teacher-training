@@ -4,6 +4,7 @@ require 'rails_helper'
 
 describe ApplicationHelper do
   include ViewHelper
+  include GovukVisuallyHiddenHelper
   include GovukComponentsHelper
   include GovukLinkHelper
 
