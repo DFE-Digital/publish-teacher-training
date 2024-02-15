@@ -74,6 +74,40 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
       end
 
+      context 'when "current" is specified as the recruitment cycle' do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: 'current',
+            include: 'recruitment_cycle'
+          }
+        end
+
+        it 'returns correct number of providers for the current cycle' do
+          parsed_recruitment_cycle_id = json_response['data'][0].dig('relationships', 'recruitment_cycle', 'data', 'id').to_i
+          parsed_provider_id = json_response['data'][0]['id'].to_i
+          expect(parsed_recruitment_cycle_id).to eq(recruitment_cycle.id)
+          expect(json_response['data'].size).to be(1)
+          expect(parsed_provider_id).to eq(provider.id)
+        end
+      end
+
+      context 'when a non-existent recruitment cycle is specified' do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: '1066',
+            include: 'recruitment_cycle'
+          }
+        end
+
+        it 'returns correct number of providers for the current cycle' do
+          parsed_recruitment_cycle_id = json_response['data'][0].dig('relationships', 'recruitment_cycle', 'data', 'id').to_i
+          parsed_provider_id = json_response['data'][0]['id'].to_i
+          expect(parsed_recruitment_cycle_id).to eq(recruitment_cycle.id)
+          expect(json_response['data'].size).to be(1)
+          expect(parsed_provider_id).to eq(provider.id)
+        end
+      end
+
       context 'with pagination' do
         before do
           recruitment_cycle.providers << build_list(:provider, 2, organisations: [organisation], contacts: [contact])

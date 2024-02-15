@@ -24,6 +24,18 @@ RSpec.describe API::Public::V1::CoursesController do
         provider.courses << build_list(:course, 2, provider:)
       end
 
+      context 'when "current" is specified as recruitment cycle' do
+        before do
+          get :index, params: { recruitment_cycle_year: 'current', include: 'recruitment_cycle' }
+        end
+
+        it 'returns courses for the current cycle' do
+          parsed_recruitment_cycle_id = json_response['data'][0].dig('relationships', 'recruitment_cycle', 'data', 'id').to_i
+          expect(parsed_recruitment_cycle_id).to eq(recruitment_cycle.id)
+          expect(json_response['data'].size).to be(2)
+        end
+      end
+
       context 'with no recruitment cycle provided' do
         let(:next_cycle) { create(:recruitment_cycle, :next) }
 

@@ -12,7 +12,7 @@ describe 'API', :with_publish_constraint do
                 in: :path,
                 type: :string,
                 required: true,
-                description: 'The starting year of the recruitment cycle.',
+                description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
                 example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
                 in: :path,

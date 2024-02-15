@@ -1926,8 +1926,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2081,8 +2081,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": 2023,
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2155,8 +2155,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2267,8 +2267,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle.Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2340,8 +2340,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": 2023,
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2396,8 +2396,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }
@@ -2492,8 +2492,8 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.",
-            "example": "2020",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "example": 2024,
             "schema": {
               "type": "string"
             }

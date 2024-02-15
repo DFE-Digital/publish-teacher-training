@@ -33,10 +33,6 @@ module API
             @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code])
           end
 
-          def recruitment_cycle
-            @recruitment_cycle ||= RecruitmentCycle.find_by(year: params[:recruitment_cycle_year])
-          end
-
           def include_param
             params.fetch(:include, '')
           end
