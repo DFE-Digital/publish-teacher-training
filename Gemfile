@@ -33,7 +33,7 @@ gem 'active_model_serializers'
 gem 'kaminari'
 
 # Pagination for API
-gem 'pagy', '~> 6.4'
+gem 'pagy', '~> 6.5'
 
 # JSON:API Ruby Client
 gem 'jsonapi-rails', github: 'DFE-Digital/jsonapi-rails'
