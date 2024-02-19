@@ -99,6 +99,7 @@ provider_to_copy_to = RecruitmentCycle.current.providers.find_by(provider_code: 
 
 
 # Initialize the CopyToProviderService and assign to a variable
+# (pass: `sites_copy_to_course: ->(a){}` if you do not want to copy the sites in the operation.)
 copier = Courses::CopyToProviderService.new(sites_copy_to_course: Sites::CopyToCourseService.new, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
 
 # Assign the course you want to copy to a variable
