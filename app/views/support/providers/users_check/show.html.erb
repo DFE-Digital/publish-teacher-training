@@ -33,8 +33,11 @@
           end
         end %>
 
-        <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span> <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span> The user will be sent an email to tell them you’ve added them to <%= @provider.provider_name %>. </strong> </div>
+        <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            The user will be sent an email to tell them you’ve added them to <%= @provider.provider_name %>.
+          </strong>
+        </div>
 
         <%= f.govuk_submit(t("support.providers.users.new")) %>
       </fieldset>
