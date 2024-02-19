@@ -46,3 +46,7 @@
 .govuk-button-group {
   form { display: contents; }
 }
+
+.govuk-tag-no-max-width {
+  max-width: none;
+}
