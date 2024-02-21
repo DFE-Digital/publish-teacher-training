@@ -15,7 +15,7 @@
 
   // Add a 2px solid border around tags which match colour of the text
   .govuk-tag--grey {
-    border: 2px solid govuk-shade(govuk-colour("dark-grey", $legacy: "grey-1"), 30);
+    border: 2px solid govuk-shade(govuk-colour("dark-grey"), 30);
   }
 
   .govuk-tag--yellow {

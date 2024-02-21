@@ -13,28 +13,30 @@
           <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-3"><%= t("page_titles.users.check") %></h1> </legend>
 
         <%= render GovukComponent::SummaryListComponent.new do |component|
-          component.with_row do |row|
-            row.with_key { t("users.first_name") }
-            row.with_value(text:  @user_form.first_name)
-            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
-          end
+              component.with_row do |row|
+                row.with_key { t("users.first_name") }
+                row.with_value(text:  @user_form.first_name)
+                row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
+              end
 
-          component.with_row do |row|
-            row.with_key { t("users.last_name") }
-            row.with_value(text: @user_form.last_name)
-            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
-          end
+              component.with_row do |row|
+                row.with_key { t("users.last_name") }
+                row.with_value(text: @user_form.last_name)
+                row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
+              end
 
-          component.with_row do |row|
-            row.with_key { t("users.email") }
-            row.with_value(text:  @user_form.email)
-            row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "email", visually_hidden_text: t("users.email").downcase)
-          end
-        end %>
+              component.with_row do |row|
+                row.with_key { t("users.email") }
+                row.with_value(text:  @user_form.email)
+                row.with_action(text: t("change"), href: edit_publish_provider_user_path(id: params[:user_id]), classes: "email", visually_hidden_text: t("users.email").downcase)
+              end
+            end %>
 
         <% if email_changed?(@user_form) %>
-          <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span> <strong class="govuk-warning-text__text">
-            <span class="govuk-warning-text__assistive">Warning</span> The user will be sent an email to tell them you’ve changed their email address  </strong>
+          <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              The user will be sent an email to tell them you’ve changed their email address.
+            </strong>
           </div>
         <% end %>
 

@@ -193,7 +193,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_the_warning_email_text_should_be_displayed
-    expect(page).to have_text('Warning The user will be sent an email to tell them you’ve changed their email address')
+    expect(page).to have_text('The user will be sent an email to tell them you’ve changed their email address.')
   end
 
   def when_i_enter_a_new_invalid_email
@@ -205,7 +205,7 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
   end
 
   def and_the_warning_email_text_should_not_be_displayed
-    expect(page).to have_no_text('Warning The user will be sent an email to tell them you’ve changed their email address')
+    expect(page).to have_no_text('The user will be sent an email to tell them you’ve changed their email address.')
   end
 
   def and_i_see_the_new_last_name_is_displayed

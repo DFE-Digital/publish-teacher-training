@@ -7,8 +7,8 @@
   "scripts": {
     "build": "yarn run build:css && yarn run build:js",
     "build:css": "yarn run build:css:publish && yarn run build:css:find",
-    "build:css:publish": "sass ./app/assets/stylesheets/publish_application.scss ./app/assets/builds/publish_application.css --no-source-map --load-path=node_modules --quiet-deps",
-    "build:css:find": "sass ./app/assets/stylesheets/find_application.scss ./app/assets/builds/find_application.css --no-source-map --load-path=node_modules --quiet-deps",
+    "build:css:publish": "sass ./app/assets/stylesheets/publish_application.scss ./app/assets/builds/publish_application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
+    "build:css:find": "sass ./app/assets/stylesheets/find_application.scss ./app/assets/builds/find_application.css --no-source-map --load-path=node_modules --load-path=. --quiet-deps",
     "build:js": "yarn run build:js:publish && yarn run build:js:find",
     "build:js:publish": "esbuild app/javascript/publish/*.* --bundle --sourcemap --outdir=app/assets/builds/publish",
     "build:js:find": "esbuild app/javascript/find/*.* --bundle --sourcemap --outdir=app/assets/builds/find",
@@ -32,10 +32,10 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^0.2.1",
+    "@ministryofjustice/frontend": "2.0.0",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
-    "govuk-frontend": "^4.5.0",
+    "govuk-frontend": "5.0.0",
     "jquery": "^3.6.0",
     "lodash.throttle": "^4.1.1",
     "set-value": "^4.0.1"
