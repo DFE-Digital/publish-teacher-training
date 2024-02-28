@@ -54,5 +54,22 @@
         Further education (PGCE or PGDE without QTS)
       <% end %>
     </div>
+
+    <div class="govuk-checkboxes__item">
+      <%= form.check_box(
+        :qualification,
+        {
+          class: "govuk-checkboxes__input",
+          multiple: true,
+          data: { qa: "pgta" },
+          checked: @filters_view.pgta_pgta_with_qts_checked? || @filters_view.qualification_params_nil?
+        },
+        ["pgta pgta_with_qts"],
+        false
+      ) %>
+      <%= form.label :qualification, { for: "qualification_pgce_pgde" }, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
+        Degree awarding (PGTA)
+      <% end %>
+    </div>
   </div>
 </fieldset>

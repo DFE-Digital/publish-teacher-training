@@ -15,6 +15,10 @@ module Find
         checked?('pgce_with_qts')
       end
 
+      def pgta_pgta_with_qts_checked?
+        checked?('pgta')
+      end
+
       def other_checked?
         checked?('pgce pgde') || checked?('pgce') || checked?('pgde')
       end
@@ -43,6 +47,10 @@ module Find
 
       def funding_checked?
         params[:funding] == 'salary'
+      end
+
+      def tda_filter_checked?
+        params[:tda_filter].present?
       end
 
       def engineers_teach_physics_checked?

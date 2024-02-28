@@ -1,0 +1,19 @@
+<fieldset class="govuk-fieldset app-filter__group" data-qa="filters__funding">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+    The degree apprenticeship <span class="govuk-visually-hidden"> filter</span>
+  </legend>
+
+  <div class="govuk-checkboxes govuk-checkboxes--small">
+    <div class="govuk-checkboxes__item" data-qa="subject">
+      <%= form.check_box(
+        :tda_filter,
+        { checked: @filters_view.tda_filter_checked?, class: "govuk-checkboxes__input" },
+        "pgta pgta_with_qts",
+        nil
+      ) %>
+      <%= form.label(:tda_filter, { for: "tda_filter" }, class: "govuk-label govuk-checkboxes__label") do %>
+        Only show courses that awards a degree with a salary (TDA)
+      <% end %>
+    </div>
+  </div>
+</fieldset>

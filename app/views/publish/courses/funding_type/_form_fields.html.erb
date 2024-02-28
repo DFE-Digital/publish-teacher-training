@@ -13,27 +13,29 @@
 
     <%= render "publish/shared/error_messages", error_keys: %i[funding_type program_type] %>
     <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <%= form.radio_button :funding_type,
-                "fee",
-                class: "govuk-radios__input" %>
-        <%= form.label :funding_type,
-                "Fee - no salary",
-                value: "fee",
-                class: "govuk-label govuk-radios__label",
-                data: { qa: "course__funding_type_fee" } %>
-      </div>
+      <% unless form.object.qualification.to_s.in?(['pgta_with_qts', 'pgta']) %>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :funding_type,
+                  "fee",
+                  class: "govuk-radios__input" %>
+          <%= form.label :funding_type,
+                  "Fee - no salary",
+                  value: "fee",
+                  class: "govuk-label govuk-radios__label",
+                  data: { qa: "course__funding_type_fee" } %>
+        </div>
 
-      <div class="govuk-radios__item">
-        <%= form.radio_button :funding_type,
-                "salary",
-                class: "govuk-radios__input" %>
-        <%= form.label :funding_type,
-                "Salary",
-                value: "salary",
-                class: "govuk-label govuk-radios__label",
-                data: { qa: "course__funding_type_salary" } %>
-      </div>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :funding_type,
+                  "salary",
+                  class: "govuk-radios__input" %>
+          <%= form.label :funding_type,
+                  "Salary",
+                  value: "salary",
+                  class: "govuk-label govuk-radios__label",
+                  data: { qa: "course__funding_type_salary" } %>
+        </div>
+      <% end %>
 
       <div class="govuk-radios__item">
         <%= form.radio_button :funding_type,
