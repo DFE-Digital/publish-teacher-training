@@ -9,8 +9,11 @@
     <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
     <%= render "find/result_filters/study_type_filter", form: %>
     <%= render "find/result_filters/qualifications_filter", form: %>
-    <%= render "find/result_filters/degree_required_filter", form: %>
+    <% unless @filters_view.tda_filter_checked? %>
+      <%= render "find/result_filters/degree_required_filter", form: %>
+    <% end %>
     <%= render "find/result_filters/send_filter", form: %>
+    <%= render "find/result_filters/tda_filter", form: %>
     <%= render "find/result_filters/salary_filter", form: %>
     <%= render "find/result_filters/applications_open_filter", form: %>
     <%= render "find/result_filters/hidden_fields", form: %>

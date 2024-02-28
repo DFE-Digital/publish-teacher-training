@@ -51,7 +51,7 @@ module Find
     end
 
     def qualifications_parameters
-      { 'qualification' => query_parameters['qualification'].presence || ['qts', 'pgce_with_qts', 'pgce pgde'] }
+      { 'qualification' => query_parameters['qualification'].presence || ['qts', 'pgce_with_qts', 'pgce pgde', 'pgta', 'pgta_with_qts'] }
     end
 
     def study_type_parameters
