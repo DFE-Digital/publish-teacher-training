@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'cgi'
 
 require_relative '../shared_examples/blank_validation'
 
@@ -27,12 +28,12 @@ module Support
     describe '#full_address' do
       subject { provider_contact_form.full_address }
       let(:expected_full_address) do
-        params.slice(:address1,
-                     :address2,
-                     :address3,
-                     :town,
-                     :address4,
-                     :postcode).values.join('<br> ')
+        CGI.unescapeHTML(params.slice(:address1,
+                                      :address2,
+                                      :address3,
+                                      :town,
+                                      :address4,
+                                      :postcode).values.join('<br> '))
       end
 
       it 'matches the expected full address' do
