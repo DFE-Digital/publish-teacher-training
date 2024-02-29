@@ -28,6 +28,7 @@ module Support
     describe '#full_address' do
       subject { provider_contact_form.full_address }
       let(:expected_full_address) do
+        # Decode html entities before comparison to prevent a flaky test from apostrophes
         CGI.unescapeHTML(params.slice(:address1,
                                       :address2,
                                       :address3,
