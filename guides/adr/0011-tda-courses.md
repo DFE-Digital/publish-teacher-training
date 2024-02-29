@@ -6,7 +6,7 @@ Date: 29/02/2024
 
 Proposed
 
-## Context
+## Context
 
 Trainee teachers will soon be able to gain a degree through an apprenticeship,
 instead of through the traditional university route into the profession.
