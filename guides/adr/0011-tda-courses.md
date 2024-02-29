@@ -11,13 +11,13 @@ Proposed
 Trainee teachers will soon be able to gain a degree through an apprenticeship,
 instead of through the traditional university route into the profession.
 
-A degree apprenticeship allows candidates to study towards an undergraduate or
+A degree apprenticeship allows trainees to study towards an undergraduate or
 master’s degree while they work, getting invaluable industry experience and
-earning a salary. Candidate's off-the-job training takes place in your working hours,
-and candidates won’t have to pay for their tuition.
+earning a salary. Trainees off-the-job training takes place in working hours,
+and trainees won’t have to pay for their tuition.
 
 Degree apprenticeships are jobs with training. On completion of the apprenticeship,
-candidates will achieve an undergraduate or master’s degree – just like someone
+trainees will achieve an undergraduate or master’s degree – just like someone
 who has got their degree through a traditional route.
 
 Our platform currently supports courses through API v1 in the Publish module.
