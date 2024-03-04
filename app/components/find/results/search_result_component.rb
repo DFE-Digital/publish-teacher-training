@@ -51,6 +51,22 @@ module Find
         end
       end
 
+      def course_fee_value
+        safe_join([formatted_uk_eu_fee_label, tag.br, formatted_international_fee_label])
+      end
+
+      def formatted_uk_eu_fee_label
+        return if course.fee_uk_eu.blank?
+
+        "UK students: #{number_to_currency(course.fee_uk_eu)}"
+      end
+
+      def formatted_international_fee_label
+        return if course.fee_international.blank?
+
+        "International students: #{number_to_currency(course.fee_international)}"
+      end
+
       def accredited_provider
         return nil if course.accrediting_provider.blank?
 
