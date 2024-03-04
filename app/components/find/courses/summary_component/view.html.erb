@@ -13,6 +13,9 @@
   <dt class="app-description-list__label">Visa sponsorship</dt>
   <dd data-qa="course__visa_sponsorship"><%= visa_sponsorship_row %></dd>
 
+   <dt class="app-description-list__label">Course fee</dt>
+  <dd data-qa="course__visa_sponsorship"><%= course_fee_value %></dd>
+
   <dt class="app-description-list__label">Qualification</dt>
   <%= render Find::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
   <% if age_range_in_years.present? %>
