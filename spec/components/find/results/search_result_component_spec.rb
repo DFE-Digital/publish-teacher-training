@@ -97,5 +97,45 @@ module Find
         expect(result.text).not_to include('QTS ratified by')
       end
     end
+
+    context 'when there are UK fees' do
+      it 'renders the uk fees' do
+        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+
+        result = render_inline(described_class.new(course:))
+        expect(result.text).to include('UK students: £9,250')
+      end
+    end
+
+    context 'when there are international fees' do
+      it 'renders the international fees' do
+        course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
+
+        result = render_inline(described_class.new(course:))
+        expect(result.text).to include('International students: £14,000')
+      end
+    end
+
+    context 'when there are uk fees but no international fees' do
+      it 'renders the uk fees and not the internation fee label' do
+        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
+
+        result = render_inline(described_class.new(course:))
+
+        expect(result.text).to include('UK students: £9,250')
+        expect(result.text).not_to include('International students')
+      end
+    end
+
+    context 'when there are international fees but no uk fees' do
+      it 'renders the international fees but not the uk fee label' do
+        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
+
+        result = render_inline(described_class.new(course:))
+
+        expect(result.text).not_to include('UK students')
+        expect(result.text).to include('International students: £14,000')
+      end
+    end
   end
 end
