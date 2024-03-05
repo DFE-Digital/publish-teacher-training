@@ -67,6 +67,10 @@ module Find
         "International students: #{number_to_currency(course.fee_international)}"
       end
 
+      def no_fee?
+        course.fee_international.blank? && course.fee_uk_eu.blank?
+      end
+
       def accredited_provider
         return nil if course.accrediting_provider.blank?
 

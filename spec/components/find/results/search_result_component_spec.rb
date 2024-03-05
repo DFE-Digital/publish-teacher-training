@@ -104,6 +104,7 @@ module Find
 
         result = render_inline(described_class.new(course:))
         expect(result.text).to include('UK students: £9,250')
+        expect(result.text).to include('Course fee')
       end
     end
 
@@ -135,6 +136,18 @@ module Find
 
         expect(result.text).not_to include('UK students')
         expect(result.text).to include('International students: £14,000')
+      end
+    end
+
+    context 'when there are no fees' do
+      it 'does not render the row' do
+        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
+
+        result = render_inline(described_class.new(course:))
+
+        expect(result.text).not_to include('UK students')
+        expect(result.text).not_to include('International students: £14,000')
+        expect(result.text).not_to include('Course fee')
       end
     end
   end

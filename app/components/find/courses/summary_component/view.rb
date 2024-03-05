@@ -66,6 +66,10 @@ module Find
 
           "International students: #{number_to_currency(course.fee_international)}"
         end
+
+        def no_fee?
+          course.fee_international.blank? && course.fee_uk_eu.blank?
+        end
       end
     end
   end
