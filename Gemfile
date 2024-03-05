@@ -138,7 +138,7 @@ gem 'jsbundling-rails', '~> 1.3'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
 # for sending analytics data to the analytics platform
-gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.11.6'
+gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.12.1'
 
 # For running data migrations
 gem 'data_migrate', '~> 9.3.0'
