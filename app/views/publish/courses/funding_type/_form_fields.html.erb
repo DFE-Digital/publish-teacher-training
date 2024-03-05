@@ -13,7 +13,7 @@
 
     <%= render "publish/shared/error_messages", error_keys: %i[funding_type program_type] %>
     <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios">
-      <% unless form.object.qualification.to_s.in?(['pgta_with_qts', 'pgta']) %>
+      <% unless form.object.qualification.to_s.in?(['tda_with_qts', 'tda']) %>
         <div class="govuk-radios__item">
           <%= form.radio_button :funding_type,
                   "fee",

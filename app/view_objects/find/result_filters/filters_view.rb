@@ -15,8 +15,8 @@ module Find
         checked?('pgce_with_qts')
       end
 
-      def pgta_pgta_with_qts_checked?
-        checked?('pgta')
+      def tda_tda_with_qts_checked?
+        checked?('tda')
       end
 
       def other_checked?

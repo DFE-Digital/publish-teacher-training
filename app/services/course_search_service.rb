@@ -199,7 +199,7 @@ class CourseSearchService
   def qualifications
     return [] if filter[:qualification].blank?
 
-    return ['pgta', 'pgta_with_qts'] if filter[:tda_filter].present?
+    return ['tda', 'tda_with_qts'] if filter[:tda_filter].present?
 
     filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
     filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)
@@ -244,9 +244,9 @@ class CourseSearchService
 
   def degrees_accepted?
     return false if filter[:qualification] && (
-      filter[:qualification].include?('pgta') ||
-        filter[:qualification].include?('pgta_with_qts') ||
-        filter[:qualification] == ['pgta pgta_with_qts']
+      filter[:qualification].include?('tda') ||
+        filter[:qualification].include?('tda_with_qts') ||
+        filter[:qualification] == ['tda tda_with_qts']
     )
 
     filter[:degree_required].present?

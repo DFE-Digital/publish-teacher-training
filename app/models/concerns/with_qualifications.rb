@@ -41,7 +41,7 @@ module WithQualifications
     # subjects this course was tagged to.
     #
     # Defined here: https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Domain/Models/CourseQualification.cs
-    enum qualification: { qts: 0, pgce_with_qts: 1, pgde_with_qts: 2, pgce: 3, pgde: 4, pgta: 5, pgta_with_qts: 6 }
+    enum qualification: { qts: 0, pgce_with_qts: 1, pgde_with_qts: 2, pgce: 3, pgde: 4, tda: 5, tda_with_qts: 6 }
 
     # This field may seem like an unnecessary overhead when there is already a
     # database-backed `qualification` field. However it's misleading, from the
@@ -59,8 +59,8 @@ module WithQualifications
       when 'pgde_with_qts' then %i[qts pgde]
       when 'pgce' then [:pgce]
       when 'pgde' then [:pgde]
-      when 'pgta_with_qts' then %i[qts pgta]
-      when 'pgta' then %i[pgta]
+      when 'tda_with_qts' then %i[qts tda]
+      when 'tda' then %i[tda]
       end
     end
 
