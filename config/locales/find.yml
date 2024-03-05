@@ -150,10 +150,10 @@ en:
           html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde:
           html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
-        pgta:
-          html: <abbr title='Some content about PGTA'>PGTA</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
-        pgta_with_qts:
-          html: <abbr title='Some content about PGTA'>PGTA</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
+        tda:
+          html: <abbr title='Some content about TDA'>TDA</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+        tda_with_qts:
+          html: <abbr title='Some content about TDA'>TDA</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
     links:
       national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
   activemodel:

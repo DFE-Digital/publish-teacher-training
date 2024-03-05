@@ -936,11 +936,11 @@ en:
       pgde_with_qts:
         label: "PGDE with QTS"
         help: "Postgraduate diploma in education with qualified teacher status"
-      pgta:
-        label: "PGTA"
+      tda:
+        label: "TDA"
         help: "Degree apprenticeship"
-      pgta_with_qts:
-        label: "PGTA with QTS"
+      tda_with_qts:
+        label: "TDA with QTS"
         help: "Degree apprenticeship with qualified teacher status"
     age_range_in_years:
       other:
