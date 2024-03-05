@@ -35,7 +35,7 @@ jobs:
           tf_vars_file=terraform/aks/workspace_variables/production_aks.tfvars.json
           echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
 
-      - uses: azure/login@v1
+      - uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
 
