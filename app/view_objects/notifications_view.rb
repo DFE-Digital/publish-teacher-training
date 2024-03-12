@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationsView
-  ORGANISATION_URL_PATTERN = %r{/organisations/(\S+)/?}
+  ORGANISATION_URL_PATTERN = %r{/publish/organisations/([^/]+)/}
 
   def initialize(
     request:,

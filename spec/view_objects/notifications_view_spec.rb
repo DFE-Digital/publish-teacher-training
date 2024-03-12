@@ -15,7 +15,7 @@ describe NotificationsView do
   let(:user_id) { '123' }
   let(:user_email) { 'dave@example.com' }
   let(:referer_url) { "https://www.example.com#{referer_path}" }
-  let(:referer_path) { '/organisations/B20' }
+  let(:referer_path) { '/publish/organisations/B20/' }
 
   describe '#user_id' do
     it "returns the current_user['user_id']" do
