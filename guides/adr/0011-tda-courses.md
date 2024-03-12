@@ -1,10 +1,14 @@
-# 11. Add PGTA/TDA Courses to Find/Publish
+# 11. Add TDA Courses to Find/Publish
 
 Date: 29/02/2024
 
 ## Status
 
 Proposed
+
+## Glossary
+
+TDA - The degree apprenticeship
 
 ## Context
 
@@ -21,18 +25,17 @@ trainees will achieve an undergraduate or master’s degree – just like someon
 who has got their degree through a traditional route.
 
 Our platform currently supports courses through API v1 in the Publish module.
-However, it lacks support for two additional values: pgta and pgta_with_qts,
-representing the degree apprenticeship program.
-Additionally, the course wizard in Publish needs improvement to accept PGTA/TDA
+However, it lacks support for the additional value: 'tda' representing the degree apprenticeship program.
+Additionally, the course wizard in Publish needs improvement to accept TDA
 courses seamlessly. Furthermore, the details course tab requires enhancements to
 automatically set degrees as not required for TDA courses.
 Lastly, there's a need for a filtering mechanism in the Find module to streamline course discovery.
 
 ## Decision
 
-API v1 Enhancement: We will extend API v1 in the Publish module to accommodate the two additional values: pgta and pgta_with_qts, representing the degree apprenticeship program. This will involve updating the API attributes and documentation accordingly.
+API v1 Enhancement: We will extend API v1 in the Publish module to accommodate the additional value: tda, representing the degree apprenticeship program. This will involve updating the API attributes and documentation accordingly.
 
-Course Wizard Enhancement: The add course wizard in Publish will be improved to seamlessly accept PGTA/TDA courses. This enhancement aims to streamline the course addition process for users and ensure compatibility with the new course types.
+Course Wizard Enhancement: The add course wizard in Publish will be improved to seamlessly accept TDA courses. This enhancement aims to streamline the course addition process for users and ensure compatibility with the new course types.
 
 Description Course Tab Enhancement: The description course tab functionality will be enhanced to automatically configure degrees as not required when adding TDA courses. This automation will simplify course management for users and ensure accurate representation of TDA course requirements.
 
