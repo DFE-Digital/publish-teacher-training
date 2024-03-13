@@ -1,5 +1,23 @@
 # Support Playbook
 
+### Adding a new admin user (DfE colleague)
+
+Admin users have access to all providers by default.
+
+- Navigate to the add user page on support in the environment you want to add the user to, eg:
+
+  `recruitment_cycle_year = RecruitmentCycle.current.year`
+
+  https://qa.publish-teacher-training-courses.service.gov.uk/support/{recruitment_cycle_year}/users/new
+
+- Fill in the details and submit the form.
+
+- Use the search box on the left hand side of the page to find the user.
+
+- Click on the user, tick the "Admin" checkbox and click update.
+
+
+
 ## Removing an organisation
 
 To remove an organisation, you can `discard` it:
