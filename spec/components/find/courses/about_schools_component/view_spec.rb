@@ -29,19 +29,31 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
     end
   end
 
-  context 'course with multiple sites' do
-    it 'renders the component' do
+  context 'course with site' do
+    it 'renders the school placement heading' do
       provider = build(:provider)
       course = build(:course,
                      provider:,
                      site_statuses: [
-                       build(:site_status, site: build(:site)),
                        build(:site_status, site: build(:site))
                      ]).decorate
 
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include(course.placements_heading)
+    end
+  end
+
+  context 'course with no site' do
+    it 'does not render the school placement heading' do
+      provider = build(:provider)
+      course = build(:course,
+                     site_statuses: [],
+                     provider:).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).not_to include(course.placements_heading)
     end
   end
 

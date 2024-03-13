@@ -44,7 +44,7 @@
       </ul>
     <% end %>
 
-    <% if course.site_statuses.map(&:site).uniq.many? %>
+    <% if course.site_statuses.map(&:site).uniq.any? %>
       <h3 class="govuk-heading-m">
         School placements
       </h3>
