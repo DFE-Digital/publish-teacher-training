@@ -8,8 +8,7 @@ module Find
       describe View do
         it 'renders sub sections' do
           provider = build(:provider).decorate
-          course = create(:course, :draft_enrichment,
-                          provider:).decorate
+          course = create(:course, :draft_enrichment, applications_open_from: Time.zone.tomorrow, provider:).decorate
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
