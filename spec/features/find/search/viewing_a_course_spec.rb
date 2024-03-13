@@ -76,7 +76,6 @@ feature 'Viewing a findable course' do
       :secondary,
       :with_scitt,
       funding_type: 'fee',
-      applications_open_from: '2022-01-01T00:00:00Z',
       start_date: '2022-09-01T00:00:00Z',
       degree_grade: 'two_one',
       additional_degree_subject_requirements: true,
@@ -178,10 +177,6 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.length).to have_content(
       '1 year - full time'
-    )
-
-    expect(find_course_show_page.applications_open_from).to have_content(
-      '1 January 2022'
     )
 
     expect(find_course_show_page.start_date).to have_content(
