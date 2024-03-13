@@ -30,7 +30,7 @@
     <dd data-qa="course__length"><%= course_length_with_study_mode_row %></dd>
   <% end %>
 
-  <% if applications_open_from.present? %>
+  <% if applications_open_from.present? && !applications_open_from_date_has_passed? %>
     <dt class="app-description-list__label">Date you can apply from</dt>
     <dd data-qa="course__applications_open"><%= l(applications_open_from&.to_date) %></dd>
   <% end %>

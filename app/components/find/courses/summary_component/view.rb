@@ -70,6 +70,10 @@ module Find
         def no_fee?
           course.fee_international.blank? && course.fee_uk_eu.blank?
         end
+
+        def applications_open_from_date_has_passed?
+          course.applications_open_from <= Time.zone.today
+        end
       end
     end
   end

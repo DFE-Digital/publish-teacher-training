@@ -23,6 +23,48 @@ module Find
           )
         end
 
+        context 'applications open date has not passed' do
+          it "renders the 'Date you can apply from'" do
+            course = build(
+              :course,
+              applications_open_from: Time.zone.tomorrow,
+              provider: build(:provider)
+            ).decorate
+
+            result = render_inline(described_class.new(course))
+
+            expect(result.text).to include('Date you can apply from')
+          end
+        end
+
+        context 'applications open date has passed' do
+          it "does not render the 'Date you can apply from'" do
+            course = build(
+              :course,
+              applications_open_from: Time.zone.yesterday,
+              provider: build(:provider)
+            ).decorate
+
+            result = render_inline(described_class.new(course))
+
+            expect(result.text).not_to include('Date you can apply from')
+          end
+        end
+
+        context 'applications open date is today' do
+          it "does not render the 'Date you can apply from'" do
+            course = build(
+              :course,
+              applications_open_from: Time.zone.today,
+              provider: build(:provider)
+            ).decorate
+
+            result = render_inline(described_class.new(course))
+
+            expect(result.text).not_to include('Date you can apply from')
+          end
+        end
+
         context 'a course has an accrediting provider that is not the provider' do
           it 'renders the accredited provider' do
             course = build(
