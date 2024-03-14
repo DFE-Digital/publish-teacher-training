@@ -5,7 +5,7 @@ class User < ApplicationRecord
   include PgSearch::Model
   include RecruitmentCycleHelper
 
-  before_save :downcase_email
+  before_save :downcase_email, :strip_email_whitespace
 
   has_many :organisation_users
 
@@ -104,5 +104,9 @@ class User < ApplicationRecord
 
   def downcase_email
     email&.downcase!
+  end
+
+  def strip_email_whitespace
+    email.strip!
   end
 end
