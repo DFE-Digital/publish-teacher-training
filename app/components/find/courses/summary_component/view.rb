@@ -71,8 +71,8 @@ module Find
           course.fee_international.blank? && course.fee_uk_eu.blank?
         end
 
-        def applications_open_from_date_has_passed?
-          course.applications_open_from <= Time.zone.today
+        def show_apply_from_row?
+          course.applications_open_from&.future?
         end
       end
     end
