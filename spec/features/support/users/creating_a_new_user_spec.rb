@@ -17,8 +17,9 @@ feature 'Creating a new user' do
       scenario 'Adding a new user record' do
         and_i_fill_in_first_name
         and_i_fill_in_last_name
-        and_i_fill_in_email
+        and_i_fill_in_email_with_some_whitespace
         when_i_save_the_form
+        and_the_users_email_is_saved_to_the_db_without_any_whitespace
         then_i_am_taken_to_the_user_index_page
       end
     end
@@ -51,8 +52,12 @@ feature 'Creating a new user' do
     support_user_new_page.last_name.set('Skywalker')
   end
 
-  def and_i_fill_in_email
-    support_user_new_page.email.set('lukeskywalker@jedi.com')
+  def and_i_fill_in_email_with_some_whitespace
+    support_user_new_page.email.set('    lukeskywalker@jedi.com     ')
+  end
+
+  def and_the_users_email_is_saved_to_the_db_without_any_whitespace
+    expect(User.find_by(email: 'lukeskywalker@jedi.com')).to be_present
   end
 
   def when_i_save_the_form

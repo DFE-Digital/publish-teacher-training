@@ -22,6 +22,8 @@ module Support
 
     def create
       @user = User.new(user_params)
+      @user.email.strip!
+
       if @user.save
         redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year])
       else
