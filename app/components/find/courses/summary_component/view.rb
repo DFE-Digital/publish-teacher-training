@@ -70,6 +70,10 @@ module Find
         def no_fee?
           course.fee_international.blank? && course.fee_uk_eu.blank?
         end
+
+        def show_apply_from_row?
+          course.applications_open_from&.future?
+        end
       end
     end
   end
