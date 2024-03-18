@@ -17,7 +17,7 @@ module Publish
       it 'validates UK/EU Fee' do
         expect(subject).to validate_numericality_of(:fee_uk_eu)
           .only_integer
-          .is_greater_than_or_equal_to(0)
+          .is_greater_than_or_equal_to(1)
           .is_less_than_or_equal_to(100_000)
           .allow_nil
       end
@@ -25,7 +25,7 @@ module Publish
       it 'validates International Fee' do
         expect(subject).to validate_numericality_of(:fee_international)
           .only_integer
-          .is_greater_than_or_equal_to(0)
+          .is_greater_than_or_equal_to(1)
           .is_less_than_or_equal_to(100_000)
           .allow_nil
       end
