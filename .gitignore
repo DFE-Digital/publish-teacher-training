@@ -47,6 +47,7 @@ terraform/aks/vendor/
 
 /.vscode/*
 /.devcontainer/*
+/.idea/
 
 # Ignore sanitised production data dump
 *.sql.tar.gz
