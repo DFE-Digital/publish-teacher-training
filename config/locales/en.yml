@@ -778,13 +778,13 @@ en:
             fee_uk_eu:
               blank: "Enter fees for UK students"
               not_a_number: "Course fees for UK and EU students must be a valid number"
-              greater_than_or_equal_to: "Course fees for UK and EU students must be greater than or equal to £0"
+              greater_than_or_equal_to: "Course fees for UK and EU students must be greater than or equal to £1"
               less_than_or_equal_to: "Course fees for UK and EU students must be less than or equal to £100,000"
               not_an_integer: "Course fees for UK and EU students must not include pence, like 1000 or 1500"
             fee_international:
               blank: "Enter fees for international students"
               not_a_number: "Course fees for international students must be a valid number"
-              greater_than_or_equal_to: "Course fees for international students must be greater than or equal to £0"
+              greater_than_or_equal_to: "Course fees for international students must be greater than or equal to £1"
               less_than_or_equal_to: "Course fees for international students must be less than or equal to £100,000"
               not_an_integer: "Course fees for international students must not include pence, like 1000 or 1500"
             fee_details:
