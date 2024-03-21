@@ -97,7 +97,8 @@ module Find
                            bursary_amount: 99_999_999,
                            scholarship_amount: 1,
                            has_early_career_payments: true,
-                           subject_name: 'foobar')
+                           subject_name: 'foobar',
+                           subjects: [])
           end
 
           def financial_support_course
@@ -119,7 +120,7 @@ module Find
 
           class FakeCourse
             include ActiveModel::Model
-            attr_accessor(:has_fees, :salaried, :excluded_from_bursary, :bursary_only, :has_scholarship_and_bursary, :financial_support, :fee_uk_eu, :fee_international, :cycle_range, :fee_details, :bursary_amount, :scholarship_amount, :has_early_career_payments, :subject_name)
+            attr_accessor(:has_fees, :salaried, :excluded_from_bursary, :bursary_only, :has_scholarship_and_bursary, :financial_support, :fee_uk_eu, :fee_international, :cycle_range, :fee_details, :bursary_amount, :scholarship_amount, :has_early_career_payments, :subject_name, :subjects)
 
             def enrichment_attribute(params)
               send(params)
