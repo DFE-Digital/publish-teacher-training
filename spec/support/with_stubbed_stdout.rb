@@ -4,7 +4,7 @@
 # Retaining as the tests becomes very noise without this.
 
 # Replace stdout with a StringIO for a given block of code, and return it.
-def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
+def with_stubbed_stdout(stdin: nil, stderr: nil, &)
   # if the parameters are wrong for a cli command then the error is written to
   # stderr which is lost when we have it mocked out. This env gives us a way to
   # disable redirection when trying to debug a failure in order to see the error
@@ -14,7 +14,7 @@ def with_stubbed_stdout(stdin: nil, stderr: nil, &block)
     { stdout: nil, stderr: nil }
   else
     stderr ||= ''
-    stdout = run(stdin:, stderr:, &block)
+    stdout = run(stdin:, stderr:, &)
     { stdout:, stderr: }
   end
 end

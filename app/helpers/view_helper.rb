@@ -32,8 +32,8 @@ module ViewHelper
     bat_contact_email_address.gsub('@', '<wbr>@').html_safe
   end
 
-  def bat_contact_mail_to(name = nil, **kwargs)
-    govuk_mail_to bat_contact_email_address, name || bat_contact_email_address_with_wrap, **kwargs
+  def bat_contact_mail_to(name = nil, **)
+    govuk_mail_to(bat_contact_email_address, name || bat_contact_email_address_with_wrap, **)
   end
 
   # def feedback_link_to
