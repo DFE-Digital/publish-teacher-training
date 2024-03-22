@@ -128,7 +128,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       end
 
       it 'tells candidates they may be eligible for relocation support' do
-        expect(page).to have_text(relocation_text)
+        if FeatureFlag.active?(:hide_international_relocation_payments)
+          expect(page).to have_not_text(relocation_text)
+        else
+          expect(page).to have_text(relocation_text)
+        end
       end
     end
 
@@ -148,7 +152,11 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
       end
 
       it 'tells candidates they may be eligible for relocation support' do
-        expect(page).to have_text(relocation_text)
+        if FeatureFlag.active?(:hide_international_relocation_payments)
+          expect(page).to have_not_text(relocation_text)
+        else
+          expect(page).to have_text(relocation_text)
+        end
       end
     end
   end
