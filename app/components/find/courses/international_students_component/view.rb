@@ -45,6 +45,7 @@ module Find
         end
 
         def course_has_relocation_entitlement?
+          return false if FeatureFlag.active?(:hide_international_relocation_payment)
           return course_subject_codes.any? { |code| SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(code) } if course.is_modern_language_course?
 
           SUBJECTS_WITH_RELOCATION_ENTITLEMENT.include?(course_subject_codes.first)
