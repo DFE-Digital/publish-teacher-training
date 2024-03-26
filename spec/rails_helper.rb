@@ -58,6 +58,7 @@ RSpec.configure do |config|
   config.include RequestHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  config.include LoggerDouble
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do

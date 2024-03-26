@@ -8,7 +8,8 @@ require 'view_component/compile_cache'
 require 'govuk/components'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+groups = Rails.env[/_aks/] ? Rails.groups + [:production] : Rails.groups
+Bundler.require(*groups)
 
 module ManageCoursesBackend
   class Application < Rails::Application
@@ -43,7 +44,7 @@ module ManageCoursesBackend
     config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true
 
     config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
-    config.skylight.logger = SemanticLogger[Skylight]
+    config.skylight.logger = SemanticLogger[Skylight] if defined? SemanticLogger
     config.skylight.log_level = :fatal
     config.skylight.native_log_level = :fatal
 
