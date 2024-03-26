@@ -8,8 +8,7 @@ module Find
 
         attr_accessor :course
 
-        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[C1 F1 11 DT Q3 G1 F3 V6 15 17 22 24].freeze
-        PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES = %w[03].freeze
+        SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES = %w[F1 11 G1 F3 15 17 22 24].freeze
 
         def initialize(course:)
           super
@@ -35,10 +34,6 @@ module Find
           else
             SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
           end
-        end
-
-        def primary_with_mathematics_subject?
-          PRIMARY_WITH_MATHEMATICS_SUBJECT_CODES.include?(course.subjects.first.subject_code)
         end
 
         def required_gcse_content(course)
