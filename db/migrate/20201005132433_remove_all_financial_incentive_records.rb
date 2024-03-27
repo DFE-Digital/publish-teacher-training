@@ -10,7 +10,6 @@ class RemoveAllFinancialIncentiveRecords < ActiveRecord::Migration[6.0]
   def down
     say_with_time 'populating finanical incentive' do
       Subjects::FinancialIncentiveCreatorService.new(year: 2020).execute
-      Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year: 2020).execute
     end
   end
 end
