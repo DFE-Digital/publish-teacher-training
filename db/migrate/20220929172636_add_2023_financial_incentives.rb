@@ -8,7 +8,6 @@ class Add2023FinancialIncentives < ActiveRecord::Migration[7.0]
       year = 2023
 
       Subjects::FinancialIncentiveCreatorService.new(year:).execute
-      Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
     end
   end
 
@@ -18,7 +17,6 @@ class Add2023FinancialIncentives < ActiveRecord::Migration[7.0]
 
       [2021, 2022].each do |year|
         Subjects::FinancialIncentiveCreatorService.new(year:).execute
-        Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
       end
     end
   end

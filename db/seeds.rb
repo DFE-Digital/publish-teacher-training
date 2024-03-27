@@ -23,7 +23,6 @@ Subjects::CreatorService.new.execute
 
 year = 2023
 Subjects::FinancialIncentiveCreatorService.new(year:).execute
-Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
 
 superuser = User.create!(
   first_name: 'Super',
