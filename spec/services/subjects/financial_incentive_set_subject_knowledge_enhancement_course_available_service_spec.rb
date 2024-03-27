@@ -9,7 +9,7 @@ describe Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailab
   let(:service) do
     described_class.new(
       financial_incentive: financial_incentive_spy,
-      year: 2023
+      year: 2020
     )
   end
 
@@ -21,7 +21,7 @@ describe Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailab
   it 'sets the subject knowledge enhancement course available for existing financial incentive' do
     service.execute
     expect(financial_incentive_spy).to have_received(:where)
-      .with(subject: { subject_name: ['Computing', 'Geography', 'Chemistry', 'Mathematics', 'Physics', 'French', 'German', 'Spanish', 'Italian', 'Japanese', 'Mandarin', 'Russian', 'Modern languages (other)'] })
+      .with(subject: { subject_name: ['Primary with mathematics', 'Biology', 'Computing', 'English', 'Design and technology', 'Geography', 'Chemistry', 'Mathematics', 'Physics', 'French', 'German', 'Spanish', 'Italian', 'Japanese', 'Mandarin', 'Russian', 'Modern languages (other)', 'Religious education'] })
       .exactly(1).times
     expect(financial_incentives_records_spy).to have_received(:update_all)
       .with(subject_knowledge_enhancement_course_available: true)
