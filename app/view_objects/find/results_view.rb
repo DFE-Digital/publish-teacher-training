@@ -8,7 +8,7 @@ module Find
     include ActionView::Helpers::NumberHelper
 
     DISTANCE = 'distance'
-    MILES = '50'
+    MILES = '10'
 
     def initialize(query_parameters:)
       @query_parameters = query_parameters

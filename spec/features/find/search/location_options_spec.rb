@@ -62,7 +62,7 @@ feature 'Searching by location' do
   def and_the_correct_age_group_form_page_url_and_query_params_are_present
     URI(current_url).then do |uri|
       expect(uri.path).to eq('/age-groups')
-      expect(uri.query).to eq('c=England&l=1&latitude=51.4524877&loc=AA+Teamworks+W+Yorks+SCITT%2C+School+Street%2C+Greetland%2C+Halifax%2C+West+Yorkshire+HX4+8JB&longitude=-0.1204749&lq=Yorkshire&radius=50&sortby=distance')
+      expect(uri.query).to eq('c=England&l=1&latitude=51.4524877&loc=AA+Teamworks+W+Yorks+SCITT%2C+School+Street%2C+Greetland%2C+Halifax%2C+West+Yorkshire+HX4+8JB&longitude=-0.1204749&lq=Yorkshire&radius=10&sortby=distance')
     end
   end
 
