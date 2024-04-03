@@ -31,7 +31,7 @@ bundle exec rubocop app config db lib spec --format clang
 or
 
 ```
-docker-compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
+docker compose exec web /bin/sh -c "bundle exec rubocop app config db lib spec Gemfile --format clang"
 ```
 
 To fix Rubocop issues:
