@@ -25,19 +25,19 @@ To start all the processes run:
 Run this in a shell and leave it running after cloning the repo:
 
 ```
-docker-compose up --build --detach
+docker compose up --build --detach
 ```
 
 You can then follow the log output with
 
 ```
-docker-compose logs --follow
+docker compose logs --follow
 ```
 
 The first time you run the app, you need to set up the databases. With the above command running separately, do:
 
 ```
-docker-compose exec web /bin/sh -c "bundle exec rails db:setup"
+docker compose exec web /bin/sh -c "bundle exec rails db:setup"
 ```
 
 Then open http://localhost:3001 to see the app.
