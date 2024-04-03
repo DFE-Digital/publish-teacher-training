@@ -6,6 +6,7 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
   ignore:
+  - dependency-name: audited
   - dependency-name: simplecov
     versions:
     - ">= 0.18.a, < 0.19"
