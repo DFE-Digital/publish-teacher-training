@@ -15,6 +15,7 @@ RSpec.describe API::Public::V1::SerializableSubject do
   it { is_expected.to have_type 'subjects' }
   it { is_expected.to have_attribute(:name).with_value(non_bursary_subject.subject_name) }
   it { is_expected.to have_attribute(:code).with_value(non_bursary_subject.subject_code) }
+  it { is_expected.to have_attribute(:subject_knowledge_enhancement_course_available).with_value(nil) }
 
   context 'when a non-bursary subject' do
     it { is_expected.to have_attribute(:bursary_amount).with_value(nil) }
