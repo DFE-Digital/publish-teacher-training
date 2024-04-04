@@ -13,6 +13,7 @@ COPY swagger /swagger
 WORKDIR docs
 RUN bundle exec middleman build --build-dir=../public
 
+
 ###
 
 FROM ruby:3.1-alpine3.19
