@@ -164,7 +164,7 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page.qualifications).to have_content(
-      'PGCE with QTS'
+      'QTS with PGCE'
     )
 
     expect(find_course_show_page.age_range).to have_content(

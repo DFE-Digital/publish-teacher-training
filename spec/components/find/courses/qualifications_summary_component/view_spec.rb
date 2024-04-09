@@ -13,7 +13,7 @@ describe Find::Courses::QualificationsSummaryComponent::View, type: :component d
 
   context 'PGCE with QTS qualification' do
     it 'renders correct text' do
-      result = render_inline(described_class.new('PGCE with QTS'))
+      result = render_inline(described_class.new('QTS with PGCE'))
 
       expect(result.text).to include('A postgraduate certificate in education (PGCE) with qualified teacher status (QTS) will allow you to teach in state schools in England')
     end

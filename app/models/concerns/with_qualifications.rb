@@ -45,7 +45,7 @@ module WithQualifications
 
     # This field may seem like an unnecessary overhead when there is already a
     # database-backed `qualification` field. However it's misleading, from the
-    # point of view of the teacher training domain, to think of 'PGCE with QTS'
+    # point of view of the teacher training domain, to think of 'QTS with PGCE'
     # as a single qualification, since the QTS and PGCE aspects are completely
     # separate and may even be delivered in different places by different providers.
     # e.g. the QTS might come from a SCITT but the PGCE would come from a university.

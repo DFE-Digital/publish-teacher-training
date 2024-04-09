@@ -22,7 +22,7 @@ en:
     qualifications:
       qts: "QTS"
       pgce: "PGCE"
-      pgce_with_qts: "PGCE with QTS"
+      pgce_with_qts: "QTS with PGCE"
       pgde: "PGDE"
       pgde_with_qts: "PGDE with QTS"
     location_filter:
@@ -140,7 +140,7 @@ en:
         qts:
           html: <abbr title='Qualified teacher status'>QTS</abbr> only
         pgce_with_qts:
-          html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
+          html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
         pgde_with_qts:
           html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
         pgce:

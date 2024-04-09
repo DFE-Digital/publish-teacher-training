@@ -27,6 +27,10 @@ class CourseDecorator < ApplicationDecorator
     h.search_ui_course_page_url(provider_code: provider.provider_code, course_code: object.course_code)
   end
 
+  def description
+    object.description.to_s.gsub('PGCE with QTS', 'QTS with PGCE')
+  end
+
   def on_find(provider = object.provider)
     if object.findable?
       if current_cycle_and_open?
