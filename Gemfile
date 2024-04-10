@@ -108,9 +108,9 @@ gem 'geokit-rails'
 # Geocoding
 gem 'geocoder'
 
-gem 'open_api-rswag-api', '0.1.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.1.0'
-gem 'open_api-rswag-specs', '0.1.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.1.0'
-gem 'open_api-rswag-ui', '0.1.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.1.0'
+gem 'open_api-rswag-api', '0.2.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.2.0'
+gem 'open_api-rswag-specs', '0.2.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.2.0'
+gem 'open_api-rswag-ui', '0.2.0', github: 'DFE-Digital/open-api-rswag', tag: 'v0.2.0'
 
 gem 'pg_search'
 

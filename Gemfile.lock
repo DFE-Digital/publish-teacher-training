@@ -24,17 +24,17 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/open-api-rswag.git
-  revision: efdf5532077f9b0927ad05bfd2bbeec2a91d5488
-  tag: v0.1.0
+  revision: b39fb1bdc9fef1c3beca52b0d0c61072c2597bae
+  tag: v0.2.0
   specs:
-    open_api-rswag-api (0.1.0)
+    open_api-rswag-api (0.2.0)
       railties
-    open_api-rswag-specs (0.1.0)
+    open_api-rswag-specs (0.2.0)
       activesupport
       hashie
       json-schema (~> 2.2)
       railties
-    open_api-rswag-ui (0.1.0)
+    open_api-rswag-ui (0.2.0)
       actionpack
       railties
 
@@ -789,9 +789,9 @@ DEPENDENCIES
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth_openid_connect (~> 0.7)
-  open_api-rswag-api (= 0.1.0)!
-  open_api-rswag-specs (= 0.1.0)!
-  open_api-rswag-ui (= 0.1.0)!
+  open_api-rswag-api (= 0.2.0)!
+  open_api-rswag-specs (= 0.2.0)!
+  open_api-rswag-ui (= 0.2.0)!
   pagy (~> 7.0)
   parallel_tests
   pg
