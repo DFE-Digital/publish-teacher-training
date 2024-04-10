@@ -27,7 +27,8 @@ module API
         end
 
         attribute :subject_knowledge_enhancement_course_available do
-          @object.financial_incentive&.subject_knowledge_enhancement_course_available
+          # This field is being deprecated
+          nil
         end
       end
     end

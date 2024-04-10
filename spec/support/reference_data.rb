@@ -29,7 +29,6 @@ RSpec.configure do |config|
     # NOTE: retained this value as it breaks a number of tests.
     year = 2021
     Subjects::FinancialIncentiveCreatorService.new(year:).execute
-    Subjects::FinancialIncentiveSetSubjectKnowledgeEnhancementCourseAvailableService.new(year:).execute
 
     TestDataCache.create_and_cache_test_records if ENV['TEST_DATA_CACHE']
   end
