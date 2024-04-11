@@ -127,7 +127,7 @@ class Course < ApplicationRecord
   accepts_nested_attributes_for :site_statuses
 
   has_many :sites,
-           -> { distinct.merge(SiteStatus.where(status: %i[new_status running])) },
+           -> { distinct.joins(:site_statuses).where(site_statuses: { status: %i[new_status running] }) },
            through: :site_statuses
 
   has_many :study_sites, through: :study_site_placements, source: :site
