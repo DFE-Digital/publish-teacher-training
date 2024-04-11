@@ -65,7 +65,9 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 
 ## Seeding Data
 
-The commands from the previous section will seed the database with some test data. If you want to seed the database with a sanitised production dump, follow the steps below:
+The commands from the previous section will seed the database with some test data, but you must seed the database with a sanitised production dump to run the application locally using the personas.
+
+To seed the database with a sanitised production dump:
 
 - Download the sanitised production dump from the [Github Actions page](https://github.com/DFE-Digital/publish-teacher-training/actions/workflows/database-restore.yml) and download the latest successful run.
 - Unzip the file and you should see a file called `backup_sanitised.sql`.

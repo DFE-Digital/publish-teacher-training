@@ -10,6 +10,7 @@ Subject.destroy_all
 SubjectArea.destroy_all
 Site.destroy_all
 SiteStatus.destroy_all
+UserPermission.destroy_all
 Provider.destroy_all
 User.destroy_all
 RecruitmentCycle.destroy_all
