@@ -90,7 +90,7 @@ en:
         help: "Postgraduate certificate in education"
       pgce_with_qts:
         label: "QTS with PGCE"
-        help: "Postgraduate certificate in education with qualified teacher status"
+        help: "Qualified teacher status with a postgraduate certificate in education"
       pgde:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
@@ -929,7 +929,7 @@ en:
         help: "Postgraduate certificate in education"
       pgce_with_qts:
         label: "QTS with PGCE"
-        help: "Postgraduate certificate in education with qualified teacher status"
+        help: "Qualified teacher status with a postgraduate certificate in education"
       pgde:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
