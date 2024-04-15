@@ -58,7 +58,7 @@ class CustomLogFormatter < SemanticLogger::Formatters::Raw
   end
 end
 
-unless Rails.env.development? || Rails.env.test?
+unless Rails.env.local?
   Rails.application.configure do
     config.semantic_logger.application = Settings.application_name
     config.log_tags = [:request_id]
