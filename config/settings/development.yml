@@ -9,6 +9,9 @@ environment:
   label: "development"
   name: "development"
 
+features:
+  teacher_degree_apprenticeship: true
+
 find_valid_referers:
   - http://localhost:3001
 
