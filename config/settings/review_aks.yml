@@ -11,6 +11,9 @@ apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 search_ui:
   base_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
 
+features:
+  teacher_degree_apprenticeship: true
+
 authentication:
   secret: secret
   mode: persona
