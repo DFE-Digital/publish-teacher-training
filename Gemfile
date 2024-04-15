@@ -135,7 +135,7 @@ gem 'oj'
 # Rails 7 CSS and JS Bundling
 gem 'cssbundling-rails', '~> 1.4'
 gem 'jsbundling-rails', '~> 1.3'
-gem 'sprockets-rails', require: 'sprockets/railtie'
+gem 'propshaft'
 
 # for sending analytics data to the analytics platform
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.12.3'

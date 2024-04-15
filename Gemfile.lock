@@ -483,6 +483,11 @@ GEM
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
+    propshaft (0.8.0)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
+      railties (>= 7.0.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -694,13 +699,6 @@ GEM
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
       spring (>= 4)
-    sprockets (4.0.3)
-      concurrent-ruby (~> 1.0)
-      rack (> 1, < 3)
-    sprockets-rails (3.4.2)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      sprockets (>= 3.0.0)
     stringio (3.1.0)
     super_diff (0.11.0)
       attr_extras (>= 6.2.4)
@@ -825,6 +823,7 @@ DEPENDENCIES
   parallel_tests
   pg
   pg_search
+  propshaft
   pry
   pry-byebug
   pry-rails
@@ -858,7 +857,6 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.1.0)
-  sprockets-rails
   super_diff
   table_print
   terminal-table
