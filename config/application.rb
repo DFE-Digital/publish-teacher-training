@@ -42,7 +42,7 @@ module ManageCoursesBackend
 
     config.session_store :cookie_store, key: Settings.cookies.session.name, httponly: true
 
-    config.skylight.environments = Settings.skylight.enable ? [Rails.env] : []
+    config.skylight.environments += Settings.skylight.enable ? [Rails.env] : []
     config.skylight.logger = SemanticLogger[Skylight]
     config.skylight.log_level = :fatal
     config.skylight.native_log_level = :fatal
