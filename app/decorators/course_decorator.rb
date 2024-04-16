@@ -28,7 +28,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def description
-    object.description.to_s.gsub('PGCE with QTS', 'QTS with PGCE')
+    object.description.to_s.sub('PGCE with QTS', 'QTS with PGCE')
   end
 
   def on_find(provider = object.provider)
