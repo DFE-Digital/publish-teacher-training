@@ -19,6 +19,9 @@ en:
         name: Find has reopened
         description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
       updated: Cycle schedule updated
+    enic:
+      statement_of_comparability: 
+        url: https://www.enic.org.uk/Qualifications/SOC/Default.aspx
     qualifications:
       qts: "QTS"
       pgce: "PGCE"

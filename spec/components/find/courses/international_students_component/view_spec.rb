@@ -20,6 +20,18 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     it 'tells candidates sponsorship is not available' do
       expect(page).to have_text('Sponsorship for a student visa is not available for this course')
     end
+
+    it 'renders the h3 qualifications gained outside the UK' do
+      expect(page).to have_css('h3', text: 'Qualifications gained outside the UK')
+    end
+
+    it 'tells candidates about qualifications gained outside of the UK' do
+      expect(page).to have_text('If you studied for your qualifications outside of the UK you should apply for a statement of comparability from UK European Network of Information Centres (UK ENIC). This will show us how your qualifications compare to UK qualifications.')
+    end
+
+    it 'renders the enic link' do
+      expect(page).to have_link('Apply for a statement of comparability (opens in new tab)')
+    end
   end
 
   context 'when the course is fee-paying and does sponsor Student visas' do
