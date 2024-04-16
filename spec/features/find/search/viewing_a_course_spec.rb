@@ -160,7 +160,7 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page.extended_qualification_descriptions).to have_content(
-      @course.extended_qualification_descriptions
+      'Qualified teacher status (QTS) with a postgraduate certificate in education (PGCE)'
     )
 
     expect(find_course_show_page.qualifications).to have_content(

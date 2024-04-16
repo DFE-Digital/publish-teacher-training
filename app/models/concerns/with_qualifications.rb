@@ -65,7 +65,7 @@ module WithQualifications
     def full_qualifications
       case qualification
       when 'qts' then 'Qualified teacher status (QTS)'
-      when 'pgce_with_qts' then 'Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)'
+      when 'pgce_with_qts' then 'Qualified teacher status (QTS) with a postgraduate certificate in education (PGCE)'
       when 'pgde_with_qts' then 'Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)'
       when 'pgce' then 'Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)'
       when 'pgde' then 'Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)'
