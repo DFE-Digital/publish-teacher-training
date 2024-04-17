@@ -126,7 +126,7 @@ feature 'Course show' do
       course.subjects.sort.join
     )
     expect(publish_provider_courses_details_page.outcome).to have_content(
-      'PGCE with QTS'
+      'QTS with PGCE'
     )
     expect(publish_provider_courses_details_page.study_mode).to have_content(
       'Full time'

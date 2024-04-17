@@ -149,11 +149,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     expect(publish_course_preview_page.description).to have_content(
-      course.description
+      course.decorate.description
     )
 
     expect(publish_course_preview_page.qualifications).to have_content(
-      'PGCE with QTS'
+      'QTS with PGCE'
     )
 
     expect(publish_course_preview_page.age_range_in_years).to have_content(

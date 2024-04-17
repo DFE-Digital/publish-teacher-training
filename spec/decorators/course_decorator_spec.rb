@@ -766,6 +766,26 @@ describe CourseDecorator do
     end
   end
 
+  describe '#description' do
+    subject(:description) { course.decorate.description }
+
+    context 'when PGCE with QTS' do
+      let(:course) { build_stubbed(:course, qualification: 'pgce_with_qts') }
+
+      it 'returns the correct page title' do
+        expect(description).to eq('QTS with PGCE full time teaching apprenticeship')
+      end
+    end
+
+    context 'when PGDE with QTS' do
+      let(:course) { build_stubbed(:course, qualification: 'pgde_with_qts') }
+
+      it 'returns the correct page title' do
+        expect(description).to eq(course.description)
+      end
+    end
+  end
+
   describe '#cycle_range' do
     subject { course.decorate.cycle_range }
 

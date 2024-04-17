@@ -45,7 +45,7 @@ module WithQualifications
 
     # This field may seem like an unnecessary overhead when there is already a
     # database-backed `qualification` field. However it's misleading, from the
-    # point of view of the teacher training domain, to think of 'PGCE with QTS'
+    # point of view of the teacher training domain, to think of 'QTS with PGCE'
     # as a single qualification, since the QTS and PGCE aspects are completely
     # separate and may even be delivered in different places by different providers.
     # e.g. the QTS might come from a SCITT but the PGCE would come from a university.
@@ -65,7 +65,7 @@ module WithQualifications
     def full_qualifications
       case qualification
       when 'qts' then 'Qualified teacher status (QTS)'
-      when 'pgce_with_qts' then 'Postgraduate certificate in education (PGCE) with qualified teacher status (QTS)'
+      when 'pgce_with_qts' then 'Qualified teacher status (QTS) with a postgraduate certificate in education (PGCE)'
       when 'pgde_with_qts' then 'Postgraduate diploma in education (PGDE) with qualified teacher status (QTS)'
       when 'pgce' then 'Postgraduate certificate in education (PGCE) without qualified teacher status (QTS)'
       when 'pgde' then 'Postgraduate diploma in education (PGDE) without qualified teacher status (QTS)'

@@ -89,8 +89,8 @@ en:
         label: "PGCE only (without QTS)"
         help: "Postgraduate certificate in education"
       pgce_with_qts:
-        label: "PGCE with QTS"
-        help: "Postgraduate certificate in education with qualified teacher status"
+        label: "QTS with PGCE"
+        help: "Qualified teacher status with a postgraduate certificate in education"
       pgde:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
@@ -254,7 +254,7 @@ en:
         maths: "at least grade B in maths A-level (or an equivalent)"
       qualification:
         qts: "QTS"
-        pgce_with_qts: "PGCE with QTS"
+        pgce_with_qts: "QTS with PGCE"
         pgce: "PGCE"
         pgde_with_qts: "PGDE with QTS"
         pgde: "PGDE"
@@ -928,8 +928,8 @@ en:
         label: "PGCE only (without QTS)"
         help: "Postgraduate certificate in education"
       pgce_with_qts:
-        label: "PGCE with QTS"
-        help: "Postgraduate certificate in education with qualified teacher status"
+        label: "QTS with PGCE"
+        help: "Qualified teacher status with a postgraduate certificate in education"
       pgde:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
