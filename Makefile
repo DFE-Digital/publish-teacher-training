@@ -246,3 +246,27 @@ action-group-resources: set-azure-account # make env_aks action-group-resources 
 	echo ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg
 	az group create -l uksouth -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Find postgraduate teacher training" "Environment=Test" "Service Offering=Teacher services cloud"
 	az monitor action-group create -n ${RESOURCE_NAME_PREFIX}-${SERVICE_NAME} -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
+
+.PHONY: qa
+qa: qa_aks
+
+.PHONY: staging
+staging: staging_aks
+
+.PHONY: sandbox
+sandbox: sandbox_aks
+
+.PHONY: production
+production: production_aks
+
+.PHONY: logs
+logs: aks-logs
+
+.PHONY: shell
+shell: aks-ssh
+
+.PHONY: worker-shell
+worker-shell: aks-worker-ssh
+
+.PHONY: aks-console
+console: aks-console
