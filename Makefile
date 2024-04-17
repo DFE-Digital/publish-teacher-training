@@ -268,5 +268,5 @@ shell: aks-ssh
 .PHONY: worker-shell
 worker-shell: aks-worker-ssh
 
-.PHONY: aks-console
+.PHONY: console
 console: aks-console
