@@ -395,7 +395,7 @@ GEM
       net-smtp
     marcel (1.0.2)
     matrix (0.4.2)
-    method_source (1.0.0)
+    method_source (1.1.0)
     mini_mime (1.1.5)
     minitest (5.22.3)
     mock_redis (0.44.0)
@@ -622,9 +622,9 @@ GEM
       activesupport (~> 7)
     semantic_logger (4.15.0)
       concurrent-ruby (~> 1.0)
-    sentry-rails (5.17.2)
+    sentry-rails (5.17.3)
       railties (>= 5.0)
-      sentry-ruby (~> 5.17.2)
+      sentry-ruby (~> 5.17.3)
     sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
