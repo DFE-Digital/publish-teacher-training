@@ -37,6 +37,11 @@ variable "enable_monitoring" {
   type    = bool
   default = true
 }
+variable "statuscake_contact_groups" {
+  type    = list(number)
+  default = []
+  description = "Contact group IDs for receiving StatusCake alerts"
+}
 
 variable "alert_window_size" {
   default = "PT5M"
