@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_18_122754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -177,7 +177,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
     t.string "scholarship"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "subject_knowledge_enhancement_course_available", default: false, null: false
     t.index ["subject_id"], name: "index_financial_incentive_on_subject_id"
   end
 
