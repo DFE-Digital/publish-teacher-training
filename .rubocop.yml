@@ -64,6 +64,10 @@ Style/HashSyntax:
   Exclude:
     - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
 
+Style/MapIntoArray:
+  Exclude:
+    - 'docs/lib/govuk_tech_docs/open_api/renderer.rb'
+
 Naming/BlockForwarding:
   Exclude:
     - 'docs/lib/govuk_tech_docs/open_api/extension.rb'
