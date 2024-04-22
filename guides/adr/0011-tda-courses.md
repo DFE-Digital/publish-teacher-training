@@ -33,7 +33,7 @@ Lastly, there's a need for a filtering mechanism in the Find module to streamlin
 
 ## Options
 
-### Update `Course#program_type` enum to include a new value: 'tda'
+### Update `Course#program_type` enum to include a new value: 'teacher_degree_apprenticeship'
 
 **Pros**
 
