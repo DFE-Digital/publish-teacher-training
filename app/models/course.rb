@@ -1048,6 +1048,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def tda?
+    qualification && qualification.include?('tda')
+  end
+
   def accredited_provider_exists_in_current_cycle
     return unless accredited_provider_code
 

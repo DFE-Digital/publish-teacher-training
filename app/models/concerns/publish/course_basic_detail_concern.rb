@@ -211,6 +211,9 @@ module Publish
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
+#        if is tda
+#          jump the question and assign Teaching apprenticeship - with salary as funding type
+#        end
         new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)

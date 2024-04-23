@@ -26,6 +26,10 @@ module Courses
       course = provider.courses.new
       course.assign_attributes(course_attributes.except(:subjects_ids))
 
+      if course.tda?
+        course.funding_type = ''
+      end
+
       update_sites(course)
       update_study_sites(course)
       course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
