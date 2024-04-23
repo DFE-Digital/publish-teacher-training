@@ -65,6 +65,21 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
         end
       end
     end
+
+    context 'when the provider does not exist' do
+      before do
+        get :index, params: {
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          provider_code: 'asdf'
+        }
+      end
+
+      it 'returns errors not found' do
+        expect(response).to be_not_found
+
+        expect(json_response['errors']).to eql([{ 'status' => 404, 'title' => 'NOT_FOUND', 'detail' => 'The requested resource could not be found' }])
+      end
+    end
   end
 
   describe 'recruitment cycle' do
