@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.8'
+gem 'rails', '7.1.3.2'
 
 # Use PostgreSQL as the database for Active Record
 gem 'pg'
@@ -135,7 +135,7 @@ gem 'oj'
 # Rails 7 CSS and JS Bundling
 gem 'cssbundling-rails', '~> 1.4'
 gem 'jsbundling-rails', '~> 1.3'
-gem 'sprockets-rails', require: 'sprockets/railtie'
+gem 'propshaft'
 
 # for sending analytics data to the analytics platform
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.12.3'

@@ -7,12 +7,12 @@ module Find
     let(:query_parameters) { ActionController::Parameters.new(parameter_hash) }
 
     let(:default_output_parameters) do
-      {
+      ActionController::Parameters.new(
         'qualification' => ['qts', 'pgce_with_qts', 'pgce pgde'],
         'study_type' => %w[full_time part_time],
         'has_vacancies' => true,
         'send_courses' => false
-      }
+      )
     end
 
     describe '#query_parameters_with_defaults' do
@@ -83,12 +83,12 @@ module Find
 
     describe 'filter_path_with_unescaped_commas' do
       let(:default_query_parameters) do
-        {
+        ActionController::Parameters.new(
           'qualification' => ['qts', 'pgce_with_qts', 'pgce pgde'],
           'study_type' => %w[full_time part_time],
           'has_vacancies' => 'true',
           'send_courses' => 'false'
-        }
+        )
       end
 
       subject(:results_view) { described_class.new(query_parameters: default_query_parameters).filter_params_with_unescaped_commas('/test') }

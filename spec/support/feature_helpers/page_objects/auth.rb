@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'helper'
+require 'active_support/core_ext/string/inflections'
 
 module FeatureHelpers
   module PageObject
