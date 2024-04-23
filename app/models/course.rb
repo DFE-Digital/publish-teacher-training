@@ -807,6 +807,10 @@ class Course < ApplicationRecord
     enrichments.where(status: 'published').order(last_published_timestamp_utc: :desc).first
   end
 
+  def teacher_degree_apprenticeship?
+    qualification && qualification.include?('tda')
+  end
+
   private
 
   def add_site!(site:)
@@ -1046,10 +1050,6 @@ class Course < ApplicationRecord
     @services.register(:content_status) do
       Courses::ContentStatusService.new
     end
-  end
-
-  def tda?
-    qualification && qualification.include?('tda')
   end
 
   def accredited_provider_exists_in_current_cycle
