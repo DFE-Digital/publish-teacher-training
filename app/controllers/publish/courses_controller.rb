@@ -46,6 +46,9 @@ module Publish
             @course.recruitment_cycle.year
           )
         )
+        if @course.teacher_degree_apprenticeship?
+          @course.update(additional_degree_subject_requirements: false)
+        end
       else
         @errors = @course.errors.messages
         @course_creation_params = course_params
