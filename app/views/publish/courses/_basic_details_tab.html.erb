@@ -194,7 +194,7 @@
            row.with_action(
              href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
              visually_hidden_text: "can sponsor skilled_worker visa"
-           )
+           ) unless course.teacher_degree_apprenticeship?
          end
        end
      end

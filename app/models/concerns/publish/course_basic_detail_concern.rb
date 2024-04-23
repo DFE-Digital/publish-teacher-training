@@ -203,7 +203,13 @@ module Publish
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
-        new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+
+        if course.teacher_degree_apprenticeship? 
+          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+        end
+ 
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range
