@@ -137,6 +137,19 @@
 
 <% end %>
 
+<% if course.teacher_degree_apprenticeship? %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      "A-levels",
+      (render ALevelRowComponent.new(course:, errors: @errors)),
+      [],
+      truncate_value: false,
+      action_visually_hidden_text: "a levels"
+    ) %>
+
+<% end %>
+
     <% enrichment_summary(
       summary_list,
       :course,

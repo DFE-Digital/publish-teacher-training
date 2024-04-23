@@ -1,0 +1,12 @@
+<%= govuk_inset_text(classes: inset_text_css_classes) do %>
+  <p class="govuk-heading-s app-inset-text__title">A-levels and equivalency tests</p>
+  <p class="govuk-body">
+    <%= govuk_link_to "Enter A-levels and equivalency test requirements",
+      degrees_start_publish_provider_recruitment_cycle_course_path(
+        course.provider.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code,
+        display_errors: has_errors? ? true : nil
+      ) %>
+  </p>
+<% end %>
