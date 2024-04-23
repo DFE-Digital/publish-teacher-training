@@ -81,7 +81,7 @@
          row.with_action(
            href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
            visually_hidden_text: "funding type"
-         )
+         ) unless course.teacher_degree_apprenticeship?
        end
      end
 
@@ -94,7 +94,7 @@
          row.with_action(
            href: full_part_time_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
            visually_hidden_text: "if full or part time"
-         )
+         ) unless course.teacher_degree_apprenticeship?
        end
      end
 
