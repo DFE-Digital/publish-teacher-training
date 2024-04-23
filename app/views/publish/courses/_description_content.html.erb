@@ -122,6 +122,8 @@
 <h3 class="govuk-heading-m">Requirements and eligibility</h3>
 
 <%= govuk_summary_list do |summary_list| %>
+
+<% unless course.teacher_degree_apprenticeship? %>
     <% enrichment_summary(
       summary_list,
       :course,
@@ -132,6 +134,8 @@
       action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
       action_visually_hidden_text: "degree"
     ) %>
+
+<% end %>
 
     <% enrichment_summary(
       summary_list,
