@@ -200,6 +200,9 @@ namespace :publish, as: :publish do
         get '/gcses-pending-or-equivalency-tests', on: :member, to: 'courses/gcse_requirements#edit'
         put '/gcses-pending-or-equivalency-tests', on: :member, to: 'courses/gcse_requirements#update'
 
+        get '/a-levels-or-equivalency-tests', on: :member, to: 'courses/a_level_requirements#edit'
+        put '/a-levels-or-equivalency-tests', on: :member, to: 'courses/a_level_requirements#update'
+
         get '/subjects', on: :member, to: 'courses/subjects#edit'
         put '/subjects', on: :member, to: 'courses/subjects#update'
 

@@ -1,0 +1,52 @@
+<% page_title = "A-levels and equivalency tests" %>
+
+<% content_for :page_title, title_with_error_prefix(page_title, @errors && @errors.any?) %>
+
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= form_with(
+      model: @gcse_requirements_form, url:
+      gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.provider.recruitment_cycle_year,
+        @course.course_code
+      ),
+      method: :put,
+      builder: GOVUKDesignSystemFormBuilder::FormBuilder
+    ) do |f| %>
+
+    <% content_for :before_content do %>
+      <%= govuk_back_link_to(back_link_path(param_form_key: f.object_name.to_sym, params:, provider_code: @provider.provider_code, recruitment_cycle_year: @course.recruitment_cycle_year, course_code: @course.course_code)) %>
+    <% end %>
+
+    <%= f.govuk_error_summary %>
+
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+      A-levels and equivalency tests
+    </h1>
+
+     <%= render partial: "publish/courses/a_level_requirements", locals: { f:, course_object: @source_course ? source_course : @course } %>
+
+     <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
+
+      <%= f.submit "Update #{page_title}", class: "govuk-button", data: { qa: "gcse_requirements__save" } %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
+  </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+     <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@course.provider.provider_code, @course.recruitment_cycle_year, @course.course_code)
+      }
+    ) %>
+  </aside>
+</div>

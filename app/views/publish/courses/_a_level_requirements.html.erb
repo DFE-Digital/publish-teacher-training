@@ -1,0 +1,19 @@
+<%= f.govuk_radio_buttons_fieldset :accept_pending_gcse, legend: { text: "Are any A levels required for this course?" } do %>
+  <%= f.govuk_radio_button :accept_pending_gcse, true,
+    checked: course_object.accept_pending_gcse,
+    label: { text: "Yes" }, data: { qa: "gcse_requirements__pending_gcse_yes_radio" }, link_errors: true %>
+
+  <%= f.govuk_radio_button :accept_pending_gcse, false,
+    checked: course_object.accept_pending_gcse == false,
+    label: { text: "No" }, data: { qa: "gcse_requirements__pending_gcse_no_radio" } %>
+<% end %>
+
+<%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, true,
+    checked: course_object.accept_gcse_equivalency,
+    label: { text: "Yes" }, data: { qa: "gcse_requirements__gcse_equivalency_yes_radio" }, link_errors: true do %>
+  <% end %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, false,
+    checked: course_object.accept_gcse_equivalency == false,
+    label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
+<% end %>
