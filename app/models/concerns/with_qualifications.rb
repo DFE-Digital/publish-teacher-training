@@ -77,7 +77,11 @@ module WithQualifications
     def qualifications_description
       return '' unless qualifications
 
-      qualifications.map(&:upcase).sort.join(' with ')
+      if teacher_degree_apprenticeship?
+        qualifications.sort.reverse.map(&:upcase).join(' with ')
+      else
+        qualifications.map(&:upcase).sort.join(' with ')
+      end
     end
 
     def full_qualification_descriptions
