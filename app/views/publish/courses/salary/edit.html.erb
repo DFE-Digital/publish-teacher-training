@@ -1,4 +1,8 @@
-<% page_title = "Course length and salary" %>
+<% if @course.teacher_degree_apprenticeship? %>
+  <% page_title = "Course salary" %>
+<% else %>
+  <% page_title = "Course length and salary" %>
+<% end %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_salary_form.errors.any?) %>
 
 <% content_for :before_content do %>
@@ -22,9 +26,10 @@
         <%= page_title %>
       </h1>
 
-      <%= render partial: "publish/courses/course_length_field", locals: { f:, form_object: @course_salary_form } %>
-
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+      <% unless @course.teacher_degree_apprenticeship? %>
+        <%= render partial: "publish/courses/course_length_field", locals: { f:, form_object: @course_salary_form } %>
+        <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+      <% end %>
 
       <h3 class="govuk-heading-m">Salary</h3>
 
