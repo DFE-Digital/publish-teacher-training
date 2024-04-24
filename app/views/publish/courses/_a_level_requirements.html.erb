@@ -13,6 +13,12 @@
   <%= f.select :sort, options_for_select(@course.selectable_subjects, selected: 'updated'), {}, { class: "govuk-select", data: { qa: "sort_select" } } %>
 </div>
 
+<%= f.govuk_text_field :additional_gcse_equivalencies,
+  value: course_object.additional_gcse_equivalencies,
+  label: { text: "Minimum grade required", size: "s" } %>
+
+<%= govuk_button_link_to("Add another A level", root_path) %>
+
 <%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
   <%= f.govuk_radio_button :accept_gcse_equivalency, true,
     checked: course_object.accept_gcse_equivalency,
