@@ -17,7 +17,7 @@
   value: course_object.additional_gcse_equivalencies,
   label: { text: "Minimum grade required", size: "s" } %>
 
-<%= govuk_button_link_to("Add another A level", root_path) %>
+<%= govuk_button_link_to("Add another A level", root_path, class: "govuk-button--secondary") %>
 
 <%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
   <%= f.govuk_radio_button :accept_gcse_equivalency, true,
