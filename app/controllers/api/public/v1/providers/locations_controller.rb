@@ -15,11 +15,11 @@ module API
           private
 
           def locations
-            @locations ||= provider&.sites
+            @locations ||= provider.sites
           end
 
           def provider
-            @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
+            @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code])
           end
 
           def include_param
