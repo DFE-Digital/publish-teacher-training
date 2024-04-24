@@ -28,3 +28,17 @@
     checked: course_object.accept_gcse_equivalency == false,
     label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
 <% end %>
+
+<%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates who need to take an equivalency test for their A levels?" } do %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, true,
+    checked: course_object.accept_gcse_equivalency,
+    label: { text: "Yes" }, link_errors: true do %>
+
+    <%= f.govuk_text_area :additional_gcse_equivalencies,
+      value: course_object.additional_gcse_equivalencies,
+      label: { text: "Details about equivalency tests you offer or accept", size: "s" }, hint: { text: "For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay." }, data: { qa: "gcse_requirements__additional_requirements" }, max_words: 200 %>
+  <% end %>
+  <%= f.govuk_radio_button :accept_gcse_equivalency, false,
+    checked: course_object.accept_gcse_equivalency == false,
+    label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
+<% end %>
