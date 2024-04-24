@@ -28,6 +28,7 @@ en:
       pgce_with_qts: "QTS with PGCE"
       pgde: "PGDE"
       pgde_with_qts: "PGDE with QTS"
+      tda_with_qts: "TDA with QTS"
     location_filter:
       errors:
         no_option: Select find courses by location or by training provider
