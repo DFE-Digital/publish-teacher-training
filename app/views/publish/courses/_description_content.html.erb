@@ -97,6 +97,8 @@
       <% row.with_action %>
     <% end %>
   <% else %>
+
+  <% unless course.teacher_degree_apprenticeship? %>
     <% enrichment_summary(
       summary_list,
       :course,
@@ -106,6 +108,7 @@
       action_path: course.is_withdrawn? ? nil : "#{salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#course-length",
       action_visually_hidden_text: "course length"
     ) %>
+  <% end %>
 
     <% enrichment_summary(
       summary_list,
