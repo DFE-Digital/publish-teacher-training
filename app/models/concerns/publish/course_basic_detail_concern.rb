@@ -175,6 +175,12 @@ module Publish
         else
           course_creation_path_for(page)
         end
+      when :can_sponsor_skilled_worker_visa
+        if course.teacher_degree_apprenticeship?
+          new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        end
       else
         course_creation_path_for(page)
       end
@@ -209,13 +215,11 @@ module Publish
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
-
-        if course.teacher_degree_apprenticeship? 
+        if course.teacher_degree_apprenticeship?
           new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
         else
           new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
         end
- 
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range
@@ -223,13 +227,11 @@ module Publish
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
-
-        if course.teacher_degree_apprenticeship? 
+        if course.teacher_degree_apprenticeship?
             new_publish_provider_recruitment_cycle_courses_schools_path(path_params.merge('course[funding_type]' => 'apprenticeship', 'course[study_mode]' => 'full_time'))
         else
             new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
         end
-
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
