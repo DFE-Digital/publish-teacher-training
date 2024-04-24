@@ -21,7 +21,7 @@ module Courses
 
         def qualifications_without_qts
           Course.qualifications.keys.reject do |qualification|
-            qualification.include?('qts')
+            qualification.include?('qts') || qualification.include?('tda')
           end
         end
       end
