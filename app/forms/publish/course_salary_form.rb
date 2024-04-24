@@ -23,5 +23,11 @@ module Publish
     def declared_fields
       FIELDS
     end
+
+    def fields_to_ignore_before_save
+      if course.teacher_degree_apprenticeship?
+        %i[course_length course_length_other_length]
+      end
+    end
   end
 end
