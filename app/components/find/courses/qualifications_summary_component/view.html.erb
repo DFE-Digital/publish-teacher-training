@@ -42,16 +42,22 @@
         This course does not lead to qualified teacher status (QTS).
       </p>
     <% end %>
-  <% when "PGDE" %>
-    <%= govuk_details(summary_text: "PGDE") do %>
+  <% when "pgde" %>
+    <%= govuk_details(summary_text: "pgde") do %>
       <p class="govuk-body">
-        A postgraduate diploma in education (PGDE) is equivalent to a postgraduate certificate in education (PGCE).
+        a postgraduate diploma in education (pgde) is equivalent to a postgraduate certificate in education (pgce).
       </p>
       <p class="govuk-body">
-        It’s recognised internationally, though you should always check what qualifications are needed in the country you’d like to teach in.
+        it’s recognised internationally, though you should always check what qualifications are needed in the country you’d like to teach in.
       </p>
       <p class="govuk-body">
-        This course does not lead to qualified teacher status (QTS).
+        this course does not lead to qualified teacher status (qts).
+      </p>
+    <% end %>
+  <% when "TDA with QTS" %>
+    <%= govuk_details(summary_text: "Teacher degree apprenticeship (TDA) with QTS") do %>
+      <p class="govuk-body">
+        TDA with QTS explanation.
       </p>
     <% end %>
   <% end %>
