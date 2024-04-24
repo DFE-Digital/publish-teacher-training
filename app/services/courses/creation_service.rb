@@ -32,6 +32,11 @@ module Courses
 
       if course.teacher_degree_apprenticeship?
         course.funding_type = 'apprenticeship'
+        course.additional_degree_subject_requirements = nil
+        course.degree_subject_requirements = false
+        course.degree_grade = 'not_required'
+        course.can_sponsor_student_visa = false
+        course.can_sponsor_skilled_worker_visa = false
         course_enrichment = course.enrichments.find_or_initialize_draft
         course_enrichment.course_length = 'FourYears'
       end
