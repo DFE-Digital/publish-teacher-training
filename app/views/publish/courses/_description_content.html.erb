@@ -98,7 +98,15 @@
     <% end %>
   <% else %>
 
-  <% unless course.teacher_degree_apprenticeship? %>
+  <% if course.teacher_degree_apprenticeship? %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      "Course length",
+      value_provided?(course.length),
+      %w[course_length],
+    ) %>
+  <% else %>
     <% enrichment_summary(
       summary_list,
       :course,

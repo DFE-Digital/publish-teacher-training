@@ -164,13 +164,15 @@ class CourseDecorator < ApplicationDecorator
       '1 year'
     when 'TwoYears'
       'Up to 2 years'
+    when 'FourYears'
+      '4 years'
     else
       course_length.to_s
     end
   end
 
   def other_course_length?
-    %w[OneYear TwoYears].exclude?(course_length) && !course_length.nil?
+    %w[OneYear TwoYears FourYears].exclude?(course_length) && !course_length.nil?
   end
 
   def other_age_range?
