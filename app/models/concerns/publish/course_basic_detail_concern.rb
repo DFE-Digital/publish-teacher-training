@@ -169,6 +169,12 @@ module Publish
         back_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
       when :engineers_teach_physics
         back_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
+      when :full_or_part_time
+        if course.teacher_degree_apprenticeship?
+          new_publish_provider_recruitment_cycle_courses_outcome_path(path_params)
+        else
+          course_creation_path_for(page)
+        end
       else
         course_creation_path_for(page)
       end
