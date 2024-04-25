@@ -11,6 +11,9 @@ apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 search_ui:
   base_url: https://find-review-4080.test.teacherservices.cloud
 
+find_valid_referers:
+  - https://find-review-4080.test.teacherservices.cloud
+
 features:
   teacher_degree_apprenticeship: true
 
