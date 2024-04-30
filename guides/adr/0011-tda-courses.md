@@ -8,7 +8,7 @@ Proposed
 
 ## Glossary
 
-TDA - The degree apprenticeship
+TDA - Teacher degree apprenticeship
 
 ## Context
 
@@ -33,7 +33,9 @@ Lastly, there's a need for a filtering mechanism in the Find module to streamlin
 
 ## Decision
 
-API v1 Enhancement: We will extend API v1 in the Publish module to accommodate the additional value: tda, representing the degree apprenticeship program. This will involve updating the API attributes and documentation accordingly.
+API v1 Enhancement - We will extend API v1 in the Publish module to accommodate the additional values. This will involve updating the API attributes and documentation accordingly. The new values are:
+    * Qualifications field: 'undergraduate_degree', representing the course awards a degree.
+    * Program type field: 'teacher_degree_apprenticeship' representing the new route into teaching.
 
 Course Wizard Enhancement: The add course wizard in Publish will be improved to seamlessly accept TDA courses. This enhancement aims to streamline the course addition process for users and ensure compatibility with the new course types.
 
@@ -44,4 +46,5 @@ Filtering Mechanism Addition: A filtering mechanism will be added to the Find ap
 ## Consequences
 
 Efficiency Gains: The filtering mechanism in the Find module will improve efficiency by enabling users to quickly find TDA courses.
+
 Publish API consumers V1 changes: The V1 changes can potentially break their integrations, so we will ensure that all teams, including Apply, Register, Vendors, Providers that uses Vendor API, and others, integrate TDA courses in their respective integrations to maintain consistency across the platform.
