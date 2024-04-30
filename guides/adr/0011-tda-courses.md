@@ -43,8 +43,6 @@ Description Course Tab Enhancement: The description course tab functionality wil
 
 Filtering Mechanism Addition: A filtering mechanism will be added to the Find app to facilitate efficient course discovery. Users will be able to filter courses based on TDA parameters, enhancing the overall user experience and enabling quicker access to TDA courses.
 
-**TDA Attribute** to be confirmed
-
 ## Consequences
 
 Efficiency Gains: The filtering mechanism in the Find module will improve efficiency by enabling users to quickly find TDA courses.
