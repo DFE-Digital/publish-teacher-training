@@ -191,7 +191,7 @@ GEM
     crass (1.0.6)
     cssbundling-rails (1.4.0)
       railties (>= 6.0.0)
-    data_migrate (9.3.0)
+    data_migrate (9.4.0)
       activerecord (>= 6.1)
       railties (>= 6.1)
     database_cleaner (2.0.2)
@@ -577,7 +577,7 @@ GEM
     redcarpet (3.6.0)
     redis (4.8.1)
     regexp_parser (2.9.0)
-    reline (0.5.0)
+    reline (0.5.4)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -778,7 +778,7 @@ DEPENDENCIES
   config
   cssbundling-rails (~> 1.4)
   custom_error_message!
-  data_migrate (~> 9.3.0)
+  data_migrate (~> 9.4.0)
   database_cleaner
   dfe-analytics!
   discard
