@@ -31,34 +31,11 @@ courses seamlessly. Furthermore, the details course tab requires enhancements to
 automatically set degrees as not required for TDA courses.
 Lastly, there's a need for a filtering mechanism in the Find module to streamline course discovery.
 
-## Options
-
-### Update `Course#program_type` enum to include a new value: 'teacher_degree_apprenticeship'
-
-**Pros**
-
-- No need to add a new attribute to the Course model
-
-**Cons**
-
-- The enum name may not be descriptive enough
-- There is confusion as to how this value is calculated
-- The current values are no longer accurate after ITT Reform
-
-### Add a new attribute to Course model to represents a `route_into_teaching`
-
-**Pros**
-
-- The attribute name is descriptive
-- The available values can be updated to reflect the ITT Reform changes 
-
-**Cons**
-
-- We would want to communicate the deprecation of the `program_type` attribute
-
 ## Decision
 
-API v1 Enhancement: We will extend API v1 in the Publish module to accommodate the additional value: tda, representing the degree apprenticeship program. This will involve updating the API attributes and documentation accordingly.
+API v1 Enhancement - We will extend API v1 in the Publish module to accommodate the additional values. This will involve updating the API attributes and documentation accordingly. The new values are:
+    * Qualifications field: 'undergraduate_degree', representing the course awards a degree.
+    * Program type field: 'teacher_degree_apprenticeship' representing the new route into teaching.
 
 Course Wizard Enhancement: The add course wizard in Publish will be improved to seamlessly accept TDA courses. This enhancement aims to streamline the course addition process for users and ensure compatibility with the new course types.
 
