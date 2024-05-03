@@ -33,6 +33,33 @@ module Find
 
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
       end
+
+      it 'redirects when downcase provider and course code' do
+        get :apply, params: {
+          provider_code: provider.provider_code.downcase,
+          course_code: course.course_code.downcase
+        }
+
+        expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
+      end
+
+      it 'when provider does not exist' do
+        get :apply, params: {
+          provider_code: 'ABCD',
+          course_code: course.course_code.downcase
+        }
+
+        expect(response).to be_not_found
+      end
+
+      it 'when course does not exist' do
+        get :apply, params: {
+          provider_code: provider.provider_code,
+          course_code: 'ABCD'
+        }
+
+        expect(response).to be_not_found
+      end
     end
 
     describe '#show' do
