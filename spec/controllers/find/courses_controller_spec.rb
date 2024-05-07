@@ -52,7 +52,7 @@ module Find
         expect(response).to be_not_found
       end
 
-      it 'when course does not exist' do
+      it 'raises a not found error when the course does not exist' do
         get :apply, params: {
           provider_code: provider.provider_code,
           course_code: 'ABCD'
