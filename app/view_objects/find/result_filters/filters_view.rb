@@ -19,6 +19,10 @@ module Find
         checked?('tda')
       end
 
+      def university_degree?
+        ActiveModel::Type::Boolean.new.cast(params['university_degree_status'])
+      end 
+
       def other_checked?
         checked?('pgce pgde') || checked?('pgce') || checked?('pgde')
       end
