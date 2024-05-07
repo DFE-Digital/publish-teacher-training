@@ -67,6 +67,7 @@ module FilterParameters
       .permit(
         *legacy_paramater_keys,
         :visa_status,
+        :university_degree_status,
         :age_group,
         :c,
         :can_sponsor_visa,

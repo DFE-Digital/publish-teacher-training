@@ -16,7 +16,7 @@ module Find
         @subjects_form = SubjectsForm.new(subjects: sanitised_subject_codes, age_group: form_params[:age_group])
 
         if @subjects_form.valid?
-          redirect_to find_visa_status_path(filter_params[:find_subjects_form])
+          redirect_to find_university_degree_status_path(filter_params[:find_subjects_form])
         else
           render :new
         end
