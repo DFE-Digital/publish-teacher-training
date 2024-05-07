@@ -43,7 +43,7 @@ module Find
         expect(response).to redirect_to("https://www.apply-for-teacher-training.service.gov.uk/candidate/apply?providerCode=#{provider.provider_code}&courseCode=#{course.course_code}")
       end
 
-      it 'when provider does not exist' do
+      it 'raises a not found error when the provider does not exist' do
         get :apply, params: {
           provider_code: 'ABCD',
           course_code: course.course_code.downcase
