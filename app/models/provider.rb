@@ -98,6 +98,10 @@ class Provider < ApplicationRecord
     accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
   end
 
+  scope :by_provider_code, lambda { |provider_code|
+    where('lower(provider_code) = ?', provider_code.to_s.downcase).first!
+  }
+
   scope :changed_since, lambda { |timestamp|
     if timestamp.present?
       where('provider.changed_at > ?', timestamp)
