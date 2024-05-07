@@ -15,15 +15,20 @@ module Find
       end
 
       def create
-        @visa_status_form = VisaStatusForm.new(visa_status: form_params[:visa_status])
+        @visa_status_form = VisaStatusForm.new(visa_status: form_params[:visa_status], university_degree_status: form_params[:university_degree_status])
 
         if @visa_status_form.valid?
-          redirect_to find_results_path(form_params.merge(
+          if @visa_status_form.require_visa_and_does_not_have_degree?
+            redirect_to find_no_degree_and_requires_visa_sponsorship_path(filter_params[:find_visa_status_form])
+          else
+
+            redirect_to find_results_path(form_params.merge(
                                           subjects: sanitised_subject_codes,
                                           has_vacancies: default_vacancies,
                                           applications_open: default_applications_open,
                                           can_sponsor_visa: form_params[:visa_status]
                                         ))
+          end
         else
           render :new
         end
@@ -41,7 +46,7 @@ module Find
         if params[:age_group] == 'further_education' || (params[:find_visa_status_form] && params[:find_visa_status_form][:age_group] == 'further_education')
           find_age_groups_path(backlink_params)
         else
-          find_subjects_path(backlink_params)
+          find_university_degree_status_path(backlink_params)
         end
       end
 

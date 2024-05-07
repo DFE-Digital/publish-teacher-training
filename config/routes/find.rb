@@ -39,6 +39,7 @@ namespace :find, path: '/' do
     get '/university-degree-status-submit' => 'university_degree_status#create', as: :university_degree_status_create
     get '/visa-status' => 'visa_status#new', as: :visa_status
     get '/visa-status-submit' => 'visa_status#create', as: :visa_status_create
+    get '/no-degree-and-requires-visa-sponsorship' => 'no_degree_and_requires_visa_sponsorship#new', as: :no_degree_and_requires_visa_sponsorship
     resources :locations, path: '/'
   end
 
