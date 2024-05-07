@@ -98,7 +98,7 @@ class Provider < ApplicationRecord
     accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
   end
 
-  scope :case_insensitive_search, lambda { |provider_code|
+  scope :by_provider_code, lambda { |provider_code|
     where('lower(provider_code) = ?', provider_code.to_s.downcase).first!
   }
 

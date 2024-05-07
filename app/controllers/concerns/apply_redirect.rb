@@ -5,8 +5,9 @@ module ApplyRedirect
 
   def apply
     course = RecruitmentCycle.current
-                             .providers.case_insensitive_search(params[:provider_code])
+                             .providers.by_provider_code(params[:provider_code])
                              .courses.case_insensitive_search(course_code_param).first!
+
     if find?
       Rails.logger.info("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}")
     else
