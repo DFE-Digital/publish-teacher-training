@@ -267,6 +267,8 @@ class Course < ApplicationRecord
     )
   }
 
+  scope :with_teacher_degree_apprenticeships, -> { where("qualification in('tda_with_qts')") }
+
   scope :with_send, lambda {
     where(is_send: true)
   }
