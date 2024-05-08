@@ -51,7 +51,7 @@
 
     <%= render Find::Courses::ContactDetailsComponent::View.new(course) %>
 
-    <%= render partial: "find/courses/advice", locals: { course: } %>
+    <%= render partial: "find/courses/advice", locals: { course: @course } unless @course.teacher_degree_apprenticeship? %>
 
     <%= render Find::Courses::ApplyComponent::View.new(course) unless course.application_status_open? %>
   </div>
