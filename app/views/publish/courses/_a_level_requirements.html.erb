@@ -1,44 +1,67 @@
-<%= f.govuk_radio_buttons_fieldset :accept_pending_gcse, legend: { text: "Are any A levels required for this course?" } do %>
-  <%= f.govuk_radio_button :accept_pending_gcse, true,
-    checked: course_object.accept_pending_gcse,
-    label: { text: "Yes" }, data: { qa: "gcse_requirements__pending_gcse_yes_radio" }, link_errors: true %>
+<%= f.govuk_radio_buttons_fieldset :a_levels, legend: { text: "Are any A levels required for this course?" } do %>
+  <%= f.govuk_radio_button :a_levels, true,
+    checked: course_object.a_levels,
+    label: { text: "Yes" }, data: { qa: "a_levels" }, link_errors: true %>
 
-  <%= f.govuk_radio_button :accept_pending_gcse, false,
-    checked: course_object.accept_pending_gcse == false,
-    label: { text: "No" }, data: { qa: "gcse_requirements__pending_gcse_no_radio" } %>
+  <%= f.govuk_radio_button :a_levels, false,
+    checked: course_object.a_levels == false,
+    label: { text: "No" }, data: { qa: "a_levels" } %>
 <% end %>
 
-<div class="govuk-form-group">
-  <%= f.label :sort, "Subject", class: "govuk-label govuk-label--s" %>
-  <%= f.select :sort, options_for_select(@course.selectable_subjects, selected: 'updated'), {}, { class: "govuk-select", data: { qa: "sort_select" } } %>
-</div>
+<%= f.govuk_radio_buttons_fieldset :a_levels_two, legend: { text: "Subject" } do %>
+  <%= f.govuk_radio_button :a_levels_two, true,
+    checked: course_object.a_levels,
+    label: { text: "Any subject" }, data: { qa: "a_levels" }, link_errors: true %>
 
-<%= f.govuk_text_field :additional_gcse_equivalencies,
+  <%= f.govuk_radio_button :a_levels_two, false,
+    checked: course_object.a_levels == false,
+    label: { text: "Any stem subject" }, data: { qa: "a_levels" } %>
+
+  <%= f.govuk_radio_button :a_levels_two, false,
+    checked: course_object.a_levels == false,
+    label: { text: "Any modern foreign language" }, data: { qa: "a_levels" } %>
+
+      <%= f.govuk_radio_button :a_levels_two, false,
+    checked: course_object.a_levels == false,
+    label: { text: "Any humanities subject" }, data: { qa: "a_levels" } %>
+
+          <%= f.govuk_radio_button :a_levels_two, false,
+    checked: course_object.a_levels == false,
+    label: { text: "Any science subject" }, data: { qa: "a_levels" } %>
+
+    <%= f.govuk_radio_divider %>
+
+    <%= f.govuk_radio_button :a_levels_two, "non_uk", label: { text: "Choose a subject" } do %>
+      <%= f.govuk_collection_select :subjects, @course.a_level_selectable_subjects, :id, :name, label: { text: "", size: "s" } %>
+    <% end %>
+<% end %>
+
+<%= f.govuk_text_field :a_levels_three,
   value: course_object.additional_gcse_equivalencies,
   label: { text: "Minimum grade required", size: "s" } %>
 
 <%= govuk_button_link_to("Add another A level", root_path, class: "govuk-button--secondary") %>
 
-<%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
-  <%= f.govuk_radio_button :accept_gcse_equivalency, true,
-    checked: course_object.accept_gcse_equivalency,
-    label: { text: "Yes" }, data: { qa: "gcse_requirements__gcse_equivalency_yes_radio" }, link_errors: true do %>
+<%= f.govuk_radio_buttons_fieldset :a_levels_three, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
+  <%= f.govuk_radio_button :a_levels_three, true,
+    checked: course_object.a_levels,
+    label: { text: "Yes" }, data: { qa: "a_levels" }, link_errors: true do %>
   <% end %>
-  <%= f.govuk_radio_button :accept_gcse_equivalency, false,
-    checked: course_object.accept_gcse_equivalency == false,
-    label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
+  <%= f.govuk_radio_button :a_levels_three, false,
+    checked: course_object.a_levels == false,
+    label: { text: "No" }, data: { qa: "a_levels" } %>
 <% end %>
 
-<%= f.govuk_radio_buttons_fieldset :accept_gcse_equivalency, legend: { text: "Will you consider candidates who need to take an equivalency test for their A levels?" } do %>
-  <%= f.govuk_radio_button :accept_gcse_equivalency, true,
-    checked: course_object.accept_gcse_equivalency,
+<%= f.govuk_radio_buttons_fieldset :a_levels_four, legend: { text: "Will you consider candidates who need to take an equivalency test for their A levels?" } do %>
+  <%= f.govuk_radio_button :a_levels_four, true,
+    checked: course_object.a_levels_four,
     label: { text: "Yes" }, link_errors: true do %>
 
-    <%= f.govuk_text_area :additional_gcse_equivalencies,
-      value: course_object.additional_gcse_equivalencies,
+    <%= f.govuk_text_area :a_levels_four,
+      value: course_object.a_levels_four,
       label: { text: "Details about equivalency tests you offer or accept", size: "s" }, hint: { text: "For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay." }, data: { qa: "gcse_requirements__additional_requirements" }, max_words: 200 %>
   <% end %>
-  <%= f.govuk_radio_button :accept_gcse_equivalency, false,
-    checked: course_object.accept_gcse_equivalency == false,
-    label: { text: "No" }, data: { qa: "gcse_requirements__gcse_equivalency_no_radio" } %>
+  <%= f.govuk_radio_button :a_levels_four, false,
+    checked: course_object.a_levels_four == false,
+    label: { text: "No" }, data: { qa: "a_levels" } %>
 <% end %>

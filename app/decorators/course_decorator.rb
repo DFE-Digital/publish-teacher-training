@@ -3,6 +3,8 @@
 class CourseDecorator < ApplicationDecorator
   include ActiveSupport::NumberHelper
 
+  attr_accessor :a_levels, :a_levels_four
+
   delegate_all
 
   LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
@@ -248,6 +250,12 @@ class CourseDecorator < ApplicationDecorator
 
   def selectable_subjects
     edit_course_options['subjects'].map { |subject| [subject.attributes['subject_name'], subject['id']] }
+  end
+
+  ALevelSubject = Struct.new(:name, :id)
+
+  def a_level_selectable_subjects
+    edit_course_options['subjects'].map { |subject| ALevelSubject.new(subject.attributes['subject_name'], subject['id']) }
   end
 
   def selected_subject_ids
