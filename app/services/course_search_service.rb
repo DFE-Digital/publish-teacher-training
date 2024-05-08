@@ -30,7 +30,11 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
     scope = scope.engineers_teach_physics if engineers_teach_physics_filter?
-    scope = scope.with_teacher_degree_apprenticeships if university_degree_status?
+    if display_tda_courses?
+      scope = scope.tda_with_qts
+    else
+      scope = scope.not_tda_with_qts
+    end
 
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.
@@ -305,8 +309,8 @@ class CourseSearchService
     filter[:engineers_teach_physics].to_s.downcase == 'true' || filter[:campaign_name] == 'engineers_teach_physics'
   end
 
-  def university_degree_status?
-    filter[:university_degree_status].to_s.downcase == 'true'
+  def display_tda_courses?
+    !ActiveModel::Type::Boolean.new.cast(filter[:visa_status]) && !ActiveModel::Type::Boolean.new.cast(filter[:university_degree_status])
   end
 
   def course_asc_requirement
