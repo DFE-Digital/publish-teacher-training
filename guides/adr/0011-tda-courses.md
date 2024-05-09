@@ -4,7 +4,7 @@ Date: 29/02/2024
 
 ## Status
 
-Proposed
+Accepted
 
 ## Glossary
 
