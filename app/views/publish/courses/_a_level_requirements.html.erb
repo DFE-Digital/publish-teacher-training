@@ -41,7 +41,7 @@
   label: { text: "Minimum grade required (optional)", size: "m" },
   width: 10 %>
 
-<%= govuk_button_link_to("Add another A level", root_path, class: "govuk-button--secondary") %>
+<%= govuk_button_link_to("Add another A level", "#", class: "govuk-button--secondary") %>
 
 <%= f.govuk_radio_buttons_fieldset :a_levels_three, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
   <%= f.govuk_radio_button :a_levels_three, true,
