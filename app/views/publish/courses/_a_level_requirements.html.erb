@@ -1,14 +1,9 @@
 <%= f.govuk_radio_buttons_fieldset :a_levels, legend: { text: "Are any A levels required for this course?" } do %>
   <%= f.govuk_radio_button :a_levels, true,
     checked: course_object.a_levels,
-    label: { text: "Yes" }, data: { qa: "a_levels" }, link_errors: true %>
+    label: { text: "Yes" }, data: { qa: "a_levels" }, link_errors: true do %>
 
-  <%= f.govuk_radio_button :a_levels, false,
-    checked: course_object.a_levels == false,
-    label: { text: "No" }, data: { qa: "a_levels" } %>
-<% end %>
-
-<%= f.govuk_radio_buttons_fieldset :a_levels_two, legend: { text: "Subject" } do %>
+    <%= f.govuk_radio_buttons_fieldset :a_levels_two, legend: { text: "Subject" } do %>
   <%= f.govuk_radio_button :a_levels_two, true,
     checked: course_object.a_levels,
     label: { text: "Any subject" }, data: { qa: "a_levels" }, link_errors: true %>
@@ -29,19 +24,26 @@
     checked: course_object.a_levels == false,
     label: { text: "Any science subject" }, data: { qa: "a_levels" } %>
 
+    <%= f.govuk_text_field :a_levels_three,
+  value: course_object.additional_gcse_equivalencies,
+  label: { text: "Minimum grade required (optional)", size: "m" },
+  width: 10 %>
+
     <%= f.govuk_radio_divider %>
 
     <%= f.govuk_radio_button :a_levels_two, "non_uk", label: { text: "Choose a subject" } do %>
       <%= f.govuk_collection_select :subjects, @course.a_level_selectable_subjects, :id, :name, label: { text: "", size: "s" } %>
     <% end %>
+
+    <%= govuk_button_link_to("Add another A level", "#", class: "govuk-button--secondary") %>
 <% end %>
 
-<%= f.govuk_text_field :a_levels_three,
-  value: course_object.additional_gcse_equivalencies,
-  label: { text: "Minimum grade required (optional)", size: "m" },
-  width: 10 %>
+    <% end %>
 
-<%= govuk_button_link_to("Add another A level", "#", class: "govuk-button--secondary") %>
+  <%= f.govuk_radio_button :a_levels, false,
+    checked: course_object.a_levels == false,
+    label: { text: "No" }, data: { qa: "a_levels" } %>
+<% end %>
 
 <%= f.govuk_radio_buttons_fieldset :a_levels_three, legend: { text: "Will you consider candidates with pending A levels?", size: "m" }, hint: { text: "These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels." } do %>
   <%= f.govuk_radio_button :a_levels_three, true,
