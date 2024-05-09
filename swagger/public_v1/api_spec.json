@@ -353,7 +353,8 @@
               "scitt_programme",
               "school_direct_training_programme",
               "school_direct_salaried_training_programme",
-              "pg_teaching_apprenticeship"
+              "pg_teaching_apprenticeship",
+              "teacher_degree_apprenticeship"
             ]
           },
           "qualifications": {
@@ -379,6 +380,10 @@
               [
                 "qts",
                 "pgde"
+              ],
+              [
+                "qts",
+                "undergraduate_degree"
               ]
             ],
             "items": {
