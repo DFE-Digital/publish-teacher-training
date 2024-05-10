@@ -28,7 +28,7 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
 
   scenario 'with SEND checked' do
     [given_i_select_further_education_level, given_i_select_secondary_level, given_i_select_primary_level].sample
-    and_i_check_is_send
+    and_i_select_is_send
     and_i_click_continue
     then_with_send_is_in_params
   end
@@ -68,8 +68,8 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_level_page.continue.click
   end
 
-  def and_i_check_is_send
-    publish_courses_new_level_page.send_specialism_checkbox.click
+  def and_i_select_is_send
+    publish_courses_new_level_page.send_specialism_radio.click
   end
 
   def provider
@@ -97,18 +97,18 @@ feature 'selecting a level', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_with_send_is_in_params
-    expect(page.current_url).to match(/is_send%5D=1/)
+    expect(page.current_url).to match(/is_send%5D=true/)
   end
 
   def primary_level_selected_params
-    '?course%5Bis_send%5D=0&course%5Blevel%5D=primary'
+    '?course%5Bis_send%5D=false&course%5Blevel%5D=primary'
   end
 
   def secondary_level_selected_params
-    '?course%5Bis_send%5D=0&course%5Blevel%5D=secondary'
+    '?course%5Bis_send%5D=false&course%5Blevel%5D=secondary'
   end
 
   def further_education_level_selected_params
-    '?course%5Bis_send%5D=0&course%5Blevel%5D=further_education'
+    '?course%5Bis_send%5D=false&course%5Blevel%5D=further_education'
   end
 end

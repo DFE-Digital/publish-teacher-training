@@ -1,8 +1,10 @@
-<div class="govuk-form-group">
-  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-    <div class="govuk-checkboxes__item">
-      <%= form.check_box(:is_send, checked: @course.is_send?, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
-      <%= form.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
-    </div>
-  </div>
-</div>
+<%= form.govuk_collection_radio_buttons(
+      :is_send,
+      [[true, "Yes"], [false, "No"]],
+      :first,
+      :last,
+      legend: {
+        text: t("course.new.level.special_educational_needs_and_disabilities.label"),
+        tag: "h2"
+      }
+    ) %>

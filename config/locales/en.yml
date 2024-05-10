@@ -240,6 +240,10 @@ en:
       open: "Course opened"
       closed: "Course closed"
     add_course: "Add course"
+    new:
+      level:
+        special_educational_needs_and_disabilities:
+          label: Does this course have a special educational needs and disability (SEND) specialism?
     update_email:
       name: "title"
       age_range_in_years: "age range"

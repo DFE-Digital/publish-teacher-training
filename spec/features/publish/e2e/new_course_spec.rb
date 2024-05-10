@@ -82,7 +82,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
 
   def select_level(course_creation_params, level:, level_selection:, next_page:)
     course_creation_params[:level] = level
-    course_creation_params[:is_send] = '0'
+    course_creation_params[:is_send] = 'false'
 
     level_selection.click
     publish_courses_new_level_page.continue.click
