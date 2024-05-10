@@ -10,12 +10,14 @@ feature 'results' do
   scenario 'when I visit the results page with no courses' do
     when_i_visit_the_find_results_page
     i_see_the_no_results_message
+    and_the_search_results_should_be_tracked
   end
 
   scenario 'when I visit the results page with courses' do
     given_there_are_courses
     when_i_visit_the_find_results_page
     i_see_the_courses
+    and_the_search_results_should_be_tracked
   end
 
   def when_i_visit_the_find_results_page
@@ -45,5 +47,9 @@ feature 'results' do
       expect(first_course.study_mode.text).to eq('Full time')
       expect(first_course.funding_options.text).to eq('Teaching apprenticeship - with salary')
     end
+  end
+
+  def and_the_search_results_should_be_tracked
+    expect(:search_results).to have_been_enqueued_as_analytics_events
   end
 end
