@@ -233,6 +233,7 @@ properties:
       - school_direct_training_programme
       - school_direct_salaried_training_programme
       - pg_teaching_apprenticeship
+      - teacher_degree_apprenticeship
   qualifications:
     type: array
     description: >-
@@ -244,6 +245,7 @@ properties:
       - [pgde]
       - [qts, pgce]
       - [qts, pgde]
+      - [qts, undergraduate_degree]
     items:
       type: string
       example: "qts"
