@@ -1,10 +1,19 @@
-<%= form.govuk_collection_radio_buttons(
-      :is_send,
-      [[true, "Yes"], [false, "No"]],
-      :first,
-      :last,
-      legend: {
-        text: t("course.new.level.special_educational_needs_and_disabilities.label"),
-        tag: "h2"
-      }
-    ) %>
+<div class="govuk-radios govuk-radios" data-module="govuk-radios">
+  <% [["yes", true], ["no", false]].each do |label, value| %>
+    <div class="govuk-radios__item">
+      <%= form.radio_button(
+            :is_send,
+            value,
+            class: "govuk-radios__input",
+            data: {
+              qa: "course__is_send_#{value}"
+            }
+          ) %>
+      <%= form.label(
+            :is_send,
+            value: label,
+            class: "govuk-label govuk-radios__label"
+          ) %>
+    </div>
+  <% end %>
+</div>

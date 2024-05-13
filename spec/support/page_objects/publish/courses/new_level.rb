@@ -12,7 +12,10 @@ module PageObjects
           element :further_education, '#course_level_further_education'
         end
 
-        element :send_specialism_radio, '#course-is-send-true-field'
+        section :send_fields, '[data-qa="course__is_send"]' do
+          element :is_send_true, '#course_is_send_true'
+          element :is_send_false, '#course_is_send_false'
+        end
 
         element :continue, '[data-qa="course__save"]'
       end

@@ -18,7 +18,6 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def then_i_can_create_the_course
     expect(publish_courses_new_level_page).to be_displayed
     course_creation_params = select_level({}, level: 'primary', level_selection: publish_courses_new_level_page.level_fields.primary, next_page: publish_courses_new_subjects_page)
-
     course_creation_params = select_subjects(course_creation_params, level: 'primary', next_page: publish_courses_new_age_range_page)
 
     course_creation_params = select_age_range(course_creation_params, next_page: publish_courses_new_outcome_page)
@@ -80,11 +79,14 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/level/new")
   end
 
-  def select_level(course_creation_params, level:, level_selection:, next_page:)
+  def select_level(course_creation_params, level:, level_selection:, next_page:,
+                   is_send_value: 'false', is_send: publish_courses_new_level_page.send_fields.is_send_false)
     course_creation_params[:level] = level
-    course_creation_params[:is_send] = 'false'
+    course_creation_params[:is_send] = is_send_value
 
     level_selection.click
+    is_send.click
+
     publish_courses_new_level_page.continue.click
 
     expect_page_to_be_displayed_with_query(

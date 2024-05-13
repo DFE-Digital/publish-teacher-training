@@ -18,7 +18,7 @@
                   ),
                   method: :get do |form| %>
 
-      <%= render "publish/courses/new_fields_holder", form:, except_keys: [:level] do |fields| %>
+      <%= render "publish/courses/new_fields_holder", form:, except_keys: %i[level is_send] do |fields| %>
         <%= render "publish/shared/error_wrapper", error_keys: [:level], data_qa: "course__level" do %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -29,7 +29,17 @@
           </fieldset>
         <% end %>
 
-        <%= render "publish/courses/send/form_fields", form: fields %>
+        <%= render "publish/shared/error_wrapper", error_keys: [:is_send], data_qa: "course__is_send" do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h2 class="govuk-fieldset__heading">
+                <%= t("course.new.level.special_educational_needs_and_disabilities.label") %>
+              </h2>
+            </legend>
+            <%= render "publish/shared/error_messages", error_keys: [:is_send] %>
+            <%= render "publish/courses/send/form_fields", form: fields %>
+          </fieldset>
+        <% end %>
       <% end %>
     <% end %>
 
