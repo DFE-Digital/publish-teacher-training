@@ -1,20 +1,10 @@
 name: deploy_v2
 description: deploys application to AKS
 
-inputs:
-  azure-credentials:
-    required: true
-  environment:
-    description: Environment to deploy to
-    required: true
-  pr-number:
-    description: PR number for the review app
-    required: false
-  sha:
-    description: Commit sha to be deployed
-    required: true
-  slack-webhook:
-    required: true
+on:
+  pull_request:
+    branches:
+      - 1633-create-setup-kubectl-github-action-test
 
 outputs:
   deploy-url:
@@ -97,66 +87,4 @@ runs:
         fi
 
     - name: Install kubectl
-      if: ${{ inputs.environment == 'review_aks' }}
       uses: DFE-Digital/github-actions/set-kubectl@1633-create-setup-kubectl-github-action
-
-
-    - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
-      with:
-        azure-credentials: ${{ inputs.azure-credentials }}
-
-    - name: K8 setup
-      if: ${{ inputs.environment == 'review_aks' }}
-      shell: bash
-      run: |
-        USE_DB_SETUP_COMMAND=false make ci review_aks get-cluster-credentials
-        make install-konduit
-
-    - name: Check whether we need to setup and restore the sanitised database
-      if: ${{ inputs.environment == 'review_aks' }}
-      shell: bash
-      run: |
-        konduit_worked=false
-
-        stats_count=$(bin/konduit.sh ${{ env.app_name }} -- psql -xAc "select count(*) from statistic" | grep "count") && konduit_worked=true || true
-
-        if [ "$konduit_worked" = false ] || [ "$stats_count" == 'count|0' ]; then
-          echo "Postgres container query failed or stats table has no records. Setup and restore sanitised database."
-          echo "USE_DB_SETUP_COMMAND=true" >> $GITHUB_ENV
-        else
-          echo "Database already created and restored."
-          echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
-        fi
-
-    - name: Terraform init, plan & apply
-      shell: bash
-      run: make ci ${{ inputs.environment }} deploy
-      env:
-        IMAGE_TAG: ${{ inputs.sha }}
-
-    - name: Restore AKS database
-      if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
-      uses: ./.github/actions/restore/
-      with:
-        azure-credentials: ${{ inputs.azure-credentials }}
-        environment: ${{ inputs.environment }}
-        pr-number: ${{ inputs.pr-number }}
-
-    - name: Run Smoke Tests for ${{ inputs.environment }}
-      uses: ./.github/actions/smoke-test_v2/
-      with:
-        environment: ${{ inputs.environment }}
-        pr-number: ${{ inputs.pr-number }}
-        slack-webhook: ${{ inputs.slack-webhook }}
-
-    - name: Alert on Failure
-      if: ${{ failure() && github.ref == 'refs/heads/main' }}
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_CHANNEL: twd_findpub_tech
-        SLACK_COLOR: '#ef5343'
-        SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Publish Teacher Training
-        SLACK_TITLE: Deploy to ${{ inputs.environment }} Failed
-        SLACK_MESSAGE: ':alert: <!channel> Deployment failure on ${{ inputs.environment }} :sadparrot:'
-        SLACK_WEBHOOK: ${{ inputs.slack-webhook }}
