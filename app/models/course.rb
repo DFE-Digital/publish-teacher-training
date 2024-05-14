@@ -85,6 +85,8 @@ class Course < ApplicationRecord
 
   belongs_to :provider
 
+  delegate :tda_active?, to: :provider
+
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
              class_name: 'Provider',

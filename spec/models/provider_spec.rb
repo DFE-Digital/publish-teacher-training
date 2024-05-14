@@ -54,6 +54,62 @@ describe Provider do
     end
   end
 
+  describe '#tda_active?' do
+    let(:provider) { create(:provider) }
+
+    before do
+      allow(provider).to receive(:recruitment_cycle_year).and_return(recruitment_cycle_year)
+    end
+
+    context 'when recruitment cycle year is after 2024 and TDA is active' do
+      let(:recruitment_cycle_year) { 2025 }
+
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:teacher_degree_apprenticeship).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(provider.tda_active?).to be true
+      end
+    end
+
+    context 'when recruitment cycle year is 2024 or before and TDA is active' do
+      let(:recruitment_cycle_year) { 2024 }
+
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:teacher_degree_apprenticeship).and_return(true)
+      end
+
+      it 'returns false' do
+        expect(provider.tda_active?).to be false
+      end
+    end
+
+    context 'when recruitment cycle year is after 2024 and TDA is not active' do
+      let(:recruitment_cycle_year) { 2025 }
+
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:teacher_degree_apprenticeship).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(provider.tda_active?).to be false
+      end
+    end
+
+    context 'when recruitment cycle year is 2024 or before and TDA is not active' do
+      let(:recruitment_cycle_year) { 2024 }
+
+      before do
+        allow(FeatureService).to receive(:enabled?).with(:teacher_degree_apprenticeship).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(provider.tda_active?).to be false
+      end
+    end
+  end
+
   describe 'validations' do
     describe 'urn validations' do
       context 'when provider_type is lead_school' do

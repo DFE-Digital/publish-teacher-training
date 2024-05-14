@@ -377,6 +377,10 @@ class Provider < ApplicationRecord
     Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Settings.current_recruitment_cycle_year.succ.to_s }).find_by(provider_code:)
   end
 
+  def tda_active?
+    recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
+  end
+
   private
 
   def accredited_provider_codes
