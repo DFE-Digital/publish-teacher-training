@@ -29,7 +29,7 @@
     <%= f.govuk_radio_button :a_levels_two, "non_uk", label: { text: "Choose a subject" } do %>
       <%= f.govuk_collection_select :subjects, @course.a_level_selectable_subjects, :id, :name, label: { text: "", size: "s" } %>
     <% end %>
-
+  <br>
     <%= f.govuk_text_field :a_levels_three,
   value: course_object.additional_gcse_equivalencies,
   label: { text: "Minimum grade required (optional)", size: "m" },
