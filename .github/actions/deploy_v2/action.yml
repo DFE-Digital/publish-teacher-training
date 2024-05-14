@@ -98,9 +98,8 @@ runs:
 
     - name: Install kubectl
       if: ${{ inputs.environment == 'review_aks' }}
-      uses: azure/setup-kubectl@v3
-      with:
-        version: "v1.26.1" # default is latest stable
+      uses: DFE-Digital/github-actions/set-kubectl@1633-create-setup-kubectl-github-action
+
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
