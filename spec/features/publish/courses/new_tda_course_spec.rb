@@ -5,6 +5,7 @@ require 'rails_helper'
 feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
   before do
     given_i_am_authenticated_as_a_provider_user
+    and_the_tda_feature_flag_is_active
   end
 
   scenario 'creating a degree awarding course' do
@@ -32,17 +33,17 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_the_tda_defaults_are_saved
   end
 
-  scenario 'changing from tda to non tda on check your answers page' do
-  end
+  # scenario 'changing from tda to non tda on check your answers page' do
+  # end
 
-  scenario 'changing from non tda to tda on check your answers page' do
-  end
+  # scenario 'changing from non tda to tda on check your answers page' do
+  # end
 
-  scenario 'when choosing a further education course' do
-  end
+  # scenario 'when choosing a further education course' do
+  # end
 
-  scenario 'when choosing primary course' do
-  end
+  # scenario 'when choosing primary course' do
+  # end
 
   def given_i_am_authenticated_as_a_provider_user
     @user = create(
@@ -54,6 +55,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     given_i_am_authenticated(
       user: @user
     )
+  end
+
+  def and_the_tda_feature_flag_is_active
+    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def when_i_visit_the_courses_page
