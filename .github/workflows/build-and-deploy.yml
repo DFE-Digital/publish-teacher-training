@@ -8,7 +8,6 @@ on:
   pull_request:
     branches:
       - 1633-create-setup-kubectl-github-action-test
-    types: [opened, reopened, synchronize, labeled]
 
 permissions:
   contents: write
