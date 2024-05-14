@@ -14,23 +14,11 @@ module Courses
         end
 
         def qualifications_with_qts
-          Course.qualifications.keys.select do |qualification|
-            if tda_active?
-              qualification.include?('qts')
-            else
-              qualification.include?('qts') && qualification != 'undergraduate_degree_with_qts'
-            end
-          end
-        end
+          qts_list = Course.qualifications.keys.grep(/qts/)
 
-        def qualifications_with_qts
-          Course.qualifications.keys.select do |qualification|
-            if tda_active?
-              qualification.include?('qts')
-            else
-              qualification.include?('qts') && qualification != 'undergraduate_degree_with_qts'
-            end
-          end
+          return qts_list if tda_active?
+
+          qts_list - %w[undergraduate_degree_with_qts]
         end
 
         def qualifications_without_qts
