@@ -26,6 +26,7 @@ jobs:
     env:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
 
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
