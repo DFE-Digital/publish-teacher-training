@@ -59,3 +59,10 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
           ref: ${{ github.head_ref }}
+
+      - name: Sets up the kubectl
+        uses: DFE-Digital/github-actions/set-kubectl@1633-create-setup-kubectl-github-action
+
+      - name: check kubectl version
+        run: |
+           kubectl version
