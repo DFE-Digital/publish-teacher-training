@@ -29,8 +29,9 @@ class HeartbeatController < ActionController::API
   private
 
   def database_alive?
-    ActiveRecord::Base.connection.active?
-  rescue PG::ConnectionBad
+    ActiveRecord::Base.connection.execute('SELECT 1') &&
+      ActiveRecord::Base.connection.active?
+  rescue StandardError => exception
     false
   end
 
