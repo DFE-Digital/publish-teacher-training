@@ -4,7 +4,6 @@ module Publish
   module Courses
     class OutcomeController < PublishController
       include CourseBasicDetailConcern
-      before_action :order_edit_options, only: %i[edit new]
 
       def new
         super
@@ -38,33 +37,8 @@ module Publish
 
       private
 
-      def order_edit_options
-        qualification_options = @course.edit_course_options[:qualifications]
-        @course.edit_course_options[:qualifications] = if @course.level == 'further_education'
-                                                         non_qts_qualifications(qualification_options)
-                                                       else
-                                                         qts_qualifications(qualification_options)
-                                                       end
-      end
-
       def current_step
         :outcome
-      end
-
-      def qts_qualifications(edit_options)
-        options = %w[pgce_with_qts qts pgde_with_qts]
-
-        raise 'Non QTS qualification options do not match' if edit_options.sort != options.sort
-
-        options
-      end
-
-      def non_qts_qualifications(edit_options)
-        options = %w[pgce pgde]
-
-        raise 'QTS qualification options do not match' if edit_options.sort != options.sort
-
-        options
       end
 
       def errors
