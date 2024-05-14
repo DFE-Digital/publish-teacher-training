@@ -7,6 +7,8 @@ describe Courses::EditOptions::QualificationConcern do
     klass = Class.new do
       include Courses::EditOptions::QualificationConcern
       attr_accessor :level
+
+      def tda_active?; end
     end
 
     klass.new
@@ -33,6 +35,18 @@ describe Courses::EditOptions::QualificationConcern do
       example_model.qualification_options.each do |q|
         expect(q).not_to include('qts')
       end
+    end
+  end
+
+  context 'for a teacher degree apprenticeship course' do
+    let(:level_value) { 'secondary' }
+
+    before do
+      allow(example_model).to receive(:tda_active?).and_return true
+    end
+
+    it 'returns a teacher degree apprenticeship' do
+      expect(example_model.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts undergraduate_degree_with_qts])
     end
   end
 end

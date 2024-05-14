@@ -15,7 +15,21 @@ module Courses
 
         def qualifications_with_qts
           Course.qualifications.keys.select do |qualification|
-            qualification.include?('qts')
+            if tda_active?
+              qualification.include?('qts')
+            else
+              qualification.include?('qts') && qualification != 'undergraduate_degree_with_qts'
+            end
+          end
+        end
+
+        def qualifications_with_qts
+          Course.qualifications.keys.select do |qualification|
+            if tda_active?
+              qualification.include?('qts')
+            else
+              qualification.include?('qts') && qualification != 'undergraduate_degree_with_qts'
+            end
           end
         end
 
