@@ -59,9 +59,8 @@ feature 'Editing course study mode', { can_edit_current_and_next_cycles: false }
   end
 
   def then_i_should_see_an_error_message
-    expect(publish_course_study_mode_edit_page.error_messages).to include(
-      I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')
-    )
+    expect(publish_course_study_mode_edit_page.error_messages)
+      .to include('You must choose a study pattern. Select all that apply.')
   end
 
   def provider

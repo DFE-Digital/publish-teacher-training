@@ -7,7 +7,7 @@
       <ul class="govuk-list govuk-error-summary__list">
         <% @errors.each do |id, messages| %>
           <% messages.each do |message| %>
-            <li data-error-message="<%= message %>"><%= link_to message, "##{id}-error" %></li>
+            <li data-error-message="<%= message %>"><%= link_to message, error_id.presence || "##{id}-error" %></li>
           <% end %>
         <% end %>
       </ul>

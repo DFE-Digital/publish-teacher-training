@@ -24,8 +24,9 @@ module Courses
 
     def build_new_course
       course = provider.courses.new
-      course.assign_attributes(course_attributes.except(:subjects_ids))
+      course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
 
+      update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
       course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
@@ -72,8 +73,25 @@ module Courses
       @site_ids ||= course_params['sites_ids']
     end
 
+    def study_mode
+      @study_mode ||= course_params['study_mode']&.flatten&.compact&.uniq
+    end
+
     def study_site_ids
       @study_site_ids ||= course_params['study_sites_ids']
+    end
+
+    def update_study_mode(course)
+      return if study_mode.nil?
+
+      if study_mode.empty?
+        course.errors.add(
+          :study_mode,
+          I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')
+        )
+      else
+        course.study_mode = study_mode.sort.join('_or_')
+      end
     end
 
     def update_sites(course)

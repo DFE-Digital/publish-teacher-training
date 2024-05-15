@@ -41,7 +41,7 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: ['Select full time or part time'] }
+        params.dig(:course, :study_mode) ? {} : { study_mode: [I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')] }
       end
     end
   end
