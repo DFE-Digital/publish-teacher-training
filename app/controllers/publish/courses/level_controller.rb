@@ -8,7 +8,7 @@ module Publish
       private
 
       def error_keys
-        [:level]
+        %i[level is_send]
       end
 
       def current_step

@@ -322,7 +322,6 @@ class Course < ApplicationRecord
     gcse_science_required? && !recruitment_cycle_after_2021?
   }
 
-  validates :is_send, inclusion: { in: [true, false] }
   validates :sites, presence: true, on: %i[publish new]
   validates :subjects, presence: true, on: :publish
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? }
@@ -348,6 +347,7 @@ class Course < ApplicationRecord
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?
   validates :level, presence: true, on: %i[new create publish]
+  validates :is_send, inclusion: { in: [true, false] }, on: %i[new create publish]
   # TODO: validates :master_subject_id ?
 
   def is_engineers_teach_physics?

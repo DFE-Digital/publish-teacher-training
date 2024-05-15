@@ -1,8 +1,19 @@
-<div class="govuk-form-group">
-  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-    <div class="govuk-checkboxes__item">
-      <%= form.check_box(:is_send, checked: @course.is_send?, data: { qa: "is_send" }, class: "govuk-checkboxes__input") %>
-      <%= form.label(:is_send, "This course has an additional SEND specialism", class: "govuk-label govuk-checkboxes__label") %>
+<div class="govuk-radios govuk-radios" data-module="govuk-radios">
+  <% [["yes", true], ["no", false]].each do |label, value| %>
+    <div class="govuk-radios__item">
+      <%= form.radio_button(
+            :is_send,
+            value,
+            class: "govuk-radios__input",
+            data: {
+              qa: "course__is_send_#{value}"
+            }
+          ) %>
+      <%= form.label(
+            :is_send,
+            value: label,
+            class: "govuk-label govuk-radios__label"
+          ) %>
     </div>
-  </div>
+  <% end %>
 </div>

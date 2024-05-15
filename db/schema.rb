@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_13_145101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -22,6 +22,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: { type: :string, limit: 150 }, force: :cascade do |t|
     t.string "ProductVersion", limit: 32, null: false
+  end
+
+  create_table "access_request", id: :serial, force: :cascade do |t|
+    t.text "email_address"
+    t.text "first_name"
+    t.text "last_name"
+    t.text "organisation"
+    t.text "reason"
+    t.datetime "request_date_utc", precision: nil, null: false
+    t.integer "requester_id"
+    t.integer "status", null: false
+    t.text "requester_email"
+    t.datetime "discarded_at", precision: nil
+    t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
+    t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -79,7 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_071202) do
     t.datetime "discarded_at", precision: nil
     t.string "age_range_in_years"
     t.date "applications_open_from"
-    t.boolean "is_send", default: false
+    t.boolean "is_send"
     t.string "level"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.integer "degree_grade"
