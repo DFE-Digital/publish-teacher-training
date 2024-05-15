@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_02_071202) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_13_145101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_02_071202) do
     t.datetime "discarded_at", precision: nil
     t.string "age_range_in_years"
     t.date "applications_open_from"
-    t.boolean "is_send", default: false
+    t.boolean "is_send"
     t.string "level"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.integer "degree_grade"

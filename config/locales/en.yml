@@ -240,6 +240,10 @@ en:
       open: "Course opened"
       closed: "Course closed"
     add_course: "Add course"
+    new:
+      level:
+        special_educational_needs_and_disabilities:
+          label: Does this course have a special educational needs and disability (SEND) specialism?
     update_email:
       name: "title"
       age_range_in_years: "age range"
@@ -501,6 +505,8 @@ en:
               blank: "Select an accredited provider"
               is_not_accredited: "Update the accredited provider"
               does_not_exist_in_cycle: "The accredited provider %{accredited_provider_code} does not exist in this cycle"
+            is_send:
+              inclusion: Select if this course has a special educational needs and disability (SEND) specialism
             base:
               duplicate: "This course already exists. You should add further schools for this course to the existing profile in Publish"
               visa_sponsorship_not_publishable: "Select if visas can be sponsored"
