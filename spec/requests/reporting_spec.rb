@@ -106,10 +106,10 @@ describe 'GET /reporting' do
         },
         qualification: {
           open: {
-            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
+            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
           },
           closed: {
-            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
+            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
           }
         },
         is_send: {
