@@ -21,6 +21,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_i_am_on_the_choose_schools_page
 
     when_i_choose_the_school
+    and_i_choose_the_study_site
     # We skip the visa sponsorship question
     then_i_am_on_the_add_applications_open_date_page
 
@@ -112,6 +113,11 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def when_i_choose_the_school
     check provider.sites.first.location_name
+    and_i_click_continue
+  end
+
+  def and_i_choose_the_study_site
+    check provider.study_sites.first.location_name
     and_i_click_continue
   end
 

@@ -203,7 +203,11 @@ module Publish
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
-        new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+        if course.undergraduate_degree_with_qts?
+          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+        end
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range
@@ -223,7 +227,7 @@ module Publish
 
     def tda_path_params
       path_params.merge(
-        course: { funding_type: 'apprenticeship', study_mode: 'full_time' }
+        course: path_params[:course].merge({ funding_type: 'apprenticeship', study_mode: 'full_time' })
       )
     end
 
