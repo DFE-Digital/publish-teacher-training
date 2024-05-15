@@ -107,8 +107,32 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def then_i_am_on_the_choose_schools_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/2025/courses/funding-type/new?course%5Bage_range_in_years%5D=14_to_19&course%5Bcampaign_name%5D=&course%5Bis_send%5D=0&course%5Blevel%5D=secondary&course%5Bmaster_subject_id%5D=17&course%5Bqualification%5D=undergraduate_degree_with_qts&course%5Bsubjects_ids%5D%5B%5D=17")
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_schools_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
   end
+
+  def when_i_choose_the_school
+    check provider.sites.first.location_name
+    and_i_click_continue
+  end
+
+  def then_i_am_on_the_add_applications_open_date_page
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
+  end
+
+  def when_i_choose_the_applications_open_date
+    choose 'As soon as the course is on Find - recommended'
+    and_i_click_continue
+  end
+
+  def and_i_choose_the_course_start_date; end
+
+  def then_i_am_on_the_check_your_answers_page; end
+
+  def when_i_click_on_add_a_course; end
+
+  def then_the_tda_course_is_created; end
+
+  def and_the_tda_defaults_are_saved; end
 
   def provider
     @user.providers.first

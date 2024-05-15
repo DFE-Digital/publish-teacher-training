@@ -211,10 +211,20 @@ module Publish
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
-        new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
+        if course.undergraduate_degree_with_qts?
+          new_publish_provider_recruitment_cycle_courses_schools_path(tda_path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
+        end
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
+    end
+
+    def tda_path_params
+      path_params.merge(
+        course: { funding_type: 'apprenticeship', study_mode: 'full_time' }
+      )
     end
 
     def go_to_confirmation_params
