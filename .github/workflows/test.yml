@@ -1,0 +1,28 @@
+name: Test Kubectl
+concurrency: build_and_deploy_${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - 1633-create-setup-kubectl-github-action-test
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
+jobs:
+  build:
+    name: Test
+    outputs:
+      docker_image: ${{ env.DOCKER_IMAGE }}
+      image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
+
+
+    steps:
+    - name: Sets up the kubectl
+      uses: DFE-Digital/github-actions/set-kubectl@1633-create-setup-kubectl-github-action
