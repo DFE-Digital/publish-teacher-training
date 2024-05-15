@@ -126,7 +126,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def when_i_choose_the_applications_open_date
-    choose 'As soon as the course is on Find - recommended'
+    first('input[name="course[applications_open_from]"]').set(true)
     and_i_click_continue
   end
 
