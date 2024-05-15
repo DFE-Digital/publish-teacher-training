@@ -35,7 +35,8 @@ class Course < ApplicationRecord
     school_direct_salaried_training_programme: 'SS',
     scitt_programme: 'SC',
     scitt_salaried_programme: 'SSC',
-    pg_teaching_apprenticeship: 'TA'
+    pg_teaching_apprenticeship: 'TA',
+    teacher_degree_apprenticeship: 'TDA'
   }
 
   enum study_mode: {

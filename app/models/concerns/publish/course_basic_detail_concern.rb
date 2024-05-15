@@ -203,11 +203,7 @@ module Publish
       when :can_sponsor_student_visa
         new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
       when :can_sponsor_skilled_worker_visa
-        if course.undergraduate_degree_with_qts?
-          new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
-        end
+        new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
       when :start_date
         new_publish_provider_recruitment_cycle_courses_start_date_path(path_params)
       when :age_range
@@ -215,11 +211,7 @@ module Publish
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
-        if course.undergraduate_degree_with_qts?
-          new_publish_provider_recruitment_cycle_courses_schools_path(tda_path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
-        end
+        new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end

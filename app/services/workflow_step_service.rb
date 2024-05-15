@@ -8,6 +8,8 @@ class WorkflowStepService
   end
 
   def call
+    return teacher_degree_apprenticeship_workflow_steps if course.undergraduate_degree_with_qts?
+
     if course.is_further_education?
       further_education_workflow_steps
     elsif course.is_school_direct?
@@ -20,6 +22,41 @@ class WorkflowStepService
   private
 
   attr_reader :course
+
+  def teacher_degree_apprenticeship_workflow_steps
+    if course.is_school_direct?
+      %i[
+        courses_list
+        level
+        subjects
+        engineers_teach_physics
+        modern_languages
+        age_range
+        outcome
+        school
+        study_site
+        accredited_provider
+        applications_open
+        start_date
+        confirmation
+      ]
+    elsif course.is_uni_or_scitt?
+      %i[
+        courses_list
+        level
+        subjects
+        engineers_teach_physics
+        modern_languages
+        age_range
+        outcome
+        school
+        study_site
+        applications_open
+        start_date
+        confirmation
+      ]
+    end
+  end
 
   def further_education_workflow_steps
     %i[

@@ -31,6 +31,14 @@ module Courses
       course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
+      if course.undergraduate_degree_with_qts?
+        course.funding_type = 'apprenticeship'
+        course.study_mode = 'full_time'
+        course.program_type = 'teacher_degree_apprenticeship'
+        course.can_sponsor_student_visa = false
+        course.can_sponsor_skilled_worker_visa = false
+      end
+
       AssignSubjectsService.call(course:, subject_ids:)
 
       course.valid?(:new)
