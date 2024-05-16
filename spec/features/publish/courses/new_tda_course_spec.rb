@@ -21,8 +21,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_choose_the_school
     and_i_choose_the_study_site
 
-    then_i_am_on_the_accreddited_provider_page
-
     # We skip the visa sponsorship question
     then_i_am_on_the_add_applications_open_date_page
 
@@ -32,10 +30,14 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_can_not_change_funding_type
     and_i_can_not_change_study_mode
     and_i_can_not_change_visa_requirements
+    then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
 
     when_i_click_on_add_a_course
     then_the_tda_course_is_created
     and_the_tda_defaults_are_saved
+
+    when_i_click_on_the_course_i_created
+    then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
   end
 
   scenario 'creating a degree awarding course from scitt provider' do
@@ -60,10 +62,14 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
+    and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
 
     when_i_click_on_add_a_course
     then_the_tda_course_is_created
     and_the_tda_defaults_are_saved
+
+    when_i_click_on_the_course_i_created
+    then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
   end
 
   scenario 'when choosing primary course' do
@@ -87,10 +93,14 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
+    and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
 
     when_i_click_on_add_a_course
     then_the_tda_course_is_created
     and_the_tda_defaults_are_saved
+
+    when_i_click_on_the_course_i_created
+    then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
   end
 
   def given_i_am_authenticated_as_a_school_direct_provider_user
@@ -199,8 +209,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_click_continue
   end
 
-  def then_i_am_on_the_accreddited_provider_page; end
-
   def then_i_am_on_the_add_applications_open_date_page
     expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
   end
@@ -268,6 +276,39 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     publish_courses_new_level_page.send_fields.is_send_false.click
   end
 
+  def then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
+    within('[data-qa="course__study_mode"]') do
+      expect(page).to have_no_link('Change')
+    end
+
+    within('[data-qa="course__funding_type"]') do
+      expect(page).to have_no_link('Change')
+    end
+
+    within('[data-qa="course__skilled_worker_visa_sponsorship"]') do
+      expect(page).to have_no_link('Change')
+    end
+  end
+
+  def then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
+    within('[data-qa="course__study_mode"]') do
+      expect(page).to have_no_link('Change')
+    end
+
+    within('[data-qa="course__funding"]') do
+      expect(page).to have_no_link('Change')
+    end
+
+    within('[data-qa="course__can_sponsor_skilled_worker_visa"]') do
+      expect(page).to have_no_link('Change')
+    end
+  end
+
+  def when_i_click_on_the_course_i_created
+    click_on course_name_and_code
+    click_on 'Basic details'
+  end
+
   def provider
     @user.providers.first
   end
@@ -275,4 +316,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def course
     provider.courses.last
   end
+
+  def course_name_and_code
+    course.decorate.name_and_code
+  end
+
+  alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
 end
