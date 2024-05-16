@@ -56,12 +56,14 @@ describe CourseReportingService do
           higher_education_salaried_programme: 0,
           school_direct_salaried_training_programme: 3, scitt_programme: 4,
           scitt_salaried_programme: 0,
-          pg_teaching_apprenticeship: 5
+          pg_teaching_apprenticeship: 5,
+          teacher_degree_apprenticeship: 0
         },
         closed: {
           higher_education_programme: 0, higher_education_salaried_programme: 0, school_direct_training_programme: 0,
           school_direct_salaried_training_programme: 0, scitt_programme: 0, scitt_salaried_programme: 0,
-          pg_teaching_apprenticeship: 0
+          pg_teaching_apprenticeship: 0,
+          teacher_degree_apprenticeship: 0
         }
       },
       study_mode: {
