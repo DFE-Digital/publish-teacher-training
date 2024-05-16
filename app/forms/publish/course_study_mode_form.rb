@@ -12,6 +12,12 @@ module Publish
               presence: true,
               inclusion: { in: Course.study_modes.keys }
 
+    def study_mode_checked?(value)
+      mode = study_mode.nil? ? model.study_mode : study_mode
+
+      mode == value || mode == 'full_time_or_part_time'
+    end
+
     private
 
     def valid_before_save
@@ -19,7 +25,7 @@ module Publish
     end
 
     def compute_fields
-      course.attributes.symbolize_keys.slice(*FIELDS).merge(new_attributes)
+      { study_mode: new_attributes[:study_mode]&.compact_blank&.sort&.join('_or_') }
     end
   end
 end

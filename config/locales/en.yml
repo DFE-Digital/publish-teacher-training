@@ -130,8 +130,6 @@ en:
         label: "Part time"
       full_time:
         label: "Full time"
-      full_time_or_part_time:
-        label: "Full time or part time"
     apprenticeship:
       pg_teaching_apprenticeship:
         label: "Yes"
@@ -839,7 +837,7 @@ en:
         publish/course_study_mode_form:
           attributes:
             study_mode:
-              blank: You must choose a study pattern. Select all that apply.
+              blank: Select a study pattern
         publish/course_withdrawal_form:
           attributes:
             confirm_course_code:
@@ -982,8 +980,6 @@ en:
         label: "Part time"
       full_time:
         label: "Full time"
-      full_time_or_part_time:
-        label: "Full time or part time"
     can_sponsor_skilled_worker_visas:
       true:
         label: "Yes"

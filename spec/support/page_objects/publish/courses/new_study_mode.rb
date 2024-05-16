@@ -7,8 +7,8 @@ module PageObjects
         set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/full-part-time/new{?query*}'
 
         section :study_mode_fields, '[data-qa="course__study_mode"]' do
-          element :full_time, '#course-study-mode-full-time-field'
-          element :part_time, '#course-study-mode-part-time-field'
+          element :full_time, '[value="full_time"]'
+          element :part_time, '[value="part_time"]'
         end
 
         element :continue, '[data-qa="course__save"]'

@@ -91,7 +91,7 @@
         <% end %>
 
         <% summary_list.with_row(html_attributes: { data: { qa: "course__study_mode" } }) do |row| %>
-          <% row.with_key { "Full time or part time" } %>
+          <% row.with_key { t("publish.providers.study_mode.form.study_pattern") } %>
           <% row.with_value { course.study_mode&.humanize } %>
           <% unless course.teacher_degree_apprenticeship?
                row.with_action(

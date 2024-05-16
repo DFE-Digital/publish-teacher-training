@@ -72,7 +72,7 @@ feature 'selecting full time or part time or full or part time', { can_edit_curr
 
   def then_i_am_met_with_errors
     expect(page).to have_content('There is a problem')
-    expect(page).to have_content('You must choose a study pattern. Select all that apply.').twice
+    expect(page).to have_content('Select a study pattern').twice
   end
 
   def selected_params(study_mode)

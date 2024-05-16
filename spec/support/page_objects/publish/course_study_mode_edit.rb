@@ -9,9 +9,8 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
-      element :full_time, '#publish-course-study-mode-form-study-mode-full-time-field'
-      element :part_time, '#publish-course-study-mode-form-study-mode-part-time-field'
-      element :full_or_part_time, '#publish-course-study-mode-form-study-mode-full-time-or-part-time-field'
+      element :full_time, '[value="full_time"]'
+      element :part_time, '[value="part_time"]'
 
       element :submit, 'button.govuk-button[type="submit"]'
 
