@@ -23,39 +23,53 @@ class WorkflowStepService
 
   attr_reader :course
 
+  def teacher_degree_apprenticeship_school_direct_workflow_steps
+    %i[
+      courses_list
+      level
+      subjects
+      engineers_teach_physics
+      modern_languages
+      age_range
+      outcome
+      school
+      study_site
+      accredited_provider
+      applications_open
+      start_date
+      confirmation
+    ]
+  end
+
+  def teacher_degree_apprenticeship_scitt_workflow_steps
+    %i[
+      courses_list
+      level
+      subjects
+      engineers_teach_physics
+      modern_languages
+      age_range
+      outcome
+      school
+      study_site
+      applications_open
+      start_date
+      confirmation
+    ]
+  end
+
   def teacher_degree_apprenticeship_workflow_steps
     if course.is_school_direct?
-      %i[
-        courses_list
-        level
-        subjects
-        engineers_teach_physics
-        modern_languages
-        age_range
-        outcome
-        school
-        study_site
-        accredited_provider
-        applications_open
-        start_date
-        confirmation
-      ]
+      teacher_degree_apprenticeship_school_direct_workflow_steps - workflow_removed_steps
     elsif course.is_uni_or_scitt?
-      %i[
-        courses_list
-        level
-        subjects
-        engineers_teach_physics
-        modern_languages
-        age_range
-        outcome
-        school
-        study_site
-        applications_open
-        start_date
-        confirmation
-      ]
+      teacher_degree_apprenticeship_scitt_workflow_steps - workflow_removed_steps
     end
+  end
+
+  def workflow_removed_steps
+    return [] unless course.provider.accredited_bodies.length == 1
+
+    %i[accredited_provider]
   end
 
   def further_education_workflow_steps

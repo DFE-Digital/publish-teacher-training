@@ -78,6 +78,96 @@ describe WorkflowStepService do
     end
   end
 
+  context 'when school direct and teacher degree apprenticeship' do
+    context 'when more than one accredited provider' do
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
+      end
+      let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, provider:) }
+      let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }, { 'Description' => 'some description', 'UcasProviderCode' => second_accredited_provider.provider_code }] }
+      let(:accredited_provider) { build(:provider, :accredited_provider) }
+      let(:second_accredited_provider) { build(:provider, :accredited_provider) }
+
+      it 'adds accredited provider step' do
+        expected_steps = %i[
+          courses_list
+          level
+          subjects
+          engineers_teach_physics
+          modern_languages
+          age_range
+          outcome
+          school
+          study_site
+          accredited_provider
+          applications_open
+          start_date
+          confirmation
+        ]
+
+        expect(subject).to eq(expected_steps)
+      end
+    end
+
+    context 'when only one accredited provider' do
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
+      end
+      let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, accrediting_provider: accredited_provider, provider:) }
+      let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }] }
+      let(:accredited_provider) { build(:provider, :accredited_provider) }
+
+      it 'removes accredited provider step' do
+        expected_steps = %i[
+          courses_list
+          level
+          subjects
+          engineers_teach_physics
+          modern_languages
+          age_range
+          outcome
+          school
+          study_site
+          applications_open
+          start_date
+          confirmation
+        ]
+
+        expect(subject).to eq(expected_steps)
+      end
+    end
+  end
+
+  context 'when scitt and teacher degree apprenticeship' do
+    let(:provider) { create(:provider, :scitt, :accredited_provider) }
+    let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, provider:) }
+
+    it 'returns workflow steps' do
+      expected_steps = %i[
+        courses_list
+        level
+        subjects
+        engineers_teach_physics
+        modern_languages
+        age_range
+        outcome
+        school
+        study_site
+        applications_open
+        start_date
+        confirmation
+      ]
+
+      expect(subject).to eq(expected_steps)
+    end
+  end
+
   context 'when course.is_further_education?' do
     let(:provider) { create(:provider, :accredited_provider) }
 

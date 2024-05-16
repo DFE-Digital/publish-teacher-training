@@ -143,6 +143,10 @@ FactoryBot.define do
       qualification { :pgde }
     end
 
+    trait :resulting_in_undergraduate_degree_with_qts do
+      qualification { :undergraduate_degree_with_qts }
+    end
+
     trait :self_accredited do
       association(:provider, factory: %i[provider accredited_provider])
     end
