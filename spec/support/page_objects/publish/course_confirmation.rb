@@ -29,6 +29,7 @@ module PageObjects
         section :start_date, SummaryList, '[data-qa=course__start_date]'
         section :name, SummaryList, '[data-qa=course__name]'
         section :entry_requirements, SummaryList, '[data-qa=course__entry_requirements]'
+        section :skilled_visa_requirements, SummaryList, '[data-qa=course__skilled_worker_visa_sponsorship]'
       end
 
       element :save_button, '[data-qa=course__save]'

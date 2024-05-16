@@ -29,6 +29,9 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_choose_the_applications_open_date
     and_i_choose_the_first_start_date
     then_i_am_on_the_check_your_answers_page
+    and_i_can_not_change_funding_type
+    and_i_can_not_change_study_mode
+    and_i_can_not_change_visa_requirements
 
     when_i_click_on_add_a_course
     then_the_tda_course_is_created
@@ -212,6 +215,36 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_i_am_on_the_check_your_answers_page
     expect(page).to have_current_path(confirmation_publish_provider_recruitment_cycle_courses_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
+  end
+
+  def and_i_can_not_change_funding_type
+    expect(
+      publish_course_confirmation_page.details.funding_type.value.text
+    ).to eq('Teaching apprenticeship - with salary')
+
+    expect(
+      publish_course_confirmation_page.details.funding_type.text
+    ).not_to include('Change')
+  end
+
+  def and_i_can_not_change_study_mode
+    expect(
+      publish_course_confirmation_page.details.study_mode.value.text
+    ).to eq('Full time')
+
+    expect(
+      publish_course_confirmation_page.details.study_mode.text
+    ).not_to include('Change')
+  end
+
+  def and_i_can_not_change_visa_requirements
+    expect(
+      publish_course_confirmation_page.details.skilled_visa_requirements.value.text
+    ).to eq('No - cannot sponsor')
+
+    expect(
+      publish_course_confirmation_page.details.skilled_visa_requirements.text
+    ).not_to include('Change')
   end
 
   def when_i_click_on_add_a_course
