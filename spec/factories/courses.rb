@@ -171,6 +171,10 @@ FactoryBot.define do
       program_type { :pg_teaching_apprenticeship }
     end
 
+    trait :with_teacher_degree_apprenticeship do
+      program_type { :teacher_degree_apprenticeship }
+    end
+
     trait :with_salary do
       program_type { :school_direct_salaried_training_programme }
     end

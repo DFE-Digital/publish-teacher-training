@@ -511,7 +511,7 @@ class Course < ApplicationRecord
 
     if school_direct_salaried_training_programme? || scitt_salaried_programme? || higher_education_salaried_programme?
       'salary'
-    elsif pg_teaching_apprenticeship?
+    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship?
       'apprenticeship'
     else
       'fee'

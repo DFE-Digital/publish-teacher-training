@@ -2914,4 +2914,34 @@ describe Course do
       end
     end
   end
+
+  describe '#funding_type' do
+    context 'when program_type is nil' do
+      it 'returns nil' do
+        course = Course.new(program_type: nil)
+        expect(course.funding_type).to be_nil
+      end
+    end
+
+    context 'when program_type is higher_education_salaried_programme' do
+      it 'returns salary' do
+        course = Course.new(program_type: :higher_education_salaried_programme)
+        expect(course.funding_type).to eq('salary')
+      end
+    end
+
+    context 'when program_type is teacher_degree_apprenticeship' do
+      it 'returns apprenticeship' do
+        course = build(:course, :with_teacher_degree_apprenticeship)
+        expect(course.funding_type).to eq('apprenticeship')
+      end
+    end
+
+    context 'when program_type is pg_teaching_apprenticeship' do
+      it 'returns apprenticeship' do
+        course = build(:course, :with_apprenticeship)
+        expect(course.funding_type).to eq('apprenticeship')
+      end
+    end
+  end
 end
