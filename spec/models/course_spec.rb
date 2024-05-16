@@ -1956,7 +1956,7 @@ describe Course do
         study_mode: :full_time,
         program_type: :teacher_degree_apprenticeship,
         qualification: :undergraduate_degree_with_qts
-      },
+      }
     }.freeze
 
     specs.each do |expected_description, course_attributes|
@@ -2923,14 +2923,14 @@ describe Course do
   describe '#funding_type' do
     context 'when program_type is nil' do
       it 'returns nil' do
-        course = Course.new(program_type: nil)
+        course = described_class.new(program_type: nil)
         expect(course.funding_type).to be_nil
       end
     end
 
     context 'when program_type is higher_education_salaried_programme' do
       it 'returns salary' do
-        course = Course.new(program_type: :higher_education_salaried_programme)
+        course = described_class.new(program_type: :higher_education_salaried_programme)
         expect(course.funding_type).to eq('salary')
       end
     end
