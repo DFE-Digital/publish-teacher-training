@@ -4,6 +4,10 @@ require 'rails_helper'
 
 module Find
   describe ResultsTracking do
+    before do
+      allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
+    end
+
     let(:request_double) do
       instance_double(ActionDispatch::Request,
                       uuid: SecureRandom.uuid,
