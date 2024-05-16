@@ -64,6 +64,14 @@ en:
     training_partners: "Training partners"
     organisation_details: "Organisation details"
     accredited_provider: "Accredited providers"
+  qualifications:
+    description:
+      qts: QTS
+      undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS
+      pgce_with_qts: PGCE with QTS
+      pgde_with_qts: PGDE with QTS
+      pgce: PGCE
+      pgde: PGDE
   edit_options:
     entry_requirements:
       must_have_qualification_at_application_time:

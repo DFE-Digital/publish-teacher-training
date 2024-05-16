@@ -1951,7 +1951,12 @@ describe Course do
         study_mode: :full_time,
         program_type: :school_direct_salaried_training_programme,
         qualification: :pgce_with_qts
-      }
+      },
+      'Teacher degree apprenticeship with QTS full time teaching apprenticeship' => {
+        study_mode: :full_time,
+        program_type: :teacher_degree_apprenticeship,
+        qualification: :undergraduate_degree_with_qts
+      },
     }.freeze
 
     specs.each do |expected_description, course_attributes|
