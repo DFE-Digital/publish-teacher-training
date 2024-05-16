@@ -14,6 +14,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_i_see_the_degree_awarding_option
 
     when_i_choose_a_degree_awarding_qualification
+
     # We skip the pages for the TDA: funding type, part-time/full time
     then_i_am_on_the_choose_schools_page
 
@@ -91,7 +92,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def given_i_am_authenticated_as_a_school_direct_provider_user
     recruitment_cycle = create(:recruitment_cycle, year: 2025)
-    @user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site)])])
+    @user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
     @accredited_provider = create(:provider, :accredited_provider, recruitment_cycle:)
     @provider.accrediting_provider_enrichments = []
