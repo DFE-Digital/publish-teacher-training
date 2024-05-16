@@ -140,11 +140,13 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_i_choose_a_secondary_course
     choose 'Secondary'
+    and_i_select_no_send
     and_i_click_continue
   end
 
   def and_i_choose_a_primary_course
     choose 'Primary'
+    and_i_select_no_send
     and_i_click_continue
     choose 'Primary with English'
     and_i_click_continue
@@ -260,6 +262,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     expect(course.funding_type).to eq('apprenticeship')
     expect(course.can_sponsor_student_visa?).to be false
     expect(course.can_sponsor_skilled_worker_visa?).to be false
+  end
+
+  def and_i_select_no_send
+    publish_courses_new_level_page.send_fields.is_send_false.click
   end
 
   def provider
