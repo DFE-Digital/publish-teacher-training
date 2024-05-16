@@ -217,12 +217,6 @@ module Publish
       end
     end
 
-    def tda_path_params
-      path_params.merge(
-        course: path_params[:course].merge({ funding_type: 'apprenticeship', study_mode: 'full_time' })
-      )
-    end
-
     def go_to_confirmation_params
       params[:goto_confirmation] || params.dig(:course, :goto_confirmation)
     end
