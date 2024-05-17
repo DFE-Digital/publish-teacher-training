@@ -35,7 +35,8 @@ class Course < ApplicationRecord
     school_direct_salaried_training_programme: 'SS',
     scitt_programme: 'SC',
     scitt_salaried_programme: 'SSC',
-    pg_teaching_apprenticeship: 'TA'
+    pg_teaching_apprenticeship: 'TA',
+    teacher_degree_apprenticeship: 'TDA'
   }
 
   enum study_mode: {
@@ -85,7 +86,7 @@ class Course < ApplicationRecord
 
   belongs_to :provider
 
-  delegate :tda_active?, to: :provider
+  delegate :tda_active?, to: :provider, allow_nil: true
 
   belongs_to :accrediting_provider,
              ->(c) { where(recruitment_cycle: c.recruitment_cycle) },
@@ -478,7 +479,7 @@ class Course < ApplicationRecord
 
   def program_type_description
     if school_direct_salaried_training_programme? then ' with salary'
-    elsif pg_teaching_apprenticeship? then ' teaching apprenticeship'
+    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship? then ' teaching apprenticeship'
     else
       ''
     end
@@ -510,7 +511,7 @@ class Course < ApplicationRecord
 
     if school_direct_salaried_training_programme? || scitt_salaried_programme? || higher_education_salaried_programme?
       'salary'
-    elsif pg_teaching_apprenticeship?
+    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship?
       'apprenticeship'
     else
       'fee'

@@ -1951,6 +1951,11 @@ describe Course do
         study_mode: :full_time,
         program_type: :school_direct_salaried_training_programme,
         qualification: :pgce_with_qts
+      },
+      'Teacher degree apprenticeship with QTS full time teaching apprenticeship' => {
+        study_mode: :full_time,
+        program_type: :teacher_degree_apprenticeship,
+        qualification: :undergraduate_degree_with_qts
       }
     }.freeze
 
@@ -2911,6 +2916,36 @@ describe Course do
 
       it "returns the course's academic year" do
         expect(subject.academic_year).to eq('2022 to 2023')
+      end
+    end
+  end
+
+  describe '#funding_type' do
+    context 'when program_type is nil' do
+      it 'returns nil' do
+        course = described_class.new(program_type: nil)
+        expect(course.funding_type).to be_nil
+      end
+    end
+
+    context 'when program_type is higher_education_salaried_programme' do
+      it 'returns salary' do
+        course = described_class.new(program_type: :higher_education_salaried_programme)
+        expect(course.funding_type).to eq('salary')
+      end
+    end
+
+    context 'when program_type is teacher_degree_apprenticeship' do
+      it 'returns apprenticeship' do
+        course = build(:course, :with_teacher_degree_apprenticeship)
+        expect(course.funding_type).to eq('apprenticeship')
+      end
+    end
+
+    context 'when program_type is pg_teaching_apprenticeship' do
+      it 'returns apprenticeship' do
+        course = build(:course, :with_apprenticeship)
+        expect(course.funding_type).to eq('apprenticeship')
       end
     end
   end

@@ -56,12 +56,14 @@ describe CourseReportingService do
           higher_education_salaried_programme: 0,
           school_direct_salaried_training_programme: 3, scitt_programme: 4,
           scitt_salaried_programme: 0,
-          pg_teaching_apprenticeship: 5
+          pg_teaching_apprenticeship: 5,
+          teacher_degree_apprenticeship: 0
         },
         closed: {
           higher_education_programme: 0, higher_education_salaried_programme: 0, school_direct_training_programme: 0,
           school_direct_salaried_training_programme: 0, scitt_programme: 0, scitt_salaried_programme: 0,
-          pg_teaching_apprenticeship: 0
+          pg_teaching_apprenticeship: 0,
+          teacher_degree_apprenticeship: 0
         }
       },
       study_mode: {
@@ -70,10 +72,10 @@ describe CourseReportingService do
       },
       qualification: {
         open: {
-          qts: 1, pgce_with_qts: 2, pgde_with_qts: 3, pgce: 4, pgde: 5
+          qts: 1, pgce_with_qts: 2, pgde_with_qts: 3, pgce: 4, pgde: 5, undergraduate_degree_with_qts: 6
         },
         closed: {
-          qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
+          qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
         }
       },
       is_send: {
@@ -135,7 +137,7 @@ describe CourseReportingService do
         expect(open_courses_scope).to receive(:group).with(:qualification).and_return(open_courses_qualification_scope)
         expect(open_courses_qualification_scope).to receive(:count)
           .and_return(
-            { 'qts' => 1, 'pgce_with_qts' => 2, 'pgde_with_qts' => 3, 'pgce' => 4, 'pgde' => 5 }
+            { 'qts' => 1, 'pgce_with_qts' => 2, 'pgde_with_qts' => 3, 'pgce' => 4, 'pgde' => 5, 'undergraduate_degree_with_qts' => 6 }
           )
 
         expect(open_courses_scope).to receive(:group).with(:is_send).and_return(open_courses_is_send_scope)

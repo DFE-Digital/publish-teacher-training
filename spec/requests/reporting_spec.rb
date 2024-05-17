@@ -92,12 +92,12 @@ describe 'GET /reporting' do
           open: {
             higher_education_programme: 0, higher_education_salaried_programme: 0,
             school_direct_training_programme: 0, school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0
+            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0, teacher_degree_apprenticeship: 0
           },
           closed: {
             higher_education_programme: 0, higher_education_salaried_programme: 0,
             school_direct_training_programme: 0, school_direct_salaried_training_programme: 0, scitt_programme: 0,
-            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0
+            scitt_salaried_programme: 0, pg_teaching_apprenticeship: 0, teacher_degree_apprenticeship: 0
           }
         },
         study_mode: {
@@ -106,10 +106,10 @@ describe 'GET /reporting' do
         },
         qualification: {
           open: {
-            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
+            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
           },
           closed: {
-            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0
+            qts: 0, pgce_with_qts: 0, pgde_with_qts: 0, pgce: 0, pgde: 0, undergraduate_degree_with_qts: 0
           }
         },
         is_send: {
