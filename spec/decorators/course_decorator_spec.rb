@@ -831,6 +831,132 @@ describe CourseDecorator do
   #   end
   # end
 
+  describe '#cannot_change_funding_type?' do
+    context 'when course is published' do
+      before { allow(course).to receive(:is_published?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_funding_type?).to be true
+      end
+    end
+
+    context 'when course is withdrawn' do
+      before { allow(course).to receive(:is_withdrawn?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_funding_type?).to be true
+      end
+    end
+
+    context 'when teacher degree apprenticeship' do
+      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_funding_type?).to be true
+      end
+    end
+
+    context 'none of the conditions are met' do
+      before do
+        allow(course).to receive_messages(is_published?: false, is_withdrawn?: false, teacher_degree_apprenticeship?: false)
+      end
+
+      it 'returns false' do
+        expect(decorated_course.cannot_change_funding_type?).to be false
+      end
+    end
+  end
+
+  describe '#cannot_change_study_mode?' do
+    context 'when course is withdrawn' do
+      before { allow(course).to receive(:is_withdrawn?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_study_mode?).to be true
+      end
+    end
+
+    context 'when course is teacher degree apprenticeship' do
+      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_study_mode?).to be true
+      end
+    end
+
+    context 'when none of the conditions are met' do
+      before do
+        allow(course).to receive_messages(is_withdrawn?: false, teacher_degree_apprenticeship?: false)
+      end
+
+      it 'returns false' do
+        expect(decorated_course.cannot_change_study_mode?).to be false
+      end
+    end
+  end
+
+  describe '#cannot_change_skilled_worker_visa?' do
+    context 'when withdrawn' do
+      before { allow(course).to receive(:is_withdrawn?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
+      end
+    end
+
+    context 'when course is teacher degree apprenticeship' do
+      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
+      end
+    end
+
+    context 'when none of the conditions are met' do
+      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
+
+      it 'returns false' do
+        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
+      end
+    end
+  end
+
+  describe '#show_skilled_worker_visa_row?' do
+    context 'when course is a school direct salaried training programme' do
+      before { allow(course).to receive(:school_direct_salaried_training_programme?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.show_skilled_worker_visa_row?).to be true
+      end
+    end
+
+    context 'when course is a pg teaching apprenticeship' do
+      before { allow(course).to receive(:pg_teaching_apprenticeship?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.show_skilled_worker_visa_row?).to be true
+      end
+    end
+
+    context 'when course is a teacher degree apprenticeship' do
+      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
+
+      it 'returns true' do
+        expect(decorated_course.show_skilled_worker_visa_row?).to be true
+      end
+    end
+
+    context 'when none of the conditions are met' do
+      before do
+        allow(course).to receive_messages(school_direct_salaried_training_programme?: false, pg_teaching_apprenticeship?: false, teacher_degree_apprenticeship?: false)
+      end
+
+      it 'returns false' do
+        expect(decorated_course.show_skilled_worker_visa_row?).to be false
+      end
+    end
+  end
+
   describe '#financial_incentive_details' do
     subject { course.decorate.financial_incentive_details }
 

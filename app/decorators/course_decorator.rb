@@ -412,6 +412,24 @@ class CourseDecorator < ApplicationDecorator
     subjects.map(&:subject_name).include?('Physical education')
   end
 
+  def cannot_change_funding_type?
+    is_published? || is_withdrawn? || teacher_degree_apprenticeship?
+  end
+
+  def cannot_change_study_mode?
+    is_withdrawn? || teacher_degree_apprenticeship?
+  end
+
+  def cannot_change_skilled_worker_visa?
+    is_withdrawn? || teacher_degree_apprenticeship?
+  end
+
+  def show_skilled_worker_visa_row?
+    school_direct_salaried_training_programme? ||
+      pg_teaching_apprenticeship? ||
+      teacher_degree_apprenticeship?
+  end
+
   private
 
   def not_on_find

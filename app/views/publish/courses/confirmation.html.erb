@@ -177,7 +177,7 @@
           <% end %>
         <% end %>
 
-        <% if course.school_direct_salaried_training_programme? || course.pg_teaching_apprenticeship? || course.teacher_degree_apprenticeship? %>
+        <% if course.show_skilled_worker_visa_row? %>
           <% summary_list.with_row(html_attributes: { data: { qa: "course__skilled_worker_visa_sponsorship" } }) do |row| %>
             <% row.with_key { "Skilled Worker visas" } %>
             <% row.with_value { course.can_sponsor_skilled_worker_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
