@@ -38,6 +38,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
     when_i_click_on_the_course_i_created
     then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
+    and_i_do_not_see_the_degree_requirements_row_on_description_tab
   end
 
   scenario 'creating a degree awarding course from scitt provider' do
@@ -70,6 +71,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
     when_i_click_on_the_course_i_created
     then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
+    and_i_do_not_see_the_degree_requirements_row_on_description_tab
   end
 
   scenario 'when choosing primary course' do
@@ -101,6 +103,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
     when_i_click_on_the_course_i_created
     then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship_on_basic_details
+    and_i_do_not_see_the_degree_requirements_row_on_description_tab
   end
 
   def given_i_am_authenticated_as_a_school_direct_provider_user
@@ -307,6 +310,16 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def when_i_click_on_the_course_i_created
     click_on course_name_and_code
     click_on 'Basic details'
+  end
+
+  def and_i_do_not_see_the_degree_requirements_row_on_description_tab
+    publish_provider_courses_show_page.load(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      course_code: course.course_code
+    )
+
+    expect(publish_provider_courses_show_page).not_to have_degree
   end
 
   def provider
