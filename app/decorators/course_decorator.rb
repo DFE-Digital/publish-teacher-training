@@ -430,6 +430,10 @@ class CourseDecorator < ApplicationDecorator
       teacher_degree_apprenticeship?
   end
 
+  def show_degree_requirements_row?
+    !teacher_degree_apprenticeship?
+  end
+
   private
 
   def not_on_find
