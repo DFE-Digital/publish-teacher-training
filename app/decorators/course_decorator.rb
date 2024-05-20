@@ -420,6 +420,10 @@ class CourseDecorator < ApplicationDecorator
     is_withdrawn? || teacher_degree_apprenticeship?
   end
 
+  def cannot_change_course_length?
+    teacher_degree_apprenticeship? || is_withdrawn?
+  end
+
   def cannot_change_skilled_worker_visa?
     is_withdrawn? || teacher_degree_apprenticeship?
   end
