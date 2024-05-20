@@ -1,5 +1,3 @@
-<%# locals: (error_id: nil) -%>
-
 <% if @errors && @errors.any? %>
   <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error">
     <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -9,7 +7,7 @@
       <ul class="govuk-list govuk-error-summary__list">
         <% @errors.each do |id, messages| %>
           <% messages.each do |message| %>
-            <li data-error-message="<%= message %>"><%= link_to message, error_id.presence || "##{id}-error" %></li>
+            <li data-error-message="<%= message %>"><%= link_to message, "##{id}-error" %></li>
           <% end %>
         <% end %>
       </ul>

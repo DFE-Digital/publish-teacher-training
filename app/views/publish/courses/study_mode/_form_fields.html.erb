@@ -12,13 +12,12 @@
 
     <%= render "publish/shared/error_messages", error_keys: [:study_mode] %>
     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-      <% @course.edit_course_options["study_modes"].each_with_index do |value, index| %>
+      <% @course.edit_course_options["study_modes"].each do |value| %>
         <div class="govuk-checkboxes__item">
           <%= form.govuk_check_box :study_mode,
                                    value,
                                    label: { text: t("edit_options.study_modes.#{value}.label") },
-                                   checked: course.study_mode.in?([value, "full_time_or_part_time"]),
-                                   link_errors: index.zero? %>
+                                   checked: course.study_mode.in?([value, "full_time_or_part_time"]) %>
         </div>
       <% end %>
     </div>
