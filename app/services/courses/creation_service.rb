@@ -37,8 +37,6 @@ module Courses
         course.program_type = 'teacher_degree_apprenticeship'
         course.can_sponsor_student_visa = false
         course.can_sponsor_skilled_worker_visa = false
-        course.additional_degree_subject_requirements = nil
-        course.degree_subject_requirements = nil
         course.degree_grade = 'not_required'
       end
 
