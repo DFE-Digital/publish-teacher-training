@@ -200,7 +200,7 @@ RSpec/IndexedLet:
     - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
     - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
 
-RSpec/Rails/HaveHttpStatus:
+RSpecRails/HaveHttpStatus:
   Exclude:
     - 'spec/smoke/api/v1/courses_spec.rb'
     - 'spec/smoke/api/v1/healthcheck_spec.rb'
