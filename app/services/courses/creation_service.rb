@@ -37,6 +37,7 @@ module Courses
         course.program_type = 'teacher_degree_apprenticeship'
         course.can_sponsor_student_visa = false
         course.can_sponsor_skilled_worker_visa = false
+        course.degree_grade = 'not_required'
       end
 
       AssignSubjectsService.call(course:, subject_ids:)

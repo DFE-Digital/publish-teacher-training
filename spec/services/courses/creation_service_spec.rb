@@ -19,6 +19,27 @@ describe Courses::CreationService do
 
   let(:next_available_course_code) { false }
 
+  context 'when teacher degree apprenticeship course' do
+    let(:valid_course_params) do
+      {
+        'level' => 'primary',
+        'is_send' => '1',
+        'age_range_in_years' => '3_to_7',
+        'qualification' => 'undergraduate_degree_with_qts'
+      }
+    end
+
+    it 'creates the teacher degree apprenticeship course' do
+      expect(subject.program_type).to eq('teacher_degree_apprenticeship')
+      expect(subject.funding_type).to eq('apprenticeship')
+      expect(subject.can_sponsor_student_visa?).to be false
+      expect(subject.can_sponsor_skilled_worker_visa?).to be false
+      expect(subject.additional_degree_subject_requirements).to be_nil
+      expect(subject.degree_subject_requirements).to be_nil
+      expect(subject.degree_grade).to eq('not_required')
+    end
+  end
+
   context 'primary course' do
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
