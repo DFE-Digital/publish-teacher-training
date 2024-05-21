@@ -52,7 +52,7 @@ describe Courses::CreationService do
         'level' => 'primary',
         'qualification' => 'qts',
         'start_date' => "September #{recruitment_cycle.year}",
-        'study_mode' => 'full_time',
+        'study_mode' => ['full_time'],
         'sites_ids' => [site.id],
         'study_sites_ids' => [study_site.id],
         'subjects_ids' => [primary_subject.id],
@@ -61,7 +61,7 @@ describe Courses::CreationService do
     end
 
     it 'create the primary course' do
-      valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code').each do |key, value|
+      valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
         expect(subject.public_send(key)).to eq(value)
       end
 
@@ -71,6 +71,7 @@ describe Courses::CreationService do
       expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Primary (SEND)')
+      expect(subject.study_mode).to eq 'full_time'
       expect(subject.errors).to be_empty
     end
 
@@ -80,7 +81,7 @@ describe Courses::CreationService do
       end
 
       it 'create the primary course' do
-        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code').each do |key, value|
+        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
@@ -91,6 +92,7 @@ describe Courses::CreationService do
         expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Primary (SEND)')
+        expect(subject.study_mode).to eq 'full_time'
         expect(subject.errors).to be_empty
       end
     end
@@ -108,7 +110,7 @@ describe Courses::CreationService do
         'level' => 'secondary',
         'qualification' => 'pgce_with_qts',
         'start_date' => "September #{recruitment_cycle.year}",
-        'study_mode' => 'part_time',
+        'study_mode' => ['part_time'],
         'sites_ids' => [site.id],
         'study_sites_ids' => [study_site.id],
         'subjects_ids' => [secondary_subject.id],
@@ -117,7 +119,7 @@ describe Courses::CreationService do
     end
 
     it 'create the secondary course' do
-      valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code').each do |key, value|
+      valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
         expect(subject.send(key)).to eq(value)
       end
 
@@ -127,6 +129,7 @@ describe Courses::CreationService do
       expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Biology')
+      expect(subject.study_mode).to eq 'part_time'
       expect(subject.errors).to be_empty
     end
 
@@ -136,7 +139,7 @@ describe Courses::CreationService do
       end
 
       it 'create the secondary course' do
-        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code').each do |key, value|
+        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
           expect(subject.public_send(key)).to eq(value)
         end
 
@@ -147,6 +150,7 @@ describe Courses::CreationService do
         expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Biology')
+        expect(subject.study_mode).to eq 'part_time'
         expect(subject.errors).to be_empty
       end
     end
@@ -162,7 +166,7 @@ describe Courses::CreationService do
         'level' => 'further_education',
         'qualification' => 'pgde',
         'start_date' => "September #{recruitment_cycle.year}",
-        'study_mode' => 'full_time_or_part_time',
+        'study_mode' => %w[full_time part_time],
         'sites_ids' => [site.id],
         'study_sites_ids' => [study_site.id]
       }
@@ -180,6 +184,7 @@ describe Courses::CreationService do
       expect(subject.english).to eq('not_required')
       expect(subject.maths).to eq('not_required')
       expect(subject.science).to eq('not_required')
+      expect(subject.study_mode).to eq 'full_time_or_part_time'
     end
 
     context 'next_available_course_code is true' do
@@ -188,7 +193,7 @@ describe Courses::CreationService do
       end
 
       it 'create the further_education course' do
-        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'course_code').each do |key, value|
+        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'course_code', 'study_mode').each do |key, value|
           expect(subject.send(key)).to eq(value)
         end
 
@@ -204,6 +209,7 @@ describe Courses::CreationService do
         expect(subject.english).to eq('not_required')
         expect(subject.maths).to eq('not_required')
         expect(subject.science).to eq('not_required')
+        expect(subject.study_mode).to eq 'full_time_or_part_time'
       end
     end
   end

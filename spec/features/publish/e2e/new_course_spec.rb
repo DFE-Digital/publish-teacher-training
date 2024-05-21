@@ -166,7 +166,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   end
 
   def select_study_mode(course_creation_params, next_page:)
-    course_creation_params[:study_mode] = 'full_time'
+    course_creation_params[:study_mode] = ['full_time']
 
     publish_courses_new_study_mode_page.study_mode_fields.full_time.click
     publish_courses_new_study_mode_page.continue.click

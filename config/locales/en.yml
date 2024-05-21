@@ -34,6 +34,9 @@ en:
       apprenticeship_and_visa: "Teaching apprenticeship and %{visa_type} visas updated"
       visa: "%{visa_type} visas updated"
   page_titles:
+    study_mode:
+      edit: Study pattern
+      new: Study pattern
     funding_type:
       edit: "Funding type"
     skilled_worker_visas:
@@ -127,8 +130,6 @@ en:
         label: "Part time"
       full_time:
         label: "Full time"
-      full_time_or_part_time:
-        label: "Full time or part time"
     apprenticeship:
       pg_teaching_apprenticeship:
         label: "Yes"
@@ -292,6 +293,10 @@ en:
     update: "Update user"
   publish:
     providers:
+      study_mode:
+        form:
+          select_all_that_apply: Select all that apply
+          study_pattern: Study pattern
       study_sites:
         index:
           add_study_site: &add_study_site "Add study site"
@@ -832,7 +837,7 @@ en:
         publish/course_study_mode_form:
           attributes:
             study_mode:
-              blank: "Select full time or part time"
+              blank: Select a study pattern
         publish/course_withdrawal_form:
           attributes:
             confirm_course_code:
@@ -975,8 +980,6 @@ en:
         label: "Part time"
       full_time:
         label: "Full time"
-      full_time_or_part_time:
-        label: "Full time or part time"
     can_sponsor_skilled_worker_visas:
       true:
         label: "Yes"

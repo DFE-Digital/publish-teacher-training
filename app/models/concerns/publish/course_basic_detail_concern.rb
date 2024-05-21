@@ -95,6 +95,7 @@ module Publish
                 :language_ids
               ).permit(
                 policy(Course.new).permitted_new_course_attributes,
+                study_mode: [],
                 sites_ids: [],
                 subjects_ids: [],
                 study_sites_ids: []

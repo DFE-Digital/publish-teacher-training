@@ -6,7 +6,7 @@ module Courses
       extend ActiveSupport::Concern
       included do
         def study_mode_options
-          Course.study_modes.keys
+          %w[full_time part_time]
         end
       end
     end

@@ -1,4 +1,4 @@
-<% page_title = "Full time or part time" %>
+<% page_title = t("page_titles.study_mode.edit") %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
 
 <% content_for :before_content do %>
@@ -26,14 +26,18 @@
 
       <%= f.govuk_error_summary %>
 
-      <%= f.govuk_radio_buttons_fieldset(:study_mode, legend: { text: "#{render CaptionText.new(text: course.name_and_code)} Full time or part time?".html_safe, tag: "h1", size: "l" }) do %>
-        <% course.edit_course_options["study_modes"].each_with_index do |study_mode, index| %>
-          <%= f.govuk_radio_button(
-            :study_mode,
-            study_mode,
-            label: { text: t("edit_options.study_modes.#{study_mode}.label") },
-            link_errors: index.zero?
-          ) %>
+      <%= f.govuk_check_boxes_fieldset :study_mode,
+                                       hint: { text: t("publish.providers.study_mode.form.select_all_that_apply") },
+                                       legend: { text: "#{render CaptionText.new(text: course.name_and_code)} #{t('publish.providers.study_mode.form.study_pattern')}".html_safe,
+                                                 tag: "h1",
+                                                 size: "l" } do %>
+        <% course.edit_course_options[:study_modes].each_with_index do |value, index| %>
+          <%= f.govuk_check_box :study_mode,
+                                value,
+                                label: { text: t("edit_options.study_modes.#{value}.label") },
+                                checked: @course_study_mode_form.study_mode_checked?(value),
+                                link_errors: index.zero? %>
+
         <% end %>
       <% end %>
 

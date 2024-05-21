@@ -16,7 +16,7 @@ module Publish
 
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
         if @course_study_mode_form.save!
-          course_updated_message('Full time or part time')
+          course_updated_message I18n.t('publish.providers.study_mode.form.study_pattern')
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,
@@ -33,7 +33,7 @@ module Publish
       def study_mode_params
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?
 
-        params.require(:publish_course_study_mode_form).permit(*CourseStudyModeForm::FIELDS)
+        params.require(:publish_course_study_mode_form).permit(study_mode: [])
       end
 
       def current_step
@@ -41,7 +41,7 @@ module Publish
       end
 
       def errors
-        params.dig(:course, :study_mode) ? {} : { study_mode: ['Select full time or part time'] }
+        params.dig(:course, :study_mode) ? {} : { study_mode: [I18n.t('activemodel.errors.models.publish/course_study_mode_form.attributes.study_mode.blank')] }
       end
     end
   end
