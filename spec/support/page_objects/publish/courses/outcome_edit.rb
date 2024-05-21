@@ -16,6 +16,8 @@ module PageObjects
         element :qts, '#course_qualification_qts'
         element :pgce_with_qts, '#course_qualification_pgce_with_qts'
 
+        element :undergraduate_degree_with_qts, '#course_qualification_undergraduate_degree_with_qts'
+
         element :submit, 'input.govuk-button[type="submit"]'
 
         def error_messages

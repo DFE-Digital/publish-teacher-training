@@ -20,6 +20,8 @@ module Publish
         return render :edit if @errors.present?
 
         if @course.update(course_params)
+          @course.update_default_attributes_for_undergraduate_degree_with_qts
+
           course_updated_message('Qualification')
 
           redirect_to(

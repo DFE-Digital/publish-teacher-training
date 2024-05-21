@@ -827,6 +827,17 @@ class Course < ApplicationRecord
     enrichments.where(status: 'published').order(last_published_timestamp_utc: :desc).first
   end
 
+  def update_default_attributes_for_undergraduate_degree_with_qts
+    return unless undergraduate_degree_with_qts?
+
+    update(
+      study_mode: 'full_time',
+      funding_type: 'apprenticeship',
+      can_sponsor_skilled_worker_visa: false,
+      can_sponsor_student_visa: false
+    )
+  end
+
   private
 
   def add_site!(site:)
