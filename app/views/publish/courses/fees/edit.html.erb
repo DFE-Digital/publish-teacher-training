@@ -1,4 +1,4 @@
-<% page_title = "Course length and fees" %>
+<% page_title = t("publish.providers.course_fees.edit.course_fees") %>
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{@course.name_and_code}", @course_fee_form.errors.any?) %>
 
 <% if params[:copy_from].present? %>
@@ -26,11 +26,9 @@
         <%= page_title %>
       </h1>
 
-      <%= render partial: "publish/courses/course_length_field", locals: { f:, form_object: @course_fee_form } %>
-
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-      <h3 class="govuk-heading-m">Course fees</h3>
+      <h2 class="govuk-heading-m"><%= t("publish.providers.course_fees.edit.course_fees") %></h2>
 
       <%= f.govuk_text_field(:fee_uk_eu,
         form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },

@@ -6,15 +6,10 @@ module Publish
 
     include FundingTypeFormMethods
 
-    FIELDS = %i[
-      course_length
-      course_length_other_length
-      salary_details
-    ].freeze
+    FIELDS = %i[salary_details].freeze
 
     attr_accessor(*FIELDS)
 
-    validates :course_length, presence: true
     validates :salary_details, presence: true
     validates :salary_details, words_count: { maximum: 250, message: :too_long }
 

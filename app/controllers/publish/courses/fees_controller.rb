@@ -26,7 +26,7 @@ module Publish
           if goto_preview?
             redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, course.course_code)
           else
-            course_updated_message('Course length and fees')
+            course_updated_message I18n.t('publish.providers.course_fees.edit.course_fees')
 
             redirect_to publish_provider_recruitment_cycle_course_path(
               provider.provider_code,

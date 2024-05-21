@@ -293,6 +293,28 @@ en:
     update: "Update user"
   publish:
     providers:
+      course_length:
+        edit:
+          course_length: Course length
+          page_title: Course length - %{course_name_and_code}
+          one_year:
+            label: 1 year
+            value: OneYear
+          two_years:
+            label: Up to 2 years
+            value: TwoYears
+          other:
+            label: Other
+            value: Other
+          custom_length:
+            label: Course length
+          update_course_length: Update course length
+      course_salary:
+        edit:
+          course_salary: Course salary
+      course_fees:
+        edit:
+          course_fees: Course fees
       study_mode:
         form:
           select_all_that_apply: Select all that apply
@@ -792,8 +814,6 @@ en:
               too_long: "Reduce the word count for how school placements work"
         publish/course_fee_form:
           attributes:
-            course_length:
-              blank: "Enter a course length"
             fee_uk_eu:
               blank: "Enter fees for UK students"
               not_a_number: "Course fees for UK and EU students must be a valid number"
@@ -810,6 +830,10 @@ en:
               too_long: "Reduce the word count for fee details"
             financial_support:
               too_long: "Reduce the word count for financial support"
+        publish/course_length_form:
+          attributes:
+            course_length:
+              blank: Enter a course length
         publish/course_salary_form:
           attributes:
             course_length:

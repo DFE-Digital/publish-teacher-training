@@ -9,8 +9,6 @@ module Publish
     include FundingTypeFormMethods
 
     FIELDS = %i[
-      course_length
-      course_length_other_length
       fee_uk_eu
       fee_international
       fee_details
@@ -19,7 +17,6 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :course_length, presence: true
     validates :fee_uk_eu, presence: true
     validates :fee_international, presence: true, if: -> { course.can_sponsor_student_visa? }
 
