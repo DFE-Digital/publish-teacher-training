@@ -311,6 +311,8 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     expect(course.additional_degree_subject_requirements).to be_nil
     expect(course.degree_subject_requirements).to be_nil
     expect(course.degree_grade).to eq('not_required')
+    expect(course.enrichments.last).to be_present
+    expect(course.enrichments.last.course_length).to eq('4 years')
   end
 
   def and_i_select_no_send
