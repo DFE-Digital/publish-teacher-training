@@ -42,6 +42,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
     and_i_do_not_see_the_change_link_for_course_length
+
+    given_i_fill_in_all_other_fields_for_the_course
+    when_i_publish_the_course
+    then_the_course_is_published
   end
 
   scenario 'creating a degree awarding course from scitt provider' do
@@ -78,6 +82,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
     and_i_do_not_see_the_change_link_for_course_length
+
+    given_i_fill_in_all_other_fields_for_the_course
+    when_i_publish_the_course
+    then_the_course_is_published
   end
 
   scenario 'when choosing primary course' do
@@ -113,6 +121,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     when_i_click_on_the_course_description_tab
     then_i_do_not_see_the_degree_requirements_row
     and_i_do_not_see_the_change_link_for_course_length
+
+    given_i_fill_in_all_other_fields_for_the_course
+    when_i_publish_the_course
+    then_the_course_is_published
   end
 
   scenario 'do not show teacher degree apprenticeship for further education' do
@@ -368,6 +380,50 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_i_do_not_see_the_degree_requirements_row
     expect(publish_provider_courses_show_page).not_to have_degree
+  end
+
+  def given_i_fill_in_all_other_fields_for_the_course
+    and_i_add_course_details
+    and_i_add_salary_information
+    and_i_add_gcse_requirements
+  end
+
+  def and_i_add_course_details
+    publish_provider_courses_show_page.about_course.find_link(
+      text: 'Change details about this course'
+    ).click
+    publish_course_information_edit_page.about_course.set('Details about the course')
+    publish_course_information_edit_page.interview_process.set('Interview process details')
+    publish_course_information_edit_page.school_placements.set('School placements information')
+    publish_course_information_edit_page.submit.click
+  end
+
+  def and_i_add_salary_information
+    publish_provider_courses_show_page.salary_details.find_link(text: 'Change salary').click
+    publish_course_salary_edit_page.salary_details.set('Some salary details')
+    publish_course_salary_edit_page.submit.click
+  end
+
+  def and_i_add_gcse_requirements
+    publish_provider_courses_show_page.gcse.find_link(
+      text: 'Enter GCSE and equivalency test requirements'
+    ).click
+    publish_courses_gcse_requirements_page.pending_gcse_yes_radio.click
+    publish_courses_gcse_requirements_page.gcse_equivalency_yes_radio.click
+    publish_courses_gcse_requirements_page.english_equivalency.check
+    publish_courses_gcse_requirements_page.maths_equivalency.check
+    publish_courses_gcse_requirements_page.additional_requirements.set('Some Proficiency')
+    publish_courses_gcse_requirements_page.save.click
+  end
+
+  def when_i_publish_the_course
+    publish_provider_courses_show_page.course_button_panel.publish_button.click
+  end
+
+  def then_the_course_is_published
+    expect(publish_provider_courses_show_page.errors.map(&:text)).to eq([])
+    expect(page).to have_content('Your course has been published.')
+    expect(course.content_status).to be :published
   end
 
   def provider
