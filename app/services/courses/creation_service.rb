@@ -39,6 +39,8 @@ module Courses
         course.can_sponsor_student_visa = false
         course.can_sponsor_skilled_worker_visa = false
         course.degree_grade = 'not_required'
+        course_enrichment = course.enrichments.find_or_initialize_draft
+        course_enrichment.course_length = '4 years'
       end
 
       AssignSubjectsService.call(course:, subject_ids:)
