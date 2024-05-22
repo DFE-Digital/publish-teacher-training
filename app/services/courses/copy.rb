@@ -22,7 +22,6 @@ module Courses
     ].freeze
 
     FEES_FIELDS = [
-      ['Course length', 'course_length'],
       ['Fee for UK students', 'fee_uk_eu'],
       ['Fee for international students', 'fee_international'],
       ['Fee details', 'fee_details'],
@@ -30,7 +29,6 @@ module Courses
     ].freeze
 
     SALARY_FIELDS = [
-      ['Course length', 'course_length'],
       ['Salary details', 'salary_details']
     ].freeze
 
