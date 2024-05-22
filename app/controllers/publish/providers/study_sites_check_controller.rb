@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class StudySitesCheckController < PublishController
-      before_action :pundit
+      before_action :authorise_with_pundit
       before_action :new_form
 
       def show; end
@@ -19,7 +19,7 @@ module Publish
 
       private
 
-      def pundit
+      def authorise_with_pundit
         authorize provider, :show?
       end
 
