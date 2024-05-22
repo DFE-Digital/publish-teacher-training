@@ -808,7 +808,7 @@ class Course < ApplicationRecord
   end
 
   def teacher_degree_apprenticeship?
-    qualification && qualification.include?('tda')
+    qualification&.include?('tda')
   end
 
   private

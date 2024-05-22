@@ -21,7 +21,7 @@ module Find
 
       def university_degree?
         ActiveModel::Type::Boolean.new.cast(params['university_degree_status'])
-      end 
+      end
 
       def other_checked?
         checked?('pgce pgde') || checked?('pgce') || checked?('pgde')

@@ -23,11 +23,11 @@ module Find
           else
 
             redirect_to find_results_path(form_params.merge(
-                                          subjects: sanitised_subject_codes,
-                                          has_vacancies: default_vacancies,
-                                          applications_open: default_applications_open,
-                                          can_sponsor_visa: form_params[:visa_status]
-                                        ))
+                                            subjects: sanitised_subject_codes,
+                                            has_vacancies: default_vacancies,
+                                            applications_open: default_applications_open,
+                                            can_sponsor_visa: form_params[:visa_status]
+                                          ))
           end
         else
           render :new

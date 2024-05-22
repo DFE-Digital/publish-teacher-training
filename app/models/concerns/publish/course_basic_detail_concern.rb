@@ -228,9 +228,9 @@ module Publish
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
         if course.teacher_degree_apprenticeship?
-            new_publish_provider_recruitment_cycle_courses_schools_path(path_params.merge('course[funding_type]' => 'apprenticeship', 'course[study_mode]' => 'full_time'))
+          new_publish_provider_recruitment_cycle_courses_schools_path(path_params.merge('course[funding_type]' => 'apprenticeship', 'course[study_mode]' => 'full_time'))
         else
-            new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
+          new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
         end
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)

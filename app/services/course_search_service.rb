@@ -30,11 +30,11 @@ class CourseSearchService
     scope = scope.changed_since(filter[:updated_since]) if updated_since_filter?
     scope = scope.can_sponsor_visa if can_sponsor_visa_filter?
     scope = scope.engineers_teach_physics if engineers_teach_physics_filter?
-    if display_tda_courses?
-      scope = scope.tda_with_qts
-    else
-      scope = scope.not_tda_with_qts
-    end
+    scope = if display_tda_courses?
+              scope.tda_with_qts
+            else
+              scope.not_tda_with_qts
+            end
 
     # The 'where' scope will remove duplicates
     # An outer query is required in the event the provider name is present.
@@ -204,7 +204,7 @@ class CourseSearchService
   def qualifications
     return [] if filter[:qualification].blank?
 
-    return ['tda', 'tda_with_qts'] if filter[:tda_filter].present?
+    return %w[tda tda_with_qts] if filter[:tda_filter].present?
 
     filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
     filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)

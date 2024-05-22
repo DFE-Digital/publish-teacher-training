@@ -25,9 +25,9 @@ module Publish
     end
 
     def fields_to_ignore_before_save
-      if course.teacher_degree_apprenticeship?
-        %i[course_length course_length_other_length]
-      end
+      return unless course.teacher_degree_apprenticeship?
+
+      %i[course_length course_length_other_length]
     end
   end
 end
