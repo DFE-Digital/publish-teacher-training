@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < PublishController
-      before_action :pundit
+      before_action :authorise_with_pundit
       before_action :site, only: %i[show delete]
 
       def index
@@ -56,7 +56,7 @@ module Publish
 
       private
 
-      def pundit
+      def authorise_with_pundit
         authorize provider, :show?
       end
 
