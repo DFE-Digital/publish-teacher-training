@@ -416,7 +416,7 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.23.0)
+    minitest (5.23.1)
     mock_redis (0.44.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -489,7 +489,7 @@ GEM
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    propshaft (0.8.0)
+    propshaft (0.9.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
