@@ -1,0 +1,39 @@
+<% content_for :page_title,
+               title_with_error_prefix(
+                 t("publish.providers.course_length.edit.page_title", course_name_and_code: @course.name_and_code),
+                 @course_length_form.errors.any?
+               ) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+          model: @course_length_form,
+          url: length_publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                     @course.recruitment_cycle_year,
+                                                                     @course.course_code),
+          data: { qa: "enrichment-form", module: "form-check-leave" },
+          method: :patch,
+          local: true
+        ) do |f| %>
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(
+              back_link_path(
+                param_form_key: f.object_name.to_sym,
+                params:,
+                provider_code: @provider.provider_code,
+                recruitment_cycle_year: @course.recruitment_cycle_year,
+                course_code: @course.course_code
+              )
+            ) %>
+      <% end %>
+
+      <%= f.govuk_error_summary %>
+
+      <%= render partial: "publish/courses/course_length_field", locals: { f:, form_object: @course_length_form } %>
+
+      <%= f.govuk_submit t("publish.providers.course_length.edit.update_course_length") %>
+
+    <% end %>
+  </div>
+</div>

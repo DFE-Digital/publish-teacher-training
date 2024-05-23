@@ -434,10 +434,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_a_valid_course_fees
-    choose '1 year'
     fill_in 'Fee for UK students', with: '100'
 
-    click_link_or_button 'Update course length and fees'
+    click_link_or_button 'Update course fees'
   end
 
   def provider

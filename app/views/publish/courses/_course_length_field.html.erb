@@ -1,19 +1,24 @@
-<%= f.govuk_radio_buttons_fieldset(:course_length,
-  legend: { text: "Course length", size: "m" },
+<%= f.govuk_radio_buttons_fieldset(
+  :course_length,
+  legend: nil,
   form_group: {
     id: form_object.errors.key?(:course_length) ? "course_length-error" : "course-length"
-  }) do %>
-    <%= f.govuk_radio_button(:course_length, "OneYear",
-      checked: @copied_fields_values&.value?("OneYear") || @course.course_length == "OneYear",
+  }
+) do %>
+  <legend>
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @course.name_and_code %></span>
+      <%= t("publish.providers.course_length.edit.course_length") %>
+    </h1>
+  </legend>
+    <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.one_year.value"),
       data: { qa: "course_course_length_oneyear" },
-      label: { text: "1 year" },
+      label: { text: t("publish.providers.course_length.edit.one_year.label") },
       link_errors: true) %>
 
-    <%= f.govuk_radio_button(:course_length, "TwoYears",
-      checked: @copied_fields_values&.value?("TwoYears") || @course.course_length == "TwoYears",
-      label: { text: "Up to 2 years" },
+    <%= f.govuk_radio_button(:course_length, t("publish.providers.course_length.edit.two_years.value"),
+      label: { text: t("publish.providers.course_length.edit.two_years.label") },
       data: { qa: "course_course_length_twoyears" }) %>
 
-    <%= render partial: "publish/courses/other_course_length_field", locals: { f:, course_object: @source_course ? source_course : @course } %>
-
+    <%= render partial: "publish/courses/other_course_length_field", locals: { f:, course_object: @course } %>
 <% end %>

@@ -10,13 +10,6 @@ module PageObjects
 
       sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
-      section :course_length, '#course-length' do
-        element :one_year, '#publish-course-fee-form-course-length-oneyear-field'
-        element :upto_two_years, '#publish-course-fee-form-course-length-twoyears-field'
-        element :other, '#publish-course-fee-form-course-length-other-field'
-        element :other_text, '#publish-course-fee-form-course-length-other-length-field'
-      end
-
       element :copy_content_warning, '[data-qa="copy-course-warning"]'
       element :uk_fee, '#publish-course-fee-form-fee-uk-eu-field'
       element :international_fee, '#publish-course-fee-form-fee-international-field'
