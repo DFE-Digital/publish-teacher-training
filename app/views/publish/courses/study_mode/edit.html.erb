@@ -41,6 +41,8 @@
         <% end %>
       <% end %>
 
+      <%= f.hidden_field :previous_tda_course, value: params[:previous_tda_course] %>
+
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
 

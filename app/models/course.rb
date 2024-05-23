@@ -535,6 +535,14 @@ class Course < ApplicationRecord
     funding_type == 'fee'
   end
 
+  def visa_type
+    is_fee_based? ? :student : :skilled_worker
+  end
+
+  def student_visa?
+    visa_type == :student
+  end
+
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
   def gcse_subjects_required
     case level

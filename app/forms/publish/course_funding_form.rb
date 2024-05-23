@@ -8,6 +8,7 @@ module Publish
       funding_type
       can_sponsor_skilled_worker_visa
       can_sponsor_student_visa
+      previous_tda_course
     ].freeze
 
     attr_accessor(*FIELDS)
@@ -50,6 +51,10 @@ module Publish
 
     def skilled_worker_visa?
       visa_type == :skilled_worker
+    end
+
+    def fields_to_ignore_before_save
+      super + [:previous_tda_course]
     end
 
     private
