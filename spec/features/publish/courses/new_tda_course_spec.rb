@@ -165,6 +165,28 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     then_i_am_on_the_check_your_answers_page
   end
 
+  scenario 'creating a tda course then changing it to a non tda fee paying course' do
+    given_i_am_on_the_check_answers_page_of_a_new_tda_course
+    when_i_visit_the_course_outcome_page
+    and_i_choose_qts
+    and_i_choose_fee
+    and_i_choose_part_time
+    and_i_choose_to_sponsor_a_student_visa
+    when_i_click_on_add_a_course
+    then_i_see_the_correct_attributes_in_the_database_for_fee_paying
+  end
+
+  scenario 'creating a tda course then changing it to a non tda salaried course' do
+    given_i_am_on_the_check_answers_page_of_a_new_tda_course
+    when_i_visit_the_course_outcome_page
+    and_i_choose_qts
+    and_i_choose_salaried
+    and_i_choose_part_time
+    and_i_choose_to_sponsor_a_skilled_worker_visa
+    when_i_click_on_add_a_course
+    then_i_see_the_correct_attributes_in_the_database_for_salaried
+  end
+
   def given_i_am_authenticated_as_a_school_direct_provider_user
     recruitment_cycle = create(:recruitment_cycle, year: 2025)
     @user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
@@ -493,5 +515,77 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     course.decorate.name_and_code
   end
 
+  def given_i_am_on_the_check_answers_page_of_a_new_tda_course
+    given_i_am_authenticated_as_a_school_direct_provider_user
+    and_the_tda_feature_flag_is_active
+    and_i_visit_the_courses_page
+    and_i_click_on_add_course
+    and_i_choose_a_secondary_course
+    and_i_select_a_subject
+    and_i_choose_an_age_range
+    and_i_choose_a_degree_awarding_qualification
+    and_i_choose_the_school
+    and_i_choose_the_study_site
+    and_i_choose_the_applications_open_date
+    and_i_choose_the_first_start_date
+    then_i_am_on_the_check_your_answers_page
+  end
+
+  def when_i_visit_the_course_outcome_page
+    publish_course_confirmation_page.details.outcome.change_link.click
+  end
+
+  def and_i_choose_qts
+    publish_courses_outcome_edit_page.qts.choose
+    and_i_click_continue
+  end
+
+  def and_i_choose_fee
+    choose 'Fee - no salary'
+    and_i_click_continue
+  end
+
+  def and_i_choose_salaried
+    choose 'Salary'
+    and_i_click_continue
+  end
+
+  def and_i_choose_part_time
+    uncheck 'Full time'
+    check 'Part time'
+    and_i_click_continue
+  end
+
+  def and_i_choose_to_sponsor_a_student_visa
+    choose 'Yes'
+    and_i_click_continue
+  end
+
+  def and_i_choose_to_sponsor_a_skilled_worker_visa
+    choose('course_can_sponsor_skilled_worker_visa_true')
+    and_i_click_continue
+  end
+
+  def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
+    course.reload
+    expect(course.study_mode == 'part_time').to be(true)
+    expect(course.funding_type == 'fee').to be(true)
+    expect(course.can_sponsor_skilled_worker_visa == false).to be(true)
+    expect(course.can_sponsor_student_visa == true).to be(true)
+  end
+
+  def then_i_see_the_correct_attributes_in_the_database_for_salaried
+    course.reload
+    expect(course.study_mode == 'part_time').to be(true)
+    expect(course.funding_type == 'salary').to be(true)
+    expect(course.can_sponsor_skilled_worker_visa == true).to be(true)
+    expect(course.can_sponsor_student_visa == false).to be(true)
+  end
+
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
+  alias_method :and_i_visit_the_courses_page, :when_i_visit_the_courses_page
+  alias_method :and_i_choose_a_degree_awarding_qualification, :when_i_choose_a_degree_awarding_qualification
+  alias_method :and_i_choose_the_school, :when_i_choose_the_school
+  alias_method :and_i_choose_the_applications_open_date, :when_i_choose_the_applications_open_date
+  alias_method :and_i_am_on_the_check_your_answers_page, :then_i_am_on_the_check_your_answers_page
 end
