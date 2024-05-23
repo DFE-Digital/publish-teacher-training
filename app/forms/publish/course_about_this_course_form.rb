@@ -1,22 +1,17 @@
 # frozen_string_literal: true
 
 module Publish
-  class CourseInformationForm < BaseProviderForm
+  class CourseAboutThisCourseForm < BaseProviderForm
     alias course_enrichment model
 
-    FIELDS = %i[
-      interview_process
-      how_school_placements_work
-    ].freeze
+    FIELDS = %i[about_course].freeze
 
     attr_accessor(*FIELDS)
 
     delegate :recruitment_cycle_year, :provider_code, :name, to: :course
 
-    validates :interview_process, words_count: { maximum: 250, message: :too_long }
-
-    validates :how_school_placements_work, presence: true
-    validates :how_school_placements_work, words_count: { maximum: 350, message: :too_long }
+    validates :about_course, presence: true
+    validates :about_course, words_count: { maximum: 400, message: :too_long }
 
     def save!
       if valid?

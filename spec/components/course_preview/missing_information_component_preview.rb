@@ -2,7 +2,7 @@
 
 module CoursePreview
   class MissingInformationComponentPreview < ViewComponent::Preview
-    %i[about_course
+    %i[about_this_course
        degree
        fee_uk_eu
        gcse

@@ -15,8 +15,11 @@ module Courses
       ['Degree subject requirements', 'degree_subject_requirements']
     ].freeze
 
+    ABOUT_THIS_COURSE_FIELDS = [
+      ['About this course', 'about_course']
+    ].freeze
+
     ABOUT_FIELDS = [
-      ['About the course', 'about_course'],
       ['Interview process', 'interview_process'],
       ['How school placements work', 'how_school_placements_work']
     ].freeze

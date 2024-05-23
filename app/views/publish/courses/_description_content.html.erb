@@ -7,7 +7,7 @@
     "About this course",
     value_provided?(course.about_course),
     %w[about_course],
-    action_path: course.is_withdrawn? ? nil : about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+    action_path: course.is_withdrawn? ? nil : about_this_course_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: "details about this course"
   ) %>
 
@@ -17,7 +17,7 @@
     "Interview process",
     value_provided?(course.interview_process),
     %w[interview_process],
-    action_path: course.is_withdrawn? ? nil : "#{about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#interview-process",
+    action_path: course.is_withdrawn? ? nil : about_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: "details about the interview process"
   ) %>
 

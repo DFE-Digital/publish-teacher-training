@@ -11,7 +11,6 @@ module PageObjects
       sections :errors, Sections::ErrorLink, '.govuk-error-summary__list li>a'
 
       element :copy_content_warning, '[data-qa="copy-course-warning"]'
-      element :about_course, '#publish-course-information-form-about-course-field'
       element :interview_process, '#publish-course-information-form-interview-process-field'
       element :school_placements, '#publish-course-information-form-how-school-placements-work-field'
       element :use_content, '[data-qa="course__use_content"]'

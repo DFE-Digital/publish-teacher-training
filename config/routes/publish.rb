@@ -159,6 +159,8 @@ namespace :publish, as: :publish do
         get '/age_range', on: :member, to: 'courses/age_range#edit'
         put '/age_range', on: :member, to: 'courses/age_range#update'
 
+        get '/about_this_course', on: :member, to: 'courses/about_this_course#edit'
+        patch '/about_this_course', on: :member, to: 'courses/about_this_course#update'
         get '/about', on: :member, to: 'courses/course_information#edit'
         patch '/about', on: :member, to: 'courses/course_information#update'
         get '/requirements', on: :member, to: 'courses/requirements#edit'

@@ -63,7 +63,6 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
   end
 
   def then_i_see_the_current_course_information
-    expect(page).to have_content(course.enrichments.first.about_course)
     expect(page).to have_content(course.enrichments.first.interview_process)
     expect(page).to have_content(course.enrichments.first.how_school_placements_work)
   end
@@ -94,7 +93,6 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
   def and_i_can_see_the_new_content
     copied_course_code = @course_to_copy.match(/\((.*?)\)/)[1]
     @copied_course = Course.find_by(course_code: copied_course_code)
-    expect(page).to have_content(@copied_course.enrichments.first.about_course)
     expect(page).to have_content(@copied_course.enrichments.first.interview_process)
     expect(page).to have_content(@copied_course.enrichments.first.how_school_placements_work)
   end

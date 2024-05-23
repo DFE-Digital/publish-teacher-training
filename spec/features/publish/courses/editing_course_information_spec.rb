@@ -31,14 +31,12 @@ feature 'Editing course information', { can_edit_current_and_next_cycles: false 
 
       [
         'Your changes are not yet saved',
-        'About the course',
         'Interview process',
         'How school placements work'
       ].each do |name|
         expect(publish_course_information_edit_page.copy_content_warning).to have_content(name)
       end
 
-      expect(publish_course_information_edit_page.about_course.value).to eq(course2_enrichment.about_course)
       expect(publish_course_information_edit_page.interview_process.value).to eq(course2_enrichment.interview_process)
       expect(publish_course_information_edit_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
     end
@@ -51,21 +49,15 @@ feature 'Editing course information', { can_edit_current_and_next_cycles: false 
 
       [
         'Your changes are not yet saved',
-        'About the course'
+        'How school placements work'
       ].each do |name|
         expect(publish_course_information_edit_page.copy_content_warning).to have_content(name)
       end
 
-      [
-        'Interview process',
-        'How school placements work'
-      ].each do |name|
-        expect(publish_course_information_edit_page.copy_content_warning).to have_no_content(name)
-      end
+      expect(publish_course_information_edit_page.copy_content_warning).to have_no_content('Interview process')
 
-      expect(publish_course_information_edit_page.about_course.value).to eq(course3_enrichment.about_course)
       expect(publish_course_information_edit_page.interview_process.value).to eq(course2_enrichment.interview_process)
-      expect(publish_course_information_edit_page.school_placements.value).to eq(course2_enrichment.how_school_placements_work)
+      expect(publish_course_information_edit_page.school_placements.value).to eq(course3_enrichment.how_school_placements_work)
     end
   end
 
@@ -93,17 +85,15 @@ feature 'Editing course information', { can_edit_current_and_next_cycles: false 
   end
 
   def and_i_set_information_about_the_course
-    @about_course = 'This is a new description'
     @interview_process = 'This is a new interview process'
     @school_placements = 'This is a new school placements'
 
-    publish_course_information_edit_page.about_course.set(@about_course)
     publish_course_information_edit_page.interview_process.set(@interview_process)
     publish_course_information_edit_page.school_placements.set(@school_placements)
   end
 
   def and_i_submit_with_invalid_data
-    publish_course_information_edit_page.about_course.set(nil)
+    publish_course_information_edit_page.school_placements.set(nil)
     and_i_submit
   end
 
@@ -118,14 +108,13 @@ feature 'Editing course information', { can_edit_current_and_next_cycles: false 
   def and_the_course_information_is_updated
     enrichment = course.reload.enrichments.find_or_initialize_draft
 
-    expect(enrichment.about_course).to eq(@about_course)
     expect(enrichment.interview_process).to eq(@interview_process)
     expect(enrichment.how_school_placements_work).to eq(@school_placements)
   end
 
   def then_i_should_see_an_error_message
     expect(publish_course_information_edit_page.error_messages).to include(
-      I18n.t('activemodel.errors.models.publish/course_information_form.attributes.about_course.blank')
+      'Enter details about school placements'
     )
   end
 

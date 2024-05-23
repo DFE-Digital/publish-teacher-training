@@ -16,8 +16,8 @@ module CoursePreview
 
       let(:hrefs) do
         {
-          about_course:
-       about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
+          about_this_course:
+            about_this_course_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           degree:
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           fee_uk_eu:
@@ -44,7 +44,7 @@ module CoursePreview
         end
       end
 
-      include_examples 'course with missing information', :about_course, 'Enter course summary'
+      include_examples 'course with missing information', :about_this_course, 'Enter course summary'
       include_examples 'course with missing information', :degree, 'Enter degree requirements'
       include_examples 'course with missing information', :fee_uk_eu, 'Enter details about fees and financial support'
       include_examples 'course with missing information', :gcse, 'Enter GCSE and equivalency test requirements'

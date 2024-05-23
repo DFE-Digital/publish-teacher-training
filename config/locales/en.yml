@@ -227,7 +227,7 @@ en:
         bursary: "Bursaries of %{amount} available"
     course_preview:
       missing_information:
-        about_course:
+        about_this_course:
           text: "Enter course summary"
         degree:
           text: "Enter degree requirements"
@@ -315,6 +315,34 @@ en:
       course_fees:
         edit:
           course_fees: Course fees
+      interview_process:
+        edit:
+          interview_process: Interview process
+
+      about_course:
+        edit:
+          about_this_course: About this course
+          page_title: About this course - %{course_name_and_code}
+          submit_button: Update about this course
+          description: >
+            The course summary appears at the top of the page on Find. Use it to show how this course is different from
+            others, this helps candidates understand whether it is right for them.
+          candidates_say: "Candidates say the most important information is:"
+          candidate_say_li_1: how and where they will spend their time
+          candidate_say_li_2: how the course is structured, for example which specific modules or areas are taught
+          candidate_say_li_3: how they will be supported, for example tutors and mentoring
+          candidate_say_li_4: the qualification and experience they will have at the end of the course.
+          remember_to: "Remember to:"
+          remember_to_li_1: keep it brief and to the point, people struggle with long blocks of writing online
+          remember_to_li_2: use bullet points, headings and paragraphs to make your writing easy to read
+          remember_to_li_3: spell out acronyms the first time you use them, for example, ITT, NQT, SCITT
+          remember_to_li_4: >
+            link to your organisation's website for people who want more detail about who you are and what you do.
+          view_examples: View examples of great course summaries
+          changes_not_saved: Your changes are not yet saved
+          copied_fields_from: We have copied this field from %{name_and_code}.
+          please_check_changes: Please check it and make your changes before saving.
+
       study_mode:
         form:
           select_all_that_apply: Select all that apply
@@ -564,7 +592,7 @@ en:
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
             about_course:
-              blank: "^Enter details about this course"
+              blank: "^Enter information about this course"
             how_school_placements_work:
               blank: "^Enter details about school placements"
             required_qualifications:
@@ -802,11 +830,13 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
-        publish/course_information_form:
+        publish/course_about_this_course_form:
           attributes:
             about_course:
-              blank: "Enter details about this course"
-              too_long: "Reduce the word count for about course"
+              blank: Enter information about this course
+              too_long: Reduce the word count for about course
+        publish/course_information_form:
+          attributes:
             interview_process:
               too_long: "Reduce the word count for interview process"
             how_school_placements_work:
