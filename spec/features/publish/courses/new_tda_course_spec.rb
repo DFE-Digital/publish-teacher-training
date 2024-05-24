@@ -445,11 +445,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     fill_in 'About this course', with: 'Details about this course'
     click_on 'Update about this course'
 
-    publish_provider_courses_show_page.interview_process.find_link(
-      text: 'Change details about the interview process'
+    publish_provider_courses_show_page.how_school_placements_work.find_link(
+      text: 'Change details about how school placements work'
     ).click
 
-    publish_course_information_edit_page.interview_process.set('Interview process details')
     publish_course_information_edit_page.school_placements.set('School placements information')
     publish_course_information_edit_page.submit.click
   end
