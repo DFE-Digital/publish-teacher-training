@@ -16,6 +16,8 @@
 
       <%= render "publish/courses/new_fields_holder", form:, except_keys: [:qualification] do |fields| %>
         <%= render "form_fields", form: fields, course_name_and_code: nil %>
+
+        <%= form.hidden_field :current_qualification, value: params[:course][:qualification] %>
       <% end %>
     <% end %>
 

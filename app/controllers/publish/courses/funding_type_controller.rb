@@ -10,10 +10,8 @@ module Publish
         @errors = errors
         if @errors.any?
           render :new
-        elsif params[:goto_visa]
-          redirect_to visa_sponsorship_path
         else
-          redirect_to next_step
+          handle_redirect
         end
       end
 
@@ -118,6 +116,28 @@ module Publish
 
       def section_key
         'Funding type'
+      end
+
+      def handle_redirect
+        if goto_visa_path?
+          redirect_to visa_sponsorship_path
+        elsif previous_tda_course_path?
+          redirect_to previously_defaulted_attributes
+        else
+          redirect_to next_step
+        end
+      end
+
+      def goto_visa_path?
+        params[:goto_visa] == 'true' && params[:course][:previous_tda_course] != 'true'
+      end
+
+      def previous_tda_course_path?
+        params[:course][:previous_tda_course] == 'true'
+      end
+
+      def previously_defaulted_attributes
+        new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params.merge(previous_tda_course: 'true'))
       end
     end
   end

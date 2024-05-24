@@ -5,6 +5,17 @@ module Publish
     class OutcomeController < PublishController
       include CourseBasicDetailConcern
 
+      def continue
+        authorize(@provider, :can_create_course?)
+        @errors = errors
+
+        if @errors.any?
+          render :new
+        else
+          handle_redirect
+        end
+      end
+
       def new
         super
       end
@@ -99,6 +110,18 @@ module Publish
           @course.recruitment_cycle_year,
           @course.course_code
         )
+      end
+
+      def handle_redirect
+        if previously_chosen_tda?
+          redirect_to new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params.merge(previous_tda_course: true))
+        else
+          redirect_to next_step
+        end
+      end
+
+      def previously_chosen_tda?
+        params[:current_qualification] == 'undergraduate_degree_with_qts' && params[:goto_confirmation] == 'true'
       end
     end
   end
