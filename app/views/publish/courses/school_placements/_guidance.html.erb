@@ -1,0 +1,27 @@
+<%= t("publish.providers.school_placements.edit.guidance_text_html") %>
+
+<% if show_universities_guidance? %>
+  <details class="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">
+        <%= t("publish.providers.school_placements.edit.summary_text") %>
+      </span>
+    </summary>
+    <div class="govuk-!-margin-top-4" />
+    <%= render Find::Utility::AdviceComponent::View.new(title: t("publish.providers.school_placements.edit.where_you_will_train")) do %>
+      <%= t("publish.providers.school_placements.edit.university_guidance_html") %>
+    <% end %>
+  </details>
+<% elsif show_scitt_guidance? %>
+  <details class="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">
+        <%= t("publish.providers.school_placements.edit.summary_text") %>
+      </span>
+    </summary>
+    <div class="govuk-!-margin-top-4" />
+    <%= render Find::Utility::AdviceComponent::View.new(title: t("publish.providers.school_placements.edit.where_you_will_train")) do %>
+      <%= t("publish.providers.school_placements.edit.scitt_guidance_html") %>
+    <% end %>
+  </details>
+<% end %>

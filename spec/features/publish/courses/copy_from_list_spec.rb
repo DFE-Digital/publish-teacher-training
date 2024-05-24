@@ -8,14 +8,14 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
       given_i_am_authenticated_as_an_accredited_provider_user
       and_there_is_an_accredited_course_i_want_to_edit
 
-      when_i_visit_the_publish_course_information_edit_page
+      when_i_visit_the_how_school_placements_work_page
       then_i_see_the_current_course_information
     end
 
     include_context 'copy_courses'
 
     scenario 'the course does not display its own name in the copy list' do
-      when_i_visit_the_publish_course_information_edit_page
+      when_i_visit_the_how_school_placements_work_page
       then_the_correct_courses_are_available_to_select
 
       when_i_select_a_course_to_copy
@@ -29,13 +29,13 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
     before do
       given_i_am_authenticated_as_a_provider_user
       and_there_is_a_course_i_want_to_edit
-      when_i_visit_the_publish_course_information_edit_page
+      when_i_visit_the_how_school_placements_work_page
     end
 
     include_context 'copy_courses'
 
     scenario 'the course does not display its own name in the copy list' do
-      when_i_visit_the_publish_course_information_edit_page
+      when_i_visit_the_how_school_placements_work_page
       then_the_correct_courses_are_available_to_select
     end
   end
@@ -56,9 +56,11 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
     given_a_course_exists(:with_accrediting_provider, enrichments: [build(:course_enrichment, :published)])
   end
 
-  def when_i_visit_the_publish_course_information_edit_page
-    publish_course_information_edit_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
+  def when_i_visit_the_how_school_placements_work_page
+    visit school_placements_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      provider.recruitment_cycle_year,
+      course.course_code
     )
   end
 
@@ -86,7 +88,7 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
 
   def then_i_see_an_alert_that_the_changes_are_not_saved_yet
     expect(page).to have_content 'Your changes are not yet saved'
-    expect(page).to have_content "We’ve copied these fields from #{@course_to_copy}"
+    expect(page).to have_content "We have copied this field from #{@course_to_copy}"
   end
 
   def and_i_can_see_the_new_content

@@ -96,9 +96,13 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_make_some_new_changes
-    publish_course_information_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code)
-    publish_course_information_edit_page.school_placements.set('some new information about school placements')
-    publish_course_information_edit_page.submit.click
+    visit school_placements_publish_provider_recruitment_cycle_course_path(
+      provider.provider_code,
+      course.recruitment_cycle_year,
+      course.course_code
+    )
+    fill_in 'How school placements work', with: 'some new information about school placements'
+    click_on 'Update how school placements work'
   end
 
   def then_i_should_see_the_unpublished_changes_message

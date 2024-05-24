@@ -333,6 +333,42 @@ en:
               <li>who will be interviewing them</li>
               <li>any tests needed - if so, how they can prepare</li>
             </ul>
+      school_placements:
+        edit:
+          how_school_placements_work: How school placements work
+          page_title: How school placements work - %{course_name_and_code}
+          submit_button: Update how school placements work
+          guidance_text_html:
+            <p class="govuk-body">Give candidates information about the schools they will be training in</p>
+            <p class="govuk-body">Tell them:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>how many placements they will have</li>
+              <li>how much time they will spend in each school</li>
+              <li>if mentors are available within the schools</li>
+            </ul>
+          where_you_will_train: Where you will train
+          summary_text: See what we include in this section
+          university_guidance_html:
+            <p class="govuk-body">
+              You will be placed in schools for most of your course. Your school placements will be within commuting
+              distance.
+            </p>
+            <p class="govuk-body">
+              You cannot pick which schools you want to be in, but your university will try to take your journey time
+              into consideration.
+            </p>
+            <p class="govuk-body">
+              Universities can work with over 100 potential placement schools. Most will be within 10 miles of the
+              university, but sometimes they can cover a wider area, especially outside of cities.
+            </p>
+          scitt_guidance_html:
+            <p class="govuk-body">
+              You will be placed in different schools during your training. You cannott pick which schools you want to
+              be in, but your training provider will place you in schools you can travel to.
+            </p>
+          changes_not_saved: Your changes are not yet saved
+          copied_fields_from: We have copied this field from %{name_and_code}.
+          please_check_changes: Please check it and make your changes before saving.
       about_course:
         edit:
           about_this_course: About this course
@@ -612,7 +648,7 @@ en:
             about_course:
               blank: "^Enter information about this course"
             how_school_placements_work:
-              blank: "^Enter details about school placements"
+              blank: "^Enter details about how school placements work"
             required_qualifications:
               blank: "^Enter details about the qualifications needed"
             course_length:
@@ -857,13 +893,11 @@ en:
             about_course:
               blank: Enter information about this course
               too_long: Reduce the word count for about this course
-        publish/course_information_form:
+        publish/course_school_placements_form:
           attributes:
-            interview_process:
-              too_long: "Reduce the word count for interview process"
             how_school_placements_work:
-              blank: "Enter details about school placements"
-              too_long: "Reduce the word count for how school placements work"
+              blank: Enter details about how school placements work
+              too_long: Reduce the word count for how school placements work
         publish/course_fee_form:
           attributes:
             fee_uk_eu:

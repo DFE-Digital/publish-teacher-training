@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class CourseInformationForm < BaseProviderForm
+  class CourseSchoolPlacementsForm < BaseProviderForm
     alias course_enrichment model
 
     FIELDS = %i[how_school_placements_work].freeze
