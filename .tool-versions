@@ -1,4 +1,4 @@
-ruby      3.2.3
+ruby      3.2.4
 bundler   2.3.20
 kubelogin 0.1.0
 kubectl   1
