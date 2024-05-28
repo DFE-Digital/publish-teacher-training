@@ -6,7 +6,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.52"
+      version = "3.104.2"
     }
     statuscake = {
       source  = "StatusCakeDev/statuscake"
