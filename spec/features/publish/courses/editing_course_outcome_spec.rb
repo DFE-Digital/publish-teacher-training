@@ -11,6 +11,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     and_i_submit
     then_i_should_see_a_success_message
     and_the_course_outcome_is_updated
+    and_i_should_be_on_the_course_details_page
   end
 
   context 'a course offering QTS' do
@@ -219,6 +220,10 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     expect(course.funding_type == 'salary').to be(true)
     expect(course.can_sponsor_skilled_worker_visa == true).to be(true)
     expect(course.can_sponsor_student_visa == false).to be(true)
+  end
+
+  def and_i_should_be_on_the_course_details_page
+    expect(page).to have_current_path(details_publish_provider_recruitment_cycle_course_path(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code), ignore_query: true)
   end
 
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa

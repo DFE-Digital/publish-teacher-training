@@ -56,7 +56,13 @@ module Publish
         elsif undergraduate_to_other_qualification?
           redirect_to funding_type_with_previous_course_path
         else
-          redirect_to funding_type_path
+          redirect_to(
+            details_publish_provider_recruitment_cycle_course_path(
+              @course.provider_code,
+              @course.recruitment_cycle_year,
+              @course.course_code
+            )
+          )
           course_updated_message('Qualification')
         end
       end
