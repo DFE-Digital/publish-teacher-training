@@ -279,9 +279,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_the_back_link_points_to_outcome_page
-    and_i_click_back
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_outcome_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
-    and_i_click_continue
+    expect(publish_courses_new_outcome_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_outcome_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025))
   end
 
   def when_i_choose_the_school
@@ -290,9 +288,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def then_the_back_link_points_to_the_school_page
-    and_i_click_back
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_schools_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
-    and_i_click_continue
+    expect(publish_courses_new_study_sites_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_schools_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025))
   end
 
   def and_i_choose_the_study_site
@@ -301,9 +297,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_the_back_link_points_to_the_study_site_page
-    and_i_click_back
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_study_sites_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
-    and_i_click_continue
+    expect(publish_courses_new_applications_open_page.back_link[:href]).to include(back_publish_provider_recruitment_cycle_courses_study_sites_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025))
   end
 
   def then_i_am_on_the_add_applications_open_date_page
@@ -311,9 +305,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_the_back_link_points_to_applications_open_date_page
-    and_i_click_back
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
-    and_i_click_continue
+    expect(publish_courses_new_start_date_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_applications_open_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025))
   end
 
   def when_i_choose_the_applications_open_date
@@ -327,9 +319,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def and_the_back_link_points_to_start_date_page
-    and_i_click_back
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
-    and_i_click_continue
+    expect(publish_course_confirmation_page.back_link[:href]).to include(new_publish_provider_recruitment_cycle_courses_start_date_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025))
   end
 
   def then_i_am_on_the_check_your_answers_page
@@ -495,10 +485,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def course_name_and_code
     course.decorate.name_and_code
-  end
-
-  def and_i_click_back
-    click_on 'Back'
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
