@@ -145,14 +145,19 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_choose_a_primary_course
     and_i_choose_a_primary_age_range
     then_i_see_the_degree_awarding_option
+
     when_i_choose_a_degree_awarding_qualification
+    # We skip the pages for the TDA: funding type, part-time/full time
     then_i_am_on_the_choose_schools_page
     and_the_back_link_points_to_outcome_page
+
     when_i_choose_the_school
     then_the_back_link_points_to_the_school_page
     and_i_choose_the_study_site
+    # We skip the visa sponsorship question
     then_i_am_on_the_add_applications_open_date_page
     and_the_back_link_points_to_the_study_site_page
+
     when_i_choose_the_applications_open_date
     and_the_back_link_points_to_applications_open_date_page
     and_i_choose_the_first_start_date
