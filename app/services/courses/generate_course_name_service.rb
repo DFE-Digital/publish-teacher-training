@@ -23,7 +23,17 @@ module Courses
 
     def initialize(course:)
       @course = course
-      @subjects = course.course_subjects.sort_by(&:position).map(&:subject)
+      @subjects = course.course_subjects.sort_by do |a, b|
+        if a.nil? && b.nil?
+          0
+        elsif a.nil?
+          -1
+        elsif b.nil?
+          1
+        else
+          a.position <=> b.position
+        end
+      end.map(&:subject)
     end
 
     def call
