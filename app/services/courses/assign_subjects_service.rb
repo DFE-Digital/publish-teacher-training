@@ -8,7 +8,7 @@ module Courses
 
     def initialize(course:, subject_ids:)
       @course = course
-      @subject_ids = subject_ids || []
+      @subject_ids = subject_ids&.map(&:to_i) || []
     end
 
     def call
@@ -17,6 +17,10 @@ module Courses
         return course
       end
 
+      if course.master_subject_id.nil? && course.subordinate_subject_id.present?
+        course.errors.add(:subjects, :course_creation)
+        return course
+      end
 
       update_subjects
 
