@@ -56,6 +56,8 @@ module Publish
           )
         else
           @errors = @course.errors.messages
+          course.master_subject_id = selected_master
+          course.subordinate_subject_id = selected_subordinate
           render :edit
         end
       end
