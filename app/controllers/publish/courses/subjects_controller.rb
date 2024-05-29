@@ -87,11 +87,11 @@ module Publish
       end
 
       def selected_master
-        @selected_master ||= params[:course][:master_subject_id] if params[:course][:master_subject_id].present?
+        params[:course][:master_subject_id]
       end
 
       def selected_subordinate
-        @selected_subordinate ||= params[:course][:subordinate_subject_id] if params[:course][:subordinate_subject_id].present?
+        params[:course][:subordinate_subject_id]
       end
 
       def build_course_params
