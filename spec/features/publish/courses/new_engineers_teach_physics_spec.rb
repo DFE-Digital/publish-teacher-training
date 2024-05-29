@@ -155,33 +155,75 @@ feature 'selecting a physics subject', { can_edit_current_and_next_cycles: false
 
   def params_with_subject(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    [
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      'course%5Bsubordinate_subject_id%5D='
+    ].join('&')
   end
 
   def params_with_etp(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=engineers_teach_physics&course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    [
+      'course%5Bcampaign_name%5D=engineers_teach_physics',
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      'course%5Bsubordinate_subject_id%5D='
+    ].join('&')
   end
 
   def params_with_no_etp(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=&course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    [
+      'course%5Bcampaign_name%5D=',
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      'course%5Bsubordinate_subject_id%5D='
+    ].join('&')
   end
 
   def modern_language_params_with_subject(level, subject_type)
     subordinate_subject = course_subject(:modern_languages)
     course_subject = course_subject(subject_type)
-    "course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
+    [
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}",
+      "course%5Bsubordinate_subject_id%5D=#{subordinate_subject.id}"
+    ].join('&')
   end
 
   def form_params_with_latin(level, subject_type)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=&course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    [
+      'course%5Bcampaign_name%5D=',
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      'course%5Bsubordinate_subject_id%5D='
+    ].join('&')
   end
 
   def modern_languages_with_form_params(level, subject_type)
     subordinate_subject = course_subject(:modern_languages)
     course_subject = course_subject(subject_type)
-    "course%5Bcampaign_name%5D=engineers_teach_physics&course%5Bis_send%5D=0&course%5Blevel%5D=#{level}&course%5Bmaster_subject_id%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}&course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}"
+    [
+      'course%5Bcampaign_name%5D=engineers_teach_physics',
+      'course%5Bis_send%5D=0',
+      "course%5Blevel%5D=#{level}",
+      "course%5Bmaster_subject_id%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}",
+      "course%5Bsubjects_ids%5D%5B%5D=#{subordinate_subject.id}",
+      "course%5Bsubordinate_subject_id%5D=#{subordinate_subject.id}"
+    ].join('&')
   end
 end

@@ -85,6 +85,7 @@ describe CoursePolicy do
           can_sponsor_skilled_worker_visa
           campaign_name
           master_subject_id
+          subordinate_subject_id
           subjects_ids
         ]
         expect(subject).to match_array(expected_attributes)
