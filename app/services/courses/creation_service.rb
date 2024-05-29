@@ -44,7 +44,6 @@ module Courses
         course_enrichment.course_length = '4 years'
       end
 
-
       course.valid?(:new) if course.errors.blank?
 
       course.remove_carat_from_error_messages
