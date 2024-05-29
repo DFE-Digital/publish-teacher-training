@@ -22,7 +22,7 @@ module Publish
       def edit
         authorize(provider)
 
-        return if selected_non_language_subjects_ids.include? modern_languages_subject_id.to_s
+        return if selected_non_language_subjects_ids.include? modern_languages_subject_id
 
         redirect_to(
           details_publish_provider_recruitment_cycle_course_path(
@@ -87,9 +87,7 @@ module Publish
 
         ids = params.dig(:course, param_key)&.map(&:to_i) || []
 
-        @course.edit_course_options[edit_course_options_key].filter_map do |subject|
-          subject.id.to_s if ids.include?(subject.id)
-        end
+        ids.intersection(@course.edit_course_options[edit_course_options_key].map(&:id))
       end
 
       def selected_language_subjects_ids
@@ -101,7 +99,7 @@ module Publish
       end
 
       def has_modern_languages_subject?
-        @course.subjects.any? { |subject| subject.id == modern_languages_subject_id }
+        @course.course_subjects.any? { |subject| subject.subject.id == modern_languages_subject_id }
       end
 
       def build_course_params
