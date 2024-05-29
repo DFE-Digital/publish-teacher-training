@@ -35,14 +35,21 @@ module Courses
       if course.further_education_course?
         update_further_education_fields
 
-        course.subjects = [FurtherEducationSubject.instance]
-        course.course_subjects.first.position = 1
+        course
+          .course_subjects
+          .build(subject_id: FurtherEducationSubject.instance.id)
 
+      elsif course.persisted?
+        Course.transaction do
+          course.course_subjects.clear
+          subject_ids.each do |subject_id|
+            course.course_subjects.create(subject_id:)
+          end
+          course.save
+        end
       else
-        course.subjects = subjects
-
-        subject_ids.each_with_index do |id, index|
-          course.course_subjects.select { |cs| cs.subject_id == id.to_i }.first.position = index
+        subject_ids.each do |subject_id|
+          course.course_subjects.build(subject_id:)
         end
       end
     end

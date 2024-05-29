@@ -26,6 +26,7 @@ module Courses
       course = provider.courses.new
       course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
 
+      AssignSubjectsService.call(course:, subject_ids:)
       update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
@@ -43,7 +44,6 @@ module Courses
         course_enrichment.course_length = '4 years'
       end
 
-      AssignSubjectsService.call(course:, subject_ids:)
 
       course.valid?(:new) if course.errors.blank?
 
