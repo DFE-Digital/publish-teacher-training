@@ -12,7 +12,11 @@ module Courses
     end
 
     def call
-      course.errors.add(:subjects, :duplicate) if request_has_duplicate_subject_ids?
+      if request_has_duplicate_subject_ids?
+        course.errors.add(:subjects, :duplicate)
+        return course
+      end
+
 
       update_subjects
 
