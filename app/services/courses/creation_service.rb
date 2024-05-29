@@ -45,7 +45,8 @@ module Courses
 
       AssignSubjectsService.call(course:, subject_ids:)
 
-      course.valid?(:new)
+      course.valid?(:new) if course.errors.blank?
+
       course.remove_carat_from_error_messages
 
       course
