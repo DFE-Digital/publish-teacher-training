@@ -16,7 +16,7 @@ describe Courses::AssignSubjectsService do
     let(:subject_ids) { [primary_subject.id, primary_subject.id] }
 
     it 'have duplicated subject errors' do
-      expect(subject.errors[:subjects].first).to include('^You have already selected this subject. You can only select a subject once')
+      expect(subject.errors[:subjects].first).to include('^The second subject must be different to the first subject')
     end
   end
 
