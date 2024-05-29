@@ -324,7 +324,8 @@ en:
           copied_fields_from: We have copied this field from %{name_and_code}.
           please_check_changes: Please check it and make your changes before saving.
           include_information_about_html:
-            <ul class="govuk-list govuk-list--bullet">"Include information about:</ul>
+            <p class="govuk-body">Include information about:</p>
+            <ul class="govuk-list govuk-list--bullet">
               <li>how many interview candidates will have</li>
               <li>the format of interviews, for example could they interview online</li>
               <li>who will be interviewing them</li>
