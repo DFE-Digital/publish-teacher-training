@@ -38,7 +38,7 @@ describe Courses::AssignSubjectsService do
     let(:subject_ids) { [] }
 
     context 'with a new course' do
-      let(:course) { Course.new(subordinate_subject_id: 33) }
+      let(:course) { Course.new }
 
       it 'raises missing subject error' do
         expect(subject.errors.full_messages).to include('Select a subject')
@@ -46,7 +46,7 @@ describe Courses::AssignSubjectsService do
     end
 
     context 'with a persisted course' do
-      let(:course) { create(:course, master_subject_id: nil, subordinate_subject_id: 33) }
+      let(:course) { create(:course) }
 
       it 'raises missing subject error' do
         expect(subject.errors.full_messages).to include('Select a subject')

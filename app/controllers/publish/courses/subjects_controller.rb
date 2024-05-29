@@ -69,7 +69,7 @@ module Publish
       end
 
       def course_subjects_form
-        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: selected_subject_ids)
+        @course_subjects_form ||= CourseSubjectsForm.new(@course, params: [selected_master, selected_subordinate])
       end
 
       def modern_languages_subject_id

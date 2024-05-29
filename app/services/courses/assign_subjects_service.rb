@@ -8,7 +8,8 @@ module Courses
 
     def initialize(course:, subject_ids:)
       @course = course
-      @subject_ids = subject_ids&.map(&:to_i) || []
+      course.master_subject_id, course.subordinate_subject_id = subject_ids
+      @subject_ids = subject_ids&.compact_blank || []
     end
 
     def call
