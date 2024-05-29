@@ -89,11 +89,11 @@ module Publish
       end
 
       def selected_master
-        params[:course][:master_subject_id]
+        params[:course][:master_subject_id].presence
       end
 
       def selected_subordinate
-        params[:course][:subordinate_subject_id]
+        params[:course][:subordinate_subject_id].presence
       end
 
       def build_course_params
