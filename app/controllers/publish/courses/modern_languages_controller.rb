@@ -67,7 +67,7 @@ module Publish
       private
 
       def updated_subject_list
-        @updated_subject_list ||= selected_language_subjects_ids.concat(selected_non_language_subjects_ids)
+        @updated_subject_list ||= selected_non_language_subjects_ids.concat(selected_language_subjects_ids)
       end
 
       def course_subjects_form
