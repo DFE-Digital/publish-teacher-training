@@ -45,12 +45,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       then_i_should_see_the_updated_content('test training with disabilities')
     end
 
-    scenario 'blank course summary' do
+    scenario 'blank school placements section' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button('Enter course summary')
+      and_i_click_link_or_button('Enter details about school placements')
       and_i_click_link_or_button('Back')
-      and_i_click_link_or_button('Enter course summary')
+      and_i_click_link_or_button('Enter details about school placements')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       and_i_see_the_new_course_text
@@ -408,7 +408,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_see_the_new_course_text
-    expect(page).to have_text('great course')
+    expect(page).to have_text('great placement')
   end
 
   def then_i_should_be_on_about_your_organisation_page
@@ -427,7 +427,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_a_valid_form
-    fill_in 'About this course', with: 'great course'
     fill_in 'School placements', with: 'great placement'
 
     click_link_or_button 'Update course information'

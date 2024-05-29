@@ -227,7 +227,7 @@ en:
         bursary: "Bursaries of %{amount} available"
     course_preview:
       missing_information:
-        about_course:
+        about_this_course:
           text: "Enter course summary"
         degree:
           text: "Enter degree requirements"
@@ -315,6 +315,39 @@ en:
       course_fees:
         edit:
           course_fees: Course fees
+      interview_process:
+        edit:
+          interview_process: Interview process
+
+      about_course:
+        edit:
+          about_this_course: About this course
+          page_title: About this course - %{course_name_and_code}
+          submit_button: Update about this course
+          description: >
+            The course summary appears at the top of the page on Find. Use it to show how this course is different from
+            others, this helps candidates understand whether it is right for them.
+          candidates_say_section_html:
+            <p class="govuk-body">Candidates say the most important information is:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>how and where they will spend their time</li>
+              <li>how the course is structured, for example which specific modules or areas are taught</li>
+              <li>how they will be supported, for example tutors and mentoring</li>
+              <li>the qualification and experience they will have at the end of the course</li>
+            <ul>
+          remember_to_section_html:
+            <p class="govuk-body">Remember to:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
+              <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
+              <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
+              <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
+            </ul>
+          view_examples: View examples of great course summaries
+          changes_not_saved: Your changes are not yet saved
+          copied_fields_from: We have copied this field from %{name_and_code}.
+          please_check_changes: Please check it and make your changes before saving.
+
       study_mode:
         form:
           select_all_that_apply: Select all that apply
@@ -564,7 +597,7 @@ en:
               less_than_or_equal_to: "must be less than or equal to £100,000"
               not_an_integer: "must not include pence, like 1000 or 1500"
             about_course:
-              blank: "^Enter details about this course"
+              blank: "^Enter information about this course"
             how_school_placements_work:
               blank: "^Enter details about school placements"
             required_qualifications:
@@ -802,11 +835,13 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
-        publish/course_information_form:
+        publish/course_about_this_course_form:
           attributes:
             about_course:
-              blank: "Enter details about this course"
-              too_long: "Reduce the word count for about course"
+              blank: Enter information about this course
+              too_long: Reduce the word count for about this course
+        publish/course_information_form:
+          attributes:
             interview_process:
               too_long: "Reduce the word count for interview process"
             how_school_placements_work:

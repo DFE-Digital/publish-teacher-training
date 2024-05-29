@@ -97,7 +97,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def when_i_make_some_new_changes
     publish_course_information_edit_page.load(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code)
-    publish_course_information_edit_page.about_course.set('some new description')
+    publish_course_information_edit_page.school_placements.set('some new information about school placements')
     publish_course_information_edit_page.submit.click
   end
 
@@ -108,13 +108,13 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   def and_i_do_not_see_the_unpublished_content_on_find
     page.driver.header 'Host', 'find'
     visit "/course/#{provider.provider_code}/#{course.course_code}"
-    expect(page).to have_no_content('some new description')
+    expect(page).to have_no_content('some new information about school placements')
   end
 
   def then_i_see_the_content_on_find
     page.driver.header 'Host', 'find'
     visit "/course/#{provider.provider_code}/#{course.course_code}"
-    expect(page).to have_content('some new description')
+    expect(page).to have_content('some new information about school placements')
   end
 
   def when_i_return_to_publish
