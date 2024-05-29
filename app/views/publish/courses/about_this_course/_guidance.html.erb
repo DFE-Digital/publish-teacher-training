@@ -1,22 +1,10 @@
 <p class="govuk-body"><%= t("publish.providers.about_course.edit.description") %></p>
-
-<p class="govuk-body"><%= t("publish.providers.about_course.edit.candidates_say") %></p>
-
-<ul class="govuk-list govuk-list--bullet">
-  <li><%= t("publish.providers.about_course.edit.candidate_say_li_1") %></li>
-  <li><%= t("publish.providers.about_course.edit.candidate_say_li_2") %></li>
-  <li><%= t("publish.providers.about_course.edit.candidate_say_li_3") %></li>
-  <li><%= t("publish.providers.about_course.edit.candidate_say_li_4") %></li>
-</ul>
-
-<p class="govuk-body"><%= t("publish.providers.about_course.edit.remember_to") %></p>
-
-<ul class="govuk-list govuk-list--bullet">
-  <li><%= t("publish.providers.about_course.edit.remember_to_li_1") %></li>
-  <li><%= t("publish.providers.about_course.edit.remember_to_li_2") %></li>
-  <li><%= t("publish.providers.about_course.edit.remember_to_li_3") %></li>
-  <li><%= t("publish.providers.about_course.edit.remember_to_li_4") %></li>
-</ul>
+<div>
+  <%= t("publish.providers.about_course.edit.candidates_say_section_html") %>
+</div>
+<div>
+  <%= t("publish.providers.about_course.edit.remember_to_section_html") %>
+</div>
 
 <p class="govuk-body">
   <%= govuk_link_to t("publish.providers.about_course.edit.view_examples"), course_summary_examples_path %>

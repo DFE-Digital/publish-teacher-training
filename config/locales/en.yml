@@ -327,17 +327,22 @@ en:
           description: >
             The course summary appears at the top of the page on Find. Use it to show how this course is different from
             others, this helps candidates understand whether it is right for them.
-          candidates_say: "Candidates say the most important information is:"
-          candidate_say_li_1: how and where they will spend their time
-          candidate_say_li_2: how the course is structured, for example which specific modules or areas are taught
-          candidate_say_li_3: how they will be supported, for example tutors and mentoring
-          candidate_say_li_4: the qualification and experience they will have at the end of the course.
-          remember_to: "Remember to:"
-          remember_to_li_1: keep it brief and to the point, people struggle with long blocks of writing online
-          remember_to_li_2: use bullet points, headings and paragraphs to make your writing easy to read
-          remember_to_li_3: spell out acronyms the first time you use them, for example, ITT, NQT, SCITT
-          remember_to_li_4: >
-            link to your organisation's website for people who want more detail about who you are and what you do.
+          candidates_say_section_html:
+            <p class="govuk-body">Candidates say the most important information is:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>how and where they will spend their time</li>
+              <li>how the course is structured, for example which specific modules or areas are taught</li>
+              <li>how they will be supported, for example tutors and mentoring</li>
+              <li>the qualification and experience they will have at the end of the course</li>
+            <ul>
+          remember_to_section_html:
+            <p class="govuk-body">Remember to:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>keep it brief and to the point, people struggle with long blocks of writing online</li>
+              <li>use bullet points, headings and paragraphs to make your writing easy to read</li>
+              <li>spell out acronyms the first time you use them, for example, ITT, NQT, SCITT</li>
+              <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
+            </ul>
           view_examples: View examples of great course summaries
           changes_not_saved: Your changes are not yet saved
           copied_fields_from: We have copied this field from %{name_and_code}.
@@ -834,7 +839,7 @@ en:
           attributes:
             about_course:
               blank: Enter information about this course
-              too_long: Reduce the word count for about course
+              too_long: Reduce the word count for about this course
         publish/course_information_form:
           attributes:
             interview_process:
