@@ -27,7 +27,7 @@ class Course < ApplicationRecord
 
       self.master_subject_id ||= sub.first&.subject&.id
 
-      self.subordinate_subject_id = sub&.second&.subject&.id
+      self.subordinate_subject_id ||= sub&.second&.subject&.id
     end
   end
 
