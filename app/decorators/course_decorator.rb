@@ -255,10 +255,6 @@ class CourseDecorator < ApplicationDecorator
     selectable_subject_ids & selected_subject_ids
   end
 
-  def subordinate_subject_id
-    selected_subject_ids - [master_subject_id] if master_subject_id
-  end
-
   def subject_present?(subject_to_find)
     subjects.any? do |course_subject|
       course_subject.id == subject_to_find.id

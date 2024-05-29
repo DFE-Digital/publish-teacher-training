@@ -98,7 +98,6 @@ module Publish
         previous_subject_selections = params[:course][:subjects_ids]
 
         params[:course][:subjects_ids] = selected_subject_ids
-        params[:course].delete(:subordinate_subject_id)
 
         build_new_course # to get languages edit_options
 

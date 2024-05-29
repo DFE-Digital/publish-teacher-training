@@ -18,6 +18,7 @@ class Course < ApplicationRecord
   has_associated_audits
   audited
 
+  attribute :subordinate_subject_id, :integer
   validates :course_code,
             uniqueness: { scope: :provider_id },
             presence: true,

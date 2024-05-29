@@ -73,6 +73,7 @@ class CoursePolicy
       can_sponsor_skilled_worker_visa
       campaign_name
       master_subject_id
+      subordinate_subject_id
       subjects_ids
     ]
   end

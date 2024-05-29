@@ -70,6 +70,7 @@
   - searchable
   :course:
   - master_subject_id
+  - subordinate_subject_id
   - campaign_name
   :gias_school:
   - searchable
