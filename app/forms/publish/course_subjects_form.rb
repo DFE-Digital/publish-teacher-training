@@ -5,7 +5,7 @@ module Publish
     alias subject_ids params
 
     def initialize(model, params: {})
-      @previous_subject_names = model.subjects.map(&:subject_name)
+      @previous_subject_names = model.course_subjects.map { |cs| cs.subject.subject_name }
       @previous_course_name = model.name
       super
     end
