@@ -18,43 +18,44 @@ module Publish
 
       def update
         authorize(provider)
-
-        if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
-          course.update(master_subject_id: params[:course][:master_subject_id])
-          redirect_to(
-            engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
-              @course.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-              course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids }
+        if validate_subject_ids
+          if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
+            course.update(master_subject_id: params[:course][:master_subject_id])
+            redirect_to(
+              engineers_teach_physics_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+                course: { master_subject_id: SecondarySubject.physics.id.to_s, subjects_ids: selected_subject_ids }
+              )
             )
-          )
 
-        elsif selected_subject_ids.include?(modern_languages_subject_id.to_s) && validate_subject_ids
-          course.update(master_subject_id: params[:course][:master_subject_id])
-          redirect_to(
-            modern_languages_publish_provider_recruitment_cycle_course_path(
-              @course.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code,
-              course: { subjects_ids: selected_subject_ids }
+          elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
+            course.update(master_subject_id: params[:course][:master_subject_id])
+            redirect_to(
+              modern_languages_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code,
+                course: { subjects_ids: selected_subject_ids }
+              )
             )
-          )
 
-        elsif course.errors.none? && course_subjects_form.save!
-          course_updated_message(section_key)
-          # TODO: move this to the form?
-          course.update(master_subject_id: params[:course][:master_subject_id])
-          course.update(name: course.generate_name)
-          course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
+          elsif course.errors.none? && course_subjects_form.save!
+            course_updated_message(section_key)
+            # TODO: move this to the form?
+            course.update(master_subject_id: params[:course][:master_subject_id])
+            course.update(name: course.generate_name)
+            course.update(campaign_name: nil) unless course.master_subject_id == SecondarySubject.physics.id
 
-          redirect_to(
-            details_publish_provider_recruitment_cycle_course_path(
-              @course.provider_code,
-              @course.recruitment_cycle_year,
-              @course.course_code
+            redirect_to(
+              details_publish_provider_recruitment_cycle_course_path(
+                @course.provider_code,
+                @course.recruitment_cycle_year,
+                @course.course_code
+              )
             )
-          )
+          end
         else
           @errors = @course.errors.messages
           course.master_subject_id = selected_master
@@ -66,11 +67,11 @@ module Publish
       private
 
       def validate_subject_ids
-        if selected_master == selected_subordinate
-          course.errors.add(:subjects, :duplicate)
-          return false
-        elsif selected_master.blank?
+        if selected_master.blank?
           course.errors.add(:subjects, :course_creation)
+          return false
+        elsif selected_master == selected_subordinate
+          course.errors.add(:subjects, :duplicate)
           return false
         end
         true
