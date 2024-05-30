@@ -146,13 +146,13 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
-  def then_i_am_met_with_the_modern_languages_page(extra_subject=nil)
+  def then_i_am_met_with_the_modern_languages_page(extra_subject = nil)
     expect(page).to have_current_path(
       [
         "/publish/organisations/#{provider.provider_code}/",
         "#{Settings.current_recruitment_cycle_year}/",
         "courses/#{course.course_code}/modern-languages?",
-        "#{params_with_subject(extra_subject)}"
+        params_with_subject(extra_subject).to_s
       ].join
     )
     expect(page).to have_content('Languages')
@@ -177,10 +177,10 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  def params_with_subject(other=nil)
+  def params_with_subject(other = nil)
     course_subject = course_subject(:modern_languages)
     other_subject = course_subject(other)
-    param = ""
+    param = ''
     param += "course%5Bsubjects_ids%5D%5B%5D=#{other_subject.id}&" if other
     param += "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
     param
