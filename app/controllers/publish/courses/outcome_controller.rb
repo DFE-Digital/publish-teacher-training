@@ -52,7 +52,11 @@ module Publish
 
       def handle_qualification_update
         if undergraduate_degree_with_qts?
-          update_undergraduate_course
+          Publish::Courses::AssignTdaAttributesService.new(@course).call
+
+          course_updated_message('Qualification')
+
+          redirect_to course_details_path
         elsif undergraduate_to_other_qualification?
           redirect_to funding_type_with_previous_course_path
         else
@@ -78,19 +82,6 @@ module Publish
 
       def undergraduate_to_other_qualification?
         @current_qualification == 'undergraduate_degree_with_qts' && @updated_qualification != 'undergraduate_degree_with_qts'
-      end
-
-      def update_undergraduate_course
-        @course.update(
-          study_mode: 'full_time',
-          funding_type: 'apprenticeship',
-          can_sponsor_skilled_worker_visa: false,
-          can_sponsor_student_visa: false
-        )
-
-        course_updated_message('Qualification')
-
-        redirect_to course_details_path
       end
 
       def funding_type_with_previous_course_path

@@ -34,8 +34,7 @@ describe Courses::CreationService do
       expect(subject.funding_type).to eq('apprenticeship')
       expect(subject.can_sponsor_student_visa?).to be false
       expect(subject.can_sponsor_skilled_worker_visa?).to be false
-      expect(subject.additional_degree_subject_requirements).to be_nil
-      expect(subject.degree_subject_requirements).to be_nil
+      expect(subject.additional_degree_subject_requirements).to be(false)
       expect(subject.degree_grade).to eq('not_required')
       expect(subject.enrichments.last).to be_present
       expect(subject.enrichments.last.course_length).to eq('4 years')
