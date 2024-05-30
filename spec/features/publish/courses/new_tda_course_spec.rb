@@ -568,18 +568,18 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
-    expect(course.study_mode == 'part_time').to be(true)
+    expect(course.part_time?).to be(true)
     expect(course.funding_type == 'fee').to be(true)
-    expect(course.can_sponsor_skilled_worker_visa == false).to be(true)
-    expect(course.can_sponsor_student_visa == true).to be(true)
+    expect(course.can_sponsor_skilled_worker_visa).to be(false)
+    expect(course.can_sponsor_student_visa).to be(true)
   end
 
   def then_i_see_the_correct_attributes_in_the_database_for_salaried
     course.reload
     expect(course.study_mode == 'part_time').to be(true)
     expect(course.funding_type == 'salary').to be(true)
-    expect(course.can_sponsor_skilled_worker_visa == true).to be(true)
-    expect(course.can_sponsor_student_visa == false).to be(true)
+    expect(course.can_sponsor_skilled_worker_visa).to be(true)
+    expect(course.can_sponsor_student_visa).to be(false)
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship

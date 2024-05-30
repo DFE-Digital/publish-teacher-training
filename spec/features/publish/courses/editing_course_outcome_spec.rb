@@ -195,18 +195,18 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
   def then_the_default_options_for_a_tda_course_should_be_applied
     course.reload
-    expect(course.study_mode == 'full_time').to be(true)
+    expect(course.full_time?).to be(true)
     expect(course.funding_type == 'apprenticeship').to be(true)
-    expect(course.can_sponsor_skilled_worker_visa == false).to be(true)
-    expect(course.can_sponsor_student_visa == false).to be(true)
+    expect(course.can_sponsor_skilled_worker_visa).to be false
+    expect(course.can_sponsor_student_visa).to be false
   end
 
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
-    expect(course.study_mode == 'part_time').to be(true)
+    expect(course.part_time?).to be(true)
     expect(course.funding_type == 'fee').to be(true)
-    expect(course.can_sponsor_skilled_worker_visa == false).to be(true)
-    expect(course.can_sponsor_student_visa == true).to be(true)
+    expect(course.can_sponsor_skilled_worker_visa).to be(false)
+    expect(course.can_sponsor_student_visa).to be(true)
   end
 
   def and_i_choose_salaried
@@ -218,8 +218,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     course.reload
     expect(course.study_mode == 'part_time').to be(true)
     expect(course.funding_type == 'salary').to be(true)
-    expect(course.can_sponsor_skilled_worker_visa == true).to be(true)
-    expect(course.can_sponsor_student_visa == false).to be(true)
+    expect(course.can_sponsor_skilled_worker_visa).to be(true)
+    expect(course.can_sponsor_student_visa).to be(false)
   end
 
   def and_i_should_be_on_the_course_details_page
