@@ -16,7 +16,7 @@ describe Courses::AssignSubjectsService do
     let(:subject_ids) { [primary_subject.id, primary_subject.id] }
 
     it 'have duplicated subject errors' do
-      expect(subject.errors[:subjects].first).to include('^You have already selected this subject. You can only select a subject once')
+      expect(subject.errors[:subjects].first).to include('^The second subject must be different to the first subject')
     end
   end
 
@@ -34,13 +34,33 @@ describe Courses::AssignSubjectsService do
     end
   end
 
+  describe 'subordinate subject present but master missing' do
+    let(:subject_ids) { [] }
+
+    context 'with a new course' do
+      let(:course) { Course.new }
+
+      it 'raises missing subject error' do
+        expect(subject.errors.full_messages).to include('Select a subject')
+      end
+    end
+
+    context 'with a persisted course' do
+      let(:course) { create(:course) }
+
+      it 'raises missing subject error' do
+        expect(subject.errors.full_messages).to include('Select a subject')
+      end
+    end
+  end
+
   context 'primary course' do
     let(:subject_ids) { [primary_subject.id] }
     let(:course) { Course.new(level: :primary) }
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
 
     it 'sets the subjects' do
-      expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
     end
 
     it 'sets the name' do
@@ -58,7 +78,7 @@ describe Courses::AssignSubjectsService do
     let(:secondary_subject) { find_or_create(:secondary_subject, :biology) }
 
     it 'sets the subjects' do
-      expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
     end
 
     it 'sets the name' do
@@ -74,12 +94,34 @@ describe Courses::AssignSubjectsService do
       let(:subject_ids) { [secondary_subject2.id, secondary_subject.id] }
 
       it 'sets the subjects' do
-        expect(subject.subjects.map(&:id)).to eq([secondary_subject2.id, secondary_subject.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
       end
 
       it 'sets the course subjects position' do
         expect(subject.course_subjects.first.position).to eq(0)
         expect(subject.course_subjects.first.subject.id).to eq(secondary_subject2.id)
+
+        expect(subject.course_subjects.second.position).to eq(1)
+        expect(subject.course_subjects.second.subject.id).to eq(secondary_subject.id)
+      end
+
+      it 'sets the name' do
+        expect(subject.name).to eq('English with biology')
+      end
+    end
+
+    context 'with 3 subjects' do
+      let(:secondary_english) { find_or_create(:secondary_subject, :english) }
+      let(:language_subject) { find_or_create(:modern_languages_subject, :german) }
+      let(:subject_ids) { [secondary_english.id, secondary_subject.id, language_subject.id] }
+
+      it 'sets the subjects' do
+        expect(subject.course_subjects.map { _1.subject.id }).to eq(subject_ids)
+      end
+
+      it 'sets the course subjects position' do
+        expect(subject.course_subjects.first.position).to eq(0)
+        expect(subject.course_subjects.first.subject.id).to eq(secondary_english.id)
 
         expect(subject.course_subjects.second.position).to eq(1)
         expect(subject.course_subjects.second.subject.id).to eq(secondary_subject.id)
@@ -97,7 +139,7 @@ describe Courses::AssignSubjectsService do
     let(:further_education_subject) { find_or_create(:further_education_subject) }
 
     it 'sets the subjects' do
-      expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
     end
 
     it 'sets the name' do

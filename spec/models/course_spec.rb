@@ -82,7 +82,7 @@ describe Course do
           let(:course) { build(:course, level: 'primary', subjects: []) }
 
           it 'Does not assign a position' do
-            course.subjects = [primary_with_mathematics]
+            course.course_subjects.build(subject: primary_with_mathematics)
 
             expect(course.course_subjects.first.position).to be_nil
           end
@@ -92,22 +92,27 @@ describe Course do
           let(:course) { build(:course, level: 'further_education', subjects: []) }
 
           it 'Does not assign a position' do
-            course.subjects = [further_education]
+            course.course_subjects.build(subject: further_education)
 
             expect(course.course_subjects.first.position).to be_nil
           end
         end
 
         context 'Secondary course' do
-          let(:course) { build(:course, level: 'secondary', subjects: []) }
+          let(:course) { build(:course, level: 'secondary', course_subjects: []) }
+
+          # The Course factory adds subjects to the course
+          # and I can't see how else to prevent the course having courses
+          before { course.subjects.destroy_all }
 
           it 'Assigns position 0 to a single secondary subject' do
-            course.subjects = [english]
+            course.course_subjects.build(subject: english)
             expect(course.course_subjects.first.position).to eq(0)
           end
 
           it 'Assigns position 0,1 to two secondary subjects in the order they are given' do
-            course.subjects = [maths, english]
+            course.course_subjects.build(subject: maths)
+            course.course_subjects.build(subject: english)
             course_subjects = course.course_subjects
 
             expect(course_subjects[0].position).to eq(0)
@@ -115,7 +120,8 @@ describe Course do
           end
 
           it 'Doesnt assign a position to languages' do
-            course.subjects = [modern_languages, french]
+            course.course_subjects.build(subject: modern_languages)
+            course.course_subjects.build(subject: french)
 
             expect(course.course_subjects[0].position).to eq(0)
             expect(course.course_subjects[1].position).to be_nil
@@ -2679,6 +2685,25 @@ describe Course do
           course:
         )
       )
+    end
+  end
+
+  describe '#subordinate_subject_id' do
+    it 'has a subordinate_subject_id attribute' do
+      expect(course).to have_attributes({ subordinate_subject_id: nil })
+    end
+
+    it 'is assignabled' do
+      course.subordinate_subject_id = 123
+      expect(course).to have_attributes({ subordinate_subject_id: 123 })
+    end
+
+    context 'when course has two subjects' do
+      it 'set the subordinate subject id to the second subjects_id' do
+        subordinate_subject = find_or_create(:secondary_subject, :physics)
+        course.subjects << subordinate_subject
+        expect(course.reload).to have_attributes({ subordinate_subject_id: subordinate_subject.id })
+      end
     end
   end
 

@@ -575,7 +575,7 @@ en:
             subjects:
               blank: "^There is a problem with this course. Contact support to fix it (Error: S)"
               course_creation: "^Select a subject"
-              duplicate: "^You have already selected this subject. You can only select a subject once"
+              duplicate: "^The second subject must be different to the first subject"
             modern_languages_subjects:
               select_a_language: "^Select at least one language"
             study_mode:

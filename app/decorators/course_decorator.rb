@@ -69,7 +69,7 @@ class CourseDecorator < ApplicationDecorator
 
   def subject_name
     if object.subjects.size == 1
-      object.subjects.first.subject_name
+      object.course_subjects.first.subject.subject_name
     else
       object.name
     end
@@ -81,7 +81,7 @@ class CourseDecorator < ApplicationDecorator
     elsif (number_of_subjects == 1 || modern_languages_other?) && LANGUAGE_SUBJECT_CODES.exclude?(subjects.first.subject_code)
       first_subject_name.downcase
     elsif number_of_subjects == 2
-      transformed_subjects = subjects.map { |subject| LANGUAGE_SUBJECT_CODES.include?(subject.subject_code) ? subject.subject_name : subject.subject_name.downcase }
+      transformed_subjects = course_subjects.map { |cs| LANGUAGE_SUBJECT_CODES.include?(cs.subject.subject_code) ? cs.subject.subject_name : cs.subject.subject_name.downcase }
       "#{transformed_subjects.first} with #{transformed_subjects.second}"
     else
       object.name.gsub('Modern Languages', 'modern languages')
@@ -103,7 +103,7 @@ class CourseDecorator < ApplicationDecorator
   def bursary_requirements
     requirements = ['a degree of 2:2 or above in any subject']
 
-    if object.subjects.any? { |subject| subject.subject_name.downcase == 'primary with mathematics' }
+    if object.course_subjects.any? { |subject| subject.subject.subject_name.downcase == 'primary with mathematics' }
       mathematics_requirement = 'at least grade B in maths A-level (or an equivalent)'
       requirements.push(mathematics_requirement)
     end
@@ -143,7 +143,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def sorted_subjects
-    object.subjects.map(&:subject_name).sort.join('<br>').html_safe
+    object.course_subjects.map { |cs| cs.subject.subject_name }.join('<br>').html_safe
   end
 
   def chosen_subjects
@@ -255,13 +255,9 @@ class CourseDecorator < ApplicationDecorator
     selectable_subject_ids & selected_subject_ids
   end
 
-  def subordinate_subject_id
-    selected_subject_ids - [master_subject_id] if master_subject_id
-  end
-
   def subject_present?(subject_to_find)
-    subjects.any? do |course_subject|
-      course_subject.id == subject_to_find.id
+    course_subjects.any? do |course_subject|
+      course_subject.subject.id == subject_to_find.id
     end
   end
 
@@ -481,7 +477,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def first_subject_name
-    subjects.first.subject_name
+    course_subjects.first.subject.subject_name
   end
 
   def modern_languages_other?
@@ -493,11 +489,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def main_subject
-    Subject.find(course.master_subject_id)
+    @main_subject ||= Subject.find(course.master_subject_id)
   end
 
   def additional_subjects
-    object.subjects.reject { |subject| subject.id == main_subject.id }
+    object.course_subjects.reject { |subject| subject.subject_id == main_subject.id }.map(&:subject)
   end
 
   def format_name(subjects)

@@ -11,6 +11,7 @@ module PageObjects
         element :subordinate_subjects_fields, '[data-qa="course__subordinate_subjects"]'
         element :google_form_link, '[data-qa="course__google_form_link"]'
 
+        element :back, '[data-qa="page-back"]'
         element :continue, '[data-qa="course__save"]'
       end
     end

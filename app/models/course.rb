@@ -18,6 +18,19 @@ class Course < ApplicationRecord
   has_associated_audits
   audited
 
+  attribute :subordinate_subject_id, :integer
+  after_initialize do
+    if is_primary?
+      self.master_subject_id ||= course_subjects.first&.subject_id
+    else
+      sub = course_subjects.select(&:position)
+
+      self.master_subject_id ||= sub.first&.subject&.id
+
+      self.subordinate_subject_id ||= sub&.second&.subject&.id
+    end
+  end
+
   validates :course_code,
             uniqueness: { scope: :provider_id },
             presence: true,
@@ -566,7 +579,7 @@ class Course < ApplicationRecord
   end
 
   def is_modern_language_course?
-    subjects.any? { |s| s == SecondarySubject.modern_languages }
+    course_subjects.any? { |cs| cs.subject == SecondarySubject.modern_languages }
   end
 
   def sites=(desired_sites)
@@ -795,7 +808,11 @@ class Course < ApplicationRecord
   end
 
   def modern_language_subjects
-    subjects.where(type: 'ModernLanguagesSubject')
+    if persisted? && course_subjects.all?(&:persisted?)
+      subjects.where(type: 'ModernLanguagesSubject')
+    else
+      course_subjects.select { |cs| cs.subject.type == 'ModernLanguagesSubject' }.map(&:subject)
+    end
   end
 
   def master_subject_nil?
@@ -803,7 +820,7 @@ class Course < ApplicationRecord
   end
 
   def has_any_modern_language_subject_type?
-    subjects.any? { |subject| subject.type == 'ModernLanguagesSubject' }
+    course_subjects.any? { |cs| cs.subject.type == 'ModernLanguagesSubject' }
   end
 
   def current_published_enrichment
@@ -990,7 +1007,7 @@ class Course < ApplicationRecord
     raise 'SecondarySubject not found' if SecondarySubject.nil?
     raise 'SecondarySubject.modern_languages not found' if SecondarySubject.modern_languages.nil?
 
-    subjects.any? { |subject| subject&.id == SecondarySubject.modern_languages.id }
+    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.modern_languages.id }
   end
 
   def validate_has_languages
@@ -998,16 +1015,16 @@ class Course < ApplicationRecord
   end
 
   def validate_subject_count
-    if subjects.empty?
+    if course_subjects.empty?
       errors.add(:subjects, :course_creation)
       return
     end
 
     case level
     when 'primary', 'further_education'
-      errors.add(:subjects, 'has too many subjects') if subjects.count > 1
+      errors.add(:subjects, 'has too many subjects') if course_subjects.count > 1
     when 'secondary'
-      errors.add(:subjects, 'has too many subjects') if subjects.count > 2 && !has_any_modern_language_subject_type?
+      errors.add(:subjects, 'has too many subjects') if course_subjects.count > 2 && !has_any_modern_language_subject_type?
     end
   end
 

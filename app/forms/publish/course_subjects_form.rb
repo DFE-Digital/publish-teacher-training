@@ -5,7 +5,7 @@ module Publish
     alias subject_ids params
 
     def initialize(model, params: {})
-      @previous_subject_names = model.subjects.map(&:subject_name)
+      @previous_subject_names = model.course_subjects.map { |cs| cs.subject.subject_name }
       @previous_course_name = model.name
       super
     end
@@ -15,7 +15,7 @@ module Publish
     attr_reader :previous_subject_names, :previous_course_name
 
     def valid?
-      super && assign_subjects_service.valid?
+      super && assign_subjects_service.errors.none?
     end
 
     def compute_fields

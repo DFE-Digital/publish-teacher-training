@@ -57,6 +57,7 @@ describe Courses::CreationService do
         'study_mode' => ['full_time'],
         'sites_ids' => [site.id],
         'study_sites_ids' => [study_site.id],
+        'master_subject_id' => primary_subject.id,
         'subjects_ids' => [primary_subject.id],
         'course_code' => 'D0CK'
       }
@@ -70,7 +71,7 @@ describe Courses::CreationService do
       expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-      expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([primary_subject.id])
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Primary (SEND)')
       expect(subject.study_mode).to eq 'full_time'
@@ -90,7 +91,7 @@ describe Courses::CreationService do
         expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.subjects.map(&:id)).to eq([primary_subject.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq([primary_subject.id])
         expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Primary (SEND)')
@@ -116,6 +117,7 @@ describe Courses::CreationService do
         'sites_ids' => [site.id],
         'study_sites_ids' => [study_site.id],
         'subjects_ids' => [secondary_subject.id],
+        'master_subject_id' => secondary_subject.id,
         'course_code' => 'D0CK'
       }
     end
@@ -128,7 +130,7 @@ describe Courses::CreationService do
       expect(subject.is_send).to be(false)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-      expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Biology')
       expect(subject.study_mode).to eq 'part_time'
@@ -148,7 +150,7 @@ describe Courses::CreationService do
         expect(subject.is_send).to be(false)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.subjects.map(&:id)).to eq([secondary_subject.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
         expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Biology')
@@ -178,7 +180,7 @@ describe Courses::CreationService do
       expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-      expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Further education (SEND)')
       expect(subject.errors).to be_empty
@@ -202,7 +204,7 @@ describe Courses::CreationService do
         expect(subject.is_send).to be(true)
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.subjects.map(&:id)).to eq([further_education_subject.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
         expect(subject.course_code).not_to be_nil
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Further education (SEND)')

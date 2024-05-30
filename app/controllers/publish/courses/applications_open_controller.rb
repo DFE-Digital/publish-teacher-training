@@ -36,7 +36,8 @@ module Publish
                 :skip_languages_goto_confirmation,
                 :accredited_provider_code,
                 :campaign_name,
-                :master_subject_id
+                :master_subject_id,
+                :subordinate_subject_id
               )
               .permit(
                 :start_date,

@@ -26,6 +26,12 @@ module Courses
       course = provider.courses.new
       course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
 
+      if course_attributes[:master_subject_id].blank? && course_attributes[:subordinate_subject_id].present?
+        course.errors.add(:subjects, :course_creation)
+      elsif subject_ids.present? || course_attributes[:level] == 'further_education'
+        AssignSubjectsService.call(course:, subject_ids:)
+      end
+
       update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
@@ -43,9 +49,8 @@ module Courses
         course_enrichment.course_length = '4 years'
       end
 
-      AssignSubjectsService.call(course:, subject_ids:)
+      course.valid?(:new) if course.errors.blank?
 
-      course.valid?(:new)
       course.remove_carat_from_error_messages
 
       course
