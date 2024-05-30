@@ -52,7 +52,12 @@ module Publish
 
       def handle_qualification_update
         if undergraduate_to_other_qualification?
-          redirect_to funding_type_with_previous_course_path
+          redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
+            @course.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+            previous_tda_course: true
+          )
         else
           Publish::Courses::AssignTdaAttributesService.new(@course).call if undergraduate_degree_with_qts?
 
@@ -77,23 +82,6 @@ module Publish
 
       def undergraduate_to_other_qualification?
         @current_qualification == 'undergraduate_degree_with_qts' && @updated_qualification != 'undergraduate_degree_with_qts'
-      end
-
-      def funding_type_with_previous_course_path
-        funding_type_publish_provider_recruitment_cycle_course_path(
-          @course.provider_code,
-          @course.recruitment_cycle_year,
-          @course.course_code,
-          previous_tda_course: true
-        )
-      end
-
-      def funding_type_path
-        funding_type_publish_provider_recruitment_cycle_course_path(
-          @course.provider_code,
-          @course.recruitment_cycle_year,
-          @course.course_code
-        )
       end
 
       def handle_redirect
