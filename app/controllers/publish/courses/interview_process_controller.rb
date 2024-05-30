@@ -31,15 +31,19 @@ module Publish
       private
 
       def authorise_with_pundit
-        authorize provider
+        authorize course_to_authorise
       end
 
       def interview_process_params
         params.require(:publish_course_interview_process_form).permit(*CourseInterviewProcessForm::FIELDS)
       end
 
+      def course_to_authorise
+        @course_to_authorise ||= provider.courses.find_by!(course_code: params[:code])
+      end
+
       def course
-        @course ||= CourseDecorator.new(provider.courses.find_by!(course_code: params[:code]))
+        @course ||= CourseDecorator.new(course_to_authorise)
       end
 
       def course_enrichment
