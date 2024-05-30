@@ -317,8 +317,10 @@ en:
           course_fees: Course fees
       interview_process:
         edit:
-          interview_process: Interview process (optional)
-          page_title: Interview process - %{course_name_and_code}
+          interview_process_heading: Interview process (optional)
+          interview_process_label: Interview process (optional)
+          interview_process_success: Interview process
+          page_title: Interview process (optional) - %{course_name_and_code}
           submit_button: Update interview process
           changes_not_saved: Your changes are not yet saved
           copied_fields_from: We have copied this field from %{name_and_code}.

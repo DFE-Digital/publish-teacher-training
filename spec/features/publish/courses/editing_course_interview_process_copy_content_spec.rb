@@ -18,7 +18,7 @@ feature 'Editing interview process section, copying content from another course'
     end
   end
 
-  scenario 'source course does not "interview process" data' do
+  scenario 'source course does not have "interview process" data' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_without_data_i_try_to_copy
@@ -26,7 +26,7 @@ feature 'Editing interview process section, copying content from another course'
     when_i_visit_the_interview_process_edit_page
     and_i_select_the_other_course_from_the_copy_content_dropdown
     then_i_do_not_see_copied_course_data
-    then_i_do_not_see_the_warning_that_changes_are_not_saved
+    and_i_do_not_see_the_warning_that_changes_are_not_saved
   end
 
   private
@@ -72,7 +72,7 @@ feature 'Editing interview process section, copying content from another course'
     expect(page).to have_content 'Please check it and make your changes before saving'
   end
 
-  def then_i_do_not_see_the_warning_that_changes_are_not_saved
+  def and_i_do_not_see_the_warning_that_changes_are_not_saved
     expect(page).to have_no_content 'Your change are not yet saved'
   end
 
@@ -92,11 +92,6 @@ feature 'Editing interview process section, copying content from another course'
 
   def when_i_click_on_the_link_in_the_warning_box
     click_on 'Interview process'
-  end
-
-  def then_the_focus_is_on_the_input
-    about = find_field 'Interview process'
-    expect(about.focus?).to be true
   end
 
   def when_i_visit_the_interview_process_edit_page

@@ -35,18 +35,23 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-        <%= t("publish.providers.interview_process.edit.interview_process") %>
+        <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
       <%= t("publish.providers.interview_process.edit.include_information_about_html") %>
 
       <%= f.govuk_text_area(:interview_process,
                             value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
-                            label: { text: t("publish.providers.interview_process.edit.interview_process"), size: "s" },
-                            max_words: 400,
+                            label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
+                            max_words: 250,
                             rows: 20) %>
       <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
     <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
+                                                                                    @provider.recruitment_cycle.year,
+                                                                                    @course.course_code)) %>
+    </p>
   </div>
   <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
     <%= render(
@@ -62,9 +67,3 @@
         ) %>
   </aside>
 </div>
-
-<p class="govuk-body">
-  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
-                                                                                @provider.recruitment_cycle.year,
-                                                                                @course.course_code)) %>
-</p>
