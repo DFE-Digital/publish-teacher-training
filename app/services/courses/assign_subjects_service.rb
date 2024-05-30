@@ -18,7 +18,7 @@ module Courses
         return course
       end
 
-      if course.master_subject_id.nil? && course.subordinate_subject_id.present?
+      if course.master_subject_id.nil? && !course.further_education_course?
         course.errors.add(:subjects, :course_creation)
         return course
       end
