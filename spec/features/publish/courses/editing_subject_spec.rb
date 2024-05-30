@@ -29,7 +29,7 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     and_there_is_a_secondary_course_i_want_to_edit
     and_the_course_has_two_subjects
     when_i_visit_the_edit_course_subject_page
-    then_i_should_see_populated_selects
+    then_i_should_see_populated_selects('Drama', 'Latin')
     when_i_select_a_master_subject(:latin)
     when_i_select_a_subordinate_subject(:business_studies)
     and_i_click_continue
@@ -44,6 +44,16 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     when_i_select_a_master_subject(:modern_languages)
     and_i_click_continue
     then_i_am_met_with_the_modern_languages_page
+  end
+
+  scenario 'updating secondary subject modern languages with multiple languages' do
+    and_there_is_a_secondary_course_i_want_to_edit
+    and_the_course_has_two_languages
+    when_i_visit_the_edit_course_subject_page
+    then_i_should_see_populated_selects('Drama', 'Modern Languages')
+    when_i_select_a_master_subject(:business_studies)
+    and_i_click_continue
+    then_i_am_met_with_the_modern_languages_page(:business_studies)
   end
 
   scenario 'updating to no subjects' do
@@ -81,9 +91,15 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     @course.subjects << find_or_create(:secondary_subject, :latin)
   end
 
-  def then_i_should_see_populated_selects
-    expect(publish_courses_subjects_edit_page.master_subject_fields.find('option[selected]')).to have_text('Drama')
-    expect(publish_courses_subjects_edit_page.subordinate_subjects_fields.find('option[selected]')).to have_text('Latin')
+  def and_the_course_has_two_languages
+    @course.subjects << find_or_create(:secondary_subject, :modern_languages)
+    @course.subjects << find_or_create(:modern_languages_subject, :french)
+    @course.subjects << find_or_create(:modern_languages_subject, :german)
+  end
+
+  def then_i_should_see_populated_selects(master_name, subordinate_name = nil)
+    expect(publish_courses_subjects_edit_page.master_subject_fields.find('option[selected]')).to have_text(master_name)
+    expect(publish_courses_subjects_edit_page.subordinate_subjects_fields.find('option[selected]')).to have_text(subordinate_name) if subordinate_name.present?
   end
 
   def and_there_is_a_primary_course_i_want_to_edit
@@ -130,8 +146,15 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
-  def then_i_am_met_with_the_modern_languages_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/modern-languages?#{params_with_subject}")
+  def then_i_am_met_with_the_modern_languages_page(extra_subject=nil)
+    expect(page).to have_current_path(
+      [
+        "/publish/organisations/#{provider.provider_code}/",
+        "#{Settings.current_recruitment_cycle_year}/",
+        "courses/#{course.course_code}/modern-languages?",
+        "#{params_with_subject(extra_subject)}"
+      ].join
+    )
     expect(page).to have_content('Languages')
   end
 
@@ -154,8 +177,12 @@ feature 'updating a subject', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  def params_with_subject
+  def params_with_subject(other=nil)
     course_subject = course_subject(:modern_languages)
-    "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    other_subject = course_subject(other)
+    param = ""
+    param += "course%5Bsubjects_ids%5D%5B%5D=#{other_subject.id}&" if other
+    param += "course%5Bsubjects_ids%5D%5B%5D=#{course_subject.id}"
+    param
   end
 end

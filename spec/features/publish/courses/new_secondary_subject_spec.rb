@@ -12,6 +12,8 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     when_i_select_one_subject(:business_studies)
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:business_studies)
+    and_i_click_back
+    then_i_am_met_with_populated_dropdowns(:business_studies)
   end
 
   scenario 'selecting two subjects' do
@@ -19,6 +21,8 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     when_i_select_two_subjects(:business_studies, :physics)
     and_i_click_continue
     then_i_am_met_with_the_age_range_page(:business_studies, :physics)
+    and_i_click_back
+    then_i_am_met_with_populated_dropdowns(:business_studies, :physics)
   end
 
   scenario 'selecting secondary subject modern languages' do
@@ -28,12 +32,28 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     then_i_am_met_with_the_modern_languages_page
   end
 
+  scenario 'selecting subordinate subject but no master' do
+    when_i_visit_the_new_course_subject_page
+    when_i_select_subordinate_subject(:business_studies)
+    and_i_click_continue
+    then_i_am_met_with_errors
+  end
+
+  scenario 'selecting duplicate subject modern languages' do
+    when_i_visit_the_new_course_subject_page
+    when_i_select_two_subjects(:modern_languages, :modern_languages)
+    and_i_click_continue
+    expect(page).to have_content('The second subject must be different to the first subject')
+
+    then_i_am_met_with_populated_dropdowns(:modern_languages, :modern_languages)
+  end
+
   scenario 'selecting duplicate first and second subject' do
     when_i_visit_the_new_course_subject_page
     when_i_select_two_subjects(:business_studies, :business_studies)
     and_i_click_continue
     expect(page).to have_content('The second subject must be different to the first subject')
-    expect(publish_courses_new_subjects_page.subordinate_subjects_fields.find('option[selected]')).to have_text('Business studies')
+    then_i_am_met_with_populated_dropdowns(:business_studies, :business_studies)
   end
 
   scenario 'invalid entries' do
@@ -57,9 +77,17 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_subjects_page.master_subject_fields.select(course_subject(subject_type).subject_name).click
   end
 
+  def when_i_select_subordinate_subject(subject_type)
+    publish_courses_new_subjects_page.subordinate_subjects_fields.select(course_subject(subject_type).subject_name).click
+  end
+
   def when_i_select_two_subjects(master, subordinate)
     publish_courses_new_subjects_page.master_subject_fields.select(course_subject(master).subject_name).click
     publish_courses_new_subjects_page.subordinate_subjects_fields.select(course_subject(subordinate).subject_name).click
+  end
+
+  def and_i_click_back
+    publish_courses_new_subjects_page.back.click
   end
 
   def and_i_click_continue
@@ -68,6 +96,11 @@ feature 'selecting a subject', { can_edit_current_and_next_cycles: false } do
 
   def provider
     @provider ||= @user.providers.first
+  end
+
+  def then_i_am_met_with_populated_dropdowns(master, subordinate = nil)
+    expect(publish_courses_new_subjects_page.master_subject_fields.find('option[selected]')).to have_content(course_subject(master))
+    expect(publish_courses_new_subjects_page.subordinate_subjects_fields.find('option[selected]')).to have_content(course_subject(subordinate)) if subordinate.present?
   end
 
   def then_i_am_met_with_the_age_range_page(master, subordinate = nil)
