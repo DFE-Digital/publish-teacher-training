@@ -122,7 +122,7 @@ module Publish
         if goto_visa_path?
           redirect_to visa_sponsorship_path
         elsif previous_tda_course_path?
-          redirect_to previously_defaulted_attributes
+          redirect_to new_publish_provider_recruitment_cycle_courses_study_mode_path(previously_defaulted_attributes)
         else
           redirect_to next_step
         end
@@ -137,7 +137,7 @@ module Publish
       end
 
       def previously_defaulted_attributes
-        new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params.merge(previous_tda_course: 'true'))
+        path_params.merge(previous_tda_course: 'true')
       end
     end
   end
