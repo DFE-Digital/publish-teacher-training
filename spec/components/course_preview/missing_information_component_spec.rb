@@ -48,7 +48,7 @@ module CoursePreview
       include_examples 'course with missing information', :degree, 'Enter degree requirements'
       include_examples 'course with missing information', :fee_uk_eu, 'Enter details about fees and financial support'
       include_examples 'course with missing information', :gcse, 'Enter GCSE and equivalency test requirements'
-      include_examples 'course with missing information', :how_school_placements_work, 'Enter details about school placements'
+      include_examples 'course with missing information', :how_school_placements_work, 'Enter details about how school placements work'
       include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
       include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
       include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the accredited provider'

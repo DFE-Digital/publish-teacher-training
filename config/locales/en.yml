@@ -236,7 +236,7 @@ en:
         gcse:
           text: "Enter GCSE and equivalency test requirements"
         how_school_placements_work:
-          text: "Enter details about school placements"
+          text: "Enter details about how school placements work"
         train_with_disability:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:

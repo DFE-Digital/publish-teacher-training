@@ -25,7 +25,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
                      provider:).decorate
 
       result = render_inline(described_class.new(course))
-      expect(result.text).to include('Enter details about school placements')
+      expect(result.text).to include('Enter details about how school placements work')
     end
   end
 
@@ -82,7 +82,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
                      ]).decorate
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('Enter details about school placements')
+      expect(result.text).to include('Enter details about how school placements work')
     end
   end
 

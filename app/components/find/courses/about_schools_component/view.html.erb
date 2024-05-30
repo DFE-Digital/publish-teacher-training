@@ -46,7 +46,7 @@
 
     <% if course.site_statuses.map(&:site).uniq.any? %>
       <h3 class="govuk-heading-m">
-        School placements
+        <%= course.placements_heading %>
       </h3>
 
       <p class="govuk-body">

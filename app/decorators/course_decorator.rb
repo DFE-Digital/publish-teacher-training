@@ -265,7 +265,7 @@ class CourseDecorator < ApplicationDecorator
     if further_education?
       'Teaching placements'
     else
-      'School placements'
+      'How school placements work'
     end
   end
 
