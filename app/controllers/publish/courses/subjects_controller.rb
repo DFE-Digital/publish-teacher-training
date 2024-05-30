@@ -18,6 +18,7 @@ module Publish
 
       def update
         authorize(provider)
+
         if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(
@@ -29,7 +30,7 @@ module Publish
             )
           )
 
-        elsif selected_subject_ids.include?(modern_languages_subject_id.to_s)
+        elsif selected_subject_ids.include?(modern_languages_subject_id.to_s) && validate_subject_ids
           course.update(master_subject_id: params[:course][:master_subject_id])
           redirect_to(
             modern_languages_publish_provider_recruitment_cycle_course_path(
@@ -40,7 +41,7 @@ module Publish
             )
           )
 
-        elsif course_subjects_form.save!
+        elsif course.errors.none? && course_subjects_form.save!
           course_updated_message(section_key)
           # TODO: move this to the form?
           course.update(master_subject_id: params[:course][:master_subject_id])
@@ -63,6 +64,17 @@ module Publish
       end
 
       private
+
+      def validate_subject_ids
+        if selected_master == selected_subordinate
+          course.errors.add(:subjects, :duplicate)
+          return false
+        elsif selected_master.blank?
+          course.errors.add(:subjects, :course_creation)
+          return false
+        end
+        true
+      end
 
       def campaign_name_check
         params[:course][:campaign_name] = '' unless @course.master_subject_id == SecondarySubject.physics.id
