@@ -129,11 +129,11 @@ module Publish
       end
 
       def goto_visa_path?
-        params[:goto_visa] == 'true' && params[:course][:previous_tda_course] != 'true'
+        params[:goto_visa] == 'true' && params.dig(:course, :previous_tda_course) != 'true'
       end
 
       def previous_tda_course_path?
-        params[:course][:previous_tda_course] == 'true'
+        params.dig(:course, :previous_tda_course) == 'true'
       end
 
       def previously_defaulted_attributes

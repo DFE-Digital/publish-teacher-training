@@ -55,7 +55,7 @@ module Publish
       end
 
       def previous_tda_course?
-        params[:publish_course_study_mode_form][:previous_tda_course] == 'true'
+        params.dig(:publish_course_study_mode_form, :previous_tda_course) == 'true'
       end
 
       def appropriate_visa_path

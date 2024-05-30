@@ -31,7 +31,7 @@ module Publish
         return render :edit if @errors.present?
 
         @current_qualification = @course.qualification
-        @updated_qualification = params[:course][:qualification]
+        @updated_qualification = params.dig(:course, :qualification)
 
         if @course.update(course_params)
           handle_qualification_update
