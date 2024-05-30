@@ -317,8 +317,22 @@ en:
           course_fees: Course fees
       interview_process:
         edit:
-          interview_process: Interview process
-
+          interview_process_heading: Interview process (optional)
+          interview_process_label: Interview process (optional)
+          interview_process_success: Interview process
+          page_title: Interview process (optional) - %{course_name_and_code}
+          submit_button: Update interview process
+          changes_not_saved: Your changes are not yet saved
+          copied_fields_from: We have copied this field from %{name_and_code}.
+          please_check_changes: Please check it and make your changes before saving.
+          include_information_about_html:
+            <p class="govuk-body">Include information about:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>how many interview candidates will have</li>
+              <li>the format of interviews, for example could they interview online</li>
+              <li>who will be interviewing them</li>
+              <li>any tests needed - if so, how they can prepare</li>
+            </ul>
       about_course:
         edit:
           about_this_course: About this course
@@ -347,7 +361,6 @@ en:
           changes_not_saved: Your changes are not yet saved
           copied_fields_from: We have copied this field from %{name_and_code}.
           please_check_changes: Please check it and make your changes before saving.
-
       study_mode:
         form:
           select_all_that_apply: Select all that apply
@@ -835,6 +848,10 @@ en:
               invalid: "Enter a real postcode"
             urn:
               format: "URN must be 5 or 6 numbers"
+        publish/course_interview_process_form:
+          attributes:
+            interview_process:
+              too_long: Reduce the word count for interview process
         publish/course_about_this_course_form:
           attributes:
             about_course:

@@ -1,17 +1,17 @@
 <% content_for :page_title, title_with_error_prefix(
-  t("publish.providers.about_course.edit.page_title", course_name_and_code: @course.name_and_code),
-  @about_this_course_form.errors.any?
+  t("publish.providers.interview_process.edit.page_title", course_name_and_code: @course.name_and_code),
+  @interview_process_form.errors.any?
 ) %>
 
 <% if params[:copy_from].present? && @copied_fields.any? %>
-  <%= render partial: "copy_about_course_content_warning" %>
+  <%= render partial: "copy_interview_process_content_warning" %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
-          model: @about_this_course_form,
-          url: about_this_course_publish_provider_recruitment_cycle_course_path(
+          model: @interview_process_form,
+          url: interview_process_publish_provider_recruitment_cycle_course_path(
             @provider.provider_code,
             @course.recruitment_cycle_year,
             @course.course_code
@@ -35,18 +35,17 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-        <%= t("publish.providers.about_course.edit.about_this_course") %>
+        <%= t("publish.providers.interview_process.edit.interview_process_heading") %>
       </h1>
 
-      <%= render partial: "guidance" %>
+      <%= t("publish.providers.interview_process.edit.include_information_about_html") %>
 
-      <%= f.govuk_text_area(:about_course,
-                            value: @copied_fields_values&.dig("about_course") || @about_this_course_form.about_course,
-                            label: { text: t("publish.providers.about_course.edit.about_this_course"), size: "s" },
-                            max_words: 400,
+      <%= f.govuk_text_area(:interview_process,
+                            value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
+                            label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
+                            max_words: 250,
                             rows: 20) %>
-      <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>
-      <%= f.govuk_submit t("publish.providers.about_course.edit.submit_button") %>
+      <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>
     <% end %>
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code,
@@ -59,7 +58,7 @@
           partial: "publish/courses/related_sidebar",
           locals: {
             course: @course,
-            page_path: about_this_course_publish_provider_recruitment_cycle_course_path(
+            page_path: interview_process_publish_provider_recruitment_cycle_course_path(
               @provider.provider_code,
               @course.recruitment_cycle_year,
               @course.course_code
@@ -67,5 +66,4 @@
           }
         ) %>
   </aside>
-  </div>
 </div>

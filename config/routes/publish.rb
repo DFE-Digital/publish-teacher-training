@@ -161,6 +161,8 @@ namespace :publish, as: :publish do
 
         get '/about-this-course', on: :member, to: 'courses/about_this_course#edit'
         patch '/about-this-course', on: :member, to: 'courses/about_this_course#update'
+        get '/interview-process', on: :member, to: 'courses/interview_process#edit'
+        patch '/interview-process', on: :member, to: 'courses/interview_process#update'
         get '/about', on: :member, to: 'courses/course_information#edit'
         patch '/about', on: :member, to: 'courses/course_information#update'
         get '/requirements', on: :member, to: 'courses/requirements#edit'

@@ -28,24 +28,6 @@
         <%= page_title %>
       </h1>
 
-      <h3 class="govuk-heading-m" id="interview-process">Interview process</h3>
-
-      <p class="govuk-body">
-        Include information about:
-      </p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>how many interviews candidates will have</li>
-        <li>who will be interviewing them</li>
-        <li>any tests needed - if so, how they can prepare</li>
-      </ul>
-
-      <%= f.govuk_text_area(:interview_process,
-        value: @copied_fields_values&.dig("interview_process") || @course.interview_process,
-        label: { text: "Interview process (optional)", size: "s" },
-        max_words: 250,
-        rows: 15) %>
-
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
       <h3 class="govuk-heading-m" id="how-school-placements-work"><%= @course.placements_heading %></h3>

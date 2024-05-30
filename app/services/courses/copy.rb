@@ -19,8 +19,11 @@ module Courses
       ['About this course', 'about_course']
     ].freeze
 
+    INTERVIEW_PROCESS_FIELDS = [
+      ['Interview process', 'interview_process']
+    ].freeze
+
     ABOUT_FIELDS = [
-      ['Interview process', 'interview_process'],
       ['How school placements work', 'how_school_placements_work']
     ].freeze
 
