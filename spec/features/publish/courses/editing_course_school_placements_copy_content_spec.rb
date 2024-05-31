@@ -18,7 +18,7 @@ feature 'Editing school placements section, copying content from another course'
     end
   end
 
-  scenario 'source course does not "about course" data' do
+  scenario 'source course does not have "about course" data' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_without_data_i_try_to_copy
