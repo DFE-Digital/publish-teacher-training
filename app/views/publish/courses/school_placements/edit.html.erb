@@ -35,13 +35,14 @@
 
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @course.name_and_code %></span>
-        <%= t("publish.providers.school_placements.edit.how_school_placements_work") %>
+        <%= CourseEnrichment.human_attribute_name("how_school_placements_work") %>
       </h1>
 
       <%= render partial: "guidance" %>
       <%= f.govuk_text_area(:how_school_placements_work,
-        value: @copied_fields_values&.dig("how_school_placements_work") || @course.how_school_placements_work,
-        label: { text: t("publish.providers.school_placements.edit.how_school_placements_work"), size: "s" },
+        value: @copied_fields_values&.dig("how_school_placements_work") ||
+          @course_school_placements_form.how_school_placements_work,
+        label: { text: CourseEnrichment.human_attribute_name("how_school_placements_work"), size: "s" },
         max_words: 350,
         rows: 15) %>
       <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>

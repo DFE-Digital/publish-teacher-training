@@ -25,9 +25,9 @@ module Publish
 
         if @course_school_placements_form.valid?
           @course_school_placements_form.save!
-          course_updated_message(I18n.t('publish.providers.school_placements.edit.how_school_placements_work')) unless goto_preview?
+          course_updated_message(CourseEnrichment.human_attribute_name('how_school_placements_work')) unless goto_preview?
 
-          redirect_to redirect_path
+          redirect_to preview_or_course_description
         else
           render :edit
         end
@@ -63,7 +63,7 @@ module Publish
         @course_information ||= Configs::CourseInformation.new(@course)
       end
 
-      def redirect_path
+      def preview_or_course_description
         if goto_preview?
           preview_publish_provider_recruitment_cycle_course_path(
             provider.provider_code,

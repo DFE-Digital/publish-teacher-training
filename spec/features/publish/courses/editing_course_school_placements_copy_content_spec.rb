@@ -3,19 +3,17 @@
 require 'rails_helper'
 
 feature 'Editing school placements section, copying content from another course' do
-  context 'source course has "about course" data' do
-    scenario 'source course has "about course" data' do
-      given_i_am_authenticated_as_a_provider_user
-      and_there_is_a_course_i_want_to_edit
-      and_there_is_a_course_with_data_i_want_to_copy
+  scenario 'source course has "about course" data' do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_course_i_want_to_edit
+    and_there_is_a_course_with_data_i_want_to_copy
 
-      when_i_visit_the_school_placements_edit_page
-      and_i_select_the_other_course_from_the_copy_content_dropdown
+    when_i_visit_the_school_placements_edit_page
+    and_i_select_the_other_course_from_the_copy_content_dropdown
 
-      then_i_see_the_copied_course_data
-      and_i_see_the_warning_that_changes_are_not_saved
-      and_the_warning_has_a_link_to_the_school_placements_input_field
-    end
+    then_i_see_the_copied_course_data
+    and_i_see_the_warning_that_changes_are_not_saved
+    and_the_warning_has_a_link_to_the_school_placements_input_field
   end
 
   scenario 'source course does not have "about course" data' do
@@ -77,7 +75,7 @@ feature 'Editing school placements section, copying content from another course'
   end
 
   def and_the_warning_has_a_link_to_the_school_placements_input_field
-    href = (find_link 'How school placements work')[:href]
+    href = find_link('How school placements work')[:href]
     school_placements_id = (find_field 'How school placements work')[:id]
     expect(school_placements_id).to eq(href.remove('#'))
   end

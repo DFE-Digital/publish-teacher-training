@@ -335,7 +335,6 @@ en:
             </ul>
       school_placements:
         edit:
-          how_school_placements_work: How school placements work
           page_title: How school placements work - %{course_name_and_code}
           submit_button: Update how school placements work
           guidance_text_html:
@@ -549,6 +548,7 @@ en:
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
+        how_school_placements_work/further_education: Teaching placements
       site:
         location_name: "Name"
         address1: "Building and street"
