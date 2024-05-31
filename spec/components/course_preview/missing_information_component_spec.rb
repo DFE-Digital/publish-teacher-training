@@ -17,7 +17,7 @@ module CoursePreview
       let(:hrefs) do
         {
           about_this_course:
-            about_this_course_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
+        about_this_course_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           degree:
         degrees_start_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           fee_uk_eu:
@@ -25,7 +25,7 @@ module CoursePreview
           gcse:
         gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           how_school_placements_work:
-        "#{about_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true)}#how-school-placements-work",
+        school_placements_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           train_with_disability:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-disability",
           train_with_us:
@@ -48,7 +48,7 @@ module CoursePreview
       include_examples 'course with missing information', :degree, 'Enter degree requirements'
       include_examples 'course with missing information', :fee_uk_eu, 'Enter details about fees and financial support'
       include_examples 'course with missing information', :gcse, 'Enter GCSE and equivalency test requirements'
-      include_examples 'course with missing information', :how_school_placements_work, 'Enter details about school placements'
+      include_examples 'course with missing information', :how_school_placements_work, 'Enter details about how school placements work'
       include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
       include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
       include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the accredited provider'

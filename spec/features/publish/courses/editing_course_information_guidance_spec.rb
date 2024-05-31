@@ -77,8 +77,10 @@ feature 'Guidance components on course edit page', { can_edit_current_and_next_c
   end
 
   def when_i_go_to_edit_a_course
-    publish_course_information_edit_page.load(
-      provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: @course.course_code
+    visit school_placements_publish_provider_recruitment_cycle_course_path(
+      @provider.provider_code,
+      @course.recruitment_cycle_year,
+      @course.course_code
     )
   end
 

@@ -262,11 +262,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def placements_heading
-    if further_education?
-      'Teaching placements'
-    else
-      'School placements'
-    end
+    CourseEnrichment.human_attribute_name("how_school_placements_work#{further_education? ? '/further_education' : nil}")
   end
 
   def further_education?

@@ -32,6 +32,14 @@ FactoryBot.define do
       providers { [create(:provider, :accredited_provider)] }
     end
 
+    trait :with_university_provider do
+      providers { [create(:provider, :university)] }
+    end
+
+    trait :with_scitt_provider do
+      providers { [create(:provider, :scitt)] }
+    end
+
     trait :inactive do
       accept_terms_date_utc { nil }
     end
