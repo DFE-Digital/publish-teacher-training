@@ -26,10 +26,6 @@
         <%= page_title %>
       </h1>
 
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
-
-      <h2 class="govuk-heading-m"><%= t("publish.providers.course_fees.edit.course_fees") %></h2>
-
       <%= f.govuk_text_field(:fee_uk_eu,
         form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },
         label: { text: "Fee for UK students", size: "s" },
@@ -46,41 +42,6 @@
         width: 5,
         data: { qa: "course_fee_international" }) %>
 
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
-
-      <h2 class="govuk-heading-m" id="financial-support">Fees and financial support (optional)</h2>
-      <p class="govuk-body">Candidates find it helpful to know when fees are due, payment schedules, top up fees and other costs like books and transport.</p>
-      <p class="govuk-body">You can also tell them about any financial support your institution offers.</p>
-      <p class="govuk-body">Do not include information about financial support available from the government like student loans or bursaries.</p>
-      <details class="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            See what we include in this section
-          </span>
-        </summary>
-        <div class="govuk-!-margin-top-4" />
-        <%= render Find::Utility::AdviceComponent::View.new(title: "Financial support from the government") do %>
-          <% if @course.salaried? %>
-            <%= render partial: "find/courses/financial_support/salaried" %>
-          <% elsif @course.excluded_from_bursary? %>
-            <%= render partial: "find/courses/financial_support/loan" %>
-          <% elsif @course.bursary_only? %>
-            <%= render Find::Courses::FinancialSupport::BursaryComponent::View.new(@course) %>
-          <% elsif @course.has_scholarship_and_bursary? %>
-            <%= render Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(@course) %>
-          <% else %>
-            <%= render partial: "find/courses/financial_support/loan" %>
-          <% end %>
-        <% end %>
-      </details>
-
-      <%= f.govuk_text_area(:fee_details,
-                            label: { text: "Fees and financial support (optional)", size: "s" },
-                            value:  @course_fee_form.fee_details,
-                            rows: 15,
-                            max_words: 250,
-                            data: { qa: "course_fee_details" }) %>
-
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
@@ -89,9 +50,4 @@
       <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <div class="app-status-box">
-      <%= render partial: "publish/courses/markdown_formatting" %>
-    </div>
-  </aside>
 </div>

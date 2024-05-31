@@ -17,66 +17,6 @@ feature 'Editing funding type' do
       and_the_course_fee_is_updated
     end
 
-    scenario 'copying course information with no courses available' do
-      and_there_is_a_course_i_want_to_edit(:fee_type_based)
-      when_i_visit_the_course_fee_edit_page
-      then_i_should_see_the_reuse_content
-    end
-
-    context 'copying content from another course' do
-      let!(:biology_course) do
-        create(
-          :course,
-          provider:,
-          name: 'Biology',
-          enrichments: [biology_course_enrichment]
-        )
-      end
-
-      let!(:course3) do
-        create(:course,
-               provider:,
-               name: 'Mathematics',
-               enrichments: [course3_enrichment])
-      end
-
-      let(:biology_course_enrichment) do
-        build(:course_enrichment,
-              fee_uk_eu: '8000',
-              fee_international: '20000',
-              fee_details: 'Test fee details',
-              financial_support: 'Test financial support')
-      end
-
-      let(:course3_enrichment) do
-        build(:course_enrichment,
-              fee_uk_eu: '',
-              fee_international: '',
-              fee_details: '',
-              financial_support: '')
-      end
-
-      scenario 'all fields get copied if all are present' do
-        and_there_is_a_course_i_want_to_edit(:fee_type_based)
-        when_i_visit_the_course_fee_edit_page
-        publish_course_fee_edit_page.copy_content.copy(biology_course)
-
-        [
-          'Your changes are not yet saved',
-          'Fee for UK students',
-          'Fee for international students',
-          'Fee details',
-          'Financial support'
-        ].each do |name|
-          expect(publish_course_fee_edit_page.copy_content_warning).to have_content(name)
-        end
-
-        expect(publish_course_fee_edit_page.uk_fee.value).to eq(biology_course_enrichment.fee_uk_eu.to_s)
-        expect(publish_course_fee_edit_page.international_fee.value).to eq(biology_course_enrichment.fee_international.to_s)
-        expect(publish_course_fee_edit_page.financial_support.value).to eq(biology_course_enrichment.financial_support)
-      end
-    end
-
     scenario 'updating with invalid data' do
       and_there_is_a_course_i_want_to_edit(:fee_type_based)
       when_i_visit_the_course_fee_edit_page
@@ -143,6 +83,8 @@ feature 'Editing funding type' do
 
   def and_i_set_an_incorrect_fee_amount
     publish_course_fee_edit_page.uk_fee.set(120_000)
+
+    publish_course_fee_edit_page.international_fee.set('abcde')
   end
 
   def and_i_set_incorrect_salary_information
@@ -176,6 +118,10 @@ feature 'Editing funding type' do
   def then_i_should_see_an_error_message_for_the_course_fee
     expect(publish_course_fee_edit_page.error_messages).to include(
       I18n.t('activemodel.errors.models.publish/course_fee_form.attributes.fee_uk_eu.less_than_or_equal_to')
+    )
+
+    expect(publish_course_fee_edit_page.error_messages).to include(
+      'Course fees for international students must be a valid number'
     )
   end
 
