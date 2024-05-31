@@ -37,6 +37,9 @@ variable "enable_monitoring" {
   type    = bool
   default = true
 }
+
+variable "enable_logit" { default = false }
+
 variable "statuscake_contact_groups" {
   type    = list(number)
   default = []
