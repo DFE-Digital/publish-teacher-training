@@ -74,7 +74,7 @@
     <% enrichment_summary(
       summary_list,
       :course,
-      "Fee details",
+      "Fees and financial support",
       value_provided?(course.fee_details),
       %w[fee_details],
       action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
@@ -86,10 +86,8 @@
       :course,
       "Financial support you offer",
       value_provided?(course.financial_support),
-      %w[financial_support],
-      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
-      action_visually_hidden_text: "details of financial support you offer"
-    ) %>
+      %w[financial_support]
+    ) if course.financial_support.present? %>
 
     <% summary_list.with_row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
       <% row.with_key { "Financial support from the government" } %>
