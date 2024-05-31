@@ -86,7 +86,7 @@ module WithQualifications
     end
 
     def qualification=(value)
-      super(value)
+      super
       self.profpost_flag = if qts?
                              :recommendation_for_qts
                            else

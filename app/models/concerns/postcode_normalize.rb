@@ -7,7 +7,7 @@ module PostcodeNormalize
       if str
         super(UKPostcode.parse(str).to_s)
       else
-        super(str)
+        super
       end
     end
   end
