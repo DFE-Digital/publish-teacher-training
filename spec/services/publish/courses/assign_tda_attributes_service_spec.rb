@@ -8,7 +8,7 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
   describe '#call' do
     it 'updates the course attributes and returns true' do
       expect(described_class.new(course).call).to be_truthy
-      expect(course.reload.study_mode).to eq('full_time')
+      expect(course.study_mode).to eq('full_time')
       expect(course.funding_type).to eq('apprenticeship')
       expect(course.can_sponsor_skilled_worker_visa).to be(false)
       expect(course.can_sponsor_student_visa).to be(false)

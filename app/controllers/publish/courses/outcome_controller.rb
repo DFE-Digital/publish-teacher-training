@@ -59,7 +59,10 @@ module Publish
             previous_tda_course: true
           )
         else
-          Publish::Courses::AssignTdaAttributesService.new(@course).call if undergraduate_degree_with_qts?
+          if undergraduate_degree_with_qts?
+            Publish::Courses::AssignTdaAttributesService.new(@course).call
+            @course.save
+          end
 
           redirect_to details_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
