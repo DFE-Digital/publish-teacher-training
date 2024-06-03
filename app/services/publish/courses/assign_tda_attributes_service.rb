@@ -16,7 +16,7 @@ module Publish
           can_sponsor_skilled_worker_visa: false,
           degree_grade: 'not_required',
           additional_degree_subject_requirements: false,
-          degree_subject_requirements: false
+          degree_subject_requirements: nil
         )
 
         if @course.enrichments.blank?
