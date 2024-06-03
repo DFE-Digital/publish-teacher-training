@@ -39,7 +39,7 @@ module Support
     end
 
     def valid?
-      super()
+      super
       assign_attributes_to_course
       course.valid?
       promote_errors_from_course

@@ -594,7 +594,7 @@ class Course < ApplicationRecord
 
       sites.reload
     else
-      super(desired_sites)
+      super
     end
   end
 
