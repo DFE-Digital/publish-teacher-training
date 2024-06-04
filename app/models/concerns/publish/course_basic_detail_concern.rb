@@ -92,7 +92,8 @@ module Publish
                 :goto_confirmation,
                 :skip_languages_goto_confirmation,
                 :goto_visa,
-                :language_ids
+                :language_ids,
+                :previous_tda_course
               ).permit(
                 policy(Course.new).permitted_new_course_attributes,
                 study_mode: [],

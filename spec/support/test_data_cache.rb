@@ -62,6 +62,9 @@ class TestDataCache
         %i[resulting_in_pgce] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgce)
                                  end,
+        %i[undergraduate_degree_with_qts] => lambda do
+                                               FactoryBot.create(:course, :undergraduate_degree_with_qts)
+                                             end,
         %i[resulting_in_pgde] => lambda do
                                    FactoryBot.create(:course, :resulting_in_pgde)
                                  end

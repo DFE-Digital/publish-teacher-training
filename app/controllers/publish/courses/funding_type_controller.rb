@@ -10,14 +10,8 @@ module Publish
         @errors = errors
         if @errors.any?
           render :new
-        elsif params[:goto_visa]
-          if course.is_fee_based?
-            redirect_to new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
-          else
-            redirect_to new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
-          end
         else
-          redirect_to(next_step)
+          handle_redirect
         end
       end
 
@@ -33,10 +27,9 @@ module Publish
         @course_funding_form = CourseFundingForm.new(@course, params: funding_type_params)
 
         if @course_funding_form.valid?
-          redirect_to(next_path)
+          handle_valid_form
         else
-          @errors = @course_funding_form.errors.messages
-          render :edit
+          handle_invalid_form
         end
       end
 
@@ -45,7 +38,34 @@ module Publish
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?
 
-        params.require(:publish_course_funding_form).permit(:funding_type)
+        params.require(:publish_course_funding_form).permit(:funding_type, :previous_tda_course)
+      end
+
+      def handle_valid_form
+        if previous_tda_course?
+          process_previous_tda_course
+        else
+          redirect_to next_path
+        end
+      end
+
+      def handle_invalid_form
+        @errors = @course_funding_form.errors.messages
+        render :edit
+      end
+
+      def previous_tda_course?
+        params[:publish_course_funding_form][:previous_tda_course] == 'true'
+      end
+
+      def process_previous_tda_course
+        @course_funding_form.save! if @course_funding_form.funding_type_updated?
+        redirect_to full_part_time_publish_provider_recruitment_cycle_course_path(
+          provider_code: course.provider_code,
+          recruitment_cycle_year: course.recruitment_cycle_year,
+          course_code: course.course_code,
+          previous_tda_course: true
+        )
       end
 
       def next_path
@@ -54,8 +74,15 @@ module Publish
           visa_page_path
         else
           course_updated_message(section_key)
-
           course_page_path
+        end
+      end
+
+      def visa_sponsorship_path
+        if course.is_fee_based?
+          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
         end
       end
 
@@ -79,9 +106,7 @@ module Publish
         if @course_funding_form.student_visa?
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         else
-          skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(
-            course_values
-          )
+          skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(course_values)
         end
       end
 
@@ -91,6 +116,28 @@ module Publish
 
       def section_key
         'Funding type'
+      end
+
+      def handle_redirect
+        if goto_visa_path?
+          redirect_to visa_sponsorship_path
+        elsif previous_tda_course_path?
+          redirect_to new_publish_provider_recruitment_cycle_courses_study_mode_path(previously_defaulted_attributes)
+        else
+          redirect_to next_step
+        end
+      end
+
+      def goto_visa_path?
+        params[:goto_visa] == 'true' && params.dig(:course, :previous_tda_course) != 'true'
+      end
+
+      def previous_tda_course_path?
+        params.dig(:course, :previous_tda_course) == 'true'
+      end
+
+      def previously_defaulted_attributes
+        path_params.merge(previous_tda_course: 'true')
       end
     end
   end

@@ -38,16 +38,7 @@ module Courses
       course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
-      if course.undergraduate_degree_with_qts?
-        course.funding_type = 'apprenticeship'
-        course.study_mode = 'full_time'
-        course.program_type = 'teacher_degree_apprenticeship'
-        course.can_sponsor_student_visa = false
-        course.can_sponsor_skilled_worker_visa = false
-        course.degree_grade = 'not_required'
-        course_enrichment = course.enrichments.find_or_initialize_draft
-        course_enrichment.course_length = '4 years'
-      end
+      Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
 
       course.valid?(:new) if course.errors.blank?
 
