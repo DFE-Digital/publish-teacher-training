@@ -4,6 +4,8 @@ require 'rails_helper'
 
 feature 'Editing course requirements', { can_edit_current_and_next_cycles: false } do
   before do
+    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024)
+    disable_features(:course_requirements_deprecated)
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_requirements_page
@@ -18,7 +20,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
   end
 
   context 'copying content from another course' do
-    let!(:course2) do
+    let!(:course_two) do
       create(
         :course,
         provider:,
@@ -48,7 +50,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
 
     scenario 'all fields get copied if all are present' do
       when_i_visit_the_course_requirements_page
-      publish_course_requirement_edit_page.copy_content.copy(course2)
+      publish_course_requirement_edit_page.copy_content.copy(course_two)
 
       [
         'Your changes are not yet saved',
@@ -64,7 +66,7 @@ feature 'Editing course requirements', { can_edit_current_and_next_cycles: false
 
     scenario 'missing fields do not get copied' do
       publish_course_requirement_edit_page.load(
-        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course2.course_code
+        provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course_two.course_code
       )
       publish_course_requirement_edit_page.copy_content.copy(course3)
 
