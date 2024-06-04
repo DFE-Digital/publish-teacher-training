@@ -381,6 +381,10 @@ class Provider < ApplicationRecord
     recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
   end
 
+  def course_requirements_deprecated?
+    recruitment_cycle_year.after_2024? && FeatureService.enabled?(:course_requirements_deprecated)
+  end
+
   private
 
   def accredited_provider_codes
