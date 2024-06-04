@@ -2,8 +2,22 @@
 
 require 'rails_helper'
 
-feature 'Course show', { can_edit_current_and_next_cycles: false } do
+feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
   include ActiveSupport::NumberHelper
+
+  before do
+    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    create(:recruitment_cycle)
+    enable_features(:course_requirements_deprecated)
+  end
+
+  scenario 'i can not see other personal qualities or other requirements' do
+    given_i_am_authenticated_as_a_provider_user(course: build(:course))
+    and_i_visit_the_course_page
+    and_i_do_not_see_personal_qualities
+    and_i_see_requirements_and_eligibility
+    and_i_do_not_see_other_requirements
+  end
 
   scenario 'i can view the course basic details' do
     given_i_am_authenticated_as_a_provider_user(course: build(:course))
@@ -60,15 +74,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  describe 'in the next cycle' do
-    scenario "published courses have a 'Scheduled' status" do
-      given_there_is_a_next_recruitment_cycle
-      given_i_am_authenticated_as_a_provider_user(course: build(:course))
-      when_i_visit_the_next_cycle_courses_page
-      then_i_should_see_the_status_scheduled
-    end
-  end
-
   describe 'with a published with unpublished changes course' do
     scenario 'i can view the unpublished partial' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: 'salary'))
@@ -77,50 +82,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_should_see_the_course_button_panel
       and_i_should_see_the_unpublished_with_changes_partial
       and_i_should_not_see_the_rollover_button
-    end
-  end
-
-  describe 'with an initial draft course' do
-    scenario 'i can view the unpublished partial and rollover' do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_initial_draft], funding_type: 'salary'))
-      given_there_is_a_next_recruitment_cycle
-      when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_initial_draft_course
-      and_i_should_see_the_course_button_panel
-      and_i_should_see_the_unpublished_partial
-      and_i_should_see_the_rollover_button
-      and_there_are_change_links
-      when_i_click_the_rollover_button
-      then_i_should_see_the_rollover_form_page
-      when_i_click_the_rollover_course_button
-      then_i_should_see_the_course_show_page_with_success_message
-      when_i_click_the_view_rollover_link
-      then_i_should_see_the_rolled_over_course_show_page
-    end
-  end
-
-  describe 'rollover with an empty course' do
-    scenario 'i can see the success message and link' do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [], funding_type: 'salary'))
-      given_there_is_a_next_recruitment_cycle
-      when_i_visit_the_rollover_form_page
-      when_i_click_the_rollover_course_button
-      then_i_should_see_the_course_show_page_with_success_message
-      when_i_click_the_view_rollover_link
-      then_i_should_see_the_draft_course_on_the_show_page
-    end
-  end
-
-  describe 'rollover with an rolled over course' do
-    scenario 'i can see the success message, link and preview' do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_rolled_over], funding_type: 'salary'))
-      given_there_is_a_next_recruitment_cycle
-      when_i_visit_the_rollover_form_page
-      when_i_click_the_rollover_course_button
-      then_i_should_see_the_course_show_page_with_success_message
-      when_i_click_the_view_rollover_link
-      and_i_should_see_the_rolled_over_course_show_page
-      then_i_should_see_the_link_to_preview
     end
   end
 
@@ -136,72 +97,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   private
 
-  def then_i_should_see_the_link_to_preview
-    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
-      expect(course_button_panel).to have_preview_link
-    end
-  end
-
-  def and_there_are_change_links
-    expect(page.find_all('.govuk-summary-list__actions a').all? { |actions| actions.text.include?('Change ') }).to be(true)
-  end
-
   def and_there_is_no_change_links
     expect(page.find_all('.govuk-summary-list__actions a').any?).to be(false)
   end
 
-  def then_i_should_see_the_rolled_over_course_show_page
-    expect(page).to have_content 'Rolled over'
-  end
-
-  alias_method :and_i_should_see_the_rolled_over_course_show_page, :then_i_should_see_the_rolled_over_course_show_page
-
-  def then_i_should_see_the_draft_course_on_the_show_page
-    expect(page).to have_content 'Draft'
-  end
-
-  def then_i_should_see_the_course_show_page_with_success_message
-    expect(page).to have_content 'Course rolled over'
-  end
-
-  def when_i_click_the_view_rollover_link
-    publish_provider_courses_show_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
-    )
-    publish_provider_courses_show_page.rolled_over_course_link.click
-  end
-
-  def given_there_is_a_next_recruitment_cycle
-    next_year = RecruitmentCycle.current.year.to_i + 1
-    RecruitmentCycle.create(year: next_year, application_start_date: Date.new(next_year - 1, 10, 1), application_end_date: Date.new(next_year, 9, 30))
-  end
-
-  def when_i_click_the_rollover_course_button
-    rollover_form_page.rollover_course_button.click
-  end
-
-  def then_i_should_see_the_rollover_form_page
-    rollover_form_page.load(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
-    )
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/rollover?")
-    expect(page).to have_content 'Are you sure you want to roll over the course into the next recruitment cycle?'
-  end
-
-  alias_method :when_i_visit_the_rollover_form_page, :then_i_should_see_the_rollover_form_page
-
-  def rollover_form_page
-    @rollover_form_page ||= PageObjects::Publish::DraftRollover.new
-  end
-
   def and_i_should_see_the_course_button_panel
     expect(publish_provider_courses_show_page).to have_course_button_panel
-  end
-
-  def and_i_should_see_the_rollover_button
-    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
-      expect(course_button_panel).to have_rollover_button
-    end
   end
 
   def and_i_should_not_see_the_rollover_button
@@ -220,14 +121,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  def and_i_should_see_the_unpublished_partial
-    publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
-      expect(course_button_panel).to have_publish_button
-      expect(course_button_panel).to have_preview_link
-      expect(course_button_panel).to have_delete_link
-    end
-  end
-
   def and_i_should_see_the_published_partial
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_view_on_find
@@ -239,10 +132,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_on_basic_details
     publish_provider_courses_show_page.basic_details_link.click
-  end
-
-  def when_i_click_the_rollover_button
-    publish_provider_courses_show_page.course_button_panel.rollover_button.click
   end
 
   def then_i_see_the_course_basic_details
@@ -266,14 +155,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   def course_enrichment_unpublished_changes
     @course_enrichment_unpublished_changes ||= build(:course_enrichment, :subsequent_draft, course_length: :TwoYears, fee_uk_eu: 9250, fee_international: 14_000)
-  end
-
-  def course_enrichment_initial_draft
-    @course_enrichment_initial_draft ||= build(:course_enrichment, :initial_draft)
-  end
-
-  def course_enrichment_rolled_over
-    @course_enrichment_rolled_over ||= build(:course_enrichment, :rolled_over)
   end
 
   def course_enrichment_withdrawn
@@ -300,16 +181,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def then_i_should_see_the_description_of_the_unpublished_changes_course
     expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment_unpublished_changes.about_course
-    )
-  end
-
-  def then_i_should_see_the_description_of_the_initial_draft_course
-    expect(publish_provider_courses_show_page.about_course).to have_content(
-      course_enrichment_initial_draft.about_course
-    )
-
-    expect(publish_provider_courses_show_page.content_status).to have_content(
-      'Draft'
     )
   end
 
@@ -352,11 +223,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_provider_courses_show_page).to have_degree
     expect(publish_provider_courses_show_page).to have_gcse
 
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities
+    expect(publish_provider_courses_show_page).to have_no_content(
+      '[data-qa=course__personal_qualities]'
     )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements
+    expect(publish_provider_courses_show_page).to have_no_content(
+      '[data-qa=course__other_requirements]'
     )
   end
 
@@ -387,11 +258,11 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
     expect(publish_provider_courses_show_page).to have_degree
     expect(publish_provider_courses_show_page).to have_gcse
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities
+    expect(publish_provider_courses_show_page).to have_no_content(
+      '[data-qa=course__personal_qualities]'
     )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements
+    expect(publish_provider_courses_show_page).to have_no_content(
+      '[data-qa=course__other_requirements]'
     )
   end
 
@@ -417,25 +288,31 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def course_enrichments_published
-    build(:course_enrichment, :published)
+  private
+
+  def and_i_see_requirements_and_eligibility
+    expect(page).to have_content('Requirements and eligibility')
   end
 
-  def next_recruitment_cycle_year
-    Settings.current_recruitment_cycle_year + 1
+  def and_i_do_not_see_personal_qualities
+    expect(page).to have_no_content('Personal qualities')
   end
 
-  def when_i_visit_the_next_cycle_courses_page
-    publish_provider_courses_index_page.load(
-      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_recruitment_cycle_year
+  def and_i_do_not_see_other_requirements
+    expect(page).to have_no_content('Other requirements')
+  end
+
+  def provider
+    @current_user.providers.first
+  end
+
+  def course
+    provider.courses.first
+  end
+
+  def and_i_visit_the_course_page
+    publish_provider_courses_show_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
-  end
-
-  def next_cycle_provider
-    create(:provider, :next_recruitment_cycle, courses: [build(:course, enrichments: [course_enrichments_published])])
-  end
-
-  def then_i_should_see_the_status_scheduled
-    expect(publish_provider_courses_index_page).to have_scheduled_tag
   end
 end
