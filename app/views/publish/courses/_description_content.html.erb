@@ -146,23 +146,25 @@
       action_visually_hidden_text: "GCSEs"
     ) %>
 
-  <% enrichment_summary(
-    summary_list,
-    :course,
-    "Personal qualities",
-    value_provided?(course.personal_qualities),
-    %w[personal_qualities],
-    action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
-    action_visually_hidden_text: "personal qualities"
-  ) %>
+  <% unless @hide_other_requirements %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      "Personal qualities",
+      value_provided?(course.personal_qualities),
+      %w[personal_qualities],
+      action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities",
+      action_visually_hidden_text: "personal qualities"
+    ) %>
 
-  <% enrichment_summary(
-    summary_list,
-    :course,
-    "Other requirements",
-    value_provided?(course.other_requirements),
-    %w[other_requirements],
-    action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
-    action_visually_hidden_text: "other requirements"
-  ) %>
+    <% enrichment_summary(
+      summary_list,
+      :course,
+      "Other requirements",
+      value_provided?(course.other_requirements),
+      %w[other_requirements],
+      action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements",
+      action_visually_hidden_text: "other requirements"
+    ) %>
+  <% end %>
 <% end %>
