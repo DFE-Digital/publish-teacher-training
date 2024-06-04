@@ -8,6 +8,7 @@ def enable_features(*feature_keys)
 end
 
 def disable_features(*feature_keys)
+  allow(FeatureService).to receive(:enabled?).and_return(true)
   feature_keys.each do |feature_key|
     allow(FeatureService).to receive(:enabled?).with(feature_key).and_return(false)
   end
