@@ -154,6 +154,12 @@ GEM
     bindata (2.5.0)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
+    blazer (3.0.3)
+      activerecord (>= 6.1)
+      chartkick (>= 5)
+      csv
+      railties (>= 6.1)
+      safely_block (>= 0.4)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     brakeman (6.1.2)
@@ -176,6 +182,7 @@ GEM
       xpath (~> 3.2)
     case_transform (0.2)
       activesupport
+    chartkick (5.0.5)
     childprocess (5.0.0)
     choice (0.2.0)
     cloudfront-rails (0.4.0)
@@ -658,6 +665,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubypants (0.7.1)
+    safely_block (0.4.0)
     schema_to_scaffold (0.8.2)
       activesupport (~> 7)
     semantic_logger (4.15.0)
@@ -776,6 +784,7 @@ DEPENDENCIES
   awesome_print
   better_errors
   binding_of_caller
+  blazer
   bootsnap (>= 1.1.0)
   brakeman
   bullet
