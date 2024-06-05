@@ -81,4 +81,6 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.authentication_token = ENV.fetch('AUTHENTICATION_TOKEN', 'bats')
+
+  config.x.read_only_database_url = ENV.fetch('DB_DATABASE', 'manage_courses_backend_development')
 end
