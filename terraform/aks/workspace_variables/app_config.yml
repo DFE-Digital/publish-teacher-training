@@ -27,4 +27,3 @@ production:
   <<: *default
   RAILS_ENV: production_aks
   RACK_ENV: production_aks
-  BIGQUERY_MAINTENANCE_WINDOW: "04-06-2024 18:15..04-06-2024 18:30"
