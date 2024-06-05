@@ -152,6 +152,9 @@ gem 'rack-cors'
 # Rails console colours
 gem 'colorize'
 
+# for running SQL queries
+gem 'blazer'
+
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 end
