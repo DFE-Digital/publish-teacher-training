@@ -191,14 +191,3 @@ provider.courses.published.filter { |c| c.content_status != :withdrawn }.each do
   new_course.update(accredited_provider_code: "2N2")
 end
 ```
-
-## Visa sponsorship issue
-
-If providers encounter an error message 'Select if visas can be sponsored' when publishing a course after correctly filling the visa option on basic details page, they need to have the provider sponsorship attributes updated from nil, as we are validating on the provider rather than the course at present.
-
-```ruby
-# Find provider to update
-provider = RecruitmentCycle.current.providers.find_by(provider_code: "1TZ")
-
-provider.update(can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: true)
-```
