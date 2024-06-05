@@ -43,6 +43,7 @@
   - statement
   - data_source
   - created_atator while
+  - created_at
   :organisation_provider:
   - id
   - provider_id
