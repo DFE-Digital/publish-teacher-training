@@ -72,5 +72,4 @@ namespace :support do
   end
 
   resources :user_permissions, only: %i[destroy]
-  mount Blazer::Engine => '/blazer'
 end
