@@ -35,9 +35,9 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
       scenario 'i can view a fee course' do
         given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
         when_i_visit_the_course_page
-        then_i_should_see_the_description_of_the_fee_course
-        and_i_should_see_the_course_financial_incentives
-        and_i_should_see_the_course_button_panel
+        then_i_see_the_description_of_the_fee_course
+        and_i_see_the_course_financial_incentives
+        and_i_see_the_course_button_panel
       end
     end
 
@@ -45,9 +45,9 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
       scenario 'i can view a fee course' do
         given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
         when_i_visit_the_course_page
-        then_i_should_see_the_description_of_the_fee_course
-        and_i_should_see_the_course_has_no_financial_incentives_information
-        and_i_should_see_the_course_button_panel
+        then_i_see_the_description_of_the_fee_course
+        and_i_see_the_course_has_no_financial_incentives_information
+        and_i_see_the_course_button_panel
       end
     end
   end
@@ -56,9 +56,9 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     scenario 'i can view a salary course' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: 'salary'))
       when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_course_as('Closed')
-      and_i_should_see_the_course_button_panel
+      then_i_see_the_description_of_the_salary_course
+      and_i_see_the_course_as('Closed')
+      and_i_see_the_course_button_panel
     end
   end
 
@@ -66,11 +66,11 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     scenario 'i can view the published partial' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], application_status: 'open', funding_type: 'salary', site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_salary_course
-      and_i_should_see_the_course_as('Open')
-      and_i_should_see_the_course_button_panel
-      and_i_should_see_the_published_partial
-      and_i_should_not_see_the_rollover_button
+      then_i_see_the_description_of_the_salary_course
+      and_i_see_the_course_as('Open')
+      and_i_see_the_course_button_panel
+      and_i_see_the_published_partial
+      and_i_do_not_see_the_rollover_button
     end
   end
 
@@ -78,10 +78,10 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     scenario 'i can view the unpublished partial' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_unpublished_changes], funding_type: 'salary'))
       when_i_visit_the_course_page
-      then_i_should_see_the_description_of_the_unpublished_changes_course
-      and_i_should_see_the_course_button_panel
-      and_i_should_see_the_unpublished_with_changes_partial
-      and_i_should_not_see_the_rollover_button
+      then_i_see_the_description_of_the_unpublished_changes_course
+      and_i_see_the_course_button_panel
+      and_i_see_the_unpublished_with_changes_partial
+      and_i_do_not_see_the_rollover_button
     end
   end
 
@@ -89,8 +89,8 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     scenario 'i can view the withdrawn course' do
       given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment_withdrawn]))
       when_i_visit_the_course_page
-      then_i_should_see_the_course_button_panel
-      and_i_should_see_the_course_withdrawn_date_and_preview_link
+      then_i_see_the_course_button_panel
+      and_i_see_the_course_withdrawn_date_and_preview_link
       and_there_is_no_change_links
     end
   end
@@ -101,19 +101,19 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     expect(page.find_all('.govuk-summary-list__actions a').any?).to be(false)
   end
 
-  def and_i_should_see_the_course_button_panel
+  def and_i_see_the_course_button_panel
     expect(publish_provider_courses_show_page).to have_course_button_panel
   end
 
-  def and_i_should_not_see_the_rollover_button
+  def and_i_do_not_see_the_rollover_button
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).not_to have_rollover_button
     end
   end
 
-  alias_method :then_i_should_see_the_course_button_panel, :and_i_should_see_the_course_button_panel
+  alias_method :then_i_see_the_course_button_panel, :and_i_see_the_course_button_panel
 
-  def and_i_should_see_the_unpublished_with_changes_partial
+  def and_i_see_the_unpublished_with_changes_partial
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_publish_button
       expect(course_button_panel).to have_withdraw_link
@@ -121,7 +121,7 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  def and_i_should_see_the_published_partial
+  def and_i_see_the_published_partial
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_view_on_find
       expect(course_button_panel).to have_withdraw_link
@@ -138,7 +138,7 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/details")
   end
 
-  def and_i_should_see_the_course_withdrawn_date_and_preview_link
+  def and_i_see_the_course_withdrawn_date_and_preview_link
     publish_provider_courses_show_page.course_button_panel.within do |course_button_panel|
       expect(course_button_panel).to have_withdrawn_date
       expect(course_button_panel).to have_preview_link
@@ -178,21 +178,21 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def then_i_should_see_the_description_of_the_unpublished_changes_course
+  def then_i_see_the_description_of_the_unpublished_changes_course
     expect(publish_provider_courses_show_page.about_course).to have_content(
       course_enrichment_unpublished_changes.about_course
     )
   end
 
-  def and_i_should_see_the_course_financial_incentives
+  def and_i_see_the_course_financial_incentives
     expect(publish_provider_courses_show_page.financial_incentives).to have_content(number_to_currency(10_000))
   end
 
-  def and_i_should_see_the_course_has_no_financial_incentives_information
+  def and_i_see_the_course_has_no_financial_incentives_information
     expect(publish_provider_courses_show_page.financial_incentives).to have_content('Information not yet available')
   end
 
-  def then_i_should_see_the_description_of_the_fee_course
+  def then_i_see_the_description_of_the_fee_course
     expect(publish_provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})"
     )
@@ -231,7 +231,7 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def then_i_should_see_the_description_of_the_salary_course
+  def then_i_see_the_description_of_the_salary_course
     expect(publish_provider_courses_show_page.title).to have_content(
       "#{course.name} (#{course.course_code})"
     )
@@ -266,7 +266,7 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def and_i_should_see_the_course_as(status_tag)
+  def and_i_see_the_course_as(status_tag)
     expect(publish_provider_courses_show_page.content_status).to have_content(status_tag)
   end
 
