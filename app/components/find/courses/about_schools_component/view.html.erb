@@ -2,7 +2,7 @@
   <h2 class="govuk-heading-l" id="training-locations">Training locations</h2>
   <div data-qa="course__about_schools">
     <% if show_higher_education_guidance? %>
-      <%= render Find::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
+      <%= render Shared::AdviceComponent::View.new(title: "Where you will train") do %>
         <p class="govuk-body">You’ll be placed in schools for most of your course. Your school placements will be within
           commuting distance.</p>
         <p class="govuk-body">You can’t pick which schools you want to be in, but your university will try to take your
@@ -11,7 +11,7 @@
           miles of the university, but sometimes they can cover a wider area, especially outside of cities.</p>
       <% end %>
     <% elsif show_scitt_guidance? %>
-      <%= render Find::Utility::AdviceComponent::View.new(title: "Where you will train") do %>
+      <%= render Shared::AdviceComponent::View.new(title: "Where you will train") do %>
         <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools you want to be in, but your training provider will place you in schools you can travel to.</p>
       <% end %>
     <% end %>

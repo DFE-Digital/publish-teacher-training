@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Find
+module Shared
   module Courses
     module FinancialSupport
       module ScholarshipAndBursaryComponent
