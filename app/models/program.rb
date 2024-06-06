@@ -38,6 +38,10 @@ class Program
   def self.fee_based?
     funding_type.fee?
   end
+
+  def self.where_salaried
+    where_funding_types(['salary', 'apprenticeship'])
+  end
 end
 
 class UnknownProgramme < Program

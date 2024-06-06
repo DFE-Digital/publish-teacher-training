@@ -248,9 +248,8 @@ class Course < ApplicationRecord
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, lambda {
-    where(
-      program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship scitt_salaried_programme higher_education_salaried_programme]
-    )
+    program_types = Program.where_salaried
+    where(program_type: program_types)
   }
   scope :with_study_modes, lambda { |study_modes|
     if study_modes.include? 'full_time_or_part_time'
@@ -509,9 +508,7 @@ class Course < ApplicationRecord
     Program.from_type(program_type)
   end
 
-  def funding_type
-    program.funding_type
-  end
+  delegate :funding_type, to: :program
 
   def is_fee_based?
     program.fee_based?
