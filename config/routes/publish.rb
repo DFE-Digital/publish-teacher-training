@@ -169,6 +169,8 @@ namespace :publish, as: :publish do
         patch '/requirements', on: :member, to: 'courses/requirements#update'
         get '/length', on: :member, to: 'courses/length#edit'
         patch '/length', on: :member, to: 'courses/length#update'
+        get '/fees-and-financial-support', on: :member, to: 'courses/fees_and_financial_support#edit'
+        patch '/fees-and-financial-support', on: :member, to: 'courses/fees_and_financial_support#update'
         get '/fees', on: :member, to: 'courses/fees#edit'
         patch '/fees', on: :member, to: 'courses/fees#update'
         get '/salary', on: :member, to: 'courses/salary#edit'

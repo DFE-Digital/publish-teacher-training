@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
-module Find
+module Shared
   module Courses
     module FinancialSupport
       module FeesAndFinancialSupportComponent
         class ViewPreview < ViewComponent::Preview
           def salaried
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(salaried_with_no_fees_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(salaried_with_no_fees_course)
           end
 
           def salaried_with_fees
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(salaried_with_fees_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(salaried_with_fees_course)
           end
 
           def excluded_from_bursary
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(excluded_from_bursary_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(excluded_from_bursary_course)
           end
 
           def bursary_only
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(bursary_only_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(bursary_only_course)
           end
 
           def scholarship_and_bursary
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(scholarship_and_bursary_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(scholarship_and_bursary_course)
           end
 
           def financial_support_available
-            render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(financial_support_course)
+            render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(financial_support_course)
           end
 
           private

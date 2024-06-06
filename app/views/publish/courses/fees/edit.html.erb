@@ -26,10 +26,6 @@
         <%= page_title %>
       </h1>
 
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
-
-      <h2 class="govuk-heading-m"><%= t("publish.providers.course_fees.edit.course_fees") %></h2>
-
       <%= f.govuk_text_field(:fee_uk_eu,
         form_group: { id: @course_fee_form.errors.key?(:fee_uk_eu) ? "fee_uk_eu-error" : "fee-uk" },
         label: { text: "Fee for UK students", size: "s" },
@@ -46,50 +42,12 @@
         width: 5,
         data: { qa: "course_fee_international" }) %>
 
-      <h3 class="govuk-heading-m" id="fee-details">Fee details</h3>
-      <p class="govuk-body">If applicable, give further details about the fees for this course.</p>
-      <p class="govuk-body">This could include:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>any top up fees</li>
-        <li>any other costs</li>
-      </ul>
-
-      <%= f.govuk_text_area(:fee_details,
-        label: { text: "Fee details (optional)", size: "s" },
-        value: @copied_fields_values&.dig("fee_details"),
-        rows: 15,
-        max_words: 250,
-        data: { qa: "course_fee_details" }) %>
-
-      <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
-
-      <h3 class="govuk-heading-m" id="financial-support">Financial support you offer</h3>
-      <p class="govuk-body">If applicable, say more about the financial support you offer for this course. For example, any bursaries available.</p>
-      <p class="govuk-body">You do not need to add details of any DfE bursaries and subject scholarships here. These will be published automatically to your course page.</p>
-
-      <%= f.govuk_text_area(:financial_support,
-        label: { text: "Financial support you offer (optional)", size: "s" },
-        value: @copied_fields_values&.dig("financial_support"),
-        rows: 15,
-        max_words: 250,
-        data: { qa: "course_financial_support" }) %>
-
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
 
       <%= f.govuk_submit "Update #{page_title.downcase}" %>
     <% end %>
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
+    </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render(
-      partial: "publish/courses/related_sidebar",
-      locals: {
-        course: @course,
-        page_path: fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @course.recruitment_cycle_year, @course.course_code)
-      }
-    ) %>
-  </aside>
 </div>
-
-<p class="govuk-body">
-  <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle.year, @course.course_code)) %>
-</p>

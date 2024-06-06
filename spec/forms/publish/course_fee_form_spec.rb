@@ -29,32 +29,6 @@ module Publish
           .allow_nil
       end
 
-      context 'fee details' do
-        before do
-          enrichment.fee_details = Faker::Lorem.sentence(word_count: 251)
-          subject.valid?
-        end
-
-        it 'validates the word count for fee details' do
-          expect(subject).not_to be_valid
-          expect(subject.errors[:fee_details])
-            .to include(I18n.t('activemodel.errors.models.publish/course_fee_form.attributes.fee_details.too_long'))
-        end
-      end
-
-      context 'financial support' do
-        before do
-          enrichment.financial_support = Faker::Lorem.sentence(word_count: 251)
-          subject.valid?
-        end
-
-        it 'validates the word count for financial support' do
-          expect(subject).not_to be_valid
-          expect(subject.errors[:financial_support])
-            .to include(I18n.t('activemodel.errors.models.publish/course_fee_form.attributes.financial_support.too_long'))
-        end
-      end
-
       context 'after 2023 recruitment cycle and if can_sponsor_student_visa' do
         let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
         let(:provider) { build(:provider, recruitment_cycle:) }

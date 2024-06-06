@@ -37,7 +37,7 @@
       <%= render partial: "find/courses/salary", locals: { course: } %>
     <% end %>
 
-    <%= render Find::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
 
     <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Find::Courses::FinancialSupport::BursaryComponent::View, type: :component do
+describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :component do
   let(:course) { create(:course, subjects: [create(:primary_subject, subject_name: 'primary with mathematics', financial_incentive: FinancialIncentive.new(bursary_amount: 3000))]).decorate }
 
   context 'bursaries_and_scholarships_announced feature flag is on' do

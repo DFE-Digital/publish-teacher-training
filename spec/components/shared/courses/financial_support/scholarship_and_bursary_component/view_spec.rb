@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, type: :component do
+describe Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, type: :component do
   let(:course) do
     build(:course,
           subjects: [
@@ -43,17 +43,12 @@ describe Find::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View, 
 
     context 'when course has a scholarship' do
       shared_examples 'subject with scholarship' do |subject_trait, scholarship_body, scholarship_url|
-        context "#{subject_trait} subject" do
-          let(:course) { build(:course, subjects:).decorate }
+        it 'renders link to scholarship body' do
+          course = build(:course, subjects: [build(:secondary_subject, subject_trait)]).decorate
+          render_inline(described_class.new(course))
 
-          let(:subjects) { [build(:secondary_subject, subject_trait)] }
-
-          it 'renders link to scholarship body' do
-            render_inline(described_class.new(course))
-
-            expect(page).to have_text("For a scholarship, you’ll need to apply through the #{scholarship_body}")
-            expect(page).to have_link('Check whether you’re eligible for a scholarship and find out how to apply', href: scholarship_url)
-          end
+          expect(page).to have_text("For a scholarship, you’ll need to apply through the #{scholarship_body}")
+          expect(page).to have_link('Check whether you’re eligible for a scholarship and find out how to apply', href: scholarship_url)
         end
       end
 

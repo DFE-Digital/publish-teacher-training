@@ -57,7 +57,7 @@
       "Fee for UK students",
       value_provided?(number_to_currency(course.fee_uk_eu)),
       %w[fee_uk_eu],
-      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-uk",
+      action_path: course.is_withdrawn? ? nil : fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       action_visually_hidden_text: "fee for UK students"
     ) %>
 
@@ -67,29 +67,29 @@
       "Fee for international students",
       value_provided?(number_to_currency(course.fee_international)),
       %w[fee_international],
-      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-international",
+      action_path: course.is_withdrawn? ? nil : fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       action_visually_hidden_text: "fee for international students"
     ) %>
 
     <% enrichment_summary(
       summary_list,
       :course,
-      "Fee details",
+      CourseEnrichment.human_attribute_name("fee_details"),
       value_provided?(course.fee_details),
       %w[fee_details],
-      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#fee-details",
-      action_visually_hidden_text: "fee details"
+      action_path: course.is_withdrawn? ? nil : fees_and_financial_support_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
+      action_visually_hidden_text: CourseEnrichment.human_attribute_name("fee_details")
     ) %>
 
-    <% enrichment_summary(
-      summary_list,
-      :course,
-      "Financial support you offer",
-      value_provided?(course.financial_support),
-      %w[financial_support],
-      action_path: course.is_withdrawn? ? nil : "#{fees_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#financial-support",
-      action_visually_hidden_text: "details of financial support you offer"
-    ) %>
+    <% if course.financial_support.present? %>
+      <% enrichment_summary(
+        summary_list,
+        :course,
+        "Financial support you offer",
+        value_provided?(course.financial_support),
+        %w[financial_support]
+      ) %>
+    <% end %>
 
     <% summary_list.with_row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
       <% row.with_key { "Financial support from the government" } %>

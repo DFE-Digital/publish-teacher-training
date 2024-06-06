@@ -29,9 +29,7 @@ module Courses
 
     FEES_FIELDS = [
       ['Fee for UK students', 'fee_uk_eu'],
-      ['Fee for international students', 'fee_international'],
-      ['Fee details', 'fee_details'],
-      ['Financial support', 'financial_support']
+      ['Fee for international students', 'fee_international']
     ].freeze
 
     SALARY_FIELDS = [
