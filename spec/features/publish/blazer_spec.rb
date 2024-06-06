@@ -12,7 +12,7 @@ feature 'Blazer SQL tool', { can_edit_current_and_next_cycles: false } do
   scenario 'i cannot access blazer as a non admin' do
     given_i_am_authenticated_as_a_non_admin
     when_i_visit_the_blazer_page
-    then_i_see_a_404
+    then_i_see_page_not_found
   end
 
   def given_i_am_authenticated_as_a_non_admin
@@ -35,7 +35,7 @@ feature 'Blazer SQL tool', { can_edit_current_and_next_cycles: false } do
     expect(publish_provider_courses_index_page).to be_displayed
   end
 
-  def then_i_see_a_404
+  def then_i_see_page_not_found
     expect(page.status_code).to eq(404)
   end
 end
