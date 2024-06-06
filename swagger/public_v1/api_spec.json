@@ -334,15 +334,15 @@
             "type": "string",
             "nullable": true,
             "format": "markdown",
-            "description": "Any non-academic qualifications or documents the applicant may need.",
-            "example": "You'll need to provide confirmation you have the health and physical capacity to commence training, and a Disclosure and Barring Service (DBS) certificate."
+            "description": "This field is being deprecated after 2024 recruitment cycle.",
+            "example": ""
           },
           "personal_qualities": {
             "type": "string",
             "nullable": true,
             "format": "markdown",
-            "description": "Any skills, motivation and experience the provider is looking for in applicants.",
-            "example": "We are looking for applicants who have the potential to become outstanding teachers, and who are able to work independently on their studies while training in a school context."
+            "description": "This field is being deprecated after 2024 recruitment cycle.",
+            "example": ""
           },
           "program_type": {
             "type": "string",
