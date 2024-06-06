@@ -2980,7 +2980,7 @@ describe Course do
       it 'returns nil' do
         course = build(:course, program_type: nil)
 
-        expect(course.program).to be_nil
+        expect(course.program).to be(UnknownProgramme)
       end
     end
 

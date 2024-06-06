@@ -520,15 +520,15 @@ class Course < ApplicationRecord
   end
 
   def program
-    Program.from_type(program_type) if program_type.present?
+    Program.from_type(program_type)
   end
 
   def funding_type
-    program.funding_type if program.present?
+    program.funding_type
   end
 
   def is_fee_based?
-    funding_type == 'fee'
+    program.fee_based?
   end
 
   def visa_type

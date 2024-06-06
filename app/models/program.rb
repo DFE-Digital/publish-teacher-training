@@ -2,6 +2,8 @@
 
 class Program
   def self.from_type(program_type)
+    return UnknownProgramme unless program_type
+
     {
       higher_education_programme: HigherEducationProgramme,
       higher_education_salaried_programme: HigherEducationSalariedProgramme,
@@ -11,11 +13,21 @@ class Program
       scitt_salaried_programme: SCITTSalariedProgramme,
       pg_teaching_apprenticeship: PostgraduateTeachingApprenticeship,
       teacher_degree_apprenticeship: TeacherDegreeApprenticeship,
-    }.fetch(program_type.to_sym, nil)
+    }.fetch(program_type.to_sym, UnknownProgramme)
   end
 
-  def self.funding_type(funding_type)
-    ActiveSupport::StringInquirer.new(funding_type)
+  def self.funding_type
+    NotImplementedError
+  end
+
+  def self.fee_based?
+    funding_type.fee?
+  end
+end
+
+class UnknownProgramme < Program
+  def self.funding_type
+    ActiveSupport::StringInquirer.new('unknown')
   end
 end
 

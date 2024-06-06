@@ -29,7 +29,7 @@ RSpec.describe Program do
     end
 
     it 'returns a PostgraduateTeachingApprenticeship instance when given :postgraduate_teaching_apprenticeship' do
-      expect(Program.from_type(:postgraduate_teaching_apprenticeship)).to be(PostgraduateTeachingApprenticeship)
+      expect(Program.from_type(:pg_teaching_apprenticeship)).to be(PostgraduateTeachingApprenticeship)
     end
 
     it 'returns a TeacherDegreeApprenticeship instance when given :teacher_degree_apprenticeship' do
@@ -37,7 +37,19 @@ RSpec.describe Program do
     end
 
     it 'returns nil when given an unknown type' do
-      expect(Program.from_type(:unknown)).to be_nil
+      expect(Program.from_type(:unknown)).to be(UnknownProgramme)
+    end
+  end
+
+  describe '.fee_funded?' do
+    it 'returns true when funding_type is "fee"' do
+      allow(Program).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('fee'))
+      expect(Program).to be_fee_based
+    end
+
+    it 'returns false when funding_type is not "fee"' do
+      allow(Program).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('salary'))
+      expect(Program).not_to be_fee_based
     end
   end
 end
