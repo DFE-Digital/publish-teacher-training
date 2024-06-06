@@ -53,18 +53,4 @@
       </p>
     <% end %>
   </div>
-
-  <% if course.personal_qualities.present? %>
-    <h3 class="govuk-heading-m">Personal qualities</h3>
-    <div data-qa="course__personal_qualities">
-      <%= helpers.markdown(course.personal_qualities) %>
-    </div>
-  <% end %>
-
-  <% if course.other_requirements.present? %>
-    <h3 class="govuk-heading-m">Other requirements</h3>
-    <div data-qa="course__other_requirements">
-      <%= helpers.markdown(course.other_requirements) %>
-    </div>
-  <% end %>
 </div>
