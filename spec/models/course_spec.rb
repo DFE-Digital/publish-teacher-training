@@ -2947,9 +2947,9 @@ describe Course do
 
   describe '#funding_type' do
     context 'when program_type is nil' do
-      it 'returns nil' do
+      it 'returns unknown' do
         course = described_class.new(program_type: nil)
-        expect(course.funding_type).to be_nil
+        expect(course.funding_type).to eq("unknown")
       end
     end
 

@@ -491,8 +491,8 @@ class Course < ApplicationRecord
   end
 
   def program_type_description
-    if school_direct_salaried_training_programme? then ' with salary'
-    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship? then ' teaching apprenticeship'
+    if program.funding_type.salary? then ' with salary'
+    elsif program.funding_type.apprenticeship? then ' teaching apprenticeship'
     else
       ''
     end
