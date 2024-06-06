@@ -13,7 +13,6 @@ require "action_view/railtie"
 require "active_support/core_ext/integer/time"
 require "view_component/compile_cache"
 require "govuk/components"
-require 'sprockets/railtie'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
