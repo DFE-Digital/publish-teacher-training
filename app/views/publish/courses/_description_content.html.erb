@@ -1,4 +1,4 @@
-<h3 class="govuk-heading-m">Course information</h3>
+<h2 class="govuk-heading-m">Course information</h2>
 
 <%= govuk_summary_list do |summary_list| %>
   <% enrichment_summary(
@@ -32,13 +32,13 @@
   ) %>
 <% end %>
 
-<h3 class="govuk-heading-m">
+<h2 class="govuk-heading-m">
   <% if course.has_fees? %>
     Course length and fees
   <% else %>
     Course length and salary
   <% end %>
-</h3>
+</h2>
 <%= govuk_summary_list do |summary_list| %>
   <% if course.has_fees? %>
     <% enrichment_summary(
@@ -119,7 +119,7 @@
   <% end %>
 <% end %>
 
-<h3 class="govuk-heading-m">Requirements and eligibility</h3>
+<h2 class="govuk-heading-m">Requirements and eligibility</h2>
 
   <%= govuk_summary_list do |summary_list| %>
     <% if course.show_degree_requirements_row? %>

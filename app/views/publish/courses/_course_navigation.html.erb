@@ -1,0 +1,4 @@
+<%= render SecondaryNavigationComponent.new do |component| %>
+  <% component.with_navigation_item t("secondary_navigation.description"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) %>
+  <% component.with_navigation_item t("secondary_navigation.basic_details"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) %>
+<% end %>

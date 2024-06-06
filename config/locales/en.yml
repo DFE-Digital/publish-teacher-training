@@ -67,6 +67,9 @@ en:
     training_partners: "Training partners"
     organisation_details: "Organisation details"
     accredited_provider: "Accredited providers"
+  secondary_navigation:
+    description: Description
+    basic_details: Basic details
   qualifications:
     description:
       qts: QTS
