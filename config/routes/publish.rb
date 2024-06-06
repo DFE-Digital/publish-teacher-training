@@ -166,13 +166,6 @@ namespace :publish, as: :publish do
         get '/school-placements', on: :member, to: 'courses/school_placements#edit'
         patch '/school-placements', on: :member, to: 'courses/school_placements#update'
 
-        # This feature is deprecated and will be removed after the beginning of
-        # 2025 recruitment cycle.
-        scope constraints: { recruitment_cycle_year: /2024/ } do
-          get '/requirements', on: :member, to: 'courses/requirements#edit'
-          patch '/requirements', on: :member, to: 'courses/requirements#update'
-        end
-
         get '/length', on: :member, to: 'courses/length#edit'
         patch '/length', on: :member, to: 'courses/length#update'
         get '/fees-and-financial-support', on: :member, to: 'courses/fees_and_financial_support#edit'

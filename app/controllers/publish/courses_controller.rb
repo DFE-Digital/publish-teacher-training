@@ -18,8 +18,6 @@ module Publish
 
       authorize @course
 
-      @hide_other_requirements = provider.course_requirements_deprecated?
-
       @errors = flash[:error_summary]
       flash.delete(:error_summary)
     end
