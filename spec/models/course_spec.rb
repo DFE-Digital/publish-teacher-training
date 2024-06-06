@@ -2975,6 +2975,24 @@ describe Course do
     end
   end
 
+  describe '#program' do
+    context 'when program_type is nil' do
+      it 'returns nil' do
+        course = build(:course, program_type: nil)
+
+        expect(course.program).to be_nil
+      end
+    end
+
+    context 'when program_type is higher_education_programme' do
+      it 'returns the HigherEducationProgramme' do
+        course = build(:course, program_type: :higher_education_programme)
+
+        expect(course.program).to be(HigherEducationProgramme)
+      end
+    end
+  end
+
   describe 'funding_type and program_type' do
     context 'setting the funding_type to apprenticeship' do
       it 'sets the funding_type to apprenticeship and program_type to pg_teaching_apprenticeship' do

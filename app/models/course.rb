@@ -519,16 +519,12 @@ class Course < ApplicationRecord
     :not_running
   end
 
-  def funding_type
-    return if program_type.nil?
+  def program
+    Program.from_type(program_type) if program_type.present?
+  end
 
-    if school_direct_salaried_training_programme? || scitt_salaried_programme? || higher_education_salaried_programme?
-      'salary'
-    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship?
-      'apprenticeship'
-    else
-      'fee'
-    end
+  def funding_type
+    program.funding_type if program.present?
   end
 
   def is_fee_based?
