@@ -12,8 +12,23 @@ class Program
       scitt_programme: SCITTProgramme,
       scitt_salaried_programme: SCITTSalariedProgramme,
       pg_teaching_apprenticeship: PostgraduateTeachingApprenticeship,
-      teacher_degree_apprenticeship: TeacherDegreeApprenticeship,
+      teacher_degree_apprenticeship: TeacherDegreeApprenticeship
     }.fetch(program_type.to_sym, UnknownProgramme)
+  end
+
+  def self.where_funding_types(funding_types = [])
+    funding_types = Array(funding_types)
+    {
+      higher_education_programme: HigherEducationProgramme,
+      higher_education_salaried_programme: HigherEducationSalariedProgramme,
+      school_direct_training_programme: SchoolDirectTrainingProgramme,
+      school_direct_salaried_training_programme: SchoolDirectSalariedTrainingProgramme,
+      scitt_programme: SCITTProgramme,
+      scitt_salaried_programme: SCITTSalariedProgramme,
+      pg_teaching_apprenticeship: PostgraduateTeachingApprenticeship,
+      teacher_degree_apprenticeship: TeacherDegreeApprenticeship
+    }.select { |_key, value| funding_types.include?(value.funding_type) }
+      .keys
   end
 
   def self.funding_type

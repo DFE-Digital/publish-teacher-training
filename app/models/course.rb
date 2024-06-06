@@ -288,21 +288,7 @@ class Course < ApplicationRecord
   }
 
   scope :with_funding_types, lambda { |funding_types|
-    program_types = []
-
-    program_types << :school_direct_salaried_training_programme if funding_types.include?('salary')
-
-    program_types << :pg_teaching_apprenticeship if funding_types.include?('apprenticeship')
-
-    if funding_types.include?('fee')
-      %i[
-        higher_education_programme
-        scitt_programme
-        school_direct_training_programme
-      ].each do |program_type|
-        program_types << program_type
-      end
-    end
+    program_types = Program.where_funding_types(funding_types)
 
     where(program_type: program_types)
   }

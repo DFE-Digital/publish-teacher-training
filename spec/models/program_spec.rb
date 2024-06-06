@@ -52,6 +52,13 @@ RSpec.describe Program do
       expect(Program).not_to be_fee_based
     end
   end
+
+  describe '.where_funding_types' do
+    it 'returns an array of program keys with the given funding types' do
+      expect(Program.where_funding_types('fee')).to match_array(%i[higher_education_programme school_direct_training_programme scitt_programme])
+      expect(Program.where_funding_types(%w[fee])).to match_array(%i[higher_education_programme school_direct_training_programme scitt_programme])
+    end
+  end
 end
 
 RSpec.describe HigherEducationProgramme do
