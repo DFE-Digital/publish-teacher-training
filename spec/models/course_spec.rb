@@ -2974,4 +2974,79 @@ describe Course do
       end
     end
   end
+
+  describe 'funding_type and program_type' do
+    context 'setting the funding_type to apprenticeship' do
+      it 'sets the funding_type to apprenticeship and program_type to pg_teaching_apprenticeship' do
+        course = build(:course, funding_type: 'apprenticeship')
+
+        expect(course.funding_type).to eq('apprenticeship')
+        expect(course.program_type).to eq('pg_teaching_apprenticeship')
+      end
+    end
+
+    context 'setting the funding_type to salary' do
+      context 'when the provider is a SCITT' do
+        it 'sets the funding_type to salary and the program_type to scitt_salaried_programme' do
+          provider = build(:provider, provider_type: 'scitt')
+          course = build(:course, provider:, funding_type: 'salary')
+
+          expect(course.funding_type).to eq('salary')
+          expect(course.program_type).to eq('scitt_salaried_programme')
+        end
+      end
+
+      context 'when the provider is a University' do
+        it 'sets the funding_type to salary and the program_type to higher_education_salaried_programme' do
+          provider = build(:provider, provider_type: 'university')
+          course = build(:course, provider:, funding_type: 'salary')
+
+          expect(course.funding_type).to eq('salary')
+          expect(course.program_type).to eq('higher_education_salaried_programme')
+        end
+      end
+
+      context 'when the provider is a Lead School' do
+        it 'sets the funding_type to salary and the program_type to school_direct_salaried_training_programme' do
+          provider = build(:provider, provider_type: 'lead_school')
+          course = build(:course, provider:, funding_type: 'salary')
+
+          expect(course.funding_type).to eq('salary')
+          expect(course.program_type).to eq('school_direct_salaried_training_programme')
+        end
+      end
+    end
+
+    context 'setting the funding_type to fee' do
+      context 'when the provider is not self accredited' do
+        it 'sets the funding_type to salary and the program_type to school_direct_training_programme' do
+          provider = build(:provider, accrediting_provider: :not_an_accredited_provider)
+          course = build(:course, provider:, funding_type: 'fee')
+
+          expect(course.funding_type).to eq('fee')
+          expect(course.program_type).to eq('school_direct_training_programme')
+        end
+      end
+
+      context 'when the provider is self accredited and a SCITT' do
+        it 'sets the funding_type to salary and the program_type to scitt_programme' do
+          provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: 'scitt')
+          course = build(:course, provider:, funding_type: 'fee')
+
+          expect(course.funding_type).to eq('fee')
+          expect(course.program_type).to eq('scitt_programme')
+        end
+      end
+
+      context 'when the provider is self accredited and not a SCITT' do
+        it 'sets the funding_type to salary and the program_type to higher_education_programme' do
+          provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: nil)
+          course = build(:course, provider:, funding_type: 'fee')
+
+          expect(course.funding_type).to eq('fee')
+          expect(course.program_type).to eq('higher_education_programme')
+        end
+      end
+    end
+  end
 end
