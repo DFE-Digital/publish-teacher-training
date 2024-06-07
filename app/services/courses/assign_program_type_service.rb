@@ -6,7 +6,7 @@ module Courses
       program_type = {
         'salary' => calculate_salary_program(course),
         'apprenticeship' => :pg_teaching_apprenticeship,
-        'fee' => calculate_fee_program(course),
+        'fee' => calculate_fee_program(course)
       }.fetch(funding_type, course.program_type)
 
       course.program_type = program_type
