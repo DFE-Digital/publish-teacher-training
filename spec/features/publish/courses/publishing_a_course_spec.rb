@@ -101,8 +101,8 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       course.recruitment_cycle_year,
       course.course_code
     )
-    fill_in 'How school placements work', with: 'some new information about school placements'
-    click_on 'Update how school placements work'
+    fill_in 'How placements work', with: 'some new information about school placements'
+    click_on 'Update how placements work'
   end
 
   def then_i_should_see_the_unpublished_changes_message

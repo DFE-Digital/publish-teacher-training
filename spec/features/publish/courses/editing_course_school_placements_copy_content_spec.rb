@@ -66,7 +66,7 @@ feature 'Editing school placements section, copying content from another course'
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content 'Your changes are not yet saved'
     expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}."
-    expect(page).to have_link 'How school placements work'
+    expect(page).to have_link 'How placements work'
     expect(page).to have_content 'Please check it and make your changes before saving'
   end
 
@@ -75,17 +75,17 @@ feature 'Editing school placements section, copying content from another course'
   end
 
   def and_the_warning_has_a_link_to_the_school_placements_input_field
-    href = find_link('How school placements work')[:href]
-    school_placements_id = (find_field 'How school placements work')[:id]
+    href = find_link('How placements work')[:href]
+    school_placements_id = (find_field 'How placements work')[:id]
     expect(school_placements_id).to eq(href.remove('#'))
   end
 
   def then_i_see_the_copied_course_data
-    expect(find_field('How school placements work').value).to eq @copied_course.enrichments.first.how_school_placements_work
+    expect(find_field('How placements work').value).to eq @copied_course.enrichments.first.how_school_placements_work
   end
 
   def then_i_do_not_see_copied_course_data
-    expect(find_field('How school placements work').value).to eq @course.enrichments.first.how_school_placements_work
+    expect(find_field('How placements work').value).to eq @course.enrichments.first.how_school_placements_work
   end
 
   def then_the_focus_is_on_the_input

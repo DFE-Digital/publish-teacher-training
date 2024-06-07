@@ -262,7 +262,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def placements_heading
-    CourseEnrichment.human_attribute_name("how_school_placements_work#{further_education? ? '/further_education' : nil}")
+    CourseEnrichment.human_attribute_name('how_school_placements_work')
   end
 
   def length_and_fees_or_salary_heading

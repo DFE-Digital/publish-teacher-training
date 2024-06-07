@@ -109,7 +109,7 @@ feature 'Viewing a findable course' do
           personal_qualities: 'We are looking for ambitious trainee teachers who are passionate.',
           other_requirements: 'You will need three years of prior work experience, but not necessarily in an educational context.',
           interview_process: 'Some helpful guidance about the interview process',
-          how_school_placements_work: 'Some info about how school placements work',
+          how_school_placements_work: 'Some info about how placements work',
           about_course: 'This is a course',
           required_qualifications: 'You need some qualifications for this course'
         )

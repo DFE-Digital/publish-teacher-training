@@ -468,11 +468,11 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     click_on 'Update about this course'
 
     publish_provider_courses_show_page.how_school_placements_work.find_link(
-      text: 'Change details about how school placements work'
+      text: 'Change details about how placements work'
     ).click
 
-    fill_in 'How school placements work', with: 'School placements information'
-    click_on 'Update how school placements work'
+    fill_in 'How placements work', with: 'School placements information'
+    click_on 'Update how placements work'
   end
 
   def and_i_add_salary_information

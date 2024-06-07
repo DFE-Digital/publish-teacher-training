@@ -24,7 +24,7 @@ module Courses
     ].freeze
 
     SCHOOL_PLACEMENTS_FIELDS = [
-      ['How school placements work', 'how_school_placements_work']
+      ['How placements work', 'how_school_placements_work']
     ].freeze
 
     FEES_FIELDS = [

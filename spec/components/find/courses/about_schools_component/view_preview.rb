@@ -33,7 +33,7 @@ module Find
         def mock_scitt_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
                          published_how_school_placements_work: 'you will go on placement and learn more',
-                         placements_heading: 'Teaching placements',
+                         placements_heading: 'How placements work',
                          program_type: 'scitt_programme',
                          study_sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
@@ -42,7 +42,7 @@ module Find
         def mock_hei_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
                          published_how_school_placements_work: 'you will go on placement and learn more',
-                         placements_heading: 'Teaching placements',
+                         placements_heading: 'How placements work',
                          program_type: 'higher_education_programme',
                          study_sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
