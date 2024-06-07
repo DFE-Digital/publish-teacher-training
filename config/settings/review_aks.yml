@@ -13,6 +13,7 @@ search_ui:
 
 features:
   teacher_degree_apprenticeship: true
+  course_requirements_deprecated: true
 
 authentication:
   secret: secret

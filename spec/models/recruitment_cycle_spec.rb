@@ -5,10 +5,12 @@ require 'rails_helper'
 describe RecruitmentCycle do
   subject { current_cycle }
 
+  before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2023) }
+
   let(:current_cycle) { find_or_create(:recruitment_cycle) }
   let(:next_cycle) { find_or_create(:recruitment_cycle, :next) }
 
-  its(:to_s) { is_expected.to eq('2024/25') }
+  its(:to_s) { is_expected.to eq('2023/24') }
 
   it 'is valid with valid attributes' do
     expect(subject).to be_valid
@@ -47,8 +49,29 @@ describe RecruitmentCycle do
     end
   end
 
+  describe '#after_2024?', :aggregate_failures do
+    context 'when cycle year is 2024' do
+      before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024) }
+
+      it 'returns false' do
+        expect(current_cycle).not_to be_after_2024
+        expect(next_cycle).to be_after_2024
+      end
+    end
+
+    context 'when cycle year is 2025' do
+      before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025) }
+
+      it 'returns true' do
+        expect(current_cycle).to be_after_2024
+        expect(next_cycle).to be_after_2024
+      end
+    end
+  end
+
   context 'when there are multiple cycles' do
     let!(:third_cycle) do
+      current_cycle
       find_or_create :recruitment_cycle, year: next_cycle.year.to_i + 1
     end
 
