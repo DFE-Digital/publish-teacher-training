@@ -25,7 +25,7 @@ This repo is home to three services:
 | ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------
 | Production  | [www](https://www.find-postgraduate-teacher-training.service.gov.uk)   | Public site
 | Staging     | [staging](https://staging.find-postgraduate-teacher-training.service.gov.uk)| For internal use by DfE to test deploys
-| QA          | [qa](https://qa.find-postgraduate-teacher-training.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
+| QA          | [qa](https://qa.find-teacher-training-courses.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
 
 ### Publish
 
