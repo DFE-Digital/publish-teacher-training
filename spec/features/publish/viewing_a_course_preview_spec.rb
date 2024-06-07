@@ -48,9 +48,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank school placements section' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button('Enter details about how school placements work')
+      and_i_click_link_or_button('Enter details about how placements work')
       and_i_click_link_or_button('Back')
-      and_i_click_link_or_button('Enter details about how school placements work')
+      and_i_click_link_or_button('Enter details about how placements work')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       and_i_see_the_new_course_text
@@ -84,9 +84,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank school placements' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button('Enter details about how school placements work')
+      and_i_click_link_or_button('Enter details about how placements work')
       and_i_click_link_or_button('Back')
-      and_i_click_link_or_button('Enter details about how school placements work')
+      and_i_click_link_or_button('Enter details about how placements work')
       and_i_submit_a_valid_form
       and_i_see_the_correct_banner
       then_i_should_be_back_on_the_preview_page
@@ -427,9 +427,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_submit_a_valid_form
-    fill_in 'How school placements work', with: 'great placement'
+    fill_in 'How placements work', with: 'great placement'
 
-    click_link_or_button 'Update how school placements work'
+    click_link_or_button 'Update how placements work'
   end
 
   def and_i_submit_a_valid_course_fees

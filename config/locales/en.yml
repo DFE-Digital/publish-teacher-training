@@ -239,7 +239,7 @@ en:
         gcse:
           text: "Enter GCSE and equivalency test requirements"
         how_school_placements_work:
-          text: "Enter details about how school placements work"
+          text: "Enter details about how placements work"
         train_with_disability:
           text: "Enter details about training with disabilities and other needs"
         train_with_us:
@@ -296,6 +296,31 @@ en:
     update: "Update user"
   publish:
     providers:
+      courses:
+        description_content:
+          course_information_heading: Course information
+          about_course_label: About this course
+          about_course_hidden_text: details about this course
+          interview_process_label: Interview process (optional)
+          interview_process_hidden_text: details about the interview process
+          how_school_placements_work_label: How placements work
+          how_school_placements_work_hidden_text: details about how placements work
+          course_length_and_fees_heading: Course length and fees
+          course_length_and_salary_heading: Course length and salary
+          course_length_label: Course length
+          fee_for_uk_students_label: Fee for UK students
+          fee_for_uk_students_hidden_text: fee for UK students
+          fee_for_international_students_label: Fee for international students
+          fee_details_label: Fees and financial support (optional)
+          fee_details_hidden_text: fees and financial support
+          financial_support_you_offer_label: Financial support you offer
+          financial_incentive_details_label: Financial support from the government
+          salary_label: Salary
+          requirements_heading: Requirements and eligibility
+          degree_label: Degree
+          gcse_label: GCSEs
+          personal_qualities_label: Personal qualities
+          other_requirements_label: Other requirements
       course_length:
         edit:
           course_length: Course length
@@ -351,8 +376,8 @@ en:
             </ul>
       school_placements:
         edit:
-          page_title: How school placements work - %{course_name_and_code}
-          submit_button: Update how school placements work
+          page_title: How placements work - %{course_name_and_code}
+          submit_button: Update how placements work
           guidance_text_html:
             <p class="govuk-body">Give candidates information about the schools they will be training in</p>
             <p class="govuk-body">Tell them:</p>
@@ -564,8 +589,9 @@ en:
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"
         fee_international: "Course fees for international students"
-        how_school_placements_work/further_education: Teaching placements
+        how_school_placements_work: How placements work
         fee_details: Fees and financial support
+        about_course: About this course
       site:
         location_name: "Name"
         address1: "Building and street"
@@ -665,7 +691,7 @@ en:
             about_course:
               blank: "^Enter information about this course"
             how_school_placements_work:
-              blank: "^Enter details about how school placements work"
+              blank: "^Enter details about how placements work"
             required_qualifications:
               blank: "^Enter details about the qualifications needed"
             course_length:
@@ -913,8 +939,8 @@ en:
         publish/course_school_placements_form:
           attributes:
             how_school_placements_work:
-              blank: Enter details about how school placements work
-              too_long: Reduce the word count for how school placements work
+              blank: Enter details about how placements work
+              too_long: Reduce the word count for how placements work
         publish/course_fees_and_financial_support_form:
           attributes:
             fee_details:

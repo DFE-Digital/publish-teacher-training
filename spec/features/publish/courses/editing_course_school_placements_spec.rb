@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Editing how school placements work', { can_edit_current_and_next_cycles: false } do
+feature 'Editing how placements work', { can_edit_current_and_next_cycles: false } do
   scenario 'I can update some information about the course' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
@@ -92,25 +92,25 @@ feature 'Editing how school placements work', { can_edit_current_and_next_cycles
   def and_i_set_information_about_the_course
     @school_placements = 'This is a new school placements'
 
-    fill_in 'How school placements work', with: @school_placements
+    fill_in 'How placements work', with: @school_placements
   end
 
   def and_i_submit_with_too_many_words
-    fill_in 'How school placements work', with: Faker::Lorem.sentence(word_count: 351)
+    fill_in 'How placements work', with: Faker::Lorem.sentence(word_count: 351)
     and_i_submit
   end
 
   def and_i_submit_without_any_data
-    fill_in 'How school placements work', with: ''
+    fill_in 'How placements work', with: ''
     and_i_submit
   end
 
   def and_i_submit
-    click_on 'Update how school placements work'
+    click_on 'Update how placements work'
   end
 
   def then_i_see_a_success_message
-    expect(page).to have_content 'How school placements work updated'
+    expect(page).to have_content 'How placements work updated'
   end
 
   def and_the_course_information_is_updated
@@ -120,11 +120,11 @@ feature 'Editing how school placements work', { can_edit_current_and_next_cycles
   end
 
   def then_i_see_an_error_message_about_reducing_word_count
-    expect(page).to have_content('Reduce the word count for how school placements work').twice
+    expect(page).to have_content('Reduce the word count for how placements work').twice
   end
 
   def then_i_see_an_error_message_about_entering_data
-    expect(page).to have_content('Enter details about how school placements work').twice
+    expect(page).to have_content('Enter details about how placements work').twice
   end
 
   def provider
