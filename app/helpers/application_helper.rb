@@ -37,8 +37,8 @@ module ApplicationHelper
   end
 
   # TODO: refactor enrichment_summary method to not use an instance variable
-  def enrichment_summary(summary_list, model, key, value, fields, truncate_value: true, action_path: nil, action_visually_hidden_text: nil)
-    action = render_action(action_path, action_visually_hidden_text)
+  def enrichment_summary(summary_list, model, key, value, fields, truncate_value: false, action_path: nil, action_visually_hidden_text: nil)
+    action = render_action(action_path, action_visually_hidden_text || key.downcase)
 
     if fields.any? { |field| @errors&.key? field.to_sym }
       errors = fields.map do |field|

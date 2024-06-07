@@ -35,7 +35,7 @@ describe ApplicationHelper do
       it 'injects the provided content into the provided summary list row' do
         expect(subject).to have_css(%(.govuk-summary-list__row[data-qa="enrichment__about"]))
         expect(subject).to have_css('.govuk-summary-list__key', text: 'About course')
-        expect(subject).to have_css('.govuk-summary-list__value.app-summary-list__value--truncate', text: 'Something about the course')
+        expect(subject).to have_css('.govuk-summary-list__value', text: 'Something about the course')
       end
     end
 
