@@ -265,6 +265,14 @@ class CourseDecorator < ApplicationDecorator
     CourseEnrichment.human_attribute_name("how_school_placements_work#{further_education? ? '/further_education' : nil}")
   end
 
+  def length_and_fees_or_salary_heading
+    if has_fees?
+      I18n.t('publish.providers.courses.description_content.course_length_and_fees_heading')
+    else
+      I18n.t('publish.providers.courses.description_content.course_length_and_salary_heading')
+    end
+  end
+
   def further_education?
     level == 'further_education' && subjects.any? { |s| s.subject_name == 'Further education' || s.subject_code = '41' }
   end

@@ -296,6 +296,32 @@ en:
     update: "Update user"
   publish:
     providers:
+      courses:
+        description_content:
+          course_information_heading: Course information
+          about_course_label: About this course
+          about_course_hidden_text: details about this course
+          interview_process_label: Interview process (optional)
+          interview_process_hidden_text: details about the interview process
+          how_school_placements_work_hidden_text: details about how school placements work
+          course_length_and_fees_heading: Course length and fees
+          course_length_and_salary_heading: Course length and salary
+          course_length_label: Course length
+          fee_for_uk_students_label: Fee for UK students
+          fee_for_uk_students_hidden_text: fee for UK students
+          fee_for_international_students_label: Fee for international students
+          fee_details_label: Fees and financial support (optional)
+          fee_details_hidden_text: fees and financial support
+          financial_support_you_offer_label: Financial support you offer
+          financial_incentive_details_label: Financial support from the government
+          salary_label: Salary
+          salary_hidden_text: salary
+          requirements_heading: Requirements and eligibility
+          degree_label: Degree
+          degree_hidden_text: degree
+          gcse_label: GCSEs
+          personal_qualities_label: Personal qualities
+          other_requirements_label: Other requirements
       course_length:
         edit:
           course_length: Course length
@@ -566,6 +592,7 @@ en:
         fee_international: "Course fees for international students"
         how_school_placements_work/further_education: Teaching placements
         fee_details: Fees and financial support
+        about_course: About this course
       site:
         location_name: "Name"
         address1: "Building and street"
