@@ -298,12 +298,12 @@ class Course < ApplicationRecord
 
   scope :can_sponsor_visa, lambda {
     where(
-      program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
+      program_type: Program.where_sponsor_student_visa,
       can_sponsor_student_visa: true
     )
       .or(
         where(
-          program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
+          program_type: Program.where_sponsor_skilled_worker_visa,
           can_sponsor_skilled_worker_visa: true
         )
       )
