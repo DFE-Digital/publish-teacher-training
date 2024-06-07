@@ -37,7 +37,7 @@ module ApplicationHelper
   end
 
   # TODO: refactor enrichment_summary method to not use an instance variable
-  def enrichment_summary(summary_list, model, key, value, fields, truncate_value: false, action_path: nil, action_visually_hidden_text: nil)
+  def enrichment_summary(summary_list, model, key, value, fields, action_path: nil, action_visually_hidden_text: nil)
     action = render_action(action_path, action_visually_hidden_text || key.downcase)
 
     if fields.any? { |field| @errors&.key? field.to_sym }
@@ -47,15 +47,13 @@ module ApplicationHelper
 
       value = raw(*errors)
       action = nil
-    elsif truncate_value
-      classes = 'app-summary-list__value--truncate'
     end
 
     value = raw('<span class="app-!-colour-muted">Empty</span>') if value.blank?
 
     summary_list.with_row(html_attributes: { data: { qa: "enrichment__#{fields.first}" } }) do |row|
       row.with_key { key.html_safe }
-      row.with_value(classes: classes || ['govuk-summary-list__value']) { value }
+      row.with_value(classes: ['govuk-summary-list__value']) { value }
       if action
         row.with_action(**action)
       else

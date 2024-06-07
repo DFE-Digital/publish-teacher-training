@@ -266,11 +266,9 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def length_and_fees_or_salary_heading
-    if has_fees?
-      I18n.t('publish.providers.courses.description_content.course_length_and_fees_heading')
-    else
-      I18n.t('publish.providers.courses.description_content.course_length_and_salary_heading')
-    end
+    heading = has_fees? ? 'course_length_and_fees_heading' : 'course_length_and_salary_heading'
+
+    I18n.t("publish.providers.courses.description_content.#{heading}")
   end
 
   def further_education?

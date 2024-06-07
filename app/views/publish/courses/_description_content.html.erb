@@ -109,8 +109,7 @@
       t("publish.providers.courses.description_content.salary_label"),
       value_provided?(course.salary_details),
       %w[salary_details],
-      action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
-      action_visually_hidden_text: t("publish.providers.courses.description_content.salary_hidden_text")
+      action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
     ) %>
   <% end %>
 <% end %>
@@ -127,9 +126,7 @@
         t("publish.providers.courses.description_content.degree_label"),
         (render DegreeRowContent.new(course:, errors: @errors)),
         %w[degree_grade degree_subject_requirements],
-        truncate_value: false,
-        action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil,
-        action_visually_hidden_text: t("publish.providers.courses.description_content.degree_hidden_text")
+        action_path: !course.is_withdrawn? && course.degree_section_complete? ? degrees_start_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil
       ) %>
     <% end %>
 
@@ -139,7 +136,6 @@
       t("publish.providers.courses.description_content.gcse_label"),
       (render GcseRowContent.new(course:, errors: @errors)),
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
-      truncate_value: false,
       action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil
     ) %>
 
