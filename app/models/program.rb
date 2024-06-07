@@ -51,7 +51,11 @@ end
 
 class UnknownProgramme < Program
   def self.funding_type
-    ActiveSupport::StringInquirer.new('unknown')
+    nil
+  end
+
+  def self.fee_based?
+    false
   end
 end
 
