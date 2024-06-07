@@ -41,7 +41,7 @@ RSpec.describe Program do
     end
   end
 
-  describe '.fee_funded?' do
+  describe '.fee_based?' do
     it 'returns true when funding_type is "fee"' do
       allow(Program).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('fee'))
       expect(Program).to be_fee_based
@@ -57,6 +57,32 @@ RSpec.describe Program do
     it 'returns an array of program keys with the given funding types' do
       expect(Program.where_funding_types('fee')).to match_array(%i[higher_education_programme school_direct_training_programme scitt_programme])
       expect(Program.where_funding_types(%w[fee])).to match_array(%i[higher_education_programme school_direct_training_programme scitt_programme])
+    end
+  end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(Program.sponsors_student_visa?).to be_falsey }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(Program.sponsors_skilled_worker_visa?).to be_falsey }
+  end
+
+  describe '.where_salaried' do
+    it 'returns an array of program keys with funding types "salary" or "apprenticeship"' do
+      expect(Program.where_salaried).to match_array(%i[higher_education_salaried_programme school_direct_salaried_training_programme scitt_salaried_programme pg_teaching_apprenticeship teacher_degree_apprenticeship])
+    end
+  end
+
+  describe '.where_sponsor_student_visa' do
+    it 'returns an array of program keys that sponsor student visas' do
+      expect(Program.where_sponsor_student_visa).to match_array(%i[higher_education_programme school_direct_training_programme scitt_programme])
+    end
+  end
+
+  describe '.where_sponsor_skilled_worker_visa' do
+    it 'returns an array of program keys that sponsor skilled worker visas' do
+      expect(Program.where_sponsor_skilled_worker_visa).to match_array(%i[school_direct_salaried_training_programme pg_teaching_apprenticeship])
     end
   end
 end
@@ -75,6 +101,14 @@ RSpec.describe HigherEducationProgramme do
       expect(HigherEducationProgramme.funding_type).to be_fee
     end
   end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(HigherEducationProgramme.sponsors_student_visa?).to be_truthy }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(HigherEducationProgramme.sponsors_skilled_worker_visa?).to be_falsey }
+  end
 end
 
 RSpec.describe HigherEducationSalariedProgramme do
@@ -90,6 +124,14 @@ RSpec.describe HigherEducationSalariedProgramme do
     it 'responds to salary?' do
       expect(HigherEducationSalariedProgramme.funding_type).to be_salary
     end
+  end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(HigherEducationSalariedProgramme.sponsors_student_visa?).to be_falsey }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(HigherEducationSalariedProgramme.sponsors_skilled_worker_visa?).to be_falsey }
   end
 end
 
@@ -107,6 +149,14 @@ RSpec.describe SchoolDirectTrainingProgramme do
       expect(SchoolDirectTrainingProgramme.funding_type).to be_fee
     end
   end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(SchoolDirectTrainingProgramme.sponsors_student_visa?).to be_truthy }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(SchoolDirectTrainingProgramme.sponsors_skilled_worker_visa?).to be_falsey }
+  end
 end
 
 RSpec.describe SchoolDirectSalariedTrainingProgramme do
@@ -122,6 +172,14 @@ RSpec.describe SchoolDirectSalariedTrainingProgramme do
     it 'responds to salary?' do
       expect(SchoolDirectSalariedTrainingProgramme.funding_type).to be_salary
     end
+  end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(SchoolDirectSalariedTrainingProgramme.sponsors_student_visa?).to be_falsey }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(SchoolDirectSalariedTrainingProgramme.sponsors_skilled_worker_visa?).to be_truthy }
   end
 end
 
@@ -139,6 +197,14 @@ RSpec.describe SCITTProgramme do
       expect(SCITTProgramme.funding_type).to be_fee
     end
   end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(SCITTProgramme.sponsors_student_visa?).to be_truthy }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(SCITTProgramme.sponsors_skilled_worker_visa?).to be_falsey }
+  end
 end
 
 RSpec.describe SCITTSalariedProgramme do
@@ -155,7 +221,14 @@ RSpec.describe SCITTSalariedProgramme do
       expect(SCITTSalariedProgramme.funding_type).to be_salary
     end
   end
+  describe '.sponsors_student_visa?' do
+    it { expect(SCITTSalariedProgramme.sponsors_student_visa?).to be_falsey }
   end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(SCITTSalariedProgramme.sponsors_skilled_worker_visa?).to be_falsey }
+  end
+end
 
 RSpec.describe PostgraduateTeachingApprenticeship do
   describe '.funding_type' do
@@ -170,6 +243,14 @@ RSpec.describe PostgraduateTeachingApprenticeship do
     it 'responds to apprenticeship?' do
       expect(PostgraduateTeachingApprenticeship.funding_type).to be_apprenticeship
     end
+  end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(PostgraduateTeachingApprenticeship.sponsors_student_visa?).to be_falsey }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(PostgraduateTeachingApprenticeship.sponsors_skilled_worker_visa?).to be_truthy}
   end
 end
 
@@ -186,5 +267,13 @@ RSpec.describe TeacherDegreeApprenticeship do
     it 'responds to apprenticeship?' do
       expect(TeacherDegreeApprenticeship.funding_type).to be_apprenticeship
     end
+  end
+
+  describe '.sponsors_student_visa?' do
+    it { expect(TeacherDegreeApprenticeship.sponsors_student_visa?).to be_falsey }
+  end
+
+  describe '.sponsors_skilled_worker_visa?' do
+    it { expect(TeacherDegreeApprenticeship.sponsors_skilled_worker_visa?).to be_falsey }
   end
 end
