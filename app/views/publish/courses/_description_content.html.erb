@@ -7,7 +7,7 @@
     summary_list,
     :course,
     t("publish.providers.courses.description_content.about_course_label"),
-    value_provided?(course.about_course),
+    value_provided?(markdown(course.about_course)),
     %w[about_course],
     action_path: course.is_withdrawn? ? nil : about_this_course_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: t("publish.providers.courses.description_content.about_course_hidden_text")
@@ -17,7 +17,7 @@
        summary_list,
        :course,
        t("publish.providers.courses.description_content.how_school_placements_work_label"),
-       value_provided?(course.how_school_placements_work),
+       value_provided?(markdown(course.how_school_placements_work)),
        %w[how_school_placements_work],
        action_path: course.is_withdrawn? ? nil : school_placements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
        action_visually_hidden_text: t("publish.providers.courses.description_content.how_school_placements_work_hidden_text")
@@ -27,7 +27,7 @@
     summary_list,
     :course,
     t("publish.providers.courses.description_content.interview_process_label"),
-    value_provided?(course.interview_process),
+    value_provided?(markdown(course.interview_process)),
     %w[interview_process],
     action_path: course.is_withdrawn? ? nil : interview_process_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
     action_visually_hidden_text: t("publish.providers.courses.description_content.interview_process_hidden_text")
@@ -71,7 +71,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.fee_details_label"),
-      value_provided?(course.fee_details),
+      value_provided?(markdown(course.fee_details)),
       %w[fee_details],
       action_path: course.is_withdrawn? ? nil : fees_and_financial_support_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
       action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text")
@@ -82,7 +82,7 @@
         summary_list,
         :course,
         t("publish.providers.courses.description_content.financial_support_you_offer_label"),
-        value_provided?(course.financial_support),
+        value_provided?(markdown(course.financial_support)),
         %w[financial_support]
       ) %>
     <% end %>
@@ -107,7 +107,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.salary_label"),
-      value_provided?(course.salary_details),
+      value_provided?(markdown(course.salary_details)),
       %w[salary_details],
       action_path: course.is_withdrawn? ? nil : salary_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
     ) %>
@@ -144,7 +144,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.personal_qualities_label"),
-      value_provided?(course.personal_qualities),
+      value_provided?(markdown(course.personal_qualities)),
       %w[personal_qualities],
       action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#personal-qualities"
     ) %>
@@ -153,7 +153,7 @@
       summary_list,
       :course,
       t("publish.providers.courses.description_content.other_requirements_label"),
-      value_provided?(course.other_requirements),
+      value_provided?(markdown(course.other_requirements)),
       %w[other_requirements],
       action_path: course.is_withdrawn? ? nil : "#{requirements_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)}#other-requirements"
     ) %>
