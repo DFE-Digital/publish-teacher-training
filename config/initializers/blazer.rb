@@ -1,4 +1,9 @@
 # frozen_string_literal: true
 
-Blazer::Record.pluralize_table_names = true
-ENV['BLAZER_DATABASE_URL'] = ENV.fetch('DATABASE_URL', nil)
+module Blazer
+  class Record < ActiveRecord::Base
+    self.abstract_class = true
+
+    self.pluralize_table_names = true
+  end
+end
