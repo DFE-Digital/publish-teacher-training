@@ -21,15 +21,12 @@ class Program
       all.fetch(program_type.to_sym, UnknownProgramme)
     end
 
+    # --- Funding type ---
     def funding_type = nil
 
     def fee_based?
       funding_type&.fee?
     end
-
-    def sponsors_student_visa? = false
-
-    def sponsors_skilled_worker_visa? = false
 
     def where_salaried
       where_funding_types(%w[salary apprenticeship])
@@ -39,6 +36,17 @@ class Program
       funding_types = Array(funding_types)
       all.select { |_key, value| funding_types.include?(value.funding_type) }.keys
     end
+    # --- End of Funding type ---
+
+    # --- Visa sponsorship ---
+    def sponsors_student_visa? = false
+
+    def sponsors_skilled_worker_visa? = false
+
+    def visa_type
+      type = fee_based? ? 'student' : 'skilled_worker'
+      ActiveSupport::StringInquirer.new(type)
+    end
 
     def where_sponsor_student_visa
       all.select { |_key, value| value.sponsors_student_visa? }.keys
@@ -47,11 +55,7 @@ class Program
     def where_sponsor_skilled_worker_visa
       all.select { |_key, value| value.sponsors_skilled_worker_visa? }.keys
     end
-
-    def visa_type
-      type = fee_based? ? 'student' : 'skilled_worker'
-      ActiveSupport::StringInquirer.new(type)
-    end
+    # --- End of Visa sponsorship ---
   end
 end
 
