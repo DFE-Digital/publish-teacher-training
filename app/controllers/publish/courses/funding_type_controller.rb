@@ -79,7 +79,7 @@ module Publish
       end
 
       def visa_sponsorship_path
-        if course.is_fee_based?
+        if course.fee_based?
           new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
         else
           new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)

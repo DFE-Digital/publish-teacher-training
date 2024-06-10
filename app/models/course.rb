@@ -508,11 +508,7 @@ class Course < ApplicationRecord
     Program.from_type(program_type)
   end
 
-  delegate :funding_type, :visa_type, to: :program
-
-  def is_fee_based?
-    program.fee_based?
-  end
+  delegate :funding_type, :visa_type, :fee_based?, to: :program
 
   def student_visa?
     visa_type.student?

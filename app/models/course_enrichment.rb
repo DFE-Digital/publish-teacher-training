@@ -79,7 +79,7 @@ class CourseEnrichment < ApplicationRecord
   validates :other_requirements, words_count: { maximum: 100 }
 
   def is_fee_based?
-    course&.is_fee_based?
+    course&.fee_based?
   end
 
   def has_been_published_before?

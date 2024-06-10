@@ -166,7 +166,7 @@
           <% end %>
         <% end %>
 
-        <% if course.is_fee_based? %>
+        <% if course.fee_based? %>
           <% summary_list.with_row(html_attributes: { data: { qa: "course__student_visa_sponsorship" } }) do |row| %>
             <% row.with_key { "Student visas" } %>
             <% row.with_value { course.can_sponsor_student_visa ? "Yes - can sponsor " : "No - cannot sponsor" } %>
