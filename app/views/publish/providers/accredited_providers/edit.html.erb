@@ -18,7 +18,7 @@
         <%= f.govuk_text_area(
           :description,
           label: { text: t(".title"), size: "l", tag: "h1" },
-          hint: { text: t(".hint") },
+          hint: -> { render "hint", hint: t(".hint") },
           caption: { text: @accredited_provider.provider_name, size: "l" },
           max_words: 100,
           rows: 10

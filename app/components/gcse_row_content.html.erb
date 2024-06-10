@@ -9,7 +9,7 @@
   </p>
 
   <% if course.additional_gcse_equivalencies %>
-    <%= simple_format(course.additional_gcse_equivalencies, class: "govuk-body") %>
+    <%= markdown(course.additional_gcse_equivalencies) %>
   <% end %>
 <% else %>
   <%= govuk_inset_text(classes: inset_text_css_classes) do %>

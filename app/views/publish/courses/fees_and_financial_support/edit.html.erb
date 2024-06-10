@@ -33,6 +33,7 @@
       <%= f.govuk_text_area(
             :fee_details,
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
+            hint: -> { render partial: "publish/courses/markdown_formatting" },
             value: @course_fees_and_financial_support_form.fee_details,
             rows: 15,
             max_words: 250,
@@ -51,7 +52,4 @@
           ) %>
     </p>
   </div>
-  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
-    <%= render partial: "publish/courses/markdown_formatting" %>
-  </aside>
 </div>

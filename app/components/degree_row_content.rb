@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DegreeRowContent < ViewComponent::Base
+  include PublishHelper
   attr_reader :course, :errors
 
   DEGREE_GRADE_MAPPING = {

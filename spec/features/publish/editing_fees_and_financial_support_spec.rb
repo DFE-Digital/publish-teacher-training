@@ -7,7 +7,9 @@ feature 'Editing fees and financial support section' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_fees_and_financial_support_edit_page
-    and_i_enter_information_into_the_fees_and_financial_support_field
+    then_i_see_markdown_formatting_guidance
+
+    when_i_enter_information_into_the_fees_and_financial_support_field
     and_i_submit_the_form
     then_fees_and_financial_support_data_has_changed
 
@@ -38,6 +40,13 @@ feature 'Editing fees and financial support section' do
 
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
+  end
+
+  def then_i_see_markdown_formatting_guidance
+    page.find('span', text: 'Help formatting your text')
+    expect(page).to have_content 'How to format your text'
+    expect(page).to have_content 'How to create a link'
+    expect(page).to have_content 'How to create bullet points'
   end
 
   def and_there_is_a_course_i_want_to_edit
@@ -76,7 +85,7 @@ feature 'Editing fees and financial support section' do
     fill_in 'Fees and financial support', with: Faker::Lorem.sentence(word_count: 251)
   end
 
-  def and_i_enter_information_into_the_fees_and_financial_support_field
+  def when_i_enter_information_into_the_fees_and_financial_support_field
     fill_in 'Fees and financial support (optional)', with: 'Here is very useful information fees and financial support'
   end
 

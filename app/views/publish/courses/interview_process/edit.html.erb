@@ -43,6 +43,7 @@
       <%= f.govuk_text_area(:interview_process,
                             value: @copied_fields_values&.dig("interview_process") || @interview_process_form.interview_process,
                             label: { text: t("publish.providers.interview_process.edit.interview_process_label"), size: "s" },
+                            hint: -> { render partial: "publish/courses/markdown_formatting" },
                             max_words: 250,
                             rows: 20) %>
       <%= f.govuk_submit t("publish.providers.interview_process.edit.submit_button") %>

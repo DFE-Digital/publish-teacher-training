@@ -16,10 +16,12 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
     and_i_see_equivalency_errors
 
     and_i_set_the_gcse_requirements
-    then_i_fill_the_equivalency_requirements
+    then_i_see_markdown_formatting_guidance
+
+    when_i_fill_the_equivalency_requirements
     and_i_click_save
 
-    and_i_am_on_the_course_page
+    then_i_am_on_the_course_page
     and_i_see_the_success_summary
   end
 
@@ -171,7 +173,14 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
     expect(page).to have_content('Select if you accept equivalency tests in English or maths')
   end
 
-  def then_i_fill_the_equivalency_requirements
+  def then_i_see_markdown_formatting_guidance
+    page.find('span', text: 'Help formatting your text')
+    expect(page).to have_content 'How to format your text'
+    expect(page).to have_content 'How to create a link'
+    expect(page).to have_content 'How to create bullet points'
+  end
+
+  def when_i_fill_the_equivalency_requirements
     publish_courses_gcse_requirements_page.english_equivalency.check
     publish_courses_gcse_requirements_page.maths_equivalency.check
     publish_courses_gcse_requirements_page.additional_requirements.set('Cycling Proficiency')
@@ -184,8 +193,10 @@ feature 'GCSE equivalency requirements', { can_edit_current_and_next_cycles: fal
       course.course_code
     )
   end
+  alias_method :then_i_am_on_the_course_page, :and_i_am_on_the_course_page
 
   def and_i_see_the_success_summary
     expect(publish_provider_courses_index_page.success_summary).to have_content(I18n.t('success.saved', value: 'GCSE requirements'))
   end
+  alias_method :then_i_see_the_success_summary, :and_i_see_the_success_summary
 end

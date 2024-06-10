@@ -27,6 +27,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       and_i_click_link_or_button('Back')
       then_i_should_be_back_on_the_preview_page
       and_i_click_link_or_button('Enter details about the training provider')
+      then_i_see_markdown_formatting_guidance_for_each_field
       and_i_submit_a_valid_about_your_organisation
       then_i_should_be_back_on_the_preview_page
       then_i_should_see_the_updated_content('test training with your organisation')
@@ -133,6 +134,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page).to have_content '44A Albert Road'
     expect(publish_course_preview_page).to have_content 'London'
     expect(publish_course_preview_page).to have_content 'NW4 2SJ'
+  end
+
+  def then_i_see_markdown_formatting_guidance_for_each_field
+    %w[#publish-about-your-organisation-form-train-with-us-hint #publish-about-your-organisation-form-train-with-disability-hint].each do |section_id|
+      within("div#{section_id}") do
+        page.find('span', text: 'Help formatting your text')
+        expect(page).to have_content 'How to format your text'
+        expect(page).to have_content 'How to create a link'
+        expect(page).to have_content 'How to create bullet points'
+      end
+    end
   end
 
   def then_i_see_the_course_preview_details

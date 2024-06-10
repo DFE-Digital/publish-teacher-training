@@ -43,6 +43,7 @@
       <%= f.govuk_text_area(:about_course,
                             value: @copied_fields_values&.dig("about_course") || @about_this_course_form.about_course,
                             label: { text: t("publish.providers.about_course.edit.about_this_course"), size: "s" },
+                            hint: -> { render partial: "publish/courses/markdown_formatting" },
                             max_words: 400,
                             rows: 20) %>
       <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>

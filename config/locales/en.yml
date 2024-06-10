@@ -11,11 +11,11 @@ en:
       Put square brackets [ ] around the link text and round brackets ( ) around the link URL. Make sure there are no
       spaces between the brackets.
     link_example_html: "For example: [http://GOV.UK](https://gov.uk/) will show as %{formatted_link}"
-    create_bullet_points_heading: How to create bullet_points
+    create_bullet_points_heading: How to create bullet points
     bullet_point_guidance_html:
       <li>use asterisks or hyphens to create a bullet point</li>
       <li>make sure there is one space after the asterisk or hyphen</li>
-      <li>leave one empty line space before the bullet points start, and one after</li>
+      <li>leave one empty line space before the bullet points start and one after</li>
     for_example: "For example:"
     list_item_one: "* list item 1"
     list_item_two: "* list item 2"

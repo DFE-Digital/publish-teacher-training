@@ -5,7 +5,7 @@
 
   <% if course.degree_subject_requirements.present? %>
     <p class="govuk-summary-list-value">
-      <%= course.degree_subject_requirements %>
+      <%= markdown(course.degree_subject_requirements) %>
     </p>
   <% end %>
 <% else %>

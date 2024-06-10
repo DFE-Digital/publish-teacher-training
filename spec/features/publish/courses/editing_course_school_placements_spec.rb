@@ -7,7 +7,9 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_publish_course_information_edit_page
-    and_i_set_information_about_the_course
+    then_i_see_markdown_formatting_guidance
+
+    when_i_enter_school_placements_information
     and_i_submit
     then_i_see_a_success_message
     and_the_course_information_is_updated
@@ -44,6 +46,13 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
 
   def and_i_click_to_see_more_guidance
     page.find('span', text: 'See what we include in this section').click
+  end
+
+  def then_i_see_markdown_formatting_guidance
+    page.find('span', text: 'Help formatting your text')
+    expect(page).to have_content 'How to format your text'
+    expect(page).to have_content 'How to create a link'
+    expect(page).to have_content 'How to create bullet points'
   end
 
   def then_i_see_the_message_for_university_users
@@ -89,7 +98,7 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     )
   end
 
-  def and_i_set_information_about_the_course
+  def when_i_enter_school_placements_information
     @school_placements = 'This is a new school placements'
 
     fill_in 'How placements work', with: @school_placements
