@@ -21,12 +21,10 @@ class Program
       all.fetch(program_type.to_sym, UnknownProgramme)
     end
 
-    def funding_type
-      NotImplementedError
-    end
+    def funding_type = nil
 
     def fee_based?
-      funding_type.fee?
+      funding_type&.fee?
     end
 
     def sponsors_student_visa? = false
@@ -49,19 +47,15 @@ class Program
     def where_sponsor_skilled_worker_visa
       all.select { |_key, value| value.sponsors_skilled_worker_visa? }.keys
     end
+
+    def visa_type
+      type = fee_based? ? 'student' : 'skilled_worker'
+      ActiveSupport::StringInquirer.new(type)
+    end
   end
 end
 
 class UnknownProgramme < Program
-  class << self
-    def funding_type
-      nil
-    end
-
-    def fee_based?
-      false
-    end
-  end
 end
 
 class HigherEducationProgramme < Program

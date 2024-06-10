@@ -21,7 +21,7 @@ RSpec.describe '#funding_type' do
     its(:funding_type) { is_expected.to eq 'fee' }
   end
 
-  describe 'school direct salaired programme' do
+  describe 'school direct salaried programme' do
     subject { create(:course, :with_salary) }
 
     its(:funding_type) { is_expected.to eq 'salary' }

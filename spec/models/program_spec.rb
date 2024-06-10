@@ -85,6 +85,26 @@ RSpec.describe Program do
       expect(described_class.where_sponsor_skilled_worker_visa).to match_array(%i[school_direct_salaried_training_programme pg_teaching_apprenticeship])
     end
   end
+
+  describe '.visa_type' do
+    it 'returns student when the funding_type is fee' do
+      allow(described_class).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('fee'))
+
+      expect(described_class.visa_type).to eq('student')
+    end
+
+    it 'returns skilled_worker when the funding_type is salary' do
+      allow(described_class).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('salary'))
+
+      expect(described_class.visa_type).to eq('skilled_worker')
+    end
+
+    it 'returns skilled_worker when the funding_type is apprenticeship' do
+      allow(described_class).to receive(:funding_type).and_return(ActiveSupport::StringInquirer.new('apprenticeship'))
+
+      expect(described_class.visa_type).to eq('skilled_worker')
+    end
+  end
 end
 
 RSpec.describe HigherEducationProgramme do

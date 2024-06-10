@@ -508,18 +508,14 @@ class Course < ApplicationRecord
     Program.from_type(program_type)
   end
 
-  delegate :funding_type, to: :program
+  delegate :funding_type, :visa_type, to: :program
 
   def is_fee_based?
     program.fee_based?
   end
 
-  def visa_type
-    is_fee_based? ? :student : :skilled_worker
-  end
-
   def student_visa?
-    visa_type == :student
+    visa_type.student?
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
