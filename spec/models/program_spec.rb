@@ -105,4 +105,12 @@ RSpec.describe Program do
       expect(described_class.visa_type).to eq('skilled_worker')
     end
   end
+
+  describe '.student_visa?' do
+    it 'returns true when visa_type is student' do
+      allow(described_class).to receive(:visa_type).and_return(ActiveSupport::StringInquirer.new('student'))
+
+      expect(described_class).to be_student_visa
+    end
+  end
 end

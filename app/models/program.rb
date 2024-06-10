@@ -55,6 +55,10 @@ class Program
     def where_sponsor_skilled_worker_visa
       all.select { |_key, value| value.sponsors_skilled_worker_visa? }.keys
     end
+
+    def student_visa?
+      visa_type.student?
+    end
     # --- End of Visa sponsorship ---
   end
 end
