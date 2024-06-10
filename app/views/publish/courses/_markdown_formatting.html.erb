@@ -1,18 +1,17 @@
-<div class="app-status-box">
-  <h3 class="govuk-heading-m">Formatting</h3>
-  <h4 class="govuk-heading-s">Links</h4>
-  <p class="govuk-body">Use square brackets [] around the link text and round brackets () around the link URL. Make sure there are no spaces between the brackets.</p>
-
-  <p class="govuk-body">For example:<br>[GOV.UK](https://gov.uk/)</p>
-
-  <h4 class="govuk-heading-s">Lists</h4>
-  <p class="govuk-body">To create a bulleted list:</p>
+<%= govuk_details(summary_text: t("markdown_formatting.summary_text")) do %>
+  <h1 class="govuk-heading-m"><%= t("markdown_formatting.title") %></h1>
+  <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_a_link_heading") %></h2>
+  <p class="govuk-body"><%= t("markdown_formatting.link_is_made_up_of_two_parts") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.link_format_warning") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.link_instructions") %></p>
+  <p class="govuk-body">
+    <%= t("markdown_formatting.link_example_html", formatted_link: link_to("http://GOV.UK", "http://gov.uk")) %>
+  </p>
+  <h2 class="govuk-heading-s"><%= t("markdown_formatting.create_bullet_points_heading") %></h2>
   <ul class="govuk-list govuk-list--bullet">
-    <li>use asterisks (*) to create a bullet point (hyphens also work)</li>
-    <li>make sure there is one space after the asterisk</li>
-    <li>leave 1 empty line space before the bullets start, and one after</li>
+    <%= t("markdown_formatting.bullet_point_guidance_html") %>
   </ul>
-
-  <p class="govuk-body">For example:</p>
-  <p class="govuk-body">* list item 1<br>* list item 2</p>
-</div>
+  <p class="govuk-body"><%= t("markdown_formatting.for_example") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.list_item_one") %></p>
+  <p class="govuk-body"><%= t("markdown_formatting.list_item_two") %></p>
+<% end %>
