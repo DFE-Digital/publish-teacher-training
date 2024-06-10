@@ -69,4 +69,8 @@ Rails/RedundantActiveRecordAllMethod:
 Rails/Output:
   Exclude:
     - config/initializers/console.rb
+  
+Rails/ApplicationRecord:
+  Exclude:
+    - config/initializers/blazer.rb
 
