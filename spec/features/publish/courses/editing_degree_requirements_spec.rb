@@ -15,6 +15,7 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
     when_i_set_a_required_grade
     then_i_should_see_the_subject_requirements_page
     then_i_should_see_the_reuse_content
+    then_i_see_markdown_formatting_guidance
     when_i_set_additional_requirements
     then_i_should_see_a_success_message('Degree requirements')
     and_the_required_grade_is_updated_with('two_one')
@@ -147,6 +148,13 @@ feature 'Editing degree requirements', { can_edit_current_and_next_cycles: false
 
   def then_i_should_see_the_reuse_content
     expect(publish_degree_subject_requirement_page).to have_use_content
+  end
+
+  def then_i_see_markdown_formatting_guidance
+    page.find('span', text: 'Help formatting your text')
+    expect(page).to have_content 'How to format your text'
+    expect(page).to have_content 'How to create a link'
+    expect(page).to have_content 'How to create bullet points'
   end
 
   def given_i_am_authenticated_as_a_provider_user

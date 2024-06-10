@@ -44,6 +44,7 @@
       <%= f.govuk_text_area(:train_with_us,
         form_group: { id: "train-with-us" },
         label: { text: "Training with your organisation", size: "m" },
+        hint: -> { render partial: "publish/courses/markdown_formatting" },
         max_words: 250,
         rows: 15) %>
 
@@ -60,7 +61,8 @@
 
       <%= f.govuk_text_area(:train_with_disability,
         form_group: { id: "train-with-disability" },
-        label: { text: "Training with disabilities and other needs", size: "s" },
+        label: { text: "Training with disabilities and other needs", size: "m" },
+        hint: -> { render partial: "publish/courses/markdown_formatting" },
         max_words: 250,
         rows: 15) %>
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>

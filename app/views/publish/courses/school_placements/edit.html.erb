@@ -43,6 +43,7 @@
         value: @copied_fields_values&.dig("how_school_placements_work") ||
           @course_school_placements_form.how_school_placements_work,
         label: { text: CourseEnrichment.human_attribute_name("how_school_placements_work"), size: "s" },
+        hint: -> { render partial: "publish/courses/markdown_formatting" },
         max_words: 350,
         rows: 15) %>
       <%= f.hidden_field(:goto_preview, value: params[:goto_preview]) %>

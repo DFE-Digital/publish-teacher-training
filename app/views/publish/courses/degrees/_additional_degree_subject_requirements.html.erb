@@ -12,6 +12,7 @@
       form_group: { id: "degree-subject-requirements" },
       label: { text: "Degree subject requirements" },
       data: { qa: "degree_subject_requirements__requirements" },
+      hint: -> { render partial: "publish/courses/markdown_formatting" },
       max_words: 250 %>
   <% end %>
 <% end %>

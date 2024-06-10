@@ -28,13 +28,13 @@
 </h1>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <%= govuk_summary_list do |summary_list| %>
       <% enrichment_summary(
         summary_list,
         :provider,
         "Training with your organisation",
-        @provider.train_with_us,
+        markdown(@provider.train_with_us),
         %w[train_with_us],
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-us",
         action_visually_hidden_text: "details about training with your organisation"
@@ -43,7 +43,7 @@
         summary_list,
         :provider,
         "Training with disabilities and other needs",
-        @provider.train_with_disability,
+        markdown(@provider.train_with_disability),
         %w[train_with_disability],
         action_path: "#{about_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}#train-with-disability",
         action_visually_hidden_text: "details about training with disabilities and other needs"

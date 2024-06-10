@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AccreditedProvider < ViewComponent::Base
+  include PublishHelper
+
   attr_reader :provider_name, :remove_path, :about_accredited_provider, :change_about_accredited_provider_path
 
   def initialize(provider_name:, remove_path:, about_accredited_provider:, change_about_accredited_provider_path:)

@@ -25,7 +25,7 @@
 
             component.with_row do |row|
               row.with_key { "About the accredited provider" }
-              row.with_value { @accredited_provider_form.description }
+              row.with_value { markdown @accredited_provider_form.description }
               row.with_action(text: "Change", href: new_publish_provider_recruitment_cycle_accredited_provider_path(goto_confirmation: true), visually_hidden_text: "accredited provider description")
             end
           end %>

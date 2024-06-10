@@ -2,6 +2,8 @@
 
 module PublishHelper
   def markdown(source)
+    return '' if source.blank?
+
     render = Govuk::MarkdownRenderer
     # Options: https://github.com/vmg/redcarpet#and-its-like-really-simple-to-use
     # lax_spacing: HTML blocks do not require to be surrounded by an empty line as in the Markdown standard.

@@ -1,4 +1,24 @@
 en:
+  markdown_formatting:
+    summary_text: Help formatting your text
+    title: How to format your text
+    create_a_link_heading: How to create a link
+    link_is_made_up_of_two_parts: >
+      Your link is made up of two parts, the link text which is what the reader will see, and the URL which is the
+      address the link will take them to.
+    link_format_warning: If you don't format the links properly, people will not be able to click on them.
+    link_instructions: >
+      Put square brackets [ ] around the link text and round brackets ( ) around the link URL. Make sure there are no
+      spaces between the brackets.
+    link_example_html: "For example: [http://GOV.UK](https://gov.uk/) will show as %{formatted_link}"
+    create_bullet_points_heading: How to create bullet points
+    bullet_point_guidance_html:
+      <li>use asterisks or hyphens to create a bullet point</li>
+      <li>make sure there is one space after the asterisk or hyphen</li>
+      <li>leave one empty line space before the bullet points start and one after</li>
+    for_example: "For example:"
+    list_item_one: "* list item 1"
+    list_item_two: "* list item 2"
   notification_banner:
     success: "Success"
     info: "Info"
