@@ -328,6 +328,7 @@ en:
           course_length_and_fees_heading: Course length and fees
           course_length_and_salary_heading: Course length and salary
           course_length_label: Course length
+          course_length_hidden_text: course length
           fee_for_uk_students_label: Fee for UK students
           fee_for_uk_students_hidden_text: fee for UK students
           fee_for_international_students_label: Fee for international students
