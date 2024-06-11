@@ -2,15 +2,20 @@
 
 class BlazerAdminConstraint
   def matches?(request)
-    system_admin?(request)
-  end
-
-  def system_admin?(request)
     signin_user = UserSession.load_from_session(request.session)
-    signin_user.present? && User.admins.kept.exists?(email: signin_user.email) && authorised_for_blazer?(signin_user)
+    return false if signin_user.blank?
+
+    admin_user = User.admins.kept.find_by(email: signin_user.email)
+    admin_user.present? && authorised_for_blazer?(admin_user)
   end
 
-  def authorised_for_blazer?(signin_user)
-    ENV['BLAZER_ALLOWED_IDS'].blank? || ENV['BLAZER_ALLOWED_IDS'].split(',').include?(User.admins.find_by(email: signin_user.email).id.to_s)
+  private
+
+  def authorised_for_blazer?(admin_user)
+    allowed_ids.blank? || allowed_ids.split(',').include?(admin_user.id.to_s)
+  end
+
+  def allowed_ids
+    ENV.fetch('BLAZER_ALLOWED_IDS', nil)
   end
 end
