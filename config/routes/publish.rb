@@ -4,7 +4,7 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 mount Sidekiq::Web, at: '/sidekiq', constraints: SystemAdminConstraint.new
-mount Blazer::Engine, at: '/blazer', constraints: SystemAdminConstraint.new
+mount Blazer::Engine, at: '/blazer', constraints: BlazerAdminConstraint.new
 
 root to: 'publish/providers#index'
 
