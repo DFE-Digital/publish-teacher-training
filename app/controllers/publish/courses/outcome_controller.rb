@@ -52,6 +52,9 @@ module Publish
 
       def handle_qualification_update
         if undergraduate_to_other_qualification?
+
+          @course.enrichments.find_or_initialize_draft.update(course_length: nil, salary_details: nil)
+
           redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
