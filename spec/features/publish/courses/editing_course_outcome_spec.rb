@@ -90,7 +90,11 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_there_is_a_tda_course_i_want_to_edit
-    given_a_course_exists(:undergraduate_degree_with_qts)
+    given_a_course_exists(:undergraduate_degree_with_qts, enrichments: [course_enrichment])
+  end
+
+  def course_enrichment
+    @course_enrichment ||= build(:course_enrichment, :draft, course_length: :FourYears, salary_details: 'foobar')
   end
 
   def and_there_is_a_non_qts_course_i_want_to_edit
@@ -220,6 +224,9 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     expect(course.funding_type == 'salary').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
+
+    expect(course.enrichments.find_or_initialize_draft.course_length).to be_nil
+    expect(course.enrichments.find_or_initialize_draft.salary_details).to be_nil
   end
 
   def and_i_should_be_on_the_course_details_page
