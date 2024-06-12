@@ -8,7 +8,9 @@ module Publish
 
         def new
           @wizard = ALevelsWizard.new(
-            current_step: :are_any_alevels_required_for_this_course
+            current_step: :are_any_alevels_required_for_this_course,
+            # changed me to actual parameters
+            provider_code: '1', recruitment_cycle_year: '2025', code: 'ab',
           )
         end
       end
