@@ -155,6 +155,8 @@ gem 'colorize'
 # for running SQL queries
 gem 'blazer'
 
+gem 'dfe-wizard', require: 'dfe/wizard', github: 'DFE-Digital/dfe-wizard'
+
 group :production, :qa, :sandbox, :staging do
   gem 'cloudfront-rails'
 end

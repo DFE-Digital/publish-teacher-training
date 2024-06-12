@@ -16,6 +16,14 @@ GIT
       request_store_rails (~> 2)
 
 GIT
+  remote: https://github.com/DFE-Digital/dfe-wizard.git
+  revision: 56207b945c2ca4bcb86c32a263ab3fdd500c1267
+  specs:
+    dfe-wizard (0.1.0)
+      activemodel
+      activesupport
+
+GIT
   remote: https://github.com/DFE-Digital/jsonapi-rails.git
   revision: 359d794d916caebc2ea2cf907477227279b4fac3
   specs:
@@ -797,6 +805,7 @@ DEPENDENCIES
   data_migrate (~> 9.4.0)
   database_cleaner
   dfe-analytics!
+  dfe-wizard!
   discard
   dotenv-rails
   draper
