@@ -6,7 +6,11 @@ module Publish
       class AreAnyAlevelsRequiredForThisCourseController < PublishController
         before_action { authorize provider }
 
-        def new; end
+        def new
+          @wizard = ALevelsWizard.new(
+            current_step: :are_any_alevels_required_for_this_course
+          )
+        end
       end
     end
   end
