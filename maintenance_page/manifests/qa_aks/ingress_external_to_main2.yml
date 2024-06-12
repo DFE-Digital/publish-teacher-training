@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qa.publish-teacher-training-courses.service.gov.uk
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: qa.publish-teacher-training-courses.service.gov.uk
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        backend:
+          service:
+            name: publish-qa
+            port:
+              number: 80
