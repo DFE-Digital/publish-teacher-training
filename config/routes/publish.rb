@@ -203,7 +203,7 @@ namespace :publish, as: :publish do
         get '/full-part-time', on: :member, to: 'courses/study_mode#edit'
         put '/full-part-time', on: :member, to: 'courses/study_mode#update'
 
-        get '/a-levels-or-equivalency-tests/required-for-this-course', on: :member, to: 'courses/a_level_requirements_for_this_course#new'
+        get '/a-levels-or-equivalency-tests/required-for-this-course', on: :member, to: 'courses/a_level_requirements/are_any_alevels_required_for_this_course#new'
 
         get '/degrees/start', on: :member, to: 'courses/degrees/start#edit'
         put '/degrees/start', on: :member, to: 'courses/degrees/start#update'
