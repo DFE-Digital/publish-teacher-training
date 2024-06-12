@@ -69,6 +69,7 @@
   - first_name
   - last_name
   - magic_link_token
+  - blazer_access
   :provider_ucas_preference:
   - id
   - provider_id
