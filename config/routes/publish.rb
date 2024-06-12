@@ -62,10 +62,6 @@ namespace :publish, as: :publish do
 
   resources :notifications, path: '/notifications', controller: 'notifications', only: %i[index update]
 
-  scope '/organisations/:provider_code/:recruitment_cycle_year/courses/:code/' do
-    get '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_alevels_required_for_this_course#new', as: :a_levels_what_a_level_is_required
-  end
-
   resources :providers, path: 'organisations', param: :code, only: [:show] do
     resource :check_user, only: %i[show update], controller: 'users_check', path: 'users/check'
     resources :users, controller: 'users' do
@@ -163,6 +159,8 @@ namespace :publish, as: :publish do
 
         get '/age_range', on: :member, to: 'courses/age_range#edit'
         put '/age_range', on: :member, to: 'courses/age_range#update'
+
+        get '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_alevels_required_for_this_course#new', as: :a_levels_what_a_level_is_required
 
         get '/about-this-course', on: :member, to: 'courses/about_this_course#edit'
         patch '/about-this-course', on: :member, to: 'courses/about_this_course#update'
