@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_05_133343) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_12_194755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -430,6 +430,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_05_133343) do
     t.datetime "discarded_at", precision: nil
     t.string "magic_link_token"
     t.datetime "magic_link_token_sent_at", precision: nil
+    t.boolean "blazer_access", default: false, null: false
     t.index ["discarded_at"], name: "index_user_on_discarded_at"
     t.index ["email"], name: "IX_user_email", unique: true
   end
