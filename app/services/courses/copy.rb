@@ -3,11 +3,11 @@
 module Courses
   class Copy
     GCSE_FIELDS = [
-      ['Accept pending GCSE', 'accept_pending_gcse'],
-      ['Accept GCSE equivalency', 'accept_gcse_equivalency'],
-      ['Accept English GCSE equivalency', 'accept_english_gcse_equivalency'],
-      ['Accept Maths GCSE equivalency', 'accept_maths_gcse_equivalency'],
-      ['Additional GCSE equivalencies', 'additional_gcse_equivalencies']
+      ['Accept pending GCSE', 'accept_pending_gcse', 'accept-pending-gcse-true'],
+      ['Accept GCSE equivalency', 'accept_gcse_equivalency', 'accept-gcse-equivalency-true'],
+      ['Accept English GCSE equivalency', 'accept_english_gcse_equivalency', 'accept-english-gcse-equivalency-english'],
+      ['Accept Maths GCSE equivalency', 'accept_maths_gcse_equivalency', 'accept-maths-gcse-equivalency-maths'],
+      ['Additional GCSE equivalencies', 'additional_gcse_equivalencies', 'additional-gcse-equivalencies']
     ].freeze
 
     SUBJECT_REQUIREMENTS_FIELDS = [

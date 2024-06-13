@@ -4,7 +4,11 @@
 ) %>
 
 <% if params[:copy_from].present? && @copied_fields.any? %>
-  <%= render partial: "copy_school_placements_content_warning", locals: { copied_fields: @copied_fields } %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-school-placements-form",
+    @source_course
+  ) %>
 <% end %>
 
 <div class="govuk-grid-row">

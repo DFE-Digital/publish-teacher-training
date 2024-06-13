@@ -168,6 +168,15 @@ en:
       school_direct_salaried_training_programme:
         label: "Salaried"
   components:
+    providers:
+      copy_course_content_warning_component:
+        copied_fields_from:
+          plural: "We have copied these fields from %{name_and_code}:"
+          singular: "We have copied this field from %{name_and_code}:"
+        please_check_changes:
+          plural: Please check them and make your changes before saving
+          singular: Please check it and make your changes before saving
+        changes_not_saved: Your changes are not yet saved
     page_titles:
       sign_in:
         index: "Sign in"
@@ -384,9 +393,6 @@ en:
           interview_process_success: Interview process
           page_title: Interview process (optional) - %{course_name_and_code}
           submit_button: Update interview process
-          changes_not_saved: Your changes are not yet saved
-          copied_fields_from: We have copied this field from %{name_and_code}.
-          please_check_changes: Please check it and make your changes before saving.
           include_information_about_html:
             <p class="govuk-body">Include information about:</p>
             <ul class="govuk-list govuk-list--bullet">
@@ -427,9 +433,6 @@ en:
               You will be placed in different schools during your training. You cannott pick which schools you want to
               be in, but your training provider will place you in schools you can travel to.
             </p>
-          changes_not_saved: Your changes are not yet saved
-          copied_fields_from: We have copied this field from %{name_and_code}.
-          please_check_changes: Please check it and make your changes before saving.
       about_course:
         edit:
           about_this_course: About this course
@@ -455,9 +458,6 @@ en:
               <li>link to your organisation's website for people who want more detail about who you are and what you do</li>
             </ul>
           view_examples: View examples of great course summaries
-          changes_not_saved: Your changes are not yet saved
-          copied_fields_from: We have copied this field from %{name_and_code}.
-          please_check_changes: Please check it and make your changes before saving.
       study_mode:
         form:
           select_all_that_apply: Select all that apply

@@ -90,7 +90,7 @@ feature 'Editing about this course section, copying content from another course'
 
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content 'Your changes are not yet saved'
-    expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}."
+    expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}:"
     expect(page).to have_link 'About this course'
     expect(page).to have_content 'Please check it and make your changes before saving'
   end

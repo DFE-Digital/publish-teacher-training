@@ -6,7 +6,11 @@
 <% end %>
 
 <% if params[:copy_from].present? %>
-  <%= render partial: "publish/courses/copy_content_warning", locals: { copied_fields: @copied_fields } %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-subject-requirement-form",
+    @source_course
+  ) %>
 <% end %>
 
 <div class="govuk-grid-row">

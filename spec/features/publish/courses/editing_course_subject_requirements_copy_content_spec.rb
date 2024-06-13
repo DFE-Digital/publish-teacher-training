@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-feature 'Editing GCSE requirements section, copying content from another course' do
+feature 'Editing subject requirements section, copying content from another course' do
   scenario 'source course has gces requirements data to copy' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_with_data_i_want_to_copy
 
-    when_i_visit_the_gcse_requirements_edit_page
+    when_i_visit_the_subject_requirements_edit_page
     and_i_select_the_other_course_from_the_copy_content_dropdown
 
     then_i_see_the_copied_course_data
@@ -21,7 +21,7 @@ feature 'Editing GCSE requirements section, copying content from another course'
     and_there_is_a_course_i_want_to_edit
     and_there_is_a_course_with_data_i_want_to_copy
 
-    when_i_visit_the_gcse_requirements_edit_page
+    when_i_visit_the_subject_requirements_edit_page
     when_i_submit_without_data
     then_i_can_still_copy_content_from_another_course
   end
@@ -33,11 +33,11 @@ feature 'Editing GCSE requirements section, copying content from another course'
   end
 
   def and_there_is_a_course_i_want_to_edit
-    given_a_course_exists
+    given_a_course_exists(:secondary, additional_degree_subject_requirements: nil, degree_subject_requirements: nil)
   end
 
   def when_i_submit_without_data
-    click_on 'Update GCSEs and equivalency tests'
+    click_on 'Update degree requirements'
   end
 
   def then_i_can_still_copy_content_from_another_course
@@ -49,14 +49,10 @@ feature 'Editing GCSE requirements section, copying content from another course'
 
   def and_there_is_a_course_with_data_i_want_to_copy
     @copied_course ||= create(
-      :course,
+      :course, :secondary,
       provider: current_user.providers.first,
-      accept_pending_gcse: true,
-      accept_gcse_equivalency: true,
-      accept_english_gcse_equivalency: true,
-      accept_maths_gcse_equivalency: true,
-      accept_science_gcse_equivalency: false,
-      additional_gcse_equivalencies: 'Some text about gcse equivalences'
+      additional_degree_subject_requirements: true,
+      degree_subject_requirements: 'Some degree requirements'
     )
   end
 
@@ -74,42 +70,23 @@ feature 'Editing GCSE requirements section, copying content from another course'
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content 'Your changes are not yet saved'
     expect(page).to have_content "We have copied these fields from #{copied_course_name_and_code}:"
-    expect(page).to have_link 'Accept pending GCSE'
-    expect(page).to have_link 'Accept GCSE equivalency'
-    expect(page).to have_link 'Accept Maths GCSE equivalency'
-    expect(page).to have_link 'Accept English GCSE equivalency'
-    expect(page).to have_link 'Additional GCSE equivalencies'
+    expect(page).to have_link 'Additional degree subject requirements'
+    expect(page).to have_link 'Degree subject requirements'
     expect(page).to have_content 'Please check them and make your changes before saving'
   end
 
   def and_links_in_warning_match_input_ids
-    expect(
-      (find_link 'Accept pending GCSE')[:href].remove('#')
-    ).to eq page.find('[data-qa="gcse_requirements__pending_gcse_yes_radio"]')[:id]
-    expect(
-      (find_link 'Accept GCSE equivalency')[:href].remove('#')
-    ).to eq page.find('[data-qa="gcse_requirements__gcse_equivalency_yes_radio"]')[:id]
-    expect(
-      (find_link 'Accept Maths GCSE equivalency')[:href].remove('#')
-    ).to eq(find_field('Maths')[:id])
-    expect((find_link 'Accept English GCSE equivalency')[:href].remove('#')).to eq(find_field('English')[:id])
-    expect((find_link 'Additional GCSE equivalencies')[:href].remove('#')).to eq(find_field('Details about equivalency tests you offer or accept')[:id])
+    expect((find_link 'Additional degree subject requirements')[:href].remove('#')).to eq(find_field('No')[:id])
+    expect((find_link 'Degree subject requirements')[:href].remove('#')).to eq(find_field('Degree subject requirements')[:id])
   end
 
   def then_i_see_the_copied_course_data
-    expect(page.find('[data-qa="gcse_requirements__pending_gcse_yes_radio"]')).to be_checked
-    expect(page.find('[data-qa="gcse_requirements__gcse_equivalency_yes_radio"]')).to be_checked
-    expect(
-      find_field(
-        'Details about equivalency tests you offer or accept'
-      ).value
-    ).to eq 'Some text about gcse equivalences'
-    expect(find_field('English')).to be_checked
-    expect(find_field('Maths')).to be_checked
+    expect(find_field('Yes')).to be_checked
+    expect(find_field('Degree subject requirements').value).to eq 'Some degree requirements'
   end
 
-  def when_i_visit_the_gcse_requirements_edit_page
-    visit gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(
+  def when_i_visit_the_subject_requirements_edit_page
+    visit degrees_subject_requirements_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
       course.recruitment_cycle_year,
       course.course_code

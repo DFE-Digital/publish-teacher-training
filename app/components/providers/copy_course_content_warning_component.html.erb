@@ -1,0 +1,23 @@
+<% if field_links.present? %>
+  <%= govuk_notification_banner(
+      title_text: t("notification_banner.warning"),
+      classes: "govuk-notification-banner--warning",
+      html_attributes: {
+        data: { qa: "copy-course-warning" },
+        role: "alert"
+      }
+    ) do |notification_banner| %>
+    <% notification_banner.with_heading(
+         text: t("components.providers.copy_course_content_warning_component.changes_not_saved")
+       ) %>
+    <p class="govuk-body">
+      <%= copied_fields_from %>
+    </p>
+    <ul class="govuk-list">
+      <% field_links.each do |name, target| %>
+        <li><%= govuk_link_to name, target, class: "govuk-notification-banner__link" %></li>
+      <% end %>
+    </ul>
+    <p class="govuk-body"><%= please_check_changes %></p>
+  <% end %>
+<% end %>
