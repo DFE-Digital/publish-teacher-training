@@ -56,7 +56,7 @@ module ViewHelper
         how_school_placements_work: "#{base}/about?display_errors=true#publish-course-information-form-how-school-placements-work-field-error",
         fee_uk_eu: "#{base}/fees?display_errors=true#fee_uk_eu-error",
         fee_international: "#{base}/fees?display_errors=true#fee_internation-error",
-        course_length: "#{base + (course.is_fee_based? ? '/fees' : '/salary')}?display_errors=true#course_length-error",
+        course_length: "#{base + (course.fee_based? ? '/fees' : '/salary')}?display_errors=true#course_length-error",
         salary_details: "#{base}/salary?display_errors=true#salary_details-error",
         required_qualifications: "#{base}/requirements?display_errors=true#required_qualifications_wrapper",
         age_range_in_years: "#{base}/age-range?display_errors=true",

@@ -248,9 +248,8 @@ class Course < ApplicationRecord
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }
   scope :with_salary, lambda {
-    where(
-      program_type: %i[school_direct_salaried_training_programme pg_teaching_apprenticeship scitt_salaried_programme higher_education_salaried_programme]
-    )
+    program_types = Program.where_salaried
+    where(program_type: program_types)
   }
   scope :with_study_modes, lambda { |study_modes|
     if study_modes.include? 'full_time_or_part_time'
@@ -288,21 +287,7 @@ class Course < ApplicationRecord
   }
 
   scope :with_funding_types, lambda { |funding_types|
-    program_types = []
-
-    program_types << :school_direct_salaried_training_programme if funding_types.include?('salary')
-
-    program_types << :pg_teaching_apprenticeship if funding_types.include?('apprenticeship')
-
-    if funding_types.include?('fee')
-      %i[
-        higher_education_programme
-        scitt_programme
-        school_direct_training_programme
-      ].each do |program_type|
-        program_types << program_type
-      end
-    end
+    program_types = Program.where_funding_types(funding_types)
 
     where(program_type: program_types)
   }
@@ -313,12 +298,12 @@ class Course < ApplicationRecord
 
   scope :can_sponsor_visa, lambda {
     where(
-      program_type: %w[school_direct_training_programme higher_education_programme scitt_programme],
+      program_type: Program.where_sponsor_student_visa,
       can_sponsor_student_visa: true
     )
       .or(
         where(
-          program_type: %w[school_direct_salaried_training_programme pg_teaching_apprenticeship],
+          program_type: Program.where_sponsor_skilled_worker_visa,
           can_sponsor_skilled_worker_visa: true
         )
       )
@@ -491,8 +476,8 @@ class Course < ApplicationRecord
   end
 
   def program_type_description
-    if school_direct_salaried_training_programme? then ' with salary'
-    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship? then ' teaching apprenticeship'
+    if program.funding_type.salary? then ' with salary'
+    elsif program.funding_type.apprenticeship? then ' teaching apprenticeship'
     else
       ''
     end
@@ -519,29 +504,11 @@ class Course < ApplicationRecord
     :not_running
   end
 
-  def funding_type
-    return if program_type.nil?
-
-    if school_direct_salaried_training_programme? || scitt_salaried_programme? || higher_education_salaried_programme?
-      'salary'
-    elsif pg_teaching_apprenticeship? || teacher_degree_apprenticeship?
-      'apprenticeship'
-    else
-      'fee'
-    end
+  def program
+    Program.from_type(program_type)
   end
 
-  def is_fee_based?
-    funding_type == 'fee'
-  end
-
-  def visa_type
-    is_fee_based? ? :student : :skilled_worker
-  end
-
-  def student_visa?
-    visa_type == :student
-  end
+  delegate :funding_type, :visa_type, :fee_based?, :student_visa?, to: :program
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
   def gcse_subjects_required

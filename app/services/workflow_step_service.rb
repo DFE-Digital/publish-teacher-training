@@ -131,7 +131,7 @@ class WorkflowStepService
   end
 
   def visas_to_remove(course)
-    if course.is_fee_based?
+    if course.fee_based?
       [:can_sponsor_skilled_worker_visa]
     else
       [:can_sponsor_student_visa]

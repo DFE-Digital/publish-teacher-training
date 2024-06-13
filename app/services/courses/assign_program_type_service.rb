@@ -3,32 +3,29 @@
 module Courses
   class AssignProgramTypeService
     def execute(funding_type, course)
-      case funding_type
-      when 'salary'
-        course.program_type = if course.provider.scitt?
-                                :scitt_salaried_programme
-                              elsif course.provider.university?
-                                :higher_education_salaried_programme
-                              else
-                                :school_direct_salaried_training_programme
-                              end
-      when 'apprenticeship'
-        course.program_type = :pg_teaching_apprenticeship
-      when 'fee'
-        course.program_type = calculate_fee_program(course)
-      end
+      program_type = {
+        'salary' => calculate_salary_program(course),
+        'apprenticeship' => :pg_teaching_apprenticeship,
+        'fee' => calculate_fee_program(course)
+      }.fetch(funding_type, course.program_type)
+
+      course.program_type = program_type
     end
 
     private
 
+    def calculate_salary_program(course)
+      return :scitt_salaried_programme if course.provider.scitt?
+      return :higher_education_salaried_programme if course.provider.university?
+
+      :school_direct_salaried_training_programme
+    end
+
     def calculate_fee_program(course)
-      if !course.self_accredited?
-        :school_direct_training_programme
-      elsif course.provider.scitt?
-        :scitt_programme
-      else
-        :higher_education_programme
-      end
+      return :school_direct_training_programme unless course.self_accredited?
+      return :scitt_programme if course.provider.scitt?
+
+      :higher_education_programme
     end
   end
 end
