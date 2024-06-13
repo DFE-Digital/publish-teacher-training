@@ -29,6 +29,7 @@ module Publish
 
           redirect_to preview_or_course_description
         else
+          fetch_course_list_to_copy_from
           render :edit
         end
       end

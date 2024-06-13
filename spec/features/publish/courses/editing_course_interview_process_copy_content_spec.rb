@@ -29,6 +29,16 @@ feature 'Editing interview process section, copying content from another course'
     and_i_do_not_see_the_warning_that_changes_are_not_saved
   end
 
+  scenario 'copy course content options are available after validation' do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_course_i_want_to_edit
+    and_there_is_a_course_with_data_i_want_to_copy
+
+    when_i_visit_the_interview_process_edit_page
+    when_i_submit_with_too_many_words
+    then_i_can_still_copy_content_from_another_course
+  end
+
   private
 
   def given_i_am_authenticated_as_a_provider_user
@@ -45,6 +55,18 @@ feature 'Editing interview process section, copying content from another course'
 
   def and_there_is_a_course_without_data_i_try_to_copy
     course_to_copy(nil)
+  end
+
+  def when_i_submit_with_too_many_words
+    fill_in 'Interview process', with: Faker::Lorem.sentence(word_count: 251)
+    click_on 'Update interview process'
+  end
+
+  def then_i_can_still_copy_content_from_another_course
+    when_i_select_the_other_course_from_the_copy_content_dropdown
+
+    then_i_see_the_copied_course_data
+    and_i_see_the_warning_that_changes_are_not_saved
   end
 
   def course_to_copy(interview_process)
@@ -64,6 +86,7 @@ feature 'Editing interview process section, copying content from another course'
 
     click_on 'Copy content'
   end
+  alias_method :when_i_select_the_other_course_from_the_copy_content_dropdown, :and_i_select_the_other_course_from_the_copy_content_dropdown
 
   def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content 'Your changes are not yet saved'
