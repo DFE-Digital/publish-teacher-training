@@ -88,11 +88,6 @@ feature 'Editing school placements section, copying content from another course'
     expect(find_field('How placements work').value).to eq @course.enrichments.first.how_school_placements_work
   end
 
-  def then_the_focus_is_on_the_input
-    about = find_field 'Interview process'
-    expect(about.focus?).to be true
-  end
-
   def when_i_visit_the_school_placements_edit_page
     visit school_placements_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,

@@ -94,11 +94,6 @@ feature 'Editing about this course section, copying content from another course'
     click_on 'About this course'
   end
 
-  def then_the_focus_is_on_the_input
-    about = find_field 'About this course'
-    expect(about.focus?).to be true
-  end
-
   def when_i_visit_the_about_this_course_edit_page
     visit about_this_course_publish_provider_recruitment_cycle_course_path(
       provider.provider_code,
