@@ -13,7 +13,7 @@ feature 'Editing about this course section, copying content from another course'
       and_i_select_the_other_course_from_the_copy_content_dropdown
 
       then_i_see_the_copied_course_data
-      then_i_see_the_warning_that_changes_are_not_saved
+      and_i_see_the_warning_that_changes_are_not_saved
       and_the_warning_has_a_link_to_the_about_course_input_field
     end
   end
@@ -29,6 +29,16 @@ feature 'Editing about this course section, copying content from another course'
     and_i_do_not_see_the_warning_that_changes_are_not_saved
   end
 
+  scenario 'copy course content options are available after validation' do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_course_i_want_to_edit
+    and_there_is_a_course_with_data_i_want_to_copy
+
+    when_i_visit_the_about_this_course_edit_page
+    when_i_submit_without_data
+    then_i_can_still_copy_content_from_another_course
+  end
+
   private
 
   def given_i_am_authenticated_as_a_provider_user
@@ -41,6 +51,18 @@ feature 'Editing about this course section, copying content from another course'
 
   def and_there_is_a_course_with_data_i_want_to_copy
     course_to_copy('About this other course')
+  end
+
+  def when_i_submit_without_data
+    fill_in 'About this course', with: ''
+    click_on 'Update about this course'
+  end
+
+  def then_i_can_still_copy_content_from_another_course
+    when_i_select_the_other_course_from_the_copy_content_dropdown
+
+    then_i_see_the_copied_course_data
+    and_i_see_the_warning_that_changes_are_not_saved
   end
 
   def and_there_is_a_course_without_data_i_try_to_copy
@@ -64,10 +86,11 @@ feature 'Editing about this course section, copying content from another course'
 
     click_on 'Copy content'
   end
+  alias_method :when_i_select_the_other_course_from_the_copy_content_dropdown, :and_i_select_the_other_course_from_the_copy_content_dropdown
 
-  def then_i_see_the_warning_that_changes_are_not_saved
+  def and_i_see_the_warning_that_changes_are_not_saved
     expect(page).to have_content 'Your changes are not yet saved'
-    expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}."
+    expect(page).to have_content "We have copied this field from #{copied_course_name_and_code}:"
     expect(page).to have_link 'About this course'
     expect(page).to have_content 'Please check it and make your changes before saving'
   end
@@ -77,7 +100,7 @@ feature 'Editing about this course section, copying content from another course'
   end
 
   def and_the_warning_has_a_link_to_the_about_course_input_field
-    href = (find_link 'About this course')[:href]
+    href = find_link('About this course')[:href]
     about_this_course_id = (find_field 'About this course')[:id]
     expect(about_this_course_id).to eq(href.remove('#'))
   end
@@ -92,11 +115,6 @@ feature 'Editing about this course section, copying content from another course'
 
   def when_i_click_on_the_link_in_the_warning_box
     click_on 'About this course'
-  end
-
-  def then_the_focus_is_on_the_input
-    about = find_field 'About this course'
-    expect(about.focus?).to be true
   end
 
   def when_i_visit_the_about_this_course_edit_page

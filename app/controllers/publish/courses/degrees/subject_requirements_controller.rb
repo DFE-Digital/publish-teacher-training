@@ -32,6 +32,7 @@ module Publish
             redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, course.recruitment_cycle_year, course.course_code)
           else
             set_backlink
+            fetch_course_list_to_copy_from
             @errors = @subject_requirements_form.errors.messages
             render :edit
           end

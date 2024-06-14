@@ -29,6 +29,7 @@ module Publish
           @gcse_requirements_form.save(course)
           redirect_to publish_provider_recruitment_cycle_course_path
         else
+          fetch_course_list_to_copy_from
           @errors = @gcse_requirements_form.errors.messages
           render :edit
         end

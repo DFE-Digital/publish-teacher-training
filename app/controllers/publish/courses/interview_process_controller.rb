@@ -23,6 +23,7 @@ module Publish
 
           redirect_to redirect_path
         else
+          fetch_course_list_to_copy_from
           render :edit
         end
       end
