@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: publish-qa.test.teacherservices.cloud
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: publish-qa.test.teacherservices.cloud
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        backend:
+          service:
+            name: publish-qa
+            port:
+              number: 80

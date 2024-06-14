@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publish-maintenance
+  labels:
+    app: publish-maintenance
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: publish-maintenance
+  template:
+    metadata:
+      labels:
+        app: publish-maintenance
+    spec:
+      nodeSelector:
+        teacherservices.cloud/node_pool: applications
+        kubernetes.io/os: linux
+      containers:
+      - name: publish-maintenance
+        image: ghcr.io/dfe-digital/publish-maintenance:#MAINTENANCE_IMAGE_TAG#
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 64M
+            cpu: 0.1
+          limits:
+            memory: 64M
+            cpu: 1
