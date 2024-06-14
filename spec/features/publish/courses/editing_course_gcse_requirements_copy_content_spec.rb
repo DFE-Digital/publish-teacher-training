@@ -84,16 +84,16 @@ feature 'Editing GCSE requirements section, copying content from another course'
 
   def and_links_in_warning_match_input_ids
     expect(
-      (find_link 'Accept pending GCSE')[:href].remove('#')
+      find_link('Accept pending GCSE')[:href].remove('#')
     ).to eq page.find('[data-qa="gcse_requirements__pending_gcse_yes_radio"]')[:id]
     expect(
-      (find_link 'Accept GCSE equivalency')[:href].remove('#')
+      find_link('Accept GCSE equivalency')[:href].remove('#')
     ).to eq page.find('[data-qa="gcse_requirements__gcse_equivalency_yes_radio"]')[:id]
     expect(
-      (find_link 'Accept Maths GCSE equivalency')[:href].remove('#')
+      find_link('Accept Maths GCSE equivalency')[:href].remove('#')
     ).to eq(find_field('Maths')[:id])
-    expect((find_link 'Accept English GCSE equivalency')[:href].remove('#')).to eq(find_field('English')[:id])
-    expect((find_link 'Additional GCSE equivalencies')[:href].remove('#')).to eq(find_field('Details about equivalency tests you offer or accept')[:id])
+    expect(find_link('Accept English GCSE equivalency')[:href].remove('#')).to eq(find_field('English')[:id])
+    expect(find_link('Additional GCSE equivalencies')[:href].remove('#')).to eq(find_field('Details about equivalency tests you offer or accept')[:id])
   end
 
   def then_i_see_the_copied_course_data

@@ -100,7 +100,7 @@ feature 'Editing about this course section, copying content from another course'
   end
 
   def and_the_warning_has_a_link_to_the_about_course_input_field
-    href = (find_link 'About this course')[:href]
+    href = find_link('About this course')[:href]
     about_this_course_id = (find_field 'About this course')[:id]
     expect(about_this_course_id).to eq(href.remove('#'))
   end

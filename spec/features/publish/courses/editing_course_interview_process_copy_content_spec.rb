@@ -100,7 +100,7 @@ feature 'Editing interview process section, copying content from another course'
   end
 
   def and_the_warning_has_a_link_to_the_interview_process_input_field
-    href = (find_link 'Interview process')[:href]
+    href = find_link('Interview process')[:href]
     interview_process_id = (find_field 'Interview process')[:id]
     expect(interview_process_id).to eq(href.remove('#'))
   end

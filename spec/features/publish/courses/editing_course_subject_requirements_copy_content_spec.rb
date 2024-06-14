@@ -76,8 +76,8 @@ feature 'Editing subject requirements section, copying content from another cour
   end
 
   def and_links_in_warning_match_input_ids
-    expect((find_link 'Additional degree subject requirements')[:href].remove('#')).to eq(find_field('No')[:id])
-    expect((find_link 'Degree subject requirements')[:href].remove('#')).to eq(find_field('Degree subject requirements')[:id])
+    expect(find_link('Additional degree subject requirements')[:href].remove('#')).to eq(find_field('No')[:id])
+    expect(find_link('Degree subject requirements')[:href].remove('#')).to eq(find_field('Degree subject requirements')[:id])
   end
 
   def then_i_see_the_copied_course_data
