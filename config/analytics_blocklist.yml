@@ -1,5 +1,49 @@
 ---
 :shared:
+  :blazer_queries:
+  - id
+  - creator_id
+  - name
+  - description
+  - statement
+  - data_source
+  - status
+  - created_at
+  - updated_at
+  :blazer_dashboard_queries:
+  - id
+  - dashboard_id
+  - query_id
+  - position
+  - created_at
+  - updated_at
+  :blazer_dashboards:
+  - id
+  - creator_id
+  - name
+  - created_at
+  - updated_at
+  :blazer_checks:
+  - id
+  - creator_id
+  - query_id
+  - state
+  - schedule
+  - emails
+  - slack_channels
+  - check_type
+  - message
+  - last_run_at
+  - created_at
+  - updated_at
+  :blazer_audits:
+  - id
+  - user_id
+  - query_id
+  - statement
+  - data_source
+  - created_atator while
+  - created_at
   :organisation_provider:
   - id
   - provider_id
@@ -25,6 +69,7 @@
   - first_name
   - last_name
   - magic_link_token
+  - blazer_access
   :provider_ucas_preference:
   - id
   - provider_id

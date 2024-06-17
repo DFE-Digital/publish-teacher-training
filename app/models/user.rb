@@ -21,6 +21,7 @@ class User < ApplicationRecord
 
   scope :admins, -> { where(admin: true) }
   scope :non_admins, -> { where.not(admin: true) }
+  scope :with_blazer_access, -> { where(blazer_access: true, admin: true) }
   scope :active, -> { where.not(accept_terms_date_utc: nil) }
   scope :last_login_since, lambda { |timestamp|
     where('last_login_date_utc > ?', timestamp)
