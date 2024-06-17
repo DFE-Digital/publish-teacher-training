@@ -40,4 +40,8 @@ module PublishHelper
       en_dash: '–'
     }
   end
+
+  def render_if(condition, &)
+    yield if condition
+  end
 end
