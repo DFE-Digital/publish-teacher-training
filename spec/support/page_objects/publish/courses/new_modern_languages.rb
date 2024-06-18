@@ -7,7 +7,7 @@ module PageObjects
         set_url '/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/modern-languages/new{?query*}'
 
         element :languages_fields, '[data-qa="course__languages"]'
-        element :title, '[data-qa="page-heading"]'
+        element :page_heading, '[data-qa="page-heading"]'
 
         element :continue, '[data-qa="course__save"]'
 
