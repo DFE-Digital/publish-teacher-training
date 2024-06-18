@@ -142,7 +142,10 @@ module Publish
     end
 
     def back_step
-      if go_to_confirmation_params
+      if previous_course_tda?
+        step_back_through_previously_defaulted_questions
+      elsif go_to_confirmation_params
+
         {
           modern_languages: :subjects,
           can_sponsor_student_visa: (@course.is_uni_or_scitt? ? :apprenticeship : :funding_type),
@@ -197,7 +200,11 @@ module Publish
       when :outcome
         new_publish_provider_recruitment_cycle_courses_outcome_path(path_params)
       when :full_or_part_time
-        new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
+        if previous_course_tda?
+          new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params.merge(previous_tda_course: true))
+        else
+          new_publish_provider_recruitment_cycle_courses_study_mode_path(path_params)
+        end
       when :applications_open
         new_publish_provider_recruitment_cycle_courses_applications_open_path(path_params)
       when :accredited_provider
@@ -213,7 +220,11 @@ module Publish
       when :subjects
         new_publish_provider_recruitment_cycle_courses_subjects_path(path_params)
       when :funding_type
-        new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
+        if previous_course_tda?
+          new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params.merge(previous_tda_course: true))
+        else
+          new_publish_provider_recruitment_cycle_courses_funding_type_path(path_params)
+        end
       when :confirmation
         confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
       end
@@ -221,6 +232,21 @@ module Publish
 
     def go_to_confirmation_params
       params[:goto_confirmation] || params.dig(:course, :goto_confirmation)
+    end
+
+    def previous_course_tda?
+      params[:previous_tda_course] == 'true'
+    end
+
+    def step_back_through_previously_defaulted_questions
+      case current_step
+      when :funding_type
+        :outcome
+      when :full_or_part_time
+        :funding_type
+      when :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa
+        :full_or_part_time
+      end
     end
   end
 end
