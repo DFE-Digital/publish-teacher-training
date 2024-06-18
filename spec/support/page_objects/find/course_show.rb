@@ -5,7 +5,7 @@ module PageObjects
     class CourseShow < PageObjects::Base
       set_url '/course/{provider_code}/{course_code}'
 
-      element :title, '.govuk-heading-xl'
+      element :page_heading, '.govuk-heading-xl'
       element :sub_title, '[data-qa=course__provider_name]'
       element :extended_qualification_descriptions, '[data-qa=course__extended_qualification_descriptions]'
       element :accredited_provider, '[data-qa=course__accredited_provider]'

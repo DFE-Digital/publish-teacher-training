@@ -11,12 +11,12 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
     scenario 'i am taken to the Student visa step' do
       given_there_is_apprenticeship_course
       when_i_visit_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:no)
+      when_i_select(:checkbox_no)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_go_back
       then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:no)
+      when_i_select(:checkbox_no)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
@@ -28,12 +28,12 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
     scenario 'i am taken to the skilled worker visa step' do
       given_there_is_fee_course
       when_i_visit_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:yes)
+      when_i_select(:checkbox_yes)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_go_back
       then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:yes)
+      when_i_select(:checkbox_yes)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored

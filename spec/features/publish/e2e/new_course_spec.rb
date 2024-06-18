@@ -154,7 +154,7 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
   def select_apprenticeship(course_creation_params, next_page:)
     course_creation_params[:funding_type] = 'fee'
 
-    publish_courses_new_apprenticeship_page.no.click
+    publish_courses_new_apprenticeship_page.checkbox_no.click
     publish_courses_new_apprenticeship_page.continue.click
 
     expect_page_to_be_displayed_with_query(
