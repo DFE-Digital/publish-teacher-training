@@ -3,6 +3,14 @@
   @course_fees_and_financial_support_form.errors.any?
 ) %>
 
+<% if params[:copy_from].present? && @copied_fields.any? %>
+  <%= render Providers::CopyCourseContentWarningComponent.new(
+    @copied_fields,
+    "publish-course-fees-and-financial-support-form",
+    @source_course
+  ) %>
+<% end %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(
@@ -34,7 +42,7 @@
             :fee_details,
             label: { text: t("publish.providers.fees_and_financial_support.edit.label"), size: "s" },
             hint: -> { render partial: "publish/courses/markdown_formatting" },
-            value: @course_fees_and_financial_support_form.fee_details,
+            value: @copied_fields_values&.dig("fee_details") || @course_fees_and_financial_support_form.fee_details,
             rows: 15,
             max_words: 250,
             data: { qa: "course_fee_details" }
@@ -52,4 +60,17 @@
           ) %>
     </p>
   </div>
+  <aside class="govuk-grid-column-one-third" data-qa="course__related_sidebar">
+    <%= render(
+      partial: "publish/courses/related_sidebar",
+      locals: {
+        course: @course,
+        page_path: fees_and_financial_support_publish_provider_recruitment_cycle_course_path(
+          @provider.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code
+        )
+      }
+    ) %>
+  </aside>
 </div>

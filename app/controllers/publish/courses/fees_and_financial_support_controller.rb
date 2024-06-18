@@ -3,11 +3,14 @@
 module Publish
   module Courses
     class FeesAndFinancialSupportController < PublishController
+      include CopyCourseContent
       before_action :authorise_with_pundit
 
       def edit
         @course_fees_and_financial_support_form = CourseFeesAndFinancialSupportForm.new(course_enrichment)
+        @copied_fields = copy_content_check(::Courses::Copy::FEES_FINANCIAL_SUPPORT_FIELDS)
 
+        @copied_fields_values = copied_fields_values if @copied_fields.present?
         @course_fees_and_financial_support_form.valid? if show_errors_on_publish?
       end
 
@@ -27,6 +30,7 @@ module Publish
           )
 
         else
+          fetch_course_list_to_copy_from
           render :edit
         end
       end

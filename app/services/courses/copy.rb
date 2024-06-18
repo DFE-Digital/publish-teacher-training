@@ -27,6 +27,10 @@ module Courses
       ['How placements work', 'how_school_placements_work']
     ].freeze
 
+    FEES_FINANCIAL_SUPPORT_FIELDS = [
+      ['Fees and financial support', 'fee_details']
+    ].freeze
+
     FEES_FIELDS = [
       ['Fee for UK students', 'fee_uk_eu'],
       ['Fee for international students', 'fee_international']
