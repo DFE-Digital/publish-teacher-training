@@ -200,12 +200,6 @@ RSpec/IndexedLet:
     - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
     - 'spec/features/publish/courses/editing_course_length_and_funding_type_spec.rb'
 
-RSpecRails/HaveHttpStatus:
-  Exclude:
-    - 'spec/smoke/api/v1/courses_spec.rb'
-    - 'spec/smoke/api/v1/healthcheck_spec.rb'
-    - 'spec/smoke/api/v1/providers_spec.rb'
-
 # In acceptance tests it's often handy to user instance variables to keep track of state
 RSpec/InstanceVariable:
   Enabled: false
@@ -218,9 +212,3 @@ RSpec/DescribeClass:
 
 RSpec/NamedSubject:
   Enabled: false
-
-RSpec/Capybara/FeatureMethods:
-  EnabledMethods:
-    - "scenario"
-    - "feature"
-
