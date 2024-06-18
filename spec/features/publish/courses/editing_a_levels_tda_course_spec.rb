@@ -13,6 +13,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     when_i_click_to_add_a_level_requirements
     then_i_am_on_the_a_levels_required_for_the_course_page
+    and_the_back_link_points_to_description_tab
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_a_levels_required_for_the_course_page
@@ -68,7 +69,13 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_i_am_on_the_a_levels_required_for_the_course_page
-    expect(page).to have_current_path('change-me')
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      )
+    )
   end
 
   def when_i_click_continue
@@ -76,19 +83,50 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
   alias_method :and_i_click_continue, :when_i_click_continue
 
-  def then_i_see_an_error_message_for_the_a_levels_required_for_the_course_page; end
+  def then_i_see_an_error_message_for_the_a_levels_required_for_the_course_page
+    expect(page.title).to eq('Error: Are any A levels required for this course? - Publish teacher training courses - GOV.UK')
+    expect(page).to have_content('Select if this course requires any A levels')
+  end
 
   def when_i_choose_no
     choose 'No'
   end
 
-  def then_i_am_on_the_course_description_tab; end
+  def then_i_am_on_the_course_description_tab
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      )
+    )
+  end
 
-  def and_i_see_a_levels_is_no_required; end
+  def and_the_back_link_points_to_description_tab
+    expect(page.find_link(text: 'Back')[:href]).to eq(
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      )
+    )
+  end
+
+  def and_i_see_a_levels_is_no_required
+    expect(page).to have_content('A levels are not required for this course')
+  end
 
   def when_i_choose_yes
     choose 'Yes'
   end
 
-  def then_i_am_on_the_what_a_level_is_required_page; end
+  def then_i_am_on_the_what_a_level_is_required_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      )
+    )
+  end
 end

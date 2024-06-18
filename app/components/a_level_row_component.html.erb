@@ -2,10 +2,10 @@
   <p class="govuk-heading-s app-inset-text__title">A-levels and equivalency tests</p>
   <p class="govuk-body">
     <%= govuk_link_to "Enter A-levels and equivalency test requirements",
-     a_levels_or_equivalency_tests_required_for_this_course_publish_provider_recruitment_cycle_course_path(
-          course.provider.provider_code,
-          course.provider.recruitment_cycle_year,
-          course.course_code,
+     publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+        course.provider.provider_code,
+        course.provider.recruitment_cycle_year,
+        course.course_code,
         display_errors: has_errors? ? true : nil
       ) %>
   </p>

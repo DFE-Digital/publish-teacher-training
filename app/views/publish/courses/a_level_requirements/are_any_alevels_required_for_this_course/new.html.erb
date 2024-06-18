@@ -1,1 +1,34 @@
+<% content_for :page_title, title_with_error_prefix(t("course.are_any_alevels_required_for_this_course.fieldset"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
 
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @wizard.current_step, url:
+        publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          @course.course_code
+        ) do |form| %>
+        <%= form.govuk_error_summary %>
+        <%= form.govuk_radio_buttons_fieldset :answer, legend: { size: "xl", text: t("course.are_any_alevels_required_for_this_course.fieldset"), tag: "h1" }, caption: { text: @course.name_and_code, size: "l" } do %>
+          <%= form.govuk_radio_button :answer, :yes, label: { text: t("course.are_any_alevels_required_for_this_course.answer_yes") } %>
+          <%= form.govuk_radio_button :answer, :no, label: { text: t("course.are_any_alevels_required_for_this_course.answer_no") } %>
+        <% end %>
+
+      <%= form.submit t("continue"), class: "govuk-button" %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, @course.course_code)) %>
+    </p>
+  </div>
+</div>

@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class ALevelsWizard < DfE::Wizard::Base
-  attr_accessor :provider_code, :recruitment_cycle_year, :course_code
+  attr_accessor :provider, :course
+
+  delegate :course_code, to: :course
+  delegate :provider_code, :recruitment_cycle_year, to: :course
 
   steps do
     [
-      {
-        are_any_alevels_required_for_this_course: ALevelSteps::AreAnyALevelsRequiredForThisCourse,
-        what_alevel_is_required: ALevelSteps::WhatALevelIsRequired
-      }
+      { are_any_a_levels_required_for_this_course: ALevelSteps::AreAnyALevelsRequiredForThisCourse },
+      { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired }
     ]
   end
 
@@ -34,5 +35,17 @@ class ALevelsWizard < DfE::Wizard::Base
   #
   def default_path_prefix
     'publish_provider_recruitment_cycle_course'
+  end
+
+  def exit_path
+    url_helpers.publish_provider_recruitment_cycle_course_path(
+      provider_code:,
+      recruitment_cycle_year:,
+      code: course_code
+    )
+  end
+
+  def logger
+    DfE::Wizard::Logger.new(Rails.logger, if: -> { Rails.env.development? })
   end
 end

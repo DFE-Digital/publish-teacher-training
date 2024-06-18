@@ -2,24 +2,25 @@
 
 module ALevelSteps
   class AreAnyALevelsRequiredForThisCourse < DfE::Wizard::Step
-    # attr_accessor :answer
-    # validates :answer, presence: true
+    delegate :exit_path, to: :wizard
+    attr_accessor :answer
 
-    # def self.permitted_params
-    #   [:answer]
-    # end
+    validates :answer, presence: true
 
-    # def previous_step
-    #   :first_step
-    # end
+    def self.permitted_params
+      [:answer]
+    end
+
+    def previous_step
+      :first_step
+    end
 
     def next_step
-      :what_alevel_is_required
-    #   if answer == 'yes'
-    #     :third_step
-    #   elsif answer == 'no'
-    #     :second_step
-    #   end
+      if answer == 'yes'
+        :what_a_level_is_required
+      elsif answer == 'no'
+        :exit
+      end
     end
   end
 end
