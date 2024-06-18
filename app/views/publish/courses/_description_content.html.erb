@@ -77,7 +77,7 @@
       action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text")
     ) %>
 
-    <% if course.financial_support.present? %>
+    <% if course.financial_support.present? && !@provider.recruitment_cycle.after_2024? %>
       <% enrichment_summary(
         summary_list,
         :course,
