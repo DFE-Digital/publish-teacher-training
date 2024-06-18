@@ -172,7 +172,11 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
+  # Linters and formatting
   gem 'erb_lint'
+  gem 'rubocop', require: false
+  gem 'rubocop-capybara'
+  gem 'rubocop-factory_bot'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
 
@@ -195,9 +199,6 @@ group :development, :test do
 
   # Test framework
   gem 'rspec-rails', '6.1.2'
-
-  # A Ruby static code analyzer and formatter
-  gem 'rubocop', require: false
 
   # Make diffs of Ruby objects much more readable
   gem 'super_diff'
