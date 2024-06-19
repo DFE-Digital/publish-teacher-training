@@ -25,4 +25,5 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.acronym 'MFL' # Modern foreign languages
   inflect.acronym 'DFE' # Department for Education
   inflect.acronym 'DfE' # Department for Education
+  inflect.acronym 'SCITT'
 end
