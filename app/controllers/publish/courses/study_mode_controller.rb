@@ -62,11 +62,13 @@ module Publish
         if @course.student_visa?
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(provider_code: course.provider_code,
                                                                                   recruitment_cycle_year: course.recruitment_cycle_year,
-                                                                                  course_code: course.course_code)
+                                                                                  course_code: course.course_code,
+                                                                                  previous_tda_course: true)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(provider_code: course.provider_code,
                                                                                          recruitment_cycle_year: course.recruitment_cycle_year,
-                                                                                         course_code: course.course_code)
+                                                                                         course_code: course.course_code,
+                                                                                         previous_tda_course: true)
         end
       end
 

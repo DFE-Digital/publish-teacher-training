@@ -9,7 +9,7 @@
           course.course_code
         )
       ) %>
-  <% elsif @provider.accredited_provider? %>
+  <% elsif @provider.accredited_provider? && params[:previous_tda_course] != 'true' %>
     <%= govuk_back_link_to(
       apprenticeship_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
@@ -17,6 +17,13 @@
           course.course_code
         )
     ) %>
+  <% elsif params[:previous_tda_course] == 'true' %>
+    <%= govuk_back_link_to(full_part_time_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code,
+              previous_tda_course: true
+            )) %>
   <% else %>
     <%= govuk_back_link_to(
       funding_type_publish_provider_recruitment_cycle_course_path(
