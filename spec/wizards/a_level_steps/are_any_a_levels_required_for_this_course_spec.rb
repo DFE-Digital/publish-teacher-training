@@ -35,21 +35,15 @@ RSpec.describe ALevelSteps::AreAnyALevelsRequiredForThisCourse do
 
   describe '#next_step' do
     context 'when a level is required' do
-      before do
-        wizard_step.answer = 'yes'
-      end
-
       it 'returns the name for the next step' do
+        wizard_step.answer = 'yes'
         expect(wizard_step.next_step).to eq(:what_a_level_is_required)
       end
     end
 
     context 'when a level is not required' do
-      before do
-        wizard_step.answer = 'no'
-      end
-
       it 'returns the name for the next step' do
+        wizard_step.answer = 'no'
         expect(wizard_step.next_step).to eq(:exit)
       end
     end
