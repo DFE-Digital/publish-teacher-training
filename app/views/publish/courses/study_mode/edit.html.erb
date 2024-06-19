@@ -2,22 +2,7 @@
 <% content_for :page_title, title_with_error_prefix("#{page_title} – #{course.name_and_code}", @course_study_mode_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <% if params[:previous_tda_course] == 'true' %>
-    <%= govuk_back_link_to(funding_type_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code,
-            previous_tda_course: true
-          )) %>
-  <% else %>
-    <%= govuk_back_link_to(
-          details_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code
-          )
-        ) %>
-  <% end %>
+  <%= govuk_back_link_to(study_mode_path(course)) %>
 <% end %>
 
 <div class="govuk-grid-row">
