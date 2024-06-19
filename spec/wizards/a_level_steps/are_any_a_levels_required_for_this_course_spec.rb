@@ -9,6 +9,9 @@ RSpec.describe ALevelSteps::AreAnyALevelsRequiredForThisCourse do
     it 'is valid with a valid answer' do
       wizard_step.answer = 'yes'
       expect(wizard_step).to be_valid
+
+      wizard_step.answer = 'no'
+      expect(wizard_step).to be_valid
     end
 
     it 'is not valid without an answer' do

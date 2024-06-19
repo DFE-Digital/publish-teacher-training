@@ -130,6 +130,18 @@
       ) %>
     <% end %>
 
+    <% if course.teacher_degree_apprenticeship? %>
+      <% enrichment_summary(
+        summary_list,
+        :course,
+        t("publish.providers.courses.description_content.a_levels_label"),
+        (render ALevelRowComponent.new(course:, errors: @errors)),
+        %w[a_levels_requirements],
+        action_path: publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code),
+        action_visually_hidden_text: "A levels"
+      ) %>
+    <% end %>
+
     <% enrichment_summary(
       summary_list,
       :course,
@@ -138,17 +150,6 @@
       %w[accept_pending_gcse accept_gcse_equivalency accept_english_gcse_equivalency accept_maths_gcse_equivalency accept_science_gcse_equivalency additional_gcse_equivalencies],
       action_path: !course.is_withdrawn? && course.gcse_section_complete? ? gcses_pending_or_equivalency_tests_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, course.course_code) : nil
     ) %>
-
-  <% if course.teacher_degree_apprenticeship? %>
-    <% enrichment_summary(
-      summary_list,
-      :course,
-      "A-levels",
-      (render ALevelRowComponent.new(course:, errors: @errors)),
-      [],
-      action_visually_hidden_text: "a levels"
-    ) %>
-  <% end %>
 
   <% render_if(@show_other_requirements) do %>
     <% enrichment_summary(

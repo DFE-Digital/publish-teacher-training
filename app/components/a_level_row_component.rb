@@ -9,6 +9,12 @@ class ALevelRowComponent < ViewComponent::Base
     @errors = errors
   end
 
+  def a_level_requirement_content
+    return if @course.a_level_requirements.present?
+
+    I18n.t('publish.providers.courses.description_content.a_levels_not_required')
+  end
+
   def inset_text_css_classes
     messages = errors&.values&.flatten
 

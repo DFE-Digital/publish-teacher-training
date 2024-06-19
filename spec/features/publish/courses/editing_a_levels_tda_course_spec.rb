@@ -23,8 +23,9 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     then_i_am_on_the_course_description_tab
     and_i_see_a_levels_is_no_required
 
-    when_i_click_to_add_a_level_requirements
+    when_i_click_to_change_a_level_requirements
     then_i_am_on_the_a_levels_required_for_the_course_page
+    and_the_no_option_is_chosen
 
     when_i_choose_yes
     and_i_click_continue
@@ -61,11 +62,11 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_i_see_a_levels_row
-    expect(page).to have_content('A-levels and equivalency tests')
+    expect(page).to have_content('A levels and equivalency tests')
   end
 
   def when_i_click_to_add_a_level_requirements
-    click_on 'Enter A-levels and equivalency test requirements'
+    click_on 'Enter A levels and equivalency test requirements'
   end
 
   def then_i_am_on_the_a_levels_required_for_the_course_page
@@ -118,6 +119,14 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def when_i_choose_yes
     choose 'Yes'
+  end
+
+  def when_i_click_to_change_a_level_requirements
+    click_on 'Change A levels'
+  end
+
+  def and_the_no_option_is_chosen
+    expect(page).to have_checked_field('are-any-a-levels-required-for-this-course-answer-no-field')
   end
 
   def then_i_am_on_the_what_a_level_is_required_page

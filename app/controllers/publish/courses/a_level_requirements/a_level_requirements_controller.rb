@@ -3,15 +3,16 @@
 module Publish
   module Courses
     module ALevelRequirements
-      class AreAnyAlevelsRequiredForThisCourseController < PublishController
+      class ALevelRequirementsController < PublishController
         before_action { authorize provider }
-        before_action :assign_course
+        before_action :assign_course, :verify_teacher_degree_apprenticeship_course
 
         def new
           @wizard = ALevelsWizard.new(
             current_step:,
             provider: @provider,
-            course: @course
+            course: @course,
+            step_params:
           )
         end
 
@@ -23,7 +24,7 @@ module Publish
             step_params:
           )
 
-          if @wizard.valid_step?
+          if @wizard.save
             redirect_to @wizard.next_step_path
           else
             render :new
@@ -32,16 +33,16 @@ module Publish
 
         private
 
+        def verify_teacher_degree_apprenticeship_course
+          redirect_to publish_provider_recruitment_cycle_courses_path(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year) unless @course.teacher_degree_apprenticeship?
+        end
+
         def assign_course
           @course = CourseDecorator.new(provider.courses.find_by!(course_code: params[:course_code]))
         end
 
         def current_step
-          :are_any_a_levels_required_for_this_course
-        end
-
-        def step_params
-          params
+          controller_name.to_sym
         end
       end
     end

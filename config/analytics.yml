@@ -42,6 +42,7 @@ shared:
     - can_sponsor_skilled_worker_visa
     - can_sponsor_student_visa
     - application_status
+    - a_level_requirements
   course_site:
     - id
     - course_id

@@ -160,8 +160,8 @@ namespace :publish, as: :publish do
         get '/age_range', on: :member, to: 'courses/age_range#edit'
         put '/age_range', on: :member, to: 'courses/age_range#update'
 
-        get '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_alevels_required_for_this_course#new', as: :a_levels_are_any_a_levels_required_for_this_course
-        post '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_alevels_required_for_this_course#create'
+        get '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_a_levels_required_for_this_course#new', as: :a_levels_are_any_a_levels_required_for_this_course
+        post '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_a_levels_required_for_this_course#create'
         get '/a-levels-or-equivalency-tests/what-a-level-is-required', to: 'courses/a_level_requirements/what_a_level_is_required#new', as: :a_levels_what_a_level_is_required
         post '/a-levels-or-equivalency-tests/what-a-level-is-required', to: 'courses/a_level_requirements/what_a_level_is_required#create'
 

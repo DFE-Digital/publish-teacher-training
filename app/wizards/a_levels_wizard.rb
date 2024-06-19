@@ -13,6 +13,8 @@ class ALevelsWizard < DfE::Wizard::Base
     ]
   end
 
+  store ALevelsWizardStore
+
   # Default argument passed to all the routing in this wizard
   # All course editing specific is done through the URL
   #
