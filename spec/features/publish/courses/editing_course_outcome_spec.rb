@@ -50,8 +50,21 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
         and_i_choose_qts
+        and_the_back_link_points_to_the_outcome_page
         and_i_choose_the_fee_paying
+        and_the_back_link_points_to_the_funding_type_page
         and_i_choose_part_time
+        and_the_back_link_points_to_the_study_mode_page
+
+        and_i_click_back
+        then_i_am_on_the_study_mode_page
+
+        and_i_click_back
+        then_i_am_on_the_funding_type_page
+
+        when_i_update
+        and_i_update
+
         and_i_choose_to_sponsor_a_student_visa
         then_i_see_the_correct_attributes_in_the_database_for_fee_paying
       end
@@ -64,8 +77,11 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
         and_i_choose_qts
+        and_the_back_link_points_to_the_outcome_page
         and_i_choose_salaried
+        and_the_back_link_points_to_the_funding_type_page
         and_i_choose_part_time
+        and_the_back_link_points_to_the_study_mode_page
         and_i_choose_to_sponsor_a_skilled_worker_visa
         then_i_see_the_correct_attributes_in_the_database_for_salaried
       end
@@ -233,5 +249,52 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path(details_publish_provider_recruitment_cycle_course_path(provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, code: course.course_code), ignore_query: true)
   end
 
+  def and_the_back_link_points_to_the_outcome_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(outcome_publish_provider_recruitment_cycle_course_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025,
+                                                             code: course.course_code
+                                                           ))
+  end
+
+  def and_the_back_link_points_to_the_funding_type_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(funding_type_publish_provider_recruitment_cycle_course_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025,
+                                                             code: course.course_code
+                                                           ))
+  end
+
+  def and_the_back_link_points_to_the_study_mode_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(full_part_time_publish_provider_recruitment_cycle_course_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025,
+                                                             code: course.course_code
+                                                           ))
+  end
+
+  def and_i_click_back
+    click_on 'Back'
+  end
+
+  def then_i_am_on_the_study_mode_page
+    expect(page).to have_current_path(full_part_time_publish_provider_recruitment_cycle_course_path(
+                                        provider_code: provider.provider_code,
+                                        recruitment_cycle_year: 2025,
+                                        code: course.course_code,
+                                        previous_tda_course: true
+                                      ))
+  end
+
+  def then_i_am_on_the_funding_type_page
+    expect(page).to have_current_path(funding_type_publish_provider_recruitment_cycle_course_path(
+                                        provider_code: provider.provider_code,
+                                        recruitment_cycle_year: 2025,
+                                        code: course.course_code,
+                                        previous_tda_course: true
+                                      ))
+  end
+
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa
+  alias_method :when_i_update, :and_i_update
 end

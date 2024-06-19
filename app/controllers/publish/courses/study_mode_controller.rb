@@ -62,19 +62,21 @@ module Publish
         if @course.student_visa?
           student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(provider_code: course.provider_code,
                                                                                   recruitment_cycle_year: course.recruitment_cycle_year,
-                                                                                  course_code: course.course_code)
+                                                                                  course_code: course.course_code,
+                                                                                  previous_tda_course: true)
         else
           skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(provider_code: course.provider_code,
                                                                                          recruitment_cycle_year: course.recruitment_cycle_year,
-                                                                                         course_code: course.course_code)
+                                                                                         course_code: course.course_code,
+                                                                                         previous_tda_course: true)
         end
       end
 
       def appropriate_visa_new_path
-        if @course.student_visa?
-          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+        if previous_tda_course_path?
+          sponsorship_path_with_previous_tda_course
         else
-          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+          sponsorship_path_without_previous_tda_course
         end
       end
 
@@ -88,6 +90,22 @@ module Publish
 
       def previous_tda_course_path?
         params[:previous_tda_course] == 'true'
+      end
+
+      def sponsorship_path_with_previous_tda_course
+        if @course.student_visa?
+          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params.merge(previous_tda_course: true))
+        else
+          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params.merge(previous_tda_course: true))
+        end
+      end
+
+      def sponsorship_path_without_previous_tda_course
+        if @course.student_visa?
+          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
+        else
+          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
+        end
       end
     end
   end

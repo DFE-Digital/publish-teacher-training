@@ -168,9 +168,25 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   scenario 'creating a tda course then changing it to a non tda fee paying course' do
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
     when_i_visit_the_course_outcome_page
+    and_the_back_link_points_to_the_confirm_page
+
     and_i_choose_qts
+    and_the_back_link_points_to_the_qualification_page
+
     and_i_choose_fee
+    and_the_back_link_points_to_the_funding_type_page
+
     and_i_choose_part_time
+    and_the_back_link_points_to_the_study_mode_page
+
+    when_i_click_back
+    then_i_am_on_the_study_mode_page
+
+    when_i_click_back
+    then_i_am_on_the_funding_type_page
+
+    when_i_click_continue
+    and_i_click_continue
     and_i_choose_to_sponsor_a_student_visa
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_fee_paying
@@ -180,8 +196,20 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
     when_i_visit_the_course_outcome_page
     and_i_choose_qts
+    and_the_back_link_points_to_the_qualification_page
     and_i_choose_salaried
+    and_the_back_link_points_to_the_funding_type_page
     and_i_choose_part_time
+    and_the_back_link_points_to_the_study_mode_page
+    when_i_click_back
+    then_i_am_on_the_study_mode_page
+
+    when_i_click_back
+    then_i_am_on_the_funding_type_page
+
+    when_i_click_continue
+    and_i_click_continue
+
     and_i_choose_to_sponsor_a_skilled_worker_visa
     when_i_click_on_add_a_course
     then_i_see_the_correct_attributes_in_the_database_for_salaried
@@ -582,10 +610,51 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     expect(course.can_sponsor_student_visa).to be(false)
   end
 
+  def and_the_back_link_points_to_the_confirm_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(confirmation_publish_provider_recruitment_cycle_courses_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025
+                                                           ))
+  end
+
+  def and_the_back_link_points_to_the_qualification_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_outcome_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025
+                                                           ))
+  end
+
+  def and_the_back_link_points_to_the_funding_type_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_funding_type_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025
+                                                           ))
+  end
+
+  def and_the_back_link_points_to_the_study_mode_page
+    expect(URI.parse(find_link('Back')[:href]).path).to eq(new_publish_provider_recruitment_cycle_courses_study_mode_path(
+                                                             provider_code: provider.provider_code,
+                                                             recruitment_cycle_year: 2025
+                                                           ))
+  end
+
+  def when_i_click_back
+    click_on 'Back'
+  end
+
+  def then_i_am_on_the_study_mode_page
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_study_mode_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
+  end
+
+  def then_i_am_on_the_funding_type_page
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_funding_type_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
+  end
+
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship
   alias_method :and_i_visit_the_courses_page, :when_i_visit_the_courses_page
   alias_method :and_i_choose_a_degree_awarding_qualification, :when_i_choose_a_degree_awarding_qualification
   alias_method :and_i_choose_the_school, :when_i_choose_the_school
   alias_method :and_i_choose_the_applications_open_date, :when_i_choose_the_applications_open_date
   alias_method :and_i_am_on_the_check_your_answers_page, :then_i_am_on_the_check_your_answers_page
+  alias_method :when_i_click_continue, :and_i_click_continue
 end

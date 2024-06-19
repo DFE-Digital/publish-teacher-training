@@ -1,31 +1,7 @@
 <% content_for :page_title, title_with_error_prefix("#{t('page_titles.skilled_worker_visas.edit')} – #{course.name_and_code}", @visa_sponsorship_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <% if params[:back_to_basic_details].present? %>
-    <%= govuk_back_link_to(
-        details_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-      ) %>
-  <% elsif @provider.accredited_provider? %>
-    <%= govuk_back_link_to(
-      apprenticeship_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-    ) %>
-  <% else %>
-    <%= govuk_back_link_to(
-      funding_type_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-    ) %>
-  <% end %>
+  <%= govuk_back_link_to(visa_path(course)) %>
 <% end %>
 
 <div class="govuk-grid-row">
