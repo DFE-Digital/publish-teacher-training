@@ -62,7 +62,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_i_click_back
         then_i_am_on_the_funding_type_page
 
-        and_i_update
+        when_i_update
         and_i_update
 
         and_i_choose_to_sponsor_a_student_visa
@@ -296,4 +296,5 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa
+  alias_method :when_i_update, :and_i_update
 end
