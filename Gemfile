@@ -198,7 +198,7 @@ group :development, :test do
   gem 'rspec-its'
 
   # Test framework
-  gem 'rspec-rails', '6.1.2'
+  gem 'rspec-rails', '6.1.3'
 
   # Make diffs of Ruby objects much more readable
   gem 'super_diff'
