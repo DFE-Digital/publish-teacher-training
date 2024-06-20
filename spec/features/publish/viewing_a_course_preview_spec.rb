@@ -228,14 +228,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       'Financial support from the training provider'
     )
 
-    expect(publish_course_preview_page.personal_qualities).to have_content(
-      decorated_course.personal_qualities
-    )
-
-    expect(publish_course_preview_page.other_requirements).to have_content(
-      decorated_course.other_requirements
-    )
-
     expect(publish_course_preview_page.train_with_us).to have_content(
       provider.train_with_us
     )

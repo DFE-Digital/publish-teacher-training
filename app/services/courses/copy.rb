@@ -36,17 +36,6 @@ module Courses
       ['Salary details', 'salary_details']
     ].freeze
 
-    POST_2022_CYCLE_REQUIREMENTS_FIELDS = [
-      ['Personal qualities', 'personal_qualities'],
-      ['Other requirements', 'other_requirements']
-    ].freeze
-
-    PRE_2022_CYCLE_REQUIREMENTS_FIELDS = [
-      ['Qualifications needed', 'required_qualifications'],
-      ['Personal qualities', 'personal_qualities'],
-      ['Other requirements', 'other_requirements']
-    ].freeze
-
     # TODO: This is to be utilised when we add these to a course form
     VISA_FIELDS = [
       ['Can sponsor skilled worker visa', 'can_sponsor_skilled_worker_visa'],

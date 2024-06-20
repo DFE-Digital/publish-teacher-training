@@ -11,7 +11,6 @@ environment:
 
 features:
   teacher_degree_apprenticeship: true
-  course_requirements_deprecated: true
 
 find_valid_referers:
   - http://localhost:3001

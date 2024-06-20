@@ -6,9 +6,7 @@ feature 'Course show 2025', { can_edit_current_and_next_cycles: false } do
   include ActiveSupport::NumberHelper
 
   before do
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
     create(:recruitment_cycle)
-    enable_features(:course_requirements_deprecated)
   end
 
   scenario 'i can not see other personal qualities or other requirements' do

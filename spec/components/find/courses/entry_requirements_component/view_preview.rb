@@ -71,8 +71,6 @@ module Find
             accept_maths_gcse_equivalency: true,
             accept_science_gcse_equivalency: true,
             additional_gcse_equivalencies: 'much much more',
-            personal_qualities: 'Personal Qualities Text Goes Here',
-            other_requirements: 'Other Requirements Text Goes Here',
             computed_subject_name_or_names: 'Biology',
             subjects: [Subject.new(subject_name: 'foo', subject_code: 'sc')] }
         end
@@ -83,7 +81,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :personal_qualities, :other_requirements, :computed_subject_name_or_names, :campaign_name, :subjects)
+          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :computed_subject_name_or_names, :campaign_name, :subjects)
 
           def enrichment_attribute(params)
             send(params)

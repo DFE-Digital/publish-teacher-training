@@ -92,7 +92,6 @@ feedback:
   link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
 
 features:
-  course_requirements_deprecated: false
   teacher_degree_apprenticeship: false
   send_request_data_to_bigquery: false
   rollover:

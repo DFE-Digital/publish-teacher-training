@@ -49,26 +49,6 @@ describe RecruitmentCycle do
     end
   end
 
-  describe '#after_2024?', :aggregate_failures do
-    context 'when cycle year is 2024' do
-      before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024) }
-
-      it 'returns false' do
-        expect(current_cycle).not_to be_after_2024
-        expect(next_cycle).to be_after_2024
-      end
-    end
-
-    context 'when cycle year is 2025' do
-      before { allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025) }
-
-      it 'returns true' do
-        expect(current_cycle).to be_after_2024
-        expect(next_cycle).to be_after_2024
-      end
-    end
-  end
-
   context 'when there are multiple cycles' do
     let!(:third_cycle) do
       current_cycle
