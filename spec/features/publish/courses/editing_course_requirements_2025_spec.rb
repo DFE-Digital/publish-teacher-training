@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Editing course deprecated requirements in 2025', { can_edit_current_and_next_cycles: false } do
   before do
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
-    enable_features(:course_requirements_deprecated)
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     provider

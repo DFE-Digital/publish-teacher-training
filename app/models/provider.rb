@@ -382,7 +382,7 @@ class Provider < ApplicationRecord
   end
 
   def course_requirements_deprecated?
-    recruitment_cycle.after_2024? || FeatureService.enabled?(:course_requirements_deprecated)
+    recruitment_cycle.after_2024?
   end
 
   private
