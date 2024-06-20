@@ -29,7 +29,7 @@
         </h1>
 
         <%= form.govuk_radio_buttons_fieldset :subject do %>
-          <%= form.govuk_radio_button :subject, :any_subject %>
+          <%= form.govuk_radio_button :subject, :any_subject, link_errors: true %>
           <%= form.govuk_radio_button :subject, :any_stem_subject %>
           <%= form.govuk_radio_button :subject, :any_modern_foreign_language %>
           <%= form.govuk_radio_button :subject, :any_humanities_subject %>
