@@ -30,6 +30,17 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_choose_yes
     and_i_click_continue
     then_i_am_on_the_what_a_level_is_required_page
+
+    when_i_click_back
+    then_the_yes_option_is_chosen
+    and_i_click_continue
+
+    and_i_click_continue
+    then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
+
+    when_i_choose_other_subject
+    and_i_click_continue
+    then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -137,5 +148,22 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
         @course.course_code
       )
     )
+  end
+
+  def when_i_click_back
+    click_on 'Back'
+  end
+
+  def then_the_yes_option_is_chosen
+    expect(page).to have_checked_field('are-any-a-levels-required-for-this-course-answer-yes-field')
+  end
+
+  def when_i_choose_other_subject
+    choose 'Choose a subject'
+  end
+
+  def then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
+    expect(page).to have_content('There is a problem')
+    expect(page).to have_content('Select a subject')
   end
 end

@@ -1,23 +1,48 @@
-<% content_for :page_title, title_with_error_prefix("SOME PAGE TITLE", @errors && @errors.any?) %>
+<% content_for :page_title, title_with_error_prefix(t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to("change-me") %>
+  <%= govuk_back_link_to(
+      publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code,
+        are_any_a_levels_required_for_this_course: { answer: "yes" }
+      )
+    ) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: @wizard.current_step, url:
-        publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+        publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code
         ) do |form| %>
+        <%= form.govuk_error_summary %>
+
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l">
+            <%= @course.name_and_code %>
+          </span>
+          <%= t("course.#{@wizard.current_step.model_name.i18n_key}.heading") %>
+        </h1>
+
+        <%= form.govuk_radio_buttons_fieldset :subject do %>
+          <%= form.govuk_radio_button :subject, :any_subject %>
+          <%= form.govuk_radio_button :subject, :any_stem_subject %>
+          <%= form.govuk_radio_button :subject, :any_modern_foreign_language %>
+          <%= form.govuk_radio_button :subject, :any_humanities_subject %>
+          <%= form.govuk_radio_button :subject, :any_science_subject %>
+          <%= form.govuk_radio_divider %>
+          <%= form.govuk_radio_button :subject, :other_subject do %>
+            <%= form.govuk_collection_select :other_subject, @wizard.current_step.subjects_list, :name, :name, options: { prompt: t("helpers.label.#{@wizard.current_step.model_name.i18n_key}.other_subject_prompt") } %>
+          <% end %>
+        <% end %>
+
+        <%= form.govuk_text_field :minimum_grade_required, label: { size: "s" }, width: "one-quarter" %>
 
       <%= form.submit t("continue"), class: "govuk-button" %>
     <% end %>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, @course.course_code)) %>
-    </p>
   </div>
 </div>

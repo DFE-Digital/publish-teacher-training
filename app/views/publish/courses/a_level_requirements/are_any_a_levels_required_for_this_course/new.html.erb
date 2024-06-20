@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix(t("course.are_any_a_levels_required_for_this_course.fieldset"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
+<% content_for :page_title, title_with_error_prefix(t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(
