@@ -6,7 +6,7 @@ require 'rails_helper'
 
 feature 'Publishing courses', can_edit_current_and_next_cycles: false do
   scenario 'i can publish a course in 2025' do
-    given_the_current_recruitment_cycle_is_2025
+    given_the_current_recruitment_cycle_is2025
     and_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_publish
     when_i_visit_the_course_page
@@ -20,7 +20,7 @@ feature 'Publishing courses', can_edit_current_and_next_cycles: false do
     given_i_am_authenticated(user: @user)
   end
 
-  def given_the_current_recruitment_cycle_is_2025
+  def given_the_current_recruitment_cycle_is2025
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
   end
 
