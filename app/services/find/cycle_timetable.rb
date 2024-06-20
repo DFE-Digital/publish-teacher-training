@@ -37,6 +37,14 @@ module Find
         find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2025 => {
+        find_opens: Time.zone.local(2024, 10, 1, 9),
+        apply_opens: Time.zone.local(2024, 10, 8, 9),
+        first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
+        apply_1_deadline: Time.zone.local(2025, 9, 7, 18),
+        apply_2_deadline: Time.zone.local(2025, 9, 21, 18),
+        find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
+      },
+      2026 => {
         # NOTE: the dates from below here are not the finalised but are required
         # for the current implementation
         find_opens: Time.zone.local(2024, 10, 5, 9),
