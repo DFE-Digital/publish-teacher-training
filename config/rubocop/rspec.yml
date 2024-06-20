@@ -1,7 +1,5 @@
 # https://docs.rubocop.org/rubocop-rspec/cops_rspec.html
 
-require: rubocop-rspec
-
 RSpec/ExampleLength:
   Enabled: false
 
@@ -212,3 +210,8 @@ RSpec/DescribeClass:
 
 RSpec/NamedSubject:
   Enabled: false
+
+RSpec/Dialect:
+  PreferredMethods:
+    - "scenario"
+    - "feature"
