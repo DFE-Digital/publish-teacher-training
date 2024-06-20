@@ -655,6 +655,9 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-rspec (3.0.1)
       rubocop (~> 1.61)
+    rubocop-rspec_rails (2.30.0)
+      rubocop (~> 1.61)
+      rubocop-rspec (~> 3, >= 3.0.1)
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.13.0)
@@ -858,6 +861,7 @@ DEPENDENCIES
   rubocop-factory_bot
   rubocop-rails
   rubocop-rspec
+  rubocop-rspec_rails
   rubypants
   schema_to_scaffold
   sentry-rails
