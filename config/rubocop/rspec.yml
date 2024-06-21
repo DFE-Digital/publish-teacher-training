@@ -1,7 +1,5 @@
 # https://docs.rubocop.org/rubocop-rspec/cops_rspec.html
 
-require: rubocop-rspec
-
 RSpec/ExampleLength:
   Enabled: false
 
@@ -207,8 +205,19 @@ RSpec/InstanceVariable:
 RSpec/PredicateMatcher:
   Enabled: false
 
+RSpecRails/HaveHttpStatus:
+  Exclude:
+    - 'spec/smoke/api/v1/courses_spec.rb'
+    - 'spec/smoke/api/v1/healthcheck_spec.rb'
+    - 'spec/smoke/api/v1/providers_spec.rb'
+
 RSpec/DescribeClass:
   Enabled: false
 
 RSpec/NamedSubject:
   Enabled: false
+
+RSpec/Dialect:
+  PreferredMethods:
+    - "scenario"
+    - "feature"

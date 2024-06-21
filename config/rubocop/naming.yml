@@ -13,12 +13,9 @@ Naming/MethodName:
   Exclude:
     - 'app/models/accrediting_provider_enrichment.rb'
 
+# Allow numbers in variable names
 Naming/VariableNumber:
-  Exclude:
-    - 'app/serializers/api/public/v1/serializable_location.rb'
-    - 'app/serializers/api/public/v1/serializable_provider.rb'
-    - 'spec/serializers/api/public/v1/serializable_location_spec.rb'
-    - 'spec/serializers/api/public/v1/serializable_provider_spec.rb'
+  Enabled: false
 
 Naming/PredicateName:
   Exclude:

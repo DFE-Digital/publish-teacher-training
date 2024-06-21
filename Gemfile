@@ -179,6 +179,7 @@ group :development, :test do
   gem 'rubocop-factory_bot'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'rubocop-rspec_rails'
 
   # run specs in parallel
   gem 'parallel_tests'
