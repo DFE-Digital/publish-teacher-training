@@ -17,7 +17,7 @@ describe ApplicationHelper do
 
       it 'returns correct content' do
         expect(enrichment_error_link(:course, 'about_course', 'Something about the course'))
-          .to eq("<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--error\"><a class=\"govuk-link\" href=\"/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about?display_errors=true#publish-course-information-form-about-course-field-error\">Something about the course</a></div>")
+          .to eq("<div class=\"govuk-inset-text app-inset-text--narrow-border app-inset-text--error\"><a class=\"govuk-link\" href=\"/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error\">Something about the course</a></div>")
       end
     end
   end
@@ -54,7 +54,7 @@ describe ApplicationHelper do
         expect(subject).to have_css('.govuk-summary-list__key', text: 'About course')
         expect(subject).to have_css('.govuk-summary-list__value > .app-inset-text--error > a', text: error_message)
 
-        expect(subject).to have_link(error_message, href: "/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about?display_errors=true#publish-course-information-form-about-course-field-error")
+        expect(subject).to have_link(error_message, href: "/publish/organisations/#{@provider.provider_code}/#{@course.recruitment_cycle_year}/courses/#{@course.course_code}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error")
       end
     end
   end
