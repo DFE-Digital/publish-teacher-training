@@ -2,6 +2,6 @@
 
 class FindConstraint
   def matches?(request)
-    Settings.find_url&.include?(request.host) || request.host.include?('find-pr') || request.host.include?('find-review')
+    Settings.find_url&.include?(request.host) || Settings.extra_find_url&.include?(request.host) || request.host.include?('find-pr') || request.host.include?('find-review')
   end
 end

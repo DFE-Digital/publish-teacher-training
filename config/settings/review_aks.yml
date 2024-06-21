@@ -7,6 +7,7 @@ environment:
 
 publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
 find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+extra_find_url: https://qa.find-teacher-training-courses.service.gov.uk
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 search_ui:
   base_url: https://qa.find-postgraduate-teacher-training.service.gov.uk

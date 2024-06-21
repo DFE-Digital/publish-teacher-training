@@ -16,13 +16,23 @@ describe FindConstraint do
 
   let(:find_url) { 'find_url' }
   let(:host) { 'find_url' }
+  let(:extra_find_url) { 'some_url' }
 
   describe '#matched?' do
     before do
       Settings.find_url = find_url
+      Settings.extra_find_url = extra_find_url
     end
 
     context 'Settings.find_url is same as host' do
+      it 'returns true' do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context 'when request host matches extra_find_url' do
+      let(:host) { 'some_url' }
+
       it 'returns true' do
         expect(subject).to be_truthy
       end
