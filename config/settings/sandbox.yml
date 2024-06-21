@@ -22,3 +22,4 @@ dfe_signin:
 
 find_valid_referers:
   - https://sandbox.find-postgraduate-teacher-training.service.gov.uk
+  - https://sandbox.find-teacher-training-courses.service.gov.uk

@@ -30,3 +30,4 @@ features:
 
 find_valid_referers:
   - https://staging.find-postgraduate-teacher-training.service.gov.uk
+  - https://staging.find-teacher-training-courses.service.gov.uk
