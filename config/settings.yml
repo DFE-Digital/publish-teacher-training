@@ -59,6 +59,7 @@ govuk_notify:
   user_added_as_organisation_to_training_partner_id: 47d3509f-eeac-49a5-a455-e4a911c93496
 publish_url: http://localhost:3000
 find_url: http://localhost:3002
+extra_find_url: http://localhost:3002
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>

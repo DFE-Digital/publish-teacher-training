@@ -35,7 +35,11 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.action_controller.asset_host = proc do |_source, request|
-    Settings.find_assets_url if Settings.find_url.include?(request.host)
+    if Settings.find_url.include?(request.host)
+      Settings.find_assets_url
+    elsif Settings.extra_find_url&.include?(request.host)
+      Settings.extra_find_assets_url
+    end
   end
 
   # Specifies the header that your server uses for sending files.

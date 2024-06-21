@@ -2,8 +2,9 @@ gcp_api_key: please_change_me
 publish_api_url: https://qa.api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://qa.publish-teacher-training-courses.service.gov.uk
 find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
-extra_find_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
+extra_find_url: https://qa.find-teacher-training-courses.service.gov.uk
 find_assets_url: https://qa-assets.find-postgraduate-teacher-training.service.gov.uk
+extra_find_assets_url: https://qa-assets.find-teacher-training-courses.service.gov.uk
 apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 
 search_ui:
