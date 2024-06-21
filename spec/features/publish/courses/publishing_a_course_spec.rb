@@ -9,11 +9,21 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   scenario 'i can publish a course' do
-    and_there_is_a_course_i_want_to_publish
+    and_there_is_a_draft_course_i_want_to_publish
     when_i_visit_the_course_page
     and_i_click_the_publish_link
     then_i_should_see_a_success_message
     and_the_course_is_published
+    and_the_course_is_open
+  end
+
+  scenario 'i can publish a rolled over course' do
+    and_there_is_a_rolled_over_course_i_want_to_publish
+    when_i_visit_the_course_page
+    and_i_click_the_publish_link
+    then_i_should_see_a_success_message
+    and_the_course_is_published
+    and_the_course_is_open
   end
 
   scenario 'i can re-publish a course' do
@@ -47,18 +57,30 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_i_have_previously_published_a_course
-    and_there_is_a_course_i_want_to_publish
+    and_there_is_a_draft_course_i_want_to_publish
     when_i_visit_the_course_page
     and_i_click_the_publish_link
     then_i_should_see_a_success_message
     and_the_course_is_published
   end
 
-  def and_there_is_a_course_i_want_to_publish
+  def and_there_is_a_draft_course_i_want_to_publish
     given_a_course_exists(
       :with_gcse_equivalency,
       :with_accrediting_provider,
+      :closed,
       enrichments: [create(:course_enrichment, :initial_draft)],
+      sites: [create(:site, location_name: 'location 1')],
+      study_sites: [create(:site, :study_site)]
+    )
+  end
+
+  def and_there_is_a_rolled_over_course_i_want_to_publish
+    given_a_course_exists(
+      :with_gcse_equivalency,
+      :with_accrediting_provider,
+      :closed,
+      enrichments: [create(:course_enrichment, :rolled_over)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
     )
@@ -93,6 +115,10 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def and_the_course_is_published
     expect(course.reload.is_published?).to be(true)
+  end
+
+  def and_the_course_is_open
+    expect(course.reload).to be_application_status_open
   end
 
   def when_i_make_some_new_changes

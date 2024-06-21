@@ -133,9 +133,12 @@ module Publish
     end
 
     def publish_course
-      @course.publish_sites
-      @course.publish_enrichment(@current_user)
-      NotificationService::CoursePublished.call(course: @course)
+      Course.transaction do
+        @course.publish_sites
+        @course.publish_enrichment(@current_user)
+        @course.application_status_open!
+        NotificationService::CoursePublished.call(course: @course)
+      end
     end
 
     def format_publish_error_messages

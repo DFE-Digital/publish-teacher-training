@@ -88,8 +88,6 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context 'when the original course is open' do
-    let(:new_recruitment_cycle) { create(:recruitment_cycle, :next) }
-
     before do
       course.update(application_status: 'open')
     end
