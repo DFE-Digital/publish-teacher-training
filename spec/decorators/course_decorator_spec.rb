@@ -226,6 +226,29 @@ describe CourseDecorator do
   #   end
   # end
 
+  describe '#a_levels_requirements_section_complete?' do
+    context 'when a_level_requirements is nil' do
+      it 'returns false' do
+        course.a_level_requirements = nil
+        expect(decorated_course.a_levels_requirements_section_complete?).to be false
+      end
+    end
+
+    context 'when a_level_requirements is true' do
+      it 'returns true' do
+        course.a_level_requirements = true
+        expect(decorated_course.a_levels_requirements_section_complete?).to be true
+      end
+    end
+
+    context 'when a_level_requirements is false' do
+      it 'returns true' do
+        course.a_level_requirements = false
+        expect(decorated_course.a_levels_requirements_section_complete?).to be true
+      end
+    end
+  end
+
   describe '#subject_present?' do
     it 'returns true when the subject id exists' do
       expect(decorated_course.subject_present?(english)).to be(true)

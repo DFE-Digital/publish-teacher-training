@@ -1,0 +1,18 @@
+<% if course.a_levels_requirements_section_complete? %>
+  <p class="govuk-summary-list-value govuk-!-margin-top-0">
+    <%= a_level_requirement_content %>
+  </p>
+<% else %>
+  <%= govuk_inset_text(classes: inset_text_css_classes) do %>
+    <p class="govuk-heading-s app-inset-text__title"><%= t("publish.providers.courses.description_content.a_levels_heading") %></p>
+    <p class="govuk-body">
+      <%= govuk_link_to t("publish.providers.courses.description_content.enter_a_levels"),
+       publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+          course.provider.provider_code,
+          course.provider.recruitment_cycle_year,
+          course.course_code,
+          display_errors: has_errors? ? true : nil
+        ) %>
+    </p>
+  <% end %>
+<% end %>
