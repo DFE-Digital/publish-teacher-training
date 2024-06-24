@@ -2,7 +2,7 @@ gcp_api_key: please_change_me
 publish_api_url: https://api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://www.publish-teacher-training-courses.service.gov.uk
 find_url: https://www.find-postgraduate-teacher-training.service.gov.uk
-find_assets_url: https://assets.find-postgraduate-teacher-training.service.gov.uk
+extra_find_url: https://find-teacher-training-courses.service.gov.uk
 
 STATE_CHANGE_SLACK_URL: replace_me
 
@@ -38,3 +38,4 @@ features:
 
 find_valid_referers:
   - https://www.find-postgraduate-teacher-training.service.gov.uk
+  - https://find-teacher-training-courses.service.gov.uk

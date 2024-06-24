@@ -14,42 +14,27 @@ describe FindConstraint do
     )
   end
 
-  let(:find_url) { 'find_url' }
-  let(:host) { 'find_url' }
+  context 'when request host start with find' do
+    let(:host) { 'find-teacher-training' }
 
-  describe '#matched?' do
-    before do
-      Settings.find_url = find_url
+    it 'returns true' do
+      expect(subject).to be true
     end
+  end
 
-    context 'Settings.find_url is same as host' do
-      it 'returns true' do
-        expect(subject).to be_truthy
-      end
+  context 'when request host is in other environments' do
+    let(:host) { 'qa.find-teacher-training' }
+
+    it 'returns true' do
+      expect(subject).to be true
     end
+  end
 
-    context 'Settings.find_url is different to host' do
-      let(:host) { 'find_different_url' }
+  context 'when request host does not start with find' do
+    let(:host) { 'publish-teacher-training' }
 
-      it 'returns false' do
-        expect(subject).to be_falsey
-      end
-    end
-
-    context 'Review environment' do
-      let(:host) { 'find-pr-123' }
-
-      it 'returns true' do
-        expect(subject).to be_truthy
-      end
-    end
-
-    context 'Settings.find_url is nil' do
-      let(:find_url) { nil }
-
-      it 'returns false' do
-        expect(subject).to be_falsey
-      end
+    it 'returns false' do
+      expect(subject).to be false
     end
   end
 end

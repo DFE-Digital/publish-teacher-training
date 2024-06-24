@@ -2,7 +2,6 @@ gcp_api_key: please_change_me
 publish_api_url: https://publish-teacher-training-rollover.london.cloudapps.digital
 publish_url: https://publish-rollover.london.cloudapps.digital
 find_url: https://find-rollover.london.cloudapps.digital
-#find_assets_url: https://sandbox-assets.find-postgraduate-teacher-training.service.gov.uk
 apply_base_url: https://apply-rollover.london.cloudapps.digital
 # apply-rollover doesnt exist
 

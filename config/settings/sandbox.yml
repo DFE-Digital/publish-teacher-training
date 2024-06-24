@@ -2,7 +2,7 @@ gcp_api_key: please_change_me
 publish_api_url: https://sandbox.api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://sandbox.publish-teacher-training-courses.service.gov.uk
 find_url: https://sandbox.find-postgraduate-teacher-training.service.gov.uk
-find_assets_url: https://sandbox-assets.find-postgraduate-teacher-training.service.gov.uk
+extra_find_url: https://sandbox.find-teacher-training-courses.service.gov.uk
 apply_base_url: https://sandbox.apply-for-teacher-training.service.gov.uk
 
 environment:
@@ -22,3 +22,4 @@ dfe_signin:
 
 find_valid_referers:
   - https://sandbox.find-postgraduate-teacher-training.service.gov.uk
+  - https://sandbox.find-teacher-training-courses.service.gov.uk
