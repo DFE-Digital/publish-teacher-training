@@ -276,15 +276,33 @@ en:
         about_accrediting_provider:
           text: "Enter details about the accredited provider"
   value_not_entered: "Not entered"
+  helpers:
+    legend:
+      what_a_level_is_required:
+        subject_foo: Subject
+    label:
+      what_a_level_is_required:
+        other_subject: Subjects
+        other_subject_prompt: Choose subject
+        minimum_grade_required: Minimum grade required (optional)
+        subject_options:
+          any_subject: Any subject
+          any_stem_subject: Any STEM subject
+          any_modern_foreign_language: Any modern foreign language
+          any_humanities_subject: Any humanities subject
+          any_science_subject: Any science subject
+          other_subject: Choose a subject
   course:
     application_status:
       open: "Course opened"
       closed: "Course closed"
     add_course: "Add course"
     are_any_a_levels_required_for_this_course:
-      fieldset: Are any A levels required for this course?
+      heading: Are any A levels required for this course?
       answer_yes: "Yes"
       answer_no: "No"
+    what_a_level_is_required:
+      heading: What A level is required?
     new:
       level:
         special_educational_needs_and_disabilities:
@@ -801,6 +819,12 @@ en:
           attributes:
             answer:
               blank: Select if this course requires any A levels
+        what_a_level_is_required:
+          attributes:
+            subject:
+              blank: Select a subject
+            other_subject:
+              blank: Select a subject
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:
