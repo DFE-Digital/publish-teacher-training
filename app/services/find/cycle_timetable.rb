@@ -36,11 +36,11 @@ module Find
         find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2025 => {
-        find_opens: Time.zone.local(2024, 10, 1, 9),
-        apply_opens: Time.zone.local(2024, 10, 8, 9),
-        first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
-        apply_deadline: Time.zone.local(2025, 9, 21, 18),
-        find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
+        find_opens: Time.zone.local(2024, 10, 1, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2025, 9, 17, 18), # CONFIRMED
+        find_closes: Time.zone.local(2025, 9, 25, 23, 59, 59) # TBC
       },
       2026 => {
         # NOTE: the dates from below here are not the finalised but are required
