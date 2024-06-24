@@ -8,7 +8,7 @@ module Find
         apply_opens: Time.zone.local(2020, 10, 13, 9),
         first_deadline_banner: Time.zone.local(2021, 7, 12, 9),
         apply_1_deadline: Time.zone.local(2021, 9, 7, 18),
-        apply_2_deadline: Time.zone.local(2021, 9, 21, 18),
+        apply_deadline: Time.zone.local(2021, 9, 21, 18),
         find_closes: Time.zone.local(2021, 10, 4, 23, 59, 59)
       },
       2022 => {
@@ -16,7 +16,7 @@ module Find
         apply_opens: Time.zone.local(2021, 10, 12, 9),
         first_deadline_banner: Time.zone.local(2022, 8, 2, 9),
         apply_1_deadline: Time.zone.local(2022, 9, 6, 18),
-        apply_2_deadline: Time.zone.local(2022, 9, 20, 18),
+        apply_deadline: Time.zone.local(2022, 9, 20, 18),
         find_closes: Time.zone.local(2022, 10, 3, 23, 59, 59)
       },
       2023 => {
@@ -25,22 +25,21 @@ module Find
 
         first_deadline_banner: Time.zone.local(2023, 8, 1, 9), # 5 weeks before Apply 1 deadline
         apply_1_deadline: Time.zone.local(2023, 9, 5, 18), # First Tuesday of September
-        apply_2_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
+        apply_deadline: Time.zone.local(2023, 9, 19, 18), # 2 weeks after Apply 1 deadline
         find_closes: Time.zone.local(2023, 10, 2, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2024 => {
         find_opens: Time.zone.local(2023, 10, 3, 9), # First Tuesday of October
         apply_opens: Time.zone.local(2023, 10, 10, 9), # Second Tuesday of October
-        first_deadline_banner: Time.zone.local(2024, 7, 30, 9), # 5 weeks before Apply 1 deadline
-        apply_2_deadline: Time.zone.local(2024, 9, 17, 18), # 2 weeks after Apply 1 deadline
+        first_deadline_banner: Time.zone.local(2024, 7, 30, 9),
+        apply_deadline: Time.zone.local(2024, 9, 17, 18),
         find_closes: Time.zone.local(2024, 9, 30, 23, 59, 59) # The evening before Find opens in the new cycle
       },
       2025 => {
         find_opens: Time.zone.local(2024, 10, 1, 9),
         apply_opens: Time.zone.local(2024, 10, 8, 9),
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
-        apply_1_deadline: Time.zone.local(2025, 9, 7, 18),
-        apply_2_deadline: Time.zone.local(2025, 9, 21, 18),
+        apply_deadline: Time.zone.local(2025, 9, 21, 18),
         find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
       },
       2026 => {
@@ -49,7 +48,7 @@ module Find
         find_opens: Time.zone.local(2024, 10, 5, 9),
         apply_opens: Time.zone.local(2024, 10, 12, 9),
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
-        apply_2_deadline: Time.zone.local(2025, 9, 21, 18),
+        apply_deadline: Time.zone.local(2025, 9, 21, 18),
         find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
       }
     }.freeze
@@ -88,8 +87,8 @@ module Find
       date(:first_deadline_banner)
     end
 
-    def self.apply_2_deadline
-      date(:apply_2_deadline)
+    def self.apply_deadline
+      date(:apply_deadline)
     end
 
     def self.find_opens
@@ -109,23 +108,23 @@ module Find
     end
 
     def self.preview_mode?
-      Time.zone.now.between?(apply_2_deadline, find_closes)
+      Time.zone.now.between?(apply_deadline, find_closes)
     end
 
     def self.find_down? = phase_in_time?(:today_is_after_find_closes)
 
     def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
 
-    def self.show_apply_2_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
+    def self.show_apply_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
 
-    def self.show_cycle_closed_banner? = phase_in_time?(:today_is_after_apply_2_deadline_passed)
+    def self.show_cycle_closed_banner? = phase_in_time?(:today_is_after_apply_deadline_passed)
 
     def self.phases_in_time
       {
         today_is_after_find_closes: Time.zone.now.between?((find_closes.in_time_zone('London') - 1.hour), (find_reopens.in_time_zone('London') - 1.hour)),
-        today_is_after_find_opens: Time.zone.now.between?((find_opens.in_time_zone('London') - 1.hour), apply_2_deadline),
-        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_2_deadline),
-        today_is_after_apply_2_deadline_passed: Time.zone.now.between?(apply_2_deadline, find_closes)
+        today_is_after_find_opens: Time.zone.now.between?((find_opens.in_time_zone('London') - 1.hour), apply_deadline),
+        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
+        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes)
       }
     end
 
@@ -167,7 +166,7 @@ module Find
     def self.fake_point_in_recruitment_cycle
       %i[
         today_is_mid_cycle
-        today_is_after_apply_2_deadline_passed
+        today_is_after_apply_deadline_passed
         today_is_after_find_closes
         today_is_after_find_opens
       ]

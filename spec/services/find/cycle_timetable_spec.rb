@@ -7,8 +7,8 @@ module Find
     let(:one_hour_before_find_opens) { described_class.find_opens - 1.hour }
     let(:one_hour_after_find_opens) { described_class.find_opens + 1.hour }
     let(:one_hour_before_first_deadline_banner) { described_class.first_deadline_banner - 1.hour }
-    let(:one_hour_before_apply_2_deadline) { described_class.apply_2_deadline - 1.hour }
-    let(:one_hour_after_apply_2_deadline) { described_class.apply_2_deadline + 1.hour }
+    let(:one_hour_before_apply_deadline) { described_class.apply_deadline - 1.hour }
+    let(:one_hour_after_apply_deadline) { described_class.apply_deadline + 1.hour }
     let(:one_hour_after_find_closes) { described_class.find_closes + 1.hour }
     let(:one_hour_after_find_reopens) { described_class.find_reopens + 1.hour }
 
@@ -51,13 +51,13 @@ module Find
     end
 
     describe '.preview_mode?' do
-      it 'returns true when it is after the Apply 2 deadline but before Find closes' do
+      it 'returns true when it is after the Apply deadline but before Find closes' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
           expect(described_class.preview_mode?).to be true
         end
       end
 
-      it 'returns false before the Apply 2 deadline' do
+      it 'returns false before the Apply deadline' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
           expect(described_class.preview_mode?).to be false
         end
@@ -97,7 +97,7 @@ module Find
         end
       end
 
-      it 'returns false after the apply_2_deadline' do
+      it 'returns false after the apply_deadline' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
           expect(described_class.mid_cycle?).to be false
         end
@@ -111,28 +111,28 @@ module Find
       end
     end
 
-    describe '.show_apply_2_deadline_banner?' do
-      it 'returns true when it is after the apply_1_deadline and before the apply_2_deadline' do
-        Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
-          expect(described_class.show_apply_2_deadline_banner?).to be true
+    describe '.show_apply_deadline_banner?' do
+      it 'returns true when it is after the first_deadline_banner and before the apply_deadline' do
+        Timecop.travel(Time.zone.local(2024, 7, 30, 19, 0, 0)) do
+          expect(described_class.show_apply_deadline_banner?).to be true
         end
       end
 
-      it 'returns false before the after the apply_2_deadline' do
+      it 'returns false before the after the apply_deadline' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
-          expect(described_class.show_apply_2_deadline_banner?).to be false
+          expect(described_class.show_apply_deadline_banner?).to be false
         end
       end
 
       it 'returns false before the first_deadline_banner' do
         Timecop.travel(Time.zone.local(2021, 7, 7, 12, 0, 0)) do
-          expect(described_class.show_apply_2_deadline_banner?).to be false
+          expect(described_class.show_apply_deadline_banner?).to be false
         end
       end
     end
 
     describe '.show_cycle_closed_banner?' do
-      it 'returns true when it is after the apply_2_deadline and before Find closes' do
+      it 'returns true when it is after the apply_deadline and before Find closes' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
           expect(described_class.show_cycle_closed_banner?).to be true
         end
@@ -144,7 +144,7 @@ module Find
         end
       end
 
-      it 'returns false before the apply_2_deadline' do
+      it 'returns false before the apply_deadline' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
           expect(described_class.show_cycle_closed_banner?).to be false
         end

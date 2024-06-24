@@ -7,7 +7,7 @@
       <%= f.govuk_radio_button :cycle_schedule_name, "real", label: { text: t("find.cycles.real.name") } %>
       <%= f.govuk_radio_divider %>
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_mid_cycle", label: { text: t("find.cycles.today_is_mid_cycle.name") }, hint: { text: hint_text_for_mid_cycle } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_2_deadline_passed", label: { text: t("find.cycles.today_is_after_apply_2_deadline_passed.name") }, hint: { text: hint_text_for_after_apply_2_deadline_passed } %>
+      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_deadline_passed", label: { text: t("find.cycles.today_is_after_apply_deadline_passed.name") }, hint: { text: hint_text_for_after_apply_deadline_passed } %>
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_closes", label: { text: t("find.cycles.today_is_after_find_closes.name") }, hint: { text: hint_text_for_today_is_after_find_closes } %>
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_opens", label: { text: t("find.cycles.today_is_after_find_opens.name") }, hint: { text: hint_text_for_today_is_after_find_opens } %>
     <% end %>
@@ -29,7 +29,7 @@
 <h2 class="govuk-heading-m">Deadlines</h2>
 
 <%= render Find::Utility::SummaryListComponent.new(rows: {
-  "Apply 2 deadline" => Find::CycleTimetable.apply_2_deadline.to_fs(:govuk_date),
+  "Apply deadline" => Find::CycleTimetable.apply_deadline.to_fs(:govuk_date),
   "Find closes on" => Find::CycleTimetable.find_closes.to_fs(:govuk_date),
   "Find reopens on" => Find::CycleTimetable.find_reopens.to_fs(:govuk_date)
 }) %>

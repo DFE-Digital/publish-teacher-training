@@ -1,9 +1,9 @@
-<% if cycle_timetable.show_apply_2_deadline_banner? %>
+<% if cycle_timetable.show_apply_deadline_banner? %>
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
     <% notification_banner.with_heading(text: "Apply now to get on a course starting in the #{cycle_timetable.cycle_year_range} academic year") %>
     <p class="govuk-body">Courses can fill up at any time, so you should apply as soon as you can.</p>
-    <p class="govuk-body">If you’re applying for the first time since applications opened in <%= cycle_timetable.find_opens.to_fs(:month_and_year) %>, apply no later than <%= apply_2_deadline %>.</p>
-    <p class="govuk-body">If your application did not lead to a place and you’re applying again, apply no later than <%= apply_2_deadline %>.</p>
+    <p class="govuk-body">If you’re applying for the first time since applications opened in <%= cycle_timetable.find_opens.to_fs(:month_and_year) %>, apply no later than <%= apply_deadline %>.</p>
+    <p class="govuk-body">If your application did not lead to a place and you’re applying again, apply no later than <%= apply_deadline %>.</p>
   <% end %>
 <% elsif cycle_timetable.show_cycle_closed_banner? %>
   <%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>

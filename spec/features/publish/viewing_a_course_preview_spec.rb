@@ -9,7 +9,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
 
     scenario 'i can view the course basic details' do
-      Timecop.travel(Find::CycleTimetable.apply_2_deadline - 1.hour) do
+      Timecop.travel(Find::CycleTimetable.apply_deadline - 1.hour) do
         given_i_am_authenticated(user: user_with_fee_based_course)
         when_i_visit_the_publish_course_preview_page
         then_i_see_the_course_preview_details
@@ -108,7 +108,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   context 'bursaries and scholarships is not announced' do
     scenario 'i can view the course basic details' do
-      Timecop.travel(Find::CycleTimetable.apply_2_deadline - 1.hour) do
+      Timecop.travel(Find::CycleTimetable.apply_deadline - 1.hour) do
         given_i_am_authenticated(user: user_with_fee_based_course)
         when_i_visit_the_publish_course_preview_page
         then_i_see_the_course_preview_details

@@ -16,7 +16,7 @@ feature 'Viewing a findable course' do
     end
 
     scenario 'course page shows correct course information' do
-      Timecop.freeze(Find::CycleTimetable.apply_2_deadline - 1.hour) do
+      Timecop.freeze(Find::CycleTimetable.apply_deadline - 1.hour) do
         when_i_visit_the_course_page
         then_i_should_see_the_course_information
       end
@@ -24,7 +24,7 @@ feature 'Viewing a findable course' do
 
     context 'end of cycle' do
       before do
-        Timecop.freeze(Find::CycleTimetable.apply_2_deadline + 1.hour)
+        Timecop.freeze(Find::CycleTimetable.apply_deadline + 1.hour)
 
         when_i_visit_the_course_page
       end
