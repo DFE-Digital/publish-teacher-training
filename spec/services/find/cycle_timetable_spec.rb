@@ -7,8 +7,6 @@ module Find
     let(:one_hour_before_find_opens) { described_class.find_opens - 1.hour }
     let(:one_hour_after_find_opens) { described_class.find_opens + 1.hour }
     let(:one_hour_before_first_deadline_banner) { described_class.first_deadline_banner - 1.hour }
-    let(:one_hour_before_apply_1_deadline) { described_class.apply_1_deadline - 1.hour }
-    let(:one_hour_after_apply_1_deadline) { described_class.apply_1_deadline + 1.hour  }
     let(:one_hour_before_apply_2_deadline) { described_class.apply_2_deadline - 1.hour }
     let(:one_hour_after_apply_2_deadline) { described_class.apply_2_deadline + 1.hour }
     let(:one_hour_after_find_closes) { described_class.find_closes + 1.hour }
@@ -113,26 +111,6 @@ module Find
       end
     end
 
-    describe '.show_apply_1_deadline_banner?' do
-      it 'returns true when it is after the deadline_banner and before the apply_1_deadline' do
-        Timecop.travel(Time.zone.local(2021, 9, 7, 17, 0, 0)) do
-          expect(described_class.show_apply_1_deadline_banner?).to be true
-        end
-      end
-
-      it 'returns false after the the apply_1_deadline' do
-        Timecop.travel(Time.zone.local(2021, 9, 7, 19, 0, 0)) do
-          expect(described_class.show_apply_1_deadline_banner?).to be false
-        end
-      end
-
-      it 'returns false before the deadline_banner' do
-        Timecop.travel(Time.zone.local(2021, 7, 12, 8, 0, 0)) do
-          expect(described_class.show_apply_1_deadline_banner?).to be false
-        end
-      end
-    end
-
     describe '.show_apply_2_deadline_banner?' do
       it 'returns true when it is after the apply_1_deadline and before the apply_2_deadline' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
@@ -146,8 +124,8 @@ module Find
         end
       end
 
-      it 'returns false before the apply_1_deadline' do
-        Timecop.travel(Time.zone.local(2021, 9, 7, 17, 0, 0)) do
+      it 'returns false before the first_deadline_banner' do
+        Timecop.travel(Time.zone.local(2021, 7, 7, 12, 0, 0)) do
           expect(described_class.show_apply_2_deadline_banner?).to be false
         end
       end

@@ -18,10 +18,6 @@ module Find
 
     attr_reader :cycle_timetable
 
-    def apply_1_deadline
-      cycle_timetable.apply_1_deadline.to_fs(:govuk_date_and_time)
-    end
-
     def apply_2_deadline
       cycle_timetable.apply_2_deadline.to_fs(:govuk_date_and_time)
     end
