@@ -2,7 +2,7 @@
 
 module ALevelSteps
   class AreAnyALevelsRequiredForThisCourse < DfE::Wizard::Step
-    delegate :exit_path, to: :wizard
+    delegate :course, :exit_path, to: :wizard
     attr_accessor :answer
 
     validates :answer, presence: true
@@ -16,10 +16,12 @@ module ALevelSteps
     end
 
     def next_step
-      if answer == 'yes'
+      return :exit if answer == 'no'
+
+      if answer == 'yes' && course.a_level_subject_requirements.present?
+        :add_a_level_to_a_list
+      else
         :what_a_level_is_required
-      elsif answer == 'no'
-        :exit
       end
     end
   end

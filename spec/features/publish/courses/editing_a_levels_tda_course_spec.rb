@@ -47,6 +47,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_click_continue
 
     then_i_see_the_subject_i_choosen
+    and_i_am_on_the_add_another_a_level_subject_page
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
@@ -77,6 +78,14 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_click_continue
     then_i_see_the_four_subjects_i_already_added
     and_i_do_not_see_the_option_to_add_more_a_level_subjects
+
+    when_i_click_back
+    then_i_am_on_the_a_levels_required_for_the_course_page
+    and_the_back_link_points_to_description_tab
+    and_the_yes_option_is_chosen
+
+    when_i_click_continue
+    then_i_am_on_the_add_another_a_level_subject_page
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -193,6 +202,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   def then_the_yes_option_is_chosen
     expect(page).to have_checked_field('are-any-a-levels-required-for-this-course-answer-yes-field')
   end
+  alias_method :and_the_yes_option_is_chosen, :then_the_yes_option_is_chosen
 
   def when_i_choose_other_subject
     choose 'Choose a subject'
@@ -269,4 +279,15 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     expect(page).to have_no_content('Yes')
     expect(page).to have_no_content('No')
   end
+
+  def then_i_am_on_the_add_another_a_level_subject_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    )
+  end
+  alias_method :and_i_am_on_the_add_another_a_level_subject_page, :then_i_am_on_the_add_another_a_level_subject_page
 end

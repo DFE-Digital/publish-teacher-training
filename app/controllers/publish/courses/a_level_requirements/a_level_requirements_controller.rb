@@ -38,7 +38,8 @@ module Publish
         end
 
         def assign_course
-          @course = CourseDecorator.new(provider.courses.find_by!(course_code: params[:course_code]))
+          @course = provider.courses.find_by!(course_code: params[:course_code])
+          @course_decorator = CourseDecorator.new(@course)
         end
 
         def current_step

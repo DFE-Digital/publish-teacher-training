@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ALevelsWizardStore < DfE::Wizard::Store
-  delegate :valid_step?, :current_step_name, :course, to: :wizard
+  delegate :valid_step?, to: :wizard
 
   def save
     return false unless valid_step?

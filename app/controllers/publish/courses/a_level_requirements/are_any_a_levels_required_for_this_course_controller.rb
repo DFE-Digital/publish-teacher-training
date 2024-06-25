@@ -7,7 +7,7 @@ module Publish
         private
 
         def step_params
-          if @course.a_levels_requirements_section_complete? && params[current_step].blank?
+          if @course_decorator.a_levels_requirements_answered? && params[current_step].blank?
             ActionController::Parameters.new(
               current_step => { answer: @course.a_level_requirements? ? 'yes' : 'no' }
             )

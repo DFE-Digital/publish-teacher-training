@@ -303,7 +303,7 @@ class CourseDecorator < ApplicationDecorator
     !object.accept_pending_gcse.nil? && !object.accept_gcse_equivalency.nil?
   end
 
-  def a_levels_requirements_section_complete?
+  def a_levels_requirements_answered?
     !object.a_level_requirements.nil?
   end
 
