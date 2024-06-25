@@ -6,7 +6,7 @@ module Publish
       class AddALevelToAListController < ALevelRequirementsController
         def step_params
           params[current_step] ||= ActionController::Parameters.new
-          params[current_step][:subjects] ||= Array(@course.a_level_subject_requirements)
+          params[current_step][:subjects] ||= @course.a_level_subject_requirements
 
           params
         end

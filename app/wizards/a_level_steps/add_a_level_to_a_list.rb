@@ -2,11 +2,12 @@
 
 module ALevelSteps
   class AddALevelToAList < DfE::Wizard::Step
-    attr_accessor :subjects, :add_another_a_level
+    attr_accessor :add_another_a_level
+    attr_writer :subjects
 
     MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS = 4
 
-    validates :add_another_a_level, presence: true
+    validates :add_another_a_level, presence: true, unless: :maximum_number_of_a_level_subjects?
 
     def self.permitted_params
       [
@@ -17,6 +18,10 @@ module ALevelSteps
 
     def maximum_number_of_a_level_subjects?
       subjects.size >= MAXIMUM_NUMBER_OF_A_LEVEL_SUBJECTS
+    end
+
+    def subjects
+      Array(@subjects)
     end
 
     def next_step
