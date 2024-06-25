@@ -1,3 +1,4 @@
-<script nonce='<%= content_security_policy_nonce %>'>
+<%# If this script changes at all, be sure to update config/initializers/content_security_policy.rb %>
+<script>
   document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
 </script>
