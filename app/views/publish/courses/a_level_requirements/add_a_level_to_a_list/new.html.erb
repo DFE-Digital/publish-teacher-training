@@ -5,7 +5,7 @@
       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
         @provider.provider_code,
         @provider.recruitment_cycle_year,
-        @course.course_code,
+        @course.course_code
       )
     ) %>
 <% end %>
@@ -16,7 +16,7 @@
         publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
           @provider.provider_code,
           @provider.recruitment_cycle_year,
-          @course.course_code,
+          @course.course_code
         ) do |form| %>
         <%= form.govuk_error_summary %>
 
@@ -31,23 +31,25 @@
           <% @wizard.current_step.subjects.each do |subject| %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-                <%= t("helpers.label.what_a_level_is_required.subject_options.#{subject[:subject]}") %> - <%= subject[:minimum_grade_required].to_s.size == 1 ? "Grade #{subject[:minimum_grade_required]} or above"  : subject[:minimum_grade_required] %>
+                <%= render ALevelSubjectRequirementRowComponent.new(subject) %>
               </dt>
               <dd class="govuk-summary-list__actions">
                 <li class="govuk-summary-list__actions-list-item">
-                  <%= govuk_link_to 'Change', '#' %>
+                  <%= govuk_link_to "Change", "#" %>
                 </li>
                 <li class="govuk-summary-list__actions-list-item">
-                  <%= govuk_link_to 'Remove', '#' %>
+                  <%= govuk_link_to "Remove", "#" %>
                 </li>
               </dd>
             </div>
           <% end %>
         </dl>
 
-        <%= form.govuk_radio_buttons_fieldset :add_another_a_level do %>
-          <%= form.govuk_radio_button :add_another_a_level, :yes, link_errors: true %>
-          <%= form.govuk_radio_button :add_another_a_level, :no %>
+        <% unless @wizard.current_step.maximum_number_of_a_level_subjects? %>
+          <%= form.govuk_radio_buttons_fieldset :add_another_a_level do %>
+            <%= form.govuk_radio_button :add_another_a_level, :yes, link_errors: true %>
+            <%= form.govuk_radio_button :add_another_a_level, :no %>
+          <% end %>
         <% end %>
 
         <%= form.submit t("continue"), class: "govuk-button" %>

@@ -2,7 +2,8 @@
 
 module ALevelSteps
   class WhatALevelIsRequired < DfE::Wizard::Step
-    attr_accessor :uuid, :subject, :other_subject, :minimum_grade_required
+    attr_accessor :subject, :other_subject, :minimum_grade_required
+    attr_writer :uuid
 
     Subject = Struct.new(:name, keyword_init: true)
 

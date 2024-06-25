@@ -60,6 +60,23 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_add_a_minimum_grade_required
     and_i_click_continue
     then_i_see_the_two_subjects_i_already_added
+
+    when_i_choose_yes
+    and_i_click_continue
+    then_i_am_on_the_what_a_level_is_required_page
+    when_i_choose_any_humanities_subject
+    and_i_click_continue
+    then_i_see_the_three_subjects_i_already_added
+
+    when_i_choose_yes
+    and_i_click_continue
+    then_i_am_on_the_what_a_level_is_required_page
+
+    when_i_choose_other_subject
+    and_i_select_mathematics
+    and_i_click_continue
+    then_i_see_the_four_subjects_i_already_added
+    and_i_do_not_see_the_option_to_add_more_a_level_subjects
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -223,5 +240,33 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   def then_i_see_the_two_subjects_i_already_added
     and_i_see_the_subject_i_choosen
     expect(page).to have_content('Any STEM subject - Grade C or above')
+  end
+
+  def when_i_choose_any_humanities_subject
+    choose 'Any humanities subject'
+  end
+
+  def then_i_see_the_three_subjects_i_already_added
+    then_i_see_the_two_subjects_i_already_added
+    expect(page).to have_content('Any humanities subject')
+  end
+
+  def when_i_choose_other_subject
+    choose 'Choose a subject'
+  end
+
+  def and_i_select_mathematics
+    select 'Mathematics', from: 'Subjects'
+  end
+
+  def then_i_see_the_four_subjects_i_already_added
+    then_i_see_the_three_subjects_i_already_added
+    expect(page).to have_content('Mathematics')
+  end
+
+  def and_i_do_not_see_the_option_to_add_more_a_level_subjects
+    expect(page).to have_no_content('Do you want to add another A level?')
+    expect(page).to have_no_content('Yes')
+    expect(page).to have_no_content('No')
   end
 end

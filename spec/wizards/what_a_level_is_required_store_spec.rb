@@ -79,7 +79,7 @@ RSpec.describe WhatALevelIsRequiredStore, type: :model do
     end
 
     context 'when updating an A level other subject requirements' do
-      let(:course) { create(:course, :with_a_level_requirements, a_level_subject_requirements: [{uuid: 'm3n4o5p6', subject: 'any_stem_subject'}]) }
+      let(:course) { create(:course, :with_a_level_requirements, a_level_subject_requirements: [{ uuid: 'm3n4o5p6', subject: 'any_stem_subject' }]) }
       let(:step_params) { { subject: 'other_subject', other_subject: 'Mathematics', minimum_grade_required: 'D', uuid: 'm3n4o5p6' } }
 
       it 'updates the course a_level_subject_requirements correctly' do

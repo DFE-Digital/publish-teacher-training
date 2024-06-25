@@ -25,7 +25,7 @@ class WhatALevelIsRequiredStore < DfE::Wizard::Store
   end
 
   def existing_a_level_subject_index
-    @existing_a_level_subject ||= course.a_level_subject_requirements.find_index do |a_level_subject_requirement|
+    @existing_a_level_subject_index ||= course.a_level_subject_requirements.find_index do |a_level_subject_requirement|
       a_level_subject_requirement['uuid'] == uuid
     end
   end
