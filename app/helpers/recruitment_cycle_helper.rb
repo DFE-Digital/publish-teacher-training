@@ -9,6 +9,10 @@ module RecruitmentCycleHelper
     "#{Settings.current_recruitment_cycle_year} to #{Settings.current_recruitment_cycle_year + 1}"
   end
 
+  def next_academic_cycle_period_text
+    "#{Settings.current_recruitment_cycle_year + 1} to #{Settings.current_recruitment_cycle_year + 2}"
+  end
+
   def previous_recruitment_cycle_period_text
     "#{Settings.current_recruitment_cycle_year - 1} to #{Settings.current_recruitment_cycle_year}"
   end
