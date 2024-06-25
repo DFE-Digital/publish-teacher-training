@@ -37,7 +37,7 @@ RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
 
   describe '.permitted_params' do
     it 'returns the correct permitted params' do
-      expect(described_class.permitted_params).to eq(%i[subject other_subject minimum_grade_required])
+      expect(described_class.permitted_params).to eq(%i[uuid subject other_subject minimum_grade_required])
     end
   end
 

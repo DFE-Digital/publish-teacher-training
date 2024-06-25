@@ -10,7 +10,9 @@ RSpec.describe ALevelsWizardStore do
       current_step:,
       provider:,
       course:,
-      step_params:
+      step_params: ActionController::Parameters.new(
+        { current_step => ActionController::Parameters.new(step_params) }
+      )
     )
   end
   let(:course) { build(:course) }

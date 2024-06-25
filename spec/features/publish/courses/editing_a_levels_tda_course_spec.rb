@@ -51,6 +51,15 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_click_continue
     then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
     and_i_see_the_subject_i_choosen
+
+    when_i_choose_yes
+    and_i_click_continue
+    then_i_am_on_the_what_a_level_is_required_page
+
+    when_i_choose_any_stem_subject
+    and_i_add_a_minimum_grade_required
+    and_i_click_continue
+    then_i_see_the_two_subjects_i_already_added
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -205,5 +214,14 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def and_i_see_there_is_a_problem
     expect(page).to have_content('There is a problem')
+  end
+
+  def when_i_choose_any_stem_subject
+    choose 'Any STEM subject'
+  end
+
+  def then_i_see_the_two_subjects_i_already_added
+    and_i_see_the_subject_i_choosen
+    expect(page).to have_content('Any STEM subject - Grade C or above')
   end
 end

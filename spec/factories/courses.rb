@@ -38,6 +38,11 @@ FactoryBot.define do
       additional_gcse_equivalencies { Faker::Lorem.sentence.to_s }
     end
 
+    trait :with_a_level_requirements do
+      a_level_requirements { true }
+      a_level_subject_requirements { [{ uuid: SecureRandom.uuid, subject: 'any_subject', minimum_grade_required: 'A' }] }
+    end
+
     trait :without_validation do
       to_create { |instance| instance.save(validate: false) }
     end

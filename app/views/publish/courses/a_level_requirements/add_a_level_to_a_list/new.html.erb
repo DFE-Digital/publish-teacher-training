@@ -18,13 +18,6 @@
           @provider.recruitment_cycle_year,
           @course.course_code,
         ) do |form| %>
-        <% Array(@wizard.current_step.subjects).each_with_index do |subject, index| %>
-          <%= fields_for "#{@wizard.current_step_name}[subjects][]", {} do |subject_fields| %>
-            <%= subject_fields.hidden_field :subject, value: subject[:subject] %>
-            <%= subject_fields.hidden_field :minimum_grade_required, value: subject[:minimum_grade_required] %>
-            <%= subject_fields.hidden_field :other_subject, value: subject[:other_subject] %>
-          <% end %>
-        <% end %>
         <%= form.govuk_error_summary %>
 
         <h1 class="govuk-heading-l">
@@ -35,7 +28,7 @@
         </h1>
 
         <dl class="govuk-summary-list">
-          <% Array(@wizard.current_step.subjects).each do |subject| %>
+          <% @wizard.current_step.subjects.each do |subject| %>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
                 <%= t("helpers.label.what_a_level_is_required.subject_options.#{subject[:subject]}") %> - <%= subject[:minimum_grade_required].to_s.size == 1 ? "Grade #{subject[:minimum_grade_required]} or above"  : subject[:minimum_grade_required] %>
