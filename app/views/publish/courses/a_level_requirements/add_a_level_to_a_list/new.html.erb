@@ -37,23 +37,15 @@
           <%= t("course.#{@wizard.current_step.model_name.i18n_key}.heading") %>
         </h1>
 
-        <dl class="govuk-summary-list">
+        <%= govuk_summary_list do |summary_list| %>
           <% @wizard.current_step.subjects.each do |subject| %>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key govuk-!-font-weight-regular">
-                <%= render ALevelSubjectRequirementRowComponent.new(subject) %>
-              </dt>
-              <dd class="govuk-summary-list__actions">
-                <li class="govuk-summary-list__actions-list-item">
-                  <%= govuk_link_to "Change", "#" %>
-                </li>
-                <li class="govuk-summary-list__actions-list-item">
-                  <%= govuk_link_to "Remove", "#" %>
-                </li>
-              </dd>
-            </div>
+            <%= summary_list.with_row do |row| %>
+              <%= row.with_key(classes: "govuk-!-font-weight-regular") { render ALevelSubjectRequirementRowComponent.new(subject) } %>
+              <%= row.with_action(text: "Change", href: "#") %>
+              <%= row.with_action(text: "Remove", href: "#") %>
+            <% end %>
           <% end %>
-        </dl>
+        <% end %>
 
         <% unless @wizard.current_step.maximum_number_of_a_level_subjects? %>
           <%= form.govuk_radio_buttons_fieldset :add_another_a_level do %>
