@@ -22,18 +22,9 @@ feature 'switcher cycle' do
     and_i_see_deadline_banner('Apply now to get on a course starting in the 2023 to 2024 academic year')
   end
 
-  scenario 'Update to Apply 1 deadline has passed' do
+  scenario 'Update to Apply deadline has passed' do
     when_i_visit_switcher_cycle_page
-    and_i_choose('Apply 1 deadline has passed')
-    then_i_click_on_update_button
-    and_i_should_see_the_success_banner
-    and_i_visit_find_results_page
-    and_i_see_deadline_banner('You can continue to view and apply for courses starting in')
-  end
-
-  scenario 'Update to Apply 2 deadline has passed' do
-    when_i_visit_switcher_cycle_page
-    and_i_choose('Apply 2 deadline has passed')
+    and_i_choose('Apply deadline has passed')
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page

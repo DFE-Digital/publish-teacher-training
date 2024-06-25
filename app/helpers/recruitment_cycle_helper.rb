@@ -14,15 +14,11 @@ module RecruitmentCycleHelper
   end
 
   def hint_text_for_mid_cycle
-    "#{I18n.t('find.cycles.today_is_mid_cycle.description')} (#{Find::CycleTimetable.find_opens.to_fs(:govuk_date)} to #{Find::CycleTimetable.apply_2_deadline.to_fs(:govuk_date)})"
+    "#{I18n.t('find.cycles.today_is_mid_cycle.description')} (#{Find::CycleTimetable.find_opens.to_fs(:govuk_date)} to #{Find::CycleTimetable.apply_deadline.to_fs(:govuk_date)})"
   end
 
-  def hint_text_for_after_apply_1_deadline_passed
-    "#{I18n.t('find.cycles.today_is_after_apply_1_deadline_passed.description')} (#{Find::CycleTimetable.apply_1_deadline.to_fs(:govuk_date)} to #{Find::CycleTimetable.apply_2_deadline.to_fs(:govuk_date)})"
-  end
-
-  def hint_text_for_after_apply_2_deadline_passed
-    "#{I18n.t('find.cycles.today_is_after_apply_2_deadline_passed.description')} (#{Find::CycleTimetable.apply_2_deadline.to_fs(:govuk_date)} to #{Find::CycleTimetable.find_closes.to_fs(:govuk_date)})"
+  def hint_text_for_after_apply_deadline_passed
+    "#{I18n.t('find.cycles.today_is_after_apply_deadline_passed.description')} (#{Find::CycleTimetable.apply_deadline.to_fs(:govuk_date)} to #{Find::CycleTimetable.find_closes.to_fs(:govuk_date)})"
   end
 
   def hint_text_for_today_is_after_find_closes
