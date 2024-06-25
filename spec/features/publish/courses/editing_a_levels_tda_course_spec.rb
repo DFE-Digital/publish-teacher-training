@@ -48,6 +48,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     then_i_see_the_subject_i_choosen
     and_i_am_on_the_add_another_a_level_subject_page
+    and_i_see_the_success_message_that_i_added_an_a_level
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
@@ -290,4 +291,8 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     )
   end
   alias_method :and_i_am_on_the_add_another_a_level_subject_page, :then_i_am_on_the_add_another_a_level_subject_page
+
+  def and_i_see_the_success_message_that_i_added_an_a_level
+    expect(page).to have_content('You have added a required A level')
+  end
 end

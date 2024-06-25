@@ -27,7 +27,7 @@ RSpec.describe ALevelSteps::AddALevelToAList do
 
     it 'is valid without an answer when maximum A level subjects' do
       wizard_step.add_another_a_level = nil
-      wizard_step.subjects = [1,2,3,4]
+      wizard_step.subjects = [1, 2, 3, 4]
       expect(wizard_step).to be_valid
     end
 

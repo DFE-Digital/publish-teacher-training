@@ -312,6 +312,7 @@ en:
       answer_no: "No"
     what_a_level_is_required:
       heading: What A level is required?
+      success_message: You have added a required A level
     add_a_level_to_a_list:
       heading: Required A levels
     new:
