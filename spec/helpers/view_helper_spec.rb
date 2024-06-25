@@ -8,7 +8,7 @@ describe ViewHelper do
     let(:course) { build(:course, provider:) }
 
     it 'returns enrichment error URL' do
-      expect(enrichment_error_url(provider_code: 'A1', course:, field: 'about_course')).to eq("/publish/organisations/A1/#{course.recruitment_cycle_year}/courses/#{course.course_code}/about?display_errors=true#publish-course-information-form-about-course-field-error")
+      expect(enrichment_error_url(provider_code: 'A1', course:, field: 'about_course')).to eq("/publish/organisations/A1/#{course.recruitment_cycle_year}/courses/#{course.course_code}/about-this-course?display_errors=true#publish-course-information-form-about-course-field-error")
     end
 
     it 'returns enrichment error URL for base error' do
