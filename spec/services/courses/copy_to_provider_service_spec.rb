@@ -87,6 +87,18 @@ RSpec.describe Courses::CopyToProviderService do
     end
   end
 
+  context 'when the original course is open' do
+    before do
+      course.update(application_status: 'open')
+    end
+
+    it "sets the new course's application_status to closed" do
+      service.execute(course:, new_provider:)
+
+      expect(new_course.application_status).to eq('closed')
+    end
+  end
+
   it 'leaves the existing course alone' do
     service.execute(course:, new_provider:)
 
