@@ -43,6 +43,7 @@ shared:
     - can_sponsor_student_visa
     - application_status
     - a_level_requirements
+    - a_level_subject_requirements
   course_site:
     - id
     - course_id
