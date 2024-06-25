@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe ALevelsWizardStore do
   subject(:store) { described_class.new(wizard) }
 
+  let(:course) { create(:course) }
+  let(:provider) { build(:provider) }
+  let(:current_step) { :what_a_level_is_required }
+
   let(:wizard) do
     ALevelsWizard.new(
       current_step:,
@@ -15,12 +19,11 @@ RSpec.describe ALevelsWizardStore do
       )
     )
   end
-  let(:course) { build(:course) }
-  let(:provider) { build(:provider) }
   let(:step_params) { {} }
-  let(:current_step) { :are_any_a_levels_required_for_this_course }
 
   describe '#save' do
+    subject { store.save }
+
     context 'when the step is not valid' do
       before do
         allow(wizard).to receive(:valid_step?).and_return(false)
@@ -31,53 +34,57 @@ RSpec.describe ALevelsWizardStore do
       end
     end
 
-    context 'when the step is valid and current step is :are_any_a_levels_required_for_this_course with answer "no"' do
+    context 'when current step name is :are_any_a_levels_required_for_this_course' do
+      let(:current_step) { :are_any_a_levels_required_for_this_course }
+      let(:step_params) { {} }
+
       before do
         allow(wizard).to receive(:valid_step?).and_return(true)
-        allow(wizard.current_step).to receive(:answer).and_return('no')
       end
 
-      it 'updates the course a_level_requirements to false' do
-        expect(course).to receive(:update!).with(a_level_requirements: false)
-        store.save
-      end
+      it 'calls save on AreAnyALevelsRequiredStore' do
+        are_any_store = instance_double(AreAnyALevelsRequiredStore)
+        allow(AreAnyALevelsRequiredStore).to receive(:new).with(wizard).and_return(are_any_store)
+        allow(are_any_store).to receive(:save)
 
-      it 'returns true' do
-        allow(course).to receive(:update!).with(a_level_requirements: false)
-        expect(store.save).to be true
+        subject
+
+        expect(are_any_store).to have_received(:save)
       end
     end
 
-    context 'when the step is valid and the current step is :are_any_a_levels_required_for_this_course with an answer other than "no"' do
+    context 'when current step name is :what_a_level_is_required' do
+      let(:current_step) { :what_a_level_is_required }
+      let(:step_params) { {} }
+
       before do
         allow(wizard).to receive(:valid_step?).and_return(true)
-        allow(wizard.current_step).to receive(:answer).and_return('yes')
       end
 
-      it 'does not update the course a_level_requirements' do
-        expect(course).not_to receive(:update!)
-        store.save
-      end
+      it 'calls save on WhatALevelIsRequiredStore' do
+        what_a_level_store = instance_double(WhatALevelIsRequiredStore)
+        allow(WhatALevelIsRequiredStore).to receive(:new).with(wizard).and_return(what_a_level_store)
+        allow(what_a_level_store).to receive(:save)
 
-      it 'returns true' do
-        expect(store.save).to be true
+        subject
+
+        expect(what_a_level_store).to have_received(:save)
       end
     end
 
-    context 'when the step is valid and the current step is not :are_any_a_levels_required_for_this_course' do
+    context 'when current step is not recognized' do
       let(:current_step) { :some_other_step }
+      let(:step_params) { {} }
 
       before do
         allow(wizard).to receive(:valid_step?).and_return(true)
       end
 
-      it 'does not update the course a_level_requirements' do
-        expect(course).not_to receive(:update!)
-        store.save
-      end
+      it 'does not call any store save method' do
+        expect(AreAnyALevelsRequiredStore).not_to receive(:new)
+        expect(WhatALevelIsRequiredStore).not_to receive(:new)
 
-      it 'returns true' do
-        expect(store.save).to be true
+        subject
       end
     end
   end
