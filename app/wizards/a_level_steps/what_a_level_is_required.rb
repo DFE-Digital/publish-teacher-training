@@ -17,8 +17,14 @@ module ALevelSteps
       A_AND_AS_LEVEL_SUBJECTS.map { |name| Subject.new(name:) }
     end
 
-    # def next_step
-    #  :exit
-    # end
+    def next_step
+      :add_a_level_to_a_list
+    end
+
+    def next_step_path_arguments
+      super.merge(
+        next_step => { subjects: [{ subject:, minimum_grade_required:, other_subject: }] }
+      )
+    end
   end
 end

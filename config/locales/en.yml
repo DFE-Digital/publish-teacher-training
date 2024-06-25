@@ -279,7 +279,9 @@ en:
   helpers:
     legend:
       what_a_level_is_required:
-        subject_foo: Subject
+        subject: Subject
+      add_a_level_to_a_list:
+        add_another_a_level: Do you want to add another A level?
     label:
       what_a_level_is_required:
         other_subject: Subjects
@@ -292,6 +294,10 @@ en:
           any_humanities_subject: Any humanities subject
           any_science_subject: Any science subject
           other_subject: Choose a subject
+      add_a_level_to_a_list:
+        add_another_a_level_options:
+          "yes": "Yes"
+          "no": "No"
   course:
     application_status:
       open: "Course opened"
@@ -303,6 +309,8 @@ en:
       answer_no: "No"
     what_a_level_is_required:
       heading: What A level is required?
+    add_a_level_to_a_list:
+      heading: Required A levels
     new:
       level:
         special_educational_needs_and_disabilities:
@@ -825,6 +833,10 @@ en:
               blank: Select a subject
             other_subject:
               blank: Select a subject
+        add_a_level_to_a_list:
+          attributes:
+            add_another_a_level:
+              blank: Select if you want to add another A level
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:

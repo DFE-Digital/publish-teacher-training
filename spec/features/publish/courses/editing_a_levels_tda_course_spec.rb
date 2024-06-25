@@ -41,6 +41,16 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_choose_other_subject
     and_i_click_continue
     then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
+
+    when_i_choose_any_subject
+    and_i_add_a_minimum_grade_required
+    and_i_click_continue
+
+    then_i_see_the_subject_i_choosen
+
+    when_i_click_continue
+    then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
+    and_i_see_the_subject_i_choosen
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -163,7 +173,37 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
-    expect(page).to have_content('There is a problem')
+    and_i_see_there_is_a_problem
     expect(page).to have_content('Select a subject')
+  end
+
+  def when_i_choose_any_subject
+    choose 'Any subject'
+  end
+
+  def and_i_add_a_minimum_grade_required
+    fill_in 'Minimum grade required (optional)', with: 'C'
+  end
+
+  def then_i_see_the_subject_i_choosen
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      ),
+      ignore_query: true
+    )
+    expect(page).to have_content('Any subject - Grade C or above')
+  end
+  alias_method :and_i_see_the_subject_i_choosen, :then_i_see_the_subject_i_choosen
+
+  def then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
+    and_i_see_there_is_a_problem
+    expect(page).to have_content('Select if you want to add another A level')
+  end
+
+  def and_i_see_there_is_a_problem
+    expect(page).to have_content('There is a problem')
   end
 end
