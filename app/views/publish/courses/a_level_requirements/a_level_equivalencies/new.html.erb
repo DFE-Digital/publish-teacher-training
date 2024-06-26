@@ -22,7 +22,7 @@
 
         <%= form.govuk_radio_buttons_fieldset :accept_a_level_equivalencies, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
           <%= form.govuk_radio_button :accept_a_level_equivalencies, :yes do %>
-            <%= form.govuk_text_area :additional_a_level_equivalencies %>
+            <%= form.govuk_text_area :additional_a_level_equivalencies, max_words: @wizard.current_step.class::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS %>
           <% end %>
           <%= form.govuk_radio_button :accept_a_level_equivalencies, :no %>
         <% end %>
