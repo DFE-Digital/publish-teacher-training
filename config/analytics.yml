@@ -44,6 +44,7 @@ shared:
     - application_status
     - a_level_requirements
     - a_level_subject_requirements
+    - accept_pending_a_level
   course_site:
     - id
     - course_id
