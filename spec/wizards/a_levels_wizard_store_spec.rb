@@ -91,6 +91,25 @@ RSpec.describe ALevelsWizardStore do
       end
     end
 
+    context 'when current step name is :a_level_equivalencies' do
+      let(:current_step) { :a_level_equivalencies }
+      let(:step_params) { {} }
+
+      before do
+        allow(wizard).to receive(:valid_step?).and_return(true)
+      end
+
+      it 'calls save on ALevelEquivalenciesStore' do
+        a_level_equivalencies_store = instance_double(ALevelEquivalenciesStore)
+        allow(ALevelEquivalenciesStore).to receive(:new).with(wizard).and_return(a_level_equivalencies_store)
+        allow(a_level_equivalencies_store).to receive(:save)
+
+        subject
+
+        expect(a_level_equivalencies_store).to have_received(:save)
+      end
+    end
+
     context 'when current step is not recognized' do
       let(:current_step) { :some_other_step }
       let(:step_params) { {} }
@@ -103,6 +122,7 @@ RSpec.describe ALevelsWizardStore do
         expect(AreAnyALevelsRequiredStore).not_to receive(:new)
         expect(WhatALevelIsRequiredStore).not_to receive(:new)
         expect(ConsiderPendingALevelStore).not_to receive(:new)
+        expect(ALevelEquivalenciesStore).not_to receive(:new)
 
         subject
       end

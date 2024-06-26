@@ -118,6 +118,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_add_an_additional_a_level_equivalencies
     and_i_click_update_a_levels
     then_i_am_on_the_course_description_tab
+
+    when_i_enter_on_a_level_equivalencies
+    then_the_yes_option_is_chosen_in_a_level_equivalencies
+    and_i_see_the_additional_a_level_equivalencies_text
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -379,5 +383,21 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
     expect(page).to have_content('Details about equivalency tests must be 250 words or less. You have 2 words too many')
+  end
+
+  def when_i_enter_on_a_level_equivalencies
+    visit publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle_year,
+      @course.course_code
+    )
+  end
+
+  def then_the_yes_option_is_chosen_in_a_level_equivalencies
+    expect(page).to have_checked_field('a-level-equivalencies-accept-a-level-equivalencies-yes-field')
+  end
+
+  def and_i_see_the_additional_a_level_equivalencies_text
+    expect(page.find('textarea').value).to eq('Some additional A level equivalencies text')
   end
 end
