@@ -93,6 +93,13 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_consider_pending_a_level_page
+
+    when_i_choose_yes
+    and_i_click_continue
+    then_i_am_on_a_level_equivalencies_page
+
+    when_i_click_continue
+    then_i_see_an_error_message_for_the_a_level_equivalencies
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -314,5 +321,19 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_consider_pending_a_level_page
     expect(page).to have_content('Select if you will consider candidates with pending A levels').twice
+  end
+
+  def then_i_am_on_a_level_equivalencies_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    )
+  end
+
+  def then_i_see_an_error_message_for_the_a_level_equivalencies
+    expect(page).to have_content('Select if you will consider candidates who need to take equivalency tests').twice
   end
 end

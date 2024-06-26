@@ -305,6 +305,11 @@ en:
         pending_a_level_options:
           "yes": "Yes"
           "no": "No"
+      a_level_equivalencies:
+        additional_a_level_equivalencies: Details about equivalency tests you offer or accept
+        accept_a_level_equivalencies_options:
+          "yes": "Yes"
+          "no": "No"
   course:
     application_status:
       open: "Course opened"
@@ -322,6 +327,8 @@ en:
     consider_pending_a_level:
       heading: Will you consider candidates with pending A levels?
       hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
+    a_level_equivalencies:
+      heading: Will you consider candidates who need to take an equivalency test for their A levels?
     new:
       level:
         special_educational_needs_and_disabilities:
