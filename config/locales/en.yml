@@ -329,6 +329,7 @@ en:
       hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
     a_level_equivalencies:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
+      submit: Update A levels
     new:
       level:
         special_educational_needs_and_disabilities:
@@ -859,6 +860,14 @@ en:
           attributes:
             pending_a_level:
               blank: Select if you will consider candidates with pending A levels
+        a_level_equivalencies:
+          attributes:
+            accept_a_level_equivalencies:
+              blank: Select if you will consider candidates who need to take equivalency tests
+            additional_a_level_equivalencies:
+              too_long:
+                one: Details about equivalency tests must be %{maximum} words or less. You have %{count} word too many
+                other: Details about equivalency tests must be %{maximum} words or less. You have %{count} words too many
         publish/engineers_teach_physics_form:
           attributes:
             campaign_name:

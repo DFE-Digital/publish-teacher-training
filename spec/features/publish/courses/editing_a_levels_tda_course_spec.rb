@@ -107,7 +107,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     then_the_no_option_is_chosen_in_pending_a_level
 
     when_i_click_continue
-    and_i_click_continue
+    and_i_click_update_a_levels
     then_i_see_an_error_message_for_the_a_level_equivalencies
   end
 
@@ -341,6 +341,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
         @course.course_code
       )
     )
+  end
+
+  def and_i_click_update_a_levels
+    click_on 'Update A levels'
   end
 
   def then_i_see_an_error_message_for_the_a_level_equivalencies
