@@ -87,6 +87,12 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     when_i_click_continue
     then_i_am_on_the_add_another_a_level_subject_page
+
+    when_i_click_continue
+    then_i_am_on_the_consider_pending_a_level_page
+
+    when_i_click_continue
+    then_i_see_an_error_message_for_the_consider_pending_a_level_page
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -294,5 +300,19 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def and_i_see_the_success_message_that_i_added_an_a_level
     expect(page).to have_content('You have added a required A level')
+  end
+
+  def then_i_am_on_the_consider_pending_a_level_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    )
+  end
+
+  def then_i_see_an_error_message_for_the_consider_pending_a_level_page
+    expect(page).to have_content('Select if you will consider candidates with pending A levels')
   end
 end

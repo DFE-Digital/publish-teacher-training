@@ -1,0 +1,32 @@
+<% content_for :page_title, title_with_error_prefix(t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @wizard.current_step, url:
+        publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          @course.course_code
+        ) do |form| %>
+        <%= form.govuk_error_summary %>
+
+        <%= form.govuk_radio_buttons_fieldset :pending_a_level, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
+          <p class="govuk-hint"><%= t("course.#{@wizard.current_step.model_name.i18n_key}.hint") %></p>
+          <%= form.govuk_radio_button :pending_a_level, :yes, link_errors: true %>
+          <%= form.govuk_radio_button :pending_a_level, :no %>
+        <% end %>
+
+        <%= form.submit t("continue"), class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>
