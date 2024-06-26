@@ -26,6 +26,7 @@ Rails/ThreeStateBooleanColumn:
     - 'db/migrate/20210623150714_remove_structured_gcse_columns_from_course_table.rb'
     - 'db/migrate/20220825093437_add_visa_fields_to_course.rb'
     - 'db/migrate/20240619150526_add_a_level_requirements_to_course.rb'
+    - 'db/migrate/20240626110024_add_accept_pending_a_level_to_courses.rb'
 
 Rails/HasAndBelongsToMany:
   Exclude:
