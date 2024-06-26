@@ -26,6 +26,7 @@ Rails.application.configure do
     policy.script_src  :self,
                        'https://www.google-analytics.com',
                        'https://www.googletagmanager.com',
+                       "'sha256-aBGeCwtg0DKytYpKh9kIMvmYL0sooy9+McqPAZ5feTk='", # add_js_enabled_class_to_body.html.erb
                        *all_domains
 
     policy.connect_src :self,
