@@ -27,7 +27,7 @@
           <%= form.govuk_radio_button :accept_a_level_equivalencies, :no %>
         <% end %>
 
-        <%= form.submit t("continue"), class: "govuk-button" %>
+        <%= form.submit t("course.#{@wizard.current_step.model_name.i18n_key}.submit"), class: "govuk-button" %>
     <% end %>
   </div>
 </div>
