@@ -164,6 +164,8 @@ namespace :publish, as: :publish do
         post '/a-levels-or-equivalency-tests/required-for-this-course', to: 'courses/a_level_requirements/are_any_a_levels_required_for_this_course#create'
         get '/a-levels-or-equivalency-tests/what-a-level-is-required', to: 'courses/a_level_requirements/what_a_level_is_required#new', as: :a_levels_what_a_level_is_required
         post '/a-levels-or-equivalency-tests/what-a-level-is-required', to: 'courses/a_level_requirements/what_a_level_is_required#create'
+        get '/a-levels-or-equivalency-tests/add-a-level-to-list', to: 'courses/a_level_requirements/add_a_level_to_a_list#new', as: :a_levels_add_a_level_to_a_list
+        post '/a-levels-or-equivalency-tests/add-a-level-to-list', to: 'courses/a_level_requirements/add_a_level_to_a_list#create'
 
         get '/about-this-course', on: :member, to: 'courses/about_this_course#edit'
         patch '/about-this-course', on: :member, to: 'courses/about_this_course#update'

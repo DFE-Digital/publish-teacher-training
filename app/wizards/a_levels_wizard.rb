@@ -9,7 +9,8 @@ class ALevelsWizard < DfE::Wizard::Base
   steps do
     [
       { are_any_a_levels_required_for_this_course: ALevelSteps::AreAnyALevelsRequiredForThisCourse },
-      { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired }
+      { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired },
+      { add_a_level_to_a_list: ALevelSteps::AddALevelToAList }
     ]
   end
 

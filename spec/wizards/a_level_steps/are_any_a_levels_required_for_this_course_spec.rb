@@ -3,7 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe ALevelSteps::AreAnyALevelsRequiredForThisCourse do
-  subject(:wizard_step) { described_class.new }
+  subject(:wizard_step) { described_class.new(wizard:) }
+
+  let(:provider) { create(:provider) }
+  let(:wizard) do
+    ALevelsWizard.new(
+      current_step: :are_any_a_levels_required_for_this_course,
+      provider:,
+      course:,
+      step_params: ActionController::Parameters.new({})
+    )
+  end
+  let(:course) { create(:course, :with_teacher_degree_apprenticeship, provider:) }
 
   describe 'validations' do
     it 'is valid with a valid answer' do
@@ -38,6 +49,15 @@ RSpec.describe ALevelSteps::AreAnyALevelsRequiredForThisCourse do
       it 'returns the name for the next step' do
         wizard_step.answer = 'yes'
         expect(wizard_step.next_step).to eq(:what_a_level_is_required)
+      end
+    end
+
+    context 'when a level is required and a level subjects added already' do
+      let(:course) { create(:course, :with_teacher_degree_apprenticeship, :with_a_level_requirements) }
+
+      it 'returns the name for the next step' do
+        wizard_step.answer = 'yes'
+        expect(wizard_step.next_step).to eq(:add_a_level_to_a_list)
       end
     end
 

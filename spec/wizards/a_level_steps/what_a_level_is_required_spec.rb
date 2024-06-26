@@ -37,7 +37,7 @@ RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
 
   describe '.permitted_params' do
     it 'returns the correct permitted params' do
-      expect(described_class.permitted_params).to eq(%i[subject other_subject minimum_grade_required])
+      expect(described_class.permitted_params).to eq(%i[uuid subject other_subject minimum_grade_required])
     end
   end
 
@@ -47,6 +47,12 @@ RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
       expect(wizard_step.subjects_list.first).to be_an(Struct)
       expect(wizard_step.subjects_list.first.name).to eq('Accounting')
       expect(wizard_step.subjects_list.last.name).to eq('World Development')
+    end
+  end
+
+  describe '#next_step' do
+    it 'returns the add a level to the list page' do
+      expect(wizard_step.next_step).to be :add_a_level_to_a_list
     end
   end
 end
