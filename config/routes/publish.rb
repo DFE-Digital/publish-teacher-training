@@ -168,6 +168,8 @@ namespace :publish, as: :publish do
         post '/a-levels-or-equivalency-tests/add-a-level-to-list', to: 'courses/a_level_requirements/add_a_level_to_a_list#create'
         get '/a-levels-or-equivalency-tests/consider-pending-a-level', to: 'courses/a_level_requirements/consider_pending_a_level#new', as: :a_levels_consider_pending_a_level
         post '/a-levels-or-equivalency-tests/consider-pending-a-level', to: 'courses/a_level_requirements/consider_pending_a_level#create'
+        get '/a-levels-or-equivalency-tests/a-level-equivalencies', to: 'courses/a_level_requirements/a_level_equivalencies#new', as: :a_levels_a_level_equivalencies
+        post '/a-levels-or-equivalency-tests/a-level-equivalencies', to: 'courses/a_level_requirements/a_level_equivalencies#create'
 
         get '/about-this-course', on: :member, to: 'courses/about_this_course#edit'
         patch '/about-this-course', on: :member, to: 'courses/about_this_course#update'
