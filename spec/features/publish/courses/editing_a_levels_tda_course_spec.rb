@@ -149,7 +149,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_a_levels_required_for_the_course_page
     expect(page.title).to eq('Error: Are any A levels required for this course? - Publish teacher training courses - GOV.UK')
-    expect(page).to have_content('Select if this course requires any A levels')
+    expect(page).to have_content('Select if this course requires any A levels').twice
   end
 
   def when_i_choose_no
@@ -217,7 +217,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_what_a_levels_is_required_for_the_course_page
     and_i_see_there_is_a_problem
-    expect(page).to have_content('Select a subject')
+    expect(page).to have_content('Select a subject').twice
   end
 
   def when_i_choose_any_subject
@@ -243,7 +243,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
     and_i_see_there_is_a_problem
-    expect(page).to have_content('Select if you want to add another A level')
+    expect(page).to have_content('Select if you want to add another A level').twice
   end
 
   def and_i_see_there_is_a_problem
@@ -313,6 +313,6 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_i_see_an_error_message_for_the_consider_pending_a_level_page
-    expect(page).to have_content('Select if you will consider candidates with pending A levels')
+    expect(page).to have_content('Select if you will consider candidates with pending A levels').twice
   end
 end
