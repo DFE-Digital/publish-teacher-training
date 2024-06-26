@@ -98,7 +98,16 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_click_continue
     then_i_am_on_a_level_equivalencies_page
 
+    when_i_click_back
+    then_the_yes_option_is_chosen_in_pending_a_level
+
+    when_i_choose_no
+    and_i_click_continue
+    and_i_click_back
+    then_the_no_option_is_chosen_in_pending_a_level
+
     when_i_click_continue
+    and_i_click_continue
     then_i_see_an_error_message_for_the_a_level_equivalencies
   end
 
@@ -212,6 +221,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   def when_i_click_back
     click_on 'Back'
   end
+  alias_method :and_i_click_back, :when_i_click_back
 
   def then_the_yes_option_is_chosen
     expect(page).to have_checked_field('are-any-a-levels-required-for-this-course-answer-yes-field')
@@ -335,5 +345,13 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_a_level_equivalencies
     expect(page).to have_content('Select if you will consider candidates who need to take equivalency tests').twice
+  end
+
+  def then_the_yes_option_is_chosen_in_pending_a_level
+    expect(page).to have_checked_field('consider-pending-a-level-pending-a-level-yes-field')
+  end
+
+  def then_the_no_option_is_chosen_in_pending_a_level
+    expect(page).to have_checked_field('consider-pending-a-level-pending-a-level-no-field')
   end
 end
