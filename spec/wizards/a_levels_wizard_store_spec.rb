@@ -72,6 +72,25 @@ RSpec.describe ALevelsWizardStore do
       end
     end
 
+    context 'when current step name is :consider_pending_a_level' do
+      let(:current_step) { :consider_pending_a_level }
+      let(:step_params) { {} }
+
+      before do
+        allow(wizard).to receive(:valid_step?).and_return(true)
+      end
+
+      it 'calls save on WhatALevelIsRequiredStore' do
+        consider_pending_a_level_store = instance_double(ConsiderPendingALevelStore)
+        allow(ConsiderPendingALevelStore).to receive(:new).with(wizard).and_return(consider_pending_a_level_store)
+        allow(consider_pending_a_level_store).to receive(:save)
+
+        subject
+
+        expect(consider_pending_a_level_store).to have_received(:save)
+      end
+    end
+
     context 'when current step is not recognized' do
       let(:current_step) { :some_other_step }
       let(:step_params) { {} }
@@ -83,6 +102,7 @@ RSpec.describe ALevelsWizardStore do
       it 'does not call any store save method' do
         expect(AreAnyALevelsRequiredStore).not_to receive(:new)
         expect(WhatALevelIsRequiredStore).not_to receive(:new)
+        expect(ConsiderPendingALevelStore).not_to receive(:new)
 
         subject
       end

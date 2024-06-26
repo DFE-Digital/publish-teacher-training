@@ -10,7 +10,8 @@ class ALevelsWizard < DfE::Wizard::Base
     [
       { are_any_a_levels_required_for_this_course: ALevelSteps::AreAnyALevelsRequiredForThisCourse },
       { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired },
-      { add_a_level_to_a_list: ALevelSteps::AddALevelToAList }
+      { add_a_level_to_a_list: ALevelSteps::AddALevelToAList },
+      { consider_pending_a_level: ALevelSteps::ConsiderPendingALevel }
     ]
   end
 

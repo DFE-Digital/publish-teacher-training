@@ -28,7 +28,7 @@ module ALevelSteps
       if add_another_a_level == 'yes'
         :what_a_level_is_required
       else
-        :pending_a_level
+        :consider_pending_a_level
       end
     end
   end

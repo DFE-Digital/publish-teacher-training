@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-# spec/models/what_a_level_is_required_store_spec.rb
-
 require 'rails_helper'
 
-RSpec.describe WhatALevelIsRequiredStore, type: :model do
+RSpec.describe WhatALevelIsRequiredStore do
   subject(:store) { described_class.new(wizard) }
 
   let(:course) { create(:course) }
