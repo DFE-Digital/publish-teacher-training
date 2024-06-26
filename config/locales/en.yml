@@ -277,7 +277,7 @@ en:
           text: "Enter details about the accredited provider"
   value_not_entered: "Not entered"
   a_level_grades:
-    minimum_grade: "Grade %{minimum_grade} or above"
+    minimum_grade: Grade %{minimum_grade} or above
     max_grade: "Grade A*"
   helpers:
     legend:
