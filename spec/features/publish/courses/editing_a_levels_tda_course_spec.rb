@@ -109,6 +109,15 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_click_continue
     and_i_click_update_a_levels
     then_i_see_an_error_message_for_the_a_level_equivalencies
+
+    when_i_choose_yes
+    and_i_add_too_many_words_into_additional_a_level_equivalencies
+    and_i_click_update_a_levels
+    then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
+
+    when_i_add_an_additional_a_level_equivalencies
+    and_i_click_update_a_levels
+    then_i_am_on_the_course_description_tab
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -357,5 +366,18 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_the_no_option_is_chosen_in_pending_a_level
     expect(page).to have_checked_field('consider-pending-a-level-pending-a-level-no-field')
+  end
+
+  def and_i_add_too_many_words_into_additional_a_level_equivalencies
+    fill_in 'Details about equivalency tests you offer or accept',
+            with: 'words ' * (ALevelSteps::ALevelEquivalencies::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS + 2)
+  end
+
+  def when_i_add_an_additional_a_level_equivalencies
+    fill_in 'Details about equivalency tests you offer or accept', with: 'Some additional A level equivalencies text'
+  end
+
+  def then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
+    expect(page).to have_content('Details about equivalency tests must be 250 words or less. You have 2 words too many')
   end
 end
