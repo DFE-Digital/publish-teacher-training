@@ -307,7 +307,7 @@ en:
           "no": "No"
       a_level_equivalencies:
         additional_a_level_equivalencies: Details about equivalency tests you offer or accept
-        accept_a_level_equivalencies_options:
+        accept_a_level_equivalency_options:
           "yes": "Yes"
           "no": "No"
   course:
@@ -863,7 +863,7 @@ en:
               blank: Select if you will consider candidates with pending A levels
         a_level_equivalencies:
           attributes:
-            accept_a_level_equivalencies:
+            accept_a_level_equivalency:
               blank: Select if you will consider candidates who need to take equivalency tests
             additional_a_level_equivalencies:
               too_long:

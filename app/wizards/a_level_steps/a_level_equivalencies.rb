@@ -3,21 +3,21 @@
 module ALevelSteps
   class ALevelEquivalencies < DfE::Wizard::Step
     delegate :exit_path, to: :wizard
-    attr_accessor :accept_a_level_equivalencies, :additional_a_level_equivalencies
+    attr_accessor :accept_a_level_equivalency, :additional_a_level_equivalencies
 
     MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS = 250
-    validates :accept_a_level_equivalencies, presence: true
+    validates :accept_a_level_equivalency, presence: true
 
     validates :additional_a_level_equivalencies,
               words_count: {
                 maximum: MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS,
                 message: ->(object, error) { object.words_count_error_message(error) }
               },
-              if: :accept_a_level_equivalencies?,
+              if: :accept_a_level_equivalency?,
               allow_blank: true
 
     def self.permitted_params
-      %i[accept_a_level_equivalencies additional_a_level_equivalencies]
+      %i[accept_a_level_equivalency additional_a_level_equivalencies]
     end
 
     def next_step
@@ -35,8 +35,8 @@ module ALevelSteps
       )
     end
 
-    def accept_a_level_equivalencies?
-      accept_a_level_equivalencies == 'yes'
+    def accept_a_level_equivalency?
+      accept_a_level_equivalency == 'yes'
     end
   end
 end
