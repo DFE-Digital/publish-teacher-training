@@ -22,39 +22,39 @@ RSpec.describe ALevelEquivalenciesStore do
   end
 
   describe '#save' do
-    it 'updates course with accept_a_level_equivalencies as true and additional_a_level_equivalencies' do
+    it 'updates course with accept_a_level_equivalency as true and additional_a_level_equivalencies' do
       step_params.merge!(
-        accept_a_level_equivalencies: 'yes',
+        accept_a_level_equivalency: 'yes',
         additional_a_level_equivalencies: 'Some additional info'
       )
       store.save
       course.reload
 
-      expect(course.accept_a_level_equivalencies).to be true
+      expect(course.accept_a_level_equivalency).to be true
       expect(course.additional_a_level_equivalencies).to eq('Some additional info')
     end
 
-    it 'updates course with accept_a_level_equivalencies as true and additional_a_level_equivalencies as nil when additional info is blank' do
+    it 'updates course with accept_a_level_equivalency as true and additional_a_level_equivalencies as nil when additional info is blank' do
       step_params.merge!(
-        accept_a_level_equivalencies: 'yes',
+        accept_a_level_equivalency: 'yes',
         additional_a_level_equivalencies: ''
       )
       store.save
       course.reload
 
-      expect(course.accept_a_level_equivalencies).to be true
+      expect(course.accept_a_level_equivalency).to be true
       expect(course.additional_a_level_equivalencies).to be_nil
     end
 
-    it 'updates course with accept_a_level_equivalencies as false and additional_a_level_equivalencies as nil' do
+    it 'updates course with accept_a_level_equivalency as false and additional_a_level_equivalencies as nil' do
       step_params.merge!(
-        accept_a_level_equivalencies: 'no',
+        accept_a_level_equivalency: 'no',
         additional_a_level_equivalencies: 'Some additional info'
       )
       store.save
       course.reload
 
-      expect(course.accept_a_level_equivalencies).to be false
+      expect(course.accept_a_level_equivalency).to be false
       expect(course.additional_a_level_equivalencies).to be_nil
     end
   end

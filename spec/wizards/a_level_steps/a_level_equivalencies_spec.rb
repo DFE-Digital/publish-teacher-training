@@ -22,10 +22,10 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
   describe '#valid?' do
     context 'when pending_a_level is present' do
       it 'is valid' do
-        wizard_step.accept_a_level_equivalencies = 'yes'
+        wizard_step.accept_a_level_equivalency = 'yes'
         expect(wizard_step).to be_valid
 
-        wizard_step.accept_a_level_equivalencies = 'no'
+        wizard_step.accept_a_level_equivalency = 'no'
         expect(wizard_step).to be_valid
       end
     end
@@ -33,7 +33,7 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
     context 'when pending_a_level is not present' do
       it 'is not valid' do
         expect(wizard_step).not_to be_valid
-        expect(wizard_step.errors.added?(:accept_a_level_equivalencies, :blank)).to be true
+        expect(wizard_step.errors.added?(:accept_a_level_equivalency, :blank)).to be true
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
       let(:long_text) { 'word ' * (word_limit + excess_words) }
 
       it 'is not valid and adds a custom error message' do
-        wizard_step.accept_a_level_equivalencies = 'yes'
+        wizard_step.accept_a_level_equivalency = 'yes'
         wizard_step.additional_a_level_equivalencies = long_text
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors[:additional_a_level_equivalencies]).to include(
@@ -58,7 +58,7 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
       let(:long_text) { 'word ' * (word_limit + excess_words) }
 
       it 'is not valid and adds a custom error message' do
-        wizard_step.accept_a_level_equivalencies = 'yes'
+        wizard_step.accept_a_level_equivalency = 'yes'
         wizard_step.additional_a_level_equivalencies = long_text
         expect(wizard_step).not_to be_valid
         expect(wizard_step.errors[:additional_a_level_equivalencies]).to include(
@@ -73,7 +73,7 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
       let(:long_text) { 'word ' * (word_limit + excess_words) }
 
       it 'does not validate max words' do
-        wizard_step.accept_a_level_equivalencies = 'no'
+        wizard_step.accept_a_level_equivalency = 'no'
         wizard_step.additional_a_level_equivalencies = 'word ' * 500
         expect(wizard_step).to be_valid
       end
@@ -82,7 +82,7 @@ RSpec.describe ALevelSteps::ALevelEquivalencies do
 
   describe '.permitted_params' do
     it 'returns the correct permitted params' do
-      expect(described_class.permitted_params).to eq(%i[accept_a_level_equivalencies additional_a_level_equivalencies])
+      expect(described_class.permitted_params).to eq(%i[accept_a_level_equivalency additional_a_level_equivalencies])
     end
   end
 

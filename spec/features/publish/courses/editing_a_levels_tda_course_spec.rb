@@ -394,7 +394,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_the_yes_option_is_chosen_in_a_level_equivalencies
-    expect(page).to have_checked_field('a-level-equivalencies-accept-a-level-equivalencies-yes-field')
+    expect(page).to have_checked_field('a-level-equivalencies-accept-a-level-equivalency-yes-field')
   end
 
   def and_i_see_the_additional_a_level_equivalencies_text
