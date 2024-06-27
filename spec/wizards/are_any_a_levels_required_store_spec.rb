@@ -54,10 +54,16 @@ RSpec.describe AreAnyALevelsRequiredStore do
       let(:course) { create(:course, :with_teacher_degree_apprenticeship, :with_a_level_requirements) }
       let(:step_params) { { answer: 'no' } }
 
-      it 'remove existing a level subject requirements' do
+      it 'remove existing a level fields' do
         expect(course.a_level_subject_requirements).to be_present
 
-        expect { subject }.to change { course.reload.a_level_subject_requirements }.to([])
+        store.save
+        course.reload
+
+        expect(course.a_level_subject_requirements).to eq([])
+        expect(course.accept_pending_a_level).to be_nil
+        expect(course.accept_a_level_equivalency).to be_nil
+        expect(course.additional_a_level_equivalencies).to be_nil
       end
     end
   end

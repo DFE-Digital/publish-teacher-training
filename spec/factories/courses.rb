@@ -41,6 +41,9 @@ FactoryBot.define do
     trait :with_a_level_requirements do
       a_level_requirements { true }
       a_level_subject_requirements { [{ uuid: SecureRandom.uuid, subject: 'any_subject', minimum_grade_required: 'A' }] }
+      accept_pending_a_level { true }
+      accept_a_level_equivalency { true }
+      additional_a_level_equivalencies { 'Some text' }
     end
 
     trait :without_validation do
