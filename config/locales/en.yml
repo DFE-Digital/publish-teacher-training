@@ -327,10 +327,17 @@ en:
     consider_pending_a_level:
       heading: Will you consider candidates with pending A levels?
       hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
+      row:
+        "true": "Candidates with pending A levels will be considered."
+        "false": "Candidates with pending A levels will not be considered."
     a_level_equivalencies:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
       submit: Update A levels
       hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
+      suffix: or equivalent qualification
+      row:
+        "true": "Equivalency tests will be considered."
+        "false": "Equivalency tests will not be considered."
     new:
       level:
         special_educational_needs_and_disabilities:

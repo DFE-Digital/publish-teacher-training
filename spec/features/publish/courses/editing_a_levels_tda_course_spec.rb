@@ -122,6 +122,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_enter_on_a_level_equivalencies
     then_the_yes_option_is_chosen_in_a_level_equivalencies
     and_i_see_the_additional_a_level_equivalencies_text
+
+    when_i_click_update_a_levels
+    then_i_am_on_the_course_description_tab
+    and_i_see_the_a_level_requirements_for_the_course
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -356,9 +360,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     )
   end
 
-  def and_i_click_update_a_levels
+  def when_i_click_update_a_levels
     click_on 'Update A levels'
   end
+  alias_method :and_i_click_update_a_levels, :when_i_click_update_a_levels
 
   def then_i_see_an_error_message_for_the_a_level_equivalencies
     expect(page).to have_content('Select if you will consider candidates who need to take equivalency tests').twice
@@ -399,5 +404,15 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def and_i_see_the_additional_a_level_equivalencies_text
     expect(page.find('textarea').value).to eq('Some additional A level equivalencies text')
+  end
+
+  def and_i_see_the_a_level_requirements_for_the_course
+    expect(page).to have_content('Any subject - Grade C or above, or equivalent')
+    expect(page).to have_content('Any STEM subject - Grade C or above, or equivalent')
+    expect(page).to have_content('Any humanities subject, or equivalent')
+    expect(page).to have_content('Mathematics, or equivalent')
+    expect(page).to have_content('Candidates with pending A levels will not be considered.')
+    expect(page).to have_content('Equivalency tests will be considered.')
+    expect(page).to have_content('Some additional A level equivalencies text')
   end
 end

@@ -9,10 +9,29 @@ class ALevelRowComponent < ViewComponent::Base
     @errors = errors&.values&.flatten
   end
 
-  def a_level_requirement_content
-    return if @course.a_level_requirements.present?
-
+  def a_level_not_required_content
     I18n.t('publish.providers.courses.description_content.a_levels_not_required')
+  end
+
+  def a_level_subject_row_content(a_level_subject_requirement)
+    row_value = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement).row_value
+
+    if @course.accept_a_level_equivalency?
+      [
+        row_value,
+        I18n.t('course.a_level_equivalencies.suffix')
+      ].join(', ')
+    else
+      row_value
+    end
+  end
+
+  def pending_a_level_summary_content
+    I18n.t("course.consider_pending_a_level.row.#{@course.accept_pending_a_level?}")
+  end
+
+  def a_level_equivalency_summary_content
+    I18n.t("course.a_level_equivalencies.row.#{@course.accept_a_level_equivalency?}")
   end
 
   def inset_text_css_classes
