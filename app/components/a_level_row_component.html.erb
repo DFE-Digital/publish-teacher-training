@@ -6,13 +6,17 @@
       </p>
     <% end %>
 
-    <p class="govuk-body">
-      <%= pending_a_level_summary_content %>
-    </p>
+    <% unless @course.accept_pending_a_level.nil? %>
+      <p class="govuk-body">
+        <%= pending_a_level_summary_content %>
+      </p>
+    <% end %>
 
-    <p class="govuk-body">
-      <%= a_level_equivalency_summary_content %>
-    </p>
+    <% unless @course.accept_a_level_equivalency.nil? %>
+      <p class="govuk-body">
+        <%= a_level_equivalency_summary_content %>
+      </p>
+    <% end %>
 
     <% if @course.accept_a_level_equivalency? && @course.additional_a_level_equivalencies.present? %>
       <p class="govuk-body">
