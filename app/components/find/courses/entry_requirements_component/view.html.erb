@@ -52,19 +52,27 @@
         <%= helpers.markdown(course.additional_gcse_equivalencies) %>
       </p>
     <% end %>
+
+    <h3 class="govuk-heading-m"><%= t("find.get_into_teaching.qualifications_outside_uk") %> </h3>
+
+    <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
+
+    <p class="govuk-body">
+
+      <%= govuk_link_to(t("find.get_into_teaching.apply_for_statement_of_comparability"),
+                        t("find.enic.statement_of_comparability.url"),
+                        target: "_blank",
+                        new_tab: true,
+                        rel: "noopener") %>
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("find.get_into_teaching.chat_online"),
+                        t("find.get_into_teaching.url_online_chat"),
+                        target: "_blank",
+                        new_tab: true,
+                        rel: "noopener") %>
+        <%= t("find.get_into_teaching.support_team") %>
+    </p>
   </div>
-
-  <% if course.personal_qualities.present? %>
-    <h3 class="govuk-heading-m">Personal qualities</h3>
-    <div data-qa="course__personal_qualities">
-      <%= helpers.markdown(course.personal_qualities) %>
-    </div>
-  <% end %>
-
-  <% if course.other_requirements.present? %>
-    <h3 class="govuk-heading-m">Other requirements</h3>
-    <div data-qa="course__other_requirements">
-      <%= helpers.markdown(course.other_requirements) %>
-    </div>
-  <% end %>
 </div>

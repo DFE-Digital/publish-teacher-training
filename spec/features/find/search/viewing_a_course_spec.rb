@@ -250,14 +250,6 @@ feature 'Viewing a findable course' do
       'Certificate must be print in blue ink'
     )
 
-    expect(find_course_show_page.personal_qualities).to have_content(
-      @course.latest_published_enrichment.personal_qualities
-    )
-
-    expect(find_course_show_page.other_requirements).to have_content(
-      @course.latest_published_enrichment.other_requirements
-    )
-
     expect(find_course_show_page.train_with_us).to have_content(
       provider.train_with_us
     )

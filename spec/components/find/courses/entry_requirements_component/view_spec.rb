@@ -245,4 +245,20 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       )
     end
   end
+
+  it 'includes the qualifications gain outside of UK section' do
+    course = build(
+      :course,
+      degree_grade: 'two_two',
+      additional_degree_subject_requirements: true,
+      degree_subject_requirements: 'Certificate must be printed on green paper.'
+    )
+    render_inline(described_class.new(course: course.decorate))
+
+    expect(page).to have_css('h3', text: 'Qualifications gained outside the UK')
+
+    expect(page).to have_text('If you studied for your qualifications outside of the UK you should apply for a statement of comparability from UK European Network of Information Centres (UK ENIC). This will show us how your qualifications compare to UK qualifications.')
+
+    expect(page).to have_link('Apply for a statement of comparability (opens in new tab)')
+  end
 end

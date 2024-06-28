@@ -119,6 +119,11 @@ en:
         html:
           <p class="govuk-body">You may be entitled to £10,000 from the UK government to help with the financial costs of moving to England.</p>
     get_into_teaching:
+      apply_for_statement_of_comparability: Apply for a statement of comparability
+      chat_online: You can chat online
+      support_team: with the Get Into Teaching support team for guidance on the UK equivalents of your qualifications.
+      qualifications_outside_uk: Qualifications gained outside the UK
+      qualifications_outside_uk_body: If you studied for your qualifications outside of the UK you should apply for a statement of comparability from UK European Network of Information Centres (UK ENIC). This will show us how your qualifications compare to UK qualifications.
       tel: 0800 389 2500
       opening_times: "Monday to Friday, 8.30am to 5.30pm"
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
