@@ -1,7 +1,32 @@
 <% if course.a_levels_requirements_answered? %>
-  <p class="govuk-summary-list-value govuk-!-margin-top-0">
-    <%= a_level_requirement_content %>
-  </p>
+  <% if @course.a_level_requirements.present? %>
+    <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
+      <p class="govuk-body">
+        <%= a_level_subject_row_content(a_level_subject_requirement.with_indifferent_access) %>
+      </p>
+    <% end %>
+
+    <% unless @course.accept_pending_a_level.nil? %>
+      <p class="govuk-body">
+        <%= pending_a_level_summary_content %>
+      </p>
+    <% end %>
+
+    <% unless @course.accept_a_level_equivalency.nil? %>
+      <p class="govuk-body">
+        <%= a_level_equivalency_summary_content %>
+      </p>
+    <% end %>
+
+    <% if @course.accept_a_level_equivalency? && @course.additional_a_level_equivalencies.present? %>
+      <p class="govuk-body">
+      <%= @course.additional_a_level_equivalencies %>
+      </p>
+    <% end %>
+  <% else %>
+    <%= a_level_not_required_content %>
+  <% end %>
+
 <% else %>
   <%= govuk_inset_text(classes: inset_text_css_classes) do %>
     <p class="govuk-heading-s app-inset-text__title"><%= t("publish.providers.courses.description_content.a_levels_heading") %></p>
