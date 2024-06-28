@@ -93,6 +93,35 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_consider_pending_a_level_page
+
+    when_i_choose_yes
+    and_i_click_continue
+    then_i_am_on_a_level_equivalencies_page
+
+    when_i_click_back
+    then_the_yes_option_is_chosen_in_pending_a_level
+
+    when_i_choose_no
+    and_i_click_continue
+    and_i_click_back
+    then_the_no_option_is_chosen_in_pending_a_level
+
+    when_i_click_continue
+    and_i_click_update_a_levels
+    then_i_see_an_error_message_for_the_a_level_equivalencies
+
+    when_i_choose_yes
+    and_i_add_too_many_words_into_additional_a_level_equivalencies
+    and_i_click_update_a_levels
+    then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
+
+    when_i_add_an_additional_a_level_equivalencies
+    and_i_click_update_a_levels
+    then_i_am_on_the_course_description_tab
+
+    when_i_enter_on_a_level_equivalencies
+    then_the_yes_option_is_chosen_in_a_level_equivalencies
+    and_i_see_the_additional_a_level_equivalencies_text
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -205,6 +234,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   def when_i_click_back
     click_on 'Back'
   end
+  alias_method :and_i_click_back, :when_i_click_back
 
   def then_the_yes_option_is_chosen
     expect(page).to have_checked_field('are-any-a-levels-required-for-this-course-answer-yes-field')
@@ -314,5 +344,60 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
   def then_i_see_an_error_message_for_the_consider_pending_a_level_page
     expect(page).to have_content('Select if you will consider candidates with pending A levels').twice
+  end
+
+  def then_i_am_on_a_level_equivalencies_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    )
+  end
+
+  def and_i_click_update_a_levels
+    click_on 'Update A levels'
+  end
+
+  def then_i_see_an_error_message_for_the_a_level_equivalencies
+    expect(page).to have_content('Select if you will consider candidates who need to take equivalency tests').twice
+  end
+
+  def then_the_yes_option_is_chosen_in_pending_a_level
+    expect(page).to have_checked_field('consider-pending-a-level-pending-a-level-yes-field')
+  end
+
+  def then_the_no_option_is_chosen_in_pending_a_level
+    expect(page).to have_checked_field('consider-pending-a-level-pending-a-level-no-field')
+  end
+
+  def and_i_add_too_many_words_into_additional_a_level_equivalencies
+    fill_in 'Details about equivalency tests you offer or accept',
+            with: 'words ' * (ALevelSteps::ALevelEquivalencies::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS + 2)
+  end
+
+  def when_i_add_an_additional_a_level_equivalencies
+    fill_in 'Details about equivalency tests you offer or accept', with: 'Some additional A level equivalencies text'
+  end
+
+  def then_i_see_an_error_message_for_the_a_level_equivalencies_additional_a_levels_field
+    expect(page).to have_content('Details about equivalency tests must be 250 words or less. You have 2 words too many')
+  end
+
+  def when_i_enter_on_a_level_equivalencies
+    visit publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
+      @provider.provider_code,
+      @provider.recruitment_cycle_year,
+      @course.course_code
+    )
+  end
+
+  def then_the_yes_option_is_chosen_in_a_level_equivalencies
+    expect(page).to have_checked_field('a-level-equivalencies-accept-a-level-equivalency-yes-field')
+  end
+
+  def and_i_see_the_additional_a_level_equivalencies_text
+    expect(page.find('textarea').value).to eq('Some additional A level equivalencies text')
   end
 end

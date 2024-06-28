@@ -5,7 +5,13 @@ module Publish
     module ALevelRequirements
       class ConsiderPendingALevelController < ALevelRequirementsController
         def step_params
-          params
+          if params[current_step].blank? && !@course.accept_pending_a_level.nil?
+            ActionController::Parameters.new(
+              current_step => { pending_a_level: @course.accept_pending_a_level? ? 'yes' : 'no' }
+            )
+          else
+            params
+          end
         end
       end
     end

@@ -1,0 +1,34 @@
+<% content_for :page_title, title_with_error_prefix(t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), @wizard.current_step.errors && @wizard.current_step.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(
+      publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with model: @wizard.current_step, url:
+        publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
+          @provider.provider_code,
+          @provider.recruitment_cycle_year,
+          @course.course_code
+        ) do |form| %>
+        <%= form.govuk_error_summary %>
+
+        <%= form.govuk_radio_buttons_fieldset :accept_a_level_equivalency, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
+
+          <%= form.govuk_radio_button :accept_a_level_equivalency, :yes do %>
+            <%= form.govuk_text_area :additional_a_level_equivalencies, max_words: @wizard.current_step.class::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS, hint: { text: t("course.#{@wizard.current_step.model_name.i18n_key}.hint") }, label: { class: "govuk-!-font-weight-bold" } %>
+          <% end %>
+          <%= form.govuk_radio_button :accept_a_level_equivalency, :no %>
+        <% end %>
+
+        <%= form.submit t("course.#{@wizard.current_step.model_name.i18n_key}.submit"), class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>
