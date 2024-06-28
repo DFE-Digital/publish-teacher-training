@@ -169,6 +169,28 @@ describe Course do
     end
   end
 
+  describe '#find_a_level_subject_requirement!' do
+    let(:course) { create(:course, a_level_subject_requirements:) }
+
+    context 'when a requirement with the specified uuid exists' do
+      let(:uuid) { 'valid_uuid' }
+      let(:a_level_subject_requirements) { [{ uuid: 'valid_uuid', subject: 'Subject Requirement' }] }
+
+      it 'returns the subject requirement' do
+        expect(course.find_a_level_subject_requirement!(uuid)).to eq(a_level_subject_requirements.first.with_indifferent_access)
+      end
+    end
+
+    context 'when no requirement with the specified uuid exists' do
+      let(:uuid) { 'nonexistent_uuid' }
+      let(:a_level_subject_requirements) { [] }
+
+      it 'raises ActiveRecord::RecordNotFound' do
+        expect { course.find_a_level_subject_requirement!(uuid) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
   describe '#applicable_for_engineers_teach_physics?' do
     subject { course.applicable_for_engineers_teach_physics? }
 

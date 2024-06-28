@@ -21,6 +21,10 @@
         ) do |form| %>
         <%= form.govuk_error_summary %>
 
+        <% if @a_level_subject_requirement.present? %>
+          <%= form.hidden_field(:uuid) %>
+        <% end %>
+
         <h1 class="govuk-heading-l">
           <span class="govuk-caption-l">
             <%= @course_decorator.name_and_code %>

@@ -126,6 +126,21 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     when_i_click_update_a_levels
     then_i_am_on_the_course_description_tab
     and_i_see_the_a_level_requirements_for_the_course
+
+    when_i_click_to_change_a_level_requirements
+    and_i_click_continue
+    and_i_click_to_change_the_subject
+    then_i_am_on_the_what_a_level_is_required_page_editing_the_subject
+    and_any_subject_is_chosen
+    and_minimum_grade_required_has_a_value
+
+    when_i_choose_any_science_subject
+    and_add_any_grade_as_minimum_grade_required
+    and_i_click_continue
+    then_i_am_on_the_add_another_a_level_subject_page
+    and_i_see_the_updated_a_level_subject_requirement
+
+    when_i_click_to_remove_the_a_level_subject
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -231,7 +246,8 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
         @provider.provider_code,
         2025,
         @course.course_code
-      )
+      ),
+      ignore_query: true
     )
   end
 
@@ -327,7 +343,8 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
         @provider.provider_code,
         @provider.recruitment_cycle_year,
         @course.course_code
-      )
+      ),
+      ignore_query: true
     )
   end
   alias_method :and_i_am_on_the_add_another_a_level_subject_page, :then_i_am_on_the_add_another_a_level_subject_page
@@ -414,5 +431,48 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     expect(page).to have_content('Candidates with pending A levels will not be considered.')
     expect(page).to have_content('Equivalency tests will be considered.')
     expect(page).to have_content('Some additional A level equivalencies text')
+  end
+
+  def and_i_click_to_change_the_subject
+    click_on('Change', match: :first)
+  end
+
+  def and_any_subject_is_chosen
+    expect(page).to have_checked_field('what-a-level-is-required-subject-any-subject-field')
+  end
+
+  def and_minimum_grade_required_has_a_value
+    expect(find_field('Minimum grade required (optional)').value).to eq 'C'
+  end
+
+  def when_i_choose_any_science_subject
+    choose 'Any science subject'
+  end
+
+  def and_add_any_grade_as_minimum_grade_required
+    fill_in 'Minimum grade required (optional)', with: 'B'
+  end
+
+  def and_i_see_the_updated_a_level_subject_requirement
+    and_there_are_only_four_subjects # it should update and not create another one
+  end
+
+  def and_there_are_only_four_subjects
+    expect(@course.reload.a_level_subject_requirements.size).to be 4
+  end
+
+  def when_i_click_to_remove_the_a_level_subject
+    click_on 'Remove', match: :first
+  end
+
+  def then_i_am_on_the_what_a_level_is_required_page_editing_the_subject
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code,
+        uuid: @course.reload.a_level_subject_requirements.first['uuid']
+      )
+    )
   end
 end
