@@ -853,6 +853,10 @@ en:
               blank: Select a subject
             other_subject:
               blank: Select a subject
+            minimum_grade_required:
+              chars_count:
+                one: Grade must be %{maximum} characters or less. You have %{count} character too many.
+                other: Grade must be %{maximum} characters or less. You have %{count} characters too many.
         add_a_level_to_a_list:
           attributes:
             add_another_a_level:

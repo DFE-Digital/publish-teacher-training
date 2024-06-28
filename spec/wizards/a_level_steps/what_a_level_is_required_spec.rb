@@ -17,6 +17,32 @@ RSpec.describe ALevelSteps::WhatALevelIsRequired, type: :model do
       expect(wizard_step.errors.added?(:subject, :blank)).to be true
     end
 
+    context 'when minimum grade required is too long' do
+      let(:excess_characters) { 5 }
+      let(:character_limit) { described_class::MAXIMUM_GRADE_CHARACTERS }
+
+      it 'adds an error message' do
+        wizard_step.minimum_grade_required = 'A' * (character_limit + excess_characters)
+        expect(wizard_step).not_to be_valid
+        expect(wizard_step.errors[:minimum_grade_required]).to include(
+          "Grade must be #{character_limit} characters or less. You have #{excess_characters} characters too many."
+        )
+      end
+    end
+
+    context 'when minimum grade required is too long by one character' do
+      let(:excess_characters) { 1 }
+      let(:character_limit) { described_class::MAXIMUM_GRADE_CHARACTERS }
+
+      it 'adds an error message' do
+        wizard_step.minimum_grade_required = 'A' * (character_limit + excess_characters)
+        expect(wizard_step).not_to be_valid
+        expect(wizard_step.errors[:minimum_grade_required]).to include(
+          "Grade must be #{character_limit} characters or less. You have #{excess_characters} character too many."
+        )
+      end
+    end
+
     context 'when subject is "other_subject"' do
       before do
         wizard_step.subject = 'other_subject'
