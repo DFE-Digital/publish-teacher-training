@@ -27,11 +27,11 @@ class ALevelRowComponent < ViewComponent::Base
   end
 
   def pending_a_level_summary_content
-    I18n.t("course.consider_pending_a_level.row.#{@course.accept_pending_a_level?}")
+    I18n.t("course.consider_pending_a_level.row.#{@course.accept_pending_a_level?}") unless @course.accept_pending_a_level.nil?
   end
 
   def a_level_equivalency_summary_content
-    I18n.t("course.a_level_equivalencies.row.#{@course.accept_a_level_equivalency?}")
+    I18n.t("course.a_level_equivalencies.row.#{@course.accept_a_level_equivalency?}") unless @course.accept_a_level_equivalency.nil?
   end
 
   def inset_text_css_classes

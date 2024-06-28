@@ -68,6 +68,24 @@ RSpec.describe ALevelRowComponent do
     expect(rendered_component.text).not_to include('Some additional information')
   end
 
+  it 'does not render the pending A level if the question is not answered' do
+    a_level_subject_requirement = { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
+    course = create(:course, accept_pending_a_level: nil, a_level_requirements: true, a_level_subject_requirements: [a_level_subject_requirement])
+    component = described_class.new(course: course.decorate)
+    rendered_component = render_inline(component)
+
+    expect(rendered_component.text).not_to include('Candidates with pending A levels will')
+  end
+
+  it 'does not render the equivalency A level if the question is not answered' do
+    a_level_subject_requirement = { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
+    course = create(:course, accept_a_level_equivalency: nil, a_level_requirements: true, a_level_subject_requirements: [a_level_subject_requirement])
+    component = described_class.new(course: course.decorate)
+    rendered_component = render_inline(component)
+
+    expect(rendered_component.text).not_to include('Equivalency tests will ')
+  end
+
   it 'returns false for has_errors?' do
     course = create(:course)
     component = described_class.new(course: course.decorate)
