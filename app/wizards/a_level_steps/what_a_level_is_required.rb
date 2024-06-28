@@ -2,6 +2,7 @@
 
 module ALevelSteps
   class WhatALevelIsRequired < DfE::Wizard::Step
+    MAXIMUM_GRADE_CHARACTERS = 50
     attr_accessor :subject, :other_subject, :minimum_grade_required
     attr_writer :uuid
 
@@ -9,6 +10,7 @@ module ALevelSteps
 
     validates :subject, presence: true
     validates :other_subject, presence: true, if: -> { subject == 'other_subject' }
+    validates :minimum_grade_required, chars_count: { maximum: MAXIMUM_GRADE_CHARACTERS }, allow_blank: true
 
     def self.permitted_params
       %i[uuid subject other_subject minimum_grade_required]
