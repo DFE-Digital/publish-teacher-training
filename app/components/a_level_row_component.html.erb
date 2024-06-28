@@ -2,7 +2,7 @@
   <% if @course.a_level_requirements.present? %>
     <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
       <p class="govuk-body">
-        <%= a_level_subject_row_content(ActiveSupport::HashWithIndifferentAccess.new(a_level_subject_requirement)) %>
+        <%= a_level_subject_row_content(a_level_subject_requirement.with_indifferent_access) %>
       </p>
     <% end %>
 
