@@ -100,6 +100,10 @@ module Find
           def engineers_teach_physics?
             campaign_name&.to_sym == :engineers_teach_physics
           end
+
+          def teacher_degree_apprenticeship?
+            false
+          end
         end
       end
     end
