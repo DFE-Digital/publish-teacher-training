@@ -131,6 +131,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_click_continue
     and_i_click_to_change_the_subject
     then_i_am_on_the_what_a_level_is_required_page_editing_the_subject
+    and_the_back_link_points_to_add_a_level_to_the_list
     and_any_subject_is_chosen
     and_minimum_grade_required_has_a_value
 
@@ -541,5 +542,15 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
 
     expect(page).to have_content('A levels and equivalency tests')
     expect(page).to have_content('Enter A levels and equivalency test requirements')
+  end
+
+  def and_the_back_link_points_to_add_a_level_to_the_list
+    expect(page.find_link(text: 'Back')[:href]).to eq(
+      publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        @course.course_code
+      )
+    )
   end
 end
