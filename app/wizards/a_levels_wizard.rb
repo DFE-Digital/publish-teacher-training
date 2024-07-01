@@ -5,12 +5,14 @@ class ALevelsWizard < DfE::Wizard::Base
 
   delegate :course_code, to: :course
   delegate :provider_code, :recruitment_cycle_year, to: :course
+  delegate :destroy, to: :store
 
   steps do
     [
       { are_any_a_levels_required_for_this_course: ALevelSteps::AreAnyALevelsRequiredForThisCourse },
       { what_a_level_is_required: ALevelSteps::WhatALevelIsRequired },
       { add_a_level_to_a_list: ALevelSteps::AddALevelToAList },
+      { remove_a_level_subject_confirmation: ALevelSteps::RemoveALevelSubjectConfirmation },
       { consider_pending_a_level: ALevelSteps::ConsiderPendingALevel },
       { a_level_equivalencies: ALevelSteps::ALevelEquivalencies }
     ]
