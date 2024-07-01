@@ -13,4 +13,8 @@ class ALevelsWizardStore < DfE::Wizard::Store
 
     true
   end
+
+  def destroy
+    RemoveALevelSubjectConfirmationStore.new(wizard).destroy if current_step_name == :remove_a_level_subject_confirmation
+  end
 end

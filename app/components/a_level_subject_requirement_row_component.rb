@@ -13,10 +13,14 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
   end
 
   def row_value
+    "#{subject_name}#{grade_display(minimum_grade)}"
+  end
+
+  def subject_name
     if other_subject?
-      "#{other_subject}#{grade_display(minimum_grade)}"
+      other_subject
     else
-      "#{I18n.t("helpers.label.what_a_level_is_required.subject_options.#{subject}")}#{grade_display(minimum_grade)}"
+      I18n.t("helpers.label.what_a_level_is_required.subject_options.#{subject}").to_s
     end
   end
 

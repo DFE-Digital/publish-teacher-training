@@ -128,4 +128,29 @@ RSpec.describe ALevelsWizardStore do
       end
     end
   end
+
+  describe '#destroy' do
+    context 'when current step name is :remove_a_level_subject_confirmation' do
+      let(:current_step) { :remove_a_level_subject_confirmation }
+
+      it 'calls destroy on RemoveALevelSubjectConfirmationStore' do
+        remove_store = instance_double(RemoveALevelSubjectConfirmationStore)
+        allow(RemoveALevelSubjectConfirmationStore).to receive(:new).with(wizard).and_return(remove_store)
+        allow(remove_store).to receive(:destroy)
+
+        store.destroy
+
+        expect(remove_store).to have_received(:destroy)
+      end
+    end
+
+    context 'when current step name is not :remove_a_level_subject_confirmation' do
+      let(:current_step) { :some_other_step }
+
+      it 'does not call destroy on RemoveALevelSubjectConfirmationStore' do
+        expect(RemoveALevelSubjectConfirmationStore).not_to receive(:new)
+        store.destroy
+      end
+    end
+  end
 end

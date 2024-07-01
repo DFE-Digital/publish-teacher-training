@@ -41,8 +41,20 @@
           <% @wizard.current_step.subjects.each do |subject| %>
             <%= summary_list.with_row do |row| %>
               <%= row.with_key(classes: "govuk-!-font-weight-regular") { render ALevelSubjectRequirementRowComponent.new(subject) } %>
-              <%= row.with_action(text: "Change", href: "#") %>
-              <%= row.with_action(text: "Remove", href: "#") %>
+              <%= row.with_action(text: "Change", href:
+                    publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+                      @provider.provider_code,
+                      @provider.recruitment_cycle_year,
+                      @course.course_code,
+                      uuid: subject.fetch("uuid")
+                    )) %>
+               <%= row.with_action(text: "Remove", href:
+                    publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
+                      @provider.provider_code,
+                      @provider.recruitment_cycle_year,
+                      @course.course_code,
+                      uuid: subject.fetch("uuid")
+                    )) %>
             <% end %>
           <% end %>
         <% end %>

@@ -802,6 +802,13 @@ class Course < ApplicationRecord
     enrichments.where(status: 'published').order(last_published_timestamp_utc: :desc).first
   end
 
+  def find_a_level_subject_requirement!(uuid)
+    requirement = a_level_subject_requirements.find { |req| req['uuid'] == uuid }
+    raise ActiveRecord::RecordNotFound unless requirement
+
+    requirement.with_indifferent_access
+  end
+
   private
 
   def add_site!(site:)
