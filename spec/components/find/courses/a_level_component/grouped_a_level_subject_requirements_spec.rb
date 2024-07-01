@@ -14,25 +14,30 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
     context 'with up to 4 singular subjects' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_subject' },
-          { 'subject' => 'any_stem_subject' },
-          { 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A' },
-          { 'subject' => 'other_subject', 'other_subject' => 'Geography' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_subject' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_stem_subject' },
+          { 'uuid' => 'uuid-3', 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A' },
+          { 'uuid' => 'uuid-4', 'subject' => 'other_subject', 'other_subject' => 'Geography' }
         ]
       end
 
       it 'renders the correct content' do
-        expect(grouped_a_level_subject_requirements).to eq([
-                                                             'Any subject', 'Any STEM subject', 'Any modern foreign language - Grade A or above', 'Geography'
-                                                           ])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any subject',
+            'Any STEM subject',
+            'Any modern foreign language - Grade A or above',
+            'Geography'
+          ]
+        )
       end
     end
 
     context 'when any stem subjects are the same' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_stem_subject' },
-          { 'subject' => 'any_stem_subject' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_stem_subject' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_stem_subject' }
         ]
       end
 
@@ -46,8 +51,8 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
     context 'when any stem subjects and grade are the same' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_stem_subject', minimum_grade_required: 'B' },
-          { 'subject' => 'any_stem_subject', minimum_grade_required: 'B' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_stem_subject', minimum_grade_required: 'B' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_stem_subject', minimum_grade_required: 'B' }
         ]
       end
 
@@ -61,8 +66,8 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
     context 'when any modern foreign language subjects are the same' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_modern_foreign_language' },
-          { 'subject' => 'any_modern_foreign_language' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language' }
         ]
       end
 
@@ -74,15 +79,18 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
     context 'when any modern foreign language subjects are the same but grades are different' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' },
-          { 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'B' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'B' }
         ]
       end
 
       it 'renders the correct content' do
-        expect(grouped_a_level_subject_requirements).to eq([
-                                                             'Any modern foreign language - Grade A or above', 'Any modern foreign language - Grade B or above'
-                                                           ])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any modern foreign language - Grade A or above',
+            'Any modern foreign language - Grade B or above'
+          ]
+        )
       end
     end
 
@@ -91,23 +99,25 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
 
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' },
-          { 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' }
+          { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' }
         ]
       end
 
       it 'renders the correct content' do
-        expect(grouped_a_level_subject_requirements).to eq([
-                                                             'Any two modern foreign languages - Grade A or above, or equivalent qualification'
-                                                           ])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any two modern foreign languages - Grade A or above, or equivalent qualification'
+          ]
+        )
       end
     end
 
     context 'when any other subjects are the same' do
       let(:a_level_subject_requirements) do
         [
-          { 'subject' => 'other_subject', 'other_subject' => 'Geography' },
-          { 'subject' => 'other_subject', 'other_subject' => 'Geography' }
+          { 'uuid' => 'uuid-1', 'subject' => 'other_subject', 'other_subject' => 'Geography' },
+          { 'uuid' => 'uuid-2', 'subject' => 'other_subject', 'other_subject' => 'Geography' }
         ]
       end
 
@@ -116,13 +126,51 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       end
     end
 
+    context 'when duplicate with A level with equivalency tests' do
+      let(:course) { create(:course, :with_a_level_requirements, a_level_subject_requirements:).decorate }
+      let(:a_level_subject_requirements) do
+        [
+          { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language', minimum_grade_required: 'A' }
+        ]
+      end
+
+      it 'renders the subject with equivalency' do
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any two modern foreign languages - Grade A or above, or equivalent qualification'
+          ]
+        )
+      end
+    end
+
+    context 'when duplicate with A level with equivalency tests without grade' do
+      let(:course) { create(:course, :with_a_level_requirements, a_level_subject_requirements:).decorate }
+      let(:a_level_subject_requirements) do
+        [
+          { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language' },
+          { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language' }
+        ]
+      end
+
+      it 'renders the subject with equivalency' do
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any two modern foreign languages, or equivalent qualification'
+          ]
+        )
+      end
+    end
+
     context 'when considering candidates who need A level equivalency tests' do
       let(:course) { create(:course, :with_a_level_requirements).decorate }
 
       it 'renders the subject with equivalency' do
-        expect(grouped_a_level_subject_requirements).to eq([
-                                                             'Any subject - Grade A or above, or equivalent qualification'
-                                                           ])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            'Any subject - Grade A or above, or equivalent qualification'
+          ]
+        )
       end
     end
   end
