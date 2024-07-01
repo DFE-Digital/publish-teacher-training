@@ -21,7 +21,7 @@ feature 'Edit provider course details' do
     scenario 'I can edit a course details' do
       when_i_fill_in_course_code_with valid_course_code
       and_i_fill_in_course_title_with valid_course_name
-      and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, valid_date_year
+      and_i_fill_in_course_start_date_with valid_date_month, valid_date_year
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
       and_i_select_the_send_checkbox
       and_i_click_the_continue_button
@@ -38,7 +38,7 @@ feature 'Edit provider course details' do
     scenario 'I cannot use invalid course details' do
       when_i_fill_in_course_code_with existing_course_code
       and_i_fill_in_course_title_with valid_course_name
-      and_i_fill_in_course_start_date_with valid_date_day, valid_date_month, invalid_date_year
+      and_i_fill_in_course_start_date_with valid_date_month, invalid_date_year
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, invalid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
@@ -46,7 +46,7 @@ feature 'Edit provider course details' do
     end
 
     scenario 'I cannot use invalid date format' do
-      when_i_fill_in_course_start_date_with invalid_date_day, invalid_date_month, valid_date_year
+      when_i_fill_in_course_start_date_with invalid_date_month, valid_date_year
       and_i_fill_in_course_application_open_from_with invalid_date_day, invalid_date_month, valid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
@@ -57,7 +57,7 @@ feature 'Edit provider course details' do
     scenario 'I cannot use a blank course details' do
       when_i_fill_in_course_code_with blank_value
       and_i_fill_in_course_title_with blank_value
-      and_i_fill_in_course_start_date_with blank_value, blank_value, blank_value
+      and_i_fill_in_course_start_date_with blank_value, blank_value
       and_i_fill_in_course_application_open_from_with blank_value, blank_value, blank_value
       and_i_click_the_continue_button
       then_i_see_the_error_summary
@@ -150,8 +150,7 @@ feature 'Edit provider course details' do
     support_provider_course_edit_page.name.set(course_name)
   end
 
-  def when_i_fill_in_course_start_date_with(day, month, year)
-    support_provider_course_edit_page.start_date_day.set(day)
+  def when_i_fill_in_course_start_date_with(month, year)
     support_provider_course_edit_page.start_date_month.set(month)
     support_provider_course_edit_page.start_date_year.set(year)
   end
@@ -183,7 +182,6 @@ feature 'Edit provider course details' do
   end
 
   def then_i_see_the_updated_start_date
-    expect(support_provider_course_edit_page.start_date_day.value).to eq(valid_date_day)
     expect(support_provider_course_edit_page.start_date_month.value).to eq(valid_date_month)
     expect(support_provider_course_edit_page.start_date_year.value).to eq(valid_date_year)
   end

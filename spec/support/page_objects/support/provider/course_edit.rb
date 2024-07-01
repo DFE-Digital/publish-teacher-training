@@ -8,7 +8,6 @@ module PageObjects
 
         element :course_code, '#support-edit-course-form-course-code-field'
         element :name, '#support-edit-course-form-name-field'
-        element :start_date_day, '#support_edit_course_form_start_date_3i'
         element :start_date_month, '#support_edit_course_form_start_date_2i'
         element :start_date_year, '#support_edit_course_form_start_date_1i'
         element :application_open_from_day, '#support_edit_course_form_applications_open_from_3i'
