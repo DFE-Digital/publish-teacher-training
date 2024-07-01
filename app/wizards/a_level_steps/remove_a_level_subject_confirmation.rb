@@ -24,14 +24,14 @@ module ALevelSteps
     end
 
     def next_step
-      if confirm_deletion? && no_a_level_subject_requirements?
+      if deletion_confirmed? && no_a_level_subject_requirements?
         :exit
       else
         :add_a_level_to_a_list
       end
     end
 
-    def confirm_deletion?
+    def deletion_confirmed?
       confirmation == 'yes'
     end
 

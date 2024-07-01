@@ -5,7 +5,7 @@ class RemoveALevelSubjectConfirmationStore < DfE::Wizard::Store
   delegate :uuid, to: :current_step
 
   def destroy
-    return unless current_step.confirm_deletion?
+    return unless current_step.deletion_confirmed?
 
     a_level_subject_requirements = course.a_level_subject_requirements.reject { |req| req['uuid'] == uuid }
 
