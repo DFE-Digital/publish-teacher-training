@@ -14,16 +14,12 @@ class ALevelRowComponent < ViewComponent::Base
   end
 
   def a_level_subject_row_content(a_level_subject_requirement)
-    row_value = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement).row_value
+    a_level_subject_requirement_row_component = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement)
 
-    if @course.accept_a_level_equivalency?
-      [
-        row_value,
-        I18n.t('course.a_level_equivalencies.suffix')
-      ].join(', ')
-    else
-      row_value
-    end
+    a_level_subject_requirement_row_component.add_equivalency_suffix(
+      course:,
+      row_value: a_level_subject_requirement_row_component.row_value
+    )
   end
 
   def pending_a_level_summary_content
