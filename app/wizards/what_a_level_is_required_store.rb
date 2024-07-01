@@ -38,8 +38,9 @@ class WhatALevelIsRequiredStore < DfE::Wizard::Store
     {
       uuid:,
       subject:,
-      other_subject: other_subject.presence,
       minimum_grade_required: minimum_grade_required.presence
-    }.compact
+    }.tap do |requirements|
+      requirements[:other_subject] = other_subject if subject == 'other_subject'
+    end.compact
   end
 end

@@ -77,12 +77,46 @@ RSpec.describe WhatALevelIsRequiredStore do
     end
 
     context 'when updating an A level other subject requirements' do
-      let(:course) { create(:course, :with_a_level_requirements, a_level_subject_requirements: [{ uuid: 'm3n4o5p6', subject: 'any_stem_subject' }]) }
-      let(:step_params) { { subject: 'other_subject', other_subject: 'Mathematics', minimum_grade_required: 'D', uuid: 'm3n4o5p6' } }
+      let(:course) do
+        create(
+          :course,
+          :with_a_level_requirements,
+          a_level_subject_requirements: [{ uuid: 'm3n4o5p6', subject: 'any_stem_subject' }]
+        )
+      end
+      let(:step_params) do
+        { subject: 'other_subject', other_subject: 'Mathematics', minimum_grade_required: 'D', uuid: 'm3n4o5p6' }
+      end
 
       it 'updates the course a_level_subject_requirements correctly' do
         expect { subject }.to change { wizard.course.reload.a_level_subject_requirements }
           .to([{ 'subject' => 'other_subject', 'other_subject' => 'Mathematics', 'minimum_grade_required' => 'D', 'uuid' => 'm3n4o5p6' }])
+      end
+    end
+
+    context 'when updating an A level from other subject to any subject' do
+      let(:course) do
+        create(
+          :course,
+          :with_a_level_requirements,
+          a_level_subject_requirements: [{ uuid: 'm3n4o5p6', subject: 'other_subject', other_subject: 'Mathematics' }]
+        )
+      end
+      let(:step_params) do
+        { subject: 'any_subject', other_subject: 'Mathematics', minimum_grade_required: 'D', uuid: 'm3n4o5p6' }
+      end
+
+      it 'updates the course a_level_subject_requirements correctly' do
+        store.save
+        course.reload
+
+        expect(course.a_level_subject_requirements).to eq([
+                                                            {
+                                                              'uuid' => 'm3n4o5p6',
+                                                              'subject' => 'any_subject',
+                                                              'minimum_grade_required' => 'D'
+                                                            }
+                                                          ])
       end
     end
   end
