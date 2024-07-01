@@ -13,6 +13,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     when_i_click_to_preview_the_course
     then_i_see_the_a_level_requirements_content
+    and_i_do_not_see_the_degree_content
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -48,7 +49,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
         { 'uuid' => 'uuid-1', 'subject' => 'any_subject', 'minimum_grade_required' => 'A' },
         { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A*' },
         { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A*' }
-      ]
+      ],
+      degree_grade: nil,
+      additional_degree_subject_requirements: nil,
+      degree_subject_requirements: nil
     )
   end
 
@@ -75,5 +79,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_content('We’ll consider candidates with pending A levels.')
     expect(page).to have_content('We’ll consider candidates who need to take A level equivalency tests.')
     expect(page).to have_content('Some additional text about A level equivalencies')
+  end
+
+  def and_i_do_not_see_the_degree_content
+    expect(page).to have_no_content('An undergraduate degree, or equivalent')
+    expect(page).to have_no_content('Enter degree requirements')
   end
 end

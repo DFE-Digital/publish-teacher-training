@@ -10,6 +10,29 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
   let(:ske_url_name) { 'subject knowledge enhancement (SKE) course.' }
   let(:ske_url) { 'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement' }
 
+  context 'when teacher degree apprenticeship course' do
+    let(:subject_name) { :physics }
+    let(:course) do
+      build(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :with_a_level_requirements,
+        :resulting_in_undergraduate_degree_with_qts,
+        subjects:,
+        accept_gcse_equivalency: false,
+        accept_pending_gcse: false
+      )
+    end
+
+    it 'renders A levels and GCSEs only and ignores degrees' do
+      expected_text = <<~TEXT
+        Entry requirements Qualifications needed A levels Any subject - Grade A or above, or equivalent qualification We’ll consider candidates with pending A levels. We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) or above in English, maths and science, or equivalent qualification. We will not consider candidates with pending GCSEs. We will not consider candidates who need to take a GCSE equivalency test.
+      TEXT
+
+      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to include(expected_text.strip)
+    end
+  end
+
   context 'when physics is selected' do
     let(:subject_name) { :physics }
 
