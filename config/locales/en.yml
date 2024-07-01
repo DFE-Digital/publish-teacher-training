@@ -301,6 +301,10 @@ en:
         add_another_a_level_options:
           "yes": "Yes"
           "no": "No"
+      remove_a_level_subject_confirmation:
+        confirmation_options:
+          "yes": "Yes"
+          "no": "No"
       consider_pending_a_level:
         pending_a_level_options:
           "yes": "Yes"
@@ -324,6 +328,8 @@ en:
       success_message: You have added a required A level
     add_a_level_to_a_list:
       heading: Required A levels
+    remove_a_level_subject_confirmation:
+      heading: Are you sure you want to remove %{subject}?
     consider_pending_a_level:
       heading: Will you consider candidates with pending A levels?
       hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
@@ -868,6 +874,10 @@ en:
           attributes:
             add_another_a_level:
               blank: Select if you want to add another A level
+        remove_a_level_subject_confirmation:
+          attributes:
+            confirmation:
+              blank: Select if you want to remove %{subject}
         consider_pending_a_level:
           attributes:
             pending_a_level:
