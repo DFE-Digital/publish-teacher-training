@@ -26,7 +26,7 @@ module Find
         private
 
         def grouped_a_level_subject_requirements
-          @a_level_subject_requirements.group_by(&:itself).transform_values(&:count)
+          @a_level_subject_requirements.group_by { |req| req.except('uuid') }.transform_values(&:count)
         end
       end
     end

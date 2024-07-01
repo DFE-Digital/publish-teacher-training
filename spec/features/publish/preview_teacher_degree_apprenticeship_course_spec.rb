@@ -43,7 +43,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :with_a_level_requirements,
       :resulting_in_undergraduate_degree_with_qts,
       provider: @provider,
-      additional_a_level_equivalencies: 'Some additional text about A level equivalencies'
+      additional_a_level_equivalencies: 'Some additional text about A level equivalencies',
+      a_level_subject_requirements: [
+        { 'uuid' => 'uuid-1', 'subject' => 'any_subject', 'minimum_grade_required' => 'A' },
+        { 'uuid' => 'uuid-1', 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A*' },
+        { 'uuid' => 'uuid-2', 'subject' => 'any_modern_foreign_language', 'minimum_grade_required' => 'A*' }
+      ]
     )
   end
 
@@ -66,6 +71,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def then_i_see_the_a_level_requirements_content
     expect(page).to have_content('A levels')
     expect(page).to have_content('Any subject - Grade A or above, or equivalent qualification')
+    expect(page).to have_content('Any two modern foreign languages - Grade A*, or equivalent qualification')
     expect(page).to have_content('We’ll consider candidates with pending A levels.')
     expect(page).to have_content('We’ll consider candidates who need to take A level equivalency tests.')
     expect(page).to have_content('Some additional text about A level equivalencies')
