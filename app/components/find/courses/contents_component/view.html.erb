@@ -1,12 +1,12 @@
 <h2 class="govuk-heading-m">Contents</h2>
 <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
+  <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
   <% if about_course.present? || preview? %>
     <li><%= govuk_link_to "Course summary", "#section-about" %></li>
   <% end %>
   <% if how_school_placements_work.present? || program_type == "higher_education_programme" || program_type == "scitt_programme" || preview? %>
     <li><%= govuk_link_to "Training locations", "#training-locations" %></li>
   <% end %>
-  <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
   <% if provider.train_with_us.present? || about_accrediting_provider.present? || preview? %>
     <li><%= govuk_link_to "About the training provider", "#section-about-provider" %></li>
   <% end %>

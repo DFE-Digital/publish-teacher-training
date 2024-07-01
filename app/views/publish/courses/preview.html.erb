@@ -27,11 +27,11 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render Find::Courses::ContentsComponent::View.new(course) %>
 
+    <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
+
     <%= render partial: "find/courses/about_course", locals: { course: } %>
 
     <%= render Find::Courses::AboutSchoolsComponent::View.new(course) %>
-
-    <%= render Find::Courses::EntryRequirementsComponent::View.new(course:) %>
 
     <% if course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: } %>

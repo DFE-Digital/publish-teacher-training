@@ -34,13 +34,13 @@
 
     <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
+    <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
+
     <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course) %>
-
-    <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
     <% if @course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: @course } %>
