@@ -70,6 +70,13 @@ en:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
+      about_schools_component:
+        view:
+          view_list_of_school_placements: View list of school placements
+          work_with_schools: We work with the following schools to provide your school placements.
+      placements:
+        heading: School placements at %{provider_name}
+        back: Back to %{course_name} (%{course_code})
       show:
         back_to_search: Back to search results
     scholarships:

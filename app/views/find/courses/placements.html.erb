@@ -1,0 +1,21 @@
+<%= content_for :page_title do %>
+  <%= t(
+    "find.courses.placements.heading",
+    provider_name: @course.provider_name
+  ) %>
+<% end %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    href: search_ui_course_page_url(
+      provider_code: @course.provider_code,
+      course_code: @course.course_code
+    ),
+    text: t(
+      "find.courses.placements.back",
+      course_name: @course.name,
+      course_code: @course.course_code
+    )
+  ) %>
+<% end %>
+
+<%= render partial: "shared/courses/placements", locals: { course: @course } %>
