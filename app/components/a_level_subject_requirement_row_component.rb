@@ -33,7 +33,7 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
     if other_subject?
       other_subject
     else
-      I18n.t("helpers.label.what_a_level_is_required.plural_subject_options.#{subject}", count: IN_WORDS[count]).to_s
+      I18n.t("helpers.label.what_a_level_is_required.plural_subject_options.#{subject}", count_in_words: IN_WORDS[count]).to_s
     end
   end
 
