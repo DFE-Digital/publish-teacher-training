@@ -84,15 +84,6 @@ en:
         not_consider_pending_a_level: We will not consider candidates with pending A levels.
         consider_a_level_equivalency: We’ll consider candidates who need to take A level equivalency tests.
         not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
-        a_level_requirements:
-          plural: Any %{count} %{subject} subjects
-        a_level_subjects:
-          any_subject: "any subject"
-          any_stem_subject: "STEM"
-          any_modern_foreign_language: "Modern Foreign Language"
-          any_humanities_subject: "Humanities"
-          any_science_subject: "Science"
-          other_subject: "other"
       show:
         back_to_search: Back to search results
     scholarships:
