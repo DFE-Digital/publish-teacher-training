@@ -34,6 +34,8 @@ module "web_application" {
   max_memory             = each.value.max_memory
   replicas               = each.value.replicas
   probe_path             = "/ping"
+
+  send_traffic_to_maintenance_page = var.send_traffic_to_maintenance_page
 }
 
 module "worker_application" {
