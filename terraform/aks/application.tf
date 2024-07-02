@@ -61,4 +61,6 @@ module "worker_application" {
   replicas      = each.value.replicas
   enable_logit  = var.enable_logit
   probe_command = ["pgrep", "-f", "sidekiq"]
+
+  enable_gcp_wif = true
 }
