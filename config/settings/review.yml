@@ -16,3 +16,5 @@ authentication:
   secret: secret
   mode: persona
 
+features:
+  send_request_data_to_bigquery: true
