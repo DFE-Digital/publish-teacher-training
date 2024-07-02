@@ -296,10 +296,10 @@ GEM
       representable (~> 3.0)
       retriable (>= 2.0, < 4.a)
       rexml
-    google-cloud-bigquery (1.49.1)
+    google-cloud-bigquery (1.50.0)
       bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
-      google-apis-bigquery_v2 (~> 0.62)
+      google-apis-bigquery_v2 (~> 0.71)
       google-apis-core (~> 0.13)
       google-cloud-core (~> 1.6)
       googleauth (~> 1.9)
