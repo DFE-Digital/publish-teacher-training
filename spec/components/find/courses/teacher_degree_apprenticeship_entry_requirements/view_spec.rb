@@ -40,4 +40,22 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
       expect(result.text).to eq('')
     end
   end
+
+  context 'when there are no A levels' do
+    let(:course) do
+      build(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        a_level_requirements: nil,
+        a_level_subject_requirements: [],
+        accept_pending_gcse: nil,
+        additional_a_level_equivalencies: nil
+      )
+    end
+
+    it 'renders the headings' do
+      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to eq('A levels GCSEs')
+    end
+  end
 end

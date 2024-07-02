@@ -1,5 +1,7 @@
-<h4 class="govuk-body">A levels</h4>
+<h4 class="govuk-heading-s">A levels</h4>
 
-<%= render Find::Courses::ALevelComponent::View.new(course:) %>
+<% if course.a_levels_requirements_answered? %>
+  <%= render Find::Courses::ALevelComponent::View.new(course:) %>
+<% end %>
 
-<h4 class="govuk-body">GCSEs</h4>
+<h4 class="govuk-heading-s">GCSEs</h4>
