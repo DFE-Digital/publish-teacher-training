@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.2.3-alpine3.19
+FROM ruby:3.2.4-alpine3.20
 
 RUN apk add --no-cache libxml2
 
