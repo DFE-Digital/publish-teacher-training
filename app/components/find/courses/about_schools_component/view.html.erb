@@ -49,19 +49,11 @@
         <%= course.placements_heading %>
       </h3>
 
-      <p class="govuk-body">
-        We work with the following schools to provide your school placements.
-      </p>
+      <p class="govuk-body"><%= t(".work_with_schools") %></p>
 
-      <ul class="govuk-list govuk-list--spaced" id="course_school_placements">
-        <% course.preview_site_statuses.each do |site_status| %>
-          <li>
-            <strong><%= smart_quotes(site_status.site.location_name) %></strong>
-            <br>
-            <%= smart_quotes(site_status.site.decorate.full_address) %>
-          </li>
-        <% end %>
-      </ul>
+      <p class="govuk-body">
+        <%= govuk_link_to(t(".view_list_of_school_placements"), placements_url) %>
+      </p>
     <% end %>
   </div>
 </div>

@@ -24,6 +24,11 @@ module Publish
       flash.delete(:error_summary)
     end
 
+    def placements
+      fetch_course
+      authorize @course
+    end
+
     def details
       fetch_course
 

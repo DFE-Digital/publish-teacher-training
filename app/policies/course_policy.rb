@@ -40,6 +40,7 @@ class CoursePolicy
   end
 
   alias preview? show?
+  alias placements? show?
   alias apply? show?
   alias details? show?
   alias update? show?

@@ -148,6 +148,7 @@ namespace :publish, as: :publish do
       end
 
       resources :courses, param: :code, only: %i[index new create show] do
+        get '/placements', on: :member, to: 'courses#placements', as: 'placements'
         get '/apply', on: :member, to: 'courses#apply', as: :apply
         get '/details', on: :member, to: 'courses#details'
 

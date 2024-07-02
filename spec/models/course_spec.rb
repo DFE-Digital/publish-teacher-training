@@ -22,6 +22,9 @@ describe Course do
   its(:to_s) { is_expected.to eq("Biology (#{course.provider.provider_code}/3X9F) [#{course.recruitment_cycle}]") }
   its(:modular) { is_expected.to eq('') }
 
+  it { is_expected.to delegate_method(:provider_name).to(:provider).allow_nil }
+  it { is_expected.to delegate_method(:provider_code).to(:provider).allow_nil }
+
   describe '#campaign_name' do
     it 'assigns the campaign' do
       course.engineers_teach_physics!
