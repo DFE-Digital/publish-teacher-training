@@ -50,6 +50,11 @@ variable "alert_window_size" {
   default = "PT5M"
 }
 
+variable "send_traffic_to_maintenance_page" {
+  default     = false
+  description = "During a maintenance operation, keep sending traffic to the maintenance page instead of resetting the ingress"
+}
+
 variable "namespace" {
   type = string
 }
