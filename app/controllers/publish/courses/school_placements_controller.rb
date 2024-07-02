@@ -8,6 +8,10 @@ module Publish
 
       before_action :authorise_with_pundit
 
+      def index
+        @course = course
+      end
+
       def edit
         @course_school_placements_form = CourseSchoolPlacementsForm.new(course_enrichment)
         @copied_fields = copy_content_check(::Courses::Copy::SCHOOL_PLACEMENTS_FIELDS)

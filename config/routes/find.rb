@@ -13,6 +13,7 @@ namespace :find, path: '/' do
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/terms-conditions', to: 'pages#terms', as: :terms
   get '/course/:provider_code/:course_code', to: 'courses#show', as: 'course'
+  get '/course/:provider_code/:course_code/placements', to: 'placements#index', as: :placements
   get '/course/:provider_code/:course_code/apply', to: 'courses#apply', as: :apply
   get '/results', to: 'results#index', as: 'results'
   get '/location-suggestions', to: 'location_suggestions#index'

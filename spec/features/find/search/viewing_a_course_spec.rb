@@ -68,6 +68,13 @@ feature 'Viewing a findable course' do
     end
   end
 
+  scenario 'user views school placements' do
+    given_there_is_a_findable_course
+    when_i_visit_the_course_page
+    when_i_click('View list of school placements')
+    then_i_should_be_on_the_school_placements_page
+  end
+
   private
 
   def given_there_is_a_findable_course
@@ -280,9 +287,7 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.school_placements).to have_no_content('Suspended site with vacancies')
 
-    @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
-      expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
-    end
+    expect(find_course_show_page).to have_link('View list of school placements')
 
     expect(find_course_show_page).to have_course_advice
 
@@ -344,5 +349,15 @@ feature 'Viewing a findable course' do
       :accredited_provider,
       provider_name: 'Accrediting Provider 1'
     )
+  end
+
+  def when_i_click(button)
+    click_on(button)
+  end
+
+  def then_i_should_be_on_the_school_placements_page
+    @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
+      expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
+    end
   end
 end

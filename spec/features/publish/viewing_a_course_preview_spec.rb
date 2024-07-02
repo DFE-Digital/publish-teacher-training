@@ -127,6 +127,13 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  scenario 'user views school placements' do
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    when_i_visit_the_publish_course_preview_page
+    when_i_click('View list of school placements')
+    then_i_should_be_on_the_school_placements_page
+  end
+
   private
 
   def then_i_see_custom_address
@@ -272,7 +279,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     expect(publish_course_preview_page).to have_study_sites_table
-    expect(publish_course_preview_page).to have_school_placements_table
+    expect(publish_course_preview_page).to have_link('View list of school placements')
 
     expect(publish_course_preview_page).to have_course_advice
 
@@ -474,5 +481,13 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def and_i_do_not_see_financial_support
     expect(publish_course_preview_page).not_to have_scholarship_amount
     expect(publish_course_preview_page).not_to have_bursary_amount
+  end
+
+  def when_i_click(button)
+    click_on(button)
+  end
+
+  def then_i_should_be_on_the_school_placements_page
+    expect(publish_course_preview_page).to have_school_placements_table
   end
 end
