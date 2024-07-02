@@ -11,7 +11,7 @@ module Find
           @a_level_subject_requirements = Array(course.a_level_subject_requirements)
         end
 
-        def to_a
+        def to_a_level_equivalency_array
           grouped_a_level_subject_requirements.map do |a_level_subject_requirement, count|
             component = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement)
 

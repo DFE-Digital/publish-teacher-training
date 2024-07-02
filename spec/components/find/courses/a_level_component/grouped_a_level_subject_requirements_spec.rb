@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements do
   subject(:grouped_a_level_subject_requirements) do
-    described_class.new(course).to_a
+    described_class.new(course).to_a_level_equivalency_array
   end
 
   let(:course) { create(:course, a_level_subject_requirements:).decorate }
   let(:a_level_subject_requirements) { [] }
 
-  describe '#to_a' do
+  describe '#to_a_level_equivalency_array' do
     context 'with up to 4 singular subjects' do
       let(:a_level_subject_requirements) do
         [
