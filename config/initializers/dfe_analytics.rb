@@ -52,4 +52,9 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
+
+  # Whether to use azure workload identity federation for authentication
+  # instead of the BigQuery API JSON Key. Note that this also will also
+  # use a new version of the BigQuery streaming APIs.
+  config.azure_federated_auth = true
 end
