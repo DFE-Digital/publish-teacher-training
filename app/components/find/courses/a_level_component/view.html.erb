@@ -1,0 +1,17 @@
+<% if a_levels_not_required? %>
+  <p class="govuk-body"><%= a_levels_not_required_content %></p>
+<% else %>
+  <% a_level_subject_requirements.each do |a_level_subject_requirement| %>
+    <p class="govuk-body">
+      <%= a_level_subject_requirement %>
+    </p>
+  <% end %>
+  <p class="govuk-body"><%= pending_a_level_summary_content %></p>
+  <p class="govuk-body"><%= a_level_equivalency_summary_content %></p>
+
+  <% if course.accept_a_level_equivalency? && course.additional_a_level_equivalencies.present? %>
+    <p class="govuk-body">
+      <%= course.additional_a_level_equivalencies %>
+    </p>
+  <% end %>
+<% end %>
