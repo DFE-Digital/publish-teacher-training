@@ -25,11 +25,6 @@ DfE::Analytics.configure do |config|
   #
   config.bigquery_dataset = Settings.google.bigquery.dataset
 
-  # Service account JSON key for the BigQuery API. See
-  # https://cloud.google.com/bigquery/docs/authentication/service-account-file
-  #
-  config.bigquery_api_json_key = Settings.google.bigquery.api_json_key
-
   # Enables the EntityTableCheckJob
   #
   config.entity_table_checks_enabled = true
