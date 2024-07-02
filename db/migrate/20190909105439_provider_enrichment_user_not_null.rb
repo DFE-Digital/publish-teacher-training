@@ -14,13 +14,16 @@ class ProviderEnrichmentUserNotNull < ActiveRecord::Migration[5.2]
       pe.updated_by_user_id = some_id
       pe.save!
     end
-
+    # rubocop:disable Rails/BulkChangeTable
     change_column_null :provider_enrichment, :updated_by_user_id, false
     change_column_null :provider_enrichment, :created_by_user_id, false
+    # rubocop:enable Rails/BulkChangeTable
   end
 
   def down
+    # rubocop:disable Rails/BulkChangeTable
     change_column_null :provider_enrichment, :updated_by_user_id, true
     change_column_null :provider_enrichment, :created_by_user_id, true
+    # rubocop:enable Rails/BulkChangeTable
   end
 end
