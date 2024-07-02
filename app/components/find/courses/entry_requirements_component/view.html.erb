@@ -31,13 +31,7 @@
       <% end %>
     <% end %>
 
-    <% if course.teacher_degree_apprenticeship? %>
-      <p class="govuk-body">A levels</p>
-
-      <%= render Find::Courses::ALevelComponent::View.new(course:) %>
-
-      <p class="govuk-body">GCSEs</p>
-    <% end %>
+    <%= render Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View.new(course:) %>
 
     <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>

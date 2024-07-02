@@ -22,7 +22,7 @@ module Find
         end
 
         def a_level_subject_requirements
-          GroupedALevelSubjectRequirements.new(course).to_a
+          GroupedALevelSubjectRequirements.new(course).to_a_level_equivalency_array
         end
 
         def pending_a_level_summary_content
