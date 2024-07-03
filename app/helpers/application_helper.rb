@@ -36,6 +36,12 @@ module ApplicationHelper
     end
   end
 
+  def sorted(column, title = nil)
+    title ||= column.titleize
+    direction = column == params[:sort] && params[:direction] == 'asc' ? 'desc' : 'asc'
+    link_to title, sort: column, direction:
+  end
+
   # TODO: refactor enrichment_summary method to not use an instance variable
   def enrichment_summary(summary_list, model, key, value, fields, action_path: nil, action_visually_hidden_text: nil, render_errors: true)
     action = render_action(action_path, action_visually_hidden_text || key.downcase)

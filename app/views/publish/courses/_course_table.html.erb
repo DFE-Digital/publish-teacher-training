@@ -1,8 +1,12 @@
 <table class="govuk-table app-table--vertical-align-middle app-table--courses">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th class="govuk-table__header">Course</th>
-      <th class="govuk-table__header">Status</th>
+      <th class="govuk-table__header">
+        <%= sorted "course" %>
+      </th>
+      <th class="govuk-table__header">
+        <%= sorted "status" %>
+      </th>
       <th class="govuk-table__header">
        Is it on <abbr class="app-!-text-decoration-underline-dotted" title="Find postgraduate teacher training">Find</abbr>?
       </th>
