@@ -118,7 +118,7 @@ RSpec.describe ALevelRowComponent do
   describe 'when course has errors on A levels' do
     let(:rendered_component) { render_inline(component) }
     let(:component) do
-      described_class.new(course: course.decorate, errors: format_publish_error_messages(course))
+      described_class.new(course: course.decorate, errors: course.errors.messages)
     end
     let(:course) do
       create(
@@ -203,12 +203,6 @@ RSpec.describe ALevelRowComponent do
           )
         )
       end
-    end
-  end
-
-  def format_publish_error_messages(course)
-    course.errors.messages.transform_values do |error_messages|
-      error_messages.map { |message| message.gsub(/^\^/, '') }
     end
   end
 end
