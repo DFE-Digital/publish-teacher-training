@@ -81,4 +81,89 @@ describe '#publishable?' do
       it { is_expected.not_to be_empty }
     end
   end
+
+  context 'when publishing a NON teacher degree apprenticeship course without A levels' do
+    it 'does not require A level to be answered' do
+      course = create(
+        :course,
+        a_level_requirements: nil
+      )
+      course.valid?(:publish)
+      expect(course.errors[:a_level_requirements]).to eq([])
+    end
+  end
+
+  context 'when publishing a teacher degree apprenticeship course without A levels' do
+    it 'requires A level to be answered' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        a_level_requirements: nil
+      )
+      course.valid?(:publish)
+      expect(course.errors[:a_level_requirements]).to include('Enter A level requirements')
+    end
+  end
+
+  context 'when publishing a teacher degree apprenticeship course without A levels subject requirements' do
+    it 'requires to add A level subject requirement' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        a_level_requirements: true,
+        a_level_subject_requirements: []
+      )
+      course.valid?(:publish)
+      expect(course.errors[:a_level_subject_requirements]).to include('Enter A level requirements')
+    end
+  end
+
+  context 'when publishing a teacher degree apprenticeship course with A levels without pending A level answered' do
+    it 'requires to add if accept pending A level' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        :with_a_level_requirements,
+        accept_pending_a_level: nil
+      )
+      course.valid?(:publish)
+      expect(course.errors[:accept_pending_a_level]).to include('Enter information on pending A levels')
+    end
+  end
+
+  context 'when publishing a teacher degree apprenticeship course with A levels without A level equivalency answered' do
+    it 'requires to add A level equivalency requirement' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        :with_a_level_requirements,
+        accept_a_level_equivalency: nil
+      )
+      course.valid?(:publish)
+      expect(course.errors[:accept_a_level_equivalency]).to include('Enter A level equivalency test requirements')
+    end
+  end
+
+  context 'when publishing a teacher degree apprenticeship course and no A levels required' do
+    it 'is valid' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        a_level_requirements: false,
+        a_level_subject_requirements: [],
+        accept_pending_a_level: nil,
+        accept_a_level_equivalency: nil
+      )
+      course.valid?(:publish)
+      expect(course.errors[:a_level_requirements]).to eq([])
+      expect(course.errors[:a_level_subject_requirements]).to eq([])
+      expect(course.errors[:accept_pending_a_level]).to eq([])
+      expect(course.errors[:accept_a_level_equivalency]).to eq([])
+    end
+  end
 end

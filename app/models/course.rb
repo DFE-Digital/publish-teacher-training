@@ -345,6 +345,7 @@ class Course < ApplicationRecord
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
   validate :accredited_provider_exists_in_current_cycle, on: :publish, unless: -> { self_accredited? }
   validates_with UniqueCourseValidator, on: :new
+  validates_with ALevelCourseValidator, on: :publish, if: :teacher_degree_apprenticeship?
 
   validates :name, :profpost_flag, :program_type, :qualification, :start_date, :study_mode, presence: true
   validates :age_range_in_years, presence: true, on: %i[new create publish], unless: :further_education_course?

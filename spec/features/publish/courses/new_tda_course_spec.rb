@@ -44,6 +44,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
   end
@@ -84,6 +85,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
   end
@@ -123,6 +125,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_do_not_see_the_change_link_for_course_length
 
     given_i_fill_in_all_other_fields_for_the_course
+    and_i_add_a_level_requirements
     when_i_publish_the_course
     then_the_course_is_published
   end
@@ -648,6 +651,12 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def then_i_am_on_the_funding_type_page
     expect(page).to have_current_path(new_publish_provider_recruitment_cycle_courses_funding_type_path(provider_code: provider.provider_code, recruitment_cycle_year: 2025), ignore_query: true)
+  end
+
+  def and_i_add_a_level_requirements
+    click_on 'Enter A levels and equivalency test requirements'
+    choose 'No'
+    and_i_click_continue
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship

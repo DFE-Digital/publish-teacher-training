@@ -23,6 +23,7 @@ module PageObjects
       section :salary_details, Sections::SummaryList, '[data-qa="enrichment__salary_details"]'
       section :degree, Sections::SummaryList, '[data-qa="enrichment__degree_grade"]'
       section :gcse, Sections::SummaryList, '[data-qa="enrichment__accept_pending_gcse"]'
+      section :a_level, Sections::SummaryList, '[data-qa="enrichment__a_level_requirements"]'
       section :personal_qualities, Sections::SummaryList, '[data-qa="enrichment__personal_qualities"]'
       section :other_requirements, Sections::SummaryList, '[data-qa="enrichment__other_requirements"]'
       section :course_button_panel, Sections::CourseButtonPanel, '[data-qa="course__button_panel"]'

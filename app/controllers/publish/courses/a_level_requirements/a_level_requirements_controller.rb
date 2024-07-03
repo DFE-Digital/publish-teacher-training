@@ -14,6 +14,8 @@ module Publish
             course: @course,
             step_params:
           )
+
+          @wizard.valid_step? if params[:display_errors].present?
         end
 
         def create
