@@ -1,4 +1,18 @@
-<% if course.a_levels_requirements_answered? %>
+<% if has_errors? %>
+  <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do %>
+    <% a_level_errors.each do |a_level_error| %>
+      <p class="govuk-heading-s app-inset-text__title">
+        <%= t("course.#{wizard_step(a_level_error)}.heading") %>
+      </p>
+      <p class="govuk-body">
+      <%= govuk_link_to(
+            @errors[a_level_error],
+            enrichment_error_url(course:, provider_code:, field: a_level_error.to_s, message: @errors[a_level_error])
+          ) %>
+      </p>
+    <% end %>
+  <% end %>
+<% elsif minimum_a_level_completed? %>
   <% if @course.a_level_requirements.present? %>
     <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
       <p class="govuk-body">
@@ -26,17 +40,17 @@
   <% else %>
     <%= a_level_not_required_content %>
   <% end %>
-
 <% else %>
-  <%= govuk_inset_text(classes: inset_text_css_classes) do %>
-    <p class="govuk-heading-s app-inset-text__title"><%= t("publish.providers.courses.description_content.a_levels_heading") %></p>
+  <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
+    <p class="govuk-heading-s app-inset-text__title">
+      <%= t("publish.providers.courses.description_content.a_levels_heading") %>
+    </p>
     <p class="govuk-body">
       <%= govuk_link_to t("publish.providers.courses.description_content.enter_a_levels"),
        publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
           course.provider.provider_code,
           course.provider.recruitment_cycle_year,
-          course.course_code,
-          display_errors: has_errors? ? true : nil
+          course.course_code
         ) %>
     </p>
   <% end %>
