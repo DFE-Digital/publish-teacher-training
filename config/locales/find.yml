@@ -17,7 +17,7 @@ en:
         description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
       updated: Cycle schedule updated
     enic:
-      statement_of_comparability: 
+      statement_of_comparability:
         url: https://www.enic.org.uk/Qualifications/SOC/Default.aspx
     qualifications:
       qts: "QTS"
@@ -25,6 +25,7 @@ en:
       pgce_with_qts: "QTS with PGCE"
       pgde: "PGDE"
       pgde_with_qts: "PGDE with QTS"
+      undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS
     location_filter:
       errors:
         no_option: Select find courses by location or by training provider
@@ -77,6 +78,12 @@ en:
       placements:
         heading: School placements at %{provider_name}
         back: Back to %{course_name} (%{course_code})
+      a_level:
+        a_levels_not_required: A levels are not required for this course
+        consider_pending_a_level: We’ll consider candidates with pending A levels.
+        not_consider_pending_a_level: We will not consider candidates with pending A levels.
+        consider_a_level_equivalency: We’ll consider candidates who need to take A level equivalency tests.
+        not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
       show:
         back_to_search: Back to search results
     scholarships:

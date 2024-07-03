@@ -304,6 +304,12 @@ en:
           any_humanities_subject: Any humanities subject
           any_science_subject: Any science subject
           other_subject: Choose a subject
+        plural_subject_options:
+          any_subject: Any %{count_in_words} subjects
+          any_stem_subject: Any %{count_in_words} STEM subjects
+          any_modern_foreign_language: Any %{count_in_words} modern foreign languages
+          any_humanities_subject: Any %{count_in_words} humanities subjects
+          any_science_subject: Any %{count_in_words} science subjects
       add_a_level_to_a_list:
         add_another_a_level_options:
           "yes": "Yes"
