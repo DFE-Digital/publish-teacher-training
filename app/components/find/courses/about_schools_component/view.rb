@@ -38,6 +38,21 @@ module Find
           course_information_config.show_placement_guidance?(:program_type)
         end
 
+        def placements_url
+          if course.has_unpublished_changes? || (course.is_published? && course.is_running?)
+            URI.join(
+              Settings.search_ui.base_url,
+              find_placements_path(course.provider_code, course.course_code)
+            ).to_s
+          else
+            placements_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code
+            )
+          end
+        end
+
         private
 
         def course_information_config

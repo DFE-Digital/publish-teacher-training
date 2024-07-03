@@ -179,6 +179,7 @@ namespace :publish, as: :publish do
         patch '/interview-process', on: :member, to: 'courses/interview_process#update'
         get '/school-placements', on: :member, to: 'courses/school_placements#edit'
         patch '/school-placements', on: :member, to: 'courses/school_placements#update'
+        get '/placements', on: :member, to: 'courses/school_placements#index', as: :placements
 
         # This feature is deprecated and will be removed after the beginning of
         # 2025 recruitment cycle.

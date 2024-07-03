@@ -1,0 +1,21 @@
+<h1 class="govuk-heading-xl">
+  <%= t(".heading", provider_name: course.provider_name) %>
+</h1>
+
+<%= govuk_warning_text(text: t(".warning")) %>
+
+<p class="govuk-body">
+  <%= t(".will_place_you", provider_name: course.provider_name) %>
+</p>
+
+<p class="govuk-body"><%= t(".schools_to_be_placed") %></p>
+
+<ul class="govuk-list govuk-list--spaced" id="course_school_placements">
+  <% course.preview_site_statuses.each do |site_status| %>
+    <li>
+      <strong><%= smart_quotes(site_status.site.location_name) %></strong>
+      <br>
+      <%= smart_quotes(site_status.site.decorate.full_address) %>
+    </li>
+  <% end %>
+</ul>

@@ -1,4 +1,11 @@
 en:
+  shared:
+    courses:
+      placements:
+        heading: School placements at %{provider_name}
+        warning: You can’t pick which schools you will be in.
+        will_place_you: '%{provider_name} will place you in different schools you can travel to during your training.'
+        schools_to_be_placed: 'The schools you could be placed in are:'
   markdown_formatting:
     summary_text: Help formatting your text
     title: How to format your text
@@ -389,6 +396,9 @@ en:
   publish:
     providers:
       courses:
+        placements:
+          heading: School placements at %{provider_name}
+          back: Back to %{course_name} (%{course_code})
         description_content:
           course_information_heading: Course information
           about_course_label: About this course

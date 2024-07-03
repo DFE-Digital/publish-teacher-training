@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe Find::Courses::AboutSchoolsComponent::View, type: :component do
+  include Rails.application.routes.url_helpers
+
   context 'valid program_type' do
     it 'renders the component' do
       %w[higher_education_programme scitt_programme].each do |program_type|
@@ -169,6 +171,58 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         result = render_inline(described_class.new(course))
 
         expect(result.text).not_to include('Advice from Get Into Teaching Where you will train')
+      end
+    end
+  end
+
+  describe '#placements_url' do
+    context 'when course is published' do
+      it 'returns the find url' do
+        provider = build(:provider)
+        course = build(
+          :course,
+          :published,
+          provider:,
+          site_statuses: [
+            build(:site_status, :findable, site: build(:site))
+          ]
+        ).decorate
+
+        result = render_inline(described_class.new(course))
+        url = URI.join(
+          Settings.search_ui.base_url,
+          find_placements_path(course.provider_code, course.course_code)
+        ).to_s
+
+        expect(result).to have_link(
+          'View list of school placements',
+          href: url
+        )
+      end
+    end
+
+    context 'when course is not published' do
+      it 'returns the publish url' do
+        provider = create(:provider)
+        course = create(
+          :course,
+          provider:,
+          site_statuses: [
+            create(:site_status, :findable, site: create(:site))
+          ]
+        ).decorate
+
+        result = render_inline(described_class.new(course))
+        url = placements_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code
+        )
+
+        expect(result).to have_link(
+          'View list of school placements',
+          href: url
+        )
       end
     end
   end
