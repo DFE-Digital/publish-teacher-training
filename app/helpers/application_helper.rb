@@ -38,8 +38,8 @@ module ApplicationHelper
 
   def sorted(column, title = nil)
     title ||= column.titleize
-    direction = column == params[:sort] && params[:direction] == 'asc' ? 'desc' : 'asc'
-    link_to title, sort: column, direction:
+    direction = column == params[:sort] && params[:direction] == 'ascending' ? 'descending' : 'ascending'
+    link_to title, { sort: column, direction: }, class: 'govuk-link'
   end
 
   # TODO: refactor enrichment_summary method to not use an instance variable

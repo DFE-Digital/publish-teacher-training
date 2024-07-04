@@ -26,12 +26,12 @@ describe Courses::Fetch do
       let(:course_c) { build(:course, name: 'c') }
 
       it 'sorts courses in ascending order' do
-        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'course', direction: 'asc')
+        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'course', direction: 'ascending')
         expect(sorted_courses.values.flatten).to eq([course_a, course_b, course_c])
       end
 
       it 'sorts courses in descending order' do
-        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'course', direction: 'desc')
+        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'course', direction: 'descending')
         expect(sorted_courses.values.flatten).to eq([course_c, course_b, course_a])
       end
     end
@@ -46,12 +46,12 @@ describe Courses::Fetch do
       let(:published_with_unpublished_changes_course) { build(:course, enrichments: [build(:course_enrichment, :subsequent_draft)]) }
 
       it 'sorts courses by content_status and application_status in the correct ascending order' do
-        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'status', direction: 'asc')
+        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'status', direction: 'ascending')
         expect(sorted_courses.values.flatten).to eq([draft_course, rolled_over_course, published_with_unpublished_changes_course, open_course, closed_course, withdrawn_course])
       end
 
       it 'sorts courses by content_status and application_status in descending order' do
-        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'status', direction: 'desc')
+        sorted_courses = described_class.by_accrediting_provider_dynamically_sorted_list(provider, sort: 'status', direction: 'descending')
         expect(sorted_courses.values.flatten).to eq([withdrawn_course, closed_course, open_course, published_with_unpublished_changes_course, rolled_over_course, draft_course])
       end
     end

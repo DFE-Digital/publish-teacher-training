@@ -21,7 +21,7 @@ module Courses
 
         courses_by_provider.transform_values do |courses|
           sorted_courses = courses.sort_by { |course| sort_column(course, sort) }
-          sorted_courses.reverse! if sort_direction(direction) == 'desc'
+          sorted_courses.reverse! if sort_direction(direction) == 'descending'
           sorted_courses.map(&:decorate)
         end
       end
@@ -47,7 +47,7 @@ module Courses
       end
 
       def sort_direction(direction)
-        %w[asc desc].include?(direction) ? direction : 'asc'
+        %w[ascending descending].include?(direction) ? direction : 'ascending'
       end
 
       def status_order(course)
