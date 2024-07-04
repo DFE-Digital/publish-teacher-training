@@ -2,16 +2,10 @@
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" aria-sort="<%= params[:sort] == "course" ? params[:direction] : "none" %>">
-        <button type="button">
-          <%= sorted "course", "Course #{params[:direction] == 'ascending' ? '(a-z)' : '(z-a)'}" %>
-          <span class="govuk-visually-hidden">Sort by course</span>
-        </button>
+         <%= render SortableTableHeader.new(column: "course", params:, title: "Course") %>
       </th>
       <th class="govuk-table__header" aria-sort="<%= params[:sort] == "status" ? params[:direction] : "none" %>">
-        <button type="button">
-          <%= sorted "status" %>
-          <span class="govuk-visually-hidden">Sort by status</span>
-        </button>
+        <%= render SortableTableHeader.new(column: "status", params:, title: "Status") %>
       </th>
       <th class="govuk-table__header">
        Is it on <abbr class="app-!-text-decoration-underline-dotted" title="Find postgraduate teacher training">Find</abbr>?
