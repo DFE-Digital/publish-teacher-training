@@ -91,10 +91,6 @@ module Publish
       end
     end
 
-    def courses_by_accrediting_provider
-      @sorted_courses_by_accrediting_provider = ::Courses::Fetch.by_accrediting_provider_dynamically_sorted_list(provider, sort: params[:sort], direction: params[:direction])
-    end
-
     private
 
     def course_params
@@ -126,6 +122,10 @@ module Publish
       @provider ||= recruitment_cycle.providers
                                      .includes(courses: %i[sites site_statuses enrichments provider])
                                      .find_by!(provider_code: params[:provider_code])
+    end
+
+    def courses_by_accrediting_provider
+      @sorted_courses_by_accrediting_provider = ::Courses::Fetch.by_accrediting_provider_dynamically_sorted_list(provider, sort: params[:sort], direction: params[:direction])
     end
 
     def self_accredited_courses
