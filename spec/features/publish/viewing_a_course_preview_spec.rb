@@ -22,14 +22,15 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank about the training provider' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
+      and_i_click_link_or_button(@course.provider_name)
       and_i_click_link_or_button('Enter details about the training provider')
       then_i_should_be_on_about_your_organisation_page
       and_i_click_link_or_button('Back')
-      then_i_should_be_back_on_the_preview_page
+      then_i_should_be_back_on_the_provider_page
       and_i_click_link_or_button('Enter details about the training provider')
       then_i_see_markdown_formatting_guidance_for_each_field
       and_i_submit_a_valid_about_your_organisation
-      then_i_should_be_back_on_the_preview_page
+      then_i_should_be_back_on_the_provider_page
       then_i_should_see_the_updated_content('test training with your organisation')
     end
 
@@ -123,6 +124,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
         user: user_with_custom_address_requested_via_zendesk
       )
       when_i_visit_the_publish_course_preview_page
+      and_i_click_link_or_button(@course.provider_name)
       then_i_see_custom_address
     end
   end
@@ -130,8 +132,22 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   scenario 'user views school placements' do
     given_i_am_authenticated(user: user_with_fee_based_course)
     when_i_visit_the_publish_course_preview_page
-    when_i_click('View list of school placements')
+    and_i_click_link_or_button('View list of school placements')
     then_i_should_be_on_the_school_placements_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_back_on_the_preview_page
+  end
+
+  scenario 'user views provider and accredited_provider' do
+    given_i_am_authenticated(user: user_with_fee_based_course)
+    when_i_visit_the_publish_course_preview_page
+    and_i_click_link_or_button(@course.provider_name)
+    then_i_should_be_on_the_provider_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    and_i_click_link_or_button(@course.accrediting_provider.provider_name)
+    then_i_should_be_on_the_accrediting_provider_page
+    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_back_on_the_preview_page
   end
 
   private
@@ -163,40 +179,28 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       provider.provider_name
     )
 
-    expect(publish_course_preview_page.accredited_provider).to have_content(
-      accrediting_provider.provider_name
-    )
-
-    expect(publish_course_preview_page.description).to have_content(
-      course.decorate.description
-    )
-
-    expect(publish_course_preview_page.qualifications).to have_content(
+    expect(publish_course_preview_page).to have_content(
       'QTS with PGCE'
     )
 
-    expect(publish_course_preview_page.age_range_in_years).to have_content(
+    expect(publish_course_preview_page).to have_content(
       '11 to 18'
     )
 
-    expect(publish_course_preview_page.funding_option).to have_content(
+    expect(publish_course_preview_page).to have_content(
       decorated_course.funding_option
     )
 
-    expect(publish_course_preview_page.length).to have_content(
+    expect(publish_course_preview_page).to have_content(
       'Up to 2 years - full time'
     )
 
-    expect(publish_course_preview_page.applications_open_from).to have_content(
+    expect(publish_course_preview_page).to have_content(
       course.applications_open_from.strftime('%-d %B %Y')
     )
 
-    expect(publish_course_preview_page.start_date).to have_content(
+    expect(publish_course_preview_page).to have_content(
       "September #{recruitment_cycle.year}"
-    )
-
-    expect(publish_course_preview_page.provider_website).to have_content(
-      provider.website
     )
 
     expect(publish_course_preview_page).not_to have_vacancies
@@ -235,48 +239,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       'Financial support from the training provider'
     )
 
-    expect(publish_course_preview_page.train_with_us).to have_content(
-      provider.train_with_us
-    )
-
-    expect(publish_course_preview_page.about_accrediting_provider).to have_content(
-      decorated_course.about_accrediting_provider
-    )
-
     expect(publish_course_preview_page.train_with_disability).to have_content(
       provider.train_with_disability
     )
 
-    expect(publish_course_preview_page.contact_email).to have_content(
-      provider.email
-    )
-
-    expect(publish_course_preview_page.contact_telephone).to have_content(
-      provider.telephone
-    )
-
     expect(publish_course_preview_page).to have_content '2:1 or above, or equivalent'
     expect(publish_course_preview_page).to have_content 'Maths A level'
-
-    expect(publish_course_preview_page.contact_website).to have_content(
-      provider.website
-    )
-
-    expect(publish_course_preview_page.contact_address).to have_content(
-      provider.address1
-    )
-    expect(publish_course_preview_page.contact_address).to have_content(
-      provider.address2
-    )
-    expect(publish_course_preview_page.contact_address).to have_content(
-      provider.address3
-    )
-    expect(publish_course_preview_page.contact_address).to have_content(
-      provider.town
-    )
-    expect(publish_course_preview_page.contact_address).to have_content(
-      provider.address4
-    )
 
     expect(publish_course_preview_page).to have_study_sites_table
     expect(publish_course_preview_page).to have_link('View list of school placements')
@@ -430,6 +398,12 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/preview"
   end
 
+  def then_i_should_be_back_on_the_provider_page
+    expect(page).to have_current_path(
+      "/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/courses/#{course.course_code}/provider"
+    )
+  end
+
   def and_i_submit_a_valid_about_your_organisation
     fill_in 'Training with your organisation', with: 'test training with your organisation'
     fill_in 'Training with disabilities and other needs', with: 'test training with disabilities'
@@ -483,11 +457,51 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page).not_to have_bursary_amount
   end
 
-  def when_i_click(button)
-    click_on(button)
-  end
-
   def then_i_should_be_on_the_school_placements_page
     expect(publish_course_preview_page).to have_school_placements_table
+  end
+
+  def then_i_should_be_on_the_provider_page
+    expect(publish_course_preview_page.train_with_us).to have_content(
+      provider.train_with_us
+    )
+
+    expect(publish_course_preview_page).to have_content(
+      provider.email
+    )
+
+    expect(publish_course_preview_page).to have_content(
+      provider.telephone
+    )
+
+    expect(publish_course_preview_page).to have_content(
+      provider.website
+    )
+
+    expect(publish_course_preview_page).to have_content(
+      provider.address1
+    )
+    expect(publish_course_preview_page).to have_content(
+      provider.address2
+    )
+    expect(publish_course_preview_page).to have_content(
+      provider.address3
+    )
+    expect(publish_course_preview_page).to have_content(
+      provider.town
+    )
+    expect(publish_course_preview_page).to have_content(
+      provider.address4
+    )
+  end
+
+  def then_i_should_be_on_the_accrediting_provider_page
+    expect(page).to have_content(
+      accrediting_provider.provider_name
+    )
+
+    expect(publish_course_preview_page.about_accrediting_provider).to have_content(
+      decorated_course.about_accrediting_provider
+    )
   end
 end

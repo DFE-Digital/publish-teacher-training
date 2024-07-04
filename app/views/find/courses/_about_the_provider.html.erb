@@ -1,22 +1,11 @@
-<div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-about-provider">About the training provider</h2>
-  <% if course.provider.train_with_us.present? %>
-    <div data-qa="course__about_provider">
-      <%= markdown(course.provider.train_with_us) %>
-    </div>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
-  <% end %>
+<h2 class="govuk-heading-l" id="section-about-provider">
+  <%= t(".heading", provider_name: course.provider_name) %>
+</h2>
 
-  <% if course.accrediting_provider.present? %>
-    <% if course.about_accrediting_provider.present? %>
-        <h3 class="govuk-heading-m">About the accredited provider</h3>
-        <div data-qa="course__about_accrediting_provider">
-          <%= markdown(course.about_accrediting_provider) %>
-        </div>
-    <% elsif params[:action] == "preview" %>
-      <h3 class="govuk-heading-m">About the accredited provider</h3>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :about_accrediting_provider, is_preview: preview?(params)) %>
-    <% end %>
-  <% end %>
-</div>
+<% if course.provider.train_with_us.present? %>
+  <div data-qa="course__about_provider">
+    <%= markdown(course.provider.train_with_us) %>
+  </div>
+<% else %>
+  <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_us, is_preview: preview?(params)) %>
+<% end %>

@@ -8,11 +8,6 @@ module PageObjects
       element :sub_title, '[data-qa=course__provider_name]'
       element :description, '[data-qa=course__description]'
       element :accredited_provider, '[data-qa=course__accredited_provider]'
-      element :qualifications, '[data-qa=course__qualifications]'
-      element :funding_option, '[data-qa=course__funding_option]'
-      element :length, '[data-qa=course__length]'
-      element :applications_open_from, '[data-qa=course__applications_open]'
-      element :start_date, '[data-qa=course__start_date]'
       element :provider_website, '[data-qa=course__provider_website]'
       element :vacancies, '[data-qa=course__vacancies]'
       element :about_course, '[data-qa=course__about_course]'
@@ -34,16 +29,11 @@ module PageObjects
       element :train_with_us, '[data-qa=course__about_provider]'
       element :about_accrediting_provider, '[data-qa=course__about_accrediting_provider]'
       element :train_with_disability, '[data-qa=course__train_with_disabilities]'
-      element :contact_email, '[data-qa=provider__email]'
-      element :contact_telephone, '[data-qa=provider__telephone]'
-      element :contact_website, '[data-qa=provider__website]'
-      element :contact_address, '[data-qa=provider__address]'
       element :course_advice, '#section-advice'
       element :course_apply, '#section-apply'
       element :study_sites_table, '#course_study_sites'
       element :school_placements_table, '#course_school_placements'
       element :salary_details, '[data-qa=course__salary_details]'
-      element :age_range_in_years, '[data-qa=course__age_range]'
     end
   end
 end

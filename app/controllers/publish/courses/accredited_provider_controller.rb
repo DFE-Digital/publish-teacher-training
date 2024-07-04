@@ -3,10 +3,14 @@
 module Publish
   module Courses
     class AccreditedProviderController < PublishController
+      include CourseBasicDetailConcern
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: :continue
 
-      include CourseBasicDetailConcern
+      def show
+        @course = build_course&.decorate
+        render_not_found if @course.accrediting_provider.blank?
+      end
 
       def edit
         build_provider

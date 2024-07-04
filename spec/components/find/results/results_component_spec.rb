@@ -24,7 +24,7 @@ module Find
         )
       end
 
-      let(:courses) { Course.all.page(1) }
+      let(:courses) { ::Course.all.page(1) }
 
       it 'renders a "No courses found" message when there are no results' do
         component = render_inline(
@@ -57,7 +57,7 @@ module Find
         )
       end
 
-      let(:courses) { Course.all.page(1) }
+      let(:courses) { ::Course.all.page(1) }
 
       before do
         create_list(:course, 10)

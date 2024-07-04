@@ -10,7 +10,15 @@
     ) do |f| %>
 
       <% content_for :before_content do %>
-       <% if goto_preview?(param_form_key: f.object_name.to_sym, params:) %>
+       <% if goto_provider?(param_form_key: f.object_name.to_sym, params:) %>
+         <%= govuk_back_link_to(
+            provider_publish_provider_recruitment_cycle_course_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              params[:course_code] || params.dig(f.object_name.to_sym, :course_code)
+            )
+          ) %>
+       <% elsif goto_preview?(param_form_key: f.object_name.to_sym, params:) %>
         <%= govuk_back_link_to(preview_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year, (params[:course_code] || params.dig(f.object_name.to_sym, :course_code)))) %>
         <% else %>
           <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
@@ -66,6 +74,7 @@
         max_words: 250,
         rows: 15) %>
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
       <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
 
       <%= f.govuk_submit "Save and publish" %>

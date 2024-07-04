@@ -19,6 +19,11 @@ namespace :find, path: '/' do
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 
+  scope module: :courses, path: '/courses' do
+    get '/:provider_code/:course_code/provider', to: 'providers#show', as: :provider
+    get '/:provider_code/:course_code/accredited-by', to: 'accrediting_providers#show', as: :accrediting_provider
+  end
+
   get '/feature-flags', to: 'feature_flags#index'
   post '/feature-flags' => 'feature_flags#update'
   get '/confirm-environment' => 'confirm_environment#new'

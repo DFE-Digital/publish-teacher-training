@@ -10,6 +10,14 @@ module Find
       goto_preview_value(param_form_key:, params:) == 'true'
     end
 
+    def goto_provider_value(param_form_key:, params:)
+      params[:goto_provider] || params.dig(param_form_key, :goto_provider)
+    end
+
+    def goto_provider?(param_form_key:, params:)
+      goto_provider_value(param_form_key:, params:) == 'true'
+    end
+
     def back_link_path(param_form_key:, params:, provider_code:, recruitment_cycle_year:, course_code:)
       if goto_preview?(param_form_key:, params:)
         preview_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code)

@@ -1,0 +1,7 @@
+<h1 class="govuk-heading-xl">
+  <%= t(".heading", provider_name: course.accrediting_provider.provider_name) %>
+</h1>
+
+<div data-qa="course__about_accrediting_provider">
+  <%= markdown(course.about_accrediting_provider) %>
+</div>

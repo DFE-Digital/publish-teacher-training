@@ -73,6 +73,20 @@ feature 'Viewing a findable course' do
     when_i_visit_the_course_page
     when_i_click('View list of school placements')
     then_i_should_be_on_the_school_placements_page
+    when_i_click("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_on_the_course_page
+  end
+
+  scenario 'user views provider and accredited_provider' do
+    given_there_is_a_findable_course
+    when_i_visit_the_course_page
+    when_i_click(@course.provider_name)
+    then_i_should_be_on_the_provider_page
+    when_i_click("Back to #{@course.name} (#{course.course_code})")
+    when_i_click(@course.accrediting_provider.provider_name)
+    then_i_should_be_on_the_accrediting_provider_page
+    when_i_click("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_on_the_course_page
   end
 
   private
@@ -162,36 +176,24 @@ feature 'Viewing a findable course' do
       provider.provider_name
     )
 
-    expect(find_course_show_page.accredited_provider).to have_content(
-      accrediting_provider.provider_name
-    )
-
-    expect(find_course_show_page.extended_qualification_descriptions).to have_content(
-      'Qualified teacher status (QTS) with a postgraduate certificate in education (PGCE)'
-    )
-
-    expect(find_course_show_page.qualifications).to have_content(
+    expect(find_course_show_page).to have_content(
       'QTS with PGCE'
     )
 
-    expect(find_course_show_page.age_range).to have_content(
+    expect(find_course_show_page).to have_content(
       '11 to 18'
     )
 
-    expect(find_course_show_page.funding_option).to have_content(
+    expect(find_course_show_page).to have_content(
       @course.decorate.funding_option
     )
 
-    expect(find_course_show_page.length).to have_content(
+    expect(find_course_show_page).to have_content(
       '1 year - full time'
     )
 
-    expect(find_course_show_page.start_date).to have_content(
+    expect(find_course_show_page).to have_content(
       'September 2022'
-    )
-
-    expect(find_course_show_page.provider_website).to have_content(
-      provider.website
     )
 
     expect(find_course_show_page).not_to have_vacancies
@@ -257,32 +259,8 @@ feature 'Viewing a findable course' do
       'Certificate must be print in blue ink'
     )
 
-    expect(find_course_show_page.train_with_us).to have_content(
-      provider.train_with_us
-    )
-
-    expect(find_course_show_page.about_accrediting_provider).to have_content(
-      @course.decorate.about_accrediting_provider
-    )
-
     expect(find_course_show_page.train_with_disability).to have_content(
       provider.train_with_disability
-    )
-
-    expect(find_course_show_page.contact_email).to have_content(
-      provider.email
-    )
-
-    expect(find_course_show_page.contact_telephone).to have_content(
-      provider.telephone
-    )
-
-    expect(find_course_show_page.contact_website).to have_content(
-      provider.website
-    )
-
-    expect(find_course_show_page.contact_address).to have_content(
-      [@provider.address1, @provider.address2, @provider.address3, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
     )
 
     expect(find_course_show_page.school_placements).to have_no_content('Suspended site with vacancies')
@@ -359,5 +337,46 @@ feature 'Viewing a findable course' do
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
       expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
     end
+  end
+
+  def then_i_should_be_on_the_provider_page
+    expect(find_course_show_page.train_with_us).to have_content(
+      provider.train_with_us
+    )
+
+    expect(find_course_show_page).to have_content(
+      provider.email
+    )
+
+    expect(find_course_show_page).to have_content(
+      provider.telephone
+    )
+
+    expect(find_course_show_page).to have_content(
+      provider.website
+    )
+
+    expect(find_course_show_page).to have_content(
+      [@provider.address1, @provider.address2, @provider.address3, @provider.town, @provider.address4, @provider.postcode].compact.join(' ')
+    )
+  end
+
+  def then_i_should_be_on_the_accrediting_provider_page
+    expect(find_course_show_page.about_accrediting_provider).to have_content(
+      @course.decorate.about_accrediting_provider
+    )
+
+    expect(find_course_show_page).to have_content(
+      accrediting_provider.provider_name
+    )
+  end
+
+  def then_i_should_be_on_the_course_page
+    expect(page.current_url).to eq(
+      URI.join(
+        Settings.search_ui.base_url,
+        "/course/#{@course.provider_code}/#{@course.course_code}"
+      ).to_s
+    )
   end
 end

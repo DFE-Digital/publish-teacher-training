@@ -1,6 +1,8 @@
 en:
   shared:
     courses:
+      provider:
+        heading: Contact %{provider_name}
       placements:
         heading: School placements at %{provider_name}
         warning: You can’t pick which schools you will be in.
@@ -396,6 +398,14 @@ en:
   publish:
     providers:
       courses:
+        accredited_provider:
+          show:
+            back: Back to %{course_name} (%{course_code})
+            heading: About %{provider_name}
+        providers:
+          show:
+            back: Back to %{course_name} (%{course_code})
+            heading: Contact %{provider_name}
         placements:
           heading: School placements at %{provider_name}
           back: Back to %{course_name} (%{course_code})
