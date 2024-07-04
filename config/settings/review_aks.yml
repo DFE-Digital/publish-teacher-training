@@ -12,14 +12,12 @@ apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 search_ui:
   base_url: https://qa.find-postgraduate-teacher-training.service.gov.uk
 
-features:
-  teacher_degree_apprenticeship: true
-
 authentication:
   secret: secret
   mode: persona
 
 features:
+  teacher_degree_apprenticeship: true
   rollover:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false
