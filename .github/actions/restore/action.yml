@@ -26,7 +26,7 @@ runs:
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
 
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ inputs.azure-credentials }}
 
@@ -43,7 +43,7 @@ runs:
 
     - name: Install kubectl
       if: ${{ env.app_environment != 'review' }}
-      uses: azure/setup-kubectl@v3
+      uses: azure/setup-kubectl@v4
       with:
         version: "v1.26.1" # default is latest stable
 

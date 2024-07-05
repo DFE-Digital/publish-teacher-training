@@ -55,14 +55,14 @@ runs:
         fi;
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Terraform ${{ env.TERRAFORM_VERSION }}
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-    - uses: azure/login@v1
+    - uses: azure/login@v2
       with:
         creds: ${{ inputs.azure-credentials }}
 
@@ -98,7 +98,7 @@ runs:
 
     - name: Install kubectl
       if: ${{ inputs.environment == 'review_aks' }}
-      uses: azure/setup-kubectl@v3
+      uses: azure/setup-kubectl@v4
       with:
         version: "v1.26.1" # default is latest stable
 
