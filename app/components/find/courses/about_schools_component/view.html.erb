@@ -30,7 +30,7 @@
       </h3>
 
       <p class="govuk-body">
-        The theoretical learning part of your course will be at the following location.
+        <%= "The theoretical learning part of your course will be at the following #{course.study_sites.many? ? 'locations' : 'location'}." %>
       </p>
 
       <ul class="govuk-list govuk-list--spaced" id="course_study_sites">
