@@ -99,7 +99,6 @@ describe '#publishable?' do
         :course,
         :with_teacher_degree_apprenticeship,
         :resulting_in_undergraduate_degree_with_qts,
-        a_level_requirements: true,
         a_level_subject_requirements: []
       )
       course.valid?(:publish)
