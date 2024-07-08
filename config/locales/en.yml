@@ -332,10 +332,6 @@ en:
       open: "Course opened"
       closed: "Course closed"
     add_course: "Add course"
-    are_any_a_levels_required_for_this_course:
-      heading: Are any A levels required for this course?
-      answer_yes: "Yes"
-      answer_no: "No"
     what_a_level_is_required:
       heading: What A level is required?
       success_message: You have added a required A level
@@ -433,7 +429,6 @@ en:
           enter_a_levels: Enter A levels and equivalency test requirements
           a_levels_heading: A levels and equivalency tests
           a_levels_label: A levels
-          a_levels_not_required: A levels are not required for this course
       course_length:
         edit:
           course_length: Course length
@@ -880,10 +875,6 @@ en:
             description:
               blank: Enter details about the accredited provider
               too_long: Description about the accredited provider must be 100 words or fewer
-        are_any_a_levels_required_for_this_course:
-          attributes:
-            answer:
-              blank: Select if this course requires any A levels
         what_a_level_is_required:
           attributes:
             subject:

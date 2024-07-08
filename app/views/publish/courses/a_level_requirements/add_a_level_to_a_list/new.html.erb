@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <% if @wizard.current_step.maximum_number_of_a_level_subjects? %>
     <%= govuk_back_link_to(
-        publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+        publish_provider_recruitment_cycle_course_path(
           @provider.provider_code,
           @provider.recruitment_cycle_year,
           @course.course_code

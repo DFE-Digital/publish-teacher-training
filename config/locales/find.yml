@@ -79,7 +79,6 @@ en:
         heading: School placements at %{provider_name}
         back: Back to %{course_name} (%{course_code})
       a_level:
-        a_levels_not_required: A levels are not required for this course
         consider_pending_a_level: We’ll consider candidates with pending A levels.
         not_consider_pending_a_level: We will not consider candidates with pending A levels.
         consider_a_level_equivalency: We’ll consider candidates who need to take A level equivalency tests.

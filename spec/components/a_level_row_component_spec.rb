@@ -5,18 +5,6 @@ require 'rails_helper'
 RSpec.describe ALevelRowComponent do
   include Rails.application.routes.url_helpers
 
-  let(:a_level_subject_requirement) do
-    { 'subject' => 'other_subject', 'other_subject' => 'Math', 'minimum_grade_required' => 'A' }
-  end
-
-  it 'renders the a_level_not_required_content when a level requirements are not present' do
-    course = create(:course, a_level_requirements: false)
-    component = described_class.new(course: course.decorate)
-    rendered_component = render_inline(component)
-
-    expect(rendered_component.text).to include(I18n.t('publish.providers.courses.description_content.a_levels_not_required'))
-  end
-
   it 'does render to enter A levels when not A levels are answered' do
     course = create(:course, a_level_requirements: nil)
     component = described_class.new(course: course.decorate)
@@ -155,13 +143,13 @@ RSpec.describe ALevelRowComponent do
     end
 
     context 'when a_level_requirements is nil' do
-      let(:attributes) { { a_level_requirements: nil } }
+      let(:attributes) { { a_level_requirements: nil, a_level_subject_requirements: [] } }
 
       it 'renders the error message for a_level_requirements' do
-        expect(rendered_component).to have_text(I18n.t("course.#{component.wizard_step(:a_level_requirements)}.heading"))
+        expect(rendered_component).to have_text(I18n.t("course.#{component.wizard_step(:a_level_subject_requirements)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:a_level_requirements].first,
-          href: publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+          href: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
             course.provider.provider_code,
             course.provider.recruitment_cycle_year,
             course.course_code,

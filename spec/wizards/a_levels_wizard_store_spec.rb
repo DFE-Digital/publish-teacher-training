@@ -34,25 +34,6 @@ RSpec.describe ALevelsWizardStore do
       end
     end
 
-    context 'when current step name is :are_any_a_levels_required_for_this_course' do
-      let(:current_step) { :are_any_a_levels_required_for_this_course }
-      let(:step_params) { {} }
-
-      before do
-        allow(wizard).to receive(:valid_step?).and_return(true)
-      end
-
-      it 'calls save on AreAnyALevelsRequiredStore' do
-        are_any_store = instance_double(AreAnyALevelsRequiredStore)
-        allow(AreAnyALevelsRequiredStore).to receive(:new).with(wizard).and_return(are_any_store)
-        allow(are_any_store).to receive(:save)
-
-        subject
-
-        expect(are_any_store).to have_received(:save)
-      end
-    end
-
     context 'when current step name is :what_a_level_is_required' do
       let(:current_step) { :what_a_level_is_required }
       let(:step_params) { {} }
@@ -119,7 +100,6 @@ RSpec.describe ALevelsWizardStore do
       end
 
       it 'does not call any store save method' do
-        expect(AreAnyALevelsRequiredStore).not_to receive(:new)
         expect(WhatALevelIsRequiredStore).not_to receive(:new)
         expect(ConsiderPendingALevelStore).not_to receive(:new)
         expect(ALevelEquivalenciesStore).not_to receive(:new)

@@ -655,8 +655,14 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_i_add_a_level_requirements
     click_on 'Enter A levels and equivalency test requirements'
+    choose 'Any subject'
+    and_i_click_continue
     choose 'No'
     and_i_click_continue
+    choose 'Yes'
+    and_i_click_continue
+    choose 'Yes'
+    click_on 'Update A levels'
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship

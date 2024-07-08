@@ -8,14 +8,6 @@ RSpec.describe Find::Courses::ALevelComponent::View, type: :component do
   let(:course) { create(:course, a_level_subject_requirements:).decorate }
   let(:a_level_subject_requirements) { [] }
 
-  context 'when A-levels are not required' do
-    let(:course) { create(:course, a_level_requirements: false).decorate }
-
-    it 'renders the correct content' do
-      expect(result).to include('A levels are not required for this course')
-    end
-  end
-
   context 'with up to 4 singular subjects' do
     let(:a_level_subject_requirements) do
       [

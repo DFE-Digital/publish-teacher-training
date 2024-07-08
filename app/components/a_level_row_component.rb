@@ -8,7 +8,6 @@ class ALevelRowComponent < ViewComponent::Base
   include ViewHelper
 
   A_LEVEL_ERRORS = %i[
-    a_level_requirements
     a_level_subject_requirements
     accept_pending_a_level
     accept_a_level_equivalency
@@ -18,10 +17,6 @@ class ALevelRowComponent < ViewComponent::Base
     super
     @course = course
     @errors = errors
-  end
-
-  def a_level_not_required_content
-    I18n.t('publish.providers.courses.description_content.a_levels_not_required')
   end
 
   def a_level_subject_row_content(a_level_subject_requirement)
@@ -51,7 +46,6 @@ class ALevelRowComponent < ViewComponent::Base
 
   def wizard_step(a_level_error)
     {
-      a_level_requirements: :are_any_a_levels_required_for_this_course,
       a_level_subject_requirements: :what_a_level_is_required,
       accept_pending_a_level: :consider_pending_a_level,
       accept_a_level_equivalency: :a_level_equivalencies
@@ -59,8 +53,6 @@ class ALevelRowComponent < ViewComponent::Base
   end
 
   def minimum_a_level_completed?
-    !course.a_level_requirements.nil? &&
-      (course.a_level_requirements.blank? ||
-        (course.a_level_requirements.present? && course.a_level_subject_requirements.present?))
+    course.a_level_subject_requirements.present?
   end
 end

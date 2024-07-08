@@ -10,19 +10,8 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
 
     when_i_visit_the_course_page
     and_i_click_the_publish_link
-    then_i_see_a_level_is_required
-    and_i_see_a_level_is_required_in_a_level_row
-
-    when_i_click_on_the_a_level_is_required_error
-    then_i_am_on_the_a_levels_required_for_the_course_page
-    and_i_see_a_level_required_error
-
-    when_i_choose_yes
-    and_i_click_continue
-
-    when_i_visit_the_course_page
-    and_i_click_the_publish_link
     then_i_see_a_level_subject_is_required
+
     when_i_click_on_the_a_level_is_required_error
     then_i_am_on_the_what_a_levels_is_required_for_the_course_page
     and_i_see_what_a_level_required_error
@@ -117,11 +106,6 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   end
   alias_method :when_i_click_the_publish_link, :and_i_click_the_publish_link
 
-  def then_i_see_a_level_is_required
-    and_i_see_that_i_need_to_enter_a_level_requirements
-    expect(page).to have_content('Are any A levels required for this course?')
-  end
-
   def then_i_see_a_level_subject_is_required
     and_i_see_that_i_need_to_enter_a_level_requirements
     expect(page).to have_content('What A level is required?')
@@ -135,17 +119,6 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
 
   def and_i_see_a_level_is_required_in_a_level_row
     expect(page).to have_content('Enter A level requirements').twice
-  end
-
-  def then_i_am_on_the_a_levels_required_for_the_course_page
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
-        @provider.provider_code,
-        2025,
-        @course.course_code,
-        display_errors: true
-      )
-    )
   end
 
   def when_i_click_on_the_a_level_is_required_error
