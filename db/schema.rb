@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_26_152102) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_08_162024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -152,7 +152,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_26_152102) do
     t.integer "master_subject_id"
     t.integer "campaign_name"
     t.integer "application_status", default: 0, null: false
-    t.boolean "a_level_requirements"
     t.jsonb "a_level_subject_requirements", default: []
     t.boolean "accept_pending_a_level"
     t.boolean "accept_a_level_equivalency"
