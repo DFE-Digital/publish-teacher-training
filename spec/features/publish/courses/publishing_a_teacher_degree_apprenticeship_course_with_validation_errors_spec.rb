@@ -75,7 +75,6 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       :draft_enrichment,
       provider: @provider,
       accrediting_provider: @accredited_provider,
-      a_level_requirements: nil,
       a_level_subject_requirements: [],
       accept_pending_a_level: nil,
       accept_a_level_equivalency: nil

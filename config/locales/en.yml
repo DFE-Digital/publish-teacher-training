@@ -766,8 +766,6 @@ en:
               does_not_exist_in_cycle: "The accredited provider %{accredited_provider_code} does not exist in this cycle"
             is_send:
               inclusion: Select if this course has a special educational needs and disability (SEND) specialism
-            a_level_requirements:
-              blank: Enter A level requirements
             a_level_subject_requirements:
               blank: Enter A level requirements
             accept_pending_a_level:

@@ -54,7 +54,6 @@ RSpec.describe RemoveALevelSubjectConfirmationStore do
         store.destroy
 
         expect(course.reload.a_level_subject_requirements).to be_empty
-        expect(course.reload.a_level_requirements).to be_nil
         expect(course.accept_pending_a_level).to be_nil
         expect(course.accept_a_level_equivalency).to be_nil
         expect(course.additional_a_level_equivalencies).to be_nil
