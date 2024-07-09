@@ -27,7 +27,7 @@ module Publish
     end
 
     def create
-      @user_form = UserForm.new(current_user, user, params: user_params)
+      @user_form = UserForm.new(current_user, user, params: user_params, provider:)
       if @user_form.stash
         redirect_to publish_provider_check_user_path(provider_code: params[:provider_code])
       else

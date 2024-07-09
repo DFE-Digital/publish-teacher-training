@@ -31,7 +31,7 @@ module Support
 
       def create
         provider
-        @user_form = UserForm.new(current_user, user, params: user_params)
+        @user_form = UserForm.new(current_user, user, params: user_params, provider:)
         if @user_form.stash
           redirect_to support_recruitment_cycle_provider_check_user_path
         else

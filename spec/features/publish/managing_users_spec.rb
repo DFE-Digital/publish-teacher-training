@@ -33,6 +33,16 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
       then_it_should_display_the_correct_error_messages
     end
+
+    scenario 'With an email that already exists' do
+      given_i_visit_the_publish_users_new_page
+      and_i_fill_in_first_name
+      and_i_fill_in_last_name
+      and_i_fill_in_email_with_one_that_is_already_associated_with_the_provider
+      when_i_continue
+      then_i_see_the_validation_error_message
+      and_i_am_still_on_the_same_page
+    end
   end
 
   describe 'Viewing a user in an organisation' do
@@ -121,8 +131,8 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
   def given_i_am_authenticated_as_a_provider_user
     @provider = create(:provider, provider_name: "Batman's Chocolate School")
-    @user = create(:user, first_name: 'Mr', last_name: 'User', providers: [@provider])
-    @user2 = create(:user, first_name: 'Mr', last_name: 'Cool', providers: [@provider])
+    @user = create(:user, first_name: 'Mr', last_name: 'User', email: 'mruser@fake.com', providers: [@provider])
+    @user2 = create(:user, first_name: 'Mr', last_name: 'Cool', email: 'mrcool@fake.com', providers: [@provider])
     given_i_am_authenticated(user: @user)
   end
 
@@ -152,9 +162,15 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
     publish_users_new_page.email.set('willy.wonka@bat-school.com')
   end
 
+  def and_i_fill_in_email_with_one_that_is_already_associated_with_the_provider
+    publish_users_new_page.email.set('mruser@fake.com')
+  end
+
   def and_i_continue
     click_link_or_button 'Continue'
   end
+
+  alias_method :when_i_continue, :and_i_continue
 
   def and_i_am_on_the_check_page
     expect(publish_users_check_page).to be_displayed(provider_code: @provider.provider_code)
@@ -315,5 +331,13 @@ feature 'Adding user to organisation as a provider user', { can_edit_current_and
 
   def user_in_db_with_name(first_name)
     Provider.find_by(provider_name: "Batman's Chocolate School").users.exists?(first_name:)
+  end
+
+  def then_i_see_the_validation_error_message
+    expect(page).to have_css('.govuk-error-summary__body', text: 'Email address already in use')
+  end
+
+  def and_i_am_still_on_the_same_page
+    expect(publish_users_index_page).to be_displayed(provider_code: @provider.provider_code)
   end
 end
