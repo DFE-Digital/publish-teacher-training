@@ -25,11 +25,6 @@ DfE::Analytics.configure do |config|
   #
   config.bigquery_dataset = Settings.google.bigquery.dataset
 
-  # Service account JSON key for the BigQuery API. See
-  # https://cloud.google.com/bigquery/docs/authentication/service-account-file
-  #
-  config.bigquery_api_json_key = Settings.google.bigquery.api_json_key
-
   # Enables the EntityTableCheckJob
   #
   config.entity_table_checks_enabled = true
@@ -52,4 +47,9 @@ DfE::Analytics.configure do |config|
   # to all events we send to BigQuery.
   #
   # config.environment = ENV.fetch('RAILS_ENV', 'development')
+
+  # Whether to use azure workload identity federation for authentication
+  # instead of the BigQuery API JSON Key. Note that this also will also
+  # use a new version of the BigQuery streaming APIs.
+  config.azure_federated_auth = true
 end
