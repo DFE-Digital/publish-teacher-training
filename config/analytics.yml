@@ -42,7 +42,6 @@ shared:
     - can_sponsor_skilled_worker_visa
     - can_sponsor_student_visa
     - application_status
-    - a_level_requirements
     - a_level_subject_requirements
     - accept_pending_a_level
     - accept_a_level_equivalency
