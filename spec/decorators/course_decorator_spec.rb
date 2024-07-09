@@ -962,6 +962,20 @@ describe CourseDecorator do
   describe '#a_level_change_path' do
     subject(:a_level_change_path) { course.decorate.a_level_change_path }
 
+    context 'when course is withdrawn' do
+      let(:course) do
+        build(
+          :course,
+          :with_a_level_requirements,
+          :withdrawn
+        )
+      end
+
+      it 'returns nil' do
+        expect(a_level_change_path).to be_nil
+      end
+    end
+
     context 'when course does not have an A level subject requirement' do
       let(:course) do
         build(
