@@ -64,12 +64,6 @@ module ViewHelper
         study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
         accrediting_provider: accredited_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
         applications_open_from: "#{base}/applications-open",
-        a_level_requirements: publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
-          course.provider_code,
-          course.provider.recruitment_cycle_year,
-          course.course_code,
-          display_errors: true
-        ),
         a_level_subject_requirements: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           course.provider_code,
           course.provider.recruitment_cycle_year,

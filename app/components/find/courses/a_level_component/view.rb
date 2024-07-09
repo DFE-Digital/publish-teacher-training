@@ -13,14 +13,6 @@ module Find
           super
         end
 
-        def a_levels_not_required?
-          course.a_levels_requirements_answered? && course.a_level_requirements.blank?
-        end
-
-        def a_levels_not_required_content
-          I18n.t('find.courses.a_level.a_levels_not_required')
-        end
-
         def a_level_subject_requirements
           GroupedALevelSubjectRequirements.new(course).to_a_level_equivalency_array
         end

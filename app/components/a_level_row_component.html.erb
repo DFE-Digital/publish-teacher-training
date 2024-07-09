@@ -13,32 +13,28 @@
     <% end %>
   <% end %>
 <% elsif minimum_a_level_completed? %>
-  <% if @course.a_level_requirements.present? %>
-    <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
-      <p class="govuk-body">
-        <%= a_level_subject_row_content(a_level_subject_requirement.with_indifferent_access) %>
-      </p>
-    <% end %>
+  <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
+    <p class="govuk-body">
+      <%= a_level_subject_row_content(a_level_subject_requirement.with_indifferent_access) %>
+    </p>
+  <% end %>
 
-    <% unless @course.accept_pending_a_level.nil? %>
-      <p class="govuk-body">
-        <%= pending_a_level_summary_content %>
-      </p>
-    <% end %>
+  <% unless @course.accept_pending_a_level.nil? %>
+    <p class="govuk-body">
+      <%= pending_a_level_summary_content %>
+    </p>
+  <% end %>
 
-    <% unless @course.accept_a_level_equivalency.nil? %>
-      <p class="govuk-body">
-        <%= a_level_equivalency_summary_content %>
-      </p>
-    <% end %>
+  <% unless @course.accept_a_level_equivalency.nil? %>
+    <p class="govuk-body">
+      <%= a_level_equivalency_summary_content %>
+    </p>
+  <% end %>
 
-    <% if @course.accept_a_level_equivalency? && @course.additional_a_level_equivalencies.present? %>
-      <p class="govuk-body">
-      <%= @course.additional_a_level_equivalencies %>
-      </p>
-    <% end %>
-  <% else %>
-    <%= a_level_not_required_content %>
+  <% if @course.accept_a_level_equivalency? && @course.additional_a_level_equivalencies.present? %>
+    <p class="govuk-body">
+    <%= @course.additional_a_level_equivalencies %>
+    </p>
   <% end %>
 <% else %>
   <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
@@ -47,7 +43,7 @@
     </p>
     <p class="govuk-body">
       <%= govuk_link_to t("publish.providers.courses.description_content.enter_a_levels"),
-       publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
+       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           course.provider.provider_code,
           course.provider.recruitment_cycle_year,
           course.course_code

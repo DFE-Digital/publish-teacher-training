@@ -136,12 +136,8 @@
         :course,
         t("publish.providers.courses.description_content.a_levels_label"),
         (render ALevelRowComponent.new(course:, errors: @errors)),
-        %w[a_level_requirements a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency],
-        action_path: publish_provider_recruitment_cycle_course_a_levels_are_any_a_levels_required_for_this_course_path(
-          @provider.provider_code,
-          @provider.recruitment_cycle_year,
-          course.course_code
-        ),
+        %w[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency],
+        action_path: course.a_level_change_path,
         action_visually_hidden_text: "A levels",
         render_errors: false
       ) %>

@@ -86,23 +86,10 @@ describe '#publishable?' do
     it 'does not require A level to be answered' do
       course = create(
         :course,
-        a_level_requirements: nil
+        a_level_subject_requirements: nil
       )
       course.valid?(:publish)
-      expect(course.errors[:a_level_requirements]).to eq([])
-    end
-  end
-
-  context 'when publishing a teacher degree apprenticeship course without A levels' do
-    it 'requires A level to be answered' do
-      course = create(
-        :course,
-        :with_teacher_degree_apprenticeship,
-        :resulting_in_undergraduate_degree_with_qts,
-        a_level_requirements: nil
-      )
-      course.valid?(:publish)
-      expect(course.errors[:a_level_requirements]).to include('Enter A level requirements')
+      expect(course.errors[:a_level_subject_requirements]).to eq([])
     end
   end
 
@@ -112,7 +99,6 @@ describe '#publishable?' do
         :course,
         :with_teacher_degree_apprenticeship,
         :resulting_in_undergraduate_degree_with_qts,
-        a_level_requirements: true,
         a_level_subject_requirements: []
       )
       course.valid?(:publish)
@@ -145,25 +131,6 @@ describe '#publishable?' do
       )
       course.valid?(:publish)
       expect(course.errors[:accept_a_level_equivalency]).to include('Enter A level equivalency test requirements')
-    end
-  end
-
-  context 'when publishing a teacher degree apprenticeship course and no A levels required' do
-    it 'is valid' do
-      course = create(
-        :course,
-        :with_teacher_degree_apprenticeship,
-        :resulting_in_undergraduate_degree_with_qts,
-        a_level_requirements: false,
-        a_level_subject_requirements: [],
-        accept_pending_a_level: nil,
-        accept_a_level_equivalency: nil
-      )
-      course.valid?(:publish)
-      expect(course.errors[:a_level_requirements]).to eq([])
-      expect(course.errors[:a_level_subject_requirements]).to eq([])
-      expect(course.errors[:accept_pending_a_level]).to eq([])
-      expect(course.errors[:accept_a_level_equivalency]).to eq([])
     end
   end
 end
