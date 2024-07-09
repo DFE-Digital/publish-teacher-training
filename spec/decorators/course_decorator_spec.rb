@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe CourseDecorator do
+  include Rails.application.routes.url_helpers
+
   let(:current_recruitment_cycle) { build_stubbed(:recruitment_cycle) }
   let(:next_recruitment_cycle) { build_stubbed(:recruitment_cycle, :next) }
   let(:provider) { build_stubbed(:provider, recruitment_cycle: current_recruitment_cycle) }
@@ -953,6 +955,48 @@ describe CourseDecorator do
 
       it 'returns false' do
         expect(decorated_course.show_skilled_worker_visa_row?).to be false
+      end
+    end
+  end
+
+  describe '#a_level_change_path' do
+    subject(:a_level_change_path) { course.decorate.a_level_change_path }
+
+    context 'when course does not have an A level subject requirement' do
+      let(:course) do
+        build(
+          :course,
+          a_level_subject_requirements: []
+        )
+      end
+
+      it 'returns the first page of A levels' do
+        expect(a_level_change_path).to eq(
+          publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+            course.provider.provider_code,
+            course.provider.recruitment_cycle_year,
+            course.course_code
+          )
+        )
+      end
+    end
+
+    context 'when course has at least one A level subject requirement' do
+      let(:course) do
+        build(
+          :course,
+          :with_a_level_requirements
+        )
+      end
+
+      it 'returns the A level list page' do
+        expect(a_level_change_path).to eq(
+          publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+            course.provider.provider_code,
+            course.provider.recruitment_cycle_year,
+            course.course_code
+          )
+        )
       end
     end
   end

@@ -47,6 +47,22 @@ class CourseDecorator < ApplicationDecorator
     object.open_for_applications? ? 'Open' : 'Closed'
   end
 
+  def a_level_change_path
+    if object.a_level_subject_requirements.present?
+      h.publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
+        object.provider.provider_code,
+        object.provider.recruitment_cycle_year,
+        object.course_code
+      )
+    else
+      h.publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+        object.provider.provider_code,
+        object.provider.recruitment_cycle_year,
+        object.course_code
+      )
+    end
+  end
+
   def outcome
     I18n.t("edit_options.qualifications.#{object.qualification}.label")
   end
