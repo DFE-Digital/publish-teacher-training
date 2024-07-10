@@ -19,9 +19,10 @@ module Find
         Timecop.travel(CycleTimetable.first_deadline_banner + 1.hour) do
           result = render_inline(described_class.new(flash_empty: true))
 
-          expect(result.text).to include('Courses can fill up at any time, so you should apply as soon as you can.')
-          expect(result.text).not_to include("You can continue to view and apply for courses until 6pm on #{CycleTimetable.apply_deadline.strftime('%e %B %Y')}")
-          expect(result.text).not_to include('as there’s no guarantee that the courses currently shown on this website will be on offer next year.')
+          cycle_year_range = Find::CycleTimetable.cycle_year_range
+          apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
+          expect(result.text).to include("The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}")
+          expect(result.text).to include('Courses may fill up before then. Check course availability with the provider.')
         end
       end
     end

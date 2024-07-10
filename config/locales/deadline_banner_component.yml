@@ -1,0 +1,4 @@
+en:
+  apply_deadline_banner:
+    heading: The deadline for applying to courses starting in %{cycle_year_range} is %{apply_deadline}
+    text: Courses may fill up before then. Check course availability with the provider.

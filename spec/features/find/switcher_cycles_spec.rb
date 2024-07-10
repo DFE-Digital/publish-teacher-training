@@ -19,7 +19,7 @@ feature 'switcher cycle' do
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
-    and_i_see_deadline_banner('Apply now to get on a course starting in the 2023 to 2024 academic year')
+    and_i_see_mid_cycle_banner
   end
 
   scenario 'Update to Apply deadline has passed' do
@@ -78,6 +78,13 @@ feature 'switcher cycle' do
 
   def and_i_visit_the_find_homepage
     visit '/'
+  end
+
+  def and_i_see_mid_cycle_banner
+    cycle_year_range = Find::CycleTimetable.cycle_year_range
+    apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
+    banner_text = "The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}"
+    and_i_see_deadline_banner(banner_text)
   end
 
   def and_i_see_deadline_banner(banner_text)
