@@ -38,26 +38,4 @@ describe GotoPreview do
       end
     end
   end
-
-  describe '#goto_provider?' do
-    subject do
-      test_class.goto_provider?
-    end
-
-    context 'params is empty' do
-      let(:params) { {} }
-
-      it 'returns falsey' do
-        expect(subject).to be_falsey
-      end
-    end
-
-    context 'params has param_form_key with goto_provider set to "true"' do
-      let(:params) { { param_form_key: { goto_provider: 'true' } } }
-
-      it 'returns truthy' do
-        expect(subject).to be_truthy
-      end
-    end
-  end
 end

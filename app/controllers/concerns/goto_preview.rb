@@ -8,5 +8,4 @@ module GotoPreview
   end
 
   def goto_preview? = params.dig(param_form_key, :goto_preview) == 'true'
-  def goto_provider? = params.dig(param_form_key, :goto_provider) == 'true'
 end
