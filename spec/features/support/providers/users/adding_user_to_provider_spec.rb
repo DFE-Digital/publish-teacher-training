@@ -36,6 +36,16 @@ feature 'Adding user to provider as an admin', :with_publish_constraint, { can_e
 
       then_it_should_display_the_correct_error_messages
     end
+
+    scenario 'With an email that already exists' do
+      given_i_visit_the_support_provider_users_new_page
+      and_i_fill_in_first_name
+      and_i_fill_in_last_name
+      and_i_fill_in_email_with_one_that_is_already_associated_with_the_provider
+      when_i_continue
+      then_i_see_the_validation_error_message
+      and_i_am_still_on_the_same_page
+    end
   end
 
   def and_there_is_a_provider
@@ -46,9 +56,15 @@ feature 'Adding user to provider as an admin', :with_publish_constraint, { can_e
     support_provider_users_index_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
   end
 
+  def given_i_visit_the_support_provider_users_new_page
+    support_provider_users_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
+  end
+
   def and_i_continue
     support_provider_user_users_new_page.submit.click
   end
+
+  alias_method :when_i_continue, :and_i_continue
 
   def given_i_visit_the_support_provider_users_new_page
     support_provider_user_users_new_page.load(recruitment_cycle_year: Settings.current_recruitment_cycle_year, provider_id: @provider.id)
@@ -64,6 +80,10 @@ feature 'Adding user to provider as an admin', :with_publish_constraint, { can_e
 
   def and_i_fill_in_email
     support_provider_user_users_new_page.email.set('viola_fisher@boyle.io')
+  end
+
+  def and_i_fill_in_email_with_one_that_is_already_associated_with_the_provider
+    support_provider_user_users_new_page.email.set(@provider.users.first.email)
   end
 
   def and_i_click_add_user
@@ -106,6 +126,14 @@ feature 'Adding user to provider as an admin', :with_publish_constraint, { can_e
 
   def and_i_enter_a_new_first_name
     support_provider_user_users_new_page.first_name.set('Aba')
+  end
+
+  def then_i_see_the_validation_error_message
+    expect(page).to have_css('.govuk-error-summary__body', text: 'Email address already in use')
+  end
+
+  def and_i_am_still_on_the_same_page
+    expect(page).to have_current_path("/support/#{Settings.current_recruitment_cycle_year}/providers/#{@provider.id}/users")
   end
 
   def given_i_am_authenticated_as_an_admin_user
