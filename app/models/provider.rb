@@ -10,8 +10,6 @@ class Provider < ApplicationRecord
   include PgSearch::Model
   include VectorSearchable
 
-  CHANGES_INTRODUCED_IN_2022_CYCLE = 2022
-
   before_save :update_searchable, if: :accredited_provider?
   before_create :set_defaults
 
@@ -379,10 +377,6 @@ class Provider < ApplicationRecord
 
   def tda_active?
     recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
-  end
-
-  def course_requirements_deprecated?
-    recruitment_cycle.after_2024?
   end
 
   private

@@ -213,27 +213,6 @@
             visually_hidden_text: "date course starts"
           ) %>
         <% end %>
-
-        <% if course.gcse_subjects_required.any? && @provider.recruitment_cycle_year.to_i < Provider::CHANGES_INTRODUCED_IN_2022_CYCLE %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__entry_requirements" } }) do |row| %>
-            <% row.with_key { "UCAS Apply: GCSE requirements for applicants" } %>
-            <% row.with_value do %>
-              <% course.gcse_subjects_required.each do |subject| %>
-                <%= render(
-                  partial: "publish/courses/entry_requirements",
-                  locals: {
-                    gcse_subject: subject.titleize,
-                    gcse_subject_code: course[subject]
-                  }
-                ) %>
-              <% end %>
-            <% end %>
-            <% row.with_action({
-              href: new_provider_recruitment_cycle_courses_entry_requirements_path(course.provider.provider_code, course.recruitment_cycle_year, params.to_unsafe_h.merge(goto_confirmation: true)),
-              visually_hidden_text: "entry requirements"
-            }) %>
-          <% end %>
-        <% end %>
       <% end %>
 
       <%= f.govuk_submit "Add course", data: { qa: "course__save" } %>
