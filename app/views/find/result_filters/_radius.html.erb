@@ -1,9 +1,7 @@
 <% if @filters_view.radius.present? %>
   <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__radius">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-      <label class="govuk-label govuk-fieldset__legend govuk-fieldset__legend--s" for="sort">
-        Search radius
-      </label>
+      <%= form.label :radius, "Search radius", class: "govuk-label govuk-fieldset__legend govuk-fieldset__legend--s" %>
     </legend>
     <div class="govuk-checkboxes govuk-checkboxes--small">
       <div class="govuk-checkboxes__item" data-qa="radius-select">
