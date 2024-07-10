@@ -22,6 +22,10 @@ module Find
       cycle_timetable.apply_deadline.to_fs(:govuk_date_and_time)
     end
 
+    def cycle_year_range
+      cycle_timetable.cycle_year_range
+    end
+
     def find_opens
       cycle_timetable.find_opens.to_fs(:month_and_year)
     end
