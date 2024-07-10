@@ -1,10 +1,11 @@
-<div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-train-with-disabilities">Training with disabilities and other needs</h2>
-  <div data-qa="course__train_with_disabilities">
-    <% if course.provider.train_with_disability.present? %>
-      <%= markdown(course.provider.train_with_disability) %>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_disability, is_preview: preview?(params)) %>
-    <% end %>
-  </div>
+<h1 class="govuk-heading-xl" id="section-train-with-disabilities">
+  <%= t(".heading", provider_name: course.provider_name) %>
+</h1>
+
+<div data-qa="course__train_with_disabilities">
+  <% if course.provider.train_with_disability.present? %>
+    <%= markdown(course.provider.train_with_disability) %>
+  <% else %>
+    <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :train_with_disability, is_preview: preview?(params)) %>
+  <% end %>
 </div>

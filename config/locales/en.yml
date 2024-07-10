@@ -398,6 +398,15 @@ en:
     add: "Add user"
     update: "Update user"
   publish:
+    courses:
+      training_with_disabilities:
+        show:
+          heading: Training with disabilities and other needs at %{provider_name}
+          back: Back to %{course_name} (%{course_code})
+          contact: Contact %{provider_name}
+      preview:
+        training_with_disabilities: Training with disabilities
+        training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     providers:
       courses:
         accredited_provider:

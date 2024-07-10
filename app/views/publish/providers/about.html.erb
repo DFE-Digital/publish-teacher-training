@@ -75,6 +75,7 @@
         rows: 15) %>
       <%= f.hidden_field(:goto_preview, value: goto_preview_value(param_form_key: f.object_name.to_sym, params:)) %>
       <%= f.hidden_field(:goto_provider, value: goto_provider_value(param_form_key: f.object_name.to_sym, params:)) %>
+      <%= f.hidden_field(:goto_training_with_disabilities, value: goto_training_with_disabilities_value(param_form_key: f.object_name.to_sym, params:)) %>
       <%= f.hidden_field(:course_code, value: params[:course_code] || params.dig(f.object_name.to_sym, :course_code)) %>
 
       <%= f.govuk_submit "Save and publish" %>
