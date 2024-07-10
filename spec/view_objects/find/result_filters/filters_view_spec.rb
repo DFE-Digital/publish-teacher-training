@@ -354,6 +354,30 @@ module Find
           it { is_expected.to be(false) }
         end
       end
+
+      describe '#radius' do
+        subject { described_class.new(params: { radius: 10 }).radius }
+
+        it { is_expected.to eq(10) }
+      end
+
+      describe '#radius_options_for_select' do
+        subject { described_class.new(params: {}).radius_options_for_select }
+
+        it 'returns an array of arrays' do
+          expect(subject).to eq([
+                                  ['1 mile', 1],
+                                  ['5 miles', 5],
+                                  ['10 miles', 10],
+                                  ['15 miles', 15],
+                                  ['20 miles', 20],
+                                  ['25 miles', 25],
+                                  ['50 miles', 50],
+                                  ['100 miles', 100],
+                                  ['200 miles', 200]
+                                ])
+        end
+      end
     end
   end
 end

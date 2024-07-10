@@ -9,6 +9,10 @@ module Find
 
       def radius_options = [1, 5, 10, 15, 20, 25, 50, 100, 200]
 
+      def radius_options_for_select
+        radius_options.map { |r| [I18n.t('find.result_filters_filters_view.radius_options_for_select.label', count: r), r] }
+      end
+
       def radius
         params[:radius]
       end
@@ -126,7 +130,6 @@ module Find
           loc: params[:loc],
           longitude: params[:longitude],
           query: params['provider.provider_name'],
-          # radius: params[:radius],
           sortby: params[:sortby]
         }
       end

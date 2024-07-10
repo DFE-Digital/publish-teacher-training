@@ -1,11 +1,11 @@
-<% if @filters_view.radius.present? %>
+<% if @filters_view.location_query? %>
   <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__radius">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
       <%= form.label :radius, "Search radius", class: "govuk-label govuk-fieldset__legend govuk-fieldset__legend--s" %>
     </legend>
     <div class="govuk-checkboxes govuk-checkboxes--small">
       <div class="govuk-checkboxes__item" data-qa="radius-select">
-        <%= form.select :radius, options_for_select(@filters_view.radius_options.map { |r| [t(".radius_select.label", count: r), r] }, @filters_view.radius), {}, class: "govuk-select" %>
+        <%= form.select :radius, options_for_select(@filters_view.radius_options_for_select, @filters_view.radius), {}, class: "govuk-select" %>
       </div>
     </div>
   </fieldset>
