@@ -6,7 +6,6 @@ class Course < ApplicationRecord
   include ChangedAt
   include TouchProvider
   include Courses::EditOptions
-  include StudyModeVacancyMapper
   include TimeFormat
 
   after_initialize :set_defaults
@@ -811,7 +810,26 @@ class Course < ApplicationRecord
     requirement.with_indifferent_access
   end
 
+  def ensure_site_statuses_match_full_time
+    site_statuses.each do |site_status|
+      update_vac_status('full_time', site_status)
+    end
+  end
+
   private
+
+  def update_vac_status(study_mode, site_status)
+    case study_mode
+    when 'full_time'
+      site_status.update(vac_status: :full_time_vacancies)
+    when 'part_time'
+      site_status.update(vac_status: :part_time_vacancies)
+    when 'full_time_or_part_time'
+      site_status.update(vac_status: :both_full_time_and_part_time_vacancies)
+    else
+      raise "Unexpected study mode #{study_mode}"
+    end
+  end
 
   def add_site!(site:)
     is_course_new = ucas_status == :new

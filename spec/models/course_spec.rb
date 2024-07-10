@@ -3018,6 +3018,22 @@ describe Course do
     end
   end
 
+  describe '#ensure_site_statuses_match_full_time' do
+    it 'updates all site statuses to full_time_vacancies' do
+      course = create(:course, study_mode: :part_time)
+      site_status_part_time = create(:site_status, course:, vac_status: :part_time_vacancies)
+
+      course.study_mode = 'full_time'
+      course.ensure_site_statuses_match_full_time
+
+      course.reload
+      site_status_part_time.reload
+
+      expect(site_status_part_time.vac_status).to eq('full_time_vacancies')
+      expect(course.site_statuses.map(&:vac_status).first).to eq('full_time_vacancies')
+    end
+  end
+
   describe 'funding_type and program_type' do
     context 'setting the funding_type to apprenticeship' do
       it 'sets the funding_type to apprenticeship and program_type to pg_teaching_apprenticeship' do
