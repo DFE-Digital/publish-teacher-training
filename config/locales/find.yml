@@ -33,6 +33,8 @@ en:
         missing_location: Enter a city, town or postcode
         missing_provider: Enter a real school, university or training provider
         blank_provider: Enter a provider name or code
+      fields:
+        location: "soemthing"
     fields:
       location: "Postcode, town or city"
       provider: "Training provider"
@@ -200,6 +202,12 @@ en:
           html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
     links:
       national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
+    result_filters:
+      radius:
+        radius_select:
+          label:
+            one: '%{count} mile'
+            other: '%{count} miles'
   activemodel:
     errors:
       models:

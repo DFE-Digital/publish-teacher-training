@@ -7,6 +7,12 @@ module Find
         @params = params
       end
 
+      def radius_options = [1, 5, 10, 15, 20, 25, 50, 100, 200]
+
+      def radius
+        params[:radius]
+      end
+
       def qts_only_checked?
         checked?('qts')
       end
@@ -120,7 +126,7 @@ module Find
           loc: params[:loc],
           longitude: params[:longitude],
           query: params['provider.provider_name'],
-          radius: params[:radius],
+          # radius: params[:radius],
           sortby: params[:sortby]
         }
       end
