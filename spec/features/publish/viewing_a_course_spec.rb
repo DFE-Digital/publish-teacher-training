@@ -6,7 +6,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   include ActiveSupport::NumberHelper
 
   scenario 'i can view the course basic details' do
-    # allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024)
     given_i_am_authenticated_as_a_provider_user(course: build(:course))
     when_i_visit_the_course_page
     and_i_click_on_basic_details
