@@ -53,8 +53,6 @@ FactoryBot.define do
     end
     how_school_placements_work { Faker::Lorem.sentence }
     interview_process { Faker::Lorem.sentence }
-    other_requirements { Faker::Lorem.sentence }
-    personal_qualities { Faker::Lorem.sentence }
     required_qualifications { Faker::Educator.degree }
     # Technically, salary_details should align with whether the course is
     # salaried or not. Maybe worth implementing this somehow at some point.

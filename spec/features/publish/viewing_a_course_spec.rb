@@ -6,7 +6,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   include ActiveSupport::NumberHelper
 
   scenario 'i can view the course basic details' do
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024)
     given_i_am_authenticated_as_a_provider_user(course: build(:course))
     when_i_visit_the_course_page
     and_i_click_on_basic_details
@@ -352,13 +351,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     expect(publish_provider_courses_show_page).to have_degree
     expect(publish_provider_courses_show_page).to have_gcse
-
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities
-    )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements
-    )
   end
 
   def then_i_should_see_the_description_of_the_salary_course
@@ -388,12 +380,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
     expect(publish_provider_courses_show_page).to have_degree
     expect(publish_provider_courses_show_page).to have_gcse
-    expect(publish_provider_courses_show_page.personal_qualities).to have_content(
-      course_enrichment.personal_qualities
-    )
-    expect(publish_provider_courses_show_page.other_requirements).to have_content(
-      course_enrichment.other_requirements
-    )
   end
 
   def and_i_should_see_the_course_as(status_tag)

@@ -434,8 +434,6 @@ en:
           requirements_heading: Requirements and eligibility
           degree_label: Degree
           gcse_label: GCSEs
-          personal_qualities_label: Personal qualities
-          other_requirements_label: Other requirements
           enter_a_levels: Enter A levels and equivalency test requirements
           a_levels_heading: A levels and equivalency tests
           a_levels_label: A levels
@@ -1125,15 +1123,6 @@ en:
           attributes:
             study_site_ids:
               blank: "Add at least one study site"
-        publish/course_requirement_form:
-          attributes:
-            required_qualifications:
-              blank: "Enter details about the qualifications needed"
-              too_long: "Reduce the word count for required qualifications"
-            personal_qualities:
-              too_long: "Reduce the word count for personal qualities"
-            other_requirements:
-              too_long: "Reduce the word count for other requirements"
         publish/course_study_mode_form:
           attributes:
             study_mode:
