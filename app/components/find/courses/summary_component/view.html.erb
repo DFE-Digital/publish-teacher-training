@@ -1,49 +1,73 @@
-<dl class="app-description-list govuk-!-margin-bottom-8">
-  <% if accrediting_provider.present? && (accrediting_provider.provider_code != provider.provider_code) %>
-    <dt class="app-description-list__label">Accredited provider</dt>
-    <dd data-qa="course__accredited_provider"><%= accrediting_provider.provider_name %></dd>
-  <% end %>
-  <dt class="app-description-list__label">Fee or salary</dt>
-    <dd data-qa="course__funding_option"><%= course.funding %>
+<%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".fee_or_salary")) %>
+    <% row.with_value do %>
+      <%= course.funding %>
       <br>
-      <p class="govuk-hint"><%= course.funding_option %>
-    </dd>
-  </dt>
-
-  <dt class="app-description-list__label">Visa sponsorship</dt>
-  <dd data-qa="course__visa_sponsorship"><%= visa_sponsorship_row %></dd>
+      <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+    <% end %>
+  <% end %>
 
   <% unless no_fee? %>
-    <dt class="app-description-list__label">Course fee</dt>
-    <dd data-qa="course__fee"><%= course_fee_value %></dd>
-  <% end %>
-
-  <dt class="app-description-list__label">Qualification</dt>
-  <%= render Find::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
-  <% if age_range_in_years.present? %>
-    <dt class="app-description-list__label">Age range</dt>
-    <dd data-qa="course__age_range"><%= age_range_in_years_row %></dd>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".course_fee")) %>
+      <% row.with_value(text: course_fee_value) %>
+    <% end %>
   <% end %>
 
   <% if length.present? %>
-    <dt class="app-description-list__label">Course length</dt>
-    <dd data-qa="course__length"><%= course_length_with_study_mode_row %></dd>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".course_length")) %>
+      <% row.with_value(text: course_length_with_study_mode_row) %>
+    <% end %>
+  <% end %>
+
+  <% if age_range_in_years.present? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".age_range")) %>
+      <% row.with_value(text: age_range_in_years_row) %>
+    <% end %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".qualification")) %>
+    <% row.with_value do %>
+      <%= render Find::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
+    <% end %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".provider")) %>
+    <% row.with_value do %>
+      <%= govuk_link_to course.provider_name, x_provider_url %>
+    <% end %>
+  <% end %>
+
+  <% if course.accrediting_provider.present? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".accredited_by")) %>
+      <% row.with_value do %>
+        <%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <% if show_apply_from_row? %>
-    <dt class="app-description-list__label">Date you can apply from</dt>
-    <dd data-qa="course__applications_open"><%= l(applications_open_from&.to_date) %></dd>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".date_can_apply")) %>
+      <% row.with_value(text: l(applications_open_from&.to_date)) %>
+    <% end %>
   <% end %>
 
   <% if start_date.present? %>
-    <dt class="app-description-list__label">Date course starts</dt>
-    <dd data-qa="course__start_date"><%= l(start_date&.to_date, format: :short) %></dd>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".date_course_start")) %>
+      <% row.with_value(text: l(start_date&.to_date, format: :short)) %>
+    <% end %>
   <% end %>
 
-  <% if provider.decorate.website.present? %>
-    <dt class="app-description-list__label">Website</dt>
-    <dd data-qa="course__provider_website">
-      <%= govuk_link_to provider.decorate.website, provider.decorate.website %>
-    </dd>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".visa_sponsorship")) %>
+    <% row.with_value(text: visa_sponsorship_row) %>
   <% end %>
-</dl>
+<% end %>

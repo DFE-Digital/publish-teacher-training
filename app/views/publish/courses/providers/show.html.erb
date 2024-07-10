@@ -1,0 +1,28 @@
+<%= content_for :page_title do %>
+  <%= t(
+    "publish.providers.courses.providers.show.heading",
+    provider_name: @course.provider_name
+  ) %>
+<% end %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    href: preview_publish_provider_recruitment_cycle_course_path(
+      @course.provider_code,
+      @course.recruitment_cycle_year,
+      @course.course_code
+    ),
+    text: t(
+      "publish.providers.courses.providers.show.back",
+      course_name: @course.name,
+      course_code: @course.course_code
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render Find::Courses::ContactDetailsComponent::View.new(@course) %>
+
+    <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
+  </div>
+</div>

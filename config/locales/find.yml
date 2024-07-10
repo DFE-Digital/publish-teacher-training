@@ -71,6 +71,39 @@ en:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
+      summary_component:
+        view:
+          fee_or_salary: Fee or salary
+          course_fee: Course fee
+          course_length: Course length
+          age_range: Age range
+          date_can_apply: Date you can apply from
+          date_course_start: Date course starts
+          qualification: Qualification
+          provider: Provider
+          accredited_by: Accredited by
+          visa_sponsorship: Visa sponsorship
+      providers:
+        show:
+          heading: About %{provider_name}
+          back: Back to %{course_name} (%{course_code})
+      about_the_provider:
+        heading: About %{provider_name}
+      about_accrediting_provider:
+        heading: About %{provider_name}
+      accrediting_providers:
+        show:
+          heading: About %{provider_name}
+          back: Back to %{course_name} (%{course_code})
+      contact_details_component:
+        view:
+          heading: Contact %{provider_name}
+          contact_form: Contact form
+          email_address: Email address
+          send_email_to_contact: Send email to course contact
+          telephone: Telephone
+          school_website: School Website
+          address: Address
       about_schools_component:
         view:
           view_list_of_school_placements: View list of school placements

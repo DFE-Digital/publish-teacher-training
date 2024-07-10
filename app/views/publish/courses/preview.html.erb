@@ -15,8 +15,6 @@
   <%= course.name_and_code %>
 </h1>
 
-<p class="govuk-body-l" data-qa="course__description"><%= course.description %></p>
-
 <%= render Find::Courses::SummaryComponent::View.new(course) %>
 
 <!--The reason for the Apply component duplication here is because we want to keep the warning text at the top but Keep the Apply button and end of cycle text at the bottom-->
@@ -31,15 +29,13 @@
 
     <%= render partial: "find/courses/about_course", locals: { course: } %>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(course) %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(course, preview: preview?(params)) %>
 
     <% if course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: } %>
     <% end %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(course) %>
-
-    <%= render partial: "find/courses/about_the_provider", locals: { course: } %>
 
     <% if course.interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: } %>
@@ -48,8 +44,6 @@
     <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
 
     <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
-
-    <%= render Find::Courses::ContactDetailsComponent::View.new(course) %>
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 

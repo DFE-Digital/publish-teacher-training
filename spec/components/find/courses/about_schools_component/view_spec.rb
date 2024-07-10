@@ -189,14 +189,10 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         ).decorate
 
         result = render_inline(described_class.new(course))
-        url = URI.join(
-          Settings.search_ui.base_url,
-          find_placements_path(course.provider_code, course.course_code)
-        ).to_s
 
         expect(result).to have_link(
           'View list of school placements',
-          href: url
+          href: find_placements_path(course.provider_code, course.course_code)
         )
       end
     end
@@ -212,7 +208,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
           ]
         ).decorate
 
-        result = render_inline(described_class.new(course))
+        result = render_inline(described_class.new(course, preview: true))
         url = placements_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,

@@ -7,16 +7,17 @@ module Find
         include PublishHelper
         include PreviewHelper
 
-        attr_reader :course
+        attr_reader :course, :preview
 
         delegate :published_how_school_placements_work,
                  :program_type,
                  :study_sites,
                  :site_statuses, to: :course
 
-        def initialize(course)
+        def initialize(course, preview: false)
           super
           @course = course
+          @preview = preview
         end
 
         def render?
@@ -39,17 +40,14 @@ module Find
         end
 
         def placements_url
-          if course.has_unpublished_changes? || (course.is_published? && course.is_running?)
-            URI.join(
-              Settings.search_ui.base_url,
-              find_placements_path(course.provider_code, course.course_code)
-            ).to_s
-          else
+          if preview
             placements_publish_provider_recruitment_cycle_course_path(
               course.provider_code,
               course.recruitment_cycle_year,
               course.course_code
             )
+          else
+            find_placements_path(course.provider_code, course.course_code)
           end
         end
 

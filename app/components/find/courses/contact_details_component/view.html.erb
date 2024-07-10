@@ -1,52 +1,55 @@
-<div id="contact_section" class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-contact">Contact this training provider</h2>
+<h1 class="govuk-heading-xl" id="section-contact">
+  <%= t(".heading", provider_name: course.provider_name) %>
+</h1>
 
-  <div class="course-basicinfo">
-    <dl class="app-description-list">
-      <% if show_contact_form_instead_of_email? %>
-        <dt class="app-description-list__label">Contact form</dt>
-        <dd data-qa="provider__email">
-          <%= govuk_link_to contact_form, contact_form %>
-        </dd>
-      <% else %>
-        <% if course.provider.email.present? %>
-          <dt class="app-description-list__label">Email</dt>
-          <dd data-qa="provider__email">
-            <%= govuk_mail_to course.provider.email, course.provider.email, title: "Send email to course contact", aria: { label: "Send email to course contact" } %>
-          </dd>
+<%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
+  <% summary_list.with_row do |row| %>
+    <% if course.provider.decorate.website.present? %>
+      <% row.with_key(text: t(".school_website")) %>
+      <% row.with_value do %>
+        <%= govuk_link_to course.provider.decorate.website, course.provider.decorate.website %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% summary_list.with_row do |row| %>
+    <% if show_contact_form_instead_of_email? %>
+      <% row.with_key(text: t(".contact_form")) %>
+      <% row.with_value do %>
+        <%= govuk_link_to contact_form, contact_form %>
+      <% end %>
+    <% else %>
+      <% if course.provider.email.present? %>
+        <% row.with_key(text: t(".email_address")) %>
+        <% row.with_value do %>
+          <%= govuk_mail_to course.provider.email, course.provider.email, title: t(".send_email_to_contact"), aria: { label: t(".send_email_to_contact") } %>
         <% end %>
       <% end %>
+    <% end %>
+  <% end %>
 
-      <% if course.provider.telephone.present? %>
-        <dt class="app-description-list__label">Telephone</dt>
-        <dd data-qa="provider__telephone">
-          <%= course.provider.telephone %>
-        </dd>
-      <% end %>
+  <% summary_list.with_row do |row| %>
+    <% if course.provider.telephone.present? %>
+      <% row.with_key(text: t(".telephone")) %>
+      <% row.with_value(text: course.provider.telephone) %>
+    <% end %>
+  <% end %>
 
-      <% if course.provider.decorate.website.present? %>
-        <dt class="app-description-list__label">Website</dt>
-        <dd data-qa="provider__website">
-          <%= govuk_link_to course.provider.decorate.website, course.provider.decorate.website %>
-        </dd>
+  <% summary_list.with_row do |row| %>
+    <% if show_address? %>
+      <% row.with_key(text: t(".address")) %>
+      <% row.with_value do %>
+        LSJS
+        <br>
+        44A Albert Road
+        <br>
+        London
+        <br>
+        NW4 2SJ
       <% end %>
-
-      <% if show_address? %>
-        <dt class="app-description-list__label">Address</dt>
-        <dd data-qa="provider__address">
-          LSJS
-          <br>
-          44A Albert Road
-          <br>
-          London
-          <br>
-          NW4 2SJ
-      <% elsif course.provider.decorate.full_address.present? %>
-        <dt class="app-description-list__label">Address</dt>
-        <dd data-qa="provider__address">
-          <%= course.provider.decorate.full_address %>
-        </dd>
-      <% end %>
-    </dl>
-  </div>
-</div>
+    <% elsif course.provider.decorate.full_address.present? %>
+      <% row.with_key(text: t(".address")) %>
+      <% row.with_value(text: course.provider.decorate.full_address) %>
+    <% end %>
+  <% end %>
+<% end %>

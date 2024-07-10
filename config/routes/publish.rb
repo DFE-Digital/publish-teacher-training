@@ -247,6 +247,9 @@ namespace :publish, as: :publish do
 
         get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
         put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
+        get '/accredited-by', on: :member, to: 'courses/accredited_provider#show'
+
+        get '/provider', on: :member, to: 'courses/providers#show'
 
         get '/study-sites', on: :member, to: 'courses/study_sites#edit'
         put '/study-sites', on: :member, to: 'courses/study_sites#update'

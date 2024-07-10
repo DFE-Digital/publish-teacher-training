@@ -13,12 +13,14 @@ module Find
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
             'Fee or salary',
-            'Qualification',
+            'Course fee',
             'Course length',
+            'Age range',
             'Qualification',
+            'Provider',
             'Date you can apply from',
             'Date course starts',
-            'Website'
+            'Visa sponsorship'
           )
         end
 
@@ -75,7 +77,7 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include(
-              'Accredited provider'
+              'Accredited by'
             )
           end
         end
@@ -108,7 +110,7 @@ module Find
 
             result = render_inline(described_class.new(course))
 
-            expect(result.css('[data-qa="course__age_range"]').text).to have_text('11 to 18 - secondary')
+            expect(result.text).to include('11 to 18 - secondary')
           end
         end
 
@@ -121,7 +123,7 @@ module Find
 
             result = render_inline(described_class.new(course))
 
-            expect(result.css('[data-qa="course__age_range"]').text).to eq('3 to 7')
+            expect(result.text).to include('3 to 7')
           end
         end
 

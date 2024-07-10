@@ -28,6 +28,7 @@ module Find
           accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_provider', provider_type: 'university')
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
                          accrediting_provider:,
+                         course_code: 'code',
                          has_bursary: false,
                          age_range_in_years: '11_to_18',
                          course_length: 'OneYear',
@@ -43,6 +44,7 @@ module Find
           accrediting_provider = Provider.new(provider_name: 'University of BAT', accrediting_provider: 'accredited_provider', provider_type: 'university')
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE', website: 'wwww.awesomeprovider@aol.com'),
                          accrediting_provider:,
+                         course_code: 'code',
                          has_bursary: false,
                          age_range_in_years: '3_to_7',
                          course_length: 'OneYear',
@@ -57,7 +59,9 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :accrediting_provider, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding_type, :subjects, :level, :can_sponsor_student_visa, :fee_uk_eu, :fee_international)
+          attr_accessor(:provider, :accrediting_provider, :course_code, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding_type, :subjects, :level, :can_sponsor_student_visa, :fee_uk_eu, :fee_international)
+
+          delegate :provider_name, :provider_code, to: :provider, allow_nil: true
 
           def has_bursary?
             has_bursary
@@ -73,6 +77,14 @@ module Find
 
           def study_mode
             'full_time'
+          end
+
+          def has_unpublished_changes?
+            false
+          end
+
+          def is_published?
+            false
           end
         end
       end

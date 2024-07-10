@@ -20,7 +20,6 @@
       </span>
       <%= @course.name_and_code %>
     </h1>
-    <p class="govuk-body-l" data-qa="course__extended_qualification_descriptions"><%= @course.extended_qualification_descriptions %></p>
   </div>
 </div>
 
@@ -40,17 +39,13 @@
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course) %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
 
     <% if @course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: @course } %>
     <% end %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
-
-    <% if @provider.train_with_us.present? || @course.about_accrediting_provider.present? %>
-      <%= render partial: "find/courses/about_the_provider", locals: { course: @course } %>
-    <% end %>
 
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
@@ -61,8 +56,6 @@
     <% if @provider.train_with_disability.present? %>
       <%= render partial: "find/courses/train_with_disabilities", locals: { course: @course } %>
     <% end %>
-
-    <%= render Find::Courses::ContactDetailsComponent::View.new(@course) %>
 
     <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
