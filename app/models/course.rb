@@ -968,13 +968,9 @@ class Course < ApplicationRecord
     if applications_open_from.blank? || applications_open_from.is_a?(Struct)
       errors.add(:applications_open_from, :blank)
     elsif valid_date_range.exclude?(applications_open_from)
-      chosen_date = short_date(applications_open_from)
-      start_date = short_date(recruitment_cycle.application_start_date)
-      end_date = short_date(recruitment_cycle.application_end_date)
       errors.add(
         :applications_open_from,
-        "#{chosen_date} is not valid for the #{provider.recruitment_cycle.year} cycle. " \
-        "A valid date must be between #{start_date} and #{end_date}"
+        "The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}"
       )
     end
   end
