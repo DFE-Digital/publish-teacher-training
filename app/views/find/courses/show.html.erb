@@ -51,8 +51,6 @@
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
 
-    <%= render Find::Courses::InternationalStudentsComponent::View.new(course: @course) %>
-
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-l" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>

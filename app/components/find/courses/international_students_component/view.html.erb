@@ -1,5 +1,4 @@
-<div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-international-students">International candidates</h2>
+<%= govuk_details(summary_text: visa_sponsorship_summary) do %>
   <div data-qa="course__international_students">
 
     <% if apprenticeship? %>
@@ -10,7 +9,9 @@
         EEA, Switzerland, Gibraltar, or the UK for at least the previous 3 years will also be eligible.</p>
     <% end %>
 
-    <p class="govuk-body"><%= apprenticeship? ? "You’ll also" : "You’ll" %> need the <%= right_required %> in the UK. You already have this if, for example, you:</p>
+    <p class="govuk-body"><%= apprenticeship? ? "You’ll also" : "You’ll" %> need the <%= right_required %> in the UK</p>
+
+    <p class="govuk-body">You already have this if, for example, you:</p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>are an Irish citizen</li>
@@ -18,8 +19,11 @@
       <li>have indefinite leave to remain in the UK</li>
     </ul>
 
-    <%= t("find.international_candidates.#{visa_type}.#{sponsorship_availability}.html") %>
+    <%= t(
+      "find.international_candidates.#{visa_type}.#{sponsorship_availability}.html",
+      provider_url: x_provider_url
+    ) %>
 
     <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as an international student", t("find.get_into_teaching.url_train_to_teach_as_international_candidate")) %>.</p>
   </div>
-</div>
+<% end %>

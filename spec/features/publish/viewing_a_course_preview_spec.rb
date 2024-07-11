@@ -188,6 +188,10 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     expect(publish_course_preview_page).to have_content(
+      'Visas cannot be sponsored'
+    )
+
+    expect(publish_course_preview_page).to have_content(
       '11 to 18'
     )
 

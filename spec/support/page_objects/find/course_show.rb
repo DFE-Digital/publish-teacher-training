@@ -26,7 +26,6 @@ module PageObjects
       element :required_qualifications, '[data-qa=course__required_qualifications]'
       element :train_with_us, '[data-qa=course__about_provider]'
       element :about_accrediting_provider, '[data-qa=course__about_accrediting_provider]'
-      element :international_students, '[data-qa=course__international_students]'
       element :train_with_disability, '[data-qa=course__train_with_disabilities]'
       element :course_advice, '#section-advice'
       element :course_apply, '#section-apply'

@@ -151,6 +151,30 @@ module ViewHelper
 
   alias cns classnames
 
+  def x_provider_url
+    if preview?(params)
+      provider_publish_provider_recruitment_cycle_course_path(
+        course.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code
+      )
+    else
+      find_provider_path(course.provider_code, course.course_code)
+    end
+  end
+
+  def x_accrediting_provider_url
+    if preview?(params)
+      accredited_by_publish_provider_recruitment_cycle_course_path(
+        course.provider_code,
+        course.recruitment_cycle_year,
+        course.course_code
+      )
+    else
+      find_accrediting_provider_path(course.provider_code, course.course_code)
+    end
+  end
+
   private
 
   def base_errors_hash(provider_code, course)

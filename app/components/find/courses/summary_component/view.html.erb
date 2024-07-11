@@ -68,6 +68,8 @@
 
   <% summary_list.with_row do |row| %>
     <% row.with_key(text: t(".visa_sponsorship")) %>
-    <% row.with_value(text: visa_sponsorship_row) %>
+    <% row.with_value do %>
+      <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
+    <% end %>
   <% end %>
 <% end %>
