@@ -1015,6 +1015,63 @@ describe CourseDecorator do
     end
   end
 
+  describe '#immutable_course_outcome?' do
+    it 'returns true when the course is a TDA and is published' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        :with_gcse_equivalency,
+        :published
+      ).decorate
+
+      expect(course.immutable_course_outcome?).to be(true)
+    end
+
+    it 'returns false when the course is a TDA but not published' do
+      course = create(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        :with_gcse_equivalency
+      ).decorate
+
+      expect(course.immutable_course_outcome?).to be(false)
+    end
+
+    it 'returns false when the course is not a TDA but is published' do
+      course = create(
+        :course,
+        :resulting_in_qts,
+        :with_gcse_equivalency,
+        :published
+      ).decorate
+
+      expect(course.immutable_course_outcome?).to be(false)
+    end
+
+    it 'returns true when the course is withdrawn' do
+      course = create(
+        :course,
+        :resulting_in_qts,
+        :with_gcse_equivalency,
+        :withdrawn
+      ).decorate
+
+      expect(course.immutable_course_outcome?).to be(true)
+    end
+
+    it 'returns false when the course is not a TDA, not published, and not withdrawn' do
+      course = create(
+        :course,
+        :resulting_in_qts,
+        :with_gcse_equivalency
+      ).decorate
+
+      expect(course.immutable_course_outcome?).to be(false)
+    end
+  end
+
   describe '#financial_incentive_details' do
     subject { course.decorate.financial_incentive_details }
 

@@ -62,7 +62,7 @@
      summary_list.with_row(html_attributes: { data: { qa: "course__outcome" } }) do |row|
        row.with_key { "Qualification" }
        row.with_value { course.outcome }
-       if course.is_withdrawn?
+       if course.immutable_course_outcome?
          row.with_action
        else
          row.with_action(

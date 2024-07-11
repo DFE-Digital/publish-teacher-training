@@ -3,9 +3,12 @@
 require 'rails_helper'
 
 feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false } do
-  scenario 'The error links target the correct pages' do
+  before do
     given_i_am_authenticated_as_a_provider_user
     and_the_tda_feature_flag_is_active
+  end
+
+  scenario 'The error links target the correct pages' do
     and_there_is_an_invalid_tda_course_i_want_to_publish
 
     when_i_visit_the_course_page
@@ -45,6 +48,22 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     then_the_course_is_published
   end
 
+  scenario 'when the TDA course is published and I try to change qualification' do
+    given_there_is_an_published_tda_course
+    when_i_visit_the_course_page
+    and_i_enter_the_basic_details_tab
+    then_there_is_no_change_qualification_link
+  end
+
+  scenario 'when the non TDA course is published and I try to change qualification' do
+    given_there_is_an_published_qts_course
+    when_i_visit_the_course_page
+    and_i_enter_the_basic_details_tab
+    and_i_click_change_qualification
+    then_the_tda_option_is_not_available
+    and_i_on_the_change_qualification_page
+  end
+
   def given_i_am_authenticated_as_a_provider_user
     recruitment_cycle = create(:recruitment_cycle, year: 2025)
     @user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
@@ -82,6 +101,34 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     @course.sites << build_list(:site, 1, provider: @provider)
   end
 
+  def given_there_is_an_published_tda_course
+    @course = create(
+      :course,
+      :with_teacher_degree_apprenticeship,
+      :resulting_in_undergraduate_degree_with_qts,
+      :with_gcse_equivalency,
+      :published,
+      provider: @provider,
+      accrediting_provider: @accredited_provider,
+      a_level_subject_requirements: [],
+      accept_pending_a_level: nil,
+      accept_a_level_equivalency: nil
+    )
+    @course.sites << build_list(:site, 1, provider: @provider)
+  end
+
+  def given_there_is_an_published_qts_course
+    @course = create(
+      :course,
+      :resulting_in_qts,
+      :with_gcse_equivalency,
+      :published,
+      provider: @provider,
+      accrediting_provider: @accredited_provider
+    )
+    @course.sites << build_list(:site, 1, provider: @provider)
+  end
+
   def when_i_visit_the_course_page
     publish_provider_courses_show_page.load(
       provider_code: @provider.provider_code,
@@ -95,6 +142,32 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
         2025,
+        @course.course_code
+      )
+    )
+  end
+
+  def then_there_is_no_change_qualification_link
+    expect(publish_provider_courses_details_page.outcome.actions.text).to be_empty
+  end
+
+  def and_i_enter_the_basic_details_tab
+    click_on 'Basic details'
+  end
+
+  def and_i_click_change_qualification
+    publish_provider_courses_details_page.outcome.actions.find('a').click
+  end
+
+  def then_the_tda_option_is_not_available
+    expect(page).to have_no_field('Teacher degree apprenticeship (TDA) with QTS', type: 'radio')
+  end
+
+  def and_i_on_the_change_qualification_page
+    expect(page).to have_current_path(
+      outcome_publish_provider_recruitment_cycle_course_path(
+        @course.provider.provider_code,
+        @course.provider.recruitment_cycle_year,
         @course.course_code
       )
     )
