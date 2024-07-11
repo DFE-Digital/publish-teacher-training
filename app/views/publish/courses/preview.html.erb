@@ -43,7 +43,20 @@
 
     <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
 
-    <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
+    <h2 class="govuk-heading-l" id="section-train-with-disabilities">
+      <%= t(".training_with_disabilities") %>
+    </h2>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+        t(".training_with_disabilities_link", provider_name: course.provider_name),
+        training_with_disabilities_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code
+        )
+      ) %>
+    </p>
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 

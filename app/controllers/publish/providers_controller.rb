@@ -54,29 +54,26 @@ module Publish
     def about
       authorize provider, :show?
 
-      @about_form = AboutYourOrganisationForm.new(provider)
+      @about_form = AboutYourOrganisationForm.new(
+        provider,
+        redirect_params:,
+        course_code: params[:course_code]
+      )
     end
 
     def update
       authorize provider, :update?
 
-      @about_form = AboutYourOrganisationForm.new(provider, params: provider_params)
+      @about_form = AboutYourOrganisationForm.new(
+        provider,
+        params: provider_params,
+        redirect_params:,
+        course_code: params.dig(param_form_key, :course_code)
+      )
 
       if @about_form.save!
-        if goto_provider?
-          redirect_to(
-            provider_publish_provider_recruitment_cycle_course_path(
-              provider.provider_code,
-              provider.recruitment_cycle_year,
-              params[:course_code] || params.dig(param_form_key, :course_code)
-            )
-          )
-        elsif goto_preview?
-          redirect_to preview_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, (params[:course_code] || params.dig(param_form_key, :course_code)))
-        else
-          flash[:success] = I18n.t('success.published')
-          redirect_to(details_publish_provider_recruitment_cycle_path(provider.provider_code, provider.recruitment_cycle_year))
-        end
+        redirect_to @about_form.update_success_path
+        flash[:success] = I18n.t('success.published') if redirect_params.all? { |_k, v| v.blank? }
       else
         @errors = @about_form.errors.messages
         render :about
@@ -124,7 +121,7 @@ module Publish
     def provider_params
       params
         .require(param_form_key)
-        .except(:goto_preview, :course_code, :goto_provider)
+        .except(:goto_preview, :course_code, :goto_provider, :goto_training_with_disabilities)
         .permit(
           *AboutYourOrganisationForm::FIELDS,
           accredited_bodies: %i[provider_name provider_code description]
@@ -132,5 +129,13 @@ module Publish
     end
 
     def param_form_key = :publish_about_your_organisation_form
+
+    def redirect_params
+      params.fetch(param_form_key, params).slice(
+        :goto_preview,
+        :goto_provider,
+        :goto_training_with_disabilities
+      ).permit!.to_h
+    end
   end
 end

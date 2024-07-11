@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Viewing a findable course' do
   include PublishHelper
+  include Rails.application.routes.url_helpers
 
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
@@ -85,6 +86,15 @@ feature 'Viewing a findable course' do
     when_i_click("Back to #{@course.name} (#{course.course_code})")
     when_i_click(@course.accrediting_provider.provider_name)
     then_i_should_be_on_the_accrediting_provider_page
+    when_i_click("Back to #{@course.name} (#{course.course_code})")
+    then_i_should_be_on_the_course_page
+  end
+
+  scenario 'user views the training with disabilities page' do
+    given_there_is_a_findable_course
+    when_i_visit_the_course_page
+    when_i_click("Find out about training with disabilities and other needs at #{@course.provider_name}")
+    then_i_should_be_on_the_training_with_disabilities_page
     when_i_click("Back to #{@course.name} (#{course.course_code})")
     then_i_should_be_on_the_course_page
   end
@@ -257,8 +267,8 @@ feature 'Viewing a findable course' do
       'Certificate must be print in blue ink'
     )
 
-    expect(find_course_show_page.train_with_disability).to have_content(
-      provider.train_with_disability
+    expect(find_course_show_page).to have_content(
+      'Training with disabilities'
     )
 
     expect(find_course_show_page.school_placements).to have_no_content('Suspended site with vacancies')
@@ -375,6 +385,17 @@ feature 'Viewing a findable course' do
         Settings.search_ui.base_url,
         "/course/#{@course.provider_code}/#{@course.course_code}"
       ).to_s
+    )
+  end
+
+  def then_i_should_be_on_the_training_with_disabilities_page
+    expect(find_course_show_page.train_with_disability).to have_content(
+      provider.train_with_disability
+    )
+
+    expect(page).to have_link(
+      "Contact #{course.provider_name}",
+      href: find_provider_path(@course.provider_code, @course.course_code)
     )
   end
 end

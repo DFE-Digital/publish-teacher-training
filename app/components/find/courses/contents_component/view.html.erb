@@ -16,7 +16,7 @@
   <% end %>
   <li><%= govuk_link_to "International candidates", "#section-international-students" %></li>
   <% if provider.train_with_disability.present? || preview? %>
-    <li><%= govuk_link_to "Training with disabilities and other needs", "#section-train-with-disabilities" %></li>
+    <li><%= govuk_link_to "Training with disabilities", "#section-train-with-disabilities" %></li>
   <% end %>
   <li><%= govuk_link_to "Support and advice", "#section-advice" %></li>
   <% if course.application_status_open? %> <li><%= govuk_link_to "Apply", "#section-apply" %></li> <% end %>

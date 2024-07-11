@@ -22,6 +22,7 @@ namespace :find, path: '/' do
   scope module: :courses, path: '/courses' do
     get '/:provider_code/:course_code/provider', to: 'providers#show', as: :provider
     get '/:provider_code/:course_code/accredited-by', to: 'accrediting_providers#show', as: :accrediting_provider
+    get '/:provider_code/:course_code/training-with-disabilities', to: 'training_with_disabilities#show', as: :training_with_disabilities
   end
 
   get '/feature-flags', to: 'feature_flags#index'

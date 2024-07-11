@@ -27,7 +27,7 @@ module CoursePreview
           how_school_placements_work:
         school_placements_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, course_code, goto_preview: true),
           train_with_disability:
-        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_preview: true)}#train-with-disability",
+        "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_training_with_disabilities: true)}#train-with-disability",
           train_with_us:
         "#{about_publish_provider_recruitment_cycle_path(provider_code, recruitment_cycle_year, course_code:, goto_provider: true)}#train-with-us",
           about_accrediting_provider:

@@ -14,8 +14,8 @@ module Find
       params[:goto_provider] || params.dig(param_form_key, :goto_provider)
     end
 
-    def goto_provider?(param_form_key:, params:)
-      goto_provider_value(param_form_key:, params:) == 'true'
+    def goto_training_with_disabilities_value(param_form_key:, params:)
+      params[:goto_training_with_disabilities] || params.dig(param_form_key, :goto_training_with_disabilities)
     end
 
     def back_link_path(param_form_key:, params:, provider_code:, recruitment_cycle_year:, course_code:)

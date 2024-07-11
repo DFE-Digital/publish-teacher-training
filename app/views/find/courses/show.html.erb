@@ -54,7 +54,19 @@
     <%= render Find::Courses::InternationalStudentsComponent::View.new(course: @course) %>
 
     <% if @provider.train_with_disability.present? %>
-      <%= render partial: "find/courses/train_with_disabilities", locals: { course: @course } %>
+      <h2 class="govuk-heading-l" id="section-train-with-disabilities">
+        <%= t(".training_with_disabilities") %>
+      </h2>
+
+      <p class="govuk-body">
+        <%= govuk_link_to(
+          t(".training_with_disabilities_link", provider_name: @course.provider_name),
+          find_training_with_disabilities_path(
+            @course.provider_code,
+            @course.course_code
+          )
+        ) %>
+      </p>
     <% end %>
 
     <%= render partial: "find/courses/advice", locals: { course: @course } %>

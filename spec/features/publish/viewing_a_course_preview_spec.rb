@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 feature 'Course show', { can_edit_current_and_next_cycles: false } do
+  include Rails.application.routes.url_helpers
   context 'bursaries and scholarships is announced' do
     before do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
@@ -37,14 +38,17 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'blank training with disabilities and other needs' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
+      and_i_click_link_or_button("Find out about training with disabilities and other needs at #{@course.provider_name}")
       and_i_click_link_or_button('Enter details about training with disabilities and other needs')
       then_i_should_be_on_about_your_organisation_page
       and_i_click_link_or_button('Back')
-      then_i_should_be_back_on_the_preview_page
+      then_i_should_be_on_the_training_with_disabilities_page
       and_i_click_link_or_button('Enter details about training with disabilities and other needs')
       and_i_submit_a_valid_about_your_organisation
-      then_i_should_be_back_on_the_preview_page
+      then_i_should_be_on_the_training_with_disabilities_page
       then_i_should_see_the_updated_content('test training with disabilities')
+      and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+      then_i_should_be_back_on_the_preview_page
     end
 
     scenario 'blank school placements section' do
@@ -239,8 +243,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       'Financial support from the training provider'
     )
 
-    expect(publish_course_preview_page.train_with_disability).to have_content(
-      provider.train_with_disability
+    expect(publish_course_preview_page).to have_content(
+      'Training with disabilities'
     )
 
     expect(publish_course_preview_page).to have_content '2:1 or above, or equivalent'
@@ -502,6 +506,21 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     expect(publish_course_preview_page.about_accrediting_provider).to have_content(
       decorated_course.about_accrediting_provider
+    )
+  end
+
+  def then_i_should_be_on_the_training_with_disabilities_page
+    expect(publish_course_preview_page.train_with_disability).to have_content(
+      provider.train_with_disability
+    )
+
+    expect(page).to have_link(
+      "Contact #{course.provider_name}",
+      href: provider_publish_provider_recruitment_cycle_course_path(
+        @course.provider_code,
+        @course.recruitment_cycle_year,
+        @course.course_code
+      )
     )
   end
 end

@@ -1,0 +1,34 @@
+<%= content_for :page_title do %>
+  <%= t(".heading", provider_name: @course.provider_name) %>
+<% end %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    href: preview_publish_provider_recruitment_cycle_course_path(
+      @course.provider_code,
+      @course.recruitment_cycle_year,
+      @course.course_code
+    ),
+    text: t(
+      ".back",
+      course_name: @course.name,
+      course_code: @course.course_code
+    )
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render partial: "find/courses/train_with_disabilities", locals: { course: } %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(
+        t(".contact", provider_name: @course.provider_name),
+        provider_publish_provider_recruitment_cycle_course_path(
+          @course.provider_code,
+          @course.recruitment_cycle_year,
+          @course.course_code
+        )
+      ) %>
+    </p>
+  </div>
+</div>

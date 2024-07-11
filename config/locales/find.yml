@@ -71,6 +71,8 @@ en:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
+      train_with_disabilities:
+        heading: Training with disabilities and other needs at %{provider_name}
       summary_component:
         view:
           fee_or_salary: Fee or salary
@@ -104,6 +106,11 @@ en:
           telephone: Telephone
           school_website: School Website
           address: Address
+      training_with_disabilities:
+        show:
+          heading: Training with disabilities and other needs at %{provider_name}
+          back: Back to %{course_name} (%{course_code})
+          contact: Contact %{provider_name}
       about_schools_component:
         view:
           view_list_of_school_placements: View list of school placements
@@ -118,6 +125,8 @@ en:
         not_consider_a_level_equivalency: We will not consider candidates who need to take A level equivalency tests.
       show:
         back_to_search: Back to search results
+        training_with_disabilities: Training with disabilities
+        training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     scholarships:
       physics:
         body: Institute of Physics
