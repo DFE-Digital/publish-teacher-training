@@ -93,7 +93,7 @@ module Support
 
           expect(subject.errors.messages.count).to eq(2)
           expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the #{Settings.current_recruitment_cycle_year} cycle")
-          expect(subject.errors.messages[:applications_open_from]).to include("04/08/2000 is not valid for the #{Settings.current_recruitment_cycle_year} cycle. A valid date must be between 01/10/#{Settings.current_recruitment_cycle_year.to_i - 1} and 30/09/#{Settings.current_recruitment_cycle_year}")
+          expect(subject.errors.messages[:applications_open_from]).to include("The date when applications open must be between #{course.recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{course.recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
         end
       end
     end

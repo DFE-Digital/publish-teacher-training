@@ -575,7 +575,7 @@ describe Course do
             course.valid?(:new)
             error = course.errors.messages[:applications_open_from]
             expect(error).not_to be_empty
-            expect(error.first).to include('is not valid')
+            expect(error.first).to include("The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
           end
         end
 
@@ -604,7 +604,7 @@ describe Course do
         it 'requires a applications_open_from date inside of the current recruitment cycle' do
           error = course.errors.messages[:applications_open_from]
           expect(error).not_to be_empty
-          expect(error.first).to include("is not valid for the #{Settings.current_recruitment_cycle_year} cycle. A valid date must be between")
+          expect(error.first).to include("The date when applications open must be between #{recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
         end
       end
 
