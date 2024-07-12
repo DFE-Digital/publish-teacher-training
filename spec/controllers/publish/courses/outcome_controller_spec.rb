@@ -13,6 +13,58 @@ RSpec.describe Publish::Courses::OutcomeController do
     allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
+  describe '#edit' do
+    context 'when teacher degree apprenticeship published course' do
+      it 'redirects to the course page' do
+        course = create(
+          :course,
+          :resulting_in_undergraduate_degree_with_qts,
+          :with_teacher_degree_apprenticeship,
+          :published,
+          provider:,
+          study_mode: :part_time,
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+        )
+
+        get :edit, params: {
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          code: course.course_code
+        }
+
+        expect(response).to redirect_to(
+          publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            provider.recruitment_cycle_year,
+            course.course_code
+          )
+        )
+      end
+    end
+
+    context 'when teacher degree apprenticeship draft course' do
+      it 'renders the edit outcome' do
+        course = create(
+          :course,
+          :resulting_in_undergraduate_degree_with_qts,
+          :with_teacher_degree_apprenticeship,
+          :draft_enrichment,
+          provider:,
+          study_mode: :part_time,
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+        )
+
+        get :edit, params: {
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          code: course.course_code
+        }
+
+        expect(response).to render_template(:edit)
+      end
+    end
+  end
+
   describe '#update' do
     context 'when changing from a QTS to teacher degree apprenticeship course' do
       it 'assigns teacher degree apprenticeship course defaults' do

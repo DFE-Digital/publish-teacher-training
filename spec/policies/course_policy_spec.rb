@@ -46,6 +46,73 @@ describe CoursePolicy do
     end
   end
 
+  permissions :can_update_qualification? do
+    context 'when the course is a TDA and is published' do
+      let(:course) do
+        create(
+          :course,
+          :with_teacher_degree_apprenticeship,
+          :resulting_in_undergraduate_degree_with_qts,
+          :with_gcse_equivalency,
+          :published
+        )
+      end
+
+      it { is_expected.not_to permit(user, course) }
+    end
+
+    context 'when the course is a TDA but not published' do
+      let(:course) do
+        create(
+          :course,
+          :with_teacher_degree_apprenticeship,
+          :resulting_in_undergraduate_degree_with_qts,
+          :with_gcse_equivalency
+        )
+      end
+
+      it { is_expected.to permit(user, course) }
+    end
+
+    context 'when the course is not a TDA but is published' do
+      let(:course) do
+        create(
+          :course,
+          :resulting_in_qts,
+          :with_gcse_equivalency,
+          :published
+        )
+      end
+
+      it { is_expected.to permit(user, course) }
+    end
+
+    context 'when the course is withdrawn' do
+      let(:course) do
+        create(
+          :course,
+          :resulting_in_qts,
+          :with_gcse_equivalency,
+          :withdrawn
+        )
+      end
+
+      it { is_expected.not_to permit(user, course) }
+    end
+
+    context 'when the course is not a TDA, not published, and not withdrawn' do
+      let(:course) do
+        create(
+          :course,
+          :resulting_in_qts,
+          :with_gcse_equivalency
+        )
+      end
+
+      it { is_expected.to permit(user, course) }
+    end
+  end
+
   describe '#permitted_attributes' do
     subject { described_class.new(user, build(:course)) }
 

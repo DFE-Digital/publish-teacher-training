@@ -21,11 +21,20 @@ module Publish
       end
 
       def edit
+        authorize course, :can_update_qualification?
+
         super
+      rescue Pundit::NotAuthorizedError
+        redirect_to publish_provider_recruitment_cycle_course_path(
+          course.provider.provider_code,
+          course.provider.recruitment_cycle_year,
+          course.course_code
+        )
       end
 
       def update
         authorize(provider)
+        authorize course, :can_update_qualification?
 
         @errors = errors
         return render :edit if @errors.present?

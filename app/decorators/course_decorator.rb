@@ -454,10 +454,6 @@ class CourseDecorator < ApplicationDecorator
     !teacher_degree_apprenticeship?
   end
 
-  def immutable_course_outcome?
-    (object.teacher_degree_apprenticeship? && object.is_published?) || object.is_withdrawn?
-  end
-
   private
 
   def not_on_find
