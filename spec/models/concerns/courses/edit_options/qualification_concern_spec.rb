@@ -9,6 +9,10 @@ describe Courses::EditOptions::QualificationConcern do
       attr_accessor :level
 
       def tda_active?; end
+
+      def teacher_degree_apprenticeship?; end
+
+      def is_published?; end
     end
 
     klass.new

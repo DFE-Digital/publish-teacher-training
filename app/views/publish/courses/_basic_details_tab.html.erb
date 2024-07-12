@@ -62,13 +62,13 @@
      summary_list.with_row(html_attributes: { data: { qa: "course__outcome" } }) do |row|
        row.with_key { "Qualification" }
        row.with_value { course.outcome }
-       if course.is_withdrawn?
-         row.with_action
-       else
+       if policy(course).can_update_qualification?
          row.with_action(
            href: outcome_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
            visually_hidden_text: "outcome"
          )
+       else
+         row.with_action
        end
      end
 

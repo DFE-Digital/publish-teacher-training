@@ -75,6 +75,9 @@ describe 'Course with edit options' do
   end
 
   describe 'qualifications' do
+    let(:provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, year: 2025)) }
+    let(:course) { create(:course, provider:, level: 'primary', subjects: [subjects]) }
+
     context "for a course that's not further education" do
       it 'returns only QTS options for users to choose between' do
         expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
@@ -93,6 +96,38 @@ describe 'Course with edit options' do
         course.qualification_options.each do |q|
           expect(q.include?('qts')).to be_falsy
         end
+      end
+    end
+
+    context 'when TDA is active' do
+      before do
+        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
+      end
+
+      it 'includes undergraduate_degree_with_qts' do
+        expect(course.qualification_options).to include('undergraduate_degree_with_qts')
+      end
+    end
+
+    context 'when TDA is not active' do
+      before do
+        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(false)
+      end
+
+      it 'does not include undergraduate_degree_with_qts' do
+        expect(course.qualification_options).not_to include('undergraduate_degree_with_qts')
+      end
+    end
+
+    context 'when the course is non-TDA and published' do
+      let(:course) { create(:course, :resulting_in_qts, :published) }
+
+      before do
+        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
+      end
+
+      it 'does not include undergraduate_degree_with_qts' do
+        expect(course.qualification_options).not_to include('undergraduate_degree_with_qts')
       end
     end
   end

@@ -39,6 +39,10 @@ class CoursePolicy
     course.draft_or_rolled_over?
   end
 
+  def can_update_qualification?
+    !(course.teacher_degree_apprenticeship? && course.is_published?) && !course.is_withdrawn?
+  end
+
   alias preview? show?
   alias apply? show?
   alias details? show?
