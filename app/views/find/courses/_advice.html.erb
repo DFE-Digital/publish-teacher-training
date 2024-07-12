@@ -1,13 +1,4 @@
-<div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-advice">Support and advice</h2>
-  <p class="govuk-body">For support and advice, you can speak to a <%= govuk_link_to "teacher training adviser", t("get_into_teaching.url_get_an_advisor") %>
-  for free. They’re all experienced teachers who can help you to prepare your application, book school
-    experience, and access exclusive teaching events.</p>
-  <p class="govuk-body">You can also call <%= t("service_name.get_into_teaching") %> on <%= t("get_into_teaching.tel") %>, or
-    <%= govuk_link_to "chat online", t("get_into_teaching.url_online_chat") %>
-    <%= t("get_into_teaching.opening_times") %> (except public holidays).</p>
-
-  <p class="govuk-body">Find out about the different ways to train <%= govuk_link_to("if you do not have a degree", t("get_into_teaching.url_ways_to_train_no_degree")) %>, or <%= govuk_link_to("are already an experienced teacher", t("get_into_teaching.url_ways_to_train_experienced_teacher")) %>.</p>
-
-  <p class="govuk-body">If there is something wrong with this course listing, <%= bat_contact_mail_to("contact us by email", subject: "Edit #{course.name} (#{course.provider_code}/#{course.course_code})") %>.</p>
+<div id="section-advice-and-support">
+  <h2 class="govuk-heading-m" id="section-advice"><%= t(".heading") %></h2>
+  <p class="govuk-body"><%= t(".body_html") %></p>
 </div>

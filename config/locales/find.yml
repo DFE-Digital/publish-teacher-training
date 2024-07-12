@@ -71,6 +71,9 @@ en:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
+      advice:
+        heading: Support and advice
+        body_html: You can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/teacher-training-advisers"> get a teacher training adviser</a> or <a class="govuk-link" href="https://getintoteaching.education.gov.uk/help-and-support"> contact Get Into Teaching</a> for free support.
       train_with_disabilities:
         heading: Training with disabilities and other needs at %{provider_name}
       international_students_component:
