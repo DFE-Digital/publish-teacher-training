@@ -21,3 +21,10 @@
 .app-advice__body > *:last-child {
   margin-bottom: 0;
 }
+
+#section-advice-and-support {
+  border: 5px solid #f162a3;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: govuk-colour("light-grey");
+}
