@@ -21,8 +21,7 @@
         <%= form.govuk_error_summary %>
 
         <%= form.govuk_radio_buttons_fieldset :accept_a_level_equivalency, legend: { size: "l", text: t("course.#{@wizard.current_step.model_name.i18n_key}.heading"), tag: "h1" }, caption: { text: @course_decorator.name_and_code, size: "l" } do %>
-
-          <%= form.govuk_radio_button :accept_a_level_equivalency, :yes do %>
+          <%= form.govuk_radio_button :accept_a_level_equivalency, :yes, link_errors: true do %>
             <%= form.govuk_text_area :additional_a_level_equivalencies, max_words: @wizard.current_step.class::MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS, hint: { text: t("course.#{@wizard.current_step.model_name.i18n_key}.hint") }, label: { class: "govuk-!-font-weight-bold" } %>
           <% end %>
           <%= form.govuk_radio_button :accept_a_level_equivalency, :no %>
