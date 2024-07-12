@@ -4,9 +4,15 @@ module Find
   module Courses
     module InternationalStudentsComponent
       class View < ViewComponent::Base
+        include ::ViewHelper
+        include PreviewHelper
         attr_reader :course
 
-        delegate :apprenticeship?, to: :course
+        delegate :apprenticeship?,
+                 :salaried?,
+                 :can_sponsor_student_visa,
+                 :can_sponsor_skilled_worker_visa,
+                 to: :course
 
         def initialize(course:)
           super
@@ -31,6 +37,16 @@ module Find
 
         def course_subject_codes
           @course_subject_codes ||= course.subjects.pluck(:subject_code).compact
+        end
+
+        def visa_sponsorship_summary
+          if !salaried? && can_sponsor_student_visa
+            t('.student_visas_can_be_sponsored')
+          elsif salaried? && can_sponsor_skilled_worker_visa
+            t('.skilled_worker_visas_can_be_sponsored')
+          else
+            t('.visas_cannot_be_sponsored')
+          end
         end
       end
     end

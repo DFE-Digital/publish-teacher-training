@@ -16,10 +16,6 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     it 'tells candidates they’ll need the right to study' do
       expect(page).to have_text('You’ll need the right to study in the UK')
     end
-
-    it 'tells candidates sponsorship is not available' do
-      expect(page).to have_text('Sponsorship for a student visa is not available for this course')
-    end
   end
 
   context 'when the course is fee-paying and does sponsor Student visas' do
@@ -37,7 +33,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'tells candidates visa sponsorship may be available, but they should check' do
-      expect(page).to have_text('Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.')
+      expect(page).to have_text('Before you apply for this course, contact the training provider to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.')
     end
 
     it 'does not tell candidates the 3-year residency rule' do
@@ -64,7 +60,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
 
     it 'tells candidates visa sponsorship may be available, but they should check' do
-      expect(page).to have_text('Before you apply for this course, contact us to check Skilled Worker visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.')
+      expect(page).to have_text('Before you apply for this course, contact the training provider to check Skilled Worker visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.')
     end
   end
 
@@ -80,10 +76,6 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
 
     it 'tells candidates they’ll need the right to work' do
       expect(page).to have_text('You’ll need the right to work in the UK')
-    end
-
-    it 'tells candidates visa sponsorship is not available' do
-      expect(page).to have_text('Sponsorship for a Skilled Worker visa is not available for this course')
     end
 
     it 'does not tell candidates the 3-year residency rule' do

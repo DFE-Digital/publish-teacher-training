@@ -189,6 +189,10 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page).to have_content(
+      'Student visas can be sponsored'
+    )
+
+    expect(find_course_show_page).to have_content(
       '11 to 18'
     )
 
@@ -240,11 +244,6 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.required_qualifications).to have_no_content(
       @course.latest_published_enrichment.required_qualifications
-    )
-
-    expect(find_course_show_page).to have_international_students
-    expect(find_course_show_page.international_students).to have_content(
-      'Before you apply for this course, contact us to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.'
     )
 
     expect(find_course_show_page.required_qualifications).to have_content(
