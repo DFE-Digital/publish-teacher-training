@@ -50,7 +50,7 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
         :with_teacher_degree_apprenticeship,
         :resulting_in_undergraduate_degree_with_qts,
         a_level_subject_requirements: [],
-        accept_pending_gcse: nil,
+        accept_pending_a_level: nil,
         accept_a_level_equivalency: nil,
         additional_a_level_equivalencies: nil
       )
@@ -71,7 +71,7 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
         :with_teacher_degree_apprenticeship,
         :resulting_in_undergraduate_degree_with_qts,
         a_level_subject_requirements: [],
-        accept_pending_gcse: nil,
+        accept_pending_a_level: nil,
         accept_a_level_equivalency: nil,
         additional_a_level_equivalencies: nil
       )
