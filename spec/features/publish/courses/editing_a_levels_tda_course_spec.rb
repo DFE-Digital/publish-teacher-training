@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
+feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_current_and_next_cycles: false } do
   scenario 'adding a level requirements' do
     given_i_am_authenticated_as_a_provider_user
     and_the_tda_feature_flag_is_active
@@ -26,13 +26,13 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     and_i_add_a_minimum_grade_required
     and_i_click_continue
 
-    then_i_see_the_subject_i_choosen
+    then_i_see_the_subject_i_selected
     and_i_am_on_the_add_another_a_level_subject_page
     and_i_see_the_success_message_that_i_added_an_a_level
 
     when_i_click_continue
     then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
-    and_i_see_the_subject_i_choosen
+    and_i_see_the_subject_i_selected
 
     when_i_choose_yes
     and_i_click_continue
@@ -257,7 +257,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     fill_in 'Minimum grade required (optional)', with: 'C'
   end
 
-  def then_i_see_the_subject_i_choosen
+  def then_i_see_the_subject_i_selected
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
@@ -268,7 +268,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
     )
     expect(page).to have_content('Any subject - Grade C or above')
   end
-  alias_method :and_i_see_the_subject_i_choosen, :then_i_see_the_subject_i_choosen
+  alias_method :and_i_see_the_subject_i_selected, :then_i_see_the_subject_i_selected
 
   def then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
     and_i_see_there_is_a_problem
@@ -284,7 +284,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', :can_edit_c
   end
 
   def then_i_see_the_two_subjects_i_already_added
-    and_i_see_the_subject_i_choosen
+    and_i_see_the_subject_i_selected
     expect(page).to have_content('Any STEM subject - Grade C or above')
   end
 
