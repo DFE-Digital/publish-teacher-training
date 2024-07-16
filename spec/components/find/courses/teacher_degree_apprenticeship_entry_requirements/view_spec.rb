@@ -4,7 +4,8 @@ require 'rails_helper'
 
 describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
   let(:course) { build(:course) }
-  let(:result) { render_inline(described_class.new(course: course.decorate)) }
+  let(:preview) { false }
+  let(:result) { render_inline(described_class.new(course: course.decorate, preview:)) }
 
   context 'when teacher degree apprenticeship course' do
     let(:course) do
@@ -41,7 +42,8 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
     end
   end
 
-  context 'when there are no A levels' do
+  context 'when preview and there are no A levels' do
+    let(:preview) { true }
     let(:course) do
       build(
         :course,
@@ -49,12 +51,36 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
         :resulting_in_undergraduate_degree_with_qts,
         a_level_subject_requirements: [],
         accept_pending_gcse: nil,
+        accept_a_level_equivalency: nil,
+        additional_a_level_equivalencies: nil
+      )
+    end
+
+    it 'renders the headings and enter A levels text' do
+      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to eq(
+        'A levels Enter A levels and equivalency test requirements GCSEs'
+      )
+    end
+  end
+
+  context 'when not preview and there are no A levels' do
+    let(:preview) { false }
+    let(:course) do
+      build(
+        :course,
+        :with_teacher_degree_apprenticeship,
+        :resulting_in_undergraduate_degree_with_qts,
+        a_level_subject_requirements: [],
+        accept_pending_gcse: nil,
+        accept_a_level_equivalency: nil,
         additional_a_level_equivalencies: nil
       )
     end
 
     it 'renders the headings' do
-      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to eq('A levels GCSEs')
+      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to eq(
+        'A levels GCSEs'
+      )
     end
   end
 end

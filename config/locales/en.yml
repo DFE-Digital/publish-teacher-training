@@ -270,6 +270,8 @@ en:
       missing_information:
         about_this_course:
           text: "Enter course summary"
+        a_levels:
+          text: "Enter A levels and equivalency test requirements"
         degree:
           text: "Enter degree requirements"
         fee_uk_eu:

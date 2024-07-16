@@ -31,7 +31,7 @@
       <% end %>
     <% end %>
 
-    <%= render Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View.new(course:) %>
+    <%= render Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View.new(course:, preview: preview?(params)) %>
 
     <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>

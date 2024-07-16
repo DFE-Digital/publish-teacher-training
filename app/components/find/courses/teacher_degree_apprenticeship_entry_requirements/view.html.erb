@@ -1,5 +1,16 @@
 <h4 class="govuk-heading-s">A levels</h4>
 
-<%= render Find::Courses::ALevelComponent::View.new(course:) %>
+<% if any_a_levels_answered? %>
+  <%= render Find::Courses::ALevelComponent::View.new(course:) %>
+<% else %>
+  <%= govuk_inset_text do %>
+    <%= govuk_link_to t('components.course_preview.missing_information.a_levels.text'),
+      publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
+        course.provider.provider_code,
+        course.provider.recruitment_cycle_year,
+        course.course_code
+      ) %>
+  <% end %>
+<% end %>
 
 <h4 class="govuk-heading-s">GCSEs</h4>
