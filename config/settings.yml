@@ -93,14 +93,14 @@ feedback:
   link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
 
 features:
-  teacher_degree_apprenticeship: false
+  teacher_degree_apprenticeship: true
   send_request_data_to_bigquery: false
   rollover:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
-    can_edit_current_and_next_cycles: false
+    can_edit_current_and_next_cycles: true
 
 cookies:
   session:
