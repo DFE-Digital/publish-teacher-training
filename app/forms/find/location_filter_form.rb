@@ -41,7 +41,7 @@ module Find
         @params.merge!(geocode_params)
         @valid = true
       else
-        @errors = [I18n.t('find.location_filter.fields.location'), I18n.t('find.location_filter.errors.unknown_location')]
+        @errors = [I18n.t('find.fields.location'), I18n.t('find.location_filter.errors.unknown_location')]
       end
     end
 

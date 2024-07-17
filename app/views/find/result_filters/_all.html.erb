@@ -5,6 +5,7 @@
 
   <div class="app-filter__content">
   <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
+    <%= render "find/result_filters/radius", form: %>
     <%= render "find/result_filters/visa_filter", form: %>
     <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
     <%= render "find/result_filters/study_type_filter", form: %>
