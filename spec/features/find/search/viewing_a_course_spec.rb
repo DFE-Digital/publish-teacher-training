@@ -247,7 +247,10 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page.required_qualifications).to have_content(
-      'Grade 4 (C) or above in English and maths, or equivalent qualification.'
+      'Grade 4 (C) in English and maths'
+    )
+    expect(find_course_show_page.required_qualifications).to have_content(
+      'or above, or equivalent qualification'
     )
     expect(find_course_show_page.required_qualifications).to have_content(
       'We’ll consider candidates with pending GCSEs.'
@@ -260,7 +263,7 @@ feature 'Viewing a findable course' do
     )
 
     expect(find_course_show_page.required_qualifications).to have_content(
-      '2:1 or above, or equivalent.'
+      '2:1 bachelor’s degree or above or equivalent qualification'
     )
     expect(find_course_show_page.required_qualifications).to have_content(
       'Certificate must be print in blue ink'

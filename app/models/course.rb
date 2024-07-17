@@ -8,6 +8,8 @@ class Course < ApplicationRecord
   include Courses::EditOptions
   include TimeFormat
 
+  A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
+
   after_initialize :set_defaults
 
   before_discard do
@@ -814,6 +816,10 @@ class Course < ApplicationRecord
     site_statuses.each do |site_status|
       update_vac_status('full_time', site_status)
     end
+  end
+
+  def any_a_levels?
+    A_LEVEL_ATTRIBUTES.any? { |attribute| public_send(attribute).present? }
   end
 
   private

@@ -2,18 +2,22 @@
   <p class="govuk-body">
     <%= a_level_subject_requirement %>
   </p>
+
+  <% unless course.accept_pending_a_level.nil? %>
+    <span class="govuk-hint govuk-!-font-size-16">
+      <%= pending_a_level_summary_content %>
+    </span>
+  <% end %>
 <% end %>
 
-<% unless course.accept_pending_a_level.nil? %>
-  <p class="govuk-body"><%= pending_a_level_summary_content %></p>
-<% end %>
+<% if course.any_a_levels? %>
+  <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".equivalency_tests")) do %>
+    <p class="govuk-body"><%= a_level_equivalency_summary_content %></p>
 
-<% unless course.accept_a_level_equivalency.nil? %>
-  <p class="govuk-body"><%= a_level_equivalency_summary_content %></p>
-<% end %>
-
-<% if course.accept_a_level_equivalency? && course.additional_a_level_equivalencies.present? %>
-  <p class="govuk-body">
-    <%= course.additional_a_level_equivalencies %>
-  </p>
+    <% if course.additional_a_level_equivalencies.present? %>
+      <p class="govuk-body">
+        <%= course.additional_a_level_equivalencies %>
+      </p>
+    <% end %>
+  <% end %>
 <% end %>

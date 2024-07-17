@@ -1,5 +1,3 @@
-<h4 class="govuk-heading-s">A levels</h4>
-
 <% if any_a_levels_answered? %>
   <%= render Find::Courses::ALevelComponent::View.new(course:) %>
 <% else %>
@@ -12,5 +10,3 @@
       ) %>
   <% end %>
 <% end %>
-
-<h4 class="govuk-heading-s">GCSEs</h4>
