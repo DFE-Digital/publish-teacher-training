@@ -5,6 +5,14 @@ require 'rails_helper'
 module Find
   module PhaseBanner
     RSpec.describe View, type: :component do
+      it 'renders the feedback link' do
+        result = render_inline(described_class.new)
+
+        mailto_link = result.css('a.govuk-link.govuk-link--no-visited-state')[0]
+        expect(mailto_link['href']).to include('subject=Feedback%20about%20Find%20teacher%20training%20courses')
+        expect(page.text).to include('Give feedback or report a problem: becomingateacher@digital.education.gov.uk')
+      end
+
       {
         'development' => 'grey',
         'qa' => 'orange',
