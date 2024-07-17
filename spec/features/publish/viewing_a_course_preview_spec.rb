@@ -306,7 +306,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :open,
       :secondary,
       :fee_type_based,
-      applications_open_from: Time.zone.tomorrow,
+      applications_open_from: RecruitmentCycle.current.application_start_date,
       accrediting_provider:,
       site_statuses:, enrichments: [course_enrichment],
       study_sites: [study_site],

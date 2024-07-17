@@ -136,11 +136,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    recruitment_cycle = create(:recruitment_cycle, year: 2025)
-    @user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    @user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
     create(:provider, :accredited_provider, provider_code: '1BJ')
-    @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ', recruitment_cycle:)
+    @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BK')
     @provider.accrediting_provider_enrichments = []
     @provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
       {
@@ -161,7 +160,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def when_i_visit_the_course_description_tab
-    publish_provider_courses_show_page.load(provider_code: @provider.provider_code, recruitment_cycle_year: 2025, course_code: @course.course_code)
+    publish_provider_courses_show_page.load(provider_code: @provider.provider_code, recruitment_cycle_year: @provider.recruitment_cycle_year, course_code: @course.course_code)
   end
 
   def then_i_see_a_levels_row
