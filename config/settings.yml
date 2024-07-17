@@ -43,7 +43,7 @@ cookies:
     expire_after_days: 182
 
 current_recruitment_cycle_year: 2024
-next_cycle_open_date: 2024-10-3
+next_cycle_open_date: 2024-10-1
 
 govuk_notify:
   api_key: please_change_me
