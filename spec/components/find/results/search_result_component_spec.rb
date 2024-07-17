@@ -4,6 +4,12 @@ require 'rails_helper'
 
 module Find
   describe Results::SearchResultComponent, type: :component do
+    context 'delegations' do
+      subject { described_class.new(course: build(:course)) }
+
+      it { is_expected.to delegate_method(:age_range_in_years_and_level).to(:course) }
+    end
+
     context 'when the course specifies a required degree grade' do
       it 'renders correct message' do
         course = build(
@@ -148,6 +154,16 @@ module Find
         expect(result.text).not_to include('UK students')
         expect(result.text).not_to include('International students: £14,000')
         expect(result.text).not_to include('Course fee')
+      end
+    end
+
+    context 'when there is an age_range_in_years_and_level' do
+      it 'renders the age range and level' do
+        course = build_stubbed(:course)
+
+        result = render_inline(described_class.new(course:))
+
+        expect(result).to have_text('Age range Some Range and Level', normalize_ws: true)
       end
     end
   end

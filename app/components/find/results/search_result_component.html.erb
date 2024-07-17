@@ -34,6 +34,11 @@
     <dt class="app-description-list__label">Study type</dt>
     <dd data-qa="course__study_mode"><%= course.study_mode.humanize %></dd>
 
+    <% if age_range_in_years_and_level.present? %>
+      <dt class="app-description-list__label"><%= t("find.courses.summary_component.view.age_range") %></dt>
+      <dd data-qa="course__age_range_in_years"><%= age_range_in_years_and_level %></dd>
+    <% end %>
+
     <% if filtered_by_location? && has_sites? %>
       <% if course.university_based? %>
         <%= render partial: "find/results/university", locals: { course: } %>
