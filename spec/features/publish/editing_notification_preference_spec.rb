@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Opting into notifications' do
+feature 'Opting into notifications', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_an_accredited_provider_user
     when_i_visit_accredited_provider_page

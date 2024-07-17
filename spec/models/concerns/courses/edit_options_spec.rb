@@ -80,7 +80,7 @@ describe 'Course with edit options' do
 
     context "for a course that's not further education" do
       it 'returns only QTS options for users to choose between' do
-        expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
+        expect(course.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts undergraduate_degree_with_qts])
         course.qualification_options.each do |q|
           expect(q.include?('qts')).to be_truthy
         end
