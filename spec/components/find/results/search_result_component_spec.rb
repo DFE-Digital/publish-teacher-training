@@ -159,11 +159,13 @@ module Find
 
     context 'when there is an age_range_in_years_and_level' do
       it 'renders the age range and level' do
-        course = build_stubbed(:course)
+        course = build_stubbed(:course,
+                               level: 'secondary',
+                               age_range_in_years: '11_to_16')
 
         result = render_inline(described_class.new(course:))
 
-        expect(result).to have_text('Age range Some Range and Level', normalize_ws: true)
+        expect(result).to have_text('Age range 11 to 16 - secondary', normalize_ws: true)
       end
     end
   end
