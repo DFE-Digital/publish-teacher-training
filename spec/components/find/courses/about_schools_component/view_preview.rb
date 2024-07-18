@@ -32,6 +32,8 @@ module Find
 
         def mock_scitt_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
+                         provider_code: '1BJ',
+                         course_code: 'ZZZZ',
                          published_how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'How placements work',
                          program_type: 'scitt_programme',
@@ -41,6 +43,8 @@ module Find
 
         def mock_hei_course
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
+                         provider_code: '1BJ',
+                         course_code: 'ZZZZ',
                          published_how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'How placements work',
                          program_type: 'higher_education_programme',
@@ -54,7 +58,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
+          attr_accessor(:provider, :provider_code, :course_code, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
 
           def higher_education_programme?
             true
