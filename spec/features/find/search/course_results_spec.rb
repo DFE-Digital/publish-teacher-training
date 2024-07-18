@@ -34,8 +34,8 @@ feature 'results' do
     site2 = build(:site, location_name: 'site2')
     site_status1 = build(:site_status, :findable, site: site1)
     site_status2 = build(:site_status, :findable, site: site2)
-    create(:course, name: 'Hello there', site_statuses: [site_status1])
-    create(:course, name: 'Hello there', site_statuses: [site_status2])
+    create(:course, name: 'Hello there', site_statuses: [site_status1], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time)
+    create(:course, name: 'Hello there', site_statuses: [site_status2], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time)
   end
 
   def i_see_the_courses
@@ -45,7 +45,7 @@ feature 'results' do
       expect(first_course.course_name.text).to include('Hello there')
       expect(first_course.provider_name.text).to be_present
       expect(first_course.qualification.text).to include('QTS with PGCE')
-      expect(first_course.study_mode.text).to eq('Full time')
+      expect(first_course.course_length.text).to eq('1 year - full time')
       expect(first_course.funding_options.text).to eq('Teaching apprenticeship - with salary')
     end
   end
