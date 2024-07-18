@@ -72,7 +72,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       then_i_should_be_back_on_the_preview_page
       and_i_click_link_or_button('Enter degree requirements')
       and_i_submit_and_continue_through_the_two_forms
-      then_i_should_see_the_updated_content('An undergraduate degree, or equivalent.')
+      then_i_should_see_the_updated_content('Bachelor’s degree or equivalent qualification')
     end
 
     scenario 'blank gcse requirements' do
@@ -251,7 +251,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       'Training with disabilities'
     )
 
-    expect(publish_course_preview_page).to have_content '2:1 or above, or equivalent'
+    expect(publish_course_preview_page).to have_content '2:1 bachelor’s degree or above or equivalent qualification'
     expect(publish_course_preview_page).to have_content 'Maths A level'
 
     expect(publish_course_preview_page).to have_study_sites_table

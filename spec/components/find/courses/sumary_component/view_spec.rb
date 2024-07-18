@@ -19,8 +19,7 @@ module Find
             'Qualification',
             'Provider',
             'Date you can apply from',
-            'Date course starts',
-            'Visa sponsorship'
+            'Date course starts'
           )
         end
 
@@ -124,51 +123,6 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include('3 to 7')
-          end
-        end
-
-        context 'when course is fee paying and can sponsor student visas' do
-          it 'displays that student visas can be sponsored' do
-            course = build(
-              :course,
-              :fee_type_based,
-              can_sponsor_student_visa: true,
-              provider: build(:provider)
-            ).decorate
-
-            result = render_inline(described_class.new(course))
-
-            expect(result.text).to include('Student visas can be sponsored')
-          end
-        end
-
-        context 'when course is salaried and can sponsor skilled worker visas' do
-          it 'displays that skilled worker visas can be sponsored' do
-            course = build(
-              :course,
-              :with_salary,
-              can_sponsor_skilled_worker_visa: true,
-              provider: build(:provider)
-            ).decorate
-
-            result = render_inline(described_class.new(course))
-
-            expect(result.text).to include('Skilled Worker visas can be sponsored')
-          end
-        end
-
-        context 'when course cannot sponsor visas' do
-          it 'displays that visas cannot be sponsored' do
-            course = build(
-              :course,
-              can_sponsor_student_visa: false,
-              can_sponsor_skilled_worker_visa: false,
-              provider: build(:provider)
-            ).decorate
-
-            result = render_inline(described_class.new(course))
-
-            expect(result.text).to include('Visas cannot be sponsored')
           end
         end
 

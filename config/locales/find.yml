@@ -81,6 +81,40 @@ en:
           student_visas_can_be_sponsored: Student visas can be sponsored
           skilled_worker_visas_can_be_sponsored: Skilled Worker visas can be sponsored
           visas_cannot_be_sponsored: Visas cannot be sponsored
+      a_level_component:
+        view:
+          equivalency_tests: Equivalency tests
+      entry_requirements_component:
+        view:
+          heading: Entry requirements
+          visa_sponsorship: Visa sponsorship
+          gcses: GCSEs
+          degree: Degree
+          or_equivalent_qualification: or equivalent qualification
+          equivalency_tests: Equivalency tests
+          degree_subject_requirements: Degree subject requirements
+          a_levels: A levels
+          above_or_equivalent_qualification: or above, or equivalent qualification
+          above_or_equivalent_qualification_html:
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+              or above or equivalent qualification
+            </span>
+          equivalent_qualification_html:
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+              or equivalent qualification
+            </span>
+          third_or_above_html:
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+              or equivalent qualification
+            </span>
+            <br>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+              This should be an honours degree (Third or above), or equivalent
+            </span>
       summary_component:
         view:
           fee_or_salary: Fee or salary
@@ -92,7 +126,6 @@ en:
           qualification: Qualification
           provider: Provider
           accredited_by: Accredited by
-          visa_sponsorship: Visa sponsorship
       providers:
         show:
           heading: About %{provider_name}

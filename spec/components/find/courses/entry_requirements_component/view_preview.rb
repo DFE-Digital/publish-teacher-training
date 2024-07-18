@@ -72,6 +72,10 @@ module Find
             accept_science_gcse_equivalency: true,
             additional_gcse_equivalencies: 'much much more',
             computed_subject_name_or_names: 'Biology',
+            funding_type: 'salary',
+            can_sponsor_skilled_worker_visa: true,
+            provider_code: 'provider_code',
+            course_code: 'course_code',
             subjects: [Subject.new(subject_name: 'foo', subject_code: 'sc')] }
         end
 
@@ -81,7 +85,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :computed_subject_name_or_names, :campaign_name, :subjects)
+          attr_accessor(:degree_grade, :degree_subject_requirements, :level, :name, :gcse_grade_required, :accept_pending_gcse, :accept_gcse_equivalency, :accept_english_gcse_equivalency, :accept_maths_gcse_equivalency, :accept_science_gcse_equivalency, :additional_gcse_equivalencies, :computed_subject_name_or_names, :campaign_name, :subjects, :funding_type, :can_sponsor_skilled_worker_visa, :provider_code, :course_code)
 
           def enrichment_attribute(params)
             send(params)
@@ -93,6 +97,22 @@ module Find
 
           def secondary_course?
             level == 'secondary'
+          end
+
+          def two_one?
+            degree_grade == 0
+          end
+
+          def two_two?
+            degree_grade == 1
+          end
+
+          def salaried?
+            funding_type == 'salary' || funding_type == 'apprenticeship'
+          end
+
+          def apprenticeship?
+            funding_type.to_s == 'apprenticeship'
           end
 
           def engineers_teach_physics?

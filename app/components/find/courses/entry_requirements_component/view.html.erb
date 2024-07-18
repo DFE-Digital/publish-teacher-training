@@ -1,60 +1,90 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-entry">Entry requirements</h2>
-  <h3 class="govuk-heading-m">Qualifications needed</h3>
+  <h2 class="govuk-heading-l" id="section-entry"><%= t(".heading") %> </h2>
   <div data-qa="course__required_qualifications">
 
-    <% unless course.teacher_degree_apprenticeship? %>
-      <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? %>
-        <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree, is_preview: preview?(params)) %>
-      <% else %>
-        <p class="govuk-body"><%= degree_grade_content(course) %></p>
+  <%= govuk_summary_list(actions: false) do |summary_list| %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: qualification_required) %>
+      <% row.with_value do %>
+
+      <% unless course.teacher_degree_apprenticeship? %>
+        <% if course.degree_grade.nil? && course.additional_degree_subject_requirements.nil? %>
+          <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree, is_preview: preview?(params)) %>
+        <% else %>
+          <p class="govuk-body">
+            <%= degree_grade_content(course) %>
+            <%= equivalent_qualification %>
+          </p>
+        <% end %>
 
         <% if course.degree_subject_requirements.present? %>
-          <p class="govuk-body">
-            <%= helpers.markdown(course.degree_subject_requirements) %>
-          </p>
-        <% end %>
-
-        <% if course.secondary_course? %>
-          <% if course.engineers_teach_physics? %>
+          <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".degree_subject_requirements")) do %>
             <p class="govuk-body">
-              This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+              <%= helpers.markdown(course.degree_subject_requirements) %>
             </p>
+
+            <% if course.secondary_course? %>
+              <% if course.engineers_teach_physics? %>
+                <p class="govuk-body">
+                  This <%= govuk_link_to "Engineers teach physics", t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+                </p>
+              <% end %>
+            <% end %>
+
+            <% if subject_knowledge_enhancement_content? %>
+              <p class="govuk-body">
+                If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+              </p>
+            <% end %>
           <% end %>
         <% end %>
+      <% end %>
 
-        <% if subject_knowledge_enhancement_content? %>
+      <%= render Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View.new(course:, preview: preview?(params)) %>
+
+      <% end %>
+    <% end %>
+
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".gcses")) %>
+      <% row.with_value do %>
+        <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
+          <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>
+        <% else %>
           <p class="govuk-body">
-            If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
+            <%= required_gcse_content(course) %>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">
+              <%= t(".above_or_equivalent_qualification") %>
+            </span>
           </p>
+
+          <span class="govuk-hint govuk-!-font-size-16">
+            <%= pending_gcse_content(course) %>
+          </span>
+
+          <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: t(".equivalency_tests")) do %>
+            <p class="govuk-body">
+              <%= gcse_equivalency_content(course) %>
+            </p>
+
+            <% if course.additional_gcse_equivalencies.present? %>
+              <p class="govuk-body">
+                <%= helpers.markdown(course.additional_gcse_equivalencies) %>
+              </p>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
 
-    <%= render Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View.new(course:, preview: preview?(params)) %>
-
-    <% if (course.accept_pending_gcse.nil? || course.accept_gcse_equivalency.nil?) %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :gcse, is_preview: preview?(params)) %>
-    <% else %>
-
-      <p class="govuk-body">
-        <%= required_gcse_content(course) %>
-      </p>
-
-      <p class="govuk-body">
-        <%= pending_gcse_content(course) %>
-      </p>
-
-      <p class="govuk-body">
-        <%= gcse_equivalency_content(course) %>
-      </p>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".visa_sponsorship")) %>
+      <% row.with_value do %>
+        <%= render Find::Courses::InternationalStudentsComponent::View.new(course:) %>
+      <% end %>
     <% end %>
-
-    <% if course.additional_gcse_equivalencies.present? %>
-      <p class="govuk-body">
-        <%= helpers.markdown(course.additional_gcse_equivalencies) %>
-      </p>
-    <% end %>
+  <% end %>
 
     <h3 class="govuk-heading-m"><%= t("find.get_into_teaching.qualifications_outside_uk") %> </h3>
 

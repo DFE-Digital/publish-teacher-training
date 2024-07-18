@@ -26,7 +26,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders A levels and GCSEs only and ignores degrees' do
       expected_text = <<~TEXT
-        Entry requirements Qualifications needed A levels Any subject - Grade A or above, or equivalent qualification We’ll consider candidates with pending A levels. We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) or above in English, maths and science, or equivalent qualification. We will not consider candidates with pending GCSEs. We will not consider candidates who need to take a GCSE equivalency test.
+        Entry requirements A levels Any subject - Grade A or above, or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) in English, maths and science or above, or equivalent qualification We will not consider candidates with pending GCSEs. Equivalency tests We will not consider candidates who need to take a GCSE equivalency test.
       TEXT
 
       expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to include(expected_text.strip)
@@ -42,7 +42,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(result).to have_link(ske_url_name, href: ske_url)
+
+      within('.govuk-details__summary') do
+        expect(result).to have_link(ske_url_name, href: ske_url)
+      end
     end
   end
 
@@ -55,7 +58,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(result).to have_link(ske_url_name, href: ske_url)
+
+      within('.govuk-details__summary') do
+        expect(result).to have_link(ske_url_name, href: ske_url)
+      end
     end
   end
 
@@ -68,7 +74,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(result).to have_link(ske_url_name, href: ske_url)
+
+      within('.govuk-details__summary') do
+        expect(result).to have_link(ske_url_name, href: ske_url)
+      end
     end
   end
 
@@ -76,12 +85,17 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     let(:subjects) { [build(:secondary_subject, :mathematics), build(:secondary_subject, :english)] }
 
     it 'renders correct message' do
-      expect(result.text).to include(ske_text)
+      within('.govuk-details__summary') do
+        expect(result.text).to include(ske_text)
+      end
     end
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(result).to have_link(ske_url_name, href: ske_url)
+
+      within('.govuk-details__summary') do
+        expect(result).to have_link(ske_url_name, href: ske_url)
+      end
     end
   end
 
@@ -103,7 +117,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders the correct link' do
       render_inline(described_class.new(course: course.decorate))
-      expect(result).to have_link(ske_url_name, href: ske_url)
+
+      within('.govuk-details__summary') do
+        expect(result).to have_link(ske_url_name, href: ske_url)
+      end
     end
   end
 
@@ -148,7 +165,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-        'Grade 4 (C) or above in English, maths and science, or equivalent qualification.'
+        'Grade 4 (C) in English, maths and science'
+      )
+      expect(result.text).to include(
+        'or above or equivalent qualification'
       )
       expect(result.text).not_to include(
         "Your degree subject should be in #{course.name} or a similar subject. Otherwise you’ll need to prove your subject knowledge in some other way"
@@ -171,7 +191,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-        'Grade 5 (C) or above in English and maths, or equivalent qualification.'
+        'Grade 5 (C) in English and maths'
+      )
+      expect(result.text).to include(
+        'or above, or equivalent qualification'
       )
     end
 
@@ -208,7 +231,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         result = render_inline(described_class.new(course: course.decorate))
 
         expect(result.text).to include(
-          'Grade 5 (C) or above in English and maths, or equivalent qualification.'
+          'Grade 5 (C) in English and maths'
+        )
+        expect(result.text).to include(
+          'or above, or equivalent qualification'
         )
       end
     end
@@ -261,7 +287,10 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
       result = render_inline(described_class.new(course: course.decorate))
 
       expect(result.text).to include(
-        '2:2 or above, or equivalent.'
+        '2:2 bachelor’s degree'
+      )
+      expect(result.text).to include(
+        'or above or equivalent qualification'
       )
       expect(result.text).to include(
         'Certificate must be printed on green paper.'
@@ -283,5 +312,131 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     expect(page).to have_text('If you studied for your qualifications outside of the UK you should apply for a statement of comparability from UK European Network of Information Centres (UK ENIC). This will show us how your qualifications compare to UK qualifications.')
 
     expect(page).to have_link('Apply for a statement of comparability (opens in new tab)')
+  end
+
+  context 'when course is fee paying and can sponsor student visas' do
+    let(:course) do
+      build(
+        :course,
+        :fee_type_based,
+        can_sponsor_student_visa: true,
+        provider: build(:provider)
+      )
+    end
+
+    it 'displays that student visas can be sponsored' do
+      expect(result.text).to include('Student visas can be sponsored')
+    end
+  end
+
+  context 'when course is salaried and can sponsor skilled worker visas' do
+    let(:course) do
+      build(
+        :course,
+        :with_salary,
+        can_sponsor_skilled_worker_visa: true,
+        provider: build(:provider)
+      )
+    end
+
+    it 'displays that skilled worker visas can be sponsored' do
+      expect(result.text).to include('Skilled Worker visas can be sponsored')
+    end
+  end
+
+  context 'when course cannot sponsor visas' do
+    let(:course) do
+      build(
+        :course,
+        can_sponsor_student_visa: false,
+        can_sponsor_skilled_worker_visa: false,
+        provider: build(:provider)
+      )
+    end
+
+    it 'displays that visas cannot be sponsored' do
+      expect(result.text).to include('Visas cannot be sponsored')
+    end
+  end
+
+  describe '#qualification_required' do
+    let(:course) { build(:course) }
+
+    it 'returns Degree' do
+      component = described_class.new(course: course.decorate)
+      render_inline(component)
+
+      expect(component.qualification_required).to eq('Degree')
+    end
+
+    context 'when teacher_degree_apprenticeship' do
+      let(:course) do
+        build(
+          :course,
+          :with_teacher_degree_apprenticeship
+        )
+      end
+
+      it 'returns A levels' do
+        component = described_class.new(course: course.decorate)
+        render_inline(component)
+
+        expect(component.qualification_required).to eq('A levels')
+      end
+    end
+  end
+
+  describe '#equivalent_qualification' do
+    context 'when course is two_one' do
+      let(:course) { build(:course, degree_grade: :two_one) }
+
+      it "returns 'or above or equivalent qualification'" do
+        component = described_class.new(course: course.decorate)
+        render_inline(component)
+
+        expect(component.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
+        )
+      end
+    end
+
+    context 'when course is two_two' do
+      let(:course) { build(:course, degree_grade: :two_two) }
+
+      it "returns 'or above or equivalent qualification'" do
+        component = described_class.new(course: course.decorate)
+        render_inline(component)
+
+        expect(component.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
+        )
+      end
+    end
+
+    context 'when course is third_class' do
+      let(:course) { build(:course, degree_grade: :third_class) }
+
+      it 'returns third and above' do
+        component = described_class.new(course: course.decorate)
+        render_inline(component)
+
+        expect(component.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span> <br> <br> <span class="govuk-hint govuk-!-font-size-16"> This should be an honours degree (Third or above), or equivalent </span>'
+        )
+      end
+    end
+
+    context 'when course is not_required' do
+      let(:course) { build(:course, degree_grade: :not_required) }
+
+      it 'returns not required' do
+        component = described_class.new(course: course.decorate)
+        render_inline(component)
+
+        expect(component.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span>'
+        )
+      end
+    end
   end
 end

@@ -145,7 +145,18 @@ RSpec.describe Find::Courses::ALevelComponent::View, type: :component do
   end
 
   context 'when not considering candidates who need A level equivalency tests' do
-    let(:course) { create(:course, accept_a_level_equivalency: false).decorate }
+    let(:course) do
+      create(
+        :course,
+        a_level_subject_requirements:,
+        accept_a_level_equivalency: false
+      ).decorate
+    end
+    let(:a_level_subject_requirements) do
+      [
+        { 'subject' => 'any_stem_subject' }
+      ]
+    end
 
     it 'renders the correct content when A level equivalency tests are not considered' do
       expect(result).to include('We will not consider candidates who need to take A level equivalency tests.')

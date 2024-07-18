@@ -3108,4 +3108,56 @@ describe Course do
       end
     end
   end
+
+  describe '#any_a_levels?' do
+    it 'returns false if no a levels' do
+      course = build(:course)
+
+      expect(course.any_a_levels?).to be_falsy
+    end
+
+    context 'when a_level_subject_requirements is present' do
+      it 'returns true' do
+        course = build(
+          :course,
+          a_level_subject_requirements: [{ uuid: SecureRandom.uuid, subject: 'any_subject', minimum_grade_required: 'A' }]
+        )
+
+        expect(course.any_a_levels?).to be_truthy
+      end
+    end
+
+    context 'when accept_pending_a_level is present' do
+      it 'returns true' do
+        course = build(
+          :course,
+          accept_pending_a_level: true
+        )
+
+        expect(course.any_a_levels?).to be_truthy
+      end
+    end
+
+    context 'when accept_a_level_equivalency is present' do
+      it 'returns true' do
+        course = build(
+          :course,
+          accept_a_level_equivalency: true
+        )
+
+        expect(course.any_a_levels?).to be_truthy
+      end
+    end
+
+    context 'when additional_a_level_equivalencies is present' do
+      it 'returns true' do
+        course = build(
+          :course,
+          additional_a_level_equivalencies: 'Can you juggle?'
+        )
+
+        expect(course.any_a_levels?).to be_truthy
+      end
+    end
+  end
 end
