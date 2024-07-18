@@ -8,7 +8,6 @@ module PageObjects
       class Courses < SitePrism::Section
         element :provider_name, '[data-qa="course__provider_name"]'
         element :course_name, '[data-qa="course__name"]'
-        element :study_mode, '[data-qa="course__study_mode"]'
         element :course_length, '[data-qa="course__course_length_with_study_mode"]'
         # TODO: nearest_location?
         element :qualification, '[data-qa="course__qualification"]'
