@@ -42,7 +42,7 @@ class AddCourseButtonPreview < ViewComponent::Preview
     end
 
     def recruitment_cycle_year
-      2024
+      Settings.current_recruitment_cycle_year
     end
 
     def accredited_provider?

@@ -64,7 +64,7 @@ feature 'updating study sites on a course', { can_edit_current_and_next_cycles: 
   end
 
   def when_i_am_authenticated_as_a_provider_user_with_study_sites
-    providers = [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider, applications_open_from: '2023-10-10', start_date: '2023-10-10')])]
+    providers = [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site)], courses: [build(:course, :with_accrediting_provider)])]
     @user = create(:user, providers:)
     given_i_am_authenticated(user: @user)
   end
