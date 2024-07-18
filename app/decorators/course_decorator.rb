@@ -253,6 +253,14 @@ class CourseDecorator < ApplicationDecorator
     I18n.t("edit_options.age_range_in_years.#{object.age_range_in_years}.label", default: object.age_range_in_years.humanize)
   end
 
+  def age_range_in_years_and_level
+    if secondary_course?
+      "#{age_range_in_years.humanize} - #{level}"
+    else
+      age_range_in_years.humanize
+    end
+  end
+
   def applications_open_first_label(recruitment_cycle)
     if current_cycle?
       'As soon as the course is on Find - recommended'

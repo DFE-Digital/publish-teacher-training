@@ -1068,4 +1068,48 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe '#age_range_in_years_and_level' do
+    context 'when the course is a secondary course' do
+      let(:course) do
+        build_stubbed(
+          :course,
+          level: 'secondary',
+          age_range_in_years: '11_to_16'
+        )
+      end
+
+      it 'renders the age range with the level' do
+        expect(decorated_course.age_range_in_years_and_level).to eq('11 to 16 - secondary')
+      end
+    end
+
+    context 'when the course is a primary course' do
+      let(:course) do
+        build_stubbed(
+          :course,
+          level: 'primary',
+          age_range_in_years: '11_to_16'
+        )
+      end
+
+      it 'renders the age range with the level' do
+        expect(decorated_course.age_range_in_years_and_level).to eq('11 to 16')
+      end
+    end
+
+    context 'when the course is a further education course' do
+      let(:course) do
+        build_stubbed(
+          :course,
+          level: 'further_education',
+          age_range_in_years: '11_to_16'
+        )
+      end
+
+      it 'renders the age range with the level' do
+        expect(decorated_course.age_range_in_years_and_level).to eq('11 to 16')
+      end
+    end
+  end
 end
