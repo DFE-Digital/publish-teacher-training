@@ -7,7 +7,7 @@ module Find
 
       attr_reader :course
 
-      delegate :age_range_in_years_and_level, to: :course
+      delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
 
       def initialize(course:, filtered_by_location: false, has_sites: false)
         super

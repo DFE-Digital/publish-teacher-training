@@ -1350,3 +1350,5 @@ en:
     url_ways_to_train_experienced_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/assessment-only-route-to-qts
     url: https://getintoteaching.education.gov.uk
   google_privacy_policy_url: "https://policies.google.com/technologies/cookies?hl=en-US#types-of-cookies"
+  course_length_with_study_mode:
+    label: "Course length"
