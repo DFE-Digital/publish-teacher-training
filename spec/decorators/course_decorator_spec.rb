@@ -1112,4 +1112,32 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe '#course_length_with_study_mode' do
+    let(:course) do
+      create(
+        :course,
+        enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')],
+        study_mode: 'full_time'
+      )
+    end
+
+    it 'returns the course length with the study mode' do
+      expect(decorated_course.course_length_with_study_mode).to eq('1 year - full time')
+    end
+
+    context 'when course length is missing' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [build(:course_enrichment, :published, course_length: nil)],
+          study_mode: 'full_time'
+        )
+      end
+
+      it 'return the study mode when course length is missing' do
+        expect(decorated_course.course_length_with_study_mode).to eq('full time')
+      end
+    end
+  end
 end

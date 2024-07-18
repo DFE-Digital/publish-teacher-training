@@ -187,6 +187,13 @@ class CourseDecorator < ApplicationDecorator
     end
   end
 
+  def course_length_with_study_mode
+    [
+      length,
+      study_mode&.humanize&.downcase
+    ].compact_blank.join(' - ')
+  end
+
   def other_course_length?
     %w[OneYear TwoYears].exclude?(course_length) && !course_length.nil?
   end
