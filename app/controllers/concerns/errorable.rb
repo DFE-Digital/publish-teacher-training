@@ -12,6 +12,7 @@ module Errorable
   end
 
   def internal_server_error
+    Sentry.capture_message("Internal server error: path: #{request.path}, params: #{request.params}")
     render status: :internal_server_error, template: 'errors/internal_server_error'
   end
 end
