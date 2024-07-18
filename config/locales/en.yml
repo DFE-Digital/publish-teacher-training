@@ -36,7 +36,7 @@ en:
     updated: "Cycle schedule updated"
   service_name:
     publish: "Publish teacher training courses"
-    find: "Find postgraduate teacher training"
+    find: "Find teacher training courses"
     support: "Publish support console"
     get_into_teaching: "Get Into Teaching"
   header:
@@ -1217,7 +1217,7 @@ en:
     published: "Your changes have been published"
     saved: "%{value} updated"
     added: "%{items_added} added"
-    changes_ttl: "Changes will appear on Find postgraduate teacher training within 15 minutes."
+    changes_ttl: "Changes will appear on Find teacher training courses within 15 minutes."
     visa_partner_warning: "Changing your answer will not change visa information for courses you or your training partners have already created."
     visa_warning: "Changing your answer will not change visa information for courses you have already created."
     visa_changes: "Visa sponsorship updated"

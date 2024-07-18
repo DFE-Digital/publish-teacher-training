@@ -15,13 +15,13 @@ feature 'View pages' do
 
   scenario 'Navigate to /privacy-policy' do
     visit '/privacy'
-    expect(page).to have_css('h1', text: 'Find postgraduate teacher training privacy notice')
+    expect(page).to have_css('h1', text: 'Find teacher training courses privacy notice')
   end
 
   scenario 'Navigate to /accessibility' do
     visit '/accessibility'
     expect(page).to have_css('h1', text: 'Accessibility statement')
-    expect(page).to have_text('This statement applies to the Find postgraduate teacher training service (Find)')
+    expect(page).to have_text('This statement applies to the Find teacher training courses service (Find)')
   end
 
   scenario 'Redirect to /cycle-has-ended when cycle open' do

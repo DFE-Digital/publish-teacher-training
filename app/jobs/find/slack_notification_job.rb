@@ -22,7 +22,7 @@ module Find
 
     def post_to_slack(text)
       payload = {
-        username: 'Find postgraduate teacher training',
+        username: 'Find teacher training courses',
         channel: SLACK_CHANNEL,
         text:,
         mrkdwn: true,
