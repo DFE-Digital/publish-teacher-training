@@ -6,7 +6,7 @@ info:
   contact:
     name: DfE
     email: becomingateacher@digital.education.gov.uk
-  description: "API for DfE's postgraduate teacher training course service."
+  description: "API for DfE's teacher training course service."
 servers:
   - url: https://api.publish-teacher-training-courses.service.gov.uk/api/public/{version}
     description: "Production url."
