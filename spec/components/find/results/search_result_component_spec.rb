@@ -8,6 +8,7 @@ module Find
       subject { described_class.new(course: build(:course)) }
 
       it { is_expected.to delegate_method(:age_range_in_years_and_level).to(:course) }
+      it { is_expected.to delegate_method(:course_length_with_study_mode).to(:course) }
     end
 
     context 'when the course specifies a required degree grade' do
@@ -166,6 +167,20 @@ module Find
         result = render_inline(described_class.new(course:))
 
         expect(result).to have_text('Age range 11 to 16 - secondary', normalize_ws: true)
+      end
+    end
+
+    context 'course length' do
+      it 'renders the course length with study mode' do
+        course = create(
+          :course,
+          enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')],
+          study_mode: 'full_time'
+        )
+
+        result = render_inline(described_class.new(course:))
+
+        expect(result).to have_text('Course length 1 year - full time', normalize_ws: true)
       end
     end
   end

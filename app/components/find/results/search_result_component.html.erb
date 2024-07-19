@@ -31,8 +31,10 @@
       <% end %>
     </dd>
 
-    <dt class="app-description-list__label">Study type</dt>
-    <dd data-qa="course__study_mode"><%= course.study_mode.humanize %></dd>
+    <% if course_length_with_study_mode.present? %>
+      <dt class="app-description-list__label"><%= t("course_length_with_study_mode.label") %></dt>
+      <dd data-qa="course__course_length_with_study_mode"><%= course_length_with_study_mode %></dd>
+    <% end %>
 
     <% if age_range_in_years_and_level.present? %>
       <dt class="app-description-list__label"><%= t("find.courses.summary_component.view.age_range") %></dt>
