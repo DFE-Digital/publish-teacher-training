@@ -19,7 +19,7 @@ module Find
             'Qualification',
             'Provider',
             'Date you can apply from',
-            'Date course starts'
+            'Start date'
           )
         end
 
@@ -131,7 +131,7 @@ module Find
             course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).to include('UK students: £9,250')
+            expect(result.text).to include('£9,250 for UK citizens')
             expect(result.text).to include('Course fee')
           end
         end
@@ -141,7 +141,7 @@ module Find
             course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).to include('International students: £14,000')
+            expect(result.text).to include('£14,000 for non-UK citizens')
           end
         end
 
@@ -151,8 +151,8 @@ module Find
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).to include('UK students: £9,250')
-            expect(result.text).not_to include('International students')
+            expect(result.text).to include('£9,250 for UK citizens')
+            expect(result.text).not_to include('for non-UK citizens')
           end
         end
 
@@ -162,8 +162,8 @@ module Find
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('UK students')
-            expect(result.text).to include('International students: £14,000')
+            expect(result.text).not_to include('for UK citizens')
+            expect(result.text).to include('£14,000 for non-UK citizens')
           end
         end
 
@@ -173,8 +173,8 @@ module Find
 
             result = render_inline(described_class.new(course))
 
-            expect(result.text).not_to include('UK students')
-            expect(result.text).not_to include('International students: £14,000')
+            expect(result.text).not_to include('for UK citizens')
+            expect(result.text).not_to include('£14,000 for non-UK citizens')
             expect(result.text).not_to include('Course fee')
           end
         end

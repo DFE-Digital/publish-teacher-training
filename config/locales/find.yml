@@ -71,6 +71,11 @@ en:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
     courses:
+      fees_component:
+        view:
+          uk_citizens: UK citizens
+          non_uk_citizens: Non-UK citizens
+          course_fees: The course fees for UK citizens in %{cycle_range} are %{fee}.
       advice:
         heading: Support and advice
         body_html: You can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/teacher-training-advisers"> get a teacher training adviser</a> or <a class="govuk-link" href="https://getintoteaching.education.gov.uk/help-and-support"> contact Get Into Teaching</a> for free support.
@@ -136,10 +141,12 @@ en:
           course_length: Course length
           age_range: Age range
           date_can_apply: Date you can apply from
-          date_course_start: Date course starts
+          start_date: Start date
           qualification: Qualification
           provider: Provider
           accredited_by: Accredited by
+          for_uk_citizens: for UK citizens
+          for_non_uk_citizens: for non-UK citizens
       providers:
         show:
           heading: About %{provider_name}

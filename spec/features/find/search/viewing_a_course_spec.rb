@@ -313,7 +313,7 @@ feature 'Viewing a findable course' do
 
   def then_i_should_only_see_the_uk_fees
     expect(find_course_show_page).to have_content(
-      "The course fees for UK students in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
+      "The course fees for UK citizens in #{RecruitmentCycle.current.year} to #{RecruitmentCycle.current.year.to_i + 1} are £9,250"
     )
 
     expect(find_course_show_page).not_to have_international_fees

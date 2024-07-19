@@ -53,19 +53,27 @@ module Find
         end
 
         def course_fee_value
-          safe_join([formatted_uk_eu_fee_label, tag.br, formatted_international_fee_label])
+          safe_join(
+            [
+              tag.b(number_to_currency(course.fee_uk_eu)),
+              formatted_uk_eu_fee_label,
+              tag.br,
+              tag.b(number_to_currency(course.fee_international)),
+              formatted_international_fee_label
+            ]
+          )
         end
 
         def formatted_uk_eu_fee_label
           return if course.fee_uk_eu.blank?
 
-          "UK students: #{number_to_currency(course.fee_uk_eu)}"
+          " #{I18n.t('find.courses.summary_component.view.for_uk_citizens')}"
         end
 
         def formatted_international_fee_label
           return if course.fee_international.blank?
 
-          "International students: #{number_to_currency(course.fee_international)}"
+          " #{I18n.t('find.courses.summary_component.view.for_non_uk_citizens')}"
         end
 
         def no_fee?
