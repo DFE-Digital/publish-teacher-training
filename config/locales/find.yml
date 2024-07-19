@@ -84,6 +84,17 @@ en:
       a_level_component:
         view:
           equivalency_tests: Equivalency tests
+      contents_component:
+        view:
+          course_details: Course details
+          how_school_placements_work: How school placements work
+          training_with_disabilities: Training with disabilities
+          fees_and_financial_support: Fees and financial support
+          salary: Salary
+          interview_process: Interview process
+          support_and_advice: Support and advice
+          apply: Apply
+          heading: Contents
       entry_requirements_component:
         view:
           heading: Entry requirements
@@ -115,9 +126,12 @@ en:
             <span class="govuk-hint govuk-!-font-size-16">
               This should be an honours degree (Third or above), or equivalent
             </span>
+      about_course:
+        heading: Course details
       summary_component:
         view:
           fee_or_salary: Fee or salary
+          course_summary: Course summary
           course_fee: Course fee
           course_length: Course length
           age_range: Age range
@@ -154,6 +168,7 @@ en:
           contact: Contact %{provider_name}
       about_schools_component:
         view:
+          heading: How school placements work
           view_list_of_school_placements: View list of school placements
           work_with_schools: We work with the following schools to provide your school placements.
       placements:

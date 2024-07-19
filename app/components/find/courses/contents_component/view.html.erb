@@ -1,22 +1,22 @@
-<h2 class="govuk-heading-m">Contents</h2>
+<h2 class="govuk-heading-m"><%= t(".heading") %> </h2>
 <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
   <li><%= govuk_link_to "Entry requirements", "#section-entry" %></li>
   <% if about_course.present? || preview? %>
-    <li><%= govuk_link_to "Course summary", "#section-about" %></li>
+    <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
   <% end %>
+  <li><%= govuk_link_to t(".fees_and_financial_support"), "#section-financial-support" %></li>
   <% if how_school_placements_work.present? || program_type == "higher_education_programme" || program_type == "scitt_programme" || preview? %>
-    <li><%= govuk_link_to "Training locations", "#training-locations" %></li>
+    <li><%= govuk_link_to t(".how_school_placements_work"), "#training-locations" %></li>
   <% end %>
   <% if salaried? %>
-    <li><%= govuk_link_to "Salary", "#section-salary" %></li>
+    <li><%= govuk_link_to t(".salary"), "#section-salary" %></li>
   <% end %>
-  <li><%= govuk_link_to "Fees and financial support", "#section-financial-support" %></li>
   <% if interview_process.present? %>
-    <li><%= govuk_link_to "Interview process", "#section-interviews" %></li>
+    <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
   <% end %>
   <% if provider.train_with_disability.present? || preview? %>
-    <li><%= govuk_link_to "Training with disabilities", "#section-train-with-disabilities" %></li>
+    <li><%= govuk_link_to t(".training_with_disabilities"), "#section-train-with-disabilities" %></li>
   <% end %>
-  <li><%= govuk_link_to "Support and advice", "#section-advice" %></li>
-  <% if course.application_status_open? %> <li><%= govuk_link_to "Apply", "#section-apply" %></li> <% end %>
+  <li><%= govuk_link_to t(".support_and_advice"), "#section-advice" %></li>
+  <% if course.application_status_open? %> <li><%= govuk_link_to t(".apply"), "#section-apply" %></li> <% end %>
 </ul>
