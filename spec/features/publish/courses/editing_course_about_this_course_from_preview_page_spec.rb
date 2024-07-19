@@ -36,7 +36,7 @@ feature 'Editing about this course from the course preview page' do
   end
 
   def and_i_click_course_summary
-    click_on 'Enter course summary'
+    click_on 'Enter course details'
   end
 
   def then_i_see_the_about_this_course_page

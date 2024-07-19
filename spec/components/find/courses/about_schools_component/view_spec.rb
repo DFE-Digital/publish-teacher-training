@@ -15,7 +15,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
         result = render_inline(described_class.new(course))
 
-        expect(result.text).to include('Training locations')
+        expect(result.text).to include('How school placements work')
       end
     end
   end

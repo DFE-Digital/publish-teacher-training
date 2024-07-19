@@ -1,3 +1,7 @@
+<h2 class="govuk-heading-l">
+  <%= t(".course_summary") %>
+</h2>
+
 <%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key(text: t(".fee_or_salary")) %>

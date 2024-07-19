@@ -1,5 +1,5 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-about">Course summary</h2>
+  <h2 class="govuk-heading-l" id="section-about"><%= t(".heading") %> </h2>
   <div data-qa="course__about_course">
     <% if course.published_about_course.present? %>
       <%= markdown(course.published_about_course) %>

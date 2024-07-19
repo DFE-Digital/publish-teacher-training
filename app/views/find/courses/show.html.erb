@@ -39,24 +39,24 @@
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+
     <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
 
     <% if @course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: @course } %>
     <% end %>
 
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
-
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
     <% end %>
 
     <% if @provider.train_with_disability.present? %>
-      <h2 class="govuk-heading-l" id="section-train-with-disabilities">
+      <h2 class="govuk-heading-m" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
 
-      <p class="govuk-body">
+      <p class="govuk-body govuk-!-margin-bottom-8">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
           find_training_with_disabilities_path(

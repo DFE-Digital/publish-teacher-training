@@ -269,7 +269,7 @@ en:
     course_preview:
       missing_information:
         about_this_course:
-          text: "Enter course summary"
+          text: "Enter course details"
         a_levels:
           text: "Enter A levels and equivalency test requirements"
         degree:
