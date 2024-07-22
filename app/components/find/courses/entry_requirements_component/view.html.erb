@@ -86,26 +86,22 @@
     <% end %>
   <% end %>
 
-    <h3 class="govuk-heading-m"><%= t("find.get_into_teaching.qualifications_outside_uk") %> </h3>
+    <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
+      <%= accordion.with_section(heading_text: t("find.get_into_teaching.qualifications_outside_uk")) do %>
+        <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
 
-    <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
+        <p class="govuk-body">
+          <%= t("find.get_into_teaching.apply_for_uk_enic_html") %>
+        </p>
 
-    <p class="govuk-body">
+        <p class="govuk-body">
+          <%= t("find.get_into_teaching.uk_enic_cost") %>
+        </p>
 
-      <%= govuk_link_to(t("find.get_into_teaching.apply_for_statement_of_comparability"),
-                        t("find.enic.statement_of_comparability.url"),
-                        target: "_blank",
-                        new_tab: true,
-                        rel: "noopener") %>
-    </p>
-
-    <p class="govuk-body">
-      <%= govuk_link_to(t("find.get_into_teaching.chat_online"),
-                        t("find.get_into_teaching.url_online_chat"),
-                        target: "_blank",
-                        new_tab: true,
-                        rel: "noopener") %>
-        <%= t("find.get_into_teaching.support_team") %>
-    </p>
+        <p class="govuk-body">
+          <%= t("find.get_into_teaching.learn_more_about_non_uk_qualifications_html") %>
+        </p>
+      <% end %>
+    <% end %>
   </div>
 </div>
