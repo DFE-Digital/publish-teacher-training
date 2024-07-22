@@ -307,11 +307,14 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     )
     render_inline(described_class.new(course: course.decorate))
 
-    expect(page).to have_css('h3', text: 'Qualifications gained outside the UK')
+    expect(page).to have_css('span', text: 'Non-UK citizens: check your qualifications')
 
-    expect(page).to have_text('If you studied for your qualifications outside of the UK you should apply for a statement of comparability from UK European Network of Information Centres (UK ENIC). This will show us how your qualifications compare to UK qualifications.')
+    expect(page).to have_text('Some training providers need a certificate known as a statement of comparability that shows how your qualifications compare to UK ones.')
+    expect(page).to have_text('There is a cost for the certificate and it takes 15 working days to arrive.')
+    expect(page).to have_text('You can apply for a statement of comparability from UK ENIC (the UK European Network of Information Centres).')
+    expect(page).to have_text('Learn more about how to check your qualifications meet the required standard.')
 
-    expect(page).to have_link('Apply for a statement of comparability (opens in new tab)')
+    expect(page).to have_link('apply for a statement of comparability from UK ENIC')
   end
 
   context 'when course is fee paying and can sponsor student visas' do

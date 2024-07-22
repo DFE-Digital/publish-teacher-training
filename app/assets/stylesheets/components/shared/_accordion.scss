@@ -1,0 +1,48 @@
+body:not(.js-enabled) {
+  .course-accordion .govuk-accordion__section-heading {
+    padding-top: 0;
+  }
+
+  .course-accordion .govuk-accordion__section {
+    padding-top: 0;
+  }
+
+  .course-accordion .govuk-accordion__section-content {
+    padding-bottom: govuk-spacing(3);
+  }
+
+  .course-accordion {
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+}
+
+.accordion-without-controls > .govuk-accordion__controls {
+  display: none;
+}
+
+.course-accordion {
+  border-top: 1px solid $govuk-border-colour;
+}
+
+.course-accordion .govuk-accordion__section {
+  border-left: govuk-spacing(1) solid govuk-colour("purple");
+  background-color: govuk-colour("light-grey");
+}
+
+.course-accordion .govuk-accordion__section-header {
+  padding-left: govuk-spacing(4);
+  padding-right: govuk-spacing(4);
+}
+
+.course-accordion .govuk-accordion__section-header:hover {
+  box-shadow: none;
+}
+
+.course-accordion .govuk-accordion__section-header button {
+  border-top: none;
+}
+
+.course-accordion .govuk-accordion__section-content {
+  padding-left: govuk-spacing(4);
+  padding-right: govuk-spacing(4);
+}
