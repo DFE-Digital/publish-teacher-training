@@ -7,7 +7,6 @@
 
 .app-search-results__item {
   @include govuk-responsive-margin(4, "bottom");
-  border-bottom: 1px solid $govuk-border-colour;
   display: block;
 }
 

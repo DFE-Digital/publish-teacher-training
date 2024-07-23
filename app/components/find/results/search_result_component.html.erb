@@ -1,55 +1,78 @@
 <li class="app-search-results__item" data-qa="course">
-  <h2 class="app-search-result__item-title">
-    <%= govuk_link_to find_course_path(provider_code: course.provider_code, course_code: course.course_code), data: { qa: "course__link" } do %>
-      <span class="app-search-result__provider-name" data-qa="course__provider_name"><%= helpers.smart_quotes(course.provider.provider_name) %></span>
-      <span class="app-search-result__course-name" data-qa="course__name"><%= course.name_and_code %></span>
-    <% end %>
-  </h2>
-  <dl class="app-description-list app-description-list--search-result">
-
-    <dt class="app-description-list__label">Fee or salary</dt>
-    <dd data-qa="course__funding_options"><%= course.funding %>
-      <br>
-      <p class="govuk-hint"><%= course.funding_option %>
-    </dd>
-
-    <% unless no_fee? %>
-      <dt class="app-description-list__label">Course fee</dt>
-      <dd data-qa="course__fee"><%= course_fee_value %></dd>
-    <% end %>
-
-    <dt class="app-description-list__label">Visa sponsorship</dt>
-    <dd data-qa="course__visa_sponsorship"><%= visa_sponsorship_status %></dd>
-
-    <dt class="app-description-list__label">Qualification</dt>
-    <dd data-qa="course__qualification">
-      <% if accredited_provider %>
-        <p class="govuk-body"><%= formatted_qualification %></p>
-        <p class="govuk-hint"><%= accredited_provider %></p>
-      <% else %>
-        <%= formatted_qualification %>
+  <%= govuk_summary_card(classes: ["course-summary-card"], title: coure_title_link) do |card| %>
+    <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
+      <% if filtered_by_location? && has_sites? %>
+        <% summary_list.with_row do |row| %>
+          <% if course.provider.decorate.website.present? %>
+            <% row.with_key(text: location_label) %>
+            <% row.with_value do %>
+              <% if course.university_based? %>
+                <%= render partial: "find/results/university", locals: { course: } %>
+              <% else %>
+                <%= render partial: "find/results/non_university", locals: { course: } %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
       <% end %>
-    </dd>
 
-    <% if course_length_with_study_mode.present? %>
-      <dt class="app-description-list__label"><%= t("course_length_with_study_mode.label") %></dt>
-      <dd data-qa="course__course_length_with_study_mode"><%= course_length_with_study_mode %></dd>
-    <% end %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: t(".fee_or_salary")) %>
+        <% row.with_value do %>
+          <%= course.funding %>
+          <br>
+          <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+        <% end %>
+      <% end %>
 
-    <% if age_range_in_years_and_level.present? %>
-      <dt class="app-description-list__label"><%= t("find.courses.summary_component.view.age_range") %></dt>
-      <dd data-qa="course__age_range_in_years"><%= age_range_in_years_and_level %></dd>
-    <% end %>
+      <% unless no_fee? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: t(".course_fee")) %>
+          <% row.with_value(text: course.course_fee_content) %>
+        <% end %>
+      <% end %>
 
-    <% if filtered_by_location? && has_sites? %>
-      <% if course.university_based? %>
-        <%= render partial: "find/results/university", locals: { course: } %>
-      <% else %>
-        <%= render partial: "find/results/non_university", locals: { course: } %>
+      <% if course_length_with_study_mode.present? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: t("course_length_with_study_mode.label")) %>
+          <% row.with_value(text: course_length_with_study_mode) %>
+        <% end %>
+      <% end %>
+
+      <% if age_range_in_years_and_level.present? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: t("find.courses.summary_component.view.age_range")) %>
+          <% row.with_value(text: age_range_in_years_and_level) %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: t(".qualification")) %>
+        <% row.with_value do %>
+          <% if accredited_provider %>
+            <%= formatted_qualification %>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16"><%= accredited_provider %></span>
+          <% else %>
+            <%= formatted_qualification %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: t(".degree_required")) %>
+        <% row.with_value do %>
+          <p class="govuk-body">
+            <%= degree_required_status %>
+            <%= course.equivalent_qualification %>
+          </p>
+        <% end %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: t(".visa_sponsorship")) %>
+        <% row.with_value(text: visa_sponsorship_status) %>
       <% end %>
     <% end %>
-
-    <dt class="app-description-list__label">Degree required</dt>
-    <dd data-qa="course__degree_required"><%= degree_required_status %></dd>
-  </dl>
+  <% end %>
 </li>

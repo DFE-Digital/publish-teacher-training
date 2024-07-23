@@ -298,6 +298,43 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
+  context 'when course two_one' do
+    it 'renders correct message' do
+      course = build(:course, degree_grade: :two_one)
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).to include(
+        '2:1 bachelor’s degree',
+        'or above or equivalent qualification'
+      )
+    end
+  end
+
+  context 'when course is third_class' do
+    it 'renders correct message' do
+      course = build(:course, degree_grade: :third_class)
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).to include(
+        'Bachelor’s degree',
+        'or equivalent qualification',
+        'This should be an honours degree (Third or above), or equivalent'
+      )
+    end
+  end
+
+  context 'when course is not_required' do
+    it 'renders correct message' do
+      course = build(:course, degree_grade: :not_required)
+      result = render_inline(described_class.new(course: course.decorate))
+
+      expect(result.text).to include(
+        'Bachelor’s degree',
+        'or equivalent qualification'
+      )
+    end
+  end
+
   it 'includes the qualifications gain outside of UK section' do
     course = build(
       :course,
@@ -385,60 +422,6 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         render_inline(component)
 
         expect(component.qualification_required).to eq('A levels')
-      end
-    end
-  end
-
-  describe '#equivalent_qualification' do
-    context 'when course is two_one' do
-      let(:course) { build(:course, degree_grade: :two_one) }
-
-      it "returns 'or above or equivalent qualification'" do
-        component = described_class.new(course: course.decorate)
-        render_inline(component)
-
-        expect(component.equivalent_qualification).to eq(
-          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
-        )
-      end
-    end
-
-    context 'when course is two_two' do
-      let(:course) { build(:course, degree_grade: :two_two) }
-
-      it "returns 'or above or equivalent qualification'" do
-        component = described_class.new(course: course.decorate)
-        render_inline(component)
-
-        expect(component.equivalent_qualification).to eq(
-          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
-        )
-      end
-    end
-
-    context 'when course is third_class' do
-      let(:course) { build(:course, degree_grade: :third_class) }
-
-      it 'returns third and above' do
-        component = described_class.new(course: course.decorate)
-        render_inline(component)
-
-        expect(component.equivalent_qualification).to eq(
-          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span> <br> <br> <span class="govuk-hint govuk-!-font-size-16"> This should be an honours degree (Third or above), or equivalent </span>'
-        )
-      end
-    end
-
-    context 'when course is not_required' do
-      let(:course) { build(:course, degree_grade: :not_required) }
-
-      it 'returns not required' do
-        component = described_class.new(course: course.decorate)
-        render_inline(component)
-
-        expect(component.equivalent_qualification).to eq(
-          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span>'
-        )
       end
     end
   end

@@ -44,9 +44,9 @@ feature 'results' do
       # list by provider?
       expect(first_course.course_name.text).to include('Hello there')
       expect(first_course.provider_name.text).to be_present
-      expect(first_course.qualification.text).to include('QTS with PGCE')
-      expect(first_course.course_length.text).to eq('1 year - full time')
-      expect(first_course.funding_options.text).to eq('Teaching apprenticeship - with salary')
+      expect(first_course).to have_text('QTS with PGCE')
+      expect(first_course).to have_text('1 year - full time')
+      expect(first_course).to have_text('Teaching apprenticeship - with salary')
     end
   end
 

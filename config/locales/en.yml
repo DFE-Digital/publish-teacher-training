@@ -1,5 +1,31 @@
 en:
   shared:
+    decorators:
+      course:
+        two_one_degree: 2:1 bachelor’s degree
+        two_two_degree: 2:2 bachelor’s degree
+        third_class_degree: Bachelor’s degree
+        degree_not_required: Bachelor’s degree
+        above_or_equivalent_qualification_html:
+          <br>
+          <span class="govuk-hint govuk-!-font-size-16">
+            or above or equivalent qualification
+          </span>
+        equivalent_qualification_html:
+          <br>
+          <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+          </span>
+        third_or_above_html:
+          <br>
+          <span class="govuk-hint govuk-!-font-size-16">
+            or equivalent qualification
+          </span>
+          <br>
+          <br>
+          <span class="govuk-hint govuk-!-font-size-16">
+            This should be an honours degree (Third or above), or equivalent
+          </span>
     courses:
       provider:
         heading: Contact %{provider_name}

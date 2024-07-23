@@ -25,8 +25,8 @@
         <% courses.each do |course| %>
           <%= render Find::Results::SearchResultComponent.new(
             course:,
-            has_sites: results.has_sites?(course),
-            filtered_by_location: results.location_filter?
+            filtered_by_location: results.location_filter?,
+            sites_count: results.sites_count(course)
           ) %>
         <% end %>
       </ul>

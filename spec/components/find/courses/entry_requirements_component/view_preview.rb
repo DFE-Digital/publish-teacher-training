@@ -122,6 +122,14 @@ module Find
           def teacher_degree_apprenticeship?
             false
           end
+
+          def degree_grade_content
+            I18n.t('shared.decorators.course.two_one_degree')
+          end
+
+          def equivalent_qualification
+            I18n.t('shared.decorators.course.above_or_equivalent_qualification_html').html_safe
+          end
         end
       end
     end

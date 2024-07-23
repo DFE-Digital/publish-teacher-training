@@ -9,11 +9,11 @@ module Find
 
       delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
 
-      def initialize(course:, filtered_by_location: false, has_sites: false)
+      def initialize(course:, filtered_by_location: false, sites_count: 0)
         super
         @course = course.decorate
         @filtered_by_location = filtered_by_location
-        @has_sites = has_sites
+        @sites_count = sites_count
       end
 
       def filtered_by_location?
@@ -21,7 +21,20 @@ module Find
       end
 
       def has_sites?
-        @has_sites
+        @sites_count.positive?
+      end
+
+      def coure_title_link
+        t(
+          '.course_title_html',
+          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+          provider_name: helpers.smart_quotes(course.provider.provider_name),
+          course_name: course.name_and_code
+        )
+      end
+
+      def location_label
+        t('.location', count: @sites_count)
       end
 
       private
@@ -35,12 +48,7 @@ module Find
       end
 
       def degree_required_status
-        {
-          two_one: 'An undergraduate degree at class 2:1 or above, or equivalent',
-          two_two: 'An undergraduate degree at class 2:2 or above, or equivalent',
-          third_class: 'An undergraduate degree, or equivalent. This should be an honours degree (Third or above), or equivalent',
-          not_required: 'An undergraduate degree, or equivalent'
-        }[course.degree_grade&.to_sym || 'N/A']
+        course.degree_grade_content || 'N/A'
       end
 
       def visa_sponsorship_status
@@ -51,22 +59,6 @@ module Find
         else
           'Visas cannot be sponsored'
         end
-      end
-
-      def course_fee_value
-        safe_join([formatted_uk_eu_fee_label, tag.br, formatted_international_fee_label])
-      end
-
-      def formatted_uk_eu_fee_label
-        return if course.fee_uk_eu.blank?
-
-        "UK students: #{number_to_currency(course.fee_uk_eu)}"
-      end
-
-      def formatted_international_fee_label
-        return if course.fee_international.blank?
-
-        "International students: #{number_to_currency(course.fee_international)}"
       end
 
       def no_fee?

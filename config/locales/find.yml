@@ -111,26 +111,6 @@ en:
           degree_subject_requirements: Degree subject requirements
           a_levels: A levels
           above_or_equivalent_qualification: or above, or equivalent qualification
-          above_or_equivalent_qualification_html:
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-              or above or equivalent qualification
-            </span>
-          equivalent_qualification_html:
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-              or equivalent qualification
-            </span>
-          third_or_above_html:
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-              or equivalent qualification
-            </span>
-            <br>
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-              This should be an honours degree (Third or above), or equivalent
-            </span>
       about_course:
         heading: Course details
       summary_component:
@@ -146,7 +126,7 @@ en:
           provider: Provider
           accredited_by: Accredited by
           for_uk_citizens: for UK citizens
-          for_non_uk_citizens: for non-UK citizens
+          for_non_uk_citizens: for Non-UK citizens
       providers:
         show:
           heading: About %{provider_name}
@@ -190,6 +170,18 @@ en:
         back_to_search: Back to search results
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
+    results:
+      search_result_component:
+        location:
+          one: Location
+          other: Nearest location
+        nearest_location: Nearest location
+        fee_or_salary: Fee or salary
+        course_fee: Course fee
+        qualification: Qualification
+        degree_required: Degree required
+        visa_sponsorship: Visa sponsorship
+        course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
     scholarships:
       physics:
         body: Institute of Physics
