@@ -298,9 +298,6 @@ en:
         add_another_a_level: Do you want to add another A level?
     label:
       what_a_level_is_required:
-        other_subject: Subjects
-        other_subject_prompt: Choose subject
-        minimum_grade_required: Minimum grade required (optional)
         subject_options:
           any_subject: Any subject
           any_stem_subject: Any STEM subject
@@ -314,6 +311,18 @@ en:
           any_modern_foreign_language: Any %{count_in_words} modern foreign languages
           any_humanities_subject: Any %{count_in_words} humanities subjects
           any_science_subject: Any %{count_in_words} science subjects
+      a_level_steps/what_a_level_is_required:
+        other_subject: Subjects
+        other_subject_prompt: Choose subject
+      what_a_level_is_required:
+        minimum_grade_required: Minimum grade required (optional)
+        subject_options:
+          any_subject: Any subject
+          any_stem_subject: Any STEM subject
+          any_modern_foreign_language: Any modern foreign language
+          any_humanities_subject: Any humanities subject
+          any_science_subject: Any science subject
+          other_subject: Choose a subject
       add_a_level_to_a_list:
         add_another_a_level_options:
           "yes": "Yes"
@@ -338,25 +347,29 @@ en:
     add_course: "Add course"
     what_a_level_is_required:
       heading: What A level is required?
+    a_level_steps/what_a_level_is_required:
       success_message: You have added a required A level
-    add_a_level_to_a_list:
+      heading: What A level is required?
+    a_level_steps/add_a_level_to_a_list:
       heading: Required A levels
     remove_a_level_subject_confirmation:
       heading: Are you sure you want to remove %{subject}?
+    a_level_steps/consider_pending_a_level:
+      hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
     consider_pending_a_level:
       heading: Will you consider candidates with pending A levels?
-      hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
       row:
         "true": "Candidates with pending A levels will be considered."
         "false": "Candidates with pending A levels will not be considered."
     a_level_equivalencies:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
-      submit: Update A levels
-      hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
       suffix: or equivalent qualification
       row:
         "true": "Equivalency tests will be considered."
         "false": "Equivalency tests will not be considered."
+    a_level_steps/a_level_equivalencies:
+      submit: Update A levels
+      hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
     new:
       level:
         special_educational_needs_and_disabilities:
@@ -892,7 +905,7 @@ en:
             description:
               blank: Enter details about the accredited provider
               too_long: Description about the accredited provider must be 100 words or fewer
-        what_a_level_is_required:
+        a_level_steps/what_a_level_is_required:
           attributes:
             subject:
               blank: Select a subject
@@ -906,11 +919,11 @@ en:
           attributes:
             add_another_a_level:
               blank: Select if you want to add another A level
-        remove_a_level_subject_confirmation:
+        a_level_steps/remove_a_level_subject_confirmation:
           attributes:
             confirmation:
               blank: Select if you want to remove %{subject}
-        consider_pending_a_level:
+        a_level_steps/consider_pending_a_level:
           attributes:
             pending_a_level:
               blank: Select if you will consider candidates with pending A levels
