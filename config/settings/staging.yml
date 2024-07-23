@@ -1,12 +1,12 @@
 gcp_api_key: please_change_me
 publish_api_url: https://staging.api.publish-teacher-training-courses.service.gov.uk
 publish_url: https://staging.publish-teacher-training-courses.service.gov.uk
-find_url: https://staging.find-postgraduate-teacher-training.service.gov.uk
+find_url: https://staging.find-teacher-training-courses.service.gov.uk
 extra_find_url: https://staging.find-teacher-training-courses.service.gov.uk
 apply_base_url: https://staging.apply-for-teacher-training.service.gov.uk
 
 search_ui:
-  base_url: https://staging.find-postgraduate-teacher-training.service.gov.uk
+  base_url: https://staging.find-teacher-training-courses.service.gov.uk
 
 # URL of this app for the callback after sigining in
 base_url: https://staging.publish-teacher-training-courses.service.gov.uk
@@ -30,5 +30,5 @@ features:
   send_request_data_to_bigquery: true
 
 find_valid_referers:
-  - https://staging.find-postgraduate-teacher-training.service.gov.uk
+  - https://staging.find-teacher-training-courses.service.gov.uk
   - https://staging.find-teacher-training-courses.service.gov.uk

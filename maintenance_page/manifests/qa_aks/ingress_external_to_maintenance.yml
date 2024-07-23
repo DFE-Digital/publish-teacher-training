@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: qa.find-postgraduate-teacher-training.service.gov.uk
+  name: qa.find-teacher-training-courses.service.gov.uk
 spec:
   ingressClassName: nginx
   rules:
-  - host: qa.find-postgraduate-teacher-training.service.gov.uk
+  - host: qa.find-teacher-training-courses.service.gov.uk
     http:
       paths:
       - pathType: ImplementationSpecific
