@@ -31,9 +31,9 @@
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
-
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
+
+    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
     <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
