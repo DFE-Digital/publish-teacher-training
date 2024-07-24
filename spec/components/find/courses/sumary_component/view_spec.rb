@@ -141,7 +141,7 @@ module Find
             course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
-            expect(result.text).to include('£14,000 for non-UK citizens')
+            expect(result.text).to include('£14,000 for Non-UK citizens')
           end
         end
 
@@ -152,7 +152,7 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).to include('£9,250 for UK citizens')
-            expect(result.text).not_to include('for non-UK citizens')
+            expect(result.text).not_to include('for Non-UK citizens')
           end
         end
 
@@ -163,7 +163,7 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include('for UK citizens')
-            expect(result.text).to include('£14,000 for non-UK citizens')
+            expect(result.text).to include('£14,000 for Non-UK citizens')
           end
         end
 
@@ -174,7 +174,7 @@ module Find
             result = render_inline(described_class.new(course))
 
             expect(result.text).not_to include('for UK citizens')
-            expect(result.text).not_to include('£14,000 for non-UK citizens')
+            expect(result.text).not_to include('£14,000 for Non-UK citizens')
             expect(result.text).not_to include('Course fee')
           end
         end

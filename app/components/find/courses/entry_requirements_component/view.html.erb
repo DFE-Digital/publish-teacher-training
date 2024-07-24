@@ -12,8 +12,8 @@
           <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :degree, is_preview: preview?(params)) %>
         <% else %>
           <p class="govuk-body">
-            <%= degree_grade_content(course) %>
-            <%= equivalent_qualification %>
+            <%= course.degree_grade_content %>
+            <%= course.equivalent_qualification %>
           </p>
         <% end %>
 

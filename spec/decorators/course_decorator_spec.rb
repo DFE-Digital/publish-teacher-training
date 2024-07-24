@@ -1140,4 +1140,122 @@ describe CourseDecorator do
       end
     end
   end
+
+  describe '#equivalent_qualification' do
+    context 'when course degree grare is two_one' do
+      let(:course) { build(:course, degree_grade: :two_one) }
+
+      it 'returns or above or equivalent qualification' do
+        expect(decorated_course.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
+        )
+      end
+    end
+
+    context 'when course degree grare is two_two' do
+      let(:course) { build(:course, degree_grade: :two_two) }
+
+      it 'returns or above or equivalent qualification' do
+        expect(decorated_course.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or above or equivalent qualification </span>'
+        )
+      end
+    end
+
+    context 'when course degree grade is third_class' do
+      let(:course) { build(:course, degree_grade: :third_class) }
+
+      it 'returns third and above' do
+        expect(decorated_course.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span> <br> <br> <span class="govuk-hint govuk-!-font-size-16"> This should be an honours degree (Third or above), or equivalent </span>'
+        )
+      end
+    end
+
+    context 'when course degree grade is not_required' do
+      let(:course) { build(:course, degree_grade: :not_required) }
+
+      it 'returns not required' do
+        expect(decorated_course.equivalent_qualification).to eq(
+          '<br> <span class="govuk-hint govuk-!-font-size-16"> or equivalent qualification </span>'
+        )
+      end
+    end
+  end
+
+  describe '#degree_grade_content' do
+    context 'when course degree grare is two_one' do
+      let(:course) { build(:course, degree_grade: :two_one) }
+
+      it 'returns two one degree' do
+        expect(decorated_course.degree_grade_content).to eq(
+          '2:1 bachelor’s degree'
+        )
+      end
+    end
+
+    context 'when course degree grare is two_two' do
+      let(:course) { build(:course, degree_grade: :two_two) }
+
+      it 'returns two two degree' do
+        expect(decorated_course.degree_grade_content).to eq(
+          '2:2 bachelor’s degree'
+        )
+      end
+    end
+
+    context 'when course degree grare is third_class' do
+      let(:course) { build(:course, degree_grade: :third_class) }
+
+      it 'returns third_class degree' do
+        expect(decorated_course.degree_grade_content).to eq(
+          'Bachelor’s degree'
+        )
+      end
+    end
+
+    context 'when course degree grare is not_required' do
+      let(:course) { build(:course, degree_grade: :not_required) }
+
+      it 'returns not_require degree' do
+        expect(decorated_course.degree_grade_content).to eq(
+          'Bachelor’s degree'
+        )
+      end
+    end
+  end
+
+  describe '#course_fee_content' do
+    context 'when course is for uk citizens' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [build(:course_enrichment, :published, fee_uk_eu: 100, fee_international: nil)],
+          study_mode: 'full_time'
+        )
+      end
+
+      it 'returns fee for uk citizens' do
+        expect(decorated_course.course_fee_content).to eq(
+          '<b>£100</b> for UK citizens<br>'
+        )
+      end
+    end
+
+    context 'when course is for uk and non citizens' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [build(:course_enrichment, :published, fee_uk_eu: 100, fee_international: 200)],
+          study_mode: 'full_time'
+        )
+      end
+
+      it 'returns fee for uk and non citizens' do
+        expect(decorated_course.course_fee_content).to eq(
+          '<b>£100</b> for UK citizens<br><b>£200</b> for Non-UK citizens'
+        )
+      end
+    end
+  end
 end

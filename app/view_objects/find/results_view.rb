@@ -146,10 +146,6 @@ module Find
       ]
     end
 
-    def has_sites?(course)
-      !new_or_running_sites_with_vacancies_for(course).empty?
-    end
-
     def sites_count(course)
       new_or_running_sites_with_vacancies_for(course).count
     end

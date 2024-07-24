@@ -23,28 +23,7 @@ module Find
           end
         end
 
-        def equivalent_qualification
-          if course.two_one? || course.two_two?
-            t('.above_or_equivalent_qualification_html')
-          elsif course.third_class?
-            t('.third_or_above_html')
-          else
-            t('.equivalent_qualification_html')
-          end
-        end
-
         private
-
-        def degree_grade_content(course)
-          degree_grade_hash = {
-            'two_one' => '2:1 bachelor’s degree',
-            'two_two' => '2:2 bachelor’s degree',
-            'third_class' => 'Bachelor’s degree',
-            'not_required' => 'Bachelor’s degree'
-          }
-
-          degree_grade_hash[course.degree_grade]
-        end
 
         def subject_knowledge_enhancement_content?
           if course.subjects.first.subject_code.nil?

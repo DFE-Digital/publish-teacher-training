@@ -2,6 +2,7 @@
 
 class CourseDecorator < ApplicationDecorator
   include ActiveSupport::NumberHelper
+  include ActionView::Helpers::TranslationHelper
 
   delegate_all
 
@@ -471,6 +472,39 @@ class CourseDecorator < ApplicationDecorator
     !teacher_degree_apprenticeship?
   end
 
+  def equivalent_qualification
+    if two_one? || two_two?
+      translate('shared.decorators.course.above_or_equivalent_qualification_html')
+    elsif third_class?
+      translate('shared.decorators.course.third_or_above_html')
+    else
+      translate('shared.decorators.course.equivalent_qualification_html')
+    end
+  end
+
+  def degree_grade_content
+    degree_grade_hash = {
+      'two_one' => I18n.t('shared.decorators.course.two_one_degree'),
+      'two_two' => I18n.t('shared.decorators.course.two_two_degree'),
+      'third_class' => I18n.t('shared.decorators.course.third_class_degree'),
+      'not_required' => I18n.t('shared.decorators.course.degree_not_required')
+    }
+
+    degree_grade_hash[degree_grade]
+  end
+
+  def course_fee_content
+    safe_join(
+      [
+        bold_tag(number_to_currency(fee_uk_eu)),
+        formatted_uk_eu_fee_label,
+        tag.br,
+        bold_tag(number_to_currency(fee_international)),
+        formatted_international_fee_label
+      ]
+    )
+  end
+
   private
 
   def not_on_find
@@ -535,5 +569,23 @@ class CourseDecorator < ApplicationDecorator
 
   def format_name(subjects)
     subjects.map(&:subject_name).join('<br>').html_safe
+  end
+
+  def formatted_uk_eu_fee_label
+    return if fee_uk_eu.blank?
+
+    " #{I18n.t('find.courses.summary_component.view.for_uk_citizens')}"
+  end
+
+  def formatted_international_fee_label
+    return if fee_international.blank?
+
+    " #{I18n.t('find.courses.summary_component.view.for_non_uk_citizens')}"
+  end
+
+  def bold_tag(value)
+    return if value.blank?
+
+    tag.b(value)
   end
 end

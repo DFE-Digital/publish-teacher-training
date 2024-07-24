@@ -88,3 +88,12 @@
     display: none;
   }
 }
+
+.course-summary-card .govuk-summary-card__title-wrapper {
+  padding-top: govuk-spacing(2);
+}
+
+.course-summary-card .govuk-summary-card__title {
+  margin-bottom: 0;
+  margin-top: 0;
+}
