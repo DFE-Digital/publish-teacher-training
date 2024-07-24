@@ -275,7 +275,7 @@ RSpec.describe Courses::CopyToProviderService do
     end
 
     it 'still copies the course to the provider' do
-      new_course = new_provider.courses.first
+      new_course = new_provider.reload.courses.first
       expect(new_course.course_code).to eq(course.course_code)
       expect(new_provider.courses.count).to eq(1)
     end
