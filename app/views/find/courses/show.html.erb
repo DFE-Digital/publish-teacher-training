@@ -39,13 +39,13 @@
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>
     <% end %>
 
-    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
-
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
-
     <% if @course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: @course } %>
     <% end %>
+
+    <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
+
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
 
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
