@@ -2,7 +2,7 @@
 
 This repo is home to three services:
 
-- A service for candidates to [find teacher training](https://www.find-teacher-training-courses.service.gov.uk)
+- A service for candidates to [find teacher training](https://find-teacher-training-courses.service.gov.uk)
 - A service for providers to [publish teacher training courses](https://www.publish-teacher-training-courses.service.gov.uk)
 - An API to retrieve data on [teacher training courses](https://api.publish-teacher-training-courses.service.gov.uk/)
 
@@ -23,7 +23,7 @@ This repo is home to three services:
 
 | Name        | URL                                                                    | Description
 | ----------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------
-| Production  | [www](https://www.find-teacher-training-courses.service.gov.uk)   | Public site
+| Production  | [www](https://find-teacher-training-courses.service.gov.uk)   | Public site
 | Staging     | [staging](https://staging.find-teacher-training-courses.service.gov.uk)| For internal use by DfE to test deploys
 | QA          | [qa](https://qa.find-teacher-training-courses.service.gov.uk)     | For internal use by DfE for testing. Automatically deployed from main
 
