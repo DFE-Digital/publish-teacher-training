@@ -29,6 +29,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     when_i_click_on_the_pending_a_level_error
     then_i_am_on_the_consider_pending_a_level_page
     and_i_see_the_pending_a_level_error
+    and_the_back_link_points_to_the_course_page
 
     when_i_choose_yes
     and_i_click_continue
@@ -39,6 +40,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
 
     when_i_click_on_the_a_level_equivalencies
     then_i_am_on_the_a_level_equivalencies_page
+    and_the_back_link_points_to_the_course_page
 
     when_i_choose_yes
     and_i_click_update_a_levels
@@ -279,5 +281,15 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   def then_the_course_is_published
     expect(page).to have_content('Your course has been published.')
     expect(@course.reload.is_published?).to be true
+  end
+
+  def and_the_back_link_points_to_the_course_page
+    expect(page.find_link(text: 'Back')[:href]).to eq(
+      publish_provider_recruitment_cycle_course_path(
+        @provider.provider_code,
+        2025,
+        @course.course_code
+      )
+    )
   end
 end
