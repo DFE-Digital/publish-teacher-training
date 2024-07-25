@@ -27,14 +27,18 @@ module Support
 
     describe '#full_address' do
       subject { provider_contact_form.full_address }
+      let(:params) do
+        {
+          address1: '2431 Collins Tunnel',
+          address2: 'Willow Village',
+          address3: 'OHara Row',
+          town: 'Yundtside',
+          address4: 'Idaho',
+          postcode: 'UN5 8BA'
+        }
+      end
       let(:expected_full_address) do
-        # Decode html entities before comparison to prevent a flaky test from apostrophes
-        CGI.unescapeHTML(params.slice(:address1,
-                                      :address2,
-                                      :address3,
-                                      :town,
-                                      :address4,
-                                      :postcode).values.join('<br> '))
+        params.slice(:address1, :address2, :address3, :town, :address4, :postcode).values.join('<br> ')
       end
 
       it 'matches the expected full address' do
