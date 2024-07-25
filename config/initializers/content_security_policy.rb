@@ -35,6 +35,7 @@ Rails.application.configure do
                        'https://*.sentry.io',
                        'https://*.google-analytics.com',
                        'https://*.analytics.google.com',
+                       'https://www.google.com',
                        *all_domains
 
     policy.style_src   :self, *all_domains
