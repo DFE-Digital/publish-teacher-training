@@ -1,5 +1,5 @@
 # See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
 User-agent: *
 Disallow: /
-Allow: https://www.find-postgraduate-teacher-training.service.gov.uk/sitemap.xml
-Sitemap: https://www.find-postgraduate-teacher-training.service.gov.uk/sitemap.xml
+Allow: https://find-teacher-training-courses.service.gov.uk/sitemap.xml
+Sitemap: https://find-teacher-training-courses.service.gov.uk/sitemap.xml

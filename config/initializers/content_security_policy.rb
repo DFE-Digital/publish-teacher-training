@@ -10,6 +10,7 @@ Rails.application.configure do
   config.content_security_policy do |policy|
     local_domains = %w[https://publish.localhost https://find.localhost]
     prod_domains = [
+      'https://*.find-teacher-training-courses.service.gov.uk',
       'https://*.find-postgraduate-teacher-training.service.gov.uk',
       'https://*.publish-teacher-training-courses.service.gov.uk'
     ]
