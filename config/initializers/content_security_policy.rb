@@ -32,6 +32,7 @@ Rails.application.configure do
 
     policy.connect_src :self,
                        'https://stats.g.doubleclick.net',
+                       'https://googleads.g.doubleclick.net',
                        'https://*.sentry.io',
                        'https://*.google-analytics.com',
                        'https://*.analytics.google.com',
