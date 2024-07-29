@@ -535,7 +535,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def provider
-    @user.providers.first
+    @user.providers.first.reload
   end
 
   def course

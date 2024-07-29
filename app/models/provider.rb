@@ -13,6 +13,8 @@ class Provider < ApplicationRecord
   before_save :update_searchable, if: :accredited_provider?
   before_create :set_defaults
 
+  after_save :update_courses_program_type, if: :provider_type_previously_changed?
+
   has_associated_audits
   audited except: :changed_at
 
@@ -380,6 +382,13 @@ class Provider < ApplicationRecord
   end
 
   private
+
+  def update_courses_program_type
+    courses.each do |course|
+      Courses::AssignProgramTypeService.new.execute(course.funding_type, course)
+      course.save
+    end
+  end
 
   def accredited_provider_codes
     accrediting_provider_enrichments&.map(&:UcasProviderCode) || []
