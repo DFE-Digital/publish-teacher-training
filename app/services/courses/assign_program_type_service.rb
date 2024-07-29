@@ -16,7 +16,11 @@ module Courses
       when 'salary'
         calculate_salary_program(provider_type)
       when 'apprenticeship'
-        :pg_teaching_apprenticeship
+        if course.teacher_degree_apprenticeship?
+          course.program_type
+        else
+          :pg_teaching_apprenticeship
+        end
       when 'fee'
         calculate_fee_program(provider_type)
       else
