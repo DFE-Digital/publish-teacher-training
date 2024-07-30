@@ -3,6 +3,8 @@
 module Find
   class CoursesController < ApplicationController
     include ApplyRedirect
+    include GetIntoTeachingRedirect
+    include ProviderWebsiteRedirect
 
     before_action -> { render_not_found if provider.nil? }
 

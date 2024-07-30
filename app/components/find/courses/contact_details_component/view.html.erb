@@ -7,7 +7,7 @@
     <% if course.provider.decorate.website.present? %>
       <% row.with_key(text: t(".school_website")) %>
       <% row.with_value do %>
-        <%= govuk_link_to course.provider.decorate.website, course.provider.decorate.website %>
+        <%= govuk_link_to course.provider.decorate.website, find_provider_website_path(course.provider_code, course.course_code) %>
       <% end %>
     <% end %>
   <% end %>

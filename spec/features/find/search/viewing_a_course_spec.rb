@@ -99,6 +99,27 @@ feature 'Viewing a findable course' do
     then_i_should_be_on_the_course_page
   end
 
+  scenario 'user visits get into teaching advice pages' do
+    given_there_is_a_findable_course
+    when_i_visit_the_course_page
+    and_i_click('get a teacher training advisor')
+    then_i_am_redirected_to_the_training_advisor_page
+
+    when_i_visit_the_course_page
+    and_i_click('contact Get Into Teaching')
+    then_i_am_redirected_to_the_git_help_and_support_page
+  end
+
+  scenario 'user visits the provider page' do
+    given_there_is_a_findable_course
+    when_i_visit_the_course_page
+    and_i_click(@provider.provider_name)
+    then_i_am_on_the_provider_contact_details_page
+
+    when_i_click(@provider.decorate.website)
+    then_i_am_redirected_to_the_provider_website
+  end
+
   private
 
   def given_there_is_a_findable_course
@@ -342,6 +363,7 @@ feature 'Viewing a findable course' do
   def when_i_click(button)
     click_on(button)
   end
+  alias_method :and_i_click, :when_i_click
 
   def then_i_should_be_on_the_school_placements_page
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
@@ -388,6 +410,22 @@ feature 'Viewing a findable course' do
         "/course/#{@course.provider_code}/#{@course.course_code}"
       ).to_s
     )
+  end
+
+  def then_i_am_redirected_to_the_training_advisor_page
+    expect(page.current_url).to eq('https://getintoteaching.education.gov.uk/teacher-training-advisers')
+  end
+
+  def then_i_am_redirected_to_the_git_help_and_support_page
+    expect(page.current_url).to eq('https://getintoteaching.education.gov.uk/help-and-support')
+  end
+
+  def then_i_am_on_the_provider_contact_details_page
+    expect(page).to have_current_path(find_provider_path(@course.provider_code, @course.course_code), ignore_query: true)
+  end
+
+  def then_i_am_redirected_to_the_provider_website
+    expect(page.current_url).to eq provider.decorate.website
   end
 
   def then_i_should_be_on_the_training_with_disabilities_page

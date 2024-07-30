@@ -5,22 +5,23 @@ module Find
     module ContactDetailsComponent
       class ViewPreview < ViewComponent::Preview
         def with_email
-          course = Course.new(provider: Provider.new(provider_code: 'DFE', email: 'learn@learsomuch.com')).decorate
+          course = Course.new(course_code: 'TEST', provider: Provider.new(provider_code: 'DFE', email: 'learn@learsomuch.com')).decorate
           render Find::Courses::ContactDetailsComponent::View.new(course)
         end
 
         def with_telephone
-          course = Course.new(provider: Provider.new(provider_code: 'DFE', telephone: '0207 123 1234')).decorate
+          course = Course.new(course_code: 'TEST', provider: Provider.new(provider_code: 'DFE', telephone: '0207 123 1234')).decorate
           render Find::Courses::ContactDetailsComponent::View.new(course)
         end
 
         def with_website
-          course = Course.new(provider: Provider.new(provider_code: 'DFE', website: 'www.gov.uk')).decorate
+          course = Course.new(course_code: 'TEST', provider: Provider.new(provider_code: 'DFE', website: 'www.gov.uk')).decorate
           render Find::Courses::ContactDetailsComponent::View.new(course)
         end
 
         def with_all
-          course = Course.new(provider: Provider.new(
+          course = Course.new(course_code: 'TEST', provider: Provider.new(
+            provider_code: 'DFE',
             email: 'learn@learsomuch.com',
             telephone: '0207 123 1234',
             website: 'www.gov.uk'
