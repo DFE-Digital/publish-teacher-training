@@ -43,4 +43,12 @@ describe Find::Courses::QualificationsSummaryComponent::View, type: :component d
       expect(result.text).to include('A postgraduate diploma in education (PGDE) is equivalent to a postgraduate certificate in education (PGCE).')
     end
   end
+
+  context 'Teacher degree apprenticeship with QTS' do
+    it 'renders correct text' do
+      result = render_inline(described_class.new('Teacher degree apprenticeship with QTS'))
+
+      expect(result.text).to include('On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS). Find out more about teacher degree apprenticeships')
+    end
+  end
 end

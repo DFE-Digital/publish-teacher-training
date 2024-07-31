@@ -113,6 +113,11 @@ en:
           above_or_equivalent_qualification: or above, or equivalent qualification
       about_course:
         heading: Course details
+      qualifications_summary_component:
+        view:
+          tda_with_qts: Teacher degree apprenticeship (TDA) with QTS
+          tda_with_qts_content_html: On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS). %{tda_link}
+          find_out_more_about_tda: Find out more about teacher degree apprenticeships
       summary_component:
         view:
           fee_or_salary: Fee or salary
@@ -233,6 +238,7 @@ en:
       learn_more_about_non_uk_qualifications_html: Learn more about how to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/non-uk-qualifications">check your qualifications meet the required standard</a>.
       tel: 0800 389 2500
       opening_times: "Monday to Friday, 8.30am to 5.30pm"
+      url_tda: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
       url_get_an_advisor: https://getintoteaching.education.gov.uk/teacher-training-adviser/sign_up/identity
       url_online_chat: https://getintoteaching.education.gov.uk/help-and-support

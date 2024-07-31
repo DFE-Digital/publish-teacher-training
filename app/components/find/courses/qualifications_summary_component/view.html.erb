@@ -53,4 +53,13 @@
       This course does not lead to qualified teacher status (QTS).
     </p>
   <% end %>
+<% when "Teacher degree apprenticeship with QTS" %>
+  <%= govuk_details(summary_text: t(".tda_with_qts")) do %>
+    <p class="govuk-body">
+      <%= t(
+        ".tda_with_qts_content_html",
+        tda_link: govuk_link_to(t(".find_out_more_about_tda"), t("find.get_into_teaching.url_tda"))
+      ) %>
+    </p>
+  <% end %>
 <% end %>
