@@ -42,6 +42,11 @@ class Course < ApplicationRecord
     open: 1
   }, _prefix: :application_status
 
+  enum course_type: {
+    postgraduate: 0,
+    undergraduate: 1
+  }, _prefix: :type
+
   enum program_type: {
     higher_education_programme: 'HE',
     higher_education_salaried_programme: 'HES',
