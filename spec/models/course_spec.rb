@@ -2911,14 +2911,14 @@ describe Course do
 
     context 'undergraduate course' do
       it 'sets the value to undergraduate' do
-        course.type_undergraduate!
+        course.undergraduate_course_type!
         expect(course.reload.course_type).to eq('undergraduate')
       end
     end
 
     context 'postgraduate course' do
       it 'sets the value to postgraduate' do
-        course.type_postgraduate!
+        course.postgraduate_course_type!
         expect(course.reload.course_type).to eq('postgraduate')
       end
     end
@@ -2931,16 +2931,16 @@ describe Course do
 
     context 'predicate methods' do
       it 'returns true for postgraduate?' do
-        expect(course.type_postgraduate?).to be true
+        expect(course.postgraduate_course_type?).to be true
       end
 
       it 'returns false for undergraduate?' do
-        expect(course.type_undergraduate?).to be false
+        expect(course.undergraduate_course_type?).to be false
       end
 
       it 'returns true for undergraduate? after setting to undergraduate' do
-        course.type_undergraduate!
-        expect(course.type_undergraduate?).to be true
+        course.undergraduate_course_type!
+        expect(course.undergraduate_course_type?).to be true
       end
     end
   end
