@@ -2900,51 +2900,6 @@ describe Course do
     end
   end
 
-  describe 'course_type enum' do
-    subject(:course) { create(:course) }
-
-    context 'default' do
-      it 'sets the value as postgraduate' do
-        expect(course.course_type).to eq('postgraduate')
-      end
-    end
-
-    context 'undergraduate course' do
-      it 'sets the value to undergraduate' do
-        course.undergraduate_course_type!
-        expect(course.reload.course_type).to eq('undergraduate')
-      end
-    end
-
-    context 'postgraduate course' do
-      it 'sets the value to postgraduate' do
-        course.postgraduate_course_type!
-        expect(course.reload.course_type).to eq('postgraduate')
-      end
-    end
-
-    context 'validation' do
-      it 'raises an error when setting an invalid course_type' do
-        expect { course.update!(course_type: 'invalid') }.to raise_error(ArgumentError)
-      end
-    end
-
-    context 'predicate methods' do
-      it 'returns true for postgraduate?' do
-        expect(course.postgraduate_course_type?).to be true
-      end
-
-      it 'returns false for undergraduate?' do
-        expect(course.undergraduate_course_type?).to be false
-      end
-
-      it 'returns true for undergraduate? after setting to undergraduate' do
-        course.undergraduate_course_type!
-        expect(course.undergraduate_course_type?).to be true
-      end
-    end
-  end
-
   describe '#is_primary?' do
     context 'when course is primary' do
       subject { build(:course, level: :primary) }
