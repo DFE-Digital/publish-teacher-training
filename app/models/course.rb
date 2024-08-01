@@ -47,6 +47,13 @@ class Course < ApplicationRecord
     undergraduate: 'undergraduate'
   }, _suffix: :course_type
 
+  enum funding: {
+    not_set: 'not_set',
+    fee: 'fee',
+    salary: 'salary',
+    apprenticeship: 'apprenticeship'
+  }
+
   enum program_type: {
     higher_education_programme: 'HE',
     higher_education_salaried_programme: 'HES',
