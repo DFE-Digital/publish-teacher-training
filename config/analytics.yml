@@ -46,6 +46,7 @@ shared:
     - accept_pending_a_level
     - accept_a_level_equivalency
     - additional_a_level_equivalencies
+    - course_type
   course_site:
     - id
     - course_id
