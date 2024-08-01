@@ -1,4 +1,2 @@
 ---
-:shared:
-  :user:
-  - sign_in_user_id
+shared: {}
