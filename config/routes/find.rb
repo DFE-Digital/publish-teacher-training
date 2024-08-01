@@ -15,6 +15,8 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code', to: 'courses#show', as: 'course'
   get '/course/:provider_code/:course_code/placements', to: 'placements#index', as: :placements
   get '/course/:provider_code/:course_code/apply', to: 'courses#apply', as: :apply
+  get '/course/:provider_code/:course_code/git/:git_path', to: 'courses#git_redirect', as: :get_into_teaching_redirect
+  get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
   get '/results', to: 'results#index', as: 'results'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'

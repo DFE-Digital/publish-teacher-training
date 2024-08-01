@@ -78,7 +78,9 @@ en:
           course_fees: The course fees for UK citizens in %{cycle_range} are %{fee}.
       advice:
         heading: Support and advice
-        body_html: You can <a class="govuk-link" href="https://getintoteaching.education.gov.uk/teacher-training-advisers"> get a teacher training adviser</a> or <a class="govuk-link" href="https://getintoteaching.education.gov.uk/help-and-support"> contact Get Into Teaching</a> for free support.
+        body_html: You can %{teacher_training_advisor_link} or %{contact_git_link} for free support
+        get_a_teacher_training_advisor_link_text: get a teacher training advisor
+        contact_get_into_teaching_link_text: contact Get Into Teaching
       train_with_disabilities:
         heading: Training with disabilities and other needs at %{provider_name}
       international_students_component:
