@@ -24,4 +24,4 @@
 - [ ] Rebased main
 - [ ] Cleaned commit history
 - [ ] Tested by running locally
-- [ ] Add PR link to Trello card
+- [ ] Attach PR to Trello card
