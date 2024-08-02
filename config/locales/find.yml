@@ -70,6 +70,20 @@ en:
       title: Select a subject -
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
+    university_degree_status_page:
+      title: Do you have a university degree?
+      content: You need a bachelor's degree or equivalent to do postgraduate teacher training. You do not need a degree to apply for a teacher degree apprenticeship (TDA).
+      train_to_be_a_teacher_link:
+        text: Find out about the different ways to train to be a teacher
+        href: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
+    no_degree_and_requires_visa_sponsorship_page:
+      title: You are not eligible for teacher training courses on this service
+      heading: You are not eligible for teacher training courses on this service.
+      content: You do not have a university degree, and you require visa sponsorship, so you are not eligible for postgraduate teacher training or teacher degree apprenticeships.
+      explanation: You may be eligible for %{link}, which are not on this service.
+      explanation_link:
+        title: undergraduate degree courses
+        href: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/if-you-dont-have-a-degree
     courses:
       fees_component:
         view:

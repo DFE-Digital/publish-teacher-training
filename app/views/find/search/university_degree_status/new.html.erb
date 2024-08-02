@@ -1,4 +1,4 @@
-<%= content_for :page_title, title_with_error_prefix('Do you have a university degree?', @university_degree_status_form.errors.any?) %>
+<%= content_for :page_title, title_with_error_prefix(t("find.university_degree_status_page.title"), @university_degree_status_form.errors.any?) %>
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
@@ -19,16 +19,25 @@
           form: f,
           form_name: :find_university_degree_status_form,
           exclude_keys: ["university_degree_status"]
-      ) %>
+        ) %>
 
-      <%= f.govuk_radio_buttons_fieldset :university_degree_status, legend: { text: "Do you have a university degree?", size: "l", tag: "h1" } do %>
-        <p class="govuk-body">You need a bachelor's degree or equivalent to do postgraduate teacher training. You do not need a degree to apply for a teacher degree apprenticeship (TDA).</p>
-        <p class="govuk-body"><%= govuk_link_to("Find out about the different ways to train to be a teacher", "https://getintoteaching.education.gov.uk/train-to-be-a-teacher", target: "_blank", rel: "noopener") %>.</p>
-        <%= f.govuk_radio_button :university_degree_status, "true", label: { text: "Yes, I have a degree or am studying for one" }, link_errors: true %>
-        <%= f.govuk_radio_button :university_degree_status, "false", label: { text: "No, I do not have a degree" } %>
+      <%= f.govuk_radio_buttons_fieldset :university_degree_status, legend: { size: "l", tag: "h1" } do %>
+        <p class="govuk-body">
+          <%= t("find.university_degree_status_page.content") %>
+        </p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t("find.university_degree_status_page.train_to_be_a_teacher_link.text"),
+            t("find.university_degree_status_page.train_to_be_a_teacher_link.href"),
+            target: "_blank",
+            rel: "noopener"
+          ) %>.
+        </p>
+        <%= f.govuk_radio_button :university_degree_status, "true", link_errors: true %>
+        <%= f.govuk_radio_button :university_degree_status, "false" %>
       <% end %>
 
-      <%= f.govuk_submit "Continue" %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
   </div>
 </div>
