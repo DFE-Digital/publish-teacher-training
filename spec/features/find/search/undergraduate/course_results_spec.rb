@@ -48,6 +48,8 @@ feature 'Questions and results for undergraduate courses' do
     when_i_choose_no
     and_i_click_to_find_courses
     then_i_am_on_results_page
+    and_some_filters_are_hidden_for_undergraduate_courses
+    and_some_filters_are_visible_for_undergraduate_courses
   end
 
   scenario 'when 2024 cycle and undergraduate feature is active' do
@@ -179,7 +181,7 @@ feature 'Questions and results for undergraduate courses' do
 
   def then_i_see_an_error_message_to_the_undergraduate_question_page
     expect(page).to have_content(
-      ''
+      '[PLACEHOLDER FOR THE ERROR MESSAGE]'
     )
   end
 
@@ -209,5 +211,22 @@ feature 'Questions and results for undergraduate courses' do
 
   def and_i_click_to_find_courses
     click_link_or_button 'Find courses'
+  end
+
+  def and_some_filters_are_hidden_for_undergraduate_courses
+    within 'form.app-filter' do
+      expect(page).to have_no_content('Study type')
+      expect(page).to have_no_content('Qualifications')
+      expect(page).to have_no_content('Degree grade accepted')
+      expect(page).to have_no_content('Salary')
+      expect(page).to have_no_content('Qualifications')
+    end
+  end
+
+  def and_some_filters_are_visible_for_undergraduate_courses
+    within 'form.app-filter' do
+      expect(page).to have_content('Special educational needs')
+      expect(page).to have_content('Applications open')
+    end
   end
 end

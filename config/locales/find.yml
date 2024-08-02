@@ -267,6 +267,8 @@ en:
           html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde:
           html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
+        undergraduate_degree_with_qts:
+          html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
     links:
       national_pay_scales: https://www.gov.uk/government/publications/national-pay-scales-for-eligible-teaching-and-education-jobs/national-pay-scales-for-eligible-teaching-and-education-leadership-occupation-codes
     result_filters_filters_view:

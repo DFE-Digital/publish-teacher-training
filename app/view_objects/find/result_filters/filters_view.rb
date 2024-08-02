@@ -39,6 +39,10 @@ module Find
         params[:qualification].nil?
       end
 
+      def display_undergraduate_courses?
+        !ActiveModel::Type::Boolean.new.cast(params['university_degree_status'])
+      end
+
       def location_query?
         params[:l] == '1'
       end
