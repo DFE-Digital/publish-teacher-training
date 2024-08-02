@@ -32,10 +32,6 @@ module Find
         end
       end
 
-      def undergraduate_feature_enabled?
-        Settings.current_recruitment_cycle_year.to_i >= 2025 && FeatureService.enabled?(:teacher_degree_apprenticeship)
-      end
-
       def sanitised_subject_codes
         form_params['subjects'].compact_blank!
       end

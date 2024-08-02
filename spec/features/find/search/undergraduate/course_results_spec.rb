@@ -15,6 +15,17 @@ feature 'Questions and results for undergraduate courses' do
     and_i_choose_subjects
     and_i_click_continue
     then_i_am_on_the_undergraduate_question_page
+
+    #    and_i_click_continue
+    #    then_i_see_an_error_message_to_the_undergraduate_question_page
+
+    when_i_choose_no
+    and_i_click_continue
+    then_i_am_on_the_visa_status_page
+
+    when_i_choose_yes
+    and_i_click_to_find_courses
+    then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
   end
 
   scenario 'when 2024 cycle and undergraduate feature is active' do
@@ -42,10 +53,13 @@ feature 'Questions and results for undergraduate courses' do
     and_i_choose_further_education
     and_i_click_continue
     then_i_am_on_the_visa_status_page
+    when_i_choose_yes
+    and_i_click_to_find_courses
+    then_i_am_on_results_page
   end
 
   def given_i_have_2025_courses
-    recruitment_cycle,provider = setup_recruitment_cycle(year: 2025)
+    _, provider = setup_recruitment_cycle(year: 2025)
 
     create(:course, :with_teacher_degree_apprenticeship, provider:, name: 'Biology')
     create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Chemistry')
@@ -70,7 +84,7 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def given_i_have_2024_courses
-    recruitment_cycle,provider = setup_recruitment_cycle(year: 2024)
+    _, provider = setup_recruitment_cycle(year: 2024)
 
     create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Chemistry')
     create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Mathematics')
@@ -131,5 +145,39 @@ feature 'Questions and results for undergraduate courses' do
 
   def and_i_choose_further_education
     choose 'Further education'
+  end
+
+  def then_i_see_an_error_message_to_the_undergraduate_question_page
+    expect(page).to have_content(
+      ''
+    )
+  end
+
+  def when_i_choose_no
+    choose 'No'
+  end
+
+  def when_i_choose_yes
+    choose 'Yes'
+  end
+
+  def then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
+    expect(page).to have_current_path(
+      find_no_degree_and_requires_visa_sponsorship_path,
+      ignore_query: true
+    )
+
+    expect(page).to have_content('You are not eligible for teacher training courses on this service.')
+  end
+
+  def then_i_am_on_results_page
+    expect(page).to have_current_path(
+      find_results_path,
+      ignore_query: true
+    )
+  end
+
+  def and_i_click_to_find_courses
+    click_link_or_button 'Find courses'
   end
 end
