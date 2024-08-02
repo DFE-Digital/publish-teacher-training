@@ -5,7 +5,7 @@
 
   <div class="app-filter__content">
   <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
-    <% if @filters_view.display_undergraduate_courses? %>
+    <% if @filters_view.show_undergraduate_courses? %>
       <%= render "find/result_filters/send_filter", form: %>
       <%= render "find/result_filters/applications_open_filter", form: %>
       <%= render "find/result_filters/hidden_fields", form: %>

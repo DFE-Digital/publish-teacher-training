@@ -17,8 +17,6 @@ module Find
       def create
         @visa_status_form = VisaStatusForm.new(
           visa_status: form_params[:visa_status],
-          university_degree_status: form_params[:university_degree_status],
-          age_group: form_params[:age_group]
         )
 
         if @visa_status_form.valid?
@@ -31,7 +29,7 @@ module Find
       private
 
       def next_step_path
-        if undergraduate_feature_enabled? && @visa_status_form.require_visa_and_does_not_have_degree?
+        if course_type_answer_determiner.non_eligible_for_undergraduate_courses?
           find_no_degree_and_requires_visa_sponsorship_path(filter_params[:find_visa_status_form])
         else
           find_results_path(
@@ -43,6 +41,14 @@ module Find
             )
           )
         end
+      end
+
+      def course_type_answer_determiner
+        CourseTypeAnswerDeterminer.new(
+          university_degree_status: form_params[:university_degree_status],
+          age_group: form_params[:age_group],
+          visa_status: form_params[:visa_status]
+        )
       end
 
       def sanitised_subject_codes
