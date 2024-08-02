@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 feature 'Questions and results for undergraduate courses' do
-  scenario 'when 2025 cycle and undergraduate feature is active' do
+  scenario 'when 2025 cycle and undergraduate feature is active and searching secondary courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
     and_the_tda_feature_flag_is_active
@@ -26,6 +26,28 @@ feature 'Questions and results for undergraduate courses' do
     when_i_choose_yes
     and_i_click_to_find_courses
     then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
+  end
+
+  scenario 'when 2025 cycle and undergraduate feature is active and searching primary courses' do
+    given_i_have_2025_courses
+    and_i_am_in_the_2025_cycle
+    and_the_tda_feature_flag_is_active
+    when_i_visit_the_start_page
+    and_i_select_the_across_england_radio_button
+    and_i_click_continue
+    and_i_choose_primary
+    and_i_click_continue
+    and_i_choose_primary_subjects
+    and_i_click_continue
+    then_i_am_on_the_undergraduate_question_page
+
+    when_i_choose_no
+    and_i_click_continue
+    then_i_am_on_the_visa_status_page
+
+    when_i_choose_no
+    and_i_click_to_find_courses
+    then_i_am_on_results_page
   end
 
   scenario 'when 2024 cycle and undergraduate feature is active' do
@@ -118,6 +140,14 @@ feature 'Questions and results for undergraduate courses' do
 
   def and_i_choose_secondary
     choose 'Secondary'
+  end
+
+  def and_i_choose_primary
+    choose 'Primary'
+  end
+
+  def and_i_choose_primary_subjects
+    check 'Primary with mathematics'
   end
 
   def and_i_choose_subjects
