@@ -47,6 +47,7 @@ shared:
     - accept_a_level_equivalency
     - additional_a_level_equivalencies
     - course_type
+    - funding
   course_site:
     - id
     - course_id
