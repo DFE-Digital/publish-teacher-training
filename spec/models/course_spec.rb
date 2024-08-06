@@ -2945,6 +2945,72 @@ describe Course do
     end
   end
 
+  describe 'funding enum' do
+    subject(:course) { create(:course) }
+
+    context 'default' do
+      it 'sets the default value as not_set' do
+        expect(course.funding).to eq('not_set')
+      end
+    end
+
+    context 'fee funding' do
+      it 'sets the value to fee' do
+        course.fee!
+        expect(course.reload.funding).to eq('fee')
+      end
+    end
+
+    context 'salary funding' do
+      it 'sets the value to salary' do
+        course.salary!
+        expect(course.reload.funding).to eq('salary')
+      end
+    end
+
+    context 'apprenticeship funding' do
+      it 'sets the value to apprenticeship' do
+        course.apprenticeship!
+        expect(course.reload.funding).to eq('apprenticeship')
+      end
+    end
+
+    context 'validation' do
+      it 'raises an error when setting an invalid funding' do
+        expect { course.update!(funding: 'invalid') }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'predicate methods' do
+      it 'returns true for not_set?' do
+        expect(course.not_set?).to be true
+      end
+
+      it 'returns false for fee?' do
+        expect(course.fee?).to be false
+      end
+
+      it 'returns false for salary?' do
+        expect(course.salary?).to be false
+      end
+
+      it 'returns true for fee? after setting to fee' do
+        course.fee!
+        expect(course.fee?).to be true
+      end
+
+      it 'returns true for salary? after setting to salary' do
+        course.salary!
+        expect(course.salary?).to be true
+      end
+
+      it 'returns true for apprenticeship? after setting to apprenticeship' do
+        course.apprenticeship!
+        expect(course.apprenticeship?).to be true
+      end
+    end
+  end
+
   describe '#is_primary?' do
     context 'when course is primary' do
       subject { build(:course, level: :primary) }
