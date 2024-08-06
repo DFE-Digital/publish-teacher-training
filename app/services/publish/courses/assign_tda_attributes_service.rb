@@ -15,7 +15,8 @@ module Publish
                                   can_sponsor_skilled_worker_visa: false,
                                   degree_grade: 'not_required',
                                   additional_degree_subject_requirements: false,
-                                  degree_subject_requirements: nil)
+                                  degree_subject_requirements: nil,
+                                  course_type: 'undergraduate')
 
         if @course.enrichments.blank?
           course_enrichment = @course.enrichments.find_or_initialize_draft
