@@ -63,6 +63,7 @@ module Publish
         if undergraduate_to_other_qualification?
           @course.enrichments.find_or_initialize_draft.update(course_length: nil, salary_details: nil)
           @course.update(
+            course_type: 'postgraduate',
             a_level_subject_requirements: [],
             accept_pending_a_level: nil,
             accept_a_level_equivalency: nil,

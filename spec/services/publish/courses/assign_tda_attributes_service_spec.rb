@@ -15,6 +15,7 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
       expect(course.additional_degree_subject_requirements).to be(false)
       expect(course.degree_subject_requirements).to be_nil
       expect(course.degree_grade).to eq('not_required')
+      expect(course.course_type).to eq('undergraduate')
     end
   end
 end
