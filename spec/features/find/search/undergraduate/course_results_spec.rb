@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 feature 'Questions and results for undergraduate courses' do
+  after do
+    Timecop.return
+  end
+
   scenario 'when 2025 cycle and undergraduate feature is active and searching secondary courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
