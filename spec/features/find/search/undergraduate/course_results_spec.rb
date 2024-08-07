@@ -18,6 +18,7 @@ feature 'Questions and results for undergraduate courses' do
 
     and_i_click_continue
     then_i_see_an_error_message_to_the_undergraduate_question_page
+    and_the_back_link_points_to_the_secondary_subjects_page
 
     when_i_choose_no_i_do_not_have_a_degree
     and_i_click_continue
@@ -29,6 +30,7 @@ feature 'Questions and results for undergraduate courses' do
 
     when_i_click_back
     then_i_am_on_the_visa_status_page
+    and_the_back_link_points_to_the_degree_question
 
     when_i_choose_no
     and_i_click_to_find_courses
@@ -51,6 +53,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_choose_primary_subjects
     and_i_click_continue
     then_i_am_on_the_undergraduate_question_page
+    and_the_back_link_points_to_the_primary_subjects_page
 
     when_i_choose_no_i_do_not_have_a_degree
     and_i_click_continue
@@ -252,32 +255,52 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def and_i_can_see_only_primary_undergraduate_courses
-    expect(page).to have_content('Primary with science')
-    expect(page).to have_content(@primary_with_science_course.course_code)
-    expect(page).to have_no_content('Biology')
-    expect(page).to have_no_content(@biology_course.course_code)
-    expect(page).to have_no_content('History')
-    expect(page).to have_no_content(@history_course.course_code)
-    expect(page).to have_no_content('Chemistry')
-    expect(page).to have_no_content(@chemistry_course.course_code)
-    expect(page).to have_no_content('Mathematics')
-    expect(page).to have_no_content(@mathematics_course.course_code)
+    within '.app-search-results' do
+      expect(page).to have_content('Primary with science')
+      expect(page).to have_content(@primary_with_science_course.course_code)
+      expect(page).to have_no_content('Biology')
+      expect(page).to have_no_content(@biology_course.course_code)
+      expect(page).to have_no_content('History')
+      expect(page).to have_no_content(@history_course.course_code)
+      expect(page).to have_no_content('Chemistry')
+      expect(page).to have_no_content(@chemistry_course.course_code)
+      expect(page).to have_no_content('Mathematics')
+      expect(page).to have_no_content(@mathematics_course.course_code)
+    end
   end
 
   def and_i_can_see_only_secondary_undergraduate_courses
-    expect(page).to have_content('Biology')
-    expect(page).to have_content(@biology_course.course_code)
-    expect(page).to have_content('History')
-    expect(page).to have_content(@history_course.course_code)
-    expect(page).to have_no_content('Primary with science')
-    expect(page).to have_no_content(@primary_with_science_course.course_code)
-    expect(page).to have_no_content('Chemistry')
-    expect(page).to have_no_content(@chemistry_course.course_code)
-    expect(page).to have_no_content('Mathematics')
-    expect(page).to have_no_content(@mathematics_course.course_code)
+    within '.app-search-results' do
+      expect(page).to have_content('Biology')
+      expect(page).to have_content(@biology_course.course_code)
+      expect(page).to have_content('History')
+      expect(page).to have_content(@history_course.course_code)
+      expect(page).to have_no_content('Primary with science')
+      expect(page).to have_no_content(@primary_with_science_course.course_code)
+      expect(page).to have_no_content('Chemistry')
+      expect(page).to have_no_content(@chemistry_course.course_code)
+      expect(page).to have_no_content('Mathematics')
+      expect(page).to have_no_content(@mathematics_course.course_code)
+    end
   end
 
   def when_i_click_back
     click_link_or_button 'Back'
+  end
+
+  def and_the_back_link_points_to_the_degree_question
+    expect(back_link[:href]).to include(find_university_degree_status_path)
+  end
+
+  def and_the_back_link_points_to_the_secondary_subjects_page
+    expect(back_link[:href]).to include(find_subjects_path(age_group: 'secondary'))
+  end
+
+  def and_the_back_link_points_to_the_primary_subjects_page
+    expect(back_link[:href]).to include(find_subjects_path(age_group: 'primary'))
+  end
+
+  def back_link
+    page.find_link('Back')
   end
 end
