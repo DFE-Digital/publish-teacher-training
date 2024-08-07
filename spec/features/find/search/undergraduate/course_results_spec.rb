@@ -98,6 +98,31 @@ feature 'Questions and results for undergraduate courses' do
     then_i_am_on_results_page
   end
 
+  scenario 'when 2025 cycle and undergraduate feature is active and searching postgraduate courses' do
+    given_i_have_2025_courses
+    and_i_am_in_the_2025_cycle
+    and_the_tda_feature_flag_is_active
+    when_i_visit_the_start_page
+    and_i_select_the_across_england_radio_button
+    and_i_click_continue
+    and_i_choose_secondary
+    and_i_click_continue
+    and_i_choose_subjects
+    and_i_click_continue
+    then_i_am_on_the_undergraduate_question_page
+
+    when_i_choose_yes_i_have_a_degree
+    and_i_click_continue
+    then_i_am_on_the_visa_status_page
+    and_the_back_link_points_to_the_degree_question
+
+    when_i_choose_no
+    and_i_click_to_find_courses
+    then_i_am_on_results_page
+    and_all_filters_are_visible
+    and_i_can_see_only_postgraduate_courses
+  end
+
   def given_i_have_2025_courses
     _, provider = setup_recruitment_cycle(year: 2025)
 
@@ -299,6 +324,33 @@ feature 'Questions and results for undergraduate courses' do
 
   def and_the_back_link_points_to_the_primary_subjects_page
     expect(back_link[:href]).to include(find_subjects_path(age_group: 'primary'))
+  end
+
+  def and_all_filters_are_visible
+    within 'form.app-filter' do
+      expect(page).to have_content('Study type')
+      expect(page).to have_content('Qualifications')
+      expect(page).to have_content('Degree grade accepted')
+      expect(page).to have_content('Salary')
+      expect(page).to have_content('Qualifications')
+      expect(page).to have_content('Special educational needs')
+      expect(page).to have_content('Applications open')
+    end
+  end
+
+  def and_i_can_see_only_postgraduate_courses
+    within '.app-search-results' do
+      expect(page).to have_content('Chemistry')
+      expect(page).to have_content(@chemistry_course.course_code)
+      expect(page).to have_content('Mathematics')
+      expect(page).to have_content(@mathematics_course.course_code)
+      expect(page).to have_no_content('Biology')
+      expect(page).to have_no_content(@biology_course.course_code)
+      expect(page).to have_no_content('History')
+      expect(page).to have_no_content(@history_course.course_code)
+      expect(page).to have_no_content('Primary with science')
+      expect(page).to have_no_content(@primary_with_science_course.course_code)
+    end
   end
 
   def back_link

@@ -39,8 +39,17 @@ module Find
     end
 
     def filter_parameters
-      query_parameters['qualification'] = Course.qualifications.keys.grep(/undergraduate/) if show_undergraduate_courses?
+      filter_course_type unless query_parameters['qualification'].present?
+
       query_parameters
+    end
+
+    def filter_course_type
+      if show_undergraduate_courses?
+        query_parameters['qualification'] = Course.qualifications.keys.grep(/undergraduate/)
+      else
+        query_parameters['qualification'] = Course.qualifications.keys.reject { |key| key.match?(/undergraduate/) }
+      end
     end
 
     def number_of_courses_string

@@ -63,6 +63,21 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
         expect(determiner.show_undergraduate_courses?).to be false
       end
     end
+
+    context 'when there is not a university degree' do
+      let(:params) do
+        {
+          age_group: 'secondary',
+          visa_status: 'false',
+          university_degree_status: nil
+        }
+      end
+
+      it 'returns false' do
+        determiner = described_class.new(**params)
+        expect(determiner.show_undergraduate_courses?).to be false
+      end
+    end
   end
 
   describe '#non_eligible_for_undergraduate_courses?' do

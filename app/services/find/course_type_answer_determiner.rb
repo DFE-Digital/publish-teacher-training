@@ -11,7 +11,7 @@ module Find
     end
 
     def show_undergraduate_courses?
-      no_further_education? && no_degrees? && does_not_require_visa_sponsorship?
+      no_further_education? && university_degree_status.present? && no_degrees? && does_not_require_visa_sponsorship?
     end
 
     def non_eligible_for_undergraduate_courses?
