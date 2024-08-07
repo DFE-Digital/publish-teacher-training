@@ -138,7 +138,7 @@ gem 'jsbundling-rails', '~> 1.3'
 gem 'propshaft'
 
 # for sending analytics data to the analytics platform
-gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.13.0'
+gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.14.0'
 
 # For running data migrations
 gem 'data_migrate', '~> 9.4.0'
