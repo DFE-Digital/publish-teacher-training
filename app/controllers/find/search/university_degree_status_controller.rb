@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-class UniversityDegreeStatusForm
-  include ActiveModel::Model
-  attr_accessor :university_degree_status
-end
-
 module Find
   module Search
     class UniversityDegreeStatusController < Find::ApplicationController
@@ -19,8 +14,18 @@ module Find
       end
 
       def create
-        redirect_to find_visa_status_path(filter_params[:university_degree_status_form])
+        @university_degree_status_form = UniversityDegreeStatusForm.new(
+          university_degree_status: form_params[:university_degree_status]
+        )
+
+        if @university_degree_status_form.valid?
+          redirect_to find_visa_status_path(filter_params[:find_university_degree_status_form])
+        else
+          render :new
+        end
       end
+
+      def form_name = :find_university_degree_status_form
 
       def back_path; end
       helper_method :back_path

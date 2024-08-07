@@ -16,16 +16,27 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     then_i_am_on_the_undergraduate_question_page
 
-    #    and_i_click_continue
-    #    then_i_see_an_error_message_to_the_undergraduate_question_page
+    and_i_click_continue
+    then_i_see_an_error_message_to_the_undergraduate_question_page
 
-    when_i_choose_no
+    when_i_choose_no_i_do_not_have_a_degree
     and_i_click_continue
     then_i_am_on_the_visa_status_page
 
     when_i_choose_yes
     and_i_click_to_find_courses
     then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
+
+    when_i_click_back
+    then_i_am_on_the_visa_status_page
+
+    when_i_choose_no
+    and_i_click_to_find_courses
+
+    then_i_am_on_results_page
+    and_some_filters_are_hidden_for_undergraduate_courses
+    and_some_filters_are_visible_for_undergraduate_courses
+    and_i_can_see_only_secondary_undergraduate_courses
   end
 
   scenario 'when 2025 cycle and undergraduate feature is active and searching primary courses' do
@@ -41,7 +52,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     then_i_am_on_the_undergraduate_question_page
 
-    when_i_choose_no
+    when_i_choose_no_i_do_not_have_a_degree
     and_i_click_continue
     then_i_am_on_the_visa_status_page
 
@@ -50,6 +61,7 @@ feature 'Questions and results for undergraduate courses' do
     then_i_am_on_results_page
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
+    and_i_can_see_only_primary_undergraduate_courses
   end
 
   scenario 'when 2024 cycle and undergraduate feature is active' do
@@ -85,10 +97,11 @@ feature 'Questions and results for undergraduate courses' do
   def given_i_have_2025_courses
     _, provider = setup_recruitment_cycle(year: 2025)
 
-    create(:course, :with_teacher_degree_apprenticeship, provider:, name: 'Biology')
-    create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Chemistry')
-    create(:course, :with_teacher_degree_apprenticeship, provider:, name: 'History')
-    create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Mathematics')
+    @biology_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
+    @chemistry_course = create(:course, :open, :published, :with_full_time_sites, :resulting_in_pgce_with_qts, :secondary, provider:, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
+    @history_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :secondary, provider:, name: 'History', subjects: [find_or_create(:secondary_subject, :history)])
+    @mathematics_course = create(:course, :open, :published, :with_full_time_sites, :resulting_in_pgce_with_qts, :secondary, provider:, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+    @primary_with_science_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :primary, provider:, name: 'Primary with science', subjects: [find_or_create(:primary_subject, :primary_with_science)])
   end
 
   def setup_recruitment_cycle(year:)
@@ -149,7 +162,7 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def and_i_choose_primary_subjects
-    check 'Primary with mathematics'
+    check 'Primary with science'
   end
 
   def and_i_choose_subjects
@@ -181,12 +194,20 @@ feature 'Questions and results for undergraduate courses' do
 
   def then_i_see_an_error_message_to_the_undergraduate_question_page
     expect(page).to have_content(
-      '[PLACEHOLDER FOR THE ERROR MESSAGE]'
+      'Select whether you have a university degree'
     )
   end
 
   def when_i_choose_no
     choose 'No'
+  end
+
+  def when_i_choose_no_i_do_not_have_a_degree
+    choose 'No, I do not have a degree'
+  end
+
+  def when_i_choose_yes_i_have_a_degree
+    choose 'Yes, I have a degree or am studying for one'
   end
 
   def when_i_choose_yes
@@ -228,5 +249,35 @@ feature 'Questions and results for undergraduate courses' do
       expect(page).to have_content('Special educational needs')
       expect(page).to have_content('Applications open')
     end
+  end
+
+  def and_i_can_see_only_primary_undergraduate_courses
+    expect(page).to have_content('Primary with science')
+    expect(page).to have_content(@primary_with_science_course.course_code)
+    expect(page).to have_no_content('Biology')
+    expect(page).to have_no_content(@biology_course.course_code)
+    expect(page).to have_no_content('History')
+    expect(page).to have_no_content(@history_course.course_code)
+    expect(page).to have_no_content('Chemistry')
+    expect(page).to have_no_content(@chemistry_course.course_code)
+    expect(page).to have_no_content('Mathematics')
+    expect(page).to have_no_content(@mathematics_course.course_code)
+  end
+
+  def and_i_can_see_only_secondary_undergraduate_courses
+    expect(page).to have_content('Biology')
+    expect(page).to have_content(@biology_course.course_code)
+    expect(page).to have_content('History')
+    expect(page).to have_content(@history_course.course_code)
+    expect(page).to have_no_content('Primary with science')
+    expect(page).to have_no_content(@primary_with_science_course.course_code)
+    expect(page).to have_no_content('Chemistry')
+    expect(page).to have_no_content(@chemistry_course.course_code)
+    expect(page).to have_no_content('Mathematics')
+    expect(page).to have_no_content(@mathematics_course.course_code)
+  end
+
+  def when_i_click_back
+    click_link_or_button 'Back'
   end
 end

@@ -293,6 +293,10 @@ en:
   activemodel:
     errors:
       models:
+        find/university_degree_status_form:
+          attributes:
+            university_degree_status:
+              blank: Select whether you have a university degree
         find/age_groups_form:
           attributes:
             age_group:

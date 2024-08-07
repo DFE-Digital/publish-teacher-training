@@ -16,7 +16,7 @@ module Find
 
       def create
         @visa_status_form = VisaStatusForm.new(
-          visa_status: form_params[:visa_status],
+          visa_status: form_params[:visa_status]
         )
 
         if @visa_status_form.valid?

@@ -3,15 +3,22 @@
 module Find
   # FIND:TODO need to prune unused methods etc.
   class ResultsView
-    attr_reader :query_parameters
+    attr_reader :query_parameters, :course_type_answer_determiner
 
     include ActionView::Helpers::NumberHelper
 
     DISTANCE = 'distance'
     MILES = '10'
 
+    delegate :show_undergraduate_courses?, to: :course_type_answer_determiner
+
     def initialize(query_parameters:)
       @query_parameters = query_parameters
+      @course_type_answer_determiner = CourseTypeAnswerDeterminer.new(
+        university_degree_status: query_parameters['university_degree_status'],
+        age_group: query_parameters['age_group'],
+        visa_status: query_parameters['visa_status']
+      )
     end
 
     def query_parameters_with_defaults
@@ -25,10 +32,15 @@ module Find
 
     def courses
       @courses ||= ::CourseSearchService.call(
-        filter: query_parameters,
+        filter: filter_parameters,
         sort: query_parameters[:sortby] || 'course_asc',
         course_scope:
       )
+    end
+
+    def filter_parameters
+      query_parameters['qualification'] = Course.qualifications.keys.grep(/undergraduate/) if show_undergraduate_courses?
+      query_parameters
     end
 
     def number_of_courses_string
