@@ -7,9 +7,6 @@ module Find
       include DefaultVacancies
       include DefaultApplicationsOpen
 
-      before_action :build_backlink_query_parameters
-      helper_method :back_path
-
       def new
         @visa_status_form = VisaStatusForm.new(visa_status: params[:visa_status])
       end
@@ -44,7 +41,7 @@ module Find
       end
 
       def course_type_answer_determiner
-        CourseTypeAnswerDeterminer.new(
+        @course_type_answer_determiner ||= CourseTypeAnswerDeterminer.new(
           university_degree_status: form_params[:university_degree_status],
           age_group: form_params[:age_group],
           visa_status: form_params[:visa_status]
@@ -57,19 +54,16 @@ module Find
 
       def form_name = :find_visa_status_form
 
-      def back_path(backlink_params)
+      def back_path
+        return find_university_degree_status_path(backlink_query_parameters) if undergraduate_feature_enabled?
+
         if params[:age_group] == 'further_education' || (params[:find_visa_status_form] && params[:find_visa_status_form][:age_group] == 'further_education')
-          find_age_groups_path(backlink_params)
+          find_age_groups_path(backlink_query_parameters)
         else
-          find_subjects_path(backlink_params)
+          find_subjects_path(backlink_query_parameters)
         end
       end
-
-      def build_backlink_query_parameters
-        @backlink_query_parameters = ResultsView.new(query_parameters: request.query_parameters[:find_visa_status_form].presence || request.query_parameters)
-                                                .query_parameters_with_defaults
-                                                .except(:find_visa_status_form)
-      end
+      helper_method :back_path
     end
   end
 end

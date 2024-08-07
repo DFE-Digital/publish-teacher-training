@@ -23,6 +23,7 @@ feature 'Questions and results for undergraduate courses' do
     when_i_choose_no_i_do_not_have_a_degree
     and_i_click_continue
     then_i_am_on_the_visa_status_page
+    and_the_back_link_points_to_the_degree_question
 
     when_i_choose_yes
     and_i_click_to_find_courses

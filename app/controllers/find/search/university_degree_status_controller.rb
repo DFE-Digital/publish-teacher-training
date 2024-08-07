@@ -27,7 +27,9 @@ module Find
 
       def form_name = :find_university_degree_status_form
 
-      def back_path; end
+      def back_path
+        find_subjects_path(backlink_query_parameters)
+      end
       helper_method :back_path
     end
   end
