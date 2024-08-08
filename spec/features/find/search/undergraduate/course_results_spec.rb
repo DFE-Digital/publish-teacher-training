@@ -130,11 +130,12 @@ feature 'Questions and results for undergraduate courses' do
   def given_i_have_2025_courses
     _, provider = setup_recruitment_cycle(year: 2025)
 
-    @biology_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
-    @chemistry_course = create(:course, :open, :published, :with_full_time_sites, :resulting_in_pgce_with_qts, :secondary, provider:, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
-    @history_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :secondary, provider:, name: 'History', subjects: [find_or_create(:secondary_subject, :history)])
-    @mathematics_course = create(:course, :open, :published, :with_full_time_sites, :resulting_in_pgce_with_qts, :secondary, provider:, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
-    @primary_with_science_course = create(:course, :open, :published, :with_full_time_sites, :with_teacher_degree_apprenticeship, :resulting_in_undergraduate_degree_with_qts, :primary, provider:, name: 'Primary with science', subjects: [find_or_create(:primary_subject, :primary_with_science)])
+    @biology_course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
+    @history_course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'History', subjects: [find_or_create(:secondary_subject, :history)])
+    @primary_with_science_course = create(:course, :published_teacher_degree_apprenticeship, :primary, provider:, name: 'Primary with science', subjects: [find_or_create(:primary_subject, :primary_with_science)])
+
+    @mathematics_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+    @chemistry_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
   end
 
   def setup_recruitment_cycle(year:)

@@ -4,8 +4,6 @@ module Find
   module Search
     class UniversityDegreeStatusController < Find::ApplicationController
       include FilterParameters
-      # include DefaultVacancies
-      # include DefaultApplicationsOpen
 
       def new
         @university_degree_status_form = UniversityDegreeStatusForm.new(

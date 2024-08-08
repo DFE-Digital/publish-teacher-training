@@ -259,5 +259,20 @@ FactoryBot.define do
     trait :closed do
       application_status { :closed }
     end
+
+    trait :published_teacher_degree_apprenticeship do
+      open
+      published
+      with_full_time_sites
+      with_teacher_degree_apprenticeship
+      resulting_in_undergraduate_degree_with_qts
+    end
+
+    trait :published_postgraduate do
+      open
+      published
+      with_full_time_sites
+      resulting_in_pgce_with_qts
+    end
   end
 end
