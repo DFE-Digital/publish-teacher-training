@@ -4,19 +4,12 @@ module Find
   module Search
     class NoDegreeAndRequiresVisaSponsorshipController < Find::ApplicationController
       def back_path
-        find_visa_status_path(backlink_params)
+        find_visa_status_path(backlink_query_parameters)
       end
       helper_method :back_path
 
-      private
-
-      def backlink_params
-        ResultsView.new(
-          query_parameters: request.query_parameters[:find_university_degree_status_form].presence || request.query_parameters
-        )
-                   .query_parameters_with_defaults
-                   .except(:find_university_degree_status_form)
-      end
+      # this controller is an exit page, so returning the latest form
+      def form_name = :find_visa_status_form
     end
   end
 end

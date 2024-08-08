@@ -44,6 +44,12 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
     and_i_can_see_only_secondary_undergraduate_courses
+
+    when_i_uncheck_all_the_filters
+    and_i_click_to_apply_filters
+    then_i_am_on_results_page
+    and_some_filters_are_hidden_for_undergraduate_courses
+    and_some_filters_are_visible_for_undergraduate_courses
   end
 
   scenario 'when 2025 cycle and undergraduate feature is active and searching primary courses' do
@@ -70,6 +76,12 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
     and_i_can_see_only_primary_undergraduate_courses
+
+    when_i_uncheck_all_the_filters
+    and_i_click_to_apply_filters
+    then_i_am_on_results_page
+    and_some_filters_are_hidden_for_undergraduate_courses
+    and_some_filters_are_visible_for_undergraduate_courses
   end
 
   scenario 'when 2024 cycle and undergraduate feature is active' do
@@ -84,6 +96,10 @@ feature 'Questions and results for undergraduate courses' do
     and_i_choose_subjects
     and_i_click_continue
     then_i_am_on_the_visa_status_page
+    when_i_choose_no
+    and_i_click_to_find_courses
+    then_i_am_on_results_page
+    and_all_filters_are_visible
   end
 
   scenario 'when 2025 cycle and undergraduate feature is active but search for further education courses' do
@@ -360,5 +376,14 @@ feature 'Questions and results for undergraduate courses' do
 
   def back_link
     page.find_link('Back')
+  end
+
+  def when_i_uncheck_all_the_filters
+    uncheck 'Only show courses open for applications'
+    uncheck 'Only show courses with a SEND specialism'
+  end
+
+  def and_i_click_to_apply_filters
+    click_link_or_button 'Apply filters'
   end
 end
