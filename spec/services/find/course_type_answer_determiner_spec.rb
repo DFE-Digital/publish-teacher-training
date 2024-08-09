@@ -111,7 +111,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
       end
     end
 
-    context 'when visa status does not require sponsorship' do
+    context 'when visa sponsorship is not required' do
       let(:params) do
         {
           age_group: 'secondary',
