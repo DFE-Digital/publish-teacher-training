@@ -81,7 +81,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
   end
 
   describe '#not_elibible_for_undergraduate_courses?' do
-    context 'when the age group is not further education, visa requires sponsorship, and no degree' do
+    context 'when the age group is not further education, requires visa sponsorship, and no degree' do
       let(:params) do
         {
           age_group: 'secondary',
