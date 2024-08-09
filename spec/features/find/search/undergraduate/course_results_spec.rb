@@ -192,11 +192,11 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def when_i_visit_the_start_page
-    find_courses_by_location_or_training_provider_page.load
+    visit root_path
   end
 
   def and_i_select_the_across_england_radio_button
-    find_courses_by_location_or_training_provider_page.across_england.choose
+    choose 'Across England'
   end
 
   def and_i_click_continue
