@@ -30,7 +30,7 @@ module Find
     end
 
     def undergraduate_feature_enabled?
-      Settings.current_recruitment_cycle_year.to_i >= 2025 && FeatureService.enabled?(:teacher_degree_apprenticeship)
+      Settings.current_recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
     end
 
     private
