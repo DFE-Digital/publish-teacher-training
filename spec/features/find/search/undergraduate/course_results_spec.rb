@@ -84,7 +84,7 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_visible_for_undergraduate_courses
   end
 
-  scenario 'when 2024 cycle and undergraduate feature is active' do
+  scenario 'in the 2024 cycle with the TDA feature active' do
     given_i_have_2024_courses
     and_i_am_in_the_2024_cycle
     and_the_tda_feature_flag_is_active
