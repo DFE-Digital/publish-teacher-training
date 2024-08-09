@@ -25,7 +25,7 @@ module Find
       private
 
       def next_page
-        if undergraduate_feature_enabled?
+        if teacher_degree_apprenticeship_active?
           find_university_degree_status_path(filter_params[:find_subjects_form])
         else
           find_visa_status_path(filter_params[:find_subjects_form])
