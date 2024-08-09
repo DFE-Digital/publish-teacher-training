@@ -18,10 +18,10 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     and_i_choose_subjects
     and_i_click_continue
-    then_i_am_on_the_undergraduate_question_page
+    then_i_am_on_the_degree_question_page
 
     and_i_click_continue
-    then_i_see_an_error_message_to_the_undergraduate_question_page
+    then_i_see_an_error_message_on_the_degree_question_page
     and_the_back_link_points_to_the_secondary_subjects_page
 
     when_i_choose_no_i_do_not_have_a_degree
@@ -30,23 +30,23 @@ feature 'Questions and results for undergraduate courses' do
     and_the_back_link_points_to_the_degree_question
 
     when_i_choose_yes
-    and_i_click_to_find_courses
-    then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
+    and_i_click_find_courses
+    then_i_am_on_an_exit_page_for_no_degree_and_requires_visa_sponsorship
 
     when_i_click_back
     then_i_am_on_the_visa_status_page
     and_the_back_link_points_to_the_degree_question
 
     when_i_choose_no
-    and_i_click_to_find_courses
+    and_i_click_find_courses
 
     then_i_am_on_results_page
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
-    and_i_can_see_only_secondary_undergraduate_courses
+    and_i_only_see_secondary_undergraduate_courses
 
     when_i_uncheck_all_the_filters
-    and_i_click_to_apply_filters
+    and_i_click_apply_filters
     then_i_am_on_results_page
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
@@ -63,7 +63,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     and_i_choose_primary_subjects
     and_i_click_continue
-    then_i_am_on_the_undergraduate_question_page
+    then_i_am_on_the_degree_question_page
     and_the_back_link_points_to_the_primary_subjects_page
 
     when_i_choose_no_i_do_not_have_a_degree
@@ -71,14 +71,14 @@ feature 'Questions and results for undergraduate courses' do
     then_i_am_on_the_visa_status_page
 
     when_i_choose_no
-    and_i_click_to_find_courses
+    and_i_click_find_courses
     then_i_am_on_results_page
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
     and_i_can_see_only_primary_undergraduate_courses
 
     when_i_uncheck_all_the_filters
-    and_i_click_to_apply_filters
+    and_i_click_apply_filters
     then_i_am_on_results_page
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
@@ -97,7 +97,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     then_i_am_on_the_visa_status_page
     when_i_choose_no
-    and_i_click_to_find_courses
+    and_i_click_find_courses
     then_i_am_on_results_page
     and_all_filters_are_visible
   end
@@ -114,7 +114,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     then_i_am_on_the_visa_status_page
     when_i_choose_yes
-    and_i_click_to_find_courses
+    and_i_click_find_courses
     then_i_am_on_results_page
   end
 
@@ -129,7 +129,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_continue
     and_i_choose_subjects
     and_i_click_continue
-    then_i_am_on_the_undergraduate_question_page
+    then_i_am_on_the_degree_question_page
 
     when_i_choose_yes_i_have_a_degree
     and_i_click_continue
@@ -137,7 +137,7 @@ feature 'Questions and results for undergraduate courses' do
     and_the_back_link_points_to_the_degree_question
 
     when_i_choose_no
-    and_i_click_to_find_courses
+    and_i_click_find_courses
     then_i_am_on_results_page
     and_all_filters_are_visible
     and_i_can_see_only_postgraduate_courses
@@ -222,7 +222,7 @@ feature 'Questions and results for undergraduate courses' do
     check 'Mathematics'
   end
 
-  def then_i_am_on_the_undergraduate_question_page
+  def then_i_am_on_the_degree_question_page
     expect(page).to have_current_path(
       find_university_degree_status_path,
       ignore_query: true
@@ -242,7 +242,7 @@ feature 'Questions and results for undergraduate courses' do
     choose 'Further education'
   end
 
-  def then_i_see_an_error_message_to_the_undergraduate_question_page
+  def then_i_see_an_error_message_on_the_degree_question_page
     expect(page).to have_content(
       'Select whether you have a university degree'
     )
@@ -264,7 +264,7 @@ feature 'Questions and results for undergraduate courses' do
     choose 'Yes'
   end
 
-  def then_i_am_on_an_exit_page_for_no_degree_and_need_of_visa_sponsorship
+  def then_i_am_on_an_exit_page_for_no_degree_and_requires_visa_sponsorship
     expect(page).to have_current_path(
       find_no_degree_and_requires_visa_sponsorship_path,
       ignore_query: true
@@ -280,7 +280,7 @@ feature 'Questions and results for undergraduate courses' do
     )
   end
 
-  def and_i_click_to_find_courses
+  def and_i_click_find_courses
     click_link_or_button 'Find courses'
   end
 
@@ -316,7 +316,7 @@ feature 'Questions and results for undergraduate courses' do
     end
   end
 
-  def and_i_can_see_only_secondary_undergraduate_courses
+  def and_i_only_see_secondary_undergraduate_courses
     within '.app-search-results' do
       expect(page).to have_content('Biology')
       expect(page).to have_content(@biology_course.course_code)
@@ -383,7 +383,7 @@ feature 'Questions and results for undergraduate courses' do
     uncheck 'Only show courses with a SEND specialism'
   end
 
-  def and_i_click_to_apply_filters
+  def and_i_click_apply_filters
     click_link_or_button 'Apply filters'
   end
 end
