@@ -102,7 +102,7 @@ feature 'Questions and results for undergraduate courses' do
     and_all_filters_are_visible
   end
 
-  scenario 'when 2025 cycle and undergraduate feature is active but search for further education courses' do
+  scenario 'in the 2025 cycle with the TDA feature active and searching for further education courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
     and_the_tda_feature_flag_is_active
