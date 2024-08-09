@@ -73,16 +73,10 @@ en:
     university_degree_status_page:
       title: Do you have a university degree?
       content: You need a bachelor’s degree or equivalent to do postgraduate teacher training. You do not need a degree to apply for a teacher degree apprenticeship (TDA).
-      train_to_be_a_teacher_link:
-        text: Find out about the different ways to train to be a teacher
-        href: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
     no_degree_and_requires_visa_sponsorship_page:
       title: You are not eligible for teacher training courses on this service
       content: You do not have a university degree, and you require visa sponsorship, so you are not eligible for postgraduate teacher training or teacher degree apprenticeships.
       explanation: You may be eligible for %{link}, which are not on this service.
-      explanation_link:
-        title: undergraduate degree courses
-        href: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/if-you-dont-have-a-degree
     courses:
       fees_component:
         view:
@@ -253,6 +247,9 @@ en:
       learn_more_about_non_uk_qualifications_html: Learn more about how to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/non-uk-qualifications">check your qualifications meet the required standard</a>.
       tel: 0800 389 2500
       opening_times: "Monday to Friday, 8.30am to 5.30pm"
+      undergraduate_degree_courses: undergraduate degree courses
+      train_to_be_a_teacher: Find out about the different ways to train to be a teacher
+      url_train_to_be_a_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
       url_tda: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
       url_get_an_advisor: https://getintoteaching.education.gov.uk/teacher-training-adviser/sign_up/identity
