@@ -52,7 +52,7 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_visible_for_undergraduate_courses
   end
 
-  scenario 'when 2025 cycle and undergraduate feature is active and searching primary courses' do
+  scenario 'in the 2025 cycle with the TDA feature active and searching primary courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
     and_the_tda_feature_flag_is_active
