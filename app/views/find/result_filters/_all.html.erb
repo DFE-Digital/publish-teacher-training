@@ -5,15 +5,21 @@
 
   <div class="app-filter__content">
   <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
-    <%= render "find/result_filters/radius", form: %>
-    <%= render "find/result_filters/visa_filter", form: %>
-    <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
-    <%= render "find/result_filters/study_type_filter", form: %>
-    <%= render "find/result_filters/qualifications_filter", form: %>
-    <%= render "find/result_filters/degree_required_filter", form: %>
-    <%= render "find/result_filters/send_filter", form: %>
-    <%= render "find/result_filters/salary_filter", form: %>
-    <%= render "find/result_filters/applications_open_filter", form: %>
-    <%= render "find/result_filters/hidden_fields", form: %>
+    <% if @filters_view.show_undergraduate_courses? %>
+      <%= render "find/result_filters/send_filter", form: %>
+      <%= render "find/result_filters/applications_open_filter", form: %>
+      <%= render "find/result_filters/hidden_fields", form: %>
+    <% else %>
+      <%= render "find/result_filters/radius", form: %>
+      <%= render "find/result_filters/visa_filter", form: %>
+      <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
+      <%= render "find/result_filters/study_type_filter", form: %>
+      <%= render "find/result_filters/qualifications_filter", form: %>
+      <%= render "find/result_filters/degree_required_filter", form: %>
+      <%= render "find/result_filters/send_filter", form: %>
+      <%= render "find/result_filters/salary_filter", form: %>
+      <%= render "find/result_filters/applications_open_filter", form: %>
+      <%= render "find/result_filters/hidden_fields", form: %>
+    <% end %>
   </div>
 <% end %>

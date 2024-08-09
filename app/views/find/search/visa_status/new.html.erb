@@ -2,7 +2,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: back_path(@backlink_query_parameters),
+    href: back_path,
     html_attributes: {
       data: { qa: "page-back" }
     }

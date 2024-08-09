@@ -6,15 +6,22 @@ class CourseSearchService
   def initialize(
     filter:,
     sort: nil,
-    course_scope: Course
+    course_scope: Course,
+    course_type_answer_determiner: Find::CourseTypeAnswerDeterminer
   )
     @filter = filter || {}
     @course_scope = course_scope
     @sort = sort
+    @course_type_answer_determiner = course_type_answer_determiner.new(
+      university_degree_status: @filter['university_degree_status'],
+      age_group: @filter['age_group'],
+      visa_status: @filter['visa_status']
+    )
   end
 
   def call
     scope = course_scope
+    scope = scope.with_course_type(course_type)
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.application_status_open if applications_open?
@@ -75,6 +82,12 @@ class CourseSearchService
   private_class_method :new
 
   private
+
+  def course_type
+    return :undergraduate if @course_type_answer_determiner.show_undergraduate_courses?
+
+    :postgraduate
+  end
 
   def expand_university?
     filter[:expand_university].to_s.downcase == 'true'
@@ -197,7 +210,7 @@ class CourseSearchService
   end
 
   def qualifications
-    return [] if filter[:qualification].blank?
+    return [] if filter[:qualification].blank? || course_type == :undergraduate
 
     filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
     filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)

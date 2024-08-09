@@ -74,6 +74,7 @@ module FilterParameters
         :engineers_teach_physics,
         :funding,
         :has_vacancies,
+        :university_degree_status,
         :applications_open,
         :l,
         :latitude,

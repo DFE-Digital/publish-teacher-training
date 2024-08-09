@@ -323,6 +323,14 @@ class Course < ApplicationRecord
       )
   }
 
+  scope :with_course_type, lambda { |course_type|
+    if course_type == :undergraduate
+      where(program_type: Course.program_types[:teacher_degree_apprenticeship])
+    else
+      where.not(program_type: Course.program_types[:teacher_degree_apprenticeship])
+    end
+  }
+
   def self.entry_requirement_options_without_nil_choice
     ENTRY_REQUIREMENT_OPTIONS.reject { |option| option == :not_set }.keys.map(&:to_s)
   end
