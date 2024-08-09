@@ -78,7 +78,6 @@ en:
         href: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
     no_degree_and_requires_visa_sponsorship_page:
       title: You are not eligible for teacher training courses on this service
-      heading: You are not eligible for teacher training courses on this service.
       content: You do not have a university degree, and you require visa sponsorship, so you are not eligible for postgraduate teacher training or teacher degree apprenticeships.
       explanation: You may be eligible for %{link}, which are not on this service.
       explanation_link:
