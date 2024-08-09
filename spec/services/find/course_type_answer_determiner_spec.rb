@@ -80,7 +80,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
     end
   end
 
-  describe '#non_eligible_for_undergraduate_courses?' do
+  describe '#not_elibible_for_undergraduate_courses?' do
     context 'when the age group is not further education, visa requires sponsorship, and no degree' do
       let(:params) do
         {
@@ -92,7 +92,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
 
       it 'returns true' do
         determiner = described_class.new(**params)
-        expect(determiner.non_eligible_for_undergraduate_courses?).to be true
+        expect(determiner.not_elibible_for_undergraduate_courses?).to be true
       end
     end
 
@@ -107,7 +107,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
 
       it 'returns false' do
         determiner = described_class.new(**params)
-        expect(determiner.non_eligible_for_undergraduate_courses?).to be false
+        expect(determiner.not_elibible_for_undergraduate_courses?).to be false
       end
     end
 
@@ -122,7 +122,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
 
       it 'returns false' do
         determiner = described_class.new(**params)
-        expect(determiner.non_eligible_for_undergraduate_courses?).to be false
+        expect(determiner.not_elibible_for_undergraduate_courses?).to be false
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
 
       it 'returns false' do
         determiner = described_class.new(**params)
-        expect(determiner.non_eligible_for_undergraduate_courses?).to be false
+        expect(determiner.not_elibible_for_undergraduate_courses?).to be false
       end
     end
 
@@ -152,7 +152,7 @@ RSpec.describe Find::CourseTypeAnswerDeterminer do
 
       it 'returns false' do
         determiner = described_class.new(**params)
-        expect(determiner.non_eligible_for_undergraduate_courses?).to be false
+        expect(determiner.not_elibible_for_undergraduate_courses?).to be false
       end
     end
   end

@@ -26,7 +26,7 @@ module Find
       private
 
       def next_step_path
-        if course_type_answer_determiner.non_eligible_for_undergraduate_courses?
+        if course_type_answer_determiner.not_elibible_for_undergraduate_courses?
           find_no_degree_and_requires_visa_sponsorship_path(filter_params[:find_visa_status_form])
         else
           find_results_path(
