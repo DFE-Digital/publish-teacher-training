@@ -6,6 +6,7 @@ feature 'Course show' do
   context 'published course' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated_as_a_provider_user
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       and_there_is_a_published_course
       when_i_visit_the_course_details_page
       then_i_see_the_primary_course_basic_details
@@ -16,6 +17,7 @@ feature 'Course show' do
     context 'Engineers Teach Physics course' do
       scenario 'i can view the course basic details' do
         given_i_am_authenticated_as_a_provider_user
+        and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_published_physics_course
         when_i_visit_the_course_details_page
         then_i_see_the_secondary_course_basic_details
@@ -47,6 +49,7 @@ feature 'Course show' do
   context 'withdrawn course' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated_as_a_provider_user
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       and_there_is_a_withdrawn_course
       when_i_visit_the_course_details_page
       then_i_see_the_primary_course_basic_details
@@ -185,5 +188,9 @@ feature 'Course show' do
 
   def provider
     @current_user.providers.first
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

@@ -4,6 +4,10 @@ require 'rails_helper'
 
 describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do
   context 'Salaried courses' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     it 'renders salaried course section if the course has a salary' do
       course = build(:course, funding_type: 'salary').decorate
 
@@ -67,6 +71,10 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
   end
 
   context 'Fee paying courses' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     it 'renders the fees section' do
       course = create(:course, name: 'Music', enrichments: [create(:course_enrichment, fee_uk_eu: '5000', fee_details: 'Some fee details')], funding_type: 'fee').decorate
 

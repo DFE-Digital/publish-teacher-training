@@ -19,6 +19,10 @@ describe Courses::CreationService do
 
   let(:next_available_course_code) { false }
 
+  before do
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+  end
+
   context 'when teacher degree apprenticeship course' do
     let(:valid_course_params) do
       {

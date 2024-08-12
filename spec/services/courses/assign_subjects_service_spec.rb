@@ -138,6 +138,10 @@ describe Courses::AssignSubjectsService do
     let(:course) { Course.new(level: :further_education, provider: Provider.new) }
     let(:further_education_subject) { find_or_create(:further_education_subject) }
 
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     it 'sets the subjects' do
       expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
     end

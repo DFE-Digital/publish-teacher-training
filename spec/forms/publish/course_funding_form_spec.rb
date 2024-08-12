@@ -11,6 +11,7 @@ describe Publish::CourseFundingForm, type: :model do
 
   before do
     allow(course_store).to receive(:get).and_return(nil)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   describe 'validations' do

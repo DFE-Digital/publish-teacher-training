@@ -10,6 +10,7 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   context 'apprenticeship to non apprenticeship course' do
     scenario 'i am taken to the Student visa step' do
       given_there_is_apprenticeship_course
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       when_i_visit_the_publish_courses_apprenticeship_edit_page
       when_i_select(:checkbox_no)
       and_i_continue
@@ -115,5 +116,9 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
 
   def accrediting_provider
     @current_user.providers.first
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe Publish::Courses::AssignTdaAttributesService do
   let(:course) { create(:course, study_mode: 'part_time', funding_type: 'fee', can_sponsor_skilled_worker_visa: true, can_sponsor_student_visa: true) }
 
+  before do
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+  end
+
   describe '#call' do
     it 'updates the course attributes and returns true' do
       expect(described_class.new(course).call).to be_truthy

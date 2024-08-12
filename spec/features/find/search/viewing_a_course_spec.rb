@@ -14,6 +14,7 @@ feature 'Viewing a findable course' do
   context 'a course with international fees' do
     before do
       given_there_is_a_findable_course
+      and_the_db_backed_funding_type_feature_flag_is_disabled
     end
 
     scenario 'course page shows correct course information' do
@@ -64,6 +65,7 @@ feature 'Viewing a findable course' do
   context 'a course with no international fees' do
     scenario 'it only displays UK fees' do
       given_there_is_a_findable_course_with_no_international_fees
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       when_i_visit_the_course_page
       then_i_should_only_see_the_uk_fees
     end
@@ -437,5 +439,9 @@ feature 'Viewing a findable course' do
       "Contact #{course.provider_name}",
       href: find_provider_path(@course.provider_code, @course.course_code)
     )
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

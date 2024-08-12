@@ -5,6 +5,7 @@ require 'rails_helper'
 feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   before do
     and_i_am_authenticated_as_a_lead_school_provider_user
+    and_the_db_backed_funding_type_feature_flag_is_disabled
   end
 
   context 'fee paying to salaried course' do
@@ -197,5 +198,9 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def accrediting_provider
     @current_user.providers.first
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

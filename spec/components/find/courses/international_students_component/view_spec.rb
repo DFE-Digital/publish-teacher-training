@@ -52,6 +52,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
         funding_type: 'salary',
         can_sponsor_skilled_worker_visa: true
       )
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
 
@@ -71,6 +72,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
         funding_type: 'salary',
         can_sponsor_skilled_worker_visa: false
       )
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
 
@@ -93,6 +95,7 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
         :course,
         funding_type: 'apprenticeship'
       )
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
       render_inline(described_class.new(course: CourseDecorator.new(course)))
     end
 

@@ -3,6 +3,12 @@
 require 'swagger_helper'
 
 describe 'API', :with_publish_constraint do
+  before do
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    create(:course, :engineers_teach_physics, provider:, course_code: 'C100')
+    create(:course, :engineers_teach_physics, provider:, course_code: 'C101')
+  end
+
   path '/recruitment_cycles/{year}/providers/{provider_code}/courses' do
     get 'Returns the courses for the specified provider.' do
       operationId :public_api_v1_provider_courses
@@ -67,18 +73,13 @@ describe 'API', :with_publish_constraint do
                    command: 'curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses'
 
       curl_example description: 'Get the second page of courses for a provider',
-                   command: 'curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/provideers/B20/courses?page[page]=2'
+                   command: 'curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses?page[page]=2'
 
       response '200', 'The collection of courses.' do
         let(:provider) { create(:provider) }
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
         let(:include) { 'provider' }
-
-        before do
-          create(:course, :engineers_teach_physics, provider:, course_code: 'C100')
-          create(:course, :engineers_teach_physics, provider:, course_code: 'C101')
-        end
 
         schema({ '$ref': '#/components/schemas/CourseListResponse' })
 
@@ -96,7 +97,7 @@ describe 'API', :with_publish_constraint do
                 in: :path,
                 type: :string,
                 required: true,
-                description: 'The starting year of the recruitment cycle.Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
+                description: 'The starting year of the recruitment cycle. Also accepts "current" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg "1066") is provided',
                 example: Settings.current_recruitment_cycle_year
       parameter name: :provider_code,
                 in: :path,
@@ -126,7 +127,6 @@ describe 'API', :with_publish_constraint do
       response '200', 'The collection of courses offered by the specified provider.' do
         let(:provider) { create(:provider) }
         let(:course) { create(:course, :engineers_teach_physics, course_code: 'A123', provider:) }
-
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
         let(:course_code) { course.course_code }

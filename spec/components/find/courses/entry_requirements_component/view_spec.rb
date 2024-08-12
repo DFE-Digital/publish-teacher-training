@@ -380,6 +380,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
 
     it 'displays that skilled worker visas can be sponsored' do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
       expect(result.text).to include('Skilled Worker visas can be sponsored')
     end
   end

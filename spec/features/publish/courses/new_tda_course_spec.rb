@@ -6,6 +6,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   scenario 'creating a degree awarding course from school direct provider' do
     given_i_am_authenticated_as_a_school_direct_provider_user
     and_the_tda_feature_flag_is_active
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_secondary_course
@@ -52,6 +53,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   scenario 'creating a degree awarding course from scitt provider' do
     given_i_am_authenticated_as_a_scitt_provider_user
     and_the_tda_feature_flag_is_active
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_secondary_course
@@ -93,6 +95,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   scenario 'when choosing primary course' do
     given_i_am_authenticated_as_a_school_direct_provider_user
     and_the_tda_feature_flag_is_active
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_primary_course
@@ -170,6 +173,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   scenario 'creating a tda course then changing it to a non tda fee paying course' do
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_course_outcome_page
     and_the_back_link_points_to_the_confirm_page
 
@@ -197,6 +201,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   scenario 'creating a tda course then changing it to a non tda salaried course' do
     given_i_am_on_the_check_answers_page_of_a_new_tda_course
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_course_outcome_page
     and_i_choose_qts
     and_the_back_link_points_to_the_qualification_page
@@ -663,6 +668,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_click_continue
     choose 'Yes'
     click_on 'Update A levels'
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship

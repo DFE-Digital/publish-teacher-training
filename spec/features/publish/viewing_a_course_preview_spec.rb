@@ -7,6 +7,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   context 'bursaries and scholarships is announced' do
     before do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
     end
 
     scenario 'i can view the course basic details' do
@@ -100,6 +101,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     scenario 'blank fees uk eu' do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       when_i_visit_the_publish_course_preview_page
       and_i_click_link_or_button('Enter details about fees and financial support')
       and_i_click_link_or_button('Back')
@@ -115,6 +117,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     scenario 'i can view the course basic details' do
       Timecop.travel(Find::CycleTimetable.apply_deadline - 1.hour) do
         given_i_am_authenticated(user: user_with_fee_based_course)
+        and_the_db_backed_funding_type_feature_flag_is_disabled
         when_i_visit_the_publish_course_preview_page
         then_i_see_the_course_preview_details
         and_i_do_not_see_financial_support
@@ -526,5 +529,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
         @course.course_code
       )
     )
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

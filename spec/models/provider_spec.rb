@@ -1022,6 +1022,10 @@ describe Provider do
     let!(:course1) { create(:course, provider:, funding_type: 'salary') }
     let!(:course2) { create(:course, provider:, funding_type: 'fee') }
 
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     it 'updates program_type for all associated courses when provider_type changes' do
       provider.update(provider_type: 'scitt')
       expect { course1.reload.program_type }.to change(course1, :program_type).from('school_direct_salaried_training_programme').to('scitt_salaried_programme')

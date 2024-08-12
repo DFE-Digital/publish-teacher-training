@@ -5,6 +5,7 @@ require 'rails_helper'
 feature 'Editing fees and financial support section' do
   scenario 'adding valid data' do
     given_i_am_authenticated_as_a_provider_user
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_fees_and_financial_support_edit_page
     then_i_see_markdown_formatting_guidance
@@ -103,5 +104,9 @@ feature 'Editing fees and financial support section' do
 
   def provider
     @provider ||= @current_user.providers.first
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end

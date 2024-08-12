@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'results' do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
+    allow(Settings.features).to receive_messages(send_request_data_to_bigquery: true, db_backed_funding_type: false)
   end
 
   scenario 'when I visit the results page with no courses' do

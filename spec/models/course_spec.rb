@@ -3082,6 +3082,10 @@ describe Course do
   end
 
   describe '#funding_type' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     context 'when program_type is nil' do
       it 'returns nil' do
         course = described_class.new(program_type: nil)
@@ -3146,6 +3150,10 @@ describe Course do
   end
 
   describe 'funding_type and program_type' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
     context 'setting the funding_type to apprenticeship' do
       it 'sets the funding_type to apprenticeship and program_type to pg_teaching_apprenticeship' do
         course = build(:course, funding_type: 'apprenticeship')
@@ -3156,6 +3164,10 @@ describe Course do
     end
 
     context 'setting the funding_type to salary' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      end
+
       context 'when the provider is a SCITT' do
         it 'sets the funding_type to salary and the program_type to scitt_salaried_programme' do
           provider = build(:provider, provider_type: 'scitt')
@@ -3167,6 +3179,10 @@ describe Course do
       end
 
       context 'when the provider is a University' do
+        before do
+          allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+        end
+
         it 'sets the funding_type to salary and the program_type to higher_education_salaried_programme' do
           provider = build(:provider, provider_type: 'university')
           course = build(:course, provider:, funding_type: 'salary')
@@ -3177,6 +3193,10 @@ describe Course do
       end
 
       context 'when the provider is a Lead School' do
+        before do
+          allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+        end
+
         it 'sets the funding_type to salary and the program_type to school_direct_salaried_training_programme' do
           provider = build(:provider, provider_type: 'lead_school')
           course = build(:course, provider:, funding_type: 'salary')
@@ -3188,6 +3208,10 @@ describe Course do
     end
 
     context 'setting the funding_type to fee' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      end
+
       context 'when the provider is not self accredited' do
         it 'sets the funding_type to salary and the program_type to school_direct_training_programme' do
           provider = build(:provider, accrediting_provider: :not_an_accredited_provider)
