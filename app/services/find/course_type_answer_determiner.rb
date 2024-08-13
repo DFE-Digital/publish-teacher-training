@@ -14,7 +14,7 @@ module Find
       !further_education? && university_degree_status.present? && no_degrees? && does_not_require_visa_sponsorship?
     end
 
-    def not_elibible_for_undergraduate_courses?
+    def show_exit_page?
       !further_education? && university_degree_status.present? && no_degrees? && require_visa_sponsorship?
     end
 
