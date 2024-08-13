@@ -178,12 +178,12 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def and_i_am_in_the_2025_cycle
-    Timecop.travel(Time.zone.local(2024, 10, 1, 9, 1)) # after Find opens
+    Timecop.travel(Find::CycleTimetable.find_reopens)
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
   end
 
   def and_i_am_in_the_2024_cycle
-    Timecop.travel(Time.zone.local(2024, 8, 1, 9))
+    Timecop.travel(Find::CycleTimetable.find_opens)
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024)
   end
 
