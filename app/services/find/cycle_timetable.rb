@@ -39,17 +39,15 @@ module Find
         find_opens: Time.zone.local(2024, 10, 1, 9), # CONFIRMED
         apply_opens: Time.zone.local(2024, 10, 8, 9), # CONFIRMED
         first_deadline_banner: Time.zone.local(2025, 7, 12, 9), # TBC
-        apply_deadline: Time.zone.local(2025, 9, 17, 18), # CONFIRMED
-        find_closes: Time.zone.local(2025, 9, 25, 23, 59, 59) # TBC
+        apply_deadline: Time.zone.local(2025, 9, 16, 18), # CONFIRMED
+        find_closes: Time.zone.local(2025, 9, 30, 23, 59, 59) # CONFIRMED
       },
       2026 => {
-        # NOTE: the dates from below here are not the finalised but are required
-        # for the current implementation
-        find_opens: Time.zone.local(2024, 10, 5, 9),
-        apply_opens: Time.zone.local(2024, 10, 12, 9),
-        first_deadline_banner: Time.zone.local(2025, 7, 12, 9),
-        apply_deadline: Time.zone.local(2025, 9, 21, 18),
-        find_closes: Time.zone.local(2025, 10, 4, 23, 59, 59)
+        find_opens: Time.zone.local(2025, 10, 1, 9), # CONFIRMED
+        apply_opens: Time.zone.local(2025, 10, 8, 9), # CONFIRMED
+        first_deadline_banner: Time.zone.local(2026, 7, 12, 9), # TBC
+        apply_deadline: Time.zone.local(2026, 9, 16, 18), # CONFIRMED
+        find_closes: Time.zone.local(2026, 9, 30, 23, 59, 59) # TBC
       }
     }.freeze
 
