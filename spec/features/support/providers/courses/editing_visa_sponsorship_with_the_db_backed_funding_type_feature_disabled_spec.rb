@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/support/providers/courses/editing_visa_sponsorship_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -5,7 +8,7 @@ require 'rails_helper'
 feature 'Editing visa sponsorship' do
   before do
     given_i_am_authenticated_as_an_admin_user
-    and_the_db_backed_funding_type_feature_flag_is_enabled
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     and_there_is_a_provider_with_courses
   end
 
@@ -101,8 +104,8 @@ feature 'Editing visa sponsorship' do
     visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 1, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
   end
 
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   alias_method :and_i_navigate_to_the_same_fee_paying_course, :when_i_navigate_to_the_fee_paying_course

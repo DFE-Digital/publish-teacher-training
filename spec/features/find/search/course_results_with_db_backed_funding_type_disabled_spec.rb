@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/find/search/course_results_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -5,7 +8,7 @@ require 'rails_helper'
 feature 'results' do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    allow(Settings.features).to receive_messages(send_request_data_to_bigquery: true, db_backed_funding_type: true)
+    allow(Settings.features).to receive_messages(send_request_data_to_bigquery: true, db_backed_funding_type: false)
   end
 
   scenario 'when I visit the results page with no courses' do

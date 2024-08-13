@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/forms/publish/course_funding_form_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -11,7 +14,7 @@ describe Publish::CourseFundingForm, type: :model do
 
   before do
     allow(course_store).to receive(:get).and_return(nil)
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   describe 'validations' do

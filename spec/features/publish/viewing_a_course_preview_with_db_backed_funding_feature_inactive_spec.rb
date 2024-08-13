@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/publish/viewing_a_course_preview_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -6,7 +9,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   include Rails.application.routes.url_helpers
 
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   context 'bursaries and scholarships is announced' do

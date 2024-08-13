@@ -3,9 +3,31 @@
 require 'rails_helper'
 
 describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do
-  context 'Salaried courses' do
+  context 'Salaried courses with db_backed_funding feature inactive' do
     before do
       allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
+    it 'renders salaried course section if the course has a salary' do
+      course = build(:course, funding_type: 'salary').decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).to include('Financial support is not available for this course because it comes with a salary.')
+    end
+
+    it 'does not render salaried course section if the course does not have a salary' do
+      course = build(:course, funding_type: 'fee', subjects: [build(:secondary_subject, bursary_amount: '3000')]).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).not_to include('Financial support is not available for this course because it comes with a salary.')
+    end
+  end
+
+  context 'Salaried courses with db_backed_funding feature active' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
     end
 
     it 'renders salaried course section if the course has a salary' do
@@ -70,9 +92,23 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     end
   end
 
-  context 'Fee paying courses' do
+  context 'Fee paying courses with db_backed_funding feature inactive' do
     before do
       allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
+    it 'renders the fees section' do
+      course = create(:course, name: 'Music', enrichments: [create(:course_enrichment, fee_uk_eu: '5000', fee_details: 'Some fee details')], funding_type: 'fee').decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).to include('Some fee details')
+    end
+  end
+
+  context 'Fee paying courses with db_backed_funding feature active' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
     end
 
     it 'renders the fees section' do

@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/serializers/api/public/v1/serializable_course_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -10,7 +13,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   let(:resource) { described_class.new(object: course) }
 
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   it 'sets type to courses' do

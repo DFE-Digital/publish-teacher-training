@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/services/courses/creation_service_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -20,7 +23,7 @@ describe Courses::CreationService do
   let(:next_available_course_code) { false }
 
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   context 'when teacher degree apprenticeship course' do

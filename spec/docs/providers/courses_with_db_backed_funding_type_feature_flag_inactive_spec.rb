@@ -2,9 +2,11 @@
 
 require 'swagger_helper'
 
+# rubocop:disable RSpec/EmptyExampleGroup
+
 describe 'API', :with_publish_constraint do
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
     create(:course, :engineers_teach_physics, provider:, course_code: 'C100')
     create(:course, :engineers_teach_physics, provider:, course_code: 'C101')
   end
@@ -139,3 +141,5 @@ describe 'API', :with_publish_constraint do
     end
   end
 end
+
+# rubocop:enable RSpec/EmptyExampleGroup
