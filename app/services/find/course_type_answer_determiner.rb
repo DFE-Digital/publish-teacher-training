@@ -11,14 +11,18 @@ module Find
     end
 
     def show_undergraduate_courses?
-      !further_education? && university_degree_status.present? && no_degrees? && does_not_require_visa_sponsorship?
+      !further_education? && university_degree_question_answered? && no_degrees? && does_not_require_visa_sponsorship?
     end
 
     def show_exit_page?
-      !further_education? && university_degree_status.present? && no_degrees? && require_visa_sponsorship?
+      !further_education? && university_degree_question_answered? && no_degrees? && require_visa_sponsorship?
     end
 
     private
+
+    def university_degree_question_answered?
+      university_degree_status.present?
+    end
 
     def further_education?
       age_group == 'further_education'
