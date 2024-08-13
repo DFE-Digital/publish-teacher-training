@@ -118,7 +118,7 @@ feature 'Questions and results for undergraduate courses' do
     then_i_am_on_results_page
   end
 
-  scenario 'in the 2025 cycle, with the TDA feature active and searching for secondary courses' do
+  scenario 'in the 2025 cycle, with the TDA feature active and searching for postgraduate courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
     and_the_tda_feature_flag_is_active
