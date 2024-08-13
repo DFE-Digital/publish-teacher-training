@@ -141,7 +141,7 @@ gem 'propshaft'
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.14.0'
 
 # For running data migrations
-gem 'data_migrate', '~> 9.4.0'
+gem 'data_migrate', '~> 9.4.1'
 
 # For outgoing http requests
 gem 'http'
