@@ -46,7 +46,7 @@ module Find
       end
     end
 
-    context 'when the provider specifies skilled worker visa sponsorship is active' do
+    context 'when the provider specifies skilled worker visa sponsorship is active and the db_backed_funding_type feature is active' do
       before do
         allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
       end

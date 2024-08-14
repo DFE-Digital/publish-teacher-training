@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'Adding a teacher degree apprenticeship course (with db_backed_funding feature disabled)', :can_edit_current_and_next_cycles do
+feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
   before do
     given_the_db_backed_funding_type_feature_flag_is_enabled
   end

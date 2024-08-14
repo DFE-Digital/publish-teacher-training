@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/docs/providers/courses_spec.rb
+
 # frozen_string_literal: true
 
 require 'swagger_helper'
