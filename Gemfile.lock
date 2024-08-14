@@ -324,7 +324,7 @@ GEM
       html-attributes-utils (~> 1.0.0, >= 1.0.0)
       pagy (>= 6, < 9)
       view_component (>= 3.9, < 3.13)
-    govuk_design_system_formbuilder (5.4.1)
+    govuk_design_system_formbuilder (5.5.0)
       actionview (>= 6.1)
       activemodel (>= 6.1)
       activesupport (>= 6.1)
@@ -825,7 +825,7 @@ DEPENDENCIES
   geokit-rails
   google-cloud-bigquery
   govuk-components (~> 5.4.1)
-  govuk_design_system_formbuilder (~> 5.4)
+  govuk_design_system_formbuilder (~> 5.5)
   govuk_notify_rails
   guard
   guard-rspec
