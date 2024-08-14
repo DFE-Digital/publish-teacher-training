@@ -694,7 +694,7 @@ GEM
       sentry-ruby (~> 5.18.2)
       sidekiq (>= 3.0)
     shellany (0.0.1)
-    shoulda-matchers (6.3.0)
+    shoulda-matchers (6.3.1)
       activesupport (>= 5.2.0)
     sidekiq (6.5.12)
       connection_pool (>= 2.2.5, < 3)
