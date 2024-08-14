@@ -3124,6 +3124,7 @@ describe Course do
       it 'returns nil' do
         course = described_class.new(program_type: nil)
         expect(course.funding_type).to be_nil
+        expect(course.funding).to eq('not_set')
       end
     end
 
@@ -3131,6 +3132,7 @@ describe Course do
       it 'returns salary' do
         course = described_class.new(program_type: :higher_education_salaried_programme)
         expect(course.funding_type).to eq('salary')
+        expect(course.funding).to eq('not_set')
       end
     end
 
@@ -3138,6 +3140,7 @@ describe Course do
       it 'returns apprenticeship' do
         course = build(:course, :with_teacher_degree_apprenticeship)
         expect(course.funding_type).to eq('apprenticeship')
+        expect(course.funding).to eq('not_set')
       end
     end
 
@@ -3145,6 +3148,61 @@ describe Course do
       it 'returns apprenticeship' do
         course = build(:course, :with_apprenticeship)
         expect(course.funding_type).to eq('apprenticeship')
+        expect(course.funding).to eq('not_set')
+      end
+    end
+
+    context 'when funding is set to fee on a salaried program' do
+      it 'returns fee' do
+        course = described_class.new(program_type: :higher_education_salaried_programme, funding: 'fee')
+        expect(course.program_type).to eq('higher_education_salaried_programme')
+        expect(course.funding).to eq('fee')
+        expect(course.funding_type).to eq('fee')
+      end
+    end
+
+    context 'when funding is set to salary on a fee program' do
+      it 'returns salary' do
+        course = build(:course, :with_school_direct, funding: 'salary')
+        expect(course.program_type).to eq('school_direct_training_programme')
+        expect(course.funding).to eq('salary')
+        expect(course.funding_type).to eq('salary')
+      end
+    end
+
+    context 'when funding is set to fee on a fee program' do
+      it 'returns fee' do
+        course = build(:course, :with_school_direct, funding: 'fee')
+        expect(course.program_type).to eq('school_direct_training_programme')
+        expect(course.funding).to eq('fee')
+        expect(course.funding_type).to eq('fee')
+      end
+    end
+
+    context 'when funding is set to apprenticeship on a fee program' do
+      it 'returns apprenticeship' do
+        course = build(:course, :with_school_direct, funding: 'apprenticeship')
+        expect(course.program_type).to eq('school_direct_training_programme')
+        expect(course.funding).to eq('apprenticeship')
+        expect(course.funding_type).to eq('apprenticeship')
+      end
+    end
+
+    context 'when funding is set to fee on a apprenticeship program' do
+      it 'returns fee' do
+        course = build(:course, :with_apprenticeship, funding: 'fee')
+        expect(course.program_type).to eq('pg_teaching_apprenticeship')
+        expect(course.funding).to eq('fee')
+        expect(course.funding_type).to eq('fee')
+      end
+    end
+
+    context 'when funding is not_set' do
+      it 'defaults to the correct funding_type' do
+        course = described_class.new(program_type: :higher_education_salaried_programme)
+        expect(course.program_type).to eq('higher_education_salaried_programme')
+        expect(course.funding).to eq('not_set')
+        expect(course.funding_type).to eq('salary')
       end
     end
   end
