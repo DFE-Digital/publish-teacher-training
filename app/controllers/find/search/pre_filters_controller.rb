@@ -10,6 +10,7 @@ module Find
           has_vacancies: true,
           applications_open: true,
           keywords: params.dig(:pre_filter, :keywords),
+          can_sponsor_visa: ActiveModel::Type::Boolean.new.cast(params.dig(:pre_filter, :can_sponsor_visa)),
           **geocode_params_for(params.dig(:pre_filter, :lq))
         )
       end
