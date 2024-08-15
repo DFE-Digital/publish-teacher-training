@@ -15,22 +15,37 @@ module Find
         )
       end
 
+      helper_method :primary_courses_path, :secondary_courses_path, :further_education_courses_path
+
       private
 
+      def primary_courses_path
+        find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'PrimarySubject').pluck(:subject_code))
+      end
+
+      def secondary_courses_path
+        find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'SecondarySubject').pluck(:subject_code))
+      end
+
+      def further_education_courses_path
+        find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'FurtherEducationSubject').pluck(:subject_code))
+      end
+
       def geocode_params_for(query)
+        return {} if query.blank?
+
         results = Geocoder.search(query, components: 'country:UK').first
-        return unless results
+        return {} unless results
 
         {
           l: 1,
-          lq: query,
           latitude: results.latitude,
           longitude: results.longitude,
           loc: results.address,
           lq: query,
           c: country(results),
           sortby: ResultsView::DISTANCE,
-          radius: ResultsView::MILES,
+          radius: ResultsView::MILES
         }
       end
 

@@ -11,10 +11,12 @@ class Course < ApplicationRecord
 
   pg_search_scope :keyword_search,
                   against: [:name, :level],
+                  associated_against: {
+                    subjects: [:subject_name]
+                  },
                   using: {
                     tsearch: { dictionary: "english", any_word: true }
                   }
-
   A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
 
   after_initialize :set_defaults
