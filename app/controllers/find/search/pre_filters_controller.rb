@@ -9,7 +9,7 @@ module Find
         redirect_to find_results_path(
           has_vacancies: true,
           applications_open: true,
-          # keywords: params.digest(:pre_filter, :keywords),
+          keywords: params.dig(:pre_filter, :keywords),
           **geocode_params_for(params.dig(:pre_filter, :lq))
         )
       end
@@ -39,7 +39,6 @@ module Find
 
         countries.each { |country| return country if flattened_results.include?(country) }
       end
-
     end
   end
 end

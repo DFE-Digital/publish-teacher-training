@@ -7,7 +7,7 @@ module Find
     def index
       matched_params = MatchOldParams.call(request.query_parameters)
 
-      @results_view = ResultsView.new(query_parameters: matched_params)
+      @results_view = ResultsView.new(query_parameters: matched_params.merge(keywords: request.query_parameters[:keywords]))
       @filters_view = ResultFilters::FiltersView.new(params: matched_params)
       @courses = @results_view.courses.page params[:page]
       @number_of_courses_string = @results_view.number_of_courses_string

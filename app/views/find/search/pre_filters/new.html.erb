@@ -9,17 +9,18 @@
           <div class="find-input-container">
 
             <div class="find-item">
-              <label for="keyword-field" class="govuk-label govuk-label--s">
+              <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
                 Keywords
-              </label>
-              <input id="keyword-field" class="govuk-input" autocomplete="off" type="text" name="keyword">
+              <% end %>
+              <%= form.text_field :keywords, class: "govuk-input", autocomplete: :off  %>
             </div>
 
             <div class="find-item govuk-form-group" style="position: relative;">
               <%= form.label :lq, class: "govuk-label govuk-label--s" do %>
                 City, town or postcode
               <% end %>
-              <%= form.text_field :lq, class: "govuk-input", autocomplete: :off  %>
+
+              <%= form.text_field :lq, class: "govuk-input", autocomplete: :off %>
               <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
             </div>
 
@@ -35,16 +36,16 @@
                   <fieldset class="govuk-fieldset">
                     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                       <div class="govuk-checkboxes__item">
-                        <input class="govuk-checkboxes__input" id="organisation" name="organisation" type="checkbox" value="hmrc">
-                        <label class="govuk-label govuk-checkboxes__label" for="organisation">
+                        <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                        <%= form.label :can_sponsor_visa, class: "govuk-label govuk-checkboxes__label" do %>
                           Only show courses that offer visa sponsorship
-                        </label>
+                        <% end %>
                       </div>
                     </div>
                   </fieldset>
                 </div>
                 Learn more about
-                <a href="https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student">training
+                <a href="https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student" class="govuk-link govuk-link--no-visited-state">training
                   to teach in England as an non-UK citizen</a>.
               </details>
             </div>
@@ -72,7 +73,7 @@
         </span>
     </p>
     <span class="govuk-body">
-        <a href="https://find-teacher-training-courses.service.gov.uk/results?age_group=primary&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&visa_status=false">
+        <a href="https://find-teacher-training-courses.service.gov.uk/results?age_group=primary&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&visa_status=false" class="govuk-link govuk-link--no-visited-state">
           View all primary courses
         </a>
       </span>
@@ -86,7 +87,7 @@
         </span>
     </p>
     <span class="govuk-body">
-        <a href="subject-fund">
+        <a href="subject-fund" class="govuk-link">
           Browse all secondary subjects
         </a>
       </span>
@@ -101,7 +102,7 @@
     </p>
 
     <span class="govuk-body">
-        <a href="https://find-teacher-training-courses.service.gov.uk/results?age_group=further_education&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=41&visa_status=false">
+        <a href="https://find-teacher-training-courses.service.gov.uk/results?age_group=further_education&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=41&visa_status=false" class="govuk-link govuk-link--no-visited-state">
           View all further education courses
         </a>
       </span>
@@ -124,14 +125,14 @@
           <div class="govuk-grid-column-one-half">
             <div class="banner-inset-white banner-inset-white--first-child">
             <span class="govuk-body">
-              <a href="https://getintoteaching.education.gov.uk/is-teaching-right-for-me">Find out if teaching is right for you</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/is-teaching-right-for-me">Find out if teaching is right for you</a>
             </span>
             </div>
           </div>
           <div class="govuk-grid-column-one-half">
             <div class="banner-inset-white">
             <span class="govuk-body">
-              <a href="https://getintoteaching.education.gov.uk/help-and-support">Contact Get Into Teaching for free support</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/help-and-support">Contact Get Into Teaching for free support</a>
             </span>
             </div>
           </div>

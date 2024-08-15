@@ -7,6 +7,13 @@ class Course < ApplicationRecord
   include TouchProvider
   include Courses::EditOptions
   include TimeFormat
+  include PgSearch::Model
+
+  pg_search_scope :keyword_search,
+                  against: [:name],
+                  using: {
+                    tsearch: { dictionary: "english" }
+                  }
 
   A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
 
