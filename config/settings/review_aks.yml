@@ -12,6 +12,8 @@ apply_base_url: https://qa.apply-for-teacher-training.service.gov.uk
 search_ui:
   base_url: https://qa.find-teacher-training-courses.service.gov.uk
 
+current_recruitment_cycle_year: 2025
+
 authentication:
   secret: secret
   mode: persona
