@@ -78,6 +78,9 @@ class CourseSearchService
       outer_scope = course_order(outer_scope)
     end
 
+    if (keywords = filter[:keywords].presence)
+      outer_scope = outer_scope.keyword_search(keywords)
+    end
     outer_scope
   end
 
