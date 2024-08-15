@@ -32,6 +32,7 @@
     ]
   },
   "dependencies": {
+    "@hotwired/turbo-rails": "^8.0.5",
     "@ministryofjustice/frontend": "2.0.0",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
