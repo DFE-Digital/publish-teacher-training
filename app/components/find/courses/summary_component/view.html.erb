@@ -3,23 +3,22 @@
 </h2>
 
 <%= govuk_summary_list(actions: false) do |summary_list| %>
+
   <% summary_list.with_row do |row| %>
     <% row.with_key(text: t(".course_fee")) %>
     <% row.with_value do %>
-      <% if course.salaried? %>
-      <%= t(".pays_salary_html") %>
-        <% if course.apprenticeship? %>
-        <%= t(".teaching_apprenticeship") %>
-        <% end %>
-        <br>
-        <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee") %></span>
-      <% elsif course.apprenticeship? %>
-        <%= t(".pays_salary_html") %>
-        <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee") %></span>
+      <% if no_fee? %>
+        <!--This course pays a salary-->
+        <!--This a Teaching Apprenticeship course paying a salary-->
+        <%= t("find.results.search_result_component.funding.#{course.funding_type}_html") %>
       <% else %>
-        <%= course.course_fee_content %>
-        <div><span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span></div>
+        <!--£9,250 for UK citizens-->
+        <!--£14,000 for Non-UK citizens-->
+        <%= course.course_fee_content_html %>
       <% end %>
+      <br>
+      <!--Student finance is available if you’re eligible-->
+        <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
     <% end %>
   <% end %>
 
@@ -44,21 +43,21 @@
     <% end %>
   <% end %>
 
-  <% summary_list.with_row do |row| %>
-    <% row.with_key(text: t(".provider")) %>
-    <% row.with_value do %>
-      <%= govuk_link_to course.provider_name, x_provider_url %>
-    <% end %>
-  <% end %>
+  <#% summary_list.with_row do |row| %>
+    <#% row.with_key(text: t(".provider")) %>
+    <#% row.with_value do %>
+      <#%= govuk_link_to course.provider_name, x_provider_url(course) %>
+    <#% end %>
+  <#% end %>
 
-  <% if course.accrediting_provider.present? %>
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: t(".accredited_by")) %>
-      <% row.with_value do %>
-        <%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <#% if course.accrediting_provider.present? %>
+    <#% summary_list.with_row do |row| %>
+      <#% row.with_key(text: t(".accredited_by")) %>
+      <#% row.with_value do %>
+        <#%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url(course) %>
+      <#% end %>
+    <#% end %>
+  <#% end %>
 
   <% if show_apply_from_row? %>
     <% summary_list.with_row do |row| %>

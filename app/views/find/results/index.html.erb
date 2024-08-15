@@ -1,37 +1,165 @@
 <%= content_for :page_title, Find::ResultSummaryService.call(results: @results_view) %>
+<%#= render Find::LocationSubjectFilterComponent.new(results: @results_view) %>
 
-<%= render Find::LocationSubjectFilterComponent.new(results: @results_view) %>
+<%# content_for :before_content do %>
+  <%#= govuk_back_link(
+    text: "Back to home",
+    href: find_root_path(@results_filter_query_parameters),
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<%# end %>
 
 <h1 class="govuk-heading-xl" data-qa="heading">
   <%= "#{@number_of_courses_string} found" %>
 </h1>
 
-<div class="app-filter-toggle"></div>
-
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
     <%= render Find::Results::FilterComponent.new(results: @results_view) %>
   </div>
+
   <div class="app-filter-layout__content">
 
-    <div class="app-promoted-link">
-      <%= govuk_link_to "Talk to teacher training providers at an event near you",
-                        t("find.get_into_teaching.url_teacher_training_events") %>.
+  <!--Not sure which course is right for you-->
+  <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section govuk-accordion__section--git">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+          Not sure which course is right for you?
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+      <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course" class="govuk-link">Find out how to choose a course</a></p>
+      <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+      <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+      </div>
     </div>
+  </div>
+  <!--End Not sure which course is right for you-->
 
-    <%= render Find::Results::NoResultsComponent.new(results: @results_view) %>
-    <%= render Find::Results::SortByComponent.new(results: @results_view) %>
+  <!--keyword and location search-->
+    <div class="app-promoted-link">
+      <%= form_with(url: '/', method: :get) do |form| %>
+        <div class="govuk-form-group">
+          <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
+            Subject
+          <% end %>
+          <%= form.text_field :keywords, class: "govuk-input", value: @filters_view.keywords, autocomplete: :off, form: "result-filters" %>
+        </div>
+        <div class="govuk-form-group" style="position: relative;">
+          <%= form.label :lq, class: "govuk-label govuk-label--s" do %>
+            City, town or postcode
+          <% end %>
+          <%= form.text_field :lq, id: :location, class: "govuk-input", value: @filters_view.lq, autocomplete: :off, form: "result-filters" %>
+          <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
+        </div>
+          <div class="govuk-form-group">
+            <%= form.label :radius, class: "govuk-label govuk-label--s" do %>
+              Search radius
+            <% end %>
+            <%= form.select :radius, options_for_select(@filters_view.radius_options_for_select, @filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
+          </div>
+        <button type="submit" class="govuk-button" data-module="govuk-button" form="result-filters" style="margin-bottom:5px;">
+          Search
+        </button>
+      <% end %>
+    </div>
+    <!--END keyword and location search-->
+
+  <!-- Sort and filter sticky buttons -->
+  <div class="div-filter-background">
+    <div class="div-sticky-container">
+      <div class="div-sticky-element">
+        <div class="app-filter-toggle"></div>
+      </div>
+      <div class="div-sticky-element">
+        <a href="#" class="govuk-button govuk-button--secondary secondary-button-filter govuk-!-font-weight-bold">Sort results</a>
+        <%#= render Find::Results::SortByComponent.new(results: @results_view) %>
+      </div>
+    </div>
+  </div>
+  <!--END Sort and filter sticky buttons -->
+
+    <%= render Find::Results::NoResultsComponent.new(results: @results_view, filters_view: @filters_view) %>
 
     <% if @results_view.has_results? %>
       <ul class="app-search-results">
-        <% @courses.each do |course| %>
+        <% @courses.each_with_index do |course, index| %>
           <%= render Find::Results::SearchResultComponent.new(
             course:,
             filtered_by_location: @results_view.location_filter?,
             results_view: @results_view
           ) %>
+
+          <% if index == 4 %>
+            <!--Consider a subject that comes with financial support-->
+            <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+              <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+                <h3 class="app-advice__title">
+                  Consider a subject that comes with financial support
+                </h3>
+                <p class="govuk-body">
+                  Financial support is not available for <strong>science</strong> courses.
+                  These similar subjects come with bursaries or scholarships, if you're eligible.
+                </p>
+                <ul class="govuk-list">
+                <!--We can loop through each of the radius options and display them as a list of buttons-->
+                <!--We could also exclude the radius' that have been selected previously-->
+                <!--With a bit of JavaScript magic we could make the (xx results) work too-->
+                <li>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state govuk-link-distance govuk-link-distance--banner" type="submit" name="radius" value="15" form="result-filters">
+                    Biology (3 courses)
+                  </a>
+                  <div id="nationality-item-hint" class="govuk-hint govuk-!-font-size-16">
+                    Bursaries of £26,000 available
+                  </div>
+                </li>
+                <li>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state govuk-link-distance govuk-link-distance--banner" type="submit" name="radius" value="20" form="result-filters">
+                    Chemistry (4 courses)
+                  </a>
+                  <div id="nationality-item-hint" class="govuk-hint govuk-!-font-size-16">
+                  Scholarships of £31,000 or bursaries of £28,000 are available
+                </div>
+                </li>
+                <li>
+                  <a href="#"n class="govuk-link govuk-link--no-visited-state govuk-link-distance govuk-link-distance--banner" type="submit" name="radius" value="200" form="result-filters">
+                    Physics (2 courses)
+                  </a>
+                  <div id="nationality-item-hint" class="govuk-hint govuk-!-font-size-16">
+                  Scholarships of £31,000 or bursaries of £28,000 are available
+                  </div>
+                </li>
+              </ul>
+              </div>
+            </div>
+            <!--END Consider a subject that comes with financial support-->
+          <% end %>
         <% end %>
       </ul>
+
+      <!--Not sure which course is right for you-->
+      <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+        <div class="govuk-accordion__section govuk-accordion__section--git">
+          <div class="govuk-accordion__section-header">
+            <h2 class="govuk-accordion__section-heading">
+              <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+              Not sure which course is right for you?
+              </span>
+            </h2>
+          </div>
+          <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+          <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course" class="govuk-link">Find out how to choose a course</a></p>
+          <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+          <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+          </div>
+        </div>
+      </div>
+      <!--End Not sure which course is right for you-->
     <% end %>
 
     <%= govuk_pagination(pagy: @pagy) %>

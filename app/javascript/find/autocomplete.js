@@ -20,6 +20,8 @@ const initAutocomplete = ({ element, input, path, selectNameAndCode }) => {
 
   try {
     if ($input) {
+      const formId = $input?.form?.id
+
       accessibleAutocomplete({
         element: $el,
         id: $input.id,
@@ -37,6 +39,11 @@ const initAutocomplete = ({ element, input, path, selectNameAndCode }) => {
       })
 
       $input.parentNode.removeChild($input)
+
+      const newAutocompleteInput = document.getElementById(inputId)
+      if (newAutocompleteInput && formId) {
+        newAutocompleteInput.setAttribute('form', formId)
+      }
     }
   } catch (err) {
     console.error(`Failed to initialise ${inputId} autocomplete:`, err)

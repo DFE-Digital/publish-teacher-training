@@ -1,26 +1,113 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
+
+  <% if course.salaried? %>
+  <p class="govuk-body">
+    You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+  </p>
+<% else %>
+  <p class="govuk-body">
+    You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.
+  </p>
+<% end %>
+
+  <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          <% if course.salaried? %>
+            Nearest employing school
+          <% else %>
+            Nearest placement school
+           <% end %>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% number_of_sites = course.new_or_running_sites_with_vacancies.uniq.count %>
+          <% if @filters_view.location_search? && number_of_sites.positive? %>
+                <span class="govuk-body">
+                    <strong>
+                      <%= "#{pluralize(course.min_site_distance_from(latitude: @filters_view.latitude, longitude: @filters_view.longitude), 'mile')}" %>
+                    </strong>
+                      from
+                    <strong>
+                      <%= @filters_view.location_search %>
+                    </strong>
+                  </span>
+            <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">
+              <% if course.salaried? %>
+                  <%= t("find.results.course_placements.nearest_location_salary", count: number_of_sites) %>
+              <% else %>
+                  <%= t("find.results.course_placements.nearest_location", count: number_of_sites) %>
+              <% end %>
+            </p>
+          <% else %>
+            <p class="govuk-hint govuk-!-font-size-16">
+              <% if course.salaried? %>
+                  <%= t("find.results.course_placements.all_school_placements_salary", count: number_of_sites) %>
+              <% else %>
+                <%= t("find.results.course_placements.all_school_placements", count: number_of_sites) %>
+              <% end %>
+            </p>
+          <% end %>
+
+          <p class="govuk-hint govuk-!-font-size-16">
+            Locations can change and are not guaranteed.
+          </p>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Where you will study
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% number_of_study_sites = course.study_sites.count %>
+          <% if @filters_view.location_search? && number_of_study_sites.positive? %>
+            <span class="govuk-body">
+              <strong>
+                <%= "#{pluralize(course.min_study_site_distance_from(latitude: @filters_view.latitude, longitude: @filters_view.longitude), 'mile')}" %>
+              </strong>
+                from
+              <strong>
+                <%= @filters_view.location_search %>
+              </strong>
+            </span>
+          <% else %>
+            <p class="govuk-body">
+              <%= t("find.results.course_study_sites.all_study_sites", count: number_of_study_sites) %>
+            </p>
+          <% end %>
+
+          <p class="govuk-hint govuk-!-font-size-16">
+            <% course.study_sites.each do |study_site| %>
+              <strong><%= smart_quotes(study_site.location_name) %></strong>
+              <br>
+              <%= smart_quotes(study_site.decorate.full_address) %>
+              <br><br>
+            <% end %>
+          </p>
+        </dd>
+      </div>
+  </dl>
+
   <div data-qa="course__about_schools">
-    <%= render Shared::Courses::SchoolPlacementsAdvice::View.new(course) %>
+  <%= render Shared::AdviceComponent::View.new(title: advice_title) do %>
 
-    <% if course.fee_based? %>
+    <% if course.salaried? %>
       <p class="govuk-body">
-        You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.
+        You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.
       </p>
     <% else %>
       <p class="govuk-body">
-        You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+        The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
+      </p>
+      <p class="govuk-body">
+        <a href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements" class="govuk-link">
+          Find out more about how school placements work</a>.
       </p>
     <% end %>
 
-    <%= render Find::Courses::TrainingLocations::View.new(course:, preview: preview?(params)) %>
-
-    <% if course.published_how_school_placements_work.present? %>
-      <%= markdown(course.published_how_school_placements_work) %>
-    <% elsif course.how_school_placements_work.present? %>
-      <%= markdown(course.how_school_placements_work) %>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
-    <% end %>
+  <% end %>
   </div>
+
+
 </div>

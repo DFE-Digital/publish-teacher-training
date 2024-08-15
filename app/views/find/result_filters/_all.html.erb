@@ -1,26 +1,36 @@
-<%= form_with url: find_results_path, skip_enforcing_utf8: true, class: "app-filter", method: :get do |form| %>
+<%= form_with url: find_results_path, skip_enforcing_utf8: true, class: "app-filter", id: "result-filters", method: :get do |form| %>
   <div class="app-filter__header">
     <h2 class="govuk-heading-m">Filters</h2>
+
   </div>
 
   <div class="app-filter__content">
+
   <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
-    <% if @filters_view.show_undergraduate_courses? %>
-      <%= render "find/result_filters/radius", form: %>
-      <%= render "find/result_filters/send_filter", form: %>
-      <%= render "find/result_filters/applications_open_filter", form: %>
-      <%= render "find/result_filters/hidden_fields", form: %>
-    <% else %>
-      <%= render "find/result_filters/radius", form: %>
-      <%= render "find/result_filters/visa_filter", form: %>
-      <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
-      <%= render "find/result_filters/study_type_filter", form: %>
-      <%= render "find/result_filters/qualifications_filter", form: %>
-      <%= render "find/result_filters/degree_required_filter", form: %>
-      <%= render "find/result_filters/send_filter", form: %>
-      <%= render "find/result_filters/salary_filter", form: %>
-      <%= render "find/result_filters/applications_open_filter", form: %>
-      <%= render "find/result_filters/hidden_fields", form: %>
-    <% end %>
+  <% if @filters_view.show_undergraduate_courses? %>
+    <%= render "find/result_filters/radius", form: %>
+    <%= render "find/result_filters/send_filter", form: %>
+    <%= render "find/result_filters/applications_open_filter", form: %>
+    <%= render "find/result_filters/hidden_fields", form: %>
+  <% else %>
+    <%= render "find/result_filters/visa_filter", form: %>
+    <%= render "find/result_filters/engineers_teach_physics_filter", form: %>
+    <%= render "find/result_filters/primary_filter", form: %>
+    <%= render "find/result_filters/subjects_filter", form: %>
+        <%= render "find/result_filters/further_filter", form: %>
+    <%= render "find/result_filters/study_type_filter", form: %>
+    <%= render "find/result_filters/qualifications_filter", form: %>
+    <%= render "find/result_filters/provider-type", form: %>
+    <%= render "find/result_filters/degree_required_filter", form: %>
+    <%= render "find/result_filters/send_filter", form: %>
+    <%= render "find/result_filters/salary_filter", form: %>
+    <%= render "find/result_filters/financial-support", form: %>
+    <%= render "find/result_filters/applications_open_filter", form: %>
+    <%= render "find/result_filters/start-date", form: %>
+    <%= render "find/result_filters/hidden_fields", form: %>
+  <% end %>
+    <div class="filter-button-bottom">
+    <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
+    </div>
   </div>
 <% end %>

@@ -250,11 +250,7 @@ en:
         view:
           uk_citizens: UK citizens
           non_uk_citizens: Non-UK citizens
-          course_fees: The course fees for UK citizens in %{cycle_range} are %{fee}.
-      tda_advice:
-        heading: Teacher degree apprenticeships (TDAs)
-        content: On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS).
-        link_text: Find out more about teacher degree apprenticeships.
+          course_fees: "Fees for UK citizens in %{cycle_range}: %{fee}."
       advice:
         heading: Support and advice
         postgraduate:
@@ -305,21 +301,21 @@ en:
           find_out_more_about_tda: Find out more about teacher degree apprenticeships
       summary_component:
         view:
-          pays_salary_html: This course pays a <strong>salary</strong>
+          pays_salary_html: Salary
           teaching_apprenticeship: It is a teaching apprenticeship
           no_fee: There is no fee
           fee_or_salary: Fee or salary
           course_summary: Course summary
-          course_fee: Course fee
+          course_fee: Fee or salary
           course_length: Course length
-          age_range: Age range
+          age_range: Age group
           date_can_apply: Date you can apply from
           start_date: Start date
-          qualification: Qualification
+          qualification: Qualification awarded
           provider: Provider
           accredited_by: Accredited by
-          for_uk_citizens: for UK citizens
-          for_non_uk_citizens: for Non-UK citizens
+          for_uk_citizens: Fee - UK citizens
+          for_non_uk_citizens: Fee - Non-UK citizens
       providers:
         show:
           heading: About %{provider_name}
@@ -349,7 +345,12 @@ en:
       about_schools_component:
         view:
           heading: Where you will train
+          view_list_of_school_placements: View list of school placements
           work_with_schools: We work with the following schools to provide your school placements.
+          nearest_location:
+          advice_title_salary: "Choosing an employing school"
+          advice_title: "How schools placements work"
+
       placements:
         heading: School placements at %{provider_name}
         back: Back to %{course_name} (%{course_code})
@@ -364,23 +365,62 @@ en:
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     results:
       search_result_component:
-        pays_salary_html: This course pays a <strong>salary</strong>
+        pays_salary_html: Salary
         teaching_apprenticeship: It is a teaching apprenticeship
         no_fee: There is no fee
         no_degree_required: No degree required
         fee_based:
-          location: Placement schools
+          location: Nearest placement school
         salary_based:
           location:
-            one: Employing school
-            other: Employing schools
+            one: Nearest employing school
+            other: Nearest employing school
+        location:
+          one: Nearest placement school
+          other: Nearest placement school
+        location_salary:
+          one: Nearest employing school
+          other: Nearest employing school
+        study_site:
+          one: Where you will study
+          other: Where you will study
         nearest_location: Nearest location
         fee_or_salary: Fee or salary
-        course_fee: Course fee
-        qualification: Qualification
+        course_fee: Fee or salary
+        qualification: Qualification awarded
         degree_required: Degree required
         visa_sponsorship: Visa sponsorship
         course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
+        funding:
+          salary_html: Salary
+          apprenticeship_html: "Salary (apprenticeship)"
+      course_placements:
+        nearest_location:
+          zero: "No placement schools available"
+          one: ""
+          other: ""
+        nearest_location_salary:
+          zero: "No employing schools available"
+          one: ""
+          other: ""
+        all_school_placements:
+          zero: "Not listed yet"
+          one: "Search by city, town or postcode to find the nearest potential placement school"
+          other: "Search by city, town or postcode to find the nearest potential placement school "
+        all_school_placements_salary:
+          zero: "No employing schools available"
+          one: "Search by city, town or postcode to find the nearest potential employing school"
+          other: "Search by city, town or postcode to find the nearest potential employing school"
+      course_study_sites:
+        nearest_location:
+          zero: "No study sites available"
+          one: "Nearest study site"
+          other: "Nearest of %{count} study sites"
+        all_study_sites:
+          zero: "Not listed yet"
+          one: "%{count} potential study site"
+          other: "%{count} potential study sites"
+
     scholarships:
       physics:
         body: Institute of Physics
@@ -409,6 +449,8 @@ en:
             <p class="govuk-body">To do this, you’ll need to be sponsored by your employer.</p>
             <p class="govuk-body">Before you apply for this course, <a class="govuk-link" href=%{provider_url}>contact the training provider</a> to check Skilled Worker visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
       student_visa:
+        not_available:
+          html: <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
         available:
           html:
             <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
