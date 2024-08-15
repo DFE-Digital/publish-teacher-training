@@ -8,7 +8,7 @@ module PagyPagination
   end
 
   def paginate(scope)
-    @pagy_results ||= pagy(scope, items: per_page, page:)
+    @pagy_results ||= pagy(scope, limit: per_page, page:)
 
     pagy_results.second
   end
