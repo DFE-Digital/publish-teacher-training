@@ -2,6 +2,8 @@
 
 root to: 'find/search/locations#start', as: :find
 
+get :landing, to: 'find/pages#landing', as: :landing
+
 scope via: :all do
   match '/404', to: 'find/errors#not_found'
   match '/500', to: 'find/errors#internal_server_error'
@@ -28,6 +30,7 @@ namespace :find, path: '/' do
   get '/secondary', to: 'v2/secondary_subjects#index'
   post '/secondary', to: 'v2/secondary_subjects#submit'
 
+  get '/results/count', to: 'results#count', as: 'results_count'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 

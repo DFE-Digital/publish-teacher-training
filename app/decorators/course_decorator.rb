@@ -252,11 +252,7 @@ class CourseDecorator < ApplicationDecorator
   def age_range_in_years_and_level
     return if age_range_in_years.blank?
 
-    if secondary_course?
-      "#{age_range_in_years.humanize} - #{level}"
-    else
-      age_range_in_years.humanize
-    end
+    "#{level.titleize} - #{age_range_in_years.humanize}"
   end
 
   def applications_open_first_label(recruitment_cycle)
@@ -485,15 +481,23 @@ class CourseDecorator < ApplicationDecorator
     degree_grade_hash[degree_grade]
   end
 
-  def course_fee_content
+  def course_fee_content_html
+    fee_uk_html = safe_join([
+                              formatted_uk_eu_fee_label,
+                              " ",
+                              bold_tag(number_to_currency(fee_uk_eu))
+                            ])
+    fee_int_html = safe_join([
+                              formatted_international_fee_label,
+                              " ",
+                              bold_tag(number_to_currency(fee_international))
+                             ])
     safe_join(
       [
-        bold_tag(number_to_currency(fee_uk_eu)),
-        formatted_uk_eu_fee_label,
-        tag.br,
-        bold_tag(number_to_currency(fee_international)),
-        formatted_international_fee_label
-      ]
+        fee_uk_html,
+        fee_int_html
+      ].compact_blank,
+      tag.br
     )
   end
 

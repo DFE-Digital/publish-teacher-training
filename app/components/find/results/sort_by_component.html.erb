@@ -1,21 +1,17 @@
-<div class="app-search-results-header">
-  <% if results.location_filter? %>
-    <p class="govuk-body">Sorted by distance</p>
-  <% else %>
-    <%= form_with(url: find_results_path, method: "get", class: "app-search-results-header__sort", data: { qa: "sort-form" }) do |form| %>
-      <%= render "find/shared/hidden_fields", form:, exclude_keys: %w[sortby] %>
-      <%= form.label(:sortby, "Sorted by", class: "govuk-label govuk-!-display-inline-block") %>
-      <%= form.select(
-        :sortby,
-        options_for_select(results.sort_options, selected: params["sortby"] || "course_asc"),
-        {},
-        {
-          class: "govuk-select",
-          role: "listbox",
-          data: { qa: "sort-form__options" }
-        }
-      ) %>
-      <%= form.submit("Sort", name: nil, class: "govuk-button", data: { qa: "sort-form__submit" }) %>
-    <% end %>
-  <% end %>
+   <div class="sort-container">
+    <!--<p class="govuk-heading-m" style="margin-bottom:0;">Sorted by distance</p>-->
+      <form action="/results" method="get" accept-charset="utf-8" novalidate>
+        <div class="govuk-form-group govuk-form-group--sort">
+          <label class="govuk-label" for="sort">
+            <strong>Sort by</strong>
+          </label>
+          <select class="govuk-select" id="sort" name="sort">
+            <option value="views">Choose an option</option>
+            <!--<option value="updated" selected>Distance</option>
+            <option value="views">Newest</option>
+            <option value="comments">Closing date</option>-->
+          </select>
+        </div>
+      </form>
+
 </div>
