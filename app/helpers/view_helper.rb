@@ -152,7 +152,7 @@ module ViewHelper
 
   alias cns classnames
 
-  def x_provider_url
+  def x_provider_url(course)
     if preview?(params)
       provider_publish_provider_recruitment_cycle_course_path(
         course.provider_code,
@@ -164,7 +164,7 @@ module ViewHelper
     end
   end
 
-  def x_accrediting_provider_url
+  def x_accrediting_provider_url(course)
     if preview?(params)
       if Settings.features.provider_partnerships
         ratified_by_publish_provider_recruitment_cycle_course_path(

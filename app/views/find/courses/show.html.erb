@@ -1,27 +1,29 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if FeatureFlag.active?(:prefiltering_find_redesign) %>
-  <% if permitted_referrer? && course_back_link %>
-    <%= content_for(:before_content) do %>
-      <%= govuk_back_link(
-        text: t("find.courses.show.back_to_search"),
-        href: course_back_link
-      ) %>
-    <% end %>
-  <% end %>
-<% else %>
-  <% if permitted_referrer? %>
-    <%= content_for(:before_content) do %>
-      <%= govuk_back_link(
-        text: t("find.courses.show.back_to_search"),
-        href: find_results_path(session[:search_params]),
-        html_attributes: {
-          data: { qa: "page-back" }
-        }
-      ) %>
-    <% end %>
-  <% end %>
-<% end %>
+      <% case @course.course_code %>
+        <% when "E026" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "R480" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "H971" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "36P4" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "Y404" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% else %>
+          <% if permitted_referrer? %>
+            <%= content_for(:before_content) do %>
+              <%= govuk_back_link(
+                text: t("find.courses.show.back_to_search"),
+                href: find_results_path(session[:search_params]),
+                html_attributes: {
+                  data: { qa: "page-back" }
+                }
+              ) %>
+            <% end %>
+          <% end %>
+        <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -31,6 +33,33 @@
       </span>
       <%= @course.name_and_code %>
     </h1>
+
+    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+    <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <strong>12 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <strong>164 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <strong>41 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <strong>5 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <strong>Be an early applicant</strong>.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -44,30 +73,326 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
-    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
+    <h2 class="govuk-heading-l">About the provider</h2>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
+    <h3 class="govuk-heading-m">Training provider<br>
+    <span class="govuk-hint govuk-!-font-size-16">They deliver the training</span>
+    </h3>
 
-    <% if @course.salaried? %>
-      <%= render partial: "find/courses/salary", locals: { course: @course } %>
-    <% end %>
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= govuk_link_to @course.provider_name, x_provider_url(@course) %><br>
+          </dd>
+        </div>
+
+        <!-- HARD-CODED PROVIDER DATA ROWS -->
+
+        <% case @course.course_code %>
+        <% when "E026" %>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Offer rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+                <strong class="govuk-tag govuk-tag--blue">
+                  Over 35%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+              The percentage of applicants to <%= @course.provider_name %> who received an offer (2022 to 2023)
+              </span>
+            </dd>
+          </div>
+
+        <% when "R480" %>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Offer rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+                <strong class="govuk-tag govuk-tag--blue">
+                  Over 20%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+              The percentage of applicants to <%= @course.provider_name %> who received an offer (2022 to 2023)
+              </span>
+            </dd>
+          </div>
+
+          <% when "H971" %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Offer rate
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <p class="govuk-body">
+                  <strong class="govuk-tag govuk-tag--blue">
+                    Over 55%
+                  </strong>
+                </p>
+                <span class="govuk-hint govuk-!-font-size-16">
+                The percentage of applicants to <%= @course.provider_name %> who received an offer (2022 to 2023)
+                </span>
+              </dd>
+            </div>
+
+        <% when "36P4" %>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Offer rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+                <strong class="govuk-tag govuk-tag--blue">
+                  Under 10%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+              The percentage of applicants to <%= @course.provider_name %> who received an offer (2022 to 2023)
+              </span>
+            </dd>
+          </div>
+
+        <% when "Y404" %>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Offer rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                    No data yet - why?
+                  </span>
+                </summary>
+                <div class="govuk-details__text">
+                  We use data from 2022 to 2023 to calculate the offer rate. <%= @course.provider_name %> did not run courses that year.
+                </div>
+              </details>
+            </dd>
+          </div>
+
+      <% end %>
+    </dl>
+
+    <h3 class="govuk-heading-m">Accredited provider<br>
+    <span class="govuk-hint govuk-!-font-size-16">They oversee the quality of the training</span>
+    </h3>
+
+    <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <%= govuk_link_to @course.accrediting_provider.provider_name, x_accrediting_provider_url(@course) %><br>
+          </dd>
+        </div>
+
+        <!-- HARD-CODED PROVIDER DATA ROWS -->
+
+        <% case @course.course_code %>
+        <% when "E026" %>
+
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Ofsted
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                    No report yet - why?
+                  </span>
+                </summary>
+                <div class="govuk-details__text">
+                  <p class="govuk-body">There may not be a report because:</p>
+                  <ul class="govuk-list govuk-list--bullet">
+                    <li><%= @course.accrediting_provider.provider_name %> hasn't been inspected yet</li>
+                    <li>an inspection has taken place recently, but the report hasn't been published yet</li>
+                  </ul>
+                </div>
+              </details>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Success rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                  Over 80%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+                54 of 66 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+              </span>
+            </dd>
+          </div>
+
+        <% when "R480" %>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Ofsted
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <a class="govuk-link govuk-link--no-visited-state" href="https://reports.ofsted.gov.uk/provider/41/70308"><%= @course.accrediting_provider.provider_name %> Ofsted rating and reports</a>
+          </dd>
+        </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Success rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                  Over 95%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+                192 of 200 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+              </span>
+            </dd>
+          </div>
+
+          <% when "H971" %>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Ofsted
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <a class="govuk-link govuk-link--no-visited-state" href="https://reports.ofsted.gov.uk/provider/41/70081"><%= @course.accrediting_provider.provider_name %> Ofsted rating and reports</a>
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Success rate
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <p class="govuk-body">
+                <strong class="govuk-tag govuk-tag--blue">
+                    100%
+                  </strong>
+                </p>
+                <span class="govuk-hint govuk-!-font-size-16">
+                 All 35 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+                </span>
+              </dd>
+            </div>
+
+        <% when "36P4" %>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Ofsted
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://reports.ofsted.gov.uk/provider/41/70049"><%= @course.accrediting_provider.provider_name %> Ofsted rating and reports</a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Success rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                  Under 80%
+                </strong>
+              </p>
+              <span class="govuk-hint govuk-!-font-size-16">
+                7 of 10 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+              </span>
+            </dd>
+          </div>
+
+        <% when "Y404" %>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Ofsted
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <a class="govuk-link govuk-link--no-visited-state" href="https://reports.ofsted.gov.uk/provider/41/70130"><%= @course.accrediting_provider.provider_name %> Ofsted rating and reports</a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Success rate
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <details class="govuk-details">
+                <summary class="govuk-details__summary">
+                  <span class="govuk-details__summary-text">
+                    No data yet - why?
+                  </span>
+                </summary>
+                <div class="govuk-details__text">
+                  We use data from 2022 to 2023 to calculate the success rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.
+                </div>
+              </details>
+            </dd>
+          </div>
+
+      <% end %>
+    </dl>
+
+     <h3 class="govuk-heading-m">
+     Contents
+    </h3>
+    <ul class="govuk-list app-list--dash course-contents">
+      <li><a class="govuk-link" href="#training-locations">Where you will train</a></li>
+        <%# if @course.salaried? %>
+          <!--<li><a class="govuk-link" href="#section-salary">Salary</a></li>-->
+        <%# end %>
+        <li>
+          <% if @course.salaried? %>
+            <a class="govuk-link" href="#section-financial-support">Salary and financial support</a>
+          <% else %>
+            <a class="govuk-link" href="#section-financial-support">Fees and financial support</a>
+          <% end %>
+        </li>
+        <li><a class="govuk-link" href="#section-about">About the course</a></li>
+        <% if @course.published_interview_process.present? %>
+          <li><a class="govuk-link" href="#section-interviews">Interview process</a></li>
+        <% end %>
+        <li><a class="govuk-link" href="#section-train-with-disabilities">Training with disabilities</a></li>
+      <li><a class="govuk-link" href="#section-advice">Support and advice</a></li>
+      <li><a class="govuk-link" href="#section-apply">Apply</a></li>
+    </ul>
+
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params), filters_view: @filters_view) %>
+
+    <%# if @course.salaried? %>
+      <%#= render partial: "find/courses/salary", locals: { course: @course } %>
+    <%# end %>
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+    <%# if @course.published_about_course.present? %>
+      <%#= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <%# end %>
 
-    <% if @course.published_interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
-    <% end %>
+     <%# if @course.published_interview_process.present? %>
+      <%#= render partial: "find/courses/interview_process", locals: { course: @course } %>
+     <%# end %>
 
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-m" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
 
-      <p class="govuk-body govuk-!-margin-bottom-8">
+      <p class="govuk-body">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
           find_training_with_disabilities_path(
@@ -78,16 +403,40 @@
       </p>
     <% end %>
 
-    <% if @course.teacher_degree_apprenticeship? %>
-      <%= render partial: "find/courses/tda_advice" %>
-    <% else %>
-      <%= render partial: "find/courses/advice", locals: { course: @course } %>
-    <% end %>
 
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+            <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+    <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <p class="govuk-body govuk-!-font-size-16">
+          <% case @course.course_code %>
+            <% when "E026" %>
+              <strong>12 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
+            <% when "R480" %>
+              <strong>164 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
+            <% when "H971" %>
+              <strong>41 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
+            <% when "36P4" %>
+              <strong>5 people</strong> have applied.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
+            <% when "Y404" %>
+              <strong>Be an early applicant</strong>.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
+        </p>
+      </div>
+    </div>
+
+  <br>
+  <%= render partial: "find/courses/advice", locals: { course: @course } %>
+
+
   </div>
 </div>

@@ -150,6 +150,10 @@ module Find
       new_or_running_sites_with_vacancies_for(course).count
     end
 
+    def study_sites_count(course)
+      course.study_sites.count
+    end
+
     def nearest_address(course)
       nearest_address = nearest_location(course)
 
@@ -172,15 +176,15 @@ module Find
         lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
       end
 
-      min_distance = distances.min
+      distances.min.ceil
+    end
 
-      if min_distance && min_distance < 0.05
-        min_distance.ceil(1)
-      elsif min_distance && min_distance < 1
-        min_distance.round(1)
-      else
-        min_distance.round(0)
+    def study_site_distance(course)
+      distances = course.study_sites.map do |site|
+        lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
       end
+
+      distances.min&.ceil
     end
 
     def with_salaries?

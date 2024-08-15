@@ -1269,8 +1269,8 @@ describe CourseDecorator do
       end
 
       it 'returns fee for uk citizens' do
-        expect(decorated_course.course_fee_content).to eq(
-          '<b>£100</b> for UK citizens<br>'
+        expect(decorated_course.course_fee_content_html).to eq(
+          'Fee - UK citizens <b>£100</b><br>'
         )
       end
     end
@@ -1285,8 +1285,8 @@ describe CourseDecorator do
       end
 
       it 'returns fee for uk and non citizens' do
-        expect(decorated_course.course_fee_content).to eq(
-          '<b>£100</b> for UK citizens<br><b>£200</b> for Non-UK citizens'
+        expect(decorated_course.course_fee_content_html).to eq(
+          'Fee - UK citizens <b>£100</b><br>Fee non-UK citizens <b>£200</b>'
         )
       end
     end

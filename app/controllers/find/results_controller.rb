@@ -7,6 +7,10 @@ module Find
 
     def index
       matched_params = MatchOldParams.call(request.query_parameters)
+                                     .merge(
+                                       keywords: request.query_parameters[:keywords],
+                                       **geocode_params_for(request.query_parameters[:lq])
+                                     )
 
       @search_params = matched_params
 
@@ -17,6 +21,17 @@ module Find
 
       track_search_results(number_of_results: @results_view.course_count,
                            course_codes: @results_view.courses.pluck(:course_code).uniq)
+    end
+
+    def count
+      matched_params = MatchOldParams.call(request.query_parameters)
+                                     .merge(
+                                       keywords: request.query_parameters[:keywords],
+                                       **geocode_params_for(request.query_parameters[:lq])
+                                     )
+
+      @filters_view = ResultFilters::FiltersView.new(params: matched_params)
+      @results_view = ResultsView.new(query_parameters: matched_params)
     end
 
     private
@@ -30,6 +45,37 @@ module Find
                            Referer: request.headers['Referer']
                          })
       Sentry.set_context('Query Parameters', request.query_parameters)
+    end
+
+    def geocode_params_for(query)
+      return {} if query.blank?
+
+      results = geocoder_result(query)
+      return {} unless results
+
+      {
+        l: '1',
+        latitude: results.latitude,
+        longitude: results.longitude,
+        loc: results.address,
+        lq: query,
+        c: country(results),
+        sortby: ResultsView::DISTANCE,
+        radius: request.query_parameters.fetch(:radius, ResultsView::MILES)
+      }
+    end
+
+    def geocoder_result(query)
+      Rails.cache.fetch("geocoder/#{query}", expires_in: 4.hours) do
+        Geocoder.search(query, components: 'country:UK').first
+      end
+    end
+
+    def country(results)
+      flattened_results = results.address_components.map(&:values).flatten
+      countries = [*DEVOLVED_NATIONS, 'England'].flatten
+
+      countries.each { |country| return country if flattened_results.include?(country) }
     end
   end
 end

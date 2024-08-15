@@ -1,7 +1,10 @@
+
+<!--
 <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__degree_required">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
     Degree grade accepted<span class="govuk-visually-hidden"> filter</span>
   </legend>
+
 
   <div class="govuk-radios govuk-radios--small">
     <%= form.govuk_radio_button :degree_required,
@@ -24,5 +27,51 @@
       label: { text: "Pass (Ordinary degree)" },
       data: { qa: "not_required" },
       checked: @filters_view.any_degree_grade_radio_chosen? %>
+      <%= form.govuk_radio_button :degree_required,
+      "not_required",
+      label: { text: "No degree required" },
+      data: { qa: "not_required" },
+      checked: @filters_view.any_degree_grade_radio_chosen? %>
   </div>
 </fieldset>
+-->
+
+  <fieldset class="govuk-fieldset app-filter__group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      <h1 class="govuk-fieldset__heading">
+        Minimum degree required
+      </h1>
+    </legend>
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="degree-required-1" name="degree-required" type="checkbox" value="hmrc">
+        <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-1">
+          2:1 or First
+        </label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="degree-required-2" name="degree-required" type="checkbox" value="employment-tribunal">
+        <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-2">
+          2:2
+        </label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="degree-required-3" name="degree-required" type="checkbox" value="MOD">
+        <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-3">
+          Third
+        </label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="degree-required-4" name="degree-required" type="checkbox" value="DfT">
+        <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-4">
+          Pass
+        </label>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="degree-required-5" name="degree-required" type="checkbox" value="DfT">
+        <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-5">
+          No degree required
+        </label>
+      </div>
+    </div>
+  </fieldset>
