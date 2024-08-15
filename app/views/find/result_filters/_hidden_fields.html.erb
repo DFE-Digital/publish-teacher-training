@@ -15,3 +15,7 @@
     <%= form.hidden_field(:subject_codes, multiple: true, value: subject_code) %>
   <% end %>
 <% end %>
+
+<% if params[:university_degree_status] %>
+  <%= form.hidden_field(:university_degree_status, value: params[:university_degree_status]) %>
+<% end %>

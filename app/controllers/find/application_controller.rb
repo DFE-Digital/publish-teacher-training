@@ -16,9 +16,21 @@ module Find
       @render_feedback_component = true
     end
 
+    def backlink_query_parameters
+      ResultsView.new(
+        query_parameters: request.query_parameters[form_name].presence || request.query_parameters
+      )
+                 .query_parameters_with_defaults
+                 .except(form_name)
+    end
+
     # DFE Analytics namespace
     def current_namespace
       'find'
+    end
+
+    def teacher_degree_apprenticeship_active?
+      Settings.current_recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
     end
 
     private

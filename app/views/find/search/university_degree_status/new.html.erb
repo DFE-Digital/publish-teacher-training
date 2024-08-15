@@ -1,0 +1,43 @@
+<%= content_for :page_title, title_with_error_prefix(t("find.university_degree_status_page.title"), @university_degree_status_form.errors.any?) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: back_path,
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @university_degree_status_form, url: find_university_degree_status_create_path, method: :get) do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <%= render Find::HiddenFieldsComponent.new(
+          query_params: request.query_parameters,
+          form: f,
+          form_name: :find_university_degree_status_form,
+          exclude_keys: ["university_degree_status"]
+        ) %>
+
+      <%= f.govuk_radio_buttons_fieldset :university_degree_status, legend: { size: "l", tag: "h1" } do %>
+        <p class="govuk-body">
+          <%= t("find.university_degree_status_page.content") %>
+        </p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t("find.get_into_teaching.train_to_be_a_teacher"),
+            t("find.get_into_teaching.url_train_to_be_a_teacher"),
+            target: "_blank",
+            rel: "noopener"
+          ) %>.
+        </p>
+        <%= f.govuk_radio_button :university_degree_status, "true", link_errors: true %>
+        <%= f.govuk_radio_button :university_degree_status, "false" %>
+      <% end %>
+
+      <%= f.govuk_submit t("continue") %>
+    <% end %>
+  </div>
+</div>

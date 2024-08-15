@@ -1,0 +1,33 @@
+<%= content_for :page_title, t("find.no_degree_and_requires_visa_sponsorship_page.title") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: back_path,
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= t("find.no_degree_and_requires_visa_sponsorship_page.title") %>.
+    </h1>
+
+    <p class="govuk-body">
+      <%= t("find.no_degree_and_requires_visa_sponsorship_page.content") %>
+    </p>
+
+    <p class="govuk-body">
+      <%= t(
+        "find.no_degree_and_requires_visa_sponsorship_page.explanation",
+        link: govuk_link_to(
+          t("find.get_into_teaching.undergraduate_degree_courses"),
+          t("find.get_into_teaching.url_ways_to_train_no_degree")
+        )
+      ).html_safe %>
+    </p>
+  </div>
+</div>

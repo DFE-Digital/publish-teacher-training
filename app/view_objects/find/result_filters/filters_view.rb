@@ -39,6 +39,14 @@ module Find
         params[:qualification].nil?
       end
 
+      def show_undergraduate_courses?
+        CourseTypeAnswerDeterminer.new(
+          age_group: params[:age_group],
+          university_degree_status: params[:university_degree_status],
+          visa_status: params[:visa_status]
+        ).show_undergraduate_courses?
+      end
+
       def location_query?
         params[:l] == '1'
       end

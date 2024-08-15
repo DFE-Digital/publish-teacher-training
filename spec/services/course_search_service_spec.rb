@@ -32,6 +32,7 @@ RSpec.describe CourseSearchService do
         ).and_return(course_with_includes)
 
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
+      allow(scope).to receive(:with_course_type).and_return(scope)
     end
 
     describe 'when no scope is passed' do
@@ -40,7 +41,6 @@ RSpec.describe CourseSearchService do
       let(:filter) { {} }
 
       it 'defaults to Course' do
-        expect(Course).to receive(:select).and_return(inner_query_scope)
         expect(course_with_includes).to receive(:where).and_return(expected_scope)
         expect(subject).to eq(expected_scope)
       end
@@ -320,6 +320,24 @@ RSpec.describe CourseSearchService do
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
 
+          expect(subject).to eq(expected_scope)
+        end
+      end
+
+      context 'when filter for undergraduate courses' do
+        let(:filter) do
+          {
+            age_group: 'secondary',
+            visa_status: 'false',
+            university_degree_status: 'false',
+            qualification: 'qts'
+          }.with_indifferent_access
+        end
+
+        it 'does add the with_qualifications scope' do
+          expect(scope).not_to receive(:with_qualifications)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
       end

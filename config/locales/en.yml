@@ -322,6 +322,8 @@ en:
         subject: Subject
       add_a_level_to_a_list:
         add_another_a_level: Do you want to add another A level?
+      find_university_degree_status_form:
+        university_degree_status: Do you have a university degree?
     label:
       what_a_level_is_required:
         other_subject: Subjects
@@ -357,6 +359,10 @@ en:
         accept_a_level_equivalency_options:
           "yes": "Yes"
           "no": "No"
+      find_university_degree_status_form:
+        university_degree_status_options:
+          "true": "Yes, I have a degree or am studying for one"
+          "false": "No, I do not have a degree"
   course:
     application_status:
       open: "Course opened"
