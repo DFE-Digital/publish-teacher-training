@@ -23,6 +23,12 @@ initAutocomplete({
   path: '/location-suggestions'
 })
 
+initAutocomplete({
+  element: 'location-autocomplete',
+  input: 'pre_filter_lq',
+  path: '/location-suggestions'
+})
+
 const filterToggleButton = new FilterToggleButton({
   bigModeMediaQuery: '(min-width: 48.063em)',
   startHidden: false,
