@@ -1,39 +1,115 @@
-<%= content_for :page_title, Find::ResultSummaryService.call(results: @results_view) %>
-
-<%= render Find::LocationSubjectFilterComponent.new(results: @results_view) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back to home",
+    href: find_root_path(@results_filter_query_parameters),
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
 
 <h1 class="govuk-heading-xl" data-qa="heading">
-  <%= "#{@number_of_courses_string} found" %>
+  <%= "#{results.number_of_courses_string} found" %>
 </h1>
-
-<div class="app-filter-toggle"></div>
 
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <%= render Find::Results::FilterComponent.new(results: @results_view) %>
+    <%= render Find::Results::FilterComponent.new(results:) %>
   </div>
   <div class="app-filter-layout__content">
 
+  <!--Not sure which course is right for you-->
+  <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section govuk-accordion__section--git">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+          Not sure which course is right for you?
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+      <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course" class="govuk-link">Find out how to choose a course</a></p>
+      <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+      <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+      </div>
+    </div>
+  </div>
+  <!--End Not sure which course is right for you-->
+
     <div class="app-promoted-link">
-      <%= govuk_link_to "Talk to teacher training providers at an event near you",
-                        t("find.get_into_teaching.url_teacher_training_events") %>.
+      <%= form_with(url: '/', method: :get) do |form| %>
+        <div class="govuk-form-group">
+          <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
+            Keyword
+          <% end %>
+          <%= form.text_field :keywords, class: "govuk-input", value: filters_view.keywords, autocomplete: :off, form: "result-filters" %>
+        </div>
+
+        <div class="govuk-form-group" style="position: relative;">
+          <%= form.label :lq, class: "govuk-label govuk-label--s" do %>
+            City, town or postcode
+          <% end %>
+
+          <%= form.text_field :lq, id: :location, class: "govuk-input", value: filters_view.lq, autocomplete: :off, form: "result-filters" %>
+          <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
+        </div>
+
+          <div class="govuk-form-group">
+            <%= form.label :radius, class: "govuk-label govuk-label--s" do %>
+              Search radius
+            <% end %>
+
+            <%= form.select :radius, options_for_select(filters_view.radius_options_for_select, filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
+          </div>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button" form="result-filters" style="margin-bottom:5px;">
+          Search
+        </button>
+
+      <% end %>
+
     </div>
 
-    <%= render Find::Results::NoResultsComponent.new(results: @results_view) %>
-    <%= render Find::Results::SortByComponent.new(results: @results_view) %>
+      <div class="app-filter-toggle div-sticky"></div>
 
-    <% if @results_view.has_results? %>
+    <%= render Find::Results::NoResultsComponent.new(results:, filters_view: @filters_view) %>
+
+    <%= render Find::Results::SortByComponent.new(results:) %>
+
+    <% if results.has_results? %>
       <ul class="app-search-results">
-        <% @courses.each do |course| %>
+        <% courses.each do |course| %>
           <%= render Find::Results::SearchResultComponent.new(
             course:,
-            filtered_by_location: @results_view.location_filter?,
-            results_view: @results_view
+            filtered_by_location: results.location_filter?,
+            sites_count: results.sites_count(course),
+            study_sites_count: results.study_sites_count(course),
           ) %>
         <% end %>
       </ul>
     <% end %>
 
+    <!--Not sure which course is right for you-->
+    <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+      <div class="govuk-accordion__section govuk-accordion__section--git">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+            Not sure which course is right for you?
+            </span>
+          </h2>
+        </div>
+        <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+        <p class="govuk-body"><a href="#" class="govuk-link">Find out how to choose a course</a></p>
+        <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+        <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+        </div>
+      </div>
+    </div>
+    <!--End Not sure which course is right for you-->
+
     <%= govuk_pagination(pagy: @pagy) %>
+
   </div>
 </div>
