@@ -2,4 +2,4 @@ js: yarn build:js --watch
 css: yarn build:css --watch
 web: bin/rails server -p 3001
 worker: bundle exec sidekiq -t 25 -C config/sidekiq.yml
-caddy: caddy run -c Caddyfile
+caddy: caddy run -c Caddyfile.dev -a caddyfile

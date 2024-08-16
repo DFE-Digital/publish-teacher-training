@@ -1,0 +1,7 @@
+publish.localhost {
+	reverse_proxy localhost:3001
+}
+
+find.localhost {
+	reverse_proxy localhost:3001
+}
