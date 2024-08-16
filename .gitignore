@@ -46,7 +46,6 @@ terraform/aks/vendor/
 *.swp
 
 /.vscode/*
-/.devcontainer/*
 /.idea/*
 
 # Ignore sanitised production data dump

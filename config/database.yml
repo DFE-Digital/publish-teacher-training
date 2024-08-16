@@ -1,20 +1,18 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch('DATABASE_CONNECTION_POOL_SIZE', ENV.fetch('RAILS_MAX_THREADS', 5)) %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  host: <%= ENV['DB_HOSTNAME'] %>
-  port: <%= ENV['DB_PORT'] %>
-  database: <%= ENV['DB_DATABASE'] %>
-  keepalives: 1
-  keepalives_idle: 60
-  keepalives_interval: 10
-  keepalives_count: 3
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  <% if ENV["DB_HOST"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: postgres
+  password: postgres
+  <% end %>
 
 development:
   <<: *default
-  database: <%= ENV.fetch('DB_DATABASE', 'manage_courses_backend_development') %>
+  database: manage_courses_backend_development
 
 test:
   <<: *default
