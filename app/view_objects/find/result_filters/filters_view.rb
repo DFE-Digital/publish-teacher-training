@@ -25,6 +25,10 @@ module Find
         params[:lq]
       end
 
+      def loc
+        params[:loc]
+      end
+
       def qts_only_checked?
         checked?('qts')
       end

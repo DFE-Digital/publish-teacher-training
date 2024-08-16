@@ -38,7 +38,7 @@ module Find
         return {} unless results
 
         {
-          l: 1,
+          l: "1",
           latitude: results.latitude,
           longitude: results.longitude,
           loc: results.address,

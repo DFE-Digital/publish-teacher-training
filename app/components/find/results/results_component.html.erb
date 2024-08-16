@@ -38,7 +38,6 @@
           <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
         </div>
 
-        <% if filters_view.location_query? %>
           <div class="govuk-form-group">
             <%= form.label :radius, class: "govuk-label govuk-label--s" do %>
               Search radius
@@ -46,7 +45,6 @@
 
             <%= form.select :radius, options_for_select(filters_view.radius_options_for_select, filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
           </div>
-        <% end %>
 
         <button type="submit" class="govuk-button" data-module="govuk-button" form="result-filters" style="margin-bottom:5px;">
           Search
