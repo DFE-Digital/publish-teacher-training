@@ -40,7 +40,7 @@ module Find
         lq: query,
         c: country(results),
         sortby: ResultsView::DISTANCE,
-        radius: ResultsView::MILES
+        radius: request.query_parameters.fetch(:radius, ResultsView::MILES)
       }
     end
 
