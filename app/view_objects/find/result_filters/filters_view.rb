@@ -17,6 +17,14 @@ module Find
         params[:radius]
       end
 
+      def keywords
+        params[:keywords]
+      end
+
+      def lq
+        params[:lq]
+      end
+
       def qts_only_checked?
         checked?('qts')
       end
