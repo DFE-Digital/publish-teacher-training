@@ -10,8 +10,8 @@ module Find
           has_vacancies: true,
           applications_open: true,
           keywords: params.dig(:pre_filter, :keywords),
+          lq: params.dig(:pre_filter, :lq),
           can_sponsor_visa: ActiveModel::Type::Boolean.new.cast(params.dig(:pre_filter, :can_sponsor_visa)),
-          **geocode_params_for(params.dig(:pre_filter, :lq))
         )
       end
 
@@ -29,31 +29,6 @@ module Find
 
       def further_education_courses_path
         find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'FurtherEducationSubject').pluck(:subject_code))
-      end
-
-      def geocode_params_for(query)
-        return {} if query.blank?
-
-        results = Geocoder.search(query, components: 'country:UK').first
-        return {} unless results
-
-        {
-          l: "1",
-          latitude: results.latitude,
-          longitude: results.longitude,
-          loc: results.address,
-          lq: query,
-          c: country(results),
-          sortby: ResultsView::DISTANCE,
-          radius: ResultsView::MILES
-        }
-      end
-
-      def country(results)
-        flattened_results = results.address_components.map(&:values).flatten
-        countries = [*DEVOLVED_NATIONS, 'England'].flatten
-
-        countries.each { |country| return country if flattened_results.include?(country) }
       end
     end
   end
