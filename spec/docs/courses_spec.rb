@@ -73,6 +73,7 @@ describe 'API', :with_publish_constraint do
 
         before do
           create(:course, :engineers_teach_physics, course_code: 'C100')
+          allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
         end
 
         schema({ '$ref': '#/components/schemas/CourseListResponse' })

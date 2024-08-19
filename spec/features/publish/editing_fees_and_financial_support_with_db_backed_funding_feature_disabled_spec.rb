@@ -1,10 +1,13 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/publish/editing_fees_and_financial_support_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
 
 feature 'Editing fees and financial support section' do
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   scenario 'adding valid data' do

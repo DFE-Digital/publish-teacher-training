@@ -369,7 +369,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
-  context 'when course is salaried and can sponsor skilled worker visas' do
+  context 'when course is salaried, the db_backed_funding_type feature flag is inactive and can sponsor skilled worker visas' do
     let(:course) do
       build(
         :course,
@@ -380,6 +380,23 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
 
     it 'displays that skilled worker visas can be sponsored' do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      expect(result.text).to include('Skilled Worker visas can be sponsored')
+    end
+  end
+
+  context 'when course is salaried, the db_backed_funding_type feature flag is active and can sponsor skilled worker visas' do
+    let(:course) do
+      build(
+        :course,
+        :with_salary,
+        can_sponsor_skilled_worker_visa: true,
+        provider: build(:provider)
+      )
+    end
+
+    it 'displays that skilled worker visas can be sponsored' do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
       expect(result.text).to include('Skilled Worker visas can be sponsored')
     end
   end

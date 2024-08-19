@@ -65,8 +65,76 @@ RSpec.describe Publish::Courses::OutcomeController do
     end
   end
 
-  describe '#update' do
+  describe '#update (with db_backed_funding_type feature inactive)' do
     context 'when changing from a QTS to teacher degree apprenticeship course' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      end
+
+      it 'assigns teacher degree apprenticeship course defaults' do
+        course = create(
+          :course,
+          :resulting_in_qts,
+          provider:,
+          study_mode: :part_time,
+          site_statuses: [build(:site_status, :part_time_vacancies, :findable)]
+        )
+        create(:course_enrichment, :initial_draft, course_length: :TwoYears, course:)
+
+        put :update, params: {
+          course: { qualification: 'undergraduate_degree_with_qts' },
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          code: course.course_code
+        }
+
+        course.reload
+
+        expect(course.funding_type).to eq('apprenticeship')
+        expect(course.can_sponsor_skilled_worker_visa).to be(false)
+        expect(course.can_sponsor_student_visa).to be(false)
+        expect(course.additional_degree_subject_requirements).to be(false)
+        expect(course.degree_subject_requirements).to be_nil
+        expect(course.degree_grade).to eq('not_required')
+        expect(course.study_mode).to eq('full_time')
+        expect(course.site_statuses.map(&:vac_status).uniq.first).to eq('full_time_vacancies')
+        expect(course.enrichments.max_by(&:created_at).course_length).to eq('4 years')
+      end
+    end
+
+    context 'when changing from teacher degree apprenticeship to a QTS course' do
+      it 'clear teacher degree specific defaults' do
+        course = create(
+          :course,
+          :with_teacher_degree_apprenticeship,
+          :resulting_in_undergraduate_degree_with_qts,
+          :with_a_level_requirements,
+          provider:
+        )
+
+        put :update, params: {
+          course: { qualification: 'qts' },
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+          code: course.course_code
+        }
+
+        course.reload
+
+        expect(course.a_level_subject_requirements).to eq([])
+        expect(course.accept_a_level_equivalency).to be_nil
+        expect(course.accept_pending_a_level).to be_nil
+        expect(course.additional_a_level_equivalencies).to be_nil
+      end
+    end
+  end
+
+  describe '#update (with db_backed_funding_type feature active)' do
+    context 'when changing from a QTS to teacher degree apprenticeship course' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+      end
+
       it 'assigns teacher degree apprenticeship course defaults' do
         course = create(
           :course,

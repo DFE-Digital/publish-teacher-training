@@ -133,10 +133,39 @@ describe Courses::AssignSubjectsService do
     end
   end
 
-  context 'further_education course' do
+  context 'further_education course (with db_backed_funding_type feature inactive)' do
     let(:subject_ids) { nil }
     let(:course) { Course.new(level: :further_education, provider: Provider.new) }
     let(:further_education_subject) { find_or_create(:further_education_subject) }
+
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
+    it 'sets the subjects' do
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])
+    end
+
+    it 'sets the name' do
+      expect(subject.name).to eq('Further education')
+    end
+
+    it 'sets further_education_fields' do
+      expect(subject.funding_type).to eq('fee')
+      expect(subject.english).to eq('not_required')
+      expect(subject.maths).to eq('not_required')
+      expect(subject.science).to eq('not_required')
+    end
+  end
+
+  context 'further_education course (with db_backed_funding_type feature active)' do
+    let(:subject_ids) { nil }
+    let(:course) { Course.new(level: :further_education, provider: Provider.new) }
+    let(:further_education_subject) { find_or_create(:further_education_subject) }
+
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    end
 
     it 'sets the subjects' do
       expect(subject.course_subjects.map { _1.subject.id }).to eq([further_education_subject.id])

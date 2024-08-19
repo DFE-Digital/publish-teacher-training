@@ -536,7 +536,11 @@ class Course < ApplicationRecord
   delegate :funding_type, :visa_type, :fee_based?, :student_visa?, to: :program
 
   def funding_type
-    FeatureService.enabled?(:db_backed_funding_type) ? funding : program.funding_type
+    if FeatureService.enabled?(:db_backed_funding_type)
+      not_set? ? program.funding_type : funding
+    else
+      program.funding_type
+    end
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent

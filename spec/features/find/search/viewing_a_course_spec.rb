@@ -11,9 +11,10 @@ feature 'Viewing a findable course' do
     FeatureFlag.activate(:bursaries_and_scholarships_announced)
   end
 
-  context 'a course with international fees' do
+  context 'a course with international fees and the db_backed_funding_type feature flag is inactive' do
     before do
       given_there_is_a_findable_course
+      and_the_db_backed_funding_type_feature_flag_is_disabled
     end
 
     scenario 'course page shows correct course information' do
@@ -61,9 +62,70 @@ feature 'Viewing a findable course' do
     end
   end
 
-  context 'a course with no international fees' do
+  context 'a course with international fees and the db_backed_funding_type feature flag is active' do
+    before do
+      given_there_is_a_findable_course
+      and_the_db_backed_funding_type_feature_flag_is_enabled
+    end
+
+    scenario 'course page shows correct course information' do
+      Timecop.freeze(Find::CycleTimetable.apply_deadline - 1.hour) do
+        when_i_visit_the_course_page
+        then_i_should_see_the_course_information
+      end
+    end
+
+    context 'end of cycle' do
+      before do
+        Timecop.freeze(Find::CycleTimetable.apply_deadline + 1.hour)
+
+        when_i_visit_the_course_page
+      end
+
+      after do
+        Timecop.return
+      end
+
+      scenario "does not display the 'apply for this course' button" do
+        then_i_should_not_see_the_apply_button
+      end
+
+      scenario 'renders the deadline banner' do
+        then_i_should_see_the_deadline_banner
+      end
+    end
+
+    context 'showing the back button' do
+      context 'when navigating directly to the course' do
+        scenario 'it does not display the back link' do
+          when_i_visit_the_course_page
+          then_i_should_not_see_the_back_link
+        end
+      end
+
+      context 'when navigating to the course from the search results page' do
+        scenario 'it displays the back link' do
+          set_referrer
+          when_i_visit_the_course_page
+          then_i_should_see_the_back_link
+        end
+      end
+    end
+  end
+
+  context 'a course with no international fees and the db_backed_funding_feature is inactive' do
     scenario 'it only displays UK fees' do
       given_there_is_a_findable_course_with_no_international_fees
+      and_the_db_backed_funding_type_feature_flag_is_disabled
+      when_i_visit_the_course_page
+      then_i_should_only_see_the_uk_fees
+    end
+  end
+
+  context 'a course with no international fees and the db_backed_funding feature is active' do
+    scenario 'it only displays UK fees' do
+      given_there_is_a_findable_course_with_no_international_fees
+      and_the_db_backed_funding_type_feature_flag_is_enabled
       when_i_visit_the_course_page
       then_i_should_only_see_the_uk_fees
     end
@@ -437,5 +499,13 @@ feature 'Viewing a findable course' do
       "Contact #{course.provider_name}",
       href: find_provider_path(@course.provider_code, @course.course_code)
     )
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_enabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
   end
 end

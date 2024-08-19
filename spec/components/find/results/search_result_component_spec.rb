@@ -26,7 +26,31 @@ module Find
       end
     end
 
-    context 'when the provider specifies skilled worker visa sponsorship' do
+    context 'when the provider specifies skilled worker visa sponsorship and the db_backed_funding_type feature is inactive' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      end
+
+      it 'renders correct message when only one kind of visa is sponsored' do
+        course = build(
+          :course,
+          funding_type: 'salary',
+          can_sponsor_student_visa: false,
+          can_sponsor_skilled_worker_visa: true
+        )
+        result = render_inline(described_class.new(course:))
+
+        expect(result.text).to include(
+          'Skilled Worker visas can be sponsored'
+        )
+      end
+    end
+
+    context 'when the provider specifies skilled worker visa sponsorship is active and the db_backed_funding_type feature is active' do
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+      end
+
       it 'renders correct message when only one kind of visa is sponsored' do
         course = build(
           :course,

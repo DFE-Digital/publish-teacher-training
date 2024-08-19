@@ -12,7 +12,41 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     then_i_see_the_course_basic_details
   end
 
-  describe 'with a fee paying course' do
+  describe 'with a fee paying course, with db_backed_funding_type disabled' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+    end
+
+    context 'bursaries and scholarships is announced' do
+      before do
+        FeatureFlag.activate(:bursaries_and_scholarships_announced)
+      end
+
+      scenario 'i can view a fee course' do
+        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
+        when_i_visit_the_course_page
+        then_i_should_see_the_description_of_the_fee_course
+        and_i_should_see_the_course_financial_incentives
+        and_i_should_see_the_course_button_panel
+      end
+    end
+
+    context 'bursaries and scholarships is not announced' do
+      scenario 'i can view a fee course' do
+        given_i_am_authenticated_as_a_provider_user(course: course_with_financial_incentive)
+        when_i_visit_the_course_page
+        then_i_should_see_the_description_of_the_fee_course
+        and_i_should_see_the_course_has_no_financial_incentives_information
+        and_i_should_see_the_course_button_panel
+      end
+    end
+  end
+
+  describe 'with a fee paying course, with db_backed_funding_type enabled' do
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    end
+
     context 'bursaries and scholarships is announced' do
       before do
         FeatureFlag.activate(:bursaries_and_scholarships_announced)

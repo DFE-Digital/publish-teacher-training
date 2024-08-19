@@ -1,3 +1,6 @@
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/publish/courses/editing_course_outcome_spec.rb
+
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -36,7 +39,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     scenario 'changing the outcome from non TDA to TDA' do
       given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
       and_the_tda_feature_flag_is_active
-      and_the_db_backed_funding_type_feature_flag_is_enabled
+      and_the_db_backed_funding_type_feature_flag_is_disabled
       and_there_is_a_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page_in_the_next_cycle
       and_i_choose_undergraduate_degree_with_qts
@@ -49,7 +52,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
       scenario 'changing the outcome from TDA to non TDA' do
         given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
         and_the_tda_feature_flag_is_active
-        and_the_db_backed_funding_type_feature_flag_is_enabled
+        and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
         and_the_course_type_is_undergraduate
@@ -79,7 +82,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
       scenario 'changing the outcome from TDA to non TDA' do
         given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
         and_the_tda_feature_flag_is_active
-        and_the_db_backed_funding_type_feature_flag_is_enabled
+        and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
         and_the_course_type_is_undergraduate
@@ -312,8 +315,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
                                       ))
   end
 
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa
