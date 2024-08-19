@@ -438,7 +438,7 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.25.0)
+    minitest (5.25.1)
     mock_redis (0.44.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -694,7 +694,7 @@ GEM
       sentry-ruby (~> 5.19.0)
       sidekiq (>= 3.0)
     shellany (0.0.1)
-    shoulda-matchers (6.3.1)
+    shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
     sidekiq (6.5.12)
       connection_pool (>= 2.2.5, < 3)
@@ -881,7 +881,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   sentry-sidekiq
-  shoulda-matchers (~> 6.3)
+  shoulda-matchers (~> 6.4)
   sidekiq
   sidekiq-cron
   simplecov (< 0.23)
