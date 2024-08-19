@@ -109,6 +109,7 @@ shared:
     - created_at
     - updated_at
   provider:
+    - selectable_school
     - id
     - address4
     - provider_name
