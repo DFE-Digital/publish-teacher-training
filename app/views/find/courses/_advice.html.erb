@@ -1,17 +1,31 @@
 <div id="section-advice-and-support">
   <h2 class="govuk-heading-m" id="section-advice"><%= t(".heading") %></h2>
   <span class="govuk-body">
-    <%= t(
-          ".body_html",
-          teacher_training_advisor_link: govuk_link_to(
-            t(".get_a_teacher_training_advisor_link_text"),
-            find_get_into_teaching_redirect_path(
-              @course.provider_code,
-              @course.course_code,
-              "teacher_training_advisers"
-            )
-          ),
-          contact_git_link:
+    <% if course.postgraduate_course_type? %>
+      <%= t(
+            ".postgraduate.body_html",
+            teacher_training_advisor_link: govuk_link_to(
+              t(".get_a_teacher_training_advisor_link_text"),
+              find_get_into_teaching_redirect_path(
+                @course.provider_code,
+                @course.course_code,
+                "teacher_training_advisers"
+              )
+            ),
+            contact_git_link:
+              govuk_link_to(
+                t(".contact_get_into_teaching_link_text"),
+                find_get_into_teaching_redirect_path(
+                  @course.provider_code,
+                  @course.course_code,
+                  "help_and_support"
+                )
+              )
+          ) %>
+    <% else %>
+      <%= t(
+            ".undergraduate.body_html",
+            contact_git_link:
             govuk_link_to(
               t(".contact_get_into_teaching_link_text"),
               find_get_into_teaching_redirect_path(
@@ -20,6 +34,7 @@
                 "help_and_support"
               )
             )
-        ) %>
+          ) %>
+    <% end %>
   </span>
 </div>
