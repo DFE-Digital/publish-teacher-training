@@ -35,6 +35,7 @@ FactoryBot.define do
     can_sponsor_student_visa { [true, false].sample }
     can_sponsor_skilled_worker_visa { [true, false].sample }
     synonyms { Faker::Lorem.words(number: 0..3) }
+    selectable_school { true }
 
     trait :with_name do
       provider_name { 'Test Name' }

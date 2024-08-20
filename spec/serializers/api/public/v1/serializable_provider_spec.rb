@@ -15,6 +15,7 @@ describe API::Public::V1::SerializableProvider do
   it { is_expected.to have_type 'providers' }
 
   it { is_expected.to have_attribute(:postcode).with_value(provider.postcode) }
+  it { is_expected.to have_attribute(:selectable_school).with_value(provider.selectable_school) }
   it { is_expected.to have_attribute(:provider_type).with_value(provider.provider_type) }
   it { is_expected.to have_attribute(:region_code).with_value(provider.region_code) }
   it { is_expected.to have_attribute(:train_with_disability).with_value(provider.train_with_disability) }
