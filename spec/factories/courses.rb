@@ -263,6 +263,7 @@ FactoryBot.define do
     trait :published_teacher_degree_apprenticeship do
       open
       published
+      undergraduate
       with_full_time_sites
       with_teacher_degree_apprenticeship
       resulting_in_undergraduate_degree_with_qts
