@@ -1,0 +1,7 @@
+#!/bin/env bash
+
+docker build --target middleman -t publish-docs .
+mkdir -p public/docs
+container_id=$(docker create publish-docs)
+docker cp $container_id:/public/. public/docs
+docker rm $container_id
