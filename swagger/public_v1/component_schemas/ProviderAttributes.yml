@@ -150,3 +150,8 @@ properties:
     example: "2023-07-18T15:23:15Z"
     format: date-time
     nullable: true
+  selectable_school:
+    type: boolean
+    description: "Can candidates choose their placement school"
+    example: true
+    nullable: false
