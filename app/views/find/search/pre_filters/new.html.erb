@@ -24,30 +24,17 @@
               <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
             </div>
 
-
             <div class="find-item govuk-!-width-full">
-              <details class="govuk-details visa-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text">
-                    Visa sponsorship
-                  </span>
-                </summary>
-                <div style="margin-top:10px; margin-bottom:10px;">
-                  <fieldset class="govuk-fieldset">
-                    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                      <div class="govuk-checkboxes__item">
-                        <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                        <%= form.label :can_sponsor_visa, class: "govuk-label govuk-checkboxes__label" do %>
-                          Only show courses that offer visa sponsorship
-                        <% end %>
-                      </div>
-                    </div>
-                  </fieldset>
+            <fieldset class="govuk-fieldset">
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="organisation" name="organisation" type="checkbox" value="hmrc">
+                    <label class="govuk-label govuk-checkboxes__label" for="organisation">
+                      Only show courses that offer visa sponsorship
+                    </label>
+                  </div>
                 </div>
-                Learn more about
-                <a href="https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student" class="govuk-link govuk-link--no-visited-state">training
-                  to teach in England as an non-UK citizen</a>.
-              </details>
+              </fieldset>
             </div>
 
           </div><!--END input container-->
@@ -64,75 +51,96 @@
 </div><!--END search container-->
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third age-group">
-    <p class="govuk-heading-m">
-      Primary
-      <br>
-      <span class="govuk-body-s">
-          Ages 5 to 11
+      <div class="govuk-grid-column-one-third age-group">
+      <p class="govuk-heading-m">
+        Primary
+        <br>
+        <span class="govuk-body-s">
+          Teach ages 5 to 11
+      </span>
+      </p>
+      <span class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="https://find-teacher-training-courses.service.gov.uk/results?age_group=primary&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&visa_status=false">
+          Browse all primary courses
+        </a>
+      </span>
+  </div><!--END three cols-->
+    <div class="govuk-grid-column-one-third age-group">
+      <p class="govuk-heading-m">
+        Secondary
+        <br>
+        <span class="govuk-body-s">
+          Teach ages 11 to 18
         </span>
-    </p>
-    <span class="govuk-body">
-      <%= link_to "View all primary courses", primary_courses_path, class: "govuk-link govuk-link--no-visited-state" %>
-    </span>
-  </div><!--END col full-->
-  <div class="govuk-grid-column-one-third age-group">
-    <p class="govuk-heading-m">
-      Secondary
-      <br>
-      <span class="govuk-body-s">
-          Ages 11 to 16
-        </span>
-    </p>
-    <span class="govuk-body">
-      <%= link_to "Browse all secondary subjects", secondary_courses_path, class: "govuk-link govuk-link--no-visited-state" %>
+      </p>
+      <span class="govuk-body">
+      <a type="submit" class="govuk-link govuk-link--no-visited-state" data-module="govuk-button" href="subject" style="margin-bottom:0;">
+        Browse courses by subject
+      </a>
       </span>
-  </div><!--END col full-->
-  <div class="govuk-grid-column-one-third age-group">
-    <p class="govuk-heading-m">
-      Further education
-      <br>
-      <span class="govuk-body-s">
-          Over 16 and not studying for a degree
+    </div><!--END col full-->
+    <div class="govuk-grid-column-one-third age-group">
+      <p class="govuk-heading-m">
+        Further education
+        <br>
+        <span class="govuk-body-s">
+          Teach over 16s not studying for a degree
       </span>
-    </p>
-
-    <span class="govuk-body">
-      <%= link_to "View all further education courses", further_education_courses_path, class: "govuk-link govuk-link--no-visited-state" %>
+      </p>
+      <span class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="https://find-teacher-training-courses.service.gov.uk/results?age_group=further_education&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce&qualification%5B%5D=pgde&qualification%5B%5D=pgde_with_qts&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&study_type%5B%5D=full_time_or_part_time&subjects%5B%5D=41&visa_status=false">
+          Browse all further education courses
+        </a>
       </span>
-
   </div><!--END three cols-->
 </div><!--END grid row-->
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-full tda">
+      <p class="govuk-heading-m">
+        Teacher degree apprenticeships (TDA)
+        <br>
+        <span class="govuk-body">
+          Teach primary or secondary if you do not have a degree and are not studying for one.
+        </span>
+      </p>
+      <span class="govuk-body">
+        <a class="govuk-link govuk-link--no-visited-state" href="#">
+          Browse teacher degree apprenticeship courses
+        </a>
+      </span>
+    </div><!--END col full-->
+  </div><!--END grid row-->
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
 
     <div class="govuk-notification-banner govuk-notification-banner--pink" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-        <h3 class="govuk-heading-m">
-          Is teacher training right for me?<br>
-          <span class="govuk-body">
-          Choosing or changing a career can be a big decision.
-        </span>
-        </h3>
-        <div class="govuk-grid-row govuk-notification-banner__content--home">
-          <div class="govuk-grid-column-one-half">
-            <div class="banner-inset-white banner-inset-white--first-child">
-            <span class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/is-teaching-right-for-me">Find out if teaching is right for you</a>
-            </span>
-            </div>
-          </div>
-          <div class="govuk-grid-column-one-half">
-            <div class="banner-inset-white">
-            <span class="govuk-body">
-              <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/help-and-support">Contact Get Into Teaching for free support</a>
-            </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey-home">
+      <h3 class="govuk-heading-m">
+        How to become a teacher<br>
+      </h3>
+      <p class="govuk-body">
+      Check your qualifications, what funding is available and how to apply.
+      <a href="https://getintoteaching.education.gov.uk/steps-to-become-a-teacher">Find out how to become a teacher</a>
+    </p>
     </div>
   </div>
+
+  </div>
+  <div class="govuk-grid-column-one-half">
+
+     <div class="govuk-notification-banner govuk-notification-banner--pink" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey-home">
+      <h3 class="govuk-heading-m">
+       Get help and support<br>
+      </h3>
+      <span class="govuk-body">
+      If you're thinking about teaching or are ready to apply, <a href="https://getintoteaching.education.gov.uk/help-and-support">contact Get Into Teaching</a> for free support.
+    </span>
+    </div>
+
+  </div>
+</div>
+
 </div>

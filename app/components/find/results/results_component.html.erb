@@ -10,11 +10,6 @@
   </div>
   <div class="app-filter-layout__content">
 
-    <div class="app-promoted-link">
-      <%= govuk_link_to "Talk to teacher training providers at an event near you",
-                        t("find.get_into_teaching.url_teacher_training_events") %>.
-    </div>
-
     <%= render Find::Results::NoResultsComponent.new(results:) %>
 
     <div class="app-promoted-link">
