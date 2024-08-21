@@ -179,7 +179,7 @@ RSpec.describe API::Public::V1::CoursesController do
         let(:sort_attribute) { 'name,provider.provider_name' }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(APICourseSearchService).to receive(:call).and_return(Course.all)
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
@@ -187,8 +187,8 @@ RSpec.describe API::Public::V1::CoursesController do
           }
         end
 
-        it 'delegates to the CourseSearchService' do
-          expect(CourseSearchService).to have_received(:call).with(
+        it 'delegates to the APICourseSearchService' do
+          expect(APICourseSearchService).to have_received(:call).with(
             hash_including(sort: sort_attribute)
           )
         end
@@ -199,7 +199,7 @@ RSpec.describe API::Public::V1::CoursesController do
           before do
             provider.courses << build(:course, provider:)
 
-            allow(CourseSearchService).to receive(:call).and_return(Course.all)
+            allow(APICourseSearchService).to receive(:call).and_return(Course.all)
 
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
@@ -209,8 +209,8 @@ RSpec.describe API::Public::V1::CoursesController do
             }
           end
 
-          it 'delegates to the CourseSearchService' do
-            expect(CourseSearchService).to have_received(:call).with(
+          it 'delegates to the APICourseSearchService' do
+            expect(APICourseSearchService).to have_received(:call).with(
               hash_including(filter: ActionController::Parameters.new(funding_type: 'salary'))
             )
           end
@@ -232,6 +232,25 @@ RSpec.describe API::Public::V1::CoursesController do
             expect(response).to have_http_status(:bad_request)
             expect(json_response['message']).to eq('Invalid changed_since value, the format should be an ISO8601 UTC timestamp, for example: `2019-01-01T12:01:00Z`')
           end
+        end
+      end
+
+      context 'no duplication response' do
+        before do
+          course = create(:course, :with_full_time_sites, provider:)
+          create(:course_enrichment, :initial_draft, course:)
+          create(:course_enrichment, :published, course:)
+          create(:course_enrichment, :subsequent_draft, course:)
+
+          provider.courses << course
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year
+          }
+        end
+
+        it 'returns correct number of courses' do
+          expect(json_response['data'].size).to be(3)
         end
       end
 

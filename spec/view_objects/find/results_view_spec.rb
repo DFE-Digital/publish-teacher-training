@@ -135,12 +135,12 @@ module Find
 
       context 'sortby is not set in query_parameters' do
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(WebCourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it 'delegates to the CourseSearchService with sort set to course_ascending' do
+        it 'delegates to the WebCourseSearchService with sort set to course_ascending' do
           subject
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(WebCourseSearchService).to have_received(:call).with(
             hash_including(filter: query_parameters, sort: course_ascending)
           )
         end
@@ -150,12 +150,12 @@ module Find
         let(:query_parameters) { { sortby: 'course_asc' } }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(WebCourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it 'delegates to the CourseSearchService with sort set to course_ascending' do
+        it 'delegates to the WebCourseSearchService with sort set to course_ascending' do
           subject
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(WebCourseSearchService).to have_received(:call).with(
             hash_including(filter: query_parameters, sort: course_ascending)
           )
         end
@@ -165,12 +165,12 @@ module Find
         let(:query_parameters) { { sortby: 'course_desc' } }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(WebCourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it 'delegates to the CourseSearchService with sort set to course_descending' do
+        it 'delegates to the WebCourseSearchService with sort set to course_descending' do
           subject
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(WebCourseSearchService).to have_received(:call).with(
             hash_including(filter: query_parameters, sort: course_descending)
           )
         end
@@ -180,12 +180,12 @@ module Find
         let(:query_parameters) { { sortby: 'provider_asc' } }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(WebCourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it 'delegates to the CourseSearchService with sort set to provider_ascending' do
+        it 'delegates to the WebCourseSearchService with sort set to provider_ascending' do
           subject
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(WebCourseSearchService).to have_received(:call).with(
             hash_including(filter: query_parameters, sort: provider_ascending)
           )
         end
@@ -195,12 +195,12 @@ module Find
         let(:query_parameters) { { sortby: 'provider_desc' } }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(WebCourseSearchService).to receive(:call).and_return(Course.all)
         end
 
-        it 'delegates to the CourseSearchService with sort set to provider_descending' do
+        it 'delegates to the WebCourseSearchService with sort set to provider_descending' do
           subject
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(WebCourseSearchService).to have_received(:call).with(
             hash_including(filter: query_parameters, sort: provider_descending)
           )
         end
@@ -280,7 +280,7 @@ module Find
       context 'there are more than three results' do
         before do
           Course.destroy_all # for flakey test fail
-          allow(CourseSearchService).to receive(:call).and_return(
+          allow(WebCourseSearchService).to receive(:call).and_return(
             instance_double(ActiveRecord::Relation, count: 10)
           )
         end

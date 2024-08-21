@@ -134,7 +134,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     describe 'filtering' do
       it 'calls CoursesController with passed filter' do
         expected_filter = ActionController::Parameters.new(funding_type: 'salary')
-        expect(CourseSearchService).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
+        expect(APICourseSearchService).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,

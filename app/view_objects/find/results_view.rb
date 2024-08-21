@@ -24,7 +24,7 @@ module Find
     end
 
     def courses
-      @courses ||= ::CourseSearchService.call(
+      @courses ||= ::WebCourseSearchService.call(
         filter: query_parameters,
         sort: query_parameters[:sortby] || 'course_asc',
         course_scope:
