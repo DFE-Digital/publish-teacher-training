@@ -19,9 +19,6 @@ Use the following command to generate OpenAPI specification:
 ```sh
 bundle exec rake rswag:specs:swaggerize
 ```
-```sh
-bundle exec rake rswag:specs:swaggerize
-```
 
 3. We build the documentation in a separate container to the main app and copy the contents into the main image.
 
