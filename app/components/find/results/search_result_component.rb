@@ -9,11 +9,12 @@ module Find
 
       delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
 
-      def initialize(course:, filtered_by_location: false, sites_count: 0)
+      def initialize(course:, filtered_by_location: false, sites_count: 0, study_sites_count: 0)
         super
         @course = course.decorate
         @filtered_by_location = filtered_by_location
         @sites_count = sites_count
+        @study_sites_count = study_sites_count
       end
 
       def filtered_by_location?
@@ -22,6 +23,10 @@ module Find
 
       def has_sites?
         @sites_count.positive?
+      end
+
+      def has_study_sites?
+        @study_sites_count.positive?
       end
 
       def coure_title_link
@@ -35,6 +40,10 @@ module Find
 
       def location_label
         t('.location', count: @sites_count)
+      end
+
+      def study_site_label
+        t('.study_site', count: @study_sites_count)
       end
 
       private

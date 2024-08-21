@@ -5,7 +5,16 @@
         <% summary_list.with_row do |row| %>
           <% row.with_key(text: location_label) %>
           <% row.with_value do %>
-              <%= render partial: "find/results/non_university", locals: { course: } %>
+              <%= render partial: "find/results/course_placements", locals: { course: } %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if filtered_by_location? && has_study_sites? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: study_site_label) %>
+          <% row.with_value do %>
+            <%= render partial: "find/results/course_study_sites", locals: { course: } %>
           <% end %>
         <% end %>
       <% end %>

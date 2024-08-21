@@ -58,7 +58,8 @@
           <%= render Find::Results::SearchResultComponent.new(
             course:,
             filtered_by_location: results.location_filter?,
-            sites_count: results.sites_count(course)
+            sites_count: results.sites_count(course),
+            study_sites_count: results.study_sites_count(course),
           ) %>
         <% end %>
       </ul>
