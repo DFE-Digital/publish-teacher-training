@@ -207,11 +207,11 @@ en:
         visa_sponsorship: Visa sponsorship
         course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
       course_placements:
-        nearest_site: "Nearest Site"
+        nearest_site: Where you will study
         nearest_location:
-          zero: "No placement locations available"
-          one: "Nearest potential placement location"
-          other: "Nearest of %{count} potential placement locations"
+          zero: "No study sites available"
+          one: "Nearest study site"
+          other: "Nearest of %{count} study sites"
       course_study_sites:
         nearest_site: "Nearest Site"
         nearest_location:
