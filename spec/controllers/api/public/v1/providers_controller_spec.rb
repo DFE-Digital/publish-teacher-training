@@ -338,7 +338,8 @@ RSpec.describe API::Public::V1::ProvidersController do
                 telephone
                 email
                 can_sponsor_skilled_worker_visa
-                can_sponsor_student_visa]
+                can_sponsor_student_visa
+                selectable_school]
           end
 
           before do
@@ -540,7 +541,8 @@ RSpec.describe API::Public::V1::ProvidersController do
             'telephone' => provider.telephone,
             'email' => provider.email,
             'can_sponsor_student_visa' => provider.can_sponsor_student_visa,
-            'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa
+            'can_sponsor_skilled_worker_visa' => provider.can_sponsor_skilled_worker_visa,
+            'selectable_school' => provider.selectable_school
           }
         }
       end

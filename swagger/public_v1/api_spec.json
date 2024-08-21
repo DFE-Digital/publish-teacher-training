@@ -7,7 +7,7 @@
       "name": "DfE",
       "email": "becomingateacher@digital.education.gov.uk"
     },
-    "description": "API for DfE's postgraduate teacher training course service."
+    "description": "API for DfE's teacher training course service."
   },
   "servers": [
     {
@@ -335,14 +335,14 @@
             "nullable": true,
             "format": "markdown",
             "description": "This field is being deprecated after 2024 recruitment cycle.",
-            "example": ""
+            "example": null
           },
           "personal_qualities": {
             "type": "string",
             "nullable": true,
             "format": "markdown",
             "description": "This field is being deprecated after 2024 recruitment cycle.",
-            "example": ""
+            "example": null
           },
           "program_type": {
             "type": "string",
@@ -1272,6 +1272,12 @@
             "example": "2023-07-18T15:23:15Z",
             "format": "date-time",
             "nullable": true
+          },
+          "selectable_school": {
+            "type": "boolean",
+            "description": "Can candidates choose their placement school",
+            "example": true,
+            "nullable": false
           }
         }
       },
@@ -2243,7 +2249,7 @@
           },
           {
             "description": "Get the second page of courses for a provider",
-            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/provideers/B20/courses?page[page]=2"
+            "command": "curl -X GET https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/recruitment_cycles/2020/providers/B20/courses?page[page]=2"
           }
         ],
         "responses": {
@@ -2272,7 +2278,7 @@
             "name": "year",
             "in": "path",
             "required": true,
-            "description": "The starting year of the recruitment cycle.Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
+            "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
             "example": 2024,
             "schema": {
               "type": "string"

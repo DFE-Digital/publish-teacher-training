@@ -23,7 +23,8 @@ module API
                    :telephone,
                    :email,
                    :can_sponsor_skilled_worker_visa,
-                   :can_sponsor_student_visa
+                   :can_sponsor_student_visa,
+                   :selectable_school
 
         attribute :accredited_body do
           @object.accredited_provider?
