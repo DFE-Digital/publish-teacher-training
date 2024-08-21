@@ -60,9 +60,9 @@
       </span>
       </p>
       <span class="govuk-body">
-        <a class="govuk-link govuk-link--no-visited-state" href="https://find-teacher-training-courses.service.gov.uk/results?age_group=primary&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&visa_status=false">
+        <%= link_to primary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
           Browse all primary courses
-        </a>
+        <% end %>
       </span>
   </div><!--END three cols-->
     <div class="govuk-grid-column-one-third age-group">
@@ -74,9 +74,9 @@
         </span>
       </p>
       <span class="govuk-body">
-      <a type="submit" class="govuk-link govuk-link--no-visited-state" data-module="govuk-button" href="subject" style="margin-bottom:0;">
+      <%= link_to secondary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
         Browse courses by subject
-      </a>
+      <% end %>
       </span>
     </div><!--END col full-->
     <div class="govuk-grid-column-one-third age-group">
@@ -88,9 +88,9 @@
       </span>
       </p>
       <span class="govuk-body">
-        <a class="govuk-link govuk-link--no-visited-state" href="https://find-teacher-training-courses.service.gov.uk/results?age_group=further_education&applications_open=true&c=England&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce&qualification%5B%5D=pgde&qualification%5B%5D=pgde_with_qts&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&study_type%5B%5D=full_time_or_part_time&subjects%5B%5D=41&visa_status=false">
+        <%= link_to further_education_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
           Browse all further education courses
-        </a>
+        <% end %>
       </span>
   </div><!--END three cols-->
 </div><!--END grid row-->
