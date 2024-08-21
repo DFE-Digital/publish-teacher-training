@@ -194,8 +194,8 @@ en:
     results:
       search_result_component:
         location:
-          one: Location
-          other: Nearest location
+          one: Placement school
+          other: Placement schools
         nearest_location: Nearest location
         fee_or_salary: Fee or salary
         course_fee: Course fee

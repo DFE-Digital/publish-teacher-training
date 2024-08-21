@@ -16,3 +16,11 @@
 <div class="app-text-ellipsis">
   <%= nearest_address %>
 </div>
+
+
+<span class="govuk-body">
+  <strong><%= "#{pluralize(@results_view.site_distance(course), 'mile')}" %></strong> from <strong><%= @results_view.location_search %></strong>
+</span><br>
+<p class="govuk-hint govuk-!-font-size-16">
+  Nearest of <%= number_of_sites %> potential placement <%= pluralize(number_of_sites, 'location') %>
+</p>

@@ -3,15 +3,9 @@
     <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
       <% if filtered_by_location? && has_sites? %>
         <% summary_list.with_row do |row| %>
-          <% if course.provider.decorate.website.present? %>
-            <% row.with_key(text: location_label) %>
-            <% row.with_value do %>
-              <% if course.university_based? %>
-                <%= render partial: "find/results/university", locals: { course: } %>
-              <% else %>
-                <%= render partial: "find/results/non_university", locals: { course: } %>
-              <% end %>
-            <% end %>
+          <% row.with_key(text: location_label) %>
+          <% row.with_value do %>
+              <%= render partial: "find/results/non_university", locals: { course: } %>
           <% end %>
         <% end %>
       <% end %>

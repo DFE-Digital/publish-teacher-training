@@ -1,14 +1,14 @@
 <!-- Subjects filter-->
-<div class="filters-component__groups__group app-filter__group" data-filters-target="group" data-group="subjects">
-  <h3 class="govuk-fieldset__legend govuk-fieldset__legend--s">Age group</h3>
-  <div>
+<fieldset class="filters-component__groups__group app-filter__group govuk-fieldset" data-filters-target="group" data-group="subjects">
+<legend class="govuk-fieldset__legend govuk-fieldset__legend--s" style="margin-bottom:0;">
+  Age group
+</legend>  <div>
     <div class="searchable-collection-component" data-controller="searchable-collection">
       <div class=" searchable-collection-component--scrollable">
 
         <div id="subjects__listbox">
 
           <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" style="margin-top:15px;">
               <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
                   <input id="subjects-chemistry-field" class="govuk-checkboxes__input" aria-describedby="subjects-chemistry-hint" type="checkbox" value="Accounting" name="subjects[]">
@@ -29,12 +29,11 @@
                   </label>
                 </div>
               </div>
-            </fieldset>
           </div>
         </div>
 
       </div>
     </div>
   </div>
-</div>
+</fieldset>
 <!--END subjects filter-->
