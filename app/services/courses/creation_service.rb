@@ -39,7 +39,7 @@ module Courses
       course.course_code = provider.next_available_course_code if next_available_course_code
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
-
+      Courses::AssignProgramTypeService.new.execute(course.funding, course)
       course.valid?(:new) if course.errors.blank?
 
       course.remove_carat_from_error_messages

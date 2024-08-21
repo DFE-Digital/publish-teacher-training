@@ -5,7 +5,7 @@ module Publish
     alias course model
 
     FIELDS = %i[
-      funding_type
+      funding
       can_sponsor_skilled_worker_visa
       can_sponsor_student_visa
       previous_tda_course
@@ -13,32 +13,32 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :funding_type, presence: true
+    validates :funding, presence: true
     validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { skilled_worker_visa? }
     validates :can_sponsor_student_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
-      @funding_type_updated = course.funding_type != compute_fields[:funding_type]
+      @funding_updated = course.funding != compute_fields[:funding]
       origin_step
     end
 
-    def funding_type_updated?
-      @funding_type_updated
+    def funding_updated?
+      @funding_updated
     end
 
     def origin_step
-      @origin_step ||= if funding_type_updated?
-                         if [course.funding_type, new_attributes[:funding_type]].include?('apprenticeship')
+      @origin_step ||= if funding_updated?
+                         if [course.funding, new_attributes[:funding]].include?('apprenticeship')
                            :apprenticeship
                          else
-                           :funding_type
+                           :funding
                          end
                        end
     end
 
     def is_fee_based?
-      funding_type == 'fee'
+      funding == 'fee'
     end
 
     def visa_type
@@ -85,7 +85,7 @@ module Publish
     end
 
     def after_save
-      return unless funding_type_updated?
+      return unless funding_updated?
 
       enrichment = course.enrichments.find_or_initialize_draft
 
@@ -96,12 +96,15 @@ module Publish
       end
 
       course.assign_attributes(reset_course_attributes)
+
+      ::Courses::AssignProgramTypeService.new.execute(course.funding, course) if db_backed_funding_type_feature_flag_active?
+
       course.save!
     end
 
     def original_fields_values
       {
-        funding_type: course.funding_type,
+        funding: course.funding,
         can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
         can_sponsor_student_visa: course.can_sponsor_student_visa
       }

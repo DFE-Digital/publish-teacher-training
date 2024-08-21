@@ -260,7 +260,7 @@ describe CourseEnrichment do
     context 'fee based course after 2024 cycle which can sponsor student visa' do
       let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
       let(:provider) { build(:provider, recruitment_cycle:) }
-      let(:course) { build(:course, can_sponsor_student_visa: true, funding_type: 'fee', provider:) }
+      let(:course) { build(:course, can_sponsor_student_visa: true, funding: 'fee', provider:) }
       let(:course_enrichment) { build(:course_enrichment, course:) }
 
       it do

@@ -52,7 +52,7 @@ describe Courses::CreationService do
       {
         'age_range_in_years' => '3_to_7',
         'applications_open_from' => recruitment_cycle.application_start_date,
-        'funding_type' => 'fee',
+        'funding' => 'fee',
         'is_send' => '1',
         'level' => 'primary',
         'qualification' => 'qts',
@@ -111,7 +111,7 @@ describe Courses::CreationService do
       {
         'age_range_in_years' => '12_to_17',
         'applications_open_from' => recruitment_cycle.application_start_date,
-        'funding_type' => 'salary',
+        'funding' => 'salary',
         'is_send' => '0',
         'level' => 'secondary',
         'qualification' => 'pgce_with_qts',

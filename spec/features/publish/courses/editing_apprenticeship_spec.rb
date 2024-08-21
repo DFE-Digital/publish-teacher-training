@@ -76,13 +76,13 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
 
   def given_there_is_fee_course
     given_a_course_exists(
-      funding_type: 'fee'
+      funding: 'fee'
     )
   end
 
   def given_there_is_apprenticeship_course
     given_a_course_exists(
-      funding_type: 'apprenticeship'
+      funding: 'apprenticeship'
     )
   end
 

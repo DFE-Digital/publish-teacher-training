@@ -100,11 +100,11 @@ FactoryBot.define do
     end
 
     trait :with_fee_based_course do
-      course { create(:course, :fee_type_based) }
+      course { create(:course, funding: 'fee') }
     end
 
     trait :with_salary_based_course do
-      course { create(:course, :salary_type_based) }
+      course { create(:course, funding: 'salary') }
     end
   end
 end

@@ -83,9 +83,9 @@ en:
     student: "Student"
     skilled_worker: "Skilled Worker"
     updated:
-      funding_type: "You’re being shown this page because you changed your answer to funding type."
+      funding: "You’re being shown this page because you changed your answer to funding type."
       apprenticeship: "You’re being shown this page because you changed your answer to whether this is a teaching apprenticeship."
-      funding_type_and_visa: "Funding type and %{visa_type} visas updated"
+      funding_and_visa: "Funding type and %{visa_type} visas updated"
       apprenticeship_and_visa: "Teaching apprenticeship and %{visa_type} visas updated"
       visa: "%{visa_type} visas updated"
   page_titles:
@@ -967,7 +967,7 @@ en:
               invalid: "Course must have draft, empty or rolled over status."
         publish/course_funding_form:
           attributes:
-            funding_type:
+            funding:
               blank: "Select a funding type"
             can_sponsor_student_visa:
               inclusion: "Select an option"

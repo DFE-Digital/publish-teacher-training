@@ -67,7 +67,7 @@ class CoursePolicy
       accredited_provider_code
       age_range_in_years
       applications_open_from
-      funding_type
+      funding
       is_send
       level
       qualification

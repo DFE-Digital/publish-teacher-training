@@ -10,7 +10,7 @@ module Publish
       def call
         @course.assign_attributes(
           course_type: 'undergraduate',
-          funding_type: 'apprenticeship',
+          funding: 'apprenticeship',
           study_mode: 'full_time',
           program_type: 'teacher_degree_apprenticeship',
           can_sponsor_student_visa: false,

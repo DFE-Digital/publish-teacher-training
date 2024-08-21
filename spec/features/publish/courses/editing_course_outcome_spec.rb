@@ -198,7 +198,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
   def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
     next_cycle_providers = [build(:provider, :accredited_provider, :next_recruitment_cycle,
-                                  courses: [create(:course, :with_accrediting_provider, study_mode: 'part_time', funding_type: 'fee', can_sponsor_skilled_worker_visa: true)])]
+                                  courses: [create(:course, :with_accrediting_provider, study_mode: 'part_time', funding: 'fee', can_sponsor_skilled_worker_visa: true)])]
     @next_cycle_user = create(:user, providers: next_cycle_providers)
     given_i_am_authenticated(user: @next_cycle_user)
   end
