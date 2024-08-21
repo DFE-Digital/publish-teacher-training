@@ -24,7 +24,7 @@ module Find
       end
 
       def secondary_courses_path
-        find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'SecondarySubject').pluck(:subject_code))
+        find_subjects_path({ age_group: :secondary })
       end
 
       def further_education_courses_path
