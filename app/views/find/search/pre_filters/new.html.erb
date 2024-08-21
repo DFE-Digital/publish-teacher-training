@@ -28,10 +28,10 @@
             <fieldset class="govuk-fieldset">
                 <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                   <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="organisation" name="organisation" type="checkbox" value="hmrc">
-                    <label class="govuk-label govuk-checkboxes__label" for="organisation">
+                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label" do %>
                       Only show courses that offer visa sponsorship
-                    </label>
+                    <% end %>
                   </div>
                 </div>
               </fieldset>
