@@ -164,8 +164,8 @@ feature 'Viewing a findable course' do
   scenario 'user visits get into teaching advice pages' do
     given_there_is_a_findable_course
     when_i_visit_the_course_page
-    and_i_click('get a teacher training advisor')
-    then_i_am_redirected_to_the_training_advisor_page
+    and_i_click('get a teacher training adviser')
+    then_i_am_redirected_to_the_training_adviser_page
 
     when_i_visit_the_course_page
     and_i_click('contact Get Into Teaching')
@@ -474,7 +474,7 @@ feature 'Viewing a findable course' do
     )
   end
 
-  def then_i_am_redirected_to_the_training_advisor_page
+  def then_i_am_redirected_to_the_training_adviser_page
     expect(page.current_url).to eq('https://getintoteaching.education.gov.uk/teacher-training-advisers')
   end
 

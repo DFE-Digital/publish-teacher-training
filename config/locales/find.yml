@@ -86,11 +86,11 @@ en:
       advice:
         heading: Support and advice
         postgraduate:
-          body_html: You can %{teacher_training_advisor_link} or %{contact_git_link} for free support
+          body_html: You can %{teacher_training_adviser_link} or %{contact_git_link} for free support
         undergraduate:
           body_html: You can %{contact_git_link} for free support
 
-        get_a_teacher_training_advisor_link_text: get a teacher training advisor
+        get_a_teacher_training_adviser_link_text: get a teacher training adviser
         contact_get_into_teaching_link_text: contact Get Into Teaching
       train_with_disabilities:
         heading: Training with disabilities and other needs at %{provider_name}
@@ -256,7 +256,6 @@ en:
       url_train_to_be_a_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
       url_tda: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
-      url_get_an_advisor: https://getintoteaching.education.gov.uk/teacher-training-adviser/sign_up/identity
       url_online_chat: https://getintoteaching.education.gov.uk/help-and-support
       url_ways_to_train_no_degree: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/if-you-dont-have-a-degree
       url_ways_to_train_experienced_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/assessment-only-route-to-qts
