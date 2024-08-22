@@ -176,13 +176,7 @@ module Find
         lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
       end
 
-      min_distance = distances.min
-
-      if min_distance && min_distance < 1
-        min_distance.ceil(1)
-      else
-        min_distance.round(0)
-      end
+      distances.min.ceil
     end
 
     def study_site_distance(course)
@@ -190,13 +184,7 @@ module Find
         lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
       end
 
-      min_distance = distances.min
-
-      if min_distance && min_distance < 1
-        min_distance.ceil(1)
-      else
-        min_distance.round(0)
-      end
+      distances.min.ceil
     end
 
     def with_salaries?
