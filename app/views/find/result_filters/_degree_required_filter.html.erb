@@ -24,5 +24,10 @@
       label: { text: "Pass (Ordinary degree)" },
       data: { qa: "not_required" },
       checked: @filters_view.any_degree_grade_radio_chosen? %>
+      <%= form.govuk_radio_button :degree_required,
+      "not_required",
+      label: { text: "No degree required" },
+      data: { qa: "not_required" },
+      checked: @filters_view.any_degree_grade_radio_chosen? %>
   </div>
 </fieldset>
