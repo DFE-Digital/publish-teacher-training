@@ -20,6 +20,7 @@
       </span>
       <%= @course.name_and_code %>
     </h1>
+    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
   </div>
 </div>
 
@@ -32,8 +33,6 @@
     <% end %>
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
-
-    <%= render Find::Courses::ContentsComponent::View.new(@course) %>
 
     <% if @course.published_about_course.present? %>
       <%= render partial: "find/courses/about_course", locals: { course: @course } %>

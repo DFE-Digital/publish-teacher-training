@@ -5,7 +5,7 @@
     <%= render Find::Courses::FeesComponent::View.new(course) %>
   <% end %>
 
-  <%= render Shared::AdviceComponent::View.new(title: "Financial support from the government") do %>
+  <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
     <% if salaried? %>
       <%= render partial: "shared/courses/financial_support/salaried" %>
     <% elsif excluded_from_bursary? %>
@@ -17,6 +17,10 @@
     <% else %>
       <%= render partial: "shared/courses/financial_support/loan" %>
     <% end %>
+  <% end %>
+
+  <%= render Shared::AdviceComponent::View.new(title: "Financial support for non-UK citizens") do %>
+    <%= render partial: "shared/courses/financial_support/non-uk" %>
   <% end %>
 
   <% if financial_support.present? %>
