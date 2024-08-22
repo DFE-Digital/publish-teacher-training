@@ -66,6 +66,60 @@ RSpec.describe API::Public::V1::CoursesController do
         end
       end
 
+      context 'returns all course types' do
+        it 'returns undergraduate and postgraduate' do
+          undergraduate_course = create(:course, :published_teacher_degree_apprenticeship)
+          postgraduate_course = create(:course, :published_postgraduate)
+          provider.courses << [undergraduate_course, postgraduate_course]
+
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year
+          }
+
+          actual = json_response['data'].map do |data|
+            {
+              id: data['id'],
+              qualifications: data['attributes']['qualifications'],
+              program_type: data['attributes']['program_type']
+            }
+          end
+
+          expect(actual).to include({
+                                      id: undergraduate_course.id.to_s,
+                                      qualifications: %w[qts undergraduate_degree],
+                                      program_type: 'teacher_degree_apprenticeship'
+                                    })
+
+          expect(actual).to include({
+                                      id: postgraduate_course.id.to_s,
+                                      qualifications: %w[qts pgce],
+                                      program_type: 'pg_teaching_apprenticeship'
+                                    })
+        end
+      end
+
+      context 'avoids duplication' do
+        it 'does not return duplicates across multiple pages ordering by id' do
+          provider.courses << build_list(:course, 30, provider:)
+          ids = []
+
+          (1..10).each do |page|
+            get :index, params: {
+              recruitment_cycle_year: recruitment_cycle.year,
+              page:,
+              per_page: 3
+            }
+
+            ids << response.parsed_body['data'].pluck('id')
+          end
+
+          ids.flatten!
+
+          expect(ids.size).to eq(ids.uniq.size)
+          expect(ids).to eq(ids.sort)
+        end
+      end
+
       context 'with pagination' do
         before do
           provider.courses << build_list(:course, 5, provider:)
