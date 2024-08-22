@@ -4,8 +4,8 @@
     <% if course.postgraduate_course_type? %>
       <%= t(
             ".postgraduate.body_html",
-            teacher_training_advisor_link: govuk_link_to(
-              t(".get_a_teacher_training_advisor_link_text"),
+            teacher_training_adviser_link: govuk_link_to(
+              t(".get_a_teacher_training_adviser_link_text"),
               find_get_into_teaching_redirect_path(
                 @course.provider_code,
                 @course.course_code,
