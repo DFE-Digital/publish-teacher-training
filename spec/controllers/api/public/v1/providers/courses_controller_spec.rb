@@ -89,10 +89,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
             per_page: 3
           }
 
-          ids << response.parsed_body['data'].pluck('id')
+          ids += response.parsed_body['data'].pluck('id')
         end
-
-        ids.flatten!
 
         expect(ids.size).to eq(ids.uniq.size)
         expect(ids).to eq(ids.sort)
