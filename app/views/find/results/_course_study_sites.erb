@@ -1,8 +1,14 @@
 <% number_of_study_sites = @results_view.study_sites_count(course) %>
 
-<span class="govuk-body">
-  <strong><%= "#{pluralize(@results_view.study_site_distance(course), 'mile')}" %></strong> from <strong><%= @results_view.location_search %></strong>
-</span>
-<p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">
-  <%= t(".nearest_location", count: number_of_study_sites) %>
-</p>
+<% if filtered_by_location && has_study_sites %>
+  <span class="govuk-body">
+    <strong><%= "#{pluralize(@results_view.study_site_distance(course), 'mile')}" %></strong> from <strong><%= @results_view.location_search %></strong>
+  </span>
+  <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">
+    <%= t(".nearest_location", count: number_of_study_sites) %>
+  </p>
+<% else %>
+  <p class="govuk-body">
+    <%= t(".all_study_sites", count: number_of_study_sites) %>
+  </p>
+<% end %>

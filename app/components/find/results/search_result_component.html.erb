@@ -1,21 +1,17 @@
 <li class="app-search-results__item" data-qa="course">
   <%= govuk_summary_card(classes: ["course-summary-card"], title: coure_title_link) do |card| %>
     <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
-      <% if filtered_by_location? && has_sites? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: location_label) %>
-          <% row.with_value do %>
-              <%= render partial: "find/results/course_placements", locals: { course: } %>
-          <% end %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: location_label) %>
+        <% row.with_value do %>
+          <%= render partial: "find/results/course_placements", locals: { course:, filtered_by_location: filtered_by_location?, has_sites: has_sites? } %>
         <% end %>
       <% end %>
 
-      <% if filtered_by_location? && has_study_sites? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: study_site_label) %>
-          <% row.with_value do %>
-            <%= render partial: "find/results/course_study_sites", locals: { course: } %>
-          <% end %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: study_site_label) %>
+        <% row.with_value do %>
+          <%= render partial: "find/results/course_study_sites", locals: { course:, filtered_by_location: filtered_by_location?, has_study_sites: has_study_sites? } %>
         <% end %>
       <% end %>
 

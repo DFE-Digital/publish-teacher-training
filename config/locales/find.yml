@@ -214,11 +214,19 @@ en:
           zero: "No placement locations available"
           one: "Nearest potential placement location"
           other: "Nearest of %{count} potential placement locations"
+        all_school_placements:
+          zero: "not listed yet"
+          one: "%{count} potential placement location"
+          other: "%{count} potential placement locations"
       course_study_sites:
         nearest_location:
           zero: "No study sites available"
           one: "Nearest study site"
           other: "Nearest of %{count} study sites"
+        all_study_sites:
+          zero: "not listed yet"
+          one: "%{count} potential study site"
+          other: "%{count} potential study sites"
 
     scholarships:
       physics:
