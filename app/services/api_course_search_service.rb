@@ -2,7 +2,7 @@
 
 class APICourseSearchService < CourseSearchService
   def default_course_order(outer_scope)
-    outer_scope.order('course.id': :asc)
+    outer_scope.order('course.created_at': :asc)
   end
 
   def filter_by_course_type(scope)

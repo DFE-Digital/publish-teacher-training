@@ -77,7 +77,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     end
 
     context 'avoids duplication' do
-      it 'does not return duplicates across multiple pages ordering by id' do
+      it 'does not return duplicates across multiple pages by ordering the courses' do
         provider.courses << build_list(:course, 30, provider:)
         ids = []
 

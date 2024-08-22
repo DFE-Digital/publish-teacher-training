@@ -18,12 +18,12 @@ RSpec.describe APICourseSearchService do
       end
     end
 
-    context 'when ordering courses by id' do
-      it 'orders courses by id ascending' do
-        course_three = create(:course, id: 3)
-        course_one = create(:course, id: 1)
-        course_four = create(:course, id: 4)
-        course_two = create(:course, id: 2)
+    context 'when ordering courses by creation date' do
+      it 'orders courses by created at ascending' do
+        course_three = create(:course, created_at: 4.days.ago)
+        course_one = create(:course, created_at: 10.days.ago)
+        course_four = create(:course, created_at: 1.day.ago)
+        course_two = create(:course, created_at: 9.days.ago)
 
         expect(result.pluck(:id)).to eq(
           [course_one.id, course_two.id, course_three.id, course_four.id]
