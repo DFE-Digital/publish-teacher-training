@@ -206,6 +206,9 @@ en:
         degree_required: Degree required
         visa_sponsorship: Visa sponsorship
         course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
+        funding:
+          salary_html: "This course pays a <strong>salary</strong>"
+          apprenticeship_html: "This a Teaching Apprenticeship course paying a <strong>salary</strong>"
       course_placements:
         nearest_location:
           zero: "No placement locations available"
