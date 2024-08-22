@@ -10,4 +10,11 @@ en:
     you_can_search_for_courses: >
       You can now search for courses starting in the %{cycle_year_range} academic year. You can prepare applications
       for these courses, and from %{apply_opens} you will be able to submit your applications.
+  apply_has_closed_banner:
+    heading: The application deadline has passed
+    application_deadline_has_passed: >
+      The application deadline has passed for courses starting in the %{cycle_year_range} academic year.
+    new_cycle_description: >
+      From %{find_reopens} you will be able to search for courses starting in the
+      %{next_cycle_year_range} academic year. From %{apply_reopens} you will be able to apply for these courses.
 

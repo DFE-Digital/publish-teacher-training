@@ -28,7 +28,7 @@ feature 'switcher cycle' do
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
-    and_i_see_deadline_banner('Courses are currently closed but you can get your application ready')
+    and_i_see_deadline_banner('The application deadline has passed')
   end
 
   scenario 'Find has closed' do

@@ -379,7 +379,7 @@ feature 'Viewing a findable course' do
   end
 
   def then_i_should_see_the_deadline_banner
-    expect(page).to have_content 'Courses are currently closed but you can get your application ready'
+    expect(page).to have_content 'The application deadline has passed'
   end
 
   def set_referrer

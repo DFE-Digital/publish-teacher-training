@@ -5,10 +5,9 @@
   <% end %>
 <% elsif cycle_timetable.show_cycle_closed_banner? %>
   <%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
-    <% notification_banner.with_heading(text: "Courses are currently closed but you can get your application ready") %>
-    <p class="govuk-body">Courses starting in the <%= cycle_timetable.cycle_year_range %> academic year are closed.</p>
-    <p class="govuk-body">You can <%= govuk_link_to("start or continue applying", Settings.apply_base_url) %> for courses starting in the <%= cycle_timetable.next_cycle_year_range %> academic year.</p>
-    <p class="govuk-body">You’ll be able to find courses from <%= cycle_timetable.find_reopens.to_fs(:govuk_date_and_time) %> and submit your applications from <%= cycle_timetable.apply_reopens.to_fs(:govuk_date_and_time) %>.</p>
+    <% notification_banner.with_heading(text: t("apply_has_closed_banner.heading")) %>
+    <p class="govuk-body"><%= t("apply_has_closed_banner.application_deadline_has_passed", cycle_year_range:) %></p>
+    <p class="govuk-body"><%= t("apply_has_closed_banner.new_cycle_description", next_cycle_year_range:, find_reopens:, apply_reopens:) %></p>
   <% end %>
 <% elsif cycle_timetable.show_apply_opens_soon_banner? %>
   <%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
