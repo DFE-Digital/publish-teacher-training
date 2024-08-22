@@ -1,59 +1,70 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
-  <div data-qa="course__about_schools">
-    <% if show_higher_education_guidance? %>
-      <%= render Shared::AdviceComponent::View.new(title: "Where you will train") do %>
-        <p class="govuk-body">You’ll be placed in schools for most of your course. Your school placements will be within
-          commuting distance.</p>
-        <p class="govuk-body">You can’t pick which schools you want to be in, but your university will try to take your
-          journey time into consideration.</p>
-        <p class="govuk-body">Universities can work with over 100 potential placement schools. Most will be within 10
-          miles of the university, but sometimes they can cover a wider area, especially outside of cities.</p>
-      <% end %>
-    <% elsif show_scitt_guidance? %>
-      <%= render Shared::AdviceComponent::View.new(title: "Where you will train") do %>
-        <p class="govuk-body">You’ll be placed in different schools during your training. You can’t pick which schools you want to be in, but your training provider will place you in schools you can travel to.</p>
-      <% end %>
-    <% end %>
 
-    <% if course.published_how_school_placements_work.present? %>
-      <%= markdown(course.published_how_school_placements_work) %>
-    <% elsif course.how_school_placements_work.present? %>
-      <%= markdown(course.how_school_placements_work) %>
-    <% else %>
-      <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
-    <% end %>
+  <p class="govuk-body">
+    You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+  </p>
 
-    <% if course.study_sites.any? %>
-      <h3 class="govuk-heading-m">
-        Study sites
-      </h3>
-
-      <p class="govuk-body">
-        <%= "The theoretical learning part of your course will be at the following #{course.study_sites.many? ? 'locations' : 'location'}." %>
-      </p>
-
-      <ul class="govuk-list govuk-list--spaced" id="course_study_sites">
-        <% course.study_sites.each do |study_site| %>
-          <li>
-            <strong><%= smart_quotes(study_site.location_name) %></strong>
-            <br>
-            <%= smart_quotes(study_site.decorate.full_address) %>
-          </li>
-      <% end %>
-      </ul>
-    <% end %>
-
+  <dl class="govuk-summary-list">
     <% if course.site_statuses.map(&:site).uniq.any? %>
-      <h3 class="govuk-heading-m">
-        <%= course.placements_heading %>
-      </h3>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Placement schools
+        </dt>
+          <dd class="govuk-summary-list__value">
+            <% number_of_sites = @results_view.sites_count(course) %>
+            <span class="govuk-body">
+              <strong>
+                <%= "#{pluralize(@results_view.site_distance(course), 'mile')}" %>
+              </strong>
+                from
+              <strong>
+                <%= @results_view.location_search %>
+              </strong>
+            </span>
+          <p class="govuk-hint govuk-!-font-size-16">
+            Nearest of <%= t(".nearest_location", count: number_of_sites) %> potential placement locations.
+          </p>
+          <p class="govuk-hint govuk-!-font-size-16">
+            Locations can change and are not guaranteed.
+          </p>
+        </dd>
+      </div>
+    <% end %>
+    <% if course.study_sites.any? %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Where you will study
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <% number_of_study_sites = @results_view.study_sites_count(course) %>
+          <span class="govuk-body">
+            <strong>
+              <%= "#{pluralize(@results_view.study_site_distance(course), 'mile')}" %>
+            </strong>
+              from
+            <strong>
+              <%= @results_view.location_search %>
+            </strong>
+          </span>
+          <p class="govuk-hint govuk-!-font-size-16">
+            <% course.study_sites.each do |study_site| %>
+              <strong><%= smart_quotes(study_site.location_name) %></strong>
+              <br>
+              <%= smart_quotes(study_site.decorate.full_address) %>
+            <% end %>
+          </p>
+        </dd>
+      </div>
+    <% end %>
+  </dl>
 
-      <p class="govuk-body"><%= t(".work_with_schools") %></p>
-
+  <div data-qa="course__about_schools">
+    <%= render Shared::AdviceComponent::View.new(title: "How school placements work") do %>
       <p class="govuk-body">
-        <%= govuk_link_to(t(".view_list_of_school_placements"), placements_url) %>
+        You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
       </p>
     <% end %>
   </div>
+
 </div>
