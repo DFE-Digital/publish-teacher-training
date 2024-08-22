@@ -19,6 +19,15 @@ module Find
         )
       )
     end
+
+    def show_apply_opens_soon_banner
+      render(
+        Find::DeadlineBannerComponent.new(
+          flash_empty: true,
+          cycle_timetable: ShowApplyOpensSoonBannerTimetable
+        )
+      )
+    end
   end
 
   class ShowApplyDeadlineBannerCycleTimetable < CycleTimetable
@@ -37,6 +46,20 @@ module Find
     end
 
     def self.show_cycle_closed_banner?
+      true
+    end
+  end
+
+  class ShowApplyOpensSoonBannerTimetable < CycleTimetable
+    def self.show_apply_deadline_banner?
+      false
+    end
+
+    def self.show_cycle_closed_banner?
+      false
+    end
+
+    def self.show_apply_opens_soon_banner?
       true
     end
   end

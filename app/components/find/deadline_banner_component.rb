@@ -37,5 +37,13 @@ module Find
     def apply_reopens
       cycle_timetable.apply_reopens.to_fs(:govuk_date_and_time)
     end
+
+    def apply_opens
+      cycle_timetable.apply_opens.to_fs(:day_and_month)
+    end
+
+    def previous_cycle_year_range
+      cycle_timetable.cycle_year_range(cycle_timetable.previous_year)
+    end
   end
 end

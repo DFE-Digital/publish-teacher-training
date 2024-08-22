@@ -9,7 +9,9 @@
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_mid_cycle", label: { text: t("find.cycles.today_is_mid_cycle.name") }, hint: { text: hint_text_for_mid_cycle } %>
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_deadline_passed", label: { text: t("find.cycles.today_is_after_apply_deadline_passed.name") }, hint: { text: hint_text_for_after_apply_deadline_passed } %>
       <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_closes", label: { text: t("find.cycles.today_is_after_find_closes.name") }, hint: { text: hint_text_for_today_is_after_find_closes } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_opens", label: { text: t("find.cycles.today_is_after_find_opens.name") }, hint: { text: hint_text_for_today_is_after_find_opens } %>
+      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_between_find_opening_and_apply_opening", label: { text: t("find.cycles.today_is_between_find_opening_and_apply_opening.name") }, hint: { text: hint_text_for_today_is_after_find_opens } %>
+      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_opens", label: { text: t("find.cycles.today_is_after_find_opens.name") }, hint: { text: hint_text_for_today_is_between_find_opening_and_apply_opening } %>
+
     <% end %>
 
     <%= f.govuk_submit "Update point in recruitment cycle" %>

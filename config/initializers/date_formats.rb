@@ -12,8 +12,8 @@ Date::DATE_FORMATS[:month_and_year] = '%B %Y'
 Time::DATE_FORMATS[:short_month_and_year] = '%b %Y'
 Date::DATE_FORMATS[:short_month_and_year] = '%b %Y'
 
-Time::DATE_FORMATS[:day_and_month] = '%d %B'
-Date::DATE_FORMATS[:day_and_month] = '%d %B'
+Time::DATE_FORMATS[:day_and_month] = '%-d %B'
+Date::DATE_FORMATS[:day_and_month] = '%-d %B'
 
 Time::DATE_FORMATS[:govuk_date_and_time] = lambda do |time|
   format = if time.min.zero?
