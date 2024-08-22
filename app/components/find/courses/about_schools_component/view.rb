@@ -14,10 +14,11 @@ module Find
                  :study_sites,
                  :site_statuses, to: :course
 
-        def initialize(course, preview: false)
+        def initialize(course, preview: false, filters_view: nil)
           super
           @course = course
           @preview = preview
+          @filters_view = filters_view
         end
 
         def render?

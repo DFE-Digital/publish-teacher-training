@@ -32,7 +32,7 @@ module Find
       def coure_title_link
         t(
           '.course_title_html',
-          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, **request.query_parameters),
           provider_name: helpers.smart_quotes(course.provider.provider_name),
           course_name: course.name_and_code
         )

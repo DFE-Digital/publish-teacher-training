@@ -6,47 +6,59 @@
   </p>
 
   <dl class="govuk-summary-list">
-    <% if course.site_statuses.map(&:site).uniq.any? %>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Placement schools
         </dt>
-          <dd class="govuk-summary-list__value">
-            <% number_of_sites = @results_view.sites_count(course) %>
-            <span class="govuk-body">
-              <strong>
-                <%= "#{pluralize(@results_view.site_distance(course), 'mile')}" %>
-              </strong>
-                from
-              <strong>
-                <%= @results_view.location_search %>
-              </strong>
-            </span>
-          <p class="govuk-hint govuk-!-font-size-16">
-            Nearest of <%= t(".nearest_location", count: number_of_sites) %> potential placement locations.
-          </p>
+        <dd class="govuk-summary-list__value">
+          <% number_of_sites = course.new_or_running_sites_with_vacancies.uniq.count %>
+          <% if @filters_view.location_search? && number_of_sites.positive? %>
+                <span class="govuk-body">
+                    <strong>
+                      <%= "#{pluralize(course.min_site_distance_from(latitude: @filters_view.latitude, longitude: @filters_view.longitude), 'mile')}" %>
+                    </strong>
+                      from
+                    <strong>
+                      <%= @filters_view.location_search %>
+                    </strong>
+                  </span>
+            <p class="govuk-hint govuk-!-font-size-16">
+              <%= t("find.results.course_placements.nearest_location", count: number_of_sites) %>
+            </p>
+          <% else %>
+            <p class="govuk-body">
+              <%= t("find.results.course_placements.all_school_placements", count: number_of_sites) %>
+            </p>
+          <% end %>
+
           <p class="govuk-hint govuk-!-font-size-16">
             Locations can change and are not guaranteed.
           </p>
         </dd>
       </div>
-    <% end %>
-    <% if course.study_sites.any? %>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Where you will study
         </dt>
         <dd class="govuk-summary-list__value">
-          <% number_of_study_sites = @results_view.study_sites_count(course) %>
-          <span class="govuk-body">
-            <strong>
-              <%= "#{pluralize(@results_view.study_site_distance(course), 'mile')}" %>
-            </strong>
-              from
-            <strong>
-              <%= @results_view.location_search %>
-            </strong>
-          </span>
+          <% number_of_study_sites = course.study_sites.count %>
+          <% if @filters_view.location_search? && number_of_study_sites.positive? %>
+            <span class="govuk-body">
+              <strong>
+                <%= "#{pluralize(course.min_study_site_distance_from(latitude: @filters_view.latitude, longitude: @filters_view.longitude), 'mile')}" %>
+              </strong>
+                from
+              <strong>
+                <%= @filters_view.location_search %>
+              </strong>
+            </span>
+          <% else %>
+            <p class="govuk-body">
+              <%= t("find.results.course_study_sites.all_study_sites", count: number_of_study_sites) %>
+            </p>
+          <% end %>
+
           <p class="govuk-hint govuk-!-font-size-16">
             <% course.study_sites.each do |study_site| %>
               <strong><%= smart_quotes(study_site.location_name) %></strong>
@@ -56,7 +68,6 @@
           </p>
         </dd>
       </div>
-    <% end %>
   </dl>
 
   <div data-qa="course__about_schools">

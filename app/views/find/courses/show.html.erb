@@ -44,7 +44,7 @@
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params)) %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params), filters_view: @filters_view) %>
 
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>

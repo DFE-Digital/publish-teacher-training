@@ -29,6 +29,12 @@ module Find
         params[:loc]
       end
 
+      alias location_search loc
+
+      def location_search?
+        loc.present?
+      end
+
       def qts_only_checked?
         checked?('qts')
       end
@@ -140,6 +146,10 @@ module Find
       def any_degree_grade_radio_chosen?
         params[:degree_required] == 'not_required'
       end
+
+      def latitude = params[:latitude]
+
+      def longitude = params[:longitude]
 
       def location_query_params
         {
