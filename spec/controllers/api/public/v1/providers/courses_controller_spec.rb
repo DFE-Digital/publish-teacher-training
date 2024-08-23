@@ -43,6 +43,59 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
       end
     end
 
+    context 'returns all course types' do
+      it 'returns undergraduate and postgraduate' do
+        undergraduate_course = create(:course, :published_teacher_degree_apprenticeship, provider:)
+        postgraduate_course = create(:course, :published_postgraduate, provider:)
+        provider.courses << [undergraduate_course, postgraduate_course]
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+          provider_code: provider.provider_code
+        }
+
+        actual = json_response['data'].map do |data|
+          {
+            id: data['id'],
+            qualifications: data['attributes']['qualifications'],
+            program_type: data['attributes']['program_type']
+          }
+        end
+
+        expect(actual).to include({
+                                    id: undergraduate_course.id.to_s,
+                                    qualifications: %w[qts undergraduate_degree],
+                                    program_type: 'teacher_degree_apprenticeship'
+                                  })
+
+        expect(actual).to include({
+                                    id: postgraduate_course.id.to_s,
+                                    qualifications: %w[qts pgce],
+                                    program_type: 'pg_teaching_apprenticeship'
+                                  })
+      end
+    end
+
+    context 'avoids duplication' do
+      it 'does not return duplicates across multiple pages by ordering the courses' do
+        provider.courses << build_list(:course, 30, provider:)
+        ids = []
+
+        (1..10).each do |page|
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            page:,
+            per_page: 3
+          }
+
+          ids += response.parsed_body['data'].pluck('id')
+        end
+
+        expect(ids.size).to eq(ids.uniq.size)
+      end
+    end
+
     context 'with pagination' do
       let!(:courses) { create_list(:course, 3, provider:) }
       let(:pagination) do

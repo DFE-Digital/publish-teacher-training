@@ -21,7 +21,7 @@ class CourseSearchService
 
   def call
     scope = course_scope
-    scope = scope.with_course_type(course_type)
+    scope = filter_by_course_type(scope)
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.application_status_open if applications_open?
@@ -74,6 +74,8 @@ class CourseSearchService
         else
           outer_scope.order(:distance)
         end
+    else
+      outer_scope = course_order(outer_scope)
     end
 
     outer_scope
@@ -82,6 +84,16 @@ class CourseSearchService
   private_class_method :new
 
   private
+
+  # This method can be overridden in subclasses to apply different ordering logic
+  # for various contexts, such as the API.
+  def course_order(outer_scope)
+    outer_scope
+  end
+
+  def filter_by_course_type(scope)
+    scope.with_course_type(course_type)
+  end
 
   def course_type
     return :undergraduate if @course_type_answer_determiner.show_undergraduate_courses?
