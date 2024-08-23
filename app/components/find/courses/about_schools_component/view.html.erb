@@ -1,8 +1,13 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
 
+  <!--Content for fee-based courses-->
   <p class="govuk-body">
     You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+  </p>
+  <!--Content for salaried courses-->
+  <p class="govuk-body">
+    You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
   </p>
 
   <dl class="govuk-summary-list">
@@ -72,9 +77,14 @@
 
   <div data-qa="course__about_schools">
     <%= render Shared::AdviceComponent::View.new(title: "How school placements work") do %>
+      <!--Content for fee-based courses-->
       <p class="govuk-body">
-        You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
+        The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
       </p>
+      <!--Content for salaried courses-->
+      <p class="govuk-body">
+      You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
+    </p>
     <% end %>
   </div>
 
