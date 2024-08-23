@@ -1,14 +1,14 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
-
-  <!--Content for fee-based courses-->
-  <p class="govuk-body">
-    You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
-  </p>
-  <!--Content for salaried courses-->
-  <p class="govuk-body">
-    You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
-  </p>
+  <% if course.salaried? %>
+    <p class="govuk-body">
+      You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+    </p>
+  <% else %>
+    <p class="govuk-body">
+      You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+    </p>
+  <% end %>
 
   <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
