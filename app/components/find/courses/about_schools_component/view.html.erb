@@ -77,14 +77,14 @@
 
   <div data-qa="course__about_schools">
     <%= render Shared::AdviceComponent::View.new(title: "How school placements work") do %>
-      <% if salaried? %>
-      <p class="govuk-body">
-        You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
-      </p>
+      <% if course.salaried? %>
+        <p class="govuk-body">
+          You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
+        </p>
       <% else %>
-      <p class="govuk-body">
-        The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
-      </p>
+        <p class="govuk-body">
+          The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
+        </p>
       <% end %>
     <% end %>
   </div>
