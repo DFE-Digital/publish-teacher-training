@@ -85,7 +85,9 @@ class CourseSearchService
 
   private
 
-  # Method signature
+  # This method provides a default ordering for courses.
+  # It can be overridden in subclasses to apply different ordering logic
+  # for various contexts, such as the API.
   def default_course_order(outer_scope)
     outer_scope
   end
