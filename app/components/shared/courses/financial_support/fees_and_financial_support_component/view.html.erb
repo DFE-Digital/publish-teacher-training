@@ -32,12 +32,6 @@
     </div>
   </aside>
 
-  <% if course.fee_details.present? %>
-    <div data-qa="course__fee_details">
-      <%= markdown(fee_details) %>
-    </div>
-  <% end %>
-
   <% if financial_support.present? %>
     <%= markdown(financial_support) %>
   <% end %>
