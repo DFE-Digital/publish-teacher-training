@@ -217,7 +217,7 @@ en:
           one: "Nearest potential placement location"
           other: "Nearest of %{count} potential placement locations"
         all_school_placements:
-          zero: "not listed yet"
+          zero: "Not listed yet"
           one: "%{count} potential placement location"
           other: "%{count} potential placement locations"
       course_study_sites:
@@ -226,7 +226,7 @@ en:
           one: "Nearest study site"
           other: "Nearest of %{count} study sites"
         all_study_sites:
-          zero: "not listed yet"
+          zero: "Not listed yet"
           one: "%{count} potential study site"
           other: "%{count} potential study sites"
 
