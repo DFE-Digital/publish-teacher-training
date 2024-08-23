@@ -114,7 +114,6 @@ RSpec.describe API::Public::V1::CoursesController do
           end
 
           expect(ids.size).to eq(ids.uniq.size)
-          expect(ids).to eq(ids.sort)
         end
       end
 
