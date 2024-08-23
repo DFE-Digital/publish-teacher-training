@@ -17,4 +17,3 @@ en:
     new_cycle_description: >
       From %{find_reopens} you will be able to search for courses starting in the
       %{next_academic_cycle_year_range} academic year. From %{apply_reopens} you will be able to apply for these courses.
-
