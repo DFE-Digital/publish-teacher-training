@@ -6,6 +6,14 @@
   padding: govuk-spacing(4);
 }
 
+.app-advice--non-uk {
+  @include govuk-responsive-margin(4, "bottom");
+  background: govuk-colour("light-grey");
+  border-left: $govuk-border-width solid #4c2c92;
+  clear: both;
+  padding: govuk-spacing(4);
+}
+
 .app-advice__caption {
   @include govuk-font($size: 19);
   color: govuk-colour("dark-grey");
