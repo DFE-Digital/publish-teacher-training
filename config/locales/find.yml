@@ -85,7 +85,7 @@ en:
         view:
           uk_citizens: UK citizens
           non_uk_citizens: Non-UK citizens
-          course_fees: The course fees for UK citizens in %{cycle_range} are %{fee}.
+          course_fees: Fees for UK citizens in %{cycle_range}: %{fee}.
       advice:
         heading: Support and advice
         postgraduate:
