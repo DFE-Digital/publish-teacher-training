@@ -19,13 +19,19 @@
     <% end %>
   <% end %>
 
-  <%= render Shared::AdviceComponent::View.new(title: "Financial support for non-UK citizens") do %>
-    <% if salaried? %>
-      <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
-    <% else %>
-      <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
-    <% end %>
-  <% end %>
+  <aside class="app-advice app-advice--non-uk">
+    <h3 class="app-advice__title">
+      Financial support for non-UK citizens
+    </h3>
+    <div class="app-advice__body">
+      <% if salaried? %>
+        <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
+      <% else %>
+        <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
+      <% end %>
+    </div>
+  </aside>
+
 
   <% if financial_support.present? %>
     <%= markdown(financial_support) %>
