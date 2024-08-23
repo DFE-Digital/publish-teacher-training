@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class APICourseSearchService < CourseSearchService
-  def default_course_order(outer_scope)
+  def course_order(outer_scope)
     outer_scope.order('course.created_at': :asc)
   end
 

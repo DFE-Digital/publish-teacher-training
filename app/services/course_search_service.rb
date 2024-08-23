@@ -75,7 +75,7 @@ class CourseSearchService
           outer_scope.order(:distance)
         end
     else
-      outer_scope = default_course_order(outer_scope)
+      outer_scope = course_order(outer_scope)
     end
 
     outer_scope
@@ -85,10 +85,9 @@ class CourseSearchService
 
   private
 
-  # This method provides a default ordering for courses.
-  # It can be overridden in subclasses to apply different ordering logic
+  # This method can be overridden in subclasses to apply different ordering logic
   # for various contexts, such as the API.
-  def default_course_order(outer_scope)
+  def course_order(outer_scope)
     outer_scope
   end
 
