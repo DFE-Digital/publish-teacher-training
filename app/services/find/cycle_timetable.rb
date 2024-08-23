@@ -119,7 +119,10 @@ module Find
 
     def self.show_apply_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
 
-    def self.show_cycle_closed_banner? = phase_in_time?(:today_is_after_apply_deadline_passed)
+    def self.show_cycle_closed_banner?
+      phase_in_time?(:today_is_after_apply_deadline_passed) &&
+        !phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+    end
 
     def self.show_apply_opens_soon_banner?
       phase_in_time?(:today_is_between_find_opening_and_apply_opening)

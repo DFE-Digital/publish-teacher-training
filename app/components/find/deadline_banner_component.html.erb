@@ -1,18 +1,18 @@
 <% if cycle_timetable.show_apply_deadline_banner? %>
   <%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
-    <% notification_banner.with_heading(text: t("apply_deadline_banner.heading", cycle_year_range:, apply_deadline:)) %>
+    <% notification_banner.with_heading(text: t("apply_deadline_banner.heading", academic_cycle_year_range:, apply_deadline:)) %>
     <p class="govuk-body"><%= t("apply_deadline_banner.text") %></p>
   <% end %>
 <% elsif cycle_timetable.show_cycle_closed_banner? %>
   <%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
     <% notification_banner.with_heading(text: t("apply_has_closed_banner.heading")) %>
-    <p class="govuk-body"><%= t("apply_has_closed_banner.application_deadline_has_passed", cycle_year_range:) %></p>
-    <p class="govuk-body"><%= t("apply_has_closed_banner.new_cycle_description", next_cycle_year_range:, find_reopens:, apply_reopens:) %></p>
+    <p class="govuk-body"><%= t("apply_has_closed_banner.application_deadline_has_passed", academic_cycle_year_range:) %></p>
+    <p class="govuk-body"><%= t("apply_has_closed_banner.new_cycle_description", next_academic_cycle_year_range:, find_reopens:, apply_reopens:) %></p>
   <% end %>
 <% elsif cycle_timetable.show_apply_opens_soon_banner? %>
   <%= govuk_notification_banner(title_text: t("important")) do |notification_banner| %>
     <% notification_banner.with_heading(text: t("apply_opens_soon_banner.heading", apply_opens:)) %>
-    <p class="govuk-body"><%= t("apply_opens_soon_banner.application_deadline_has_passed", previous_cycle_year_range:) %></p>
-    <p class="govuk-body"><%= t("apply_opens_soon_banner.you_can_search_for_courses", cycle_year_range:, apply_opens:) %></p>
+    <p class="govuk-body"><%= t("apply_opens_soon_banner.application_deadline_has_passed", previous_academic_cycle_year_range:) %></p>
+    <p class="govuk-body"><%= t("apply_opens_soon_banner.you_can_search_for_courses", academic_cycle_year_range:, apply_opens:) %></p>
   <% end %>
 <% end %>

@@ -20,6 +20,9 @@ feature 'switcher cycle' do
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
     and_i_see_mid_cycle_banner
+
+    and_i_do_not_see_the_cycle_has_closed_banner
+    and_i_do_not_see_the_apply_opens_soon_banner
   end
 
   scenario 'Update to Apply deadline has passed' do
@@ -29,6 +32,9 @@ feature 'switcher cycle' do
     and_i_should_see_the_success_banner
     and_i_visit_find_results_page
     and_i_see_deadline_banner('The application deadline has passed')
+
+    and_i_do_not_see_mid_cycle_banner
+    and_i_do_not_see_the_apply_opens_soon_banner
   end
 
   scenario 'Find has closed' do
@@ -55,7 +61,10 @@ feature 'switcher cycle' do
     and_i_should_see_the_success_banner
     and_i_should_see_the_correct_previous_recruitment_cycle_year
     and_i_visit_the_find_homepage
-    then_i_should_see_the_apply_opens_soon_banner
+    then_i_see_the_apply_opens_soon_banner
+
+    and_i_do_not_see_mid_cycle_banner
+    and_i_do_not_see_the_cycle_has_closed_banner
   end
 
   def when_i_visit_switcher_cycle_page
@@ -97,16 +106,35 @@ feature 'switcher cycle' do
     and_i_see_deadline_banner(banner_text)
   end
 
+  def and_i_do_not_see_mid_cycle_banner
+    cycle_year_range = Find::CycleTimetable.cycle_year_range
+    apply_deadline = Find::CycleTimetable.apply_deadline.to_fs(:govuk_date_and_time)
+    banner_text = "The deadline for applying to courses starting in #{cycle_year_range} is #{apply_deadline}"
+    and_i_do_not_see_deadline_banner(banner_text)
+  end
+
   def and_i_see_deadline_banner(banner_text)
-    expect(page).to have_css('.govuk-notification-banner__content', text: banner_text)
+    expect(page).to have_css('.govuk-notification-banner__heading', text: banner_text)
+  end
+
+  def and_i_do_not_see_deadline_banner(banner_text)
+    expect(page).to have_no_css('.govuk-notification-banner__heading', text: banner_text)
   end
 
   def then_i_should_see_the_applications_closed_text
     expect(page).to have_text('Applications are currently closed but you can get ready to apply')
   end
 
-  def then_i_should_see_the_apply_opens_soon_banner
+  def then_i_see_the_apply_opens_soon_banner
     and_i_see_deadline_banner('Apply for courses from 10 October')
+  end
+
+  def and_i_do_not_see_the_apply_opens_soon_banner
+    and_i_do_not_see_deadline_banner('Apply for courses from 10 October')
+  end
+
+  def and_i_do_not_see_the_cycle_has_closed_banner
+    and_i_do_not_see_deadline_banner('The application deadline has passed')
   end
 
   def and_i_should_see_the_correct_previous_recruitment_cycle_year
