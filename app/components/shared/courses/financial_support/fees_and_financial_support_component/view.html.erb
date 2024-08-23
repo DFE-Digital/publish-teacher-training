@@ -20,7 +20,11 @@
   <% end %>
 
   <%= render Shared::AdviceComponent::View.new(title: "Financial support for non-UK citizens") do %>
-    <%= render partial: "shared/courses/financial_support/non-uk" %>
+    <% if salaried? %>
+      <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
+    <% else %>
+      <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
+    <% end %>
   <% end %>
 
   <% if financial_support.present? %>
