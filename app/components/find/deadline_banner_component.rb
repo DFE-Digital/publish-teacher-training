@@ -22,7 +22,7 @@ module Find
       cycle_timetable.apply_deadline.to_fs(:govuk_date_and_time)
     end
 
-    def cycle_year_range
+    def academic_cycle_year_range
       cycle_timetable.cycle_year_range
     end
 
@@ -31,11 +31,23 @@ module Find
     end
 
     def find_reopens
-      cycle_timetable.find_reopens.to_fs(:govuk_date_and_time)
+      cycle_timetable.find_reopens.to_fs(:day_and_month)
     end
 
     def apply_reopens
-      cycle_timetable.apply_reopens.to_fs(:govuk_date_and_time)
+      cycle_timetable.apply_reopens.to_fs(:day_and_month)
+    end
+
+    def apply_opens
+      cycle_timetable.apply_opens.to_fs(:day_and_month)
+    end
+
+    def previous_academic_cycle_year_range
+      cycle_timetable.cycle_year_range(cycle_timetable.previous_year)
+    end
+
+    def next_academic_cycle_year_range
+      cycle_timetable.cycle_year_range(cycle_timetable.next_year)
     end
   end
 end

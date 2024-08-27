@@ -62,7 +62,7 @@ module Find
 
       # If the cycle switcher has been set to 'find has reopened' then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule == :today_is_after_find_opens
+      if SiteSetting.cycle_schedule.in? %i[today_is_after_find_opens today_is_between_find_opening_and_apply_opening]
         current_year + 1
       else
         current_year
@@ -97,6 +97,10 @@ module Find
       date(:find_opens, next_year)
     end
 
+    def self.apply_opens
+      date(:apply_opens, current_year)
+    end
+
     def self.apply_reopens
       date(:apply_opens, next_year)
     end
@@ -115,14 +119,22 @@ module Find
 
     def self.show_apply_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
 
-    def self.show_cycle_closed_banner? = phase_in_time?(:today_is_after_apply_deadline_passed)
+    def self.show_cycle_closed_banner?
+      phase_in_time?(:today_is_after_apply_deadline_passed) &&
+        !phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+    end
+
+    def self.show_apply_opens_soon_banner?
+      phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+    end
 
     def self.phases_in_time
       {
         today_is_after_find_closes: Time.zone.now.between?((find_closes.in_time_zone('London') - 1.hour), (find_reopens.in_time_zone('London') - 1.hour)),
         today_is_after_find_opens: Time.zone.now.between?((find_opens.in_time_zone('London') - 1.hour), apply_deadline),
         today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
-        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes)
+        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
+        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens)
       }
     end
 
@@ -167,6 +179,7 @@ module Find
         today_is_after_apply_deadline_passed
         today_is_after_find_closes
         today_is_after_find_opens
+        today_is_after_apply_opens
       ]
     end
 
