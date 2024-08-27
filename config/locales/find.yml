@@ -128,7 +128,7 @@ en:
           a_levels: A levels
           above_or_equivalent_qualification: or above, or equivalent qualification
       about_course:
-        heading: Course details
+        heading: About the course
       qualifications_summary_component:
         view:
           tda_with_qts: Teacher degree apprenticeship (TDA) with QTS
