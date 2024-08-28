@@ -42,22 +42,22 @@
           <!--With a bit of JavaScript magic we could make the (xx results) work too-->
           <li>
             <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="15" form="result-filters">
-              15 miles <%= turbo_frame_tag [:radius_turbo_frame, 15], src: find_results_count_path(request.query_parameters.merge(radius: 15)), loading: :lazy  %>
+              15 miles <%= turbo_frame_tag [:results_count, :radius, 15], src: find_results_count_path(request.query_parameters.merge(radius: 15)), loading: :lazy  %>
             </button>
           </li>
           <li>
             <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="20" form="result-filters">
-              20 miles <%= turbo_frame_tag [:radius_turbo_frame, 20], src: find_results_count_path(request.query_parameters.merge(radius: 20)), loading: :lazy  %>
+              20 miles <%= turbo_frame_tag [:results_count, :radius, 20], src: find_results_count_path(request.query_parameters.merge(radius: 20)), loading: :lazy  %>
             </button>
           </li>
           <li>
             <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="100" form="result-filters">
-              100 miles <%= turbo_frame_tag [:radius_turbo_frame, 100], src: find_results_count_path(request.query_parameters.merge(radius: 100)), loading: :lazy  %>
+              100 miles <%= turbo_frame_tag [:results_count, :radius, 100], src: find_results_count_path(request.query_parameters.merge(radius: 100)), loading: :lazy  %>
             </button>
           </li>
           <li>
             <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="200" form="result-filters">
-              200 miles <%= turbo_frame_tag [:radius_turbo_frame, 200], src: find_results_count_path(request.query_parameters.merge(radius: 200)), loading: :lazy  %>
+              200 miles <%= turbo_frame_tag [:results_count, :radius, 200], src: find_results_count_path(request.query_parameters.merge(radius: 200)), loading: :lazy  %>
             </button>
           </li>
         </ul>
