@@ -1,3 +1,13 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back to home",
+    href: find_root_path(@results_filter_query_parameters),
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
+
 <h1 class="govuk-heading-xl" data-qa="heading">
   <%= "#{results.number_of_courses_string} found" %>
 </h1>
