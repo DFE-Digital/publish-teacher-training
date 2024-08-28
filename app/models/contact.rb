@@ -14,12 +14,11 @@ class Contact < ApplicationRecord
   validates :telephone, phone: true, allow_nil: true
   validates :permission_given, acceptance: true
 
-  enum type: {
-         admin: 'admin',
-         utt: 'utt',
-         web_link: 'web_link',
-         fraud: 'fraud',
-         finance: 'finance'
-       },
-       _suffix: 'contact'
+  enum :type, {
+    admin: 'admin',
+    utt: 'utt',
+    web_link: 'web_link',
+    fraud: 'fraud',
+    finance: 'finance'
+  }, suffix: 'contact'
 end

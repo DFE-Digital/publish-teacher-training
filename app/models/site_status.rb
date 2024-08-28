@@ -14,24 +14,24 @@ class SiteStatus < ApplicationRecord
   validate :vac_status_must_be_consistent_with_course_study_mode,
            if: proc { |s| s.course&.study_mode.present? }
 
-  enum vac_status: {
+  enum :vac_status, {
     both_full_time_and_part_time_vacancies: 'B',
     part_time_vacancies: 'P',
     full_time_vacancies: 'F',
     no_vacancies: ''
   }
 
-  enum status: {
+  enum :status, {
     discontinued: 'D',
     running: 'R',
     new_status: 'N',
     suspended: 'S'
-  }, _prefix: :status
+  }, prefix: :status
 
-  enum publish: {
+  enum :publish, {
     published: 'Y',
     unpublished: 'N'
-  }, _suffix: :on_ucas
+  }, suffix: :on_ucas
 
   aasm column: :status, enum: true do
     state :new_status, initial: true

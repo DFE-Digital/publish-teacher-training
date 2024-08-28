@@ -36,7 +36,7 @@ module Support
 
       return '' if address.all?(&:blank?)
 
-      address.select(&:present?).join('<br>').html_safe
+      address.compact_blank.join('<br>').html_safe
     end
 
     private

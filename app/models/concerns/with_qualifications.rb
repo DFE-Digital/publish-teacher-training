@@ -8,7 +8,7 @@ module WithQualifications
     #
     # See [UCAS Teacher Training Set-up Guide](https://www.ucas.com/file/115581/download?token=mv-G6P53),
     # page 32
-    enum profpost_flag: {
+    enum :profpost_flag, {
 
       # Recommendation for QTS: the student will not receive an academic teacher
       # training qualification on successful completion of the
@@ -41,7 +41,7 @@ module WithQualifications
     # subjects this course was tagged to.
     #
     # Defined here: https://github.com/DFE-Digital/manage-courses-api/blob/master/src/ManageCourses.Domain/Models/CourseQualification.cs
-    enum qualification: { qts: 0, pgce_with_qts: 1, pgde_with_qts: 2, pgce: 3, pgde: 4, undergraduate_degree_with_qts: 5 }
+    enum :qualification, { qts: 0, pgce_with_qts: 1, pgde_with_qts: 2, pgce: 3, pgde: 4, undergraduate_degree_with_qts: 5 }
 
     # This field may seem like an unnecessary overhead when there is already a
     # database-backed `qualification` field. However it's misleading, from the
