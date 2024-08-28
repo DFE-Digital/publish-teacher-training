@@ -10,8 +10,6 @@
   </div>
   <div class="app-filter-layout__content">
 
-    <%= render Find::Results::NoResultsComponent.new(results:) %>
-
     <div class="app-promoted-link">
 
       <%= form_with(url: '/', method: :get) do |form| %>
@@ -49,6 +47,7 @@
 
     </div>
 
+    <%= render Find::Results::NoResultsComponent.new(results:) %>
 
     <%= render Find::Results::SortByComponent.new(results:) %>
 

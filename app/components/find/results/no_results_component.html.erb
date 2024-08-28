@@ -16,8 +16,43 @@
       <%= govuk_link_to "Learn more about teacher training in Northern Ireland", "https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland" %>
     </p>
   <% else %>
+    <h3 class="govuk-heading-m">
+      Try another search
+    </h3>
     <p class="govuk-body">
-      You can try another search, for example by changing <%= "subject".pluralize(subjects.size) %> or location<% if results.with_salaries? %> or searching for courses that do not offer a salary<% end %>.
+      You may get more results if you:
     </p>
+    <div class="no-results-divider">
+      <ul class="govuk-list govuk-list--bullet">
+        <li>add more keywords, or try different ones</li>
+        <li>change the radius of your search</li>
+        <li>look at a wider geographical location. West Yorkshire instead of Leeds for example</li>
+        <li>remove some filters if you have used them</li>
+      </ul>
+    </div>
+
+    <div class="no-results-divider">
+      <h3 class="govuk-heading-m">
+        Try a wider location search
+      </h3>
+      <ul class="govuk-list govuk-list--bullet">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#">15 miles (1 result)</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#">20 miles (3 results)</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#">100 miles (4 results)</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#">200 miles (5 results)</a></li>
+      </ul>
+    </div>
+
+  <h3 class="govuk-heading-m">
+    Or <a class="govuk-link govuk-link--no-visited-state" href="#">get notified</a> when a course like this get listed
+  </h3>
+  <p class="govuk-body">
+  Subscribers
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>get an email when new jobs match their search</li>
+  <li>can unsubscrive at any time</li>
+  <li>receive no more than 1 email a day</li>
+</ul>
   <% end %>
 </div>
