@@ -22,7 +22,7 @@ class Site < ApplicationRecord
 
   belongs_to :provider
 
-  enum site_type: {
+  enum :site_type, {
     school: 0,
     study_site: 1
   }
@@ -72,7 +72,7 @@ class Site < ApplicationRecord
 
     return '' if address.all?(&:blank?)
 
-    address.select(&:present?).join(', ')
+    address.compact_blank.join(', ')
   end
 
   def address_changed?

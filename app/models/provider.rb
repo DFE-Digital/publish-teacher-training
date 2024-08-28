@@ -25,13 +25,13 @@ class Provider < ApplicationRecord
   # The `scitt` & `university` provider types can be used to denote
   # that they are an `accredited_provider` for accrediting providers
   # therefore `lead_school` is a `not_an_accredited_provider`.
-  enum provider_type: {
+  enum :provider_type, {
     scitt: 'B',
     lead_school: 'Y',
     university: 'O'
   }
 
-  enum accrediting_provider: {
+  enum :accrediting_provider, {
     accredited_provider: 'Y',
     not_an_accredited_provider: 'N'
   }
@@ -223,7 +223,7 @@ class Provider < ApplicationRecord
   end
 
   def full_address_with_breaks
-    [address1, address2, address3, town, address4, postcode].map { |line| ERB::Util.html_escape(line) }.select(&:present?).join('<br> ').html_safe
+    [address1, address2, address3, town, address4, postcode].map { |line| ERB::Util.html_escape(line) }.compact_blank.join('<br> ').html_safe
   end
 
   def address_changed?

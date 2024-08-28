@@ -6,7 +6,7 @@ module RegionCode
     # These correspond to the first-level NUTS regions for the UK (minus Northern Ireland)
     # https://en.wikipedia.org/wiki/First-level_NUTS_of_the_European_Union#United_Kingdom
 
-    enum region_code: {
+    enum :region_code, {
       no_region: 0,
       london: 1,
       south_east: 2,

@@ -160,7 +160,7 @@ module Find
         nearest_address.town,
         nearest_address.address4,
         nearest_address.postcode
-      ].select(&:present?).join(', ').html_safe
+      ].compact_blank.join(', ').html_safe
     end
 
     def nearest_location_name(course)

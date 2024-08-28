@@ -37,24 +37,24 @@ class Course < ApplicationRecord
             presence: true,
             on: %i[create update]
 
-  enum application_status: {
+  enum :application_status, {
     closed: 0,
     open: 1
-  }, _prefix: :application_status
+  }, prefix: :application_status
 
-  enum course_type: {
+  enum :course_type, {
     postgraduate: 'postgraduate',
     undergraduate: 'undergraduate'
-  }, _suffix: :course_type
+  }, suffix: :course_type
 
-  enum funding: {
+  enum :funding, {
     not_set: 'not_set',
     fee: 'fee',
     salary: 'salary',
     apprenticeship: 'apprenticeship'
   }
 
-  enum program_type: {
+  enum :program_type, {
     higher_education_programme: 'HE',
     higher_education_salaried_programme: 'HES',
     school_direct_training_programme: 'SD',
@@ -65,19 +65,19 @@ class Course < ApplicationRecord
     teacher_degree_apprenticeship: 'TDA'
   }
 
-  enum study_mode: {
+  enum :study_mode, {
     full_time: 'F',
     part_time: 'P',
     full_time_or_part_time: 'B'
   }
 
-  enum level: {
+  enum :level, {
     primary: 'Primary',
     secondary: 'Secondary',
     further_education: 'Further education'
-  }, _suffix: :course
+  }, suffix: :course
 
-  enum degree_grade: {
+  enum :degree_grade, {
     two_one: 0,
     two_two: 1,
     third_class: 2,
