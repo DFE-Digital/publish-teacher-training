@@ -4,6 +4,7 @@ module Find
   module Results
     class NoResultsComponent < ViewComponent::Base
       include ::ViewHelper
+      include Turbo::FramesHelper
 
       attr_reader :results, :filters_view
 

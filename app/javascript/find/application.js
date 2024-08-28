@@ -7,6 +7,7 @@ import { FilterToggleButton } from './filter-toggle-button'
 import initAutocomplete from './autocomplete'
 import dfeAutocomplete from './dfe-autocomplete'
 import CookieBanner from '../cookie_banner'
+import "@hotwired/turbo-rails"
 
 window.jQuery = jQuery
 window.$ = jQuery

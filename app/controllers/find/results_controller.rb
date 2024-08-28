@@ -20,6 +20,17 @@ module Find
                            course_codes: @courses.pluck(:course_code).uniq)
     end
 
+    def count
+      matched_params = MatchOldParams.call(request.query_parameters)
+                                     .merge(
+                                       keywords: request.query_parameters[:keywords],
+                                       **geocode_params_for(request.query_parameters[:lq])
+                                     )
+
+      @filters_view = ResultFilters::FiltersView.new(params: matched_params)
+      @results_view = ResultsView.new(query_parameters: matched_params)
+    end
+
     private
 
     def track_search_results(number_of_results:, course_codes:)

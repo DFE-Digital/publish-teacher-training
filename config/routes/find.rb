@@ -18,6 +18,7 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/git/:git_path', to: 'courses#git_redirect', as: :get_into_teaching_redirect
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
   get '/results', to: 'results#index', as: 'results'
+  get '/results/count', to: 'results#count', as: 'results_count'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 
