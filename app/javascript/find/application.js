@@ -7,7 +7,10 @@ import { FilterToggleButton } from './filter-toggle-button'
 import initAutocomplete from './autocomplete'
 import dfeAutocomplete from './dfe-autocomplete'
 import CookieBanner from '../cookie_banner'
-import "@hotwired/turbo-rails"
+import '@hotwired/turbo-rails'
+
+// eslint-disable-next-line no-undef
+Turbo.session.drive = false
 
 window.jQuery = jQuery
 window.$ = jQuery

@@ -35,7 +35,7 @@
             City, town or postcode
           <% end %>
 
-          <%= form.text_field :lq, class: "govuk-input", value: filters_view.lq, autocomplete: :off, form: "result-filters" %>
+          <%= form.text_field :lq, id: :location, class: "govuk-input", value: filters_view.lq, autocomplete: :off, form: "result-filters" %>
           <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
         </div>
 
