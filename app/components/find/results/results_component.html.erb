@@ -47,7 +47,7 @@
 
     </div>
 
-    <%= render Find::Results::NoResultsComponent.new(results:) %>
+    <%= render Find::Results::NoResultsComponent.new(results:, filters_view: @filters_view) %>
 
     <%= render Find::Results::SortByComponent.new(results:) %>
 

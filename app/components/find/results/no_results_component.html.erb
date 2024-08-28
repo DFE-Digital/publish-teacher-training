@@ -31,17 +31,38 @@
       </ul>
     </div>
 
-    <div class="no-results-divider">
-      <h3 class="govuk-heading-m">
-        Try a wider location search
-      </h3>
-      <ul class="govuk-list govuk-list--bullet">
-        <li><a class="govuk-link govuk-link--no-visited-state" href="#">15 miles (1 result)</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="#">20 miles (3 results)</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="#">100 miles (4 results)</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="#">200 miles (5 results)</a></li>
-      </ul>
-    </div>
+    <% if filters_view.location_query? %>
+      <div class="no-results-divider">
+        <h3 class="govuk-heading-m">
+          Try a wider location search
+        </h3>
+        <ul class="govuk-list govuk-list--bullet">
+          <!--We can loop through each of the radius options and display them as a list of buttons-->
+          <!--We could also exclude the radius' that have been selected previously-->
+          <!--With a bit of JavaScript magic we could make the (xx results) work too-->
+          <li>
+            <button class="govuk-link govuk-link--no-visited-state" type="submit" name="radius" value="15" form="result-filters">
+              15 miles (3 results)
+            </button>
+          </li>
+          <li>
+            <button class="govuk-link govuk-link--no-visited-state" type="submit" name="radius" value="20" form="result-filters">
+              20 miles (3 results)
+            </button>
+          </li>
+          <li>
+            <button class="govuk-link govuk-link--no-visited-state" type="submit" name="radius" value="100" form="result-filters">
+              100 miles (3 results)
+            </button>
+          </li>
+          <li>
+            <button class="govuk-link govuk-link--no-visited-state" type="submit" name="radius" value="200" form="result-filters">
+              200 miles (3 results)
+            </button>
+          </li>
+        </ul>
+      </div>
+    <% end %>
 
   <h3 class="govuk-heading-m">
     Or <a class="govuk-link govuk-link--no-visited-state" href="#">get notified</a> when a course like this get listed
