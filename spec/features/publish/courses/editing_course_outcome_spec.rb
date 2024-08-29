@@ -32,7 +32,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  context 'TDA course' do
+  context 'TDA course with db_backed_funding_type enabled' do
     scenario 'changing the outcome from non TDA to TDA' do
       given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
       and_the_tda_feature_flag_is_active
@@ -80,6 +80,70 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
         and_the_tda_feature_flag_is_active
         and_the_db_backed_funding_type_feature_flag_is_enabled
+        and_there_is_a_tda_course_i_want_to_edit
+        when_i_visit_the_course_outcome_page_in_the_next_cycle
+        and_the_course_type_is_undergraduate
+        and_i_choose_qts
+        and_the_course_type_is_postgraduate
+        and_the_back_link_points_to_the_outcome_page
+        and_i_choose_salaried
+        and_the_back_link_points_to_the_funding_type_page
+        and_i_choose_part_time
+        and_the_back_link_points_to_the_study_mode_page
+        and_i_choose_to_sponsor_a_skilled_worker_visa
+        then_i_see_the_correct_attributes_in_the_database_for_salaried
+      end
+    end
+  end
+
+  context 'TDA course with db_backed_funding_type_disabled' do
+    scenario 'changing the outcome from non TDA to TDA' do
+      given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+      and_the_tda_feature_flag_is_active
+      and_the_db_backed_funding_type_feature_flag_is_disabled
+      and_there_is_a_qts_course_i_want_to_edit
+      when_i_visit_the_course_outcome_page_in_the_next_cycle
+      and_i_choose_undergraduate_degree_with_qts
+      and_the_course_type_is_postgraduate
+      and_i_submit
+      then_the_default_options_for_a_tda_course_should_be_applied
+    end
+
+    context 'fee course' do
+      scenario 'changing the outcome from TDA to non TDA' do
+        given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+        and_the_tda_feature_flag_is_active
+        and_the_db_backed_funding_type_feature_flag_is_disabled
+        and_there_is_a_tda_course_i_want_to_edit
+        when_i_visit_the_course_outcome_page_in_the_next_cycle
+        and_the_course_type_is_undergraduate
+        and_i_choose_qts
+        and_the_course_type_is_postgraduate
+        and_the_back_link_points_to_the_outcome_page
+        and_i_choose_the_fee_paying
+        and_the_back_link_points_to_the_funding_type_page
+        and_i_choose_part_time
+        and_the_back_link_points_to_the_study_mode_page
+
+        and_i_click_back
+        then_i_am_on_the_study_mode_page
+
+        and_i_click_back
+        then_i_am_on_the_funding_type_page
+
+        when_i_update
+        and_i_update
+
+        and_i_choose_to_sponsor_a_student_visa
+        then_i_see_the_correct_attributes_in_the_database_for_fee_paying
+      end
+    end
+
+    context 'salaried course' do
+      scenario 'changing the outcome from TDA to non TDA' do
+        given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+        and_the_tda_feature_flag_is_active
+        and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
         and_the_course_type_is_undergraduate
@@ -314,6 +378,10 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
   def and_the_db_backed_funding_type_feature_flag_is_enabled
     allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+  end
+
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa
