@@ -68,6 +68,7 @@ class CoursePolicy
       age_range_in_years
       applications_open_from
       funding
+      funding_type
       is_send
       level
       qualification

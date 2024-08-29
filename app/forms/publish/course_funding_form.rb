@@ -6,6 +6,7 @@ module Publish
 
     FIELDS = %i[
       funding
+      funding_type
       can_sponsor_skilled_worker_visa
       can_sponsor_student_visa
       previous_tda_course
@@ -13,13 +14,19 @@ module Publish
 
     attr_accessor(*FIELDS)
 
-    validates :funding, presence: true
+    validates :funding, presence: true, if: -> { db_backed_funding_type_feature_flag_active? }
+    validates :funding_type, presence: true, if: -> { !db_backed_funding_type_feature_flag_active? }
     validates :can_sponsor_skilled_worker_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { skilled_worker_visa? }
     validates :can_sponsor_student_visa, inclusion: { in: [true, false, 'true', 'false'] }, if: -> { student_visa? }
 
     def initialize(model, params: {})
       super(model, model, params:)
-      @funding_updated = course.funding != compute_fields[:funding]
+
+      @funding_updated = if db_backed_funding_type_feature_flag_active?
+                           course.funding != compute_fields[:funding]
+                         else
+                           course.funding_type != compute_fields[:funding_type]
+                         end
       origin_step
     end
 
@@ -29,16 +36,26 @@ module Publish
 
     def origin_step
       @origin_step ||= if funding_updated?
-                         if [course.funding, new_attributes[:funding]].include?('apprenticeship')
+                         if db_backed_funding_type_feature_flag_active?
+                           if [course.funding, new_attributes[:funding]].include?('apprenticeship')
+                             :apprenticeship
+                           else
+                             :funding
+                           end
+                         elsif [course.funding_type, new_attributes[:funding_type]].include?('apprenticeship')
                            :apprenticeship
                          else
-                           :funding
+                           :funding_type
                          end
                        end
     end
 
     def is_fee_based?
-      funding == 'fee'
+      if db_backed_funding_type_feature_flag_active?
+        funding == 'fee'
+      else
+        funding_type == 'fee'
+      end
     end
 
     def visa_type
@@ -96,18 +113,32 @@ module Publish
       end
 
       course.assign_attributes(reset_course_attributes)
+<<<<<<< HEAD
 
       ::Courses::AssignProgramTypeService.new.execute(course.funding, course) if db_backed_funding_type_feature_flag_active?
 
       course.save!
+=======
+      ::Courses::AssignProgramTypeService.new.execute(course.funding, course)
+      course.save! if db_backed_funding_type_feature_flag_active?
+>>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
     end
 
     def original_fields_values
-      {
-        funding: course.funding,
-        can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
-        can_sponsor_student_visa: course.can_sponsor_student_visa
-      }
+      if db_backed_funding_type_feature_flag_active?
+        {
+          funding: course.funding,
+          can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
+          can_sponsor_student_visa: course.can_sponsor_student_visa
+        }
+      else
+
+        {
+          funding_type: course.funding_type,
+          can_sponsor_skilled_worker_visa: course.can_sponsor_skilled_worker_visa,
+          can_sponsor_student_visa: course.can_sponsor_student_visa
+        }
+      end
     end
 
     def compute_fields
@@ -116,6 +147,10 @@ module Publish
 
     def form_store_key
       :funding_types_and_visas
+    end
+
+    def db_backed_funding_type_feature_flag_active?
+      FeatureService.enabled?(:db_backed_funding_type)
     end
   end
 end

@@ -8,17 +8,31 @@ module Publish
       end
 
       def call
-        @course.assign_attributes(
-          course_type: 'undergraduate',
-          funding: 'apprenticeship',
-          study_mode: 'full_time',
-          program_type: 'teacher_degree_apprenticeship',
-          can_sponsor_student_visa: false,
-          can_sponsor_skilled_worker_visa: false,
-          degree_grade: 'not_required',
-          additional_degree_subject_requirements: false,
-          degree_subject_requirements: nil
-        )
+        if FeatureService.enabled?(:db_backed_funding_type)
+          @course.assign_attributes(
+            course_type: 'undergraduate',
+            funding: 'apprenticeship',
+            study_mode: 'full_time',
+            program_type: 'teacher_degree_apprenticeship',
+            can_sponsor_student_visa: false,
+            can_sponsor_skilled_worker_visa: false,
+            degree_grade: 'not_required',
+            additional_degree_subject_requirements: false,
+            degree_subject_requirements: nil
+          )
+        else
+          @course.assign_attributes(
+            course_type: 'undergraduate',
+            funding_type: 'apprenticeship',
+            study_mode: 'full_time',
+            program_type: 'teacher_degree_apprenticeship',
+            can_sponsor_student_visa: false,
+            can_sponsor_skilled_worker_visa: false,
+            degree_grade: 'not_required',
+            additional_degree_subject_requirements: false,
+            degree_subject_requirements: nil
+          )
+        end
 
         if @course.enrichments.blank?
           course_enrichment = @course.enrichments.find_or_initialize_draft
