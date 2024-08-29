@@ -10,7 +10,7 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
 
   scenario 'selecting multiple accredited_bodies' do
     when_i_select_an_accredited_provider
-    2.times { and_i_click_continue }
+    and_i_click_continue
     then_i_am_met_with_the_applications_open_page
   end
 

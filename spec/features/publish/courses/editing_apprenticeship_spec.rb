@@ -12,12 +12,12 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
       given_there_is_apprenticeship_course
       and_the_db_backed_funding_type_feature_flag_is_disabled
       when_i_visit_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_no)
+      when_i_select(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_go_back
       then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_no)
+      when_i_select(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
@@ -30,12 +30,12 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
       given_there_is_apprenticeship_course
       and_the_db_backed_funding_type_feature_flag_is_enabled
       when_i_visit_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_no)
+      when_i_select(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_go_back
       then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_no)
+      when_i_select(:fee)
       and_i_continue
       then_i_should_be_on_the_student_visa_edit_page
       when_i_update_the_student_visa_to_be_sponsored
@@ -43,16 +43,35 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  context 'non apprenticeship to apprenticeship course' do
+  context 'non apprenticeship to apprenticeship course with db_backed_funding feature active' do
     scenario 'i am taken to the skilled worker visa step' do
       given_there_is_fee_course
+      and_the_db_backed_funding_type_feature_flag_is_enabled
       when_i_visit_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_yes)
+      when_i_select(:apprenticeship)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_go_back
       then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-      when_i_select(:checkbox_yes)
+      when_i_select(:apprenticeship)
+      and_i_continue
+      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+      when_i_update_the_skilled_worker_visa_to_be_sponsored
+      then_i_should_see_a_success_message_for('Skilled Worker')
+    end
+  end
+
+  context 'non apprenticeship to apprenticeship course with db_backed_funding feature inactive' do
+    scenario 'i am taken to the skilled worker visa step' do
+      given_there_is_funding_fee_course
+      and_the_db_backed_funding_type_feature_flag_is_disabled
+      when_i_visit_the_publish_courses_apprenticeship_edit_page
+      when_i_select(:apprenticeship)
+      and_i_continue
+      then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
+      when_i_go_back
+      then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
+      when_i_select(:apprenticeship)
       and_i_continue
       then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page
       when_i_update_the_skilled_worker_visa_to_be_sponsored
@@ -67,7 +86,7 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_should_be_on_the_publish_courses_apprenticeship_edit_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/apprenticeship")
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/funding-type")
   end
 
   def and_i_am_authenticated_as_accredited_provider_provider_user
@@ -80,6 +99,12 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
     )
   end
 
+  def given_there_is_funding_fee_course
+    given_a_course_exists(
+      funding_type: 'fee'
+    )
+  end
+
   def given_there_is_apprenticeship_course
     given_a_course_exists(
       funding: 'apprenticeship'
@@ -87,7 +112,7 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_visit_the_publish_courses_apprenticeship_edit_page
-    publish_courses_apprenticeship_edit_page.load(
+    publish_courses_funding_type_edit_page.load(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code
     )
   end
@@ -107,7 +132,7 @@ feature 'Editing apprenticeship', { can_edit_current_and_next_cycles: false } do
   end
 
   def when_i_select(option)
-    publish_courses_apprenticeship_edit_page.funding_type_fields.send(option).click
+    publish_courses_funding_type_edit_page.funding_type_fields.send(option).click
   end
 
   def then_i_should_be_on_the_publish_courses_skilled_worker_visa_sponsorship_edit_page

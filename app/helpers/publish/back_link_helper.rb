@@ -16,12 +16,6 @@ module Publish
           course.course_code,
           previous_tda_course: true
         )
-      elsif course.provider.accredited_provider?
-        apprenticeship_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
       else
         funding_type_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
