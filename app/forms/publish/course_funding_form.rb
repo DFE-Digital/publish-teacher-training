@@ -113,15 +113,10 @@ module Publish
       end
 
       course.assign_attributes(reset_course_attributes)
-<<<<<<< HEAD
 
       ::Courses::AssignProgramTypeService.new.execute(course.funding, course) if db_backed_funding_type_feature_flag_active?
 
       course.save!
-=======
-      ::Courses::AssignProgramTypeService.new.execute(course.funding, course)
-      course.save! if db_backed_funding_type_feature_flag_active?
->>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
     end
 
     def original_fields_values

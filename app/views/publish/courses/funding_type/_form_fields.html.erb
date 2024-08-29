@@ -1,9 +1,5 @@
 <% if FeatureService.enabled?(:db_backed_funding_type) %>
-<<<<<<< HEAD
   <%= render "publish/shared/error_wrapper", error_keys: %i[funding program_type], data_qa: "course__funding_type" do %>
-=======
-  <%= render "publish/shared/error_wrapper", error_keys: %i[funding program_type], data_qa: "course__funding" do %>
->>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-fieldset__heading">
@@ -26,11 +22,7 @@
                   "Fee - no salary",
                   value: "fee",
                   class: "govuk-label govuk-radios__label",
-<<<<<<< HEAD
                   data: { qa: "course__funding_type_fee" } %>
-=======
-                  data: { qa: "course__funding_fee" } %>
->>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
         </div>
 
         <div class="govuk-radios__item">
@@ -41,11 +33,7 @@
                   "Salary",
                   value: "salary",
                   class: "govuk-label govuk-radios__label",
-<<<<<<< HEAD
                   data: { qa: "course__funding_type_salary" } %>
-=======
-                  data: { qa: "course__funding_salary" } %>
->>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
         </div>
 
         <div class="govuk-radios__item">
@@ -56,11 +44,7 @@
                   "Teaching apprenticeship - with salary",
                   value: "apprenticeship",
                   class: "govuk-label govuk-radios__label",
-<<<<<<< HEAD
                   data: { qa: "course__funding_type_apprenticeship" } %>
-=======
-                  data: { qa: "course__funding_apprenticeship" } %>
->>>>>>> f9c6824d0 ([2234] Ensure the previous implementation works)
         </div>
       </div>
 
