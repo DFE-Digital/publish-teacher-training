@@ -8,6 +8,15 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   end
 
   context 'fee paying course' do
+    scenario 'i can update the student visa with db_backed_funding_inactive' do
+      given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa_with_db_backed_funding_inactive
+      when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
+      and_i_choose_yes_to_the_student_sponsorship_question
+      and_i_continue_for('Student')
+      and_i_click_on_basic_details
+      then_i_should_see_that_the_student_visa_can_be_sponsored
+    end
+
     scenario 'i can update the student visa' do
       given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
       when_i_visit_the_course_publish_courses_student_visa_sponsorship_edit_page
@@ -35,8 +44,14 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
     given_i_am_authenticated(user: @user)
   end
 
-  def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+  def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa_with_db_backed_funding_inactive
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
     given_a_course_exists(funding_type: 'fee', can_sponsor_student_visa: false, accrediting_provider:)
+  end
+
+  def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    given_a_course_exists(funding: 'fee', can_sponsor_student_visa: false, accrediting_provider:)
   end
 
   def given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
