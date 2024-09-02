@@ -40,6 +40,11 @@ variable "enable_monitoring" {
 
 variable "enable_logit" { default = false }
 
+variable "external_url" {
+  default     = null
+  description = "Healthcheck URL for StatusCake monitoring"
+}
+
 variable "statuscake_contact_groups" {
   type    = list(number)
   default = []
