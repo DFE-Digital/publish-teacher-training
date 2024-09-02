@@ -7,7 +7,7 @@ describe EmailAddressValidator do
 
   let(:model) do
     Class.new do
-      include ActiveRecord::Validations
+      include ActiveModel::Model
 
       attr_accessor :email
 
