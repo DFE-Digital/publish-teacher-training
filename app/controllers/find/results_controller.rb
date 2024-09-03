@@ -40,7 +40,7 @@ module Find
     def geocode_params_for(query)
       return {} if query.blank?
 
-      results = Geocoder.search(query, components: 'country:UK').first
+      results = geocoder_result(query)
       return {} unless results
 
       {
@@ -53,6 +53,12 @@ module Find
         sortby: ResultsView::DISTANCE,
         radius: request.query_parameters.fetch(:radius, ResultsView::MILES)
       }
+    end
+
+    def geocoder_result(query)
+      Rails.cache.fetch("geocoder/#{query}", expires_in: 4.hours) do
+        Geocoder.search(query, components: 'country:UK').first
+      end
     end
 
     def country(results)
