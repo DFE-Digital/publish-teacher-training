@@ -311,9 +311,8 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def and_i_do_not_see_the_option_to_add_more_a_level_subjects
-    expect(page).to have_no_content('Do you want to add another A level?')
-    expect(page).to have_no_content('Yes')
-    expect(page).to have_no_content('No')
+    expect(page).to have_no_css('fieldset.govuk-fieldset')
+    expect(page).to have_no_css('legend', text: 'Do you want to add another A level?')
   end
 
   def then_i_am_on_the_add_another_a_level_subject_page
