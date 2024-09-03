@@ -12,17 +12,26 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   scenario 'selecting fee paying' do
     when_i_select_funding_type(:fee)
     and_i_click_continue
+    and_i_click_back
+    and_fee_is_is_still_selected
+    and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:fee)
   end
 
   scenario 'selecting salaried' do
     when_i_select_funding_type(:salary)
     and_i_click_continue
+    and_i_click_back
+    and_salary_is_is_still_selected
+    and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:salary)
   end
 
   scenario 'selecting apprenticeship' do
     when_i_select_funding_type(:apprenticeship)
+    and_i_click_continue
+    and_i_click_back
+    and_apprenticeship_is_is_still_selected
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:apprenticeship)
   end
@@ -49,6 +58,22 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
 
   def and_i_click_continue
     publish_courses_new_funding_type_page.continue.click
+  end
+
+  def and_i_click_back
+    click_on 'Back'
+  end
+
+  def and_fee_is_is_still_selected
+    expect(page).to have_checked_field('Fee - no salary')
+  end
+
+  def and_salary_is_is_still_selected
+    expect(page).to have_checked_field('Salary')
+  end
+
+  def and_apprenticeship_is_is_still_selected
+    expect(page).to have_checked_field('Teaching apprenticeship - with salary')
   end
 
   def provider

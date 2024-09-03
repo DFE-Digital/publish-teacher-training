@@ -17,7 +17,7 @@
         <div class="govuk-radios__item">
           <%= form.radio_button :funding,
                   "fee",
-                  class: "govuk-radios__input" %>
+                  class: "govuk-radios__input", checked: course.fee? %>
           <%= form.label :funding,
                   "Fee - no salary",
                   value: "fee",
@@ -28,7 +28,7 @@
         <div class="govuk-radios__item">
           <%= form.radio_button :funding,
                   "salary",
-                  class: "govuk-radios__input" %>
+                  class: "govuk-radios__input", checked: course.salary? %>
           <%= form.label :funding,
                   "Salary",
                   value: "salary",
@@ -39,7 +39,7 @@
         <div class="govuk-radios__item">
           <%= form.radio_button :funding,
                   "apprenticeship",
-                  class: "govuk-radios__input" %>
+                  class: "govuk-radios__input", checked: course.apprenticeship? %>
           <%= form.label :funding,
                   "Teaching apprenticeship - with salary",
                   value: "apprenticeship",
