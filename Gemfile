@@ -193,7 +193,7 @@ group :development, :test do
 
   gem 'rails-controller-testing'
 
-  gem 'rails-erd'
+  # gem 'rails-erd'
 
   gem 'rb-readline'
 

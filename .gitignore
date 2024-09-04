@@ -46,7 +46,6 @@ terraform/aks/vendor/
 *.swp
 
 /.vscode/*
-/.devcontainer/*
 /.idea/*
 
 # Ignore sanitised production data dump
@@ -82,7 +81,6 @@ terraform/*token
 yarn-debug.log*
 .yarn-integrity
 .jest-cache
-Caddyfile
 
 # Ignore snyk related cache
 .dccache
