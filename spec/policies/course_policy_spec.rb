@@ -143,6 +143,7 @@ describe CoursePolicy do
           age_range_in_years
           applications_open_from
           funding_type
+          funding
           is_send
           level
           qualification

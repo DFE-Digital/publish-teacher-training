@@ -260,8 +260,27 @@ describe CourseEnrichment do
     context 'fee based course after 2024 cycle which can sponsor student visa' do
       let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
       let(:provider) { build(:provider, recruitment_cycle:) }
+      let(:course) { build(:course, can_sponsor_student_visa: true, funding: 'fee', provider:) }
+      let(:course_enrichment) { build(:course_enrichment, course:) }
+
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+      end
+
+      it do
+        expect(subject).to validate_presence_of(:fee_international).on(:publish)
+      end
+    end
+
+    context 'fee based course after 2024 cycle which can sponsor student visa without db_backed_funding feature' do
+      let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
+      let(:provider) { build(:provider, recruitment_cycle:) }
       let(:course) { build(:course, can_sponsor_student_visa: true, funding_type: 'fee', provider:) }
       let(:course_enrichment) { build(:course_enrichment, course:) }
+
+      before do
+        allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
+      end
 
       it do
         expect(subject).to validate_presence_of(:fee_international).on(:publish)

@@ -100,11 +100,19 @@ FactoryBot.define do
     end
 
     trait :with_fee_based_course do
-      course { create(:course, :fee_type_based) }
+      if FeatureService.enabled?(:db_backed_funding_type)
+        course { create(:course, funding: 'fee') }
+      else
+        course { create(:course, :fee_type_based) }
+      end
     end
 
     trait :with_salary_based_course do
-      course { create(:course, :salary_type_based) }
+      if FeatureService.enabled?(:db_backed_funding_type)
+        course { create(:course, funding: 'salary') }
+      else
+        course { create(:course, :salary_type_based) }
+      end
     end
   end
 end

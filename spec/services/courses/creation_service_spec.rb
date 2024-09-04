@@ -52,7 +52,7 @@ describe Courses::CreationService do
       {
         'age_range_in_years' => '3_to_7',
         'applications_open_from' => recruitment_cycle.application_start_date,
-        'funding_type' => 'fee',
+        'funding' => 'fee',
         'is_send' => '1',
         'level' => 'primary',
         'qualification' => 'qts',
@@ -111,6 +111,69 @@ describe Courses::CreationService do
       {
         'age_range_in_years' => '12_to_17',
         'applications_open_from' => recruitment_cycle.application_start_date,
+        'funding' => 'salary',
+        'is_send' => '0',
+        'level' => 'secondary',
+        'qualification' => 'pgce_with_qts',
+        'start_date' => "September #{recruitment_cycle.year}",
+        'study_mode' => ['part_time'],
+        'sites_ids' => [site.id],
+        'study_sites_ids' => [study_site.id],
+        'subjects_ids' => [secondary_subject.id],
+        'master_subject_id' => secondary_subject.id,
+        'course_code' => 'D0CK'
+      }
+    end
+
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    end
+
+    it 'create the secondary course' do
+      valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
+        expect(subject.send(key)).to eq(value)
+      end
+
+      expect(subject.is_send).to be(false)
+      expect(subject.sites.map(&:id)).to eq([site.id])
+      expect(subject.study_sites.map(&:id)).to eq([study_site.id])
+      expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
+      expect(subject.course_code).to be_nil
+      expect(subject.name).to eq('Biology')
+      expect(subject.study_mode).to eq 'part_time'
+      expect(subject.errors).to be_empty
+    end
+
+    context 'next_available_course_code is true' do
+      let(:next_available_course_code) do
+        true
+      end
+
+      it 'create the secondary course' do
+        valid_course_params.except('is_send', 'sites_ids', 'study_sites_ids', 'subjects_ids', 'course_code', 'study_mode').each do |key, value|
+          expect(subject.public_send(key)).to eq(value)
+        end
+
+        expect(subject.is_send).to be(false)
+        expect(subject.sites.map(&:id)).to eq([site.id])
+        expect(subject.study_sites.map(&:id)).to eq([study_site.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
+        expect(subject.course_code).not_to be_nil
+        expect(subject.course_code).not_to eq('D0CK')
+        expect(subject.name).to eq('Biology')
+        expect(subject.study_mode).to eq 'part_time'
+        expect(subject.errors).to be_empty
+      end
+    end
+  end
+
+  context 'secondary course with db_backed_funding_type disabled' do
+    let(:secondary_subject) { find_or_create(:secondary_subject, :biology) }
+
+    let(:valid_course_params) do
+      {
+        'age_range_in_years' => '12_to_17',
+        'applications_open_from' => recruitment_cycle.application_start_date,
         'funding_type' => 'salary',
         'is_send' => '0',
         'level' => 'secondary',
@@ -123,6 +186,10 @@ describe Courses::CreationService do
         'master_subject_id' => secondary_subject.id,
         'course_code' => 'D0CK'
       }
+    end
+
+    before do
+      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
     end
 
     it 'create the secondary course' do

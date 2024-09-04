@@ -38,7 +38,9 @@ module Publish
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?
 
-        params.require(:publish_course_funding_form).permit(:funding_type, :previous_tda_course)
+        # Remove funding_type from permitted params when the `db_backed_funding_type` feature flag is removed
+
+        params.require(:publish_course_funding_form).permit(:funding_type, :funding, :previous_tda_course)
       end
 
       def handle_valid_form
@@ -59,7 +61,7 @@ module Publish
       end
 
       def process_previous_tda_course
-        @course_funding_form.save! if @course_funding_form.funding_type_updated?
+        @course_funding_form.save! if @course_funding_form.funding_updated?
         redirect_to full_part_time_publish_provider_recruitment_cycle_course_path(
           provider_code: course.provider_code,
           recruitment_cycle_year: course.recruitment_cycle_year,
@@ -69,7 +71,7 @@ module Publish
       end
 
       def next_path
-        if @course_funding_form.funding_type_updated?
+        if @course_funding_form.funding_updated?
           @course_funding_form.stash
           visa_page_path
         else

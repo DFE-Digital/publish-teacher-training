@@ -48,12 +48,12 @@ describe Publish::CourseFundingForm, type: :model do
       end
     end
 
-    describe '#funding_type_updated?' do
+    describe '#funding_updated?' do
       context 'when updated funding type is different' do
         let(:params) { { funding_type: 'salary' } }
 
         it 'returns true' do
-          expect(subject.funding_type_updated?).to be true
+          expect(subject.funding_updated?).to be true
         end
       end
 
@@ -61,7 +61,7 @@ describe Publish::CourseFundingForm, type: :model do
         let(:params) { { funding_type: 'fee' } }
 
         it 'returns false' do
-          expect(subject.funding_type_updated?).to be false
+          expect(subject.funding_updated?).to be false
         end
       end
     end

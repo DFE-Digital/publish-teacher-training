@@ -24,7 +24,7 @@
         <%= t("page_titles.student_visas.edit") %>
       </h1>
 
-      <% if @visa_sponsorship_form.funding_type_updated? %>
+      <% if @visa_sponsorship_form.funding_updated? %>
         <p class="govuk-body"><%= t("visa_sponsorships.updated.#{@visa_sponsorship_form.origin_step}") %></p>
       <% end %>
 

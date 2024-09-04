@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
+# This file can be deleted along with the db_backed_funding_type feature flag. All functionality is tested in
+# spec/features/publish/courses/new_funding_type_spec.rb
+
 require 'rails_helper'
 
 feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    and_the_db_backed_funding_type_feature_flag_is_enabled
+    and_the_db_backed_funding_type_feature_flag_is_disabled
     when_i_visit_the_publish_courses_new_funding_type_page
   end
 
   scenario 'selecting fee paying' do
     when_i_select_funding_type(:fee)
-    and_i_click_continue
-    and_i_click_back
-    and_fee_is_is_still_selected
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:fee)
   end
@@ -21,17 +21,11 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   scenario 'selecting salaried' do
     when_i_select_funding_type(:salary)
     and_i_click_continue
-    and_i_click_back
-    and_salary_is_is_still_selected
-    and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:salary)
   end
 
   scenario 'selecting apprenticeship' do
     when_i_select_funding_type(:apprenticeship)
-    and_i_click_continue
-    and_i_click_back
-    and_apprenticeship_is_is_still_selected
     and_i_click_continue
     then_i_am_met_with_the_full_or_part_time_page(:apprenticeship)
   end
@@ -60,22 +54,6 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
     publish_courses_new_funding_type_page.continue.click
   end
 
-  def and_i_click_back
-    click_on 'Back'
-  end
-
-  def and_fee_is_is_still_selected
-    expect(page).to have_checked_field('Fee - no salary')
-  end
-
-  def and_salary_is_is_still_selected
-    expect(page).to have_checked_field('Salary')
-  end
-
-  def and_apprenticeship_is_is_still_selected
-    expect(page).to have_checked_field('Teaching apprenticeship - with salary')
-  end
-
   def provider
     @provider ||= @user.providers.first
   end
@@ -91,10 +69,10 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   end
 
   def selected_params(funding_type)
-    "?course%5Bage_range_in_years%5D=3_to_7&course%5Bfunding%5D=#{funding_type}&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
+    "?course%5Bage_range_in_years%5D=3_to_7&course%5Bfunding_type%5D=#{funding_type}&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
   end
 
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+  def and_the_db_backed_funding_type_feature_flag_is_disabled
+    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end
