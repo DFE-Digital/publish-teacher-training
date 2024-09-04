@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 class PhoneValidatorTest
-  include ActiveRecord::Validations
+  include ActiveModel::Model
 
   attr_accessor :phone_number
 
