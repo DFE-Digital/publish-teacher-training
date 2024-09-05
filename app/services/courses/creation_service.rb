@@ -72,7 +72,11 @@ module Courses
     end
 
     def study_mode
-      @study_mode ||= course_params['study_mode']&.flatten&.compact&.uniq
+      @study_mode ||= if course_params['study_mode'].nil?
+                        nil
+                      else
+                        Array(course_params['study_mode'])&.flatten&.compact&.uniq
+                      end
     end
 
     def study_site_ids

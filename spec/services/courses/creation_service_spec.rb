@@ -165,6 +165,37 @@ describe Courses::CreationService do
         expect(subject.errors).to be_empty
       end
     end
+
+    context 'study_mode param is a string' do
+      let(:valid_course_params) do
+        {
+          'age_range_in_years' => '12_to_17',
+          'applications_open_from' => recruitment_cycle.application_start_date,
+          'funding' => 'salary',
+          'is_send' => '0',
+          'level' => 'secondary',
+          'qualification' => 'pgce_with_qts',
+          'start_date' => "September #{recruitment_cycle.year}",
+          'study_mode' => 'part_time',
+          'sites_ids' => [site.id],
+          'study_sites_ids' => [study_site.id],
+          'subjects_ids' => [secondary_subject.id],
+          'master_subject_id' => secondary_subject.id,
+          'course_code' => 'D0CK'
+        }
+      end
+
+      it 'creates a course' do
+        expect(subject.is_send).to be(false)
+        expect(subject.sites.map(&:id)).to eq([site.id])
+        expect(subject.study_sites.map(&:id)).to eq([study_site.id])
+        expect(subject.course_subjects.map { _1.subject.id }).to eq([secondary_subject.id])
+        expect(subject.course_code).to be_nil
+        expect(subject.name).to eq('Biology')
+        expect(subject.study_mode).to eq 'part_time'
+        expect(subject.errors).to be_empty
+      end
+    end
   end
 
   context 'secondary course with db_backed_funding_type disabled' do
