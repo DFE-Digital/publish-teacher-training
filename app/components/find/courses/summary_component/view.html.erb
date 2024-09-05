@@ -20,7 +20,9 @@
       <% end %>
       <br>
       <!--Student finance is available if you’re eligible-->
-      <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+      <a class="govuk-link govuk-link--no-visited-state" href="#section-financial-support">
+        <span class="govuk-!-font-size-16"><%= course.funding_option %></span>
+      </a>
     <% end %>
   <% end %>
 
