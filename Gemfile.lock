@@ -160,7 +160,7 @@ GEM
     bindata (2.5.0)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    blazer (3.0.3)
+    blazer (3.0.4)
       activerecord (>= 6.1)
       chartkick (>= 5)
       csv
@@ -188,7 +188,7 @@ GEM
       xpath (~> 3.2)
     case_transform (0.2)
       activesupport
-    chartkick (5.0.5)
+    chartkick (5.1.0)
     childprocess (5.0.0)
     choice (0.2.0)
     cloudfront-rails (0.4.0)
@@ -674,7 +674,7 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubypants (0.7.1)
-    safely_block (0.4.0)
+    safely_block (0.4.1)
     schema_to_scaffold (0.8.2)
       activesupport (~> 7)
     securerandom (0.3.1)
