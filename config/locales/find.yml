@@ -180,6 +180,8 @@ en:
           view_list_of_school_placements: View list of school placements
           work_with_schools: We work with the following schools to provide your school placements.
           nearest_location:
+          advice_title_salary: "How school employments work"
+          advice_title: "How school placements work"
 
       placements:
         heading: School placements at %{provider_name}
@@ -198,6 +200,9 @@ en:
         location:
           one: Placement school
           other: Placement schools
+        location_salary:
+          one: Employing school
+          other: Employing schools
         study_site:
           one: Where you will study
           other: Where you will study

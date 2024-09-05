@@ -2,7 +2,7 @@
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
 
   <div data-qa="course__about_schools">
-  <%= render Shared::AdviceComponent::View.new(title: "How school placements work") do %>
+  <%= render Shared::AdviceComponent::View.new(title: advice_title) do %>
     <% if course.salaried? %>
       <p class="govuk-body">
         You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.

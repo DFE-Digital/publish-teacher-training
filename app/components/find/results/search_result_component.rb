@@ -39,7 +39,11 @@ module Find
       end
 
       def location_label
-        t('.location', count: @sites_count)
+        if no_fee?
+          t('.location_salary', count: @sites_count)
+        else
+          t('.location', count: @sites_count)
+        end
       end
 
       def study_site_label

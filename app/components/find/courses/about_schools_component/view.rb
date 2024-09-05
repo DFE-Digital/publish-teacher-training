@@ -28,6 +28,14 @@ module Find
             site_statuses.map(&:site).uniq.many? || preview?(params)
         end
 
+        def advice_title
+          if course.fee_international.blank? && course.fee_uk_eu.blank?
+            t('.advice_title_salary')
+          else
+            t('.advice_title')
+          end
+        end
+
         def show_higher_education_guidance?
           return false unless course.higher_education_programme?
 
