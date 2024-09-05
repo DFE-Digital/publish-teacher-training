@@ -3450,4 +3450,31 @@ describe Course do
       end
     end
   end
+
+  describe '#training_route' do
+    it 'returns teacher_degree_apprenticeship for undergraduate and salaried' do
+      course = build(:course, funding: 'salary', course_type: 'undergraduate')
+      expect(course.training_route).to eq('teacher_degree_apprenticeship')
+    end
+
+    it 'returns school_direct_salaried for postgraduate and salaried' do
+      course = build(:course, funding: 'salary', course_type: 'postgraduate')
+      expect(course.training_route).to eq('school_direct_salaried')
+    end
+
+    it 'returns postgraduate_teaching_apprenticeship for postgraduate and apprenticeship' do
+      course = build(:course, funding: 'apprenticeship', course_type: 'postgraduate')
+      expect(course.training_route).to eq('postgraduate_teacher_apprenticeship')
+    end
+
+    it 'returns fee_funded_initial_teacher_training for postgraduate and fee' do
+      course = build(:course, funding: 'fee', course_type: 'postgraduate')
+      expect(course.training_route).to eq('fee_funded_initial_teacher_training')
+    end
+
+    it 'returns unknown_training_route for unknown course_type and funding_type combination' do
+      course = build(:course, funding: 'fee', course_type: 'undergraduate')
+      expect(course.training_route).to eq('unknown_training_route')
+    end
+  end
 end

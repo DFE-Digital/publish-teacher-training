@@ -10,6 +10,13 @@ class Course < ApplicationRecord
 
   A_LEVEL_ATTRIBUTES = %i[a_level_subject_requirements accept_pending_a_level accept_a_level_equivalency additional_a_level_equivalencies].freeze
 
+  TRAINING_ROUTE_MAP = {
+    %w[postgraduate fee] => 'fee_funded_initial_teacher_training',
+    %w[postgraduate salary] => 'school_direct_salaried',
+    %w[postgraduate apprenticeship] => 'postgraduate_teacher_apprenticeship',
+    %w[undergraduate salary] => 'teacher_degree_apprenticeship'
+  }.freeze
+
   after_initialize :set_defaults
 
   before_discard do
@@ -750,6 +757,10 @@ class Course < ApplicationRecord
 
   def funding_type=(funding_type)
     Courses::AssignProgramTypeService.new.execute(funding_type, self)
+  end
+
+  def training_route
+    TRAINING_ROUTE_MAP.fetch([course_type, funding_type], 'unknown_training_route')
   end
 
   def ensure_site_statuses_match_study_mode
