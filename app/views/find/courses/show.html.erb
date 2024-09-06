@@ -38,12 +38,12 @@
      Contents
     </h3>
     <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
-        <li><a class="govuk-link" href="#section-about">About the course</a></li>
+      <li><a class="govuk-link" href="#training-locations">Where you will train</a></li>
         <% if @course.salaried? %>
           <li><a class="govuk-link" href="#section-salary">Salary</a></li>
         <% end %>
       <li><a class="govuk-link" href="#section-financial-support">Fees and financial support</a></li>
-        <li><a class="govuk-link" href="#training-locations">Where you will train</a></li>
+        <li><a class="govuk-link" href="#section-about">About the course</a></li>
         <% if @course.published_interview_process.present? %>
           <li><a class="govuk-link" href="#section-interviews">Interview process</a></li>
         <% end %>
@@ -52,9 +52,7 @@
       <li><a class="govuk-link" href="#section-apply">Apply</a></li>
     </ul>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params), filters_view: @filters_view) %>
 
     <% if @course.salaried? %>
       <%= render partial: "find/courses/salary", locals: { course: @course } %>
@@ -62,7 +60,9 @@
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <%= render Find::Courses::AboutSchoolsComponent::View.new(@course, preview: preview?(params), filters_view: @filters_view) %>
+    <% if @course.published_about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <% end %>
 
     <% if @course.published_interview_process.present? %>
       <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
