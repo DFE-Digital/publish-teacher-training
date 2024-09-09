@@ -508,8 +508,8 @@ class Course < ApplicationRecord
   end
 
   def program_type_description
-    if program.funding_type.salary? then ' with salary'
-    elsif program.funding_type.apprenticeship? then ' teaching apprenticeship'
+    if salary? then ' with salary'
+    elsif apprenticeship? then ' teaching apprenticeship'
     else
       ''
     end

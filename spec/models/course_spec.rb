@@ -1980,6 +1980,7 @@ describe Course do
       },
       'PGCE with QTS full time with salary' => {
         study_mode: :full_time,
+        funding: 'salary',
         program_type: :school_direct_salaried_training_programme,
         qualification: :pgce_with_qts
       },
@@ -2002,7 +2003,7 @@ describe Course do
       subject do
         create(:course,
                study_mode: :full_time,
-               program_type: :school_direct_salaried_training_programme,
+               funding: 'salary',
                qualification: :pgce_with_qts)
       end
 
@@ -2013,7 +2014,7 @@ describe Course do
       subject do
         create(:course,
                study_mode: :part_time,
-               program_type: :pg_teaching_apprenticeship,
+               funding: 'apprenticeship',
                qualification: :pgde_with_qts)
       end
 

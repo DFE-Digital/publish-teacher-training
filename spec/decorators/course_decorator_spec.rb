@@ -772,7 +772,7 @@ describe CourseDecorator do
     subject(:description) { course.decorate.description }
 
     context 'when PGCE with QTS' do
-      let(:course) { build_stubbed(:course, qualification: 'pgce_with_qts') }
+      let(:course) { build_stubbed(:course, funding: 'apprenticeship', qualification: 'pgce_with_qts') }
 
       it 'returns the correct page title' do
         expect(description).to eq('QTS with PGCE full time teaching apprenticeship')
