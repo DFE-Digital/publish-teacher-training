@@ -103,9 +103,9 @@ class Course < ApplicationRecord
   # but some require grade 5 ("strong C")
   PROVIDERS_REQUIRING_GCSE_GRADE_5 = %w[I30].freeze
 
-  enum maths: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_maths
-  enum english: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_english
-  enum science: ENTRY_REQUIREMENT_OPTIONS, _suffix: :for_science
+  enum :maths, ENTRY_REQUIREMENT_OPTIONS, suffix: :for_maths
+  enum :english, ENTRY_REQUIREMENT_OPTIONS, suffix: :for_english
+  enum :science, ENTRY_REQUIREMENT_OPTIONS, suffix: :for_science
 
   after_validation :remove_unnecessary_enrichments_validation_message
   before_save :set_applications_open_from
