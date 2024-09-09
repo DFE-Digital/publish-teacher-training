@@ -78,6 +78,18 @@
       <% end %>
     <% end %>
 
+    <h2 class="govuk-heading-m">School placements</h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        "Let candidates choose preferred schools",
+        @provider.selectable_school ? "Yes" : "No",
+        %w[selectable_school],
+        action_path: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+        action_visually_hidden_text: "school placement display"
+      ) %>
+    <% end %>
     <h2 class="govuk-heading-m">Contact details</h2>
     <%= govuk_summary_list do |summary_list| %>
       <% enrichment_summary(
