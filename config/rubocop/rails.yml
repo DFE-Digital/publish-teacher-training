@@ -3,12 +3,7 @@
 require: rubocop-rails
 
 Rails/SkipsModelValidations:
-  Exclude:
-    - 'spec/**/*'
-    - 'db/**/*'
-    - 'app/models/course.rb'
-    - 'app/models/provider.rb'
-    - 'lib/tasks/migrate_user_organisation_to_user_permission.rake'
+  Enabled: false
 
 Rails/ThreeStateBooleanColumn:
   Exclude:
