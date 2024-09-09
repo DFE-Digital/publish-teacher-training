@@ -116,3 +116,4 @@ google_tag_manager:
   floodlight_id: 2673654
 
 STATE_CHANGE_SLACK_URL: replace_me
+current_recruitment_cycle_year: 2025
