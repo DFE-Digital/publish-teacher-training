@@ -3366,6 +3366,95 @@ describe Course do
       end
     end
 
+    describe '#update_program_type!' do
+      context 'when the provider is a Lead School' do
+        context 'changing funding from fee to apprenticeship' do
+          it 'changes the program_type from school_direct_training_programme to pg_teaching_apprenticeship' do
+            course = build(:course, program_type: 'school_direct_training_programme')
+
+            expect(course.program_type).to eq('school_direct_training_programme')
+
+            course.update(funding: 'apprenticeship')
+            expect(course.program_type).to eq('pg_teaching_apprenticeship')
+          end
+        end
+
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from school_direct_training_programme to school_direct_salaried_training_programme' do
+            course = build(:course, program_type: 'school_direct_training_programme')
+
+            expect(course.program_type).to eq('school_direct_training_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('school_direct_salaried_training_programme')
+          end
+        end
+
+        context 'changing funding from salary to fee' do
+          it 'changes the program_type from school_direct_training_programme to school_direct_salaried_training_programme' do
+            course = build(:course, program_type: 'school_direct_salaried_training_programme')
+
+            expect(course.program_type).to eq('school_direct_salaried_training_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('school_direct_training_programme')
+          end
+        end
+      end
+
+      context 'when the provider is a scitt' do
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from scitt_program to scitt_salaried_programme' do
+            provider = build(:provider, provider_type: 'scitt')
+            course = build(:course, provider:, program_type: 'scitt_programme')
+
+            expect(course.program_type).to eq('scitt_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('scitt_salaried_programme')
+          end
+        end
+
+        context 'changing funding from salary to fee' do
+          it 'changes the program_type from scitt_salaried_programme to scitt_programme' do
+            provider = build(:provider, provider_type: 'scitt')
+            course = build(:course, provider:, program_type: 'scitt_salaried_programme')
+
+            expect(course.program_type).to eq('scitt_salaried_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('scitt_programme')
+          end
+        end
+      end
+
+      context 'when the provider is a hei' do
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from higher_education_programme to higher_education_salaried_programme' do
+            provider = build(:provider, provider_type: 'university')
+            course = build(:course, provider:, program_type: 'higher_education_programme')
+
+            expect(course.program_type).to eq('higher_education_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('higher_education_salaried_programme')
+          end
+        end
+
+        context 'changing funding from fee to salaried' do
+          it 'changes the program_type from higher_education_salaried_programme to higher_education_programme' do
+            provider = build(:provider, provider_type: 'university')
+            course = build(:course, provider:, program_type: 'higher_education_salaried_programme')
+
+            expect(course.program_type).to eq('higher_education_salaried_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('higher_education_programme')
+          end
+        end
+      end
+    end
+
     context 'setting the funding_type to fee' do
       context 'when the provider is not self accredited' do
         it 'sets the funding_type to salary and the program_type to school_direct_training_programme' do

@@ -117,6 +117,8 @@ class Course < ApplicationRecord
   after_validation :remove_unnecessary_enrichments_validation_message
   before_save :set_applications_open_from
 
+  after_save :update_program_type!
+
   belongs_to :provider
 
   delegate :tda_active?, to: :provider, allow_nil: true
@@ -1048,6 +1050,10 @@ class Course < ApplicationRecord
 
   def set_applications_open_from
     self.applications_open_from ||= recruitment_cycle.application_start_date
+  end
+
+  def update_program_type!
+    ::Courses::AssignProgramTypeService.new.execute(funding, self)
   end
 
   def validate_start_date
