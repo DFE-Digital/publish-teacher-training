@@ -14,7 +14,7 @@ class Course < ApplicationRecord
     %w[postgraduate fee] => 'fee_funded_initial_teacher_training',
     %w[postgraduate salary] => 'school_direct_salaried',
     %w[postgraduate apprenticeship] => 'postgraduate_teacher_apprenticeship',
-    %w[undergraduate salary] => 'teacher_degree_apprenticeship'
+    %w[undergraduate apprenticeship] => 'teacher_degree_apprenticeship'
   }.freeze
 
   after_initialize :set_defaults

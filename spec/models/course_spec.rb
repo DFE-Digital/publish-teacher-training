@@ -3452,8 +3452,8 @@ describe Course do
   end
 
   describe '#training_route' do
-    it 'returns teacher_degree_apprenticeship for undergraduate and salaried' do
-      course = build(:course, funding: 'salary', course_type: 'undergraduate')
+    it 'returns teacher_degree_apprenticeship for undergraduate and apprenticeship' do
+      course = build(:course, funding: 'apprenticeship', course_type: 'undergraduate')
       expect(course.training_route).to eq('teacher_degree_apprenticeship')
     end
 
