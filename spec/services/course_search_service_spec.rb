@@ -32,7 +32,7 @@ RSpec.describe CourseSearchService do
         ).and_return(course_with_includes)
 
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
-      allow(scope).to receive(:with_course_type).and_return(scope)
+      allow(scope).to receive(:with_degree_type).and_return(scope)
     end
 
     describe 'when no scope is passed' do

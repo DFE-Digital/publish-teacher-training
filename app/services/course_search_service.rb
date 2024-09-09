@@ -7,12 +7,12 @@ class CourseSearchService
     filter:,
     sort: nil,
     course_scope: Course,
-    course_type_answer_determiner: Find::CourseTypeAnswerDeterminer
+    degree_type_answer_determiner: Find::CourseTypeAnswerDeterminer
   )
     @filter = filter || {}
     @course_scope = course_scope
     @sort = sort
-    @course_type_answer_determiner = course_type_answer_determiner.new(
+    @degree_type_answer_determiner = degree_type_answer_determiner.new(
       university_degree_status: @filter['university_degree_status'],
       age_group: @filter['age_group'],
       visa_status: @filter['visa_status']
@@ -21,7 +21,7 @@ class CourseSearchService
 
   def call
     scope = course_scope
-    scope = filter_by_course_type(scope)
+    scope = filter_by_degree_type(scope)
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.application_status_open if applications_open?
@@ -91,12 +91,12 @@ class CourseSearchService
     outer_scope
   end
 
-  def filter_by_course_type(scope)
-    scope.with_course_type(course_type)
+  def filter_by_degree_type(scope)
+    scope.with_degree_type(degree_type)
   end
 
-  def course_type
-    return :undergraduate if @course_type_answer_determiner.show_undergraduate_courses?
+  def degree_type
+    return :undergraduate if @degree_type_answer_determiner.show_undergraduate_courses?
 
     :postgraduate
   end
@@ -222,7 +222,7 @@ class CourseSearchService
   end
 
   def qualifications
-    return [] if filter[:qualification].blank? || course_type == :undergraduate
+    return [] if filter[:qualification].blank? || degree_type == :undergraduate
 
     filter[:qualification] = filter[:qualification].values if filter[:qualification].is_a?(Hash)
     filter[:qualification] = filter[:qualification].split(',') if filter[:qualification].is_a?(String)
