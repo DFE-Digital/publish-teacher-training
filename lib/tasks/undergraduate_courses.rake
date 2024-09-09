@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../spec/strategies/find_or_create_strategy'
-Faker::Config.locale = 'en-GB'
 
 namespace :undergraduate do
   desc 'Create TDA courses'
   task create: :environment do
+    require 'factory_bot_rails'
+    require 'faker'
+    Faker::Config.locale = 'en-GB'
     providers_count = ENV.fetch('PROVIDERS_COUNT', 100)
 
     ActiveRecord::Base.transaction do
