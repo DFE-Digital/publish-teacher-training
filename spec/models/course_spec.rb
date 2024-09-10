@@ -1980,6 +1980,7 @@ describe Course do
       },
       'PGCE with QTS full time with salary' => {
         study_mode: :full_time,
+        funding: 'salary',
         program_type: :school_direct_salaried_training_programme,
         qualification: :pgce_with_qts
       },
@@ -2002,7 +2003,7 @@ describe Course do
       subject do
         create(:course,
                study_mode: :full_time,
-               program_type: :school_direct_salaried_training_programme,
+               funding: 'salary',
                qualification: :pgce_with_qts)
       end
 
@@ -2013,7 +2014,7 @@ describe Course do
       subject do
         create(:course,
                study_mode: :part_time,
-               program_type: :pg_teaching_apprenticeship,
+               funding: 'apprenticeship',
                qualification: :pgde_with_qts)
       end
 
@@ -3362,6 +3363,95 @@ describe Course do
 
           expect(course.funding_type).to eq('salary')
           expect(course.program_type).to eq('school_direct_salaried_training_programme')
+        end
+      end
+    end
+
+    describe '#update_program_type!' do
+      context 'when the provider is a Lead School' do
+        context 'changing funding from fee to apprenticeship' do
+          it 'changes the program_type from school_direct_training_programme to pg_teaching_apprenticeship' do
+            course = build(:course, program_type: 'school_direct_training_programme')
+
+            expect(course.program_type).to eq('school_direct_training_programme')
+
+            course.update(funding: 'apprenticeship')
+            expect(course.program_type).to eq('pg_teaching_apprenticeship')
+          end
+        end
+
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from school_direct_training_programme to school_direct_salaried_training_programme' do
+            course = build(:course, program_type: 'school_direct_training_programme')
+
+            expect(course.program_type).to eq('school_direct_training_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('school_direct_salaried_training_programme')
+          end
+        end
+
+        context 'changing funding from salary to fee' do
+          it 'changes the program_type from school_direct_training_programme to school_direct_salaried_training_programme' do
+            course = build(:course, program_type: 'school_direct_salaried_training_programme')
+
+            expect(course.program_type).to eq('school_direct_salaried_training_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('school_direct_training_programme')
+          end
+        end
+      end
+
+      context 'when the provider is a scitt' do
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from scitt_program to scitt_salaried_programme' do
+            provider = build(:provider, provider_type: 'scitt')
+            course = build(:course, provider:, program_type: 'scitt_programme')
+
+            expect(course.program_type).to eq('scitt_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('scitt_salaried_programme')
+          end
+        end
+
+        context 'changing funding from salary to fee' do
+          it 'changes the program_type from scitt_salaried_programme to scitt_programme' do
+            provider = build(:provider, provider_type: 'scitt')
+            course = build(:course, provider:, program_type: 'scitt_salaried_programme')
+
+            expect(course.program_type).to eq('scitt_salaried_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('scitt_programme')
+          end
+        end
+      end
+
+      context 'when the provider is a HEI' do
+        context 'changing funding from fee to salary' do
+          it 'changes the program_type from higher_education_programme to higher_education_salaried_programme' do
+            provider = build(:provider, provider_type: 'university')
+            course = build(:course, provider:, program_type: 'higher_education_programme')
+
+            expect(course.program_type).to eq('higher_education_programme')
+
+            course.update(funding: 'salary')
+            expect(course.program_type).to eq('higher_education_salaried_programme')
+          end
+        end
+
+        context 'changing funding from fee to salaried' do
+          it 'changes the program_type from higher_education_salaried_programme to higher_education_programme' do
+            provider = build(:provider, provider_type: 'university')
+            course = build(:course, provider:, program_type: 'higher_education_salaried_programme')
+
+            expect(course.program_type).to eq('higher_education_salaried_programme')
+
+            course.update(funding: 'fee')
+            expect(course.program_type).to eq('higher_education_programme')
+          end
         end
       end
     end
