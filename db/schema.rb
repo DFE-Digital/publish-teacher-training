@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_19_121058) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_10_141649) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -158,6 +158,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_19_121058) do
     t.text "additional_a_level_equivalencies"
     t.string "course_type", default: "postgraduate", null: false
     t.string "funding", default: "not_set", null: false
+    t.string "degree_type", default: "postgraduate", null: false
     t.index ["accredited_provider_code"], name: "index_course_on_accredited_provider_code"
     t.index ["application_status"], name: "index_course_on_application_status"
     t.index ["campaign_name"], name: "index_course_on_campaign_name"
