@@ -3429,7 +3429,7 @@ describe Course do
         end
       end
 
-      context 'when the provider is a hei' do
+      context 'when the provider is a HEI' do
         context 'changing funding from fee to salary' do
           it 'changes the program_type from higher_education_programme to higher_education_salaried_programme' do
             provider = build(:provider, provider_type: 'university')
