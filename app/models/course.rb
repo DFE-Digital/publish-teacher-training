@@ -117,7 +117,7 @@ class Course < ApplicationRecord
   after_validation :remove_unnecessary_enrichments_validation_message
   before_save :set_applications_open_from
 
-  after_save :update_program_type!
+  after_save :update_program_type!, if: :saved_change_to_funding?
 
   belongs_to :provider
 
