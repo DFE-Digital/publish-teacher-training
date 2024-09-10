@@ -570,6 +570,8 @@ class Course < ApplicationRecord
   end
 
   def funding_type
+    ActiveSupport::Deprecation.new.warn('`funding_type` is deprecated and will be removed. Please use `funding` instead.')
+
     if FeatureService.enabled?(:db_backed_funding_type)
       not_set? ? program.funding_type : funding
     else
