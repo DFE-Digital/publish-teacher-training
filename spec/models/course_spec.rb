@@ -3087,6 +3087,19 @@ describe Course do
       allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
     end
 
+    context 'deprecation warning' do
+      it 'issues a deprecation warning when `funding_type` is called' do
+        deprecation_instance = instance_double(ActiveSupport::Deprecation)
+        allow(ActiveSupport::Deprecation).to receive(:new).and_return(deprecation_instance)
+        expect(deprecation_instance).to receive(:warn).with(
+          '`funding_type` is deprecated and will be removed. Please use `funding` instead.'
+        )
+
+        course = described_class.new
+        course.funding_type
+      end
+    end
+
     context 'when program_type is nil' do
       it 'returns nil' do
         course = described_class.new(program_type: nil)
@@ -3119,6 +3132,19 @@ describe Course do
   describe '#funding_type (with db_backed_funding enabled)' do
     before do
       allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
+    end
+
+    context 'deprecation warning' do
+      it 'issues a deprecation warning when `funding_type` is called' do
+        deprecation_instance = instance_double(ActiveSupport::Deprecation)
+        allow(ActiveSupport::Deprecation).to receive(:new).and_return(deprecation_instance)
+        expect(deprecation_instance).to receive(:warn).with(
+          '`funding_type` is deprecated and will be removed. Please use `funding` instead.'
+        )
+
+        course = described_class.new
+        course.funding_type
+      end
     end
 
     context 'when program_type is nil' do
