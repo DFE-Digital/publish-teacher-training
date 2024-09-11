@@ -7,7 +7,7 @@ class CourseSearchService
     filter:,
     sort: nil,
     course_scope: Course,
-    degree_type_answer_determiner: Find::CourseTypeAnswerDeterminer
+    degree_type_answer_determiner: Find::DegreeTypeAnswerDeterminer
   )
     @filter = filter || {}
     @course_scope = course_scope

@@ -41,7 +41,7 @@ module Find
       end
 
       def degree_type_answer_determiner
-        @degree_type_answer_determiner ||= CourseTypeAnswerDeterminer.new(
+        @degree_type_answer_determiner ||= DegreeTypeAnswerDeterminer.new(
           university_degree_status: form_params[:university_degree_status],
           age_group: form_params[:age_group],
           visa_status: form_params[:visa_status]
