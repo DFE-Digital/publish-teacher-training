@@ -764,7 +764,7 @@ class Course < ApplicationRecord
   end
 
   def training_route
-    TRAINING_ROUTE_MAP.fetch([course_type, funding_type], 'unknown_training_route')
+    TRAINING_ROUTE_MAP.fetch([degree_type, funding_type], 'unknown_training_route')
   end
 
   def ensure_site_statuses_match_study_mode
