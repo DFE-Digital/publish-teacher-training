@@ -11,6 +11,10 @@ class RecruitmentCycle < ApplicationRecord
   validates :year, presence: true
 
   class << self
+    def current_recruitment_cycle!
+      find_by!(year: Settings.current_recruitment_cycle_year)
+    end
+
     def current_recruitment_cycle
       find_by(year: Settings.current_recruitment_cycle_year)
     end
