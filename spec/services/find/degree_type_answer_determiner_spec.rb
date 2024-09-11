@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Find::CourseTypeAnswerDeterminer do
+RSpec.describe Find::DegreeTypeAnswerDeterminer do
   describe '#show_undergraduate_courses?' do
     context 'when the age group is not further education, no degree, and no visa sponsorship required' do
       let(:params) do

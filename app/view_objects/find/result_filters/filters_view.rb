@@ -40,7 +40,7 @@ module Find
       end
 
       def show_undergraduate_courses?
-        CourseTypeAnswerDeterminer.new(
+        DegreeTypeAnswerDeterminer.new(
           age_group: params[:age_group],
           university_degree_status: params[:university_degree_status],
           visa_status: params[:visa_status]

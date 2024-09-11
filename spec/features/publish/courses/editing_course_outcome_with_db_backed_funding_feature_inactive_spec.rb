@@ -43,7 +43,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
       and_there_is_a_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page_in_the_next_cycle
       and_i_choose_undergraduate_degree_with_qts
-      and_the_course_type_is_postgraduate
+      and_the_degree_type_is_postgraduate
       and_i_submit
       then_the_default_options_for_a_tda_course_should_be_applied
     end
@@ -55,9 +55,9 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
-        and_the_course_type_is_undergraduate
+        and_the_degree_type_is_undergraduate
         and_i_choose_qts
-        and_the_course_type_is_postgraduate
+        and_the_degree_type_is_postgraduate
         and_the_back_link_points_to_the_outcome_page
         and_i_choose_the_fee_paying
         and_the_back_link_points_to_the_funding_type_page
@@ -85,9 +85,9 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_the_db_backed_funding_type_feature_flag_is_disabled
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page_in_the_next_cycle
-        and_the_course_type_is_undergraduate
+        and_the_degree_type_is_undergraduate
         and_i_choose_qts
-        and_the_course_type_is_postgraduate
+        and_the_degree_type_is_postgraduate
         and_the_back_link_points_to_the_outcome_page
         and_i_choose_salaried
         and_the_back_link_points_to_the_funding_type_page
@@ -117,7 +117,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_there_is_a_tda_course_i_want_to_edit
-    given_a_course_exists(:undergraduate_degree_with_qts, course_type: 'undergraduate')
+    given_a_course_exists(:undergraduate_degree_with_qts, degree_type: 'undergraduate')
   end
 
   def course_enrichment
@@ -224,17 +224,17 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     )
   end
 
-  def and_the_course_type_is_undergraduate
-    expect(course.undergraduate_course_type?).to be(true)
+  def and_the_degree_type_is_undergraduate
+    expect(course.undergraduate_degree_type?).to be(true)
   end
 
-  def and_the_course_type_is_postgraduate
-    expect(course.reload.postgraduate_course_type?).to be(true)
+  def and_the_degree_type_is_postgraduate
+    expect(course.reload.postgraduate_degree_type?).to be(true)
   end
 
   def then_the_default_options_for_a_tda_course_should_be_applied
     course.reload
-    expect(course.undergraduate_course_type?).to be(true)
+    expect(course.undergraduate_degree_type?).to be(true)
     expect(course.full_time?).to be(true)
     expect(course.funding_type == 'apprenticeship').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be false

@@ -10,7 +10,7 @@ module Publish
       def call
         if FeatureService.enabled?(:db_backed_funding_type)
           @course.assign_attributes(
-            course_type: 'undergraduate',
+            degree_type: 'undergraduate',
             funding: 'apprenticeship',
             study_mode: 'full_time',
             program_type: 'teacher_degree_apprenticeship',
@@ -22,7 +22,7 @@ module Publish
           )
         else
           @course.assign_attributes(
-            course_type: 'undergraduate',
+            degree_type: 'undergraduate',
             funding_type: 'apprenticeship',
             study_mode: 'full_time',
             program_type: 'teacher_degree_apprenticeship',

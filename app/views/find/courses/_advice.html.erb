@@ -1,7 +1,7 @@
 <div id="section-advice-and-support">
   <h2 class="govuk-heading-m" id="section-advice"><%= t(".heading") %></h2>
   <span class="govuk-body">
-    <% if course.postgraduate_course_type? %>
+    <% if course.postgraduate_degree_type? %>
       <%= t(
             ".postgraduate.body_html",
             teacher_training_adviser_link: govuk_link_to(

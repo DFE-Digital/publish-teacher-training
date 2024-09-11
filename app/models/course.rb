@@ -49,10 +49,10 @@ class Course < ApplicationRecord
     open: 1
   }, prefix: :application_status
 
-  enum :course_type, {
+  enum :degree_type, {
     postgraduate: 'postgraduate',
     undergraduate: 'undergraduate'
-  }, suffix: :course_type
+  }, suffix: :degree_type
 
   enum :funding, {
     not_set: 'not_set',
@@ -332,8 +332,8 @@ class Course < ApplicationRecord
       )
   }
 
-  scope :with_course_type, lambda { |course_type|
-    if course_type == :undergraduate
+  scope :with_degree_type, lambda { |degree_type|
+    if degree_type == :undergraduate
       where(program_type: Course.program_types[:teacher_degree_apprenticeship])
     else
       where.not(program_type: Course.program_types[:teacher_degree_apprenticeship])

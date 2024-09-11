@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Find
-  class CourseTypeAnswerDeterminer
+  class DegreeTypeAnswerDeterminer
     attr_reader :age_group, :visa_status, :university_degree_status
 
     def initialize(age_group:, visa_status:, university_degree_status:)

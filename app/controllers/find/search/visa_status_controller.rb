@@ -26,7 +26,7 @@ module Find
       private
 
       def next_step_path
-        if course_type_answer_determiner.show_exit_page?
+        if degree_type_answer_determiner.show_exit_page?
           find_no_degree_and_requires_visa_sponsorship_path(filter_params[:find_visa_status_form])
         else
           find_results_path(
@@ -40,8 +40,8 @@ module Find
         end
       end
 
-      def course_type_answer_determiner
-        @course_type_answer_determiner ||= CourseTypeAnswerDeterminer.new(
+      def degree_type_answer_determiner
+        @degree_type_answer_determiner ||= DegreeTypeAnswerDeterminer.new(
           university_degree_status: form_params[:university_degree_status],
           age_group: form_params[:age_group],
           visa_status: form_params[:visa_status]
