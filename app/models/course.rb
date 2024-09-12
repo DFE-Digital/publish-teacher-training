@@ -571,12 +571,7 @@ class Course < ApplicationRecord
 
   def funding_type
     ActiveSupport::Deprecation.new.warn('`funding_type` is deprecated and will be removed. Please use `funding` instead.')
-
-    if FeatureService.enabled?(:db_backed_funding_type)
-      not_set? ? program.funding_type : funding
-    else
-      program.funding_type
-    end
+    funding
   end
 
   # https://www.gov.uk/government/publications/initial-teacher-training-criteria/initial-teacher-training-itt-criteria-and-supporting-advice#c11-gcse-standard-equivalent
