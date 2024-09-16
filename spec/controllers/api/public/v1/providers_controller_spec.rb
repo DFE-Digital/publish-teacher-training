@@ -6,6 +6,19 @@ RSpec.describe API::Public::V1::ProvidersController do
   describe '#index' do
     let(:recruitment_cycle) { find_or_create :recruitment_cycle }
 
+    context "when the recruitment cycle doesn't exist" do
+      it 'returns a not found response' do
+        allow(RecruitmentCycle).to receive(:find_by).and_return(nil)
+        allow(RecruitmentCycle).to receive(:current_recruitment_cycle!).and_raise(ActiveRecord::RecordNotFound)
+
+        get :index, params: {
+          recruitment_cycle_year: 2024
+        }
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
     context 'when there are no providers' do
       before do
         get :index, params: {
