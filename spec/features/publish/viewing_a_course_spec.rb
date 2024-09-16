@@ -433,7 +433,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :course,
       :secondary,
       enrichments: [course_enrichment],
-      funding_type: 'fee',
+      funding: 'fee',
       subjects: [build(:secondary_subject, bursary_amount: 10_000)]
     )
   end

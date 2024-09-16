@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Editing visa sponsorship' do
   before do
     given_i_am_authenticated_as_an_admin_user
-    and_the_db_backed_funding_type_feature_flag_is_enabled
     and_there_is_a_provider_with_courses
   end
 
@@ -82,7 +81,7 @@ feature 'Editing visa sponsorship' do
   end
 
   def provider
-    @provider ||= create(:provider, courses: [build(:course, :fee_type_based, id: 1, can_sponsor_student_visa: false), build(:course, :with_salary, id: 2), build(:course, :with_apprenticeship, id: 3)])
+    @provider ||= create(:provider, courses: [build(:course, id: 1, can_sponsor_student_visa: false, funding: 'fee'), build(:course, id: 2, funding: 'salary'), build(:course, id: 3, funding: 'apprenticeship')])
   end
 
   def and_there_is_a_provider_with_courses
@@ -99,10 +98,6 @@ feature 'Editing visa sponsorship' do
 
   def when_i_navigate_to_the_fee_paying_course
     visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 1, recruitment_cycle_year: Settings.current_recruitment_cycle_year)
-  end
-
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
   end
 
   alias_method :and_i_navigate_to_the_same_fee_paying_course, :when_i_navigate_to_the_fee_paying_course

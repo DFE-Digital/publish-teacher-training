@@ -310,7 +310,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :course,
       :open,
       :secondary,
-      :fee_type_based,
+      funding: 'fee',
       applications_open_from: Time.zone.tomorrow,
       accrediting_provider:,
       site_statuses:, enrichments: [course_enrichment],
@@ -342,7 +342,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     course = create(
-      :course, :secondary, :fee_type_based, :with_accrediting_provider, provider:, degree_grade: nil, additional_degree_subject_requirements: nil
+      :course, :secondary, :with_accrediting_provider, provider:, degree_grade: nil, funding: 'fee', additional_degree_subject_requirements: nil
     )
 
     accredited_provider_code = course.accredited_provider_code

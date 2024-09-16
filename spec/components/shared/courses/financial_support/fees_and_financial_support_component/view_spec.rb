@@ -3,13 +3,9 @@
 require 'rails_helper'
 
 describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View, type: :component do
-  context 'Salaried courses with db_backed_funding feature inactive' do
-    before do
-      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
-    end
-
+  context 'Salaried courses' do
     it 'renders salaried course section if the course has a salary' do
-      course = build(:course, funding_type: 'salary').decorate
+      course = build(:course, funding: 'salary').decorate
 
       result = render_inline(described_class.new(course))
 
@@ -17,29 +13,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     end
 
     it 'does not render salaried course section if the course does not have a salary' do
-      course = build(:course, funding_type: 'fee', subjects: [build(:secondary_subject, bursary_amount: '3000')]).decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).not_to include('Financial support is not available for this course because it comes with a salary.')
-    end
-  end
-
-  context 'Salaried courses with db_backed_funding feature active' do
-    before do
-      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-    end
-
-    it 'renders salaried course section if the course has a salary' do
-      course = build(:course, funding_type: 'salary').decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include('Financial support is not available for this course because it comes with a salary.')
-    end
-
-    it 'does not render salaried course section if the course does not have a salary' do
-      course = build(:course, funding_type: 'fee', subjects: [build(:secondary_subject, bursary_amount: '3000')]).decorate
+      course = build(:course, funding: 'fee', subjects: [build(:secondary_subject, bursary_amount: '3000')]).decorate
 
       result = render_inline(described_class.new(course))
 
@@ -49,7 +23,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
   context 'Courses excluded from bursary' do
     it 'renders the student loans section if the course is excluded from bursary' do
-      course = build(:course, funding_type: 'fee', name: 'Drama', subjects: [build(:secondary_subject), build(:secondary_subject)]).decorate
+      course = build(:course, funding: 'fee', name: 'Drama', subjects: [build(:secondary_subject), build(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course))
 
@@ -62,7 +36,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     it 'renders the bursary section if the course has a bursary' do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
 
-      course = build(:course, funding_type: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000'), build(:secondary_subject)]).decorate
+      course = build(:course, funding: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000'), build(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course))
 
@@ -74,7 +48,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     it 'renders the scholarships and bursary section' do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
 
-      course = build(:course, funding_type: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000', financial_incentive: FinancialIncentive.new(scholarship: '1000')), build(:secondary_subject)]).decorate
+      course = build(:course, funding: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000', financial_incentive: FinancialIncentive.new(scholarship: '1000')), build(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course))
 
@@ -84,7 +58,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
   context 'Courses with student loans' do
     it 'renders the student loans section if the course is not salaried, does not have a bursary or scholarship and does not meet bursary exclusion criteria' do
-      course = create(:course, funding_type: 'fee', name: 'Drama', subjects: [create(:primary_subject), create(:secondary_subject)]).decorate
+      course = create(:course, funding: 'fee', name: 'Drama', subjects: [create(:primary_subject), create(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course))
 
@@ -92,27 +66,9 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     end
   end
 
-  context 'Fee paying courses with db_backed_funding feature inactive' do
-    before do
-      allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
-    end
-
+  context 'Fee paying courses' do
     it 'renders the fees section' do
-      course = create(:course, name: 'Music', enrichments: [create(:course_enrichment, fee_uk_eu: '5000', fee_details: 'Some fee details')], funding_type: 'fee').decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include('Some fee details')
-    end
-  end
-
-  context 'Fee paying courses with db_backed_funding feature active' do
-    before do
-      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-    end
-
-    it 'renders the fees section' do
-      course = create(:course, name: 'Music', enrichments: [create(:course_enrichment, fee_uk_eu: '5000', fee_details: 'Some fee details')], funding_type: 'fee').decorate
+      course = create(:course, name: 'Music', enrichments: [create(:course_enrichment, fee_uk_eu: '5000', fee_details: 'Some fee details')], funding: 'fee').decorate
 
       result = render_inline(described_class.new(course))
 
