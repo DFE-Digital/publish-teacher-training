@@ -63,8 +63,12 @@
         <% row.with_key(text: t(".degree_required")) %>
         <% row.with_value do %>
           <p class="govuk-body">
-            <%= degree_required_status %>
-            <%= course.equivalent_qualification %>
+            <% if course.undergraduate_degree_type? %>
+              <%= t(".no_degree_required") %>
+            <% else %>
+              <%= degree_required_status %>
+              <%= course.equivalent_qualification %>
+            <% end %>
           </p>
         <% end %>
       <% end %>

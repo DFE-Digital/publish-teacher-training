@@ -48,6 +48,7 @@ feature 'Questions and results for undergraduate courses' do
     when_i_uncheck_all_the_filters
     and_i_click_apply_filters
     then_i_am_on_results_page
+    and_i_can_see_that_degree_is_not_required
     and_some_filters_are_hidden_for_undergraduate_courses
     and_some_filters_are_visible_for_undergraduate_courses
   end
@@ -381,6 +382,12 @@ feature 'Questions and results for undergraduate courses' do
   def when_i_uncheck_all_the_filters
     uncheck 'Only show courses open for applications'
     uncheck 'Only show courses with a SEND specialism'
+  end
+
+  def and_i_can_see_that_degree_is_not_required
+    expect(page).to have_content(
+      "Degree required\nNo degree required\n"
+    ).twice
   end
 
   def and_i_click_apply_filters

@@ -193,6 +193,7 @@ en:
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     results:
       search_result_component:
+        no_degree_required: No degree required
         location:
           one: Location
           other: Nearest location
