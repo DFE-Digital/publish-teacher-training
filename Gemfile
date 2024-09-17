@@ -64,7 +64,7 @@ gem 'terminal-table'
 
 # For querying third party APIs
 gem 'faraday'
-gem 'faraday-net_http_persistent', '~> 2.0'
+gem 'faraday-net_http_persistent', '~> 2.2'
 
 # UK postcode parsing and validation for Ruby
 gem 'uk_postcode'
