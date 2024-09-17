@@ -8,7 +8,7 @@
   <% end %>
   <li><%= govuk_link_to t(".fees_and_financial_support"), "#section-financial-support" %></li>
   <% if how_school_placements_work.present? || program_type == "higher_education_programme" || program_type == "scitt_programme" || preview? %>
-    <li><%= govuk_link_to t(".how_school_placements_work"), "#training-locations" %></li>
+    <li><%= govuk_link_to t(".where_you_will_train"), "#training-locations" %></li>
   <% end %>
   <% if interview_process.present? %>
     <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>
