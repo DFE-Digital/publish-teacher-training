@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
-  before do
-    given_the_db_backed_funding_type_feature_flag_is_enabled
-  end
-
   scenario 'creating a degree awarding course from school direct provider' do
     given_i_am_authenticated_as_a_school_direct_provider_user
     and_the_tda_feature_flag_is_active
@@ -666,10 +662,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     and_i_click_continue
     choose 'Yes'
     click_on 'Update A levels'
-  end
-
-  def given_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
   end
 
   alias_method :and_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship, :then_i_do_not_see_the_change_links_for_study_mode_funding_type_and_visa_sponsorship

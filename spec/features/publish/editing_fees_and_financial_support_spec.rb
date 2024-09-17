@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 feature 'Editing fees and financial support section' do
-  before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-  end
-
   scenario 'adding valid data' do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
@@ -54,7 +50,7 @@ feature 'Editing fees and financial support section' do
   end
 
   def and_there_is_a_course_i_want_to_edit
-    given_a_course_exists(:fee_type_based, enrichments: [build(:course_enrichment, :published)])
+    given_a_course_exists(funding: 'fee', enrichments: [build(:course_enrichment, :published)])
   end
 
   def when_i_visit_the_fees_and_financial_support_edit_page

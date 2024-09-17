@@ -4,9 +4,8 @@ require 'swagger_helper'
 
 describe 'API', :with_publish_constraint do
   before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-    create(:course, :engineers_teach_physics, provider:, course_code: 'C100')
-    create(:course, :engineers_teach_physics, provider:, course_code: 'C101')
+    create(:course, :engineers_teach_physics, provider:, course_code: 'C100', funding: 'fee')
+    create(:course, :engineers_teach_physics, provider:, course_code: 'C101', funding: 'fee')
   end
 
   path '/recruitment_cycles/{year}/providers/{provider_code}/courses' do
@@ -126,7 +125,7 @@ describe 'API', :with_publish_constraint do
 
       response '200', 'The collection of courses offered by the specified provider.' do
         let(:provider) { create(:provider) }
-        let(:course) { create(:course, :engineers_teach_physics, course_code: 'A123', provider:) }
+        let(:course) { create(:course, :engineers_teach_physics, course_code: 'A123', provider:, funding: 'fee') }
         let(:year) { provider.recruitment_cycle.year }
         let(:provider_code) { provider.provider_code }
         let(:course_code) { course.course_code }

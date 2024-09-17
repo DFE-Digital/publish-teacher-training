@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   before do
     and_i_am_authenticated_as_a_lead_school_provider_user
-    and_the_db_backed_funding_type_feature_flag_is_enabled
   end
 
   context 'fee paying to salaried course' do
@@ -84,7 +83,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def given_there_is_a_fee_paying_course_i_want_to_edit_which_cant_sponsor_a_student_visa
     given_a_course_exists(
-      funding_type: 'fee',
+      funding: 'fee',
       can_sponsor_student_visa: false,
       accrediting_provider:
     )
@@ -92,7 +91,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
     given_a_course_exists(
-      funding_type: 'salary',
+      funding: 'salary',
       can_sponsor_skilled_worker_visa: false,
       accrediting_provider:
     )
@@ -198,9 +197,5 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def accrediting_provider
     @current_user.providers.first
-  end
-
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
   end
 end

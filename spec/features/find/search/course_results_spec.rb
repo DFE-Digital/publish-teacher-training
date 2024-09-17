@@ -5,7 +5,7 @@ require 'rails_helper'
 feature 'results' do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    allow(Settings.features).to receive_messages(send_request_data_to_bigquery: true, db_backed_funding_type: true)
+    allow(Settings.features).to receive_messages(send_request_data_to_bigquery: true)
   end
 
   scenario 'when I visit the results page with no courses' do
@@ -34,8 +34,8 @@ feature 'results' do
     site2 = build(:site, location_name: 'site2')
     site_status1 = build(:site_status, :findable, site: site1)
     site_status2 = build(:site_status, :findable, site: site2)
-    create(:course, name: 'Hello there', site_statuses: [site_status1], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time)
-    create(:course, name: 'Hello there', site_statuses: [site_status2], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time)
+    create(:course, name: 'Hello there', site_statuses: [site_status1], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time, funding: 'apprenticeship')
+    create(:course, name: 'Hello there', site_statuses: [site_status2], enrichments: [build(:course_enrichment, :published, course_length: 'OneYear')], study_mode: :full_time, funding: 'apprenticeship')
   end
 
   def i_see_the_courses
