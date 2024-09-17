@@ -26,6 +26,8 @@
       </p>
     <% end %>
 
+      <%= render Find::Courses::TrainingLocations::View.new(course:, preview: preview?(params)) %>
+
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>
     <% elsif course.how_school_placements_work.present? %>

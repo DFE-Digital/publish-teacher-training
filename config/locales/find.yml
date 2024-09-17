@@ -177,7 +177,6 @@ en:
       about_schools_component:
         view:
           heading: Where you will train
-          view_list_of_school_placements: View list of school placements
           work_with_schools: We work with the following schools to provide your school placements.
       placements:
         heading: School placements at %{provider_name}

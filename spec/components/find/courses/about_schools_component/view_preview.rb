@@ -48,6 +48,7 @@ module Find
                          placements_heading: 'How placements work',
                          program_type: 'scitt_programme',
                          study_sites: [fake_study_site],
+                         sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
         end
 
@@ -60,6 +61,7 @@ module Find
                          placements_heading: 'How placements work',
                          program_type: 'higher_education_programme',
                          study_sites: [fake_study_site],
+                         sites: [fake_study_site],
                          site_statuses: [SiteStatus.new(id: 2_245_455, course_id: 12_983_436, publish: 'published', site_id: 11_228_658, status: 'running', vac_status: 'part_time_vacancies'), SiteStatus.new(id: 22_454_556, course_id: 12_983_436, publish: 'published', site_id: 11_228_659, status: 'running', vac_status: 'part_time_vacancies')])
         end
 
@@ -69,7 +71,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :provider_code, :course_code, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses, :is_fee_based)
+          attr_accessor(:provider, :provider_code, :course_code, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses, :is_fee_based, :sites)
 
           def higher_education_programme?
             true
