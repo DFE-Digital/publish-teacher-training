@@ -15,7 +15,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
         result = render_inline(described_class.new(course))
 
-        expect(result.text).to include('How school placements work')
+        expect(result.text).to include('Where you will train')
       end
     end
   end
@@ -31,31 +31,36 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
     end
   end
 
-  context 'course with site' do
-    it 'renders the school placement heading' do
-      provider = build(:provider)
+  context 'salaried course' do
+    it 'renders the correct content' do
       course = build(:course,
-                     provider:,
-                     site_statuses: [
-                       build(:site_status, site: build(:site))
-                     ]).decorate
+                     funding: 'salary').decorate
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include(course.placements_heading)
+      expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
     end
   end
 
-  context 'course with no site' do
-    it 'does not render the school placement heading' do
-      provider = build(:provider)
+  context 'apprenticeship course' do
+    it 'renders the correct content' do
       course = build(:course,
-                     site_statuses: [],
-                     provider:).decorate
+                     funding: 'apprenticeship').decorate
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).not_to include(course.placements_heading)
+      expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
+    end
+  end
+
+  context 'fee paying course' do
+    it 'renders the correct content' do
+      course = build(:course,
+                     funding: 'fee').decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).to include('You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.')
     end
   end
 
@@ -171,54 +176,6 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
         result = render_inline(described_class.new(course))
 
         expect(result.text).not_to include('Advice from Get Into Teaching Where you will train')
-      end
-    end
-  end
-
-  describe '#placements_url' do
-    context 'when course is published' do
-      it 'returns the find url' do
-        provider = build(:provider)
-        course = build(
-          :course,
-          :published,
-          provider:,
-          site_statuses: [
-            build(:site_status, :findable, site: build(:site))
-          ]
-        ).decorate
-
-        result = render_inline(described_class.new(course))
-
-        expect(result).to have_link(
-          'View list of school placements',
-          href: find_placements_path(course.provider_code, course.course_code)
-        )
-      end
-    end
-
-    context 'when course is not published' do
-      it 'returns the publish url' do
-        provider = create(:provider)
-        course = create(
-          :course,
-          provider:,
-          site_statuses: [
-            create(:site_status, :findable, site: create(:site))
-          ]
-        ).decorate
-
-        result = render_inline(described_class.new(course, preview: true))
-        url = placements_publish_provider_recruitment_cycle_course_path(
-          course.provider_code,
-          course.recruitment_cycle_year,
-          course.course_code
-        )
-
-        expect(result).to have_link(
-          'View list of school placements',
-          href: url
-        )
       end
     end
   end

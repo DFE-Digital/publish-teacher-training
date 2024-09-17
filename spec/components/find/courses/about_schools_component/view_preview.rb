@@ -4,11 +4,21 @@ module Find
   module Courses
     module AboutSchoolsComponent
       class ViewPreview < ViewComponent::Preview
-        def hei_minimum
+        def hei_minimum_without_salary
           course = Course.new(course_code: 'FIND',
                               provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
                               program_type: 'higher_education_programme',
-                              level: 'further_education').decorate
+                              level: 'further_education',
+                              funding: 'fee').decorate
+          render Find::Courses::AboutSchoolsComponent::View.new(course)
+        end
+
+        def hei_minimum_with_salary
+          course = Course.new(course_code: 'FIND',
+                              provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current),
+                              program_type: 'higher_education_programme',
+                              level: 'further_education',
+                              funding: 'salary').decorate
           render Find::Courses::AboutSchoolsComponent::View.new(course)
         end
 
@@ -45,6 +55,7 @@ module Find
           FakeCourse.new(provider: Provider.new(provider_code: 'DFE'),
                          provider_code: '1BJ',
                          course_code: 'ZZZZ',
+                         is_fee_based: true,
                          published_how_school_placements_work: 'you will go on placement and learn more',
                          placements_heading: 'How placements work',
                          program_type: 'higher_education_programme',
@@ -58,7 +69,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :provider_code, :course_code, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses)
+          attr_accessor(:provider, :provider_code, :course_code, :published_how_school_placements_work, :placements_heading, :program_type, :study_sites, :site_statuses, :is_fee_based)
 
           def higher_education_programme?
             true
@@ -66,6 +77,10 @@ module Find
 
           def preview_site_statuses
             site_statuses.sort_by { |status| status.site.location_name }
+          end
+
+          def fee_based?
+            is_fee_based
           end
         end
       end

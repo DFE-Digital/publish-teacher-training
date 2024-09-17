@@ -16,6 +16,16 @@
       <% end %>
     <% end %>
 
+    <% if course.fee_based? %>
+      <p class="govuk-body">
+        You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+      </p>
+    <% end %>
+
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>
     <% elsif course.how_school_placements_work.present? %>
