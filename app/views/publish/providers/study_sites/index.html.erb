@@ -11,9 +11,7 @@
 
     <%= govuk_button_link_to t(".add_study_site"), search_publish_provider_recruitment_cycle_study_sites_path(@provider.provider_code) %>
 
-    <p class="govuk-body">A study site, such as a university campus, is where trainees do theoretical training. Add study sites for your organisation and then attach one or more to a course from the ‘Basic details’ tab on the course page.</p>
-
-    <p class="govuk-body">Candidates will see a list of the attached study sites in the ‘Training locations’ section on the course page on Find.</p>
+    <%= render Publish::Providers::StudySites::ExplainerComponent.new %>
 
     <% if @study_sites.any? %>
       <table class="govuk-table app-table--vertical-align-middle">
