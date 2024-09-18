@@ -1267,6 +1267,8 @@ en:
     gov_design_accessibility: "https://design-system.service.gov.uk/accessibility/"
     ico_complaint: "https://ico.org.uk/make-a-complaint/"
     eu_settlement_scheme: "https://www.gov.uk/settled-status-eu-citizens-families"
+    how_to:
+      add_school_placements: "https://www.publish-teacher-training-courses.service.gov.uk/how-to-use-this-service/add-schools-and-study-sites"
     initial_teacher_training_guidance: https://www.gov.uk/education/initial-teacher-training-itt
     initial_teacher_training_forming_partnerships: https://www.gov.uk/government/publications/initial-teacher-training-itt-forming-partnerships
     urn_html: |-

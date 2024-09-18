@@ -6,7 +6,9 @@ RSpec.describe Publish::Providers::SchoolPlacements::ExplainerComponent, type: :
   it 'renders School Placement information for the Provider' do
     render_inline(described_class.new)
 
-    expect(page).to have_text('A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.')
-    expect(page).to have_text('Candidates will see a list of the attached placements in the ‘Training locations’ section on the course page on Find to help them get a sense of the areas your organisation operates in.')
+    expect(page).to have_text('Add the schools you can offer placements in. A placement school is where candidates will go to get classroom experience.', normalize_ws: true)
+    expect(page).to have_text("Your courses will not appear in candidate's location searches if you do not add placement schools to them.", normalize_ws: true)
+    expect(page).to have_link('Find out more about why you should add school placement locations', href: 'https://www.publish-teacher-training-courses.service.gov.uk/how-to-use-this-service/add-schools-and-study-sites')
+    expect(page).to have_text('Add placement schools here, then attach them to any of your courses from the ‘Basic details’ tab on each course page.', normalize_ws: true)
   end
 end
