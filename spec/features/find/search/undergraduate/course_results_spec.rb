@@ -144,6 +144,47 @@ feature 'Questions and results for undergraduate courses' do
     and_i_can_see_only_postgraduate_courses
   end
 
+  scenario 'in the 2025 cycle with the TDA feature active and searching by location' do
+    given_i_have_2025_courses_in_different_locations
+    and_i_am_in_the_2025_cycle
+    and_the_tda_feature_flag_is_active
+    when_i_visit_the_start_page
+    and_i_choose_to_find_courses_by_location
+    and_i_add_a_location
+    and_i_click_continue
+    and_i_choose_secondary
+    and_i_click_continue
+    and_i_choose_subjects
+    and_i_click_continue
+    and_i_click_continue
+    then_i_see_an_error_message_on_the_degree_question_page
+    and_the_back_link_points_to_the_secondary_subjects_page
+
+    when_i_choose_no_i_do_not_have_a_degree
+    and_i_click_continue
+    then_i_am_on_the_visa_status_page
+    and_the_back_link_points_to_the_degree_question
+
+    when_i_choose_no
+    and_i_click_find_courses
+
+    then_i_am_on_results_page
+    and_some_filters_are_hidden_for_undergraduate_courses
+    and_some_filters_are_visible_for_undergraduate_courses
+    and_the_search_radius_filter_is_visible
+    and_i_can_see_all_courses_nearer_the_radius
+
+    when_i_select_the_most_nearer_location
+    and_i_click_apply_filters
+    then_i_am_on_results_page
+    and_i_can_see_only_the_courses_nearer_to_the_minimum_radius_limit
+
+    when_i_increase_the_search_radius_to_the_maximum
+    and_i_click_apply_filters
+    then_i_am_on_results_page
+    and_i_can_see_all_courses_nearer_the_radius
+  end
+
   def given_i_have_2025_courses
     _, provider = setup_recruitment_cycle(year: 2025)
 
@@ -153,6 +194,43 @@ feature 'Questions and results for undergraduate courses' do
 
     @mathematics_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
     @chemistry_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
+  end
+
+  def given_i_have_2025_courses_in_different_locations
+    _, provider = setup_recruitment_cycle(year: 2025)
+
+    @york_biology_course = create(
+      :course,
+      :published_teacher_degree_apprenticeship,
+      :secondary,
+      provider:,
+      name: 'Biology',
+      subjects: [find_or_create(:secondary_subject, :biology)],
+      site_statuses: [
+        build(
+          :site_status,
+          :findable,
+          vac_status: :full_time_vacancies,
+          site: build(:site, latitude: 51.4524877, longitude: -0.1204749, address1: 'AA Teamworks W Yorks SCITT, School Street, Greetland, Halifax, West Yorkshire', postcode: 'HX4 8JB')
+        )
+      ]
+    )
+    @london_biology_course = create(
+      :course,
+      :published_teacher_degree_apprenticeship,
+      :secondary,
+      provider:,
+      name: 'Biology',
+      subjects: [find_or_create(:secondary_subject, :biology)],
+      site_statuses: [
+        build(
+          :site_status,
+          :findable,
+          vac_status: :full_time_vacancies,
+          site: build(:site, latitude: 51.4980188, longitude: -0.1300436, address1: 'Westminster, London', postcode: 'SW1P 3BT')
+        )
+      ]
+    )
   end
 
   def setup_recruitment_cycle(year:)
@@ -392,5 +470,44 @@ feature 'Questions and results for undergraduate courses' do
 
   def and_i_click_apply_filters
     click_link_or_button 'Apply filters'
+  end
+
+  def and_i_choose_to_find_courses_by_location
+    stub_geocoder_lookup
+    choose 'By city, town or postcode'
+  end
+
+  def and_i_add_a_location
+    fill_in 'Postcode, town or city', with: 'Yorkshire'
+  end
+
+  def and_the_search_radius_filter_is_visible
+    within 'form.app-filter' do
+      expect(page).to have_content('Search radius')
+    end
+  end
+
+  def when_i_select_the_most_nearer_location
+    select '1 mile', from: 'Search radius'
+  end
+
+  def and_i_can_see_all_courses_nearer_the_radius
+    within '.app-search-results' do
+      expect(page).to have_content('Biology')
+      expect(page).to have_content(@york_biology_course.course_code)
+      expect(page).to have_content(@london_biology_course.course_code)
+    end
+  end
+
+  def and_i_can_see_only_the_courses_nearer_to_the_minimum_radius_limit
+    within '.app-search-results' do
+      expect(page).to have_content('Biology')
+      expect(page).to have_content(@york_biology_course.course_code)
+      expect(page).to have_no_content(@london_biology_course.course_code)
+    end
+  end
+
+  def when_i_increase_the_search_radius_to_the_maximum
+    select '200 miles', from: 'Search radius'
   end
 end
