@@ -7,14 +7,16 @@ describe Find::Courses::TrainingLocations::View, type: :component do
 
   subject { render_inline(described_class.new(course:, preview:)) }
 
-  let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site)]) }
-  let(:study_site) { course.study_sites.first.decorate }
   let(:preview) { false }
   let(:component) { described_class.new(course:, preview:) }
 
   describe '#render' do
-    context 'when displaying school placements' do
-      it "renders the 'school placements' key" do
+    let(:study_site) { course.study_sites.first.decorate }
+
+    context 'for fee-paying courses' do
+      let(:course) { create(:course, :with_full_time_sites, funding: 'fee', study_sites: [build(:site, :study_site)]) }
+
+      it "renders the 'Placement schools' heading" do
         expect(subject).to have_css('.govuk-summary-list__key', text: 'Placement schools')
       end
 
@@ -22,18 +24,28 @@ describe Find::Courses::TrainingLocations::View, type: :component do
         expect(subject).to have_link('View list of school placements')
       end
 
-      it 'renders the hint about school placements not being guaranteed' do
+      it 'renders the hint about placements not being guaranteed' do
         expect(subject).to have_css('.govuk-hint', text: 'Locations can change and are not guaranteed')
       end
     end
 
-    context 'when displaying study site (singular)' do
-      it "renders the 'Where you will study' key" do
-        expect(subject).to have_css('.govuk-summary-list__key', text: 'Where you will study')
+    context 'for salaried courses' do
+      let(:course) { create(:course, :with_full_time_sites, funding: 'salary', study_sites: [build(:site, :study_site)]) }
+
+      it "renders the 'Employing schools' heading" do
+        expect(subject).to have_css('.govuk-summary-list__key', text: 'Employing schools')
       end
 
-      it 'renders the potential placement location text' do
-        expect(subject).to have_css('.govuk-body', text: '1 potential placement location')
+      it 'renders the link to employing schools' do
+        expect(subject).to have_link('View list of school placements')
+      end
+
+      it 'renders the hint about placements not being guaranteed' do
+        expect(subject).to have_css('.govuk-hint', text: 'Locations can change and are not guaranteed')
+      end
+
+      it "renders 'Where you will study' for study sites" do
+        expect(subject).to have_css('.govuk-summary-list__key', text: 'Where you will study')
       end
 
       it 'renders the study site names and addresses' do
@@ -44,10 +56,12 @@ describe Find::Courses::TrainingLocations::View, type: :component do
   end
 
   describe '#placements_url' do
+    let(:course) { create(:course) }
+
     context 'when preview is true' do
       let(:preview) { true }
 
-      it 'renders a link to the placements publish path' do
+      it 'renders a link to the publish path' do
         expect(subject).to have_link(
           'View list of school placements',
           href: placements_publish_provider_recruitment_cycle_course_path(
@@ -62,40 +76,54 @@ describe Find::Courses::TrainingLocations::View, type: :component do
     context 'when preview is false' do
       let(:preview) { false }
 
-      it 'returns the find placements path' do
+      it 'renders a link to the find path' do
         expect(subject).to have_link('View list of school placements',
                                      href: find_placements_path(course.provider_code, course.course_code))
       end
     end
   end
 
-  describe 'potential_placement_schools_text' do
-    context 'when there is one school' do
-      it 'returns one potential placement location' do
+  describe '#potential_placements_text' do
+    context 'for fee-paying courses' do
+      let(:course) { create(:course, :with_full_time_sites, funding: 'fee', study_sites: [build(:site, :study_site)]) }
+
+      it 'returns the correct text for one potential placement location' do
         expect(component.potential_placements_text).to eq('1 potential placement location')
       end
     end
 
-    context 'when there are three schools' do
-      let(:course) { create(:course, sites: [create(:site), create(:site), create(:site)]) }
+    context 'for salaried courses' do
+      let(:course) { create(:course, :with_full_time_sites, funding: 'salary', study_sites: [build(:site, :study_site)]) }
 
-      it 'returns three potential placement locations' do
+      it 'returns the correct text for one potential employing school' do
+        expect(component.potential_placements_text).to eq('1 potential employing school')
+      end
+    end
+
+    context 'with multiple placements' do
+      let(:course) { create(:course, funding: 'fee', sites: [create(:site), create(:site), create(:site)]) }
+
+      it 'returns the correct text for multiple placements' do
         expect(component.potential_placements_text).to eq('3 potential placement locations')
       end
     end
   end
 
-  describe 'potential_study_sites_text' do
+  describe '#potential_study_sites_text' do
+    let(:course) { create(:course, :with_full_time_sites) }
+
     context 'when there is one study site' do
-      it 'returns 1 potential placement location' do
-        expect(component.potential_study_sites_text).to eq('1 potential study site')
+      let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site)]) }
+
+      it 'returns the correct text for one study site' do
+        expect(component.potential_study_sites_text).to eq('1 study site')
       end
     end
 
-    context 'when there are two study sites' do
+    context 'when there are multiple study sites' do
       let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site), build(:site, :study_site)]) }
 
-      it 'returns two potential study sites' do
+      it 'returns the correct text for multiple study sites' do
         expect(component.potential_study_sites_text).to eq('2 potential study sites')
       end
     end
@@ -103,8 +131,8 @@ describe Find::Courses::TrainingLocations::View, type: :component do
     context 'when there are no study sites' do
       let(:course) { create(:course, :with_full_time_sites, study_sites: []) }
 
-      it 'returns no study sites' do
-        expect(component.potential_study_sites_text).to eq('No study sites')
+      it 'returns the correct text for no study sites' do
+        expect(component.potential_study_sites_text).to eq('Not listed yet')
       end
     end
   end

@@ -28,13 +28,29 @@ module Find
         end
 
         def potential_placements_text
-          pluralize(course.sites.size, 'potential placement location')
+          if course.fee_based?
+            pluralize(course.sites.size, 'potential placement location')
+          else
+            pluralize(course.sites.size, 'potential employing school')
+          end
         end
 
         def potential_study_sites_text
-          return 'No study sites' if course.study_sites.none?
+          return 'Not listed yet' if course.study_sites.none?
 
-          pluralize(course.study_sites.size, 'potential study site')
+          if course.study_sites.one?
+            '1 study site'
+          else
+            "#{course.study_sites.size} potential study sites"
+          end
+        end
+
+        def top_heading
+          course.fee_based? ? 'Placement schools' : 'Employing schools'
+        end
+
+        def bottom_heading
+          'Where you will study'
         end
       end
     end
