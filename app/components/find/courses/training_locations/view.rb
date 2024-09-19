@@ -28,13 +28,13 @@ module Find
         end
 
         def potential_placements_text
-          "#{course.sites.size} potential placement #{course.sites.many? ? 'locations' : 'location'}"
+          pluralize(course.sites.size, 'potential placement location')
         end
 
         def potential_study_sites_text
           return 'No study sites' if course.study_sites.none?
 
-          "#{course.study_sites.size} potential study #{course.study_sites.many? ? 'sites' : 'site'}"
+          pluralize(course.study_sites.size, 'potential study site')
         end
       end
     end
