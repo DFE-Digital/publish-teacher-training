@@ -71,7 +71,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
 
   describe 'potential_placement_schools_text' do
     context 'when there is one school' do
-      it 'returns 1 potential placement location' do
+      it 'returns one potential placement location' do
         expect(component.potential_placements_text).to eq('1 potential placement location')
       end
     end
@@ -95,7 +95,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
     context 'when there are two study sites' do
       let(:course) { create(:course, :with_full_time_sites, study_sites: [build(:site, :study_site), build(:site, :study_site)]) }
 
-      it 'returns q potential placement locations' do
+      it 'returns two potential study sites' do
         expect(component.potential_study_sites_text).to eq('2 potential study sites')
       end
     end
@@ -103,7 +103,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
     context 'when there are no study sites' do
       let(:course) { create(:course, :with_full_time_sites, study_sites: []) }
 
-      it 'returns q potential placement locations' do
+      it 'returns no study sites' do
         expect(component.potential_study_sites_text).to eq('No study sites')
       end
     end
