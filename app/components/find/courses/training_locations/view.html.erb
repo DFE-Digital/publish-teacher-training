@@ -1,25 +1,26 @@
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Placement schools</dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"><%= potential_placements_text %></p>
-          <%= govuk_link_to(t("view_list_of_school_placements"), placements_url) %>
-          <p class="govuk-hint">Locations can change and are not guaranteed</p>
-        </dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Where you will study</dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body"><%= potential_study_sites_text %></p>
-          <ul class="govuk-list govuk-list--spaced">
-            <% course.study_sites.each do |study_site| %>
-              <li>
-                <p class="govuk-hint"><strong><%= smart_quotes(study_site.location_name) %></strong><br>
-                 <%= smart_quotes(study_site.decorate.full_address) %></p>
-              </li>
-            <% end %>
-          </ul>
-        </dd>
-      </div>
-    </dl>
+<%= govuk_summary_list(actions: false) do |summary_list| %>
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Placement schools" } %>
+    <%= row.with_value do %>
+      <p class="govuk-body"><%= potential_placements_text %></p>
+      <%= govuk_link_to(t("view_list_of_school_placements"), placements_url) %>
+      <p class="govuk-hint">Locations can change and are not guaranteed</p>
+    <% end %>
+  <% end %>
+  <%= summary_list.with_row do |row| %>
+    <%= row.with_key { "Where you will study" } %>
+    <%= row.with_value do %>
+      <p class="govuk-body"><%= potential_study_sites_text %></p>
+      <ul class="govuk-list govuk-list--spaced">
+        <% course.study_sites.each do |study_site| %>
+          <li>
+            <p class="govuk-hint">
+              <strong><%= smart_quotes(study_site.location_name) %></strong><br>
+              <%= smart_quotes(study_site.decorate.full_address) %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>
