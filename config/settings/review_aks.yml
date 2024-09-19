@@ -15,4 +15,3 @@ search_ui:
 authentication:
   secret: secret
   mode: persona
-
