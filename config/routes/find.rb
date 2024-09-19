@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-root to: 'find/search/locations#start', as: :find
+root to: 'find/search/pre_filters#new', as: :find
 
 scope via: :all do
   match '/404', to: 'find/errors#not_found'
@@ -18,6 +18,7 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/git/:git_path', to: 'courses#git_redirect', as: :get_into_teaching_redirect
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
   get '/results', to: 'results#index', as: 'results'
+  get '/results/count', to: 'results#count', as: 'results_count'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 
@@ -50,6 +51,7 @@ namespace :find, path: '/' do
     get '/visa-status-submit' => 'visa_status#create', as: :visa_status_create
     get '/no-degree-and-requires-visa-sponsorship' => 'no_degree_and_requires_visa_sponsorship#new', as: :no_degree_and_requires_visa_sponsorship
     resources :locations, only: %i[new create], path: '/'
+    resource :pre_filter
   end
 
   scope module: :result_filters, path: '/results/filter' do

@@ -1,7 +1,6 @@
-<div class="govuk-!-margin-bottom-8" id="section-apply">
+<div id="section-apply">
   <% if Find::CycleTimetable.mid_cycle? %>
     <% if application_status_open? %>
-      <p class="govuk-body">
         <%= govuk_start_button(
               text: "Apply for this course",
               href: apply_path,
@@ -9,7 +8,6 @@
                 data: { qa: "course__apply_link" }
               }
             ) %>
-      </p>
     <% else %>
       <%= govuk_warning_text(text: "You cannot apply for this course as it is closed for applications. To find courses open for applications, change your search to ‘Only show courses open for applications’.") %>
     <% end %>

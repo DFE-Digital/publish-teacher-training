@@ -1,4 +1,12 @@
-<%= render Find::LocationSubjectFilterComponent.new(results:) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back to home",
+    href: find_root_path(@results_filter_query_parameters),
+    html_attributes: {
+      data: { qa: "page-back" }
+    }
+  ) %>
+<% end %>
 
 <h1 class="govuk-heading-xl" data-qa="heading">
   <%= "#{results.number_of_courses_string} found" %>
@@ -13,11 +21,44 @@
   <div class="app-filter-layout__content">
 
     <div class="app-promoted-link">
-      <%= govuk_link_to "Talk to teacher training providers at an event near you",
-                        t("find.get_into_teaching.url_teacher_training_events") %>.
+
+      <%= form_with(url: '/', method: :get) do |form| %>
+        <div class="govuk-form-group">
+          <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
+            Keywords
+          <% end %>
+          <%= form.text_field :keywords, class: "govuk-input", value: filters_view.keywords, autocomplete: :off, form: "result-filters" %>
+        </div>
+
+        <div class="govuk-form-group" style="position: relative;">
+          <%= form.label :lq, class: "govuk-label govuk-label--s" do %>
+            City, town or postcode
+          <% end %>
+
+          <%= form.text_field :lq, id: :location, class: "govuk-input", value: filters_view.lq, autocomplete: :off, form: "result-filters" %>
+          <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
+        </div>
+
+        <% if filters_view.location_query? %>
+          <div class="govuk-form-group">
+            <%= form.label :radius, class: "govuk-label govuk-label--s" do %>
+              Search radius
+            <% end %>
+
+            <%= form.select :radius, options_for_select(filters_view.radius_options_for_select, filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
+          </div>
+          <% end %>
+
+        <button type="submit" class="govuk-button" data-module="govuk-button" form="result-filters" style="margin-bottom:5px;">
+          Search
+        </button>
+
+      <% end %>
+
     </div>
 
-    <%= render Find::Results::NoResultsComponent.new(results:) %>
+    <%= render Find::Results::NoResultsComponent.new(results:, filters_view: @filters_view) %>
+
     <%= render Find::Results::SortByComponent.new(results:) %>
 
     <% if results.has_results? %>
@@ -26,7 +67,8 @@
           <%= render Find::Results::SearchResultComponent.new(
             course:,
             filtered_by_location: results.location_filter?,
-            sites_count: results.sites_count(course)
+            sites_count: results.sites_count(course),
+            study_sites_count: results.study_sites_count(course),
           ) %>
         <% end %>
       </ul>

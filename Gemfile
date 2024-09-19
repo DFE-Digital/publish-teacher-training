@@ -260,3 +260,8 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'launchy'
 end
+
+gem "turbo-rails", "~> 2.0"
+
+# Use Redis for Action Cable
+gem "redis", "~> 4.0"

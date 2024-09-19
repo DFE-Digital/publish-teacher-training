@@ -7,6 +7,10 @@ import { FilterToggleButton } from './filter-toggle-button'
 import initAutocomplete from './autocomplete'
 import dfeAutocomplete from './dfe-autocomplete'
 import CookieBanner from '../cookie_banner'
+import '@hotwired/turbo-rails'
+
+// eslint-disable-next-line no-undef
+Turbo.session.drive = false
 
 window.jQuery = jQuery
 window.$ = jQuery
@@ -20,6 +24,12 @@ CookieBanner.init()
 initAutocomplete({
   element: 'location-autocomplete',
   input: 'location',
+  path: '/location-suggestions'
+})
+
+initAutocomplete({
+  element: 'location-autocomplete',
+  input: 'pre_filter_lq',
   path: '/location-suggestions'
 })
 
