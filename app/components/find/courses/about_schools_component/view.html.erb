@@ -16,6 +16,18 @@
       <% end %>
     <% end %>
 
+    <% if course.fee_based? %>
+      <p class="govuk-body">
+        You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+      </p>
+    <% end %>
+
+      <%= render Find::Courses::TrainingLocations::View.new(course:, preview: preview?(params)) %>
+
     <% if course.published_how_school_placements_work.present? %>
       <%= markdown(course.published_how_school_placements_work) %>
     <% elsif course.how_school_placements_work.present? %>
@@ -42,18 +54,6 @@
           </li>
       <% end %>
       </ul>
-    <% end %>
-
-    <% if course.site_statuses.map(&:site).uniq.any? %>
-      <h3 class="govuk-heading-m">
-        <%= course.placements_heading %>
-      </h3>
-
-      <p class="govuk-body"><%= t(".work_with_schools") %></p>
-
-      <p class="govuk-body">
-        <%= govuk_link_to(t(".view_list_of_school_placements"), placements_url) %>
-      </p>
     <% end %>
   </div>
 </div>

@@ -108,7 +108,7 @@ en:
       contents_component:
         view:
           course_details: Course details
-          how_school_placements_work: How school placements work
+          where_you_will_train: Where you will train
           training_with_disabilities: Training with disabilities
           fees_and_financial_support: Fees and financial support
           salary: Salary
@@ -176,8 +176,7 @@ en:
           contact: Contact %{provider_name}
       about_schools_component:
         view:
-          heading: How school placements work
-          view_list_of_school_placements: View list of school placements
+          heading: Where you will train
           work_with_schools: We work with the following schools to provide your school placements.
       placements:
         heading: School placements at %{provider_name}
