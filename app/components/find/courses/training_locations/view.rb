@@ -53,6 +53,11 @@ module Find
         def bottom_heading
           'Where you will study'
         end
+
+        def show_school_placements_link?
+          Time.zone.now > CycleTimetable.find_opens(@year) &&
+            @course.provider.selectable_school?
+        end
       end
     end
   end

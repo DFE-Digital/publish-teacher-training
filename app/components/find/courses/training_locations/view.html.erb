@@ -3,7 +3,7 @@
     <%= row.with_key { top_heading } %>
     <%= row.with_value do %>
       <p class="govuk-body"><%= potential_placements_text %></p>
-      <%= govuk_link_to(t("view_list_of_school_placements"), placements_url) %>
+      <%= govuk_link_to(t("view_list_of_school_placements"), placements_url) if show_school_placements_link? %>
       <p class="govuk-hint govuk-!-font-size-16">Locations can change and are not guaranteed</p>
     <% end %>
   <% end %>
