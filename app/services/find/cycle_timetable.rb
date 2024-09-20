@@ -89,8 +89,8 @@ module Find
       date(:apply_deadline)
     end
 
-    def self.find_opens
-      date(:find_opens, current_year)
+    def self.find_opens(year = current_year)
+      date(:find_opens, year)
     end
 
     def self.find_reopens
