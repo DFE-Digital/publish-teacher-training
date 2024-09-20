@@ -73,6 +73,33 @@ module Find
                               provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current)).decorate
           render Find::Courses::TrainingLocations::View.new(course:)
         end
+
+        def show_training_locations_link_disabled
+          course = Course.new(course_code: 'FIND',
+                              sites: [Site.new, Site.new],
+                              funding: 'salary',
+                              study_sites: [Site.new, Site.new],
+                              provider: Provider.new(provider_code: 'DFE', selectable_school: true, recruitment_cycle: RecruitmentCycle.current)).decorate
+          render Find::Courses::TrainingLocations::View.new(course:)
+        end
+
+        def show_training_locations_link_enabled
+          course = Course.new(course_code: 'FIND',
+                              sites: [Site.new, Site.new],
+                              funding: 'salary',
+                              study_sites: [Site.new, Site.new],
+                              provider: Provider.new(provider_code: 'DFE', selectable_school: true, recruitment_cycle: RecruitmentCycle.current)).decorate
+          render Find::Courses::TrainingLocations::View.new(course:, year: 2023)
+        end
+
+        def show_training_locations_link_current
+          course = Course.new(course_code: 'FIND',
+                              sites: [Site.new, Site.new],
+                              funding: 'salary',
+                              study_sites: [Site.new, Site.new],
+                              provider: Provider.new(provider_code: 'DFE', selectable_school: true, recruitment_cycle: RecruitmentCycle.current)).decorate
+          render Find::Courses::TrainingLocations::View.new(course:)
+        end
       end
     end
   end
