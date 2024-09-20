@@ -12,6 +12,16 @@ module Find
     end
 
     context 'when there are no search results' do
+      let(:search_params) do
+        { 'age_group' => 'primary',
+          'applications_open' => 'true',
+          'can_sponsor_visa' => 'false',
+          'has_vacancies' => 'true',
+          'l' => '2',
+          'subjects' => ['00'],
+          'visa_status' => 'false' }
+      end
+
       let(:results_view) do
         instance_double(
           Find::ResultsView,
@@ -29,7 +39,7 @@ module Find
 
       it 'renders a "No courses found" message when there are no results' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, search_params:)
         )
 
         expect(component.text).to include('No courses found')
@@ -37,13 +47,23 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, search_params:)
         )
         expect(component.text).to include('event near you')
       end
     end
 
     context 'when there are 10 matching courses' do
+      let(:search_params) do
+        { 'age_group' => 'primary',
+          'applications_open' => 'true',
+          'can_sponsor_visa' => 'false',
+          'has_vacancies' => 'true',
+          'l' => '2',
+          'subjects' => ['00'],
+          'visa_status' => 'false' }
+      end
+
       let(:results_view) do
         instance_double(
           Find::ResultsView,
@@ -68,12 +88,13 @@ module Find
         allow(Results::SearchResultComponent).to receive(:new).and_return(plain: '')
 
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, search_params:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
+            search_params:,
             filtered_by_location: false,
             sites_count: 2
           )
@@ -84,12 +105,13 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, search_params:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
+            search_params:,
             filtered_by_location: false,
             sites_count: 2
           )

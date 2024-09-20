@@ -9,11 +9,12 @@ module Find
 
       delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
 
-      def initialize(course:, filtered_by_location: false, sites_count: 0)
+      def initialize(course:, search_params:, filtered_by_location: false, sites_count: 0)
         super
         @course = course.decorate
         @filtered_by_location = filtered_by_location
         @sites_count = sites_count
+        @search_params = search_params
       end
 
       def filtered_by_location?
@@ -27,7 +28,7 @@ module Find
       def coure_title_link
         t(
           '.course_title_html',
-          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code),
+          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, search_params: @search_params.to_query),
           provider_name: helpers.smart_quotes(course.provider.provider_name),
           course_name: course.name_and_code
         )
