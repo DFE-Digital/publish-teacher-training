@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 describe Find::Courses::TrainingLocations::View, type: :component do
-  include Rails.application.routes.url_helpers
-
   subject { render_inline(described_class.new(course:, preview:)) }
 
   let(:preview) { false }
@@ -135,5 +133,9 @@ describe Find::Courses::TrainingLocations::View, type: :component do
         expect(component.potential_study_sites_text).to eq('Not listed yet')
       end
     end
+  end
+
+  def url_helpers
+    Rails.application.routes.url_helpers
   end
 end
