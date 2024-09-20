@@ -9,8 +9,9 @@ module Find
 
         attr_reader :course, :preview
 
-        def initialize(course:, preview: false)
+        def initialize(course:, preview: false, year: 2025)
           @course = course
+          @year = year
           @preview = preview
           super
         end
