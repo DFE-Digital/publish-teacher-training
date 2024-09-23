@@ -64,21 +64,6 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
     end
   end
 
-  context 'course with study sites' do
-    it 'renders the component' do
-      provider = build(:provider)
-      course = build(:course,
-                     provider:,
-                     study_sites: [
-                       build(:site, :study_site)
-                     ]).decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include('Study sites')
-    end
-  end
-
   context 'course without multiple sites' do
     it 'renders the component' do
       provider = build(:provider)

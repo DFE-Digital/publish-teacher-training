@@ -274,8 +274,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page).to have_content '2:1 bachelor’s degree or above or equivalent qualification'
     expect(publish_course_preview_page).to have_content 'Maths A level'
 
-    expect(publish_course_preview_page).to have_study_sites_table
-
     expect(publish_course_preview_page).to have_link('View list of school placements')
 
     expect(publish_course_preview_page).to have_course_advice

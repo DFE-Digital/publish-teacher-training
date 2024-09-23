@@ -35,25 +35,5 @@
     <% else %>
       <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :how_school_placements_work, is_preview: preview?(params)) %>
     <% end %>
-
-    <% if course.study_sites.any? %>
-      <h3 class="govuk-heading-m">
-        Study sites
-      </h3>
-
-      <p class="govuk-body">
-        <%= "The theoretical learning part of your course will be at the following #{course.study_sites.many? ? 'locations' : 'location'}." %>
-      </p>
-
-      <ul class="govuk-list govuk-list--spaced" id="course_study_sites">
-        <% course.study_sites.each do |study_site| %>
-          <li>
-            <strong><%= smart_quotes(study_site.location_name) %></strong>
-            <br>
-            <%= smart_quotes(study_site.decorate.full_address) %>
-          </li>
-      <% end %>
-      </ul>
-    <% end %>
   </div>
 </div>
