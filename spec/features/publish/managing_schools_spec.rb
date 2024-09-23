@@ -77,7 +77,10 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
   end
 
   def given_i_see_the_schools_guidance_text
-    expect(page).to have_content('A school placement is a school where the candidate might be placed in to do classroom experience, for example. Add placement schools then attach them to any of your courses from the ‘Basic details’ tab on the course page.')
+    expect(page).to have_text('Add the schools you can offer placements in. A placement school is where candidates will go to get classroom experience.', normalize_ws: true)
+    expect(page).to have_text('Your courses will not appear in candidate’s location searches if you do not add placement schools to them.', normalize_ws: true)
+    expect(page).to have_link('Find out more about why you should add school placement locations', href: 'https://www.publish-teacher-training-courses.service.gov.uk/how-to-use-this-service/add-schools-and-study-sites')
+    expect(page).to have_text('Add placement schools here, then attach them to any of your courses from the ‘Basic details’ tab on each course page.', normalize_ws: true)
   end
 
   def and_the_school_is_not_added
