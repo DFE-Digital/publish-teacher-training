@@ -138,13 +138,28 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
+  scenario 'user sees no school placements in 2025' do
+    create(:recruitment_cycle, :next)
+    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      provider.update(selectable_school: false)
+      when_i_visit_the_publish_course_preview_page
+      then_i_see_no_school_placements_link
+    end
+  end
+
   scenario 'user views school placements' do
-    given_i_am_authenticated(user: user_with_fee_based_course)
-    when_i_visit_the_publish_course_preview_page
-    and_i_click_link_or_button('View list of school placements')
-    then_i_should_be_on_the_school_placements_page
-    and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
-    then_i_should_be_back_on_the_preview_page
+    create(:recruitment_cycle, :next)
+    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+      given_i_am_authenticated(user: user_with_fee_based_course)
+      when_i_visit_the_publish_course_preview_page
+      and_i_click_link_or_button('View list of school placements')
+      then_i_should_be_on_the_school_placements_page
+      and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
+      then_i_should_be_back_on_the_preview_page
+    end
   end
 
   scenario 'user views provider and accredited_provider' do
@@ -260,6 +275,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page).to have_content 'Maths A level'
 
     expect(publish_course_preview_page).to have_study_sites_table
+
     expect(publish_course_preview_page).to have_link('View list of school placements')
 
     expect(publish_course_preview_page).to have_course_advice
@@ -531,5 +547,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
         @course.course_code
       )
     )
+  end
+
+  def then_i_see_no_school_placements_link
+    expect(publish_course_preview_page).to have_no_link('View list of school placements')
   end
 end
