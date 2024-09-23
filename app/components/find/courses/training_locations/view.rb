@@ -55,9 +55,9 @@ module Find
         end
 
         def show_school_placements_link?
-          CycleTimetable.current_year < @year ||
-            (CycleTimetable.current_year >= @year &&
-              @course.provider.selectable_school?)
+          @course.provider.recruitment_cycle_year.to_i < @year ||
+            (@course.provider.recruitment_cycle_year.to_i >= @year &&
+                @course.provider.selectable_school?)
         end
       end
     end
