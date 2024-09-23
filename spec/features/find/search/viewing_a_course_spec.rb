@@ -69,11 +69,23 @@ feature 'Viewing a findable course' do
     end
   end
 
-  scenario 'user views school placements' do
+  scenario 'user sees no school placements in 2025' do
     create(:recruitment_cycle, :next)
     Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
       allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
       given_there_is_a_findable_course
+      @provider.update(selectable_school: false)
+      when_i_visit_the_course_page
+      then_i_see_no_school_placements_link
+    end
+  end
+
+  scenario 'user views selectable school placements' do
+    create(:recruitment_cycle, :next)
+    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+      given_there_is_a_findable_course
+      @provider.update(selectable_school: true)
       when_i_visit_the_course_page
       when_i_click('View list of school placements')
       then_i_should_be_on_the_school_placements_page
@@ -300,11 +312,7 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.school_placements).to have_no_content('Suspended site with vacancies')
 
-    if RecruitmentCycle.current.year.to_i == 2024
-      expect(find_course_show_page).to have_no_link('View list of school placements')
-    else
-      expect(find_course_show_page).to have_link('View list of school placements')
-    end
+    expect(find_course_show_page).to have_link('View list of school placements')
 
     expect(find_course_show_page).to have_course_advice
 
@@ -445,5 +453,9 @@ feature 'Viewing a findable course' do
       "Contact #{course.provider_name}",
       href: find_provider_path(@course.provider_code, @course.course_code)
     )
+  end
+
+  def then_i_see_no_school_placements_link
+    expect(find_course_show_page).to have_no_link('View list of school placements')
   end
 end

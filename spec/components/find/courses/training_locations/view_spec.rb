@@ -19,7 +19,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
 
       it 'renders the link to school placements' do
-        expect(subject).to have_no_link('View list of school placements')
+        expect(subject).to have_link('View list of school placements')
       end
 
       it 'renders the hint about placements not being guaranteed' do
@@ -35,7 +35,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
 
       it 'renders the link to employing schools' do
-        expect(subject).to have_no_link('View list of school placements')
+        expect(subject).to have_link('View list of school placements')
       end
 
       it 'renders the hint about placements not being guaranteed' do
@@ -54,30 +54,14 @@ describe Find::Courses::TrainingLocations::View, type: :component do
   end
 
   describe '#placements_url' do
-    let(:course) { create(:course) }
+    let(:provider) { create(:provider, selectable_school: false) }
+    let(:course) { create(:course, provider:) }
 
-    context 'when preview is true before 2025 find opens' do
+    context 'when preview = true, before 2025 find opens and provider != selectable_school' do
       let(:preview) { true }
 
-      it 'renders no link to the publish path before 2025 find opens' do
+      it 'renders link to the publish path before 2025 find opens' do
         travel_to(1.minute.until(Find::CycleTimetable.find_opens(2025))) do
-          expect(subject).to have_no_link(
-            'View list of school placements',
-            href: url_helpers.placements_publish_provider_recruitment_cycle_course_path(
-              course.provider_code,
-              course.recruitment_cycle_year,
-              course.course_code
-            )
-          )
-        end
-      end
-    end
-
-    context 'when preview is true after 2025 find opens' do
-      let(:preview) { true }
-
-      it 'renders a link to the publish path' do
-        travel_to(1.minute.since(Find::CycleTimetable.find_opens(2025))) do
           expect(subject).to have_link(
             'View list of school placements',
             href: url_helpers.placements_publish_provider_recruitment_cycle_course_path(
@@ -90,18 +74,38 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
-    context 'when preview is false before 2025 find opens' do
-      let(:preview) { false }
+    context 'when preview is true after 2025 find opens and provider != selectable_school' do
+      let(:preview) { true }
 
-      it 'renders a link to the find path' do
-        travel_to(1.minute.until(Find::CycleTimetable.find_opens(2025))) do
-          expect(subject).to have_no_link('View list of school placements',
-                                          href: url_helpers.find_placements_path(course.provider_code, course.course_code))
+      it 'renders a link to the publish path' do
+        travel_to(1.minute.since(Find::CycleTimetable.find_opens(2025))) do
+          expect(subject).to have_no_link(
+            'View list of school placements',
+            href: url_helpers.placements_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code
+            )
+          )
         end
       end
     end
 
-    context 'when preview is false after find opens 2025' do
+    context 'when preview is false before 2025 find opens and provider != selectable_school' do
+      let(:preview) { false }
+
+      it 'renders a link to the find path' do
+        travel_to(1.minute.until(Find::CycleTimetable.find_opens(2025))) do
+          expect(subject).to have_link('View list of school placements',
+                                       href: url_helpers.find_placements_path(course.provider_code, course.course_code))
+        end
+      end
+    end
+
+    context 'when preview is false after find opens 2025 and provider != selectable_school' do
+      let(:provider) { create(:provider, selectable_school: true) }
+      let(:course) { create(:course, provider:) }
+
       it 'renders a link to the find path' do
         travel_to(1.minute.since(Find::CycleTimetable.find_opens(2025))) do
           expect(subject).to have_link('View list of school placements',

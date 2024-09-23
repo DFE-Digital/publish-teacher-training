@@ -10,10 +10,10 @@ module Find
         attr_reader :course, :preview
 
         def initialize(course:, preview: false, year: 2025)
+          super
           @course = course
           @year = year
           @preview = preview
-          super
         end
 
         def placements_url
@@ -55,8 +55,9 @@ module Find
         end
 
         def show_school_placements_link?
-          Time.zone.now > CycleTimetable.find_opens(@year) &&
-            @course.provider.selectable_school?
+          CycleTimetable.current_year < @year ||
+            (CycleTimetable.current_year >= @year &&
+              @course.provider.selectable_school?)
         end
       end
     end
