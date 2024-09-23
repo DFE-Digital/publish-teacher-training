@@ -356,7 +356,9 @@ RSpec.describe API::Public::V1::CoursesController do
                 can_sponsor_skilled_worker_visa
                 can_sponsor_student_visa
                 campaign_name
-                application_status]
+                application_status
+                training_route
+                degree_type]
           end
 
           before do

@@ -403,3 +403,21 @@ properties:
     enum:
       - open
       - closed
+  training_route:
+    type: string
+    nullable: false
+    description: "The course training route corresponding to different combinations of course types and funding types"
+    example: "fee_funded_initial_teacher_training"
+    enum:
+      - fee_funded_initial_teacher_training
+      - school_direct_salaried
+      - postgraduate_teacher_apprenticeship
+      - teacher_degree_apprenticeship
+  degree_type:
+    type: string
+    nullable: false
+    description: "The type of degree on the course"
+    example: "postgraduate"
+    enum:
+      - postgraduate
+      - undergraduate

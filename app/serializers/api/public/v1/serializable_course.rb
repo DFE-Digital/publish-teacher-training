@@ -50,7 +50,9 @@ module API
                    :can_sponsor_skilled_worker_visa,
                    :can_sponsor_student_visa,
                    :campaign_name,
-                   :application_status
+                   :application_status,
+                   :training_route,
+                   :degree_type
 
         attribute :about_accredited_body do
           @object.accrediting_provider_description
