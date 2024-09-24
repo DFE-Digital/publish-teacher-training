@@ -76,7 +76,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
-    context 'when preview = true for 2024 provider and provider != selectable_school' do
+    context 'when preview is true for a 2024 provider and the provider does not have selectable_school enabled' do
       let(:year) { 2024 }
       let(:selectable_school) { false }
       let(:preview) { true }
