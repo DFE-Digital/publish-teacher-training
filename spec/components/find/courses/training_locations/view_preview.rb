@@ -74,7 +74,7 @@ module Find
           render Find::Courses::TrainingLocations::View.new(course:)
         end
 
-        def show_training_locations_link_disabled
+        def show_training_locations_school_placements_link_disabled
           course = Course.new(course_code: 'FIND',
                               sites: [Site.new, Site.new],
                               funding: 'salary',
