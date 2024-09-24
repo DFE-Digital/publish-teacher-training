@@ -104,7 +104,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
-    context 'when preview is false after find opens 2025 and provider = selectable_school' do
+    context 'when preview is false after find opens in 2025 and provider has selectable_school enabled' do
       let(:year) { 2025 }
       let(:selectable_school) { true }
 
