@@ -12,16 +12,6 @@ module Find
     end
 
     context 'when there are no search results' do
-      let(:search_params) do
-        { 'age_group' => 'primary',
-          'applications_open' => 'true',
-          'can_sponsor_visa' => 'false',
-          'has_vacancies' => 'true',
-          'l' => '2',
-          'subjects' => ['00'],
-          'visa_status' => 'false' }
-      end
-
       let(:results_view) do
         instance_double(
           Find::ResultsView,
@@ -30,8 +20,7 @@ module Find
           subjects: [],
           number_of_courses_string: 'No courses',
           no_results_found?: true,
-          has_results?: false,
-          sites_count: 0
+          has_results?: false
         )
       end
 
@@ -39,7 +28,7 @@ module Find
 
       it 'renders a "No courses found" message when there are no results' do
         component = render_inline(
-          described_class.new(results: results_view, courses:, search_params:)
+          described_class.new(results: results_view, courses:)
         )
 
         expect(component.text).to include('No courses found')
@@ -47,23 +36,13 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:, search_params:)
+          described_class.new(results: results_view, courses:)
         )
         expect(component.text).to include('event near you')
       end
     end
 
     context 'when there are 10 matching courses' do
-      let(:search_params) do
-        { 'age_group' => 'primary',
-          'applications_open' => 'true',
-          'can_sponsor_visa' => 'false',
-          'has_vacancies' => 'true',
-          'l' => '2',
-          'subjects' => ['00'],
-          'visa_status' => 'false' }
-      end
-
       let(:results_view) do
         instance_double(
           Find::ResultsView,
@@ -73,30 +52,28 @@ module Find
           number_of_courses_string: '10 courses',
           no_results_found?: false,
           has_results?: true,
-          location_filter?: false,
-          sites_count: 2
+          location_filter?: false
         )
       end
 
       let(:courses) { ::Course.all.page(1) }
 
       before do
-        create_list(:course, 10)
+        create_list(:course, 10, :with_2_full_time_sites)
       end
 
       it 'renders "10 courses found" and a `SearchResultComponent` for each course' do
         allow(Results::SearchResultComponent).to receive(:new).and_return(plain: '')
 
         component = render_inline(
-          described_class.new(results: results_view, courses:, search_params:)
+          described_class.new(results: results_view, courses:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
-            search_params:,
-            filtered_by_location: false,
-            sites_count: 2
+            results_view:,
+            filtered_by_location: false
           )
         end
 
@@ -105,15 +82,14 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:, search_params:)
+          described_class.new(results: results_view, courses:)
         )
 
         courses.each do |course|
           expect(Results::SearchResultComponent).to have_received(:new).with(
             course:,
-            search_params:,
-            filtered_by_location: false,
-            sites_count: 2
+            results_view:,
+            filtered_by_location: false
           )
         end
         expect(component.text).to include('event near you')

@@ -1,16 +1,21 @@
 <li class="app-search-results__item" data-qa="course">
   <%= govuk_summary_card(classes: ["course-summary-card"], title: course_title_link) do |card| %>
     <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
-      <% if filtered_by_location? && has_sites? %>
-        <% summary_list.with_row do |row| %>
-          <% if course.provider.decorate.website.present? %>
+      <% if course.provider.decorate.website.present? %>
+          <% summary_list.with_row do |row| %>
             <% row.with_key(text: location_label) %>
             <% row.with_value do %>
-              <% if course.university_based? %>
-                <%= render partial: "find/results/university", locals: { course: } %>
+              <% if has_sites? %>
+              <% if filtered_by_location? %>
+                  <%= render partial: "find/results/by_location",
+                             locals: { site_distance:, location_name:, school_term:, sites_count: } %>
               <% else %>
-                <%= render partial: "find/results/non_university", locals: { course: } %>
+                <%= render partial: "find/results/by_country_or_provider",
+                           locals: { sites_count:, school_term: } %>
               <% end %>
+
+            <% else %>
+              Not listed yet
             <% end %>
           <% end %>
         <% end %>

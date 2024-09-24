@@ -26,8 +26,7 @@
           <%= render Find::Results::SearchResultComponent.new(
             course:,
             filtered_by_location: results.location_filter?,
-            sites_count: results.sites_count(course),
-            search_params:
+            results_view: results
           ) %>
         <% end %>
       </ul>

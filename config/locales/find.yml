@@ -193,9 +193,14 @@ en:
     results:
       search_result_component:
         no_degree_required: No degree required
-        location:
-          one: Location
-          other: Nearest location
+        fee_based:
+          location:
+            one: Placement school
+            other: Placement schools
+        salary_based:
+          location:
+            one: Employing school
+            other: Employing schools
         nearest_location: Nearest location
         fee_or_salary: Fee or salary
         course_fee: Course fee
