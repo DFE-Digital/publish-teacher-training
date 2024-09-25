@@ -444,6 +444,13 @@ en:
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     providers:
+      details:
+        page_title: Organisation details
+        about: About your organisation
+        school_placements: School placements
+        contact_details: Contact details
+        visa_sponsorship: Visa sponsorship
+        selectable_school_label: Let candidates choose preferred schools
       courses:
         accredited_provider:
           show:
@@ -536,6 +543,7 @@ en:
         edit:
           page_title: How placements work - %{course_name_and_code}
           submit_button: Update how placements work
+          selectable_school_label: Let candidates select their preferred schools when applying
           guidance_text_html:
             <p class="govuk-body">Give candidates information about the schools they will be training in</p>
             <p class="govuk-body">Tell them:</p>

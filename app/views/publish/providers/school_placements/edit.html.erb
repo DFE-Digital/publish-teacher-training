@@ -22,7 +22,7 @@
       </h1>
 
       <%= f.govuk_radio_buttons_fieldset(:selectable_school,
-                                         legend: { text: "Let candidates select their preferred schools when applying" }) do %>
+                                         legend: { text: t(".selectable_school_label") }) do %>
         <%= f.govuk_radio_button :selectable_school, true, label: { text: "Yes" }, link_errors: true %>
         <%= f.govuk_radio_button :selectable_school, false, label: { text: "No" } %>
       <% end %>
