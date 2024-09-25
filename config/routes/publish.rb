@@ -296,6 +296,8 @@ namespace :publish, as: :publish do
 
         get '/contact', on: :member, to: 'contacts#edit'
         put '/contact', on: :member, to: 'contacts#update'
+        get '/school_placements', on: :member, to: 'school_placements#edit'
+        put '/school_placements', on: :member, to: 'school_placements#update'
         get '/student-visa', on: :member, to: 'student_visa#edit'
         get '/skilled-worker-visa', on: :member, to: 'skilled_worker_visa#edit'
         put '/student-visa', on: :member, to: 'student_visa#update'

@@ -12,6 +12,8 @@ module PageObjects
       element :student_visa_link, '[data-qa=enrichment__can_sponsor_student_visa] a'
       element :skilled_worker_visa_link, '[data-qa=enrichment__can_sponsor_skilled_worker_visa] a'
       element :email_link, '[data-qa=enrichment__email] a'
+      element :selectable_school, '[data-qa=enrichment__selectable_school]'
+      element :selectable_school_change_link, '[data-qa=enrichment__selectable_school] a'
     end
   end
 end

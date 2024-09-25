@@ -8,6 +8,7 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     when_i_visit_the_details_page
     then_i_can_edit_info_about_training_with_us
     then_i_can_edit_info_about_disabilities_and_other_needs
+    then_i_can_edit_school_placements
   end
 
   def given_i_am_a_provider_user_as_a_provider_user
@@ -59,6 +60,21 @@ feature 'About Your Organisation section', { can_edit_current_and_next_cycles: f
     expect(page).to have_content 'Your changes have been published'
     within_summary_row 'Training with disabilities and other needs' do
       expect(page).to have_content 'Updated: training with disabilities'
+    end
+  end
+
+  def then_i_can_edit_school_placements
+    within(publish_provider_details_show_page.selectable_school) do
+      expect(page).to have_content('Yes')
+    end
+    publish_provider_details_show_page.selectable_school_change_link.click
+    expect(page.find_by_id('provider-selectable-school-true-field')).to be_checked
+    page.find('input#provider-selectable-school-field').click
+    page.click_on('Update school placement preferences')
+
+    publish_provider_details_show_page.selectable_school.click
+    within(publish_provider_details_show_page.selectable_school) do
+      expect(page).to have_content('No')
     end
   end
 end

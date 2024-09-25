@@ -1,0 +1,33 @@
+<% page_title = "School placements" %>
+<% content_for :page_title, title_with_error_prefix(page_title, @provider.errors.present?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(
+      model: @provider,
+      url: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+      method: :put,
+      local: true
+    ) do |f| %>
+
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @provider.provider_name %></span>
+        <%= page_title %>
+      </h1>
+
+      <%= f.govuk_radio_buttons_fieldset(:selectable_school,
+                                         legend: { text: t(".selectable_school_label") }) do %>
+        <%= f.govuk_radio_button :selectable_school, true, label: { text: "Yes" }, link_errors: true %>
+        <%= f.govuk_radio_button :selectable_school, false, label: { text: "No" } %>
+      <% end %>
+
+      <%= f.govuk_submit "Update school placement preferences" %>
+    <% end %>
+  </div>
+</div>

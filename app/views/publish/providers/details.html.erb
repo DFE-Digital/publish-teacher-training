@@ -24,9 +24,12 @@
 <% end %>
 
 <h1 class="govuk-heading-l">
-  Organisation details
+  <%= t(".page_title") %>
 </h1>
 
+<h2 class="govuk-heading-m">
+  <%= t(".about") %>
+</h2>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <%= govuk_summary_list do |summary_list| %>
@@ -51,7 +54,7 @@
     <% end %>
 
     <% unless @provider.provider_type == 'lead_school' %>
-      <h2 class="govuk-heading-m">Visa sponsorship</h2>
+      <h2 class="govuk-heading-m"><%= t(".visa_sponsorship") %></h2>
       <%= govuk_summary_list do |summary_list| %>
         <% enrichment_summary(
              summary_list,
@@ -75,7 +78,19 @@
       <% end %>
     <% end %>
 
-    <h2 class="govuk-heading-m">Contact details</h2>
+    <h2 class="govuk-heading-m"><%= t(".school_placements") %></h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% enrichment_summary(
+        summary_list,
+        :provider,
+        t(".selectable_school_label"),
+        @provider.selectable_school ? "Yes" : "No",
+        %w[selectable_school],
+        action_path: school_placements_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year),
+        action_visually_hidden_text: "school placement display"
+      ) %>
+    <% end %>
+    <h2 class="govuk-heading-m"><%= t(".contact_details") %></h2>
     <%= govuk_summary_list do |summary_list| %>
       <% enrichment_summary(
         summary_list,
