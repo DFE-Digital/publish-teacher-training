@@ -52,6 +52,57 @@ course.update(program_type: :school_direct_salaried_training_programme)
 course.enrichments.max_by(&:created_at).update(fee_details: nil, fee_uk_eu: nil, fee_international: nil, financial_support: nil)
 ```
 
+
+## Changing a Teacher Degree Apprenticeship (TDA) Course to a Non TDA Course
+
+**If the course has had applications, policy input is required**
+
+When a request is made to change a TDA course to a non TDA course, it's important to note that default settings are applied when TDA courses are created (see `assign_tda_attributes_service.rb`). As a result, the provider will need to select new options, as they haven't previously had the opportunity to choose these options.
+
+### Courses in `Draft` or `Rolled Over` State
+If the course is in a `draft` or `rolled_over` state, the provider can change the qualification themselves. This process will guide them through the relevant questions.
+
+### Courses Previously Published
+If the course has already been published, the provider should be asked to **withdraw the course** and create a new one. If they are dissatisfied with this solution, request the following course details:
+
+- **Qualification:**
+  - QTS with PGCE
+  - PGDE with QTS
+  - QTS
+
+- **Funding Type:**
+  - Fee - no salary
+  - Salary
+  - Teaching apprenticeship - with salary
+
+- **Study Pattern:**
+  - Full time
+  - Part time
+
+- **Visa Sponsorship:**
+  - Can they sponsor Skilled Worker visas (for salaried courses)? 
+  - Can they sponsor student visas (for fee-paying courses)?
+
+  - Yes
+  - No
+
+We should then update the course details, change the `program_type` to `teacher_degree_apprenticeship`, and reset the A-level fields to `nil` (as these fields are only applicable for TDA courses).
+
+
+
+## Changing a Non TDA Course to a Teacher Degree Apprenticeship (TDA) Course
+
+**If the course has had applications, policy input is required**
+
+When a request is made to change a non TDA course to a Teacher Degree Apprenticeship (TDA) course, several defaults must be applied, as TDA courses have specific requirements and attributes (see `assign_tda_attributes_service.rb`).
+
+### Courses in Draft or Rolled Over State
+If the course is in a `draft` or `rolled_over` state, the provider can change the qualification themselves. This process will set the relevant defaults for the user.
+
+### Courses Previously Published
+If the course has already been published, ask the provider to **withdraw the course** and create a new TDA course, with the correct qualification. If they are unhappy with this solution, we should change the course back to **draft** for them. This will allow the provider to update the course themselves, as they will need to input A-level information before being able to publish the course.
+
+
 ## Changing provider to a different type (eg scitt to sd)
 
 Change `provider_type` to the preferred value on the provider record.
