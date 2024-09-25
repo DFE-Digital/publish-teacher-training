@@ -69,13 +69,29 @@ feature 'Viewing a findable course' do
     end
   end
 
-  scenario 'user views school placements' do
-    given_there_is_a_findable_course
-    when_i_visit_the_course_page
-    when_i_click('View list of school placements')
-    then_i_should_be_on_the_school_placements_page
-    when_i_click("Back to #{@course.name} (#{course.course_code})")
-    then_i_should_be_on_the_course_page
+  scenario 'user sees no school placements in 2025' do
+    create(:recruitment_cycle, :next)
+    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+      given_there_is_a_findable_course
+      and_the_provider_does_not_have_selectable_schools
+      when_i_visit_the_course_page
+      then_i_see_no_school_placements_link
+    end
+  end
+
+  scenario 'user views selectable school placements' do
+    create(:recruitment_cycle, :next)
+    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
+      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+      given_there_is_a_findable_course
+      and_the_provider_has_selectable_schools
+      when_i_visit_the_course_page
+      when_i_click('View list of school placements')
+      then_i_should_be_on_the_school_placements_page
+      when_i_click("Back to #{@course.name} (#{course.course_code})")
+      then_i_should_be_on_the_course_page
+    end
   end
 
   scenario 'user views provider and accredited_provider' do
@@ -437,5 +453,17 @@ feature 'Viewing a findable course' do
       "Contact #{course.provider_name}",
       href: find_provider_path(@course.provider_code, @course.course_code)
     )
+  end
+
+  def then_i_see_no_school_placements_link
+    expect(find_course_show_page).to have_no_link('View list of school placements')
+  end
+
+  def and_the_provider_does_not_have_selectable_schools
+    @provider.update(selectable_school: false)
+  end
+
+  def and_the_provider_has_selectable_schools
+    @provider.update(selectable_school: true)
   end
 end

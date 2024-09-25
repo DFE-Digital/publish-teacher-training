@@ -1,5 +1,5 @@
 <li class="app-search-results__item" data-qa="course">
-  <%= govuk_summary_card(classes: ["course-summary-card"], title: coure_title_link) do |card| %>
+  <%= govuk_summary_card(classes: ["course-summary-card"], title: course_title_link) do |card| %>
     <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
       <% if filtered_by_location? && has_sites? %>
         <% summary_list.with_row do |row| %>

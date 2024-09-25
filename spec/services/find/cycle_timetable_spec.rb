@@ -50,6 +50,24 @@ module Find
       end
     end
 
+    describe '.find_opens(year)' do
+      context 'when no argument is passed' do
+        it 'returns find_opens date for 2021' do
+          Timecop.travel(Time.zone.local(2021, 1, 1, 12, 0, 0)) do
+            expect(described_class.find_opens).to eq(Time.zone.local(2020, 10, 6, 9))
+          end
+        end
+      end
+
+      context 'when passing 2024 as argument' do
+        it 'returns find_opens date for 2024' do
+          Timecop.travel(Time.zone.local(2021, 11, 1, 12, 0, 0)) do
+            expect(described_class.find_opens(2024)).to eq(Time.zone.local(2023, 10, 3, 9))
+          end
+        end
+      end
+    end
+
     describe '.preview_mode?' do
       it 'returns true when it is after the Apply deadline but before Find closes' do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
