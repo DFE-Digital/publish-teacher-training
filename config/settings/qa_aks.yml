@@ -33,8 +33,8 @@ current_recruitment_cycle_year: 2025
 
 features:
   send_request_data_to_bigquery: true
-    rollover:
-      can_edit_current_and_next_cycles: false
+  rollover:
+    can_edit_current_and_next_cycles: false
 
 
 find_valid_referers:
