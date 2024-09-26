@@ -52,7 +52,7 @@ module Find
         end
 
         def mock_ske_course_attributes
-          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: 'SKE Subject', subject_code: 'C1')] })
+          mock_course_attributes.merge({ subjects: [Subject.new(subject_name: 'SKE Subject', subject_code: 'G1')] })
         end
 
         def mock_primary_maths_ske_course_attributes
