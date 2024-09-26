@@ -165,6 +165,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
   def and_there_is_an_invalid_course_i_want_to_publish
     given_a_course_exists(
       :with_accrediting_provider,
+      :salary,
       degree_grade: nil,
       enrichments: [create(:course_enrichment, :without_content, about_course: '')],
       sites: [create(:site, location_name: 'location 1')],

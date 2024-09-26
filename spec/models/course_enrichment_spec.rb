@@ -202,7 +202,7 @@ describe CourseEnrichment do
 
     let(:salary_details_text) { 'this course is great' }
 
-    let(:salaried_course) { build(:course, :with_salary) }
+    let(:salaried_course) { build(:course, :salary) }
 
     context 'with over 250 words' do
       let(:salary_details_text) { Faker::Lorem.sentence(word_count: 250 + 1) }

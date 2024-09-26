@@ -69,7 +69,7 @@ RSpec.describe API::Public::V1::CoursesController do
       context 'returns all course types' do
         it 'returns undergraduate and postgraduate' do
           undergraduate_course = create(:course, :published_teacher_degree_apprenticeship)
-          postgraduate_course = create(:course, :published_postgraduate)
+          postgraduate_course = create(:course, :published_postgraduate, :apprenticeship)
           provider.courses << [undergraduate_course, postgraduate_course]
 
           get :index, params: {

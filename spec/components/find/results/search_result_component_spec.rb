@@ -210,6 +210,7 @@ module Find
         it 'renders the school placement text' do
           course = create(
             :course,
+            :salary,
             :with_full_time_sites
           )
 
@@ -224,6 +225,7 @@ module Find
         it 'renders the school placement text' do
           course = create(
             :course,
+            :salary,
             :with_2_full_time_sites
           )
 

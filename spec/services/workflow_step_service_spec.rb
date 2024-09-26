@@ -15,7 +15,7 @@ describe WorkflowStepService do
           accrediting_provider_enrichments:
         )
       end
-      let(:course) { create(:course, accrediting_provider: accredited_provider, provider:) }
+      let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accrediting_provider_enrichments) { nil }
       let(:accredited_provider) { nil }
 
@@ -50,7 +50,7 @@ describe WorkflowStepService do
           accrediting_provider_enrichments:
         )
       end
-      let(:course) { create(:course, accrediting_provider: accredited_provider, provider:) }
+      let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }] }
       let(:accredited_provider) { build(:provider, :accredited_provider) }
 
@@ -193,7 +193,7 @@ describe WorkflowStepService do
 
   context 'when course.is_uni_or_scitt?' do
     let(:provider) { create(:provider, :accredited_provider) }
-    let(:course) { create(:course, provider:) }
+    let(:course) { create(:course, :salary, provider:) }
 
     it 'returns the expected workflow steps' do
       expected_steps = %i[

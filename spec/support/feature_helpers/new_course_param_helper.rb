@@ -71,7 +71,7 @@ module FeatureHelpers
         'course[accredited_provider_code]' => provider.courses.first.accrediting_provider.provider_code,
         'course[age_range_in_years]' => '14_to_19',
         'course[applications_open_from]' => "#{provider.recruitment_cycle_year.to_i - 1}-10-12",
-        'course[funding_type]' => 'apprenticeship',
+        'course[funding]' => 'apprenticeship',
         'course[is_send]' => '0',
         'course[level]' => 'secondary',
         'course[qualification]' => 'pgde_with_qts',

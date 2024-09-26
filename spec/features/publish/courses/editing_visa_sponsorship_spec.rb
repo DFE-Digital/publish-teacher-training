@@ -40,7 +40,7 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
   end
 
   def given_there_is_a_salaried_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
-    given_a_course_exists(funding_type: 'salary', can_sponsor_skilled_worker_visa: false, accrediting_provider:)
+    given_a_course_exists(funding: 'salary', can_sponsor_skilled_worker_visa: false, accrediting_provider:)
   end
 
   def and_i_click_on_basic_details

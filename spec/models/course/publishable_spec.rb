@@ -5,7 +5,7 @@ require 'rails_helper'
 describe '#publishable?' do
   subject { course }
 
-  let(:course) { create(:course) }
+  let(:course) { create(:course, :salary) }
   let(:site) { create(:site) }
   let(:study_site) { create(:site, :study_site) }
   let(:site_status) { create(:site_status, :new_status, site:) }
