@@ -76,34 +76,6 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
-    context 'when preview is true for a 2024 provider and the provider does not have selectable_school enabled' do
-      let(:year) { 2024 }
-      let(:selectable_school) { false }
-      let(:preview) { true }
-
-      it 'renders a link to the publish path' do
-        expect(subject).to have_link(
-          'View list of school placements',
-          href: url_helpers.placements_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code
-          )
-        )
-      end
-    end
-
-    context 'when preview is false for a 2024 provider and the provider has selectable_school enabled' do
-      let(:year) { 2024 }
-      let(:selectable_school) { true }
-      let(:preview) { false }
-
-      it 'renders a link to the find path' do
-        expect(subject).to have_link('View list of school placements',
-                                     href: url_helpers.find_placements_path(course.provider_code, course.course_code))
-      end
-    end
-
     context 'when preview is false after find opens in 2025 and provider has selectable_school enabled' do
       let(:year) { 2025 }
       let(:selectable_school) { true }

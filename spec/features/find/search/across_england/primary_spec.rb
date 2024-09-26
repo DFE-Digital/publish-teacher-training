@@ -42,13 +42,21 @@ feature 'Searching across England' do
 
     when_i_select_the_primary_subject_textbox
     and_i_click_continue
+
+    and_i_choose_yes_i_have_a_degree
+    and_i_click_continue
+
     then_i_should_see_the_visa_status_page
 
     when_i_click_find_courses
     then_i_should_see_a_validation_error
 
     when_i_click_back
+    and_i_click_back
     then_i_should_see_the_subjects_form
+    and_i_click_continue
+
+    and_i_choose_yes_i_have_a_degree
     and_i_click_continue
 
     when_i_select_my_visa_status
@@ -131,6 +139,8 @@ feature 'Searching across England' do
   end
   alias_method :when_i_click_find_courses, :and_i_click_find_courses
 
+  alias_method :and_i_click_back, :when_i_click_back
+
   def then_i_should_see_a_subjects_validation_error
     expect(page).to have_content('Select at least one primary subject you want to teach')
   end
@@ -143,6 +153,10 @@ feature 'Searching across England' do
     expect(page).to have_content('Do you need visa sponsorship?')
   end
 
+  def and_i_choose_yes_i_have_a_degree
+    choose 'Yes, I have a degree or am studying for one'
+  end
+
   def when_i_select_my_visa_status
     choose 'No'
   end
@@ -152,7 +166,7 @@ feature 'Searching across England' do
   end
 
   def then_i_should_see_the_find_results_page
-    expect(page).to have_current_path('/results?age_group=primary&applications_open=true&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&visa_status=false')
+    expect(page).to have_current_path('/results?age_group=primary&applications_open=true&can_sponsor_visa=false&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&university_degree_status=true&visa_status=false')
   end
 
   def and_i_should_see_the_correct_courses

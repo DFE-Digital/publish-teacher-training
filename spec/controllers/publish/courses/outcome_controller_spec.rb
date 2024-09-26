@@ -3,8 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Publish::Courses::OutcomeController do
-  let(:recruitment_cycle) { create(:recruitment_cycle, year: 2025) }
-  let(:user) { create(:user, providers: [build(:provider, recruitment_cycle:)]) }
+  let(:user) { create(:user, providers: [build(:provider)]) }
   let(:provider) { user.providers.first }
 
   before do
