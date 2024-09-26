@@ -20,4 +20,13 @@
       You can try another search, for example by changing <%= "subject".pluralize(subjects.size) %> or location<% if results.with_salaries? %> or searching for courses that do not offer a salary<% end %>.
     </p>
   <% end %>
+
+  <% if show_undergraduate_courses? %>
+    <p class="govuk-body">
+      <%= t(".undergraduate.message_html", contact: govuk_mail_to(Settings.support_email)) %>
+    </p>
+    <p class="govuk-body">
+      <%= govuk_link_to(t(".undergraduate.find_out_more_about_tda"), t("find.get_into_teaching.url_tda")) %>
+    </p>
+  <% end %>
 </div>

@@ -207,6 +207,14 @@ module Find
       @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
     end
 
+    def show_undergraduate_courses?
+      Find::DegreeTypeAnswerDeterminer.new(
+        age_group: query_parameters['age_group'],
+        visa_status: query_parameters['visa_status'],
+        university_degree_status: query_parameters['university_degree_status']
+      ).show_undergraduate_courses?
+    end
+
     private
 
     def latitude
