@@ -7,6 +7,7 @@ FactoryBot.define do
     name { Faker::Lorem.word }
     qualification { :pgce_with_qts }
     with_apprenticeship
+    funding { 'fee' }
 
     association :provider
 
