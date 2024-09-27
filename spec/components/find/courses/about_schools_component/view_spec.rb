@@ -60,7 +60,7 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.')
+      expect(result.text).to include('You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.')
     end
   end
 

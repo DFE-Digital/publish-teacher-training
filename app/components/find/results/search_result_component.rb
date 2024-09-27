@@ -5,16 +5,17 @@ module Find
     class SearchResultComponent < ViewComponent::Base
       include ::ViewHelper
 
-      attr_reader :course
+      attr_reader :course, :sites_count
 
       delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
 
-      def initialize(course:, search_params:, filtered_by_location: false, sites_count: 0)
+      def initialize(course:, results_view:, filtered_by_location: false)
         super
         @course = course.decorate
         @filtered_by_location = filtered_by_location
-        @sites_count = sites_count
-        @search_params = search_params
+        @sites_count = results_view.sites_count(course)
+        @results_view = results_view
+        @search_params = results_view.query_parameters.to_query
       end
 
       def filtered_by_location?
@@ -22,20 +23,40 @@ module Find
       end
 
       def has_sites?
-        @sites_count.positive?
+        sites_count.positive?
       end
 
       def course_title_link
         t(
           '.course_title_html',
-          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, search_params: @search_params.to_query),
+          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, search_params: @search_params),
           provider_name: helpers.smart_quotes(course.provider.provider_name),
           course_name: course.name_and_code
         )
       end
 
       def location_label
-        t('.location', count: @sites_count)
+        if course.fee_based?
+          t('.fee_based.location', count: sites_count)
+        else
+          t('.salary_based.location', count: sites_count)
+        end
+      end
+
+      def location_name
+        @results_view.query_parameters['lq']
+      end
+
+      def school_term
+        if course.fee?
+          'placement'
+        else
+          'employing'
+        end
+      end
+
+      def site_distance
+        @results_view.site_distance(course)
       end
 
       private

@@ -4,18 +4,18 @@ require 'rails_helper'
 
 module Find
   describe Results::SearchResultComponent, type: :component do
-    let(:search_params) do
-      { 'age_group' => 'primary',
-        'applications_open' => 'true',
-        'can_sponsor_visa' => 'false',
-        'has_vacancies' => 'true',
-        'l' => '2',
-        'subjects' => ['00'],
-        'visa_status' => 'false' }
+    let(:results_view) do
+      ResultsView.new(query_parameters: { 'age_group' => 'primary',
+                                          'applications_open' => 'true',
+                                          'can_sponsor_visa' => 'false',
+                                          'has_vacancies' => 'true',
+                                          'l' => '2',
+                                          'subjects' => ['00'],
+                                          'visa_status' => 'false' })
     end
 
     context 'delegations' do
-      subject { described_class.new(course: build(:course), search_params:) }
+      subject { described_class.new(course: build(:course), results_view:) }
 
       it { is_expected.to delegate_method(:age_range_in_years_and_level).to(:course) }
       it { is_expected.to delegate_method(:course_length_with_study_mode).to(:course) }
@@ -27,7 +27,7 @@ module Find
           :course,
           degree_grade: :two_one
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include(
           '2:1 bachelor’s degree',
@@ -44,7 +44,7 @@ module Find
           can_sponsor_student_visa: false,
           can_sponsor_skilled_worker_visa: true
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include(
           'Skilled Worker visas can be sponsored'
@@ -60,7 +60,7 @@ module Find
           can_sponsor_student_visa: false,
           can_sponsor_skilled_worker_visa: true
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include(
           'Visas cannot be sponsored'
@@ -71,7 +71,7 @@ module Find
     context 'when the provider specifies student visa sponsorship' do
       it 'renders correct message when only one kind of visa is sponsored' do
         course = build(:course, :can_sponsor_student_visa, :fee_type_based)
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include(
           'Student visas can be sponsored'
@@ -84,7 +84,7 @@ module Find
           can_sponsor_student_visa: false,
           can_sponsor_skilled_worker_visa: false
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include(
           'Visas cannot be sponsored'
@@ -98,7 +98,7 @@ module Find
           :course,
           accrediting_provider: build(:provider, :accredited_provider, provider_name: 'ACME SCITT A1')
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include('QTS ratified by ACME SCITT A1')
       end
@@ -110,7 +110,7 @@ module Find
           :course,
           accrediting_provider: nil
         )
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).not_to include('QTS ratified by')
       end
@@ -120,7 +120,7 @@ module Find
       it 'renders the uk fees' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).to include('£9,250 for UK citizens')
         expect(result.text).to include('Course fee')
       end
@@ -130,7 +130,7 @@ module Find
       it 'renders the international fees' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).to include('£14,000 for Non-UK citizens')
       end
     end
@@ -139,7 +139,7 @@ module Find
       it 'renders the uk fees and not the internation fee label' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).to include('£9,250 for UK citizens')
         expect(result.text).not_to include('Non-UK citizens')
@@ -150,7 +150,7 @@ module Find
       it 'renders the international fees but not the uk fee label' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).not_to include('for UK citizens')
         expect(result.text).to include('£14,000 for Non-UK citizens')
@@ -161,7 +161,7 @@ module Find
       it 'does not render the row' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result.text).not_to include('for UK citizens')
         expect(result.text).not_to include('£14,000 for Non-UK citizens')
@@ -175,7 +175,7 @@ module Find
                                level: 'secondary',
                                age_range_in_years: '11_to_16')
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result).to have_text('Age range 11 to 16 - secondary', normalize_ws: true)
       end
@@ -189,9 +189,39 @@ module Find
           study_mode: 'full_time'
         )
 
-        result = render_inline(described_class.new(course:, search_params:))
+        result = render_inline(described_class.new(course:, results_view:))
 
         expect(result).to have_text('Course length 1 year - full time', normalize_ws: true)
+      end
+    end
+
+    context 'school placements (search by country or provider)' do
+      context 'fee_based with 1 school' do
+        it 'renders the school placement text' do
+          course = create(
+            :course,
+            :with_full_time_sites
+          )
+
+          result = render_inline(described_class.new(course:, results_view:))
+
+          expect(result).to have_text('Employing school')
+          expect(result).to have_text('1 potential employing school')
+        end
+      end
+
+      context 'fee_based with 2 schools' do
+        it 'renders the school placement text' do
+          course = create(
+            :course,
+            :with_2_full_time_sites
+          )
+
+          result = render_inline(described_class.new(course:, results_view:))
+
+          expect(result).to have_text('Employing schools')
+          expect(result).to have_text('2 potential employing schools')
+        end
       end
     end
   end
