@@ -116,6 +116,16 @@ module Find
       end
     end
 
+    context 'when teacher degree apprenticeship courses has incorrectly fees' do
+      it 'does not render fees' do
+        course = create(:course, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+
+        result = render_inline(described_class.new(course:, results_view:))
+        expect(result.text).not_to include('£9,250')
+        expect(result.text).not_to include('Course fee')
+      end
+    end
+
     context 'when there are UK fees' do
       it 'renders the uk fees' do
         course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate

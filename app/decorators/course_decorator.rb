@@ -505,6 +505,11 @@ class CourseDecorator < ApplicationDecorator
     )
   end
 
+  def no_fee?
+    object.teacher_degree_apprenticeship? ||
+      (fee_international.blank? && fee_uk_eu.blank?)
+  end
+
   private
 
   def not_on_find

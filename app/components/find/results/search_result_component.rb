@@ -7,7 +7,9 @@ module Find
 
       attr_reader :course, :sites_count
 
-      delegate :age_range_in_years_and_level, :course_length_with_study_mode, to: :course
+      delegate :age_range_in_years_and_level,
+               :course_length_with_study_mode,
+               :no_fee?, to: :course
 
       def initialize(course:, results_view:, filtered_by_location: false)
         super
@@ -81,10 +83,6 @@ module Find
         else
           'Visas cannot be sponsored'
         end
-      end
-
-      def no_fee?
-        course.fee_international.blank? && course.fee_uk_eu.blank?
       end
 
       def accredited_provider

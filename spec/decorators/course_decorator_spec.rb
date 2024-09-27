@@ -224,6 +224,61 @@ describe CourseDecorator do
   #   end
   # end
 
+  describe '#no_fee?' do
+    context 'when it is a teacher degree apprenticeship with incorrect fees' do
+      let(:course) do
+        create(
+          :course,
+          :published_teacher_degree_apprenticeship,
+          enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]
+        ).decorate
+      end
+
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
+      end
+    end
+
+    context 'when both fees are blank' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]
+        ).decorate
+      end
+
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
+      end
+    end
+
+    context 'when at least one fee is present' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [create(:course_enrichment, fee_uk_eu: 1000, fee_international: nil)]
+        ).decorate
+      end
+
+      it 'returns false' do
+        expect(decorated_course.no_fee?).to be false
+      end
+    end
+
+    context 'when all fees are present' do
+      let(:course) do
+        create(
+          :course,
+          enrichments: [create(:course_enrichment, fee_uk_eu: 1000, fee_international: 1000)]
+        ).decorate
+      end
+
+      it 'returns false' do
+        expect(decorated_course.no_fee?).to be false
+      end
+    end
+  end
+
   describe '#subject_present?' do
     it 'returns true when the subject id exists' do
       expect(decorated_course.subject_present?(english)).to be(true)

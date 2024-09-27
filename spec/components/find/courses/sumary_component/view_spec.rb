@@ -23,6 +23,16 @@ module Find
           )
         end
 
+        context 'when teacher degree apprenticeship courses has incorrectly fees' do
+          it 'does not render fees' do
+            course = create(:course, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+
+            result = render_inline(described_class.new(course))
+            expect(result.text).not_to include('£9,250')
+            expect(result.text).not_to include('Course fee')
+          end
+        end
+
         context 'applications open date has not passed' do
           it "renders the 'Date you can apply from'" do
             course = build(
