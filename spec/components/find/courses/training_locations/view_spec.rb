@@ -23,7 +23,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
 
       it 'renders the hint about placements not being guaranteed' do
-        expect(subject).to have_css('.govuk-hint', text: 'Locations can change and are not guaranteed')
+        expect(subject).to have_css('.govuk-hint', text: 'Schools can change and are not guaranteed')
       end
     end
 
@@ -39,7 +39,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
 
       it 'renders the hint about placements not being guaranteed' do
-        expect(subject).to have_css('.govuk-hint', text: 'Locations can change and are not guaranteed')
+        expect(subject).to have_css('.govuk-hint', text: 'Schools can change and are not guaranteed')
       end
 
       it "renders 'Where you will study' for study sites" do
@@ -120,7 +120,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, :with_full_time_sites, funding: 'fee', study_sites: [build(:site, :study_site)]) }
 
       it 'returns the correct text for one potential placement location' do
-        expect(component.potential_placements_text).to eq('1 potential placement location')
+        expect(component.potential_placements_text).to eq('1 potential placement school')
       end
     end
 
@@ -136,7 +136,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       let(:course) { create(:course, funding: 'fee', sites: [create(:site), create(:site), create(:site)]) }
 
       it 'returns the correct text for multiple placements' do
-        expect(component.potential_placements_text).to eq('3 potential placement locations')
+        expect(component.potential_placements_text).to eq('3 potential placement schools')
       end
     end
   end

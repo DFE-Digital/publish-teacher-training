@@ -29,7 +29,7 @@ module Find
 
         def potential_placements_text
           if course.fee_based?
-            pluralize(course.sites.size, 'potential placement location')
+            pluralize(course.sites.size, 'potential placement school')
           else
             pluralize(course.sites.size, 'potential employing school')
           end
