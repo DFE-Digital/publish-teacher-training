@@ -75,10 +75,6 @@ describe CourseDecorator do
     expect(decorated_course.is_send?).to eq('No')
   end
 
-  # it "returns the Find URL" do
-  #   expect(decorated_course.find_url).to eq("#{Settings.search_ui.base_url}/course/#{provider.provider_code}/#{course.course_code}")
-  # end
-
   it 'returns course length' do
     allow(course.enrichments).to receive(:most_recent).and_return([course_enrichment])
 

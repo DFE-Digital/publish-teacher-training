@@ -6,9 +6,6 @@ extra_find_url: https://find-teacher-training-courses.service.gov.uk
 
 STATE_CHANGE_SLACK_URL: replace_me
 
-search_ui:
-  base_url: https://find-teacher-training-courses.service.gov.uk
-
 base_url: https://www.publish-teacher-training-courses.service.gov.uk
 
 dfe_signin:

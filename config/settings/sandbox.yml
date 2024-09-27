@@ -9,9 +9,6 @@ environment:
   label: "Sandbox"
   name: "sandbox"
 
-search_ui:
-  base_url: https://sandbox.find-teacher-training-courses.service.gov.uk
-
 base_url: https://sandbox.publish-teacher-training-courses.service.gov.uk
 
 dfe_signin:
