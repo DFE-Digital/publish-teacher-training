@@ -185,6 +185,25 @@ feature 'Questions and results for undergraduate courses' do
     and_i_can_see_all_courses_nearer_the_radius
   end
 
+  scenario 'when there are no results' do
+    given_2025_cycle_started
+    and_the_tda_feature_flag_is_active
+    when_i_visit_the_start_page
+    and_i_choose_to_find_courses_by_location
+    and_i_add_a_location
+    and_i_click_continue
+    and_i_choose_secondary
+    and_i_click_continue
+    and_i_choose_subjects
+    and_i_click_continue
+    and_i_choose_no_i_do_not_have_a_degree
+    and_i_click_continue
+    and_i_choose_no
+    and_i_click_find_courses
+    then_i_am_on_results_page
+    and_i_see_the_default_message_for_no_undergraduate_courses
+  end
+
   def given_i_have_2025_courses
     _, provider = setup_recruitment_cycle(year: 2025)
 
@@ -233,12 +252,12 @@ feature 'Questions and results for undergraduate courses' do
     )
   end
 
-  def setup_recruitment_cycle(year:)
+  def setup_recruitment_cycle(year:, provider_code: 'IBJ')
     recruitment_cycle = create(:recruitment_cycle, year:)
     user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     provider = user.providers.first
-    create(:provider, :accredited_provider, provider_code: '1BJ')
-    accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ', recruitment_cycle:)
+    create(:provider, :accredited_provider, provider_code:)
+    accredited_provider = create(:provider, :accredited_provider, provider_code:, recruitment_cycle:)
     provider.accrediting_provider_enrichments = []
     provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
       {
@@ -259,6 +278,11 @@ feature 'Questions and results for undergraduate courses' do
   def and_i_am_in_the_2025_cycle
     Timecop.travel(Find::CycleTimetable.find_reopens)
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+  end
+
+  def given_2025_cycle_started
+    setup_recruitment_cycle(year: 2025, provider_code: '1BL')
+    and_i_am_in_the_2025_cycle
   end
 
   def and_i_am_in_the_2024_cycle
@@ -330,10 +354,12 @@ feature 'Questions and results for undergraduate courses' do
   def when_i_choose_no
     choose 'No'
   end
+  alias_method :and_i_choose_no, :when_i_choose_no
 
   def when_i_choose_no_i_do_not_have_a_degree
     choose 'No, I do not have a degree'
   end
+  alias_method :and_i_choose_no_i_do_not_have_a_degree, :when_i_choose_no_i_do_not_have_a_degree
 
   def when_i_choose_yes_i_have_a_degree
     choose 'Yes, I have a degree or am studying for one'
@@ -509,5 +535,14 @@ feature 'Questions and results for undergraduate courses' do
 
   def when_i_increase_the_search_radius_to_the_maximum
     select '200 miles', from: 'Search radius'
+  end
+
+  def and_i_see_the_default_message_for_no_undergraduate_courses
+    expect(page).to have_content(
+      'There are not many teacher degree apprenticeship (TDA) courses on the service at the moment. You can try again soon when there may be more courses, or get in touch with us at becomingateacher@digital.education.gov.uk.'
+    )
+    expect(page).to have_content(
+      'Find out more about teacher degree apprenticeship (TDA) courses.'
+    )
   end
 end

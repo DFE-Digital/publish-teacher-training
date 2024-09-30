@@ -7,7 +7,7 @@ module Find
 
       attr_reader :results
 
-      delegate :devolved_nation?, :country, :subjects, :with_salaries?, to: :results
+      delegate :devolved_nation?, :country, :subjects, :with_salaries?, :show_undergraduate_courses?, to: :results
 
       def initialize(results:)
         super

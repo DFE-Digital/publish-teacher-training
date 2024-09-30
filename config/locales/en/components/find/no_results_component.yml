@@ -1,0 +1,7 @@
+en:
+  find:
+    results:
+      no_results_component:
+        undergraduate:
+          message_html: There are not many teacher degree apprenticeship (TDA) courses on the service at the moment. You can try again soon when there may be more courses, or get in touch with us at %{contact}.
+          find_out_more_about_tda: Find out more about teacher degree apprenticeship (TDA) courses.
