@@ -225,38 +225,11 @@ describe CourseDecorator do
   # end
 
   describe '#no_fee?' do
-    context 'when it is a teacher degree apprenticeship with incorrect fees' do
+    context 'when course funding is fee' do
       let(:course) do
         create(
           :course,
-          :published_teacher_degree_apprenticeship,
-          enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]
-        ).decorate
-      end
-
-      it 'returns true' do
-        expect(decorated_course.no_fee?).to be true
-      end
-    end
-
-    context 'when both fees are blank' do
-      let(:course) do
-        create(
-          :course,
-          enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]
-        ).decorate
-      end
-
-      it 'returns true' do
-        expect(decorated_course.no_fee?).to be true
-      end
-    end
-
-    context 'when at least one fee is present' do
-      let(:course) do
-        create(
-          :course,
-          enrichments: [create(:course_enrichment, fee_uk_eu: 1000, fee_international: nil)]
+          :fee
         ).decorate
       end
 
@@ -265,16 +238,29 @@ describe CourseDecorator do
       end
     end
 
-    context 'when all fees are present' do
+    context 'when course funding is salary' do
       let(:course) do
         create(
           :course,
-          enrichments: [create(:course_enrichment, fee_uk_eu: 1000, fee_international: 1000)]
+          :salary
         ).decorate
       end
 
-      it 'returns false' do
-        expect(decorated_course.no_fee?).to be false
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
+      end
+    end
+
+    context 'when course funding is apprenticeship' do
+      let(:course) do
+        create(
+          :course,
+          :apprenticeship
+        ).decorate
+      end
+
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
       end
     end
   end

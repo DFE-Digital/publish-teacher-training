@@ -193,6 +193,18 @@ FactoryBot.define do
       end
     end
 
+    trait :fee do
+      funding { 'fee' }
+    end
+
+    trait :salary do
+      funding { 'salary' }
+    end
+
+    trait :apprenticeship do
+      funding { 'apprenticeship' }
+    end
+
     trait :salary_type_based do
       program_type { %i[pg_teaching_apprenticeship school_direct_salaried_training_programme].sample }
     end

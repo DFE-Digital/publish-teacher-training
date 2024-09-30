@@ -118,7 +118,7 @@ module Find
 
     context 'when teacher degree apprenticeship course has incorrect fees' do
       it 'does not render fees' do
-        course = create(:course, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+        course = create(:course, :apprenticeship, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).not_to include('£9,250')
@@ -128,7 +128,7 @@ module Find
 
     context 'when there are UK fees' do
       it 'renders the uk fees' do
-        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+        course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).to include('£9,250 for UK citizens')
@@ -138,7 +138,7 @@ module Find
 
     context 'when there are international fees' do
       it 'renders the international fees' do
-        course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
+        course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).to include('£14,000 for Non-UK citizens')
@@ -147,7 +147,7 @@ module Find
 
     context 'when there are uk fees but no international fees' do
       it 'renders the uk fees and not the internation fee label' do
-        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
+        course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
 
@@ -158,7 +158,7 @@ module Find
 
     context 'when there are international fees but no uk fees' do
       it 'renders the international fees but not the uk fee label' do
-        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
+        course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
 
@@ -169,7 +169,7 @@ module Find
 
     context 'when there are no fees' do
       it 'does not render the row' do
-        course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
+        course = create(:course, :salary, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
 
         result = render_inline(described_class.new(course:, results_view:))
 
