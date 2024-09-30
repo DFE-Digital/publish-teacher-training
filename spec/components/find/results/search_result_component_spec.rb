@@ -116,7 +116,7 @@ module Find
       end
     end
 
-    context 'when teacher degree apprenticeship courses has incorrectly fees' do
+    context 'when teacher degree apprenticeship course has incorrect fees' do
       it 'does not render fees' do
         course = create(:course, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
