@@ -20,7 +20,8 @@ module Find
           subjects: [],
           number_of_courses_string: 'No courses',
           no_results_found?: true,
-          has_results?: false
+          has_results?: false,
+          show_undergraduate_courses?: false
         )
       end
 
