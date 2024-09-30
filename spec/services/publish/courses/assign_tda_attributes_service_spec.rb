@@ -11,11 +11,14 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
       study_mode: 'part_time',
       funding_type: 'fee',
       can_sponsor_skilled_worker_visa: true,
-      can_sponsor_student_visa: true
+      can_sponsor_student_visa: true,
+      degree_type:
     )
   end
 
   describe '#call' do
+    let(:degree_type) { 'undergraduate' }
+
     context 'when course does not have enrichments' do
       it 'updates the course attributes and returns true' do
         expect(service.call).to be_truthy
@@ -31,6 +34,7 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
     end
 
     context 'when course is postgraduate and contain fees' do
+      let(:degree_type) { 'postgraduate' }
       let!(:enrichment) do
         build(
           :course_enrichment,
