@@ -14,12 +14,12 @@ module ViewHelper
     )
   end
 
-  def search_ui_url(relative_path)
-    URI.join(Settings.search_ui.base_url, relative_path).to_s
+  def x_find_url(relative_path)
+    URI.join(Settings.find_url, relative_path).to_s
   end
 
-  def search_ui_course_page_url(provider_code:, course_code:)
-    search_ui_url("/course/#{provider_code}/#{course_code}")
+  def x_find_course_page_url(provider_code:, course_code:)
+    x_find_url(find_course_path(provider_code, course_code))
   end
 
   def bat_contact_email_address

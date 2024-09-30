@@ -6,7 +6,7 @@
 <% end %>
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    href: search_ui_course_page_url(
+    href: x_find_course_page_url(
       provider_code: @course.provider_code,
       course_code: @course.course_code
     ),

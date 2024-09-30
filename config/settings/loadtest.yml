@@ -7,9 +7,6 @@ apply_base_url: https://apply-loadtest.london.cloudapps.digital
 # URL of this app for the callback after signing in
 base_url: https://publish-loadtest.london.cloudapps.digital
 
-search_ui:
-  base_url: https://find-loadtest.london.cloudapps.digital
-
 environment:
   label: "Load test"
   name: "loadtest"

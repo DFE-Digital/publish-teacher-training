@@ -9,9 +9,6 @@ environment:
   label: "Rollover"
   name: "rollover"
 
-search_ui:
-  base_url: https://find-rollover.london.cloudapps.digital
-
 base_url: https://publish-rollover.london.cloudapps.digital
 
 dfe_signin:

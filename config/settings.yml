@@ -4,8 +4,7 @@ environment:
 support_email: becomingateacher@digital.education.gov.uk
 campaign_email: itt.engagement@education.gov.uk
 
-search_ui:
-  base_url: https://find.localhost
+find_url: https://find.localhost
 
 # URL of this app for the callback after sigining in
 base_url: https://localhost:3001
@@ -57,9 +56,6 @@ govuk_notify:
   new_user_added_by_support_team_id: 4da327dd-907a-4619-abe6-45f348bb2fa3
   remove_user_from_organisation_id: e75ad04e-4efa-4b1a-ae65-b007758483f4
   user_added_as_organisation_to_training_partner_id: 47d3509f-eeac-49a5-a455-e4a911c93496
-publish_url: http://localhost:3000
-find_url: http://localhost:3002
-extra_find_url: http://localhost:3002
 mcbg:
   redis_password: <%= SecureRandom.base64 %>
 system_authentication_token: <%= SecureRandom.base64 %>

@@ -5,9 +5,6 @@ find_url: https://staging.find-teacher-training-courses.service.gov.uk
 extra_find_url: https://staging.find-teacher-training-courses.service.gov.uk
 apply_base_url: https://staging.apply-for-teacher-training.service.gov.uk
 
-search_ui:
-  base_url: https://staging.find-teacher-training-courses.service.gov.uk
-
 # URL of this app for the callback after sigining in
 base_url: https://staging.publish-teacher-training-courses.service.gov.uk
 
