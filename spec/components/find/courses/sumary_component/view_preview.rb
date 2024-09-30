@@ -67,6 +67,10 @@ module Find
             has_bursary
           end
 
+          def teacher_degree_apprenticeship?
+            true
+          end
+
           def enrichment_attribute(params)
             send(params)
           end
