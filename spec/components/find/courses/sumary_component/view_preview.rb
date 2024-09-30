@@ -67,7 +67,7 @@ module Find
             has_bursary
           end
 
-          def teacher_degree_apprenticeship?
+          def fee?
             true
           end
 
