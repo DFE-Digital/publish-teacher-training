@@ -20,17 +20,36 @@ namespace :undergraduate do
                  'Mathematics'
                end
 
+        level = if provider.provider_name.include?('Primary')
+                  :primary
+                else
+                  :secondary
+                end
+
+        subjects = if level == :primary
+                     [Subject.find_by!(subject_name: 'Primary')]
+                   else
+                     [Subject.find_by!(subject_name: 'Mathematics')]
+                   end
+
         FactoryBot.find_or_create(
           :course,
           :published_teacher_degree_apprenticeship,
-          :secondary,
+          level,
           :with_a_level_requirements,
           :with_gcse_equivalency,
           provider:,
+          funding: 'apprenticeship',
           name:,
-          subjects: [Subject.find_by!(subject_name: 'Mathematics')],
+          subjects:,
           applications_open_from: 2.days.ago,
-          site_statuses: [FactoryBot.build(:site_status, :findable, site: FactoryBot.build(:site, provider:))]
+          site_statuses: [
+            FactoryBot.build(
+              :site_status,
+              :findable,
+              site: FactoryBot.build(:site, provider:)
+            )
+          ]
         )
       end
     end

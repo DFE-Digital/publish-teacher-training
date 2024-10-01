@@ -282,8 +282,19 @@ FactoryBot.define do
     end
 
     trait :published_teacher_degree_apprenticeship do
+      enrichments do
+        [
+          build(
+            :course_enrichment,
+            :published,
+            course_length: '4 years',
+            fee_uk_eu: nil,
+            fee_international: nil,
+            required_qualifications: nil
+          )
+        ]
+      end
       open
-      published
       undergraduate
       with_full_time_sites
       with_teacher_degree_apprenticeship
