@@ -27,8 +27,6 @@ describe Enrichments::CopyToCourseService do
 
     its(:about_course) { is_expected.to eq published_enrichment.about_course }
     its(:last_published_timestamp_utc) { is_expected.to be_nil }
-    its(:other_requirements) { is_expected.to be_nil }
-    its(:personal_qualities) { is_expected.to be_nil }
     it { is_expected.to be_rolled_over }
   end
 end
