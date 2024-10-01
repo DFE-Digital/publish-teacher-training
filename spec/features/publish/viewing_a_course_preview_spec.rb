@@ -15,7 +15,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
 
     scenario 'i can view the course basic details' do
-      Timecop.travel(Find::CycleTimetable.apply_deadline - 1.hour) do
+      Timecop.travel(Find::CycleTimetable.mid_cycle) do
         given_i_am_authenticated(user: user_with_fee_based_course)
         when_i_visit_the_publish_course_preview_page
         then_i_see_the_course_preview_details
@@ -223,7 +223,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     expect(publish_course_preview_page).to have_content(
       'Up to 2 years - full time'
     )
-
     expect(publish_course_preview_page).to have_content(
       course.applications_open_from.strftime('%-d %B %Y')
     )
@@ -326,7 +325,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
       :open,
       :secondary,
       funding: 'fee',
-      applications_open_from: RecruitmentCycle.current.application_start_date,
+      applications_open_from: RecruitmentCycle.current.application_end_date - 1.minute,
       accrediting_provider:,
       site_statuses:, enrichments: [course_enrichment],
       study_sites: [study_site],
