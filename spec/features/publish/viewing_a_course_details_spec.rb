@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 feature 'Course show' do
-  before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-  end
-
   context 'published course' do
     scenario 'i can view the course basic details' do
       given_i_am_authenticated_as_a_provider_user

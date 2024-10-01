@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    and_the_db_backed_funding_type_feature_flag_is_enabled
     when_i_visit_the_publish_courses_new_funding_type_page
   end
 
@@ -92,9 +91,5 @@ feature 'selecting funding type', { can_edit_current_and_next_cycles: false } do
 
   def selected_params(funding_type)
     "?course%5Bage_range_in_years%5D=3_to_7&course%5Bfunding%5D=#{funding_type}&course%5Bis_send%5D=0&course%5Blevel%5D=primary&course%5Bsubjects_ids%5D%5B%5D=2"
-  end
-
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
   end
 end

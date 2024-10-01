@@ -5,10 +5,6 @@ require 'rails_helper'
 feature 'Course show', { can_edit_current_and_next_cycles: false } do
   include Rails.application.routes.url_helpers
 
-  before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-  end
-
   context 'bursaries and scholarships is announced' do
     before do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)

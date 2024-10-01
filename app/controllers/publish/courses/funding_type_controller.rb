@@ -38,9 +38,7 @@ module Publish
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?
 
-        # Remove funding_type from permitted params when the `db_backed_funding_type` feature flag is removed
-
-        params.require(:publish_course_funding_form).permit(:funding_type, :funding, :previous_tda_course)
+        params.require(:publish_course_funding_form).permit(:funding, :previous_tda_course)
       end
 
       def handle_valid_form

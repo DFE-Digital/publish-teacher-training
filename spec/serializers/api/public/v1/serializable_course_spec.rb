@@ -9,10 +9,6 @@ RSpec.describe API::Public::V1::SerializableCourse do
   let(:course) { create(:course, :with_accrediting_provider, enrichments: [enrichment], funding: 'apprenticeship') }
   let(:resource) { described_class.new(object: course) }
 
-  before do
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-  end
-
   it 'sets type to courses' do
     expect(resource.jsonapi_type).to eq(:courses)
   end
