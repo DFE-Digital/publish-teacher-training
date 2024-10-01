@@ -3,14 +3,16 @@
 require 'rails_helper'
 
 feature 'Questions and results for undergraduate courses' do
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   after do
     Timecop.return
   end
 
-  scenario 'in the 2025 cycle with the TDA feature active and searching for secondary courses' do
-    skip 'to open cycle, will fix after'
-    given_i_have_2025_courses
-    and_i_am_in_the_2025_cycle
+  scenario 'with the TDA feature active and searching for secondary courses' do
+    given_i_have_courses
     and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
@@ -54,10 +56,8 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_visible_for_undergraduate_courses
   end
 
-  scenario 'in the 2025 cycle with the TDA feature active and searching primary courses' do
-    skip 'to open cycle, will fix after'
-    given_i_have_2025_courses
-    and_i_am_in_the_2025_cycle
+  scenario 'with the TDA feature active and searching primary courses' do
+    given_i_have_courses
     and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
@@ -87,10 +87,8 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_visible_for_undergraduate_courses
   end
 
-  scenario 'in the 2025 cycle with the TDA feature active and searching for further education courses' do
-    skip 'to open cycle, will fix after'
-    given_i_have_2025_courses
-    and_i_am_in_the_2025_cycle
+  scenario 'with the TDA feature active and searching for further education courses' do
+    given_i_have_courses
     and_the_tda_feature_flag_is_active
 
     when_i_visit_the_start_page
@@ -104,10 +102,8 @@ feature 'Questions and results for undergraduate courses' do
     then_i_am_on_results_page
   end
 
-  scenario 'in the 2025 cycle, with the TDA feature active and searching for postgraduate courses' do
-    skip 'to open cycle, will fix after'
-    given_i_have_2025_courses
-    and_i_am_in_the_2025_cycle
+  scenario 'with the TDA feature active and searching for postgraduate courses' do
+    given_i_have_courses
     and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
@@ -130,10 +126,8 @@ feature 'Questions and results for undergraduate courses' do
     and_i_can_see_only_postgraduate_courses
   end
 
-  scenario 'in the 2025 cycle with the TDA feature active and searching by location' do
-    skip 'to open cycle, will fix after'
-    given_i_have_2025_courses_in_different_locations
-    and_i_am_in_the_2025_cycle
+  scenario 'with the TDA feature active and searching by location' do
+    given_i_have_courses_in_different_locations
     and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_choose_to_find_courses_by_location
@@ -173,7 +167,6 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   scenario 'when there are no results' do
-    skip 'to open cycle, will fix after'
     given_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_choose_to_find_courses_by_location
@@ -191,7 +184,7 @@ feature 'Questions and results for undergraduate courses' do
     and_i_see_the_default_message_for_no_undergraduate_courses
   end
 
-  def given_i_have_2025_courses
+  def given_i_have_courses
     provider = create(:provider)
 
     @biology_course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
@@ -202,7 +195,7 @@ feature 'Questions and results for undergraduate courses' do
     @chemistry_course = create(:course, :published_postgraduate, :secondary, provider:, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
   end
 
-  def given_i_have_2025_courses_in_different_locations
+  def given_i_have_courses_in_different_locations
     provider = create(:provider)
 
     @york_biology_course = create(
@@ -237,11 +230,6 @@ feature 'Questions and results for undergraduate courses' do
         )
       ]
     )
-  end
-
-  def and_i_am_in_the_2025_cycle
-    Timecop.travel(Find::CycleTimetable.find_reopens)
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
   end
 
   def and_the_tda_feature_flag_is_active
