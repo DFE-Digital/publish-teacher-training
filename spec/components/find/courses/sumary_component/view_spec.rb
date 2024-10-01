@@ -8,7 +8,7 @@ module Find
       describe View do
         it 'renders sub sections' do
           provider = build(:provider).decorate
-          course = create(:course, :draft_enrichment, applications_open_from: Time.zone.tomorrow, provider:).decorate
+          course = create(:course, :fee, :draft_enrichment, applications_open_from: Time.zone.tomorrow, provider:).decorate
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
@@ -21,6 +21,16 @@ module Find
             'Date you can apply from',
             'Start date'
           )
+        end
+
+        context 'when teacher degree apprenticeship course has incorrect fees' do
+          it 'does not render fees' do
+            course = create(:course, :apprenticeship, :published_teacher_degree_apprenticeship, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+
+            result = render_inline(described_class.new(course))
+            expect(result.text).not_to include('£9,250')
+            expect(result.text).not_to include('Course fee')
+          end
         end
 
         context 'applications open date has not passed' do
@@ -128,7 +138,7 @@ module Find
 
         context 'when there are UK fees' do
           it 'renders the uk fees' do
-            course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
+            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250)]).decorate
 
             result = render_inline(described_class.new(course))
             expect(result.text).to include('£9,250 for UK citizens')
@@ -138,7 +148,7 @@ module Find
 
         context 'when there are international fees' do
           it 'renders the international fees' do
-            course = create(:course, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
+            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
             expect(result.text).to include('£14,000 for Non-UK citizens')
@@ -147,7 +157,7 @@ module Find
 
         context 'when there are uk fees but no international fees' do
           it 'renders the uk fees and not the internation fee label' do
-            course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
+            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: 9250, fee_international: nil)]).decorate
 
             result = render_inline(described_class.new(course))
 
@@ -158,7 +168,7 @@ module Find
 
         context 'when there are international fees but no uk fees' do
           it 'renders the international fees but not the uk fee label' do
-            course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
+            course = create(:course, :fee, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: 14_000)]).decorate
 
             result = render_inline(described_class.new(course))
 
@@ -169,7 +179,7 @@ module Find
 
         context 'when there are no fees' do
           it 'does not render the row' do
-            course = create(:course, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
+            course = create(:course, :salary, enrichments: [create(:course_enrichment, fee_uk_eu: nil, fee_international: nil)]).decorate
 
             result = render_inline(described_class.new(course))
 

@@ -224,6 +224,47 @@ describe CourseDecorator do
   #   end
   # end
 
+  describe '#no_fee?' do
+    context 'when course funding is fee' do
+      let(:course) do
+        create(
+          :course,
+          :fee
+        ).decorate
+      end
+
+      it 'returns false' do
+        expect(decorated_course.no_fee?).to be false
+      end
+    end
+
+    context 'when course funding is salary' do
+      let(:course) do
+        create(
+          :course,
+          :salary
+        ).decorate
+      end
+
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
+      end
+    end
+
+    context 'when course funding is apprenticeship' do
+      let(:course) do
+        create(
+          :course,
+          :apprenticeship
+        ).decorate
+      end
+
+      it 'returns true' do
+        expect(decorated_course.no_fee?).to be true
+      end
+    end
+  end
+
   describe '#subject_present?' do
     it 'returns true when the subject id exists' do
       expect(decorated_course.subject_present?(english)).to be(true)

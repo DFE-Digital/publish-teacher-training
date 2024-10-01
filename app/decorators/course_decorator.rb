@@ -505,6 +505,10 @@ class CourseDecorator < ApplicationDecorator
     )
   end
 
+  def no_fee?
+    !object.fee?
+  end
+
   private
 
   def not_on_find

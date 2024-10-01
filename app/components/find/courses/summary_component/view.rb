@@ -23,7 +23,8 @@ module Find
                  :study_mode,
                  :salaried?,
                  :can_sponsor_student_visa,
-                 :can_sponsor_skilled_worker_visa, to: :course
+                 :can_sponsor_skilled_worker_visa,
+                 :no_fee?, to: :course
 
         def initialize(course)
           super
@@ -50,10 +51,6 @@ module Find
           else
             'Visas cannot be sponsored'
           end
-        end
-
-        def no_fee?
-          course.fee_international.blank? && course.fee_uk_eu.blank?
         end
 
         def show_apply_from_row?
