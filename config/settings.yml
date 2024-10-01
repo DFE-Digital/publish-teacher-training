@@ -90,7 +90,6 @@ feedback:
 
 features:
   teacher_degree_apprenticeship: true
-  db_backed_funding_type: true
   send_request_data_to_bigquery: false
   rollover:
     # Normally a short period of time between rollover and the next cycle

@@ -545,28 +545,16 @@ class Course < ApplicationRecord
   delegate :funding_type, :visa_type, :fee_based?, :student_visa?, to: :program
 
   def fee_based?
-    if FeatureService.enabled?(:db_backed_funding_type)
-      fee?
-    else
-      program.fee_based?
-    end
+    fee?
   end
 
   def visa_type
-    if FeatureService.enabled?(:db_backed_funding_type)
-      type = fee_based? ? 'student' : 'skilled_worker'
-      ActiveSupport::StringInquirer.new(type)
-    else
-      program.visa_type
-    end
+    type = fee_based? ? 'student' : 'skilled_worker'
+    ActiveSupport::StringInquirer.new(type)
   end
 
   def student_visa?
-    if FeatureService.enabled?(:db_backed_funding_type)
-      visa_type.student?
-    else
-      program.student_visa?
-    end
+    visa_type.student?
   end
 
   def funding_type

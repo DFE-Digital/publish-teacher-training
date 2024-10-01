@@ -3082,11 +3082,7 @@ describe Course do
     end
   end
 
-  describe '#funding_type (with db_backed_funding enabled)' do
-    before do
-      allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-    end
-
+  describe '#funding_type' do
     context 'deprecation warning' do
       it 'issues a deprecation warning when `funding_type` is called' do
         deprecation_instance = instance_double(ActiveSupport::Deprecation)

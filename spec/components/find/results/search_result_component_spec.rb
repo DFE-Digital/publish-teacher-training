@@ -36,7 +36,7 @@ module Find
       end
     end
 
-    context 'when the provider specifies skilled worker visa sponsorship is active and the db_backed_funding_type feature is active' do
+    context 'when the provider specifies skilled worker visa sponsorship is active' do
       it 'renders correct message when only one kind of visa is sponsored' do
         course = build(
           :course,

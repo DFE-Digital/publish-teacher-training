@@ -8,21 +8,9 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
     # and ensure that the correct page gets displayed at the end
     # with the correct course being created
     given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
-    and_the_db_backed_funding_type_feature_flag_is_enabled
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     then_i_can_create_the_course
-  end
-
-  scenario 'creates the correct course in the 2023 cycle with db_backed_funding disabled' do
-    # This is intended to be a test which will go through the entire flow
-    # and ensure that the correct page gets displayed at the end
-    # with the correct course being created
-    given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
-    and_the_db_backed_funding_type_feature_flag_is_disabled
-    when_i_visit_the_courses_page
-    and_i_click_on_add_course
-    then_i_can_create_the_course_with_funding_type
   end
 
   private
@@ -312,13 +300,5 @@ feature 'new course', { can_edit_current_and_next_cycles: false } do
 
     expect(publish_provider_courses_index_page).to be_displayed
     expect(publish_provider_courses_index_page.success_summary).to have_content('Your course has been created')
-  end
-
-  def and_the_db_backed_funding_type_feature_flag_is_enabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(true)
-  end
-
-  def and_the_db_backed_funding_type_feature_flag_is_disabled
-    allow(Settings.features).to receive(:db_backed_funding_type).and_return(false)
   end
 end
