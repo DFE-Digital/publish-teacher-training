@@ -5,13 +5,16 @@ require 'rails_helper'
 feature 'Viewing an undergraduate course' do
   include Rails.application.routes.url_helpers
 
+  before do
+    Timecop.travel(Find::CycleTimetable.mid_cycle)
+  end
+
   after do
     Timecop.return
   end
 
   scenario 'user visits get into teaching advice page' do
     given_there_is_a_findable_undergraduate_course
-    and_i_am_in_the_2025_cycle
     when_i_visit_the_course_page
     and_i_click_to_contact_get_into_teaching
     then_i_am_redirected_to_the_git_help_and_support_page
@@ -30,11 +33,6 @@ feature 'Viewing an undergraduate course' do
       }
     )
     @course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
-  end
-
-  def and_i_am_in_the_2025_cycle
-    Timecop.travel(Find::CycleTimetable.find_reopens)
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
   end
 
   def when_i_visit_the_course_page
