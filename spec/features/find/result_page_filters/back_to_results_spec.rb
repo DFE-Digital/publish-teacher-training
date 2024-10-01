@@ -22,6 +22,9 @@ RSpec.feature 'Back to results back button' do
     and_i_select_the_primary_subject_checkbox
     and_i_click_continue
 
+    and_i_choose_yes_i_have_a_degree
+    and_i_click_continue
+
     and_i_select_my_visa_status
     and_i_click_find_courses
 
@@ -43,6 +46,10 @@ RSpec.feature 'Back to results back button' do
     create(:course, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
 
     create(:course, :secondary, :published, :with_salary, application_status: 'open', site_statuses: [build(:site_status, :findable)])
+  end
+
+  def and_i_choose_yes_i_have_a_degree
+    choose 'Yes, I have a degree or am studying for one'
   end
 
   def when_i_visit_the_start_page

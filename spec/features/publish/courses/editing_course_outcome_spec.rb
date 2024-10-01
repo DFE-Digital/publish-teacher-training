@@ -34,10 +34,10 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
   context 'TDA course' do
     scenario 'changing the outcome from non TDA to TDA' do
-      given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+      given_i_am_authenticated_as_a_provider_user
       and_the_tda_feature_flag_is_active
       and_there_is_a_qts_course_i_want_to_edit
-      when_i_visit_the_course_outcome_page_in_the_next_cycle
+      when_i_visit_the_course_outcome_page
       and_i_choose_undergraduate_degree_with_qts
       and_the_degree_type_is_postgraduate
       and_i_submit
@@ -46,10 +46,10 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
     context 'fee course' do
       scenario 'changing the outcome from TDA to non TDA' do
-        given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+        given_i_am_authenticated_as_a_provider_user
         and_the_tda_feature_flag_is_active
         and_there_is_a_tda_course_i_want_to_edit
-        when_i_visit_the_course_outcome_page_in_the_next_cycle
+        when_i_visit_the_course_outcome_page
         and_the_degree_type_is_undergraduate
         and_i_choose_qts
         and_the_degree_type_is_postgraduate
@@ -75,10 +75,10 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
 
     context 'salaried course' do
       scenario 'changing the outcome from TDA to non TDA' do
-        given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
+        given_i_am_authenticated_as_a_provider_user
         and_the_tda_feature_flag_is_active
         and_there_is_a_tda_course_i_want_to_edit
-        when_i_visit_the_course_outcome_page_in_the_next_cycle
+        when_i_visit_the_course_outcome_page
         and_the_degree_type_is_undergraduate
         and_i_choose_qts
         and_the_degree_type_is_postgraduate
@@ -91,15 +91,6 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         then_i_see_the_correct_attributes_in_the_database_for_salaried
       end
     end
-  end
-
-  def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
-    next_cycle_providers = [build(:provider, :next_recruitment_cycle, :accredited_provider,
-                                  courses: [create(:course, :with_accrediting_provider)],
-                                  sites: [build(:site), build(:site)],
-                                  study_sites: [build(:site, :study_site)])]
-    @next_cycle_user = create(:user, providers: next_cycle_providers)
-    given_i_am_authenticated(user: @next_cycle_user)
   end
 
   def given_i_am_authenticated_as_a_provider_user
@@ -153,7 +144,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_shown_the_correct_qts_options
-    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('QTS', 'QTS with PGCE', 'PGDE with QTS')
+    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('QTS', 'QTS with PGCE', 'PGDE with QTS', 'Teacher degree apprenticeship (TDA) with QTS')
   end
 
   def then_i_am_shown_the_correct_non_qts_options
@@ -193,29 +184,12 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     @current_user.providers.first
   end
 
-  def given_i_am_authenticated_as_a_provider_user_in_the_next_cycle
-    next_cycle_providers = [build(:provider, :accredited_provider, :next_recruitment_cycle,
-                                  courses: [create(:course, :with_accrediting_provider, study_mode: 'part_time', funding: 'fee', can_sponsor_skilled_worker_visa: true)])]
-    @next_cycle_user = create(:user, providers: next_cycle_providers)
-    given_i_am_authenticated(user: @next_cycle_user)
-  end
-
-  def next_cycle_provider
-    @provider ||= @current_user.providers.first
-  end
-
   def and_the_tda_feature_flag_is_active
     allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def and_there_is_a_qts_course_i_want_to_edit
     given_a_course_exists(:resulting_in_qts, study_mode: 'part_time', funding_type: 'fee', can_sponsor_skilled_worker_visa: true)
-  end
-
-  def when_i_visit_the_course_outcome_page_in_the_next_cycle
-    publish_courses_outcome_edit_page.load(
-      provider_code: next_cycle_provider.provider_code, recruitment_cycle_year: next_cycle_provider.recruitment_cycle_year, course_code: next_cycle_provider.courses.first.course_code
-    )
   end
 
   def and_the_degree_type_is_undergraduate

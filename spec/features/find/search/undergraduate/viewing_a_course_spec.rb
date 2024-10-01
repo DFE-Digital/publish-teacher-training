@@ -18,11 +18,10 @@ feature 'Viewing an undergraduate course' do
   end
 
   def given_there_is_a_findable_undergraduate_course
-    recruitment_cycle = create(:recruitment_cycle, year: 2025)
-    user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     provider = user.providers.first
-    create(:provider, :accredited_provider, provider_code: '1BJ')
-    accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ', recruitment_cycle:)
+    create(:provider, :accredited_provider, provider_code: '1BK')
+    accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ')
     provider.accrediting_provider_enrichments = []
     provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
       {

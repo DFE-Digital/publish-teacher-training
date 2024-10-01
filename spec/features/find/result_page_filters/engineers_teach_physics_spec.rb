@@ -14,12 +14,14 @@ RSpec.feature 'Engineers teach physics' do
 
   scenario 'Candidate searches for physics subject' do
     given_i_choose_physics
+    and_i_choose_yes_i_have_a_degree
     and_i_provide_my_visa_status
     then_i_see_that_the_etp_checkbox_is_unchecked
   end
 
   scenario 'Candidate searches for any other subject' do
     given_i_choose_music
+    and_i_choose_yes_i_have_a_degree
     and_i_provide_my_visa_status
     then_i_dont_see_the_etp_checkbox
   end
@@ -61,5 +63,14 @@ RSpec.feature 'Engineers teach physics' do
 
   def then_i_dont_see_the_etp_checkbox
     expect(find_results_page).to have_no_text('Only show Engineers teach physics courses')
+  end
+
+  def and_i_choose_yes_i_have_a_degree
+    choose 'Yes, I have a degree or am studying for one'
+    and_i_click_continue
+  end
+
+  def and_i_click_continue
+    click_link_or_button 'Continue'
   end
 end

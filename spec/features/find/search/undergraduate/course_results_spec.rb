@@ -85,24 +85,6 @@ feature 'Questions and results for undergraduate courses' do
     and_some_filters_are_visible_for_undergraduate_courses
   end
 
-  scenario 'in the 2024 cycle with the TDA feature active' do
-    given_i_have_2024_courses
-    and_i_am_in_the_2024_cycle
-    and_the_tda_feature_flag_is_active
-    when_i_visit_the_start_page
-    and_i_select_the_across_england_radio_button
-    and_i_click_continue
-    and_i_choose_secondary
-    and_i_click_continue
-    and_i_choose_subjects
-    and_i_click_continue
-    then_i_am_on_the_visa_status_page
-    when_i_choose_no
-    and_i_click_find_courses
-    then_i_am_on_results_page
-    and_all_filters_are_visible
-  end
-
   scenario 'in the 2025 cycle with the TDA feature active and searching for further education courses' do
     given_i_have_2025_courses
     and_i_am_in_the_2025_cycle
@@ -186,8 +168,7 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   scenario 'when there are no results' do
-    given_2025_cycle_started
-    and_the_tda_feature_flag_is_active
+    given_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_choose_to_find_courses_by_location
     and_i_add_a_location
@@ -205,7 +186,7 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def given_i_have_2025_courses
-    _, provider = setup_recruitment_cycle(year: 2025)
+    provider = create(:provider)
 
     @biology_course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
     @history_course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'History', subjects: [find_or_create(:secondary_subject, :history)])
@@ -216,7 +197,7 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   def given_i_have_2025_courses_in_different_locations
-    _, provider = setup_recruitment_cycle(year: 2025)
+    provider = create(:provider)
 
     @york_biology_course = create(
       :course,
@@ -252,42 +233,9 @@ feature 'Questions and results for undergraduate courses' do
     )
   end
 
-  def setup_recruitment_cycle(year:, provider_code: 'IBJ')
-    recruitment_cycle = create(:recruitment_cycle, year:)
-    user = create(:user, providers: [build(:provider, recruitment_cycle:, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
-    provider = user.providers.first
-    create(:provider, :accredited_provider, provider_code:)
-    accredited_provider = create(:provider, :accredited_provider, provider_code:, recruitment_cycle:)
-    provider.accrediting_provider_enrichments = []
-    provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
-      {
-        UcasProviderCode: accredited_provider.provider_code,
-        Description: 'description'
-      }
-    )
-    [recruitment_cycle, provider]
-  end
-
-  def given_i_have_2024_courses
-    _, provider = setup_recruitment_cycle(year: 2024)
-
-    create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Chemistry')
-    create(:course, :resulting_in_pgce_with_qts, provider:, name: 'Mathematics')
-  end
-
   def and_i_am_in_the_2025_cycle
     Timecop.travel(Find::CycleTimetable.find_reopens)
     allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
-  end
-
-  def given_2025_cycle_started
-    setup_recruitment_cycle(year: 2025, provider_code: '1BL')
-    and_i_am_in_the_2025_cycle
-  end
-
-  def and_i_am_in_the_2024_cycle
-    Timecop.travel(Find::CycleTimetable.find_opens)
-    allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2024)
   end
 
   def and_the_tda_feature_flag_is_active
@@ -545,4 +493,6 @@ feature 'Questions and results for undergraduate courses' do
       'Find out more about teacher degree apprenticeship (TDA) courses.'
     )
   end
+
+  alias_method :given_the_tda_feature_flag_is_active, :and_the_tda_feature_flag_is_active
 end

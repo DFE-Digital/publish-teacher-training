@@ -32,6 +32,8 @@ feature 'Editing a search' do
     and_i_click_continue
     and_i_select_the_primary_subject_checkbox
     and_i_click_continue
+    and_i_choose_yes_i_have_a_degree
+    and_i_click_continue
     and_i_choose_yes_to_visa_sponsorship
     and_i_click_find_courses
     and_i_see_that_the_visa_checkbox_is_checked
@@ -60,6 +62,10 @@ feature 'Editing a search' do
     expect(find_field('Primary')).to be_checked
   end
 
+  def and_i_choose_yes_i_have_a_degree
+    choose 'Yes, I have a degree or am studying for one'
+  end
+
   def and_i_select_the_primary_radio_button
     find_age_groups_page.primary.choose
   end
@@ -78,7 +84,7 @@ feature 'Editing a search' do
 
   def then_i_should_see_the_find_results_page
     expect(find_results_page).to be_displayed
-    expect(find_results_page.current_url).to end_with('/results?age_group=primary&applications_open=true&can_sponsor_visa=true&has_vacancies=true&l=2&subjects%5B%5D=00&visa_status=true')
+    expect(find_results_page.current_url).to end_with('/results?age_group=primary&applications_open=true&can_sponsor_visa=true&has_vacancies=true&l=2&subjects%5B%5D=00&university_degree_status=true&visa_status=true')
   end
 
   def when_i_change_my_search_query
@@ -99,7 +105,7 @@ feature 'Editing a search' do
 
   def then_i_should_see_the_subjects_form
     expect(find_primary_subjects_page.current_url).to end_with(
-      '/subjects?age_group=primary&applications_open=true&can_sponsor_visa=true&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&visa_status=true'
+      '/subjects?age_group=primary&applications_open=true&can_sponsor_visa=true&has_vacancies=true&l=2&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&send_courses=false&study_type%5B%5D=full_time&study_type%5B%5D=part_time&subjects%5B%5D=00&university_degree_status=true&visa_status=true'
     )
   end
 
