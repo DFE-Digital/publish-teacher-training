@@ -38,7 +38,7 @@ describe CoursePublishEmailMailer do
     end
 
     it 'includes the course funding type in the personalisation' do
-      expect(mail.govuk_notify_personalisation[:course_funding_type]).to eq(course.funding_type)
+      expect(mail.govuk_notify_personalisation[:course_funding_type]).to eq(course.funding)
     end
 
     it 'includes the datetime for the creation in the personalisation' do
