@@ -30,7 +30,6 @@ module API
                    :bursary_amount,
                    :bursary_requirements,
                    :created_at,
-                   :funding_type,
                    :gcse_subjects_required,
                    :level,
                    :name,
@@ -140,6 +139,10 @@ module API
 
         attribute :required_qualifications do
           @object.required_qualifications
+        end
+
+        attribute :funding_type do
+          @object.funding
         end
 
         enrichment_attribute :about_course
