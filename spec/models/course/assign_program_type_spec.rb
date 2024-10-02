@@ -55,7 +55,7 @@ RSpec.describe 'AssignProgramType' do
         it 'keeps the teacher_degree_apprenticeship program type' do
           provider = create(:provider)
           course = create(:course, :with_teacher_degree_apprenticeship, provider:)
-          service.execute(course.funding_type, course)
+          service.execute(course.funding, course)
           expect(course.program_type).to eq('teacher_degree_apprenticeship')
         end
       end

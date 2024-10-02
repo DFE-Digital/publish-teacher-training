@@ -9,7 +9,7 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
     create(
       :course,
       study_mode: 'part_time',
-      funding_type: 'fee',
+      funding: 'fee',
       can_sponsor_skilled_worker_visa: true,
       can_sponsor_student_visa: true,
       degree_type:
@@ -23,7 +23,7 @@ RSpec.describe Publish::Courses::AssignTdaAttributesService do
       it 'updates the course attributes and returns true' do
         expect(service.call).to be_truthy
         expect(course.study_mode).to eq('full_time')
-        expect(course.funding_type).to eq('apprenticeship')
+        expect(course.funding).to eq('apprenticeship')
         expect(course.can_sponsor_skilled_worker_visa).to be(false)
         expect(course.can_sponsor_student_visa).to be(false)
         expect(course.additional_degree_subject_requirements).to be(false)
