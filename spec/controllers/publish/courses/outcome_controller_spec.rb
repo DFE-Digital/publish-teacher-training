@@ -85,7 +85,7 @@ RSpec.describe Publish::Courses::OutcomeController do
 
         course.reload
 
-        expect(course.funding_type).to eq('apprenticeship')
+        expect(course.funding).to eq('apprenticeship')
         expect(course.can_sponsor_skilled_worker_visa).to be(false)
         expect(course.can_sponsor_student_visa).to be(false)
         expect(course.additional_degree_subject_requirements).to be(false)
