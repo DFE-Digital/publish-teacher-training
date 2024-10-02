@@ -17,7 +17,7 @@ class CourseUpdateEmailMailer < GovukNotifyRails::Mailer
       course_name: set_course_name(course, attribute_name, original_value),
       course_code: course.course_code,
       course_description: course.description,
-      course_funding_type: course.funding_type,
+      course_funding_type: course.funding,
       attribute_changed: I18n.t("course.update_email.#{attribute_name}"),
       attribute_change_datetime: gov_uk_format(course.updated_at),
       course_url: create_course_url(course),
