@@ -55,7 +55,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
         and_the_degree_type_is_postgraduate
         and_the_back_link_points_to_the_outcome_page
         and_i_choose_the_fee_paying
-        and_the_back_link_points_to_the_funding_page
+        and_the_back_link_points_to_the_funding_type_page
         and_i_choose_part_time
         and_the_back_link_points_to_the_study_mode_page
 
