@@ -55,7 +55,6 @@ class Course < ApplicationRecord
   }, suffix: :degree_type
 
   enum :funding, {
-    not_set: 'not_set',
     fee: 'fee',
     salary: 'salary',
     apprenticeship: 'apprenticeship'
