@@ -417,7 +417,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def and_the_tda_defaults_are_saved
     expect(course.program_type).to eq('teacher_degree_apprenticeship')
-    expect(course.funding_type).to eq('apprenticeship')
+    expect(course.funding).to eq('apprenticeship')
     expect(course.can_sponsor_student_visa?).to be false
     expect(course.can_sponsor_skilled_worker_visa?).to be false
     expect(course.additional_degree_subject_requirements).to be false
@@ -598,7 +598,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
     expect(course.part_time?).to be(true)
-    expect(course.funding_type == 'fee').to be(true)
+    expect(course.funding == 'fee').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(false)
     expect(course.can_sponsor_student_visa).to be(true)
   end
@@ -606,7 +606,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   def then_i_see_the_correct_attributes_in_the_database_for_salaried
     course.reload
     expect(course.study_mode == 'part_time').to be(true)
-    expect(course.funding_type == 'salary').to be(true)
+    expect(course.funding == 'salary').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
   end
