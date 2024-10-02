@@ -35,7 +35,7 @@ describe Publish::CourseFundingForm, type: :model do
     end
 
     context 'can_sponsor_skilled_worker_visa is nil' do
-      let(:course) { create(:course, :with_salary) }
+      let(:course) { create(:course, :salary) }
       let(:params) { { can_sponsor_skilled_worker_visa: nil } }
 
       it 'is invalid' do
@@ -262,7 +262,7 @@ describe Publish::CourseFundingForm, type: :model do
       end
 
       context 'skilled worker visa is nil' do
-        let(:course) { create(:course, :with_salary) }
+        let(:course) { create(:course, :salary) }
         let(:params) { { can_sponsor_skilled_worker_visa: nil } }
 
         it 'does not update the course with invalid details' do

@@ -40,7 +40,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   describe 'with a salary paying course' do
     scenario 'i can view a salary course' do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], funding_type: 'salary'))
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, :salary, enrichments: [course_enrichment]))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_course_as('Closed')
@@ -50,7 +50,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
   describe 'with a published and running course' do
     scenario 'i can view the published partial' do
-      given_i_am_authenticated_as_a_provider_user(course: build(:course, enrichments: [course_enrichment], application_status: 'open', funding_type: 'salary', site_statuses: [build(:site_status, :findable)]))
+      given_i_am_authenticated_as_a_provider_user(course: build(:course, :salary, enrichments: [course_enrichment], application_status: 'open', site_statuses: [build(:site_status, :findable)]))
       when_i_visit_the_course_page
       then_i_should_see_the_description_of_the_salary_course
       and_i_should_see_the_course_as('Open')

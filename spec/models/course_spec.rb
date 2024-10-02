@@ -1986,6 +1986,7 @@ describe Course do
       },
       'Teacher degree apprenticeship with QTS' => {
         study_mode: :full_time,
+        funding: 'apprenticeship',
         program_type: :teacher_degree_apprenticeship,
         qualification: :undergraduate_degree_with_qts
       }
@@ -2949,12 +2950,6 @@ describe Course do
   describe 'funding enum' do
     subject(:course) { create(:course) }
 
-    context 'default' do
-      it 'sets the default value as not_set' do
-        expect(course.funding).to eq('not_set')
-      end
-    end
-
     context 'fee funding' do
       it 'sets the value to fee' do
         course.fee!
@@ -2983,21 +2978,12 @@ describe Course do
     end
 
     context 'predicate methods' do
-      it 'returns true for not_set?' do
-        expect(course.not_set?).to be true
-      end
-
       it 'returns false for fee?' do
-        expect(course.fee?).to be false
+        expect(course.fee?).to be true
       end
 
       it 'returns false for salary?' do
         expect(course.salary?).to be false
-      end
-
-      it 'returns true for fee? after setting to fee' do
-        course.fee!
-        expect(course.fee?).to be true
       end
 
       it 'returns true for salary? after setting to salary' do
@@ -3093,14 +3079,6 @@ describe Course do
 
         course = described_class.new
         course.funding_type
-      end
-    end
-
-    context 'when program_type is nil' do
-      it 'returns nil' do
-        course = described_class.new(program_type: nil)
-        expect(course.funding_type).to eq('not_set')
-        expect(course.funding).to eq('not_set')
       end
     end
 

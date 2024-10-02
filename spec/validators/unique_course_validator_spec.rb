@@ -17,6 +17,7 @@ describe UniqueCourseValidator do
            subjects: [primary_with_english_subject],
            age_range_in_years: '5_to_11',
            qualification: 'qts',
+           funding: 'apprenticeship',
            program_type: 'pg_teaching_apprenticeship',
            study_mode: 'P',
            maths: 'not_required',

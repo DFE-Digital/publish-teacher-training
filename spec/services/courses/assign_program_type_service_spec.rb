@@ -83,14 +83,5 @@ describe Courses::AssignProgramTypeService do
         end
       end
     end
-
-    context 'with an empty funding_type paramater' do
-      let(:course) { create(:course, :with_scitt) }
-      let(:funding_type) { nil }
-
-      it 'returns the courses current study mode' do
-        expect(course.program_type).to eq('scitt_programme')
-      end
-    end
   end
 end

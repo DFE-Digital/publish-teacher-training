@@ -7,6 +7,7 @@ FactoryBot.define do
     name { Faker::Lorem.word }
     qualification { :pgce_with_qts }
     with_apprenticeship
+    funding { 'fee' }
 
     association :provider
 
@@ -180,6 +181,7 @@ FactoryBot.define do
 
     trait :with_teacher_degree_apprenticeship do
       program_type { :teacher_degree_apprenticeship }
+      funding { :apprenticeship }
     end
 
     trait :with_salary do
