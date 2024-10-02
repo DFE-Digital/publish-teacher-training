@@ -35,7 +35,7 @@ module Find
                          applications_open_from: Time.zone.now,
                          start_date: Time.zone.now,
                          qualification: 'pgce',
-                         funding_type: 'salaried',
+                         funding: 'salaried',
                          subjects: nil,
                          level: :secondary)
         end
@@ -51,7 +51,7 @@ module Find
                          applications_open_from: Time.zone.now,
                          start_date: Time.zone.now,
                          qualification: 'pgce',
-                         funding_type: 'salaried',
+                         funding: 'salaried',
                          subjects: nil,
                          level: :primary,
                          can_sponsor_student_visa: true)
@@ -59,7 +59,7 @@ module Find
 
         class FakeCourse
           include ActiveModel::Model
-          attr_accessor(:provider, :accrediting_provider, :course_code, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding_type, :subjects, :level, :can_sponsor_student_visa, :fee_uk_eu, :fee_international)
+          attr_accessor(:provider, :accrediting_provider, :course_code, :has_bursary, :age_range_in_years, :course_length, :applications_open_from, :start_date, :qualification, :funding, :subjects, :level, :can_sponsor_student_visa, :fee_uk_eu, :fee_international)
 
           delegate :provider_name, :provider_code, to: :provider, allow_nil: true
 
