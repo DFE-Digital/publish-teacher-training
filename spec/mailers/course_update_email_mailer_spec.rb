@@ -57,7 +57,7 @@ describe CourseUpdateEmailMailer do
     end
 
     it 'includes the course funding type in the personalisation' do
-      expect(mail.govuk_notify_personalisation[:course_funding_type]).to eq(course.funding_type)
+      expect(mail.govuk_notify_personalisation[:course_funding_type]).to eq(course.funding)
     end
 
     it 'includes the updated detail in the personalisation' do

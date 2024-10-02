@@ -189,7 +189,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def and_there_is_a_qts_course_i_want_to_edit
-    given_a_course_exists(:resulting_in_qts, study_mode: 'part_time', funding_type: 'fee', can_sponsor_skilled_worker_visa: true)
+    given_a_course_exists(:resulting_in_qts, study_mode: 'part_time', funding: 'fee', can_sponsor_skilled_worker_visa: true)
   end
 
   def and_the_degree_type_is_undergraduate
@@ -204,7 +204,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     course.reload
     expect(course.undergraduate_degree_type?).to be(true)
     expect(course.full_time?).to be(true)
-    expect(course.funding_type == 'apprenticeship').to be(true)
+    expect(course.funding == 'apprenticeship').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be false
     expect(course.can_sponsor_student_visa).to be false
   end
@@ -212,7 +212,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def then_i_see_the_correct_attributes_in_the_database_for_fee_paying
     course.reload
     expect(course.part_time?).to be(true)
-    expect(course.funding_type == 'fee').to be(true)
+    expect(course.funding == 'fee').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(false)
     expect(course.can_sponsor_student_visa).to be(true)
   end
@@ -225,7 +225,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def then_i_see_the_correct_attributes_in_the_database_for_salaried
     course.reload
     expect(course.study_mode == 'part_time').to be(true)
-    expect(course.funding_type == 'salary').to be(true)
+    expect(course.funding == 'salary').to be(true)
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
 

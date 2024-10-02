@@ -385,7 +385,7 @@ class Provider < ApplicationRecord
 
   def update_courses_program_type
     courses.each do |course|
-      Courses::AssignProgramTypeService.new.execute(course.funding_type, course)
+      Courses::AssignProgramTypeService.new.execute(course.funding, course)
       course.save
     end
   end

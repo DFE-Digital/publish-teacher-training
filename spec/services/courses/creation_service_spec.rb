@@ -31,7 +31,7 @@ describe Courses::CreationService do
 
     it 'creates the teacher degree apprenticeship course' do
       expect(subject.program_type).to eq('teacher_degree_apprenticeship')
-      expect(subject.funding_type).to eq('apprenticeship')
+      expect(subject.funding).to eq('apprenticeship')
       expect(subject.can_sponsor_student_visa?).to be false
       expect(subject.can_sponsor_skilled_worker_visa?).to be false
       expect(subject.additional_degree_subject_requirements).to be(false)
@@ -215,7 +215,7 @@ describe Courses::CreationService do
       expect(subject.course_code).to be_nil
       expect(subject.name).to eq('Further education (SEND)')
       expect(subject.errors).to be_empty
-      expect(subject.funding_type).to eq('fee')
+      expect(subject.funding).to eq('fee')
       expect(subject.english).to eq('not_required')
       expect(subject.maths).to eq('not_required')
       expect(subject.science).to eq('not_required')
@@ -240,7 +240,7 @@ describe Courses::CreationService do
         expect(subject.course_code).not_to eq('D0CK')
         expect(subject.name).to eq('Further education (SEND)')
         expect(subject.errors).to be_empty
-        expect(subject.funding_type).to eq('fee')
+        expect(subject.funding).to eq('fee')
         expect(subject.english).to eq('not_required')
         expect(subject.maths).to eq('not_required')
         expect(subject.science).to eq('not_required')

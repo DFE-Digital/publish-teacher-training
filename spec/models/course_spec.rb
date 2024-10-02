@@ -3087,7 +3087,6 @@ describe Course do
         course = described_class.new(program_type: :higher_education_salaried_programme, funding: 'fee')
         expect(course.program_type).to eq('higher_education_salaried_programme')
         expect(course.funding).to eq('fee')
-        expect(course.funding_type).to eq('fee')
       end
     end
 
@@ -3096,7 +3095,6 @@ describe Course do
         course = build(:course, :with_school_direct, funding: 'salary')
         expect(course.program_type).to eq('school_direct_training_programme')
         expect(course.funding).to eq('salary')
-        expect(course.funding_type).to eq('salary')
       end
     end
 
@@ -3105,7 +3103,6 @@ describe Course do
         course = build(:course, :with_school_direct, funding: 'fee')
         expect(course.program_type).to eq('school_direct_training_programme')
         expect(course.funding).to eq('fee')
-        expect(course.funding_type).to eq('fee')
       end
     end
 
@@ -3114,7 +3111,6 @@ describe Course do
         course = build(:course, :with_school_direct, funding: 'apprenticeship')
         expect(course.program_type).to eq('school_direct_training_programme')
         expect(course.funding).to eq('apprenticeship')
-        expect(course.funding_type).to eq('apprenticeship')
       end
     end
 
@@ -3123,7 +3119,6 @@ describe Course do
         course = build(:course, :with_apprenticeship, funding: 'fee')
         expect(course.program_type).to eq('pg_teaching_apprenticeship')
         expect(course.funding).to eq('fee')
-        expect(course.funding_type).to eq('fee')
       end
     end
   end
@@ -3167,7 +3162,7 @@ describe Course do
       it 'sets the funding to apprenticeship and program_type to pg_teaching_apprenticeship' do
         course = build(:course, funding: 'apprenticeship')
 
-        expect(course.funding_type).to eq('apprenticeship')
+        expect(course.funding).to eq('apprenticeship')
         expect(course.program_type).to eq('pg_teaching_apprenticeship')
       end
     end
@@ -3178,27 +3173,27 @@ describe Course do
           provider = build(:provider, provider_type: 'scitt')
           course = create(:course, provider:, funding: 'salary')
 
-          expect(course.funding_type).to eq('salary')
+          expect(course.funding).to eq('salary')
           expect(course.program_type).to eq('scitt_salaried_programme')
         end
       end
 
       context 'when the provider is a University' do
-        it 'sets the funding_type to salary and the program_type to higher_education_salaried_programme' do
+        it 'sets the funding to salary and the program_type to higher_education_salaried_programme' do
           provider = build(:provider, provider_type: 'university')
           course = create(:course, provider:, funding: 'salary')
 
-          expect(course.funding_type).to eq('salary')
+          expect(course.funding).to eq('salary')
           expect(course.program_type).to eq('higher_education_salaried_programme')
         end
       end
 
       context 'when the provider is a Lead School' do
-        it 'sets the funding_type to salary and the program_type to school_direct_salaried_training_programme' do
+        it 'sets the funding to salary and the program_type to school_direct_salaried_training_programme' do
           provider = build(:provider, provider_type: 'lead_school')
           course = create(:course, provider:, funding: 'salary')
 
-          expect(course.funding_type).to eq('salary')
+          expect(course.funding).to eq('salary')
           expect(course.program_type).to eq('school_direct_salaried_training_programme')
         end
       end
@@ -3293,33 +3288,33 @@ describe Course do
       end
     end
 
-    context 'setting the funding_type to fee' do
+    context 'setting the funding to fee' do
       context 'when the provider is not self accredited' do
-        it 'sets the funding_type to salary and the program_type to school_direct_training_programme' do
+        it 'sets the funding to salary and the program_type to school_direct_training_programme' do
           provider = build(:provider, accrediting_provider: :not_an_accredited_provider)
           course = create(:course, provider:, funding: 'fee')
 
-          expect(course.funding_type).to eq('fee')
+          expect(course.funding).to eq('fee')
           expect(course.program_type).to eq('school_direct_training_programme')
         end
       end
 
       context 'when the provider is self accredited and a SCITT' do
-        it 'sets the funding_type to salary and the program_type to scitt_programme' do
+        it 'sets the funding to salary and the program_type to scitt_programme' do
           provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: 'scitt')
           course = create(:course, provider:, funding: 'fee')
 
-          expect(course.funding_type).to eq('fee')
+          expect(course.funding).to eq('fee')
           expect(course.program_type).to eq('scitt_programme')
         end
       end
 
       context 'when the provider is self accredited and not a SCITT' do
-        it 'sets the funding_type to salary and the program_type to higher_education_programme' do
+        it 'sets the funding to salary and the program_type to higher_education_programme' do
           provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: 'university')
           course = create(:course, provider:, funding: 'fee')
 
-          expect(course.funding_type).to eq('fee')
+          expect(course.funding).to eq('fee')
           expect(course.program_type).to eq('higher_education_programme')
         end
       end
@@ -3399,7 +3394,7 @@ describe Course do
       expect(course.training_route).to eq('fee_funded_initial_teacher_training')
     end
 
-    it 'returns unknown_training_route for unknown degree_type and funding_type combination' do
+    it 'returns unknown_training_route for unknown degree_type and funding combination' do
       course = build(:course, funding: 'fee', degree_type: 'undergraduate')
       expect(course.training_route).to eq('unknown_training_route')
     end

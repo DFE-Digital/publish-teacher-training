@@ -11,7 +11,7 @@ class CoursePublishEmailMailer < GovukNotifyRails::Mailer
       course_name: course.name,
       course_code: course.course_code,
       course_description: course.description,
-      course_funding_type: course.funding_type,
+      course_funding_type: course.funding,
       create_course_datetime: gov_uk_format(course.created_at),
       course_url: create_course_url(course)
     )

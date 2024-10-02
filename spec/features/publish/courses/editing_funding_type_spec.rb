@@ -119,7 +119,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def then_the_course_should_should_still_be_fee_paying
     course.reload
-    expect(course.funding_type).to eq('fee')
+    expect(course.funding).to eq('fee')
   end
 
   def then_the_previously_updated_skilled_worker_visa_should_be_false
@@ -134,7 +134,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def then_the_course_should_should_still_be_salaried
     course.reload
-    expect(course.funding_type).to eq('salary')
+    expect(course.funding).to eq('salary')
   end
 
   def when_i_update_funding_type_back_to_salaried_and_skilled_worker_to_sponsored
@@ -153,14 +153,14 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
 
   def and_the_course_should_have_updated_to_salaried_and_sponsor_skilled_worker_visa
     course.reload
-    expect(course.funding_type).to eq('salary')
+    expect(course.funding).to eq('salary')
     expect(course.can_sponsor_skilled_worker_visa).to be(true)
     expect(course.can_sponsor_student_visa).to be(false)
   end
 
   def and_the_course_should_have_updated_to_fee_and_sponsor_student_visa
     course.reload
-    expect(course.funding_type).to eq('fee')
+    expect(course.funding).to eq('fee')
     expect(course.can_sponsor_skilled_worker_visa).to be(false)
     expect(course.can_sponsor_student_visa).to be(true)
   end

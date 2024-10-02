@@ -83,7 +83,7 @@ class CourseDecorator < ApplicationDecorator
       'salary' => 'Salary',
       'apprenticeship' => 'Teaching apprenticeship - with salary',
       'fee' => 'Fee - no salary'
-    }[object.funding_type]
+    }[object.funding]
   end
 
   def subject_name
@@ -150,11 +150,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def salaried?
-    object.funding_type == 'salary' || object.funding_type == 'apprenticeship'
+    object.funding == 'salary' || object.funding == 'apprenticeship'
   end
 
   def apprenticeship?
-    object.funding_type.to_s == 'apprenticeship'
+    object.funding.to_s == 'apprenticeship'
   end
 
   def apprenticeship
@@ -324,7 +324,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def has_fees?
-    object.funding_type.match?(/fee/)
+    object.funding.match?(/fee/)
   end
 
   def is_further_education?
