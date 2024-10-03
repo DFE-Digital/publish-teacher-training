@@ -2,7 +2,7 @@
 
 module Find
   class FeatureFlagsController < ApplicationController
-    before_action :enforce_basic_auth
+    # before_action :enforce_basic_auth
     skip_before_action :redirect_to_maintenance_page_if_flag_is_active
     skip_before_action :redirect_to_cycle_has_ended_if_find_is_down
 

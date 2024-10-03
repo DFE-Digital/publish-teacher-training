@@ -10,6 +10,22 @@ module Subjects
 
     def subject_and_financial_incentives
       subject_and_financial_incentives = {
+        2025 => {
+          %w[Mathematics Physics Chemistry Computing] => {
+            bursary_amount: '20',
+            scholarship: '20'
+          },
+          %w[French German Spanish] => {
+            bursary_amount: '20',
+            scholarship: '20'
+          },
+          ['Geography', 'Biology', 'Design and technology',] => {
+            bursary_amount: '20'
+          },
+          ['English', 'Art and design', 'Drama', 'Music', 'Religious education'] => {
+            bursary_amount: '20'
+          }
+        },
         2024 => {
           %w[Mathematics Physics Chemistry Computing] => {
             bursary_amount: '28000',
