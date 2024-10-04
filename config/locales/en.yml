@@ -316,7 +316,8 @@ en:
           text: "Enter details about the accredited provider"
   value_not_entered: "Not entered"
   a_level_grades:
-    minimum_grade: Grade %{minimum_grade} or above
+    minimum_grade: Grade %{minimum_grade}
+    minimum_grade_or_above: Grade %{minimum_grade} or above
     max_grade: "Grade A*"
   helpers:
     legend:
@@ -387,6 +388,7 @@ en:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
       submit: Update A levels
       hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
+      or_above: or above
       suffix: or equivalent qualification
       row:
         "true": "Equivalency tests will be considered."

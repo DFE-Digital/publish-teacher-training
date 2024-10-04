@@ -401,10 +401,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def and_i_see_the_a_level_requirements_for_the_course
-    expect(page).to have_content('Any subject - Grade C or above, or equivalent')
-    expect(page).to have_content('Any STEM subject - Grade C or above, or equivalent')
-    expect(page).to have_content('Any humanities subject, or equivalent')
-    expect(page).to have_content('Mathematics, or equivalent')
+    expect(page).to have_content('Any subject - Grade C or above or equivalent')
+    expect(page).to have_content('Any STEM subject - Grade C or above or equivalent')
+    expect(page).to have_content('Any humanities subject or equivalent')
+    expect(page).to have_content('Mathematics or equivalent')
     expect(page).to have_content('Candidates with pending A levels will not be considered.')
     expect(page).to have_content('Equivalency tests will be considered.')
     expect(page).to have_content('Some additional A level equivalencies text')

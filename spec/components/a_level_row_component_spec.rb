@@ -19,7 +19,9 @@ RSpec.describe ALevelRowComponent do
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include('Math - Grade A or above')
+    expect(
+      rendered_component.text.gsub(/\r?\n/, ' ').squeeze(' ').strip
+    ).to include('Math - Grade A or above')
   end
 
   it 'renders the pending a level summary content for acceptance when course accepts pending a levels' do

@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Find::Courses::ALevelComponent::View, type: :component do
-  subject(:result) { render_inline(described_class.new(course:)).text }
+  subject(:result) do
+    render_inline(
+      described_class.new(course:)
+    ).text.gsub(/\r?\n/, ' ').squeeze(' ').strip
+  end
 
   let(:course) { create(:course, a_level_subject_requirements:).decorate }
   let(:a_level_subject_requirements) { [] }
@@ -96,7 +100,7 @@ RSpec.describe Find::Courses::ALevelComponent::View, type: :component do
 
     it 'renders the correct content' do
       expect(result).to include(
-        'Any two modern foreign languages - Grade A or above, or equivalent qualification'
+        'Any two modern foreign languages - Grade A or above or equivalent qualification'
       )
     end
   end
@@ -140,7 +144,7 @@ RSpec.describe Find::Courses::ALevelComponent::View, type: :component do
     end
 
     it 'renders the subject with equivalency' do
-      expect(result).to include('Any subject - Grade A or above, or equivalent qualification')
+      expect(result).to include('Any subject - Grade A or above or equivalent qualification')
     end
   end
 
