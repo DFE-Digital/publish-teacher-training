@@ -24,10 +24,10 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the correct content' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any subject',
-            'Any STEM subject',
-            'Any modern foreign language - Grade A or above',
-            'Geography'
+            ['Any subject', 'or equivalent qualification'],
+            ['Any STEM subject', 'or equivalent qualification'],
+            ['Any modern foreign language - Grade A', 'or above or equivalent qualification'],
+            ['Geography', 'or equivalent qualification']
           ]
         )
       end
@@ -43,7 +43,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
 
       it 'renders the correct content' do
         expect(grouped_a_level_subject_requirements).to eq(
-          ['Any two STEM subjects']
+          [['Any two STEM subjects', 'or equivalent qualification']]
         )
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
 
       it 'renders the correct content' do
         expect(grouped_a_level_subject_requirements).to eq(
-          ['Any two STEM subjects - Grade B or above']
+          [['Any two STEM subjects - Grade B', 'or above or equivalent qualification']]
         )
       end
     end
@@ -72,7 +72,9 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       end
 
       it 'renders the correct content' do
-        expect(grouped_a_level_subject_requirements).to eq(['Any two modern foreign languages'])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [['Any two modern foreign languages', 'or equivalent qualification']]
+        )
       end
     end
 
@@ -87,8 +89,8 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the correct content' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any modern foreign language - Grade A or above',
-            'Any modern foreign language - Grade B or above'
+            ['Any modern foreign language - Grade A', 'or above or equivalent qualification'],
+            ['Any modern foreign language - Grade B', 'or above or equivalent qualification']
           ]
         )
       end
@@ -107,7 +109,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the correct content' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any two modern foreign languages - Grade A or above, or equivalent qualification'
+            ['Any two modern foreign languages - Grade A', 'or above or equivalent qualification']
           ]
         )
       end
@@ -122,7 +124,11 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       end
 
       it 'renders the correct content' do
-        expect(grouped_a_level_subject_requirements).to eq(%w[Geography])
+        expect(grouped_a_level_subject_requirements).to eq(
+          [
+            ['Geography', 'or equivalent qualification']
+          ]
+        )
       end
     end
 
@@ -138,7 +144,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the subject with equivalency' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any two modern foreign languages - Grade A or above, or equivalent qualification'
+            ['Any two modern foreign languages - Grade A', 'or above or equivalent qualification']
           ]
         )
       end
@@ -156,7 +162,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the subject with equivalency' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any two modern foreign languages, or equivalent qualification'
+            ['Any two modern foreign languages', 'or equivalent qualification']
           ]
         )
       end
@@ -168,7 +174,7 @@ RSpec.describe Find::Courses::ALevelComponent::GroupedALevelSubjectRequirements 
       it 'renders the subject with equivalency' do
         expect(grouped_a_level_subject_requirements).to eq(
           [
-            'Any subject - Grade A or above, or equivalent qualification'
+            ['Any subject - Grade A', 'or above or equivalent qualification']
           ]
         )
       end

@@ -271,7 +271,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
 
   def then_i_see_an_error_message_for_the_add_a_level_to_a_list_page
     and_i_see_there_is_a_problem
-    expect(page).to have_content('Select if you want to add another A level').twice
+    expect(page).to have_content('Select if you want to add another A level or equivalent qualification').twice
   end
 
   def and_i_see_there_is_a_problem
@@ -311,7 +311,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
 
   def and_i_do_not_see_the_option_to_add_more_a_level_subjects
     expect(page).to have_no_css('fieldset.govuk-fieldset')
-    expect(page).to have_no_css('legend', text: 'Do you want to add another A level?')
+    expect(page).to have_no_css('legend', text: 'Do you want to add another A level or equivalent qualification?')
   end
 
   def then_i_am_on_the_add_another_a_level_subject_page
@@ -327,7 +327,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   alias_method :and_i_am_on_the_add_another_a_level_subject_page, :then_i_am_on_the_add_another_a_level_subject_page
 
   def and_i_see_the_success_message_that_i_added_an_a_level
-    expect(page).to have_content('You have added a required A level')
+    expect(page).to have_content('You have added a required A level or equivalent qualification')
   end
 
   def then_i_am_on_the_consider_pending_a_level_page
@@ -401,10 +401,10 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def and_i_see_the_a_level_requirements_for_the_course
-    expect(page).to have_content('Any subject - Grade C or above, or equivalent')
-    expect(page).to have_content('Any STEM subject - Grade C or above, or equivalent')
-    expect(page).to have_content('Any humanities subject, or equivalent')
-    expect(page).to have_content('Mathematics, or equivalent')
+    expect(page).to have_content('Any subject - Grade C or above or equivalent')
+    expect(page).to have_content('Any STEM subject - Grade C or above or equivalent')
+    expect(page).to have_content('Any humanities subject or equivalent')
+    expect(page).to have_content('Mathematics or equivalent')
     expect(page).to have_content('Candidates with pending A levels will not be considered.')
     expect(page).to have_content('Equivalency tests will be considered.')
     expect(page).to have_content('Some additional A level equivalencies text')

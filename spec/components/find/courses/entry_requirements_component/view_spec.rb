@@ -26,7 +26,7 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
     it 'renders A levels and GCSEs only and ignores degrees' do
       expected_text = <<~TEXT
-        Entry requirements A levels Any subject - Grade A or above, or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) in English, maths and science or above, or equivalent qualification We will not consider candidates with pending GCSEs. Equivalency tests We will not consider candidates who need to take a GCSE equivalency test.
+        Entry requirements A levels Any subject - Grade A or above or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) in English, maths and science or above, or equivalent qualification We will not consider candidates with pending GCSEs. Equivalency tests We will not consider candidates who need to take a GCSE equivalency test.
       TEXT
 
       expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to include(expected_text.strip)

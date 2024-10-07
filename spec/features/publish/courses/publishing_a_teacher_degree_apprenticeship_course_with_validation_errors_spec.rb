@@ -181,7 +181,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
 
   def then_i_see_a_level_subject_is_required
     and_i_see_that_i_need_to_enter_a_level_requirements
-    expect(page).to have_content('What A level is required?')
+    expect(page).to have_content('What A level or equivalent qualification is required?')
   end
 
   def and_i_see_that_i_need_to_enter_a_level_requirements

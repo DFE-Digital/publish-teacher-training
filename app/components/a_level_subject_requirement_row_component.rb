@@ -21,6 +21,14 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
     "#{plural_subject_name(count:)}#{grade}"
   end
 
+  def row_value_with_hint
+    "#{subject_name}#{grade(short_description: true)}"
+  end
+
+  def plural_row_value_with_hint(count:)
+    "#{plural_subject_name(count:)}#{grade(short_description: true)}"
+  end
+
   def subject_name
     if other_subject?
       other_subject
@@ -37,30 +45,41 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
     end
   end
 
-  def grade
+  def grade(short_description: false)
     return '' if minimum_grade.blank?
 
-    if MINIMUM_GRADES.include?(minimum_grade)
-      " - #{I18n.t('a_level_grades.minimum_grade', minimum_grade:)}"
-    elsif minimum_grade == MAX_GRADE
-      " - #{I18n.t('a_level_grades.max_grade')}"
+    " - #{grade_description(short_description:)}"
+  end
+
+  def grade_description(short_description:)
+    return I18n.t('a_level_grades.max_grade').to_s if max_grade?
+
+    if minimum_grade? && short_description.present?
+      I18n.t('a_level_grades.minimum_grade', minimum_grade:).to_s
+    elsif minimum_grade? && short_description.blank?
+      I18n.t('a_level_grades.minimum_grade_or_above', minimum_grade:).to_s
     else
-      " - #{minimum_grade}"
+      minimum_grade.to_s
     end
+  end
+
+  def minimum_grade?
+    MINIMUM_GRADES.include?(minimum_grade)
+  end
+
+  def max_grade?
+    minimum_grade == MAX_GRADE
   end
 
   def other_subject?
     subject == 'other_subject'
   end
 
-  def add_equivalency_suffix(course:, row_value:)
-    if course.accept_a_level_equivalency?
-      [
-        row_value,
-        I18n.t('course.a_level_equivalencies.suffix')
-      ].join(', ')
+  def grade_hint
+    if minimum_grade?
+      "#{I18n.t('course.a_level_equivalencies.or_above')} #{I18n.t('course.a_level_equivalencies.suffix')}"
     else
-      row_value
+      I18n.t('course.a_level_equivalencies.suffix')
     end
   end
 

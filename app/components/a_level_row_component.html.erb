@@ -16,6 +16,10 @@
   <% Array(@course.a_level_subject_requirements).map do |a_level_subject_requirement| %>
     <p class="govuk-body">
       <%= a_level_subject_row_content(a_level_subject_requirement.with_indifferent_access) %>
+      <br>
+      <span class="govuk-hint govuk-!-font-size-16">
+        <%= or_equivalent_message(a_level_subject_requirement.with_indifferent_access) %>
+      </span>
     </p>
   <% end %>
 

@@ -20,12 +20,11 @@ class ALevelRowComponent < ViewComponent::Base
   end
 
   def a_level_subject_row_content(a_level_subject_requirement)
-    a_level_subject_requirement_row_component = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement)
+    ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement).row_value_with_hint
+  end
 
-    a_level_subject_requirement_row_component.add_equivalency_suffix(
-      course:,
-      row_value: a_level_subject_requirement_row_component.row_value
-    )
+  def or_equivalent_message(a_level_subject_requirement)
+    ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement).grade_hint
   end
 
   def pending_a_level_summary_content

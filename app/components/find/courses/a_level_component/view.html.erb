@@ -1,13 +1,17 @@
-<% a_level_subject_requirements.each do |a_level_subject_requirement| %>
+<% a_level_subject_requirements.each do |a_level_subject_requirement, or_equivalent_message| %>
   <p class="govuk-body">
     <%= a_level_subject_requirement %>
-  </p>
-
-  <% unless course.accept_pending_a_level.nil? %>
+    <br>
     <span class="govuk-hint govuk-!-font-size-16">
-      <%= pending_a_level_summary_content %>
+      <%= or_equivalent_message %>
     </span>
-  <% end %>
+  </p>
+<% end %>
+
+<% unless course.accept_pending_a_level.nil? %>
+  <span class="govuk-hint govuk-!-font-size-16">
+    <%= pending_a_level_summary_content %>
+  </span>
 <% end %>
 
 <% if course.any_a_levels? %>

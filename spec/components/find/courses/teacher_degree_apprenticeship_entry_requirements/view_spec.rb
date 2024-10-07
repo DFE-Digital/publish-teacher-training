@@ -22,7 +22,7 @@ describe Find::Courses::TeacherDegreeApprenticeshipEntryRequirements::View do
 
     it 'renders A levels and GCSEs only and ignores degrees' do
       expected_text = <<~TEXT
-        Any subject - Grade A or above, or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text about A level equivalencies
+        Any subject - Grade A or above or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text about A level equivalencies
       TEXT
 
       expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to include(expected_text.strip)

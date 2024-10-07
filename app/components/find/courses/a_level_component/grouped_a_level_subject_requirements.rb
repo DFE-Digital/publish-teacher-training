@@ -16,9 +16,9 @@ module Find
             component = ALevelSubjectRequirementRowComponent.new(a_level_subject_requirement)
 
             if count > 1
-              component.add_equivalency_suffix(course:, row_value: component.plural_row_value(count:))
+              [component.plural_row_value_with_hint(count:), component.grade_hint]
             else
-              component.add_equivalency_suffix(course:, row_value: component.row_value)
+              [component.row_value_with_hint, component.grade_hint]
             end
           end
         end
