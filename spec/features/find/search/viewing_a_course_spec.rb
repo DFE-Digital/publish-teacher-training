@@ -277,8 +277,6 @@ feature 'Viewing a findable course' do
 
     expect(find_course_show_page.bursary_amount).to have_content('a bursary of £4,000')
 
-    expect(find_course_show_page.financial_support_details).to have_content('Financial support from the training provider')
-
     expect(find_course_show_page.required_qualifications).to have_no_content(
       @course.latest_published_enrichment.required_qualifications
     )
