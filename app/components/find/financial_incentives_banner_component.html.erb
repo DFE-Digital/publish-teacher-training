@@ -1,0 +1,4 @@
+<%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
+  <% notification_banner.with_heading(text: "Financial support") %>
+  <p class="govuk-body">Details of financial support for courses starting in the <%= Find::CycleTimetable.cycle_year_range %> academic year will be released soon.</p>
+<% end %>
