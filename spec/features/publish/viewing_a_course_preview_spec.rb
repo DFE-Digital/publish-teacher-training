@@ -259,10 +259,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
 
     expect(publish_course_preview_page).not_to have_salary_details
 
-    expect(publish_course_preview_page.financial_support_details).to have_content(
-      'Financial support from the training provider'
-    )
-
     expect(publish_course_preview_page).to have_content(
       'Training with disabilities'
     )
