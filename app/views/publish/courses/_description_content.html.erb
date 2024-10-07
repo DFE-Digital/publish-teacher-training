@@ -77,16 +77,6 @@
       action_visually_hidden_text: t("publish.providers.courses.description_content.fee_details_hidden_text")
     ) %>
 
-    <% if course.financial_support.present? && !@provider.recruitment_cycle.after_2024? %>
-      <% enrichment_summary(
-        summary_list,
-        :course,
-        t("publish.providers.courses.description_content.financial_support_you_offer_label"),
-        value_provided?(markdown(course.financial_support)),
-        %w[financial_support]
-      ) %>
-    <% end %>
-
     <% summary_list.with_row(html_attributes: { data: { qa: "course__financial_incentives" } }) do |row| %>
       <% row.with_key { t("publish.providers.courses.description_content.financial_incentive_details_label") } %>
       <% row.with_value { course.financial_incentive_details } %>
