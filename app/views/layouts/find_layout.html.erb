@@ -54,6 +54,7 @@
 
         <%= render Find::MaintenanceBannerComponent.new %>
         <%= render Find::DeadlineBannerComponent.new(flash_empty: flash.reject { |flash| flash[0] == "start_wizard" }.empty?) unless request.url.include?("/results/filter/subject") %>
+        <%= render Find::FinancialIncentivesBannerComponent.new %>
 
         <%= yield %>
       </main>
