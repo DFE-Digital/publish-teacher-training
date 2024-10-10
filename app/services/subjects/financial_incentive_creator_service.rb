@@ -12,18 +12,21 @@ module Subjects
       subject_and_financial_incentives = {
         2025 => {
           %w[Mathematics Physics Chemistry Computing] => {
-            bursary_amount: '20',
-            scholarship: '20'
+            bursary_amount: '29000',
+            scholarship: '31000'
           },
           %w[French German Spanish] => {
-            bursary_amount: '20',
-            scholarship: '20'
+            bursary_amount: '26000',
+            scholarship: '28000'
           },
           ['Geography', 'Biology', 'Design and technology'] => {
-            bursary_amount: '20'
+            bursary_amount: '26000'
           },
-          ['English', 'Art and design', 'Drama', 'Music', 'Religious education'] => {
-            bursary_amount: '20'
+          ['Art and design', 'Music', 'Religious education'] => {
+            bursary_amount: '10000'
+          },
+          ['English'] => {
+            bursary_amount: '5000'
           }
         },
         2024 => {
