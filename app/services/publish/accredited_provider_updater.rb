@@ -15,8 +15,8 @@ module Publish
     end
 
     def update_provider
-      provider.update!(accrediting_provider: 'not_an_accredited_provider',
-                       accrediting_provider_enrichments: new_accrediting_provider_enrichments)
+      provider.update_columns(accrediting_provider: 'not_an_accredited_provider',
+                              accrediting_provider_enrichments: new_accrediting_provider_enrichments)
     end
 
     def update_courses
