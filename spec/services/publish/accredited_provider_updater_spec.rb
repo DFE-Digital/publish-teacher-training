@@ -55,6 +55,24 @@ RSpec.describe Publish::AccreditedProviderUpdater do
         expect(provider.reload.accredited_providers).to include(accredited_provider, new_accredited_provider)
       end
     end
+
+    context 'when Provider is already Accredited by the new Accredited Provider' do
+      let!(:provider) do
+        create(:provider,
+               provider_code:,
+               recruitment_cycle:,
+               accrediting_provider: 'not_an_accredited_provider',
+               accrediting_provider_enrichments: [{ UcasProviderCode: new_accredited_provider_code, Description: '' }])
+      end
+
+      it 'updates the provider' do
+        subject.update_provider
+
+        expect(provider.reload.accrediting_provider).to eq('not_an_accredited_provider')
+        expect(provider.reload.accredited_providers).to include(new_accredited_provider)
+        expect(provider.reload.accrediting_provider_enrichments.count).to eq(1)
+      end
+    end
   end
 
   describe '#update_courses' do
