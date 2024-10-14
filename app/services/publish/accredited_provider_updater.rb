@@ -29,7 +29,7 @@ module Publish
     end
 
     def update_courses
-      courses = Course.where(provider:)
+      courses = provider.courses
       courses.find_each { |course| course.update!(accredited_provider_code: new_accredited_provider.provider_code) }
     end
   end
