@@ -29,10 +29,6 @@ module Find
       'find'
     end
 
-    def teacher_degree_apprenticeship_active?
-      Settings.current_recruitment_cycle_year.to_i > 2024 && FeatureService.enabled?(:teacher_degree_apprenticeship)
-    end
-
     private
 
     def provider

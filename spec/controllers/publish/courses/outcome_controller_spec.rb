@@ -9,7 +9,6 @@ RSpec.describe Publish::Courses::OutcomeController do
   before do
     allow(controller).to receive(:authenticate).and_return(true)
     controller.instance_variable_set(:@current_user, user)
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   describe '#edit' do

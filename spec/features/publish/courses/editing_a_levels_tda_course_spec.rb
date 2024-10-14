@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_current_and_next_cycles: false } do
   scenario 'adding a level requirements' do
     given_i_am_authenticated_as_a_provider_user
-    and_the_tda_feature_flag_is_active
     and_i_have_a_teacher_degree_apprenticeship_course
 
     when_i_visit_the_course_description_tab
@@ -149,10 +148,6 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     )
 
     given_i_am_authenticated(user: @user)
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def and_i_have_a_teacher_degree_apprenticeship_course

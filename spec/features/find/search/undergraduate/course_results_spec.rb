@@ -13,7 +13,6 @@ feature 'Questions and results for undergraduate courses' do
 
   scenario 'with the TDA feature active and searching for secondary courses' do
     given_i_have_courses
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
     and_i_click_continue
@@ -58,7 +57,6 @@ feature 'Questions and results for undergraduate courses' do
 
   scenario 'with the TDA feature active and searching primary courses' do
     given_i_have_courses
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
     and_i_click_continue
@@ -89,8 +87,6 @@ feature 'Questions and results for undergraduate courses' do
 
   scenario 'with the TDA feature active and searching for further education courses' do
     given_i_have_courses
-    and_the_tda_feature_flag_is_active
-
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
     and_i_click_continue
@@ -104,7 +100,6 @@ feature 'Questions and results for undergraduate courses' do
 
   scenario 'with the TDA feature active and searching for postgraduate courses' do
     given_i_have_courses
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_select_the_across_england_radio_button
     and_i_click_continue
@@ -128,7 +123,6 @@ feature 'Questions and results for undergraduate courses' do
 
   scenario 'with the TDA feature active and searching by location' do
     given_i_have_courses_in_different_locations
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_choose_to_find_courses_by_location
     and_i_add_a_location
@@ -167,7 +161,6 @@ feature 'Questions and results for undergraduate courses' do
   end
 
   scenario 'when there are no results' do
-    given_the_tda_feature_flag_is_active
     when_i_visit_the_start_page
     and_i_choose_to_find_courses_by_location
     and_i_add_a_location
@@ -230,10 +223,6 @@ feature 'Questions and results for undergraduate courses' do
         )
       ]
     )
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def when_i_visit_the_start_page
@@ -487,6 +476,4 @@ feature 'Questions and results for undergraduate courses' do
       'Find out more about teacher degree apprenticeship (TDA) courses.'
     )
   end
-
-  alias_method :given_the_tda_feature_flag_is_active, :and_the_tda_feature_flag_is_active
 end

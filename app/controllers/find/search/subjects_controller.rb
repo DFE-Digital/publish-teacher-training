@@ -25,11 +25,7 @@ module Find
       private
 
       def next_page
-        if teacher_degree_apprenticeship_active?
-          find_university_degree_status_path(filter_params[:find_subjects_form])
-        else
-          find_visa_status_path(filter_params[:find_subjects_form])
-        end
+        find_university_degree_status_path(filter_params[:find_subjects_form])
       end
 
       def sanitised_subject_codes

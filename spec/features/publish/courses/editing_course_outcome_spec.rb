@@ -35,7 +35,6 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   context 'TDA course' do
     scenario 'changing the outcome from non TDA to TDA' do
       given_i_am_authenticated_as_a_provider_user
-      and_the_tda_feature_flag_is_active
       and_there_is_a_qts_course_i_want_to_edit
       when_i_visit_the_course_outcome_page
       and_i_choose_undergraduate_degree_with_qts
@@ -47,7 +46,6 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     context 'fee course' do
       scenario 'changing the outcome from TDA to non TDA' do
         given_i_am_authenticated_as_a_provider_user
-        and_the_tda_feature_flag_is_active
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page
         and_the_degree_type_is_undergraduate
@@ -76,7 +74,6 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     context 'salaried course' do
       scenario 'changing the outcome from TDA to non TDA' do
         given_i_am_authenticated_as_a_provider_user
-        and_the_tda_feature_flag_is_active
         and_there_is_a_tda_course_i_want_to_edit
         when_i_visit_the_course_outcome_page
         and_the_degree_type_is_undergraduate
@@ -176,16 +173,8 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
     and_i_update
   end
 
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
-  end
-
   def provider
     @current_user.providers.first
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def and_there_is_a_qts_course_i_want_to_edit
