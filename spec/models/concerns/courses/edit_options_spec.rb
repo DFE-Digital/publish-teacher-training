@@ -99,32 +99,8 @@ describe 'Course with edit options' do
       end
     end
 
-    context 'when TDA is active' do
-      before do
-        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
-      end
-
-      it 'includes undergraduate_degree_with_qts' do
-        expect(course.qualification_options).to include('undergraduate_degree_with_qts')
-      end
-    end
-
-    context 'when TDA is not active' do
-      before do
-        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(false)
-      end
-
-      it 'does not include undergraduate_degree_with_qts' do
-        expect(course.qualification_options).not_to include('undergraduate_degree_with_qts')
-      end
-    end
-
     context 'when the course is non-TDA and published' do
       let(:course) { create(:course, :resulting_in_qts, :published) }
-
-      before do
-        allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
-      end
 
       it 'does not include undergraduate_degree_with_qts' do
         expect(course.qualification_options).not_to include('undergraduate_degree_with_qts')

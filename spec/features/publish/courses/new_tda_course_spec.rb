@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
   scenario 'creating a degree awarding course from school direct provider' do
     given_i_am_authenticated_as_a_school_direct_provider_user
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_secondary_course
@@ -91,7 +90,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   scenario 'when choosing primary course' do
     given_i_am_authenticated_as_a_school_direct_provider_user
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_primary_course
@@ -131,7 +129,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   scenario 'do not show teacher degree apprenticeship for further education' do
     given_i_am_authenticated_as_a_school_direct_provider_user
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_further_education_course
@@ -141,7 +138,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   scenario 'back links when choosing a teacher degree apprenticeship' do
     given_i_am_authenticated_as_a_school_direct_provider_user
-    and_the_tda_feature_flag_is_active
     when_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_primary_course
@@ -244,10 +240,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     given_i_am_authenticated(
       user: @user
     )
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def when_i_visit_the_courses_page
@@ -546,7 +538,6 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
 
   def given_i_am_on_the_check_answers_page_of_a_new_tda_course
     given_i_am_authenticated_as_a_school_direct_provider_user
-    and_the_tda_feature_flag_is_active
     and_i_visit_the_courses_page
     and_i_click_on_add_course
     and_i_choose_a_secondary_course

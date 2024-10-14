@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Course show', { can_edit_current_and_next_cycles: false } do
   scenario 'when viewing a teacher degree apprenticeship course' do
     given_i_am_authenticated_as_a_provider_user
-    and_the_tda_feature_flag_is_active
     and_i_have_a_teacher_degree_apprenticeship_course
 
     when_i_visit_the_course_page
@@ -30,10 +29,6 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     )
 
     given_i_am_authenticated(user: @user)
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def and_i_have_a_teacher_degree_apprenticeship_course

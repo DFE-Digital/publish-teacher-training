@@ -5,7 +5,6 @@ require 'rails_helper'
 feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false } do
   before do
     given_i_am_authenticated_as_a_provider_user
-    and_the_tda_feature_flag_is_active
   end
 
   scenario 'The error links target the correct pages' do
@@ -80,10 +79,6 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     )
 
     given_i_am_authenticated(user: @user)
-  end
-
-  def and_the_tda_feature_flag_is_active
-    allow(Settings.features).to receive(:teacher_degree_apprenticeship).and_return(true)
   end
 
   def and_there_is_an_invalid_tda_course_i_want_to_publish
