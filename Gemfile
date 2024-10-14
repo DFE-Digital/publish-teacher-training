@@ -119,7 +119,7 @@ gem 'skylight'
 
 # govuk styling
 gem 'govuk-components', '~> 5.7.0'
-gem 'govuk_design_system_formbuilder', '~> 5.6'
+gem 'govuk_design_system_formbuilder', '~> 5.7'
 
 # DfE Sign-In
 gem 'omniauth', '~> 2.1'
