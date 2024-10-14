@@ -75,7 +75,7 @@ describe 'Course with edit options' do
   end
 
   describe 'qualifications' do
-    let(:provider) { create(:provider, recruitment_cycle: create(:recruitment_cycle, year: 2025)) }
+    let(:provider) { create(:provider) }
     let(:course) { create(:course, provider:, level: 'primary', subjects: [subjects]) }
 
     context "for a course that's not further education" do

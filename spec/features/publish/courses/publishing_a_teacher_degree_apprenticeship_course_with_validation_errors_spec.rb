@@ -137,7 +137,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       )
     )
@@ -209,7 +209,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code,
         display_errors: true
       )
@@ -281,9 +281,13 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     expect(page.find_link(text: 'Back')[:href]).to eq(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       )
     )
+  end
+
+  def recruitment_cycle_year
+    RecruitmentCycle.current.year
   end
 end

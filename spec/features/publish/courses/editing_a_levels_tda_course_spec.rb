@@ -155,7 +155,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
   end
 
   def when_i_visit_the_course_description_tab
-    publish_provider_courses_show_page.load(provider_code: @provider.provider_code, recruitment_cycle_year: 2025, course_code: @course.course_code)
+    publish_provider_courses_show_page.load(provider_code: @provider.provider_code, recruitment_cycle_year:, course_code: @course.course_code)
   end
 
   def then_i_see_a_levels_row
@@ -180,7 +180,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       )
     )
@@ -190,7 +190,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page.find_link(text: 'Back')[:href]).to eq(
       publish_provider_recruitment_cycle_course_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       )
     )
@@ -217,7 +217,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       ),
       ignore_query: true
@@ -255,7 +255,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_add_a_level_to_a_list_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code
       ),
       ignore_query: true
@@ -441,7 +441,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code,
         uuid: @course.reload.a_level_subject_requirements.first['uuid']
       )
@@ -452,7 +452,7 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_a_levels_remove_a_level_subject_confirmation_path(
         @provider.provider_code,
-        2025,
+        recruitment_cycle_year,
         @course.course_code,
         uuid: @course.reload.a_level_subject_requirements.first['uuid']
       )
@@ -502,5 +502,9 @@ feature 'Adding A levels to a teacher degree apprenticeship course', { can_edit_
         @course.course_code
       )
     )
+  end
+
+  def recruitment_cycle_year
+    RecruitmentCycle.current.year
   end
 end
