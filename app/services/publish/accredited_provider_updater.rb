@@ -15,22 +15,37 @@ module Publish
     end
 
     def update_provider
+      provider.update!(accrediting_provider: 'not_an_accredited_provider',
+                       accrediting_provider_enrichments: new_accrediting_provider_enrichments)
+    end
+
+    def update_courses
+      courses = provider.courses
+      courses.update_all(accredited_provider_code: new_accredited_provider.provider_code)
+    end
+
+    private
+
+    def new_accrediting_provider_enrichments
+      existing_accrediting_provider_enrichments = provider.accrediting_provider_enrichments || []
+
+      return existing_accrediting_provider_enrichments if new_accredited_provider_code_in_enrichments?(
+        existing_accrediting_provider_enrichments
+      )
+
       accredited_provider_enrichment = AccreditingProviderEnrichment.new(
         {
           UcasProviderCode: new_accredited_provider.provider_code,
           Description: ''
         }
       )
-      accrediting_provider_enrichments = provider.accrediting_provider_enrichments || []
-      accrediting_provider_enrichments << accredited_provider_enrichment
 
-      provider.update!(accrediting_provider: 'not_an_accredited_provider',
-                       accrediting_provider_enrichments:)
+      existing_accrediting_provider_enrichments << accredited_provider_enrichment
     end
 
-    def update_courses
-      courses = provider.courses
-      courses.update_all(accredited_provider_code: new_accredited_provider.provider_code)
+    def new_accredited_provider_code_in_enrichments?(accrediting_provider_enrichments)
+      ucas_provider_code = new_accredited_provider.provider_code
+      accrediting_provider_enrichments.map(&:UcasProviderCode).include?(ucas_provider_code)
     end
   end
 end
