@@ -229,7 +229,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def and_the_back_link_points_to_the_outcome_page
     expect(URI.parse(find_link('Back')[:href]).path).to eq(outcome_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year: 2025,
+                                                             recruitment_cycle_year:,
                                                              code: course.course_code
                                                            ))
   end
@@ -237,7 +237,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def and_the_back_link_points_to_the_funding_type_page
     expect(URI.parse(find_link('Back')[:href]).path).to eq(funding_type_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year: 2025,
+                                                             recruitment_cycle_year:,
                                                              code: course.course_code
                                                            ))
   end
@@ -245,7 +245,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def and_the_back_link_points_to_the_study_mode_page
     expect(URI.parse(find_link('Back')[:href]).path).to eq(full_part_time_publish_provider_recruitment_cycle_course_path(
                                                              provider_code: provider.provider_code,
-                                                             recruitment_cycle_year: 2025,
+                                                             recruitment_cycle_year:,
                                                              code: course.course_code
                                                            ))
   end
@@ -257,7 +257,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def then_i_am_on_the_study_mode_page
     expect(page).to have_current_path(full_part_time_publish_provider_recruitment_cycle_course_path(
                                         provider_code: provider.provider_code,
-                                        recruitment_cycle_year: 2025,
+                                        recruitment_cycle_year:,
                                         code: course.course_code,
                                         previous_tda_course: true
                                       ))
@@ -266,10 +266,14 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   def then_i_am_on_the_funding_type_page
     expect(page).to have_current_path(funding_type_publish_provider_recruitment_cycle_course_path(
                                         provider_code: provider.provider_code,
-                                        recruitment_cycle_year: 2025,
+                                        recruitment_cycle_year:,
                                         code: course.course_code,
                                         previous_tda_course: true
                                       ))
+  end
+
+  def recruitment_cycle_year
+    RecruitmentCycle.current.year
   end
 
   alias_method :and_i_choose_to_sponsor_a_skilled_worker_visa, :and_i_choose_to_sponsor_a_student_visa
