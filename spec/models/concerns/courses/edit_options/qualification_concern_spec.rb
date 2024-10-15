@@ -24,7 +24,7 @@ describe Courses::EditOptions::QualificationConcern do
     let(:level_value) { 'primary' }
 
     it 'returns only QTS options for users to choose between' do
-      expect(example_model.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts])
+      expect(example_model.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts undergraduate_degree_with_qts])
       expect(example_model.qualification_options).to all(include('qts'))
     end
   end
@@ -37,14 +37,6 @@ describe Courses::EditOptions::QualificationConcern do
       example_model.qualification_options.each do |q|
         expect(q).not_to include('qts')
       end
-    end
-  end
-
-  context 'for a teacher degree apprenticeship course' do
-    let(:level_value) { 'secondary' }
-
-    it 'returns a teacher degree apprenticeship' do
-      expect(example_model.qualification_options).to eq(%w[qts pgce_with_qts pgde_with_qts undergraduate_degree_with_qts])
     end
   end
 end
