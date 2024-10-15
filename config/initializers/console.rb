@@ -3,7 +3,13 @@
 module PublishConsole
   def start
     show_warning_message_about_environments
+    set_attributes_for_inspect
     super
+  end
+
+  # https://api.rubyonrails.org/classes/ActiveRecord/Core.html#method-i-inspect
+  def set_attributes_for_inspect
+    ActiveRecord::Base.attributes_for_inspect = :all unless Rails.env.production_aks?
   end
 
   def show_warning_message_about_environments
