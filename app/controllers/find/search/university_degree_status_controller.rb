@@ -27,13 +27,6 @@ module Find
 
       def back_path
         find_subjects_path(backlink_query_parameters)
-
-        # investigate
-#        if params[:age_group] == 'further_education' || (params[:find_visa_status_form] && params[:find_visa_status_form][:age_group] == 'further_education')
-#          find_age_groups_path(backlink_query_parameters)
-#        else
-#          find_subjects_path(backlink_query_parameters)
-#        end
       end
       helper_method :back_path
     end

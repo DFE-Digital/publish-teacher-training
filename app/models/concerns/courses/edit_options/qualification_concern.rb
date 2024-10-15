@@ -21,7 +21,6 @@ module Courses
           qts_list
         end
 
-        # investigate
         def non_tda_published?
           !teacher_degree_apprenticeship? && is_published?
         end

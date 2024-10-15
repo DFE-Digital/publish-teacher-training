@@ -55,7 +55,11 @@ module Find
       def form_name = :find_visa_status_form
 
       def back_path
-        find_university_degree_status_path(backlink_query_parameters)
+        if params[:age_group] == 'further_education' || (params[:find_visa_status_form] && params[:find_visa_status_form][:age_group] == 'further_education')
+          find_age_groups_path(backlink_query_parameters)
+        else
+          find_university_degree_status_path(backlink_query_parameters)
+        end
       end
       helper_method :back_path
     end
