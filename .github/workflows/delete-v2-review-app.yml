@@ -68,7 +68,7 @@ jobs:
         if: env.TF_STATE_EXISTS == 'true'
         run: make ci review_aks destroy
         env:
-          APP_NAME: ${{ env.PR_NUMBER }}
+          PR_NUMBER: ${{ env.PR_NUMBER }}
 
       - name: Delete tf state file
         if: env.TF_STATE_EXISTS == 'true'

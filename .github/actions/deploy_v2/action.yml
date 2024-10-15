@@ -38,9 +38,9 @@ runs:
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
 
         if [ -n "${{ inputs.pr-number }}" ]; then
-          APP_NAME=${{ inputs.pr-number }}
-          echo "APP_NAME=${APP_NAME}" >> $GITHUB_ENV
-          echo "deploy_url=https://publish-review-${APP_NAME}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
+          PR_NUMBER=${{ inputs.pr-number }}
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+          echo "deploy_url=https://publish-review-${PR_NUMBER}.test.teacherservices.cloud" >> $GITHUB_OUTPUT
           echo "DEPLOY_REF=${{ github.head_ref }}" >> $GITHUB_ENV
         else
           app_environment=$(jq -r '.app_environment' ${tf_vars_file})
