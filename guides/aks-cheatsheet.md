@@ -51,7 +51,7 @@ Get access credentials for a managed Kubernetes cluster (passing the
 environment name):
 
 ```
-$ make production_aks get-cluster-credentials
+$ make production get-cluster-credentials
 ```
 
 ## Show namespaces
@@ -101,8 +101,8 @@ $ kubetail -n bat-qa publish-qa-*
 You can also get logs from a deployed app using make with aks-logs:
 
 ```
-$ make review_aks aks-logs APP_NAME=1234
-$ make qa_aks aks-logs
+$ make review logs PR_NUMBER=1234
+$ make qa logs
 ```
 
 ## Open a shell
@@ -121,15 +121,15 @@ $ kubectl -n bat-qa exec -ti publish-qa-some-number -- sh
 You can run a rails console on a deployed app using make with aks-console:
 
 ```
-$ make review_aks aks-console APP_NAME=1234
-$ make qa_aks aks-console
+$ make review console PR_NUMBER=1234
+$ make qa console
 ```
 
 You can connect using ssh on a deployed app using make with aks-ssh or aks-worker-ssh:
 
 ```
-$ make review_aks aks-ssh APP_NAME=1234
-$ make qa_aks aks-worker-ssh
+$ make review ssh PR_NUMBER=1234
+$ make qa worker-ssh
 ```
 
 ## Show CPU / Memory Usage
