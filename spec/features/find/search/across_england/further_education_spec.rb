@@ -18,6 +18,7 @@ feature 'Searching across England' do
     when_i_select_the_further_education_radio_button
     and_i_click_continue
     then_i_should_see_the_visa_status_page
+    and_the_back_link_points_to_age_group_page
 
     when_i_select_my_visa_status
     and_i_click_find_courses
@@ -81,5 +82,21 @@ feature 'Searching across England' do
     find_results_page.courses.first.then do |first_course|
       expect(first_course.course_name.text).to include(@further_education_course.name)
     end
+  end
+
+  def and_the_back_link_points_to_age_group_page
+    further_education_subject_code = 41
+    expect(page.find_link(text: 'Back')[:href]).to eq(
+      find_age_groups_path(
+        age_group: 'further_education',
+        applications_open: true,
+        has_vacancies: true,
+        l: 2,
+        qualification: ['qts', 'pgce_with_qts', 'pgce pgde'],
+        send_courses: false,
+        study_type: %w[full_time part_time],
+        subjects: [further_education_subject_code]
+      )
+    )
   end
 end
