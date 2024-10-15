@@ -160,11 +160,11 @@ GEM
     bindata (2.5.0)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    blazer (3.0.4)
+    blazer (3.1.0)
       activerecord (>= 6.1)
       chartkick (>= 5)
       csv
-      railties (>= 6.1)
+      railties (>= 7)
       safely_block (>= 0.4)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -532,7 +532,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.9)
+    rack (2.2.10)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-oauth2 (2.2.1)
@@ -772,7 +772,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.0)
 
 PLATFORMS
   arm64-darwin-20
