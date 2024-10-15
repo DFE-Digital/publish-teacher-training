@@ -29,7 +29,7 @@ RSpec.describe ALevelRowComponent do
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.consider_pending_a_level.row.true'))
+    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/consider_pending_a_level.row.true'))
   end
 
   it 'renders the pending a level summary content for non-acceptance when course does not accept pending a levels' do
@@ -37,7 +37,7 @@ RSpec.describe ALevelRowComponent do
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.consider_pending_a_level.row.false'))
+    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/consider_pending_a_level.row.false'))
   end
 
   it 'renders the a level equivalency summary content for acceptance when course accepts a level equivalencies' do
@@ -45,7 +45,7 @@ RSpec.describe ALevelRowComponent do
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_equivalencies.row.true'))
+    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/a_level_equivalencies.row.true'))
   end
 
   it 'renders the a level equivalency summary content for non-acceptance when course does not accept a level equivalencies' do
@@ -53,7 +53,7 @@ RSpec.describe ALevelRowComponent do
     component = described_class.new(course: course.decorate)
     rendered_component = render_inline(component)
 
-    expect(rendered_component.text).to include(I18n.t('course.a_level_equivalencies.row.false'))
+    expect(rendered_component.text).to include(I18n.t('course.a_level_steps/a_level_equivalencies.row.false'))
   end
 
   it 'renders the additional a level equivalencies content when present' do
@@ -123,7 +123,7 @@ RSpec.describe ALevelRowComponent do
       let(:attributes) { {  accept_a_level_equivalency: nil } }
 
       it 'renders the error message for accept_a_level_equivalency' do
-        expect(rendered_component).to have_text(I18n.t("course.#{component.wizard_step(:accept_a_level_equivalency)}.heading"))
+        expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:accept_a_level_equivalency)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:accept_a_level_equivalency].first,
           href: publish_provider_recruitment_cycle_course_a_levels_a_level_equivalencies_path(
@@ -140,7 +140,7 @@ RSpec.describe ALevelRowComponent do
       let(:attributes) { { a_level_subject_requirements: [] } }
 
       it 'renders the error message for a_level_subject_requirements' do
-        expect(rendered_component).to have_text(I18n.t("course.#{component.wizard_step(:a_level_subject_requirements)}.heading"))
+        expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:a_level_subject_requirements)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:a_level_subject_requirements].first,
           href: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
@@ -157,7 +157,7 @@ RSpec.describe ALevelRowComponent do
       let(:attributes) { { accept_pending_a_level: nil } }
 
       it 'renders the error message for accept_pending_a_level' do
-        expect(rendered_component).to have_text(I18n.t("course.#{component.wizard_step(:accept_pending_a_level)}.heading"))
+        expect(rendered_component).to have_text(I18n.t("course.a_level_steps/#{component.wizard_step(:accept_pending_a_level)}.heading"))
         expect(rendered_component).to have_link(
           component.errors[:accept_pending_a_level].first,
           href: publish_provider_recruitment_cycle_course_a_levels_consider_pending_a_level_path(

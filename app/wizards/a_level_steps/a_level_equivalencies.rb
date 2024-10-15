@@ -29,7 +29,7 @@ module ALevelSteps
       excess_words = word_count - MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS
 
       I18n.t(
-        'activemodel.errors.models.a_level_equivalencies.attributes.additional_a_level_equivalencies.too_long',
+        'activemodel.errors.models.a_level_steps/a_level_equivalencies.attributes.additional_a_level_equivalencies.too_long',
         maximum: MAXIMUM_ADDITIONAL_A_LEVEL_EQUIVALENCY_WORDS,
         count: excess_words
       )
