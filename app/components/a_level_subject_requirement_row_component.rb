@@ -77,9 +77,9 @@ class ALevelSubjectRequirementRowComponent < ViewComponent::Base
 
   def grade_hint
     if minimum_grade?
-      "#{I18n.t('course.a_level_equivalencies.or_above')} #{I18n.t('course.a_level_equivalencies.suffix')}"
+      "#{I18n.t('course.a_level_steps/a_level_equivalencies.or_above')} #{I18n.t('course.a_level_steps/a_level_equivalencies.suffix')}"
     else
-      I18n.t('course.a_level_equivalencies.suffix')
+      I18n.t('course.a_level_steps/a_level_equivalencies.suffix')
     end
   end
 

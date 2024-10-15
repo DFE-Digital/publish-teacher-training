@@ -321,7 +321,7 @@ en:
     max_grade: "Grade A*"
   helpers:
     legend:
-      what_a_level_is_required:
+      a_level_steps/what_a_level_is_required:
         subject: Subject
       add_a_level_to_a_list:
         add_another_a_level: Do you want to add another A level or equivalent qualification?
@@ -330,7 +330,6 @@ en:
     label:
       what_a_level_is_required:
         other_subject: Subjects
-        other_subject_prompt: Choose subject
         minimum_grade_required: Minimum grade required (optional)
         subject_options:
           any_subject: Any subject
@@ -345,6 +344,8 @@ en:
           any_modern_foreign_language: Any %{count_in_words} modern foreign languages
           any_humanities_subject: Any %{count_in_words} humanities subjects
           any_science_subject: Any %{count_in_words} science subjects
+      a_level_steps/what_a_level_is_required:
+        other_subject_prompt: Choose subject
       add_a_level_to_a_list:
         add_another_a_level_options:
           "yes": "Yes"
@@ -371,20 +372,20 @@ en:
       open: "Course opened"
       closed: "Course closed"
     add_course: "Add course"
-    what_a_level_is_required:
+    a_level_steps/what_a_level_is_required:
       heading: What A level or equivalent qualification is required?
       success_message: You have added a required A level or equivalent qualification
-    add_a_level_to_a_list:
+    a_level_steps/add_a_level_to_a_list:
       heading: Required A levels or equivalent qualifications
-    remove_a_level_subject_confirmation:
+    a_level_steps/remove_a_level_subject_confirmation:
       heading: Are you sure you want to remove %{subject}?
-    consider_pending_a_level:
+    a_level_steps/consider_pending_a_level:
       heading: Will you consider candidates with pending A levels?
       hint: These are candidates who expect to have the qualification before the beginning of the course. You can give them an offer, on the condition that they pass their A levels.
       row:
         "true": "Candidates with pending A levels will be considered."
         "false": "Candidates with pending A levels will not be considered."
-    a_level_equivalencies:
+    a_level_steps/a_level_equivalencies:
       heading: Will you consider candidates who need to take an equivalency test for their A levels?
       submit: Update A levels
       hint: For example, if you offer the tests or ask candidates to use a third party, and if there are any costs to pay
@@ -934,7 +935,7 @@ en:
             description:
               blank: Enter details about the accredited provider
               too_long: Description about the accredited provider must be 100 words or fewer
-        what_a_level_is_required:
+        a_level_steps/what_a_level_is_required:
           attributes:
             subject:
               blank: Select a subject
@@ -944,19 +945,19 @@ en:
               chars_count:
                 one: Grade must be %{maximum} characters or less. You have %{count} character too many.
                 other: Grade must be %{maximum} characters or less. You have %{count} characters too many.
-        add_a_level_to_a_list:
+        a_level_steps/add_a_level_to_a_list:
           attributes:
             add_another_a_level:
               blank: Select if you want to add another A level or equivalent qualification
-        remove_a_level_subject_confirmation:
+        a_level_steps/remove_a_level_subject_confirmation:
           attributes:
             confirmation:
               blank: Select if you want to remove %{subject}
-        consider_pending_a_level:
+        a_level_steps/consider_pending_a_level:
           attributes:
             pending_a_level:
               blank: Select if you will consider candidates with pending A levels
-        a_level_equivalencies:
+        a_level_steps/a_level_equivalencies:
           attributes:
             accept_a_level_equivalency:
               blank: Select if you will consider candidates who need to take equivalency tests

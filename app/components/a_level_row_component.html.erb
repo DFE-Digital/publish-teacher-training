@@ -2,7 +2,7 @@
   <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--error") do %>
     <% a_level_errors.each do |a_level_error| %>
       <p class="govuk-heading-s app-inset-text__title">
-        <%= t("course.#{wizard_step(a_level_error)}.heading") %>
+        <%= t("course.a_level_steps/#{wizard_step(a_level_error)}.heading") %>
       </p>
       <p class="govuk-body">
       <%= govuk_link_to(
