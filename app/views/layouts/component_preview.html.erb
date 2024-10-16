@@ -29,6 +29,12 @@
     ) %>
 
     <div class="govuk-width-container">
+
+      <% content_for :before_content do %>
+        <%= govuk_back_link_to(publish_support_view_component_previews_path) unless content_for?(:before_content) %>
+      <% end %>
+
+      <%= content_for :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <%= yield %>
       </main>
