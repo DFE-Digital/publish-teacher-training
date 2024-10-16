@@ -79,7 +79,7 @@ module Find
                               sites: [Site.new, Site.new],
                               funding: 'salary',
                               study_sites: [Site.new, Site.new],
-                              provider: Provider.new(provider_code: 'DFE', selectable_school: false, recruitment_cycle: FactoryBot.build(:recruitment_cycle, year: 2025))).decorate
+                              provider: Provider.new(provider_code: 'DFE', selectable_school: false, recruitment_cycle: FactoryBot.build(:recruitment_cycle))).decorate
           render Find::Courses::TrainingLocations::View.new(course:)
         end
 
@@ -88,7 +88,7 @@ module Find
                               sites: [Site.new, Site.new],
                               funding: 'salary',
                               study_sites: [Site.new, Site.new],
-                              provider: Provider.new(provider_code: 'DFE', selectable_school: true, recruitment_cycle: FactoryBot.build(:recruitment_cycle, year: 2025))).decorate
+                              provider: Provider.new(provider_code: 'DFE', selectable_school: true, recruitment_cycle: FactoryBot.build(:recruitment_cycle))).decorate
           render Find::Courses::TrainingLocations::View.new(course:)
         end
       end
