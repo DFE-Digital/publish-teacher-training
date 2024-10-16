@@ -64,7 +64,8 @@ install-terrafile: ## Install terrafile to manage terraform modules
 # Set "USE_DB_SETUP_COMMAND" to true for first time deployments, otherwise false.
 review_aks: ## make review_aks deploy PR_NUMBER=2222 USE_DB_SETUP_COMMAND=true
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a name for your review app))
-	$(eval export TF_VAR_use_db_setup_command=$USE_DB_SETUP_COMMAND)
+	$(if $(USE_DB_SETUP_COMMAND), , $(error Missing environment variable "USE_DB_SETUP_COMMAND", Set to true for first time deployments, otherwise false.))
+	$(eval export TF_VAR_use_db_setup_command=$(USE_DB_SETUP_COMMAND))
 	$(eval include global_config/review_aks.sh)
 	$(eval export TF_VAR_app_name=$(PR_NUMBER))
 	$(eval backend_key=-backend-config=key=pr-$(PR_NUMBER).tfstate)
@@ -74,8 +75,9 @@ review_aks: ## make review_aks deploy PR_NUMBER=2222 USE_DB_SETUP_COMMAND=true
 # Set "USE_DB_SETUP_COMMAND" to true for first time deployments, otherwise false.
 dv_review_aks: ## make dv_review_aks deploy PR_NUMBER=2222 CLUSTER=cluster1 USE_DB_SETUP_COMMAND=true
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a pr number for your review app))
+	$(if $(USE_DB_SETUP_COMMAND), , $(error Missing environment variable "USE_DB_SETUP_COMMAND", Set to true for first time deployments, otherwise false.))
 	$(if $(CLUSTER), , $(error Missing environment variable "CLUSTER", Please specify a dev cluster name (eg 'cluster1')))
-	$(eval export TF_VAR_use_db_setup_command=$USE_DB_SETUP_COMMAND)
+	$(eval export TF_VAR_use_db_setup_command=$(USE_DB_SETUP_COMMAND))
 	$(eval include global_config/dv_review_aks.sh)
 	$(eval backend_key=-backend-config=key=$(PR_NUMBER).tfstate)
 	$(eval export TF_VAR_cluster=$(CLUSTER))
