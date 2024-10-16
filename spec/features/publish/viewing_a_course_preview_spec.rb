@@ -134,10 +134,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  scenario 'user sees no school placements in 2025' do
+  scenario 'user sees no school placements' do
     create(:recruitment_cycle, :next)
-    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    Timecop.travel(Find::CycleTimetable.find_opens) do
       given_i_am_authenticated(user: user_with_fee_based_course)
       provider.update(selectable_school: false)
       when_i_visit_the_publish_course_preview_page
@@ -145,9 +144,8 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
     end
   end
 
-  scenario 'user views school placements' do
-    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+  scenario 'user sees school placements' do
+    Timecop.travel(Find::CycleTimetable.find_opens) do
       given_i_am_authenticated(user: user_with_fee_based_course)
       when_i_visit_the_publish_course_preview_page
       and_i_click_link_or_button('View list of school placements')
