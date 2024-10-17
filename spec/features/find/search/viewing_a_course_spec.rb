@@ -380,6 +380,9 @@ feature 'Viewing a findable course' do
   alias_method :and_i_click, :when_i_click
 
   def then_i_should_be_on_the_school_placements_page
+    expect(page).to have_content(
+      'You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.'
+    )
     @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
       expect(find_course_show_page).to have_content(smart_quotes(site.decorate.full_address))
     end
