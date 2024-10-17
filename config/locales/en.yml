@@ -34,6 +34,14 @@ en:
         warning: You can’t pick which schools you will be in.
         will_place_you: '%{provider_name} will place you in different schools you can travel to during your training.'
         schools_to_be_placed: 'The schools you could be placed in are:'
+      school_placements_advice:
+        view:
+          heading: How school placements work
+          content:
+            find_out_more_about_school_placements: Find out more about how school placements work
+            selectable_school: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
+            fee: The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
+            salary: You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.
   markdown_formatting:
     summary_text: Help formatting your text
     title: How to format your text
@@ -556,24 +564,6 @@ en:
             </ul>
           where_you_will_train: Where you will train
           summary_text: See what we include in this section
-          university_guidance_html:
-            <p class="govuk-body">
-              You will be placed in schools for most of your course. Your school placements will be within commuting
-              distance.
-            </p>
-            <p class="govuk-body">
-              You cannot pick which schools you want to be in, but your university will try to take your journey time
-              into consideration.
-            </p>
-            <p class="govuk-body">
-              Universities can work with over 100 potential placement schools. Most will be within 10 miles of the
-              university, but sometimes they can cover a wider area, especially outside of cities.
-            </p>
-          scitt_guidance_html:
-            <p class="govuk-body">
-              You will be placed in different schools during your training. You cannott pick which schools you want to
-              be in, but your training provider will place you in schools you can travel to.
-            </p>
       about_course:
         edit:
           about_this_course: About this course

@@ -26,20 +26,31 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     then_i_see_an_error_message_about_entering_data
   end
 
-  scenario 'I can view additional guidance for this section as a university provider' do
-    given_i_am_authenticated_as_a_university_provider_user
+  scenario 'I can view additional guidance for this section when provider has selectable school toggle active' do
+    given_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
+    and_school_placement_is_selectable
     when_i_visit_the_publish_course_information_edit_page
     and_i_click_to_see_more_guidance
-    then_i_see_the_message_for_university_users
+    then_i_see_selectable_school_placement_guidance
   end
 
-  scenario 'I can view additional guidance for this section as a scitt provider' do
-    given_i_am_authenticated_as_a_scitt_provider_user
-    and_there_is_a_scitt_course_i_want_to_edit
+  scenario 'I can view additional guidance for this section when course is salaried' do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_salaried_course_i_want_to_edit
+    and_school_placement_is_not_selectable
     when_i_visit_the_publish_course_information_edit_page
     and_i_click_to_see_more_guidance
-    then_i_see_the_message_for_scitt_users
+    then_i_see_salaried_course_school_placement_guidance
+  end
+
+  scenario 'I can view additional guidance for this section when course is fee based' do
+    given_i_am_authenticated_as_a_provider_user
+    and_there_is_a_fee_based_course_i_want_to_edit
+    and_school_placement_is_not_selectable
+    when_i_visit_the_publish_course_information_edit_page
+    and_i_click_to_see_more_guidance
+    then_i_see_fee_based_course_school_placement_guidance
   end
 
   private
@@ -55,35 +66,28 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
     expect(page).to have_content 'How to create bullet points'
   end
 
-  def then_i_see_the_message_for_university_users
-    expect(page).to have_content 'Where you will train'
-    expect(page).to have_content 'Universities can work with over 100 potential placement schools.'
-  end
-
-  def then_i_see_the_message_for_scitt_users
-    expect(page).to have_content 'Where you will train'
-    expect(page).to have_no_content 'Universities can work with over 100 potential placement schools.'
-    expect(page).to have_content 'You will be placed in different schools during your training.'
-  end
-
-  def given_i_am_authenticated_as_a_university_provider_user
-    given_i_am_authenticated(user: create(:user, :with_university_provider))
-  end
-
-  def given_i_am_authenticated_as_a_scitt_provider_user
-    given_i_am_authenticated(user: create(:user, :with_scitt_provider))
-  end
-
   def given_i_am_authenticated_as_a_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
   end
 
-  def and_there_is_a_scitt_course_i_want_to_edit
-    given_a_course_exists(program_type: :scitt_programme, enrichments: [build(:course_enrichment, :published)])
+  def and_there_is_a_course_i_want_to_edit
+    given_a_course_exists(:published)
   end
 
-  def and_there_is_a_course_i_want_to_edit
-    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
+  def and_there_is_a_fee_based_course_i_want_to_edit
+    given_a_course_exists(:fee, :published)
+  end
+
+  def and_there_is_a_salaried_course_i_want_to_edit
+    given_a_course_exists(:salary, :published)
+  end
+
+  def and_school_placement_is_selectable
+    @course.provider.update!(selectable_school: true)
+  end
+
+  def and_school_placement_is_not_selectable
+    @course.provider.update!(selectable_school: false)
   end
 
   def then_i_see_the_reuse_content
@@ -134,6 +138,27 @@ feature 'Editing how placements work', { can_edit_current_and_next_cycles: false
 
   def then_i_see_an_error_message_about_entering_data
     expect(page).to have_content('Enter details about how placements work').twice
+  end
+
+  def then_i_see_selectable_school_placement_guidance
+    expect(page).to have_content(
+      'The training provider will contact you to discuss your choice to help them select a location that suits you.'
+    )
+    expect(page).to have_content('Find out more about how school placements work')
+  end
+
+  def then_i_see_salaried_course_school_placement_guidance
+    expect(page).to have_content(
+      'You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.'
+    )
+    expect(page).to have_content('Find out more about how school placements work')
+  end
+
+  def then_i_see_fee_based_course_school_placement_guidance
+    expect(page).to have_content(
+      'The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.'
+    )
+    expect(page).to have_content('Find out more about how school placements work')
   end
 
   def provider
