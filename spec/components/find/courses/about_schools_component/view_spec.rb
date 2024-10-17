@@ -5,21 +5,6 @@ require 'rails_helper'
 describe Find::Courses::AboutSchoolsComponent::View, type: :component do
   include Rails.application.routes.url_helpers
 
-  context 'valid program_type' do
-    it 'renders the component' do
-      %w[higher_education_programme scitt_programme].each do |program_type|
-        provider = build(:provider)
-        course = build(:course,
-                       provider:,
-                       program_type:).decorate
-
-        result = render_inline(described_class.new(course))
-
-        expect(result.text).to include('Where you will train')
-      end
-    end
-  end
-
   context 'invalid program type' do
     it 'renders the component' do
       provider = build(:provider)
@@ -33,12 +18,19 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
   context 'salaried course' do
     it 'renders the correct content' do
-      course = build(:course,
-                     funding: 'salary').decorate
+      provider = build(:provider, selectable_school: false)
+      course = build(
+        :course,
+        funding: 'salary',
+        provider:
+      ).decorate
 
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include('You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.')
+      expect(result).to have_css('.app-advice__title', text: 'How school placements work')
+      expect(result.text).to include('You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.')
+      expect(result.text).to include('Find out more about how school placements work')
     end
   end
 
@@ -55,12 +47,33 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
 
   context 'fee paying course' do
     it 'renders the correct content' do
-      course = build(:course,
-                     funding: 'fee').decorate
+      provider = build(:provider, selectable_school: false)
+      course = build(
+        :course,
+        funding: 'fee',
+        provider:
+      ).decorate
 
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include('You should get 120 days of classroom experience in schools. You will also spend time at a location where you will study.')
+      expect(result).to have_css('.app-advice__title', text: 'How school placements work')
+      expect(result.text).to include('Find out more about how school placements work')
+      expect(result.text).to include('The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.')
+    end
+  end
+
+  context 'when the course allows selecting a placement location' do
+    it 'displays the correct placement message' do
+      provider = build(:provider, selectable_school: true)
+      course = build(:course, provider:).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.text).not_to include('Advice from Get Into Teaching')
+      expect(result.text).to include('You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen.')
+      expect(result.text).to include('Find out more about how school placements work')
+      expect(result.text).to include('The training provider will contact you to discuss your choice to help them select a location that suits you.')
     end
   end
 
@@ -75,93 +88,6 @@ describe Find::Courses::AboutSchoolsComponent::View, type: :component do
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include('Enter details about how placements work')
-    end
-  end
-
-  context 'higher_education_programme' do
-    it 'renders the HEI where will you train advice box' do
-      provider = build(:provider)
-
-      course = build(:course,
-                     provider:,
-                     program_type: 'higher_education_programme').decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include('Universities can work with over 100 potential placement schools.')
-    end
-
-    context 'Provider is The Bedfordshire Schools Training Partnership' do
-      it 'does not render the HEI where will you train advice box' do
-        provider = build(
-          :provider,
-          provider_name: 'The Bedfordshire Schools Training Partnership',
-          provider_code: 'B31',
-          provider_type: 'scitt',
-          website: 'https://scitt.org',
-          address1: '1 Long Rd',
-          postcode: 'E1 ABC'
-        )
-
-        course = build(:course,
-                       provider:,
-                       program_type: 'higher_education_programme').decorate
-
-        result = render_inline(described_class.new(course))
-
-        expect(result.text).not_to include('Universities can work with over 100 potential placement schools. Most will be within 10 miles of the university')
-      end
-    end
-  end
-
-  context 'scitt_programme' do
-    it 'renders the SCITT where will you train advice box' do
-      provider = build(:provider)
-
-      course = build(:course,
-                     provider:,
-                     program_type: 'scitt_programme').decorate
-
-      result = render_inline(described_class.new(course))
-
-      expect(result.text).to include('You’ll be placed in different schools during your training.')
-    end
-
-    context 'Provider is Educate Teacher Training' do
-      it 'does not render the SCITT where will you train advice box' do
-        provider = build(
-          :provider,
-          provider_name: 'Educate Teacher Training',
-          provider_code: 'E65',
-          provider_type: 'scitt',
-          website: 'https://scitt.org',
-          address1: '1 Long Rd',
-          postcode: 'E1 ABC'
-        )
-
-        course = build(:course,
-                       provider:,
-                       program_type: 'scitt_programme').decorate
-
-        result = render_inline(described_class.new(course))
-
-        expect(result.text).not_to include('You’ll be placed in different schools during your training. You can’t pick which schools you want to be in')
-      end
-    end
-  end
-
-  %w[pg_teaching_apprenticeship school_direct_training_programme school_direct_salaried_training_programme].each do |programme_type|
-    context programme_type.to_s do
-      it 'does not render the where will you train advice box' do
-        provider = build(:provider)
-
-        course = build(:course,
-                       provider:).decorate
-
-        result = render_inline(described_class.new(course))
-
-        expect(result.text).not_to include('Advice from Get Into Teaching Where you will train')
-      end
     end
   end
 end
