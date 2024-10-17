@@ -2,7 +2,7 @@
 
 module Find
   class PlacementsController < ApplicationController
-    before_action -> { render_not_found if provider.nil? }
+    before_action -> { render_not_found if provider.nil? || provider.selectable_school.blank? }
 
     def index
       @course = provider.courses.includes(

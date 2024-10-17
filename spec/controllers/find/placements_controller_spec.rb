@@ -20,6 +20,20 @@ module Find
         end
       end
 
+      context 'when provider sets school_placement as not selectable' do
+        it 'renders the not found page' do
+          provider = create(:provider, selectable_school: false)
+          course = create(:course, :published, provider:)
+
+          get :index, params: {
+            provider_code: provider.provider_code,
+            course_code: course.course_code
+          }
+
+          expect(response).to render_template('errors/not_found')
+        end
+      end
+
       context 'when course is not published' do
         it 'renders the not found page' do
           provider = create(:provider)
@@ -31,6 +45,20 @@ module Find
           }
 
           expect(response).to render_template('errors/not_found')
+        end
+      end
+
+      context 'when course is published and school placement is selectable' do
+        it 'respond successfully' do
+          provider = create(:provider, selectable_school: true)
+          course = create(:course, :published, provider:)
+
+          get :index, params: {
+            provider_code: provider.provider_code,
+            course_code: course.course_code
+          }
+
+          expect(response).to have_http_status(:success)
         end
       end
     end
