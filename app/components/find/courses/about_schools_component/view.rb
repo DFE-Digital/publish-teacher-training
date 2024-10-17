@@ -41,12 +41,6 @@ module Find
             find_placements_path(course.provider_code, course.course_code)
           end
         end
-
-        private
-
-        def course_information_config
-          @course_information_config ||= Configs::CourseInformation.new(course)
-        end
       end
     end
   end

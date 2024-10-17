@@ -27,7 +27,7 @@ module Find
         private
 
         def build_course(funding:, selectable_school:)
-          course = Course.new(
+          Course.new(
             course_code: 'FIND',
             provider: Provider.new(provider_code: 'DFE', recruitment_cycle: RecruitmentCycle.current, selectable_school:),
             funding:,
