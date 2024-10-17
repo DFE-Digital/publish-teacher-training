@@ -178,6 +178,13 @@ en:
         view:
           heading: Where you will train
           work_with_schools: We work with the following schools to provide your school placements.
+          advice:
+            heading: How school placements work
+            content:
+              find_out_more_about_school_placements: Find out more about how school placements work
+              selectable_school: You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.
+              fee: The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
+              salary: You usually cannot choose your employing school. The training provider will contact you and discuss your situation to help them select a location you can travel to.
       placements:
         heading: School placements at %{provider_name}
         back: Back to %{course_name} (%{course_code})
@@ -274,6 +281,7 @@ en:
       url_subject_knowledge_enhancement: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement
       url_events: https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_start&utm_content=Autumn23events
       url_train_to_teach_as_international_candidate: https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student
+      url_school_placements: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements
       url_fund_your_training: https://getintoteaching.education.gov.uk/funding-and-support
       url_visas_for_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees
     qualification:

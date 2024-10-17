@@ -1,6 +1,8 @@
 <aside class="app-advice">
   <h3 class="app-advice__title">
-    <span class="app-advice__caption">Advice from <%= t("service_name.get_into_teaching") %></span>
+    <% if show_caption? %>
+      <span class="app-advice__caption">Advice from <%= t("service_name.get_into_teaching") %></span>
+    <% end %>
     <%= title %>
   </h3>
   <div class="app-advice__body">
