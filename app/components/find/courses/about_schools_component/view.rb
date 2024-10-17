@@ -26,10 +26,6 @@ module Find
             site_statuses.map(&:site).uniq.many? || preview?(params)
         end
 
-        def show_school_placements_advice?
-          course.salaried? || course.fee? || course.provider.selectable_school?
-        end
-
         def placements_url
           if preview
             placements_publish_provider_recruitment_cycle_course_path(
