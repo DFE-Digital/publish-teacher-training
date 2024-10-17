@@ -9,11 +9,6 @@ module Shared
         def initialize(course)
           super
           @course = course
-          # @course_information_config = Configs::CourseInformation.new(course)
-        end
-
-        def render?
-          # @course_information_config.show_placement_guidance?(:program_type)
         end
       end
     end
