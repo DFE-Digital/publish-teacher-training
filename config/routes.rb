@@ -23,4 +23,8 @@ Rails.application.routes.draw do
     draw(:support)
     draw(:api)
   end
+
+  direct :publish_support_view_component_previews do
+    Rails.application.routes.url_helpers.root_url.chomp('/') + Rails.application.config.view_component.preview_route
+  end
 end
