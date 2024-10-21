@@ -22,6 +22,21 @@ RSpec.describe Publish::AccreditedProviderUpdater do
   describe '#update_provider' do
     let!(:new_accredited_provider) { create(:provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
 
+    describe 'updates the providers updated_at' do
+      let(:updated_at) { 1.week.ago.change(sec: 0) }
+      let!(:provider) do
+        create(:provider, :accredited_provider,
+               provider_code:,
+               recruitment_cycle:,
+               accrediting_provider_enrichments: nil,
+               updated_at:)
+      end
+
+      it "updates the course's Accrediting Provider" do
+        expect { subject.update_provider }.to change { provider.reload.updated_at }.from(updated_at).to(be_within(1.minute).of(Time.zone.now))
+      end
+    end
+
     context 'when Provider is an Accredited Provider' do
       let!(:provider) do
         create(:provider, :accredited_provider,
@@ -79,13 +94,23 @@ RSpec.describe Publish::AccreditedProviderUpdater do
     let!(:provider) { create(:provider, provider_code:, recruitment_cycle:) }
     let!(:new_accredited_provider) { create(:provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
 
+    describe 'updates the courses updated_at' do
+      let(:updated_at) { 1.week.ago.change(sec: 0) }
+      let!(:course) { create(:course, provider:, accredited_provider_code: nil, updated_at:) }
+
+      it "updates the course's Accrediting Provider" do
+        expect { subject.update_courses }.to change { course.reload.updated_at }.from(updated_at).to(be_within(1.minute).of(Time.zone.now))
+      end
+    end
+
     context 'when the course does not have an Accredited Provider' do
-      let!(:course) { create(:course, provider:, accredited_provider_code: nil) }
+      let!(:course) { create(:course, provider:, accredited_provider_code: nil, updated_at: 1.week.ago) }
 
       it "updates the course's Accrediting Provider" do
         subject.update_courses
 
         expect(course.reload.accredited_provider_code).to eq(new_accredited_provider_code)
+        expect(course.reload.updated_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
