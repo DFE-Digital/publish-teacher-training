@@ -19,7 +19,7 @@ FROM ruby:3.3.5-alpine3.20
 
 RUN apk add --no-cache libxml2
 
-RUN apk add --update --no-cache tzdata && \
+RUN apk add --update --no-cache tzdata jemalloc && \
     cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
     echo "Europe/London" > /etc/timezone
 
@@ -42,8 +42,8 @@ RUN apk add --update --no-cache --virtual build-dependencies \
  apk del build-dependencies
 
 COPY package.json yarn.lock ./
-RUN  yarn install --frozen-lockfile && \
-     yarn cache clean
+RUN yarn install --frozen-lockfile && \
+    yarn cache clean
 
 ADD . $APP_HOME/
 
