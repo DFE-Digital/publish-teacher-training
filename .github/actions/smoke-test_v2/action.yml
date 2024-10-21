@@ -14,10 +14,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Set up Ruby 3.2.4
+    - name: Set up Ruby 3.3.5
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2.4
+        ruby-version: 3.3.5
 
     - name: install bundler and gems
       shell: bash
