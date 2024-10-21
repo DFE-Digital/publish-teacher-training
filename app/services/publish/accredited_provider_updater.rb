@@ -17,17 +17,20 @@ module Publish
     end
 
     def update_provider_and_courses
-      update_provider && update_courses
+      ActiveRecord::Base.transaction do
+        update_provider
+        update_courses
+      end
     end
 
     def update_provider
-      provider.update_columns(accrediting_provider: 'not_an_accredited_provider',
-                              accrediting_provider_enrichments: new_accrediting_provider_enrichments)
+      provider.update!(accrediting_provider: 'not_an_accredited_provider',
+                       accrediting_provider_enrichments: new_accrediting_provider_enrichments)
     end
 
     def update_courses
       courses = provider.courses
-      courses.update_all(accredited_provider_code: new_accredited_provider.provider_code)
+      courses.each { |c| c.update!(accredited_provider_code: new_accredited_provider.provider_code) }
     end
 
     private
