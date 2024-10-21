@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+################################################################
+# WARNING:
+#
+# This service is only to be used when moving ALL a providers accredited
+# courses to the accredited provider.
+################################################################
 module Publish
   class AccreditedProviderUpdater
     attr_reader :provider, :new_accredited_provider, :recruitment_cycle
