@@ -25,6 +25,10 @@ module Find
           include ActiveModel::Model
           attr_accessor(:provider, :about_course, :how_school_placements_work, :placements_heading, :about_accrediting_provider, :salaried, :interview_process, :application_status_open)
 
+          def training_locations?
+            true
+          end
+
           def has_bursary?
             has_bursary
           end
