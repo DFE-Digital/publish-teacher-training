@@ -509,6 +509,12 @@ class CourseDecorator < ApplicationDecorator
     !object.fee?
   end
 
+  def training_locations?
+    published_how_school_placements_work.present? ||
+      study_sites.any? ||
+      site_statuses.map(&:site).uniq.many?
+  end
+
   private
 
   def not_on_find

@@ -107,7 +107,7 @@ en:
           equivalency_tests: Equivalency tests
       contents_component:
         view:
-          course_details: Course details
+          course_details: About the course
           where_you_will_train: Where you will train
           training_with_disabilities: Training with disabilities
           fees_and_financial_support: Fees and financial support
@@ -128,7 +128,7 @@ en:
           a_levels: A levels
           above_or_equivalent_qualification: or above, or equivalent qualification
       about_course:
-        heading: Course details
+        heading: About the course
       qualifications_summary_component:
         view:
           tda_with_qts: Teacher degree apprenticeship (TDA) with QTS
