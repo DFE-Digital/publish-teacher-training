@@ -51,6 +51,18 @@ describe Find::Courses::ContentsComponent::View, type: :component do
     end
   end
 
+  context 'when previewing the course' do
+    it 'renders the schools section link' do
+      course = build(:course).decorate
+      component = described_class.new(course)
+      allow_any_instance_of(ActionController::Base).to receive(:params).and_return(action: 'preview')
+
+      result = render_inline(component)
+
+      expect(result.text).to include('Where you will train')
+    end
+  end
+
   context 'when the course is open' do
     it 'does render the apply link' do
       provider = build(:provider)
