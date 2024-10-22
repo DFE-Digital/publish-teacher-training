@@ -1,14 +1,14 @@
 <h2 class="govuk-heading-m"><%= t(".heading") %> </h2>
 <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
-  <% if about_course.present? || preview? %>
-    <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
+  <% if course.training_locations? %>
+    <li><%= govuk_link_to t(".where_you_will_train"), "#training-locations" %></li>
   <% end %>
   <% if salaried? %>
     <li><%= govuk_link_to t(".salary"), "#section-salary" %></li>
   <% end %>
   <li><%= govuk_link_to t(".fees_and_financial_support"), "#section-financial-support" %></li>
-  <% if how_school_placements_work.present? || program_type == "higher_education_programme" || program_type == "scitt_programme" || preview? %>
-    <li><%= govuk_link_to t(".where_you_will_train"), "#training-locations" %></li>
+  <% if about_course.present? || preview? %>
+    <li><%= govuk_link_to t(".course_details"), "#section-about" %></li>
   <% end %>
   <% if interview_process.present? %>
     <li><%= govuk_link_to t(".interview_process"), "#section-interviews" %></li>

@@ -21,9 +21,7 @@ module Find
         end
 
         def render?
-          published_how_school_placements_work.present? ||
-            study_sites.any? ||
-            site_statuses.map(&:site).uniq.many? || preview?(params)
+          @course.training_locations? || preview?(params)
         end
 
         def placements_url
