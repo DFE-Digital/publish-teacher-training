@@ -54,7 +54,7 @@ describe Find::Courses::TrainingLocations::View, type: :component do
   end
 
   describe '#placements_url' do
-    let(:provider) { create(:provider,  selectable_school:) }
+    let(:provider) { create(:provider, selectable_school:) }
     let(:course) { create(:course, provider:) }
     let(:selectable_school) { false }
 
