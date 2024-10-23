@@ -25,7 +25,17 @@
             </div>
 
             <div class="find-item govuk-!-width-full">
-            <fieldset class="govuk-fieldset">
+              <details class="govuk-details pre-filtering-details">
+                <summary class="govuk-details__summary pre-filtering-details-summary">
+                  <span class="govuk-details__summary-text">
+                    Advanced search
+                  </span>
+                </summary>
+
+                <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+
+                <!--<fieldset class="govuk-fieldset">
                 <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                   <div class="govuk-checkboxes__item">
                     <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
@@ -35,6 +45,122 @@
                   </div>
                 </div>
               </fieldset>
+              <fieldset class="govuk-fieldset">
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label" do %>
+                      Only show courses that do not require a degree
+                    <% end %>
+                  </div>
+                </div>
+              </fieldset>-->
+
+              <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  <h1 class="govuk-fieldset__heading">
+                  Do you need visa sponsorship?
+                  </h1>
+                </legend>
+                <div class="govuk-radios--small" data-module="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+                    <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive">
+                      Yes
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+                    <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive-2">
+                      No
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+              </div>
+
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                  Qualification
+                </h1>
+              </legend>
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
+                      QTS only
+                    <% end %>
+                  </div>
+                  <div class="govuk-checkboxes__item">
+                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
+                      QTS with PGCE (or PGDE)
+                    <% end %>
+                  </div>
+                  <div class="govuk-checkboxes__item">
+                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
+                      Further education (PGCE or PGDE without QTS)
+                    <% end %>
+                  </div>
+                </div>
+              </fieldset>
+
+            </div><!--end col one half-->
+            <div class="govuk-grid-column-one-half">
+
+            <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                Do you have a university degree?
+                </h1>
+              </legend>
+              <div class="govuk-radios--small" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive">
+                    Yes, I have a degree or I am studying for one
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive-2">
+                    No, I do not have a degree
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+            <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Study type
+              </h1>
+            </legend>
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                  <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
+                    Full time
+                  <% end %>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
+                  <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
+                    Part time
+                  <% end %>
+                </div>
+              </div>
+            </fieldset>
+
+            </div><!--end col one half-->
+            </div><!--end grid row-->
+
+              </details>
             </div>
 
           </div><!--END input container-->
