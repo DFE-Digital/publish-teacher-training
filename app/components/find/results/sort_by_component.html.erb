@@ -1,15 +1,16 @@
   <% if results.location_filter? %>
    <div class="sort-container">
-    <p class="govuk-heading-m" style="margin-bottom:0;">Sorted by distance</p>
+    <!--<p class="govuk-heading-m" style="margin-bottom:0;">Sorted by distance</p>-->
       <form action="/results" method="get" accept-charset="utf-8" novalidate>
         <div class="govuk-form-group govuk-form-group--sort">
           <label class="govuk-label" for="sort">
             Sort by
           </label>
           <select class="govuk-select" id="sort" name="sort">
-            <option value="updated" selected>Distance</option>
+            <option value="views">Choose an option</option>
+            <!--<option value="updated" selected>Distance</option>
             <option value="views">Newest</option>
-            <option value="comments">Closing date</option>
+            <option value="comments">Closing date</option>-->
           </select>
         </div>
       </form>
