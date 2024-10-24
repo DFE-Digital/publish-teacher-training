@@ -1,5 +1,5 @@
 skylight:
-  enable: false
+  enable: true
 
 environment:
   label: "Review"
