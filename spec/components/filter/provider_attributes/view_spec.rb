@@ -10,7 +10,7 @@ module Filters
       let(:filters) { nil }
 
       before do
-        render_inline(described_class.new(filters: nil))
+        render_inline(described_class.new(filters: {}))
       end
 
       it 'renders all the correct details' do

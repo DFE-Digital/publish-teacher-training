@@ -6,3 +6,11 @@
   <%= label_tag "course_search", t("components.filter.providers.course_search"), class: "govuk-label govuk-label--s" %>
   <%= text_field_tag "course_search", (filters[:course_search] if filters), spellcheck: false, class: "govuk-input", autocomplete: "off" %>
 </div>
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <%= check_box_tag "accrediting_provider", nil, class: "govuk-checkboxes__input", checked: filters[:accrediting_provider] == "on" %>
+      <%= label_tag "accrediting_provider", t("components.filter.providers.accrediting_provider"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
+    </div>
+  </div>
+</div>

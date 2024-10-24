@@ -36,11 +36,11 @@ module Support
     end
 
     def find_providers
-      recruitment_cycle.providers.order(:provider_name).includes(:recruitment_cycle, :courses, :users)
+      recruitment_cycle.providers.order(:provider_name).includes(:recruitment_cycle)
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:provider_search, :course_search, :page)
+      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:provider_search, :course_search, :page, :accrediting_provider)
     end
 
     def provider

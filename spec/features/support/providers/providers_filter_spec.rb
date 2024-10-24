@@ -29,6 +29,12 @@ feature 'View filtered providers' do
     when_i_remove_the_course_code_filter
     then_i_see_the_unfiltered_providers
 
+    when_i_filter_by_accredited_provider
+    then_i_see_the_providers_filtered_by_accredited_provider
+
+    when_i_remove_the_accredited_provider_filter
+    then_i_see_the_unfiltered_providers
+
     when_i_filter_by_provider_code_and_course_code
     then_i_see_the_providers_filtered_by_provider_code_and_course_code
 
@@ -52,6 +58,7 @@ feature 'View filtered providers' do
   def and_there_are_providers
     create(:provider, provider_name: 'Really big school', provider_code: 'A01', courses: [build(:course, course_code: '2VVZ')])
     create(:provider, provider_name: 'Slightly smaller school', provider_code: 'A02', ukprn: '12345678', courses: [build(:course, course_code: '2VVZ')])
+    create(:provider, :accredited_provider, provider_name: 'Accredited school', provider_code: 'A03', courses: [build(:course, course_code: '2VVZ')])
   end
 
   def when_i_visit_the_support_provider_index_page
@@ -59,10 +66,20 @@ feature 'View filtered providers' do
   end
 
   def then_i_see_the_providers
-    expect(support_provider_index_page.providers.size).to eq(2)
+    expect(support_provider_index_page.providers.size).to eq(3)
   end
 
   alias_method :then_i_see_the_unfiltered_providers, :then_i_see_the_providers
+
+  def when_i_filter_by_accredited_provider
+    check 'Accredited provider'
+    click_link_or_button 'Apply filters'
+  end
+
+  def then_i_see_the_providers_filtered_by_accredited_provider
+    expect(support_provider_index_page.providers.size).to eq(1)
+    expect(support_provider_index_page.providers.first.text).to have_content('Accredited school A03')
+  end
 
   def when_i_filter_by_provider
     fill_in 'Provider name, code or UKPRN', with: 'Really big school'
@@ -89,13 +106,19 @@ feature 'View filtered providers' do
   alias_method :then_i_see_the_providers_filtered_by_provider_code_and_course_code, :then_i_see_providers_filtered_by_provider_name
 
   def then_i_see_the_providers_filtered_by_course_code
-    expect(support_provider_index_page.providers.size).to eq(2)
-    expect(support_provider_index_page.providers.first.text).to have_content('Really big school A01')
-    expect(support_provider_index_page.providers.last.text).to have_content('Slightly smaller school A02')
+    expect(support_provider_index_page.providers.size).to eq(3)
+    expect(support_provider_index_page.providers[0].text).to have_content('Accredited school A03')
+    expect(support_provider_index_page.providers[1].text).to have_content('Really big school A01')
+    expect(support_provider_index_page.providers[2].text).to have_content('Slightly smaller school A02')
   end
 
   def when_i_remove_the_provider_filter
     click_link_or_button 'Remove Really big school provider search filter'
+  end
+
+  def when_i_remove_the_accredited_provider_filter
+    uncheck 'Accredited provider'
+    click_link_or_button 'Apply filters'
   end
 
   def when_i_remove_the_course_code_filter
