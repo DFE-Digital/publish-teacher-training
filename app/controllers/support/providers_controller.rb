@@ -36,7 +36,7 @@ module Support
     end
 
     def find_providers
-      recruitment_cycle.providers.order(:provider_name).includes(:recruitment_cycle, :courses, :users)
+      recruitment_cycle.providers.order(:provider_name).includes(:recruitment_cycle)
     end
 
     def filter_params
