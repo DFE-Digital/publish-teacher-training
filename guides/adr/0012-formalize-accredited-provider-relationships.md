@@ -12,12 +12,20 @@ We have a database table `provider` that has an implicit self-join relationship 
 
 The relationship that currently exists is unconventional with respect to a normalised relational database.
 
-Making the relationship more conventional will allow us to query, validate and enforce the realtionships easily and will reduce the uncertainty about the nature of this relationship.
+Making the relationship more conventional will allow us to query, validate and enforce the relationships easily and will reduce the uncertainty about the nature of this relationship.
+
+
+### Organisations
+
+Publish used to employ a system of Organisations. A number of Providers would be grouped by all being a member of an organisation. 
+Users would also be members of the organisation.
+
+
 
 
 ### Misuse of the existing relationships
 
-We have seen Accredited provider relationships that exist solely for organisational reasons. This happens when Accredited provider A1 is an accredited provider for provider A2 but there is no expectation or intention for A1 to be the accredited provdier for courses run by A2. This feels like an abuse of the accredited provider association.
+We have seen Accredited provider relationships that exist solely for organisational reasons. This happens when Accredited provider A1 is an accredited provider for provider A2 but there is no expectation or intention for A1 to be the accredited provider for courses run by A2. This feels like an abuse of the accredited provider association.
 
 ### Definitions
 
@@ -83,7 +91,7 @@ TrainingProvider --> Course --> AccreditedProvider;
 
 ### 1. Leave the relationships as they are
 
-A training provider stores their accredited provider relationships in a serialized json column called `accredited_provider_enrichments`. The primary key is stored as a property in this serialized string. This columns is of type `jsonb` but the json type of the value is `string`, not `object` using a key that is outdated and misleading `'UcasProviderCode'`.
+A training provider stores their accredited provider relationships in a serialized JSON column called `accredited_provider_enrichments`. The primary key is stored as a property in this serialized string. This columns is of type `jsonb` but the json type of the value is `string`, not `object` using a key that is outdated and misleading `'UcasProviderCode'`.
 
 ```
 manage_courses_backend_development=# select jsonb_typeof(accrediting_provider_enrichments) from provider limit 1;
@@ -95,23 +103,126 @@ manage_courses_backend_development=# select jsonb_typeof(accrediting_provider_en
 
 This requires us to pattern match the string to find a training providers accredited provider associations. We cannot coerce the value to a jsonb object (array) because of the quote escaping in the stored string.
 
+
+```ruby
+class Provider < ApplicationRecord
+  enum :accrediting_provider, {
+    accredited_provider: 'Y',
+    not_an_accredited_provider: 'N'
+  }
+
+  has_and_belongs_to_many :organisations, join_table: :organisation_provider
+
+  has_many :users_via_organisation, -> { kept }, through: :organisations, source: :users
+
+  has_many :user_permissions
+  has_many :users, -> { kept }, through: :user_permissions
+
+  def accredited_providers
+    recruitment_cycle.providers.where(provider_code: accredited_provider_codes)
+  end
+
+  serialize :accrediting_provider_enrichments, coder: AccreditingProviderEnrichment::ArraySerializer
+
+  alias accrediting_providers accredited_providers
+  alias accredited? accredited_provider?
+
+  # the providers that this provider is an accredited_provider for
+  def training_providers
+    Provider.where(id: current_accredited_courses.pluck(:provider_id))
+  end
+
+  def current_accredited_courses
+    accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
+  end
+
+  def accredited_body(provider_code)
+    accrediting_provider_enrichment = accrediting_provider_enrichments&.find { |enrichment| enrichment.UcasProviderCode == provider_code }
+
+    return unless accrediting_provider_enrichment
+
+    accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
+
+    return if accredited_provider.blank?
+
+    {
+      accredited_provider_id: accredited_provider.id,
+      description: accrediting_provider_enrichment.Description || ''
+    }
+  end
+
+  def accredited_bodies
+    accrediting_provider_enrichments&.filter_map do |accrediting_provider_enrichment|
+      provider_code = accrediting_provider_enrichment.UcasProviderCode
+
+      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
+
+      if accredited_provider.present?
+        {
+          provider_name: accredited_provider.provider_name,
+          provider_code: accredited_provider.provider_code,
+          description: accrediting_provider_enrichment.Description || ''
+        }
+      end
+    end || []
+  end
+
+  def add_enrichment_errors
+    accrediting_provider_enrichments&.each do |item|
+      provider_code = item.UcasProviderCode
+
+      accredited_provider = recruitment_cycle.providers.find_by(provider_code:)
+
+      if accredited_provider.present? && item.invalid?
+        message = "^Reduce the word count for #{accredited_provider.provider_name}"
+        errors.add :accredited_bodies, message
+      end
+    end
+  end
+
+  def accredited_provider_codes
+    accrediting_provider_enrichments&.map(&:UcasProviderCode) || []
+  end
+
+    ...
+
+class Organisation < ApplicationRecord
+  has_many :organisation_users
+
+  has_many :users, through: :organisation_users
+
+  has_and_belongs_to_many :providers
+
+    ...
+
+class Course < ApplicationRecord
+
+  def accrediting_provider_description
+    return if accrediting_provider.blank?
+    return if provider.accrediting_provider_enrichments.blank?
+
+    accrediting_provider_enrichment = provider.accrediting_provider_enrichments
+                                              .find do |provider|
+      provider.UcasProviderCode == accrediting_provider.provider_code
+    end
+
+    accrediting_provider_enrichment.Description if accrediting_provider_enrichment.present?
+  end
+```
 #### Pros
 
 - No effort expended and other work can be prioritised
 
 #### Cons
 
-- Consuses new developers
+- Consuses eases burden of onboarding developers
 - Leaves the data in an under contrained state
 - Inefficient methods for querying entity relationships
 
 ### 2. Create typical self-join has_many through pivot table relationship
 
-
-To be filled out
 ```ruby
- # app/models/provider.rb
-
+class Provider < ApplicationRecord
   has_many :accredited_accreditations,
            class_name: 'ProviderAccreditation',
            foreign_key: :training_provider_id
@@ -138,6 +249,40 @@ To be filled out
 - More formally distinguish accredited and accrediting providers.
 - Database validations (if desired) on which accredited providers can accredit which courses.
 - Opportunity to clarify definintions and understand how we are using them.
+
+#### Cons
+
+- None!
+
+
+### 3. Replicate the Apply User / Provider Relationship model
+
+```ruby
+class ProviderRelationshipPermissions < ApplicationRecord
+  belongs_to :ratifying_provider, class_name: 'Provider'
+  belongs_to :training_provider, class_name: 'Provider'
+
+    ...
+
+class Provider < ApplicationRecord
+  has_many :provider_permissions, dependent: :destroy
+  has_many :provider_users, through: :provider_permissions
+  has_many :training_provider_permissions, class_name: 'ProviderRelationshipPermissions', foreign_key: :training_provider_id
+  has_many :ratifying_provider_permissions, class_name: 'ProviderRelationshipPermissions', foreign_key: :ratifying_provider_id
+
+    ...
+
+class Course < ApplicationRecord
+  belongs_to :provider
+  belongs_to :accredited_provider, class_name: 'Provider', optional: true
+
+    ...
+```
+
+#### Pros
+
+- Consistency between the two services
+- Could we sync users and their permissions?
 
 #### Cons
 
