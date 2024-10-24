@@ -15,7 +15,7 @@ RUN bundle exec middleman build --build-dir=../public
 
 ###
 
-FROM ruby:3.2.4-alpine3.20
+FROM ruby:3.3.5-alpine3.20
 
 RUN apk add --no-cache libxml2
 
@@ -24,7 +24,7 @@ RUN apk add --update --no-cache tzdata && \
     echo "Europe/London" > /etc/timezone
 
 RUN apk add --update --no-cache \
- postgresql-dev git ncurses shared-mime-info
+ postgresql-dev git ncurses shared-mime-info jemalloc
 
 ENV APP_HOME /app
 
@@ -41,9 +41,11 @@ RUN apk add --update --no-cache --virtual build-dependencies \
  rm -rf /usr/local/bundle/cache && \
  apk del build-dependencies
 
+ENV LD_PRELOAD="/usr/lib/libjemalloc.so.2"
+
 COPY package.json yarn.lock ./
-RUN  yarn install --frozen-lockfile && \
-     yarn cache clean
+RUN yarn install --frozen-lockfile && \
+    yarn cache clean
 
 ADD . $APP_HOME/
 
