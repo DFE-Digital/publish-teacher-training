@@ -69,10 +69,9 @@ feature 'Viewing a findable course' do
     end
   end
 
-  scenario 'user sees no school placements in 2025' do
+  scenario 'user sees no school placements' do
     create(:recruitment_cycle, :next)
-    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    Timecop.travel(Find::CycleTimetable.find_opens) do
       given_there_is_a_findable_course
       and_the_provider_does_not_have_selectable_schools
       when_i_visit_the_course_page
@@ -80,10 +79,9 @@ feature 'Viewing a findable course' do
     end
   end
 
-  scenario 'user views selectable school placements' do
+  scenario 'user sees selectable school placements' do
     create(:recruitment_cycle, :next)
-    Timecop.travel(1.month.since(Find::CycleTimetable.find_opens(2025))) do
-      allow(Settings).to receive(:current_recruitment_cycle_year).and_return(2025)
+    Timecop.travel(Find::CycleTimetable.find_opens) do
       given_there_is_a_findable_course
       and_the_provider_has_selectable_schools
       when_i_visit_the_course_page
