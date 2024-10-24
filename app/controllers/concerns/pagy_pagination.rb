@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 module PagyPagination
+  include Skylight::Helpers
   extend ActiveSupport::Concern
 
   def jsonapi_links
     pagy_results.present? ? pagination_links : {}
   end
 
+  instrument_method
   def paginate(scope)
     @pagy_results ||= pagy(scope, limit: per_page, page:)
 
