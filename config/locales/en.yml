@@ -289,6 +289,7 @@ en:
       providers:
         provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"
+        accrediting_provider: "Accredited providers"
       users:
         text_search: "Name or email"
         user_type: "User type"

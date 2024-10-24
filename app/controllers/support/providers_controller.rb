@@ -40,7 +40,7 @@ module Support
     end
 
     def filter_params
-      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:provider_search, :course_search, :page)
+      @filter_params ||= params.except(:commit, :recruitment_cycle_year).permit(:provider_search, :course_search, :page, :accrediting_provider)
     end
 
     def provider

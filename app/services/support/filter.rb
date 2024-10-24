@@ -48,11 +48,18 @@ module Support
       end
     end
 
+    def provider_type(records, accredited_provider)
+      return records unless accredited_provider == 'on'
+
+      records.accredited_provider
+    end
+
     def filter_records
       filtered_records = model_data_scope
 
       filtered_records = text_search(filtered_records, filter_params[:text_search]) if filtered_records.respond_to?(:search)
       filtered_records = provider_search(filtered_records, filter_params[:provider_search]) if filtered_records.respond_to?(:provider_search)
+      filtered_records = provider_type(filtered_records, filter_params[:accrediting_provider])
       filtered_records = course_search(filtered_records, filter_params[:course_search]) if filtered_records.respond_to?(:course_search)
       filtered_records = user_type(filtered_records, filter_params[:user_type]) if filtered_records.respond_to?(:admins)
 
