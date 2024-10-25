@@ -49,7 +49,7 @@ describe SessionsController do
   describe '#callback' do
     let(:request_callback) do
       request.env['omniauth.auth'] = user_exists_in_dfe_sign_in(user:)
-      post :callback
+      get :callback
     end
 
     context 'existing database user' do

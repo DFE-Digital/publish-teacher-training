@@ -45,7 +45,7 @@ if AuthenticationService.magic_link?
   get '/auth/dfe/signout', to: 'sessions#destroy'
 elsif AuthenticationService.persona?
   get '/personas', to: 'personas#index'
-  post '/auth/developer/callback', to: 'sessions#callback'
+  get '/auth/developer/callback', to: 'sessions#callback'
   get '/auth/developer/signout', to: 'sessions#destroy'
 else
   get '/auth/dfe/callback', to: 'sessions#callback'

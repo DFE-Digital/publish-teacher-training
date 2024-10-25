@@ -1,4 +1,4 @@
-<%= form_tag("/auth/developer/callback") do %>
+<%= form_tag("/auth/developer/callback", method: :get) do %>
   <%= hidden_field_tag "email", email_address %>
   <%= hidden_field_tag "first_name", first_name %>
   <%= hidden_field_tag "last_name", last_name %>
