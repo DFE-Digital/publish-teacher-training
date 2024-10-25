@@ -138,7 +138,7 @@ module API
         end
 
         attribute :subject_codes do
-          @object.subjects.pluck(:subject_code).compact
+          @object.subjects.map(&:subject_code).compact
         end
 
         attribute :required_qualifications do
