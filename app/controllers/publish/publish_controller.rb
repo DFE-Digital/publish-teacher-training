@@ -9,6 +9,9 @@ module Publish
     before_action :check_interrupt_redirects
     before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?('rollover.can_edit_current_and_next_cycles') }
 
+    # Protect every action of a provider
+    before_action { authorize provider, :show? if provider }
+
     after_action :verify_authorized
 
     # DFE Analytics namespace

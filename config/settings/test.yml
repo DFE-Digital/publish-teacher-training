@@ -1,3 +1,4 @@
+base_url: http://www.publish-test.com
 govuk_notify:
   api_key: cafe-cafecafe-cafe-cafe-cafe-cafecafecafe-cafecafe-cafe-cafe-cafe-cafecafecafe
 system_authentication_token: "Ge32"
