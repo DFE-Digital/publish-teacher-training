@@ -166,6 +166,9 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_accredited_provider_name_displayed
-    expect(page).to have_css('h2', text: 'Accrediting provider name')
+    expect(page).to have_css(
+      'h2.govuk-summary-card__title a.govuk-link',
+      text: 'Accrediting provider name'
+    )
   end
 end
