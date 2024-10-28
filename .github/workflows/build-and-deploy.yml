@@ -25,110 +25,110 @@ jobs:
       DOCKER_IMAGE: ghcr.io/dfe-digital/publish-teacher-training
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Get values for current commit (Push)
-      if: github.event_name == 'push'
-      run: |
-        GIT_REF=${{github.ref}}
-        GIT_BRANCH=${GIT_REF##*/}
-        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-        echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+      - name: Get values for current commit (Push)
+        if: github.event_name == 'push'
+        run: |
+          GIT_REF=${{github.ref}}
+          GIT_BRANCH=${GIT_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
 
-    - name: Get values for current commit (Pull request)
-      if: github.event_name == 'pull_request'
-      run: |
-        # This is the actual PR branch
-        GIT_REF=${{ github.head_ref }}
-        GIT_BRANCH=${GIT_REF##*/}
-        echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-        # This is the latest commit on the actual PR branch
-        echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+      - name: Get values for current commit (Pull request)
+        if: github.event_name == 'pull_request'
+        run: |
+          # This is the actual PR branch
+          GIT_REF=${{ github.head_ref }}
+          GIT_BRANCH=${GIT_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+          # This is the latest commit on the actual PR branch
+          echo "DOCKER_IMAGE_TAG=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
-    - name: Set KV environment variables
-      run: |
-        # tag build to the review env for vars and secrets
-        tf_vars_file=terraform/aks/workspace_variables/review_aks.tfvars.json
-        echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-        echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+      - name: Set KV environment variables
+        run: |
+          # tag build to the review env for vars and secrets
+          tf_vars_file=terraform/aks/workspace_variables/review_aks.tfvars.json
+          echo "KEY_VAULT_NAME=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "KEY_VAULT_INFRA_SECRET_NAME=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
 
-    - uses: DFE-Digital/keyvault-yaml-secret@v1
-      id: get-secret
-      with:
-        keyvault: ${{ env.KEY_VAULT_NAME }}
-        secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
-        key: SNYK_TOKEN
+      - uses: DFE-Digital/keyvault-yaml-secret@v1
+        id: get-secret
+        with:
+          keyvault: ${{ env.KEY_VAULT_NAME }}
+          secret: ${{ env.KEY_VAULT_INFRA_SECRET_NAME }}
+          key: SNYK_TOKEN
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Build Publish-Teacher-Training-Middleman
-      uses: docker/build-push-action@v6
-      with:
-        tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-        push: true
-        target: middleman
-        cache-from: |
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-        build-args: BUILDKIT_INLINE_CACHE=1
+      - name: Build Publish-Teacher-Training-Middleman
+        uses: docker/build-push-action@v6
+        with:
+          tags: ${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          push: true
+          target: middleman
+          cache-from: |
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          build-args: BUILDKIT_INLINE_CACHE=1
 
-    - name: Build Publish-Teacher-Training
-      uses: docker/build-push-action@v6
-      with:
-        tags: |
-          ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-        push: false
-        load: true
-        cache-from: |
-          type=registry,ref=${{ env.DOCKER_IMAGE}}:main
-          type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
-          type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
-        build-args: |
-          BUILDKIT_INLINE_CACHE=1
-          COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+      - name: Build Publish-Teacher-Training
+        uses: docker/build-push-action@v6
+        with:
+          tags: |
+            ${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+            ${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+          push: false
+          load: true
+          cache-from: |
+            type=registry,ref=${{ env.DOCKER_IMAGE}}:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:main
+            type=registry,ref=${{ env.DOCKER_IMAGE}}-middleman:${{ env.BRANCH_TAG }}
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Push ${{ env.DOCKER_IMAGE }} images for review
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
-      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+      - name: Push ${{ env.DOCKER_IMAGE }} images for review
+        if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
-    - name: Run Snyk to check Docker image for vulnerabilities
-      uses: snyk/actions/docker@master
-      env:
-        SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
-      with:
-        image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
-        args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ steps.get-secret.outputs.snyk_token }}
+        with:
+          image: ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
+          args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
 
-    - name: Push ${{ env.DOCKER_IMAGE }} images
-      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
-      run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
+      - name: Push ${{ env.DOCKER_IMAGE }} images
+        if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+        run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
-    - name: Alert Build Failures
-      if: ${{ failure() && github.ref == 'refs/heads/main' }}
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_CHANNEL: twd_findpub_tech
-        SLACK_COLOR: '#ef5343'
-        SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Publish Teacher Training
-        SLACK_TITLE: Build failure
-        SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Alert Build Failures
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: ts_publish_and_find_tech
+          SLACK_COLOR: "#ef5343"
+          SLACK_ICON_EMOJI: ":github-logo:"
+          SLACK_USERNAME: Publish Teacher Training
+          SLACK_TITLE: Build failure
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Build failure :sadparrot:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   lint:
     name: Lint
@@ -181,10 +181,10 @@ jobs:
         if: ${{ failure() && github.ref == 'refs/heads/main' }}
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_CHANNEL: twd_findpub_tech
+          SLACK_CHANNEL: ts_publish_and_find_tech
           SLACK_USERNAME: Publish Teacher Training CI
           SLACK_TITLE: Lint failure
-          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training ${{ matrix.tests }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:'
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training ${{ matrix.tests }} lint failure on branch ${{ needs.build.outputs.GIT_BRANCH }} :sadparrot:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_COLOR: failure
           SLACK_FOOTER: Sent from lint job in build workflow
@@ -199,7 +199,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
+        tests:
+          [
+            unit_models,
+            unit_services,
+            unit_forms,
+            unit_components,
+            unit_other,
+            integration_auth,
+            integration_find,
+            integration_publish,
+            integration_support,
+            integration_other,
+          ]
         include:
           - tests: unit_models
             include-pattern: spec/models/.*_spec.rb
@@ -225,50 +237,50 @@ jobs:
             exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set environment variables
-      run: |
-        echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+      - name: Set environment variables
+        run: |
+          echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
 
-    - name: Pull docker images
-      run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
+      - name: Pull docker images
+        run: docker pull ${{ needs.build.outputs.docker_image }}:$IMAGE_TAG
 
-    - name: Setup tests
-      run: |
-        docker compose up --no-build -d
-        docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
-        docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+      - name: Setup tests
+        run: |
+          docker compose up --no-build -d
+          docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
+          docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
+          docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
 
-    - name: ${{ matrix.tests }} tests
-      run: |
-        docker compose exec -T web /bin/sh -c 'bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"'
-      env:
-        IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
-        INCLUDE_PATTERN: ${{ matrix.include-pattern }}
-        EXCLUDE_PATTERN: ${{ matrix.exclude-pattern || ' ' }}
-        TEST_MATRIX_NODE_NAME: ${{ matrix.tests }}
+      - name: ${{ matrix.tests }} tests
+        run: |
+          docker compose exec -T web /bin/sh -c 'bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"'
+        env:
+          IMAGE_TAG: ${{ env.DOCKER_IMAGE_TAG }}
+          INCLUDE_PATTERN: ${{ matrix.include-pattern }}
+          EXCLUDE_PATTERN: ${{ matrix.exclude-pattern || ' ' }}
+          TEST_MATRIX_NODE_NAME: ${{ matrix.tests }}
 
-    - name: Upload coverage results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: Coverage_report
-        path: ${{ github.workspace }}/out/*
+      - name: Upload coverage results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Coverage_report
+          path: ${{ github.workspace }}/out/*
 
-    - name: Alert Test Failures
-      if: ${{ failure() && github.ref == 'refs/heads/main' }}
-      uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_CHANNEL: twd_findpub_tech
-        SLACK_COLOR: '#ef5343'
-        SLACK_ICON_EMOJI: ':github-logo:'
-        SLACK_USERNAME: Publish Teacher Training CI
-        SLACK_TITLE: Test failure
-        SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Test failure :sadparrot:'
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Alert Test Failures
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: ts_publish_and_find_tech
+          SLACK_COLOR: "#ef5343"
+          SLACK_ICON_EMOJI: ":github-logo:"
+          SLACK_USERNAME: Publish Teacher Training CI
+          SLACK_TITLE: Test failure
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Test failure :sadparrot:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-v2-review-app:
     name: Deployment To Review v2
@@ -281,11 +293,11 @@ jobs:
     steps:
       - name: Start review_aks-${{ github.event.pull_request.number }} Deployment
         uses: bobheadxi/deployments@v1
-        id:   deployment
+        id: deployment
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env:   review_aks-${{ github.event.pull_request.number }}
+          env: review_aks-${{ github.event.pull_request.number }}
           ref: ${{ github.head_ref }}
 
       - name: Checkout
@@ -302,12 +314,12 @@ jobs:
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Update review_aks-${{ github.event.pull_request.number }} status
-        if:   always()
+        if: always()
         uses: bobheadxi/deployments@v1
         with:
-          step:   finish
-          token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    review_aks-${{ github.event.pull_request.number }}
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: review_aks-${{ github.event.pull_request.number }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
@@ -324,7 +336,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [qa_aks,staging_aks]
+        environment: [qa_aks, staging_aks]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

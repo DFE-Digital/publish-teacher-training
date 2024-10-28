@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: '0 13 * * 0'
+    - cron: "0 13 * * 0"
 
 jobs:
   build:
@@ -87,14 +87,14 @@ jobs:
         if: ${{ success() }}
         run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
-      - name: 'Notify #twd_findpub_tech on failure'
+      - name: "Notify #ts_publish_and_find_tech on failure"
         if: failure()
         uses: rtCamp/action-slack-notify@master
         env:
-          SLACK_CHANNEL: twd_findpub_tech
-          SLACK_COLOR: '#ef5343'
-          SLACK_ICON_EMOJI: ':github-logo:'
+          SLACK_CHANNEL: ts_publish_and_find_tech
+          SLACK_COLOR: "#ef5343"
+          SLACK_ICON_EMOJI: ":github-logo:"
           SLACK_USERNAME: Publish Teacher Training
           SLACK_TITLE: Build failure on weekly rebuild cache workflow
-          SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Build failure :sadparrot:'
+          SLACK_MESSAGE: ":alert: <!channel> Publish Teacher Training Build failure :sadparrot:"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
