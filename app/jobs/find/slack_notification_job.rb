@@ -4,7 +4,7 @@ require 'http'
 
 module Find
   class SlackNotificationJob < ApplicationJob
-    SLACK_CHANNEL = '#twd_findpub_tech'
+    SLACK_CHANNEL = '#ts_publish_and_find_tech'
 
     def perform(text, url = nil)
       @webhook_url = Settings.STATE_CHANGE_SLACK_URL
