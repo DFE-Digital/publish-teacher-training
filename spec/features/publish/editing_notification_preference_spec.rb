@@ -33,7 +33,7 @@ feature 'Opting into notifications', { can_edit_current_and_next_cycles: false }
   end
 
   def when_i_visit_accredited_provider_page
-    publish_provider_courses_index_page.load(id: accrediting_provider.provider_code)
+    publish_provider_courses_index_page.load(provider_code: accrediting_provider.provider_code, recruitment_cycle_year: accrediting_provider.recruitment_cycle.year)
   end
 
   def and_i_click_on_notifications_link
