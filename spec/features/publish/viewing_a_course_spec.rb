@@ -419,7 +419,9 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def next_cycle_provider
-    create(:provider, :next_recruitment_cycle, courses: [build(:course, enrichments: [course_enrichments_published])])
+    create(:provider, :next_recruitment_cycle, provider_code: current_user.providers.first.provider_code, courses: [build(:course, enrichments: [course_enrichments_published])]) do |provider|
+      current_user.providers << provider
+    end
   end
 
   def then_i_should_see_the_status_scheduled
