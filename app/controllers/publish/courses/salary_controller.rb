@@ -4,15 +4,11 @@ module Publish
   module Courses
     class SalaryController < BaseFundingTypeController
       def edit
-        authorize(provider)
-
         @course_salary_form = CourseSalaryForm.new(course_enrichment)
         @course_salary_form.valid? if show_errors_on_publish?
       end
 
       def update
-        authorize(provider)
-
         @course_salary_form = CourseSalaryForm.new(course_enrichment, params: formatted_params)
 
         if @course_salary_form.save!

@@ -19,15 +19,11 @@ module Publish
       end
 
       def edit
-        authorize(provider)
-
         @course_school_form = CourseSchoolForm.new(@course)
         @course_school_form.valid? if show_errors_on_publish?
       end
 
       def update
-        authorize(provider)
-
         @course_school_form = CourseSchoolForm.new(@course, params: school_params)
         if @course_school_form.save!
           course_updated_message(section_key)

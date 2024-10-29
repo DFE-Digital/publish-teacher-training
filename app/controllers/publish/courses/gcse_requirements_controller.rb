@@ -9,16 +9,12 @@ module Publish
       decorates_assigned :source_course
 
       def edit
-        authorize(provider)
-
         @gcse_requirements_form = GcseRequirementsForm.build_from_course(course)
         copy_boolean_check(::Courses::Copy::GCSE_FIELDS)
         @gcse_requirements_form.valid? if show_errors_on_publish?
       end
 
       def update
-        authorize(provider)
-
         @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
 
         if @gcse_requirements_form.valid? && goto_preview?

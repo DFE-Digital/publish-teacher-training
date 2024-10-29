@@ -8,16 +8,13 @@ module Publish
       before_action :build_course_params, :campaign_name_check, only: [:continue]
       include CourseBasicDetailConcern
 
-      def edit
-        authorize(provider)
-      end
+      def edit; end
 
       def continue
         super
       end
 
       def update
-        authorize(provider)
         if validate_subject_ids
           if params[:course][:master_subject_id] == SecondarySubject.physics.id.to_s
             course.update(master_subject_id: params[:course][:master_subject_id])

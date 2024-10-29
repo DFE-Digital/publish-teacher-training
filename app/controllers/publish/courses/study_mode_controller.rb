@@ -16,14 +16,10 @@ module Publish
       end
 
       def edit
-        authorize(provider)
-
         @course_study_mode_form = CourseStudyModeForm.new(@course)
       end
 
       def update
-        authorize(provider)
-
         @course_study_mode_form = CourseStudyModeForm.new(@course, params: study_mode_params)
 
         if @course_study_mode_form.save!

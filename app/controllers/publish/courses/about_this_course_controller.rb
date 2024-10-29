@@ -5,7 +5,6 @@ module Publish
     class AboutThisCourseController < PublishController
       include GotoPreview
       include CopyCourseContent
-      before_action :authorise_with_pundit
 
       def edit
         @about_this_course_form = CourseAboutThisCourseForm.new(course_enrichment)
@@ -30,10 +29,6 @@ module Publish
       end
 
       private
-
-      def authorise_with_pundit
-        authorize provider
-      end
 
       def about_params
         params.require(param_form_key)

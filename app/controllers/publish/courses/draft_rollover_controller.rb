@@ -6,14 +6,10 @@ module Publish
       before_action :redirect_to_courses, if: -> { course.is_published? }
 
       def edit
-        authorize(provider)
-
         @course_rollover_form = CourseRolloverForm.new(course)
       end
 
       def update
-        authorize(provider)
-
         @course_rollover_form = CourseRolloverForm.new(course)
         if @course_rollover_form.valid?
           RolloverProviderService.call(provider_code: params[:provider_code], course_codes: params[:code]&.split, force: true)

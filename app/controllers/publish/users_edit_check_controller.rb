@@ -2,8 +2,6 @@
 
 module Publish
   class UsersEditCheckController < PublishController
-    before_action :authorize_provider
-
     def show
       @user_form = UserForm.new(current_user, user)
     end
@@ -21,10 +19,6 @@ module Publish
 
     def user
       @user = User.find(params[:user_id])
-    end
-
-    def authorize_provider
-      authorize(provider)
     end
   end
 end

@@ -4,7 +4,6 @@ module Publish
   module Courses
     module ALevelRequirements
       class ALevelRequirementsController < PublishController
-        before_action { authorize provider }
         before_action :assign_course, :verify_teacher_degree_apprenticeship_course
 
         def new
