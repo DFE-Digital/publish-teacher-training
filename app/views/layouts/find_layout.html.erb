@@ -22,6 +22,15 @@
   </head>
 
   <body class="govuk-template__body">
+
+    <h1>Remote IP (what DfE analytics does) <%= request.remote_ip %></h1>
+    <h2>X-Forwarded-For: <%= request.headers['X-Forwarded-For'] %></h2>
+    <h2>Client-IP: <%= request.headers['Client-IP'] || request.headers['client-ip'] %></h2>
+    <h2>X-Real-IP: <%= request.headers['X-Real-IP'] || request.headers['x-real-ip'] %></h2>
+    <h3>Request Fullpath: <%= request.fullpath %></h3>
+    <h3>Request Origin: <%= request.origin %></h3>
+    <h3>Request User Agent: <%= request.user_agent %></h3>
+
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
     <% if google_analytics_allowed? %>
