@@ -34,11 +34,7 @@
   </p>
 
   <%= f.govuk_radio_buttons_fieldset :accrediting_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
-    <%= f.govuk_radio_button :accrediting_provider, :accredited_provider, label: { text: "Yes", size: "s" } do %>
-      <%= f.govuk_text_field :accredited_provider_id,
-        label: { text: "Accredited provider ID" },
-        width: 10 %>
-    <% end %>
+    <%= f.govuk_radio_button :accrediting_provider, :accredited_provider, label: { text: "Yes", size: "s" } %>
     <%= f.govuk_radio_button :accrediting_provider, :not_an_accredited_provider, label: { text: "No", size: "s" } %>
   <% end %>
 
