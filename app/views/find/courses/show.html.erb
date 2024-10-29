@@ -42,7 +42,13 @@
         <%# if @course.salaried? %>
           <!--<li><a class="govuk-link" href="#section-salary">Salary</a></li>-->
         <%# end %>
-      <li><a class="govuk-link" href="#section-financial-support">Fees and financial support</a></li>
+        <li>
+          <% if @course.salaried? %>
+            <a class="govuk-link" href="#section-financial-support">Salary and financial support</a>
+          <% else %>
+            <a class="govuk-link" href="#section-financial-support">Fees and financial support</a>
+          <% end %>
+        </li>
         <li><a class="govuk-link" href="#section-about">About the course</a></li>
         <% if @course.published_interview_process.present? %>
           <li><a class="govuk-link" href="#section-interviews">Interview process</a></li>

@@ -1,28 +1,45 @@
 <div class="govuk-!-margin-bottom-8">
-  <h2 class="govuk-heading-l" id="section-financial-support">Fees and financial support</h2>
+  <% if salaried? %>
+    <h2 class="govuk-heading-l" id="section-financial-support">Salary and financial support</h2>
+  <% else %>
+    <h2 class="govuk-heading-l" id="section-financial-support">Fees and financial support</h2>
+  <% end %>
 
   <% if has_fees? %>
     <%= render Find::Courses::FeesComponent::View.new(course) %>
   <% end %>
 
-  <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
     <% if salaried? %>
+      <%= render Shared::AdviceComponent::View.new(title: "How salaried courses work") do %>
       <%= render partial: "shared/courses/financial_support/salaried" %>
+    <% end %>
     <% elsif excluded_from_bursary? %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% elsif bursary_only? %>
-      <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
-    <% elsif has_scholarship_and_bursary? %>
-      <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
-    <% else %>
+      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
       <%= render partial: "shared/courses/financial_support/loan" %>
     <% end %>
+    <% elsif bursary_only? %>
+      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
+
+      <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+    <% end %>
+    <% elsif has_scholarship_and_bursary? %>
+      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
+      <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+    <% end %>
+    <% else %>
+      <%= render partial: "shared/courses/financial_support/loan" %>
   <% end %>
 
   <aside class="app-advice app-advice--non-uk">
-    <h3 class="app-advice__title">
-      Financial support for non-UK citizens
-    </h3>
+    <% if salaried? %>
+      <h3 class="app-advice__title">
+        Non-UK citizens: applying for salaried courses
+      </h3>
+    <% else %>
+       <h3 class="app-advice__title">
+        Financial support for non-UK citizens
+      </h3>
+    <% end %>
     <div class="app-advice__body">
       <% if salaried? %>
         <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
