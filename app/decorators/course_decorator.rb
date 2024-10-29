@@ -232,14 +232,14 @@ class CourseDecorator < ApplicationDecorator
 
     if excluded_from_bursary?
       # Duplicate branch body detected
-      'Student finance if you’re eligible'
+      'Student loans if you’re eligible'
     elsif has_scholarship_and_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      'Scholarships or bursaries, as well as student finance, are available if you’re eligible'
+      'Scholarships, bursaries and student loans are available if you’re eligible'
     elsif has_bursary? && bursary_and_scholarship_flag_active_or_preview?
-      'Bursaries and student finance are available if you’re eligible'
+      'Bursaries and student loans are available if you’re eligible'
     else
       # Duplicate branch body detected
-      'Student finance is available if you’re eligible'
+      'Student loans are available if you’re eligible'
     end
   end
 
