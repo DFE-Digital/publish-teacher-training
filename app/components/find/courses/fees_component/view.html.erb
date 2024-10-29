@@ -41,13 +41,11 @@
       <% end %>
     </div>
 
-    <% if course.fee_details.present? %>
-    <div data-qa="course__fee_details">
-      <%= markdown(fee_details) %>
-    </div>
-  <% end %>
-<% else %>
-  <%= render CoursePreview::MissingInformationComponent.new(course:, information_type: :fee_uk_eu, is_preview: preview?(params)) %>
-<% end %>
+    <%# if course.fee_details.present? %>
+      <!--<div data-qa="course__fee_details">-->
+        <%#= markdown(fee_details) %>
+      <!--</div>-->
+    <%# end %>
 
+  <% end %>
 </div>
