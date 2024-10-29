@@ -18,12 +18,10 @@ module Publish
       end
 
       def edit
-        authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course)
       end
 
       def update
-        authorize(@provider)
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course, params: form_params)
         if form_params[:skip_languages_goto_confirmation].present?
 

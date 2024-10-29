@@ -19,8 +19,6 @@ module Publish
     end
 
     def suggest
-      authorize :provider, :show?
-
       @provider_list = providers
                        .provider_search(params[:query])
                        .limit(10)
@@ -30,7 +28,6 @@ module Publish
 
     def show
       @cycle_year = session[:cycle_year] if session[:cycle_year].present?
-      authorize provider
 
       if rollover_active?
         if session[:cycle_year].present? && params[:switcher] != 'true'
@@ -44,16 +41,12 @@ module Publish
     end
 
     def details
-      authorize provider, :show?
-
       redirect_to_contact_page_with_ukprn_error if provider.ukprn.blank?
       @errors = flash[:error_summary]
       flash.delete(:error_summary)
     end
 
     def about
-      authorize provider, :show?
-
       @about_form = AboutYourOrganisationForm.new(
         provider,
         redirect_params:,
@@ -99,10 +92,6 @@ module Publish
     end
 
     private
-
-    def provider
-      @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code] || params[:code])
-    end
 
     def providers
       @providers ||= if current_user.admin?

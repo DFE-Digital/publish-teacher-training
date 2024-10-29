@@ -33,7 +33,6 @@ module Publish
       end
 
       def update
-        authorize(provider)
         authorize course, :can_update_qualification?
 
         @errors = errors

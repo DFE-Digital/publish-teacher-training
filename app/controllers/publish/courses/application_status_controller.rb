@@ -3,8 +3,6 @@
 module Publish
   module Courses
     class ApplicationStatusController < PublishController
-      before_action :authorize_provider
-
       def new
         course
       end
@@ -21,10 +19,6 @@ module Publish
 
       def course
         @course ||= CourseDecorator.new(provider.courses.find_by(course_code: params[:code]))
-      end
-
-      def authorize_provider
-        authorize(provider)
       end
     end
   end

@@ -2,8 +2,6 @@
 
 module Publish
   class UsersCheckController < PublishController
-    before_action :authorize_provider
-
     def show
       @user_form = UserForm.new(current_user, user)
     end
@@ -18,10 +16,6 @@ module Publish
     end
 
     private
-
-    def authorize_provider
-      authorize(provider)
-    end
 
     def user
       User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)

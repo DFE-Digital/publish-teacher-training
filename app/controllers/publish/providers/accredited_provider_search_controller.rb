@@ -6,13 +6,10 @@ module Publish
       helper_method :query, :search_result_title_component
 
       def new
-        authorize_provider
-        provider
         @accredited_provider_search_form = AccreditedProviderSearchForm.new
       end
 
       def create
-        authorize_provider
         if accredited_provider_id.present?
           redirect_to new_publish_provider_recruitment_cycle_accredited_provider_path(
             provider_code: provider.provider_code,
@@ -28,15 +25,12 @@ module Publish
             @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
             render :results
           else
-            provider
             render :new
           end
         end
       end
 
       def update
-        authorize_provider
-
         @accredited_provider_select_form = AccreditedProviderSelectForm.new(provider_id: accredited_provider_select_params[:provider_id])
 
         if @accredited_provider_select_form.valid?
@@ -55,10 +49,6 @@ module Publish
 
       def accredited_provider_id
         params[:accredited_provider_id]
-      end
-
-      def provider
-        @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code] || params[:code])
       end
 
       def query
@@ -87,10 +77,6 @@ module Publish
           search_resource: 'accredited provider',
           caption_text: 'Add accredited provider'
         )
-      end
-
-      def authorize_provider
-        authorize(provider)
       end
     end
   end

@@ -5,8 +5,6 @@ module Publish
     class AccreditedProvidersController < PublishController
       helper_method :accredited_provider_id
 
-      before_action :authorize_provider, :provider
-
       def index; end
 
       def new
@@ -64,14 +62,6 @@ module Publish
 
       def accredited_provider
         @accredited_provider ||= @recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
-      end
-
-      def provider
-        @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code] || params[:code])
-      end
-
-      def authorize_provider
-        authorize(provider)
       end
 
       def accredited_provider_id

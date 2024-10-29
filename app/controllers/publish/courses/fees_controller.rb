@@ -7,8 +7,6 @@ module Publish
       decorates_assigned :source_course
 
       def edit
-        authorize(provider)
-
         @course_fee_form = CourseFeeForm.new(course_enrichment)
         @copied_fields = copy_content_check(::Courses::Copy::FEES_FIELDS)
 
@@ -18,8 +16,6 @@ module Publish
       end
 
       def update
-        authorize(provider)
-
         @course_fee_form = CourseFeeForm.new(course_enrichment, params: formatted_params)
 
         if @course_fee_form.save!

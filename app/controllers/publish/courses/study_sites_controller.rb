@@ -19,14 +19,10 @@ module Publish
       end
 
       def edit
-        authorize(provider)
-
         @course_study_site_form = CourseStudySiteForm.new(@course)
       end
 
       def update
-        authorize(provider)
-
         @course_study_site_form = CourseStudySiteForm.new(@course, params: study_site_params)
 
         if @course_study_site_form.save!

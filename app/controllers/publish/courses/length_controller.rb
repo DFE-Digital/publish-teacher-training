@@ -3,7 +3,6 @@
 module Publish
   module Courses
     class LengthController < PublishController
-      before_action :authorise_with_pundit
       before_action :redirect_if_not_editable
 
       def edit
@@ -25,10 +24,6 @@ module Publish
       end
 
       private
-
-      def authorise_with_pundit
-        authorize provider
-      end
 
       def length_params
         params.require(:publish_course_length_form).permit(*CourseLengthForm::FIELDS)

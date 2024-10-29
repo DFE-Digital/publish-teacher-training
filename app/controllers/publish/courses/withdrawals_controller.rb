@@ -7,14 +7,10 @@ module Publish
       before_action :redirect_to_courses, unless: -> { course.is_published? }
 
       def edit
-        authorize(provider)
-
         @course_withdrawal_form = CourseWithdrawalForm.new(course)
       end
 
       def update
-        authorize(provider)
-
         @course_withdrawal_form = CourseWithdrawalForm.new(course)
 
         if @course_withdrawal_form.save!

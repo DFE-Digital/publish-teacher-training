@@ -10,14 +10,10 @@ module Publish
       end
 
       def edit
-        authorize(provider)
-
         visa_sponsorship_form
       end
 
       def update
-        authorize(provider)
-
         if visa_sponsorship_form.save!
           flash[:success] = success_message
 

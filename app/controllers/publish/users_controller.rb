@@ -2,8 +2,6 @@
 
 module Publish
   class UsersController < PublishController
-    before_action :authorize_provider
-
     def index
       @users = provider.users.in_name_order
     end
@@ -52,10 +50,6 @@ module Publish
     end
 
     private
-
-    def authorize_provider
-      authorize(provider)
-    end
 
     def cycle_year
       session[:cycle_year] || params[:recruitment_cycle_year] || params[:year] || Settings.current_recruitment_cycle_year

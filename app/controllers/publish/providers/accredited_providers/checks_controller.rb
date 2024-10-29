@@ -4,10 +4,7 @@ module Publish
   module Providers
     module AccreditedProviders
       class ChecksController < PublishController
-        before_action :authorize_provider
-
         def show
-          provider
           accredited_provider_form
         end
 
@@ -20,14 +17,6 @@ module Publish
 
         def accredited_provider_form
           @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
-        end
-
-        def provider
-          @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
-        end
-
-        def authorize_provider
-          authorize(provider)
         end
       end
     end

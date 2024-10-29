@@ -3,7 +3,6 @@
 module Publish
   module Providers
     class StudySitesController < PublishController
-      before_action :authorise_with_pundit
       before_action :site, only: %i[show delete]
       before_action :build_study_site, only: %i[new create]
 
@@ -54,10 +53,6 @@ module Publish
       end
 
       private
-
-      def authorise_with_pundit
-        authorize provider, :show?
-      end
 
       def site
         @site ||= provider.study_sites.find(params[:id])

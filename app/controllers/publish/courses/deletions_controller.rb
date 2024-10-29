@@ -6,14 +6,10 @@ module Publish
       before_action :redirect_to_courses, if: -> { course&.is_published? }
 
       def edit
-        authorize(provider)
-
         @course_deletion_form = CourseDeletionForm.new(course)
       end
 
       def destroy
-        authorize(provider)
-
         @course_deletion_form = CourseDeletionForm.new(course, params: deletion_params)
 
         if @course_deletion_form.destroy!
