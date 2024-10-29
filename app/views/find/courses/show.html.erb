@@ -60,13 +60,13 @@
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+    <%# if @course.published_about_course.present? %>
+      <%#= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <%# end %>
 
-    <% if @course.published_interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
-    <% end %>
+     <%# if @course.published_interview_process.present? %>
+      <%#= render partial: "find/courses/interview_process", locals: { course: @course } %>
+     <%# end %>
 
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-m" id="section-train-with-disabilities">
