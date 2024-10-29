@@ -19,7 +19,6 @@
 .env
 
 .byebug_history
-.ruby-version
 .node-version
 coverage/
 
