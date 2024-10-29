@@ -3,10 +3,10 @@
     <div class="body-text">
 
       <% if fee_international.present? %>
+        <p class="govuk-body">
+          Fees for <%= cycle_range %>:
+        </p>
         <dl class="govuk-summary-list">
-          <caption class="govuk-table__caption govuk-!-font-weight-regular govuk-!-margin-bottom-4">Fees
-            for <%= cycle_range %>:
-          </caption>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
               <%= t(".uk_citizens") %>
@@ -25,10 +25,10 @@
         </div>
         </dl>
         <% else %>
+        <p class="govuk-body">
+          Fees for <%= cycle_range %>:
+        </p>
          <dl class="govuk-summary-list">
-          <caption class="govuk-table__caption govuk-!-font-weight-regular govuk-!-margin-bottom-4">Fees
-            for <%= cycle_range %>:
-          </caption>
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
               <%= t(".uk_citizens") %>
