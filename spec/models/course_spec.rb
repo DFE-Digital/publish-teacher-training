@@ -3157,6 +3157,38 @@ describe Course do
     end
   end
 
+  describe '#last_published_at' do
+    context 'with an unpublished course' do
+      let(:course) { create(:course, study_mode: :part_time, enrichments: [create(:course_enrichment)]) }
+
+      it 'returns nil' do
+        expect(course.last_published_at).to be_nil
+      end
+    end
+
+    context 'with a twice published course' do
+      let(:course) do
+        create(:course, study_mode: :part_time, enrichments:
+          [
+            create(:course_enrichment, :published, last_published_timestamp_utc: '1/1/2024'),
+            create(:course_enrichment, :published, last_published_timestamp_utc: '1/1/2023')
+          ])
+      end
+
+      it 'selects the enrichment with the latest date' do
+        expect(course.last_published_at).to eq('1/1/2024')
+      end
+
+      context 'when the enrichments are not loaded' do
+        it 'selects the enrichment with the latest date' do
+          course.reload
+          expect(course.enrichments.loaded?).to be_falsey
+          expect(course.last_published_at).to eq('1/1/2024')
+        end
+      end
+    end
+  end
+
   describe 'funding_type and program_type' do
     context 'setting the funding to apprenticeship' do
       it 'sets the funding to apprenticeship and program_type to pg_teaching_apprenticeship' do
