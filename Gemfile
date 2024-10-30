@@ -236,11 +236,6 @@ group :development do
 
   # Make HTTP requests fun again
   gem 'httparty'
-
-  # Run tests automatically
-  gem 'guard'
-  gem 'guard-rspec', require: false
-  gem 'guard-rubocop', require: false
 end
 
 group :test do
