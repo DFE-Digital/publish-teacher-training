@@ -594,7 +594,7 @@ class Course < ApplicationRecord
   end
 
   def last_published_at
-    return enrichments.max_by(&:last_published_timestamp_utc)&.last_published_timestamp_utc if enrichments.loaded?
+    return enrichments.select(&:last_published_timestamp_utc).max_by(&:last_published_timestamp_utc)&.last_published_timestamp_utc if enrichments.loaded?
 
     enrichments.maximum(:last_published_timestamp_utc)
   end
