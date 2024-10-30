@@ -4,7 +4,7 @@ module Support
   class ProvidersController < SupportController
     def index
       [ProviderForm.new(current_user, recruitment_cycle:), ProviderContactForm.new(current_user)].each(&:clear_stash) if flash.key?(:success)
-      @providers = filtered_providers
+      @pagy, @providers = pagy(filtered_providers)
     end
 
     def show
@@ -25,7 +25,7 @@ module Support
     end
 
     def users
-      @users = provider.users.order(:last_name).page(params[:page] || 1)
+      @pagy, @users = pagy(provider.users.order(:last_name))
       render layout: 'provider_record'
     end
 

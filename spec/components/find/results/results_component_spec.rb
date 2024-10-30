@@ -25,11 +25,12 @@ module Find
         )
       end
 
-      let(:courses) { ::Course.all.page(1) }
+      let(:courses) { ::Course.all }
+      let(:pagy) { Pagy.new(count: courses.count, page: 1) }
 
       it 'renders a "No courses found" message when there are no results' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, pagy:)
         )
 
         expect(component.text).to include('No courses found')
@@ -37,7 +38,7 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, pagy:)
         )
         expect(component.text).to include('event near you')
       end
@@ -57,7 +58,8 @@ module Find
         )
       end
 
-      let(:courses) { ::Course.all.page(1) }
+      let(:courses) { ::Course.all }
+      let(:pagy) { Pagy.new(count: courses.count, page: 1) }
 
       before do
         create_list(:course, 10, :with_2_full_time_sites)
@@ -67,7 +69,7 @@ module Find
         allow(Results::SearchResultComponent).to receive(:new).and_return(plain: '')
 
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, pagy:)
         )
 
         courses.each do |course|
@@ -83,7 +85,7 @@ module Find
 
       it 'renders the inset text' do
         component = render_inline(
-          described_class.new(results: results_view, courses:)
+          described_class.new(results: results_view, courses:, pagy:)
         )
 
         courses.each do |course|

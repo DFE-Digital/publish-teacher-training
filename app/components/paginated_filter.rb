@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class PaginatedFilter < ViewComponent::Base
-  attr_reader :filter_params, :collection
+  attr_reader :filter_params, :collection, :pagy
 
-  def initialize(filter_params:, collection:)
+  def initialize(filter_params:, collection:, pagy:)
     super
     @filter_params = filter_params
     @collection = collection
+    @pagy = pagy
   end
 
   def filters
