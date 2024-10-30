@@ -323,9 +323,18 @@
   background-color: #f3f2f1;
 }
 
+.govuk-accordion__section--git {
+  border-left: 5px solid #f47738 !important;
+  background-color: #f3f2f1;
+}
+
 .govuk-accordion__section--uk {
   border-left: 5px solid govuk-colour("orange") !important;
   background-color: #f3f2f1;
+}
+
+.govuk-accordion__section-button {
+  padding-bottom: 0 !important;
 }
 
 .govuk-accordion__section-button--non-uk {
@@ -334,8 +343,14 @@
 }
 
 .govuk-accordion__section-content--non-uk {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.accordion--last-child {
+  padding-bottom: 30px;
 }
 
 // Notification banners

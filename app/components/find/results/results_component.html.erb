@@ -20,8 +20,26 @@
   </div>
   <div class="app-filter-layout__content">
 
-    <div class="app-promoted-link">
+  <!--Not sure which course is right for you-->
+  <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section govuk-accordion__section--git">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+          Not sure which course is right for you?
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+      <p class="govuk-body"><a href="#" class="govuk-link">Find out how to choose a course</a></p>
+      <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+      <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+      </div>
+    </div>
+  </div>
+  <!--End Not sure which course is right for you-->
 
+    <div class="app-promoted-link">
       <%= form_with(url: '/', method: :get) do |form| %>
         <div class="govuk-form-group">
           <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
@@ -72,6 +90,26 @@
       </ul>
     <% end %>
 
+    <!--Not sure which course is right for you-->
+    <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+      <div class="govuk-accordion__section govuk-accordion__section--git">
+        <div class="govuk-accordion__section-header">
+          <h2 class="govuk-accordion__section-heading">
+            <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+            Not sure which course is right for you?
+            </span>
+          </h2>
+        </div>
+        <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+        <p class="govuk-body"><a href="#" class="govuk-link">Find out how to choose a course</a></p>
+        <p class="govuk-body"><a href="https://getintoteaching.education.gov.uk/teacher-training-advisers?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUta_TKSgQ4c_Dv4udxuGawcUDwlEMCovl6PAEJbjWjOHQ20Lus2zf8aApTGEALw_wcB&gclsrc=aw.ds" class="govuk-link">Get a free teacher training adviser</a></p>
+        <p class="govuk-body accordion--last-child"><a href="https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUto9QeS7hqS9vFBAHLQns-WSkYFXHOl1sv18HXwzKJHiOm5QHex09kaAmEUEALw_wcB&gclsrc=aw.ds" class="govuk-link">Talk to teacher training providers at an event near you</a></p>
+        </div>
+      </div>
+    </div>
+    <!--End Not sure which course is right for you-->
+
     <%= paginate(courses) %>
+
   </div>
 </div>
