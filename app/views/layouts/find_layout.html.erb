@@ -24,6 +24,7 @@
   <body class="govuk-template__body">
 
     <h1>Remote IP (what DfE analytics does) <%= request.remote_ip %></h1>
+    <h1>DfE::Analytics.anonymise: <%= DfE::Analytics.anonymise(request.user_agent.to_s + request.remote_ip.to_s) %></h1>
     <h2>X-Forwarded-For: <%= request.headers['X-Forwarded-For'] %></h2>
     <h2>Client-IP: <%= request.headers['Client-IP'] || request.headers['client-ip'] %></h2>
     <h2>X-Real-IP: <%= request.headers['X-Real-IP'] || request.headers['x-real-ip'] %></h2>
