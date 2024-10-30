@@ -5,7 +5,6 @@ module Publish
     include RecruitmentCycleHelper
     include GotoPreview
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
-    decorates_assigned :provider
 
     def index
       authorize :provider, :index?
