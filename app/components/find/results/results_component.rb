@@ -5,12 +5,13 @@ module Find
     class ResultsComponent < ViewComponent::Base
       include ::ViewHelper
 
-      attr_reader :results, :courses
+      attr_reader :results, :courses, :pagy
 
-      def initialize(results:, courses:)
+      def initialize(results:, courses:, pagy:)
         super
         @results = results
         @courses = courses
+        @pagy = pagy
       end
     end
   end

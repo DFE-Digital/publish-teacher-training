@@ -26,4 +26,4 @@
   </tbody>
 </table>
 
-<%= render Paginator.new(scope: @courses) %>
+<%= govuk_pagination(pagy: @pagy) %>
