@@ -60,6 +60,18 @@ describe RequiredQualificationsSummary do
       end
     end
 
+    context 'when the course enrichments are not loaded' do
+      let(:enrichment) { build(:course_enrichment, :published, required_qualifications: 'GCSE Computer Science') }
+      let(:course) { create(:course, enrichments: [enrichment]) }
+
+      it 'returns the expected value' do
+        course.reload
+        expect(course.enrichments.loaded?).to be_falsey
+        summary = described_class.new(course).extract
+        expect(summary).to eq 'GCSE Computer Science'
+      end
+    end
+
     context 'when required_qualifications enrichment attribute is blank' do
       it 'assembles a whole summary based on course attributes' do
         course = create(:course, :primary)

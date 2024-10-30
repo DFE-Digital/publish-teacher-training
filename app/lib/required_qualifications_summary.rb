@@ -8,7 +8,6 @@ class RequiredQualificationsSummary
   end
 
   def extract
-    # This performance improvement saves ~100 database queries in the courses api endpoint
     legacy_qualifications_attribute = if course.enrichments.loaded?
                                         course.enrichments.max_by(&:created_at)&.required_qualifications
                                       else
