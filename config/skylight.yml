@@ -5,3 +5,5 @@ ignored_endpoints:
   - HeartbeatController#ping
   - HeartbeatController#healthcheck
   - HeartbeatController#sha
+deploy:
+  git_sha: <%= ENV["COMMIT_SHA"] %>
