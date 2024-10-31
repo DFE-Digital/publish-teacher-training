@@ -843,7 +843,6 @@ DEPENDENCIES
   sentry-ruby
   sentry-sidekiq
   shoulda-matchers (~> 6.4)
-  sidekiq
   sidekiq-cron
   simplecov (< 0.23)
   site_prism (~> 5.0)
