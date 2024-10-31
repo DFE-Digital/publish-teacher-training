@@ -219,20 +219,20 @@ en:
       course_placements:
         nearest_location:
           zero: "No placement locations available"
-          one: "Nearest potential placement location"
-          other: "Nearest of %{count} potential placement locations"
+          one: "Nearest potential placement school"
+          other: "Nearest of %{count} potential placement schools"
         nearest_location_salary:
-          zero: "No employing locations available"
-          one: "Nearest potential employing location"
-          other: "Nearest of %{count} potential employing locations"
+          zero: "No employing schools available"
+          one: "Nearest potential employing school"
+          other: "Nearest of %{count} potential employing schools"
         all_school_placements:
           zero: "Not listed yet"
-          one: "%{count} potential placement location"
-          other: "%{count} potential placement locations"
+          one: "%{count} potential placement school"
+          other: "%{count} potential placement schools"
         all_school_placements_salary:
           zero: "Not listed yet"
-          one: "%{count} potential employing location"
-          other: "%{count} potential employing locations"
+          one: "%{count} potential employing school"
+          other: "%{count} potential employing schools"
       course_study_sites:
         nearest_location:
           zero: "No study sites available"
