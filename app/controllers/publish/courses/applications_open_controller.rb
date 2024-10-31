@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class ApplicationsOpenController < PublishController
+    class ApplicationsOpenController < ApplicationController
       before_action :build_recruitment_cycle
       before_action :build_course_params, only: %i[update continue]
       include CourseBasicDetailConcern

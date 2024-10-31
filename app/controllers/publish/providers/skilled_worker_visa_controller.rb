@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class SkilledWorkerVisaController < PublishController
+    class SkilledWorkerVisaController < ApplicationController
       def edit
         authorize(provider, :edit?)
 
