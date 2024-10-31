@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class TermsController < ApplicationController
+  class TermsController < ::ApplicationController
     def edit
       @accept_terms_form = Interruption::AcceptTermsForm.new(current_user)
     end

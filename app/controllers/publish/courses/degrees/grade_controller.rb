@@ -3,7 +3,7 @@
 module Publish
   module Courses
     module Degrees
-      class GradeController < PublishController
+      class GradeController < ApplicationController
         include GotoPreview
 
         def edit

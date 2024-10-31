@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class ModernLanguagesController < PublishController
+    class ModernLanguagesController < ApplicationController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: [:continue]

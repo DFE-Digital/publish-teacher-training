@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class ContactsController < PublishController
+    class ContactsController < ApplicationController
       def edit
         authorize(provider, :edit?)
 

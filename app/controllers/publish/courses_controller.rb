@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class CoursesController < PublishController
+  class CoursesController < ApplicationController
     include ApplyRedirect
 
     decorates_assigned :course

@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class VisaSponsorshipController < PublishController
+    class VisaSponsorshipController < ApplicationController
       include CourseBasicDetailConcern
 
       def new

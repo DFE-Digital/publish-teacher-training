@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class EngineersTeachPhysicsController < PublishController
+    class EngineersTeachPhysicsController < ApplicationController
       decorates_assigned :course
       include CourseBasicDetailConcern
 

@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class AgeRangeController < PublishController
+    class AgeRangeController < ApplicationController
       include CourseBasicDetailConcern
       decorates_assigned :course
 

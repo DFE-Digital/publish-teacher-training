@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class StudySitesCheckController < PublishController
+    class StudySitesCheckController < ApplicationController
       before_action :new_form
 
       def show; end

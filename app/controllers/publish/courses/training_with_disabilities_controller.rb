@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class TrainingWithDisabilitiesController < PublishController
+    class TrainingWithDisabilitiesController < ApplicationController
       include CourseBasicDetailConcern
       before_action :build_course, only: %i[show]
 

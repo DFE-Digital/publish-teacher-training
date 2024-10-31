@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class SchoolPlacementsController < PublishController
+    class SchoolPlacementsController < ApplicationController
       def edit
         authorize(provider, :edit?)
 

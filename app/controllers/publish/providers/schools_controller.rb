@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class SchoolsController < PublishController
+    class SchoolsController < ApplicationController
       before_action :site, only: %i[show delete]
 
       def index
