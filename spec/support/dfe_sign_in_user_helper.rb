@@ -12,6 +12,11 @@ module DfESignInUserHelper
     )
   end
 
+  # Helper to login user for request specs
+  def login_user(user)
+    get '/auth/dfe/callback', headers: { 'omniauth.auth' => user_exists_in_dfe_sign_in(user:) }
+  end
+
   private
 
   def fake_dfe_sign_in_auth_hash(email:, sign_in_user_id:, first_name:, last_name:)
