@@ -56,6 +56,22 @@
     </div>
     </li>
     <li>
+    <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="20" form="result-filters">
+      Computing <%= turbo_frame_tag [:results_count, :radius, 20], src: find_results_count_path(request.query_parameters.merge(radius: 20)), loading: :lazy  %>
+    </button>
+    <div id="nationality-item-hint" class="govuk-hint govuk-!-font-size-16 hint-padding">
+    Scholarships of £30,000 or bursaries of £28,000 are available
+  </div>
+  </li>
+  <li>
+    <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="100" form="result-filters">
+        Design and technology <%= turbo_frame_tag [:results_count, :radius, 100], src: find_results_count_path(request.query_parameters.merge(radius: 100)), loading: :lazy  %>
+      </button>
+      <div id="nationality-item-hint" class="govuk-hint govuk-!-font-size-16 hint-padding">
+      Bursaries of £25,000 available
+      </div>
+    </li>
+    <li>
       <button class="govuk-link govuk-link--no-visited-state govuk-link-distance" type="submit" name="radius" value="100" form="result-filters">
         Mathematics <%= turbo_frame_tag [:results_count, :radius, 100], src: find_results_count_path(request.query_parameters.merge(radius: 100)), loading: :lazy  %>
       </button>
