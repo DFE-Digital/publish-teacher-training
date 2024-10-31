@@ -11,8 +11,7 @@ module Publish
       return unless @user_form.save!
 
       UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
-      redirect_to publish_provider_users_path(params[:provider_code])
-      flash[:success] = 'User added'
+      redirect_to publish_provider_users_path(params[:provider_code]), flash: { success: 'User added' }
     end
 
     private
