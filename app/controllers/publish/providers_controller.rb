@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class ProvidersController < PublishController
+  class ProvidersController < ApplicationController
     include RecruitmentCycleHelper
     include GotoPreview
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found

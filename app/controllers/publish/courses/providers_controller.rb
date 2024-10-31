@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class ProvidersController < PublishController
+    class ProvidersController < ApplicationController
       include CourseBasicDetailConcern
 
       before_action :build_course, only: %i[show]

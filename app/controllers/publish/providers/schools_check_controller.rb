@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class SchoolsCheckController < PublishController
+    class SchoolsCheckController < ApplicationController
       before_action :new_form
 
       def show; end
