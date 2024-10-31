@@ -27,4 +27,12 @@ RSpec.configure do |config|
 
     metadata[:with_publish_constraint] = true
   end
+
+  config.define_derived_metadata(file_path: Regexp.new('/spec/requests/find')) do |metadata|
+    metadata[:namespace] = :find
+  end
+
+  config.define_derived_metadata(file_path: Regexp.new('/spec/requests/publish')) do |metadata|
+    metadata[:namespace] = :publish
+  end
 end

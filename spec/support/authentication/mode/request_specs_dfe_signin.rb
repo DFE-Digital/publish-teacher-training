@@ -3,7 +3,7 @@
 # PublishConstraint requires the server domain matches the request host to match routes
 # Settings.base_url&.include?(request.host)
 RSpec.configure do |config|
-  config.before type: :request do
+  config.before namespace: :publish, type: :request do
     host! URI(Settings.base_url).host
   end
 end
