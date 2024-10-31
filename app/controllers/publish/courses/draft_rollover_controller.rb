@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class DraftRolloverController < PublishController
+    class DraftRolloverController < ApplicationController
       before_action :redirect_to_courses, if: -> { course.is_published? }
 
       def edit

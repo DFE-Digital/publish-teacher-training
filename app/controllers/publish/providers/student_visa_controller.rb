@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class StudentVisaController < PublishController
+    class StudentVisaController < ApplicationController
       def edit
         authorize(provider, :edit?)
 

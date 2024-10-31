@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class StudySitesController < PublishController
+    class StudySitesController < ApplicationController
       before_action :site, only: %i[show delete]
       before_action :build_study_site, only: %i[new create]
 

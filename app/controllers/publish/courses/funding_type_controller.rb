@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class FundingTypeController < PublishController
+    class FundingTypeController < ApplicationController
       include CourseBasicDetailConcern
 
       def continue

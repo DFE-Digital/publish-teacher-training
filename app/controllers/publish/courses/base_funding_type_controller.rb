@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class BaseFundingTypeController < PublishController
+    class BaseFundingTypeController < ApplicationController
       include SuccessMessage
       include GotoPreview
 

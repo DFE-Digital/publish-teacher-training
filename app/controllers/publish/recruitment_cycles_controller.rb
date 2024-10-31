@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class RecruitmentCyclesController < PublishController
+  class RecruitmentCyclesController < ApplicationController
     def show
       @recruitment_cycle = RecruitmentCycle.find_by(year: params[:year])
       @provider ||= recruitment_cycle.providers.find_by!(provider_code: params[:provider_code] || params[:code])

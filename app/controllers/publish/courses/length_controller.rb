@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class LengthController < PublishController
+    class LengthController < ApplicationController
       before_action :redirect_if_not_editable
 
       def edit

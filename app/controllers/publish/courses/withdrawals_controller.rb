@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class WithdrawalsController < PublishController
+    class WithdrawalsController < ApplicationController
       before_action :redirect_to_courses, if: :course_withdrawn?
       before_action :redirect_to_courses, unless: -> { course.is_published? }
 

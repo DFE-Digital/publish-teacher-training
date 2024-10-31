@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class StartDateController < PublishController
+    class StartDateController < ApplicationController
       include CourseBasicDetailConcern
 
       private

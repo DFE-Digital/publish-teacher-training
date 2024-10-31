@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class ApplicationStatusController < PublishController
+    class ApplicationStatusController < ApplicationController
       def new
         course
       end

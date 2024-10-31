@@ -3,7 +3,7 @@
 module Publish
   module Courses
     module Degrees
-      class SubjectRequirementsController < PublishController
+      class SubjectRequirementsController < ApplicationController
         include CopyCourseContent
         include GotoPreview
 

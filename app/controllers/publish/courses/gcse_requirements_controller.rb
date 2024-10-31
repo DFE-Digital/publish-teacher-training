@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class GcseRequirementsController < PublishController
+    class GcseRequirementsController < ApplicationController
       include CopyCourseContent
       include GotoPreview
 

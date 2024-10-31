@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class UsersCheckController < PublishController
+  class UsersCheckController < ApplicationController
     def show
       @user_form = UserForm.new(current_user, user)
     end
