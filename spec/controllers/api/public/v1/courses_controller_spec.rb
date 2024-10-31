@@ -306,7 +306,7 @@ RSpec.describe API::Public::V1::CoursesController do
 
           it 'delegates to the CourseSearchService' do
             expect(CourseSearchService).to have_received(:call).with(
-              hash_including(filter: ActionController::Parameters.new(funding_type: 'salary'))
+              hash_including(filter: ActionController::Parameters.new(funding_type: 'salary').permit!)
             )
           end
         end
