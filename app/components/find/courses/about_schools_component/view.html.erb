@@ -1,33 +1,15 @@
 <div class="govuk-!-margin-bottom-8">
   <h2 class="govuk-heading-l" id="training-locations"><%= t(".heading") %> </h2>
 
-  <div data-qa="course__about_schools">
-  <%= render Shared::AdviceComponent::View.new(title: advice_title) do %>
-    <% if course.salaried? %>
-      <p class="govuk-body">
-        You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
-      </p>
-      <p class="govuk-body">
-        You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
-      </p>
-      <p class="govuk-body">
-      <a href="#" class="govuk-link">
-        Find out more about how school placements work</a>.
-    </p>
-    <% else %>
-      <p class="govuk-body">
-        You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
-      </p>
-      <p class="govuk-body">
-        The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
-      </p>
-      <p class="govuk-body">
-        <a href="#" class="govuk-link">
-          Find out more about how school placements work</a>.
-      </p>
-    <% end %>
-  <% end %>
-  </div>
+  <% if course.salaried? %>
+  <p class="govuk-body">
+    You will spend most of your time in one school which will employ you. You will also spend some time in another school and at a location where you will study.
+  </p>
+<% else %>
+  <p class="govuk-body">
+    You’ll be placed in schools for most of your course to get classroom experience. You will also spend time at a location where you will study.
+  </p>
+<% end %>
 
   <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
@@ -97,5 +79,26 @@
         </dd>
       </div>
   </dl>
+
+  <div data-qa="course__about_schools">
+  <%= render Shared::AdviceComponent::View.new(title: advice_title) do %>
+
+    <% if course.salaried? %>
+      <p class="govuk-body">
+        You usually cannot choose your employing schools. The training provider will contact you and discuss your situation to help them select a location you can travel to.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        The training provider will select placement schools for you. They will contact you and discuss your situation to help them select a location that you can travel to.
+      </p>
+      <p class="govuk-body">
+        <a href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements" class="govuk-link">
+          Find out more about how school placements work</a>.
+      </p>
+    <% end %>
+
+  <% end %>
+  </div>
+
 
 </div>
