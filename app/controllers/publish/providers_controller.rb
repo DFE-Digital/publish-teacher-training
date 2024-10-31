@@ -18,6 +18,8 @@ module Publish
     end
 
     def suggest
+      skip_authorization
+
       @provider_list = providers
                        .provider_search(params[:query])
                        .limit(10)
