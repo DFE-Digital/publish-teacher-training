@@ -204,7 +204,9 @@ module Find
     end
 
     def all_subjects
-      @all_subjects ||= Subject.select(:subject_name, :subject_code).order(:subject_name).all
+      @all_subjects ||= Rails.cache.fetch('results_subjects', expires: 1.day) do
+        Subject.select(:subject_name, :subject_code).order(:subject_name).all
+      end
     end
 
     def show_undergraduate_courses?
