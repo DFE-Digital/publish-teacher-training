@@ -8,7 +8,7 @@
 
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <%= render Find::Results::FilterComponent.new(results:) %>
+    <%= render(partial: "find/result_filters/all", locals: { filters_view: @filters_view }) if @filters_view %>
   </div>
   <div class="app-filter-layout__content">
 

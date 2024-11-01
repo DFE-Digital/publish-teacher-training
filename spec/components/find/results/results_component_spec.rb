@@ -6,7 +6,6 @@ module Find
   describe Results::ResultsComponent, type: :component do
     before do
       allow(LocationSubjectFilterComponent).to receive(:new).and_return(plain: '')
-      allow(Results::FilterComponent).to receive(:new).and_return(plain: '')
       allow(Results::SortByComponent).to receive(:new).and_return(plain: '')
       allow(Results::SearchResultComponent).to receive(:new).and_return(plain: '')
     end
