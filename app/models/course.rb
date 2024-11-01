@@ -516,9 +516,18 @@ class Course < ApplicationRecord
   def description
     return qualifications_description if teacher_degree_apprenticeship?
 
-    study_mode_string = (full_time_or_part_time? ? ', ' : ' ') +
-                        study_mode_description
     qualifications_description + study_mode_string + program_type_description
+  end
+
+  def summary
+    return qualifications_summary if teacher_degree_apprenticeship?
+
+    qualifications_summary + study_mode_string + program_type_description
+  end
+
+  def study_mode_string
+    (full_time_or_part_time? ? ', ' : ' ') +
+      study_mode_description
   end
 
   def extended_qualification_descriptions
@@ -1027,7 +1036,7 @@ class Course < ApplicationRecord
     if qualification.blank?
       errors.add(:qualification, :blank)
     else
-      errors.add(:qualification, "^#{qualifications_description} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification.in?(qualification_options)
+      errors.add(:qualification, "^#{qualifications_summary} is not valid for a #{level.to_s.humanize.downcase} course") unless qualification.in?(qualification_options)
     end
   end
 

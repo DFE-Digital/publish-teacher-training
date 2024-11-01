@@ -79,6 +79,12 @@ module WithQualifications
       I18n.t("qualifications.description.#{qualification}")
     end
 
+    def qualifications_summary
+      return '' unless qualifications
+
+      I18n.t("qualifications.summary.#{qualification}")
+    end
+
     def full_qualification_descriptions
       return '' unless full_qualifications
 
