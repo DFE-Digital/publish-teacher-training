@@ -135,6 +135,13 @@ en:
     description: Description
     basic_details: Basic details
   qualifications:
+    summary:
+      qts: QTS
+      undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS
+      pgce_with_qts: QTS with PGCE
+      pgde_with_qts: QTS with PGDE
+      pgce: PGCE
+      pgde: PGDE
     description:
       qts: QTS
       undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS

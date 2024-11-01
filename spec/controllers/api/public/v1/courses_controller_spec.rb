@@ -19,6 +19,50 @@ RSpec.describe API::Public::V1::CoursesController do
       end
     end
 
+    context 'when course summary feature flag is on' do
+      before do
+        allow(Settings.features).to receive(:api_summary_content_change).and_return(true)
+      end
+
+      it 'returns new summary content' do
+        pgce_with_qts = create(:course, :resulting_in_pgce_with_qts)
+        pgde_with_qts = create(:course, :resulting_in_pgde_with_qts)
+        provider.courses << [pgce_with_qts, pgde_with_qts]
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year
+        }
+
+        actual = json_response['data'].map do |data|
+          data['attributes']['summary']
+        end
+
+        expect(actual).to contain_exactly('QTS with PGCE full time', 'QTS with PGDE full time')
+      end
+    end
+
+    context 'when course summary feature flag is off' do
+      before do
+        allow(Settings.features).to receive(:api_summary_content_change).and_return(false)
+      end
+
+      it 'returns old summary content' do
+        pgce_with_qts = create(:course, :resulting_in_pgce_with_qts)
+        pgde_with_qts = create(:course, :resulting_in_pgde_with_qts)
+        provider.courses << [pgce_with_qts, pgde_with_qts]
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year
+        }
+
+        actual = json_response['data'].map do |data|
+          data['attributes']['summary']
+        end
+
+        expect(actual).to contain_exactly('PGCE with QTS full time', 'PGDE with QTS full time')
+      end
+    end
+
     context 'when there are courses' do
       before do
         provider.courses << build_list(:course, 2, provider:)
