@@ -1,6 +1,6 @@
-<% case find_outcome %>
-<% when "QTS" %>
-  <%= govuk_details(summary_text: "QTS") do %>
+<% case course.qualification %>
+<% when 'qts' %>
+  <%= govuk_details(summary_text:) do %>
     <p class="govuk-body">
       Qualified teacher status (QTS) allows you to teach in state schools in England and may also allow you to teach in other parts of the UK.
     </p>
@@ -8,8 +8,8 @@
       It may also allow you to teach overseas, though you should always check what qualifications are needed in the country you’d like to teach in.
     </p>
   <% end %>
-<% when "QTS with PGCE" %>
-  <%= govuk_details(summary_text: "QTS with PGCE") do %>
+<% when "pgce_with_qts" %>
+  <%= govuk_details(summary_text:) do %>
     <p class="govuk-body">
      You need qualified teacher status (QTS) to teach in state schools in England. QTS may also allow you to teach in other parts of the UK.
     </p>
@@ -17,8 +17,8 @@
       This course also offers a postgraduate certificate in education (PGCE). PGCE courses can include credits that count towards a master’s degree.
     </p>
   <% end %>
-<% when "PGDE with QTS" %>
-  <%= govuk_details(summary_text: "PGDE with QTS") do %>
+<% when "pgde_with_qts" %>
+  <%= govuk_details(summary_text:) do %>
     <p class="govuk-body">
       A postgraduate diploma in education (PGDE) with qualified teacher status (QTS) will allow you to teach in state schools in England and may allow you to teach in other parts of the UK.
     </p>
@@ -29,8 +29,8 @@
       Many PGDE courses include credits towards a Master’s degree.
     </p>
   <% end %>
-<% when "PGCE" %>
-  <%= govuk_details(summary_text: "PGCE") do %>
+<% when "pgce" %>
+  <%= govuk_details(summary_text:) do %>
     <p class="govuk-body">
       A postgraduate certificate in education (PGCE) is an academic qualification in education.
     </p>
@@ -41,8 +41,8 @@
       This course does not lead to qualified teacher status (QTS).
     </p>
   <% end %>
-<% when "PGDE" %>
-  <%= govuk_details(summary_text: "PGDE") do %>
+<% when "pgde" %>
+  <%= govuk_details(summary_text:) do %>
     <p class="govuk-body">
       A postgraduate diploma in education (PGDE) is equivalent to a postgraduate certificate in education (PGCE).
     </p>
@@ -53,7 +53,7 @@
       This course does not lead to qualified teacher status (QTS).
     </p>
   <% end %>
-<% when "Teacher degree apprenticeship with QTS" %>
+<% when "undergraduate_degree_with_qts" %>
   <%= govuk_details(summary_text: t(".tda_with_qts")) do %>
     <p class="govuk-body">
       <%= t(

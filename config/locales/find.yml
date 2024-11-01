@@ -27,7 +27,7 @@ en:
       pgce: "PGCE"
       pgce_with_qts: "QTS with PGCE"
       pgde: "PGDE"
-      pgde_with_qts: "PGDE with QTS"
+      pgde_with_qts: "QTS with PGDE"
       undergraduate_degree_with_qts: Teacher degree apprenticeship with QTS
     location_filter:
       errors:

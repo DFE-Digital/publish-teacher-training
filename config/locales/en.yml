@@ -173,7 +173,7 @@ en:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
       pgde_with_qts:
-        label: "PGDE with QTS"
+        label: "QTS with PGDE"
         help: "Postgraduate diploma in education with qualified teacher status"
     age_range_in_years:
       other:
@@ -422,7 +422,7 @@ en:
         qts: "QTS"
         pgce_with_qts: "QTS with PGCE"
         pgce: "PGCE"
-        pgde_with_qts: "PGDE with QTS"
+        pgde_with_qts: "QTS with PGDE"
         pgde: "PGDE"
       entry_requirements:
         must_have_qualification_at_application_time: "Must have the GCSE"
@@ -1290,7 +1290,7 @@ en:
         label: "PGDE only (without QTS)"
         help: "Postgraduate diploma in education"
       pgde_with_qts:
-        label: "PGDE with QTS"
+        label: "QTS with PGDE"
         help: "Postgraduate diploma in education with qualified teacher status"
       undergraduate_degree_with_qts:
         label: "Teacher degree apprenticeship (TDA) with QTS"

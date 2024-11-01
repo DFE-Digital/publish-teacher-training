@@ -89,7 +89,7 @@ RSpec.describe CourseAttributeFormatterService do
 
     context 'pgde_with_qts' do
       let(:value) { 'pgde_with_qts' }
-      let(:expected_value) { 'PGDE with QTS' }
+      let(:expected_value) { 'QTS with PGDE' }
 
       it { is_expected.to eq(expected_value) }
     end
