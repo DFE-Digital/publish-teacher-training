@@ -33,11 +33,19 @@
                     </strong>
                   </span>
             <p class="govuk-hint govuk-!-font-size-16">
-              <%= t("find.results.course_placements.nearest_location", count: number_of_sites) %>
+              <% if course.salaried? %>
+                  <%= t("find.results.course_placements.nearest_location_salary", count: number_of_sites) %>
+              <% else %>
+                  <%= t("find.results.course_placements.nearest_location", count: number_of_sites) %>
+              <% end %>
             </p>
           <% else %>
             <p class="govuk-body">
-              <%= t("find.results.course_placements.all_school_placements", count: number_of_sites) %>
+              <% if course.salaried? %>
+                <%= t("find.results.course_placements.all_school_placements_salary", count: number_of_sites) %>
+              <% else %>
+                <%= t("find.results.course_placements.all_school_placements", count: number_of_sites) %>
+              <% end %>
             </p>
           <% end %>
 

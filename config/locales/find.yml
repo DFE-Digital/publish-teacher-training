@@ -218,7 +218,7 @@ en:
           apprenticeship_html: "This a Teaching Apprenticeship course paying a <strong>salary</strong>"
       course_placements:
         nearest_location:
-          zero: "No placement locations available"
+          zero: "No placement schools available"
           one: "Nearest potential placement school"
           other: "Nearest of %{count} potential placement schools"
         nearest_location_salary:
@@ -230,7 +230,7 @@ en:
           one: "%{count} potential placement school"
           other: "%{count} potential placement schools"
         all_school_placements_salary:
-          zero: "Not listed yet"
+          zero: "No employing schools available"
           one: "%{count} potential employing school"
           other: "%{count} potential employing schools"
       course_study_sites:
