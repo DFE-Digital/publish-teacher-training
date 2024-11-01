@@ -141,7 +141,7 @@ feature 'Editing course outcome', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_shown_the_correct_qts_options
-    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('QTS', 'QTS with PGCE', 'PGDE with QTS', 'Teacher degree apprenticeship (TDA) with QTS')
+    expect(publish_courses_outcome_edit_page.qualification_names).to contain_exactly('QTS', 'QTS with PGCE', 'QTS with PGDE', 'Teacher degree apprenticeship (TDA) with QTS')
   end
 
   def then_i_am_shown_the_correct_non_qts_options

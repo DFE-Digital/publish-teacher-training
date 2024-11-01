@@ -5,23 +5,28 @@ module Find
     module QualificationsSummaryComponent
       class ViewPreview < ViewComponent::Preview
         def qts
-          render Find::Courses::QualificationsSummaryComponent::View.new('QTS')
+          course = Course.new(qualification: 'qts').decorate
+          render Find::Courses::QualificationsSummaryComponent::View.new(course:)
         end
 
         def pgce_with_qts
-          render Find::Courses::QualificationsSummaryComponent::View.new('PGCE with QTS')
+          course = Course.new(qualification: 'pgce_with_qts').decorate
+          render Find::Courses::QualificationsSummaryComponent::View.new(course:)
         end
 
         def pgde_with_qts
-          render Find::Courses::QualificationsSummaryComponent::View.new('PGDE with QTS')
+          course = Course.new(qualification: 'pgde_with_qts').decorate
+          render Find::Courses::QualificationsSummaryComponent::View.new(course:)
         end
 
         def pgce
-          render Find::Courses::QualificationsSummaryComponent::View.new('PGCE')
+          course = Course.new(qualification: 'pgce').decorate
+          render Find::Courses::QualificationsSummaryComponent::View.new(course:)
         end
 
         def pgde
-          render Find::Courses::QualificationsSummaryComponent::View.new('PGDE')
+          course = Course.new(qualification: 'pgde').decorate
+          render Find::Courses::QualificationsSummaryComponent::View.new(course:)
         end
       end
     end

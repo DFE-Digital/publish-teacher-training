@@ -38,7 +38,7 @@
   <% summary_list.with_row do |row| %>
     <% row.with_key(text: t(".qualification")) %>
     <% row.with_value do %>
-      <%= render Find::Courses::QualificationsSummaryComponent::View.new(find_outcome) %>
+      <%= render Find::Courses::QualificationsSummaryComponent::View.new(course:) %>
     <% end %>
   <% end %>
 

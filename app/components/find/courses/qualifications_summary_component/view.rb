@@ -7,11 +7,13 @@ module Find
         include ApplicationHelper
         include ::ViewHelper
 
-        attr_reader :find_outcome
+        attr_reader :course
+        delegate :find_outcome, to: :course
+        alias_method :summary_text, :find_outcome
 
-        def initialize(find_outcome)
+        def initialize(course:)
           super
-          @find_outcome = find_outcome
+          @course = course
         end
       end
     end
