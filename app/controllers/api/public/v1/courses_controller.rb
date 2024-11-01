@@ -18,12 +18,8 @@ module API
         def cached_course_count
           year = permitted_params[:recruitment_cycle_year] || RecruitmentCycle.current.year
 
-          if permitted_params[:no_cache]
+          Rails.cache.fetch("api_course_count_#{year}", expires_in: 5.minutes) do
             courses.count('course.id')
-          else
-            Rails.cache.fetch("api_course_count_#{year}", expires_in: 5.minutes) do
-              courses.count('course.id')
-            end
           end
         end
 
@@ -40,7 +36,7 @@ module API
         end
 
         def permitted_params
-          params.permit('page', 'no_cache', 'sort', 'per_page', 'courses', 'recruitment_cycle_year', 'include', 'filter' => %w[updated_since funding_type])
+          params.permit('page', 'sort', 'per_page', 'courses', 'recruitment_cycle_year', 'include', 'filter' => %w[updated_since funding_type])
         end
       end
     end
