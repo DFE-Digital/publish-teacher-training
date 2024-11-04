@@ -8,6 +8,6 @@
 
     <%= content %>
 
-    <%= govuk_pagination(pagy: pagy) %>
+    <%= render Paginator.new(scope: collection) %>
   </div>
 </div>

@@ -2,4 +2,4 @@
 
 <%= render "support/users/user_providers", providers: @providers %>
 
-<%= govuk_pagination(pagy: @pagy) %>
+<%= render Paginator.new(scope: @providers) %>

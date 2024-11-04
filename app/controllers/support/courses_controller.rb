@@ -3,7 +3,7 @@
 module Support
   class CoursesController < SupportController
     def index
-      @pagy, @courses = pagy(provider.courses.order(:name))
+      @courses = provider.courses.order(:name).page(params[:page] || 1)
       render layout: 'provider_record'
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = 'Provider not found'

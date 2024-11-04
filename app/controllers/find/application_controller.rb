@@ -2,7 +2,6 @@
 
 module Find
   class ApplicationController < ActionController::Base
-    include Pagy::Backend
     include DfE::Analytics::Requests
 
     layout 'find_layout'
