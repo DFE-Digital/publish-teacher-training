@@ -4,7 +4,7 @@ module Support
   module Providers
     class UsersController < SupportController
       def index
-        @pagy, @users = pagy(provider.users.order(:last_name))
+        @users = provider.users.order(:last_name).page(params[:page] || 1)
         render layout: 'provider_record'
       end
 

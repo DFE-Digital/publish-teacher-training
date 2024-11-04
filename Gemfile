@@ -29,7 +29,10 @@ gem 'draper'
 # Custom attributes for endpoints
 gem 'active_model_serializers'
 
-# Pagination for frontend and API
+# Pagination for frontend
+gem 'kaminari'
+
+# Pagination for API
 gem 'pagy', '~> 9.1'
 
 # JSON:API Ruby Client

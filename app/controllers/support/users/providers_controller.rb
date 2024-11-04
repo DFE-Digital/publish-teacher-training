@@ -5,7 +5,7 @@ module Support
     class ProvidersController < SupportController
       def show
         user
-        @pagy, @providers = pagy(providers.order(:provider_name))
+        @providers = providers.order(:provider_name).page(params[:page] || 1)
         render layout: 'user_record'
       end
 

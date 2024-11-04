@@ -8,7 +8,7 @@ module Support
     before_action :site, only: %i[edit show delete]
 
     def index
-      @pagy, @sites = pagy(provider.sites.order(:location_name))
+      @sites = provider.sites.order(:location_name).page(params[:page] || 1)
       render layout: 'provider_record'
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = 'Provider not found'

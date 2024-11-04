@@ -4,7 +4,7 @@ module Support
   class UsersController < SupportController
     def index
       recruitment_cycle
-      @pagy, @users = pagy(filtered_users)
+      @users = filtered_users.page(params[:page] || 1)
     end
 
     def show
