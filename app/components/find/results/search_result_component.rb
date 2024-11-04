@@ -39,7 +39,7 @@ module Find
 
       def location_label
         if course.fee_based?
-          t('.fee_based.location', count: sites_count)
+          t('.fee_based.location')
         else
           t('.salary_based.location', count: sites_count)
         end
