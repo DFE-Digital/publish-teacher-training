@@ -12,8 +12,6 @@
   <%= "#{results.number_of_courses_string} found" %>
 </h1>
 
-<div class="app-filter-toggle"></div>
-
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
     <%= render Find::Results::FilterComponent.new(results:) %>
@@ -72,6 +70,9 @@
       <% end %>
 
     </div>
+
+    <div class="app-filter-toggle"></div>
+
 
     <%= render Find::Results::NoResultsComponent.new(results:, filters_view: @filters_view) %>
 
