@@ -36,11 +36,6 @@ authentication:
   # mode: magic_link  # when dfe_signin is down
   # mode: persona     # none critical systems, ie localhost
 
-cookies:
-  consent:
-    name: _consented_to_analytics_cookies
-    expire_after_days: 182
-
 current_recruitment_cycle_year: 2025
 next_cycle_open_date: 2025-10-1 # TBC
 
@@ -81,9 +76,6 @@ google:
     dataset: replaceme
     api_json_key: "{}"
     table_name: events
-
-google_tag_manager:
-  tracking_id: change_me
 
 feedback:
   link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
