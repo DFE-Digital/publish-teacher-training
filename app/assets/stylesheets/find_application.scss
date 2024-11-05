@@ -418,7 +418,6 @@
 
 .sort-container {
   display: block;
-  margin-top: 20px;
 
   @include govuk-media-query($from: tablet) {
     display: flex;
@@ -496,4 +495,9 @@
 
 .secondary-button-filter {
   margin-bottom: 0;
+}
+
+.selected-tags {
+  border-bottom: 1px solid #b1b4b6;
+  margin-bottom: 20px;
 }
