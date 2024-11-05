@@ -40,7 +40,7 @@ const filterToggleButton = new FilterToggleButton({
     container: $('.app-filter-toggle'),
     showText: 'Show filters',
     hideText: 'Hide filters',
-    classes: 'govuk-button--secondary'
+    classes: 'govuk-button--secondary secondary-button-filter'
   },
   closeButton: {
     container: $('.app-filter__header'),
