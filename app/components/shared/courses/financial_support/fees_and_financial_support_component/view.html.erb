@@ -9,45 +9,66 @@
     <%= render Find::Courses::FeesComponent::View.new(course) %>
   <% end %>
 
-    <% if salaried? %>
-      <%= render Shared::AdviceComponent::View.new(title: "How salaried courses work") do %>
-      <%= render partial: "shared/courses/financial_support/salaried" %>
-    <% end %>
-    <% elsif excluded_from_bursary? %>
-      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% end %>
-    <% elsif bursary_only? %>
-      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
 
-      <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
-    <% end %>
-    <% elsif has_scholarship_and_bursary? %>
-      <%= render Shared::AdviceComponent::View.new(title: "Financial support for UK citizens") do %>
-      <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
-    <% end %>
-    <% else %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-  <% end %>
+  <!--Not sure which course is right for you-->
+  <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section govuk-accordion__section--git">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+          <% if salaried? %>
+            How salaried courses work
+          <% else %>
+            Financial support for UK citizens
+          <% end %>
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
+      <% if salaried? %>
+        <%= render partial: "shared/courses/financial_support/salaried" %>
+      <% elsif excluded_from_bursary? %>
+        <%= render partial: "shared/courses/financial_support/loan" %>
+      <% elsif bursary_only? %>
+        <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+      <% elsif has_scholarship_and_bursary? %>
+        <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+      <% else %>
+        <%= render partial: "shared/courses/financial_support/loan" %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+  <!--End Not sure which course is right for you-->
 
-  <aside class="app-advice app-advice--non-uk">
-    <% if salaried? %>
-      <h3 class="app-advice__title">
-        Non-UK citizens: applying for salaried courses
-      </h3>
-    <% else %>
-       <h3 class="app-advice__title">
-        Financial support for non-UK citizens
-      </h3>
-    <% end %>
-    <div class="app-advice__body">
+  <!--Not sure which course is right for you-->
+  <div class="govuk-accordion govuk-accordion--non-uk" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section govuk-accordion__section--non-uk">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button govuk-accordion__section-button--non-uk" id="accordion-default-heading-1">
+          <% if salaried? %>
+          <h3 class="app-advice__title">
+            Non-UK citizens: applying for salaried courses
+          </h3>
+        <% else %>
+           <h3 class="app-advice__title">
+            Financial support for non-UK citizens
+          </h3>
+        <% end %>
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
       <% if salaried? %>
         <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
       <% else %>
         <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
       <% end %>
+      </div>
     </div>
-  </aside>
+  </div>
+  <!--End Not sure which course is right for you-->
 
   <!--<% if financial_support.present? %>
     <%= markdown(financial_support) %>

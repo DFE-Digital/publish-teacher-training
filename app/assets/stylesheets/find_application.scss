@@ -279,7 +279,7 @@
 
 .govuk-accordion--non-uk {
   margin-top: -40px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .govuk-accordion--non-uk-home {
@@ -321,11 +321,13 @@
 .govuk-accordion__section--non-uk {
   border-left: 5px solid #4c2c92 !important;
   background-color: #f3f2f1;
+  padding-bottom: 1px;
 }
 
 .govuk-accordion__section--git {
   border-left: 5px solid #f47738 !important;
   background-color: #f3f2f1;
+  padding-bottom: 1px;
 }
 
 .govuk-accordion__section--uk {
