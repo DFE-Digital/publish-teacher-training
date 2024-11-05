@@ -15,8 +15,10 @@
 !/log/.keep
 !/tmp/.keep
 
-#Ignore .env file
+#Ignore .env files
 .env
+.env.local
+.env.*.local
 
 .byebug_history
 .node-version
