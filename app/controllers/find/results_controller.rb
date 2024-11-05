@@ -13,7 +13,7 @@ module Find
 
       @results_view = ResultsView.new(query_parameters: matched_params)
       @filters_view = ResultFilters::FiltersView.new(params: matched_params)
-      @courses = @results_view.courses.page params[:page]
+      @courses = @results_view.courses.page(params[:page]).per(10)
       @number_of_courses_string = @results_view.number_of_courses_string
 
       track_search_results(number_of_results: @results_view.course_count,
