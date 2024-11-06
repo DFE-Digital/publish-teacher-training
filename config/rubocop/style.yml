@@ -24,3 +24,13 @@ Style/StringLiterals:
     - config/initializers/inflections.rb
     - bin/rails
     - bin/rake
+
+Style/SafeNavigationChainLength:
+  Enabled: true
+  Exclude:
+    - app/controllers/publish/courses/gcse_requirements_controller.rb
+    - app/forms/publish/course_study_mode_form.rb
+    - app/models/course.rb
+    - app/models/course_enrichment.rb
+    - app/services/courses/content_status_service.rb
+    - app/services/courses/creation_service.rb
