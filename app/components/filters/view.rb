@@ -12,12 +12,6 @@ module Filters
 
     private
 
-    def tags_for_filter(filter, value)
-      [value].flatten.map do |v|
-        { title: title_html(filter, v), remove_link: remove_select_tag_link(filter) }
-      end
-    end
-
     def filter_attributes
       "::Filters::#{filter_model}Attributes::View".constantize.new(filters:)
     end
@@ -31,8 +25,28 @@ module Filters
       tag.span('Remove ', class: 'govuk-visually-hidden') + value + tag.span(" #{filter.humanize.downcase} filter", class: 'govuk-visually-hidden')
     end
 
+    ### Tags are links you can click to remove the search property and reload the page
+    def tags_for_filter(filter, value)
+      if value.respond_to?(:keys)
+        value = value.keys
+        Array(value).map do |v|
+          { title: title_html(filter, v), remove_link: remove_select_tag_link({ filter => v }) }
+        end
+      else
+        Array(value).map do |v|
+          { title: title_html(filter, v), remove_link: remove_select_tag_link(filter) }
+        end
+      end
+    end
+
     def remove_select_tag_link(filter)
-      new_filters = filters.reject { |f| f == filter }
+      new_filters = filters.deep_dup
+
+      if filter.respond_to?(:keys)
+        new_filters[filter.keys.first].delete(filter.values.first)
+      else
+        new_filters.reject! { |f| f == filter }
+      end
       new_filters.to_query.blank? ? nil : "?#{new_filters.to_query}"
     end
 
