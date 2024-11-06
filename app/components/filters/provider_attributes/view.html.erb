@@ -14,3 +14,26 @@
     </div>
   </div>
 </div>
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+      <h1 class="govuk-fieldset__heading">
+        Provider Types
+      </h1>
+    </legend>
+    <div class="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <%= check_box_tag "provider_type[scitt]", nil, class: "govuk-checkboxes__input", checked: filters[:provider_type][:scitt] == "on" %>
+        <%= label_tag "scitt", t("components.filter.providers.scitt"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <%= check_box_tag "provider_type[university]", nil, class: "govuk-checkboxes__input", checked: filters[:provider_type][:university] == "on" %>
+        <%= label_tag "university", t("components.filter.providers.university"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
+      </div>
+      <div class="govuk-checkboxes__item">
+        <%= check_box_tag "provider_type[lead_school]", nil, class: "govuk-checkboxes__input", checked: filters[:provider_type][:lead_school] == "on" %>
+        <%= label_tag "lead_school", t("components.filter.providers.lead_school"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
+      </div>
+    </div>
+  </fieldset>
+</div>

@@ -27,6 +27,7 @@ module Filters
     end
 
     def title_html(filter, value)
+      value = value.keys.first if value.respond_to?(:keys)
       tag.span('Remove ', class: 'govuk-visually-hidden') + value + tag.span(" #{filter.humanize.downcase} filter", class: 'govuk-visually-hidden')
     end
 
