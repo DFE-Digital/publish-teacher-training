@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe AccreditedProvider do
+describe AccreditedProviderComponent do
   alias_method :component, :page
 
   before do
