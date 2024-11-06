@@ -11,11 +11,11 @@ module Find
 
       @results_view = ResultsView.new(query_parameters: matched_params)
       @filters_view = ResultFilters::FiltersView.new(params: matched_params)
-      @courses = @results_view.courses.page params[:page]
+      @pagy, @courses = pagy(@results_view.courses)
       @number_of_courses_string = @results_view.number_of_courses_string
 
       track_search_results(number_of_results: @results_view.course_count,
-                           course_codes: @courses.pluck(:course_code).uniq)
+                           course_codes: @results_view.courses.pluck(:course_code).uniq)
     end
 
     private
