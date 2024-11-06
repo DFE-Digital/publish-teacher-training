@@ -297,6 +297,10 @@ en:
         provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"
         accrediting_provider: "Accredited providers"
+        provider_type: "Provider Type"
+        scitt: "SCITT"
+        university: "University"
+        lead_school: "Lead School"
       users:
         text_search: "Name or email"
         user_type: "User type"
