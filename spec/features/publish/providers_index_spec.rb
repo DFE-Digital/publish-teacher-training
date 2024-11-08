@@ -23,6 +23,7 @@ feature 'Providers index' do
     i_should_see_the_provider_list
     i_should_see_the_admin_search_box
     i_should_see_the_pagination_link
+    i_should_only_see_10_providers_per_page
     i_can_search_with_provider_details
 
     i_should_see_the_change_organisation_link
@@ -118,6 +119,10 @@ feature 'Providers index' do
 
   def i_should_see_the_pagination_link
     expect(publish_providers_index_page.pagination_pages.text).to eq('2 of 4')
+  end
+
+  def i_should_only_see_10_providers_per_page
+    expect(page).to have_css('ul.govuk-list.govuk-list--spaced', count: 10)
   end
 
   def when_i_visit_the_publish_providers_index_page
