@@ -117,7 +117,7 @@ feature 'Providers index' do
   end
 
   def i_should_see_the_pagination_link
-    expect(publish_providers_index_page.pagination_pages.text).to eq('2 of 2')
+    expect(publish_providers_index_page.pagination_pages.text).to eq('2 of 4')
   end
 
   def when_i_visit_the_publish_providers_index_page
