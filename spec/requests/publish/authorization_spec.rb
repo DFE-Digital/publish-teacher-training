@@ -13,7 +13,7 @@ describe 'Provider authorization spec' do
   before { host! URI(Settings.base_url).host }
 
   describe 'GET /publish/organisations' do
-    describe 'when authenticated' do
+    describe 'when authenticated user has one provider' do
       it 'redirects twice to the first valid providers courses' do
         get '/auth/dfe/callback', headers: { 'omniauth.auth' => user_exists_in_dfe_sign_in(user:) }
         get publish_root_path
@@ -21,6 +21,16 @@ describe 'Provider authorization spec' do
         follow_redirect!
         expect(response).to redirect_to('/publish/organisations/A14/2025/courses')
         follow_redirect!
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'when authenticated user has two providers' do
+      it 'renders the providers index' do
+        user.providers << another_provider
+
+        get '/auth/dfe/callback', headers: { 'omniauth.auth' => user_exists_in_dfe_sign_in(user:) }
+        get publish_root_path
         expect(response).to have_http_status(:ok)
       end
     end
