@@ -9,7 +9,6 @@ module Find
     before_action -> { render_not_found if provider.nil? }
 
     before_action :render_feedback_component, only: :show
-    before_action :set_search_params, only: :show
 
     def show
       @course = provider.courses.includes(
