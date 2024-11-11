@@ -11,12 +11,14 @@ module Find
                :course_length_with_study_mode,
                :no_fee?, to: :course
 
-      def initialize(course:, filtered_by_location: false, sites_count: 0, study_sites_count: 0)
+      def initialize(course:, results_view:, filtered_by_location: false)
         super
         @course = course.decorate
         @filtered_by_location = filtered_by_location
-        @sites_count = sites_count
-        @study_sites_count = study_sites_count
+        @sites_count = results_view.sites_count(course)
+        @study_sites_count = results_view.sites_count(course)
+        @results_view = results_view
+        @search_params = results_view.query_parameters.to_query
       end
 
       def filtered_by_location?
