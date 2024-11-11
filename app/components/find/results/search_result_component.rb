@@ -33,7 +33,7 @@ module Find
         @study_sites_count.positive?
       end
 
-      def coure_title_link
+      def course_title_link
         t(
           '.course_title_html',
           course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, **request.query_parameters),
