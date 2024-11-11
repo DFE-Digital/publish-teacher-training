@@ -1,20 +1,23 @@
-<% content_for :before_content do %>
-  <%= govuk_back_link(
+<%= content_for :page_title, Find::ResultSummaryService.call(results: @results_view) %>
+<%= render Find::LocationSubjectFilterComponent.new(results: @results_view) %>
+
+<%# content_for :before_content do %>
+  <%#= govuk_back_link(
     text: "Back to home",
     href: find_root_path(@results_filter_query_parameters),
     html_attributes: {
       data: { qa: "page-back" }
     }
   ) %>
-<% end %>
+<%# end %>
 
 <h1 class="govuk-heading-xl" data-qa="heading">
-  <%= "#{results.number_of_courses_string} found" %>
+  <%= "#{@number_of_courses_string} found" %>
 </h1>
 
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <%= render Find::Results::FilterComponent.new(results:) %>
+    <%= render Find::Results::FilterComponent.new(results: @results_view) %>
   </div>
   <div class="app-filter-layout__content">
 
@@ -43,7 +46,7 @@
           <%= form.label :keywords, class: "govuk-label govuk-label--s" do %>
             Keyword
           <% end %>
-          <%= form.text_field :keywords, class: "govuk-input", value: filters_view.keywords, autocomplete: :off, form: "result-filters" %>
+          <%= form.text_field :keywords, class: "govuk-input", value: @filters_view.keywords, autocomplete: :off, form: "result-filters" %>
         </div>
 
         <div class="govuk-form-group" style="position: relative;">
@@ -51,7 +54,7 @@
             City, town or postcode
           <% end %>
 
-          <%= form.text_field :lq, id: :location, class: "govuk-input", value: filters_view.lq, autocomplete: :off, form: "result-filters" %>
+          <%= form.text_field :lq, id: :location, class: "govuk-input", value: @filters_view.lq, autocomplete: :off, form: "result-filters" %>
           <div id="location-autocomplete" class="govuk-body" style="position: absolute; width: 100%;"></div>
         </div>
 
@@ -60,7 +63,7 @@
               Search radius
             <% end %>
 
-            <%= form.select :radius, options_for_select(filters_view.radius_options_for_select, filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
+            <%= form.select :radius, options_for_select(@filters_view.radius_options_for_select, @filters_view.radius), {}, class: "govuk-select", form: "result-filters" %>
           </div>
 
         <button type="submit" class="govuk-button" data-module="govuk-button" form="result-filters" style="margin-bottom:5px;">
@@ -73,18 +76,16 @@
 
       <div class="app-filter-toggle div-sticky"></div>
 
-    <%= render Find::Results::NoResultsComponent.new(results:, filters_view: @filters_view) %>
+      <%= render Find::Results::NoResultsComponent.new(results: @results_view, filters_view: @filters_view) %>
+      <%= render Find::Results::SortByComponent.new(results: @results_view) %>>
 
-    <%= render Find::Results::SortByComponent.new(results:) %>
-
-    <% if results.has_results? %>
+    <% if @results_view.has_results? %>
       <ul class="app-search-results">
-        <% courses.each do |course| %>
+        <% @courses.each do |course| %>
           <%= render Find::Results::SearchResultComponent.new(
             course:,
-            filtered_by_location: results.location_filter?,
-            sites_count: results.sites_count(course),
-            study_sites_count: results.study_sites_count(course),
+            filtered_by_location: @results_view.location_filter?,
+            results_view: @results_view
           ) %>
         <% end %>
       </ul>
