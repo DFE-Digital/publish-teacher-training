@@ -282,7 +282,7 @@ en:
         pgce_with_qts:
           html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
         pgde_with_qts:
-          html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> with <abbr title='Qualified teacher status'>QTS</abbr>
+          html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate diploma in education'>PGDE</abbr>
         pgce:
           html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde:

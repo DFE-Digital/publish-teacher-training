@@ -181,7 +181,7 @@ en:
         help: "Postgraduate diploma in education"
       pgde_with_qts:
         label: "QTS with PGDE"
-        help: "Postgraduate diploma in education with qualified teacher status"
+        help: "Qualified teacher status with a postgraduate diploma in education"
     age_range_in_years:
       other:
         label: "Another age range"
@@ -1298,7 +1298,7 @@ en:
         help: "Postgraduate diploma in education"
       pgde_with_qts:
         label: "QTS with PGDE"
-        help: "Postgraduate diploma in education with qualified teacher status"
+        help: "Qualified teacher status with a postgraduate diploma in education"
       undergraduate_degree_with_qts:
         label: "Teacher degree apprenticeship (TDA) with QTS"
         help: "Teacher degree apprenticeship with qualified teacher status"
