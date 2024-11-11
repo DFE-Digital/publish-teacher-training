@@ -2,7 +2,7 @@
 
 module Publish
   module TrainingProviders
-    class CoursesController < PublishController
+    class CoursesController < ApplicationController
       def index
         authorize(provider, :index?)
 

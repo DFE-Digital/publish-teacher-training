@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class SchoolSearchController < PublishController
+    class SchoolSearchController < ApplicationController
       helper_method :query, :search_result_title_component
 
       before_action :authorize_provider

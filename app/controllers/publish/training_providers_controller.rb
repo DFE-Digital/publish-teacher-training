@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class TrainingProvidersController < PublishController
+  class TrainingProvidersController < ApplicationController
     def index
       authorize(provider, :can_list_training_providers?)
 

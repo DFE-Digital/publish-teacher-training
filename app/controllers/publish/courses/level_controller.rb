@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class LevelController < PublishController
+    class LevelController < ApplicationController
       include CourseBasicDetailConcern
 
       private

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class UsersController < PublishController
+  class UsersController < ApplicationController
     def index
       @users = provider.users.in_name_order
     end

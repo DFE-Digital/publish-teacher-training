@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class FeesAndFinancialSupportController < PublishController
+    class FeesAndFinancialSupportController < ApplicationController
       include CopyCourseContent
       before_action :authorise_with_pundit
 

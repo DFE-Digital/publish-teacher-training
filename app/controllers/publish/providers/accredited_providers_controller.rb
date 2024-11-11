@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class AccreditedProvidersController < PublishController
+    class AccreditedProvidersController < ApplicationController
       helper_method :accredited_provider_id
 
       def index; end

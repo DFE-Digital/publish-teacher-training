@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class InterviewProcessController < PublishController
+    class InterviewProcessController < ApplicationController
       include CopyCourseContent
       before_action :authorise_with_pundit
 

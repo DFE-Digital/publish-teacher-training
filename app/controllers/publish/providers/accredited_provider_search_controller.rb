@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class AccreditedProviderSearchController < PublishController
+    class AccreditedProviderSearchController < ApplicationController
       helper_method :query, :search_result_title_component
 
       def new

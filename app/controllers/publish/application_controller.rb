@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class PublishController < ApplicationController
+  class ApplicationController < ::ApplicationController
     include SuccessMessage
 
     layout 'publish'
