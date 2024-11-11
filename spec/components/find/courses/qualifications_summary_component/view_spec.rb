@@ -29,7 +29,7 @@ describe Find::Courses::QualificationsSummaryComponent::View, type: :component d
       result = render_inline(described_class.new(course:))
 
       expect(result.text).to include('QTS with PGDE')
-      expect(result.text).to include('A postgraduate diploma in education (PGDE) with qualified teacher status (QTS) will allow you to teach in state schools in England')
+      expect(result.text).to include('Qualified teacher status (QTS) with a postgraduate diploma in education (PGDE) will allow you to teach in state schools in England')
     end
   end
 
