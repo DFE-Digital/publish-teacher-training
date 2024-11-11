@@ -3,6 +3,7 @@
 module Publish
   class NotificationsController < PublishController
     skip_before_action :check_interrupt_redirects
+    skip_before_action :authorize_provider
 
     def index
       authorize(current_user, :index?)
