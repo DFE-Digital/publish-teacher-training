@@ -77,7 +77,7 @@
       <div class="app-filter-toggle div-sticky"></div>
 
       <%= render Find::Results::NoResultsComponent.new(results: @results_view, filters_view: @filters_view) %>
-      <%= render Find::Results::SortByComponent.new(results: @results_view) %>>
+      <%= render Find::Results::SortByComponent.new(results: @results_view) %>
 
     <% if @results_view.has_results? %>
       <ul class="app-search-results">
