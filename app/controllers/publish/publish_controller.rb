@@ -10,7 +10,7 @@ module Publish
     before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?('rollover.can_edit_current_and_next_cycles') }
 
     # Protect every action of a provider
-    before_action { authorize provider, :show? if provider }
+    before_action :authorize_provider
 
     after_action :verify_authorized
 
@@ -22,7 +22,7 @@ module Publish
     private
 
     def provider
-      @provider ||= recruitment_cycle.providers.find_by(provider_code: params[:provider_code] || params[:code])
+      @provider ||= recruitment_cycle.providers.find_by!(provider_code: provider_code_param)
     end
 
     def recruitment_cycle
@@ -50,6 +50,14 @@ module Publish
       return if session[:cycle_year].to_i == Settings.current_recruitment_cycle_year
 
       session[:cycle_year] = nil
+    end
+
+    def authorize_provider
+      authorize provider, :show? if provider_code_param.present?
+    end
+
+    def provider_code_param
+      params[:provider_code] || params[:code]
     end
   end
 end
