@@ -10,7 +10,7 @@ module Support
     end
 
     def call
-      filter_records.page(filter_params[:page] || 1)
+      filter_records
     end
 
     private

@@ -6,7 +6,7 @@ module Publish
       before_action :site, only: %i[show delete]
 
       def index
-        @schools = provider.sites.sort_by(&:location_name)
+        @pagy, @schools = pagy(provider.sites.order(:location_name))
       end
 
       def show; end

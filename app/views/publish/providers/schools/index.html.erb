@@ -32,6 +32,7 @@
           <%= render partial: "school", collection: @schools %>
         </tbody>
       </table>
+      <%= govuk_pagination(pagy: @pagy) %>
     <% end %>
   </div>
 </div>
