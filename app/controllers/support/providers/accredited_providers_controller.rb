@@ -10,7 +10,7 @@ module Support
       before_action :reset_accredited_provider_form, only: %i[index]
 
       def index
-        @accredited_providers = provider.accrediting_providers.order(:provider_name).page(params[:page] || 1)
+        @pagy, @accredited_providers = pagy(provider.accrediting_providers.order(:provider_name))
         render layout: 'provider_record'
       end
 

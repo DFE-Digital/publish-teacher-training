@@ -3,7 +3,7 @@
 module Publish
   class UsersController < PublishController
     def index
-      @users = provider.users.in_name_order
+      @pagy, @users = pagy(provider.users.in_name_order)
     end
 
     def show

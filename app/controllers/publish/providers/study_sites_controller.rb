@@ -7,7 +7,7 @@ module Publish
       before_action :build_study_site, only: %i[new create]
 
       def index
-        @study_sites = provider.study_sites.sort_by(&:location_name)
+        @pagy, @study_sites = pagy(provider.study_sites.order(:location_name))
       end
 
       def show; end
