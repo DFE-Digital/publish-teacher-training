@@ -1,18 +1,18 @@
-version: '3.4'
-volumes:
-  dbdata:
 services:
-
   redis:
     image: redis
+    ports:
+      - "6379:6379"
 
   db:
     image: postgres:14-alpine
     # To preserve data between runs of docker compose, we mount a folder from the host machine.
     volumes:
-     - dbdata:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
     environment:
-    - POSTGRES_PASSWORD=developmentpassword
+      - POSTGRES_PASSWORD=developmentpassword
+    ports:
+      - "5432:5432"
 
   web:
     build:
@@ -51,3 +51,6 @@ services:
       - DB_PASSWORD=developmentpassword
       - SETTINGS__APPLICATION=teacher-training-api-bg
       - REDIS_WORKER_URL=redis://redis:6379
+
+volumes:
+  dbdata:
