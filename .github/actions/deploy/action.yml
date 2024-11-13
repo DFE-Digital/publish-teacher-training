@@ -1,4 +1,4 @@
-name: deploy_v2
+name: deploy
 description: deploys application to AKS
 
 inputs:
@@ -142,7 +142,7 @@ runs:
         pr-number: ${{ inputs.pr-number }}
 
     - name: Run Smoke Tests for ${{ inputs.environment }}
-      uses: ./.github/actions/smoke-test_v2/
+      uses: ./.github/actions/smoke-test/
       with:
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}

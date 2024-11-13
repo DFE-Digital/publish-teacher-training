@@ -1,5 +1,5 @@
-name: Deploy v2 Review App
-concurrency: deploy_v2_${{ github.ref_name }}
+name: Deploy Review App
+concurrency: deploy_${{ github.ref_name }}
 
 on:
   workflow_dispatch:
@@ -18,9 +18,9 @@ on:
         required: true
 
 jobs:
-  deploy-v2-review-app:
-    name: Deployment To Review v2
-    concurrency: deploy_v2_review_${{ inputs.pr-number }}
+  deploy-review-app:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ inputs.pr-number }}
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,9 +38,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy App to Review v2
-        id: deploy_v2_review
-        uses: ./.github/actions/deploy_v2/
+      - name: Deploy App to Review
+        id: deploy_review
+        uses: ./.github/actions/deploy/
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
           environment: review_aks
@@ -57,5 +57,5 @@ jobs:
           env:    review_aks-${{ inputs.pr-number }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
+          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
           ref: ${{ github.head_ref }}

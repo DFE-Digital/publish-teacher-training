@@ -103,7 +103,7 @@ jobs:
           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Push ${{ env.DOCKER_IMAGE }} images for review
-      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+      if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Run Snyk to check Docker image for vulnerabilities
@@ -115,7 +115,7 @@ jobs:
         args: --file=Dockerfile --severity-threshold=high --exclude-app-vulns
 
     - name: Push ${{ env.DOCKER_IMAGE }} images
-      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+      if: ${{ success() && !contains(github.event.pull_request.labels.*.name, 'deploy') }}
       run: docker image push --all-tags ${{ env.DOCKER_IMAGE }}
 
     - name: Alert Build Failures
@@ -270,10 +270,10 @@ jobs:
         SLACK_MESSAGE: ':alert: <!channel> Publish Teacher Training Test failure :sadparrot:'
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  deploy-v2-review-app:
-    name: Deployment To Review v2
-    concurrency: deploy_v2_review_${{ github.event.pull_request.number }}
-    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy_v2') }}
+  deploy-review-app:
+    name: Deployment To Review
+    concurrency: deploy_review_${{ github.event.pull_request.number }}
+    if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
     runs-on: ubuntu-latest
     env:
@@ -291,9 +291,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy App to Review v2
-        id: deploy_v2_review
-        uses: ./.github/actions/deploy_v2/
+      - name: Deploy App to Review
+        id: deploy_review
+        uses: ./.github/actions/deploy/
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
           environment: review_aks
@@ -310,14 +310,14 @@ jobs:
           env:    review_aks-${{ github.event.pull_request.number }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.deploy_v2_review.outputs.deploy-url }}
+          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
           ref: ${{ github.head_ref }}
 
   deploy-aks-before-production:
-    name: Parallel deployment before production v2
+    name: Parallel deployment before production
     environment:
       name: ${{ matrix.environment }}
-      url: ${{ steps.deploy_app_before_production_v2.outputs.deploy-url }}
+      url: ${{ steps.deploy_app_before_production.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [test]
     runs-on: ubuntu-latest
@@ -329,9 +329,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy App to ${{ matrix.environment }} v2
-        id: deploy_app_before_production_v2
-        uses: ./.github/actions/deploy_v2/
+      - name: Deploy App to ${{ matrix.environment }}
+        id: deploy_app_before_production
+        uses: ./.github/actions/deploy/
         with:
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
           environment: ${{ matrix.environment }}
@@ -339,10 +339,10 @@ jobs:
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-aks-production:
-    name: Production deployment v2
+    name: Production deployment
     environment:
       name: production_aks
-      url: ${{ steps.deploy_app_v2.outputs.deploy-url }}
+      url: ${{ steps.deploy_app.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [deploy-aks-before-production]
     runs-on: ubuntu-latest
@@ -350,9 +350,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy App to production v2
-        id: deploy_app_v2
-        uses: ./.github/actions/deploy_v2/
+      - name: Deploy App to production
+        id: deploy_app
+        uses: ./.github/actions/deploy/
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
           environment: production_aks
@@ -360,10 +360,10 @@ jobs:
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
   deploy-aks-sandbox:
-    name: Sandbox deployment v2
+    name: Sandbox deployment
     environment:
       name: sandbox_aks
-      url: ${{ steps.deploy_sandbox_v2.outputs.deploy-url }}
+      url: ${{ steps.deploy_sandbox.outputs.deploy-url }}
     if: ${{ success() && github.ref == 'refs/heads/main' }}
     needs: [deploy-aks-production]
     runs-on: ubuntu-latest
@@ -371,9 +371,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy App to sandbox v2
-        id: deploy_sandbox_v2
-        uses: ./.github/actions/deploy_v2/
+      - name: Deploy App to sandbox
+        id: deploy_sandbox
+        uses: ./.github/actions/deploy/
         with:
           azure-credentials: ${{ secrets.AZURE_CREDENTIALS_SANDBOX_AKS }}
           environment: sandbox_aks

@@ -1,4 +1,4 @@
-name: restore_v2
+name: restore
 description: Restore AKS environment database
 
 inputs:
