@@ -91,13 +91,13 @@ runs:
             ;;
         esac
 
-        if [ "${{ inputs.environment }}" == "review_aks" ] && [ "${{ inputs.pr-number }}" != "" ]; then
+        if [ "${{ inputs.environment }}" == "review" ] && [ "${{ inputs.pr-number }}" != "" ]; then
           echo "Set the app name to include the review app PR number."
           echo "app_name=publish-review-${{ inputs.pr-number }}" >> $GITHUB_ENV
         fi
 
     - name: Install kubectl
-      if: ${{ inputs.environment == 'review_aks' }}
+      if: ${{ inputs.environment == 'review' }}
       uses: DFE-Digital/github-actions/set-kubectl@master
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
@@ -105,14 +105,14 @@ runs:
         azure-credentials: ${{ inputs.azure-credentials }}
 
     - name: K8 setup
-      if: ${{ inputs.environment == 'review_aks' }}
+      if: ${{ inputs.environment == 'review' }}
       shell: bash
       run: |
-        USE_DB_SETUP_COMMAND=false make ci review_aks get-cluster-credentials
+        USE_DB_SETUP_COMMAND=false make ci review get-cluster-credentials
         make install-konduit
 
     - name: Check whether we need to setup and restore the sanitised database
-      if: ${{ inputs.environment == 'review_aks' }}
+      if: ${{ inputs.environment == 'review' }}
       shell: bash
       run: |
         konduit_worked=false
@@ -134,7 +134,7 @@ runs:
         IMAGE_TAG: ${{ inputs.sha }}
 
     - name: Restore AKS database
-      if: ${{ inputs.environment == 'review_aks' && env.USE_DB_SETUP_COMMAND == 'true' }}
+      if: ${{ inputs.environment == 'review' && env.USE_DB_SETUP_COMMAND == 'true' }}
       uses: ./.github/actions/restore/
       with:
         azure-credentials: ${{ inputs.azure-credentials }}

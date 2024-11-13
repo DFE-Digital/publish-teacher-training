@@ -8,36 +8,36 @@ TERRAFILE_VERSION=0.8
 .PHONY: help
 help: ## Show this help
 	echo Usage: make env [target]...
-	echo 
+	echo
 	echo "     Environments:"
 	echo "       - qa"
 	echo "       - review"
 	echo "       - production"
 	echo "       - staging"
 	echo "       - sandbox"
-	echo 
+	echo
 	echo "  Examples:"
-	echo 
+	echo
 	echo "  $$ make qa print-app-secrets"
 	echo "  $$ make review console PR_NUMBER=1234"
-	echo 
+	echo
 	echo "For more information regarding some of the commands run here:"
 	echo "  https://github.com/DFE-Digital/publish-teacher-training/blob/main/guides/aks-cheatsheet.md"
-	echo 
+	echo
 	printf "\033[33m%s\033[0m\n" "Install utilities:"
-	echo 
+	echo
 	@grep -E '^install[a-zA-Z\.\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	echo 
+	echo
 	printf "\033[33m%s\033[0m\n" "Manage or inspect secrets:"
-	echo 
+	echo
 	@grep -E '^(print|edit)[a-zA-Z\.\-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	echo 
+	echo
 	printf "\033[33m%s\033[0m\n" "Access the running app in given environment:"
-	echo 
+	echo
 	@grep -E '^(console|shell|logs):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-	echo 
+	echo
 	printf "\033[33m%s\033[0m\n" "Enable / Disable the maintainence page:"
-	echo 
+	echo
 	@grep -E '^(en|dis)able-maintenance:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 ## Install utilities
@@ -62,41 +62,41 @@ install-terrafile: ## Install terrafile to manage terraform modules
 		|| true
 
 # Set "USE_DB_SETUP_COMMAND" to true for first time deployments, otherwise false.
-review_aks: ## make review_aks deploy PR_NUMBER=2222 USE_DB_SETUP_COMMAND=true
+review: ## make review deploy PR_NUMBER=2222 USE_DB_SETUP_COMMAND=true
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a name for your review app))
 	$(if $(USE_DB_SETUP_COMMAND), , $(error Missing environment variable "USE_DB_SETUP_COMMAND", Set to true for first time deployments, otherwise false.))
 	$(eval export TF_VAR_use_db_setup_command=$(USE_DB_SETUP_COMMAND))
-	$(eval include global_config/review_aks.sh)
+	$(eval include global_config/review.sh)
 	$(eval export TF_VAR_app_name=$(PR_NUMBER))
 	$(eval backend_key=-backend-config=key=pr-$(PR_NUMBER).tfstate)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 	echo https://$(SERVICE_NAME)-review-$(PR_NUMBER).test.teacherservices.cloud will be created in AKS
 
 # Set "USE_DB_SETUP_COMMAND" to true for first time deployments, otherwise false.
-dv_review_aks: ## make dv_review_aks deploy PR_NUMBER=2222 CLUSTER=cluster1 USE_DB_SETUP_COMMAND=true
+dv_review: ## make dv_review deploy PR_NUMBER=2222 CLUSTER=cluster1 USE_DB_SETUP_COMMAND=true
 	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify a pr number for your review app))
 	$(if $(USE_DB_SETUP_COMMAND), , $(error Missing environment variable "USE_DB_SETUP_COMMAND", Set to true for first time deployments, otherwise false.))
 	$(if $(CLUSTER), , $(error Missing environment variable "CLUSTER", Please specify a dev cluster name (eg 'cluster1')))
 	$(eval export TF_VAR_use_db_setup_command=$(USE_DB_SETUP_COMMAND))
-	$(eval include global_config/dv_review_aks.sh)
+	$(eval include global_config/dv_review.sh)
 	$(eval backend_key=-backend-config=key=$(PR_NUMBER).tfstate)
 	$(eval export TF_VAR_cluster=$(CLUSTER))
 	$(eval export TF_VAR_app_name=$(PR_NUMBER))
 	echo https://$(SERVICE_NAME)-review-$(PR_NUMBER).$(CLUSTER).development.teacherservices.cloud will be created in AKS
 
-qa_aks:
-	$(eval include global_config/qa_aks.sh)
+qa:
+	$(eval include global_config/qa.sh)
 	$(eval backup_storage_secret_name=PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-DEVELOPMENT)
 
-staging_aks:
-	$(eval include global_config/staging_aks.sh)
+staging:
+	$(eval include global_config/staging.sh)
 
-sandbox_aks:
-	$(eval include global_config/sandbox_aks.sh)
+sandbox:
+	$(eval include global_config/sandbox.sh)
 
-production_aks:
+production:
 	$(if $(or ${SKIP_CONFIRM}, ${CONFIRM_PRODUCTION}), , $(error Missing CONFIRM_PRODUCTION=yes))
-	$(eval include global_config/production_aks.sh)
+	$(eval include global_config/production.sh)
 
 .PHONY: ci
 ci:	## Run in automation environment
@@ -133,24 +133,24 @@ get-cluster-credentials: read-cluster-config set-azure-account ## make <config> 
 	az aks get-credentials --overwrite-existing -g ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER_SHORT}-rg -n ${RESOURCE_NAME_PREFIX}-tsc-${CLUSTER}-aks
 	kubelogin convert-kubeconfig -l $(if ${GITHUB_ACTIONS},spn,azurecli)
 
-aks-console: get-cluster-credentials
+console: get-cluster-credentials ## Run the Rails console in the given environment
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID} -- /bin/sh -c "cd /app && /usr/local/bin/bundle exec rails c"
 
-aks-logs: get-cluster-credentials
+logs: get-cluster-credentials ## Print logs from aks
 	echo "config: $CONFIG_LONG"
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID} --tail=-1 --timestamps=true
 
-aks-worker-logs: get-cluster-credentials
+worker-logs: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID}-worker --tail=-1 --timestamps=true
 
-aks-ssh: get-cluster-credentials
+shell: get-cluster-credentials ## Start an ssh shell on the web pod
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID} -- /bin/sh
 
-aks-worker-ssh: get-cluster-credentials
+worker-shell: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID}-worker -- /bin/sh
 
@@ -256,42 +256,13 @@ domains-apply: domains-init # make publish qa domains-apply
 domains-destroy: domains-init # make publish qa domains-destroy
 	terraform -chdir=terraform/custom_domains/environment_domains destroy -var-file workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}.tfvars.json
 
-action-group-resources: set-azure-account # make env_aks action-group-resources ACTION_GROUP_EMAIL=notificationemail@domain.com . Must be run before setting enable_monitoring=true for each subscription
+action-group-resources: set-azure-account # make env action-group-resources ACTION_GROUP_EMAIL=notificationemail@domain.com . Must be run before setting enable_monitoring=true for each subscription
 	$(if $(ACTION_GROUP_EMAIL), , $(error Please specify a notification email for the action group))
 	echo ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg
 	az group create -l uksouth -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --tags "Product=Find postgraduate teacher training" "Environment=Test" "Service Offering=Teacher services cloud"
 	az monitor action-group create -n ${RESOURCE_NAME_PREFIX}-${SERVICE_NAME} -g ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-mn-rg --action email ${RESOURCE_NAME_PREFIX}-${SERVICE_SHORT}-email ${ACTION_GROUP_EMAIL}
 
 ### Infra targets end
-
-### Environment aliases
-
-.PHONY: review
-review: review_aks
-
-.PHONY: qa
-qa: qa_aks
-
-.PHONY: staging
-staging: staging_aks
-
-.PHONY: sandbox
-sandbox: sandbox_aks
-
-.PHONY: production
-production: production_aks
-
-.PHONY: logs
-logs: aks-logs ## Print logs from aks
-
-.PHONY: shell
-shell: aks-ssh ## Start an ssh shell on the web pod
-
-.PHONY: worker-shell
-worker-shell: aks-worker-ssh
-
-.PHONY: console
-console: aks-console ## Run the Rails console in the given environment
 
 #### Maintenence targets
 

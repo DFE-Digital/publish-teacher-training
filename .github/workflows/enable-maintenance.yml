@@ -30,14 +30,14 @@ jobs:
 
     - uses: azure/login@v2
       with:
-        creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}_AKS', github.event.inputs.environment)] }}
+        creds: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
 
     - name: Set ARM and kubelogin environment
       uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
-        azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}_AKS', github.event.inputs.environment)] }}
+        azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
 
     - name: Deploy maintenance app
-      run: make ${{ inputs.environment }}_aks maintenance-fail-over
+      run: make ${{ inputs.environment }} maintenance-fail-over
       env:
         MAINTENANCE_IMAGE_TAG: ${{steps.build-image.outputs.tag}}

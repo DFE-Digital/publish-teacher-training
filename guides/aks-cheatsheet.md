@@ -98,7 +98,7 @@ Alternatively you can install kubetail and run:
 $ kubetail -n bat-qa publish-qa-*
 ```
 
-You can also get logs from a deployed app using make with aks-logs:
+You can also get logs from a deployed app using make with logs:
 
 ```
 $ make review logs PR_NUMBER=1234
@@ -118,18 +118,18 @@ Alternatively you can enter directly on a pod:
 $ kubectl -n bat-qa exec -ti publish-qa-some-number -- sh
 ```
 
-You can run a rails console on a deployed app using make with aks-console:
+You can run a rails console on a deployed app using make with console:
 
 ```
 $ make review console PR_NUMBER=1234
 $ make qa console
 ```
 
-You can connect using ssh on a deployed app using make with aks-ssh or aks-worker-ssh:
+You can connect using ssh on a deployed app using make with shell or worker-shell:
 
 ```
-$ make review ssh PR_NUMBER=1234
-$ make qa worker-ssh
+$ make review shell PR_NUMBER=1234
+$ make qa worker-shell
 ```
 
 ## Show CPU / Memory Usage

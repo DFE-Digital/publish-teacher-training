@@ -9,7 +9,7 @@ on:
         required: true
         type: choice
         options:
-        - review_aks
+        - review
       pr-number:
         description: PR number for the existing review app to deploy to
         required: false
@@ -26,13 +26,13 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Start review_aks-${{ inputs.pr-number }} Deployment
+      - name: Start review-${{ inputs.pr-number }} Deployment
         uses: bobheadxi/deployments@v1
         id:   deployment
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env:   review_aks-${{ inputs.pr-number }}
+          env:   review-${{ inputs.pr-number }}
           ref: ${{ github.head_ref }}
 
       - name: Checkout
@@ -42,19 +42,19 @@ jobs:
         id: deploy_review
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW_AKS }}
-          environment: review_aks
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          environment: review
           pr-number: ${{ inputs.pr-number }}
           sha: ${{ inputs.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Update review_aks-${{ inputs.pr-number }} status
+      - name: Update review-${{ inputs.pr-number }} status
         if:   always()
         uses: bobheadxi/deployments@v1
         with:
           step:   finish
           token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    review_aks-${{ inputs.pr-number }}
+          env:    review-${{ inputs.pr-number }}
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.deploy_review.outputs.deploy-url }}

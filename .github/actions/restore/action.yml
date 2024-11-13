@@ -9,9 +9,9 @@ inputs:
     required: true
     type: choice
     options:
-      - review_aks
-      - qa_aks
-      - staging_aks
+      - review
+      - qa
+      - staging
   pr-number:
     description: PR number for the review app
     required: false

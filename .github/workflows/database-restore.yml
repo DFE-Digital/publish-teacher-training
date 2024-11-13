@@ -32,24 +32,24 @@ jobs:
 
       - name: Set KV environment variables
         run: |
-          tf_vars_file=terraform/aks/workspace_variables/production_aks.tfvars.json
+          tf_vars_file=terraform/aks/workspace_variables/production.tfvars.json
           echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
 
       - uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
 
       - name: Install kubectl
         uses: DFE-Digital/github-actions/set-kubectl@master
 
       - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION_AKS }}
+          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
 
       - name: K8 & konduit setup
         shell: bash
         run: |
-          make ci production_aks get-cluster-credentials
+          make ci production get-cluster-credentials
           make install-konduit
 
       - name: Backup Publish Teacher Training Prod Database
@@ -106,7 +106,7 @@ jobs:
           path: backup_sanitised.sql
           retention-days: 7
 
-  restore-aks:
+  restore:
     needs: [backup]
     runs-on: ubuntu-latest
     env:
@@ -114,13 +114,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [qa_aks, staging_aks]
+        environment: [qa, staging]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Restore AKS database
-        id: restore_aks
+      - name: Restore database
+        id: restore
         uses: ./.github/actions/restore/
         with:
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}

@@ -1,5 +1,5 @@
 CONFIG=review_aks
-DEPLOY_ENV=${CONFIG}
+DEPLOY_ENV=review
 CONFIG_SHORT=rv
 AZ_SUBSCRIPTION=s189-teacher-services-cloud-test
 RESOURCE_NAME_PREFIX=s189t01
