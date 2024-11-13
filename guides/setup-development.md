@@ -105,7 +105,7 @@ Once the file is merged to main, you can run the process in the required environ
 Use the following sequence to allow the above console output to display, chaining the commands does update the database but does not display the console ouptut.
 
 ```
-make <environment> aks-console
+make <environment> console
 cd /app
 /usr/local/bin/bundle exec rails 'gias_update[csv/<file_name>]'
 ```

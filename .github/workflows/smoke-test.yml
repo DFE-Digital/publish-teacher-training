@@ -4,15 +4,15 @@ on:
     inputs:
       environment:
         description: 'The environment to run tests against (review)'
-        default: qa_aks
+        default: qa
         required: true
         type: choice
         options:
-        - review_aks
-        - qa_aks
-        - staging_aks
-        - sandbox_aks
-        - production_aks
+        - review
+        - qa
+        - staging
+        - sandbox
+        - production
       pr:
         description: 'The PR number if the environment is review'
         required: false
