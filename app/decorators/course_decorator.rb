@@ -266,12 +266,7 @@ class CourseDecorator < ApplicationDecorator
 
   def age_range_in_years_and_level
     return if age_range_in_years.blank?
-
-    if secondary_course?
-      "#{age_range_in_years.humanize} - #{level}"
-    else
-      age_range_in_years.humanize
-    end
+      "#{level} - #{age_range_in_years.humanize}"
   end
 
   def applications_open_first_label(recruitment_cycle)
