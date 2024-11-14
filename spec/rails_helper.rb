@@ -9,6 +9,9 @@ require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/rspec'
+require 'capybara/rails'
+require 'selenium/webdriver'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Pull in all the files in spec/support automatically.
@@ -58,6 +61,7 @@ RSpec.configure do |config|
   config.include RequestHelpers, type: :controller
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  config.include ActiveJob::TestHelper, type: :request
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
@@ -102,12 +106,6 @@ RSpec.configure do |config|
     config.before { Bullet.start_request }
     config.after  { Bullet.end_request }
   end
-
-  config.before(:each, type: :system) do
-    driven_by(:rack_test)
-  end
-
-  config.include ActiveJob::TestHelper, type: :request
 
   ActiveJob::Base.queue_adapter = :test
 end
