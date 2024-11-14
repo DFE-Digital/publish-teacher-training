@@ -35,3 +35,8 @@ Style/SafeNavigationChainLength:
     - app/services/courses/content_status_service.rb
     - app/services/courses/creation_service.rb
     - app/views/publish/shared/_error_wrapper.html.erb
+
+Style/IfUnlessModifier:
+  Enabled: true
+  Exclude:
+    - spec/support/system_test_config.rb
