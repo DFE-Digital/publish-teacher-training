@@ -266,7 +266,8 @@ class CourseDecorator < ApplicationDecorator
 
   def age_range_in_years_and_level
     return if age_range_in_years.blank?
-      "#{level} - #{age_range_in_years.humanize}"
+
+    "#{level.titleize} - #{age_range_in_years.humanize}"
   end
 
   def applications_open_first_label(recruitment_cycle)
