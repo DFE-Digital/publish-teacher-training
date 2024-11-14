@@ -32,7 +32,7 @@ module Find
         end
 
         def age_range_in_years_row
-            "#{level} - #{age_range_in_years.humanize}"
+            "#{level.titleize} - #{age_range_in_years.humanize}"
         end
 
         def course_length_with_study_mode_row
