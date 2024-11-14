@@ -22,9 +22,22 @@ module Courses
       @new_course ||= provider.courses.new
     end
 
+    def filtered_course_attributes
+      if course_attributes[:funding] == 'teacher_degree_apprenticeship'
+        course_attributes
+          .except(:subjects_ids, :study_mode, :funding)
+          .merge(
+            program_type: 'teacher_degree_apprenticeship',
+            qualification: 'undergraduate_degree_with_qts',
+          )
+      else
+        course_attributes.except(:subjects_ids, :study_mode)
+      end
+    end
+
     def build_new_course
       course = provider.courses.new
-      course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
+      course.assign_attributes(filtered_course_attributes)
 
       if course_attributes[:master_subject_id].blank? && course_attributes[:subordinate_subject_id].present?
         course.errors.add(:subjects, :course_creation)

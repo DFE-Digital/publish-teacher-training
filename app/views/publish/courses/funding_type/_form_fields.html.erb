@@ -40,13 +40,26 @@
                 "apprenticeship",
                 class: "govuk-radios__input", checked: course.apprenticeship? %>
         <%= form.label :funding,
-                "Teaching apprenticeship - with salary",
+                "Postgraduate teaching apprenticeship (PGTA) - with salary",
                 value: "apprenticeship",
                 class: "govuk-label govuk-radios__label",
                 data: { qa: "course__funding_type_apprenticeship" } %>
       </div>
+
+      <% if course.qualification == 'qts' %>
+        <div class="govuk-radios__item">
+          <%= form.radio_button :funding,
+                  "teacher_degree_apprenticeship",
+                  class: "govuk-radios__input", checked: course.teacher_degree_apprenticeship? %>
+          <%= form.label :funding,
+                  "Teacher degree apprenticeship (TDA) with salary",
+                  value: "teacher_degree_apprenticeship",
+                  class: "govuk-label govuk-radios__label",
+                  data: { qa: "course__funding_type_teacher_degree_apprenticeship" } %>
+        </div>
+      <% end %>
     </div>
 
-        <%= form.hidden_field :previous_tda_course, value: params[:previous_tda_course] %>
+    <%= form.hidden_field :previous_tda_course, value: params[:previous_tda_course] %>
   </fieldset>
 <% end %>
