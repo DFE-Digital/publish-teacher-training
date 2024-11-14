@@ -184,7 +184,7 @@ module Find
         lat_long.distance_to("#{site[:latitude]},#{site[:longitude]}")
       end
 
-      distances.min.ceil
+      distances.min&.ceil
     end
 
     def with_salaries?
