@@ -24,6 +24,8 @@ if ENV.fetch('COVERAGE', false)
   end
 end
 
+WebMock.disable_net_connect!(allow_localhost: true)
+
 # Pull in all the files in spec/support automatically.
 Dir['./spec/support/**/*.rb'].each { |file| require file }
 
