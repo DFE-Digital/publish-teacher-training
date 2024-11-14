@@ -341,7 +341,7 @@
 
 .govuk-notification-banner--git {
   border-bottom: 0px;
-  border-left: 5px solid #f9b400;
+  border-left: 5px solid #f47738;
   border-right: 0px;
   border-top: 0px;
   margin-bottom: 30px;
@@ -433,6 +433,10 @@
   border: 0;
   color: #1d70b8;
   font-size: 19px;
+}
+
+.govuk-link-distance--banner {
+  background-color: #f3f2f1;
 }
 
 .filter-button-bottom {
