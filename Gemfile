@@ -210,7 +210,7 @@ group :development, :test do
   gem 'fakefs', require: 'fakefs/safe'
   gem 'faker'
 
-  gem 'dotenv-rails'
+  gem 'dotenv'
 end
 
 group :development do

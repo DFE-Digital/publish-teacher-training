@@ -228,9 +228,6 @@ GEM
     docile (1.4.0)
     domain_name (0.6.20240107)
     dotenv (3.1.4)
-    dotenv-rails (3.1.4)
-      dotenv (= 3.1.4)
-      railties (>= 6.1)
     draper (4.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -766,7 +763,7 @@ DEPENDENCIES
   dfe-analytics!
   dfe-wizard!
   discard
-  dotenv-rails
+  dotenv
   draper
   dry-container
   erb_lint
