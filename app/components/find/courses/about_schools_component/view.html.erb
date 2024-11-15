@@ -32,7 +32,7 @@
                       <%= @filters_view.location_search %>
                     </strong>
                   </span>
-            <p class="govuk-hint govuk-!-font-size-16">
+            <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">
               <% if course.salaried? %>
                   <%= t("find.results.course_placements.nearest_location_salary", count: number_of_sites) %>
               <% else %>
@@ -82,6 +82,7 @@
               <strong><%= smart_quotes(study_site.location_name) %></strong>
               <br>
               <%= smart_quotes(study_site.decorate.full_address) %>
+              <br><br>
             <% end %>
           </p>
         </dd>
