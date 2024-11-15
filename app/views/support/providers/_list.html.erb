@@ -4,6 +4,7 @@
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Provider code</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Accredited Provider?</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Accredited Provider Number</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">UKPRN</th>
     </tr>
   </thead>
@@ -34,6 +35,11 @@
           </span>
         </td>
 
+        <td class="govuk-table__cell">
+          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+            <%= provider.accredited_provider_id %>
+          </span>
+        </td>
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= provider.ukprn %>
