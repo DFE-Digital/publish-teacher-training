@@ -472,7 +472,7 @@ en:
         school_placements: School placements
         contact_details: Contact details
         visa_sponsorship: Visa sponsorship
-        selectable_school_label: Let candidates choose preferred schools
+        selectable_school_label: Show locations and allow candidates to select a preferred school
       courses:
         accredited_provider:
           show:
@@ -564,7 +564,8 @@ en:
         edit:
           page_title: How placements work - %{course_name_and_code}
           submit_button: Update how placements work
-          selectable_school_label: Let candidates select their preferred schools when applying
+          selectable_school_label: Do you want to show placement schools to candidates?
+          selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply
           guidance_text_html:
             <p class="govuk-body">Give candidates information about the schools they will be training in</p>
             <p class="govuk-body">Tell them:</p>
