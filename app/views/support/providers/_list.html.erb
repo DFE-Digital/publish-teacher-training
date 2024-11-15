@@ -12,9 +12,10 @@
     <% @providers.each do |provider| %>
       <tr class="govuk-table__row qa-provider_row">
         <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
+          <div class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= govuk_link_to provider.provider_name, support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider) %>
-          </span>
+            <div class="govuk-caption-m"><%= Provider.human_attribute_name(provider.provider_type) %></div>
+          </div>
         </td>
 
         <td class="govuk-table__cell">

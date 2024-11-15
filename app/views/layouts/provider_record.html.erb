@@ -8,6 +8,7 @@
     ) %>
   <% end %>
 
+  <div class="govuk-caption-l"><%= Provider.human_attribute_name(@provider.provider_type) %></div>
   <h1 class="govuk-heading-l"><%= @provider.name_and_code %></h1>
 
   <%= render TabNavigation.new(items: [
