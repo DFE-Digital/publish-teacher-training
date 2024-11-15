@@ -211,10 +211,10 @@ en:
             one: Employing school
             other: Employing schools
         location:
-          one: Placement school
+          one: Placement schools
           other: Placement schools
         location_salary:
-          one: Employing school
+          one: Employing schools
           other: Employing schools
         study_site:
           one: Where you will study
