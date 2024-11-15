@@ -9,4 +9,8 @@ module FiltersFeatureSpecsHelper
   def and_apply_the_filters
     find_results_page.apply_filters_button.click
   end
+
+  def query_params(uri)
+    ActionDispatch::Request.new({ 'QUERY_STRING' => uri.query }).query_parameters
+  end
 end
