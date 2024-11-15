@@ -261,14 +261,14 @@ GEM
     fakefs (2.5.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.12.0)
-      faraday-net_http (>= 2.0, < 3.4)
+    faraday (2.12.1)
+      faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
-    faraday-net_http (3.3.0)
-      net-http
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     faraday-net_http_persistent (2.3.0)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
@@ -357,7 +357,7 @@ GEM
       reline (>= 0.4.2)
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
-    json (2.8.1)
+    json (2.8.2)
     json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -711,7 +711,7 @@ GEM
     uk_postcode (2.1.8)
     unicode-display_width (2.6.0)
     uniform_notifier (1.16.0)
-    uri (1.0.0)
+    uri (1.0.2)
     useragent (0.16.10)
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
