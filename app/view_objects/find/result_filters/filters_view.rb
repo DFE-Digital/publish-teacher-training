@@ -14,7 +14,7 @@ module Find
       end
 
       def radius
-        params[:radius]
+        params[:radius] || 10
       end
 
       def keywords
