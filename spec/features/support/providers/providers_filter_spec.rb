@@ -78,7 +78,8 @@ feature 'View filtered providers' do
 
   def then_i_see_the_providers_filtered_by_accredited_provider
     expect(support_provider_index_page.providers.size).to eq(1)
-    expect(support_provider_index_page.providers.first.text).to have_content('Accredited school A03')
+    expect(support_provider_index_page.providers.first.text).to have_content('Accredited school')
+    expect(support_provider_index_page.providers.first.text).to have_content('A03')
   end
 
   def when_i_filter_by_provider
@@ -100,16 +101,20 @@ feature 'View filtered providers' do
 
   def then_i_see_providers_filtered_by_provider_name
     expect(support_provider_index_page.providers.size).to eq(1)
-    expect(support_provider_index_page.providers.first.text).to have_content('Really big school A01')
+    expect(support_provider_index_page.providers.first.text).to have_content('Really big school')
+    expect(support_provider_index_page.providers.first.text).to have_content('A01')
   end
 
   alias_method :then_i_see_the_providers_filtered_by_provider_code_and_course_code, :then_i_see_providers_filtered_by_provider_name
 
   def then_i_see_the_providers_filtered_by_course_code
     expect(support_provider_index_page.providers.size).to eq(3)
-    expect(support_provider_index_page.providers[0].text).to have_content('Accredited school A03')
-    expect(support_provider_index_page.providers[1].text).to have_content('Really big school A01')
-    expect(support_provider_index_page.providers[2].text).to have_content('Slightly smaller school A02')
+    expect(support_provider_index_page.providers[0].text).to have_content('Accredited school')
+    expect(support_provider_index_page.providers[0].text).to have_content('A03')
+    expect(support_provider_index_page.providers[1].text).to have_content('Really big school')
+    expect(support_provider_index_page.providers[1].text).to have_content('A01')
+    expect(support_provider_index_page.providers[2].text).to have_content('Slightly smaller school')
+    expect(support_provider_index_page.providers[2].text).to have_content('A02')
   end
 
   def when_i_remove_the_provider_filter
