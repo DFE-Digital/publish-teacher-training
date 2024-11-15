@@ -9,13 +9,6 @@
       <% end %>
 
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: study_site_label) %>
-        <% row.with_value do %>
-          <%= render partial: "find/results/course_study_sites", locals: { course:, filtered_by_location: filtered_by_location?, has_study_sites: has_study_sites? } %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
         <% row.with_key(text: t(".course_fee")) %>
         <% row.with_value do %>
           <% if no_fee? %>
@@ -49,7 +42,9 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key(text: t(".qualification")) %>
-        <% row.with_value(text: formatted_qualification) %>
+        <% row.with_value do %>
+          <%= formatted_qualification %>
+        <% end %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
