@@ -22,16 +22,14 @@
             <!--This course pays a salary-->
             <!--This a Teaching Apprenticeship course paying a salary-->
             <%= t("find.results.search_result_component.funding.#{course.funding_type}_html") %>
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">There is no fee</span>
+            <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0">There is no fee</p>
           <% else %>
             <!--£9,250 for UK citizens-->
             <!--£14,000 for Non-UK citizens-->
             <%= course.course_fee_content_html %>
           <% end %>
-          <br>
           <!--Student finance is available if you’re eligible-->
-          <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+          <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-0"><%= course.funding_option %></p>
         <% end %>
       <% end %>
 
