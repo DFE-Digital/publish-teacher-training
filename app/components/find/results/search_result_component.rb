@@ -84,12 +84,6 @@ module Find
           'Visas cannot be sponsored'
         end
       end
-
-      def accredited_provider
-        return nil if course.accrediting_provider.blank?
-
-        "QTS ratified by #{helpers.smart_quotes(course.accrediting_provider.provider_name)}"
-      end
     end
   end
 end
