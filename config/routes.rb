@@ -10,10 +10,6 @@ Rails.application.routes.draw do
     get '/', to: redirect('/docs/')
   end
 
-  constraints(host: /www2\./) do
-    match '/(*path)' => redirect { |_, req| "#{Settings.base_url}#{req.fullpath}" }, via: %i[get post put]
-  end
-
   constraints(FindConstraint.new) do
     draw(:find)
   end
