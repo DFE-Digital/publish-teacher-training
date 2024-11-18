@@ -6,6 +6,10 @@
       <%= ENV.fetch("PR_NUMBER", "Can't read PR_NUMBER") %>
     </p>
 
+    <p class="govuk-body">
+      <%= ENV.fetch("APP_NAME_SUFFIX", "Can't read APP_NAME_SUFFIX") %>
+    </p>
+
     <%= render partial: "default_signin_content" %>
   </div>
 </div>
