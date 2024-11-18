@@ -64,5 +64,7 @@ unless Rails.env.local?
     level: Rails.application.config.log_level,
     formatter: CustomLogFormatter.new
   )
-  Rails.application.config.logger.info('Application logging to STDOUT')
+  Rails.application.config.logger.info(
+    "Application logging to STDOUT. Config: #{Rails.application.config.rails_semantic_logger}"
+  )
 end
