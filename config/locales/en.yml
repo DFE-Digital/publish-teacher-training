@@ -565,7 +565,7 @@ en:
           page_title: How placements work - %{course_name_and_code}
           submit_button: Update how placements work
           selectable_school_label: Do you want to show placement schools to candidates?
-          selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply
+          selectable_school_hint: Candidates will see a list of placement schools on your course pages and be able to select a preference when they apply.
           guidance_text_html:
             <p class="govuk-body">Give candidates information about the schools they will be training in</p>
             <p class="govuk-body">Tell them:</p>
