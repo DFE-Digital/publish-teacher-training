@@ -17,18 +17,22 @@
       <% end %>
 
       <% summary_list.with_row do |row| %>
-        <% row.with_key(text: t(".fee_or_salary")) %>
+        <% row.with_key(text: t(".course_fee")) %>
         <% row.with_value do %>
-          <%= course.funding %>
-          <br>
-          <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
-        <% end %>
-      <% end %>
-
-      <% unless no_fee? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: t(".course_fee")) %>
-          <% row.with_value(text: course.course_fee_content) %>
+          <% if course.salaried? %>
+            This course pays a <strong>salary</strong>.
+            <% if course.apprenticeship? %>
+              It is a Teaching Apprenticeship.
+            <% end %>
+            <br>
+            <span class="govuk-hint govuk-!-font-size-16">There is no fee.</span>
+          <% elsif course.apprenticeship? %>
+            This is a Teaching Apprenticeship course that pays a <strong>salary</strong>.
+            <span class="govuk-hint govuk-!-font-size-16">There is no fee.</span>
+          <% else %>
+            <%= course.course_fee_content %>
+            <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+          <% end %>
         <% end %>
       <% end %>
 
@@ -48,15 +52,7 @@
 
       <% summary_list.with_row do |row| %>
         <% row.with_key(text: t(".qualification")) %>
-        <% row.with_value do %>
-          <% if accredited_provider %>
-            <%= formatted_qualification %>
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16"><%= accredited_provider %></span>
-          <% else %>
-            <%= formatted_qualification %>
-          <% end %>
-        <% end %>
+        <% row.with_value(text: formatted_qualification) %>
       <% end %>
 
       <% summary_list.with_row do |row| %>
