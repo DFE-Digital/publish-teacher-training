@@ -1,4 +1,4 @@
-CONFIG=sandbox_aks
+CONFIG=sandbox
 DEPLOY_ENV=sandbox
 CONFIG_SHORT=sbx
 AZ_SUBSCRIPTION=s189-teacher-services-cloud-production

@@ -2,28 +2,28 @@ default: &default
   ASSETS_PRECOMPILE: true
   RAILS_SERVE_STATIC_FILES: true
   RAILS_MAX_THREADS: 50
-  RAILS_ENV: review_aks
-  RACK_ENV: review_aks
+  RAILS_ENV: review
+  RACK_ENV: review
 
 review:
   <<: *default
 
 qa:
   <<: *default
-  RAILS_ENV: qa_aks
-  RACK_ENV: qa_aks
+  RAILS_ENV: qa
+  RACK_ENV: qa
 
 staging:
   <<: *default
-  RAILS_ENV: staging_aks
-  RACK_ENV: staging_aks
+  RAILS_ENV: staging
+  RACK_ENV: staging
 
 sandbox:
   <<: *default
-  RAILS_ENV: sandbox_aks
-  RACK_ENV: sandbox_aks
+  RAILS_ENV: sandbox
+  RACK_ENV: sandbox
 
 production:
   <<: *default
-  RAILS_ENV: production_aks
-  RACK_ENV: production_aks
+  RAILS_ENV: production
+  RACK_ENV: production

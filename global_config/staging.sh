@@ -1,4 +1,4 @@
-CONFIG=staging_aks
+CONFIG=staging
 DEPLOY_ENV=staging
 CONFIG_SHORT=stg
 AZ_SUBSCRIPTION=s189-teacher-services-cloud-test
