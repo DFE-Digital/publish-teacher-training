@@ -20,15 +20,15 @@
         <% row.with_key(text: t(".course_fee")) %>
         <% row.with_value do %>
           <% if course.salaried? %>
-            <%= t(".pays_salary_html")%>
+            <%= t(".pays_salary_html") %>
             <% if course.apprenticeship? %>
-              <%= t(".teaching_apprenticeship")%>
+              <%= t(".teaching_apprenticeship") %>
             <% end %>
             <br>
-          <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee")%></span>
+          <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee") %></span>
           <% elsif course.apprenticeship? %>
-            <%= t(".pays_salary_html")%>
-            <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee")%></span>
+            <%= t(".pays_salary_html") %>
+            <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee") %></span>
           <% else %>
             <%= course.course_fee_content %>
             <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
