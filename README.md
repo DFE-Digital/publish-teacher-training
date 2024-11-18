@@ -1,6 +1,6 @@
 # Find & Publish Teacher Training
 
-[![View performance data on Skylight](https://badges.skylight.io/status/OSMheTARjT6C.svg)](https://oss.skylight.io/app/applications/OSMheTARjT6C)
+[![View performance data on Skylight](https://badges.skylight.io/status/NXAwzyZjkp2m.svg)](https://oss.skylight.io/app/applications/NXAwzyZjkp2m)
 
 This repo is home to three services:
 
