@@ -23,8 +23,6 @@ dfe_signin:
   # The URL support users are directed to in order to find a user by email
   user_search_url: https://test-support.signin.education.gov.uk/users
 
-use_ssl: false
-
 authentication:
   algorithm: HS256
   # Set this in the env! The below ensures that we are un-authenticatable if we
