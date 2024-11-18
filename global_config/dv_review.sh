@@ -1,4 +1,4 @@
-CONFIG=dv_review_aks
+CONFIG=dv_review
 DEPLOY_ENV=dv_review
 CONFIG_SHORT=rv
 AZ_SUBSCRIPTION=s189-teacher-services-cloud-development

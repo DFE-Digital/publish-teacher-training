@@ -9,11 +9,11 @@ module PublishConsole
 
   # https://api.rubyonrails.org/classes/ActiveRecord/Core.html#method-i-inspect
   def set_attributes_for_inspect
-    ActiveRecord::Base.attributes_for_inspect = :all unless Rails.env.production_aks?
+    ActiveRecord::Base.attributes_for_inspect = :all unless Rails.env.production?
   end
 
   def show_warning_message_about_environments
-    if Rails.env.production_aks?
+    if Rails.env.production?
       puts ('*' * 50).red
       puts '** You are in the Rails console for PRODUCTION! **'.red
       puts ('*' * 50).red

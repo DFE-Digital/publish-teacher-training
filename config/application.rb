@@ -62,7 +62,7 @@ module ManageCoursesBackend
     config.view_component.preview_route = '/support/view_components'
     config.view_component.default_preview_layout = 'component_preview'
     config.view_component.preview_controller = 'Support::ComponentPreviewsController'
-    config.view_component.show_previews = !Rails.env.production_aks?
+    config.view_component.show_previews = !Rails.env.production?
 
     config.analytics = config_for(:analytics)
 

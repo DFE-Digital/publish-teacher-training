@@ -164,7 +164,7 @@ module Find
 
     def self.current_cycle_schedule
       # Make sure this setting only has effect on non-production environments
-      return :real if Rails.env.production_aks?
+      return :real if Rails.env.production?
 
       SiteSetting.cycle_schedule
     end

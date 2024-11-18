@@ -1,4 +1,4 @@
-CONFIG=review_aks
+CONFIG=review
 DEPLOY_ENV=review
 CONFIG_SHORT=rv
 AZ_SUBSCRIPTION=s189-teacher-services-cloud-test
