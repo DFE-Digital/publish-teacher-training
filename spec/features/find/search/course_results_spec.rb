@@ -46,7 +46,7 @@ feature 'results' do
       expect(first_course.provider_name.text).to be_present
       expect(first_course).to have_text('QTS with PGCE')
       expect(first_course).to have_text('1 year - full time')
-      expect(first_course).to have_text('Teaching apprenticeship - with salary')
+      expect(first_course).to have_text('This course pays a salary')
     end
   end
 

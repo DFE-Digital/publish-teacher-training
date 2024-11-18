@@ -12,7 +12,6 @@ module Find
 
           result = render_inline(described_class.new(course))
           expect(result.text).to include(
-            'Fee or salary',
             'Course fee',
             'Course length',
             'Age range',
@@ -29,7 +28,9 @@ module Find
 
             result = render_inline(described_class.new(course))
             expect(result.text).not_to include('£9,250')
-            expect(result.text).not_to include('Course fee')
+            expect(result.text).to include('Course fee')
+            expect(result.text).to include('This course pays a salary.')
+            expect(result.text).to include('It is a teaching apprenticeship.')
           end
         end
 
@@ -185,7 +186,7 @@ module Find
 
             expect(result.text).not_to include('for UK citizens')
             expect(result.text).not_to include('£14,000 for Non-UK citizens')
-            expect(result.text).not_to include('Course fee')
+            expect(result.text).to include('Course fee')
           end
         end
       end
