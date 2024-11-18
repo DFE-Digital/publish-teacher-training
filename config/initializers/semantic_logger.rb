@@ -59,12 +59,10 @@ class CustomLogFormatter < SemanticLogger::Formatters::Raw
 end
 
 unless Rails.env.local?
-  Rails.application.configure do
-    config.semantic_logger.application = Settings.application_name
-    config.log_tags = [:request_id]
-    config.log_level = Settings.log_level
-  end
-
-  SemanticLogger.add_appender(io: $stdout, level: Settings.log_level, formatter: CustomLogFormatter.new)
+  SemanticLogger.add_appender(
+    io: $stdout,
+    level: Rails.application.config.log_level,
+    formatter: CustomLogFormatter.new
+  )
   Rails.application.config.logger.info('Application logging to STDOUT')
 end

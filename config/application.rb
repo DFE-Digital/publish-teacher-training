@@ -68,5 +68,8 @@ module ManageCoursesBackend
 
     config.exceptions_app = routes
     config.active_job.queue_adapter = :sidekiq
+
+    config.log_tags = [:request_id]
+    config.log_level = Settings.log_level
   end
 end
