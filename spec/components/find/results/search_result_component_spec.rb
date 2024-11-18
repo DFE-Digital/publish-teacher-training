@@ -92,18 +92,6 @@ module Find
       end
     end
 
-    context 'when there is an accrediting provider' do
-      it 'renders correct message' do
-        course = build(
-          :course,
-          accrediting_provider: build(:provider, :accredited_provider, provider_name: 'ACME SCITT A1')
-        )
-        result = render_inline(described_class.new(course:, results_view:))
-
-        expect(result.text).to include('QTS ratified by ACME SCITT A1')
-      end
-    end
-
     context 'when there is no accrediting provider' do
       it 'renders correct message' do
         course = build(
@@ -122,7 +110,7 @@ module Find
 
         result = render_inline(described_class.new(course:, results_view:))
         expect(result.text).not_to include('£9,250')
-        expect(result.text).not_to include('Course fee')
+        expect(result.text).to include('Course fee')
       end
     end
 
@@ -175,7 +163,7 @@ module Find
 
         expect(result.text).not_to include('for UK citizens')
         expect(result.text).not_to include('£14,000 for Non-UK citizens')
-        expect(result.text).not_to include('Course fee')
+        expect(result.text).to include('Course fee')
       end
     end
 

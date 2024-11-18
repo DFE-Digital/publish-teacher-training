@@ -9,12 +9,12 @@
       <% if course.salaried? %>
         This course pays a <strong>salary</strong>.
         <% if course.apprenticeship? %>
-          It is a Teaching Apprenticeship.
+          It is a teaching apprenticeship.
         <% end %>
         <br>
         <span class="govuk-hint govuk-!-font-size-16">There is no fee.</span>
       <% elsif course.apprenticeship? %>
-        This is a Teaching Apprenticeship course that pays a <strong>salary</strong>.
+        This is a teaching apprenticeship course that pays a <strong>salary</strong>.
         <span class="govuk-hint govuk-!-font-size-16">There is no fee.</span>
       <% else %>
         <%= course.course_fee_content %>
