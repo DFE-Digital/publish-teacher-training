@@ -64,6 +64,8 @@ class Provider < ApplicationRecord
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
+  normalizes :provider_name, with: ->(value) { value.gsub(/\s+/, ' ').strip }
+
   def accredited_providers
     recruitment_cycle.providers.where(provider_code: accredited_provider_codes)
   end
