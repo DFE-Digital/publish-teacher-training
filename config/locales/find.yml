@@ -136,9 +136,9 @@ en:
           find_out_more_about_tda: Find out more about teacher degree apprenticeships
       summary_component:
         view:
-          pays_salary_html: This course pays a <strong>salary</strong>.
-          teaching_apprenticeship: It is a teaching apprenticeship.
-          no_fee: There is no fee.
+          pays_salary_html: This course pays a <strong>salary</strong>
+          teaching_apprenticeship: It is a teaching apprenticeship
+          no_fee: There is no fee
           fee_or_salary: Fee or salary
           course_summary: Course summary
           course_fee: Course fee
@@ -195,9 +195,9 @@ en:
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     results:
       search_result_component:
-        pays_salary_html: This course pays a <strong>salary</strong>.
-        teaching_apprenticeship: It is a teaching apprenticeship.
-        no_fee: There is no fee.
+        pays_salary_html: This course pays a <strong>salary</strong>
+        teaching_apprenticeship: It is a teaching apprenticeship
+        no_fee: There is no fee
         no_degree_required: No degree required
         fee_based:
           location: Placement schools

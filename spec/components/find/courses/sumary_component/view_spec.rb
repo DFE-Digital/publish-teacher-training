@@ -29,8 +29,8 @@ module Find
             result = render_inline(described_class.new(course))
             expect(result.text).not_to include('£9,250')
             expect(result.text).to include('Course fee')
-            expect(result.text).to include('This course pays a salary.')
-            expect(result.text).to include('It is a teaching apprenticeship.')
+            expect(result.text).to include('This course pays a salary')
+            expect(result.text).to include('It is a teaching apprenticeship')
           end
         end
 
