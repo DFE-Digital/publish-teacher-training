@@ -65,7 +65,17 @@
         <% if salaried? %>
           <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
         <% elsif course.subjects.map(&:subject_name).include?("Physics") %>
-          This course is for Physics
+          <div data-qa="course__scholarship_and_bursary_details">
+            <p class="govuk-heading-s">
+              Bursaries and scholarships
+            </p>
+            <p class="govuk-body">
+              Bursaries of £29,000 and scholarships of £31,000 are available to eligible trainees.
+            </p>
+            <p class="govuk-body">
+              <a class="govuk-link" href="https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries">Find out whether you are eligible for a bursary or scholarship</a>.
+            </p>
+          </div>
         <% else %>
           <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
         <% end %>
