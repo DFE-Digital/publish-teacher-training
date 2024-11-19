@@ -28,6 +28,14 @@ RecruitmentCycle.current.providers.find_by(provider_code: "1JJ").discard
 
 If the organisation has running courses, you will get a validation error. In this scenario you just need to make sure there aren't any users attached to it.
 
+## Publishing a course from an old recruitment cycle
+
+
+Use the Rake task for publishing courses [PublishCourse Rake Task](../lib/tasks/publish_course.rake) 
+
+Get the uuid of the course you want to publish and choose a user (your own user ideally) to publish.
+
+
 ## Unpublishing a published course
 
 Sometimes providers will accidentally publish a course and would like to unpublish it.
