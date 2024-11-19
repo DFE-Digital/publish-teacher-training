@@ -72,8 +72,7 @@ module Publish
       fetch_course
       authorize @course
 
-      if @course.publishable?
-        publish_course
+      if ::Courses::PublishService.new(course: @course, user: @current_user).call
         flash[:success] = 'Your course has been published.'
 
         redirect_to publish_provider_recruitment_cycle_course_path(
@@ -128,15 +127,6 @@ module Publish
 
     def self_accredited_courses
       @self_accredited_courses ||= courses_by_accrediting_provider.delete(provider.provider_name)
-    end
-
-    def publish_course
-      Course.transaction do
-        @course.publish_sites
-        @course.publish_enrichment(@current_user)
-        @course.application_status_open!
-        NotificationService::CoursePublished.call(course: @course)
-      end
     end
 
     def format_publish_error_messages
