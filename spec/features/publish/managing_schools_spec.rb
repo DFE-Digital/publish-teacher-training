@@ -67,12 +67,25 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
       and_the_school_is_deleted
     end
 
-    scenario 'with associcated course' do
+    scenario 'with associated course' do
       given_there_is_an_associated_course
       when_i_visit_the_publish_school_show_page
       and_i_click_remove_school_link
       then_i_am_on_the_school_delete_page
       and_i_cannot_delete_the_school
+    end
+
+    scenario 'with discarded associated course' do
+      given_there_is_an_associated_course
+      and_i_delete_the_course
+      when_i_visit_the_publish_school_show_page
+      and_i_click_remove_school_link
+      then_i_am_on_the_school_delete_page
+      and_i_am_able_to_remove_the_school
+
+      when_i_click_remove_school_button
+      then_i_am_on_the_index_page
+      and_the_school_is_deleted
     end
   end
 
@@ -130,13 +143,28 @@ feature "Managing a provider's schools", { can_edit_current_and_next_cycles: fal
     @course.sites << @site
   end
 
+  def and_i_delete_the_course
+    visit delete_publish_provider_recruitment_cycle_course_path(
+      provider_code: @course.provider.provider_code,
+      recruitment_cycle_year: @course.recruitment_cycle.year,
+      code: @course.course_code
+    )
+    fill_in 'Enter the course code to confirm', with: @course.course_code
+    click_link_or_button 'Yes I’m sure – delete this course'
+  end
+
   def and_the_school_is_deleted
     expect(provider.sites.count).to eq 0
+  end
+
+  def and_i_am_able_to_remove_the_school
+    expect(page).to have_content('Remove school')
   end
 
   def and_i_click_remove_school_button
     click_link_or_button 'Remove school'
   end
+  alias_method :when_i_click_remove_school_button, :and_i_click_remove_school_button
 
   def when_i_click_cancel
     click_link_or_button 'Cancel'
