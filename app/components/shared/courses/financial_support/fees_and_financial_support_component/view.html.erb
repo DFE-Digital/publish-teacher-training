@@ -24,18 +24,19 @@
           </span>
         </h2>
       </div>
+
       <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
-      <% if salaried? %>
-        <%= render partial: "shared/courses/financial_support/salaried" %>
-      <% elsif excluded_from_bursary? %>
-        <%= render partial: "shared/courses/financial_support/loan" %>
-      <% elsif bursary_only? %>
-        <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
-      <% elsif has_scholarship_and_bursary? %>
-        <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
-      <% else %>
-        <%= render partial: "shared/courses/financial_support/loan" %>
-      <% end %>
+        <% if salaried? %>
+          <%= render partial: "shared/courses/financial_support/salaried" %>
+        <% elsif excluded_from_bursary? %>
+          <%= render partial: "shared/courses/financial_support/loan" %>
+        <% elsif bursary_only? %>
+          <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+        <% elsif has_scholarship_and_bursary? %>
+          <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+        <% else %>
+          <%= render partial: "shared/courses/financial_support/loan" %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -59,12 +60,15 @@
           </span>
         </h2>
       </div>
+
       <div id="accordion-default-content-1" class="govuk-accordion__section-content govuk-accordion__section-content--non-uk">
-      <% if salaried? %>
-        <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
-      <% else %>
-        <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
-      <% end %>
+        <% if salaried? %>
+          <%= render partial: "shared/courses/financial_support/non-uk-salaried" %>
+        <% elsif course.subjects.map(&:subject_name).include?("Physics") %>
+          This course is for Physics
+        <% else %>
+          <%= render partial: "shared/courses/financial_support/non-uk-fees" %>
+        <% end %>
       </div>
     </div>
   </div>
