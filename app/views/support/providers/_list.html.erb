@@ -3,7 +3,6 @@
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Provider code</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Accredited Provider?</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Accredited Provider Number</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">UKPRN</th>
     </tr>
@@ -27,19 +26,16 @@
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <% if  provider.accrediting_provider_before_type_cast == "Y" %>
-              ☑️
-            <% else %>
-              ✖️
+            <% if provider.accrediting_provider_before_type_cast == "Y" %>
+               <% if provider.accredited_provider_id.present? %>
+                  <%= govuk_tag(text: provider.accredited_provider_id, colour: "green") %>
+               <% else %>
+                  <%= govuk_tag(text: "Fill me in", colour: "yellow") %>
+               <% end %>
             <% end %>
           </span>
         </td>
 
-        <td class="govuk-table__cell">
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <%= provider.accredited_provider_id %>
-          </span>
-        </td>
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= provider.ukprn %>
