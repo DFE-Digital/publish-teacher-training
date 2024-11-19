@@ -90,6 +90,7 @@ FactoryBot.define do
     end
 
     trait :published_scitt do
+      scitt
       transient do
         identifier { 'published_scitt' }
       end
