@@ -52,7 +52,7 @@ class Site < ApplicationRecord
   delegate :after_2021?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def has_no_course?
-    Course.includes(:sites).where(sites: { id: }).none?
+    Course.kept.includes(:sites).where(sites: { id: }).none?
   end
 
   def geocode_site
