@@ -18,8 +18,7 @@
         <span class="govuk-hint govuk-!-font-size-16"><%= t(".no_fee") %></span>
       <% else %>
         <%= course.course_fee_content %>
-        <br>
-        <span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span>
+        <div><span class="govuk-hint govuk-!-font-size-16"><%= course.funding_option %></span></div>
       <% end %>
     <% end %>
   <% end %>
