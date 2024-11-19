@@ -108,6 +108,10 @@ describe Provider do
     end
   end
 
+  describe 'normalizations' do
+    it { is_expected.to normalize(:provider_name).from('  ACME  SCITT  ').to('ACME SCITT') }
+  end
+
   describe 'organisation' do
     it 'returns the only organisation a provider has' do
       expect(subject.organisation).to eq subject.organisations.first
