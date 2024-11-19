@@ -882,6 +882,10 @@ class Course < ApplicationRecord
     A_LEVEL_ATTRIBUTES.any? { |attribute| public_send(attribute).present? }
   end
 
+  def published?
+    current_published_enrichment.present?
+  end
+
   private
 
   def update_vac_status(study_mode, site_status)
@@ -921,10 +925,6 @@ class Course < ApplicationRecord
     else
       enrichments.max_by(&:created_at)
     end
-  end
-
-  def published?
-    current_published_enrichment.present?
   end
 
   def enrichment_not_withdrawn?
