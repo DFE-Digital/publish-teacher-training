@@ -227,6 +227,14 @@ FactoryBot.define do
       to_create { |instance| instance.save(validate: false) }
     end
 
+    trait :publishable do
+      unpublished
+      draft_enrichment
+      accredited_provider_code { provider.provider_code }
+
+      with_gcse_equivalency
+    end
+
     trait :unpublished do
       transient do
         identifier { 'unpublished' }
