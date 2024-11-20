@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './config/initializers/redis'
+
 module Find
   class SiteSetting
     def self.cycle_schedule
