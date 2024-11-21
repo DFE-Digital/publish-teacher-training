@@ -18,29 +18,27 @@ describe UserNotificationPreferences do
     end
 
     describe 'enabled?' do
+      before { user_notification }
+
       context 'when there are no user notifications' do
         it 'returns false' do
           expect(subject.enabled?).to be(false)
         end
       end
 
-      context 'when there are notifications' do
-        before { user_notification }
+      context 'when the preferences are set to false' do
+        let(:preference) { false }
 
-        context 'when the preferences are set to false' do
-          let(:preference) { false }
-
-          it 'returns false' do
-            expect(subject.enabled?).to be(false)
-          end
+        it 'returns false' do
+          expect(subject.enabled?).to be(false)
         end
+      end
 
-        context 'when the preferences are set to true' do
-          let(:preference) { true }
+      context 'when the preferences are set to true' do
+        let(:preference) { true }
 
-          it 'returns true' do
-            expect(subject.enabled?).to be(true)
-          end
+        it 'returns true' do
+          expect(subject.enabled?).to be(true)
         end
       end
     end
@@ -70,19 +68,19 @@ describe UserNotificationPreferences do
   end
 
   describe '#update' do
-    let(:accredited_provider1) { create(:provider, :accredited_provider) }
+    let(:accredited_provider_one) { create(:provider, :accredited_provider) }
     let(:accredited_provider2) { create(:provider, :accredited_provider) }
 
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
 
-    let(:user_notification1) do
+    let(:user_notification_one) do
       create(
         :user_notification,
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_provider1.provider_code
+        provider_code: accredited_provider_one.provider_code
       )
     end
 
@@ -102,13 +100,13 @@ describe UserNotificationPreferences do
         user: other_user,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_provider1.provider_code
+        provider_code: accredited_provider_one.provider_code
       )
     end
 
     context 'user has no notifications' do
       before do
-        user.providers << [accredited_provider1, accredited_provider2]
+        user.providers << [accredited_provider_one, accredited_provider2]
       end
 
       it 'creates user notification preference for each accredited provider' do
@@ -119,7 +117,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.count).to eq(2)
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
-        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_provider1.provider_code, accredited_provider2.provider_code)
+        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_provider_one.provider_code, accredited_provider2.provider_code)
       end
 
       context 'when the user has duplicate provider associations' do
@@ -149,8 +147,8 @@ describe UserNotificationPreferences do
       before do
         user
         other_user
-        user.providers << [accredited_provider1, accredited_provider2]
-        user_notification1
+        user.providers << [accredited_provider_one, accredited_provider2]
+        user_notification_one
         user_notification2
         other_users_notification
       end
@@ -164,7 +162,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
         expect(user_notifications.map(&:provider_code))
-          .to contain_exactly(accredited_provider1.provider_code, accredited_provider2.provider_code)
+          .to contain_exactly(accredited_provider_one.provider_code, accredited_provider2.provider_code)
       end
 
       it 'resets enabled after update' do
@@ -209,8 +207,8 @@ describe UserNotificationPreferences do
         before do
           user
           other_user
-          user.providers = [accredited_provider1]
-          user_notification1
+          user.providers = [accredited_provider_one]
+          user_notification_one
           user_notification2
         end
 
@@ -220,7 +218,7 @@ describe UserNotificationPreferences do
 
           expect(user_notifications.count).to eq(1)
           expect(user_notifications.map(&:provider_code))
-            .to contain_exactly(accredited_provider1.provider_code)
+            .to contain_exactly(accredited_provider_one.provider_code)
         end
       end
 
@@ -230,8 +228,8 @@ describe UserNotificationPreferences do
         before do
           user
           other_user
-          user.providers << [accredited_provider1, accredited_provider2, accredited_provider3]
-          user_notification1
+          user.providers << [accredited_provider_one, accredited_provider2, accredited_provider3]
+          user_notification_one
           user_notification2
         end
 
@@ -242,7 +240,7 @@ describe UserNotificationPreferences do
           expect(user_notifications.count).to eq(3)
           expect(user_notifications.map(&:provider_code))
             .to contain_exactly(
-              accredited_provider1.provider_code,
+              accredited_provider_one.provider_code,
               accredited_provider2.provider_code,
               accredited_provider3.provider_code
             )
