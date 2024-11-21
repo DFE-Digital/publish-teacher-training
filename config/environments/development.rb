@@ -82,4 +82,9 @@ Rails.application.configure do
   config.authentication_token = ENV.fetch('AUTHENTICATION_TOKEN', 'bats')
 
   config.x.read_only_database_url = "postgres://localhost/#{ENV.fetch('DB_DATABASE', 'manage_courses_backend_development')}"
+
+  config.rails_semantic_logger.semantic   = false
+  config.rails_semantic_logger.started    = true
+  config.rails_semantic_logger.processing = true
+  config.rails_semantic_logger.rendered   = true
 end
