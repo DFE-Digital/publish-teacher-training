@@ -14,6 +14,52 @@ describe RequiredQualificationsSummary do
       end
     end
 
+    context 'course.accept_gcse_equivalency? is false' do
+      let(:course) { create(:course, accept_gcse_equivalency: false) }
+
+      it 'states equivalency tests not accepted' do
+        summary = described_class.new(course).extract
+
+        expect(summary).to include 'We do not accept equivalency tests'
+      end
+    end
+
+    context 'course.accept_gcse_equivalency? is true' do
+      let(:course) { create(:course, accept_gcse_equivalency: true) }
+
+      it 'states one equivalency accepted if only one accepted' do
+        course.update!(accept_english_gcse_equivalency: true)
+        summary = described_class.new(course).extract
+
+        expect(summary).to include 'We will accept equivalency tests in English'
+      end
+
+      it 'states two equivalencies accepted if two accepted' do
+        course.update!(accept_english_gcse_equivalency: true, accept_maths_gcse_equivalency: true)
+        summary = described_class.new(course).extract
+
+        expect(summary).to include 'We will accept equivalency tests in English and maths'
+      end
+
+      it 'states three equivalencies accepted if three accepted' do
+        course.update!(
+          accept_english_gcse_equivalency: true,
+          accept_maths_gcse_equivalency: true,
+          accept_science_gcse_equivalency: true
+        )
+        summary = described_class.new(course).extract
+
+        expect(summary).to include 'We will accept equivalency tests in English, maths and science'
+      end
+
+      it 'shows additional GCSE equivalencies if present' do
+        course.update!(additional_gcse_equivalencies: 'Some additional GCSE equivalencies')
+        summary = described_class.new(course).extract
+
+        expect(summary).to include 'Some additional GCSE equivalencies'
+      end
+    end
+
     context 'when required_qualifications enrichment attribute is blank' do
       it 'assembles a whole summary based on course attributes' do
         course = create(:course, :primary)
@@ -74,52 +120,6 @@ describe RequiredQualificationsSummary do
         summary = described_class.new(course).extract
 
         expect(summary).to include 'We will not consider candidates with pending GCSEs'
-      end
-
-      context 'course.accept_gcse_equivalency? is false' do
-        let(:course) { create(:course, accept_gcse_equivalency: false) }
-
-        it 'states equivalency tests not accepted' do
-          summary = described_class.new(course).extract
-
-          expect(summary).to include 'We do not accept equivalency tests'
-        end
-      end
-
-      context 'course.accept_gcse_equivalency? is true' do
-        let(:course) { create(:course, accept_gcse_equivalency: true) }
-
-        it 'states one equivalency accepted if only one accepted' do
-          course.update!(accept_english_gcse_equivalency: true)
-          summary = described_class.new(course).extract
-
-          expect(summary).to include 'We will accept equivalency tests in English'
-        end
-
-        it 'states two equivalencies accepted if two accepted' do
-          course.update!(accept_english_gcse_equivalency: true, accept_maths_gcse_equivalency: true)
-          summary = described_class.new(course).extract
-
-          expect(summary).to include 'We will accept equivalency tests in English and maths'
-        end
-
-        it 'states three equivalencies accepted if three accepted' do
-          course.update!(
-            accept_english_gcse_equivalency: true,
-            accept_maths_gcse_equivalency: true,
-            accept_science_gcse_equivalency: true
-          )
-          summary = described_class.new(course).extract
-
-          expect(summary).to include 'We will accept equivalency tests in English, maths and science'
-        end
-
-        it 'shows additional GCSE equivalencies if present' do
-          course.update!(additional_gcse_equivalencies: 'Some additional GCSE equivalencies')
-          summary = described_class.new(course).extract
-
-          expect(summary).to include 'Some additional GCSE equivalencies'
-        end
       end
 
       it 'states the appropriate degree grade requirement' do
