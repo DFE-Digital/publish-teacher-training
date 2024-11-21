@@ -2,7 +2,7 @@
 
 require './config/initializers/redis'
 
-class SiteSetting < ApplicationRecord
+class SiteSetting
   def self.cycle_schedule
     RedisClient.current.get('cycle_schedule')&.to_sym || :real
   end
