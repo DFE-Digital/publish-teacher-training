@@ -165,18 +165,22 @@ FactoryBot.define do
 
     trait :with_higher_education do
       program_type { :higher_education_programme }
+      funding { :fee }
     end
 
     trait :with_school_direct do
       program_type { :school_direct_training_programme }
+      funding { :fee }
     end
 
     trait :with_scitt do
       program_type { :scitt_programme }
+      funding { :fee }
     end
 
     trait :with_apprenticeship do
       program_type { :pg_teaching_apprenticeship }
+      funding { :apprenticeship }
     end
 
     trait :with_teacher_degree_apprenticeship do
@@ -186,6 +190,7 @@ FactoryBot.define do
 
     trait :with_salary do
       program_type { :school_direct_salaried_training_programme }
+      funding { :salary }
     end
 
     trait :fee_type_based do
@@ -193,6 +198,7 @@ FactoryBot.define do
         %i[higher_education_programme school_direct_training_programme
            scitt_programme].sample
       end
+      funding { :fee }
     end
 
     trait :fee do
@@ -209,6 +215,7 @@ FactoryBot.define do
 
     trait :salary_type_based do
       program_type { %i[pg_teaching_apprenticeship school_direct_salaried_training_programme].sample }
+      funding { :salary }
     end
 
     trait :non_salary_type_based do
