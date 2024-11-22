@@ -16,11 +16,11 @@ module Publish
       private
 
       def courses
-        @courses ||= provider.current_accredited_courses.includes(:enrichments, :sites, :site_statuses)
+        @courses ||= provider.current_accredited_courses
       end
 
       def data_export
-        @data_export ||= Exports::AccreditedCourseList.new(courses)
+        @data_export ||= Exports::AccreditedCourseList.new(courses:)
       end
     end
   end
