@@ -1170,28 +1170,28 @@ describe Course do
       subject { described_class.with_salary }
 
       let!(:course_higher_education_programme) do
-        create(:course, program_type: :higher_education_programme)
+        create(:course, program_type: :higher_education_programme, funding: :fee)
       end
 
       let!(:course_scitt_salaried_programme) do
-        create(:course, program_type: :scitt_salaried_programme)
+        create(:course, program_type: :scitt_salaried_programme, funding: :salary)
       end
 
       let!(:course_higher_education_salaried_programme) do
-        create(:course, program_type: :higher_education_salaried_programme)
+        create(:course, program_type: :higher_education_salaried_programme, funding: :salary)
       end
 
       let!(:course_school_direct_training_programme) do
-        create(:course, program_type: :school_direct_training_programme)
+        create(:course, program_type: :school_direct_training_programme, funding: :fee)
       end
 
       let!(:course_school_direct_salaried_training_programme) do
-        create(:course, program_type: :school_direct_salaried_training_programme)
+        create(:course, program_type: :school_direct_salaried_training_programme, funding: :salary)
       end
 
-      let!(:course_scitt_programme) { create(:course, program_type: :scitt_programme) }
+      let!(:course_scitt_programme) { create(:course, program_type: :scitt_programme, funding: :fee) }
       let!(:course_pg_teaching_apprenticeship) do
-        create(:course, program_type: :pg_teaching_apprenticeship)
+        create(:course, program_type: :pg_teaching_apprenticeship, funding: :apprenticeship)
       end
 
       it 'only returns salaried training programme' do

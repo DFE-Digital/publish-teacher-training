@@ -26,49 +26,56 @@ RSpec.feature 'Funding filter' do
       :secondary,
       :open,
       site_statuses:,
-      program_type: :higher_education_programme
+      program_type: :higher_education_programme,
+      funding: :fee
     )
     @course_scitt_salaried_programme = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :scitt_salaried_programme
+      program_type: :scitt_salaried_programme,
+      funding: :salary
     )
     @course_higher_education_salaried_programme = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :higher_education_salaried_programme
+      program_type: :higher_education_salaried_programme,
+      funding: :salary
     )
     @course_school_direct_training_programme = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :school_direct_training_programme
+      program_type: :school_direct_training_programme,
+      funding: :fee
     )
     @course_school_direct_salaried_training_programme = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :school_direct_salaried_training_programme
+      program_type: :school_direct_salaried_training_programme,
+      funding: :salary
     )
     @course_scitt_programme = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :scitt_programme
+      program_type: :scitt_programme,
+      funding: :fee
     )
     @course_pg_teaching_apprenticeship = create(
       :course,
       :secondary,
       :open,
       site_statuses:,
-      program_type: :pg_teaching_apprenticeship
+      program_type: :pg_teaching_apprenticeship,
+      funding: :apprenticeship
     )
   end
 

@@ -67,7 +67,7 @@ feature 'Editing course length' do
   end
 
   def and_there_is_an_uneditable_course
-    given_a_course_exists(program_type: 'TDA')
+    given_a_course_exists(program_type: 'TDA', funding: :apprenticeship)
   end
 
   def and_there_is_a_course_i_want_to_edit(course_length)
