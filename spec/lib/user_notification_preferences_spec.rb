@@ -69,7 +69,7 @@ describe UserNotificationPreferences do
 
   describe '#update' do
     let(:accredited_provider_one) { create(:provider, :accredited_provider) }
-    let(:accredited_provider2) { create(:provider, :accredited_provider) }
+    let(:accredited_provider_two) { create(:provider, :accredited_provider) }
 
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
@@ -84,13 +84,13 @@ describe UserNotificationPreferences do
       )
     end
 
-    let(:user_notification2) do
+    let(:user_notification_two) do
       create(
         :user_notification,
         user:,
         course_publish: false,
         course_update: false,
-        provider_code: accredited_provider2.provider_code
+        provider_code: accredited_provider_two.provider_code
       )
     end
 
@@ -106,7 +106,7 @@ describe UserNotificationPreferences do
 
     context 'user has no notifications' do
       before do
-        user.providers << [accredited_provider_one, accredited_provider2]
+        user.providers << [accredited_provider_one, accredited_provider_two]
       end
 
       it 'creates user notification preference for each accredited provider' do
@@ -117,7 +117,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.count).to eq(2)
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
-        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_provider_one.provider_code, accredited_provider2.provider_code)
+        expect(user_notifications.map(&:provider_code)).to contain_exactly(accredited_provider_one.provider_code, accredited_provider_two.provider_code)
       end
 
       context 'when the user has duplicate provider associations' do
@@ -147,9 +147,9 @@ describe UserNotificationPreferences do
       before do
         user
         other_user
-        user.providers << [accredited_provider_one, accredited_provider2]
+        user.providers << [accredited_provider_one, accredited_provider_two]
         user_notification_one
-        user_notification2
+        user_notification_two
         other_users_notification
       end
 
@@ -162,7 +162,7 @@ describe UserNotificationPreferences do
         expect(user_notifications.map(&:course_publish)).to eq([true, true])
         expect(user_notifications.map(&:course_update)).to eq([true, true])
         expect(user_notifications.map(&:provider_code))
-          .to contain_exactly(accredited_provider_one.provider_code, accredited_provider2.provider_code)
+          .to contain_exactly(accredited_provider_one.provider_code, accredited_provider_two.provider_code)
       end
 
       it 'resets enabled after update' do
@@ -209,7 +209,7 @@ describe UserNotificationPreferences do
           other_user
           user.providers = [accredited_provider_one]
           user_notification_one
-          user_notification2
+          user_notification_two
         end
 
         it 'removes the unassociated accredited provider UserNotification' do
@@ -223,14 +223,14 @@ describe UserNotificationPreferences do
       end
 
       context 'accredited provider added' do
-        let(:accredited_provider3) { create(:provider, :accredited_provider) }
+        let(:accredited_provider_three) { create(:provider, :accredited_provider) }
 
         before do
           user
           other_user
-          user.providers << [accredited_provider_one, accredited_provider2, accredited_provider3]
+          user.providers << [accredited_provider_one, accredited_provider_two, accredited_provider_three]
           user_notification_one
-          user_notification2
+          user_notification_two
         end
 
         it 'creates a UserNotification for the new accredited provider notification' do
@@ -241,8 +241,8 @@ describe UserNotificationPreferences do
           expect(user_notifications.map(&:provider_code))
             .to contain_exactly(
               accredited_provider_one.provider_code,
-              accredited_provider2.provider_code,
-              accredited_provider3.provider_code
+              accredited_provider_two.provider_code,
+              accredited_provider_three.provider_code
             )
         end
       end
