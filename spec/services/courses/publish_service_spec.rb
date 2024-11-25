@@ -29,6 +29,17 @@ RSpec.describe Courses::PublishService do
     end
   end
 
+  describe 'when the course is discarded' do
+    let(:course) { create(:course, :publishable, uuid:, discarded_at: 1.minute.ago) }
+
+    it 'the course is undiscarded and published' do
+      allow(Course).to receive(:find_by).with({ uuid: uuid }).and_return(course)
+      subject.call
+      expect(course.reload).to be_published
+      expect(course.reload).to be_undiscarded
+    end
+  end
+
   describe 'publishing the course fails' do
     it 'the course is unpublished' do
       allow(Course).to receive(:find_by).with({ uuid: uuid }).and_return(course)
