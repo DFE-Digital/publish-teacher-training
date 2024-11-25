@@ -26,6 +26,7 @@ module Courses
 
     def publish_course
       Course.transaction do
+        course.undiscard
         course.publish_sites
         course.publish_enrichment(user)
         course.application_status_open!
