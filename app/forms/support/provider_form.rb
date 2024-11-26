@@ -4,7 +4,7 @@ module Support
   class ProviderForm < BaseForm
     FIELDS = %i[
       accredited_provider
-      accredited_provider_id
+      accredited_provider_number
 
       provider_code
       provider_name
@@ -14,9 +14,9 @@ module Support
       urn
     ].freeze
 
-    UNIVERSITY_ACCREDITED_PROVIDER_ID_FORMAT = /\A1\d{3}\z/
-    SCITT_ACCREDITED_PROVIDER_ID_FORMAT = /\A5\d{3}\z/
-    ACCREDITED_PROVIDER_ID_FORMAT = /\A[15]\d{3}\z/
+    UNIVERSITY_ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A1\d{3}\z/
+    SCITT_ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A5\d{3}\z/
+    ACCREDITED_PROVIDER_NUMBER_FORMAT = /\A[15]\d{3}\z/
 
     attr_accessor(*FIELDS, :recruitment_cycle)
 
@@ -32,7 +32,7 @@ module Support
     validate :provider_code_taken
 
     validates :accredited_provider, presence: true
-    validate :validate_accredited_provider_id
+    validate :validate_accredited_provider_number
 
     validates :ukprn, ukprn_format: { allow_blank: false }
 
@@ -77,21 +77,21 @@ module Support
       errors.add(:provider_type, :school_is_an_invalid_accredited_provider) if accredited_provider? && lead_school?
     end
 
-    def validate_accredited_provider_id
+    def validate_accredited_provider_number
       return unless accredited_provider?
 
-      if accredited_provider_id.blank?
-        errors.add(:accredited_provider_id, :blank)
+      if accredited_provider_number.blank?
+        errors.add(:accredited_provider_number, :blank)
       else
         regex = if university?
-                  UNIVERSITY_ACCREDITED_PROVIDER_ID_FORMAT
+                  UNIVERSITY_ACCREDITED_PROVIDER_NUMBER_FORMAT
                 elsif scitt?
-                  SCITT_ACCREDITED_PROVIDER_ID_FORMAT
+                  SCITT_ACCREDITED_PROVIDER_NUMBER_FORMAT
                 else
-                  ACCREDITED_PROVIDER_ID_FORMAT
+                  ACCREDITED_PROVIDER_NUMBER_FORMAT
                 end
 
-        errors.add(:accredited_provider_id, :invalid) unless regex.match?(accredited_provider_id)
+        errors.add(:accredited_provider_number, :invalid) unless regex.match?(accredited_provider_number)
       end
     end
   end

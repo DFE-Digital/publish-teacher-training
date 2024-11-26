@@ -25,9 +25,9 @@
 
       <%= f.govuk_radio_buttons_fieldset(:accredited_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" }) do %>
         <%= f.govuk_radio_button :accredited_provider, :accredited_provider, label: { text: "Yes" }, link_errors: true  do %>
-          <%= f.govuk_text_field :accredited_provider_id,
+          <%= f.govuk_text_field :accredited_provider_number,
                                 width: 10,
-                                label: { text: "Accredited provider ID" },
+                                label: { text: "Accredited provider number" },
                                 autocomplete: :disabled %>
 
           <% end %>
