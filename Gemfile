@@ -20,9 +20,6 @@ gem 'puma', '~> 6.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-# Canonical meta tag
-gem 'canonical-rails'
-
 # Decorate logic to keep it out of the views and helper methods
 gem 'draper'
 
