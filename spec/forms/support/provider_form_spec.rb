@@ -12,7 +12,7 @@ module Support
     let(:params) do
       build(:provider).attributes.symbolize_keys.slice(
         :accrediting_provider,
-        :accredited_provider_id,
+        :accredited_provider_number,
         :provider_code,
         :provider_name,
         :provider_type,
@@ -127,7 +127,7 @@ module Support
           { accredited_provider: :accredited_provider }
         end
 
-        include_examples 'blank validation', :accredited_provider_id, 'Enter an accredited provider ID'
+        include_examples 'blank validation', :accredited_provider_number, 'Enter an accredited provider number'
       end
 
       context 'urn set to invalid' do
@@ -190,42 +190,42 @@ module Support
         end
       end
 
-      shared_examples 'accredited provider id validation' do |provider_type, accredited_provider_id, message|
-        context "provider_type is set to '#{provider_type}' and accredited_provider_id is set to '#{accredited_provider_id}'" do
+      shared_examples 'accredited provider number validation' do |provider_type, accredited_provider_number, message|
+        context "provider_type is set to '#{provider_type}' and accredited_provider_number is set to '#{accredited_provider_number}'" do
           let(:params) do
             {
               provider_type:,
               accredited_provider: :accredited_provider,
-              accredited_provider_id:
+              accredited_provider_number:
             }
           end
 
-          it 'validates the accredited provider id' do
+          it 'validates the accredited provider number' do
             expect(subject).not_to be_valid
 
-            expect(subject.errors[:accredited_provider_id]).to match_array(message)
+            expect(subject.errors[:accredited_provider_number]).to match_array(message)
           end
         end
       end
 
-      blank_accredited_provider_id_message = 'Enter an accredited provider ID'
+      blank_accredited_provider_number_message = 'Enter an accredited provider number'
 
-      [nil, ''].each do |blank_accredited_provider_id|
-        include_examples 'accredited provider id validation', nil, blank_accredited_provider_id, blank_accredited_provider_id_message
-        include_examples 'accredited provider id validation', :scitt, blank_accredited_provider_id, blank_accredited_provider_id_message
-        include_examples 'accredited provider id validation', :university, blank_accredited_provider_id, blank_accredited_provider_id_message
+      [nil, ''].each do |blank_accredited_provider_number|
+        include_examples 'accredited provider number validation', nil, blank_accredited_provider_number, blank_accredited_provider_number_message
+        include_examples 'accredited provider number validation', :scitt, blank_accredited_provider_number, blank_accredited_provider_number_message
+        include_examples 'accredited provider number validation', :university, blank_accredited_provider_number, blank_accredited_provider_number_message
       end
 
-      invalid_accredited_provider_id_message = 'Enter a valid accredited provider ID'
+      invalid_accredited_provider_number_message = 'Enter a valid accredited provider number'
 
-      %w[a aaaa 12345 54321 abcde 1 5].each do |invalid_accredited_provider_id|
-        include_examples 'accredited provider id validation', nil, invalid_accredited_provider_id, invalid_accredited_provider_id_message
-        include_examples 'accredited provider id validation', :scitt, invalid_accredited_provider_id, invalid_accredited_provider_id_message
-        include_examples 'accredited provider id validation', :university, invalid_accredited_provider_id, invalid_accredited_provider_id_message
+      %w[a aaaa 12345 54321 abcde 1 5].each do |invalid_accredited_provider_number|
+        include_examples 'accredited provider number validation', nil, invalid_accredited_provider_number, invalid_accredited_provider_number_message
+        include_examples 'accredited provider number validation', :scitt, invalid_accredited_provider_number, invalid_accredited_provider_number_message
+        include_examples 'accredited provider number validation', :university, invalid_accredited_provider_number, invalid_accredited_provider_number_message
       end
 
-      include_examples 'accredited provider id validation', :scitt, '1234', invalid_accredited_provider_id_message
-      include_examples 'accredited provider id validation', :university, '5432', invalid_accredited_provider_id_message
+      include_examples 'accredited provider number validation', :scitt, '1234', invalid_accredited_provider_number_message
+      include_examples 'accredited provider number validation', :university, '5432', invalid_accredited_provider_number_message
     end
 
     describe '#stash' do

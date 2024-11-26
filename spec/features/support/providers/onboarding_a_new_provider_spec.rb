@@ -159,12 +159,12 @@ feature 'Onboarding a new provider' do
       fill_in 'Unique reference number (URN)', with: '54321'
     when :university
       choose 'Yes'
-      fill_in 'Accredited provider ID', with: '1111'
+      fill_in 'Accredited provider number', with: '1111'
 
       choose 'Higher education institution (HEI)'
     when :scitt
       choose 'Yes'
-      fill_in 'Accredited provider ID', with: '5555'
+      fill_in 'Accredited provider number', with: '5555'
 
       choose 'School centred initial teacher training (SCITT)'
     end
@@ -192,12 +192,12 @@ feature 'Onboarding a new provider' do
       expect(page).to have_field('Unique reference number (URN)', with: '54321')
     when :university
       expect(page).to have_checked_field('Yes')
-      expect(page).to have_field('Accredited provider ID', with: '1111')
+      expect(page).to have_field('Accredited provider number', with: '1111')
 
       expect(page).to have_checked_field('Higher education institution (HEI)')
     when :scitt
       expect(page).to have_checked_field('Yes')
-      expect(page).to have_field('Accredited provider ID', with: '5555')
+      expect(page).to have_field('Accredited provider number', with: '5555')
 
       expect(page).to have_checked_field('School centred initial teacher training (SCITT)')
     end

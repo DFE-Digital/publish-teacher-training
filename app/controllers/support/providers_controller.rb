@@ -52,7 +52,7 @@ module Support
                                        :provider_type,
                                        :ukprn,
                                        :urn,
-                                       :accrediting_provider, :accredited_provider_id)
+                                       :accrediting_provider, :accredited_provider_number)
     end
 
     def create_provider_params

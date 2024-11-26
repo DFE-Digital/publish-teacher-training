@@ -2,21 +2,21 @@
 
 require 'rails_helper'
 
-class AccreditedProviderIdFormatValidatorTest
+class AccreditedProviderNumberFormatValidatorTest
   include ActiveModel::Validations
 
-  attr_accessor :accredited_provider_id
+  attr_accessor :accredited_provider_number
 
-  validates :accredited_provider_id, accredited_provider_id_format: { allow_blank: false }
+  validates :accredited_provider_number, accredited_provider_number_format: { allow_blank: false }
 end
 
-describe AccreditedProviderIdFormatValidator do
+describe AccreditedProviderNumberFormatValidator do
   let(:accredited_provider) { create(:provider, :accredited_provider, :university) }
-  let(:accredited_provider_id) { 1234 }
+  let(:accredited_provider_number) { 1234 }
 
   let(:model) do
     model = accredited_provider
-    model.accredited_provider_id = accredited_provider_id
+    model.accredited_provider_number = accredited_provider_number
     model
   end
 
@@ -28,7 +28,7 @@ describe AccreditedProviderIdFormatValidator do
     end
 
     context 'with a valid id starting with 5' do
-      let(:accredited_provider_id) { 5432 }
+      let(:accredited_provider_number) { 5432 }
 
       it 'does not add an error' do
         expect(model).not_to be_valid
@@ -46,7 +46,7 @@ describe AccreditedProviderIdFormatValidator do
     end
 
     context 'with a valid id starting with 5' do
-      let(:accredited_provider_id) { 5432 }
+      let(:accredited_provider_number) { 5432 }
 
       it 'does not add an error' do
         expect(model).to be_valid
@@ -65,7 +65,7 @@ describe AccreditedProviderIdFormatValidator do
     end
 
     context 'with a valid id starting with 5' do
-      let(:accredited_provider_id) { 5432 }
+      let(:accredited_provider_number) { 5432 }
 
       it 'adds provider_type error' do
         model.valid?

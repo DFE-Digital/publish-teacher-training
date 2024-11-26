@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccreditedProviderIdFormatValidator < ActiveModel::EachValidator
+class AccreditedProviderNumberFormatValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if options[:allow_blank] && value.blank?
 

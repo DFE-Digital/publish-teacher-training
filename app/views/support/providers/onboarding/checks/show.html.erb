@@ -37,9 +37,9 @@
 
             if @provider_form.accredited_provider?
               component.with_row do |row|
-                row.with_key { "Accredited provider ID" }
-                row.with_value { @provider_form.accredited_provider_id }
-                row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "accredited provider ID")
+                row.with_key { "Accredited provider number" }
+                row.with_value { @provider_form.accredited_provider_number }
+                row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "accredited provider number")
               end
             end
 
