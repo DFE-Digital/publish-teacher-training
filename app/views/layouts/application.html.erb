@@ -5,8 +5,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= tag.link(href: request.url.split('?').first, rel: "canonical") %>
-    <%= tag.meta(property: "og:url", content: request.url.split('?').first) %>
+    <%= tag.link(href: request.url.split('?').first, rel: 'canonical') %>
+    <%= tag.meta(property: 'og:url', content: request.url.split('?').first) %>
 
     <%= tag.meta(name: "viewport", content: "width=device-width, initial-scale=1") %>
     <%= tag.meta(property: "og:image", content: image_path("govuk-opengraph-image.png")) %>
