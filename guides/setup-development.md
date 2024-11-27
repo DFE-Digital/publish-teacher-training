@@ -69,7 +69,9 @@ The commands from the previous section will seed the database with some test dat
 
 To seed the database with a sanitised production dump:
 
-- Download the sanitised production dump from the [Github Actions page](https://github.com/DFE-Digital/publish-teacher-training/actions/workflows/database-restore.yml) and download the latest successful run.
+- Download the sanitised production dump from the Azure Storage Account.
+- In the Azure portal, go to 'Storage Accounts' -> 's189p01pttdbbkppdsa' -> 'Containers' -> 'database-backup'
+- Download the latest sanitised backup.
 - Unzip the file and you should see a file called `backup_sanitised.sql`.
 
 Then run the following command to populate the database:
