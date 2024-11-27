@@ -5,7 +5,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <% canonical_url = "#{request.base_url}#{request.path}".chomp('/') + '/' %>
+    <% canonical_url = "#{request.base_url}#{request.path.chomp('/')}/" %>
 
     <%= tag.link(href: canonical_url, rel: "canonical") %>
     <%= tag.meta(property: "og:url", content: canonical_url) %>
