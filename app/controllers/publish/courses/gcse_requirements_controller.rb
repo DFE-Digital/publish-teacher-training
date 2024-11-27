@@ -15,7 +15,8 @@ module Publish
       end
 
       def update
-        @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params.merge(level: course.level))
+        gcse_requirements_form_params[:level] = course.level
+        @gcse_requirements_form = GcseRequirementsForm.new(**gcse_requirements_form_params)
 
         if @gcse_requirements_form.valid? && goto_preview?
           @gcse_requirements_form.save(course)
