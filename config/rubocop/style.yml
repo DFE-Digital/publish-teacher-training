@@ -34,3 +34,4 @@ Style/SafeNavigationChainLength:
     - app/models/course_enrichment.rb
     - app/services/courses/content_status_service.rb
     - app/services/courses/creation_service.rb
+    - app/views/publish/shared/_error_wrapper.html.erb
