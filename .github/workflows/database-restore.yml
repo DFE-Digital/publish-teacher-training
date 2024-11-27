@@ -70,7 +70,10 @@ jobs:
         run: |
           az storage blob upload --container-name database-backup \
           --file ${PROD_BACKUP}.tar.gz --name ${PROD_BACKUP}.tar.gz \
-          --connection-string '${{ env.STORAGE_CONN_STR }}'
+          --connection-string '${{ env.STORAGE_CONN_STR }}' --overwrite
+
+      - name: Set env variable
+        run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
 
       - name: Sanitise the Database backup
         run: |
@@ -90,7 +93,7 @@ jobs:
           rm ${{ env.PROD_BACKUP }}
 
           echo "::group::Backup Sanitised Database"
-          pg_dump --encoding utf8 --clean --no-owner --if-exists -d ${DATABASE_NAME} -f backup_sanitised.sql
+          pg_dump --compress=1 --encoding utf8 --clean --no-owner --if-exists -d ${DATABASE_NAME} -f ${SANITISED_FILE_NAME}.sql.gz
           echo "::endgroup::"
         env:
           DATABASE_NAME: teacher_training_api
@@ -99,12 +102,12 @@ jobs:
           PGHOST: localhost
           PGPORT: 5432
 
-      - name: Upload Sanitised Backup
-        uses: actions/upload-artifact@v4
-        with:
-          name: backup_sanitised
-          path: backup_sanitised.sql
-          retention-days: 7
+      - name: Upload Backup to Azure Storage
+        run: |
+          az storage blob upload --container-name database-backup \
+          --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz --overwrite \
+          --connection-string '${{ env.STORAGE_CONN_STR }}'
+          rm ${SANITISED_FILE_NAME}.sql.gz
 
   restore:
     needs: [backup]
@@ -124,4 +127,5 @@ jobs:
         uses: ./.github/actions/restore/
         with:
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          prod-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
           environment: ${{ matrix.environment }}

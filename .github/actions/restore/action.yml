@@ -4,6 +4,8 @@ description: Restore AKS environment database
 inputs:
   azure-credentials:
     required: true
+  prod-credentials:
+    required: true
   environment:
     description: Environment to restore to
     required: true
@@ -19,16 +21,41 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Set env variable
+      shell: bash
+      run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
+
+    - name: Set KV environment variables
+      shell: bash
+      run: |
+        tf_vars_file=terraform/aks/workspace_variables/production.tfvars.json
+        echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+
+    - uses: azure/login@v2
+      with:
+        creds: ${{ inputs.prod-credentials }}
+
+    - name: Set Connection String
+      shell: bash
+      run: |
+        STORAGE_CONN_STR="$(az keyvault secret show --name PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION --vault-name ${{ env.key_vault_name }} | jq -r .value)"
+        echo "::add-mask::$STORAGE_CONN_STR"
+        echo "STORAGE_CONN_STR=$STORAGE_CONN_STR" >> $GITHUB_ENV
+
+    - name: Download Backup
+      shell: bash
+      run: |
+        az storage blob download --container-name database-backup \
+        --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz \
+        --connection-string '${{ env.STORAGE_CONN_STR }}'
+        az logout
+
     - name: Set environment variables for AKS
       shell: bash
       run: |
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
-
-    - uses: azure/login@v2
-      with:
-        creds: ${{ inputs.azure-credentials }}
 
     - name: Set app name variable
       shell: bash
@@ -40,6 +67,10 @@ runs:
           echo "Set the app name to the environent name"
           echo "app_name=publish-${{ env.app_environment }}" >> $GITHUB_ENV
         fi
+
+    - uses: azure/login@v2
+      with:
+        creds: ${{ inputs.azure-credentials }}
 
     - name: Install kubectl
       if: ${{ env.app_environment != 'review' }}
@@ -56,22 +87,7 @@ runs:
         make ci ${{ inputs.environment }} get-cluster-credentials
         make install-konduit
 
-    - name: Download Sanitised Backup
-      if: ${{ env.app_environment != 'review' }}
-      uses: actions/download-artifact@v4
-      with:
-        name: backup_sanitised
-
-    - name: Download Latest Sanitised Backup
-      if: ${{ env.app_environment == 'review' }}
-      shell: bash
-      run: |
-        sanitised_backup_workflow_run_id=$(gh run list -w "Database Backup and Restore" -s success --json databaseId --jq '.[].databaseId' -L 1)
-        echo "Download artifact for Database Backup and Restore workflow run ID: $sanitised_backup_workflow_run_id"
-        gh run download $sanitised_backup_workflow_run_id
-        mv backup_sanitised/backup_sanitised.sql ./
-
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        bin/konduit.sh -i backup_sanitised.sql -t 7200 ${{ env.app_name }} -- psql
+        bin/konduit.sh -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 ${{ env.app_name }} -- psql
