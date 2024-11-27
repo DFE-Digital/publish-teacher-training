@@ -5,9 +5,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <% url = URI(request.url.split("?").first) %>
-    <%= tag.link(href: url.path.ends_with?("/") ? url.to_s : "#{url}/", rel: "canonical") %>
-    <%= tag.meta(property: "og:url", content: url.path.ends_with?("/") ? url.to_s : "#{url}/") %>
+    <% canonical_url = "#{request.base_url}#{request.path}".chomp('/') + '/' %>
+
+    <%= tag.link(href: canonical_url, rel: "canonical") %>
+    <%= tag.meta(property: "og:url", content: canonical_url) %>
 
     <%= tag.meta(name: "viewport", content: "width=device-width, initial-scale=1") %>
     <%= tag.meta(property: "og:image", content: image_path("govuk-opengraph-image.png")) %>
