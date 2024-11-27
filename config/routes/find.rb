@@ -17,6 +17,8 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/apply', to: 'courses#apply', as: :apply
   get '/course/:provider_code/:course_code/git/:git_path', to: 'courses#git_redirect', as: :get_into_teaching_redirect
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
+
+  get '/v2/results', to: 'v2/results#index', as: 'v2_results', constraints: ->(_request) { Settings.features.v2_results.present? }
   get '/results', to: 'results#index', as: 'results'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
