@@ -25,6 +25,20 @@
             </div>
 
             <div class="find-item govuk-!-width-full">
+            <fieldset class="govuk-fieldset">
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="organisation" name="organisation" type="checkbox" value="hmrc">
+                    <label class="govuk-label govuk-checkboxes__label" for="organisation">
+                      Only show courses that offer visa sponsorship
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+
+            <div class="find-item govuk-!-width-full">
               <details class="govuk-details pre-filtering-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
@@ -45,35 +59,37 @@
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                <h1 class="govuk-fieldset__heading">
-                  Qualification
-                </h1>
-              </legend>
-                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                  <div class="govuk-checkboxes__item">
-                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
-                      QTS only
-                    <% end %>
-                  </div>
-                  <div class="govuk-checkboxes__item">
-                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
-                      QTS with PGCE or PGDE
-                    <% end %>
-                  </div>
-                  <div class="govuk-checkboxes__item">
-                    <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                    <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
-                      PGCE or PGDE without QTS
-                    <% end %>
-                  </div>
+
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Age group
+              </h1>
+            </legend>
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="age-group-filter-home-1" name="age-group-filter-home" type="checkbox" value="hmrc">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="age-group-filter-home-1">
+                    Primary - 5 to 11
+                  </label>
                 </div>
-              </fieldset>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="age-group-filter-home-2" name="age-group-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="age-group-filter-home-2">
+                    Secondary - 11 to 18
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="age-group-filter-home-3" name="age-group-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="age-group-filter-home-3">
+                    Further education - 16 and over
+                  </label>
+                </div>
+              </div>
+            </fieldset>
             </div>
+
 
             <div class="govuk-form-group">
               <fieldset class="govuk-fieldset">
@@ -84,19 +100,49 @@
             </legend>
               <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
-                  <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                  <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
-                    Full time
-                  <% end %>
+                  <input class="govuk-checkboxes__input" id="study-type-filter-home-1" name="study-type-filter-home" type="checkbox" value="hmrc">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-1">
+                    Full time (12 months)
+                  </label>
                 </div>
                 <div class="govuk-checkboxes__item">
-                  <%= form.check_box :can_sponsor_visa, class: "govuk-checkboxes__input" %>
-                  <%= form.label :can_sponsor_visa, class:"govuk-label govuk-checkboxes__label govuk-!-font-size-16" do %>
-                    Part time
-                  <% end %>
+                  <input class="govuk-checkboxes__input" id="study-type-filter-home-2" name="study-type-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-2">
+                    Part time (18 to 24 months)
+                  </label>
                 </div>
               </div>
             </fieldset>
+            </div>
+
+            <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                  Qualifications
+                </h1>
+              </legend>
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                  <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="qualification-filter-home-1" name="qualification-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="qualification-filter-home-1">
+                    QTS only
+                  </label>
+                  </div>
+                  <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="qualification-filter-home-2" name="qualification-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="qualification-filter-home-2">
+                  QTS with PGCE or PGDE
+                  </label>
+                  </div>
+                  <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="qualification-filter-home-3" name="qualification-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="qualification-filter-home-3">
+                    PGCE or PGDE without QTS
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
             </div>
 
             </div><!--end col one half-->
@@ -106,49 +152,93 @@
             <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 <h1 class="govuk-fieldset__heading">
-                Do you need visa sponsorship?
+                Degree grade accepted
                 </h1>
               </legend>
               <div class="govuk-radios--small" data-module="govuk-radios">
                 <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouLive" name="whereDoYouLive" type="radio" value="england">
-                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive">
-                    Yes
+                  <input class="govuk-radios__input" id="degree-filter-home-1" name="degree-filter-home" type="radio" value="england">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-1">
+                    2:1 or First
                   </label>
                 </div>
                 <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouLive-2" name="whereDoYouLive" type="radio" value="scotland">
-                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouLive-2">
-                    No
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-            </div>
-
-            <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                <h1 class="govuk-fieldset__heading">
-                Do you have a university degree?
-                </h1>
-              </legend>
-              <div class="govuk-radios--small" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouStudy" name="whereDoYouStudy" type="radio" value="england">
-                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouStudy">
-                    Yes, I have a degree or I am studying for one
+                  <input class="govuk-radios__input" id="degree-filter-home-2" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-2">
+                    2:2
                   </label>
                 </div>
                 <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="whereDoYouStudy-2" name="whereDoYouStudy" type="radio" value="scotland">
-                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="whereDoYouStudy-2">
-                    No, I do not have a degree
+                  <input class="govuk-radios__input" id="degree-filter-home-3" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-3">
+                    Third
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-4" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-4">
+                    Pass (Ordinary degree)
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-5" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-5">
+                    No degree required
                   </label>
                 </div>
               </div>
             </fieldset>
           </div>
+
+          <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Fee or salary
+              </h1>
+            </legend>
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="fee-or-salary-filter-home-1" name="fee-or-salary-filter-home" type="checkbox" value="employment-tribunal">
+                <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="fee-or-salary-filter-home-1">
+                  Fee - no salary
+                </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="fee-or-salary-filter-home-2" name="fee-or-salary-filter-home" type="checkbox" value="employment-tribunal">
+                <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="fee-or-salary-filter-home-2">
+                  Salary
+                </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="fee-or-salary-filter-home-3" name="fee-or-salary-filter-home" type="checkbox" value="employment-tribunal">
+                <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="fee-or-salary-filter-home-3">
+                  Teaching apprenticeship - with salary
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Financial support
+              </h1>
+            </legend>
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="financial-support-filter-home-1" name="financial-support-filter-home" type="checkbox" value="employment-tribunal">
+                <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="financial-support-filter-home-1">
+                  Only show courses that have financial support available
+                </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+
 
             </div><!--end col one half-->
             </div><!--end grid row-->
