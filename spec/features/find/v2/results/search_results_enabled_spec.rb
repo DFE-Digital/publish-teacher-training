@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-feature 'V2 results - feature flag enabled' do
+feature 'V2 results - enabled' do
   before do
     allow(Settings.features).to receive_messages(v2_results: true)
   end
