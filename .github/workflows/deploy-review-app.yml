@@ -47,6 +47,7 @@ jobs:
           pr-number: ${{ inputs.pr-number }}
           sha: ${{ inputs.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          prod-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
 
       - name: Update review-${{ inputs.pr-number }} status
         if:   always()
