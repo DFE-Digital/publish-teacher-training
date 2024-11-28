@@ -70,10 +70,19 @@
     </div>
     <!--END keyword and location search-->
 
-    <div class="app-filter-toggle div-sticky"></div>
+  <div class="div-filter-background">
+    <div class="div-sticky-container">
+      <div class="div-sticky-element">
+        <div class="app-filter-toggle"></div>
+      </div>
+      <div class="div-sticky-element">
+        <a href="#" class="govuk-button govuk-button--secondary secondary-button-filter govuk-!-font-weight-bold">Sort results</a>
+        <%#= render Find::Results::SortByComponent.new(results: @results_view) %>
+      </div>
+    </div>
+  </div>
 
     <%= render Find::Results::NoResultsComponent.new(results: @results_view, filters_view: @filters_view) %>
-    <%= render Find::Results::SortByComponent.new(results: @results_view) %>
 
     <% if @results_view.has_results? %>
       <ul class="app-search-results">
