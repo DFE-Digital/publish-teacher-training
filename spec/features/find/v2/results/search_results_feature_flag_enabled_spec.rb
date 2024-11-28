@@ -8,8 +8,13 @@ feature 'V2 results - feature flag enabled' do
   end
 
   scenario 'when I visit the results page' do
+    given_i_am_authenticated
     when_i_visit_the_find_results_page
     then_the_page_is_load_successfully
+  end
+
+  def given_i_am_authenticated
+    page.driver.browser.authorize 'admin', 'password'
   end
 
   def when_i_visit_the_find_results_page
