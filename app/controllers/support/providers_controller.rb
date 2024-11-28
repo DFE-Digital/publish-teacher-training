@@ -17,7 +17,9 @@ module Support
     end
 
     def update
-      if provider.update(update_provider_params)
+      provider.assign_attributes(update_provider_params)
+      provider.accredited_provider_number = nil if provider.accrediting_provider_change[1] == 'not_an_accredited_provider'
+      if provider.save
         redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
       else
         render :edit
@@ -52,7 +54,8 @@ module Support
                                        :provider_type,
                                        :ukprn,
                                        :urn,
-                                       :accrediting_provider, :accredited_provider_number)
+                                       :accrediting_provider,
+                                       :accredited_provider_number)
     end
 
     def create_provider_params

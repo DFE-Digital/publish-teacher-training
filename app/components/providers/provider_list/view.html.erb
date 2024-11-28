@@ -24,7 +24,7 @@
       end
 
       if @provider.accredited_provider?
-        component.with_row do |row|
+        component.with_row(html_attributes: { data: { qa: 'ap-number-row' } }) do |row|
           row.with_key { "Accredited provider number" }
           row.with_value { value_provided?(@provider.accredited_provider_number.to_s) }
           row.with_action(text: "Change", href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), visually_hidden_text: "accredited provider id")
