@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_26_104331) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_29_151352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -337,6 +337,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_26_104331) do
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
     t.index ["searchable"], name: "index_provider_on_searchable", using: :gin
     t.index ["synonyms"], name: "index_provider_on_synonyms", using: :gin
+  end
+
+  create_table "provider_partnership", force: :cascade do |t|
+    t.bigint "accredited_provider_id", null: false
+    t.bigint "training_provider_id", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accredited_provider_id", "training_provider_id"], name: "idx_on_accredited_provider_id_training_provider_id_7705512e33", unique: true
+    t.index ["accredited_provider_id"], name: "index_provider_partnership_on_accredited_provider_id"
+    t.index ["training_provider_id"], name: "index_provider_partnership_on_training_provider_id"
   end
 
   create_table "provider_ucas_preference", force: :cascade do |t|
