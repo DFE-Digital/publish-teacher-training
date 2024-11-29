@@ -62,6 +62,14 @@
       </div>
 
       <div class="govuk-width-container">
+        <p class="govuk-body">
+          <%= "anonymised_user_agent_and_ip: #{DfE::Analytics::Event.new.send(:anonymised_user_agent_and_ip, request)}" %>
+        </p>
+
+        <p class="govuk-body">
+          <%= "request.headers[\"X-REAL-IP\"]: #{request.headers["X-REAL-IP"]}" %>
+        </p>
+
         <% if current_user && @provider && !params[:controller].start_with?("support") %>
           <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
            <%= render TitleBar.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
