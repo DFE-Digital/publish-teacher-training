@@ -140,6 +140,13 @@ shared:
     - accredited_provider_number
     - town
     - address3
+  provider_partnership:
+    - id
+    - accredited_provider_id
+    - training_provider_id
+    - description
+    - created_at
+    - updated_at
   recruitment_cycle:
     - id
     - year
