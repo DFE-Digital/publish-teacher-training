@@ -17,9 +17,8 @@ module Support
     end
 
     def update
-      provider.assign_attributes(update_provider_params)
-      provider.accredited_provider_number = nil if provider.accrediting_provider_change&.[](1) == 'not_an_accredited_provider'
-      if provider.save
+      update_form = UpdateProviderForm.new(provider, attributes: update_provider_params)
+      if update_form.save
         redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t('support.flash.updated', resource: 'Provider') }
       else
         render :edit
