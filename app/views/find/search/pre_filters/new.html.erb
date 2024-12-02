@@ -251,15 +251,6 @@
   </div><!--END search content-->
 </div><!--END search container-->
 
-<!--<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <p class="govuk-heading-l">
-      Browse primary or secondary courses
-    </p>
-  </div>
-</div>-->
-
-
 <div class="govuk-grid-row age-group-container">
   <div class="govuk-grid-column-one-half age-group-container">
     <!--Callout start-->
@@ -269,9 +260,9 @@
         Primary (ages 5 to 11)
         </h3>
         <p class="govuk-body">
-          <%= link_to primary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
-            Browse all primary courses
-          <% end %>
+          <a href="https://find.localhost/subjects?age_group=primary" class="govuk-link govuk-link--no-visited-state">
+            Browse primary courses
+          </a>
         </p>
       </div>
     </div>
@@ -286,7 +277,7 @@
         </h3>
         <p class="govuk-body">
           <%= link_to secondary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
-            Browse all secondary courses
+            Browse secondary courses
           <% end %>
         </p>
       </div>
@@ -328,10 +319,14 @@
         <p class="govuk-body">
           Specialise in teaching and nurturing pupils with complex needs.
         </p>
-          <span class="govuk-body">
-            <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
-                Browse all courses with a SEND specialism</a>.
-          </span>
+          <p class="govuk-body">
+            <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
+                Browse primary courses with a SEND specialism.</a>
+          </p>
+          <p class="govuk-body">
+          <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=A1&subjects%5B%5D=A2&subjects%5B%5D=W1&subjects%5B%5D=C1&subjects%5B%5D=08&subjects%5B%5D=F1&subjects%5B%5D=09&subjects%5B%5D=Q8&subjects%5B%5D=P3&subjects%5B%5D=11&subjects%5B%5D=12&subjects%5B%5D=DT&subjects%5B%5D=13&subjects%5B%5D=L1&subjects%5B%5D=Q3&subjects%5B%5D=15&subjects%5B%5D=F8&subjects%5B%5D=17&subjects%5B%5D=L5&subjects%5B%5D=V1&subjects%5B%5D=18&subjects%5B%5D=19&subjects%5B%5D=A0&subjects%5B%5D=20&subjects%5B%5D=G1&subjects%5B%5D=24&subjects%5B%5D=W3&subjects%5B%5D=P1&subjects%5B%5D=C6&subjects%5B%5D=C7&subjects%5B%5D=F3&subjects%5B%5D=C8&subjects%5B%5D=V6&subjects%5B%5D=21&subjects%5B%5D=F0&subjects%5B%5D=14&subjects%5B%5D=22&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
+              Browse secondary courses with a SEND specialism.</a>
+        </p>
       </div>
     </div>
     <div class="govuk-accordion__section">
