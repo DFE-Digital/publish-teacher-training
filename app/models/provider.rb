@@ -31,6 +31,15 @@ class Provider < ApplicationRecord
     university: 'O'
   }
 
+  # Provider partnership associations
+  # Accredited providers have Training partnerships
+  has_many :training_partnerships, foreign_key: :accredited_provider_id, class_name: 'ProviderPartnership', inverse_of: :accredited_provider
+  has_many :training_partners, through: :training_partnerships, class_name: 'Provider', source: :training_provider
+
+  # Training provdiers have Accredited partnerships
+  has_many :accredited_partnerships, foreign_key: :training_provider_id, class_name: 'ProviderPartnership', inverse_of: :training_provider
+  has_many :accredited_partners, through: :accredited_partnerships, class_name: 'Provider', source: :accredited_provider
+
   enum :accrediting_provider, {
     accredited_provider: 'Y',
     not_an_accredited_provider: 'N'
