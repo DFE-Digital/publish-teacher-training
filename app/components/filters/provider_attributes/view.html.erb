@@ -31,8 +31,8 @@
         <%= label_tag "provider_type[university]", t("components.filter.providers.university"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
       </div>
       <div class="govuk-checkboxes__item">
-        <%= check_box_tag "provider_type[lead_school]", nil, class: "govuk-checkboxes__input", checked: filters.dig(:provider_type, :lead_school) %>
-        <%= label_tag "provider_type[lead_school]", t("components.filter.providers.lead_school"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
+        <%= check_box_tag "provider_type[lead_partner]", nil, class: "govuk-checkboxes__input", checked: filters.dig(:provider_type, :lead_partner) %>
+        <%= label_tag "provider_type[lead_partner]", t("components.filter.providers.lead_partner"), class: "govuk-label govuk-checkboxes__label govuk-label--s" %>
       </div>
     </div>
   </fieldset>

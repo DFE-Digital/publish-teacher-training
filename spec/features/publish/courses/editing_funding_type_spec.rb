@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
   before do
-    and_i_am_authenticated_as_a_lead_school_provider_user
+    and_i_am_authenticated_as_a_lead_partner_provider_user
   end
 
   context 'fee paying to salaried course' do
@@ -77,7 +77,7 @@ feature 'Editing funding type', { can_edit_current_and_next_cycles: false } do
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/#{course.course_code}/funding-type")
   end
 
-  def and_i_am_authenticated_as_a_lead_school_provider_user
+  def and_i_am_authenticated_as_a_lead_partner_provider_user
     given_i_am_authenticated(user: create(:user, providers: [create(:provider)]))
   end
 

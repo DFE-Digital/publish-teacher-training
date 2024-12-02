@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } do
   before do
-    and_i_am_authenticated_as_a_lead_school_provider_user
+    and_i_am_authenticated_as_a_lead_partner_provider_user
   end
 
   context 'fee paying course' do
@@ -29,7 +29,7 @@ feature 'Editing visa sponsorship', { can_edit_current_and_next_cycles: false } 
     end
   end
 
-  def and_i_am_authenticated_as_a_lead_school_provider_user
+  def and_i_am_authenticated_as_a_lead_partner_provider_user
     @user = create(:user, providers: [build(:provider, sites: [build(:site)])])
     @user.providers.first.courses << create(:course, :with_accrediting_provider)
     given_i_am_authenticated(user: @user)

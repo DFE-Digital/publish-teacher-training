@@ -9,7 +9,7 @@ feature 'Onboarding a new provider' do
       and_i_visit_the_onboarding_a_new_provider_page
     end
 
-    %i[university lead_school scitt].each do |provider_type|
+    %i[university lead_partner scitt].each do |provider_type|
       scenario "add a new #{provider_type} provider" do
         when_i_fill_in_a_valid_provider_details(provider_type:)
         and_i_click_the_continue_button
@@ -33,7 +33,7 @@ feature 'Onboarding a new provider' do
     end
   end
 
-  %i[university lead_school scitt].each do |provider_type|
+  %i[university lead_partner scitt].each do |provider_type|
     describe "adding contact details for #{provider_type} provider" do
       before do
         given_i_am_authenticated(user:)
@@ -152,7 +152,7 @@ feature 'Onboarding a new provider' do
     fill_in 'UK provider reference number (UKPRN)', with: '12341234'
 
     case provider_type
-    when :lead_school
+    when :lead_partner
       choose 'No'
 
       choose 'School'
@@ -185,7 +185,7 @@ feature 'Onboarding a new provider' do
     expect(page).to have_field('UK provider reference number (UKPRN)', with: '12341234')
 
     case provider_type
-    when :lead_school
+    when :lead_partner
       expect(page).to have_checked_field('No')
 
       expect(page).to have_checked_field('School')

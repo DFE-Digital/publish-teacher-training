@@ -44,10 +44,10 @@ describe CourseReportingService do
       },
       provider_type: {
         open: {
-          scitt: 1, lead_school: 2, university: 3
+          scitt: 1, lead_partner: 2, university: 3
         },
         closed: {
-          scitt: 0, lead_school: 0, university: 0
+          scitt: 0, lead_partner: 0, university: 0
         }
       },
       program_type: {

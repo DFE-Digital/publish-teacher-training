@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } do
   before do
-    given_i_am_a_lead_school_provider_user
+    given_i_am_a_lead_partner_provider_user
     and_i_visit_the_root_path
     when_i_click_on_the_accredited_provider_tab
   end
@@ -261,7 +261,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     visit root_path
   end
 
-  def given_i_am_a_lead_school_provider_user
+  def given_i_am_a_lead_partner_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
     @provider = @current_user.providers.first
   end

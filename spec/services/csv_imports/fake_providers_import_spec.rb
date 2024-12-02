@@ -35,7 +35,7 @@ RSpec.describe CSVImports::FakeProvidersImport do
 
   context 'two providers to import' do
     let(:csv_content) do
-      "name,code,type,accredited_provider\n\"Provider A\",ABC,scitt,false\n\"Provider B\",DEF,lead_school,false"
+      "name,code,type,accredited_provider\n\"Provider A\",ABC,scitt,false\n\"Provider B\",DEF,lead_partner,false"
     end
 
     it 'creates two providers' do
@@ -54,7 +54,7 @@ RSpec.describe CSVImports::FakeProvidersImport do
 
   context 'when the CSV contains duplicated data' do
     let(:csv_content) do
-      "name,code,type,accredited_provider\n\"Provider A\",ABC,scitt,false\n\"Provider A\",ABC,lead_school,true"
+      "name,code,type,accredited_provider\n\"Provider A\",ABC,scitt,false\n\"Provider A\",ABC,lead_partner,true"
     end
 
     it 'reports on the created provider and the error' do

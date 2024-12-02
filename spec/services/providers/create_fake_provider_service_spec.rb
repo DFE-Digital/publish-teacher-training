@@ -36,8 +36,8 @@ RSpec.describe Providers::CreateFakeProviderService do
     end
   end
 
-  context 'the requested provider is both a lead_school and an accredited_provider' do
-    let(:provider_type) { 'lead_school' }
+  context 'the requested provider is both a lead_partner and an accredited_provider' do
+    let(:provider_type) { 'lead_partner' }
     let(:is_accredited_provider) { true }
 
     it 'does not complete' do

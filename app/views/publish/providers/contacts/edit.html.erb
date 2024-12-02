@@ -46,7 +46,7 @@
         width: 10,
         data: { qa: "ukprn" }) %>
 
-      <% if @provider_contact_form.provider.provider_type == "lead_school" %>
+      <% if @provider_contact_form.provider.provider_type == "lead_partner" %>
         <%= f.govuk_text_field(:urn,
           form_group: { id: "urn" },
           label: { text: "Unique reference number (URN)", size: "s" },

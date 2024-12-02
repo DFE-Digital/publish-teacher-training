@@ -54,9 +54,9 @@ namespace :sandbox do
 
     name,code,type,accredited_provider
     Provider one,ABC,scitt,true
-    Provider two,DEF,lead_school,false
+    Provider two,DEF,lead_partner,false
 
-    provider_type options -> "lead_school", "scitt", "unknown", "university"
+    provider_type options -> "lead_partner", "scitt", "unknown", "university"
     provider_code must be a unique string
 
     Providers will be created if they don't exist, along with a single

@@ -12,7 +12,7 @@ module PageObjects
       element :accredited_provider_filter, '#accrediting_provider.govuk-checkboxes__input'
       element :scitt_provider_filter, '#provider_type_scitt.govuk-checkboxes__input'
       element :university_provider_filter, '#provider_type_university.govuk-checkboxes__input'
-      element :lead_school_provider_filter, '#provider_type_lead_school.govuk-checkboxes__input'
+      element :lead_partner_provider_filter, '#provider_type_lead_partner.govuk-checkboxes__input'
       element :remove_filters, 'a.govuk-link', text: 'Clear'
 
       def providers

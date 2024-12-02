@@ -56,7 +56,7 @@ describe Provider do
 
   describe 'validations' do
     describe 'urn validations' do
-      context 'when provider_type is lead_school' do
+      context 'when provider_type is lead_partner' do
         let(:invalid_provider) { build(:provider, urn: '1') }
         let(:valid) { build(:provider, urn: '12345') }
 
@@ -66,7 +66,7 @@ describe Provider do
         end
       end
 
-      context 'when provider_type is lead_schools' do
+      context 'when provider_type is lead_partners' do
         let(:invalid_provider) { build(:provider, urn: 'XXXXXX') }
 
         it 'validates that a urn contains digits only' do
@@ -99,7 +99,7 @@ describe Provider do
 
     describe 'provider_type validations' do
       let(:invalid_provider) { build(:provider, provider_type: nil) }
-      let(:valid_provider) { build(:provider, provider_type: 'lead_school') }
+      let(:valid_provider) { build(:provider, provider_type: 'lead_partner') }
 
       it 'validates provider_type' do
         expect(invalid_provider).not_to be_valid
@@ -624,7 +624,7 @@ describe Provider do
     describe '#with_provider_types' do
       subject { described_class.with_provider_types(provider_types) }
 
-      let(:provider_types) { ['lead_school'] }
+      let(:provider_types) { ['lead_partner'] }
 
       let(:provider) { create(:provider) }
 
@@ -966,7 +966,7 @@ describe Provider do
   end
 
   describe '#update_courses_program_type' do
-    let(:provider) { create(:provider, :lead_school) }
+    let(:provider) { create(:provider, :lead_partner) }
     let!(:course1) { create(:course, provider:, funding: 'salary') }
     let!(:course2) { create(:course, provider:, funding: 'fee') }
 

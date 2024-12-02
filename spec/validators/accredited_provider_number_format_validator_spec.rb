@@ -55,7 +55,7 @@ describe AccreditedProviderNumberFormatValidator do
   end
 
   describe 'lead school validation' do
-    let(:accredited_provider) { create(:provider, :accredited_provider, :lead_school) }
+    let(:accredited_provider) { create(:provider, :accredited_provider, :lead_partner) }
 
     context 'with a valid id starting with 1' do
       it 'adds provider_type error' do

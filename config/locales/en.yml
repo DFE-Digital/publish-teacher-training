@@ -300,7 +300,7 @@ en:
         provider_type: "Provider Type"
         scitt: "SCITT"
         university: "University"
-        lead_school: "Lead School"
+        lead_partner: "Lead School"
       users:
         text_search: "Name or email"
         user_type: "User type"
@@ -728,7 +728,7 @@ en:
             caption: *accredited_provider_caption
             add: Add accredited provider
       provider_type:
-        lead_school: "School"
+        lead_partner: "School"
         scitt: "School centred initial teacher training (SCITT)"
         university: "Higher education institution (HEI)"
     flash:
@@ -748,7 +748,7 @@ en:
         name: "Title"
       provider:
         scitt: "SCITT"
-        lead_school: "Lead school"
+        lead_partner: "Lead school"
         university: "University"
       course_enrichment:
         fee_uk_eu: "Course fees for UK and EU students"

@@ -27,7 +27,7 @@ module Providers
 
     def execute
       return false if provider_already_exists?
-      return false if attempting_to_make_lead_school_accredited_provider?
+      return false if attempting_to_make_lead_partner_accredited_provider?
 
       provider = @recruitment_cycle.providers.build({
         provider_name: @provider_name,
@@ -66,8 +66,8 @@ module Providers
       end
     end
 
-    def attempting_to_make_lead_school_accredited_provider?
-      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited provider." if @provider_type == 'lead_school' && @is_accredited_provider
+    def attempting_to_make_lead_partner_accredited_provider?
+      errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited provider." if @provider_type == 'lead_partner' && @is_accredited_provider
     end
   end
 end

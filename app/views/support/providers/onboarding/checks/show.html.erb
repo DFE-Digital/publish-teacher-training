@@ -49,7 +49,7 @@
               row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "provider type")
             end
 
-            if @provider_form.lead_school?
+            if @provider_form.lead_partner?
               component.with_row do |row|
                 row.with_key { "Unique reference number (URN)" }
                 row.with_value { @provider_form.urn }

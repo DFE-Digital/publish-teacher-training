@@ -21,7 +21,7 @@ feature 'Viewing an undergraduate course' do
   end
 
   def given_there_is_a_findable_undergraduate_course
-    user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    user = create(:user, providers: [build(:provider, provider_type: 'lead_partner', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     provider = user.providers.first
     create(:provider, :accredited_provider, provider_code: '1BK')
     accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ')

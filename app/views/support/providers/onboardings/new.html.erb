@@ -37,7 +37,7 @@
         <%= f.govuk_radio_buttons_fieldset(:provider_type, legend: { text: "Provider type", size: "s" }) do %>
           <%= f.govuk_radio_button :provider_type, :university, label: { text: "Higher education institution (HEI)" }, link_errors: true %>
           <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "School centred initial teacher training (SCITT)" }, link_errors: true %>
-          <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "School" }, link_errors: true  do %>
+          <%= f.govuk_radio_button :provider_type, :lead_partner, label: { text: "School" }, link_errors: true  do %>
             <%= f.govuk_text_field :urn,
                                   width: 10,
                                   label: { text: "Unique reference number (URN)" },

@@ -16,7 +16,7 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   end
 
   def given_i_am_authenticated_as_a_provider_user
-    @user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    @user = create(:user, providers: [build(:provider, provider_type: 'lead_partner', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
     create(:provider, :accredited_provider, provider_code: '1BJ')
     @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BK')

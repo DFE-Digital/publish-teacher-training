@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false } do
   scenario 'as a lead school i cannot view any visa details' do
-    given_i_am_authenticated_as_a_lead_school_provider_user
+    given_i_am_authenticated_as_a_lead_partner_provider_user
     when_i_visit_the_provider_details_page
     then_i_should_not_see_any_visa_details
   end
@@ -39,9 +39,9 @@ feature 'Editing visa sponsorships', { can_edit_current_and_next_cycles: false }
     and_the_student_visa_sponsorship_is_updated
   end
 
-  def given_i_am_authenticated_as_a_lead_school_provider_user
+  def given_i_am_authenticated_as_a_lead_partner_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
-    provider.update!(provider_type: 'lead_school')
+    provider.update!(provider_type: 'lead_partner')
   end
 
   def given_i_am_authenticated_as_a_scitt_provider_user

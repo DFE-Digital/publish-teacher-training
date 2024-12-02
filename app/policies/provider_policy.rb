@@ -98,7 +98,7 @@ class ProviderPolicy
       can_sponsor_skilled_worker_visa
       can_sponsor_student_visa
     ]
-    provider.lead_school? ? base_attributes << :urn : base_attributes
+    provider.lead_partner? ? base_attributes << :urn : base_attributes
   end
 
   def admin_provider_attributes

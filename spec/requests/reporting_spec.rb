@@ -29,12 +29,12 @@ describe 'GET /reporting' do
           provider_type: {
             open: {
               scitt: 0,
-              lead_school: 0,
+              lead_partner: 0,
               university: 0
             },
             closed: {
               scitt: 0,
-              lead_school: 0,
+              lead_partner: 0,
               university: 0
             }
           },
@@ -82,10 +82,10 @@ describe 'GET /reporting' do
         },
         provider_type: {
           open: {
-            scitt: 0, lead_school: 0, university: 0
+            scitt: 0, lead_partner: 0, university: 0
           },
           closed: {
-            scitt: 0, lead_school: 0, university: 0
+            scitt: 0, lead_partner: 0, university: 0
           }
         },
         program_type: {

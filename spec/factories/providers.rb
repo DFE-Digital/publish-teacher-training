@@ -22,7 +22,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     telephone { Faker::PhoneNumber.phone_number }
     website { Faker::Internet.url }
-    provider_type { :lead_school }
+    provider_type { :lead_partner }
     urn { Faker::Number.number(digits: [5, 6].sample) }
     ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accrediting_provider { 'N' }

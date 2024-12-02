@@ -3190,7 +3190,7 @@ describe Course do
 
       context 'when the provider is a Lead School' do
         it 'sets the funding to salary and the program_type to school_direct_salaried_training_programme' do
-          provider = build(:provider, provider_type: 'lead_school')
+          provider = build(:provider, provider_type: 'lead_partner')
           course = create(:course, provider:, funding: 'salary')
 
           expect(course.funding).to eq('salary')

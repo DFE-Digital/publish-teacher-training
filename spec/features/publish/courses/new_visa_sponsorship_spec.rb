@@ -34,7 +34,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
 
   private
 
-  def lead_school_provider
+  def lead_partner_provider
     build(:provider, sites: [build(:site)], study_sites: [build(:site, :study_site)])
   end
 
@@ -42,7 +42,7 @@ feature 'visa sponsorship (add course summary page)', { can_edit_current_and_nex
     build(:provider, :accredited_provider, sites: [build(:site)], study_sites: [build(:site, :study_site)])
   end
 
-  def given_i_am_authenticated_as_a_provider_user(provider = lead_school_provider)
+  def given_i_am_authenticated_as_a_provider_user(provider = lead_partner_provider)
     @user = create(:user, providers: [provider])
     @user.providers.first.courses << create(:course, :with_accrediting_provider)
     given_i_am_authenticated(user: @user)

@@ -35,7 +35,7 @@ RSpec.describe 'AssignProgramType' do
         end
 
         it 'sets the correct program type for lead school providers' do
-          provider = create(:provider, :lead_school)
+          provider = create(:provider, :lead_partner)
           course = create(:course, provider:, funding_type:)
           service.execute(funding_type, course)
           expect(course.program_type).to eq('school_direct_salaried_training_programme')
@@ -64,7 +64,7 @@ RSpec.describe 'AssignProgramType' do
         let(:funding_type) { 'fee' }
 
         it 'sets the correct program type for externally accredited courses' do
-          provider = create(:provider, :lead_school)
+          provider = create(:provider, :lead_partner)
           course = create(:course, funding_type:, provider:)
           service.execute(funding_type, course)
           expect(course.program_type).to eq('school_direct_training_programme')

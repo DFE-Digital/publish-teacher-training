@@ -7,8 +7,8 @@ module Providers
         render(ProviderList::View.new(provider: Provider.new(id: '1', provider_name: 'University A', provider_code: 'AA01', provider_type: 'scitt', accrediting_provider: 'accredited_provider', updated_at: Time.zone.now, recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year))))
       end
 
-      def with_lead_school_provider
-        render(ProviderList::View.new(provider: Provider.new(id: '1', provider_name: 'University A', provider_code: 'AA01', provider_type: 'lead_school', accrediting_provider: 'not_an_accredited_provider', updated_at: Time.zone.now, recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year))))
+      def with_lead_partner_provider
+        render(ProviderList::View.new(provider: Provider.new(id: '1', provider_name: 'University A', provider_code: 'AA01', provider_type: 'lead_partner', accrediting_provider: 'not_an_accredited_provider', updated_at: Time.zone.now, recruitment_cycle: RecruitmentCycle.new(year: Settings.current_recruitment_cycle_year))))
       end
 
       def with_university_provider

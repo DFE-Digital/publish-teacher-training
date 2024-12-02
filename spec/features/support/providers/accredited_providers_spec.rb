@@ -105,7 +105,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_there_are_accredited_providers_in_the_database
-    @provider = create(:provider, :lead_school)
+    @provider = create(:provider, :lead_partner)
     @accredited_provider = create(:provider, :accredited_provider, provider_name: 'UCL', users: [create(:user)])
     @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
     @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')

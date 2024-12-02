@@ -47,12 +47,12 @@ module Support
       end
     end
 
-    describe '#lead_school?' do
-      subject { provider_form.lead_school? }
+    describe '#lead_partner?' do
+      subject { provider_form.lead_partner? }
 
-      context 'params provider_type is set to lead_school' do
+      context 'params provider_type is set to lead_partner' do
         let(:params) do
-          { provider_type: :lead_school }
+          { provider_type: :lead_partner }
         end
 
         it 'returns true' do
@@ -60,7 +60,7 @@ module Support
         end
       end
 
-      context 'params provider_type is set to a non lead_school' do
+      context 'params provider_type is set to a non lead_partner' do
         let(:params) do
           { provider_type: %i[university scitt].sample }
         end
@@ -103,18 +103,18 @@ module Support
       include_examples 'blank validation', :provider_type, 'Select a provider type'
       include_examples 'blank validation', :accredited_provider, 'Select if the organisation is an accredited provider'
 
-      context 'provider_type is set to lead_school' do
+      context 'provider_type is set to lead_partner' do
         let(:params) do
-          { provider_type: :lead_school }
+          { provider_type: :lead_partner }
         end
 
         include_examples 'blank validation', :urn, 'Enter a unique reference number (URN)'
       end
 
-      context 'provider_type is set to lead_school and accredited_provider is set to not_an_accredited_body' do
+      context 'provider_type is set to lead_partner and accredited_provider is set to not_an_accredited_body' do
         let(:params) do
           {
-            provider_type: :lead_school,
+            provider_type: :lead_partner,
             accredited_provider: :not_an_accredited_body
           }
         end
@@ -133,7 +133,7 @@ module Support
       context 'urn set to invalid' do
         let(:params) do
           {
-            provider_type: :lead_school,
+            provider_type: :lead_partner,
             urn: %w[1234 1234567 digit].sample
           }
         end
@@ -175,10 +175,10 @@ module Support
         end
       end
 
-      context 'provider_type is set to lead_school and accredited_provider is set to accredited_body' do
+      context 'provider_type is set to lead_partner and accredited_provider is set to accredited_body' do
         let(:params) do
           {
-            provider_type: :lead_school,
+            provider_type: :lead_partner,
             accredited_provider: :accredited_provider
           }
         end

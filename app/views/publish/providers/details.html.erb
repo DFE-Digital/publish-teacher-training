@@ -53,7 +53,7 @@
       ) %>
     <% end %>
 
-    <% unless @provider.provider_type == 'lead_school' %>
+    <% unless @provider.provider_type == 'lead_partner' %>
       <h2 class="govuk-heading-m"><%= t(".visa_sponsorship") %></h2>
       <%= govuk_summary_list do |summary_list| %>
         <% enrichment_summary(
@@ -132,7 +132,7 @@
         action_visually_hidden_text: "UKPRN"
       ) %>
 
-      <% if @provider.provider_type == "lead_school" %>
+      <% if @provider.provider_type == "lead_partner" %>
         <% enrichment_summary(
           summary_list,
           :provider,

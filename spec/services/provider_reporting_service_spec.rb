@@ -47,10 +47,10 @@ describe ProviderReportingService do
         },
         provider_type: {
           open: {
-            scitt: 1, lead_school: 2, university: 3
+            scitt: 1, lead_partner: 2, university: 3
           },
           closed: {
-            scitt: 0, lead_school: 0, university: 0
+            scitt: 0, lead_partner: 0, university: 0
           }
         },
         region_code: {
@@ -119,7 +119,7 @@ describe ProviderReportingService do
         expect(open_providers_scope).to receive(:group).with(:provider_type).and_return(open_providers_provider_type_scope)
         expect(open_providers_provider_type_scope).to receive(:count)
           .and_return(
-            { 'scitt' => 1, 'lead_school' => 2, 'university' => 3, 'unknown' => 4, 'invalid_value' => 5 }
+            { 'scitt' => 1, 'lead_partner' => 2, 'university' => 3, 'unknown' => 4, 'invalid_value' => 5 }
           )
 
         expect(open_providers_scope).to receive(:group).with(:region_code).and_return(open_providers_region_code_scope)

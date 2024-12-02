@@ -24,10 +24,10 @@ class Provider < ApplicationRecord
   # Validation can be added to enforce compliance.
   # The `scitt` & `university` provider types can be used to denote
   # that they are an `accredited_provider` for accrediting providers
-  # therefore `lead_school` is a `not_an_accredited_provider`.
+  # therefore `lead_partner` is a `not_an_accredited_provider`.
   enum :provider_type, {
     scitt: 'B',
-    lead_school: 'Y',
+    lead_partner: 'Y',
     university: 'O'
   }
 
@@ -161,7 +161,7 @@ class Provider < ApplicationRecord
 
   validates :ukprn, ukprn_format: { allow_blank: false }, on: :update
 
-  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: :lead_school?
+  validates :urn, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: 'Provider URN must be 5 or 6 numbers' }, if: :lead_partner?
 
   validates :train_with_us, presence: true, on: :update, if: :train_with_us_changed?
   validates :train_with_disability, presence: true, on: :update, if: :train_with_disability_changed?

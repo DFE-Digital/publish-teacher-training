@@ -24,9 +24,9 @@ feature 'Filter providers by type' do
     end
 
     scenario 'lead school provider' do
-      when_i_filter_lead_school_providers
+      when_i_filter_lead_partner_providers
       and_when_i_click_apply_filters
-      i_see_only_the_lead_school_providers
+      i_see_only_the_lead_partner_providers
     end
   end
 
@@ -54,24 +54,24 @@ feature 'Filter providers by type' do
     support_provider_index_page.university_provider_filter.click
   end
 
-  def when_i_filter_lead_school_providers
-    support_provider_index_page.lead_school_provider_filter.click
+  def when_i_filter_lead_partner_providers
+    support_provider_index_page.lead_partner_provider_filter.click
   end
 
   def i_see_only_the_scitt_providers
     expect(page).to have_content(@provider_scitt.provider_name)
     expect(page).to have_no_content(@provider_hei.provider_name)
-    expect(page).to have_no_content(@provider_lead_school.provider_name)
+    expect(page).to have_no_content(@provider_lead_partner.provider_name)
   end
 
   def i_see_only_the_university_providers
     expect(page).to have_content(@provider_hei.provider_name)
     expect(page).to have_no_content(@provider_scitt.provider_name)
-    expect(page).to have_no_content(@provider_lead_school.provider_name)
+    expect(page).to have_no_content(@provider_lead_partner.provider_name)
   end
 
-  def i_see_only_the_lead_school_providers
-    expect(page).to have_content(@provider_lead_school.provider_name)
+  def i_see_only_the_lead_partner_providers
+    expect(page).to have_content(@provider_lead_partner.provider_name)
     expect(page).to have_no_content(@provider_scitt.provider_name)
     expect(page).to have_no_content(@provider_hei.provider_name)
   end
@@ -79,7 +79,7 @@ feature 'Filter providers by type' do
   def and_there_are_providers_with_different_types
     @provider_scitt = create(:provider, :scitt)
     @provider_hei = create(:provider, :university)
-    @provider_lead_school = create(:provider, :lead_school)
+    @provider_lead_partner = create(:provider, :lead_partner)
   end
 
   def when_i_visit_the_providers_index_page
@@ -95,7 +95,7 @@ feature 'Filter providers by type' do
   end
 
   def and_i_can_see_unfiltered_results
-    expect(support_provider_index_page).to have_content(@provider_lead_school.provider_name)
+    expect(support_provider_index_page).to have_content(@provider_lead_partner.provider_name)
     expect(support_provider_index_page).to have_content(@provider_hei.provider_name)
     expect(support_provider_index_page).to have_content(@provider_scitt.provider_name)
   end
