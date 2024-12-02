@@ -3,7 +3,6 @@ ifndef VERBOSE
 endif
 SERVICE_SHORT=ptt
 SERVICE_NAME=publish
-TERRAFILE_VERSION=0.8
 
 .PHONY: help
 help: ## Show this help
@@ -53,12 +52,6 @@ install-fetch-config: ## Install utility to fetch the cli config from teacher se
 	[ ! -f bin/fetch_config.rb ] \
 		&& curl -s https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/scripts/fetch_config/fetch_config.rb -o bin/fetch_config.rb \
 		&& chmod +x bin/fetch_config.rb \
-		|| true
-
-install-terrafile: ## Install terrafile to manage terraform modules
-	[ ! -f bin/terrafile ] \
-		&& curl -sL https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_$$(uname)_x86_64.tar.gz \
-		| tar xz -C ./bin terrafile \
 		|| true
 
 # Set "USE_DB_SETUP_COMMAND" to true for first time deployments, otherwise false.
@@ -154,13 +147,17 @@ worker-shell: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
 	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID}-worker -- /bin/sh
 
+.PHONY: vendor-modules
+vendor-modules:
+	rm -rf terraform/aks/vendor/modules
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/aks/vendor/modules/aks
+
 ### Infra Targets From Here
 
-deploy-init: install-terrafile
+deploy-init: vendor-modules
 	$(if $(IMAGE_TAG), , $(eval export IMAGE_TAG=main))
 	$(eval export TF_VAR_docker_image=ghcr.io/dfe-digital/publish-teacher-training:$(IMAGE_TAG))
 	az account set -s ${AZ_SUBSCRIPTION} && az account show
-	[ "${RUN_TERRAFILE}" = "yes" ] && ./bin/terrafile -p terraform/aks/vendor/modules -f terraform/aks/workspace_variables/$(DEPLOY_ENV)_Terrafile || true
 	terraform -chdir=terraform/aks init -reconfigure -upgrade -backend-config=./workspace_variables/$(DEPLOY_ENV)_backend.tfvars $(backend_key)
 	$(eval export TF_VARS=-var config_short=${CONFIG_SHORT} -var service_short=${SERVICE_SHORT} -var service_name=${SERVICE_NAME} -var azure_resource_prefix=${RESOURCE_NAME_PREFIX})
 
@@ -234,7 +231,13 @@ validate-domain-resources: set-what-if domain-azure-resources # make publish val
 
 deploy-domain-resources: check-auto-approve domain-azure-resources # make publish deploy-domain-resources AUTO_APPROVE=1
 
-domains-infra-init: set-production-subscription set-azure-account
+.PHONY: vendor-domain-infra-modules
+vendor-domain-infra-modules:
+	rm -rf terraform/custom_domains/infrastructure/vendor/modules/domains
+	TERRAFORM_MODULES_TAG=stable
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/infrastructure/vendor/modules/domains
+
+domains-infra-init: set-production-subscription set-azure-account vendor-domain-infra-modules
 	terraform -chdir=terraform/custom_domains/infrastructure init -reconfigure -upgrade \
 		-backend-config=workspace_variables/${DOMAINS_ID}_backend.tfvars
 
@@ -244,7 +247,12 @@ domains-infra-plan: domains-infra-init # make publish domains-infra-plan
 domains-infra-apply: domains-infra-init # make publish domains-infra-apply
 	terraform -chdir=terraform/custom_domains/infrastructure apply -var-file workspace_variables/${DOMAINS_ID}.tfvars.json ${AUTO_APPROVE}
 
-domains-init: set-production-subscription set-azure-account
+.PHONY: vendor-domain-modules
+vendor-domain-modules:
+	rm -rf terraform/custom_domains/environment_domains/vendor/modules/domains
+	git -c advice.detachedHead=false clone --depth=1 --single-branch --branch ${TERRAFORM_MODULES_TAG} https://github.com/DFE-Digital/terraform-modules.git terraform/custom_domains/environment_domains/vendor/modules/domains
+
+domains-init: set-production-subscription set-azure-account vendor-domain-modules
 	terraform -chdir=terraform/custom_domains/environment_domains init -upgrade -reconfigure -backend-config=workspace_variables/${DOMAINS_ID}_${DEPLOY_ENV}_backend.tfvars
 
 domains-plan: domains-init  # make publish qa domains-plan
