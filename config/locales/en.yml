@@ -866,6 +866,12 @@ en:
               blank: "^Enter details about the qualifications needed"
             course_length:
               blank: "^Enter a course length"
+        provider_partnership:
+          attributes:
+            accredited_provider:
+              must_be_accredited: must be accredited
+            training_provider:
+              must_not_be_accredited: must not be accredited
         provider:
           attributes:
             provider_name:

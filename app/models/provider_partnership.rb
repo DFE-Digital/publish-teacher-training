@@ -15,13 +15,13 @@ class ProviderPartnership < ApplicationRecord
     return if accredited_provider.blank?
 
     accredited_provider.accredited? ||
-      errors.add(:accredited_provider, 'must be accredited')
+      errors.add(:accredited_provider, :must_be_accredited)
   end
 
   def training_provider_must_not_be_accredited
     return if training_provider.blank?
 
     training_provider.accredited? &&
-      errors.add(:training_provider, 'must not be accredited')
+      errors.add(:training_provider, :must_not_be_accredited)
   end
 end
