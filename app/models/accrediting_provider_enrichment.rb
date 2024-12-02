@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccreditingProviderEnrichment
-  include ActiveModel::Validations
   include ActiveModel::Model
 
   # Pascal cased as the original is stored like so.
@@ -9,10 +8,8 @@ class AccreditingProviderEnrichment
 
   validates :Description, words_count: { maximum: 100 }
 
-  def initialize(attrs)
-    attrs.each do |attr, value|
-      send("#{attr}=", value) unless attr == 'errors'
-    end
+  def initialize(attributes = {})
+    super(attributes.with_indifferent_access.slice('UcasProviderCode', 'Description'))
   end
 
   class ArraySerializer
