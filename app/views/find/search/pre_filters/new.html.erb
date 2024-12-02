@@ -1,10 +1,14 @@
 <div class="find-search-container">
   <div class="find-search-content">
+
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l home-title">Find teacher training courses in England</h1>
+      </div>
+    </div>
 
-        <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
-
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
         <%= form_with(url: find_pre_filter_path, scope: :pre_filter, class: "find-input-and-search-container", method: :post) do |form| %>
           <div class="find-input-container">
 
@@ -80,37 +84,6 @@
                     Secondary - 11 to 18
                   </label>
                 </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="age-group-filter-home-3" name="age-group-filter-home" type="checkbox" value="employment-tribunal">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="age-group-filter-home-3">
-                    Further education - 16 and over
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-            </div>
-
-
-            <div class="govuk-form-group">
-              <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-              <h1 class="govuk-fieldset__heading">
-                Study type
-              </h1>
-            </legend>
-              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="study-type-filter-home-1" name="study-type-filter-home" type="checkbox" value="hmrc">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-1">
-                    Full time (12 months)
-                  </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="study-type-filter-home-2" name="study-type-filter-home" type="checkbox" value="employment-tribunal">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-2">
-                    Part time (18 to 24 months)
-                  </label>
-                </div>
               </div>
             </fieldset>
             </div>
@@ -135,18 +108,9 @@
                   QTS with PGCE or PGDE
                   </label>
                   </div>
-                  <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="qualification-filter-home-3" name="qualification-filter-home" type="checkbox" value="employment-tribunal">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="qualification-filter-home-3">
-                    PGCE or PGDE without QTS
-                    </label>
-                  </div>
                 </div>
               </fieldset>
             </div>
-
-            </div><!--end col one half-->
-            <div class="govuk-grid-column-one-half">
 
             <div class="govuk-form-group">
             <fieldset class="govuk-fieldset">
@@ -189,6 +153,34 @@
               </div>
             </fieldset>
           </div>
+
+            </div><!--end col one half-->
+            <div class="govuk-grid-column-one-half">
+
+
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Study type
+              </h1>
+            </legend>
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="study-type-filter-home-1" name="study-type-filter-home" type="checkbox" value="hmrc">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-1">
+                    Full time (12 months)
+                  </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="study-type-filter-home-2" name="study-type-filter-home" type="checkbox" value="employment-tribunal">
+                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="study-type-filter-home-2">
+                    Part time (18 to 24 months)
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+            </div>
 
           <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
@@ -259,97 +251,143 @@
   </div><!--END search content-->
 </div><!--END search container-->
 
-<div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-third age-group">
-      <p class="govuk-heading-m">
-        Primary
-        <br>
-        <span class="govuk-body-s">
-          Teach ages 5 to 11
-      </span>
-      </p>
-      <span class="govuk-body">
-        <%= link_to primary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
-          Browse all primary courses
-        <% end %>
-      </span>
-  </div><!--END three cols-->
-    <div class="govuk-grid-column-one-third age-group">
-      <p class="govuk-heading-m">
-        Secondary
-        <br>
-        <span class="govuk-body-s">
-          Teach ages 11 to 18
-        </span>
-      </p>
-      <span class="govuk-body">
-      <%= link_to secondary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
-        Browse courses by subject
-      <% end %>
-      </span>
-    </div><!--END col full-->
-    <div class="govuk-grid-column-one-third age-group">
-      <p class="govuk-heading-m">
-        Further education
-        <br>
-        <span class="govuk-body-s">
-          Teach over 16s not studying for a degree
-      </span>
-      </p>
-      <span class="govuk-body">
-        <%= link_to further_education_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
-          Browse all further education courses
-        <% end %>
-      </span>
-  </div><!--END three cols-->
+<!--<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <p class="govuk-heading-l">
+      Browse primary or secondary courses
+    </p>
+  </div>
+</div>-->
+
+
+<div class="govuk-grid-row age-group-container">
+  <div class="govuk-grid-column-one-half age-group-container">
+    <!--Callout start-->
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <h3 class="govuk-heading-m">
+        Primary (ages 5 to 11)
+        </h3>
+        <p class="govuk-body">
+          <%= link_to primary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
+            Browse all primary courses
+          <% end %>
+        </p>
+      </div>
+    </div>
+    <!--END Callout-->
+  </div><!--END col-->
+  <div class="govuk-grid-column-one-half age-group-container">
+    <!--Callout start-->
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <h3 class="govuk-heading-m">
+          Secondary (ages 11 to 18)
+        </h3>
+        <p class="govuk-body">
+          <%= link_to secondary_courses_path, class:"govuk-link govuk-link--no-visited-state" do %>
+            Browse all secondary courses
+          <% end %>
+        </p>
+      </div>
+    </div>
+    <!--END Callout-->
+  </div><!--END col-->
 </div><!--END grid row-->
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full tda">
-      <p class="govuk-heading-m">
-        Teacher degree apprenticeships (TDA)
-        <br>
-        <span class="govuk-body">
+  <!--accordion start-->
+  <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+            Teacher degree apprenticeships (TDA)
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+        <p class="govuk-body">
           Teach primary or secondary if you do not have a degree and are not studying for one.
+        </p>
+         <span class="govuk-body">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            Browse teacher degree apprenticeship courses.
+          </a>
         </span>
-      </p>
-      <span class="govuk-body">
-        <a class="govuk-link govuk-link--no-visited-state" href="#">
-          Browse teacher degree apprenticeship courses
-        </a>
-      </span>
-    </div><!--END col full-->
-  </div><!--END grid row-->
+      </div>
+    </div>
+    <div class="govuk-accordion__section">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button" id="accordion-default-heading-2">
+            Special educational needs and disabilities (SEND)
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-2" class="govuk-accordion__section-content">
+        <p class="govuk-body">
+          Specialise in teaching and nurturing pupils with complex needs.
+        </p>
+          <span class="govuk-body">
+            <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
+                Browse all courses with a SEND specialism</a>.
+          </span>
+      </div>
+    </div>
+    <div class="govuk-accordion__section">
+      <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">
+          <span class="govuk-accordion__section-button" id="accordion-default-heading-3">
+            Teaching other stages
+          </span>
+        </h2>
+      </div>
+      <div id="accordion-default-content-3" class="govuk-accordion__section-content">
+        <p class="govuk-body">
+          <strong>Nursery or pre-school</strong><br><br>
+          Help young children under 5 years old to develop by becoming an early years teacher.<br><br>
+          Learn about
+          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
+            the routes to become an early years teacher</a>.
+        </p>
+        <p class="govuk-body"><br>
+        <strong>Further education</strong><br><br>
+          Teach young people and adults over 16 who are not studying for a degree.<br><br>
+          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
+            Browse all further education courses</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--accordion END-->
 
+<!-- Support callouts start-->
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-
     <div class="govuk-notification-banner govuk-notification-banner--pink" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey-home">
-      <h3 class="govuk-heading-m">
-        How to become a teacher<br>
-      </h3>
-      <p class="govuk-body">
-      Check your qualifications, what funding is available and how to apply.
-      <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/steps-to-become-a-teacher">Find out how to become a teacher</a>
-    </p>
+        <h3 class="govuk-heading-m">
+          How to become a teacher<br>
+        </h3>
+        <p class="govuk-body">
+        Check your qualifications, what funding is available and how to apply.
+        <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/steps-to-become-a-teacher">
+          Find out how to become a teacher.</a>
+      </p>
+      </div>
     </div>
-  </div>
-
   </div>
   <div class="govuk-grid-column-one-half">
-
-     <div class="govuk-notification-banner govuk-notification-banner--pink" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner govuk-notification-banner--pink pink-last-child" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey-home">
-      <h3 class="govuk-heading-m">
-       Get help and support<br>
-      </h3>
-      <span class="govuk-body">
-      If you're thinking about teaching or are ready to apply, <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/help-and-support">contact Get Into Teaching</a> for free support.
-    </span>
+        <h3 class="govuk-heading-m">
+        Get help and support<br>
+        </h3>
+        <span class="govuk-body">
+        If you're thinking about teaching or are ready to apply, <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/help-and-support">contact Get Into Teaching</a> for free support.
+        </span>
+      </div>
     </div>
-
-  </div>
 </div>
-
 </div>
+<!-- Support callouts END-->
