@@ -37,22 +37,5 @@
         QTS with PGCE or PGDE
       <% end %>
     </div>
-
-    <div class="govuk-checkboxes__item">
-      <%= form.check_box(
-        :qualification,
-        {
-          class: "govuk-checkboxes__input",
-          multiple: true,
-          data: { qa: "other" },
-          checked: @filters_view.other_checked?
-        },
-        ["pgce pgde"],
-        false
-      ) %>
-      <%= form.label :qualification, { for: "qualification_pgce_pgde" }, value: "Other", class: "govuk-label govuk-checkboxes__label" do %>
-        PGCE or PGDE without QTS
-      <% end %>
-    </div>
   </div>
 </fieldset>
