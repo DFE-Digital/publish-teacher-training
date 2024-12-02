@@ -80,8 +80,8 @@ module Support
       attributes = {
         course_code:,
         name:,
-        start_date:,
-        applications_open_from:,
+        start_date: valid_date?(:start_date) ? start_date : nil,
+        applications_open_from: valid_date?(:applications_open_from) ? applications_open_from : nil,
         is_send: send?,
         can_sponsor_student_visa:,
         can_sponsor_skilled_worker_visa:
