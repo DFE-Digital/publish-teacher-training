@@ -872,6 +872,8 @@ en:
               must_be_accredited: must be accredited
             training_provider:
               must_not_be_accredited: must not be accredited
+            base:
+              exists: This partnership already exists
         provider:
           attributes:
             provider_name:

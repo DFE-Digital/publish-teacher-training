@@ -20,6 +20,17 @@ RSpec.describe ProviderPartnership do
       end
     end
 
+    context 'duplicate record' do
+      subject(:duplicate) { build(:provider_partnership, accredited_provider: partnership.accredited_provider, training_provider: partnership.training_provider) }
+
+      let(:partnership) { create(:provider_partnership) }
+
+      it 'has correct error message' do
+        duplicate.validate
+        expect(duplicate.errors.full_messages).to include('This partnership already exists')
+      end
+    end
+
     context 'accredited provider must be accredited' do
       subject(:partnership) { build(:provider_partnership, accredited_provider: build(:provider)) }
 
