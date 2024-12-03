@@ -300,11 +300,15 @@
         <p class="govuk-body">
           Teach primary or secondary if you do not have a degree and are not studying for one.
         </p>
-         <span class="govuk-body">
+         <p class="govuk-body">
           <a class="govuk-link govuk-link--no-visited-state" href="#">
             Browse teacher degree apprenticeship courses.
           </a>
-        </span>
+        </p>
+        <p class="govuk-body">
+        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships">
+        teacher degree apprenticeships</a>.
+      </p>
       </div>
     </div>
     <div class="govuk-accordion__section">
@@ -326,6 +330,10 @@
         <p class="govuk-body">
           <%= link_to "Browse secondary courses with a SEND specialism.", find_results_path({send_courses: true}), class:"govuk-link govuk-link--no-visited-state" %>
         </p>
+        <p class="govuk-body">
+        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships">
+        teaching pupils with special educational needs and disabilities</a>.
+      </p>
       </div>
     </div>
     <div class="govuk-accordion__section">
@@ -347,9 +355,12 @@
         <p class="govuk-body"><br>
         <strong>Further education</strong><br><br>
           Teach young people and adults over 16 who are not studying for a degree.<br><br>
-
-          <%= link_to "Browse all further education courses.", find_results_path({applications_open: true, has_vacancies: true, subjects: [41], }), class:"govuk-link govuk-link--no-visited-state" %>
+          <%= link_to "Browse further education courses.", find_results_path({applications_open: true, has_vacancies: true, subjects: [41], }), class:"govuk-link govuk-link--no-visited-state" %>
         </p>
+        <p class="govuk-body">
+        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/further-education-teachers">
+        teaching in further education</a>.
+      </p>
       </div>
     </div>
   </div>
