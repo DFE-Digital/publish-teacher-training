@@ -341,14 +341,14 @@
           <strong>Nursery or pre-school</strong><br><br>
           Help young children under 5 years old to develop by becoming an early years teacher.<br><br>
           Learn about
-          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
+          <a href="https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/early-years-teachers" class="govuk-link govuk-link--no-visited-state">
             the routes to become an early years teacher</a>.
         </p>
         <p class="govuk-body"><br>
         <strong>Further education</strong><br><br>
           Teach young people and adults over 16 who are not studying for a degree.<br><br>
-          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
-            Browse all further education courses</a>.
+
+          <%= link_to "Browse all further education courses.", find_results_path({applications_open: true, has_vacancies: true, subjects: [41], }), class:"govuk-link govuk-link--no-visited-state" %>
         </p>
       </div>
     </div>
