@@ -16,10 +16,6 @@ class CourseDecorator < ApplicationDecorator
     object.study_site_ids.compact_blank
   end
 
-  def name_and_code
-    "#{object.name} (#{object.course_code})"
-  end
-
   def modern_languages_other_id
     '24'
   end

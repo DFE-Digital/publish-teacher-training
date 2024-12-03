@@ -888,6 +888,10 @@ class Course < ApplicationRecord
     current_published_enrichment.present?
   end
 
+  def name_and_code
+    "#{name} (#{course_code})"
+  end
+
   private
 
   def update_vac_status(study_mode, site_status)
