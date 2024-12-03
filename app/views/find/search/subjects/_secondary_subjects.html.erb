@@ -332,7 +332,7 @@
     </fieldset>
   </div>
 
-  <%= link_to "Find secondary courses", find_results_path, class:"govuk-button" %>
+  <%= link_to "Find secondary courses", find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'SecondarySubject').pluck(:subject_code)), class:"govuk-button" %>
 
 <!--Financial support-->
 <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
