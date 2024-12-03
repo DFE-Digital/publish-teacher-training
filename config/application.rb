@@ -44,6 +44,8 @@ module ManageCoursesBackend
       'Pagy::OverflowError' => :bad_request
     }
 
+    config.active_model.i18n_customize_full_message = true
+
     # https://github.com/rails/rails/commit/ddb6d788d6a611fd1ba6cf92ad6d1342079517a8
     config.action_dispatch.return_only_media_type_on_content_type = false
     config.autoload_paths += %W[#{config.root}/app/models/subjects]
