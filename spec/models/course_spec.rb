@@ -25,6 +25,12 @@ describe Course do
   it { is_expected.to delegate_method(:provider_name).to(:provider).allow_nil }
   it { is_expected.to delegate_method(:provider_code).to(:provider).allow_nil }
 
+  describe '#name_and_code' do
+    it 'returns the course name and code in brackets' do
+      expect(course.name_and_code).to eq('Biology (3X9F)')
+    end
+  end
+
   describe '#campaign_name' do
     it 'assigns the campaign' do
       course.engineers_teach_physics!

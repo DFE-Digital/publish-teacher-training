@@ -18,11 +18,11 @@
                 provider_code: course.provider_code,
                 course_code: course.course_code
               ),
-              class: 'govuk-link govuk-!-font-size-24',
-              data: { qa: 'course__link' }
+              class: "govuk-link govuk-!-font-size-24",
+              data: { qa: "course__link" }
             ) do
-              content_tag(:span, course.provider.provider_name, class: 'app-search-result__provider-name', data: { qa: 'course__provider_name' }) +
-              content_tag(:span, course.name_and_code, class: 'app-search-result__course-name', data: { qa: 'course__name' })
+              content_tag(:span, course.provider.provider_name, class: "app-search-result__provider-name", data: { qa: "course__provider_name" }) +
+              content_tag(:span, course.name_and_code, class: "app-search-result__course-name", data: { qa: "course__name" })
             end
           ) %>
         </li>

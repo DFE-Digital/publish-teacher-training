@@ -53,10 +53,6 @@ describe CourseDecorator do
 
   let(:decorated_course) { course.decorate }
 
-  it 'returns the course name and code in brackets' do
-    expect(decorated_course.name_and_code).to eq('Mathematics (A1)')
-  end
-
   it 'returns a list of subjects in alphabetical order' do
     expect(decorated_course.sorted_subjects).to eq('English<br>Mathematics')
   end
