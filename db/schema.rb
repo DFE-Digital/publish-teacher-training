@@ -10,18 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_26_104331) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_29_151352) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
   enable_extension "citext"
   enable_extension "pg_buffercache"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
-  enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: { type: :string, limit: 150 }, force: :cascade do |t|
     t.string "ProductVersion", limit: 32, null: false
+  end
+
+  create_table "access_request", id: :serial, force: :cascade do |t|
+    t.text "email_address"
+    t.text "first_name"
+    t.text "last_name"
+    t.text "organisation"
+    t.text "reason"
+    t.datetime "request_date_utc", precision: nil, null: false
+    t.integer "requester_id"
+    t.integer "status", null: false
+    t.text "requester_email"
+    t.datetime "discarded_at", precision: nil
+    t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
+    t.index ["requester_id"], name: "IX_access_request_requester_id"
   end
 
   create_table "audit", force: :cascade do |t|
@@ -337,6 +352,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_26_104331) do
     t.index ["recruitment_cycle_id", "provider_code"], name: "index_provider_on_recruitment_cycle_id_and_provider_code", unique: true
     t.index ["searchable"], name: "index_provider_on_searchable", using: :gin
     t.index ["synonyms"], name: "index_provider_on_synonyms", using: :gin
+  end
+
+  create_table "provider_partnership", force: :cascade do |t|
+    t.bigint "accredited_provider_id", null: false
+    t.bigint "training_provider_id", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["accredited_provider_id", "training_provider_id"], name: "idx_on_accredited_provider_id_training_provider_id_7705512e33", unique: true
+    t.index ["accredited_provider_id"], name: "index_provider_partnership_on_accredited_provider_id"
+    t.index ["training_provider_id"], name: "index_provider_partnership_on_training_provider_id"
   end
 
   create_table "provider_ucas_preference", force: :cascade do |t|
