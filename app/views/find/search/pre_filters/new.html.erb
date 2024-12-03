@@ -319,13 +319,12 @@
         <p class="govuk-body">
           Specialise in teaching and nurturing pupils with complex needs.
         </p>
-          <p class="govuk-body">
-            <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
-                Browse primary courses with a SEND specialism.</a>
-          </p>
-          <p class="govuk-body">
-          <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=A1&subjects%5B%5D=A2&subjects%5B%5D=W1&subjects%5B%5D=C1&subjects%5B%5D=08&subjects%5B%5D=F1&subjects%5B%5D=09&subjects%5B%5D=Q8&subjects%5B%5D=P3&subjects%5B%5D=11&subjects%5B%5D=12&subjects%5B%5D=DT&subjects%5B%5D=13&subjects%5B%5D=L1&subjects%5B%5D=Q3&subjects%5B%5D=15&subjects%5B%5D=F8&subjects%5B%5D=17&subjects%5B%5D=L5&subjects%5B%5D=V1&subjects%5B%5D=18&subjects%5B%5D=19&subjects%5B%5D=A0&subjects%5B%5D=20&subjects%5B%5D=G1&subjects%5B%5D=24&subjects%5B%5D=W3&subjects%5B%5D=P1&subjects%5B%5D=C6&subjects%5B%5D=C7&subjects%5B%5D=F3&subjects%5B%5D=C8&subjects%5B%5D=V6&subjects%5B%5D=21&subjects%5B%5D=F0&subjects%5B%5D=14&subjects%5B%5D=22&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
-              Browse secondary courses with a SEND specialism.</a>
+
+        <p class="govuk-body">
+          <%= link_to "Browse primary courses with a SEND specialism.", find_results_path({send_courses: true}), class:"govuk-link govuk-link--no-visited-state" %>
+         </p>
+        <p class="govuk-body">
+          <%= link_to "Browse secondary courses with a SEND specialism.", find_results_path({send_courses: true}), class:"govuk-link govuk-link--no-visited-state" %>
         </p>
       </div>
     </div>
