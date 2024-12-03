@@ -5,7 +5,11 @@ module Find
     class ResultsController < Find::ApplicationController
       before_action :enforce_basic_auth
 
-      def index; end
+      def index
+        @courses = CoursesQuery.call
+
+        @pagy, @results = pagy(@courses)
+      end
 
       def enforce_basic_auth
         authenticate_or_request_with_http_basic do |username, password|
