@@ -10,7 +10,7 @@ COPY docs /docs
 COPY public /public
 COPY swagger /swagger
 
-WORKDIR docs
+WORKDIR /docs
 RUN bundle exec middleman build --build-dir=../public
 
 ###
