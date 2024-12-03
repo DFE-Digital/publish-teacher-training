@@ -108,6 +108,13 @@ shared:
     - telephone
     - created_at
     - updated_at
+  provider_partnership:
+    - id
+    - accredited_provider_id
+    - training_provider_id
+    - description
+    - created_at
+    - updated_at
   provider:
     - selectable_school
     - id
