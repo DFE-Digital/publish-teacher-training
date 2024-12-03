@@ -1,11 +1,11 @@
 <!-- Subjects filter-->
 <fieldset class="filters-component__groups__group app-filter__group govuk-fieldset" data-filters-target="group" data-group="subjects">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s" style="margin-bottom:0;">
-    Subject
+    Secondary (11 to 18)
   </legend>
   <div>
     <div class="searchable-collection-component" data-controller="searchable-collection">
-      <div class=" searchable-collection-component--scrollable">
+      <div class=" searchable-collection-component--scrollable filter-max-height-secondary">
 
         <div class="searchable-collection-component__search" style="margin-bottom:10px;">
           <input aria-controls="subjects__listbox" aria-expanded="true" aria-label="Subject" class="govuk-input icon icon--left icon--search js-action" data-action="input->searchable-collection#input" data-searchable-collection-target="input" placeholder="Search" role="combobox">
@@ -19,6 +19,12 @@
 
               <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                 <input type="hidden"  value="" autocomplete="off">
+                <div class="govuk-checkboxes__item">
+                  <input id="subject-filter-field-0" class="govuk-checkboxes__input" aria-describedby="subject-filter-hint" type="checkbox" value="Accounting" >
+                  <label for="subject-filter-field-0" class="govuk-label govuk-checkboxes__label">
+                    All secondary subjects
+                  </label>
+                </div>
                 <div class="govuk-checkboxes__item">
                   <input id="subject-filter-field-1" class="govuk-checkboxes__input" aria-describedby="subject-filter-hint" type="checkbox" value="Accounting" >
                   <label for="subject-filter-field-1" class="govuk-label govuk-checkboxes__label">
