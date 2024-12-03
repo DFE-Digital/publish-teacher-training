@@ -26,7 +26,7 @@ RUN apk add --update --no-cache tzdata && \
 RUN apk add --update --no-cache \
   postgresql-dev git ncurses shared-mime-info jemalloc
 
-ENV APP_HOME /app
+ENV APP_HOME=/app
 
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
