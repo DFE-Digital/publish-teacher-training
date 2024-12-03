@@ -24,21 +24,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_29_151352) do
     t.string "ProductVersion", limit: 32, null: false
   end
 
-  create_table "access_request", id: :serial, force: :cascade do |t|
-    t.text "email_address"
-    t.text "first_name"
-    t.text "last_name"
-    t.text "organisation"
-    t.text "reason"
-    t.datetime "request_date_utc", precision: nil, null: false
-    t.integer "requester_id"
-    t.integer "status", null: false
-    t.text "requester_email"
-    t.datetime "discarded_at", precision: nil
-    t.index ["discarded_at"], name: "index_access_request_on_discarded_at"
-    t.index ["requester_id"], name: "IX_access_request_requester_id"
-  end
-
   create_table "audit", force: :cascade do |t|
     t.integer "auditable_id"
     t.string "auditable_type"
