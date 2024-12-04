@@ -98,4 +98,11 @@ FactoryBot.define do
       provider_name { "#{identifier} provider name" }
     end
   end
+
+  factory :accredited_provider, parent: :provider do
+    provider_type { :university }
+    accrediting_provider { 'Y' }
+    accredited_provider_number { Faker::Number.within(range: 1000..1999) }
+    urn { nil }
+  end
 end
