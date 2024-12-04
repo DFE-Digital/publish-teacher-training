@@ -1,8 +1,9 @@
 # See options here https://github.com/voormedia/rails-erd
 
 attributes:
+  - primary_keys
   - content
-  - foreign_key
+  - foreign_keys
   - inheritance
 filename: docs/database-diagram
 filetype: jpg
