@@ -688,12 +688,6 @@ GEM
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
-    spring (4.2.1)
-    spring-commands-rspec (1.0.4)
-      spring (>= 0.9.1)
-    spring-watcher-listen (2.1.0)
-      listen (>= 2.7, < 4.0)
-      spring (>= 4)
     stringio (3.1.2)
     super_diff (0.14.0)
       attr_extras (>= 6.2.4)
@@ -845,9 +839,6 @@ DEPENDENCIES
   simplecov (< 0.23)
   site_prism (~> 5.0)
   skylight
-  spring
-  spring-commands-rspec
-  spring-watcher-listen (~> 2.1.0)
   super_diff
   table_print
   terminal-table
