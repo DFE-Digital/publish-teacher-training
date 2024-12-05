@@ -3339,7 +3339,7 @@ describe Course do
 
       context 'when the provider is self accredited and a SCITT' do
         it 'sets the funding to salary and the program_type to scitt_programme' do
-          provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: 'scitt')
+          provider = build(:accredited_provider, :scitt)
           course = create(:course, provider:, funding: 'fee')
 
           expect(course.funding).to eq('fee')
@@ -3349,7 +3349,7 @@ describe Course do
 
       context 'when the provider is self accredited and not a SCITT' do
         it 'sets the funding to salary and the program_type to higher_education_programme' do
-          provider = build(:provider, accrediting_provider: :accredited_provider, provider_type: 'university')
+          provider = build(:accredited_provider, :university)
           course = create(:course, provider:, funding: 'fee')
 
           expect(course.funding).to eq('fee')

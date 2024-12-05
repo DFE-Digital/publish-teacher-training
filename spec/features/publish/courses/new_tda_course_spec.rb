@@ -214,10 +214,10 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
   end
 
   def given_i_am_authenticated_as_a_school_direct_provider_user
-    @user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
+    @user = create(:user, providers: [build(:provider, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     @provider = @user.providers.first
-    create(:provider, :accredited_provider, provider_code: '1BJ')
-    @accredited_provider = create(:provider, :accredited_provider, provider_code: '1BK')
+    create(:accredited_provider, provider_code: '1BJ')
+    @accredited_provider = create(:accredited_provider, provider_code: '1BK')
     @provider.accrediting_provider_enrichments = []
     @provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
       {
@@ -234,7 +234,7 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     @user = create(
       :user,
       providers: [
-        create(:provider, :scitt, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
+        create(:accredited_provider, :scitt, sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])
       ]
     )
     given_i_am_authenticated(
