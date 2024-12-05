@@ -16,7 +16,7 @@ module Find
                       original_fullpath: '/path',
                       query_string: nil,
                       referer: nil,
-                      remote_ip: '1.2.3.4')
+                      headers: { 'X-REAL-IP' => '1.2.3.4' })
     end
 
     subject(:tracker) { described_class.new(request: request_double) }
