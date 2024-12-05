@@ -106,6 +106,15 @@ describe Provider do
         expect(valid_provider).to be_valid
       end
     end
+
+    describe 'accredited_provider_number is required for accredited provider' do
+      let(:accredited_provider) { build(:provider, :accredited_provider, accredited_provider_number: nil) }
+
+      it 'accredited provider without accredited_provider_number is invalid' do
+        expect(accredited_provider).not_to be_valid
+        expect(accredited_provider.errors.full_messages).to include('Accredited provider number Enter a valid accredited provider number - it must be 4 digits starting with a 1 or a 5')
+      end
+    end
   end
 
   describe 'normalizations' do
