@@ -11,7 +11,7 @@ class AccreditedProviderNumberFormatValidatorTest
 end
 
 describe AccreditedProviderNumberFormatValidator do
-  let(:accredited_provider) { create(:provider, :accredited_provider, :university) }
+  let(:accredited_provider) { create(:accredited_provider, :university) }
   let(:accredited_provider_number) { 1234 }
 
   let(:model) do
@@ -20,56 +20,65 @@ describe AccreditedProviderNumberFormatValidator do
     model
   end
 
-  describe 'university validation' do
-    context 'with a valid id starting with 1' do
-      it 'does not add an error' do
+  describe 'accredited university validation' do
+    let(:accredited_provider) { create(:accredited_provider, :university) }
+
+    context 'with a 4 digit number starting with 1' do
+      it 'is valid' do
         expect(model).to be_valid
       end
     end
 
-    context 'with a valid id starting with 5' do
+    context 'with a 5 digit number starting with 1' do
+      let(:accredited_provider_number) { 12_345 }
+
+      it 'is not valid' do
+        expect(model).not_to be_valid
+      end
+    end
+
+    context 'with a number starting with 5' do
       let(:accredited_provider_number) { 5432 }
 
-      it 'does not add an error' do
+      it 'is not valid' do
         expect(model).not_to be_valid
       end
     end
   end
 
-  describe 'scitt validation' do
-    let(:accredited_provider) { create(:provider, :accredited_provider, :scitt) }
+  describe 'accredited scitt validation' do
+    let(:accredited_provider) { create(:accredited_provider, :scitt) }
 
-    context 'with a valid id starting with 1' do
-      it 'does add an error' do
+    context 'with a number starting with 1' do
+      it 'is not valid' do
         expect(model).not_to be_valid
       end
     end
 
-    context 'with a valid id starting with 5' do
+    context 'with a 5 digit number starting with 5' do
+      let(:accredited_provider_number) { 54_321 }
+
+      it 'is not valid' do
+        expect(model).not_to be_valid
+      end
+    end
+
+    context 'with a number starting with 5' do
       let(:accredited_provider_number) { 5432 }
 
-      it 'does not add an error' do
+      it 'is valid' do
         expect(model).to be_valid
       end
     end
   end
 
   describe 'lead school validation' do
-    let(:accredited_provider) { create(:provider, :accredited_provider, :lead_school) }
+    let(:accredited_provider) { create(:provider, accredited_provider_number: nil) }
 
-    context 'with a valid id starting with 1' do
-      it 'adds provider_type error' do
+    context 'without an accredited_provider_number' do
+      it 'adds no errors' do
         model.valid?
-        expect(model.errors.attribute_names).to eq([:provider_type])
-      end
-    end
-
-    context 'with a valid id starting with 5' do
-      let(:accredited_provider_number) { 5432 }
-
-      it 'adds provider_type error' do
-        model.valid?
-        expect(model.errors.attribute_names).to eq([:provider_type])
+        expect(model.errors).to be_empty
       end
     end
   end
