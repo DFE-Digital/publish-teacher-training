@@ -242,6 +242,7 @@ FactoryBot.define do
       with_gcse_equivalency
     end
 
+    # Assumes a self accredited training provider
     trait :unpublished do
       transient do
         identifier { 'unpublished' }
@@ -249,7 +250,7 @@ FactoryBot.define do
 
       name { "#{identifier} course name" }
 
-      provider { find_or_create :provider, :published_scitt }
+      provider { find_or_create :accredited_provider, :published_scitt }
       sites { build_list(:site, 1, provider:) }
     end
 
