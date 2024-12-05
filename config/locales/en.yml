@@ -877,6 +877,9 @@ en:
             provider_type:
               blank: "Provider type can't be blank"
               format: Accredited provider cannot be a school
+            accrediting_provider:
+              format: '%{message}'
+              invalid_provider_type: 'Accredited provider must not have Provider type school'
             email:
               blank: "^Enter email address"
             website:
