@@ -1,1 +1,4 @@
+<% content_for :tab_navigation_actions do %>
+  <%= govuk_link_to "Copy Courses", new_support_recruitment_cycle_provider_copy_course_path(@recruitment_cycle.year, @provider), class: "govuk-button" %>
+<% end %>
 <%= render Providers::ProviderList::View.new(provider: @provider) %>
