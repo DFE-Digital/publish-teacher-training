@@ -113,46 +113,45 @@
             </div>
 
             <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset app-filter__group">
+            <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                 <h1 class="govuk-fieldset__heading">
-                  Degree required
+                Degree grade accepted
                 </h1>
               </legend>
-              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="degree-required-1" name="degree-required" type="checkbox" value="hmrc">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-1">
+              <div class="govuk-radios--small" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-1" name="degree-filter-home" type="radio" value="england">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-1">
                     2:1 or First
                   </label>
                 </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="degree-required-2" name="degree-required" type="checkbox" value="employment-tribunal">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-2">
-                    2:2 or above
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-2" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-2">
+                    2:2
                   </label>
                 </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="degree-required-3" name="degree-required" type="checkbox" value="MOD">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-3">
-                    Third or above
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-3" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-3">
+                    Third
                   </label>
                 </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="degree-required-4" name="degree-required" type="checkbox" value="DfT">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-4">
-                    Pass
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-4" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-4">
+                    Pass (Ordinary degree)
                   </label>
                 </div>
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="degree-required-5" name="degree-required" type="checkbox" value="DfT">
-                  <label class="govuk-label govuk-checkboxes__label govuk-!-font-size-16" for="degree-required-5">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="degree-filter-home-5" name="degree-filter-home" type="radio" value="scotland">
+                  <label class="govuk-label govuk-radios__label govuk-!-font-size-16" for="degree-filter-home-5">
                     No degree required
                   </label>
                 </div>
               </div>
             </fieldset>
-
           </div>
 
             </div><!--end col one half-->
@@ -301,15 +300,11 @@
         <p class="govuk-body">
           Teach primary or secondary if you do not have a degree and are not studying for one.
         </p>
-         <p class="govuk-body">
+         <span class="govuk-body">
           <a class="govuk-link govuk-link--no-visited-state" href="#">
             Browse teacher degree apprenticeship courses.
           </a>
-        </p>
-        <p class="govuk-body">
-        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships">
-        teacher degree apprenticeships</a>.
-      </p>
+        </span>
       </div>
     </div>
     <div class="govuk-accordion__section">
@@ -324,17 +319,14 @@
         <p class="govuk-body">
           Specialise in teaching and nurturing pupils with complex needs.
         </p>
-
-        <p class="govuk-body">
-          <%= link_to "Browse primary courses with a SEND specialism.", find_results_path({send_courses: true}), class:"govuk-link govuk-link--no-visited-state" %>
-         </p>
-        <p class="govuk-body">
-          <%= link_to "Browse secondary courses with a SEND specialism.", find_results_path({send_courses: true}), class:"govuk-link govuk-link--no-visited-state" %>
+          <p class="govuk-body">
+            <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=00&subjects%5B%5D=01&subjects%5B%5D=02&subjects%5B%5D=03&subjects%5B%5D=04&subjects%5B%5D=06&subjects%5B%5D=07&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
+                Browse primary courses with a SEND specialism.</a>
+          </p>
+          <p class="govuk-body">
+          <a href="https://find-teacher-training-courses.service.gov.uk/results?study_type%5B%5D=full_time&study_type%5B%5D=part_time&qualification%5B%5D=qts&qualification%5B%5D=pgce_with_qts&qualification%5B%5D=pgce+pgde&degree_required=show_all_courses&send_courses=true&applications_open=false&applications_open=true&c=England&l=2&subjects%5B%5D=A1&subjects%5B%5D=A2&subjects%5B%5D=W1&subjects%5B%5D=C1&subjects%5B%5D=08&subjects%5B%5D=F1&subjects%5B%5D=09&subjects%5B%5D=Q8&subjects%5B%5D=P3&subjects%5B%5D=11&subjects%5B%5D=12&subjects%5B%5D=DT&subjects%5B%5D=13&subjects%5B%5D=L1&subjects%5B%5D=Q3&subjects%5B%5D=15&subjects%5B%5D=F8&subjects%5B%5D=17&subjects%5B%5D=L5&subjects%5B%5D=V1&subjects%5B%5D=18&subjects%5B%5D=19&subjects%5B%5D=A0&subjects%5B%5D=20&subjects%5B%5D=G1&subjects%5B%5D=24&subjects%5B%5D=W3&subjects%5B%5D=P1&subjects%5B%5D=C6&subjects%5B%5D=C7&subjects%5B%5D=F3&subjects%5B%5D=C8&subjects%5B%5D=V6&subjects%5B%5D=21&subjects%5B%5D=F0&subjects%5B%5D=14&subjects%5B%5D=22&university_degree_status=true" class="govuk-link govuk-link--no-visited-state">
+              Browse secondary courses with a SEND specialism.</a>
         </p>
-        <p class="govuk-body">
-        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships">
-        teaching pupils with special educational needs and disabilities</a>.
-      </p>
       </div>
     </div>
     <div class="govuk-accordion__section">
@@ -350,18 +342,15 @@
           <strong>Nursery or pre-school</strong><br><br>
           Help young children under 5 years old to develop by becoming an early years teacher.<br><br>
           Learn about
-          <a href="https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/early-years-teachers" class="govuk-link govuk-link--no-visited-state">
+          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
             the routes to become an early years teacher</a>.
         </p>
         <p class="govuk-body"><br>
         <strong>Further education</strong><br><br>
           Teach young people and adults over 16 who are not studying for a degree.<br><br>
-          <%= link_to "Browse further education courses.", find_results_path({applications_open: true, has_vacancies: true, subjects: [41], }), class:"govuk-link govuk-link--no-visited-state" %>
+          <a href="https://find.localhost/results?applications_open=true&has_vacancies=true&subjects%5B%5D=41" class="govuk-link govuk-link--no-visited-state">
+            Browse all further education courses</a>.
         </p>
-        <p class="govuk-body">
-        Learn about <a class="govuk-link govuk-link--no-visited-state" href="https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/further-education-teachers">
-        teaching in further education</a>.
-      </p>
       </div>
     </div>
   </div>
