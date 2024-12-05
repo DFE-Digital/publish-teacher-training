@@ -12,7 +12,7 @@ module Support
         @provider = Provider.find(params[:provider_id])
         @from_provider = recruitment_cycle.providers.find_by(provider_code: params[:course][:autocompleted_provider_code])
 
-        sites_copy_to_course = params[:sites] ? Sites::CopyToCourseService : ->(*) {}
+        sites_copy_to_course = params[:schools] ? Sites::CopyToCourseService : ->(*) {}
 
         copier = ::Courses::CopyToProviderService.new(sites_copy_to_course:, enrichments_copy_to_course: Enrichments::CopyToCourseService.new, force: true)
 
