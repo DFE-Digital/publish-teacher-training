@@ -302,6 +302,13 @@ en:
         label:
           one: '%{count} mile'
           other: '%{count} miles'
+  helpers:
+    legend:
+      course_search_form:
+        can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
+    label:
+      course_search_form:
+        can_sponsor_visa: Only show courses with visa sponsorship
   activemodel:
     errors:
       models:
