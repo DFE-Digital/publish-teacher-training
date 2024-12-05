@@ -1,12 +1,22 @@
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <div class="app-filter__header">
-      <h2 class="govuk-heading-m">Filters</h2>
-
+    <%= form_with model: @course_search_form, scope: "", url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
       <div class="app-filter__content">
+        <div class="app-filter__header">
+          <h2 class="govuk-heading-m">Filters</h2>
+        </div>
+
+        <div class="app-filter__content">
+          <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
+
+          <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.course_search_form.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", data: { qa: "filters__visa" }, hidden: false do %>
+            <%= form.govuk_check_box :can_sponsor_visa, "true", name: "can_sponsor_visa", label: { text: t("helpers.label.course_search_form.can_sponsor_visa"), size: "s" } %>
+          <% end %>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
+
   <div class="app-filter-layout__content">
     <ul class="app-search-results">
       <% @results.each do |course| %>
