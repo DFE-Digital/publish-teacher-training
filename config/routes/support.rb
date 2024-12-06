@@ -56,6 +56,8 @@ namespace :support do
           get '/check', on: :collection, to: 'accredited_providers/checks#show'
           put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
+
+        resources :copy_courses, only: %i[new create]
       end
     end
     resources :users do

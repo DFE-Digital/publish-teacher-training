@@ -1,0 +1,43 @@
+<h1 class="govuk-heading-l"><%= @provider.provider_name %></h1>
+<h2 class="govuk-heading-m">Copy courses from:</h2>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div>
+        <%= form_with url: support_recruitment_cycle_provider_copy_courses_path(@recruitment_cycle.year, @provider) do |form| %>
+          <% error = flash[:error] && flash[:error]["message"] == "Name or provider code" %>
+          <div class="govuk-form-group<% if error %> govuk-form-group--error<% end %>">
+            <%= form.label :query, { class: "govuk-label", for: "provider" } do %>
+              <div>Search for an organisation to copy courses from:</div>
+              <span class="govuk-hint govuk-!-display-inline">Enter the name or provider code</span>
+              <% if error %>
+                <span class="govuk-error-message" id="provider-error" data-qa="provider-error">
+                  Please enter the name or provider code
+                </span>
+              <% end %>
+            <% end %>
+            <%= form.text_field :provider,
+                                id: "provider",
+                                value: params[:query],
+                                class: "govuk-input",
+                                data: { qa: "provider-search" } %>
+            <div id="provider-autocomplete"></div>
+          </div>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <div class="govuk-form-group">
+                <%= form.govuk_check_box :schools, true, false, label: { text: "Copy placement schools?" }, hint: { text: tag.div("Any placement schools that are not already linked to the target provider will not be copied", class: %w[govuk-hint govuk-!-font-size-16]) }, multiple: false %>
+              </div>
+            </div>
+          </div>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <%= form.govuk_submit "Copy courses" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

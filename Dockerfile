@@ -24,7 +24,10 @@ RUN apk add --update --no-cache tzdata && \
   echo "Europe/London" > /etc/timezone
 
 RUN apk add --update --no-cache \
-  postgresql-dev git ncurses shared-mime-info jemalloc
+  postgresql-dev git ncurses shared-mime-info jemalloc gcompat \
+  nss \
+  libxcb \
+  nspr
 
 ENV APP_HOME=/app
 
