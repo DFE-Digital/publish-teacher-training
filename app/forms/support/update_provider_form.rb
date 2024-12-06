@@ -2,21 +2,31 @@
 
 module Support
   class UpdateProviderForm
-    attr_reader :provider
+    delegate :valid?, to: :provider
 
     def initialize(provider, attributes:)
       @provider = provider
       @attributes = attributes
+      assign_attributes
     end
 
     def save
-      @provider.assign_attributes(@attributes)
+      return false unless provider.valid?
+
+      provider.save!
+    end
+
+    private
+
+    attr_reader :provider, :attributes
+
+    def assign_attributes
+      @provider.assign_attributes(attributes)
       remove_accredited_provider_number
-      @provider.save
     end
 
     def remove_accredited_provider_number
-      return unless @provider.accrediting_provider_change&.[](1) == 'not_an_accredited_provider'
+      return unless @provider.accrediting_provider_changed?(to: 'not_an_accredited_provider')
 
       @provider.accredited_provider_number = nil
     end

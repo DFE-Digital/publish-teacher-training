@@ -168,7 +168,14 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  validates :accredited_provider_number, accredited_provider_number_format: { allow_blank: true }, on: :update, if: :accredited_provider?
+  validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited_provider?
+
+  validate :accredited_provider_type
+  def accredited_provider_type
+    return unless accredited_provider?
+
+    errors.add(:accrediting_provider, :invalid_provider_type) unless provider_type.to_s.in?(%w[scitt university])
+  end
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 

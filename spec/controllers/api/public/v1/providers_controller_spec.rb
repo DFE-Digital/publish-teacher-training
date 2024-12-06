@@ -370,7 +370,7 @@ RSpec.describe API::Public::V1::ProvidersController do
       context 'with filter' do
         let(:provider2) do
           Timecop.freeze(Time.zone.today + 1) do
-            create(:provider,
+            create(:accredited_provider,
                    :university,
                    provider_code: '2AT',
                    provider_name: 'Second',

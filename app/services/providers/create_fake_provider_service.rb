@@ -33,7 +33,8 @@ module Providers
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
-        accrediting_provider: @is_accredited_provider ? 'accredited_provider' : 'not_an_accredited_provider'
+        accrediting_provider: @is_accredited_provider ? 'accredited_provider' : 'not_an_accredited_provider',
+        accredited_provider_number: @is_accredited_provider && generate_accredited_provider_number(@provider_type)
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 
       organisation = Organisation.new(name: @provider_name)
@@ -68,6 +69,11 @@ module Providers
 
     def attempting_to_make_lead_school_accredited_provider?
       errors << "Provider #{@provider_name} (#{@provider_code}) cannot be both a lead school and an accredited provider." if @provider_type == 'lead_school' && @is_accredited_provider
+    end
+
+    def generate_accredited_provider_number(provider_type)
+      classifier = provider_type == 'scitt' ? 5000 : 1000
+      rand(100..999) + classifier
     end
   end
 end

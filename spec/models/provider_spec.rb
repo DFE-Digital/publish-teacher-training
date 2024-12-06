@@ -106,6 +106,24 @@ describe Provider do
         expect(valid_provider).to be_valid
       end
     end
+
+    describe 'accredited_provider_number is required for accredited provider' do
+      let(:accredited_provider) { build(:provider, :accredited_provider, accredited_provider_number: nil) }
+
+      it 'accredited provider without accredited_provider_number is invalid' do
+        expect(accredited_provider).not_to be_valid
+        expect(accredited_provider.errors.messages[:accredited_provider_number]).to include('Enter a valid University accredited provider number - it must be 4 digits starting with a 1')
+      end
+    end
+
+    describe 'a lead school can not be an accredited provider' do
+      let(:provider) { build(:provider, provider_type: 'lead_school', accrediting_provider: 'Y') }
+
+      it 'is invalid' do
+        expect(provider).not_to be_valid
+        expect(provider.errors[:accrediting_provider]).to include('Accredited provider must not have Provider type school')
+      end
+    end
   end
 
   describe 'normalizations' do
@@ -339,7 +357,7 @@ describe Provider do
   describe '#accrediting_providers' do
     let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
 
-    let(:accrediting_provider) { create(:provider, accrediting_provider: 'Y') }
+    let(:accrediting_provider) { create(:accredited_provider) }
     let(:accredited_provider) { accrediting_provider }
     let!(:course1) { create(:course, accrediting_provider:, provider:) }
     let!(:course2) { create(:course, accrediting_provider:, provider:) }
