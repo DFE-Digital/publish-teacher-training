@@ -151,5 +151,5 @@ RSpec.configure do |config|
   config.include JSONAPI::RSpec
 
   # Ensure we're clearing the cache before each spec
-  config.before { Rails.cache.clear }
+  # config.before { Rails.cache.clear }
 end

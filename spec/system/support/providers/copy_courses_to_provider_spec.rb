@@ -23,8 +23,8 @@ RSpec.describe 'Support', service: :publish do
     puts file_exists
     if file_exists
       file_stat = File.stat('/root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver')
-      puts 'file_stat.excutable?'
-      puts file_stat.excutable?
+      puts 'file_stat.executable?'
+      puts file_stat.executable?
     end
 
     sign_in_system_test(user:)
