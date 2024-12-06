@@ -17,6 +17,16 @@ RSpec.describe 'Support', service: :publish do
   let(:user) { create(:user, :admin) }
 
   before do
+    Rails.logger.debug('/root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver')
+    file_exists = File.exist?('/root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver')
+    puts "File.exist?('/root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver')"
+    puts file_exists
+    if file_exists
+      file_stat = File.stat('/root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver')
+      puts 'file_stat.excutable?'
+      puts file_stat.excutable?
+    end
+
     sign_in_system_test(user:)
   end
 
