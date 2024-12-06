@@ -10,7 +10,6 @@ module Token
                    audience:,
                    issuer:,
                    subject:)
-
       @encoded_token = encoded_token
 
       @secret = secret
