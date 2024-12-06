@@ -23,6 +23,7 @@ RSpec.describe 'Support', service: :publish do
   it 'copy courses from one provider to another', :js do
     visit '/support'
     click_on 'Target Provider'
+    click_on 'Courses'
     click_on 'Copy Courses'
     autocomplete = page.find('input#provider')
     autocomplete.set(source_provider.provider_code)
