@@ -27,7 +27,7 @@ RSpec.describe 'Support', service: :publish do
   # >       No such file or directory - /root/.cache/selenium/chromedriver/linux64/131.0.6778.87/chromedriver
   #
   it 'copy courses from one provider to another', :js do
-    pending('Javascript tests cannot run on CI')
+    skip('Javascript tests cannot run on CI')
     visit '/support'
     click_on 'Target Provider'
     click_on 'Courses'
