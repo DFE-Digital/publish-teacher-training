@@ -30,7 +30,7 @@ RSpec.describe 'Support', service: :publish do
     li = page.find('ul#provider__listbox li', visible: false)
     li.click
     page.find_by_id('schools-true-field', visible: false).click
-    click_on 'Continue'
+    click_on 'Copy courses'
     click_on 'Courses'
     courses.map(&:name).each do |course_name|
       expect(page).to have_content(course_name)
