@@ -16,6 +16,7 @@ module Find
         @course = course.decorate
         @filtered_by_location = filtered_by_location
         @sites_count = results_view.sites_count(course)
+        @study_sites_count = results_view.sites_count(course)
         @results_view = results_view
         @search_params = results_view.query_parameters.to_query
       end
@@ -28,37 +29,29 @@ module Find
         sites_count.positive?
       end
 
+      def has_study_sites?
+        @study_sites_count.positive?
+      end
+
       def course_title_link
         t(
           '.course_title_html',
-          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, search_params: @search_params),
+          course_path: find_course_path(provider_code: course.provider_code, course_code: course.course_code, **request.query_parameters),
           provider_name: helpers.smart_quotes(course.provider.provider_name),
           course_name: course.name_and_code
         )
       end
 
       def location_label
-        if course.fee_based?
-          t('.fee_based.location')
+        if no_fee?
+          t('.location_salary', count: @sites_count)
         else
-          t('.salary_based.location', count: sites_count)
+          t('.location', count: @sites_count)
         end
       end
 
-      def location_name
-        @results_view.query_parameters['lq']
-      end
-
-      def school_term
-        if course.fee?
-          'placement'
-        else
-          'employing'
-        end
-      end
-
-      def site_distance
-        @results_view.site_distance(course)
+      def study_site_label
+        t('.study_site', count: @study_sites_count)
       end
 
       private
