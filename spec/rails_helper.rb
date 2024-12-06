@@ -13,7 +13,7 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'selenium/webdriver'
 
-# Selenium::WebDriver.logger.level = Logger::DEBUG
+Selenium::WebDriver.logger.level = Logger::DEBUG
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Pull in all the files in spec/support automatically.
