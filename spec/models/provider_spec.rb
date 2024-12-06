@@ -112,7 +112,7 @@ describe Provider do
 
       it 'accredited provider without accredited_provider_number is invalid' do
         expect(accredited_provider).not_to be_valid
-        expect(accredited_provider.errors.full_messages).to include('Accredited provider number Enter a valid accredited provider number - it must be 4 digits starting with a 1 or a 5')
+        expect(accredited_provider.errors.messages[:accredited_provider_number]).to include('Enter a valid University accredited provider number - it must be 4 digits starting with a 1')
       end
     end
 

@@ -34,6 +34,7 @@ describe AccreditedProviderNumberFormatValidator do
 
       it 'is not valid' do
         expect(model).not_to be_valid
+        expect(model.errors.messages[:accredited_provider_number]).to include('Enter a valid University accredited provider number - it must be 4 digits starting with a 1')
       end
     end
 
@@ -42,6 +43,7 @@ describe AccreditedProviderNumberFormatValidator do
 
       it 'is not valid' do
         expect(model).not_to be_valid
+        expect(model.errors.messages[:accredited_provider_number]).to include('Enter a valid University accredited provider number - it must be 4 digits starting with a 1')
       end
     end
   end
@@ -52,6 +54,7 @@ describe AccreditedProviderNumberFormatValidator do
     context 'with a number starting with 1' do
       it 'is not valid' do
         expect(model).not_to be_valid
+        expect(model.errors.messages[:accredited_provider_number]).to include('Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5')
       end
     end
 
@@ -60,6 +63,7 @@ describe AccreditedProviderNumberFormatValidator do
 
       it 'is not valid' do
         expect(model).not_to be_valid
+        expect(model.errors.messages[:accredited_provider_number]).to include('Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5')
       end
     end
 
