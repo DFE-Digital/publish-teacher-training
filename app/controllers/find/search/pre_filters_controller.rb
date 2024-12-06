@@ -20,7 +20,7 @@ module Find
       private
 
       def primary_courses_path
-        find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'PrimarySubject').pluck(:subject_code))
+        find_subjects_path({ age_group: :primary })
       end
 
       def secondary_courses_path
