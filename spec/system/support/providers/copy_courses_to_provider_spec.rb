@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Support', service: :publish do
+RSpec.describe 'Support', service: :publish, skip: 'can not get chromedriver working on Alpine' do
   include DfESignInUserHelper
 
   let(:courses) do
