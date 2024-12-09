@@ -1,4 +1,7 @@
 <%= render PageTitle.new(title: "support.providers.courses.index") %>
+<% content_for :tab_navigation_actions do %>
+  <%= govuk_link_to "Copy Courses", new_support_recruitment_cycle_provider_copy_course_path(@recruitment_cycle.year, @provider), class: "govuk-button" %>
+<% end %>
 
 <table class="govuk-table">
   <thead class="govuk-table__head">

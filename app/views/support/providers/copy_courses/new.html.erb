@@ -1,0 +1,45 @@
+<%= render PageTitle.new(title: "support.providers.copy_courses.new", has_errors: @copy_courses_form.errors.present?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <div>
+        <%= form_with model: @copy_courses_form, url: support_recruitment_cycle_provider_copy_courses_path(@recruitment_cycle.year, @target_provider) do |form| %>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+              <%= form.govuk_error_summary %>
+            </div>
+          </div>
+          <h1 class="govuk-heading-l"><%= @target_provider.provider_name %></h1>
+          <h2 class="govuk-heading-m">Copy courses from:</h2>
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+              <div class="govuk-form-group">
+                <%= form.govuk_text_field :provider,
+                  id: "provider",
+                  value: params[:query],
+                  class: "govuk-input",
+                  data: { qa: "provider-search" },
+                  label: -> { tag.div("Search for an organisation to copy courses from:") + tag.div("Enter the name or provider code", class: %w[govuk-hint govuk-!-display-inline]) } %>
+                <div id="provider-autocomplete"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <div class="govuk-form-group">
+                <%= form.govuk_check_box :schools, true, false, label: { text: "Copy placement schools?" }, hint: { text: tag.div("Any placement schools that are not already linked to the target provider will not be copied", class: %w[govuk-hint govuk-!-font-size-16]) }, multiple: false %>
+              </div>
+            </div>
+          </div>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <%= form.govuk_submit "Copy courses" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
