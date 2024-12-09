@@ -6,8 +6,7 @@ module Find
       before_action :enforce_basic_auth
 
       def index
-        @course_search_form = CourseSearchForm.new(params.permit(:can_sponsor_visa))
-        @courses = CoursesQuery.call(@course_search_form.search_params)
+        @courses = CoursesQuery.call(params:)
 
         @pagy, @results = pagy(@courses)
       end

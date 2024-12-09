@@ -4,14 +4,14 @@ require 'rails_helper'
 
 RSpec.describe CoursesQuery do
   describe '.call' do
-    subject(:results) { described_class.call(query) }
+    subject(:results) { described_class.call(params:) }
 
     context 'when no filters or sorting are applied' do
       let!(:findable_course) { create(:course, :with_full_time_sites) }
       let!(:another_course) { create(:course, :with_full_time_sites) }
       let!(:non_findable_course) { create(:course) }
 
-      let(:query) { {} }
+      let(:params) { {} }
 
       it 'returns all findable courses' do
         expect(results).to contain_exactly(findable_course, another_course)
@@ -32,7 +32,7 @@ RSpec.describe CoursesQuery do
         create(:course, :with_full_time_sites, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false)
       end
 
-      let(:query) { { can_sponsor_visa: true } }
+      let(:params) { { can_sponsor_visa: 'true' } }
 
       it 'returns courses that sponsor visa' do
         expect(results).to match_collection(

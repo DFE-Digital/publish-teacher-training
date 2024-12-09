@@ -1,6 +1,6 @@
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
-    <%= form_with model: @course_search_form, scope: "", url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
+    <%= form_with url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
       <div class="app-filter__content">
         <div class="app-filter__header">
           <h2 class="govuk-heading-m">Filters</h2>
@@ -10,7 +10,7 @@
           <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
 
           <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.course_search_form.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", data: { qa: "filters__visa" }, hidden: false do %>
-            <%= form.govuk_check_box :can_sponsor_visa, "true", name: "can_sponsor_visa", label: { text: t("helpers.label.course_search_form.can_sponsor_visa"), size: "s" } %>
+            <%= form.govuk_check_box :can_sponsor_visa, "true", name: "can_sponsor_visa", label: { text: t("helpers.label.course_search_form.can_sponsor_visa"), size: "s" }, checked: params[:can_sponsor_visa].present? %>
           <% end %>
         </div>
       </div>
