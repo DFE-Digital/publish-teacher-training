@@ -54,6 +54,6 @@ class CoursesQuery
   end
 
   def log_query_info
-    CoursesQueryLogger.new(@applied_filters, @scope).call
+    CoursesQuery::Logger.new(@applied_filters, @scope).call
   end
 end
