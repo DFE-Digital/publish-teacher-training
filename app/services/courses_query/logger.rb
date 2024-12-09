@@ -2,9 +2,12 @@
 
 class CoursesQuery
   class Logger
-    def initialize(applied_scopes, scope, explain: false)
-      @applied_scopes = applied_scopes
-      @scope = scope
+    attr_reader :courses_query
+
+    delegate :scope, :applied_scopes, to: :courses_query
+
+    def initialize(courses_query, explain: false)
+      @courses_query = courses_query
       @explain = explain
     end
 
@@ -18,12 +21,12 @@ class CoursesQuery
     private
 
     def log_filters
-      if @applied_scopes.blank?
+      if applied_scopes.blank?
         logger.tagged(log_tag) { logger.debug('No filters applied'.colorize(:red)) }
       else
         logger.tagged(log_tag) do
           logger.debug('Applied Filters:'.colorize(:green))
-          @applied_scopes.each do |name, value|
+          applied_scopes.each do |name, value|
             logger.debug("* #{name} => #{value}".colorize(:light_blue))
           end
         end
@@ -32,9 +35,9 @@ class CoursesQuery
 
     def log_query
       logger.tagged(log_tag) do
-        logger.debug("Full query: #{@scope.to_sql.colorize(:green)}")
+        logger.debug("Full query: #{scope.to_sql.colorize(:green)}")
 
-        logger.debug("EXPLAIN Output: #{@scope.explain(:analyze).inspect}".colorize(:yellow)) if @explain
+        logger.debug("EXPLAIN Output: #{scope.explain(:analyze).inspect}".colorize(:yellow)) if @explain
       end
     end
 

@@ -5,7 +5,7 @@ class CoursesQuery
     new(...).call
   end
 
-  attr_reader :scope, :params
+  attr_reader :scope, :params, :applied_scopes
 
   def initialize(params:)
     @params = params
@@ -50,6 +50,6 @@ class CoursesQuery
   private
 
   def log_query_info
-    CoursesQuery::Logger.new(@applied_scopes, @scope).call
+    CoursesQuery::Logger.new(self).call
   end
 end
