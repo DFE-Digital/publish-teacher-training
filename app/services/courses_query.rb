@@ -9,7 +9,7 @@ class CoursesQuery
 
   def initialize(params:)
     @params = params
-    @applied_filters = []
+    @applied_scopes = {}
     @scope = RecruitmentCycle
              .current
              .courses
@@ -23,7 +23,7 @@ class CoursesQuery
   end
 
   def call
-    @scope = visa_sponsorship_filter
+    @scope = visa_sponsorship_scope
     @scope = @scope.distinct
 
     log_query_info
@@ -31,10 +31,10 @@ class CoursesQuery
     @scope
   end
 
-  def visa_sponsorship_filter
+  def visa_sponsorship_scope
     return @scope if params[:can_sponsor_visa].blank?
 
-    filter_applied(name: :can_sponsor_visa)
+    @applied_scopes[:can_sponsor_visa] = params[:can_sponsor_visa]
 
     @scope
       .where(
@@ -49,11 +49,7 @@ class CoursesQuery
 
   private
 
-  def filter_applied(name:)
-    @applied_filters << { name:, value: params[name] }
-  end
-
   def log_query_info
-    CoursesQuery::Logger.new(@applied_filters, @scope).call
+    CoursesQuery::Logger.new(@applied_scopes, @scope).call
   end
 end

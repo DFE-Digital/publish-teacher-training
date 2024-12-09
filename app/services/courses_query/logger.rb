@@ -2,8 +2,8 @@
 
 class CoursesQuery
   class Logger
-    def initialize(applied_filters, scope, explain: false)
-      @applied_filters = applied_filters
+    def initialize(applied_scopes, scope, explain: false)
+      @applied_scopes = applied_scopes
       @scope = scope
       @explain = explain
     end
@@ -18,13 +18,13 @@ class CoursesQuery
     private
 
     def log_filters
-      if @applied_filters.blank?
+      if @applied_scopes.blank?
         logger.tagged(log_tag) { logger.debug('No filters applied'.colorize(:red)) }
       else
         logger.tagged(log_tag) do
           logger.debug('Applied Filters:'.colorize(:green))
-          @applied_filters.each do |filter|
-            logger.debug("* #{filter[:name]} => #{filter[:value]}".colorize(:light_blue))
+          @applied_scopes.each do |name, value|
+            logger.debug("* #{name} => #{value}".colorize(:light_blue))
           end
         end
       end
