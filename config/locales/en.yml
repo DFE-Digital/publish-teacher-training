@@ -260,6 +260,8 @@ en:
           show: "View a provider"
           edit: "Edit a provider"
           edit_contact: "Edit provider contact details"
+          copy_courses:
+            new: Copy courses
           courses:
             index: "Courses"
             edit: "Edit course details"
@@ -1041,6 +1043,8 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
+        support/copy_courses_form:
+          blank: Provider can't be blank
         support/user_form:
           attributes:
             email:
