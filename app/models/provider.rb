@@ -64,6 +64,12 @@ class Provider < ApplicationRecord
            primary_key: :provider_code,
            inverse_of: :accrediting_provider
 
+  has_many :training_partnerships, foreign_key: :accredited_provider_id, class_name: 'ProviderPartnership', inverse_of: :accredited_provider
+  has_many :training_partners, through: :training_partnerships, class_name: 'Provider', source: :training_provider
+
+  has_many :accredited_partnerships, foreign_key: :training_provider_id, class_name: 'ProviderPartnership', inverse_of: :training_provider
+  has_many :accredited_partners, through: :accredited_partnerships, class_name: 'Provider', source: :accredited_provider
+
   normalizes :provider_name, with: ->(value) { value.gsub(/\s+/, ' ').strip }
 
   def accredited_providers
