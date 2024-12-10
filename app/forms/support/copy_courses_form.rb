@@ -12,5 +12,10 @@ module Support
     end
 
     validates :target_provider, :provider, presence: true
+    validate :different_providers
+
+    def different_providers
+      errors.add(:provider, message: 'Choose different providers') if target_provider == provider
+    end
   end
 end
