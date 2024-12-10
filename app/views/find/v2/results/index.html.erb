@@ -13,6 +13,11 @@
             <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.can_sponsor_visa"), size: "s" }, checked: params[:can_sponsor_visa].present? %>
           <% end %>
 
+          <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t("helpers.legend.courses_query_filters.study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false do %>
+            <%= form.govuk_check_box :study_types, "full_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.full_time"), size: "s" }, checked: params[:study_types].present? && params[:study_types].include?("full_time") %>
+            <%= form.govuk_check_box :study_types, "part_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.part_time"), size: "s" }, checked: params[:study_types].present? && params[:study_types].include?("part_time") %>
+          <% end %>
+
           <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false do %>
             <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" }, checked: params[:send_courses].present? %>
           <% end %>
