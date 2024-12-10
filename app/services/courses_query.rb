@@ -24,6 +24,9 @@ class CoursesQuery
 
   def call
     @scope = visa_sponsorship_scope
+    @scope = study_modes_scope
+    @scope = applications_open_scope
+    @scope = special_education_needs_scope
     @scope = @scope.distinct
 
     log_query_info
@@ -45,6 +48,39 @@ class CoursesQuery
           can_sponsor_skilled_worker_visa: true
         )
       )
+  end
+
+  def study_modes_scope
+    study_modes = (params[:study_types].presence || []).compact_blank
+
+    return @scope if study_modes.blank?
+
+    @applied_scopes[:study_modes] = study_modes
+
+    case study_modes
+    when ['full_time']
+      @scope.where(study_mode: [Course.study_modes[:full_time], Course.study_modes[:full_time_or_part_time]])
+    when ['part_time']
+      @scope.where(study_mode: [Course.study_modes[:part_time], Course.study_modes[:full_time_or_part_time]])
+    else
+      @scope
+    end
+  end
+
+  def applications_open_scope
+    return @scope if params[:applications_open].blank?
+
+    @applied_scopes[:applications_open] = params[:applications_open]
+
+    @scope.where(application_status: Course.application_statuses[:open])
+  end
+
+  def special_education_needs_scope
+    return @scope if params[:send_courses].blank?
+
+    @applied_scopes[:send_courses] = params[:send_courses]
+
+    @scope.where(is_send: true)
   end
 
   private
