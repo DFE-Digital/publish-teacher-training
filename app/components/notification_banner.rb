@@ -39,7 +39,7 @@ class NotificationBanner < ApplicationComponent
   end
 
   def type_class
-    "#{DEFAULT_CLASS}--#{type}" if success_banner?
+    "#{DEFAULT_CLASS}--#{type}"
   end
 
   def title
