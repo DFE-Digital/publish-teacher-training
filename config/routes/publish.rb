@@ -270,6 +270,8 @@ namespace :publish, as: :publish do
           put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
 
+        resources :partnerships, param: :partner_provider_code
+
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do
