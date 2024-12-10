@@ -2,15 +2,19 @@
 
 module Courses
   class CopyToProviderService
+    attr_reader :courses_copied, :courses_not_copied
+
     def initialize(sites_copy_to_course:, enrichments_copy_to_course:, force:)
       @sites_copy_to_course = sites_copy_to_course
       @enrichments_copy_to_course = enrichments_copy_to_course
       @force = force
+      @courses_copied = []
+      @courses_not_copied = []
     end
 
     def execute(course:, new_provider:)
-      return unless course.rollable? || force
-      return if course_code_already_exists_on_provider?(course:, new_provider:)
+      @courses_not_copied << course and return unless course.rollable? || force
+      @courses_not_copied << course and return if course_code_already_exists_on_provider?(course:, new_provider:)
 
       new_course = nil
 
@@ -32,7 +36,7 @@ module Courses
         copy_schools(course:, new_provider:, new_course:)
         copy_study_sites(course:, new_provider:, new_course:)
       end
-      new_course
+      new_course.tap { @courses_copied << _1 }
     end
 
     private

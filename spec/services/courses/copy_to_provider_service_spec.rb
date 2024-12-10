@@ -53,6 +53,12 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.can_sponsor_student_visa).to eq course.can_sponsor_student_visa
   end
 
+  it 'adds the copied course to @courses_copied' do
+    service.execute(course:, new_provider:)
+
+    expect(service.courses_copied.map(&:course_code)).to include(course.course_code)
+  end
+
   context 'applications open from date' do
     it 'updates the applications_open_from and start date attributes' do
       service.execute(course:, new_provider:)
@@ -177,6 +183,12 @@ RSpec.describe Courses::CopyToProviderService do
       service.execute(course:, new_provider:)
 
       expect(mocked_enrichments_copy_to_course_service).not_to have_received(:execute)
+    end
+
+    it 'adds the uncopied course to @courses_not_copied' do
+      service.execute(course:, new_provider:)
+
+      expect(service.courses_not_copied).to include(course)
     end
   end
 
