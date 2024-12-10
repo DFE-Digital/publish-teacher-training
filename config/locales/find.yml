@@ -229,12 +229,12 @@ en:
           find_out_more_about_tda: Find out more about teacher degree apprenticeships
       summary_component:
         view:
-          pays_salary_html: This course pays a <strong>salary</strong>
+          pays_salary_html: Salary
           teaching_apprenticeship: It is a teaching apprenticeship
           no_fee: There is no fee
           fee_or_salary: Fee or salary
           course_summary: Course summary
-          course_fee: Course fee
+          course_fee: Fee or salary
           course_length: Course length
           age_range: Age group
           date_can_apply: Date you can apply from
@@ -242,8 +242,8 @@ en:
           qualification: Qualification
           provider: Provider
           accredited_by: Accredited by
-          for_uk_citizens: for UK citizens
-          for_non_uk_citizens: for Non-UK citizens
+          for_uk_citizens: Fee - UK citizens
+          for_non_uk_citizens: Fee - Non-UK citizens
       providers:
         show:
           heading: About %{provider_name}
@@ -293,7 +293,7 @@ en:
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
     results:
       search_result_component:
-        pays_salary_html: This course pays a <strong>salary</strong>
+        pays_salary_html: Salary
         teaching_apprenticeship: It is a teaching apprenticeship
         no_fee: There is no fee
         no_degree_required: No degree required
@@ -314,14 +314,14 @@ en:
           other: Where you will study
         nearest_location: Nearest location
         fee_or_salary: Fee or salary
-        course_fee: Course fee
+        course_fee: Fee or salary
         qualification: Qualification
         degree_required: Degree required
         visa_sponsorship: Visa sponsorship
         course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
         funding:
-          salary_html: "This course pays a <strong>salary</strong>"
-          apprenticeship_html: "This a Teaching Apprenticeship course paying a <strong>salary</strong>"
+          salary_html: Salary
+          apprenticeship_html: "Salary (apprenticeship)"
       course_placements:
         nearest_location:
           zero: "No placement schools available"
