@@ -325,5 +325,9 @@ FactoryBot.define do
       with_full_time_sites
       resulting_in_pgce_with_qts
     end
+
+    trait :with_special_education_needs do
+      is_send { true }
+    end
   end
 end
