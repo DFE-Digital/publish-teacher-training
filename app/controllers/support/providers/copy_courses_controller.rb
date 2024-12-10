@@ -25,7 +25,12 @@ module Support
             end
           end
 
-          redirect_to support_recruitment_cycle_provider_path(recruitment_cycle.year, @copy_courses_form.target_provider.id)
+          @courses_copied = copier.courses_copied
+          @courses_not_copied = copier.courses_not_copied
+          flash[:success] = "Courses copied: #{@courses_copied.map(&:course_code).to_sentence}"
+          flash[:warning] = "Courses not copied: #{@courses_not_copied.map(&:course_code).to_sentence}"
+
+          redirect_to support_recruitment_cycle_provider_courses_path(recruitment_cycle.year, @copy_courses_form.target_provider.id)
         else
           render :new
         end
