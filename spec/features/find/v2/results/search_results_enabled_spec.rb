@@ -18,6 +18,21 @@ feature 'V2 results - enabled' do
     and_the_visa_sponsorship_filter_is_checked
   end
 
+  scenario 'when I filter by study type' do
+    given_there_are_courses_containing_all_study_types
+    when_i_visit_the_find_results_page
+    and_i_filter_only_by_part_time_courses
+    then_i_see_only_part_time_courses
+    and_the_part_time_filter_is_checked
+    when_i_filter_only_by_full_time_courses
+    then_i_see_only_full_time_courses
+    and_the_full_time_filter_is_checked
+    when_i_filter_by_part_time_and_full_time_courses
+    then_i_see_all_courses_containing_all_study_types
+    and_the_part_time_filter_is_checked
+    and_the_full_time_filter_is_checked
+  end
+
   scenario 'when I filter by applications open' do
     given_there_are_courses_open_for_applications
     and_there_are_courses_that_are_closed_for_applications
@@ -44,6 +59,12 @@ feature 'V2 results - enabled' do
     create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: 'Biology', course_code: 'S872')
     create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: 'Chemistry', course_code: 'K592')
     create(:course, :with_full_time_sites, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, name: 'Computing', course_code: 'L364')
+  end
+
+  def given_there_are_courses_containing_all_study_types
+    create(:course, :with_full_time_sites, study_mode: 'full_time', name: 'Biology', course_code: 'S872')
+    create(:course, :with_part_time_sites, study_mode: 'part_time', name: 'Chemistry', course_code: 'K592')
+    create(:course, :with_full_time_or_part_time_sites, study_mode: 'full_time_or_part_time', name: 'Computing', course_code: 'L364')
   end
 
   def given_there_are_courses_open_for_applications
@@ -81,6 +102,24 @@ feature 'V2 results - enabled' do
     and_i_apply_the_filters
   end
 
+  def and_i_filter_only_by_part_time_courses
+    uncheck 'Full time (12 months)'
+    check 'Part time (18 to 24 months)'
+    and_i_apply_the_filters
+  end
+
+  def when_i_filter_only_by_full_time_courses
+    uncheck 'Part time (18 to 24 months)'
+    check 'Full time (12 months)'
+    and_i_apply_the_filters
+  end
+
+  def when_i_filter_by_part_time_and_full_time_courses
+    check 'Part time (18 to 24 months)'
+    check 'Full time (12 months)'
+    and_i_apply_the_filters
+  end
+
   def and_i_filter_by_courses_open_for_applications
     check 'Only show courses open for applications'
     and_i_apply_the_filters
@@ -96,6 +135,32 @@ feature 'V2 results - enabled' do
     expect(page).to have_content('Chemistry (K592)')
     expect(page).to have_content('Computing (L364)')
     expect(page).to have_no_content('Dance (C115)')
+  end
+
+  def then_i_see_only_part_time_courses
+    expect(page).to have_content('Chemistry (K592)')
+    expect(page).to have_content('Computing (L364)')
+    expect(page).to have_no_content('Biology (S872)')
+  end
+
+  def and_the_part_time_filter_is_checked
+    expect(page).to have_checked_field('Part time (18 to 24 months)')
+  end
+
+  def then_i_see_only_full_time_courses
+    expect(page).to have_content('Biology (S872)')
+    expect(page).to have_content('Computing (L364)')
+    expect(page).to have_no_content('Chemistry (K592)')
+  end
+
+  def and_the_full_time_filter_is_checked
+    expect(page).to have_checked_field('Full time (12 months)')
+  end
+
+  def then_i_see_all_courses_containing_all_study_types
+    expect(page).to have_content('Biology (S872)')
+    expect(page).to have_content('Computing (L364)')
+    expect(page).to have_content('Chemistry (K592)')
   end
 
   def then_i_see_only_courses_with_special_education_needs

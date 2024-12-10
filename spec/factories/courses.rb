@@ -258,6 +258,14 @@ FactoryBot.define do
       site_statuses { [build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
     end
 
+    trait :with_part_time_sites do
+      site_statuses { [build(:site_status, :findable, vac_status: :part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
+    end
+
+    trait :with_full_time_or_part_time_sites do
+      site_statuses { [build(:site_status, :findable, vac_status: :both_full_time_and_part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: '1 Foo Street', postcode: 'BN1 1AA'))] }
+    end
+
     trait :with_2_full_time_sites do
       site_statuses do
         [

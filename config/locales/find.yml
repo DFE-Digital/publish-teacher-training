@@ -306,6 +306,7 @@ en:
     legend:
       courses_query_filters:
         can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
+        study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
         special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
     label:
@@ -313,6 +314,9 @@ en:
         can_sponsor_visa: Only show courses with visa sponsorship
         special_education_needs: Only show courses with a SEND specialism
         applications_open: Only show courses open for applications
+        study_type_options:
+          full_time: Full time (12 months)
+          part_time: Part time (18 to 24 months)
   activemodel:
     errors:
       models:
