@@ -494,12 +494,14 @@ class CourseDecorator < ApplicationDecorator
 
   def course_fee_content_html
     fee_uk_html = safe_join([
-                              bold_tag(number_to_currency(fee_uk_eu)),
-                              formatted_uk_eu_fee_label
+                              formatted_uk_eu_fee_label,
+                              " ",
+                              bold_tag(number_to_currency(fee_uk_eu))
                             ])
     fee_int_html = safe_join([
-                               bold_tag(number_to_currency(fee_international)),
-                               formatted_international_fee_label
+                              formatted_international_fee_label,
+                              " ",
+                              bold_tag(number_to_currency(fee_international))
                              ])
     safe_join(
       [
