@@ -304,11 +304,15 @@ en:
           other: '%{count} miles'
   helpers:
     legend:
-      course_search_form:
+      courses_query_filters:
         can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
+        special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
+        applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
     label:
-      course_search_form:
+      courses_query_filters:
         can_sponsor_visa: Only show courses with visa sponsorship
+        special_education_needs: Only show courses with a SEND specialism
+        applications_open: Only show courses open for applications
   activemodel:
     errors:
       models:

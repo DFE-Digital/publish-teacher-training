@@ -9,8 +9,16 @@
         <div class="app-filter__content">
           <%= form.submit "Apply filters", name: nil, class: "govuk-button", data: { qa: "apply-filters" } %>
 
-          <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.course_search_form.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", data: { qa: "filters__visa" }, hidden: false do %>
-            <%= form.govuk_check_box :can_sponsor_visa, "true", name: "can_sponsor_visa", label: { text: t("helpers.label.course_search_form.can_sponsor_visa"), size: "s" }, checked: params[:can_sponsor_visa].present? %>
+          <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false do %>
+            <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.can_sponsor_visa"), size: "s" }, checked: params[:can_sponsor_visa].present? %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false do %>
+            <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" }, checked: params[:send_courses].present? %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false do %>
+            <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.applications_open"), size: "s" }, checked: params[:applications_open].present? %>
           <% end %>
         </div>
       </div>

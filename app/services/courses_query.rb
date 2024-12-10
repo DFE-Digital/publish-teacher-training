@@ -24,6 +24,8 @@ class CoursesQuery
 
   def call
     @scope = visa_sponsorship_scope
+    @scope = applications_open_scope
+    @scope = special_education_needs_scope
     @scope = @scope.distinct
 
     log_query_info
@@ -45,6 +47,22 @@ class CoursesQuery
           can_sponsor_skilled_worker_visa: true
         )
       )
+  end
+
+  def applications_open_scope
+    return @scope if params[:applications_open].blank?
+
+    @applied_scopes[:applications_open] = params[:applications_open]
+
+    @scope.where(application_status: Course.application_statuses[:open])
+  end
+
+  def special_education_needs_scope
+    return @scope if params[:send_courses].blank?
+
+    @applied_scopes[:send_courses] = params[:send_courses]
+
+    @scope.where(is_send: true)
   end
 
   private
