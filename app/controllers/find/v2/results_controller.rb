@@ -8,6 +8,7 @@ module Find
       def index
         @search_courses_form = SearchCoursesForm.new(search_courses_params)
         @courses = CoursesQuery.call(params: @search_courses_form.search_params)
+        @courses_count = @courses.count
 
         @pagy, @results = pagy(@courses)
       end

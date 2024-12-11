@@ -16,6 +16,7 @@ feature 'V2 results - enabled' do
     and_i_filter_by_courses_that_sponsor_visa
     then_i_see_only_courses_that_sponsor_visa
     and_the_visa_sponsorship_filter_is_checked
+    and_i_see_that_there_are_three_courses_are_found
   end
 
   scenario 'when I filter by study type' do
@@ -49,6 +50,11 @@ feature 'V2 results - enabled' do
     and_i_filter_by_courses_with_special_education_needs
     then_i_see_only_courses_with_special_education_needs
     and_the_special_education_needs_filter_is_checked
+  end
+
+  scenario 'when no results' do
+    when_i_visit_the_find_results_page
+    then_i_see_no_courses_found
   end
 
   def given_i_am_authenticated
@@ -193,5 +199,15 @@ feature 'V2 results - enabled' do
 
   def and_i_apply_the_filters
     click_link_or_button 'Apply filters'
+  end
+
+  def and_i_see_that_there_are_three_courses_are_found
+    expect(page).to have_content('3 courses found')
+    expect(page).to have_title('3 courses found')
+  end
+
+  def then_i_see_no_courses_found
+    expect(page).to have_content('No courses found')
+    expect(page).to have_title('No courses found')
   end
 end

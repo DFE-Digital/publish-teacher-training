@@ -1,3 +1,9 @@
+<%= content_for :page_title, Find::ResultsSummary::View.new(courses_count: @courses_count).title %>
+
+<h1 class="govuk-heading-xl" data-qa="heading">
+  <%= render Find::ResultsSummary::View.new(courses_count: @courses_count) %>
+</h1>
+
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
     <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
