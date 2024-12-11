@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class CoursesController < SupportController
+  class CoursesController < ApplicationController
     def index
       @pagy, @courses = pagy(provider.courses.order(:name))
       render layout: 'provider_record'

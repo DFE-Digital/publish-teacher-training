@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class ProvidersController < SupportController
+  class ProvidersController < ApplicationController
     def index
       [ProviderForm.new(current_user, recruitment_cycle:), ProviderContactForm.new(current_user)].each(&:clear_stash) if flash.key?(:success)
       @pagy, @providers = pagy(filtered_providers)

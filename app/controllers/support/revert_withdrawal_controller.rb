@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class RevertWithdrawalController < SupportController
+  class RevertWithdrawalController < ApplicationController
     def edit
       provider
       course

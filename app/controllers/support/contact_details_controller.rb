@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class ContactDetailsController < SupportController
+  class ContactDetailsController < ApplicationController
     def edit
       @provider_contact_form = ContactDetailsForm.new(provider)
     end

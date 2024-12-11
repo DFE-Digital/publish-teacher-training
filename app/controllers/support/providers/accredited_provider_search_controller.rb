@@ -2,7 +2,7 @@
 
 module Support
   module Providers
-    class AccreditedProviderSearchController < SupportController
+    class AccreditedProviderSearchController < ApplicationController
       helper_method :query, :search_result_title_component
 
       def new

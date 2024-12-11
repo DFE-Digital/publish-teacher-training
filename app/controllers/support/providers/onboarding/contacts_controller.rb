@@ -3,7 +3,7 @@
 module Support
   module Providers
     module Onboarding
-      class ContactsController < SupportController
+      class ContactsController < ApplicationController
         include GotoConfirmationHelper
 
         def new

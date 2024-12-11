@@ -3,7 +3,7 @@
 module Support
   module Providers
     module Onboarding
-      class ChecksController < SupportController
+      class ChecksController < ApplicationController
         def show
           provider_form
           provider_contact_form

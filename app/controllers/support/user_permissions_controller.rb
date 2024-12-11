@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class UserPermissionsController < SupportController
+  class UserPermissionsController < ApplicationController
     def destroy
       user.remove_access_to(provider)
 

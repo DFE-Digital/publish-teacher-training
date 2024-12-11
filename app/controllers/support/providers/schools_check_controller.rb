@@ -2,7 +2,7 @@
 
 module Support
   module Providers
-    class SchoolsCheckController < SupportController
+    class SchoolsCheckController < ApplicationController
       before_action :new_form
 
       def show; end

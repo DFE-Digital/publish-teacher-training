@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class SupportController < ApplicationController
+  class ApplicationController < ::ApplicationController
     layout 'support'
     before_action :check_user_is_admin
 

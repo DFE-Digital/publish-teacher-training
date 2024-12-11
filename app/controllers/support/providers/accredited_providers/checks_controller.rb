@@ -3,7 +3,7 @@
 module Support
   module Providers
     module AccreditedProviders
-      class ChecksController < SupportController
+      class ChecksController < ApplicationController
         include ClearStashable
 
         def show

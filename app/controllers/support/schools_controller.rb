@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class SchoolsController < SupportController
+  class SchoolsController < ApplicationController
     before_action :build_site, only: %i[index new create]
     before_action :new_form, only: %i[index new]
     before_action :reset_csv_schools_forms, only: %i[index]

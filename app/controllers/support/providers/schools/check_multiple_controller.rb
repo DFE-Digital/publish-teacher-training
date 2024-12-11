@@ -3,7 +3,7 @@
 module Support
   module Providers
     module Schools
-      class CheckMultipleController < SupportController
+      class CheckMultipleController < ApplicationController
         include SuccessMessage
 
         def show

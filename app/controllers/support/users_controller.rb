@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class UsersController < SupportController
+  class UsersController < ApplicationController
     def index
       recruitment_cycle
       @pagy, @users = pagy(filtered_users)
