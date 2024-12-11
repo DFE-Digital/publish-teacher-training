@@ -3,7 +3,7 @@
 module Support
   module Providers
     module Schools
-      class MultipleController < SupportController
+      class MultipleController < ApplicationController
         def new
           @raw_csv_schools_form = RawCSVSchoolsForm.new(provider)
         end

@@ -3,7 +3,7 @@
 module Support
   module Providers
     module Schools
-      class NewMultipleController < SupportController
+      class NewMultipleController < ApplicationController
         def show
           site
           max

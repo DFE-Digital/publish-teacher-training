@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Support
-  class DataExportsController < SupportController
+  class DataExportsController < ApplicationController
     def index
       @data_exports = DataExports::DataExport.all
     end

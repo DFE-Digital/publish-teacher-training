@@ -2,7 +2,7 @@
 
 module Support
   module Providers
-    class AccreditedProvidersController < SupportController
+    class AccreditedProvidersController < ApplicationController
       include ClearStashable
 
       helper_method :accredited_provider_id

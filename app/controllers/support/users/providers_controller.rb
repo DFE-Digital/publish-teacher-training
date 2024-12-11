@@ -2,7 +2,7 @@
 
 module Support
   module Users
-    class ProvidersController < SupportController
+    class ProvidersController < ApplicationController
       def show
         user
         @pagy, @providers = pagy(providers.order(:provider_name))

@@ -2,7 +2,7 @@
 
 module Support
   module Providers
-    class CopyCoursesController < SupportController
+    class CopyCoursesController < ApplicationController
       before_action :recruitment_cycle
 
       def new

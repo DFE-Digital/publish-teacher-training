@@ -2,7 +2,7 @@
 
 module Support
   module Providers
-    class OnboardingsController < SupportController
+    class OnboardingsController < ApplicationController
       include GotoConfirmationHelper
 
       def new
