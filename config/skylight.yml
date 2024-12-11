@@ -7,3 +7,5 @@ ignored_endpoints:
   - HeartbeatController#sha
 deploy:
   git_sha: <%= ENV["COMMIT_SHA"] %>
+review:
+  env: <%= ENV["APP_NAME_SUFFIX"] %>
