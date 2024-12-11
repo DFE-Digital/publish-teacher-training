@@ -302,6 +302,11 @@ en:
         label:
           one: '%{count} mile'
           other: '%{count} miles'
+    results_summary:
+      title:
+        zero: "No courses found"
+        one: "1 course found"
+        other: "%{formatted_count} courses found"
   helpers:
     legend:
       courses_query_filters:
