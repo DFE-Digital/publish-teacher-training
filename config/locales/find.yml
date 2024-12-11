@@ -239,7 +239,7 @@ en:
           age_range: Age group
           date_can_apply: Date you can apply from
           start_date: Start date
-          qualification: Qualification
+          qualification: Qualification awarded
           provider: Provider
           accredited_by: Accredited by
           for_uk_citizens: Fee - UK citizens
@@ -315,7 +315,7 @@ en:
         nearest_location: Nearest location
         fee_or_salary: Fee or salary
         course_fee: Fee or salary
-        qualification: Qualification
+        qualification: Qualification awarded
         degree_required: Degree required
         visa_sponsorship: Visa sponsorship
         course_title_html: <a class="govuk-link govuk-!-font-size-24" data-qa="course__link" href=%{course_path}><span class="app-search-result__provider-name" data-qa="course__provider_name">%{provider_name}</span><span class="app-search-result__course-name" data-qa="course__name">%{course_name}</span></a>
