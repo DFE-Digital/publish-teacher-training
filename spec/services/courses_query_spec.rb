@@ -85,6 +85,17 @@ RSpec.describe CoursesQuery do
           )
         end
       end
+
+      context 'when pass invalid parameter' do
+        let(:params) { { study_types: 'something' } }
+
+        it 'returns full time and part time courses' do
+          expect(results).to match_collection(
+            [full_time_course, part_time_course, full_time_or_part_time_course],
+            attribute_names: %w[study_mode]
+          )
+        end
+      end
     end
 
     context 'when filter for applications open' do
