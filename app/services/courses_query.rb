@@ -51,7 +51,7 @@ class CoursesQuery
   end
 
   def study_modes_scope
-    study_modes = (params[:study_types].presence || []).compact_blank
+    study_modes = Array(params[:study_types]).compact_blank
 
     return @scope if study_modes.blank?
 
