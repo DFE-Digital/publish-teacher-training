@@ -271,8 +271,16 @@ namespace :publish, as: :publish do
           put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
 
-        resources :training_providers, path: '/training-providers', only: [:index], param: :code do
-          resources :courses, only: [:index], controller: 'training_providers/courses'
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :training_providers, path: '/training-providers', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'training_providers/courses'
+          end
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resources :training_providers, path: '/training-providers', controller: 'v2/training_providers', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'v2/training_providers/courses'
+          end
         end
 
         resources :partnerships, param: :partner_provider_code
