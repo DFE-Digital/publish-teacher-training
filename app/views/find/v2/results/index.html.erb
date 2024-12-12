@@ -1,7 +1,7 @@
-<%= content_for :page_title, Find::ResultsSummary::View.new(courses_count: @courses_count).title %>
+<%= content_for :page_title, t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
 
-<h1 class="govuk-heading-xl" data-qa="heading">
-  <%= render Find::ResultsSummary::View.new(courses_count: @courses_count) %>
+<h1 class="govuk-heading-xl">
+  <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
 </h1>
 
 <div class="app-filter-layout">
