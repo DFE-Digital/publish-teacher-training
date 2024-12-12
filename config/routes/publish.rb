@@ -257,18 +257,36 @@ namespace :publish, as: :publish do
           resources :courses, module: :training_providers, only: [:index]
         end
 
-        resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
-          member do
-            get :delete
-            delete :delete, to: 'accredited_providers#destroy'
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_providers#destroy'
+            end
+
+            get '/search', on: :collection, to: 'accredited_provider_search#new'
+            post '/search', on: :collection, to: 'accredited_provider_search#create'
+            put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+            get '/check', on: :collection, to: 'accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'accredited_providers/checks#update'
           end
+        end
 
-          get '/search', on: :collection, to: 'accredited_provider_search#new'
-          post '/search', on: :collection, to: 'accredited_provider_search#create'
-          put '/search', on: :collection, to: 'accredited_provider_search#update'
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resources :accredited_providers, param: :accredited_provider_code, except: %i[show], path: 'accredited-providers', controller: 'v2/accredited_providers' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_providers#destroy'
+            end
 
-          get '/check', on: :collection, to: 'accredited_providers/checks#show'
-          put '/check', on: :collection, to: 'accredited_providers/checks#update'
+            get '/search', on: :collection, to: 'accredited_provider_search#new'
+            post '/search', on: :collection, to: 'accredited_provider_search#create'
+            put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+            get '/check', on: :collection, to: 'accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'accredited_providers/checks#update'
+          end
         end
 
         constraints(::Constraints::PartnershipFeature.new(:off)) do
