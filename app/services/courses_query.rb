@@ -51,10 +51,9 @@ class CoursesQuery
   end
 
   def study_modes_scope
-    study_modes = Array(params[:study_types]).compact_blank
+    return @scope if params[:study_types].blank?
 
-    return @scope if study_modes.blank?
-
+    study_modes = params[:study_types]
     @applied_scopes[:study_modes] = study_modes
 
     case study_modes
