@@ -125,6 +125,7 @@ namespace :publish, as: :publish do
         resource :apprenticeship, on: :member, only: %i[new], controller: 'courses/apprenticeship' do
           get 'continue'
         end
+
         resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
           get 'continue'
           get 'search_new'
@@ -268,6 +269,10 @@ namespace :publish, as: :publish do
 
           get '/check', on: :collection, to: 'accredited_providers/checks#show'
           put '/check', on: :collection, to: 'accredited_providers/checks#update'
+        end
+
+        resources :training_providers, path: '/training-providers', only: [:index], param: :code do
+          resources :courses, only: [:index], controller: 'training_providers/courses'
         end
 
         resources :partnerships, param: :partner_provider_code
