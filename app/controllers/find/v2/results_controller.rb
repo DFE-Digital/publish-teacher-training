@@ -6,9 +6,21 @@ module Find
       before_action :enforce_basic_auth
 
       def index
-        @courses = CoursesQuery.call(params:)
+        @search_courses_form = SearchCoursesForm.new(search_courses_params)
+        @courses = CoursesQuery.call(params: @search_courses_form.search_params)
 
         @pagy, @results = pagy(@courses)
+      end
+
+      private
+
+      def search_courses_params
+        params.permit(
+          :can_sponsor_visa,
+          :send_courses,
+          :applications_open,
+          study_types: []
+        )
       end
 
       def enforce_basic_auth
