@@ -648,7 +648,25 @@ en:
         new:
           title: *new_search
           cannot_find: *cannot_find
-      accredited_providers:
+      v2:
+        accredited_providers:
+          new:
+            title: About the accredited provider
+            hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+            caption: &add_accredited_provider Add accredited provider
+          edit:
+            title: About the accredited provider
+            hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+            updated: About the accredited provider updated
+          delete:
+            title: Are you sure you want to remove this accredited provider?
+            remove: Remove accredited provider
+            updated: Accredited provider removed
+          checks:
+            show:
+              title:  *add_accredited_provider
+              caption: *add_accredited_provider
+              add: *add_accredited_provider
         new:
           title: About the accredited provider
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
@@ -870,6 +888,9 @@ en:
               blank: "^Enter a course length"
         provider_partnership:
           attributes:
+            description:
+              blank: Enter details about the accredited provider
+              too_long: Description about the accredited provider must be 100 words or fewer
             accredited_provider:
               format: "%{message}"
               taken: This partnership already exists

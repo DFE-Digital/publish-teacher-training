@@ -20,6 +20,33 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_should_see_the_accredited_provider_name_displayed
   end
 
+  scenario 'i can create a new provider partnership' do
+    given_there_are_accredited_providers_in_the_database_with_users
+    when_i_click_add_accredited_provider
+    and_i_search_with_an_invalid_query
+    then_i_should_see_an_error_message
+
+    when_i_search_for_an_accredited_provider_with_a_valid_query
+    then_i_see_the_provider_i_searched_for
+
+    when_i_continue_without_selecting_an_accredited_provider
+    and_i_should_see_an_error_message('Select an accredited provider')
+    then_i_should_still_see_the_provider_i_searched_for
+
+    when_i_select_the_provider
+    and_i_continue_without_entering_a_description
+    then_i_should_see_an_error_message('Enter details about the accredited provider')
+
+    when_i_input_some_information
+    then_i_should_see_the_information_i_added
+
+    when_i_confirm_the_changes
+    then_i_should_be_taken_to_the_index_page
+    and_the_accredited_provider_is_saved_to_the_database
+    and_i_should_see_a_success_message
+    and_i_should_see_the_accredited_providers
+  end
+
   private
 
   def and_i_click_remove_ap
@@ -54,8 +81,8 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def and_the_accredited_provider_is_saved_to_the_database
     @provider.reload
-    expect(@provider.accredited_providers.count).to eq(1)
-    expect(@provider.accredited_providers.first.id).to eq(@accredited_provider.id)
+    expect(@provider.accredited_partners.count).to eq(1)
+    expect(@provider.accredited_partners.first.id).to eq(@accredited_provider.id)
   end
 
   def then_i_should_be_taken_to_the_accredited_provider_description_page
