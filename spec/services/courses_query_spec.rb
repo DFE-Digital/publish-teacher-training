@@ -54,7 +54,7 @@ RSpec.describe CoursesQuery do
       end
 
       context 'when filter by full time only' do
-        let(:params) { { study_types: ['', 'full_time'] } }
+        let(:params) { { study_types: ['full_time'] } }
 
         it 'returns full time courses only' do
           expect(results).to match_collection(
@@ -65,7 +65,7 @@ RSpec.describe CoursesQuery do
       end
 
       context 'when filter by part time only' do
-        let(:params) { { study_types: ['', 'part_time'] } }
+        let(:params) { { study_types: ['part_time'] } }
 
         it 'returns part time courses only' do
           expect(results).to match_collection(
@@ -76,7 +76,7 @@ RSpec.describe CoursesQuery do
       end
 
       context 'when filter by full time and part time' do
-        let(:params) { { study_types: ['', 'full_time', 'part_time'] } }
+        let(:params) { { study_types: %w[full_time part_time] } }
 
         it 'returns full time and part time courses' do
           expect(results).to match_collection(
