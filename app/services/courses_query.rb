@@ -53,10 +53,9 @@ class CoursesQuery
   def study_modes_scope
     return @scope if params[:study_types].blank?
 
-    study_modes = params[:study_types]
-    @applied_scopes[:study_modes] = study_modes
+    @applied_scopes[:study_modes] = params[:study_types]
 
-    case study_modes
+    case params[:study_types]
     when ['full_time']
       @scope.where(study_mode: [Course.study_modes[:full_time], Course.study_modes[:full_time_or_part_time]])
     when ['part_time']
