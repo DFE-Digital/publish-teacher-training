@@ -20,6 +20,16 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     then_i_should_see_the_accredited_provider_name_displayed
   end
 
+  scenario 'i can edit accredited providers on the index page' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_change
+
+    when_i_input_some_different_information
+    then_i_should_see_the_different_information
+    and_i_see_the_success_message
+  end
+
   scenario 'i can create a new provider partnership' do
     given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
