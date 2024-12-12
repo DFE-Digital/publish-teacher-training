@@ -284,8 +284,8 @@ namespace :publish, as: :publish do
             post '/search', on: :collection, to: 'accredited_provider_search#create'
             put '/search', on: :collection, to: 'accredited_provider_search#update'
 
-            get '/check', on: :collection, to: 'accredited_providers/checks#show'
-            put '/check', on: :collection, to: 'accredited_providers/checks#update'
+            get '/check', on: :collection, to: 'v2/accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'v2/accredited_providers/checks#update'
           end
         end
 
