@@ -2,6 +2,7 @@
 
 module Find
   class ResultsController < ApplicationController
+    before_action :set_sentry_context
     before_action :render_feedback_component
 
     def index
@@ -22,6 +23,13 @@ module Find
 
     def track_search_results(number_of_results:, course_codes:)
       Find::ResultsTracking.new(request:).track_search_results(number_of_results:, course_codes:)
+    end
+
+    def set_sentry_context
+      Sentry.set_context('Request Headers', {
+                           Referer: request.headers['Referer']
+                         })
+      Sentry.set_context('Query Parameters', request.query_parameters)
     end
   end
 end
