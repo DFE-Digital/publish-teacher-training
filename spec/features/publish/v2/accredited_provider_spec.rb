@@ -30,6 +30,21 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     and_i_see_the_success_message
   end
 
+  scenario 'i cannot delete accredited providers if they are attached to a course' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_remove
+    then_i_should_see_the_cannot_remove_ap_text
+  end
+
+  scenario 'i can delete accredited providers if they are not attached to a course' do
+    and_i_create_a_new_accredited_provider
+    and_i_click_remove
+    and_i_click_remove_ap
+    and_i_see_the_remove_success_message
+    then_i_should_be_taken_to_the_index_page
+  end
+
   scenario 'i can create a new provider partnership' do
     given_there_are_accredited_providers_in_the_database_with_users
     when_i_click_add_accredited_provider
@@ -55,6 +70,21 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
     and_the_accredited_provider_is_saved_to_the_database
     and_i_should_see_a_success_message
     and_i_should_see_the_accredited_providers
+  end
+
+  scenario 'back links behaviour' do
+    given_i_am_on_the_confirm_page
+    when_i_click_the_change_link_for('accredited provider name')
+    then_i_should_be_taken_to_the_accredited_provider_search_page
+
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
+
+    when_i_click_the_change_link_for('accredited provider description')
+    then_i_should_be_taken_to_the_accredited_provider_description_page
+
+    when_i_click_the_back_link
+    then_i_should_be_taken_back_to_the_confirm_page
   end
 
   private

@@ -40,12 +40,27 @@ module Publish
           end
         end
 
+        def delete
+          @provider_partnership = provider.accredited_partnerships.find_by(accredited_provider: partner)
+          cannot_delete
+        end
+
         def destroy
-          @partnership = provider.training_partnerships.find_by(training_provider_id: partner.id)
-          redirect_to publish_provider_recruitment_cycle_partnerships_path(@provider, recruitment_cycle.year)
+          @partnership = provider.accredited_partnerships.find_by(accredited_provider_id: partner.id)
+
+          if @partnership.destroy
+            flash[:success] = t('publish.providers.v2.accredited_providers.delete.updated')
+            redirect_to publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, recruitment_cycle.year)
+          else
+            render :delete
+          end
         end
 
         private
+
+        def cannot_delete
+          @cannot_delete ||= provider.courses.exists?(accredited_provider_code: params[:accredited_provider_code])
+        end
 
         def provider
           @provider = recruitment_cycle.providers.find_by(provider_code: params[:provider_code])
