@@ -1,7 +1,7 @@
-<% content_for :page_title, title_with_error_prefix("About the accredited provider - Add accredited provider - #{@provider.name_and_code}", @provider_partnership.errors.present?) %>
+<% content_for :page_title, title_with_error_prefix("About the accredited provider - Add accredited provider - #{@provider.name_and_code}", @provider_partnership_form.errors.present?) %>
 
  <%= form_with(
-        model: @provider_partnership,
+        model: @provider_partnership_form,
         url: publish_provider_recruitment_cycle_accredited_providers_path,
         method: :post
       ) do |f| %>
