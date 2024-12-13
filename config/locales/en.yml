@@ -685,23 +685,6 @@ en:
             title:  *add_accredited_provider
             caption: *add_accredited_provider
             add: *add_accredited_provider
-        new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
-        edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
-        delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
-        checks:
-          show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
