@@ -277,7 +277,7 @@ namespace :publish, as: :publish do
           resources :accredited_providers, param: :accredited_provider_code, except: %i[show], path: 'accredited-providers', controller: 'v2/accredited_providers' do
             member do
               get :delete
-              delete :delete, to: 'accredited_providers#destroy'
+              delete :delete, to: 'v2/accredited_providers#destroy'
             end
 
             get '/search', on: :collection, to: 'accredited_provider_search#new'
