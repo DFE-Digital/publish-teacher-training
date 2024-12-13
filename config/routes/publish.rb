@@ -308,8 +308,6 @@ namespace :publish, as: :publish do
           end
         end
 
-        # resources :partnerships, param: :partner_provider_code
-
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
           member do

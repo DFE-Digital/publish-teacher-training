@@ -15,4 +15,5 @@ authentication:
   mode: persona
 
 features:
+  provider_partnerships: true
   api_summary_content_change: true
