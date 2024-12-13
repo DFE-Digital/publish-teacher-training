@@ -257,11 +257,12 @@ namespace :publish, as: :publish do
           resources :courses, module: :training_providers, only: [:index]
         end
 
+        # rubocop:disable Style/RedundantConstantBase
         constraints(::Constraints::PartnershipFeature.new(:on)) do
           get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/provider-partnerships')
         end
 
-        constraints(Constraints::PartnershipFeature.new(:off)) do
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
           resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
             member do
               get :delete
@@ -277,7 +278,7 @@ namespace :publish, as: :publish do
           end
         end
 
-        constraints(Constraints::PartnershipFeature.new(:on)) do
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
           get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/provider-partnerships')
           resources :provider_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'provider_partnerships' do
             member do
@@ -296,17 +297,18 @@ namespace :publish, as: :publish do
           put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
 
-        constraints(Constraints::PartnershipFeature.new(:off)) do
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
           resources :training_providers, path: '/training-providers', only: [:index], param: :code do
             resources :courses, only: [:index], controller: 'training_providers/courses'
           end
         end
 
-        constraints(Constraints::PartnershipFeature.new(:on)) do
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
           resources :training_providers, path: '/training-providers', controller: 'v2/training_providers', only: [:index], param: :code do
             resources :courses, only: [:index], controller: 'v2/training_providers/courses'
           end
         end
+        # rubocop:enable Style/RedundantConstantBase
 
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
