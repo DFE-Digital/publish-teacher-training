@@ -21,7 +21,7 @@ class ProviderPartnershipForm < Form
   private
 
   def assign_attributes_to_model
-    if model
+    if model.persisted?
       model.description = description
     else
       model.accredited_partnerships.build(accredited_provider_id: accredited_provider_id, description: description)

@@ -257,6 +257,10 @@ namespace :publish, as: :publish do
           resources :courses, module: :training_providers, only: [:index]
         end
 
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/provider-partnerships')
+        end
+
         constraints(::Constraints::PartnershipFeature.new(:off)) do
           resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
             member do
@@ -274,19 +278,22 @@ namespace :publish, as: :publish do
         end
 
         constraints(::Constraints::PartnershipFeature.new(:on)) do
-          resources :accredited_providers, param: :accredited_provider_code, except: %i[show], path: 'accredited-providers', controller: 'v2/accredited_providers' do
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/provider-partnerships')
+          resources :provider_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'provider_partnerships' do
             member do
               get :delete
-              delete :delete, to: 'v2/accredited_providers#destroy'
+              delete :delete, to: 'provider_partnerships#destroy'
             end
 
-            get '/search', on: :collection, to: 'accredited_provider_search#new'
-            post '/search', on: :collection, to: 'accredited_provider_search#create'
-            put '/search', on: :collection, to: 'accredited_provider_search#update'
-
-            get '/check', on: :collection, to: 'v2/accredited_providers/checks#show'
-            put '/check', on: :collection, to: 'v2/accredited_providers/checks#update'
+            get '/check', on: :collection, to: 'provider_partnerships/checks#show'
+            put '/check', on: :collection, to: 'provider_partnerships/checks#update'
           end
+        end
+
+        scope ':recruitment_cycle_year/accredited-providers', as: :accredited_providers do
+          get '/search', on: :collection, to: 'accredited_provider_search#new'
+          post '/search', on: :collection, to: 'accredited_provider_search#create'
+          put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
 
         constraints(::Constraints::PartnershipFeature.new(:off)) do
@@ -301,7 +308,7 @@ namespace :publish, as: :publish do
           end
         end
 
-        resources :partnerships, param: :partner_provider_code
+        # resources :partnerships, param: :partner_provider_code
 
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do
