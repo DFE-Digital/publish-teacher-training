@@ -6,11 +6,11 @@ module Publish
       module AccreditedProviders
         class ChecksController < PublishController
           def show
-            accredited_provider_form
+            provider_partnership_form
           end
 
           def update
-            @partnership = provider.accredited_partnerships.build(accredited_provider: accredited_provider_form.accredited_provider, description: accredited_provider_form.description)
+            @partnership = provider.accredited_partnerships.build(accredited_provider: provider_partnership_form.accredited_provider, description: provider_partnership_form.description)
 
             if @partnership.save
               notify_accredited_provider_users
@@ -23,8 +23,8 @@ module Publish
 
           private
 
-          def accredited_provider_form
-            @accredited_provider_form ||= AccreditedProviderForm.new(current_user, provider)
+          def provider_partnership_form
+            @provider_partnership_form ||= ProviderPartnershipForm.new(current_user, provider)
           end
 
           def notify_accredited_provider_users

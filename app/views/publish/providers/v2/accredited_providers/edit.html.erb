@@ -1,7 +1,7 @@
-<% content_for :page_title, title_with_error_prefix("About the accredited provider - #{@provider_partnership.accredited_provider.provider_name}", @accredited_provider_form.errors.present?) %>
+<% content_for :page_title, title_with_error_prefix("About the accredited provider - #{@provider_partnership_form.accredited_provider.provider_name}", @provider_partnership_form.errors.present?) %>
 
  <%= form_with(
-        model: @provider_partnership,
+        model: @provider_partnership_form,
         url: publish_provider_recruitment_cycle_accredited_provider_path,
         method: :put
       ) do |f| %>
@@ -19,12 +19,12 @@
           :description,
           label: { text: t(".title"), size: "l", tag: "h1" },
           hint: -> { render "hint", hint: t(".hint") },
-          caption: { text: @provider_partnership.accredited_provider.provider_name, size: "l" },
+          caption: { text: @provider_partnership_form.accredited_provider.provider_name, size: "l" },
           max_words: 100,
           rows: 10
         ) %>
 
-        <%= f.hidden_field :accredited_provider_id, value: @provider_partnership.accredited_provider.id %>
+        <%= f.hidden_field :accredited_provider_id, value: @provider_partnership_form.accredited_provider_id %>
 
         <%= f.govuk_submit "Update description" %>
 
