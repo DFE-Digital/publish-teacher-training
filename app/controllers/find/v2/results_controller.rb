@@ -20,7 +20,9 @@ module Find
           :can_sponsor_visa,
           :send_courses,
           :applications_open,
-          study_types: []
+          :further_education,
+          study_types: [],
+          qualifications: []
         )
       end
 

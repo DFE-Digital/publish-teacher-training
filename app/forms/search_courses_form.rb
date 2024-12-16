@@ -7,6 +7,8 @@ class SearchCoursesForm < ApplicationForm
   attribute :send_courses, :boolean
   attribute :applications_open, :boolean
   attribute :study_types
+  attribute :qualifications
+  attribute :further_education, :boolean
 
   def search_params
     attributes.symbolize_keys.compact

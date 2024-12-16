@@ -25,6 +25,8 @@ class CoursesQuery
   def call
     @scope = visa_sponsorship_scope
     @scope = study_modes_scope
+    @scope = qualifications_scope
+    @scope = further_education_scope
     @scope = applications_open_scope
     @scope = special_education_needs_scope
     @scope = @scope.distinct
@@ -63,6 +65,29 @@ class CoursesQuery
     else
       @scope
     end
+  end
+
+  def qualifications_scope
+    return @scope if params[:qualifications].blank?
+
+    @applied_scopes[:qualifications_scope] = params[:qualifications]
+
+    case params[:qualifications]
+    when ['qts']
+      @scope.where(qualification: [Course.qualifications[:qts]])
+    when ['qts_with_pgce_or_pgde'], ['qts_with_pgce']
+      @scope.where(qualification: [Course.qualifications[:pgce_with_qts], Course.qualifications[:pgde_with_qts]])
+    else
+      @scope
+    end
+  end
+
+  def further_education_scope
+    return @scope if params[:further_education].blank?
+
+    @applied_scopes[:further_education] = params[:further_education]
+
+    @scope.where(level: Course.levels[:further_education])
   end
 
   def applications_open_scope
