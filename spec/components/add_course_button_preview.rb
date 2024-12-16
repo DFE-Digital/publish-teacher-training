@@ -35,7 +35,11 @@ class AddCourseButtonPreview < ViewComponent::Preview
 
   class FakeProvider
     include ActiveModel::Model
-    attr_accessor(:study_sites, :accredited_providers, :sites)
+    attr_accessor(:study_sites, :accredited_providers, :accredited_partners, :sites)
+
+    def accredited_partners
+      []
+    end
 
     def provider_code
       'DFE'

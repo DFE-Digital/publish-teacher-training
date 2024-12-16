@@ -3,22 +3,53 @@
 require 'rails_helper'
 
 RSpec.feature 'view components' do
-  all_links = (ViewComponent::Preview.all.map do |component|
-    component.examples.map do |example|
-      "#{Rails.application.config.view_component.preview_route}/#{component.preview_name}/#{example}"
+  context 'accredited_enrichments' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     end
-  end).flatten
 
-  shared_examples 'navigate to' do |link|
-    scenario "navigate to #{link}" do
-      visit link
+    all_links = (ViewComponent::Preview.all.map do |component|
+      component.examples.map do |example|
+        "#{Rails.application.config.view_component.preview_route}/#{component.preview_name}/#{example}"
+      end
+    end).flatten
 
-      expect(page.status_code).to eq(200)
-      expect(page).to have_css('#main-content')
+    shared_examples 'navigate to' do |link|
+      scenario "navigate to #{link}" do
+        visit link
+
+        expect(page.status_code).to eq(200)
+        expect(page).to have_css('#main-content')
+      end
+    end
+
+    all_links.each do |link|
+      include_examples 'navigate to', link
     end
   end
 
-  all_links.each do |link|
-    include_examples 'navigate to', link
+  context 'accredited_partnerships' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    end
+
+    all_links = (ViewComponent::Preview.all.map do |component|
+      component.examples.map do |example|
+        "#{Rails.application.config.view_component.preview_route}/#{component.preview_name}/#{example}"
+      end
+    end).flatten
+
+    shared_examples 'navigate to' do |link|
+      scenario "navigate to #{link}" do
+        visit link
+
+        expect(page.status_code).to eq(200)
+        expect(page).to have_css('#main-content')
+      end
+    end
+
+    all_links.each do |link|
+      include_examples 'navigate to', link
+    end
   end
 end
