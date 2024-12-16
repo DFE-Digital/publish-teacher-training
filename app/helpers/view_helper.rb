@@ -165,7 +165,7 @@ module ViewHelper
 
   def x_accrediting_provider_url
     if preview?(params)
-      accredited_by_publish_provider_recruitment_cycle_course_path(
+      ratified_by_publish_provider_recruitment_cycle_course_path(
         course.provider_code,
         course.recruitment_cycle_year,
         course.course_code
