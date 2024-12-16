@@ -9,7 +9,7 @@ module Publish
 
       def new
         provider_partnership = provider.accredited_partnerships.build
-        @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: params[:accredited_provider_id])
+        @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: { accredited_provider_id: params[:accredited_provider_id] })
       end
 
       def edit
