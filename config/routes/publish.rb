@@ -80,11 +80,6 @@ namespace :publish, as: :publish do
       get '/about', on: :member, to: 'providers#about'
       put '/about', on: :member, to: 'providers#update'
       get '/details', on: :member, to: 'providers#details'
-      get '/training-providers-courses', on: :member, to: 'training_providers/course_exports#index', as: 'download_training_providers_courses'
-
-      resources :training_providers, path: '/training-providers', only: [:index], param: :code do
-        resources :courses, only: [:index], controller: 'training_providers/courses'
-      end
 
       resource :courses, only: %i[create] do
         resource :outcome, on: :member, only: %i[new], controller: 'courses/outcome' do
@@ -256,6 +251,11 @@ namespace :publish, as: :publish do
       end
 
       scope module: :providers do
+        get '/training-providers-courses', on: :member, to: 'training_providers/course_exports#index', as: 'download_training_providers_courses'
+        resources :training_providers, path: '/training-providers', only: [:index], param: :code do
+          resources :courses, module: :training_providers, only: [:index]
+        end
+
         resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
           member do
             get :delete
