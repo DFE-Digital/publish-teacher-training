@@ -29,6 +29,7 @@ class CoursesQuery
     @scope = further_education_scope
     @scope = applications_open_scope
     @scope = special_education_needs_scope
+    @scope = funding_scope
     @scope = @scope.distinct
 
     log_query_info
@@ -104,6 +105,14 @@ class CoursesQuery
     @applied_scopes[:send_courses] = params[:send_courses]
 
     @scope.where(is_send: true)
+  end
+
+  def funding_scope
+    return @scope if params[:funding].blank?
+
+    @applied_scopes[:funding] = params[:funding]
+
+    @scope.where(funding: params[:funding])
   end
 
   private

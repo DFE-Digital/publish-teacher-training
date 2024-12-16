@@ -196,5 +196,72 @@ RSpec.describe CoursesQuery do
         )
       end
     end
+
+    context 'when filter by funding' do
+      let!(:fee_course) do
+        create(:course, :with_full_time_sites, funding: 'fee')
+      end
+      let!(:salaried_course) do
+        create(:course, :with_full_time_sites, funding: 'salary')
+      end
+      let!(:apprenticeship_course) do
+        create(:course, :with_full_time_sites, funding: 'apprenticeship')
+      end
+
+      context 'when filter by fee' do
+        let(:params) { { funding: ['fee'] } }
+
+        it 'returns courses with fees only' do
+          expect(results).to match_collection(
+            [fee_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+
+      context 'when filter by salary' do
+        let(:params) { { funding: ['salary'] } }
+
+        it 'returns courses with salary' do
+          expect(results).to match_collection(
+            [salaried_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+
+      context 'when filter by apprenticeship' do
+        let(:params) { { funding: ['apprenticeship'] } }
+
+        it 'returns courses with apprenticeship' do
+          expect(results).to match_collection(
+            [apprenticeship_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+
+      context 'when filter by two funding types' do
+        let(:params) { { funding: %w[fee salary] } }
+
+        it 'returns courses with the expected funding types' do
+          expect(results).to match_collection(
+            [fee_course, salaried_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+
+      context 'when filter by all funding types' do
+        let(:params) { { funding: %w[fee salary apprenticeship] } }
+
+        it 'returns all courses' do
+          expect(results).to match_collection(
+            [fee_course, salaried_course, apprenticeship_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+    end
   end
 end

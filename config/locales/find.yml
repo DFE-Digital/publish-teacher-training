@@ -317,6 +317,7 @@ en:
         qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>
         further_education_html: Further education<span class="govuk-visually-hidden"> filter</span>
         special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
+        funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
     hint:
       courses_query_filters:
@@ -333,6 +334,10 @@ en:
           qts: QTS only
           qts_with_pgce_or_pgde: QTS with PGCE or PGDE
         further_education: Only show further education courses
+        funding_options:
+          fee: Fee - no salary
+          salary: Salary
+          apprenticeship: Teaching apprenticeship - with salary
   activemodel:
     errors:
       models:
