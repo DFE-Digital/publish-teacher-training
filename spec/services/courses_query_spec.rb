@@ -98,6 +98,71 @@ RSpec.describe CoursesQuery do
       end
     end
 
+    context 'when filter by qualifications' do
+      let!(:qts_course) do
+        create(:course, :with_full_time_sites, qualification: 'qts')
+      end
+      let!(:pgce_with_qts_course) do
+        create(:course, :with_full_time_sites, qualification: 'pgce_with_qts')
+      end
+      let!(:pgde_with_qts_course) do
+        create(:course, :with_full_time_sites, qualification: 'pgde_with_qts')
+      end
+      let!(:course_without_qts) do
+        create(:course, :with_full_time_sites, qualification: 'undergraduate_degree_with_qts')
+      end
+
+      context 'when filter by qts' do
+        let(:params) { { qualifications: ['qts'] } }
+
+        it 'returns courses with qts qualification only' do
+          expect(results).to match_collection(
+            [qts_course],
+            attribute_names: %w[qualification]
+          )
+        end
+      end
+
+      context 'when filter by qts with pgce or pgde' do
+        let(:params) { { qualifications: ['qts_with_pgce_or_pgde'] } }
+
+        it 'returns courses with qts and pgce/pgde qualifications' do
+          expect(results).to match_collection(
+            [pgce_with_qts_course, pgde_with_qts_course],
+            attribute_names: %w[qualification]
+          )
+        end
+      end
+
+      context 'when filter by qts with pgce (for backwards compatibility)' do
+        let(:params) { { qualifications: ['qts_with_pgce'] } }
+
+        it 'returns courses with qts and pgce/pgde qualifications' do
+          expect(results).to match_collection(
+            [pgce_with_qts_course, pgde_with_qts_course],
+            attribute_names: %w[qualification]
+          )
+        end
+      end
+    end
+
+    context 'when filter for further education' do
+      let!(:further_education_course) do
+        create(:course, :with_full_time_sites, level: 'further_education')
+      end
+      let!(:regular_course) do
+        create(:course, :with_full_time_sites, level: 'secondary')
+      end
+      let(:params) { { further_education: 'true' } }
+
+      it 'returns courses for further education only' do
+        expect(results).to match_collection(
+          [further_education_course],
+          attribute_names: %w[level]
+        )
+      end
+    end
+
     context 'when filter for applications open' do
       let!(:course_opened) do
         create(:course, :with_full_time_sites, :open)

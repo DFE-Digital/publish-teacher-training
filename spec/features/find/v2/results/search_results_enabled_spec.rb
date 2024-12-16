@@ -34,6 +34,33 @@ feature 'V2 results - enabled' do
     and_the_full_time_filter_is_checked
   end
 
+  scenario 'when I filter by QTS-only courses' do
+    given_there_are_courses_containing_all_qualifications
+    when_i_visit_the_find_results_page
+    and_i_filter_by_qts_only_courses
+    then_i_see_only_qts_only_courses
+    and_the_qts_only_filter_is_checked
+    and_i_see_that_there_is_one_course_found
+  end
+
+  scenario 'when I filter by QTS with PGCE' do
+    given_there_are_courses_containing_all_qualifications
+    when_i_visit_the_find_results_page
+    and_i_filter_by_qts_with_pgce_or_pgde_courses
+    then_i_see_only_qts_with_pgce_or_pgde_courses
+    and_the_qts_with_pgce_or_pgde_filter_is_checked
+    and_i_see_that_there_are_two_courses_found
+  end
+
+  scenario 'when I filter by further education only courses' do
+    given_there_are_courses_containing_all_levels
+    when_i_visit_the_find_results_page
+    and_i_filter_by_further_education_courses
+    then_i_see_only_further_education__courses
+    and_the_further_education_filter_is_checked
+    and_i_see_that_there_is_one_course_found
+  end
+
   scenario 'when I filter by applications open' do
     given_there_are_courses_open_for_applications
     and_there_are_courses_that_are_closed_for_applications
@@ -71,6 +98,21 @@ feature 'V2 results - enabled' do
     create(:course, :with_full_time_sites, study_mode: 'full_time', name: 'Biology', course_code: 'S872')
     create(:course, :with_part_time_sites, study_mode: 'part_time', name: 'Chemistry', course_code: 'K592')
     create(:course, :with_full_time_or_part_time_sites, study_mode: 'full_time_or_part_time', name: 'Computing', course_code: 'L364')
+  end
+
+  def given_there_are_courses_containing_all_qualifications
+    create(:course, :with_full_time_sites, qualification: 'qts', name: 'Biology', course_code: 'S872')
+    create(:course, :with_full_time_sites, qualification: 'pgce_with_qts', name: 'Chemistry', course_code: 'K592')
+    create(:course, :with_full_time_sites, qualification: 'pgde_with_qts', name: 'Computing', course_code: 'L364')
+    create(:course, :with_full_time_sites, qualification: 'pgce', name: 'Dance', course_code: 'C115')
+    create(:course, :with_full_time_sites, qualification: 'pgde', name: 'Physics', course_code: '3CXN')
+    create(:course, :with_full_time_sites, qualification: 'undergraduate_degree_with_qts', name: 'Mathemathics', course_code: '4RTU')
+  end
+
+  def given_there_are_courses_containing_all_levels
+    create(:course, :with_full_time_sites, level: 'primary', name: 'Biology', course_code: 'S872')
+    create(:course, :with_full_time_sites, level: 'secondary', name: 'Chemistry', course_code: 'K592')
+    create(:course, :with_full_time_sites, level: 'further_education', name: 'Further education', course_code: 'K594')
   end
 
   def given_there_are_courses_open_for_applications
@@ -126,8 +168,23 @@ feature 'V2 results - enabled' do
     and_i_apply_the_filters
   end
 
+  def and_i_filter_by_qts_only_courses
+    check 'QTS only'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_qts_with_pgce_or_pgde_courses
+    check 'QTS with PGCE or PGDE'
+    and_i_apply_the_filters
+  end
+
   def and_i_filter_by_courses_open_for_applications
     check 'Only show courses open for applications'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_further_education_courses
+    check 'Only show further education courses'
     and_i_apply_the_filters
   end
 
@@ -169,6 +226,42 @@ feature 'V2 results - enabled' do
     expect(page).to have_content('Chemistry (K592)')
   end
 
+  def then_i_see_only_qts_only_courses
+    expect(page).to have_content('Biology (S872)')
+    expect(page).to have_no_content('Chemistry (K592)')
+    expect(page).to have_no_content('Computing (L364)')
+    expect(page).to have_no_content('Dance (C115)')
+    expect(page).to have_no_content('Physics (3CXN)')
+    expect(page).to have_no_content('Mathemathics (4RTU)')
+  end
+
+  def and_the_qts_only_filter_is_checked
+    expect(page).to have_checked_field('QTS only')
+  end
+
+  def then_i_see_only_qts_with_pgce_or_pgde_courses
+    expect(page).to have_content('Chemistry (K592)')
+    expect(page).to have_content('Computing (L364)')
+    expect(page).to have_no_content('Biology (S872)')
+    expect(page).to have_no_content('Dance (C115)')
+    expect(page).to have_no_content('Physics (3CXN)')
+    expect(page).to have_no_content('Mathemathics (4RTU)')
+  end
+
+  def and_the_qts_with_pgce_or_pgde_filter_is_checked
+    expect(page).to have_checked_field('QTS with PGCE or PGDE')
+  end
+
+  def then_i_see_only_further_education__courses
+    expect(page).to have_content('Further education (K594)')
+    expect(page).to have_no_content('Biology (S872)')
+    expect(page).to have_no_content('Chemistry (K592)')
+  end
+
+  def and_the_further_education_filter_is_checked
+    expect(page).to have_checked_field('Only show further education courses')
+  end
+
   def then_i_see_only_courses_with_special_education_needs
     expect(page).to have_content('Biology SEND (S872')
     expect(page).to have_content('Chemistry SEND (K592)')
@@ -199,6 +292,16 @@ feature 'V2 results - enabled' do
 
   def and_i_apply_the_filters
     click_link_or_button 'Apply filters'
+  end
+
+  def and_i_see_that_there_is_one_course_found
+    expect(page).to have_content('1 course found')
+    expect(page).to have_title('1 course found')
+  end
+
+  def and_i_see_that_there_are_two_courses_found
+    expect(page).to have_content('2 courses found')
+    expect(page).to have_title('2 courses found')
   end
 
   def and_i_see_that_there_are_three_courses_are_found

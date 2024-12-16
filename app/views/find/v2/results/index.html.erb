@@ -23,6 +23,15 @@
           <%= form.govuk_check_box :study_types, "part_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.part_time"), size: "s" }, include_hidden: false %>
         <% end %>
 
+        <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t("helpers.legend.courses_query_filters.qualifications_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_check_box :qualifications, "qts", label: { text: t("helpers.label.courses_query_filters.qualification_options.qts"), size: "s" }, include_hidden: false %>
+          <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t("helpers.label.courses_query_filters.qualification_options.qts_with_pgce_or_pgde"), size: "s" }, include_hidden: false %>
+        <% end %>
+
+        <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t("helpers.legend.courses_query_filters.further_education_html"), size: "s" }, hint: { text: t("helpers.hint.courses_query_filters.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_check_box :further_education, "true", label: { text: t("helpers.label.courses_query_filters.further_education"), size: "s" }, multiple: false %>
+        <% end %>
+
         <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
           <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" } %>
         <% end %>
