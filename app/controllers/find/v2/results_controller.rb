@@ -21,6 +21,7 @@ module Find
           :send_courses,
           :applications_open,
           :further_education,
+          :funding,
           study_types: [],
           qualifications: [],
           funding: []
