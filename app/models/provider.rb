@@ -73,7 +73,11 @@ class Provider < ApplicationRecord
   normalizes :provider_name, with: ->(value) { value.gsub(/\s+/, ' ').strip }
 
   def accredited_providers
-    recruitment_cycle.providers.where(provider_code: accredited_provider_codes)
+    if Settings.features.provider_partnerships
+      accredited_partners
+    else
+      recruitment_cycle.providers.where(provider_code: accredited_provider_codes)
+    end
   end
 
   alias accrediting_providers accredited_providers
