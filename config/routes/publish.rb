@@ -242,6 +242,7 @@ namespace :publish, as: :publish do
         get '/apprenticeship', on: :member, to: 'courses/apprenticeship#edit'
         put '/apprenticeship', on: :member, to: 'courses/apprenticeship#update'
 
+        # rubocop:disable Style/RedundantConstantBase
         constraints(::Constraints::PartnershipFeature.new(:off)) do
           get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
           put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
@@ -253,6 +254,7 @@ namespace :publish, as: :publish do
           put '/ratifying-provider', on: :member, to: 'courses/ratifying_provider#update', as: :ratifying_provider_publish_provider_recruitment_cycle_course
           get '/ratified-by', on: :member, to: 'courses/ratifying_provider#show'
         end
+        # rubocop:enable Style/RedundantConstantBase
 
         get '/provider', on: :member, to: 'courses/providers#show'
 
