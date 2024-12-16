@@ -151,10 +151,6 @@ gem 'blazer'
 
 gem 'dfe-wizard', require: 'dfe/wizard', github: 'DFE-Digital/dfe-wizard', tag: 'v0.1.1'
 
-group :production, :qa, :sandbox, :staging do
-  gem 'cloudfront-rails'
-end
-
 group :development, :test do
   # Prettyprint in console
   gem 'awesome_print'
