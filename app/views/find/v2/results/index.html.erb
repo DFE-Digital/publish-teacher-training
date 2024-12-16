@@ -46,7 +46,7 @@
   <div class="app-filter-layout__content">
     <ul class="app-search-results">
       <% @results.each do |course| %>
-        <li class="app-search-results__item" data-qa="course">
+        <li class="app-search-results__item">
           <%= govuk_summary_card(
             classes: ["course-summary-card"],
             title: govuk_link_to(
@@ -54,11 +54,10 @@
                 provider_code: course.provider_code,
                 course_code: course.course_code
               ),
-              class: "govuk-link govuk-!-font-size-24",
-              data: { qa: "course__link" }
+              class: "govuk-link govuk-!-font-size-24"
             ) do
-              content_tag(:span, course.provider.provider_name, class: "app-search-result__provider-name", data: { qa: "course__provider_name" }) +
-              content_tag(:span, course.name_and_code, class: "app-search-result__course-name", data: { qa: "course__name" })
+              content_tag(:span, course.provider.provider_name, class: "app-search-result__provider-name") +
+              content_tag(:span, course.name_and_code, class: "app-search-result__course-name")
             end
           ) %>
         </li>
