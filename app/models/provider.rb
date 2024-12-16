@@ -339,6 +339,8 @@ class Provider < ApplicationRecord
   end
 
   def accredited_bodies
+    return accredited_partners if Settings.features.provider_partnerships
+
     accrediting_provider_enrichments&.filter_map do |accrediting_provider_enrichment|
       provider_code = accrediting_provider_enrichment.UcasProviderCode
 
