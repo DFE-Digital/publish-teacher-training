@@ -60,6 +60,14 @@ RSpec.describe SearchCoursesForm do
       end
     end
 
+    context 'when funding is provided' do
+      let(:form) { described_class.new(funding: %w[fee salary]) }
+
+      it 'returns the correct search params with study_types as an array' do
+        expect(form.search_params).to eq({ funding: %w[fee salary] })
+      end
+    end
+
     context 'when no attributes are set' do
       let(:form) { described_class.new }
 

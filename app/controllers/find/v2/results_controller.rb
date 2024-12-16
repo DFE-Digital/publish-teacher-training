@@ -22,7 +22,8 @@ module Find
           :applications_open,
           :further_education,
           study_types: [],
-          qualifications: []
+          qualifications: [],
+          funding: []
         )
       end
 

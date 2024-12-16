@@ -79,6 +79,33 @@ feature 'V2 results - enabled' do
     and_the_special_education_needs_filter_is_checked
   end
 
+  scenario 'when I filter by salaried' do
+    given_there_are_courses_with_all_funding_types
+    when_i_visit_the_find_results_page
+    and_i_filter_by_salaried_courses
+    then_i_see_only_salaried_courses
+    and_the_salary_filter_is_checked
+    and_i_see_that_there_is_one_course_found
+  end
+
+  scenario 'when I filter by fee' do
+    given_there_are_courses_with_all_funding_types
+    when_i_visit_the_find_results_page
+    and_i_filter_by_fee_courses
+    then_i_see_only_fee_courses
+    and_the_fee_filter_is_checked
+    and_i_see_that_there_is_one_course_found
+  end
+
+  scenario 'when I filter by apprenticeship' do
+    given_there_are_courses_with_all_funding_types
+    when_i_visit_the_find_results_page
+    and_i_filter_by_apprenticeship_courses
+    then_i_see_only_apprenticeship_courses
+    and_the_apprenticeship_filter_is_checked
+    and_i_see_that_there_is_one_course_found
+  end
+
   scenario 'when no results' do
     when_i_visit_the_find_results_page
     then_i_see_no_courses_found
@@ -130,6 +157,12 @@ feature 'V2 results - enabled' do
     create(:course, :with_full_time_sites, :with_special_education_needs, name: 'Biology SEND', course_code: 'S872')
     create(:course, :with_full_time_sites, :with_special_education_needs, name: 'Chemistry SEND', course_code: 'K592')
     create(:course, :with_full_time_sites, :with_special_education_needs, name: 'Computing SEND', course_code: 'L364')
+  end
+
+  def given_there_are_courses_with_all_funding_types
+    create(:course, :with_full_time_sites, :fee_type_based, name: 'Biology', course_code: 'S872')
+    create(:course, :with_full_time_sites, :with_salary, name: 'Chemistry', course_code: 'K592')
+    create(:course, :with_full_time_sites, :with_apprenticeship, name: 'Computing', course_code: 'L364')
   end
 
   def and_there_are_courses_that_with_no_special_education_needs
@@ -190,6 +223,21 @@ feature 'V2 results - enabled' do
 
   def and_i_filter_by_courses_with_special_education_needs
     check 'Only show courses with a SEND specialism'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_salaried_courses
+    check 'Salary'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_fee_courses
+    check 'Fee - no salary'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_apprenticeship_courses
+    check 'Teaching apprenticeship - with salary'
     and_i_apply_the_filters
   end
 
@@ -270,8 +318,26 @@ feature 'V2 results - enabled' do
     expect(page).to have_no_content('Physics (3CXN)')
   end
 
+  def then_i_see_only_salaried_courses
+    expect(page).to have_content('Chemistry (K592)')
+    expect(page).to have_no_content('Biology (S872)')
+    expect(page).to have_no_content('Computing (L364)')
+  end
+
+  def then_i_see_only_fee_courses
+    expect(page).to have_content('Biology (S872)')
+    expect(page).to have_no_content('Chemistry (K592)')
+    expect(page).to have_no_content('Computing (L364)')
+  end
+
+  def then_i_see_only_apprenticeship_courses
+    expect(page).to have_content('Computing (L364)')
+    expect(page).to have_no_content('Chemistry (K592)')
+    expect(page).to have_no_content('Biology (S872)')
+  end
+
   def then_i_see_only_courses_that_are_open_for_applications
-    expect(page).to have_content('Biology (S872')
+    expect(page).to have_content('Biology (S872)')
     expect(page).to have_content('Chemistry (K592)')
     expect(page).to have_content('Computing (L364)')
     expect(page).to have_no_content('Dance (C115)')
@@ -288,6 +354,18 @@ feature 'V2 results - enabled' do
 
   def and_the_special_education_needs_filter_is_checked
     expect(page).to have_checked_field('Only show courses with a SEND specialism')
+  end
+
+  def and_the_fee_filter_is_checked
+    expect(page).to have_checked_field('Fee - no salary')
+  end
+
+  def and_the_salary_filter_is_checked
+    expect(page).to have_checked_field('Salary')
+  end
+
+  def and_the_apprenticeship_filter_is_checked
+    expect(page).to have_checked_field('Teaching apprenticeship - with salary')
   end
 
   def and_i_apply_the_filters

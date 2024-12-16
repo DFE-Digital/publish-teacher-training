@@ -36,6 +36,12 @@
           <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" } %>
         <% end %>
 
+        <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t("helpers.legend.courses_query_filters.funding_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_check_box :funding, "fee", label: { text: t("helpers.label.courses_query_filters.funding_options.fee"), size: "s" }, include_hidden: false %>
+          <%= form.govuk_check_box :funding, "salary", label: { text: t("helpers.label.courses_query_filters.funding_options.salary"), size: "s" }, include_hidden: false %>
+          <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t("helpers.label.courses_query_filters.funding_options.apprenticeship"), size: "s" }, include_hidden: false %>
+        <% end %>
+
         <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
           <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.applications_open"), size: "s" } %>
         <% end %>
