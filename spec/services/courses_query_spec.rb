@@ -241,6 +241,17 @@ RSpec.describe CoursesQuery do
         end
       end
 
+      context 'when filter by salary in the old search parameter' do
+        let(:params) { { funding: 'salary' } }
+
+        it 'returns courses with salary' do
+          expect(results).to match_collection(
+            [salaried_course],
+            attribute_names: %w[funding]
+          )
+        end
+      end
+
       context 'when filter by two funding types' do
         let(:params) { { funding: %w[fee salary] } }
 

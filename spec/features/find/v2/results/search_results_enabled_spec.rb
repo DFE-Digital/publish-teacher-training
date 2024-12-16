@@ -110,6 +110,13 @@ feature 'V2 results - enabled' do
       and_i_see_that_there_are_two_courses_found
     end
 
+    scenario 'when I use the old funding parameter' do
+      when_i_visit_the_find_results_page_using_old_salary_parameter
+      then_i_see_only_salaried_courses
+      and_the_salary_filter_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
+
     scenario 'when I filter by apprenticeship' do
       when_i_visit_the_find_results_page
       and_i_filter_by_apprenticeship_courses
@@ -189,6 +196,10 @@ feature 'V2 results - enabled' do
 
   def when_i_visit_the_find_results_page
     visit find_v2_results_path
+  end
+
+  def when_i_visit_the_find_results_page_using_old_salary_parameter
+    visit(find_v2_results_path(funding: 'salary'))
   end
 
   def and_i_filter_by_courses_that_sponsor_visa
