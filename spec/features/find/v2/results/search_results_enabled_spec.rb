@@ -110,9 +110,9 @@ feature 'V2 results - enabled' do
   end
 
   def given_there_are_courses_containing_all_levels
-    create(:course, :with_full_time_sites, level: 'primary', name: 'Biology', course_code: 'S872')
-    create(:course, :with_full_time_sites, level: 'secondary', name: 'Chemistry', course_code: 'K592')
-    create(:course, :with_full_time_sites, level: 'further_education', name: 'Further education', course_code: 'K594')
+    create(:course, :with_full_time_sites, :primary, name: 'Biology', course_code: 'S872')
+    create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', course_code: 'K592')
+    create(:course, :with_full_time_sites, :further_education, name: 'Further education', course_code: 'K594')
   end
 
   def given_there_are_courses_open_for_applications
