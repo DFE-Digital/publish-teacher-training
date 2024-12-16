@@ -1001,7 +1001,7 @@ describe Provider do
     let(:accredited_provider) { create(:accredited_provider) }
 
     it 'can create an accredited partnership' do
-      partnership = training_provider.accredited_partnerships.create(accredited_provider:)
+      partnership = training_provider.accredited_partnerships.create(accredited_provider:, description: 'Great partnership!')
       expect(training_provider.accredited_partnerships).to include(partnership)
       expect(training_provider.accredited_partners).to include(accredited_provider)
       expect(partnership).to be_valid
@@ -1009,7 +1009,7 @@ describe Provider do
     end
 
     it 'can create an training partnership' do
-      partnership = accredited_provider.training_partnerships.create(training_provider:)
+      partnership = accredited_provider.training_partnerships.create(training_provider:, description: 'Great partnership!')
       expect(accredited_provider.training_partnerships).to include(partnership)
       expect(accredited_provider.training_partners).to include(training_provider)
       expect(partnership).to be_valid

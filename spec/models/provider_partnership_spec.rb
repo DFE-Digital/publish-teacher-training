@@ -21,7 +21,7 @@ describe ProviderPartnership do
       subject(:partnership) { build(:provider_partnership, description: '') }
 
       it 'has correct error message' do
-        expect(subject.errors.messages[:description]).to include('Enter details about the accredited provider')
+        expect(subject.errors.messages[:description]).to include('Enter details about the accredited partnership')
       end
     end
 
