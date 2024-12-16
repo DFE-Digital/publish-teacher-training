@@ -126,6 +126,7 @@ namespace :publish, as: :publish do
           get 'continue'
         end
 
+        # rubocop:disable Style/RedundantConstantBase
         constraints(::Constraints::PartnershipFeature.new(:off)) do
           resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
             get 'continue'
@@ -139,6 +140,7 @@ namespace :publish, as: :publish do
             get 'search_new'
           end
         end
+        # rubocop:enable Style/RedundantConstantBase
         resource :student_visa_sponsorship, on: :member, controller: 'courses/student_visa_sponsorship', path: 'student-visa-sponsorship' do
           get 'continue'
         end
