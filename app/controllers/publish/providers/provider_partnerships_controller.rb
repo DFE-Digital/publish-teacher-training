@@ -9,7 +9,7 @@ module Publish
 
       def new
         provider_partnership = provider.accredited_partnerships.build
-        @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: edit_partnership_params)
+        @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: params[:accredited_provider_id])
       end
 
       def edit
@@ -71,16 +71,8 @@ module Publish
         recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
       end
 
-      def provider_partnership
-        recruitment_cycle.providers.find_by(provider_code: params[:accredited_provider_code])
-      end
-
       def partnership_params
         params.require(:provider_partnership_form).permit(:accredited_provider_id, :description)
-      end
-
-      def edit_partnership_params
-        params.permit(:accredited_provider_id, :description)
       end
     end
   end
