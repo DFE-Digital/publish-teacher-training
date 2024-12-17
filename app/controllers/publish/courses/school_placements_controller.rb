@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class SchoolPlacementsController < PublishController
+    class SchoolPlacementsController < ApplicationController
       include CopyCourseContent
       include GotoPreview
 

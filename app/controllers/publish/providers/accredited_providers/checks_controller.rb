@@ -3,7 +3,7 @@
 module Publish
   module Providers
     module AccreditedProviders
-      class ChecksController < PublishController
+      class ChecksController < ApplicationController
         def show
           accredited_provider_form
         end

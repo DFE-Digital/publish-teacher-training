@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class SubjectsController < PublishController
+    class SubjectsController < ApplicationController
       decorates_assigned :course
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, :campaign_name_check, only: [:continue]

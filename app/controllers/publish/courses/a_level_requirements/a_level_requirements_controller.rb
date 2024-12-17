@@ -3,7 +3,7 @@
 module Publish
   module Courses
     module ALevelRequirements
-      class ALevelRequirementsController < PublishController
+      class ALevelRequirementsController < ApplicationController
         before_action :assign_course, :verify_teacher_degree_apprenticeship_course
 
         def new

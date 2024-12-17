@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Publish
-  class NotificationsController < PublishController
+  class NotificationsController < ApplicationController
     skip_before_action :check_interrupt_redirects
     skip_before_action :authorize_provider
 

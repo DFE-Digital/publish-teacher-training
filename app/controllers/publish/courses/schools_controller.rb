@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class SchoolsController < PublishController
+    class SchoolsController < ApplicationController
       include CourseBasicDetailConcern
 
       def continue
