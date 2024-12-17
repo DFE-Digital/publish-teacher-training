@@ -63,21 +63,23 @@ namespace :support do
         end
 
         constraints(::Constraints::PartnershipFeature.new(:on)) do
-          resources :accredited_partners, param: :accredited_partner_code, only: %i[index new edit create update], path: 'accredited-partners' do
+          resources :accredited_partners, param: :accredited_provider_code, only: %i[index new edit create update], path: 'accredited-partners' do
             member do
               get :delete
               delete :delete, to: 'accredited_partners#destroy'
             end
+            get '/check', on: :collection, to: 'accredited_partners/checks#show'
+            put '/check', on: :collection, to: 'accredited_partners/checks#update'
+          end
+
+          resources :accredited_providers, param: :accredited_provider_code, only: %i[], path: 'accredited-providers' do
             get '/search', on: :collection, to: 'accredited_provider_search#new'
             post '/search', on: :collection, to: 'accredited_provider_search#create'
             put '/search', on: :collection, to: 'accredited_provider_search#update'
-
-            get '/check', on: :collection, to: 'accredited_providers/checks#show'
-            put '/check', on: :collection, to: 'accredited_providers/checks#update'
           end
-
           resources :copy_courses, only: %i[new create]
         end
+        # rubocop:enable Style/RedundantConstantBase
       end
     end
     resources :users do
