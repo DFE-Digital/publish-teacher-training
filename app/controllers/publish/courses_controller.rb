@@ -117,7 +117,7 @@ module Publish
 
     def provider
       @provider ||= recruitment_cycle.providers
-                                     .includes(courses: %i[sites site_statuses enrichments provider])
+                                     .includes(courses: %i[site_statuses enrichments provider])
                                      .find_by!(provider_code: params[:provider_code])
     end
 
