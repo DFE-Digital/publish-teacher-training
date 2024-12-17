@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
   <head>
+    <meta charset="UTF-8">
+
     <title><%= yield :page_title %> - Publish teacher training courses - GOV.UK</title>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -14,6 +17,7 @@
     <%= tag.meta(property: "og:image", content: image_path("govuk-opengraph-image.png")) %>
     <%= tag.meta(name: "theme-color", content: "#0b0c0c") %>
     <%= tag.meta(name: "format-detection", content: "telephone=no") %>
+
     <%= favicon_link_tag image_path("favicon.ico"), type: nil, sizes: "48x48" %>
     <%= favicon_link_tag image_path("favicon.svg"), type: "image/svg+xml", sizes: "any" %>
     <%= favicon_link_tag image_path("govuk-icon-mask.svg"), rel: "mask-icon", color: "#0b0c0c", type: nil %>
