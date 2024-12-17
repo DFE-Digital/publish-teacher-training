@@ -19,6 +19,16 @@ module GotoConfirmationHelper
     end
   end
 
+  def back_link_for_adding_accredited_partner_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
+    if goto_confirmation?(param_form_key:, params:)
+      check_support_recruitment_cycle_provider_accredited_partners_path(recruitment_cycle_year, provider)
+    elsif param_form_key == :support_accredited_provider_form
+      search_support_recruitment_cycle_provider_accredited_partners_path
+    else
+      support_recruitment_cycle_provider_accredited_partners_path(recruitment_cycle_year, provider)
+    end
+  end
+
   def back_link_for_adding_accrediting_provider_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     if goto_confirmation?(param_form_key:, params:)
       check_support_recruitment_cycle_provider_accredited_providers_path(recruitment_cycle_year, provider)
