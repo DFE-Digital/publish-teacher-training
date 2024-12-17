@@ -10,7 +10,7 @@
 
   <div class="govuk-caption-l"><%= Provider.human_attribute_name(@provider.provider_type) %></div>
   <h1 class="govuk-heading-l"><%= @provider.name_and_code %></h1>
-  <% accredited_tab = [{url: '', name:''}] %>
+  <% accredited_tab = [{ url: "", name: "" }] %>
   <% unless @provider.accredited_provider? %>
     <% if Settings.features.provider_partnerships %>
       <% accredited_tab = [{ name: "Accredited partnerships", url: support_recruitment_cycle_provider_accredited_partners_path(@provider.recruitment_cycle_year, @provider) }] %>
