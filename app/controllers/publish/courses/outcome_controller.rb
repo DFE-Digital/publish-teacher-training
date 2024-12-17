@@ -84,13 +84,12 @@ module Publish
             @course.ensure_site_statuses_match_full_time
           end
 
-          redirect_to details_publish_provider_recruitment_cycle_course_path(
+          redirect_to funding_type_publish_provider_recruitment_cycle_course_path(
             @course.provider_code,
             @course.recruitment_cycle_year,
-            @course.course_code
+            @course.course_code,
+            course: { qualification: "undergraduate_degree_with_qts" }
           )
-
-          course_updated_message('Qualification')
         end
       end
 

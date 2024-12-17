@@ -16,14 +16,11 @@ module Courses
         def qualifications_with_qts
           qts_list = Course.qualifications.keys.grep(/qts/)
 
-          qts_list -= %w[undergraduate_degree_with_qts] if non_tda_published?
+          qts_list -= %w[qts]
 
           qts_list
         end
 
-        def non_tda_published?
-          !teacher_degree_apprenticeship? && is_published?
-        end
 
         def qualifications_without_qts
           Course.qualifications.keys.reject do |qualification|

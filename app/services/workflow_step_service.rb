@@ -32,6 +32,7 @@ class WorkflowStepService
       modern_languages
       age_range
       outcome
+      funding_type
       school
       study_site
       accredited_provider
@@ -50,6 +51,7 @@ class WorkflowStepService
       modern_languages
       age_range
       outcome
+      funding_type
       school
       study_site
       applications_open
