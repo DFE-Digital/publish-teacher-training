@@ -1007,7 +1007,7 @@ describe Provider do
       end
 
       it 'returns the current recruitment accredited bodies' do
-        expect(subject.accredited_bodies.map(&:accredited_provider_id)).to match(accredited_partnerships.map(&:accredited_provider_id))
+        expect(subject.accredited_bodies.map(&:id)).to match(accredited_partnerships.map(&:accredited_provider_id))
       end
     end
   end
