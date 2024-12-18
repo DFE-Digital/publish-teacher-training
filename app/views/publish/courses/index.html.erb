@@ -3,7 +3,11 @@
 
 <h1 class="govuk-heading-l">Courses</h1>
 
+<% if Settings.features.provider_partnerships %>
+<%= render AddCourseButtonPartnerships.new(provider: @provider) %>
+<% else %>
 <%= render AddCourseButton.new(provider: @provider) %>
+<% end %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
