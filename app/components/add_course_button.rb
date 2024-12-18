@@ -42,7 +42,7 @@ class AddCourseButton < ViewComponent::Base
   def accredited_provider_present?
     return true if accredited_provider?
 
-    provider.accredited_partners.any?
+    provider.accredited_providers.any?
   end
 
   def site_present?
