@@ -45,11 +45,7 @@ module Publish
     end
 
     def accredited_provider_search_path(param_form_key:, params:, provider:, recruitment_cycle_year:)
-      if Settings.features.provider_partnerships
-        publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
-      else
-        publish_back_link_for_adding_accrediting_provider_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
-      end
+      publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     end
 
     private
