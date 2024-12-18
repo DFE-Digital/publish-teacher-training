@@ -13,15 +13,7 @@ module Publish
     end
     let(:train_with_us) { 'train_with_us' }
     let(:train_with_disability) { 'train_with_disability' }
-    let(:provider) do
-      create(
-        :provider,
-        accrediting_provider_enrichments: [
-          { UcasProviderCode: accredited_provider.provider_code }
-        ]
-      )
-    end
-    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:provider) { create(:provider) }
     let(:redirect_params) { { 'goto_preview' => 'true' } }
     let(:course_code) { create(:course) }
 
@@ -47,17 +39,6 @@ module Publish
           expect(subject.valid?).to be_falsey
           expect(subject.errors[:train_with_disability]).to include('Reduce the word count for training with disabilities and other needs')
         end
-      end
-    end
-
-    describe '#accredited_bodies' do
-      it 'returns an array of accredited_providers' do
-        expect(subject.accredited_bodies).to include(
-          have_attributes(
-            provider_name: accredited_provider.provider_name,
-            provider_code: accredited_provider.provider_code
-          )
-        )
       end
     end
 
