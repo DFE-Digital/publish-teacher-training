@@ -1,0 +1,43 @@
+<% content_for :page_title, title_with_error_prefix("Ratifying provider – #{course.name_and_code}", course.errors.any?) %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
+<% end %>
+
+<%= render "publish/shared/errors" %>
+
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+    <h1 class="govuk-fieldset__heading">
+      <%= render CaptionText.new(text: course.name_and_code) %>
+      Ratifying provider
+    </h1>
+  </legend>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= form_with model: course,
+                    url: ratifying_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code),
+                    method: :put do |form| %>
+
+        <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">
+          <%= render partial: "provider_suggestion", collection: accredited_partners, locals: { form: } %>
+        </div>
+
+        <div class="govuk-button-group">
+          <%= form.submit "Update ratifying partner", class: "govuk-button govuk-!-margin-top-5", data: { qa: "course__save" } %>
+          <%= govuk_link_to(
+            "Add accredited partner",
+            search_publish_provider_recruitment_cycle_accredited_providers_path(course.provider_code, course.recruitment_cycle_year),
+            class: "govuk-!-margin-bottom-6 govuk-!-margin-top-5",
+            data: { qa: "course__add" }
+          ) %>
+        </div>
+      <% end %>
+
+      <p class="govuk-body">
+        <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      </p>
+    </div>
+  </div>
+</fieldset>

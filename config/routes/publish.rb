@@ -125,10 +125,22 @@ namespace :publish, as: :publish do
         resource :apprenticeship, on: :member, only: %i[new], controller: 'courses/apprenticeship' do
           get 'continue'
         end
-        resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
-          get 'continue'
-          get 'search_new'
+
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
+            get 'continue'
+            get 'search_new'
+          end
         end
+
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resource :ratifying_provider, on: :member, only: %i[new], controller: 'courses/ratifying_provider', path: 'ratifying-provider' do
+            get 'continue'
+            get 'search_new'
+          end
+        end
+        # rubocop:enable Style/RedundantConstantBase
         resource :student_visa_sponsorship, on: :member, controller: 'courses/student_visa_sponsorship', path: 'student-visa-sponsorship' do
           get 'continue'
         end
@@ -232,9 +244,19 @@ namespace :publish, as: :publish do
         get '/apprenticeship', on: :member, to: 'courses/apprenticeship#edit'
         put '/apprenticeship', on: :member, to: 'courses/apprenticeship#update'
 
-        get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
-        put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
-        get '/accredited-by', on: :member, to: 'courses/accredited_provider#show'
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          get '/accredited-provider', on: :member, to: 'courses/accredited_provider#edit'
+          put '/accredited-provider', on: :member, to: 'courses/accredited_provider#update'
+          get '/accredited-by', on: :member, to: 'courses/accredited_provider#show'
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          get '/ratifying-provider', on: :member, to: 'courses/ratifying_provider#edit'
+          put '/ratifying-provider', on: :member, to: 'courses/ratifying_provider#update', as: :ratifying_provider_publish_provider_recruitment_cycle_course
+          get '/ratified-by', on: :member, to: 'courses/ratifying_provider#show'
+        end
+        # rubocop:enable Style/RedundantConstantBase
 
         get '/provider', on: :member, to: 'courses/providers#show'
 
@@ -256,19 +278,58 @@ namespace :publish, as: :publish do
           resources :courses, module: :training_providers, only: [:index]
         end
 
-        resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
-          member do
-            get :delete
-            delete :delete, to: 'accredited_providers#destroy'
-          end
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/provider-partnerships')
+        end
 
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_providers#destroy'
+            end
+
+            get '/search', on: :collection, to: 'accredited_provider_search#new'
+            post '/search', on: :collection, to: 'accredited_provider_search#create'
+            put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+            get '/check', on: :collection, to: 'accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'accredited_providers/checks#update'
+          end
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/provider-partnerships')
+          resources :provider_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'provider_partnerships' do
+            member do
+              get :delete
+              delete :delete, to: 'provider_partnerships#destroy'
+            end
+
+            get '/check', on: :collection, to: 'provider_partnerships/checks#show'
+            put '/check', on: :collection, to: 'provider_partnerships/checks#update'
+          end
+        end
+
+        scope ':recruitment_cycle_year/accredited-providers', as: :accredited_providers do
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
-
-          get '/check', on: :collection, to: 'accredited_providers/checks#show'
-          put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
+
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :training_providers, path: '/training-providers', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'training_providers/courses'
+          end
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resources :training_providers, path: '/training-providers', controller: 'v2/training_providers', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'v2/training_providers/courses'
+          end
+        end
+        # rubocop:enable Style/RedundantConstantBase
 
         resource :check_school, only: %i[show update], controller: 'schools_check', path: 'schools/check'
         resources :schools do

@@ -1,0 +1,52 @@
+<% content_for :page_title, "Training partners" %>
+<%= content_for :before_content, render_breadcrumbs(:training_providers) %>
+
+  <h1 class="govuk-heading-l">
+    Training partners
+  </h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <ul class="govuk-list" data-qa="provider__training_providers_list">
+      <% @training_providers.each do |training_provider| %>
+        <li data-qa="training_provider">
+          <h3 class="govuk-heading-s">
+            <%= govuk_link_to(
+              training_provider.provider_name,
+              publish_provider_recruitment_cycle_training_provider_courses_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                training_provider.provider_code
+              ),
+              class: "govuk-!-font-weight-bold",
+              data: { qa: "training_provider_name" }
+            ) %>
+            <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
+              <%= pluralize(@course_counts[training_provider.provider_code], "course") %>
+            </span>
+          </h3>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <% unless @training_providers.empty? %>
+    <aside class="govuk-grid-column-one-third">
+      <div class="app-status-box" data-qa="download-section">
+        <h2 class="govuk-heading-m">Download</h2>
+        <p class="govuk-body">Export all the courses you’re the accredited provider for.</p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            "Download as a CSV file",
+            download_training_providers_courses_publish_provider_recruitment_cycle_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              format: :csv
+            )
+          ) %>
+        </p>
+      </div>
+    </aside>
+  <% end %>
+</div>
