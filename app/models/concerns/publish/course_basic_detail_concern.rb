@@ -16,6 +16,7 @@ module Publish
     def back; end
 
     def new
+      @course.funding = nil if @course.present?
       authorize(@provider, :can_create_course?)
     end
 
