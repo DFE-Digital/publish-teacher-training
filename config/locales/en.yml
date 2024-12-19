@@ -730,6 +730,24 @@ en:
         new:
           title: *accredited_provider_title
           caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+      accredited_partners:
+        new:
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: "Add accredited partner - %{provider_name} (%{code})"
+        edit:
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: "%{provider_name}"
+          updated: About the accredited partner updated
+        delete:
+          title: Are you sure you want to remove this accredited partner?
+          remove: Remove accredited partner
+          updated: Accredited partner removed
+        checks:
+          show:
+            caption: "Add accredited partner - %{provider_name} (%{code})"
+            add: Add accredited partner
       accredited_providers:
         new:
           title: About the accredited provider

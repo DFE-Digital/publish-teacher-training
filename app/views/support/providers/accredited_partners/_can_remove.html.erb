@@ -1,0 +1,22 @@
+<%= content_for :page_title, t("support.providers.accredited_providers.delete.title") %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_recruitment_cycle_provider_accredited_partners_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= @accredited_provider.provider_name %></span>
+        <%= t("support.providers.accredited_partners.delete.title") %>
+    </h1>
+
+    <%= govuk_button_to "Remove accredited partner",
+                        delete_support_recruitment_cycle_provider_accredited_partner_path,
+        method: :delete,
+        class: "govuk-button--warning" %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_partners_path) %>
+    </p>
+  </div>
+</div>

@@ -12,7 +12,7 @@
       <%= content_for(:breadcrumbs) do %>
         <%= render GovukComponent::BackLinkComponent.new(
           text: "Back",
-          href: back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)
+          href: back_link_for_adding_accredited_partner_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)
         ) %>
       <% end %>
 
@@ -39,7 +39,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_providers_path) %>
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_accredited_partners_path) %>
     </p>
   </div>
 </div>
