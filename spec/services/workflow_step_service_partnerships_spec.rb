@@ -42,7 +42,7 @@ describe WorkflowStepService do
     end
 
     context 'when course.is_school_direct? && course.provider.accredited_partners.length == 1' do
-      let(:provider) { build( :provider, :with_accredited_partner) }
+      let(:provider) { build(:provider, :with_accredited_partner) }
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
       let(:accredited_provider) { provider.accredited_partners.first }
 
@@ -100,7 +100,7 @@ describe WorkflowStepService do
     end
 
     context 'when only one accredited provider' do
-      let(:provider) { build( :provider, :with_accredited_partner) }
+      let(:provider) { build(:provider, :with_accredited_partner) }
       let(:accredited_provider) { provider.accredited_partners.first }
       let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, accrediting_provider: accredited_provider, provider:) }
 
