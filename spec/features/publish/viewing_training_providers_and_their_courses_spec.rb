@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Viewing courses as an accredited provider', { can_edit_current_and_next_cycles: false } do
   before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     given_i_am_authenticated_as_an_accredited_provider_user
     and_some_courses_exist_with_one_i_accredit
     when_i_visit_the_publish_training_provider_index_page
