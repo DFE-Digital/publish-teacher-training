@@ -381,6 +381,10 @@ class Course < ApplicationRecord
   validates :is_send, inclusion: { in: [true, false] }, on: %i[new create publish]
   # TODO: validates :master_subject_id ?
 
+  def primary_or_secondary_level?
+    %w[primary secondary].include?(level)
+  end
+
   def is_engineers_teach_physics?
     master_subject_id == SecondarySubject.physics.id && engineers_teach_physics?
   end
