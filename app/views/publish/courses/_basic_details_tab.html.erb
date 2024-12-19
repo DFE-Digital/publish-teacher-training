@@ -156,7 +156,7 @@
        heading = "Ratifying provider"
        partners = @provider.accredited_partners
        add_provider_text = "Add at least one accredited partner"
-       add_provider_link = publish_provider_recruitment_cycle_provider_partnerships_path(@course.provider_code, @course.recruitment_cycle_year)
+       add_provider_link = publish_provider_recruitment_cycle_accredited_partnerships_path(@course.provider_code, @course.recruitment_cycle_year)
        select_partner_text = "Select an accredited partner"
        select_partner_link = ratifying_provider_publish_provider_recruitment_cycle_course_path(@course.provider_code, @course.recruitment_cycle_year, @course.course_code)
        change_partner_link = ratifying_provider_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)

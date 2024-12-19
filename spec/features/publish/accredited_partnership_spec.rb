@@ -126,11 +126,11 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_be_taken_to_the_accredited_provider_description_page
-    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_provider_partnership_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))
+    expect(page).to have_current_path(new_publish_provider_recruitment_cycle_accredited_partnership_path(@provider.provider_code, @provider.recruitment_cycle_year, goto_confirmation: true))
   end
 
   def then_i_should_be_taken_back_to_the_confirm_page
-    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
+    expect(page).to have_current_path(check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
   end
 
   def when_i_click_the_back_link
@@ -170,7 +170,7 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
   end
 
   def then_i_should_be_taken_to_the_index_page
-    expect(page).to have_current_path(publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
+    expect(page).to have_current_path(publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year))
   end
 
   def when_i_confirm_the_changes

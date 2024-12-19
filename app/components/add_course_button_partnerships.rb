@@ -22,7 +22,7 @@ class AddCourseButtonPartnerships < ViewComponent::Base
   def incomplete_sections_hash
     {
       site_not_present?: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year),
-      accredited_partner_not_present?: publish_provider_recruitment_cycle_provider_partnerships_path(provider.provider_code, provider.recruitment_cycle_year)
+      accredited_partner_not_present?: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year)
     }
   end
 

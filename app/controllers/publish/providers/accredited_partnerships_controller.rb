@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    class ProviderPartnershipsController < PublishController
+    class AccreditedPartnershipsController < PublishController
       helper_method :accredited_provider_id
 
       def index; end
@@ -23,7 +23,7 @@ module Publish
         @provider_partnership_form = ProviderPartnershipForm.new(current_user, @provider_partnership, params: partnership_params)
 
         if @provider_partnership_form.stash
-          redirect_to check_publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, recruitment_cycle.year)
+          redirect_to check_publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, recruitment_cycle.year)
         else
           render :new
         end
@@ -35,7 +35,7 @@ module Publish
 
         if @provider_partnership_form.save!
           flash[:success] = t('publish.providers.provider_partnerships.edit.updated')
-          redirect_to publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, recruitment_cycle.year)
+          redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, recruitment_cycle.year)
         else
           render :edit
         end
@@ -51,7 +51,7 @@ module Publish
 
         if @partnership.destroy
           flash[:success] = t('publish.providers.provider_partnerships.delete.updated')
-          redirect_to publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, recruitment_cycle.year)
+          redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, recruitment_cycle.year)
         else
           render :delete
         end

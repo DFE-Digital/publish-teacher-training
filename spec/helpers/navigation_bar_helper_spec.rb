@@ -55,7 +55,7 @@ RSpec.describe NavigationBarHelper do
         end
 
         it 'includes the correct link to accredited providers' do
-          expect(accredited_provider_item[:url]).to eq publish_provider_recruitment_cycle_provider_partnerships_path(provider.provider_code, provider.recruitment_cycle.year)
+          expect(accredited_provider_item[:url]).to eq publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle.year)
         end
       end
     end

@@ -2,7 +2,7 @@
 
 module Publish
   module Providers
-    module ProviderPartnerships
+    module AccreditedPartnerships
       class ChecksController < PublishController
         def show
           provider_partnership_form
@@ -14,7 +14,7 @@ module Publish
           if @partnership.save
             notify_accredited_provider_users
 
-            redirect_to publish_provider_recruitment_cycle_provider_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: 'Accredited partnership added' }
+            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: 'Accredited partnership added' }
           else
             render :show
           end

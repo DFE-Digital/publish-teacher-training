@@ -2,7 +2,7 @@
 
  <%= form_with(
         model: @provider_partnership_form,
-        url: publish_provider_recruitment_cycle_provider_partnerships_path,
+        url: publish_provider_recruitment_cycle_accredited_partnerships_path,
         method: :post
       ) do |f| %>
 
@@ -29,7 +29,7 @@
       <%= f.govuk_submit t("continue") %>
 
       <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_provider_partnerships_path) %>
+        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_partnerships_path) %>
       </p>
     </div>
   </div>

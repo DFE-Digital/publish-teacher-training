@@ -12,7 +12,7 @@ module Publish
       def create
         if accredited_provider_id.present?
           if Settings.features.provider_partnerships
-            redirect_to new_publish_provider_recruitment_cycle_provider_partnership_path(
+            redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
               provider_code: provider.provider_code,
               recruitment_cycle_year: provider.recruitment_cycle_year,
               accredited_provider_id:
@@ -43,7 +43,7 @@ module Publish
 
         if @accredited_provider_select_form.valid?
           if Settings.features.provider_partnerships
-            redirect_to new_publish_provider_recruitment_cycle_provider_partnership_path(
+            redirect_to new_publish_provider_recruitment_cycle_accredited_partnership_path(
               provider_code: provider.provider_code,
               recruitment_cycle_year: provider.recruitment_cycle_year,
               accredited_provider_id: accredited_provider_select_params[:provider_id]

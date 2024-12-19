@@ -301,14 +301,14 @@ namespace :publish, as: :publish do
 
         constraints(::Constraints::PartnershipFeature.new(:on)) do
           get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/provider-partnerships')
-          resources :provider_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'provider_partnerships' do
+          resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'accredited_partnerships' do
             member do
               get :delete
-              delete :delete, to: 'provider_partnerships#destroy'
+              delete :delete, to: 'accredited_partnerships#destroy'
             end
 
-            get '/check', on: :collection, to: 'provider_partnerships/checks#show'
-            put '/check', on: :collection, to: 'provider_partnerships/checks#update'
+            get '/check', on: :collection, to: 'accredited_partnerships/checks#show'
+            put '/check', on: :collection, to: 'accredited_partnerships/checks#update'
           end
         end
 

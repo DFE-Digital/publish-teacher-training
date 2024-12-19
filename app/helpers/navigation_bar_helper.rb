@@ -23,7 +23,7 @@ module NavigationBarHelper
       if provider.accredited_provider?
         { name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year) }
       else
-        { name: t('navigation_bar.accredited_partnerships'), url: publish_provider_recruitment_cycle_provider_partnerships_path(provider.provider_code, provider.recruitment_cycle_year) }
+        { name: t('navigation_bar.accredited_partnerships'), url: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year) }
       end
     elsif provider.accredited_provider?
       { name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year) }
