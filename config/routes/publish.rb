@@ -280,7 +280,16 @@ namespace :publish, as: :publish do
 
         # rubocop:disable Style/RedundantConstantBase
         constraints(::Constraints::PartnershipFeature.new(:on)) do
-          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/provider-partnerships')
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-partnerships')
+          resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: 'accredited-partnerships', controller: 'accredited_partnerships' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_partnerships#destroy'
+            end
+
+            get '/check', on: :collection, to: 'accredited_partnerships/checks#show'
+            put '/check', on: :collection, to: 'accredited_partnerships/checks#update'
+          end
         end
 
         constraints(::Constraints::PartnershipFeature.new(:off)) do
@@ -296,19 +305,6 @@ namespace :publish, as: :publish do
 
             get '/check', on: :collection, to: 'accredited_providers/checks#show'
             put '/check', on: :collection, to: 'accredited_providers/checks#update'
-          end
-        end
-
-        constraints(::Constraints::PartnershipFeature.new(:on)) do
-          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/provider-partnerships')
-          resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: 'provider-partnerships', controller: 'accredited_partnerships' do
-            member do
-              get :delete
-              delete :delete, to: 'accredited_partnerships#destroy'
-            end
-
-            get '/check', on: :collection, to: 'accredited_partnerships/checks#show'
-            put '/check', on: :collection, to: 'accredited_partnerships/checks#update'
           end
         end
 
