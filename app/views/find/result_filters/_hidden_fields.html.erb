@@ -1,9 +1,3 @@
-<% @filters_view.location_query_params.each do |k, v| %>
-  <% if v.present? %>
-    <%= form.hidden_field(k, value: v) %>
-  <% end %>
-<% end %>
-
 <% if params["subjects"].present? %>
   <% request.params["subjects"].each do |subject_code| %>
     <%= form.hidden_field(:subjects, multiple: true, value: subject_code) %>
