@@ -17,6 +17,22 @@ describe ProviderPartnership do
   describe 'validations' do
     before { subject.validate }
 
+    describe '#description must be present' do
+      subject(:partnership) { build(:provider_partnership, description: '') }
+
+      it 'has correct error message' do
+        expect(subject.errors.messages[:description]).to include('Enter details about the accredited partnership')
+      end
+    end
+
+    describe '#description length' do
+      subject(:partnership) { build(:provider_partnership, description: Faker::Lorem.sentence(word_count: 101)) }
+
+      it 'has correct error message' do
+        expect(subject.errors.messages[:description]).to include('Description about the accredited provider must be 100 words or fewer')
+      end
+    end
+
     context 'blank accredited provider' do
       subject(:partnership) { build(:provider_partnership, accredited_provider: nil) }
 
