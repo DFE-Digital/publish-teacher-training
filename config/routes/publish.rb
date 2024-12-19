@@ -256,15 +256,41 @@ namespace :publish, as: :publish do
           resources :courses, module: :training_providers, only: [:index]
         end
 
-        resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
-          member do
-            get :delete
-            delete :delete, to: 'accredited_providers#destroy'
-          end
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          get '/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-providers', to: redirect('/publish/organisations/:provider_code/:recruitment_cycle_year/accredited-partnerships')
+          resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: 'accredited-partnerships', controller: 'accredited_partnerships' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_partnerships#destroy'
+            end
 
+            get '/check', on: :collection, to: 'accredited_partnerships/checks#show'
+            put '/check', on: :collection, to: 'accredited_partnerships/checks#update'
+          end
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update destroy], path: 'accredited-providers' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_providers#destroy'
+            end
+
+            get '/search', on: :collection, to: 'accredited_provider_search#new'
+            post '/search', on: :collection, to: 'accredited_provider_search#create'
+            put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+            get '/check', on: :collection, to: 'accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'accredited_providers/checks#update'
+          end
+        end
+
+        scope ':recruitment_cycle_year/accredited-providers', as: :accredited_providers do
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
+        end
 
           get '/check', on: :collection, to: 'accredited_providers/checks#show'
           put '/check', on: :collection, to: 'accredited_providers/checks#update'
