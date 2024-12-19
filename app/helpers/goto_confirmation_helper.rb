@@ -48,7 +48,7 @@ module GotoConfirmationHelper
                           publish_provider_recruitment_cycle_provider_partnerships_path(provider.provider_code, recruitment_cycle_year)
                         end
 
-    return with_partnerships unless Settings.features.provider_partnerships
+    return with_partnerships if Settings.features.provider_partnerships
 
     if goto_confirmation?(param_form_key:, params:)
       check_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
