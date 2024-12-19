@@ -292,8 +292,6 @@ namespace :publish, as: :publish do
           put '/search', on: :collection, to: 'accredited_provider_search#update'
         end
 
-          get '/check', on: :collection, to: 'accredited_providers/checks#show'
-          put '/check', on: :collection, to: 'accredited_providers/checks#update'
         constraints(::Constraints::PartnershipFeature.new(:off)) do
           resources :training_providers, path: '/training-providers', only: [:index], param: :code do
             resources :courses, only: [:index], controller: 'training_providers/courses'
