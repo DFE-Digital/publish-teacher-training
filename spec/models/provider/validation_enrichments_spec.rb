@@ -9,6 +9,7 @@ describe 'validation' do
     create(:provider,
            provider_name: 'ACME SCITT',
            provider_code: 'A01',
+           accrediting_provider_enrichments:,
            courses:)
   end
 
@@ -116,6 +117,95 @@ describe 'validation' do
       let(:word_count) { 250 + 1 }
 
       it { is_expected.not_to be_valid }
+    end
+  end
+
+  context 'no accrediting_providers' do
+    describe '#accrediting_provider_providers' do
+      subject do
+        provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+        provider
+      end
+
+      let(:word_count) { 100 }
+
+      let(:accrediting_provider_enrichments) do
+        result = []
+        10.times do |index|
+          result <<
+            {
+              'Description' => Faker::Lorem.sentence(word_count:),
+              'UcasProviderCode' => "UPC#{index}"
+            }
+        end
+        result
+      end
+
+      let(:provider) do
+        create(:provider)
+      end
+
+      context 'word count within limit' do
+        it { is_expected.to be_valid }
+      end
+
+      context 'word count exceed limit' do
+        let(:word_count) { 100 + 1 }
+        # NOTE: its valid as it is orphaned data
+        # ie a previous course
+        # with an acrediting provider was removed
+        # but the accrediting provider enrichment was left behind
+
+        it { is_expected.to be_valid }
+      end
+    end
+  end
+
+  context 'with accrediting_providers' do
+    describe '#accrediting_provider_providers' do
+      subject do
+        provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+        provider
+      end
+
+      let(:word_count) { 100 }
+
+      let(:accrediting_providers) do
+        result = []
+        10.times do
+          result << create(:provider)
+        end
+        result
+      end
+
+      let(:accrediting_provider_enrichments) do
+        accrediting_providers.map do |ap|
+          {
+            'Description' => Faker::Lorem.sentence(word_count:),
+            'UcasProviderCode' => ap.provider_code.to_s
+          }
+        end
+      end
+
+      let(:courses) do
+        accrediting_providers.map do |ap|
+          build(:course, accrediting_provider: ap)
+        end
+      end
+
+      let(:provider) do
+        create(:provider, courses:)
+      end
+
+      context 'word count within limit' do
+        it { is_expected.to be_valid }
+      end
+
+      context 'word count exceed limit' do
+        let(:word_count) { 100 + 1 }
+
+        it { is_expected.not_to be_valid }
+      end
     end
   end
 end
