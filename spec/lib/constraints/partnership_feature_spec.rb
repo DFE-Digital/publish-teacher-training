@@ -12,7 +12,7 @@ module Constraints
       context 'when we pass :on' do
         let(:constraint) { described_class.new(:on) }
 
-        it 'matches?' do
+        it 'matches' do
           expect(constraint.matches?(nil)).to be_truthy
         end
       end
@@ -20,7 +20,7 @@ module Constraints
       context 'when we pass :off' do
         let(:constraint) { described_class.new(:off) }
 
-        it 'matches?' do
+        it 'does not match' do
           expect(constraint.matches?(nil)).to be_falsey
         end
       end
@@ -34,7 +34,7 @@ module Constraints
       context 'when we pass :on' do
         let(:constraint) { described_class.new(:on) }
 
-        it 'matches?' do
+        it 'does not match' do
           expect(constraint.matches?(nil)).to be_falsey
         end
       end
@@ -42,7 +42,7 @@ module Constraints
       context 'when we pass :off' do
         let(:constraint) { described_class.new(:off) }
 
-        it 'matches?' do
+        it 'matches' do
           expect(constraint.matches?(nil)).to be_truthy
         end
       end
