@@ -130,7 +130,7 @@ en:
     users: "Users"
     training_partners: "Training partners"
     organisation_details: "Organisation details"
-    accredited_provider: "Accredited providers"
+    accredited_provider: "Accredited partnerships"
   secondary_navigation:
     description: Description
     basic_details: Basic details
@@ -279,7 +279,7 @@ en:
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
           accredited_providers:
-            index: Accredited providers
+            index: Accredited partnerships
           onboardings:
             new: "Organisation details"
           onboarding:
@@ -334,7 +334,7 @@ en:
         train_with_us:
           text: "Enter details about the training provider"
         about_accrediting_provider:
-          text: "Enter details about the accredited provider"
+          text: "Enter details about the ratifying provider"
   value_not_entered: "Not entered"
   a_level_grades:
     minimum_grade: Grade %{minimum_grade}
@@ -650,26 +650,26 @@ en:
           cannot_find: *cannot_find
       accredited_providers:
         new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
+          title: About the accredited partnership
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: &add_accredited_partner Add accredited partner
         edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
+          title: About the accredited partnership
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          updated: About the accredited partner updated
         delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
+          title: Are you sure you want to remove this accredited partner?
+          remove: Remove accredited partner
+          updated: Accredited partner removed
         checks:
           show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
+            title:  *add_accredited_partner
+            caption: *add_accredited_partner
+            add: *add_accredited_partner
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
-          caption: *add_accredited_provider
+          caption: *add_accredited_partner
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.
@@ -710,25 +710,25 @@ en:
       accredited_provider_search:
         new:
           title: *accredited_provider_title
-          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+          caption: &accredited_provider_caption "Add accredited partner - %{provider_name} (%{code})"
       accredited_providers:
         new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: "Add accredited partner - %{provider_name} (%{code})"
         edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
           caption: "%{provider_name}"
-          updated: About the accredited provider updated
+          updated: About the accredited partner updated
         delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
+          title: Are you sure you want to remove this accredited partner?
+          remove: Remove accredited partner
+          updated: Accredited partner removed
         checks:
           show:
             caption: *accredited_provider_caption
-            add: Add accredited provider
+            add: Add accredited partner
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
@@ -828,9 +828,9 @@ en:
             applications_open_from:
               blank: "Select an applications open date"
             accrediting_provider:
-              blank: "Select an accredited provider"
-              is_not_accredited: "Update the accredited provider"
-              does_not_exist_in_cycle: "The accredited provider %{accredited_provider_code} does not exist in this cycle"
+              blank: "Select an accredited partner"
+              is_not_accredited: "Update the ratifying provider"
+              does_not_exist_in_cycle: "The accredited partner %{accredited_provider_code} does not exist in this cycle"
             is_send:
               inclusion: Select if this course has a special educational needs and disability (SEND) specialism
             a_level_subject_requirements:
@@ -950,8 +950,8 @@ en:
         accredited_provider_form:
           attributes:
             description:
-              blank: Enter details about the accredited provider
-              too_long: Description about the accredited provider must be 100 words or fewer
+              blank: Enter details about the accredited partner
+              too_long: Description about the accredited partnership must be 100 words or fewer
         a_level_steps/what_a_level_is_required:
           attributes:
             subject:
