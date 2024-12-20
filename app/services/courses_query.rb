@@ -24,6 +24,7 @@ class CoursesQuery
 
   def call
     @scope = visa_sponsorship_scope
+    @scope = subjects_scope
     @scope = study_modes_scope
     @scope = qualifications_scope
     @scope = further_education_scope
@@ -51,6 +52,14 @@ class CoursesQuery
           can_sponsor_skilled_worker_visa: true
         )
       )
+  end
+
+  def subjects_scope
+    return @scope if params[:subjects].blank?
+
+    @applied_scopes[:subjects] = params[:subjects]
+
+    @scope.joins(:subjects).where(subjects: { subject_code: params[:subjects] })
   end
 
   def study_modes_scope

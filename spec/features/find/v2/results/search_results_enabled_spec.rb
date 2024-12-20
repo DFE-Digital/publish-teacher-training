@@ -126,6 +126,37 @@ feature 'V2 results - enabled' do
     end
   end
 
+  context 'when filter by secondary subjects' do
+    before do
+      given_there_are_courses_with_secondary_subjects
+    end
+
+    scenario 'filter by specific secondary subjects' do
+      when_i_visit_the_find_results_page
+      and_i_filter_by_mathematics
+      then_i_see_only_mathematics_courses
+      and_the_mathematics_secondary_option_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
+
+    scenario 'filter by many secondary subjects' do
+      when_i_visit_the_find_results_page
+      and_i_filter_by_mathematics
+      and_i_filter_by_chemistry
+      then_i_see_mathematics_and_chemistry_courses
+      and_the_mathematics_secondary_option_is_checked
+      and_the_chemistry_secondary_option_is_checked
+      and_i_see_that_there_are_two_courses_found
+    end
+
+    scenario 'passing subjects on the parameters' do
+      when_i_visit_the_find_results_page_passing_mathematics_in_the_params
+      then_i_see_only_mathematics_courses
+      and_the_mathematics_secondary_option_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
+  end
+
   scenario 'when no results' do
     when_i_visit_the_find_results_page
     then_i_see_no_courses_found
@@ -145,6 +176,13 @@ feature 'V2 results - enabled' do
     create(:course, :with_full_time_sites, study_mode: 'full_time', name: 'Biology', course_code: 'S872')
     create(:course, :with_part_time_sites, study_mode: 'part_time', name: 'Chemistry', course_code: 'K592')
     create(:course, :with_full_time_or_part_time_sites, study_mode: 'full_time_or_part_time', name: 'Computing', course_code: 'L364')
+  end
+
+  def given_there_are_courses_with_secondary_subjects
+    create(:course, :with_full_time_sites, :secondary, name: 'Biology', course_code: 'S872', subjects: [find_or_create(:secondary_subject, :biology)])
+    create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', course_code: 'K592', subjects: [find_or_create(:secondary_subject, :chemistry)])
+    create(:course, :with_full_time_sites, :secondary, name: 'Computing', course_code: 'L364', subjects: [find_or_create(:secondary_subject, :computing)])
+    create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', course_code: '4RTU', subjects: [find_or_create(:secondary_subject, :mathematics)])
   end
 
   def given_there_are_courses_containing_all_qualifications
@@ -202,8 +240,22 @@ feature 'V2 results - enabled' do
     visit(find_v2_results_path(funding: 'salary'))
   end
 
+  def when_i_visit_the_find_results_page_passing_mathematics_in_the_params
+    visit(find_v2_results_path(subjects: ['G1']))
+  end
+
   def and_i_filter_by_courses_that_sponsor_visa
     check 'Only show courses with visa sponsorship'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_mathematics
+    check 'Mathematics'
+    and_i_apply_the_filters
+  end
+
+  def and_i_filter_by_chemistry
+    check 'Chemistry'
     and_i_apply_the_filters
   end
 
@@ -266,16 +318,16 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_only_courses_that_sponsor_visa
-    expect(page).to have_content('Biology (S872')
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Dance (C115)')
+    expect(results).to have_content('Biology (S872')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Dance (C115)')
   end
 
   def then_i_see_only_part_time_courses
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Biology (S872)')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Biology (S872)')
   end
 
   def and_the_part_time_filter_is_checked
@@ -283,9 +335,9 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_only_full_time_courses
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Chemistry (K592)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Chemistry (K592)')
   end
 
   def and_the_full_time_filter_is_checked
@@ -293,18 +345,18 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_all_courses_containing_all_study_types
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_content('Chemistry (K592)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_content('Chemistry (K592)')
   end
 
   def then_i_see_only_qts_only_courses
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_no_content('Chemistry (K592)')
-    expect(page).to have_no_content('Computing (L364)')
-    expect(page).to have_no_content('Dance (C115)')
-    expect(page).to have_no_content('Physics (3CXN)')
-    expect(page).to have_no_content('Mathemathics (4RTU)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_no_content('Chemistry (K592)')
+    expect(results).to have_no_content('Computing (L364)')
+    expect(results).to have_no_content('Dance (C115)')
+    expect(results).to have_no_content('Physics (3CXN)')
+    expect(results).to have_no_content('Mathemathics (4RTU)')
   end
 
   def and_the_qts_only_filter_is_checked
@@ -312,12 +364,12 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_only_qts_with_pgce_or_pgde_courses
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Biology (S872)')
-    expect(page).to have_no_content('Dance (C115)')
-    expect(page).to have_no_content('Physics (3CXN)')
-    expect(page).to have_no_content('Mathemathics (4RTU)')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Biology (S872)')
+    expect(results).to have_no_content('Dance (C115)')
+    expect(results).to have_no_content('Physics (3CXN)')
+    expect(results).to have_no_content('Mathemathics (4RTU)')
   end
 
   def and_the_qts_with_pgce_or_pgde_filter_is_checked
@@ -325,9 +377,9 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_only_further_education__courses
-    expect(page).to have_content('Further education (K594)')
-    expect(page).to have_no_content('Biology (S872)')
-    expect(page).to have_no_content('Chemistry (K592)')
+    expect(results).to have_content('Further education (K594)')
+    expect(results).to have_no_content('Biology (S872)')
+    expect(results).to have_no_content('Chemistry (K592)')
   end
 
   def and_the_further_education_filter_is_checked
@@ -335,43 +387,43 @@ feature 'V2 results - enabled' do
   end
 
   def then_i_see_only_courses_with_special_education_needs
-    expect(page).to have_content('Biology SEND (S872')
-    expect(page).to have_content('Chemistry SEND (K592)')
-    expect(page).to have_content('Computing SEND (L364)')
-    expect(page).to have_no_content('Dance (C115)')
-    expect(page).to have_no_content('Physics (3CXN)')
+    expect(results).to have_content('Biology SEND (S872')
+    expect(results).to have_content('Chemistry SEND (K592)')
+    expect(results).to have_content('Computing SEND (L364)')
+    expect(results).to have_no_content('Dance (C115)')
+    expect(results).to have_no_content('Physics (3CXN)')
   end
 
   def then_i_see_only_salaried_courses
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_no_content('Biology (S872)')
-    expect(page).to have_no_content('Computing (L364)')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_no_content('Biology (S872)')
+    expect(results).to have_no_content('Computing (L364)')
   end
 
   def then_i_see_only_fee_courses
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_no_content('Chemistry (K592)')
-    expect(page).to have_no_content('Computing (L364)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_no_content('Chemistry (K592)')
+    expect(results).to have_no_content('Computing (L364)')
   end
 
   def then_i_see_fee_and_salaried_courses
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_no_content('Computing (L364)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_no_content('Computing (L364)')
   end
 
   def then_i_see_only_apprenticeship_courses
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Chemistry (K592)')
-    expect(page).to have_no_content('Biology (S872)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Chemistry (K592)')
+    expect(results).to have_no_content('Biology (S872)')
   end
 
   def then_i_see_only_courses_that_are_open_for_applications
-    expect(page).to have_content('Biology (S872)')
-    expect(page).to have_content('Chemistry (K592)')
-    expect(page).to have_content('Computing (L364)')
-    expect(page).to have_no_content('Dance (C115)')
-    expect(page).to have_no_content('Physics (3CXN)')
+    expect(results).to have_content('Biology (S872)')
+    expect(results).to have_content('Chemistry (K592)')
+    expect(results).to have_content('Computing (L364)')
+    expect(results).to have_no_content('Dance (C115)')
+    expect(results).to have_no_content('Physics (3CXN)')
   end
 
   def and_the_visa_sponsorship_filter_is_checked
@@ -417,8 +469,36 @@ feature 'V2 results - enabled' do
     expect(page).to have_title('3 courses found')
   end
 
+  def then_i_see_only_mathematics_courses
+    expect(results).to have_content('Mathematics (4RTU)')
+    expect(results).to have_no_content('Biology')
+    expect(results).to have_no_content('Chemistry')
+    expect(results).to have_no_content('Computing')
+  end
+
+  def then_i_see_mathematics_and_chemistry_courses
+    expect(results).to have_content('Mathematics')
+    expect(results).to have_content('Chemistry')
+    expect(results).to have_no_content('Biology')
+    expect(results).to have_no_content('Computing')
+  end
+
+  def and_the_mathematics_secondary_option_is_checked
+    expect(page).to have_checked_field('Mathematics')
+  end
+
+  def and_the_chemistry_secondary_option_is_checked
+    expect(page).to have_checked_field('Chemistry')
+  end
+
   def then_i_see_no_courses_found
     expect(page).to have_content('No courses found')
     expect(page).to have_title('No courses found')
+  end
+
+  private
+
+  def results
+    page.first('.app-search-results')
   end
 end

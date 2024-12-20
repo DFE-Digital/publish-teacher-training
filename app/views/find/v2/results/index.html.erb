@@ -18,6 +18,10 @@
           <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.can_sponsor_visa"), size: "s" } %>
         <% end %>
 
+        <%= form.govuk_check_boxes_fieldset :subjects, legend: { text: t("helpers.legend.courses_query_filters.secondary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_query_filters.secondary"), class: "govuk-!-font-size-16" }, class: "app-filter__group", hidden: false, multiple: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_collection_check_boxes :subjects, form.object.secondary_subjects, :subject_code, :subject_name, legend: nil, include_hidden: false, small: true %>
+        <% end %>
+
         <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t("helpers.legend.courses_query_filters.study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
           <%= form.govuk_check_box :study_types, "full_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.full_time"), size: "s" }, include_hidden: false %>
           <%= form.govuk_check_box :study_types, "part_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.part_time"), size: "s" }, include_hidden: false %>
