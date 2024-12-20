@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false } do
   before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_accredited_providers_page
   end

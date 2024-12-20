@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Publishing a course when course accrediting provider is invalid', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
     given_i_am_authenticated_as_a_provider_user
   end
 
@@ -61,12 +61,8 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def and_the_provider_has_a_valid_accrediting_provider
-    enrichment = AccreditingProviderEnrichment.new(
-      UcasProviderCode: accredited_provider.provider_code,
-      Description: ''
-    )
     provider = @user.providers.first
-    provider.update!(accrediting_provider_enrichments: [enrichment])
+    provider.accredited_partnerships.create(accredited_provider: accredited_provider, description: 'Description')
   end
 
   def and_the_provider_has_no_accredited_provider
@@ -117,7 +113,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_it_takes_me_to_the_accredited_providers_page
-    expect(publish_courses_accredited_providers_page).to be_displayed
+    expect(publish_courses_ratifying_providers_page).to be_displayed
   end
 
   def when_i_click_add_an_accredited_provider
@@ -143,7 +139,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_see_that_the_accredited_provider_has_been_added
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content('Accredited partnership added')
   end
 
   def and_i_click_the_publish_button
@@ -156,7 +152,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
 
   def and_i_choose_the_new_accredited_provider
     choose accredited_provider.provider_name
-    page.click_link_or_button('Update accredited provider')
+    page.click_link_or_button('Update ratifying partner')
     expect(page).to have_content('Accredited provider updated')
   end
 
