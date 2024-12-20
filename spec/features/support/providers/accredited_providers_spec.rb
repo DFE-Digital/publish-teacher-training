@@ -62,15 +62,15 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   def and_i_see_the_remove_success_message; end
 
   def and_i_click_remove_ap
-    click_link_or_button 'Remove accredited provider'
+    click_link_or_button 'Remove accredited partner'
   end
 
   def and_i_confirm_the_changes
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button 'Add accredited partner'
   end
 
   def when_i_input_new_information
-    fill_in 'About the accredited provider', with: 'New AP description'
+    fill_in 'About the accredited partner', with: 'New AP description'
     click_link_or_button 'Continue'
   end
 
@@ -89,7 +89,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_click_add_accredited_provider
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button 'Add accredited partner'
   end
 
   def and_i_click_remove
@@ -97,7 +97,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_cannot_remove_text
-    expect(page).to have_css('h1', text: 'You cannot remove this accredited provider')
+    expect(page).to have_css('h1', text: 'You cannot remove this accredited partner')
   end
 
   def given_i_am_authenticated_as_an_admin_user
@@ -134,7 +134,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_content('About the accredited provider updated')
+    expect(page).to have_content('About the accredited partner updated')
   end
 
   def then_i_should_see_the_updated_description
@@ -142,12 +142,12 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_input_updated_description
-    fill_in 'About the accredited provider', with: 'update the AP description'
+    fill_in 'About the accredited partner', with: 'update the AP description'
     click_link_or_button 'Update description'
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
-    expect(page).to have_text("There are no accredited providers for #{@provider.provider_name}")
+    expect(page).to have_text("There are no accredited partners for #{@provider.provider_name}")
   end
 
   def and_i_click_on_the_accredited_provider_tab
@@ -155,7 +155,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_my_provider_has_accrediting_providers
-    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
+    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting partner name'))
 
     @provider.courses << course
     @provider.update(
@@ -168,7 +168,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   def then_i_should_see_the_accredited_provider_name_displayed
     expect(page).to have_css(
       'h2.govuk-summary-card__title a.govuk-link',
-      text: 'Accrediting provider name'
+      text: 'Accrediting partner name'
     )
   end
 end
