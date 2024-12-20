@@ -152,8 +152,8 @@
         <% end %>
 
         <% unless @provider.accredited_provider? || course.is_further_education? %>
-          <% summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row| %>
-            <% row.with_key { "Ratifying provider" } %>
+          <% summary_list.with_row(html_attributes: { data: { qa: "course__ratifying_partner" } }) do |row| %>
+            <% row.with_key { "Ratifying partner" } %>
             <% row.with_value { course.accrediting_provider.provider_name } %>
             <% if @provider.accredited_bodies.length > 1 %>
               <% row.with_action(
