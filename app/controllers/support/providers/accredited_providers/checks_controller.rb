@@ -15,7 +15,7 @@ module Support
 
           redirect_to support_recruitment_cycle_provider_accredited_providers_path(
             recruitment_cycle.year, provider.id
-          ), flash: { success: 'Accredited provider added' }
+          ), flash: { success: 'Accredited partner added' }
         end
 
         private

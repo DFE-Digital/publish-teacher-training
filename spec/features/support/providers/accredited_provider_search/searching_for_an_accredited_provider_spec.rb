@@ -22,7 +22,7 @@ feature 'Searching for an accredited provider' do
 
     when_i_select_the_provider
     and_i_continue_without_entering_a_description
-    then_i_should_see_an_error_message('Enter details about the accredited provider')
+    then_i_should_see_an_error_message('Enter details about the accredited partner')
 
     when_i_enter_a_description
     and_i_confirm_the_changes
@@ -33,13 +33,13 @@ feature 'Searching for an accredited provider' do
 
   scenario 'back links behaviour' do
     when_i_am_on_the_confirm_page
-    and_i_click_the_change_link_for('accredited provider name')
+    and_i_click_the_change_link_for('accredited partner name')
     then_i_should_be_taken_to_the_accredited_provider_search_page
     when_i_click_the_back_link
     then_i_should_be_taken_back_to_the_confirm_page
 
     when_i_am_on_the_confirm_page
-    and_i_click_the_change_link_for('accredited provider description')
+    and_i_click_the_change_link_for('accredited partner description')
     then_i_should_be_taken_to_the_accredited_provider_description_page
     when_i_click_the_back_link
     then_i_should_be_taken_back_to_the_confirm_page
@@ -109,18 +109,18 @@ feature 'Searching for an accredited provider' do
   end
 
   def when_i_enter_a_description
-    fill_in 'About the accredited provider', with: 'This is a description'
+    fill_in 'About the accredited partner', with: 'This is a description'
     click_continue
   end
 
   def and_i_confirm_the_changes
     expect do
-      click_link_or_button 'Add accredited provider'
+      click_link_or_button 'Add accredited partner'
     end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
   def and_i_should_see_a_success_message
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content('Accredited partner added')
   end
 
   def and_i_should_see_the_accredited_providers
