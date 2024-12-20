@@ -158,7 +158,7 @@
             <% if @provider.accredited_bodies.length > 1 %>
               <% row.with_action(
                 href: new_publish_provider_recruitment_cycle_courses_accredited_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
-                visually_hidden_text: "ratifying provider"
+                visually_hidden_text: "ratifying partner"
               ) %>
             <% else %>
               <% row.with_action %>
