@@ -59,7 +59,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
     when_i_select_the_provider
     and_i_continue_without_entering_a_description
-    then_i_should_see_an_error_message('Enter details about the accredited provider')
+    then_i_should_see_an_error_message('Enter details about the accredited partner')
 
     when_i_input_some_information
     then_i_should_see_the_information_i_added
@@ -73,13 +73,13 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   scenario 'back links behaviour' do
     given_i_am_on_the_confirm_page
-    when_i_click_the_change_link_for('accredited provider name')
+    when_i_click_the_change_link_for('accredited partner name')
     then_i_should_be_taken_to_the_accredited_provider_search_page
 
     when_i_click_the_back_link
     then_i_should_be_taken_back_to_the_confirm_page
 
-    when_i_click_the_change_link_for('accredited provider description')
+    when_i_click_the_change_link_for('accredited partner description')
     then_i_should_be_taken_to_the_accredited_provider_description_page
 
     when_i_click_the_back_link
@@ -89,11 +89,11 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   private
 
   def and_i_click_remove_ap
-    click_link_or_button 'Remove accredited provider'
+    click_link_or_button 'Remove accredited partner'
   end
 
   def then_i_should_see_the_cannot_remove_ap_text
-    expect(page).to have_css('h1', text: 'You cannot remove this accredited provider')
+    expect(page).to have_css('h1', text: 'You cannot remove this accredited partner')
   end
 
   def and_i_click_remove
@@ -157,15 +157,15 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def and_i_should_see_a_success_message
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content('Accredited partner added')
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_content('About the accredited provider updated')
+    expect(page).to have_content('About the accredited partner updated')
   end
 
   def and_i_see_the_remove_success_message
-    expect(page).to have_content('Accredited provider removed')
+    expect(page).to have_content('Accredited partner removed')
   end
 
   def then_i_should_be_taken_to_the_index_page
@@ -174,7 +174,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
 
   def when_i_confirm_the_changes
     expect do
-      click_link_or_button 'Add accredited provider'
+      click_link_or_button 'Add accredited partner'
     end.to have_enqueued_email(Users::OrganisationMailer, :added_as_an_organisation_to_training_partner)
   end
 
@@ -189,12 +189,12 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   alias_method :then_i_should_see_the_description, :then_i_should_see_the_information_i_added
 
   def when_i_input_some_information
-    fill_in 'About the accredited provider', with: 'This is a description'
+    fill_in 'About the accredited partner', with: 'This is a description'
     click_continue
   end
 
   def when_i_input_some_different_information
-    fill_in 'About the accredited provider', with: 'updates to the AP description'
+    fill_in 'About the accredited partner', with: 'updates to the AP description'
     click_link_or_button 'Update description'
   end
 
@@ -244,15 +244,15 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def when_i_click_add_accredited_provider
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button 'Add accredited partner'
   end
 
   def then_i_see_the_correct_text_for_no_accredited_providers
-    expect(page).to have_text("There are no accredited providers for #{@provider.provider_name}")
+    expect(page).to have_text("There are no accredited partners for #{@provider.provider_name}")
   end
 
   def when_i_click_on_the_accredited_provider_tab
-    click_link_or_button 'Accredited provider'
+    click_link_or_button 'Accredited partner'
   end
 
   alias_method :and_i_click_on_the_accredited_provider_tab, :when_i_click_on_the_accredited_provider_tab
@@ -277,7 +277,7 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   alias_method :and_i_continue_without_entering_a_description, :click_continue
 
   def and_my_provider_has_accrediting_providers
-    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting provider name'))
+    course = build(:course, accrediting_provider: build(:provider, :accredited_provider, provider_name: 'Accrediting partner name'))
 
     @provider.courses << course
     @provider.update(
@@ -288,6 +288,6 @@ feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } 
   end
 
   def then_i_should_see_the_accredited_provider_name_displayed
-    expect(page).to have_css('h2', text: 'Accrediting provider name')
+    expect(page).to have_css('h2', text: 'Accrediting partner name')
   end
 end
