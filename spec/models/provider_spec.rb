@@ -948,7 +948,7 @@ describe Provider do
     end
   end
 
-  describe '#accredited_bodies' do
+  describe '#accredited_bodies enrichments' do
     before do
       allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     end
@@ -988,7 +988,7 @@ describe Provider do
     end
   end
 
-  describe '#accredited_bodies partnerships' do
+  describe '#accredited_bodies' do
     before do
       allow(Settings.features).to receive(:provider_partnerships).and_return(true)
     end
