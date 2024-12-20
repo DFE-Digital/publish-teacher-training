@@ -52,7 +52,7 @@ module CoursePreview
       include_examples 'course with missing information', :train_with_disability, 'Enter details about training with disabilities and other needs'
 
       include_examples 'course with missing information', :train_with_us, 'Enter details about the training provider'
-      include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the accredited provider'
+      include_examples 'course with missing information', :about_accrediting_provider, 'Enter details about the ratifying provider'
     end
   end
 end
