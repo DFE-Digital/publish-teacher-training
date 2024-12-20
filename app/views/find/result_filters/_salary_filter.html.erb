@@ -1,9 +1,15 @@
 <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__funding">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-    Salary<span class="govuk-visually-hidden"> filter</span>
+    Fee or salary<span class="govuk-visually-hidden"> filter</span>
   </legend>
 
   <div class="govuk-checkboxes govuk-checkboxes--small">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="fee-or-salary-1" name="fee-or-salary" type="checkbox" value="hmrc">
+      <label class="govuk-label govuk-checkboxes__label" for="fee-or-salary-1">
+        Fee - no salary
+      </label>
+    </div>
     <div class="govuk-checkboxes__item" data-qa="subject">
       <%= form.check_box(
         :funding,
@@ -12,8 +18,14 @@
         nil
       ) %>
       <%= form.label(:funding, { for: "funding" }, class: "govuk-label govuk-checkboxes__label") do %>
-        Only show courses that come with a salary
+        Salary
       <% end %>
+    </div>
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="fee-or-salary-3" name="fee-or-salary" type="checkbox" value="hmrc">
+      <label class="govuk-label govuk-checkboxes__label" for="fee-or-salary-3">
+        Teaching apprenticeship - with salary
+      </label>
     </div>
   </div>
 </fieldset>
