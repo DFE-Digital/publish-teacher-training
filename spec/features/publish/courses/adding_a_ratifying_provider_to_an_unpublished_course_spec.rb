@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'unpublished course without accredited provider', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
   end
 
   scenario 'adding and changing an accredited provider' do
@@ -31,7 +31,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_click_update_accredited_provider
-    click_link_or_button 'Update accredited provider'
+    click_link_or_button 'Update ratifying partner'
   end
 
   def and_i_choose_the_new_accredited_provider
@@ -40,7 +40,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def when_i_click_select_an_accredited_provider
-    click_link_or_button 'Select an accredited provider'
+    click_link_or_button 'Select an accredited partner'
   end
 
   def and_i_create_a_new_accredited_provider
@@ -58,7 +58,7 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_input_some_information
-    fill_in 'About the accredited provider', with: 'This is a description'
+    fill_in 'About the accredited partner', with: 'This is a description'
     click_continue
   end
 
@@ -80,15 +80,15 @@ feature 'unpublished course without accredited provider', { can_edit_current_and
   end
 
   def and_i_click_the_add_accredited_provider_link
-    click_link_or_button 'Add at least one accredited provider'
+    click_link_or_button 'Add at least one accredited partner'
   end
 
   def and_i_click_add_accredited_provider_link
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button 'Add accredited partner'
   end
 
   def and_i_click_add_accredited_provider_button
-    click_link_or_button 'Add accredited provider'
+    click_link_or_button 'Add accredited partner'
   end
 
   def given_i_am_authenticated_as_a_provider_user

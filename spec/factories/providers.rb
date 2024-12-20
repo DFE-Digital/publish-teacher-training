@@ -41,6 +41,10 @@ FactoryBot.define do
       provider_name { 'Test Name' }
     end
 
+    trait :with_accredited_partner do
+      accredited_partnerships { [association(:provider_partnership)] }
+    end
+
     trait :university do
       provider_type { :university }
       urn { nil }

@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-describe ProviderPolicy do
-  subject { described_class }
+describe 'ProviderPolicyAccreditedEnrichments' do
+  subject { ProviderPolicy }
 
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
   end
 
   let(:user) { build(:user) }
@@ -35,6 +35,8 @@ describe ProviderPolicy do
   end
 
   permissions :can_show_training_provider? do
+    let(:accrediting_provider_enrichments) { [{ UcasProviderCode: course.accredited_provider_code }] }
+
     let(:allowed_user) { create(:user, providers: [provider]) }
     let(:not_allowed_user) { create(:user) }
 
@@ -42,9 +44,9 @@ describe ProviderPolicy do
 
     let(:provider) { course.accrediting_provider }
     let(:training_provider) do
-      course.provider.tap do |p|
-        p.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: 'asdfa')
-      end
+      course.provider
+      course.provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+      course.provider
     end
 
     it { is_expected.to permit(admin, training_provider) }
@@ -54,7 +56,7 @@ describe ProviderPolicy do
 
   describe '#permitted_provider_attributes' do
     context 'when user' do
-      subject { described_class.new(user, build(:provider)) }
+      subject { ProviderPolicy.new(user, build(:provider)) }
 
       it 'includes email' do
         expect(subject.permitted_provider_attributes).to include(:email)
@@ -66,7 +68,7 @@ describe ProviderPolicy do
     end
 
     context 'when admin' do
-      subject { described_class.new(admin, build(:provider)) }
+      subject { ProviderPolicy.new(admin, build(:provider)) }
 
       it 'includes email' do
         expect(subject.permitted_provider_attributes).to include(:email)

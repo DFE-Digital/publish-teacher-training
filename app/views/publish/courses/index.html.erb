@@ -3,7 +3,11 @@
 
 <h1 class="govuk-heading-l">Courses</h1>
 
+<% if Settings.features.provider_partnerships %>
+<%= render AddCourseButtonPartnerships.new(provider: @provider) %>
+<% else %>
 <%= render AddCourseButton.new(provider: @provider) %>
+<% end %>
 
 <% if @self_accredited_courses %>
   <section data-qa="courses__table-section">
@@ -14,7 +18,7 @@
 <% @courses_by_accrediting_provider.each do |accrediting_provider, courses| %>
   <section data-qa="courses__table-section">
     <h2 class="govuk-heading-m">
-      <span class="govuk-caption-m">Accredited provider</span>
+      <span class="govuk-caption-m">Ratifying provider</span>
       <%= accrediting_provider %>
     </h2>
 
