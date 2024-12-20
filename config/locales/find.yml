@@ -313,6 +313,7 @@ en:
     legend:
       courses_query_filters:
         can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
+        secondary_html: Secondary<span class="govuk-visually-hidden"> filter</span>
         study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
         qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>
         further_education_html: Further education<span class="govuk-visually-hidden"> filter</span>
@@ -322,6 +323,7 @@ en:
     hint:
       courses_query_filters:
         further_education: (ages 16 and over)
+        secondary: (ages 11 to 18)
     label:
       courses_query_filters:
         can_sponsor_visa: Only show courses with visa sponsorship

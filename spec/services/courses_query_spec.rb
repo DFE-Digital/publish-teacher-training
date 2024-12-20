@@ -42,6 +42,27 @@ RSpec.describe CoursesQuery do
       end
     end
 
+    context 'when filter by secondary subjects' do
+      let!(:biology) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
+      end
+      let!(:chemistry) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
+      end
+      let!(:mathematics) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+      end
+
+      let(:params) { { subjects: %w[C1 F1] } }
+
+      it 'returns specific secondary courses' do
+        expect(results).to match_collection(
+          [biology, chemistry],
+          attribute_names: %w[name]
+        )
+      end
+    end
+
     context 'when filter by study mode' do
       let!(:full_time_course) do
         create(:course, :with_full_time_sites, study_mode: 'full_time', name: 'Biology', course_code: 'S872')
