@@ -2287,6 +2287,33 @@ describe Course do
     end
   end
 
+  describe '#ratifying_provider_description' do
+    subject { course.ratifying_provider_description }
+
+    context 'for courses without ratifying provider' do
+      let(:accrediting_provider) { nil }
+      let(:course) { create(:course, accrediting_provider:) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'for courses with ratifying provider' do
+      let(:provider) { create(:provider) }
+      let(:accrediting_provider) { build(:accredited_provider) }
+      let(:course) { create(:course, provider:, accrediting_provider:) }
+
+      context 'without any provider partnership' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'with accrediting_provider_enrichments' do
+        let(:provider) { create(:provider, accredited_partnerships: [build(:provider_partnership, accredited_provider: accrediting_provider, description: 'one two three')]) }
+
+        it { is_expected.to match 'one two three' }
+      end
+    end
+  end
+
   describe '#accrediting_provider_description' do
     subject { course.accrediting_provider_description }
 
