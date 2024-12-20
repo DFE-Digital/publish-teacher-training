@@ -1,4 +1,4 @@
-<% content_for :page_title, "You cannot remove this accredited provider" %>
+<% content_for :page_title, "You cannot remove this accredited partner" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path) %>
@@ -8,17 +8,17 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
      <span class="govuk-caption-l"><%= @accredited_provider.provider_name %></span>
-      You cannot remove this accredited provider
+      You cannot remove this accredited partner
     </h1>
 
     <p class="govuk-body">
       <%= @accredited_provider.provider_name %> is an
-      accredited provider for courses run by <%= @provider.provider_name %>. At least one of these courses is
+      ratifying partner for courses run by <%= @provider.provider_name %>. At least one of these courses is
       currently published on Find.
     </p>
 
     <p class="govuk-body">
-      If you need to change an accredited provider for a course which is published, please contact us at
+      If you need to change an ratifying provider for a course which is published, please contact us at
       <%= bat_contact_mail_to %>.
     </p>
 

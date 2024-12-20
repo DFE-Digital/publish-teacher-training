@@ -18,15 +18,15 @@
 
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
-              row.with_key { "Accredited provider" }
+              row.with_key { "Accredited partner" }
               row.with_value { @accredited_provider_form.provider_name }
-              row.with_action(text: "Change", href: search_publish_provider_recruitment_cycle_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited provider name")
+              row.with_action(text: "Change", href: search_publish_provider_recruitment_cycle_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited partner name")
             end
 
             component.with_row do |row|
-              row.with_key { "About the accredited provider" }
+              row.with_key { "About the accredited partner" }
               row.with_value { markdown @accredited_provider_form.description }
-              row.with_action(text: "Change", href: new_publish_provider_recruitment_cycle_accredited_provider_path(goto_confirmation: true), visually_hidden_text: "accredited provider description")
+              row.with_action(text: "Change", href: new_publish_provider_recruitment_cycle_accredited_provider_path(goto_confirmation: true), visually_hidden_text: "accredited partner description")
             end
           end %>
 
