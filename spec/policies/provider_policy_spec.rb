@@ -5,6 +5,10 @@ require 'rails_helper'
 describe ProviderPolicy do
   subject { described_class }
 
+  before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+  end
+
   let(:user) { build(:user) }
   let(:admin) { build(:user, :admin) }
 
@@ -31,8 +35,6 @@ describe ProviderPolicy do
   end
 
   permissions :can_show_training_provider? do
-    let(:accrediting_provider_enrichments) { [{ UcasProviderCode: course.accredited_provider_code }] }
-
     let(:allowed_user) { create(:user, providers: [provider]) }
     let(:not_allowed_user) { create(:user) }
 
@@ -40,9 +42,9 @@ describe ProviderPolicy do
 
     let(:provider) { course.accrediting_provider }
     let(:training_provider) do
-      course.provider
-      course.provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-      course.provider
+      course.provider.tap do |p|
+        p.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: 'asdfa')
+      end
     end
 
     it { is_expected.to permit(admin, training_provider) }

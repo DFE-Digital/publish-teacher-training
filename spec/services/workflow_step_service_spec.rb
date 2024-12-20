@@ -7,6 +7,10 @@ describe WorkflowStepService do
     described_class.call(course)
   end
 
+  before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+  end
+
   describe '#call' do
     context 'when course.is_school_direct? && when course.provider.accredited_bodies.length == 0' do
       let(:provider) do

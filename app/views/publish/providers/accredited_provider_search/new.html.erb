@@ -7,7 +7,7 @@
       ) do |f| %>
 
   <% content_for :before_content do %>
-    <%= govuk_back_link_to(publish_back_link_for_adding_accrediting_provider_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
+    <%= govuk_back_link_to(accredited_provider_search_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
   <% end %>
 
   <%= f.govuk_error_summary %>
@@ -38,7 +38,7 @@
       <%= f.govuk_submit t("continue") %>
 
       <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+        <%= govuk_link_to(t("cancel"), accredited_provider_search_path(param_form_key: f.object_name.to_sym, params:, recruitment_cycle_year: @recruitment_cycle.year, provider: @provider)) %>
       </p>
     </div>
   </div>
