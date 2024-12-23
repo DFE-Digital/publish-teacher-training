@@ -16,3 +16,4 @@ authentication:
 
 features:
   api_summary_content_change: true
+  v2_results: true
