@@ -2,11 +2,10 @@
 
 require 'rails_helper'
 
-feature 'V2 results - enabled' do
+RSpec.describe 'V2 results - enabled', :js, service: :find do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
     allow(Settings.features).to receive_messages(v2_results: true)
-    given_i_am_authenticated
   end
 
   scenario 'when I filter by visa sponsorship' do
@@ -133,10 +132,20 @@ feature 'V2 results - enabled' do
 
     scenario 'filter by specific secondary subjects' do
       when_i_visit_the_find_results_page
-      and_i_filter_by_mathematics
+      and_i_search_for_the_mathematics_option
+      then_i_can_only_see_the_mathematics_option
+      when_i_clear_my_search_for_secondary_options
+      then_i_can_see_all_secondary_options
+      when_i_filter_by_mathematics
       then_i_see_only_mathematics_courses
       and_the_mathematics_secondary_option_is_checked
       and_i_see_that_there_is_one_course_found
+
+      when_i_search_for_specific_secondary_options
+      then_i_can_only_see_options_that_i_searched
+
+      when_i_clear_my_search_for_secondary_options
+      then_i_can_see_all_secondary_options
     end
 
     scenario 'filter by many secondary subjects' do
@@ -160,10 +169,6 @@ feature 'V2 results - enabled' do
   scenario 'when no results' do
     when_i_visit_the_find_results_page
     then_i_see_no_courses_found
-  end
-
-  def given_i_am_authenticated
-    page.driver.browser.authorize 'admin', 'password'
   end
 
   def given_there_are_courses_that_sponsor_visa
@@ -244,76 +249,101 @@ feature 'V2 results - enabled' do
     visit(find_v2_results_path(subjects: ['G1']))
   end
 
+  def and_i_search_for_the_mathematics_option
+    page.find('[data-filter-search-target="searchInput"]').set('Math')
+  end
+
+  def then_i_can_only_see_the_mathematics_option
+    expect(secondary_options).to eq(['Mathematics'])
+  end
+
+  def then_i_can_see_all_secondary_options
+    expect(secondary_options.size).to eq(37)
+  end
+
+  def when_i_search_for_specific_secondary_options
+    page.find('[data-filter-search-target="searchInput"]').set('Com')
+  end
+
+  def then_i_can_only_see_options_that_i_searched
+    expect(secondary_options).to eq(['Communication and media studies', 'Computing'])
+  end
+
+  def when_i_clear_my_search_for_secondary_options
+    fill_in 'filter-search-0-input', with: ''
+  end
+
   def and_i_filter_by_courses_that_sponsor_visa
-    check 'Only show courses with visa sponsorship'
+    check 'Only show courses with visa sponsorship', visible: :all
     and_i_apply_the_filters
   end
 
-  def and_i_filter_by_mathematics
-    check 'Mathematics'
+  def when_i_filter_by_mathematics
+    check 'Mathematics', visible: :all
     and_i_apply_the_filters
   end
+  alias_method :and_i_filter_by_mathematics, :when_i_filter_by_mathematics
 
   def and_i_filter_by_chemistry
-    check 'Chemistry'
+    check 'Chemistry', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_only_by_part_time_courses
-    uncheck 'Full time (12 months)'
-    check 'Part time (18 to 24 months)'
+    uncheck 'Full time (12 months)', visible: :all
+    check 'Part time (18 to 24 months)', visible: :all
     and_i_apply_the_filters
   end
 
   def when_i_filter_only_by_full_time_courses
-    uncheck 'Part time (18 to 24 months)'
-    check 'Full time (12 months)'
+    uncheck 'Part time (18 to 24 months)', visible: :all
+    check 'Full time (12 months)', visible: :all
     and_i_apply_the_filters
   end
 
   def when_i_filter_by_part_time_and_full_time_courses
-    check 'Part time (18 to 24 months)'
-    check 'Full time (12 months)'
+    check 'Part time (18 to 24 months)', visible: :all
+    check 'Full time (12 months)', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_qts_only_courses
-    check 'QTS only'
+    check 'QTS only', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_qts_with_pgce_or_pgde_courses
-    check 'QTS with PGCE or PGDE'
+    check 'QTS with PGCE or PGDE', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_courses_open_for_applications
-    check 'Only show courses open for applications'
+    check 'Only show courses open for applications', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_further_education_courses
-    check 'Only show further education courses'
+    check 'Only show further education courses', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_courses_with_special_education_needs
-    check 'Only show courses with a SEND specialism'
+    check 'Only show courses with a SEND specialism', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_salaried_courses
-    check 'Salary'
+    check 'Salary', visible: :all, visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_fee_courses
-    check 'Fee - no salary'
+    check 'Fee - no salary', visible: :all
     and_i_apply_the_filters
   end
 
   def and_i_filter_by_apprenticeship_courses
-    check 'Teaching apprenticeship - with salary'
+    check 'Teaching apprenticeship - with salary', visible: :all
     and_i_apply_the_filters
   end
 
@@ -331,7 +361,7 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_part_time_filter_is_checked
-    expect(page).to have_checked_field('Part time (18 to 24 months)')
+    expect(page).to have_checked_field('Part time (18 to 24 months)', visible: :all)
   end
 
   def then_i_see_only_full_time_courses
@@ -341,7 +371,7 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_full_time_filter_is_checked
-    expect(page).to have_checked_field('Full time (12 months)')
+    expect(page).to have_checked_field('Full time (12 months)', visible: :all)
   end
 
   def then_i_see_all_courses_containing_all_study_types
@@ -360,7 +390,7 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_qts_only_filter_is_checked
-    expect(page).to have_checked_field('QTS only')
+    expect(page).to have_checked_field('QTS only', visible: :all)
   end
 
   def then_i_see_only_qts_with_pgce_or_pgde_courses
@@ -373,7 +403,7 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_qts_with_pgce_or_pgde_filter_is_checked
-    expect(page).to have_checked_field('QTS with PGCE or PGDE')
+    expect(page).to have_checked_field('QTS with PGCE or PGDE', visible: :all)
   end
 
   def then_i_see_only_further_education__courses
@@ -383,7 +413,7 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_further_education_filter_is_checked
-    expect(page).to have_checked_field('Only show further education courses')
+    expect(page).to have_checked_field('Only show further education courses', visible: :all)
   end
 
   def then_i_see_only_courses_with_special_education_needs
@@ -427,27 +457,27 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_visa_sponsorship_filter_is_checked
-    expect(page).to have_checked_field('Only show courses with visa sponsorship')
+    expect(page).to have_checked_field('Only show courses with visa sponsorship', visible: :all)
   end
 
   def and_the_open_for_application_filter_is_checked
-    expect(page).to have_checked_field('Only show courses open for applications')
+    expect(page).to have_checked_field('Only show courses open for applications', visible: :all)
   end
 
   def and_the_special_education_needs_filter_is_checked
-    expect(page).to have_checked_field('Only show courses with a SEND specialism')
+    expect(page).to have_checked_field('Only show courses with a SEND specialism', visible: :all)
   end
 
   def and_the_fee_filter_is_checked
-    expect(page).to have_checked_field('Fee - no salary')
+    expect(page).to have_checked_field('Fee - no salary', visible: :all)
   end
 
   def and_the_salary_filter_is_checked
-    expect(page).to have_checked_field('Salary')
+    expect(page).to have_checked_field('Salary', visible: :all)
   end
 
   def and_the_apprenticeship_filter_is_checked
-    expect(page).to have_checked_field('Teaching apprenticeship - with salary')
+    expect(page).to have_checked_field('Teaching apprenticeship - with salary', visible: :all)
   end
 
   def and_i_apply_the_filters
@@ -484,11 +514,11 @@ feature 'V2 results - enabled' do
   end
 
   def and_the_mathematics_secondary_option_is_checked
-    expect(page).to have_checked_field('Mathematics')
+    expect(page).to have_checked_field('Mathematics', visible: :all)
   end
 
   def and_the_chemistry_secondary_option_is_checked
-    expect(page).to have_checked_field('Chemistry')
+    expect(page).to have_checked_field('Chemistry', visible: :all)
   end
 
   def then_i_see_no_courses_found
@@ -497,6 +527,12 @@ feature 'V2 results - enabled' do
   end
 
   private
+
+  def secondary_options
+    page.all(
+      '[data-filter-search-target="optionsList"]', wait: 2
+    ).map(&:text).join(' ').split("\n")
+  end
 
   def results
     page.first('.app-search-results')
