@@ -32,6 +32,7 @@
     ]
   },
   "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
     "@ministryofjustice/frontend": "2.0.0",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
