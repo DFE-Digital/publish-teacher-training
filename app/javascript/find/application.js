@@ -8,11 +8,11 @@ import initAutocomplete from './autocomplete'
 import dfeAutocomplete from './dfe-autocomplete'
 import CookieBanner from '../cookie_banner'
 
-import { Application } from "@hotwired/stimulus";
-import FilterSearchController from "./controllers/filter_search_controller";
+import { Application } from '@hotwired/stimulus'
+import FilterSearchController from './controllers/filter_search_controller'
 
-window.Stimulus = Application.start();
-Stimulus.register("filter-search", FilterSearchController);
+window.Stimulus = Application.start()
+Stimulus.register('filter-search', FilterSearchController)
 
 window.jQuery = jQuery
 window.$ = jQuery

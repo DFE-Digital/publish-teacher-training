@@ -25,7 +25,8 @@
     ],
     "globals": [
       "$",
-      "google"
+      "google",
+      "Stimulus"
     ],
     "ignore": [
       "app/javascript/jestGlobalMocks.js"
