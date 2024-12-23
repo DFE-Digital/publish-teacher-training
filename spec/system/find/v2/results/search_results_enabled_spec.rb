@@ -333,7 +333,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_filter_by_salaried_courses
-    check 'Salary', visible: :all, visible: :all
+    check 'Salary', visible: :all
     and_i_apply_the_filters
   end
 
