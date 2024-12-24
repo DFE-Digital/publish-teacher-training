@@ -10,16 +10,14 @@ Capybara.server = :webrick
 
 Capybara.register_driver :playwright do |app|
   Capybara::Playwright::Driver.new(app,
-    browser_type: :chromium,
-    headless: false
-  )
+                                   browser_type: :chromium,
+                                   headless: false)
 end
 
 Capybara.register_driver :playwright_headless do |app|
   Capybara::Playwright::Driver.new(app,
-    browser_type: :chromium,
-    headless: true
-  )
+                                   browser_type: :chromium,
+                                   headless: true)
 end
 
 Capybara.javascript_driver = :playwright_headless
@@ -30,8 +28,6 @@ Capybara.javascript_driver = :playwright_headless
 Capybara.automatic_label_click = true
 
 RSpec.configure do |config|
-  screen_size = [1400, 1400]
-
   config.before(:each, type: :system) do
     service = self.class.metadata[:service]
 
