@@ -1,5 +1,4 @@
-<% if @filters_view.location_query? %>
-  <fieldset class="govuk-fieldset app-filter__group" data-qa="filters__radius">
+<fieldset class="govuk-fieldset app-filter__group" data-qa="filters__radius">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
       <%= form.label :radius, "Search radius", class: "govuk-label govuk-fieldset__legend govuk-fieldset__legend--s" %>
     </legend>
@@ -9,4 +8,3 @@
       </div>
     </div>
   </fieldset>
-<% end %>
