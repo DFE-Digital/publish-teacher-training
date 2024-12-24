@@ -199,7 +199,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
+        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other, system_specs ]
         include:
           - tests: unit_models
             include-pattern: spec/models/.*_spec.rb
@@ -211,7 +211,9 @@ jobs:
             include-pattern: spec/components/.*_spec.rb
           - tests: unit_other
             include-pattern: spec/.*_spec.rb
-            exclude-pattern: spec/(features|smoke|models|services|forms|components)/.*_spec.rb
+            exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
+          - tests: system_specs
+            include-pattern: spec/system/.*_spec.rb
           - tests: integration_auth
             include-pattern: spec/features/auth/.*_spec.rb
           - tests: integration_find
@@ -240,12 +242,23 @@ jobs:
         docker compose up --no-build -d
         docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker compose exec -T web /bin/sh -c 'apk add --no-cache xvfb xauth nss'
-        #        docker compose exec -T web /bin/sh -c "echo 'Checking if chromedriver is installed...'; which chromium; which chromedriver; ls -l /usr/bin/chromium; ls -l /usr/bin/chromedriver; chromium --version; chromedriver --version"
-        # Ensure that xvfb is set up to allow GUI-based apps like Chromium to run headlessly
-        docker compose exec -T web /bin/sh -c 'Xvfb :99 -ac &'
-        docker compose exec -T web /bin/sh -c 'export DISPLAY=:99'
         docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
+
+    - name: Install Playwright (system_specs only)
+      if: matrix.tests == 'system_specs'
+      run: |
+        docker compose exec -T web /bin/sh -c 'apk add --no-cache \
+          chromium \
+          nss \
+          harfbuzz \
+          libxcomposite \
+          libxrandr \
+          libxdamage \
+          libxshmfence \
+          udev \
+          ttf-freefont \
+          fonts-noto-cjk'
+        docker compose exec -T web /bin/sh -c 'npx playwright install --with-deps'
 
     - name: ${{ matrix.tests }} tests
       run: |
