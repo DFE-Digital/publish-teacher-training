@@ -240,7 +240,7 @@ jobs:
         docker compose up --no-build -d
         docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
-        docker compose exec -T web /bin/sh -c 'apk add --no-cache chromium chromium-chromedriver xvfb xauth'
+        docker compose exec -T web /bin/sh -c 'apk add --no-cache chromium chromium-chromedriver xvfb xauth nss'
         docker compose exec -T web /bin/sh -c "echo 'Checking if chromedriver is installed...'; which chromium; which chromedriver; ls -l /usr/bin/chromium; ls -l /usr/bin/chromedriver; chromium --version; chromedriver --version"
         # Ensure that xvfb is set up to allow GUI-based apps like Chromium to run headlessly
         docker compose exec -T web /bin/sh -c 'Xvfb :99 -ac &'
