@@ -40,11 +40,6 @@ RSpec.configure do |config|
 
   config.before(:each, :js, type: :system) do
     driven_by :selenium_chrome_headless, using: :headless_chrome, screen_size:
-
-    if Capybara.current_driver == :selenium_chrome_headless
-      logs = page.driver.browser.manage.logs.get(:browser)
-      logs.each { |log| puts log.message }
-    end
   end
 
   config.before(:each, :js_browser, type: :system) do
