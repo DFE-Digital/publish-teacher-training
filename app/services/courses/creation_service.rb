@@ -24,7 +24,7 @@ module Courses
 
     def build_new_course
       course = provider.courses.new
-      course.assign_attributes(course_attributes.except(:subjects_ids, :study_mode))
+      course.assign_attributes(filtered_course_attributes)
 
       if course_attributes[:master_subject_id].blank? && course_attributes[:subordinate_subject_id].present?
         course.errors.add(:subjects, :course_creation)
@@ -35,7 +35,7 @@ module Courses
       update_study_mode(course)
       update_sites(course)
       update_study_sites(course)
-      course.accrediting_provider = course.provider.accrediting_providers.first if course.provider.accredited_bodies.length == 1
+      course.accrediting_provider = course.provider.accrediting_providersdef .first if course.provider.accredited_bodies.length == 1
       course.course_code = provider.next_available_course_code if next_available_course_code
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
@@ -49,6 +49,16 @@ module Courses
 
     def course_attributes
       @course_attributes ||= course_params.to_h.symbolize_keys.slice(*permitted_new_course_attributes)
+    end
+
+    def filtered_course_attributes
+      attributes = course_attributes.except(:subjects_ids, :study_mode)
+      return attributes unless course_attributes[:funding] == 'teacher_degree_apprenticeship'
+
+      attributes.merge(
+        program_type: 'teacher_degree_apprenticeship',
+        qualification: 'undergraduate_degree_with_qts'
+      ).except(:funding)
     end
 
     def permitted_new_course_attributes

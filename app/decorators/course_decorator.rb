@@ -76,8 +76,8 @@ class CourseDecorator < ApplicationDecorator
 
   def funding
     {
-      'salary' => 'Salary',
-      'apprenticeship' => 'Teaching apprenticeship - with salary',
+      'salary' => 'School direct - with salary',
+      'apprenticeship' => 'Teaching degree apprenticeship (TDA) - with salary',
       'fee' => 'Fee - no salary'
     }[object.funding]
   end
@@ -151,6 +151,10 @@ class CourseDecorator < ApplicationDecorator
 
   def apprenticeship?
     object.funding.to_s == 'apprenticeship'
+  end
+
+  def teacher_degree_apprenticeship?
+    object.funding.to_s == 'apprenticeship' && object.qualification == 'undergraduate_degree_with_qts'
   end
 
   def apprenticeship
