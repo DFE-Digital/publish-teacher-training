@@ -355,6 +355,36 @@ describe Provider do
   end
 
   describe '#accrediting_providers' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    end
+
+    let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
+    let!(:partnership) { create(:provider_partnership, training_provider: provider, accredited_provider:) }
+
+    let(:accrediting_provider) { create(:accredited_provider) }
+    let(:accredited_provider) { accrediting_provider }
+    let!(:course1) { create(:course, accrediting_provider:, provider:) }
+    let!(:course2) { create(:course, accrediting_provider:, provider:) }
+
+    it "returns the course's accrediting provider" do
+      expect(provider.accrediting_providers.first).to eq(accrediting_provider)
+    end
+
+    it 'is aliased' do
+      expect(provider.accrediting_providers).to eq(provider.accredited_providers)
+    end
+
+    it 'does not duplicate data' do
+      expect(provider.accrediting_providers.count).to eq(1)
+    end
+  end
+
+  describe '#accrediting_providers enrichments' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+    end
+
     let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
 
     let(:accrediting_provider) { create(:accredited_provider) }
@@ -918,7 +948,11 @@ describe Provider do
     end
   end
 
-  describe '#accredited_bodies' do
+  describe '#accredited_bodies enrichments' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+    end
+
     it 'returns empty array' do
       expect(subject.accredited_bodies).to match([])
     end
@@ -950,6 +984,30 @@ describe Provider do
             }
           ]
         )
+      end
+    end
+  end
+
+  describe '#accredited_bodies' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    end
+
+    it 'returns empty array' do
+      expect(subject.accredited_bodies).to match([])
+    end
+
+    context 'with accredited provider' do
+      let(:accredited_provider_one) { create(:accredited_provider, provider_code: 'AP1') }
+      let(:accredited_provider_two) { create(:accredited_provider, provider_code: 'AP2') }
+
+      let!(:accredited_partnerships) do
+        [create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_one, description: 'about the accredited provider'),
+         create(:provider_partnership, training_provider: provider, accredited_provider: accredited_provider_two)]
+      end
+
+      it 'returns the current recruitment accredited bodies' do
+        expect(subject.accredited_bodies.map(&:id)).to match(accredited_partnerships.map(&:accredited_provider_id))
       end
     end
   end
@@ -1001,7 +1059,7 @@ describe Provider do
     let(:accredited_provider) { create(:accredited_provider) }
 
     it 'can create an accredited partnership' do
-      partnership = training_provider.accredited_partnerships.create(accredited_provider:)
+      partnership = training_provider.accredited_partnerships.create(accredited_provider:, description: 'Great partnership!')
       expect(training_provider.accredited_partnerships).to include(partnership)
       expect(training_provider.accredited_partners).to include(accredited_provider)
       expect(partnership).to be_valid
@@ -1009,7 +1067,7 @@ describe Provider do
     end
 
     it 'can create an training partnership' do
-      partnership = accredited_provider.training_partnerships.create(training_provider:)
+      partnership = accredited_provider.training_partnerships.create(training_provider:, description: 'Great partnership!')
       expect(accredited_provider.training_partnerships).to include(partnership)
       expect(accredited_provider.training_partners).to include(training_provider)
       expect(partnership).to be_valid

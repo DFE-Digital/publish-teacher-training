@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'view components' do
+  before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+  end
+
   all_links = (ViewComponent::Preview.all.map do |component|
     component.examples.map do |example|
       "#{Rails.application.config.view_component.preview_route}/#{component.preview_name}/#{example}"
