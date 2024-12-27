@@ -212,8 +212,6 @@ jobs:
           - tests: unit_other
             include-pattern: spec/.*_spec.rb
             exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
-          - tests: system_specs
-            include-pattern: spec/system/.*_spec.rb
           - tests: integration_auth
             include-pattern: spec/features/auth/.*_spec.rb
           - tests: integration_find
@@ -225,6 +223,8 @@ jobs:
           - tests: integration_other
             include-pattern: spec/features/.*_spec.rb
             exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
+          - tests: system_specs
+            include-pattern: spec/system/.*_spec.rb
 
     steps:
     - name: Checkout
@@ -247,7 +247,7 @@ jobs:
     - name: Install Playwright (system_specs only)
       if: matrix.tests == 'system_specs'
       run: |
-        docker compose exec -T web /bin/sh -c 'npx playwright install --with-deps chromium'
+        docker compose exec -T web /bin/sh -c './node_modules/.bin/playwright install --with-deps chromium'
 
     - name: ${{ matrix.tests }} tests
       run: |
