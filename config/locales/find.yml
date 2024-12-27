@@ -335,7 +335,7 @@ en:
         qualification_options:
           qts: QTS only
           qts_with_pgce_or_pgde: QTS with PGCE or PGDE
-        further_education: Only show further education courses
+        further_education: Further education courses
         funding_options:
           fee: Fee - no salary
           salary: Salary

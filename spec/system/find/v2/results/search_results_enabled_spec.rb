@@ -323,7 +323,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_filter_by_further_education_courses
-    check 'Only show further education courses', visible: :all
+    check 'Further education courses', visible: :all
     and_i_apply_the_filters
   end
 
@@ -413,7 +413,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_the_further_education_filter_is_checked
-    expect(page).to have_checked_field('Only show further education courses', visible: :all)
+    expect(page).to have_checked_field('Further education courses', visible: :all)
   end
 
   def then_i_see_only_courses_with_special_education_needs
