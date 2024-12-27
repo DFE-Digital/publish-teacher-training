@@ -248,7 +248,21 @@ jobs:
       if: matrix.tests == 'system_specs'
       run: |
         docker compose exec -T web /bin/sh -c 'yarn install --dev'
-        docker compose exec -T web /bin/sh -c './node_modules/.bin/playwright install --with-deps chromium'
+        docker compose exec -T web /bin/sh -c '
+        apk add --no-cache \
+          libstdc++ \
+          chromium \
+          harfbuzz \
+          nss \
+          freetype \
+          ttf-freefont \
+          font-noto-emoji \
+          wqy-zenhei'
+        docker compose exec -T web /bin/sh -c '
+        export CHROME_BIN=/usr/bin/chromium \
+        export CHROME_PATH=/usr/lib/chromium/ \
+        export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1'
+        docker compose exec -T web /bin/sh -c './node_modules/.bin/playwright install'
 
     - name: ${{ matrix.tests }} tests
       run: |
