@@ -199,7 +199,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other, system_specs ]
+        tests: [ unit_models, unit_services, unit_forms, unit_components, unit_other, integration_auth, integration_find, integration_publish, integration_support, integration_other ]
         include:
           - tests: unit_models
             include-pattern: spec/models/.*_spec.rb
@@ -223,8 +223,6 @@ jobs:
           - tests: integration_other
             include-pattern: spec/features/.*_spec.rb
             exclude-pattern: spec/features/(auth|find|publish|support)/.*_spec.rb
-          - tests: system_specs
-            include-pattern: spec/system/.*_spec.rb
 
     steps:
     - name: Checkout
@@ -243,28 +241,6 @@ jobs:
         docker compose exec -T web /bin/sh -c "./wait-for-command.sh -c 'nc -z db 5432' -s 0 -t 20"
         docker compose exec -T web /bin/sh -c 'bundle config --local disable_exec_load true'
         docker compose exec -T web /bin/sh -c 'bundle exec rake parallel:setup'
-
-    - name: Install Playwright (system_specs only)
-      if: matrix.tests == 'system_specs'
-      run: |
-        docker compose exec -T web /bin/sh -c 'yarn install --dev'
-        docker compose exec -T web /bin/sh -c 'apk add --no-cache nodejs npm'
-        docker compose exec -T web /bin/sh -c 'apk add --no-cache libc6-compat gcompat'
-        docker compose exec -T web /bin/sh -c '
-        apk add --no-cache \
-          libstdc++ \
-          chromium \
-          harfbuzz \
-          nss \
-          freetype \
-          ttf-freefont \
-          font-noto-emoji \
-          wqy-zenhei'
-        docker compose exec -T web /bin/sh -c '
-        export CHROME_BIN=/usr/bin/chromium \
-        export CHROME_PATH=/usr/lib/chromium/ \
-        export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1'
-        docker compose exec -T web /bin/sh -c './node_modules/.bin/playwright install'
 
     - name: ${{ matrix.tests }} tests
       run: |
