@@ -1,10 +1,12 @@
-.filter-search {
-  .govuk-checkboxes {
-    position: relative;
-    max-height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+.app-filter__group {
+  .govuk-fieldset {
+    .govuk-checkboxes {
+      .scrollable-filter {
+        margin-left: -10px;
+        max-height: 196px;
+        overflow-y: auto;
+        padding-left: 10px;
+      }
+    }
   }
 }

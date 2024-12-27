@@ -7,9 +7,6 @@ export default class extends Controller {
   static instanceCounter = 0
 
   connect () {
-    const list = this.element.querySelector('.govuk-checkboxes, .govuk-radios')
-    list.dataset.filterSearchTarget = 'optionsList'
-
     const legend = this.element.querySelector('legend')
     legend.dataset.filterSearchTarget = 'legend'
 
@@ -17,11 +14,12 @@ export default class extends Controller {
     this.instanceId = this.constructor.instanceCounter++
 
     const searchInput = this.createSearchInput()
-    list.before(searchInput)
+    this.optionsListTarget.before(searchInput)
   }
 
   createSearchInput () {
     const container = document.createElement('div')
+    container.classList.add('filter-search__search')
 
     const inputId = `${this.identifier}-${this.instanceId}-input`
     const labelText = `${this.legendTarget.innerText}`
@@ -32,6 +30,7 @@ export default class extends Controller {
       </label>
       <input type="search" id="${inputId}"
         class="govuk-input govuk-!-margin-bottom-1"
+        autocomplete="off"
         placeholder="Search"
         data-action="input->${this.identifier}#search"
         data-filter-search-target="searchInput">
