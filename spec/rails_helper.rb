@@ -14,8 +14,6 @@ require 'capybara/rails'
 require 'selenium/webdriver'
 # Add additional requires below this line. Rails is not loaded until this point!
 
-require Rails.root.join('spec/spec_helper_system')
-
 # Pull in all the files in spec/support automatically.
 Dir['./spec/strategies/**/*.rb'].each { |file| require file }
 
