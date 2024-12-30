@@ -186,6 +186,10 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    capybara-playwright-driver (0.5.4)
+      addressable
+      capybara
+      playwright-ruby-client (>= 1.16.0)
     case_transform (0.2)
       activesupport
     chartkick (5.1.0)
@@ -404,6 +408,10 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
+    mime-types (3.6.0)
+      logger
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2024.1203)
     mini_mime (1.1.5)
     minitest (5.25.4)
     mock_redis (0.46.0)
@@ -475,6 +483,9 @@ GEM
     pg_search (2.3.7)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
+    playwright-ruby-client (1.49.0)
+      concurrent-ruby (>= 1.1.6)
+      mime-types (>= 3.0)
     propshaft (1.1.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -637,17 +648,10 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubypants (0.7.1)
-    rubyzip (2.3.2)
     safely_block (0.4.1)
     schema_to_scaffold (0.8.0)
       activesupport (>= 3.2.1)
     securerandom (0.4.1)
-    selenium-webdriver (4.26.0)
-      base64 (~> 0.2)
-      logger (~> 1.4)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     semantic_logger (4.16.0)
       concurrent-ruby (~> 1.0)
     sentry-rails (5.22.1)
@@ -731,7 +735,6 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.9.1)
-    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -758,6 +761,7 @@ DEPENDENCIES
   bullet
   byebug
   capybara (>= 2.15)
+  capybara-playwright-driver
   colorize
   config
   cssbundling-rails (~> 1.4)
@@ -829,7 +833,6 @@ DEPENDENCIES
   rubocop-rspec_rails
   rubypants
   schema_to_scaffold
-  selenium-webdriver
   sentry-rails
   sentry-ruby
   sentry-sidekiq
