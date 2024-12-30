@@ -211,7 +211,7 @@ jobs:
             include-pattern: spec/components/.*_spec.rb
           - tests: unit_other
             include-pattern: spec/.*_spec.rb
-            exclude-pattern: spec/(features|smoke|models|services|forms|components)/.*_spec.rb
+            exclude-pattern: spec/(system|features|smoke|models|services|forms|components)/.*_spec.rb
           - tests: integration_auth
             include-pattern: spec/features/auth/.*_spec.rb
           - tests: integration_find
