@@ -18,11 +18,13 @@ module Find
           :can_sponsor_visa,
           :send_courses,
           :applications_open,
-          :further_education,
+          :level,
           :funding,
+          :age_group,
           subjects: [],
           study_types: [],
           qualifications: [],
+          qualification: [],
           funding: []
         )
       end

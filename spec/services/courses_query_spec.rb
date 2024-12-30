@@ -174,7 +174,7 @@ RSpec.describe CoursesQuery do
       let!(:regular_course) do
         create(:course, :with_full_time_sites, level: 'secondary')
       end
-      let(:params) { { further_education: 'true' } }
+      let(:params) { { level: 'further_education' } }
 
       it 'returns courses for further education only' do
         expect(results).to match_collection(
