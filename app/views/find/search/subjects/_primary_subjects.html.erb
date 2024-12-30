@@ -1,22 +1,159 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <%= I18n.t("find.subjects_page.primary_title") %>
+      Browse primary courses
     </h1>
 
-    <p class="govuk-body">
-      As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
-    </p>
 
-    <p class="govuk-body">
-      Some courses also enable you to develop your knowledge of a particular subject. When you're a teacher, you could
-      take on a role to influence the way it's taught in your school - for example, mentoring your teacher colleagues
-      to teach that subject better.
-    </p>
 
-    <%= f.govuk_collection_check_boxes :subjects, primary_subject_options,
-       :code, :name, legend: { text: "Which courses would you like to find?" } %>
 
-     <%= f.govuk_submit "Continue" %>
+
+
+<!-- version asking up front about specialisms-->
+<!--
+<h2 class="govuk-heading-m">
+Would you like to find courses with a specialism?
+</h2>
+    <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+      <div class="govuk-radios" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact-2" name="contact" type="radio" value="phone" data-aria-controls="conditional-contact-2">
+          <label class="govuk-label govuk-radios__label" for="contact-2">
+            Yes I want to find courses with a specialism
+          </label>
+        </div>
+        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+          <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+            <legend class="govuk-fieldset__legend">
+              <h1 class="govuk-body govuk-!-font-weight-bold">
+                Primary specialisms
+              </h1>
+            </legend>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="primary-option-1" name="primary-option" type="checkbox" value="carcasses">
+                <label class="govuk-label govuk-checkboxes__label" for="primary-option-1">
+                  English
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="primary-option-2" name="primary-option" type="checkbox" value="mines">
+                <label class="govuk-label govuk-checkboxes__label" for="primary-option-2">
+                  Geography and history
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="primary-option-3" name="primary-option" type="checkbox" value="farm">
+                <label class="govuk-label govuk-checkboxes__label" for="primary-option-3">
+                  Mathematics
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="primary-option-4" name="primary-option" type="checkbox" value="farm">
+                <label class="govuk-label govuk-checkboxes__label" for="primary-option-4">
+                  Modern languages
+                </label>
+              </div>
+              <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="primary-option-5" name="primary-option" type="checkbox" value="farm">
+              <label class="govuk-label govuk-checkboxes__label" for="primary-option-5">
+                Physical education
+              </label>
+            </div>
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="primary-option-6" name="primary-option" type="checkbox" value="farm">
+                <label class="govuk-label govuk-checkboxes__label" for="primary-option-6">
+                  Science
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        </div>
+        <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="email" data-aria-controls="conditional-contact">
+        <label class="govuk-label govuk-radios__label" for="contact">
+          No, I just want to find primary courses
+        </label>
+      </div>
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
+      </div>
+      </div>
+    </fieldset>
+  </div>
+-->
+
+<!-- All checkboxes -->
+
+  <div class="govuk-form-group" style="margin-bottom:10px;">
+    <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="subject-1" name="waste" type="checkbox" value="mines">
+            <label class="govuk-label govuk-checkboxes__label" for="subject-1">
+              Primary
+            </label>
+          </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-1" name="waste" type="checkbox" value="mines">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-1">
+            Primary with English
+          </label>
+        </div>
+         <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-2" name="waste" type="checkbox" value="mines">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-2">
+            Primary with geography and history
+          </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-3" name="waste" type="checkbox" value="farm">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-3">
+            Primary with mathematics
+          </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-4" name="waste" type="checkbox" value="farm">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-4">
+            Primary with modern languages
+          </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-5" name="waste" type="checkbox" value="farm">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-5">
+           Primary with physical education
+          </label>
+        </div>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" id="subject-6" name="waste" type="checkbox" value="farm">
+          <label class="govuk-label govuk-checkboxes__label" for="subject-6">
+            Primary with science
+          </label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+    <%= link_to "Find primary courses", find_results_path(has_vacancies: true, applications_open: true, subjects: Subject.where(type: 'PrimarySubject').pluck(:subject_code)), class:"govuk-button" %>
+
+     <!--Financial support-->
+      <div class="govuk-notification-banner govuk-notification-banner--git govuk-accordion__section--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+          <h3 class="app-advice__title">
+            How primary specialisms work
+          </h3>
+          <p class="govuk-body">
+            As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
+          </p>
+        <p class="govuk-body">
+          Some courses also enable you to develop your knowledge of a particular subject.
+This means that when you're a teacher, you might be able to influence the way this subject is taught in your school. For example, you might mentor your colleagues to teach that subject better.        </p>
+        </div>
+      </div>
+      <!--END Financial support-->
   </div>
 </div>
+
+
