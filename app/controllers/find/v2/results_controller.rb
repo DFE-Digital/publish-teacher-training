@@ -20,9 +20,11 @@ module Find
           :applications_open,
           :level,
           :funding,
+          :age_group,
           subjects: [],
           study_types: [],
           qualifications: [],
+          qualification: [],
           funding: []
         )
       end

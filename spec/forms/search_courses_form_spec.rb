@@ -77,8 +77,8 @@ RSpec.describe SearchCoursesForm do
         end
       end
 
-      context 'when old qualification params is used' do
-        let(:form) { described_class.new(qualification: ['']) }
+      context 'when old qualification params is used as string' do
+        let(:form) { described_class.new(qualification: ['pgce pgde']) }
 
         it 'returns level search params' do
           expect(form.search_params).to eq({ level: 'further_education' })

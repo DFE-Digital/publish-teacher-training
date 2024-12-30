@@ -51,13 +51,32 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     and_i_see_that_there_are_two_courses_found
   end
 
-  scenario 'when I filter by further education only courses' do
-    given_there_are_courses_containing_all_levels
-    when_i_visit_the_find_results_page
-    and_i_filter_by_further_education_courses
-    then_i_see_only_further_education__courses
-    and_the_further_education_filter_is_checked
-    and_i_see_that_there_is_one_course_found
+  context 'when I filter by further education only courses' do
+    before do
+      given_there_are_courses_containing_all_levels
+    end
+
+    scenario 'when I filter by further education only courses' do
+      when_i_visit_the_find_results_page
+      and_i_filter_by_further_education_courses
+      then_i_see_only_further_education__courses
+      and_the_further_education_filter_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
+
+    scenario 'when I filter by the old age group further education parameter' do
+      when_i_visit_the_find_results_page_using_the_old_age_group_parameter
+      then_i_see_only_further_education__courses
+      and_the_further_education_filter_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
+
+    scenario 'when I filter by the old pgce pgde further education parameter' do
+      when_i_visit_the_find_results_page_using_the_old_pgce_pgde_parameter
+      then_i_see_only_further_education__courses
+      and_the_further_education_filter_is_checked
+      and_i_see_that_there_is_one_course_found
+    end
   end
 
   scenario 'when I filter by applications open' do
@@ -247,6 +266,14 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
   def when_i_visit_the_find_results_page_passing_mathematics_in_the_params
     visit(find_v2_results_path(subjects: ['G1']))
+  end
+
+  def when_i_visit_the_find_results_page_using_the_old_age_group_parameter
+    visit(find_v2_results_path(age_group: 'further_education'))
+  end
+
+  def when_i_visit_the_find_results_page_using_the_old_pgce_pgde_parameter
+    visit(find_v2_results_path(qualification: ['pgce pgde']))
   end
 
   def and_i_search_for_the_mathematics_option

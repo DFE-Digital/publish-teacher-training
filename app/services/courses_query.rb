@@ -93,7 +93,7 @@ class CoursesQuery
   end
 
   def further_education_scope
-    return @scope if params[:level].blank? || params[:level] != 'further_education'
+    return @scope if params[:level] != 'further_education'
 
     @applied_scopes[:level] = params[:level]
 
