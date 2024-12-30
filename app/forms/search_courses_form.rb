@@ -9,7 +9,7 @@ class SearchCoursesForm < ApplicationForm
   attribute :applications_open, :boolean
   attribute :study_types
   attribute :qualifications
-  attribute :further_education, :boolean
+  attribute :level
   attribute :funding
 
   def search_params
