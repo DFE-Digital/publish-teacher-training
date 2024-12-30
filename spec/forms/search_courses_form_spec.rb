@@ -60,6 +60,32 @@ RSpec.describe SearchCoursesForm do
       end
     end
 
+    context 'when further education is provided' do
+      context 'when new level params' do
+        let(:form) { described_class.new(level: 'further_education') }
+
+        it 'returns level search params' do
+          expect(form.search_params).to eq({ level: 'further_education' })
+        end
+      end
+
+      context 'when old age group params is used' do
+        let(:form) { described_class.new(age_group: 'further_education') }
+
+        it 'returns level search params' do
+          expect(form.search_params).to eq({ level: 'further_education' })
+        end
+      end
+
+      context 'when old qualification params is used as string' do
+        let(:form) { described_class.new(qualification: ['pgce pgde']) }
+
+        it 'returns level search params' do
+          expect(form.search_params).to eq({ level: 'further_education' })
+        end
+      end
+    end
+
     context 'when funding is provided' do
       let(:form) { described_class.new(funding: %w[fee salary]) }
 

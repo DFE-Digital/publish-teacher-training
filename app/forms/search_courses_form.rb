@@ -9,11 +9,24 @@ class SearchCoursesForm < ApplicationForm
   attribute :applications_open, :boolean
   attribute :study_types
   attribute :qualifications
-  attribute :further_education, :boolean
+  attribute :level
   attribute :funding
 
+  attribute :age_group
+  attribute :qualification
+
   def search_params
-    attributes.symbolize_keys.compact
+    attributes
+      .symbolize_keys
+      .then { |params| params.except(*old_parameters) }
+      .then { |params| transform_old_parameters(params) }
+      .compact
+  end
+
+  def level
+    return 'further_education' if old_further_education_parameters?
+
+    super
   end
 
   def secondary_subjects
@@ -21,5 +34,21 @@ class SearchCoursesForm < ApplicationForm
       .where(type: %w[SecondarySubject ModernLanguagesSubject])
       .where.not(subject_name: ['Modern Languages'])
       .order(:subject_name)
+  end
+
+  private
+
+  def transform_old_parameters(params)
+    params.tap do
+      params[:level] = level
+    end
+  end
+
+  def old_further_education_parameters?
+    age_group == 'further_education' || qualification == ['pgce pgde']
+  end
+
+  def old_parameters
+    %i[age_group qualification]
   end
 end
