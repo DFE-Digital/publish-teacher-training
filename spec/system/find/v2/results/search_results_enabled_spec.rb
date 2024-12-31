@@ -144,13 +144,27 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     end
   end
 
-  context 'when filter by secondary subjects' do
+  context 'when filter by subjects' do
     before do
       given_there_are_courses_with_secondary_subjects
+      and_there_are_courses_with_primary_subjects
+      when_i_visit_the_find_results_page
+    end
+
+    scenario 'filter by specific primary subjects' do
+      when_i_filter_by_primary
+      then_i_see_only_primary_specific_courses
+      and_the_primary_option_is_checked
+      and_i_see_that_there_is_one_course_found
+
+      when_i_filter_by_primary_with_science_too
+      then_i_see_primary_and_primary_with_science_courses
+      and_the_primary_option_is_checked
+      and_the_primary_with_science_option_is_checked
+      and_i_see_that_there_are_two_courses_found
     end
 
     scenario 'filter by specific secondary subjects' do
-      when_i_visit_the_find_results_page
       and_i_search_for_the_mathematics_option
       then_i_can_only_see_the_mathematics_option
       when_i_clear_my_search_for_secondary_options
@@ -168,7 +182,6 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     end
 
     scenario 'filter by many secondary subjects' do
-      when_i_visit_the_find_results_page
       and_i_filter_by_mathematics
       and_i_filter_by_chemistry
       then_i_see_mathematics_and_chemistry_courses
@@ -207,6 +220,13 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', course_code: 'K592', subjects: [find_or_create(:secondary_subject, :chemistry)])
     create(:course, :with_full_time_sites, :secondary, name: 'Computing', course_code: 'L364', subjects: [find_or_create(:secondary_subject, :computing)])
     create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', course_code: '4RTU', subjects: [find_or_create(:secondary_subject, :mathematics)])
+  end
+
+  def and_there_are_courses_with_primary_subjects
+    create(:course, :with_full_time_sites, :primary, name: 'Primary', course_code: 'S872', subjects: [find_or_create(:primary_subject, :primary)])
+    create(:course, :with_full_time_sites, :primary, name: 'Primary with english', course_code: 'K592', subjects: [find_or_create(:primary_subject, :primary_with_english)])
+    create(:course, :with_full_time_sites, :primary, name: 'Primary with mathematics', course_code: 'L364', subjects: [find_or_create(:primary_subject, :primary_with_mathematics)])
+    create(:course, :with_full_time_sites, :primary, name: 'Primary with science', course_code: '4RTU', subjects: [find_or_create(:primary_subject, :primary_with_science)])
   end
 
   def given_there_are_courses_containing_all_qualifications
@@ -305,6 +325,16 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     and_i_apply_the_filters
   end
 
+  def when_i_filter_by_primary
+    check 'Primary', visible: :all
+    and_i_apply_the_filters
+  end
+
+  def when_i_filter_by_primary_with_science_too
+    check 'Primary with science', visible: :all
+    and_i_apply_the_filters
+  end
+
   def when_i_filter_by_mathematics
     check 'Mathematics', visible: :all
     and_i_apply_the_filters
@@ -372,6 +402,28 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def and_i_filter_by_apprenticeship_courses
     check 'Teaching apprenticeship - with salary', visible: :all
     and_i_apply_the_filters
+  end
+
+  def then_i_see_only_primary_specific_courses
+    expect(results).to have_content('Primary (S872)')
+    expect(results).to have_no_content('Primary with english')
+    expect(results).to have_no_content('Primary with mathematics')
+    expect(results).to have_no_content('Primary with science')
+  end
+
+  def then_i_see_primary_and_primary_with_science_courses
+    expect(results).to have_content('Primary (S872)')
+    expect(results).to have_content('Primary with science')
+    expect(results).to have_no_content('Primary with english')
+    expect(results).to have_no_content('Primary with mathematics')
+  end
+
+  def and_the_primary_option_is_checked
+    expect(page).to have_checked_field('Primary', visible: :all)
+  end
+
+  def and_the_primary_with_science_option_is_checked
+    expect(page).to have_checked_field('Primary with science', visible: :all)
   end
 
   def then_i_see_only_courses_that_sponsor_visa
