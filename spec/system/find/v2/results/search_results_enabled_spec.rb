@@ -560,7 +560,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_apply_the_filters
-    click_link_or_button 'Apply filters'
+    click_link_or_button 'Apply filters', match: :first
   end
 
   def and_i_see_that_there_is_one_course_found
