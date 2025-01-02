@@ -65,7 +65,7 @@ module Publish
         if update_params[:accredited_provider_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
-          course_updated_message('Accredited provider')
+          course_updated_message('Ratifying partner')
           redirect_to_update_successful
         else
           @errors = @course.errors.messages

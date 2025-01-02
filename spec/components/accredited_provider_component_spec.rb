@@ -17,7 +17,7 @@ describe AccreditedProviderComponent do
   end
 
   it 'renders the about_accredited_provider key' do
-    expect(component).to have_css '.govuk-summary-list__key', text: 'About the accredited provider'
+    expect(component).to have_css '.govuk-summary-list__key', text: 'About the accredited partner'
   end
 
   it 'renders the about_accredited_provider change link' do
