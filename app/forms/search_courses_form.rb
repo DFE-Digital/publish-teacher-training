@@ -36,6 +36,10 @@ class SearchCoursesForm < ApplicationForm
       .order(:subject_name)
   end
 
+  def primary_subjects
+    Subject.where(type: 'PrimarySubject').order(:subject_name)
+  end
+
   private
 
   def transform_old_parameters(params)
