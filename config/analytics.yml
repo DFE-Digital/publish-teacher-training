@@ -116,6 +116,7 @@ shared:
     - created_at
     - updated_at
   provider:
+    - accredited
     - selectable_school
     - id
     - address4
