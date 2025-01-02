@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } do
   before do
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     given_i_am_a_lead_school_provider_user
     and_i_visit_the_root_path
     when_i_click_on_the_accredited_provider_tab
