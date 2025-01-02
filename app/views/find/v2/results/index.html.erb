@@ -65,6 +65,10 @@
         <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
           <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.applications_open"), size: "s" } %>
         <% end %>
+
+        <div class="govuk-!-margin-top-4">
+          <%= form.govuk_submit "Apply filters" %>
+        </div>
       </div>
     <% end %>
   </div>
