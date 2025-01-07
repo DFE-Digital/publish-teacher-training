@@ -4,6 +4,8 @@
   <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
 </h1>
 
+<div class="app-filter-toggle"></div>
+
 <div class="app-filter-layout">
   <div class="app-filter-layout__filter">
     <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
