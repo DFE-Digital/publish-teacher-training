@@ -229,6 +229,79 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context 'when filter by degree grade requirements' do
+      let!(:requires_two_one_course) do
+        create(:course, :published_postgraduate, degree_grade: 'two_one')
+      end
+      let!(:requires_two_two_course) do
+        create(:course, :published_postgraduate, degree_grade: 'two_two')
+      end
+      let!(:requires_third_class_course) do
+        create(:course, :published_postgraduate, degree_grade: 'third_class')
+      end
+      let!(:requires_pass_degree) do
+        create(:course, :published_postgraduate, degree_grade: 'not_required')
+      end
+      let!(:undergraduate_does_not_require_degree_course) do
+        create(:course, :published_teacher_degree_apprenticeship, degree_grade: 'not_required')
+      end
+
+      context 'when filter by two_one' do
+        let(:params) { { minimum_degree_required: 'two_one' } }
+
+        it 'returns courses requiring two_one or lower' do
+          expect(results).to match_collection(
+            [requires_two_one_course, requires_two_two_course, requires_third_class_course, requires_pass_degree],
+            attribute_names: %w[name degree_grade degree_type]
+          )
+        end
+      end
+
+      context 'when filter by two_two' do
+        let(:params) { { minimum_degree_required: 'two_two' } }
+
+        it 'returns courses requiring two_two or lower' do
+          expect(results).to match_collection(
+            [requires_two_two_course, requires_third_class_course, requires_pass_degree],
+            attribute_names: %w[name degree_grade degree_type]
+          )
+        end
+      end
+
+      context 'when filter by third class' do
+        let(:params) { { minimum_degree_required: 'third_class' } }
+
+        it 'returns courses requiring a third class degree or lower' do
+          expect(results).to match_collection(
+            [requires_third_class_course, requires_pass_degree],
+            attribute_names: %w[name degree_grade degree_type]
+          )
+        end
+      end
+
+      context 'when filter by pass' do
+        let(:params) { { minimum_degree_required: 'pass' } }
+
+        it 'returns courses requiring a pass degree' do
+          expect(results).to match_collection(
+            [requires_pass_degree],
+            attribute_names: %w[name degree_grade degree_type]
+          )
+        end
+      end
+
+      context 'when filter by not requiring a degree' do
+        let(:params) { { minimum_degree_required: 'no_degree_required' } }
+
+        it 'returns courses that do not require a degree' do
+          expect(results).to match_collection(
+            [undergraduate_does_not_require_degree_course],
+            attribute_names: %w[name degree_grade degree_type]
+          )
+        end
+      end
+    end
+
     context 'when filter by funding' do
       let!(:fee_course) do
         create(:course, :with_full_time_sites, funding: 'fee')

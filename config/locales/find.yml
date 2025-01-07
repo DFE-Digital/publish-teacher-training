@@ -406,6 +406,7 @@ en:
         study_type_html: Study type<span class="govuk-visually-hidden"> filter</span>
         qualifications_html: Qualification awarded<span class="govuk-visually-hidden"> filter</span>
         further_education_html: Further education<span class="govuk-visually-hidden"> filter</span>
+        minimum_degree_required_html: Minimum degree required<span class="govuk-visually-hidden"> filter</span>
         special_education_needs_html: Special educational needs<span class="govuk-visually-hidden"> filter</span>
         funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
@@ -426,6 +427,12 @@ en:
           qts: QTS only
           qts_with_pgce_or_pgde: QTS with PGCE or PGDE
         further_education: Further education courses
+        minimum_degree_required_options:
+          two_one: "2:1 or First"
+          two_two: "2:2"
+          third_class: Third
+          pass: Pass
+          no_degree_required: No degree required
         funding_options:
           fee: Fee - no salary
           salary: Salary
