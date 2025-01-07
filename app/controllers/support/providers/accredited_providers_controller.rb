@@ -11,7 +11,6 @@ module Support
 
       def index
         @pagy, @accredited_providers = pagy(provider.accrediting_providers.order(:provider_name))
-        render layout: 'provider_record'
       end
 
       def new
