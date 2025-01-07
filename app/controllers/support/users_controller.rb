@@ -9,7 +9,6 @@ module Support
 
     def show
       user
-      render layout: 'user_record'
     end
 
     def new

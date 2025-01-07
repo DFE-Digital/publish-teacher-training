@@ -6,7 +6,6 @@ module Support
       def show
         user
         @pagy, @providers = pagy(providers.order(:provider_name))
-        render layout: 'user_record'
       end
 
       private
