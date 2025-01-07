@@ -7,7 +7,7 @@ class PhaseBanner < ViewComponent::Base
   end
 
   def environment_label
-    Settings.environment.label.capitalize
+    Settings.environment.label
   end
 
   def environment_colour
