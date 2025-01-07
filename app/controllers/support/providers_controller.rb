@@ -9,7 +9,6 @@ module Support
 
     def show
       provider
-      render layout: 'provider_record'
     end
 
     def edit
@@ -23,11 +22,6 @@ module Support
       else
         render :edit
       end
-    end
-
-    def users
-      @pagy, @users = pagy(provider.users.order(:last_name))
-      render layout: 'provider_record'
     end
 
     private

@@ -5,7 +5,6 @@ module Support
     class UsersController < ApplicationController
       def index
         @pagy, @users = pagy(provider.users.order(:last_name))
-        render layout: 'provider_record'
       end
 
       def show

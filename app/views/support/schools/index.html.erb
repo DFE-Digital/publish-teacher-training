@@ -1,5 +1,23 @@
 <%= render PageTitle.new(title: "support.providers.schools.index") %>
 
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "All provider records",
+    href: support_recruitment_cycle_providers_path
+  ) %>
+<% end %>
+
+<div class="govuk-caption-l"><%= Provider.human_attribute_name(@provider.provider_type) %></div>
+<h1 class="govuk-heading-l"><%= @provider.name_and_code %></h1>
+
+<%= render TabNavigation.new(items: [
+  { name: "Details", url: support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider) },
+  { name: "Users", url: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider) },
+  { name: "Courses", url: support_recruitment_cycle_provider_courses_path(@provider.recruitment_cycle_year, @provider) },
+  { name: "Schools", url: support_recruitment_cycle_provider_schools_path(@provider.recruitment_cycle_year, @provider) },
+  *([{ name: "Accredited providers", url: support_recruitment_cycle_provider_accredited_providers_path(@provider.recruitment_cycle_year, @provider) }] unless @provider.accredited_provider?)
+]) %>
+
 <%= govuk_link_to("Add school", new_support_recruitment_cycle_provider_school_path, class: "govuk-button govuk-!-margin-bottom-3") %>
 
 <%= govuk_link_to("Add multiple schools", new_support_recruitment_cycle_provider_schools_multiple_path, class: "govuk-button govuk-button--secondary govuk") %>
