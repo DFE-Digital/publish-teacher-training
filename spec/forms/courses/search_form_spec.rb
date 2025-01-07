@@ -86,6 +86,68 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when minimum degree grade is provided' do
+      shared_examples 'minimum degree required in search params' do |mapping|
+        let(:form) { described_class.new(mapping[:from]) }
+
+        it "maps #{mapping[:from]} to #{mapping[:to]}" do
+          expect(form.search_params).to eq(mapping[:to])
+        end
+
+        it "returns the expected #{mapping[:to].keys.first} value" do
+          expect(form.minimum_degree_required).to eq(mapping[:to].values.first)
+        end
+      end
+
+      context 'when new params' do
+        include_examples 'minimum degree required in search params',
+                         from: { minimum_degree_required: 'two_one' },
+                         to: { minimum_degree_required: 'two_one' }
+      end
+
+      context 'when old 2:1 params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'show_all_courses' },
+                         to: { minimum_degree_required: 'two_one' }
+      end
+
+      context 'when old 2:2 params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'two_two' },
+                         to: { minimum_degree_required: 'two_two' }
+      end
+
+      context 'when old "Third class" params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'third_class' },
+                         to: { minimum_degree_required: 'third_class' }
+      end
+
+      context 'when old "Pass" params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'not_required' },
+                         to: { minimum_degree_required: 'pass' }
+      end
+
+      context 'when old undergraduate params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { university_degree_status: false },
+                         to: { minimum_degree_required: 'no_degree_required' }
+      end
+
+      context 'when param value does not exist' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'does_not_exist' },
+                         to: {}
+      end
+
+      context 'when show postgraduate params is used' do
+        include_examples 'minimum degree required in search params',
+                         from: { university_degree_status: true },
+                         to: {}
+      end
+    end
+
     context 'when funding is provided' do
       let(:form) { described_class.new(funding: %w[fee salary]) }
 

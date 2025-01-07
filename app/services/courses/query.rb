@@ -31,6 +31,7 @@ module Courses
       @scope = study_modes_scope
       @scope = qualifications_scope
       @scope = further_education_scope
+      @scope = minimum_degree_required_scope
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
@@ -101,6 +102,28 @@ module Courses
       @applied_scopes[:level] = params[:level]
 
       @scope.where(level: Course.levels[:further_education])
+    end
+
+    def minimum_degree_required_scope
+      return @scope if params[:minimum_degree_required].blank?
+
+      minimum_degree_required = params[:minimum_degree_required]
+      @applied_scopes[:minimum_degree_required] = minimum_degree_required
+
+      case minimum_degree_required
+      when 'two_one'
+        @scope.where(degree_grade: %w[two_one two_two third_class not_required], degree_type: :postgraduate)
+      when 'two_two'
+        @scope.where(degree_grade: %w[two_two third_class not_required], degree_type: :postgraduate)
+      when 'third_class'
+        @scope.where(degree_grade: %w[third_class not_required], degree_type: :postgraduate)
+      when 'pass'
+        @scope.where(degree_grade: 'not_required', degree_type: :postgraduate)
+      when 'no_degree_required'
+        @scope.where(degree_grade: 'not_required', degree_type: :undergraduate)
+      else
+        @scope
+      end
     end
 
     def applications_open_scope

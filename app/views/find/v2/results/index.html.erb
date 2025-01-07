@@ -54,6 +54,14 @@
           <%= form.govuk_check_box :level, "further_education", label: { text: t("helpers.label.courses_query_filters.further_education"), size: "s" }, multiple: false %>
         <% end %>
 
+        <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t("helpers.legend.courses_query_filters.minimum_degree_required_html"), size: "s" }, class: "app-filter__group govuk-radios--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+          <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.two_one"), size: "s" } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.two_two"), size: "s" } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.third_class"), size: "s" } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.pass"), size: "s" } %>
+          <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.no_degree_required"), size: "s" } %>
+        <% end %>
+
         <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
           <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" } %>
         <% end %>
