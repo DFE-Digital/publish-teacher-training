@@ -15,7 +15,6 @@ module.exports = {
     '!<rootDir>/app/javascript/utils/test.js'
   ],
   reporters: ['default'],
-  setupFilesAfterEnv: ['<rootDir>/app/javascript/jestGlobalMocks.js'],
   transformIgnorePatterns: ['node_modules/*'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/app/javascript/$1'

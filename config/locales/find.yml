@@ -233,8 +233,7 @@ en:
     international_candidates:
       skilled_worker_visa:
         not_available:
-          html:
-            <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
+          html: <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
         available:
           html:
             <p class="govuk-body">If you do not already have the right to work in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
@@ -242,21 +241,19 @@ en:
             <p class="govuk-body">Before you apply for this course, <a class="govuk-link" href=%{provider_url}>contact the training provider</a> to check Skilled Worker visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
       student_visa:
         not_available:
-          html:
-            <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
+          html: <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
         available:
           html:
             <p class="govuk-body">If you do not already have the right to study in the UK, you may need to <a class="govuk-link" href="https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees"> apply for your visa to train to teach in England</a>.</p>
             <p class="govuk-body">To do this, you’ll need to be sponsored by your training provider.</p>
             <p class="govuk-body">Before you apply for this course, <a class="govuk-link" href=%{provider_url}>contact the training provider</a> to check Student visa sponsorship is available. If it is, and you get a place on this course, we’ll help you apply for your visa.</p>
       entitlement:
-        html:
-          <p class="govuk-body">You may be entitled to £10,000 from the UK government to help with the financial costs of moving to England.</p>
+        html: <p class="govuk-body">You may be entitled to £10,000 from the UK government to help with the financial costs of moving to England.</p>
     get_into_teaching:
       apply_for_statement_of_comparability: Apply for a statement of comparability
       chat_online: You can chat online
       support_team: with the Get Into Teaching support team for guidance on the UK equivalents of your qualifications.
-      qualifications_outside_uk: 'Non-UK citizens: check your qualifications'
+      qualifications_outside_uk: "Non-UK citizens: check your qualifications"
       qualifications_outside_uk_body: Some training providers need a certificate known as a statement of comparability that shows how your qualifications compare to UK ones.
       apply_for_uk_enic_html: You can <a class="govuk-link" href="https://enic.org.uk/Qualifications/SOC/Default.aspx">apply for a statement of comparability from UK ENIC</a> (the UK European Network of Information Centres).
       uk_enic_cost: There is a cost for the certificate and it takes 15 working days to arrive.
@@ -300,8 +297,8 @@ en:
     result_filters_filters_view:
       radius_options_for_select:
         label:
-          one: '%{count} mile'
-          other: '%{count} miles'
+          one: "%{count} mile"
+          other: "%{count} miles"
     v2:
       results:
         index:
@@ -363,7 +360,3 @@ en:
             subjects:
               primary_subject: "Select at least one primary subject you want to teach"
               secondary_subject: "Select at least one secondary subject you want to teach"
-        find/cookie_preferences_form:
-          attributes:
-            consent:
-              blank: Select yes if you want to accept Google Analytics cookies

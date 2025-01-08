@@ -26,20 +26,10 @@
     <%= stylesheet_link_tag "accessible-autocomplete.min" %>
     <%= stylesheet_link_tag "publish_application" %>
     <%= javascript_include_tag "publish/application", "data-turbo-track": "reload", defer: true %>
-
-    <%= render("layouts/gtm", tracking_id: Settings.google_tag_manager.publish_tracking_id, consented_to_analytics_cookie_value:) %>
   </head>
 
   <body class="govuk-template__body <%= yield :body_class %>">
-    <% if google_analytics_allowed? %>
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<%= Settings.google_tag_manager.publish_tracking_id %>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <% end %>
-
     <%= render "layouts/add_js_enabled_class_to_body" %>
-
-    <% unless hide_cookie_banner? %>
-      <%= render("layouts/cookie_banner", service_name: t("service_name.publish"), cookies_path:) %>
-    <% end %>
 
     <%= govuk_skip_link %>
 

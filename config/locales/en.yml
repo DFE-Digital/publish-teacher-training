@@ -1219,10 +1219,6 @@ en:
             email:
               blank: "Enter an email adddress"
               invalid: "Enter a valid email address"
-        publish/cookie_preferences_form:
-          attributes:
-            analytics_consent:
-              blank: Select yes if you want to accept Google Analytics cookies
         publish/schools/search_form:
           attributes:
             query:
@@ -1259,10 +1255,6 @@ en:
             environment:
               blank: Enter the environment to proceed
               invalid_environment: "That's not %{environment}"
-        find/cookie_preferences_form:
-          attributes:
-            analytics_consent:
-              blank: Select yes if you want to accept Google Analytics cookies
   errors:
     messages:
       email: "^Enter an email address in the correct format, like name@example.com"
@@ -1390,22 +1382,6 @@ en:
   time:
     formats:
       last_event: "%-d %B %Y at %l:%M%P"
-  cookies:
-    heading: Cookies on %{service_name}
-    accept: Accept analytics cookies
-    reject: Reject analytics cookies
-    preferences:
-      success: Your cookie preferences have been updated
-    message_html:
-      <p class="govuk-body">We use some essential cookies to make this service work.</p>
-      <p class="govuk-body app-js-only">We’d also like to use analytics cookies so we can understand how you use the service and make improvements.</p>
-    cookies_page_link: View cookies
-    after_consent:
-      page_link_text: change your cookie settings
-      message:
-        You’ve <span class="decision">rejected</span> analytics cookies.
-        You can %{cookie_preferences_link} at any time.
-      button_text_html: Hide this <span class="govuk-visually-hidden">cookies</span> message
   get_into_teaching:
     tel: 0800 389 2500
     opening_times: "Monday to Friday, 8.30am to 5.30pm"

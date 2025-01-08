@@ -27,9 +27,6 @@
       "$",
       "google",
       "Stimulus"
-    ],
-    "ignore": [
-      "app/javascript/jestGlobalMocks.js"
     ]
   },
   "dependencies": {
