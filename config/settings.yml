@@ -93,13 +93,5 @@ features:
 cookies:
   session:
     name: _teacher_training_courses_session
-  analytics:
-    name: _consented_to_anaytics_cookies
-  expire_after_days: 182
-
-google_tag_manager:
-  find_tracking_id: change_me
-  publish_tracking_id: change_me
-  floodlight_id: 2673654
 
 STATE_CHANGE_SLACK_URL: replace_me
