@@ -4,8 +4,8 @@ module Find
   module V2
     class ResultsController < Find::ApplicationController
       def index
-        @search_courses_form = SearchCoursesForm.new(search_courses_params)
-        @courses = CoursesQuery.call(params: @search_courses_form.search_params)
+        @search_courses_form = ::Courses::SearchForm.new(search_courses_params)
+        @courses = ::Courses::Query.call(params: @search_courses_form.search_params)
         @courses_count = @courses.count
 
         @pagy, @results = pagy(@courses)

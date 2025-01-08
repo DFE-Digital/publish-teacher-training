@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SearchCoursesForm do
+RSpec.describe Courses::SearchForm do
   describe '#search_params' do
     context 'when can_sponsor_visa is true' do
       let(:form) { described_class.new(can_sponsor_visa: 'true') }

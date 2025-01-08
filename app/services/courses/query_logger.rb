@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class CoursesQuery
-  class Logger
+module Courses
+  class QueryLogger
     attr_reader :courses_query
 
     delegate :scope, :applied_scopes, to: :courses_query
