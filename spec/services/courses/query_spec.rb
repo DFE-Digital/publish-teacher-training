@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CoursesQuery do
+RSpec.describe Courses::Query do
   describe '.call' do
     subject(:results) { described_class.call(params:) }
 
