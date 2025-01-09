@@ -650,26 +650,26 @@ en:
           cannot_find: *cannot_find
       accredited_providers:
         new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: &add_accredited_provider Add accredited provider
+          title: About the accredited partnership
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: &add_accredited_partner Add accredited partner
         edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          updated: About the accredited provider updated
+          title: About the accredited partnership
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          updated: About the accredited partner updated
         delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
+          title: Are you sure you want to remove this accredited partner?
+          remove: Remove accredited partner
+          updated: Accredited partner removed
         checks:
           show:
-            title:  *add_accredited_provider
-            caption: *add_accredited_provider
-            add: *add_accredited_provider
+            title:  *add_accredited_partner
+            caption: *add_accredited_partner
+            add: *add_accredited_partner
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
-          caption: *add_accredited_provider
+          caption: *add_accredited_partner
   search_result_title_component:
     add_school: *add_school
     many_results_html: Showing the first %{results_limit} results. %{link} if the %{search_resource} you’re looking for is not listed.

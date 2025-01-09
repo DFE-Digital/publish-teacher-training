@@ -10,7 +10,7 @@ module Publish
 
         def update
           accredited_provider_form.save!
-          redirect_to publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: 'Accredited provider added' }
+          redirect_to publish_provider_recruitment_cycle_accredited_providers_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: 'Accredited partner added' }
         end
 
         private
