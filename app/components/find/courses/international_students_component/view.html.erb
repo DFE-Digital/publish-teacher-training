@@ -9,7 +9,7 @@
         EEA, Switzerland, Gibraltar, or the UK for at least the previous 3 years will also be eligible.</p>
     <% end %>
 
-    <p class="govuk-body"><%= apprenticeship? ? "You’ll also" : "You’ll" %> need the <%= right_required %> in the UK</p>
+    <p class="govuk-body"><%= apprenticeship? ? "You’ll also" : "You’ll" %> need the <%= right_required %> in the UK.</p>
 
     <p class="govuk-body">You already have this if, for example, you:</p>
 
@@ -19,11 +19,13 @@
       <li>have indefinite leave to remain in the UK</li>
     </ul>
 
-    <%= t(
-      "find.international_candidates.#{visa_type}.#{sponsorship_availability}.html",
-      provider_url: x_provider_url
-    ) %>
+    <% unless visa_type == :student_visa && sponsorship_availability != :available %>
+      <%= t(
+        "find.international_candidates.#{visa_type}.#{sponsorship_availability}.html",
+        provider_url: x_provider_url
+      ) %>
+    <% end %>
 
-    <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as an international student", t("find.get_into_teaching.url_train_to_teach_as_international_candidate")) %>.</p>
+    <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as a non-UK citizen", t("find.get_into_teaching.url_train_to_teach_as_international_candidate")) %>.</p>
   </div>
 <% end %>
