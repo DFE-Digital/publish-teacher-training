@@ -16,8 +16,8 @@ feature 'Guidance pages', :with_publish_constraint do
     then_i_should_see_the_h1_add_and_remove_users
 
     given_i_click_on_the_how_to_use_this_service_breadcrumb
-    when_i_click_on_change_an_accredited_provider_relationship
-    then_i_should_see_the_h1_change_an_accredited_provider_relationship
+    when_i_click_on_change_an_accredited_partnership
+    then_i_should_see_the_h1_change_an_accredited_partnership
 
     given_i_click_on_the_how_to_use_this_service_breadcrumb
     when_i_click_on_roll_over_courses_to_a_new_recruitment_cycle
@@ -64,12 +64,12 @@ feature 'Guidance pages', :with_publish_constraint do
     expect(page).to have_css('h1', text: 'Add and remove users')
   end
 
-  def when_i_click_on_change_an_accredited_provider_relationship
-    click_link_or_button 'Change an accredited provider relationship'
+  def when_i_click_on_change_an_accredited_partnership
+    click_link_or_button 'Change an accredited partnership'
   end
 
-  def then_i_should_see_the_h1_change_an_accredited_provider_relationship
-    expect(page).to have_css('h1', text: 'Change an accredited provider relationship')
+  def then_i_should_see_the_h1_change_an_accredited_partnership
+    expect(page).to have_css('h1', text: 'Change an accredited partnership')
   end
 
   def when_i_click_on_roll_over_courses_to_a_new_recruitment_cycle
