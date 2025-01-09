@@ -7,8 +7,8 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     given_i_am_authenticated_as_a_provider_user
   end
 
-  scenario 'Add accrediting provider to provider and provider has no accrediting providers, change accrediting provider of course then publish' do
-    and_the_provider_has_no_accredited_provider
+  scenario 'Add ratifying provider to training provider and provider has no accredited partner, change ratifying provider of course then publish' do
+    and_the_provider_has_no_accredited_partners
     and_there_is_a_draft_course_with_an_unaccredited_provider
 
     # Publising is invalid
@@ -68,7 +68,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     provider.update!(accrediting_provider_enrichments: [enrichment])
   end
 
-  def and_the_provider_has_no_accredited_provider
+  def and_the_provider_has_no_accredited_partners
     expect(provider.accredited_providers).to be_empty
   end
 
@@ -104,11 +104,11 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
-    expect(publish_provider_courses_show_page.error_messages).to include('Update the ratifying provider')
+    expect(publish_provider_courses_show_page.error_messages).to include('Update the ratifying partner')
   end
 
   def then_i_should_see_an_error_message_for_the_accrediting_provider
-    expect(publish_provider_courses_show_page.error_messages).to include('Select an accredited provider')
+    expect(publish_provider_courses_show_page.error_messages).to include('Select a ratifying partner')
   end
 
   def when_i_click_the_error_message_link
@@ -142,7 +142,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_see_that_the_accredited_provider_has_been_added
-    expect(page).to have_content('Ratifying partner added')
+    expect(page).to have_content('Accredited partner added')
   end
 
   def and_i_click_the_publish_button
@@ -150,7 +150,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def when_i_click_the_select_accredited_provider_error_message_link
-    page.click_link_or_button('Select an ratifying partner')
+    page.click_link_or_button('Select a ratifying partner')
   end
 
   def and_i_choose_the_new_accredited_provider

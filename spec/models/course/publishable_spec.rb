@@ -15,7 +15,7 @@ describe '#publishable?' do
     expect(course).not_to be_publishable
     expect(course.errors.messages).to eq(
       { sites: ['^Select at least one school'],
-        accrediting_provider: ['Select an accredited partner'],
+        accrediting_provider: ['Select a ratifying partner'],
         about_course: ['^Enter information about this course'],
         how_school_placements_work: ['^Enter details about how placements work'],
         course_length: ['^Enter a course length'],

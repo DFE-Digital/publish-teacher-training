@@ -828,7 +828,7 @@ en:
             applications_open_from:
               blank: "Select an applications open date"
             accrediting_provider:
-              blank: "Select an accredited partner"
+              blank: "Select a ratifying partner"
               is_not_accredited: "Update the ratifying partner"
               does_not_exist_in_cycle: "The accredited partner %{accredited_provider_code} does not exist in this cycle"
             is_send:

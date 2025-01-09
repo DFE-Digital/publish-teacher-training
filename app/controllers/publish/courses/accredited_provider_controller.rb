@@ -127,7 +127,7 @@ module Publish
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
           errors = { accredited_provider: ['Accredited provider search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_provider_code: ['Select an accredited provider'] }
+          errors = { accredited_provider_code: ['Select a ratifying partner'] }
         end
 
         errors
