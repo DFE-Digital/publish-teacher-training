@@ -104,7 +104,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
-    expect(publish_provider_courses_show_page.error_messages).to include('Update the accredited provider')
+    expect(publish_provider_courses_show_page.error_messages).to include('Update the ratifying provider')
   end
 
   def then_i_should_see_an_error_message_for_the_accrediting_provider
@@ -142,7 +142,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def then_i_see_that_the_accredited_provider_has_been_added
-    expect(page).to have_content('Accredited provider added')
+    expect(page).to have_content('Ratifying partner added')
   end
 
   def and_i_click_the_publish_button
@@ -150,13 +150,13 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def when_i_click_the_select_accredited_provider_error_message_link
-    page.click_link_or_button('Select an accredited provider')
+    page.click_link_or_button('Select an ratifying partner')
   end
 
   def and_i_choose_the_new_accredited_provider
     choose accredited_provider.provider_name
-    page.click_link_or_button('Update accredited provider')
-    expect(page).to have_content('Accredited provider updated')
+    page.click_link_or_button('Update ratifying partner')
+    expect(page).to have_content('Ratifying partner updated')
   end
 
   def and_an_accredited_provider_exists
