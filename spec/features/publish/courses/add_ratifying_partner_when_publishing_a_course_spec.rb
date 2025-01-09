@@ -14,7 +14,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     # Publising is invalid
     when_i_visit_the_course_page
     and_i_click_the_publish_button
-    then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
+    then_i_should_see_an_error_message_that_ratifying_provider_is_not_accredited
 
     # Add accrediting provider to provider
     when_i_click_the_error_message_link
@@ -28,11 +28,11 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     # Publishing is invalid
     when_i_visit_the_course_page
     and_i_click_the_publish_button
-    then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
+    then_i_should_see_an_error_message_that_ratifying_provider_is_not_accredited
 
     # Clicking error message allows user to select accrediting provider
     when_i_click_the_error_message_link
-    and_i_choose_the_new_accredited_provider
+    and_i_choose_the_new_accredited_partner
     and_i_click_the_publish_button
     then_i_should_see_a_success_message
   end
@@ -49,7 +49,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
 
     # Clicking error message allows user to select accrediting provider
     when_i_click_the_select_accredited_provider_error_message_link
-    and_i_choose_the_new_accredited_provider
+    and_i_choose_the_new_accredited_partner
     and_i_click_the_publish_button
     then_i_should_see_a_success_message
   end
@@ -103,7 +103,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     expect(page).to have_content('Your course has been published.')
   end
 
-  def then_i_should_see_an_error_message_that_accredited_provider_is_not_accredited
+  def then_i_should_see_an_error_message_that_ratifying_provider_is_not_accredited
     expect(publish_provider_courses_show_page.error_messages).to include('Update the ratifying partner')
   end
 
@@ -153,7 +153,7 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
     page.click_link_or_button('Select a ratifying partner')
   end
 
-  def and_i_choose_the_new_accredited_provider
+  def and_i_choose_the_new_accredited_partner
     choose accredited_provider.provider_name
     page.click_link_or_button('Update ratifying partner')
     expect(page).to have_content('Ratifying partner updated')
