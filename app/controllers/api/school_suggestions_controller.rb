@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module API
-  class SchoolSuggestionsController < PublicAPIController
+  class SchoolSuggestionsController < ApplicationController
     def index
       return render_json_error(status: 400, message: I18n.t("school_suggestion.errors.bad_request")) if invalid_query?
 

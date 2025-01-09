@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module API
-  class AccreditedProviderSuggestionsController < PublicAPIController
+  class AccreditedProviderSuggestionsController < ApplicationController
     def index
       return render_json_error(status: 400, message: I18n.t("accredited_provider_suggestion.errors.bad_request")) if invalid_query?
 

@@ -3,7 +3,7 @@
 module API
   module Public
     module V1
-      class ProviderSuggestionsController < API::Public::V1::ApplicationController
+      class ProviderSuggestionsController < ApplicationController
         def index
           return render_json_error(status: 400, message: I18n.t("provider_suggestion.errors.bad_request")) if invalid_query?
 

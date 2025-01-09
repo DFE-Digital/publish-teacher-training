@@ -3,7 +3,7 @@
 module API
   module Public
     module V1
-      class ApplicationController < PublicAPIController
+      class ApplicationController < ApplicationController
         include PagyPagination
 
       private

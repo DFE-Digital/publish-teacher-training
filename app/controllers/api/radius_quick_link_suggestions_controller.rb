@@ -1,5 +1,5 @@
 module API
-  class RadiusQuickLinkSuggestionsController < PublicAPIController
+  class RadiusQuickLinkSuggestionsController < ApplicationController
     MAX_RADIUS = Courses::SearchForm::RADIUS_VALUES.max
     MAX_COURSES_COUNT = 100
 
