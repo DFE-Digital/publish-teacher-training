@@ -3,7 +3,7 @@
 module API
   module Public
     module V1
-      class ProvidersController < API::Public::V1::ApplicationController
+      class ProvidersController < ApplicationController
         def index
           render jsonapi: paginate(providers),
                  include: params[:include],
