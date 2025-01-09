@@ -15,7 +15,7 @@ describe '#publishable?' do
     expect(course).not_to be_publishable
     expect(course.errors.messages).to eq(
       { sites: ['^Select at least one school'],
-        accrediting_provider: ['Select an accredited provider'],
+        accrediting_provider: ['Select a ratifying partner'],
         about_course: ['^Enter information about this course'],
         how_school_placements_work: ['^Enter details about how placements work'],
         course_length: ['^Enter a course length'],
@@ -24,7 +24,7 @@ describe '#publishable?' do
     )
   end
 
-  context 'when associated accredited provider is no longer accredited' do
+  context 'when associated accredited partner is no longer accredited' do
     let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
     let(:primary_with_mathematics) { find_or_create(:primary_subject, :primary_with_mathematics) }
     let(:course) do

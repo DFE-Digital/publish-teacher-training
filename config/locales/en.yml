@@ -334,7 +334,7 @@ en:
         train_with_us:
           text: "Enter details about the training provider"
         about_accrediting_provider:
-          text: "Enter details about the accredited provider"
+          text: "Enter details about the ratifying partner"
   value_not_entered: "Not entered"
   a_level_grades:
     minimum_grade: Grade %{minimum_grade}
@@ -828,9 +828,9 @@ en:
             applications_open_from:
               blank: "Select an applications open date"
             accrediting_provider:
-              blank: "Select an accredited provider"
-              is_not_accredited: "Update the accredited provider"
-              does_not_exist_in_cycle: "The accredited provider %{accredited_provider_code} does not exist in this cycle"
+              blank: "Select a ratifying partner"
+              is_not_accredited: "Update the ratifying partner"
+              does_not_exist_in_cycle: "The accredited partner %{accredited_provider_code} does not exist in this cycle"
             is_send:
               inclusion: Select if this course has a special educational needs and disability (SEND) specialism
             a_level_subject_requirements:

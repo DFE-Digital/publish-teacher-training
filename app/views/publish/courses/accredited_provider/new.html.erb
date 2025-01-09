@@ -1,4 +1,4 @@
-<% content_for :page_title, title_with_error_prefix("Accredited provider – #{course.name_and_code}", @errors && @errors.any?) %>
+<% content_for :page_title, title_with_error_prefix("Ratifying partner – #{course.name_and_code}", @errors && @errors.any?) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(@back_link_path) %>
@@ -9,17 +9,17 @@
   <div class="govuk-grid-column-full">
   <%= form_with url: continue_publish_provider_recruitment_cycle_courses_accredited_provider_path(@provider.provider_code, @provider.recruitment_cycle_year), method: :get do |form| %>
     <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_provider_code] do |fields| %>
-      <%= render "publish/shared/error_wrapper", error_keys: [:accredited_provider_code], data_qa: "course__accredited_provider" do %>
+      <%= render "publish/shared/error_wrapper", error_keys: [:accredited_provider_code], data_qa: "course__ratifying_partner" do %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">
             <%= render CaptionText.new(text: t("course.add_course")) %>
-            Accredited provider
+            Ratifying partner
           </h1>
         </legend>
         <%= render "publish/shared/error_messages", error_keys: [:accredited_provider_code] %>
 
-        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_provider">
+        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__ratifying_partner">
           <% if @provider.accredited_bodies.length > 0 %>
             <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
           <% else %>

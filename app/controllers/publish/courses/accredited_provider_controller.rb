@@ -65,7 +65,7 @@ module Publish
         if update_params[:accredited_provider_code] == 'other'
           redirect_to_provider_search
         elsif @course.update(update_params)
-          course_updated_message('Accredited provider')
+          course_updated_message('Ratifying partner')
           redirect_to_update_successful
         else
           @errors = @course.errors.messages
@@ -127,7 +127,7 @@ module Publish
         if other_selected_with_no_autocompleted_code?(code) && query.length < 2
           errors = { accredited_provider: ['Accredited provider search too short, enter 2 or more characters'] }
         elsif code.blank?
-          errors = { accredited_provider_code: ['Select an accredited provider'] }
+          errors = { accredited_provider_code: ['Select a ratifying partner'] }
         end
 
         errors
