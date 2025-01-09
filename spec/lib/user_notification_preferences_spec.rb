@@ -202,8 +202,8 @@ describe UserNotificationPreferences do
       end
     end
 
-    context 'user has changed accredited provider associations' do
-      context 'accredited provider removed' do
+    context 'user has changed accredited partnerships' do
+      context 'accredited partnership removed' do
         before do
           user
           other_user
@@ -222,7 +222,7 @@ describe UserNotificationPreferences do
         end
       end
 
-      context 'accredited provider added' do
+      context 'accredited partnership created' do
         let(:accredited_provider_three) { create(:provider, :accredited_provider) }
 
         before do

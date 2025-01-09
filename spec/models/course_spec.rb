@@ -1320,7 +1320,7 @@ describe Course do
         let!(:accredited_provider) { create(:provider, :accredited_provider) }
         let!(:accredited_course) { create(:course, accrediting_provider: accredited_provider) }
 
-        it 'returns courses for which the provider is the accredited provider' do
+        it 'returns courses for which the provider is the ratifying provider' do
           expect(subject).to contain_exactly(accredited_course)
         end
       end

@@ -13,9 +13,9 @@ describe AddCourseButton do
   end
 
   context 'when the provider has not filled out any required sections' do
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -47,9 +47,9 @@ describe AddCourseButton do
       )
     end
 
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -71,9 +71,9 @@ describe AddCourseButton do
   context 'when the provider is an accredited provider' do
     let(:provider) { build(:provider, :accredited_provider, recruitment_cycle:) }
 
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_no_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -95,9 +95,9 @@ describe AddCourseButton do
   context 'when the provider has only added a site' do
     let(:provider) { build(:provider, sites: [create(:site)], recruitment_cycle:) }
 
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -129,9 +129,9 @@ describe AddCourseButton do
       )
     end
 
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
@@ -163,9 +163,9 @@ describe AddCourseButton do
       )
     end
 
-    it 'renders an accredited provider link' do
+    it 'renders an accredited partner link' do
       expect(rendered_content).to have_no_link(
-        'add an accredited provider',
+        'add an accredited partner',
         href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year

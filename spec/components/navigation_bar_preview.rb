@@ -27,7 +27,7 @@ class NavigationBarPreview < ViewComponent::Preview
       { name: 'Courses', url: 'root_path' },
       { name: 'Schools', url: '#', current: false },
       { name: 'Users', url: '#' },
-      { name: 'Accredited providers', url: '#' },
+      { name: 'Accredited partnerships', url: '#' },
       { name: 'Organisation details', url: '#' }
     ]
   end
