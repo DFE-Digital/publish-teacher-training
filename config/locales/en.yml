@@ -279,7 +279,7 @@ en:
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
           accredited_providers:
-            index: Accredited providers
+            index: Accredited partnerships
           onboardings:
             new: "Organisation details"
           onboarding:
@@ -710,25 +710,25 @@ en:
       accredited_provider_search:
         new:
           title: *accredited_provider_title
-          caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+          caption: &accredited_provider_caption "Add accredited partner - %{provider_name} (%{code})"
       accredited_providers:
         new:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
-          caption: "Add accredited provider - %{provider_name} (%{code})"
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
+          caption: "Add accredited partner - %{provider_name} (%{code})"
         edit:
-          title: About the accredited provider
-          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          title: About the accredited partner
+          hint: Tell candidates about the accredited partner. You could mention their academic specialities and achievements.
           caption: "%{provider_name}"
-          updated: About the accredited provider updated
+          updated: About the accredited partner updated
         delete:
-          title: Are you sure you want to remove this accredited provider?
-          remove: Remove accredited provider
-          updated: Accredited provider removed
+          title: Are you sure you want to remove this accredited partner?
+          remove: Remove accredited partner
+          updated: Accredited partner removed
         checks:
           show:
             caption: *accredited_provider_caption
-            add: Add accredited provider
+            add: Add accredited partner
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
@@ -950,8 +950,8 @@ en:
         accredited_provider_form:
           attributes:
             description:
-              blank: Enter details about the accredited provider
-              too_long: Description about the accredited provider must be 100 words or fewer
+              blank: Enter details about the accredited partner
+              too_long: Description about the accredited partnership must be 100 words or fewer
         a_level_steps/what_a_level_is_required:
           attributes:
             subject:

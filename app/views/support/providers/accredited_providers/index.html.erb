@@ -1,9 +1,9 @@
 <%= render PageTitle.new(title: "support.providers.accredited_providers.index") %>
 
-<%= govuk_button_link_to("Add accredited provider", search_support_recruitment_cycle_provider_accredited_providers_path) %>
+<%= govuk_button_link_to("Add accredited partner", search_support_recruitment_cycle_provider_accredited_providers_path) %>
 
 <% if @accredited_providers.none? %>
-  <p class="govuk-body">There are no accredited providers for <%= @provider.provider_name %>.</p>
+  <p class="govuk-body">There are no accredited partners for <%= @provider.provider_name %>.</p>
 <% else %>
   <% @accredited_providers.each do |accredited_provider| %>
     <%= render AccreditedProviderComponent.new(
