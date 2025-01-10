@@ -28,7 +28,7 @@ class AddCourseButton < ViewComponent::Base
 
   def incomplete_section_label_suffix(section)
     labels = {
-      accredited_provider_not_present?: 'accredited provider',
+      accredited_provider_not_present?: 'accredited partner',
       site_not_present?: 'school'
     }
 
@@ -64,6 +64,6 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def incomplete_section_article(section)
-    incomplete_section_label_suffix(section) == 'accredited provider' ? 'an' : 'a'
+    incomplete_section_label_suffix(section) == 'accredited partner' ? 'an' : 'a'
   end
 end
