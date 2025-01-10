@@ -1,0 +1,14 @@
+.govuk-inset-text.app-callout {
+  background-color: govuk-colour("light-grey");
+  padding: govuk-spacing(3);
+  border-left-width: govuk-spacing(1);
+
+  &.app-callout--pink {
+    border-left-color: govuk-colour("pink")
+  }
+
+  @include govuk-media-query($from: tablet) {
+    padding: govuk-spacing(4);
+    min-height: 130px;
+  }
+}

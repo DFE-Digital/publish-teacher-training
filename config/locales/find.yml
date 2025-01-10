@@ -66,6 +66,15 @@ en:
     visa_status:
       primary_title: Visa sponsorship
       secondary_title: Do you need visa sponsorship?
+    search:
+      become_a_teacher: How to become a teacher
+      become_a_teacher_html: |
+        Check your qualifications, what funding is available and how to apply. %{link}
+      become_a_teacher_link_text: Find out how to become a teacher.
+      get_help_and_support: Get help and support
+      get_help_and_support_link_text: contact Get Into Teaching
+      get_help_and_support_html: |
+        If you're thinking about teaching or are ready to apply, %{link} for free support.
     subjects:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
