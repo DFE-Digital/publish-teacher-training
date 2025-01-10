@@ -20,7 +20,17 @@
       </span>
       <%= @course.name_and_code %>
     </h1>
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+      <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <p class="govuk-hint govuk-body govuk-!-font-size-16">
+        This provider normally responds to applications within 10 days.
+      </p>
+    </div>
+  </div>
+
   </div>
 </div>
 
@@ -34,10 +44,70 @@
 
     <%= render Find::Courses::EntryRequirementsComponent::View.new(course: @course) %>
 
+<h2 class="govuk-heading-l">About the provider</h2>
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Provider
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <%#= govuk_link_to course.provider_name, x_provider_url %>
+      <a class="govuk-link govuk-link--no-visited-state" href="#">North Worcestershire Teacher Training Hub</a><br>
+      <span class="govuk-hint govuk-!-font-size-16">They deliver the training</span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Accredited by
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <%#= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url %>
+      <a class="govuk-link govuk-link--no-visited-state" href="#">University of Worcester</a><br>
+      <span class="govuk-hint govuk-!-font-size-16">They oversee the quality of the training</span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Ofsted
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <a class="govuk-link govuk-link--no-visited-state" href="#">University of Worcester Ofsted rating and reports</a>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+  <dt class="govuk-summary-list__key">
+    Offer rate
+  </dt>
+  <dd class="govuk-summary-list__value">
+    <p class="govuk-body">
+      <strong class="govuk-tag govuk-tag--green">
+        Over 75%
+      </strong>
+    </p>
+    <span class="govuk-hint govuk-!-font-size-16">Percentage of candidates who applied to this provider received an offer</span>
+  </dd>
+</div>
+<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Success rate
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <p class="govuk-body">
+      <strong class="govuk-tag govuk-tag--green">
+          Over 90%
+        </strong>
+      </p>
+      <span class="govuk-hint govuk-!-font-size-16">Percentage of trainees with this provider achieved Qualified Teacher Status (QTS)</span>
+    </dd>
+  </div>
+</dl>
+
+
+
      <h3 class="govuk-heading-m">
      Contents
     </h3>
-    <ul class="govuk-list app-list--dash course-contents govuk-!-margin-bottom-8">
+    <ul class="govuk-list app-list--dash course-contents">
       <li><a class="govuk-link" href="#training-locations">Where you will train</a></li>
         <%# if @course.salaried? %>
           <!--<li><a class="govuk-link" href="#section-salary">Salary</a></li>-->
@@ -49,10 +119,10 @@
             <a class="govuk-link" href="#section-financial-support">Fees and financial support</a>
           <% end %>
         </li>
-        <!--<li><a class="govuk-link" href="#section-about">About the course</a></li>-->
-        <%# if @course.published_interview_process.present? %>
-          <!--<li><a class="govuk-link" href="#section-interviews">Interview process</a></li>-->
-        <%# end %>
+        <li><a class="govuk-link" href="#section-about">About the course</a></li>
+        <% if @course.published_interview_process.present? %>
+          <li><a class="govuk-link" href="#section-interviews">Interview process</a></li>
+        <% end %>
         <li><a class="govuk-link" href="#section-train-with-disabilities">Training with disabilities</a></li>
       <li><a class="govuk-link" href="#section-advice">Support and advice</a></li>
       <li><a class="govuk-link" href="#section-apply">Apply</a></li>
@@ -66,20 +136,20 @@
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <%# if @course.published_about_course.present? %>
-      <%#= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <%# end %>
+    <% if @course.published_about_course.present? %>
+      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <% end %>
 
-     <%# if @course.published_interview_process.present? %>
-      <%#= render partial: "find/courses/interview_process", locals: { course: @course } %>
-     <%# end %>
+     <% if @course.published_interview_process.present? %>
+      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
+     <% end %>
 
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-m" id="section-train-with-disabilities">
         <%= t(".training_with_disabilities") %>
       </h2>
 
-      <p class="govuk-body govuk-!-margin-bottom-8">
+      <p class="govuk-body">
         <%= govuk_link_to(
           t(".training_with_disabilities_link", provider_name: @course.provider_name),
           find_training_with_disabilities_path(
@@ -90,12 +160,23 @@
       </p>
     <% end %>
 
-    <%= render partial: "find/courses/advice", locals: { course: @course } %>
 
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+        <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+      <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <p class="govuk-hint govuk-body govuk-!-font-size-16">
+        This provider normally responds to applications within 10 days.
+      </p>
+    </div>
+  </div>
+
+  <br>
+  <%= render partial: "find/courses/advice", locals: { course: @course } %>
+
+
   </div>
 </div>
