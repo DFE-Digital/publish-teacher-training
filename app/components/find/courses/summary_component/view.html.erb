@@ -46,7 +46,7 @@
   <#% summary_list.with_row do |row| %>
     <#% row.with_key(text: t(".provider")) %>
     <#% row.with_value do %>
-      <#%= govuk_link_to course.provider_name, x_provider_url %>
+      <#%= govuk_link_to course.provider_name, x_provider_url(course) %>
     <#% end %>
   <#% end %>
 
@@ -54,7 +54,7 @@
     <#% summary_list.with_row do |row| %>
       <#% row.with_key(text: t(".accredited_by")) %>
       <#% row.with_value do %>
-        <#%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url %>
+        <#%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url(course) %>
       <#% end %>
     <#% end %>
   <#% end %>
