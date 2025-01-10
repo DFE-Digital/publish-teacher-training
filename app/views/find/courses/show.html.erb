@@ -51,7 +51,7 @@
       Provider
     </dt>
     <dd class="govuk-summary-list__value">
-      <%#= govuk_link_to course.provider_name, x_provider_url %>
+      <%= govuk_link_to @course.provider_name, x_provider_url %>
       <a class="govuk-link govuk-link--no-visited-state" href="#">North Worcestershire Teacher Training Hub</a><br>
       <span class="govuk-hint govuk-!-font-size-16">They deliver the training</span>
     </dd>
@@ -61,7 +61,7 @@
       Accredited by
     </dt>
     <dd class="govuk-summary-list__value">
-      <%#= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url %>
+      <%= govuk_link_to @course.accrediting_provider.provider_name, x_accrediting_provider_url %>
       <a class="govuk-link govuk-link--no-visited-state" href="#">University of Worcester</a><br>
       <span class="govuk-hint govuk-!-font-size-16">They oversee the quality of the training</span>
     </dd>
