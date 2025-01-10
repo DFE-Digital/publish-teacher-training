@@ -70,6 +70,7 @@
     </div>
     <!--END keyword and location search-->
 
+  <!-- Sort and filter sticky buttons -->
   <div class="div-filter-background">
     <div class="div-sticky-container">
       <div class="div-sticky-element">
@@ -81,6 +82,7 @@
       </div>
     </div>
   </div>
+  <!--END Sort and filter sticky buttons -->
 
     <%= render Find::Results::NoResultsComponent.new(results: @results_view, filters_view: @filters_view) %>
 
