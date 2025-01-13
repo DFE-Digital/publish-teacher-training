@@ -5,6 +5,7 @@ require 'rails_helper'
 feature 'Questions and results for undergraduate courses' do
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
+    allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
   end
 
   after do
@@ -175,6 +176,18 @@ feature 'Questions and results for undergraduate courses' do
     and_i_click_find_courses
     then_i_am_on_results_page
     and_i_see_the_default_message_for_no_undergraduate_courses
+  end
+
+  scenario 'when a user clicks the how to become a teacher link' do
+    when_i_visit_the_start_page
+    click_link_or_button 'Find out how to become a teacher.'
+    and_the_link_click_is_tracked
+  end
+
+  scenario 'when a user clicks the get help and support link' do
+    when_i_visit_the_start_page
+    click_link_or_button 'contact Get Into Teaching'
+    and_the_link_click_is_tracked
   end
 
   def given_i_have_courses
@@ -475,5 +488,9 @@ feature 'Questions and results for undergraduate courses' do
     expect(page).to have_content(
       'Find out more about teacher degree apprenticeship (TDA) courses.'
     )
+  end
+
+  def and_the_link_click_is_tracked
+    expect(:track_click).to have_been_enqueued_as_analytics_events
   end
 end

@@ -9,6 +9,8 @@ scope via: :all do
 end
 
 namespace :find, path: '/' do
+  get 'track_click', to: 'track#track_click'
+
   get '/accessibility', to: 'pages#accessibility', as: :accessibility
   get '/privacy', to: 'pages#privacy', as: :privacy
   get '/terms-conditions', to: 'pages#terms', as: :terms
