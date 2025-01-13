@@ -64,6 +64,21 @@ describe Find::Courses::InternationalStudentsComponent::View, type: :component d
     end
   end
 
+  context 'when the course has a visa_type of student_visa and sponsorship_availability of :not_available' do
+    before do
+      course = build(
+        :course,
+        funding: 'fee',
+        can_sponsor_skilled_worker_visa: false
+      )
+      render_inline(described_class.new(course: CourseDecorator.new(course)))
+    end
+
+    it 'does not show the content if visa cannont be sponsored' do
+      expect(page).to have_no_text('If you do not already have the right to work in the UK, you may need to')
+    end
+  end
+
   context 'when the course is salaried and does not sponsor Skilled Worker visas' do
     before do
       course = build(
