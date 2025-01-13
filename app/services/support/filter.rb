@@ -57,7 +57,7 @@ module Support
     def provider_accredited_type(records, accredited_provider)
       return records unless accredited_provider == 'on'
 
-      records.accredited_provider
+      records.accredited
     end
 
     def filter_records

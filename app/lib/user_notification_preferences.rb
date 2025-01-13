@@ -46,7 +46,7 @@ class UserNotificationPreferences
   private
 
   def user_accredited_provider_codes
-    user.providers.accredited_provider.in_current_cycle.distinct.pluck(:provider_code)
+    user.providers.accredited.in_current_cycle.distinct.pluck(:provider_code)
   end
 
   def user_notifications

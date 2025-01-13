@@ -23,7 +23,7 @@ module AccreditedProviders
     attr_reader :query, :limit, :recruitment_cycle_year
 
     def providers
-      providers = RecruitmentCycle.find_by(year: recruitment_cycle_year).providers.accredited_provider
+      providers = RecruitmentCycle.find_by(year: recruitment_cycle_year).providers.accredited
       providers = providers.accredited_provider_search(query) if query
       providers = providers.limit(limit) if limit
       providers.reorder(:provider_name)

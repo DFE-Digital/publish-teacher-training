@@ -28,7 +28,7 @@ class ProviderReportingService
           open: @open_providers.count,
           closed: @closed_providers.count
         },
-        accredited_provider: { **group_by_count(:accrediting_provider) },
+        accredited_provider: { **group_by_count(:accredited) },
         provider_type: { **group_by_count(:provider_type) },
         region_code: { **group_by_count(:region_code) }
       }
@@ -42,14 +42,15 @@ class ProviderReportingService
   def group_by_count(column)
     open = @open_providers.group(column).count
     closed = @closed_providers.group(column).count
+    column_name = column.to_s.pluralize
 
     {
-      open: Provider.send(column.to_s.pluralize).map do |key, _value|
+      open: Provider.send(column_name).map do |key, _value|
               x = {}
               x[key.to_sym] = open[key] || 0
               x
             end.reduce({}, :merge),
-      closed: Provider.send(column.to_s.pluralize).map do |key, _value|
+      closed: Provider.send(column_name).map do |key, _value|
                 x = {}
                 x[key.to_sym] = closed[key] || 0
                 x
