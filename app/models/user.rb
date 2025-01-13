@@ -68,7 +68,7 @@ class User < ApplicationRecord
   def associated_with_accredited_provider?
     providers
       .in_current_cycle
-      .accredited_provider
+      .accredited
       .count
       .positive?
   end
