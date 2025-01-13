@@ -31,11 +31,11 @@
 
             component.with_row do |row|
               row.with_key { "Is the organisation an accredited provider?" }
-              row.with_value { @provider_form.accredited_provider? ? "Yes" : "No" }
+              row.with_value { @provider_form.accredited? ? "Yes" : "No" }
               row.with_action(text: "Change", href: new_support_recruitment_cycle_providers_onboarding_path(goto_confirmation: true), visually_hidden_text: "accredited provider")
             end
 
-            if @provider_form.accredited_provider?
+            if @provider_form.accredited?
               component.with_row do |row|
                 row.with_key { "Accredited provider number" }
                 row.with_value { @provider_form.accredited_provider_number }

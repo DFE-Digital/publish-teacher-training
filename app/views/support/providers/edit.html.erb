@@ -33,13 +33,13 @@
     <%= t("links.ukprn_html") %>
   </p>
 
-  <%= f.govuk_radio_buttons_fieldset :accrediting_provider, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
-    <%= f.govuk_radio_button :accrediting_provider, :accredited_provider, label: { text: "Yes", size: "s" } do %>
+  <%= f.govuk_radio_buttons_fieldset :accredited, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
+    <%= f.govuk_radio_button :accredited, true, label: { text: "Yes", size: "s" } do %>
       <%= f.govuk_text_field :accredited_provider_number,
         label: { text: "Accredited provider number" },
         width: 10 %>
     <% end %>
-    <%= f.govuk_radio_button :accrediting_provider, :not_an_accredited_provider, label: { text: "No", size: "s" } %>
+    <%= f.govuk_radio_button :accredited, false, label: { text: "No", size: "s" } %>
   <% end %>
 
   <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: "Provider type", size: "s" } do %>

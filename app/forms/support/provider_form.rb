@@ -3,7 +3,7 @@
 module Support
   class ProviderForm < BaseForm
     FIELDS = %i[
-      accredited_provider
+      accredited
       accredited_provider_number
 
       provider_code
@@ -31,7 +31,6 @@ module Support
 
     validate :provider_code_taken
 
-    validates :accredited_provider, presence: true
     validate :validate_accredited_provider_number
 
     validates :ukprn, ukprn_format: { allow_blank: false }
@@ -39,18 +38,17 @@ module Support
     validates :provider_type, presence: true
     validate :provider_type_school_is_an_invalid_accredited_provider
 
-    validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited_provider? && lead_school? }
+    validates :urn, presence: true, reference_number_format: { allow_blank: true, minimum: 5, maximum: 6, message: :invalid }, if: -> { !accredited? && lead_school? }
 
     alias compute_fields new_attributes
 
     def attributes_to_save
-      new_attributes.transform_keys { |key| key == :accredited_provider ? :accrediting_provider : key }
-                    .merge(organisations_attributes: [{ name: provider_name }])
+      new_attributes.merge(organisations_attributes: [{ name: provider_name }])
                     .merge(recruitment_cycle:)
     end
 
-    def accredited_provider?
-      accredited_provider&.to_sym == :accredited_provider
+    def accredited?
+      ActiveModel::Type::Boolean.new.cast(accredited)
     end
 
     def lead_school?
@@ -74,11 +72,11 @@ module Support
     end
 
     def provider_type_school_is_an_invalid_accredited_provider
-      errors.add(:provider_type, :school_is_an_invalid_accredited_provider) if accredited_provider? && lead_school?
+      errors.add(:provider_type, :school_is_an_invalid_accredited_provider) if accredited? && lead_school?
     end
 
     def validate_accredited_provider_number
-      return unless accredited_provider?
+      return unless accredited?
 
       if accredited_provider_number.blank?
         errors.add(:accredited_provider_number, :blank)
