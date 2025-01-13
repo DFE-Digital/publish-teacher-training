@@ -32,7 +32,7 @@ describe '#publishable?' do
     end
 
     it 'is not publishable' do
-      course.accrediting_provider.not_an_accredited_provider!
+      course.accrediting_provider.update!(accredited: false)
       expect(course).not_to be_publishable
     end
   end

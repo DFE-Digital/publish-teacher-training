@@ -52,7 +52,7 @@ RSpec.describe Providers::CreateFakeProviderService do
     it 'the created provider is an accredited_provider' do
       service.execute
 
-      expect(Provider.last.accredited_provider?).to be(true)
+      expect(Provider.last.accredited?).to be(true)
     end
   end
 
@@ -62,7 +62,7 @@ RSpec.describe Providers::CreateFakeProviderService do
     it 'the created provider is an accredited_provider' do
       service.execute
 
-      expect(Provider.last.accredited_provider?).to be(false)
+      expect(Provider.last.accredited?).to be(false)
     end
   end
 end

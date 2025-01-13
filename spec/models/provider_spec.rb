@@ -117,7 +117,7 @@ describe Provider do
     end
 
     describe 'a lead school can not be an accredited provider' do
-      let(:provider) { build(:provider, provider_type: 'lead_school', accrediting_provider: 'Y') }
+      let(:provider) { build(:provider, provider_type: 'lead_school', accredited: true) }
 
       it 'is invalid' do
         expect(provider).not_to be_valid
@@ -299,11 +299,20 @@ describe Provider do
 
   its(:recruitment_cycle) { is_expected.to eq find(:recruitment_cycle) }
 
-  it 'defines an enum for accrediting_provider' do
-    expect(subject)
-      .to define_enum_for('accrediting_provider')
-      .backed_by_column_of_type(:text)
-      .with_values('accredited_provider' => 'Y', 'not_an_accredited_provider' => 'N')
+  describe '#accredited' do
+    context 'when provider is accredited' do
+      it 'returns true' do
+        provider = build(:accredited_provider)
+        expect(provider).to be_accredited
+      end
+    end
+
+    context 'when provider is not accredited' do
+      it 'returns false' do
+        provider = build(:provider)
+        expect(provider).not_to be_accredited
+      end
+    end
   end
 
   describe 'courses' do
@@ -587,6 +596,15 @@ describe Provider do
   end
 
   describe 'scopes' do
+    describe '.accredited' do
+      let!(:accredited_providers) { create_list(:accredited_provider, 2) }
+      let!(:providers) { create_list(:provider, 2) }
+
+      it 'returns only accredited providers' do
+        expect(described_class.accredited).to match_array(accredited_providers)
+      end
+    end
+
     describe '.with_findable_courses' do
       subject do
         described_class.with_findable_courses
@@ -1020,24 +1038,6 @@ describe Provider do
 
     it 'returns only study sites' do
       expect(provider.study_sites).to match([study_site])
-    end
-  end
-
-  describe '#accredited?' do
-    context 'for an accredited provider' do
-      let(:provider) { create(:provider, :accredited_provider) }
-
-      it 'returns true' do
-        expect(provider).to be_accredited
-      end
-    end
-
-    context 'for an unaccredited provider' do
-      let(:provider) { create(:provider) }
-
-      it 'returns false' do
-        expect(provider).not_to be_accredited
-      end
     end
   end
 

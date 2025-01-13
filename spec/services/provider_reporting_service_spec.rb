@@ -108,7 +108,7 @@ describe ProviderReportingService do
         expect(open_providers_scope).to receive(:count).and_return(open_providers_count)
 
         expect(open_providers_scope).to receive(:group)
-          .with(:accrediting_provider)
+          .with(:accredited)
           .and_return(open_providers_accrediting_provider_scope)
 
         expect(open_providers_accrediting_provider_scope).to receive(:count)
@@ -143,7 +143,7 @@ describe ProviderReportingService do
 
         expect(closed_providers_scope).to receive(:count).and_return(closed_providers_count)
 
-        expect(closed_providers_scope).to receive(:group).with(:accrediting_provider).and_return(closed_providers_accrediting_provider_scope)
+        expect(closed_providers_scope).to receive(:group).with(:accredited).and_return(closed_providers_accrediting_provider_scope)
         expect(closed_providers_accrediting_provider_scope).to receive(:count).and_return({})
 
         expect(closed_providers_scope).to receive(:group).with(:provider_type).and_return(closed_providers_provider_type_scope)
