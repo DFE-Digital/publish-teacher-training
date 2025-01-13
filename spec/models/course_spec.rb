@@ -3437,4 +3437,52 @@ describe Course do
       expect(course.training_route).to eq('unknown_training_route')
     end
   end
+
+  describe '#visa_sponsorship' do
+    context 'when the funding type is fee-based' do
+      let(:course) { build(:course, funding: 'fee', can_sponsor_student_visa:) }
+
+      context 'and the course can sponsor a student visa' do
+        let(:can_sponsor_student_visa) { true }
+
+        it 'returns :can_sponsor_student_visa' do
+          expect(course.visa_sponsorship).to eq(:can_sponsor_student_visa)
+        end
+      end
+
+      context 'and the course cannot sponsor a student visa' do
+        let(:can_sponsor_student_visa) { false }
+
+        it 'returns :no_sponsorship' do
+          expect(course.visa_sponsorship).to eq(:no_sponsorship)
+        end
+      end
+    end
+
+    context 'when the funding type is salary-based or apprenticeship' do
+      let(:course) { build(:course, funding: funding, can_sponsor_skilled_worker_visa:) }
+
+      %w[salary apprenticeship].each do |funding_type|
+        context "and the funding type is #{funding_type}" do
+          let(:funding) { funding_type }
+
+          context 'and the course can sponsor a skilled worker visa' do
+            let(:can_sponsor_skilled_worker_visa) { true }
+
+            it 'returns :can_sponsor_skilled_worker_visa' do
+              expect(course.visa_sponsorship).to eq(:can_sponsor_skilled_worker_visa)
+            end
+          end
+
+          context 'and the course cannot sponsor a skilled worker visa' do
+            let(:can_sponsor_skilled_worker_visa) { false }
+
+            it 'returns :no_sponsorship' do
+              expect(course.visa_sponsorship).to eq(:no_sponsorship)
+            end
+          end
+        end
+      end
+    end
+  end
 end

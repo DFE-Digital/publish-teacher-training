@@ -1,0 +1,42 @@
+<li class="app-search-results__item">
+  <%= govuk_summary_card(classes: ["course-summary-card"], title:) do |card| %>
+    <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: location_key) %>
+        <% row.with_value(text: location_value) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: fee_key) %>
+        <% row.with_value(text: fee_value) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: length_key) %>
+        <% row.with_value(text: length_value) %>
+      <% end %>
+
+      <% if show_age_group_row? %>
+        <% summary_list.with_row do |row| %>
+          <% row.with_key(text: age_group_key) %>
+          <% row.with_value(text: age_group_value) %>
+        <% end %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: qualification_key) %>
+        <% row.with_value(text: qualification_value) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: degree_requirements_key) %>
+        <% row.with_value(text: degree_requirements_value) %>
+      <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key(text: visa_sponsorship_key) %>
+        <% row.with_value(text: visa_sponsorship_value) %>
+      <% end %>
+    <% end %>
+  <% end %>
+</li>
