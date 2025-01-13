@@ -47,7 +47,7 @@ feature 'Publishing a course when course when accrediting_provider is nil', { ca
   end
 
   def and_the_provider_is_accredited
-    provider.update(accrediting_provider: 'accredited_provider', accredited_provider_number: '5432', provider_type: 'scitt')
+    provider.update(accredited: true, accredited_provider_number: '5432', provider_type: 'scitt')
   end
 
   def provider

@@ -22,7 +22,7 @@ RSpec.describe CSVImports::FakeProvidersImport do
       expect(created_provider.provider_name).to eq('Provider A')
       expect(created_provider.provider_code).to eq('ABC')
       expect(created_provider.provider_type).to eq('scitt')
-      expect(created_provider).not_to be_accredited_provider
+      expect(created_provider).not_to be_accredited
     end
 
     it 'reports on the created provider' do
