@@ -24,11 +24,6 @@ class Provider < ApplicationRecord
     university: 'O'
   }
 
-  enum :accrediting_provider, {
-    accredited_provider: 'Y',
-    not_an_accredited_provider: 'N'
-  }
-
   belongs_to :recruitment_cycle
 
   has_and_belongs_to_many :organisations, join_table: :organisation_provider
