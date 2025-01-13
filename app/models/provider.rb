@@ -10,7 +10,7 @@ class Provider < ApplicationRecord
   include PgSearch::Model
   include VectorSearchable
 
-  before_save :update_searchable, if: :accredited_provider?
+  before_save :update_searchable, if: :accredited?
   before_create :set_defaults
 
   after_save :update_courses_program_type, if: :provider_type_previously_changed?
@@ -18,13 +18,6 @@ class Provider < ApplicationRecord
   has_associated_audits
   audited except: :changed_at
 
-  # NOTE: `provider_type` &  `accrediting_provider`
-  # The `unknown` & `invalid_value` provider types can be removed
-  # Once the underlying the data discreptives has been amended.
-  # Validation can be added to enforce compliance.
-  # The `scitt` & `university` provider types can be used to denote
-  # that they are an `accredited_provider` for accrediting providers
-  # therefore `lead_school` is a `not_an_accredited_provider`.
   enum :provider_type, {
     scitt: 'B',
     lead_school: 'Y',
@@ -81,7 +74,6 @@ class Provider < ApplicationRecord
   end
 
   alias accrediting_providers accredited_providers
-  alias accredited? accredited_provider?
 
   delegate :year, to: :recruitment_cycle, prefix: true
 
@@ -178,11 +170,11 @@ class Provider < ApplicationRecord
 
   validate :add_enrichment_errors
 
-  validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited_provider?
+  validates :accredited_provider_number, accredited_provider_number_format: true, if: :accredited?
 
   validate :accredited_provider_type
   def accredited_provider_type
-    return unless accredited_provider?
+    return unless accredited?
 
     errors.add(:accrediting_provider, :invalid_provider_type) unless provider_type.to_s.in?(%w[scitt university])
   end

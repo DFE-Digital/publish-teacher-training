@@ -72,7 +72,7 @@ module API
           @providers = @providers.with_region_codes(region_codes) if region_codes.present?
           @providers = @providers.with_can_sponsor_skilled_worker_visa(true) if can_sponsor_skilled_worker_visa?
           @providers = @providers.with_can_sponsor_student_visa(true) if can_sponsor_student_visa?
-          @providers = @providers.accredited_provider if is_accredited_body?
+          @providers = @providers.accredited if is_accredited_body?
           @providers = @providers.unscope(where: :discarded_at).discarded if discarded?
           @providers = if sort_by_provider_ascending?
                          @providers.by_name_ascending

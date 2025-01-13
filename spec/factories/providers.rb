@@ -26,6 +26,7 @@ FactoryBot.define do
     urn { Faker::Number.number(digits: [5, 6].sample) }
     ukprn { Faker::Number.within(range: 10_000_000..19_999_999) }
     accrediting_provider { 'N' }
+    accredited { false }
     region_code { 'london' }
     association :recruitment_cycle, strategy: :find_or_create
 
@@ -54,6 +55,7 @@ FactoryBot.define do
     trait :accredited_provider do
       provider_type { :university }
       accrediting_provider { 'Y' }
+      accredited { true }
       accredited_provider_number { Faker::Number.within(range: 1000..1999) }
       urn { nil }
     end
@@ -99,6 +101,7 @@ FactoryBot.define do
     factory :accredited_provider do
       provider_type { :university }
       accrediting_provider { 'Y' }
+      accredited { true }
       accredited_provider_number do
         if provider_type == :scitt
           Faker::Number.within(range: 5000..5999)

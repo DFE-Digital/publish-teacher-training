@@ -45,7 +45,7 @@ class AddCourseButtonPreview < ViewComponent::Preview
       Settings.current_recruitment_cycle_year
     end
 
-    def accredited_provider?
+    def accredited?
       false
     end
   end
