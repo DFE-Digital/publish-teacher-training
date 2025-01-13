@@ -287,6 +287,10 @@ class Provider < ApplicationRecord
     ).select('provider.*, COALESCE(a.courses_count, 0) AS included_accredited_courses_count')
   end
 
+  def self.accrediteds
+    %w[accredited_provider not_an_accredited_provider]
+  end
+
   def courses_count
     has_attribute?('included_courses_count') ? included_courses_count : courses.size
   end
