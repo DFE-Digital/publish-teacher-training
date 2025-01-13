@@ -9,26 +9,30 @@ module Support
     let(:provider_form) { described_class.new(user, recruitment_cycle:, params:) }
     let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
     let(:user) { create(:user) }
-    let(:params) do
+    let(:base_params) do
       build(:provider).attributes.symbolize_keys.slice(
-        :accrediting_provider,
+        :accredited,
         :accredited_provider_number,
         :provider_code,
         :provider_name,
         :provider_type,
         :ukprn,
         :urn
-      ).transform_keys { |key| key == :accrediting_provider ? :accredited_provider : key }
+      )
     end
+    let(:params) do
+      test_params.reverse_merge(base_params)
+    end
+    let(:test_params) { {} }
 
     subject { provider_form }
 
-    describe '#accredited_provider?' do
-      subject { provider_form.accredited_provider? }
+    describe '#accredited?' do
+      subject { provider_form.accredited? }
 
-      context 'params accredited_provider is set to accredited_provider' do
-        let(:params) do
-          { accredited_provider: :accredited_provider }
+      context 'params accredited is true' do
+        let(:test_params) do
+          { accredited: '1' }
         end
 
         it 'returns true' do
@@ -36,9 +40,9 @@ module Support
         end
       end
 
-      context 'params accredited_provider is set to a not_an_accredited_provider' do
-        let(:params) do
-          { accredited_provider: :not_an_accredited_provider }
+      context 'params accredited is false' do
+        let(:test_params) do
+          { accredited: '0' }
         end
 
         it 'returns false' do
@@ -51,7 +55,7 @@ module Support
       subject { provider_form.lead_school? }
 
       context 'params provider_type is set to lead_school' do
-        let(:params) do
+        let(:test_params) do
           { provider_type: :lead_school }
         end
 
@@ -61,7 +65,7 @@ module Support
       end
 
       context 'params provider_type is set to a non lead_school' do
-        let(:params) do
+        let(:test_params) do
           { provider_type: %i[university scitt].sample }
         end
 
@@ -74,8 +78,7 @@ module Support
     describe '#attributes_to_save' do
       subject { provider_form.attributes_to_save }
       let(:expected_attributes) do
-        params.transform_keys { |key| key == :accredited_provider ? :accrediting_provider : key }
-              .merge(organisations_attributes: [{ name: params[:provider_name] }])
+        params.merge(organisations_attributes: [{ name: params[:provider_name] }])
               .merge(recruitment_cycle:)
       end
 
@@ -101,37 +104,36 @@ module Support
       include_examples 'blank validation', :provider_code, 'Enter a provider code'
       include_examples 'blank validation', :ukprn, 'Enter a UK provider reference number (UKPRN)'
       include_examples 'blank validation', :provider_type, 'Select a provider type'
-      include_examples 'blank validation', :accredited_provider, 'Select if the organisation is an accredited provider'
 
       context 'provider_type is set to lead_school' do
-        let(:params) do
+        let(:test_params) do
           { provider_type: :lead_school }
         end
 
         include_examples 'blank validation', :urn, 'Enter a unique reference number (URN)'
       end
 
-      context 'provider_type is set to lead_school and accredited_provider is set to not_an_accredited_body' do
-        let(:params) do
+      context 'provider_type is set to lead_school and accredited is false' do
+        let(:test_params) do
           {
             provider_type: :lead_school,
-            accredited_provider: :not_an_accredited_body
+            accredited: '0'
           }
         end
 
         include_examples 'blank validation', :urn, 'Enter a unique reference number (URN)'
       end
 
-      context 'accredited_provider is set to accredited_body' do
-        let(:params) do
-          { accredited_provider: :accredited_provider }
+      context 'accredited is true' do
+        let(:test_params) do
+          { accredited: '1' }
         end
 
         include_examples 'blank validation', :accredited_provider_number, 'Enter an accredited provider number'
       end
 
       context 'urn set to invalid' do
-        let(:params) do
+        let(:test_params) do
           {
             provider_type: :lead_school,
             urn: %w[1234 1234567 digit].sample
@@ -146,7 +148,7 @@ module Support
       end
 
       context 'ukprn set to invalid' do
-        let(:params) do
+        let(:test_params) do
           {
             ukprn: %w[1234567 123456789 digit].sample
           }
@@ -160,7 +162,7 @@ module Support
       end
 
       context 'using an existing provider_code' do
-        let(:params) do
+        let(:test_params) do
           { provider_code: }
         end
 
@@ -175,11 +177,11 @@ module Support
         end
       end
 
-      context 'provider_type is set to lead_school and accredited_provider is set to accredited_body' do
-        let(:params) do
+      context 'provider_type is set to lead_school and accredited is true' do
+        let(:test_params) do
           {
             provider_type: :lead_school,
-            accredited_provider: :accredited_provider
+            accredited: true
           }
         end
 
@@ -192,10 +194,10 @@ module Support
 
       shared_examples 'accredited provider number validation' do |provider_type, accredited_provider_number, message|
         context "provider_type is set to '#{provider_type}' and accredited_provider_number is set to '#{accredited_provider_number}'" do
-          let(:params) do
+          let(:test_params) do
             {
               provider_type:,
-              accredited_provider: :accredited_provider,
+              accredited: '1',
               accredited_provider_number:
             }
           end
@@ -231,6 +233,7 @@ module Support
     describe '#stash' do
       context 'valid details' do
         it 'returns true' do
+          puts subject.params
           expect(subject.stash).to be true
 
           expect(subject.errors.messages).to be_blank
