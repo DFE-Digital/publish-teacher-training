@@ -50,7 +50,7 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def accredited_provider_not_present?
-    return false if provider.accredited_provider?
+    return false if provider.accredited?
 
     !accredited_provider_present?
   end
@@ -60,7 +60,7 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def accredited_provider?
-    provider.accredited_provider?
+    provider.accredited?
   end
 
   def incomplete_section_article(section)

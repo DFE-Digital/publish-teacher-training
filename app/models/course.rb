@@ -678,7 +678,7 @@ class Course < ApplicationRecord
   end
 
   def is_uni_or_scitt?
-    provider.accredited_provider?
+    provider.accredited?
   end
 
   def is_school_direct?
@@ -686,7 +686,7 @@ class Course < ApplicationRecord
   end
 
   def self_accredited?
-    provider.accredited_provider?
+    provider.accredited?
   end
 
   def to_s

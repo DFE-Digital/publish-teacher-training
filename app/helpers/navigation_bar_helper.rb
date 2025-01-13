@@ -19,9 +19,9 @@ module NavigationBarHelper
   end
 
   def partnership_link(provider)
-    if Settings.features.provider_partnerships && !provider.accredited_provider?
+    if Settings.features.provider_partnerships && !provider.accredited?
       { name: t('navigation_bar.accredited_partnerships'), url: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year) }
-    elsif provider.accredited_provider?
+    elsif provider.accredited?
       { name: t('navigation_bar.training_partners'), url: publish_provider_recruitment_cycle_training_providers_path(provider.provider_code, provider.recruitment_cycle_year) }
     else
       { name: t('navigation_bar.accredited_provider'), url: publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year) }

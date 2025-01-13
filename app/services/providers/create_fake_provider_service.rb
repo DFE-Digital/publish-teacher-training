@@ -33,7 +33,7 @@ module Providers
         provider_name: @provider_name,
         provider_code: @provider_code,
         provider_type: @provider_type,
-        accrediting_provider: @is_accredited_provider ? 'accredited_provider' : 'not_an_accredited_provider',
+        accredited: @is_accredited_provider,
         accredited_provider_number: @is_accredited_provider && generate_accredited_provider_number(@provider_type)
       }.merge(DEFAULT_PROVIDER_ATTRIBUTES))
 

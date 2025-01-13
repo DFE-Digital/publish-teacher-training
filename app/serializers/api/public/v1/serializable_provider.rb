@@ -27,7 +27,7 @@ module API
                    :selectable_school
 
         attribute :accredited_body do
-          @object.accredited_provider?
+          @object.accredited?
         end
 
         attribute :changed_at do
