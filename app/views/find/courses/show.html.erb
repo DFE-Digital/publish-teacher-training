@@ -26,7 +26,7 @@
     <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
       <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
       <p class="govuk-hint govuk-body govuk-!-font-size-16">
-        This provider normally responds to applications within 10 days.
+        <%= @course.accrediting_provider.provider_name %> normally responds to applications within 10 days.
       </p>
     </div>
   </div>
@@ -51,8 +51,7 @@
       Provider
     </dt>
     <dd class="govuk-summary-list__value">
-      <%= govuk_link_to @course.provider_name, x_provider_url(@course) %>
-      <a class="govuk-link govuk-link--no-visited-state" href="#">North Worcestershire Teacher Training Hub</a><br>
+      <%= govuk_link_to @course.provider_name, x_provider_url(@course) %><br>
       <span class="govuk-hint govuk-!-font-size-16">They deliver the training</span>
     </dd>
   </div>
@@ -61,8 +60,7 @@
       Accredited by
     </dt>
     <dd class="govuk-summary-list__value">
-      <%= govuk_link_to @course.accrediting_provider.provider_name, x_accrediting_provider_url(@course) %>
-      <a class="govuk-link govuk-link--no-visited-state" href="#">University of Worcester</a><br>
+      <%= govuk_link_to @course.accrediting_provider.provider_name, x_accrediting_provider_url(@course) %><br>
       <span class="govuk-hint govuk-!-font-size-16">They oversee the quality of the training</span>
     </dd>
   </div>
@@ -84,7 +82,9 @@
         Over 75%
       </strong>
     </p>
-    <span class="govuk-hint govuk-!-font-size-16">Percentage of candidates who applied to this provider received an offer</span>
+    <span class="govuk-hint govuk-!-font-size-16">
+    The percentage of applicants to <%= @course.accrediting_provider.provider_name %> who received an offer (2022 to 2023)
+    </span>
   </dd>
 </div>
 <div class="govuk-summary-list__row">
@@ -97,7 +97,26 @@
           Over 90%
         </strong>
       </p>
-      <span class="govuk-hint govuk-!-font-size-16">Percentage of trainees with this provider achieved Qualified Teacher Status (QTS)</span>
+      <span class="govuk-hint govuk-!-font-size-16">
+        The percentage of trainees at <%= @course.accrediting_provider.provider_name %> who achieved Qualified Teacher Status (QTS) in 2023
+      </span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Success rate
+    </dt>
+    <dd class="govuk-summary-list__value">
+    <details class="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">
+        No data yet - why?
+      </span>
+    </summary>
+    <div class="govuk-details__text">
+      We use data from 2022 to 2023 to calculate the offer rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.
+    </div>
+  </details>
     </dd>
   </div>
 </dl>
@@ -136,13 +155,13 @@
 
     <%= render Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::View.new(@course) %>
 
-    <% if @course.published_about_course.present? %>
-      <%= render partial: "find/courses/about_course", locals: { course: @course } %>
-    <% end %>
+    <%# if @course.published_about_course.present? %>
+      <%#= render partial: "find/courses/about_course", locals: { course: @course } %>
+    <%# end %>
 
-     <% if @course.published_interview_process.present? %>
-      <%= render partial: "find/courses/interview_process", locals: { course: @course } %>
-     <% end %>
+     <%# if @course.published_interview_process.present? %>
+      <%#= render partial: "find/courses/interview_process", locals: { course: @course } %>
+     <%# end %>
 
     <% if @provider.train_with_disability.present? %>
       <h2 class="govuk-heading-m" id="section-train-with-disabilities">
@@ -169,7 +188,7 @@
     <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
       <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
       <p class="govuk-hint govuk-body govuk-!-font-size-16">
-        This provider normally responds to applications within 10 days.
+        <%= @course.accrediting_provider.provider_name %> normally responds to applications within 10 days.
       </p>
     </div>
   </div>
