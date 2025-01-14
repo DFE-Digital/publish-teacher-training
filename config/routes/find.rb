@@ -2,6 +2,8 @@
 
 root to: 'find/search/pre_filters#new', as: :find
 
+get :landing, to: 'find/search/pre_filters#new', as: :landing, landing: true
+
 scope via: :all do
   match '/404', to: 'find/errors#not_found'
   match '/500', to: 'find/errors#internal_server_error'
