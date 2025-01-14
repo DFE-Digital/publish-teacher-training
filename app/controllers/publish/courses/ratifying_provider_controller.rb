@@ -2,7 +2,7 @@
 
 module Publish
   module Courses
-    class RatifyingProviderController < PublishController
+    class RatifyingProviderController < ApplicationController
       include CourseBasicDetailConcern
       before_action :build_course, only: %i[edit update]
       before_action :build_course_params, only: :continue

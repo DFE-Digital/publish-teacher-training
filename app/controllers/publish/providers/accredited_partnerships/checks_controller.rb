@@ -3,7 +3,7 @@
 module Publish
   module Providers
     module AccreditedPartnerships
-      class ChecksController < PublishController
+      class ChecksController < ApplicationController
         def show
           provider_partnership_form
         end
