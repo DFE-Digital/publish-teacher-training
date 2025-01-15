@@ -108,7 +108,7 @@ module Find
           end
 
           def salaried?
-            funding_type == 'salary' || funding_type == 'apprenticeship'
+            funding_type.in?(%w[salary apprenticeship])
           end
 
           def apprenticeship?

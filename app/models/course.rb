@@ -706,7 +706,7 @@ class Course < ApplicationRecord
   end
 
   def draft_or_rolled_over?
-    content_status == :draft || content_status == :rolled_over
+    content_status.in?(%i[draft rolled_over])
   end
 
   def changeable?

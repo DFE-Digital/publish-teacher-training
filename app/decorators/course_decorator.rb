@@ -146,7 +146,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def salaried?
-    object.funding == 'salary' || object.funding == 'apprenticeship'
+    object.funding.in?(%w[salary apprenticeship])
   end
 
   def apprenticeship?
@@ -308,7 +308,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def subject_page_title
-    if level == 'primary' || level == 'secondary'
+    if level.in?(%w[primary secondary])
       'Subject'
     else
       'Pick a subject'
