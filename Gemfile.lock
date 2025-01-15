@@ -699,9 +699,6 @@ GEM
       attr_required (>= 0.0.5)
       faraday (~> 2.0)
       faraday-follow_redirects
-    table_print (1.5.7)
-    terminal-table (3.0.2)
-      unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.2)
     timecop (0.9.10)
     timeout (0.4.3)
@@ -840,8 +837,6 @@ DEPENDENCIES
   site_prism (~> 5.0)
   skylight
   super_diff
-  table_print
-  terminal-table
   timecop
   tzinfo-data
   uk_postcode

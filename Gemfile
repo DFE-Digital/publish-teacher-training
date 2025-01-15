@@ -50,12 +50,6 @@ gem 'jwt'
 # Formalise config settings with support for env vars
 gem 'config'
 
-# Build pretty tables in the terminal
-#   table_print handles ActiveRecord objects and collections really nicely
-gem 'table_print'
-#   terminal-table is a bit more flexible allowing us to use a headers column
-gem 'terminal-table'
-
 # For querying third party APIs
 gem 'faraday'
 gem 'faraday-net_http_persistent', '~> 2.3'
