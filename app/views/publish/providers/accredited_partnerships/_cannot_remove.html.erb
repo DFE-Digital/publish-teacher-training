@@ -1,0 +1,26 @@
+<% content_for :page_title, t(".warning") %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(publish_provider_recruitment_cycle_accredited_providers_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+     <span class="govuk-caption-l"><%= @provider_partnership.accredited_provider.provider_name %></span>
+     <%= t(".warning") %>
+    </h1>
+
+    <p class="govuk-body">
+      <%= t(".reason", ratifying_provider_name: @provider_partnership.accredited_provider.provider_name, training_provider_name: @provider.provider_name) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= t(".need_to_change_html", email: bat_contact_mail_to) %>
+    </p>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_partnerships_path) %>
+    </p>
+  </div>
+</div>

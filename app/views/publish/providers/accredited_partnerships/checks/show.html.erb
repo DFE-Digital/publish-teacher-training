@@ -1,5 +1,5 @@
 <%= render PageTitle.new(
-  title: "Check your answers - #{t('.title')}"
+  title: "#{t('.check_answers')} - #{t('.title')}"
 ) %>
 
 <% content_for :before_content do %>
@@ -13,24 +13,24 @@
     <%= form_with(url: check_publish_provider_recruitment_cycle_accredited_partnerships_path, method: :put, local: true) do |f| %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t(".caption") %></span>
-        Check your answers
+        <%= t(".check_answers") %>
       </h1>
 
       <%= render GovukComponent::SummaryListComponent.new do |component|
             component.with_row do |row|
-              row.with_key { "Accredited provider" }
+              row.with_key { t(".accredited_provider") }
               row.with_value { @provider_partnership_form.provider_name }
-              row.with_action(text: "Change", href: search_publish_provider_recruitment_cycle_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited provider name")
+              row.with_action(text: t("change"), href: search_publish_provider_recruitment_cycle_accredited_providers_path(goto_confirmation: true), visually_hidden_text: "accredited provider name")
             end
 
             component.with_row do |row|
-              row.with_key { "About the accredited provider" }
+              row.with_key { t(".about") }
               row.with_value { markdown @provider_partnership_form.description }
-              row.with_action(text: "Change", href: new_publish_provider_recruitment_cycle_accredited_partnership_path(goto_confirmation: true), visually_hidden_text: "accredited provider description")
+              row.with_action(text: t("change"), href: new_publish_provider_recruitment_cycle_accredited_partnership_path(goto_confirmation: true), visually_hidden_text: "accredited provider description")
             end
           end %>
 
-      <%= govuk_warning_text(text: "All users at #{@provider_partnership_form.provider_name} will be sent an email to let them know they’ve been added.") %>
+      <%= govuk_warning_text(text: t(".warning", provider_name: @provider_partnership_form.provider_name)) %>
 
       <%= f.govuk_submit(t(".add")) %>
     <% end %>
