@@ -131,6 +131,7 @@ en:
     training_partners: "Training partners"
     organisation_details: "Organisation details"
     accredited_provider: "Accredited providers"
+    accredited_partnerships: "Accredited providers"
   secondary_navigation:
     description: Description
     basic_details: Basic details
@@ -648,6 +649,45 @@ en:
         new:
           title: *new_search
           cannot_find: *cannot_find
+      accredited_partnerships:
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: &add_accredited_partnership Add accredited provider
+        index:
+          title: Accredited providers
+          add: Add accredited provider
+          no_providers: There are no accredited providers for %{provider_name}.
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: &add_accredited_partnership Add accredited provider
+        edit:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          updated: About the accredited provider updated
+          update_description: Update description
+        delete:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        destroy:
+          removed: Accredited provider removed
+        can_remove:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        cannot_remove:
+          warning: You cannot remove this accredited provider
+          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
+          need_to_change_html: If you need to change an accredited provider for a course which is published, please contact us at %{email}
+        checks:
+          show:
+            title:  *add_accredited_partnership
+            caption: *add_accredited_partnership
+            add: *add_accredited_partnership
+            check_answers: Check your answers
+            about: About the accredited provider
+            accredited_provider: Accredited provider
+            warning: All users at %{provider_name} will be sent an email to let them know they’ve been added.
+          update:
+            added: Accredited provider added
       accredited_providers:
         new:
           title: About the accredited provider
@@ -872,7 +912,7 @@ en:
           attributes:
             accredited_provider:
               format: "%{message}"
-              taken: This partnership already exists
+              taken: This provider already exists
               required: Accredited provider must exist
               must_be_accredited: Accredited provider must be accredited
             training_provider:
@@ -950,7 +990,7 @@ en:
         provider_partnership_form:
           attributes:
             description:
-              blank: Enter details about the accredited partnership
+              blank: Enter details about the accredited provider
               too_long: Description about the accredited provider must be 100 words or fewer
         accredited_provider_form:
           attributes:
