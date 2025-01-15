@@ -18,6 +18,12 @@ module Find
 
     def maintenance; end
 
+    def landing
+      @courses = RecruitmentCycle.current.courses
+                                 .where(course_code: %w[EO26 R480 H971 Y404 36P4])
+                                 .order(created_at: :desc)
+    end
+
     private
 
     def redirect_to_homepage_unless_in_maintenance_mode

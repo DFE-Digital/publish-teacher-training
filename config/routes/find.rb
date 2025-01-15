@@ -2,7 +2,7 @@
 
 root to: 'find/search/pre_filters#new', as: :find
 
-get :landing, to: 'find/search/pre_filters#new', as: :landing, landing: true
+get :landing, to: 'find/pages#landing', as: :landing
 
 scope via: :all do
   match '/404', to: 'find/errors#not_found'
