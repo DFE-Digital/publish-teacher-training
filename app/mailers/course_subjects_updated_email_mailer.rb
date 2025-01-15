@@ -9,7 +9,6 @@ class CourseSubjectsUpdatedEmailMailer < GovukNotifyRails::Mailer
     previous_course_name:,
     recipient:
   )
-
     set_template(Settings.govuk_notify.course_subjects_updated_email_template_id)
 
     set_personalisation(
