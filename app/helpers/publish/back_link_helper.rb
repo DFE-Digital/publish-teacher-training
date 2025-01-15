@@ -44,6 +44,10 @@ module Publish
       end
     end
 
+    def accredited_provider_search_path(param_form_key:, params:, provider:, recruitment_cycle_year:)
+      publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
+    end
+
     private
 
     def previously_tda_course?
