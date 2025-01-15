@@ -23,11 +23,11 @@
 
 
     <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-      <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
 
-      <p class="govuk-hint govuk-body govuk-!-font-size-16">
-        <%= @course.provider_name %> normally
+        <p class="govuk-hint govuk-body govuk-!-font-size-16">
+          <%= @course.provider_name %> normally
           <% case @course.course_code %>
             <% when "E026" %>
               responds to applications within three weeks.
@@ -39,10 +39,10 @@
               takes over a month to respond to applications
             <% when "Y404" %>
               responds to applications within a week.
-            <% end %>
+        <% end %>
         </p>
+      </div>
     </div>
-  </div>
 
   </div>
 </div>
