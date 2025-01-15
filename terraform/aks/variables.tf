@@ -40,14 +40,9 @@ variable "enable_monitoring" {
 
 variable "enable_logit" { default = false }
 
-variable "external_url" {
-  default     = null
-  description = "Healthcheck URL for StatusCake monitoring"
-}
-
 variable "statuscake_contact_groups" {
-  type    = list(number)
-  default = []
+  type        = list(number)
+  default     = []
   description = "Contact group IDs for receiving StatusCake alerts"
 }
 
@@ -135,3 +130,9 @@ variable "use_db_setup_command" {
 }
 
 variable "postgres_azure_maintenance_window" { default = null }
+
+variable "apex_urls" {
+  description = "List of URLs with DNS zones apex domain for SSL certificate monitoring"
+  type        = list(string)
+  default     = []
+}
