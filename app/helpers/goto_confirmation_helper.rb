@@ -43,7 +43,7 @@ module GotoConfirmationHelper
     if goto_confirmation?(param_form_key:, params:)
       check_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
     elsif param_form_key == :publish_accredited_provider_form
-      search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
+      search_publish_provider_accredited_providers_recruitment_cycles_path(provider.provider_code, recruitment_cycle_year)
     else
       publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle_year)
     end
