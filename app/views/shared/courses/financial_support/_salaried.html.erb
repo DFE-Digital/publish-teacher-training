@@ -1,17 +1,24 @@
-<div data-qa="course__salary_details">
-  <p class="govuk-body">
-    Financial support is not available for this course because it comes with a salary.
-  </p>
-  <p class="govuk-body">
-    <%= govuk_link_to "Find out more about national pay scales for unqualified teachers", t("find.links.national_pay_scales") %>
-  </p>
-  <p class="govuk-body">
-    Salaried courses are in high demand, so check your eligibility with the training provider and apply as soon as possible.
-  <p>
-  <p class="govuk-body">
-    If you choose a course without a salary, you may be eligible for financial support. This includes bursaries, scholarships and student loans.
-  </p>
-  <p class="govuk-body">
-    <%= govuk_link_to "Learn more about ways to fund your training", t("find.get_into_teaching.url_fund_your_training") %>
-  </p>
-</div>
+<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
+  <%= accordion.with_section(heading_text: t("find.financial_support.uk_citizens.salaried_courses.title"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
+    <div data-qa="course__salary_details">
+      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary") %></p>
+      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.no_fees") %></p>
+
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), t("find.links.national_pay_scales")) %></p>
+
+      <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.competitive") %></p>
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.find_out_more"), t("find.get_into_teaching.url_teacher_salaries")) %></p>
+    </div>
+  <% end %>
+<% end %>
+
+<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
+  <%= accordion.with_section(heading_text: t("find.financial_support.non_uk_citizens.salaried_courses.title")) do %>
+    <div data-qa="course__salary_details_non_uk">
+      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.competitive") %></p>
+      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.entry_requirements") %></p>
+
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), t("find.get_into_teaching.url_non_uk_trainees")) %></p>
+    </div>
+  <% end %>
+<% end %>

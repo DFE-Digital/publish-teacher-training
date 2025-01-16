@@ -1,25 +1,36 @@
-<div data-qa="course__bursary_details">
-  <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
-    <p class="govuk-body">
-      You could be eligible for a bursary of <%= number_to_currency(bursary_amount) %>.
-    </p>
+<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
+  <%= accordion.with_section(heading_text: t("find.financial_support.uk_citizens.title"), html_attributes: { class: "govuk-accordion__section--orange" }) do %>
+    <div data-qa="course__bursary_details">
+      <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
+        <h3 class="govuk-heading-m"><%= t("find.financial_support.bursaries") %></h3>
 
-    <p class="govuk-body">
-      To be eligible for a bursary you’ll need a 2:2 degree in any subject.
-      You do not need to apply for a bursary.
-      If you’re eligible, you’ll automatically start receiving it when you start the course.
-    </p>
+        <p class="govuk-body"><%= t("find.financial_support.bursary_amount", amount: number_to_currency(bursary_amount)) %> </p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), t("find.get_into_teaching.url_bursaries_and_scholarships")) %>.</p>
+      <% end %>
+
+      <h3 class="govuk-heading-m"><%= t("find.financial_support.student_loans") %></h3>
+
+      <p class="govuk-body"><%= t("find.financial_support.eligible_for_student_loan") %></p>
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.find_out_more_student_loans"), t("find.get_into_teaching.url_maintenance_loans")) %></p>
+    </div>
   <% end %>
+<% end %>
 
-  <p class="govuk-body">
-    You may also be eligible for a student loan.
-    These are normally for undergraduate courses but you can also apply if you do postgraduate teacher training.
-    <%= govuk_link_to("Find out how much loan you could get using the student finance calculator", "https://www.gov.uk/student-finance-calculator") %>.
-  </p>
+<%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
+  <%= accordion.with_section(heading_text: t("find.financial_support.non_uk_citizens.title")) do %>
+    <div data-qa="course__bursary_details_non_uk">
 
-  <p class="govuk-body">
-    Depending on your immigration status, financial support may not be available.
-    Find out about
-    <%= govuk_link_to("training to teach if you’re a non-UK citizen", "https://getintoteaching.education.gov.uk/non-uk-teachers/train-to-teach-in-england-as-an-international-student") %>.
-  </p>
-</div>
+      <% if bursary_eligible_subjects %>
+        <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
+          <h3 class="govuk-heading-m"><%= t("find.financial_support.bursaries") %></h3>
+
+          <p class="govuk-body"><%= t("find.financial_support.bursary_amount", amount: number_to_currency(bursary_amount)) %> </p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), t("find.get_into_teaching.url_bursaries_and_scholarships")) %>.</p>
+        <% end %>
+      <% else %>
+      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), t("find.get_into_teaching.url_non_uk_trainees")) %></p>
+    </div>
+    <% end %>
+  <% end %>
+<% end %>

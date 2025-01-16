@@ -46,3 +46,8 @@ body:not(.js-enabled) {
   padding-left: govuk-spacing(4);
   padding-right: govuk-spacing(4);
 }
+
+.course-accordion .govuk-accordion__section--orange {
+  border-left: govuk-spacing(1) solid govuk-colour("orange");
+  background-color: govuk-colour("light-grey");
+}

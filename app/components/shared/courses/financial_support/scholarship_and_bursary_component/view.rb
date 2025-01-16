@@ -25,7 +25,18 @@ module Shared
             I18n.t("find.scholarships.#{subject_with_scholarship}.url", default: nil)
           end
 
+          def bursary_and_scholarship_eligible_subjects
+            course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
+          end
+
           private
+
+          ELIGIBLE_SUBJECTS = %w[
+            Physics
+            French
+            German
+            Spanish
+          ].freeze
 
           SUBJECT_WITH_SCHOLARSHIPS = [
             %w[F1 chemistry],
@@ -36,6 +47,10 @@ module Shared
             %w[17 german],
             %w[22 spanish]
           ].freeze
+
+          def eligible_subjects
+            ELIGIBLE_SUBJECTS
+          end
 
           def subject_with_scholarship
             @subject_with_scholarship ||= SUBJECT_WITH_SCHOLARSHIPS.detect do |subject_code, _subject_name|

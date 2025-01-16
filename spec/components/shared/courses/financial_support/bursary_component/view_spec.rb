@@ -12,13 +12,8 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
     end
 
     it 'renders bursary details' do
-      expect(page.has_text?('You could be eligible for a bursary of £3,000')).to be true
-    end
-
-    context 'bursary requirements' do
-      it 'renders bursary requirements' do
-        expect(page.has_text?('To be eligible for a bursary you’ll need a 2:2 degree in any subject')).to be true
-      end
+      expect(page.has_text?('Find out whether you are eligible for a bursary')).to be true
+      expect(page.has_text?('This course has a bursary of £3,000 available to eligible trainees.')).to be true
     end
   end
 

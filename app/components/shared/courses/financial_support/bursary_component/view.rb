@@ -15,6 +15,26 @@ module Shared
             super
             @course = course
           end
+
+          def bursary_eligible_subjects
+            course.course_subjects.any? { |subject| eligible_subjects.include?(subject.subject.subject_name) }
+          end
+
+          private
+
+          ELIGIBLE_SUBJECTS = [
+            'Italian',
+            'Japanese',
+            'Mandarin',
+            'Russian',
+            'Modern languages (other)',
+            'Ancient Greek',
+            'Ancient Hebrew'
+          ].freeze
+
+          def eligible_subjects
+            ELIGIBLE_SUBJECTS
+          end
         end
       end
     end

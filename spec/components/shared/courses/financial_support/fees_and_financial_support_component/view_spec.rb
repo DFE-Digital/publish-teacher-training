@@ -9,7 +9,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('Financial support is not available for this course because it comes with a salary.')
+      expect(result.text).to include('How salaried courses work')
     end
 
     it 'does not render salaried course section if the course does not have a salary' do
@@ -17,7 +17,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).not_to include('Financial support is not available for this course because it comes with a salary.')
+      expect(result.text).not_to include('How salaried courses work')
     end
   end
 
@@ -27,8 +27,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You may be eligible for a student loan')
-      expect(result.text).not_to include('You do not have to apply for a bursary')
+      expect(result.text).to include('You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.')
     end
   end
 
@@ -40,7 +39,8 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You do not need to apply for a bursary')
+      expect(result.text).to include('Bursaries')
+      expect(result.text).to include('This course has a bursary of £2,000 available to eligible trainees.')
     end
   end
 
@@ -48,11 +48,12 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     it 'renders the scholarships and bursary section' do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
 
-      course = build(:course, funding: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000', financial_incentive: FinancialIncentive.new(scholarship: '1000')), build(:secondary_subject)]).decorate
+      course = build(:course, funding: 'fee', name: 'History', subjects: [build(:secondary_subject, bursary_amount: '2000', scholarship: '1000'), build(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('To be eligible for a bursary you’ll need a 2:2 degree in any subject')
+      expect(result.text).to include('Bursaries and scholarships')
+      expect(result.text).to include('Bursaries of £2,000 and scholarships of £1,000 are available to eligible trainees.')
     end
   end
 
@@ -62,7 +63,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
       result = render_inline(described_class.new(course))
 
-      expect(result.text).to include('You may be eligible for a student loan')
+      expect(result.text).to include('You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.')
     end
   end
 

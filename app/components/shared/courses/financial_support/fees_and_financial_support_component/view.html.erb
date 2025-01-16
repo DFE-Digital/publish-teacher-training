@@ -5,17 +5,15 @@
     <%= render Find::Courses::FeesComponent::View.new(course) %>
   <% end %>
 
-  <%= render Shared::AdviceComponent::View.new(title: "Financial support from the government") do %>
-    <% if salaried? %>
-      <%= render partial: "shared/courses/financial_support/salaried" %>
-    <% elsif excluded_from_bursary? %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% elsif bursary_only? %>
-      <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
-    <% elsif has_scholarship_and_bursary? %>
-      <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
-    <% else %>
-      <%= render partial: "shared/courses/financial_support/loan" %>
-    <% end %>
+  <% if salaried? %>
+    <%= render partial: "shared/courses/financial_support/salaried" %>
+  <% elsif excluded_from_bursary? %>
+    <%= render partial: "shared/courses/financial_support/loan" %>
+  <% elsif bursary_only? %>
+    <%= render Shared::Courses::FinancialSupport::BursaryComponent::View.new(course) %>
+  <% elsif has_scholarship_and_bursary? %>
+    <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(course) %>
+  <% else %>
+    <%= render partial: "shared/courses/financial_support/loan" %>
   <% end %>
 </div>
