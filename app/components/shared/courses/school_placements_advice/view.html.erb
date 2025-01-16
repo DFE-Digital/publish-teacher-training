@@ -1,4 +1,4 @@
-<%= render Shared::AdviceComponent::View.new(title: t(".heading"), show_caption: false) do %>
+<%= render Shared::AdviceComponent::View.new(title: t(".heading")) do %>
   <% if course.provider.selectable_school? %>
     <p class="govuk-body"><%= t(".content.selectable_school") %></p>
   <% elsif course.salaried? %>

@@ -147,6 +147,33 @@ en:
         further_education:
           radio: Further education
           hint_text: For example, teaching A levels or vocational courses
+    financial_support:
+      bursaries: Bursaries
+      bursary_and_scholarships: Bursaries and scholarships
+      bursary_amount: This course has a bursary of %{amount} available to eligible trainees.
+      bursary_and_scholarship_amount: Bursaries of %{bursary_amount} and scholarships of %{scholarship_amount} are available to eligible trainees.
+      eligible_for_bursary: Find out whether you are eligible for a bursary
+      eligible_for_bursary_or_scholarship: Find out whether you are eligible for a bursary or scholarship
+      student_loans: Student loans
+      find_out_more_student_loans: Find out more about student loans for teacher training
+      eligible_for_student_loan: You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.
+      uk_citizens:
+        title: Financial Support for UK citizens
+        salaried_courses:
+          title: How salaried courses work
+          paid_salary: You will be paid a salary during this course. Financial support such as bursaries, scholarships and student loans is not available.
+          no_fees: Most salaried courses do not charge fees, but some do. Contact the training provider for more information.
+          pay_scale: Find out more about national pay scales for unqualified teachers.
+          competitive: Places on salaried courses are limited and very competitive. Check your eligibility with the training provider and apply as soon as possible.
+          find_out_more: Find out more about salaried courses
+      non_uk_citizens:
+        title: Financial Support for non-UK citizens
+        salaried_courses:
+          title: "Non-UK citizens: applying for salaried courses"
+          competitive: You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.
+          entry_requirements: Before you apply, contact the teacher training provider to check you meet the entry requirements.
+        unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan.
+        what_support: Find out what financial support is available to non-UK citizens.
     visa_status:
       primary_title: Visa sponsorship
       secondary_title: Do you need visa sponsorship?
@@ -361,6 +388,10 @@ en:
       url_ways_to_train_experienced_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/assessment-only-route-to-qts
       url_funding_your_training: https://getintoteaching.education.gov.uk/funding-your-training
       url_bursaries_and_scholarships: https://getintoteaching.education.gov.uk/funding-your-training#bursaries-and-scholarships
+      url_maintenance_loans: "https://getintoteaching.education.gov.uk/funding-and-support/tuition-fee-and-maintenance-loans"
+      url_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/fees-and-funding-for-non-uk-trainees
+      url_bursaries_and_scholarships_support: https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries
+      url_teacher_salaries: https://getintoteaching.education.gov.uk/funding-and-support/salaried-teacher-training
       url_improve_your_subject_knowledge: https://getintoteaching.education.gov.uk/improve-your-subject-knowledge
       url_teacher_training_events: https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_banner&utm_content=Autumn23events
       url_subject_knowledge_enhancement: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/subject-knowledge-enhancement

@@ -7,14 +7,9 @@ module Shared
 
       attr_reader :title
 
-      def initialize(title:, show_caption: true)
+      def initialize(title:)
         super
         @title = title
-        @show_caption = show_caption
-      end
-
-      def show_caption?
-        @show_caption.present?
       end
     end
   end

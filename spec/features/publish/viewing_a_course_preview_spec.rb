@@ -463,15 +463,13 @@ feature 'Course show', { can_edit_current_and_next_cycles: false } do
   def and_i_see_financial_support
     expect(decorated_course.use_financial_support_placeholder?).to be_falsey
 
-    expect(publish_course_preview_page.scholarship_amount).to have_content('a scholarship of £26,000')
-    expect(publish_course_preview_page.bursary_amount).to have_content('a bursary of £24,000')
+    expect(publish_course_preview_page.scholarship_amount).to have_content('Bursaries of £24,000 and scholarships of £26,000 are available to eligible trainees.')
 
     expect(publish_course_preview_page).to have_no_content('Information not yet available')
   end
 
   def and_i_do_not_see_financial_support
     expect(publish_course_preview_page).not_to have_scholarship_amount
-    expect(publish_course_preview_page).not_to have_bursary_amount
   end
 
   def then_i_should_be_on_the_school_placements_page
