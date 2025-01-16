@@ -20,7 +20,7 @@ module Find
 
     def landing
       @courses = RecruitmentCycle.current.courses
-                                 .where(course_code: %w[EO26 R480 H971 Y404 36P4])
+                                 .where(course_code: %w[E026 R480 H971 Y404 36P4])
                                  .order(created_at: :desc)
     end
 
