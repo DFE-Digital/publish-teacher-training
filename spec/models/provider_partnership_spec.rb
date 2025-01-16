@@ -32,7 +32,7 @@ describe ProviderPartnership do
 
       it 'has correct error message' do
         duplicate.validate
-        expect(duplicate.errors.messages[:accredited_provider]).to include('This partnership already exists')
+        expect(duplicate.errors.messages[:accredited_provider]).to include('This provider already exists')
       end
     end
 
