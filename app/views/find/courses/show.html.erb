@@ -91,12 +91,14 @@
               <details class="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
-                    No data yet - why?
+                    No report yet - why?
                   </span>
                 </summary>
-                <div class="govuk-details__text">
-                  We use data from 2022 to 2023 to calculate the success rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.
-                </div>
+                <p class="govuk-body">There may not be a report because:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li><%= @course.accrediting_provider.provider_name %> hasn't been inspected yet</li>
+                  <li>an inspection has taken place recently, but the report hasn't been published yet.</li>
+                </ul>
               </details>
             </dd>
           </div>
