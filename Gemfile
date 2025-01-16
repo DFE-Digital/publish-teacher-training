@@ -228,7 +228,7 @@ group :test do
   gem 'simplecov', '< 0.23', require: false
 
   # Page objects
-  gem 'site_prism', '~> 5.0'
+  gem 'site_prism', '~> 5.1'
 
   gem 'webmock'
 
