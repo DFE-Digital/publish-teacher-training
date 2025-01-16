@@ -9,12 +9,15 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     render_inline(
       described_class.new(
         course:,
-        search_params:
+        location:,
+        visa_sponsorship:
       )
     )
   end
 
   let(:search_params) { {} }
+  let(:location) { search_params[:location] }
+  let(:visa_sponsorship) { search_params[:can_sponsor_visa] }
 
   describe '#title' do
     let(:course) do
@@ -596,7 +599,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
       it 'does not render the hint text' do
         course = create(:course, degree_type: 'undergraduate', degree_grade: 'not_required')
-        expect(render_inline(described_class.new(course:, search_params: {}))).not_to include('or equivalent qualification')
+        expect(render_inline(described_class.new(course:))).not_to include('or equivalent qualification')
       end
     end
   end
