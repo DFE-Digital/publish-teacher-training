@@ -2,12 +2,13 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :search_params, :available_placements_count, :minimum_distance_to_search_location
+    attr_reader :course, :location, :visa_sponsorship, :available_placements_count, :minimum_distance_to_search_location
 
-    def initialize(course:, search_params:)
+    def initialize(course:, location: nil, visa_sponsorship: nil)
       @course = course
-      @search_params = search_params
       @available_placements_count = course.available_placements_count
+      @location = location
+      @visa_sponsorship = visa_sponsorship
 
       super
     end
@@ -37,7 +38,7 @@ module Courses
               '.location_value.distance',
               school_term:,
               distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location, 'mile'), class: 'govuk-!-font-weight-bold'),
-              location: content_tag(:span, sanitize(@search_params[:location]), class: 'govuk-!-font-weight-bold')
+              location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
             ).html_safe,
             content_tag(
               :div,
@@ -134,10 +135,6 @@ module Courses
       t(".location_value.school_term.#{course.funding}", default: t('.location_value.school_term.default'))
     end
 
-    def search_by_location?
-      @search_params[:location].present?
-    end
-
     def fee_content
       fees = [uk_fees, international_fees].compact_blank
 
@@ -180,8 +177,12 @@ module Courses
       !bursary_and_scholarship_flag_active_or_preview? || (search_by_visa_sponsorship? && (!physics? && !languages?)) || financial_incentive.blank?
     end
 
+    def search_by_location?
+      @location.present?
+    end
+
     def search_by_visa_sponsorship?
-      @search_params[:can_sponsor_visa].present?
+      @visa_sponsorship.present?
     end
 
     PHYSICS_SUBJECT = 'Physics'

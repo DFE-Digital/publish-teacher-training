@@ -79,7 +79,7 @@
     <div class="app-filter-layout__content">
       <ul class="app-search-results">
         <% @results.each do |course| %>
-          <%= render Courses::SummaryCardComponent.new(course:, search_params: @search_params) %>
+          <%= render Courses::SummaryCardComponent.new(course:, location: @search_params[:location], visa_sponsorship: @search_params[:can_sponsor_visa]) %>
         <% end %>
       </ul>
 
