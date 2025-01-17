@@ -107,11 +107,13 @@
                     No report yet - why?
                   </span>
                 </summary>
-                <p class="govuk-body">There may not be a report because:</p>
-                <ul class="govuk-list govuk-list--bullet">
-                  <li><%= @course.accrediting_provider.provider_name %> hasn't been inspected yet</li>
-                  <li>an inspection has taken place recently, but the report hasn't been published yet</li>
-                </ul>
+                <div class="govuk-details__text">
+                  <p class="govuk-body">There may not be a report because:</p>
+                  <ul class="govuk-list govuk-list--bullet">
+                    <li><%= @course.accrediting_provider.provider_name %> hasn't been inspected yet</li>
+                    <li>an inspection has taken place recently, but the report hasn't been published yet</li>
+                  </ul>
+                </div>
               </details>
             </dd>
           </div>
