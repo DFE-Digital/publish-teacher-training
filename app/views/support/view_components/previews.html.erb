@@ -1,0 +1,11 @@
+<% content_for :page_title, params[:path] %>
+<% content_for :before_content do %>
+  <%= govuk_back_link_to(support_view_components_path) %>
+<% end %>
+
+<h3><%= @preview.preview_name.titleize %></h3>
+<ul>
+  <% @preview.examples.each do |example| %>
+    <li><%= link_to example, preview_view_component_path("#{@preview.preview_name}/#{example}") %></li>
+  <% end %>
+</ul>
