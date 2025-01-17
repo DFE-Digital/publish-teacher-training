@@ -11,4 +11,10 @@ RSpec.describe UpdateRatifyingProviderForCourse do
     described_class.new(training_provider_code: provider.provider_code, target_ratifying_provider_code: target_ratifying_provider.provider_code).call
     expect(provider.courses.reload.first.accrediting_provider).to eq(target_ratifying_provider)
   end
+
+  it 'no errors when a provider cannot be found' do
+    expect do
+      described_class.new(training_provider_code: 'P11', target_ratifying_provider_code: target_ratifying_provider.provider_code).call
+    end.not_to raise_error
+  end
 end
