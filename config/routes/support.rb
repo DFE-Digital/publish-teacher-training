@@ -74,4 +74,6 @@ namespace :support do
   end
 
   resources :user_permissions, only: %i[destroy]
+
+  resources :view_components, only: %i[index]
 end
