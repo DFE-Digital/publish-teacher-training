@@ -9,6 +9,10 @@ RSpec.describe Publish::AccreditedProviderUpdater do
                         new_accredited_provider_code:)
   end
 
+  before do
+    allow(Settings.features).to receive_messages(provider_partnerships: false)
+  end
+
   let(:provider_code) { 'A0' }
   let(:recruitment_cycle_year) { 2024 }
   let(:new_accredited_provider_code) { 'A1' }
