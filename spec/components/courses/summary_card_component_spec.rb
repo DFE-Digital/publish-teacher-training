@@ -5,7 +5,11 @@ require 'rails_helper'
 RSpec.describe Courses::SummaryCardComponent, type: :component do
   include Rails.application.routes.url_helpers
 
-  subject(:summary_card) do
+  subject(:summary_card_content) do
+    summary_card.text.gsub(/\r?\n/, ' ').squeeze(' ').strip
+  end
+
+  let(:summary_card) do
     render_inline(
       described_class.new(
         course:,
@@ -14,7 +18,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       )
     )
   end
-
   let(:search_params) { {} }
   let(:location) { search_params[:location] }
   let(:visa_sponsorship) { search_params[:can_sponsor_visa] }
@@ -49,7 +52,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(count) }
 
     it "returns the correct content for #{funding_type} when course has #{count} school(s)" do
-      expect(subject.text).to include(expected_output)
+      expect(summary_card_content).to include(expected_output)
     end
   end
 
@@ -131,8 +134,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         before { allow(course).to receive(:available_placements_count).and_return(2) }
 
         it 'sanitizes user input by striping html tags' do
-          expect(summary_card.text).to include(
-            '0.2 miles from alert("XSS")Nearest of 2 potential placement schools'
+          expect(summary_card_content).to include(
+            '0.2 miles from alert("XSS") Nearest of 2 potential placement schools'
           )
         end
       end
@@ -146,7 +149,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct fee or salary row for #{funding_type}" do
-      expect(subject.text).to include(expected_output)
+      expect(summary_card_content).to include(expected_output)
     end
   end
 
@@ -166,9 +169,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       let(:funding) { :salary }
 
       it 'does not show bursaries or scholarship' do
-        expect(summary_card.text).to include('Salary')
-        expect(summary_card.text).not_to include('Bursaries')
-        expect(summary_card.text).not_to include('Scholarships')
+        expect(summary_card_content).to include('Salary')
+        expect(summary_card_content).not_to include('Bursaries')
+        expect(summary_card_content).not_to include('Scholarships')
       end
     end
 
@@ -176,9 +179,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       let(:funding) { :apprenticeship }
 
       it 'does not show bursaries or scholarship' do
-        expect(summary_card.text).to include('Salary (apprenticeship)')
-        expect(summary_card.text).not_to include('Bursaries')
-        expect(summary_card.text).not_to include('Scholarships')
+        expect(summary_card_content).to include('Salary (apprenticeship)')
+        expect(summary_card_content).not_to include('Bursaries')
+        expect(summary_card_content).not_to include('Scholarships')
       end
     end
 
@@ -262,8 +265,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£8,000 for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
 
@@ -305,8 +308,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like 'fee or salary row', :fee, { can_sponsor_visa: true }, '£6,900 for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
 
@@ -327,8 +330,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         let(:search_params) { { can_sponsor_visa: true } }
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
 
@@ -348,8 +351,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         let(:search_params) { { can_sponsor_visa: true } }
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
     end
@@ -434,8 +437,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like 'fee or salary row', :fee, {}, '£6,900 for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
 
@@ -458,8 +461,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it_behaves_like 'fee or salary row', :fee, {}, '£8,500 for Non-UK citizens'
 
         it 'does not show bursaries or scholarship' do
-          expect(summary_card.text).not_to include('Bursaries')
-          expect(summary_card.text).not_to include('Scholarships')
+          expect(summary_card_content).not_to include('Bursaries')
+          expect(summary_card_content).not_to include('Scholarships')
         end
       end
     end
@@ -475,7 +478,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct course length row for #{course_length} and #{course_study_mode}" do
-      expect(subject.text).to include("Course length#{expected_output}")
+      expect(summary_card_content).to include("Course length#{expected_output}")
     end
   end
 
@@ -507,7 +510,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct age group row for #{course_level} and #{course_age_group}" do
-      expect(subject.text).to include("Age group#{expected_output}")
+      expect(summary_card_content).to include("Age group#{expected_output}")
     end
   end
 
@@ -538,7 +541,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       let(:course) { create(:course, :further_education, age_range_in_years: nil) }
 
       it 'does not include age group row' do
-        expect(subject.text).not_to include('Age group')
+        expect(summary_card_content).not_to include('Age group')
       end
     end
   end
@@ -549,7 +552,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct qualification row for #{course_qualification}" do
-      expect(subject.text).to include("Qualification awarded#{expected_output}")
+      expect(summary_card_content).to include("Qualification awarded#{expected_output}")
     end
   end
 
@@ -570,28 +573,28 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     before { allow(course).to receive(:available_placements_count).and_return(2) }
 
     it "returns the correct degree requirements row for #{course_degree_type} and #{course_degree_grade_required}" do
-      expect(subject.text).to include("Degree required#{expected_output}")
+      expect(summary_card_content).to include("Degree required #{expected_output}")
     end
   end
 
   describe 'when displaying course degree requirements' do
     context 'when course requires 2:1 degree' do
-      it_behaves_like 'course degree requirements row', :postgraduate, 'two_one', '2:1 bachelor’s degreeor above or equivalent qualification'
+      it_behaves_like 'course degree requirements row', :postgraduate, 'two_one', '2:1 bachelor’s degree or above or equivalent qualification'
     end
 
     context 'when course requires 2:2 degree' do
-      it_behaves_like 'course degree requirements row', :postgraduate, 'two_two', '2:2 bachelor’s degreeor above or equivalent qualification'
+      it_behaves_like 'course degree requirements row', :postgraduate, 'two_two', '2:2 bachelor’s degree or above or equivalent qualification'
     end
 
     context 'when course requires third class degree' do
       it_behaves_like 'course degree requirements row',
                       :postgraduate,
                       'third_class',
-                      'Bachelor’s degree  or equivalent qualification     This should be an honours degree (Third or above), or equivalent'
+                      'Bachelor’s degree or equivalent qualification This should be an honours degree (Third or above), or equivalent'
     end
 
     context 'when course requires "Pass" degree' do
-      it_behaves_like 'course degree requirements row', :postgraduate, 'not_required', 'Bachelor’s degree  or equivalent qualification'
+      it_behaves_like 'course degree requirements row', :postgraduate, 'not_required', 'Bachelor’s degree or equivalent qualification'
     end
 
     context 'when course requires no degree' do
@@ -617,7 +620,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:can_sponsor_skilled_worker_visa) { visa_sponsorship[:can_sponsor_skilled_worker_visa] }
 
     it "displays the correct visa sponsorship text for #{funding} courses with #{visa_sponsorship}" do
-      expect(summary_card.text).to include("Visa sponsorship#{expected_text}")
+      expect(summary_card_content).to include("Visa sponsorship#{expected_text}")
     end
   end
 

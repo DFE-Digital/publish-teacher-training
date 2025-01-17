@@ -31,9 +31,9 @@ en:
           uk_fees_html: '%{value} for UK citizens'
           international_fees_html: '%{value} for Non-UK citizens'
           hint:
-            bursaries_and_scholarship_html: '<div><span class="govuk-hint govuk-!-font-size-16">Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available</span></div>'
-            bursaries_only_html: '<div><span class="govuk-hint govuk-!-font-size-16">Bursaries of %{bursary_amount} are available</span></div>'
-            scholarship_only_html: '<div><span class="govuk-hint govuk-!-font-size-16">Scholarships of %{scholarship_amount} are available</span></div>'
+            bursaries_and_scholarship_html: 'Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available'
+            bursaries_only_html: 'Bursaries of %{bursary_amount} are available'
+            scholarship_only_html: 'Scholarships of %{scholarship_amount} are available'
       length_key: Course length
       length_value:
         OneYear: 1 year
