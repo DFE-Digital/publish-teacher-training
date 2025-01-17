@@ -32,25 +32,12 @@ module Courses
       return t('.location_value.not_listed') if @available_placements_count.zero?
 
       if search_by_location?
-        safe_join(
-          [
-            t(
-              '.location_value.distance',
-              school_term:,
-              distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location, 'mile'), class: 'govuk-!-font-weight-bold'),
-              location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
-            ).html_safe,
-            content_tag(
-              :div,
-              t(
-                '.location_value.distance_hint_html',
-                school_term:,
-                count: @available_placements_count
-              ),
-              class: 'govuk-hint govuk-!-font-size-16'
-            )
-          ]
-        )
+        t(
+          '.location_value.distance',
+          school_term:,
+          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location, 'mile'), class: 'govuk-!-font-weight-bold'),
+          location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
+        ).html_safe
       else
         t(
           '.location_value.potential_schools',
@@ -60,19 +47,47 @@ module Courses
       end
     end
 
+    def location_hint
+      return unless search_by_location?
+
+      t(
+        '.location_value.distance_hint_html',
+        school_term:,
+        count: @available_placements_count
+      )
+    end
+
     def fee_key
       t('.fee_key')
     end
 
     def fee_value
-      case course.funding
-      when 'salary', 'apprenticeship'
+      if course.salary? || course.apprenticeship?
         t(".fee_value.#{course.funding}")
       else
-        [
-          fee_content,
-          fee_hint
-        ].join.html_safe
+        safe_join([uk_fees, international_fees].compact_blank, tag.br)
+      end
+    end
+
+    def fee_hint
+      return if course.salary? || course.apprenticeship? || hide_fee_hint?
+
+      if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
+        t(
+          '.fee_value.fee.hint.bursaries_and_scholarship_html',
+          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
+          scholarship_amount: number_to_currency(financial_incentive.scholarship)
+        )
+      elsif financial_incentive.bursary_amount.present?
+        t(
+          '.fee_value.fee.hint.bursaries_only_html',
+          bursary_amount: number_to_currency(financial_incentive.bursary_amount)
+        )
+      elsif financial_incentive.scholarship.present?
+        t(
+          '.fee_value.fee.hint.scholarship_only_html',
+          scholarship_amount: number_to_currency(financial_incentive.scholarship)
+        )
       end
     end
 
@@ -112,13 +127,13 @@ module Courses
     end
 
     def degree_requirements_value
-      content = t(".degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
-      hint = t(".degree_requirements_hint.#{course.degree_grade}.html") unless course.undergraduate_degree_type?
+      t(".degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
+    end
 
-      [
-        content,
-        hint
-      ].join.html_safe
+    def degree_requirements_hint
+      return if course.undergraduate_degree_type?
+
+      t(".degree_requirements_hint.#{course.degree_grade}.html")
     end
 
     def visa_sponsorship_key
@@ -135,12 +150,6 @@ module Courses
       t(".location_value.school_term.#{course.funding}", default: t('.location_value.school_term.default'))
     end
 
-    def fee_content
-      fees = [uk_fees, international_fees].compact_blank
-
-      safe_join(fees, tag.br)
-    end
-
     def uk_fees(fee_uk = course.enrichment_attribute(:fee_uk_eu))
       t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f)))
     end
@@ -151,30 +160,10 @@ module Courses
       t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f)))
     end
 
-    def fee_hint
-      return nil if hide_fee_hint?
-
-      if financial_incentive.bursary_amount.present? && financial_incentive.scholarship.present?
-        t(
-          '.fee_value.fee.hint.bursaries_and_scholarship_html',
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount),
-          scholarship_amount: number_to_currency(financial_incentive.scholarship)
-        )
-      elsif financial_incentive.bursary_amount.present?
-        t(
-          '.fee_value.fee.hint.bursaries_only_html',
-          bursary_amount: number_to_currency(financial_incentive.bursary_amount)
-        )
-      elsif financial_incentive.scholarship.present?
-        t(
-          '.fee_value.fee.hint.scholarship_only_html',
-          scholarship_amount: number_to_currency(financial_incentive.scholarship)
-        )
-      end
-    end
-
     def hide_fee_hint?
-      !bursary_and_scholarship_flag_active_or_preview? || (search_by_visa_sponsorship? && (!physics? && !languages?)) || financial_incentive.blank?
+      !bursary_and_scholarship_flag_active_or_preview? ||
+        (search_by_visa_sponsorship? && !physics? && !languages?) ||
+        financial_incentive.blank?
     end
 
     def search_by_location?
