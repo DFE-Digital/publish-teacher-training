@@ -1,16 +1,29 @@
 <%= content_for :page_title, "#{@course.name_and_code} with #{smart_quotes(@course.provider.provider_name)}" %>
 
-<% if permitted_referrer? %>
-  <%= content_for(:before_content) do %>
-    <%= govuk_back_link(
-      text: t("find.courses.show.back_to_search"),
-      href: find_results_path(session[:search_params]),
-      html_attributes: {
-        data: { qa: "page-back" }
-      }
-    ) %>
-  <% end %>
-<% end %>
+      <% case @course.course_code %>
+        <% when "E026" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "R480" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "H971" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "36P4" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% when "Y404" %>
+          <p class="govuk-body-s"><a class="govuk-back-link" href="/landing">Back to list of courses</a></p>
+        <% else %>
+          <% if permitted_referrer? %>
+            <%= content_for(:before_content) do %>
+              <%= govuk_back_link(
+                text: t("find.courses.show.back_to_search"),
+                href: find_results_path(session[:search_params]),
+                html_attributes: {
+                  data: { qa: "page-back" }
+                }
+              ) %>
+            <% end %>
+          <% end %>
+        <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
