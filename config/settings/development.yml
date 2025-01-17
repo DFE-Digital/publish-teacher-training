@@ -10,8 +10,8 @@ log_level: debug
 gcp_api_key: please_change_me
 
 environment:
-  label: "development"
-  name: "development"
+  label: Development
+  name: development
 
 find_valid_referers:
   - http://localhost:3001

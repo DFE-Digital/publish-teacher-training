@@ -4,19 +4,26 @@ class SecondaryNavigationComponent < ViewComponent::Base
   renders_many :navigation_items, 'NavigationItemComponent'
 
   class NavigationItemComponent < ViewComponent::Base
-    attr_reader :name, :url
-
-    def initialize(name, url, classes: [], html_attributes: {})
+    def initialize(name, url, current: nil, classes: [], html_attributes: {})
       @name = name
       @url = url
+      @current = current
 
       super(classes:, html_attributes:)
     end
 
     def call
       content_tag(:li, class: 'app-secondary-navigation__item') do
-        link_to name, url, class: 'app-secondary-navigation__link', aria: { current: current_page?(url) && 'page' }
+        link_to name, url, class: 'app-secondary-navigation__link', aria: { current: current? && 'page' }
       end
+    end
+
+    private
+
+    attr_reader :name, :url, :current
+
+    def current?
+      current || current_page?(url)
     end
   end
 end

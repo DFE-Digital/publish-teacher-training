@@ -11,7 +11,14 @@ class Header < ApplicationComponent
     @current_user = current_user
   end
 
-  def environment_header_class
-    "app-header--#{Settings.environment.name}"
+  def colour
+    {
+      development: 'grey',
+      production: 'blue',
+      review: 'purple',
+      sandbox: 'purple',
+      staging: 'red',
+      qa: 'orange'
+    }.fetch(Settings.environment.name.to_sym, 'grey')
   end
 end

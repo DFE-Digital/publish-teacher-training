@@ -19,7 +19,7 @@ class PhaseBanner < ViewComponent::Base
       'sandbox' => 'purple',
       'staging' => 'red',
       'unknown-environment' => 'yellow'
-    }[Settings.environment.name]
+    }.fetch(Settings.environment.name, 'grey')
   end
 
   def sandbox_mode?
