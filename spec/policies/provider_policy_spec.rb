@@ -30,24 +30,50 @@ describe ProviderPolicy do
     it { is_expected.to permit(admin, provider) }
   end
 
-  permissions :can_show_training_provider? do
-    let(:accrediting_provider_enrichments) { [{ UcasProviderCode: course.accredited_provider_code }] }
+  context 'provider enrichments' do
+    before { allow(Settings.features).to receive_messages(provider_partnerships: false) }
 
-    let(:allowed_user) { create(:user, providers: [provider]) }
-    let(:not_allowed_user) { create(:user) }
+    permissions :can_show_training_provider? do
+      let(:accrediting_provider_enrichments) { [{ UcasProviderCode: course.accredited_provider_code }] }
 
-    let(:course) { create(:course, :with_accrediting_provider) }
+      let(:allowed_user) { create(:user, providers: [provider]) }
+      let(:not_allowed_user) { create(:user) }
 
-    let(:provider) { course.accrediting_provider }
-    let(:training_provider) do
-      course.provider
-      course.provider.accrediting_provider_enrichments = accrediting_provider_enrichments
-      course.provider
+      let(:course) { create(:course, :with_accrediting_provider) }
+
+      let(:provider) { course.accrediting_provider }
+      let(:training_provider) do
+        course.provider
+        course.provider.accrediting_provider_enrichments = accrediting_provider_enrichments
+        course.provider
+      end
+
+      it { is_expected.to permit(admin, training_provider) }
+      it { is_expected.to permit(allowed_user, training_provider) }
+      it { is_expected.not_to permit(not_allowed_user, training_provider) }
     end
+  end
 
-    it { is_expected.to permit(admin, training_provider) }
-    it { is_expected.to permit(allowed_user, training_provider) }
-    it { is_expected.not_to permit(not_allowed_user, training_provider) }
+  context 'provider partnerships' do
+    before { allow(Settings.features).to receive_messages(provider_partnerships: true) }
+
+    permissions :can_show_training_provider? do
+      let(:allowed_user) { create(:user, providers: [provider]) }
+      let(:not_allowed_user) { create(:user) }
+
+      let(:course) { create(:course, :with_accrediting_provider) }
+
+      let(:provider) { course.accrediting_provider }
+      let(:training_provider) do
+        course.provider
+        course.provider.accredited_partnerships.create(accredited_provider: course.accrediting_provider, description: 'description')
+        course.provider
+      end
+
+      it { is_expected.to permit(admin, training_provider) }
+      it { is_expected.to permit(allowed_user, training_provider) }
+      it { is_expected.not_to permit(not_allowed_user, training_provider) }
+    end
   end
 
   describe '#permitted_provider_attributes' do
