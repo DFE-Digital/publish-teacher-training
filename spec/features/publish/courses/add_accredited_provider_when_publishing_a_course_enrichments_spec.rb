@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Publishing a course when course accrediting provider is invalid', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive_messages(provider_partnerships: true)
+    allow(Settings.features).to receive_messages(provider_partnerships: false)
     given_i_am_authenticated_as_a_provider_user
   end
 
@@ -61,8 +61,12 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def and_the_provider_has_a_valid_accrediting_provider
+    enrichment = AccreditingProviderEnrichment.new(
+      UcasProviderCode: accredited_provider.provider_code,
+      Description: ''
+    )
     provider = @user.providers.first
-    provider.accredited_partnerships.create(accredited_provider: accredited_provider, description: '')
+    provider.update!(accrediting_provider_enrichments: [enrichment])
   end
 
   def and_the_provider_has_no_accredited_provider
