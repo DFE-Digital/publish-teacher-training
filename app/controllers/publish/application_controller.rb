@@ -4,8 +4,6 @@ module Publish
   class ApplicationController < ::ApplicationController
     include SuccessMessage
 
-    layout 'publish'
-
     before_action :check_interrupt_redirects
     before_action :clear_previous_cycle_year_in_session, unless: -> { FeatureService.enabled?('rollover.can_edit_current_and_next_cycles') }
 
@@ -38,7 +36,7 @@ module Publish
     end
 
     def check_interrupt_redirects(use_redirect_back_to: true)
-      if !current_user.accepted_terms?
+      if current_user && !current_user.accepted_terms?
         redirect_to publish_accept_terms_path
       elsif use_redirect_back_to
         redirect_to session[:redirect_back_to] if session[:redirect_back_to].present?

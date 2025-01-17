@@ -23,20 +23,18 @@
     <%= favicon_link_tag image_path("govuk-icon-mask.svg"), rel: "mask-icon", color: "#0b0c0c", type: nil %>
     <%= favicon_link_tag image_path("govuk-icon-180.png"), rel: "apple-touch-icon", type: nil %>
 
-    <%= stylesheet_link_tag "find_application" %>
+    <%= stylesheet_link_tag "find/application" %>
     <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="govuk-template__body">
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
-    <%= render Find::Header::View.new(
-      service_name: t("service_name.find")
-    ) %>
+    <%= render HeaderComponent.new(service_name: I18n.t("service_name.find")) do |header| %>
+      <% header.with_phase_banner_text "Give feedback or report a problem: #{govuk_mail_to('becomingateacher@digital.education.gov.uk', subject: 'Feedback about Find teacher training courses')}" %>
+    <% end %>
 
     <div class="govuk-width-container">
-      <%= render Find::PhaseBanner::View.new %>
-
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if flash[:success] %>

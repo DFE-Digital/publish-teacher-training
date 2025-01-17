@@ -1,10 +1,64 @@
-<%= extends_layout :application do %>
-  <%= content_for(:header) do %>
-    <%= render Header.new(
-      service_name: I18n.t("service_name.support"),
-      current_user:
-    ) %>
-  <% end %>
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+  <head>
+    <meta charset="UTF-8">
 
-  <%= yield %>
-<% end %>
+    <title><%= content_for(:page_title) || I18n.t([params[:controller].gsub("/", "."), params[:action], "page_title"].join(".")) %> - Publish teacher training courses - GOV.UK</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <% canonical_url = "#{request.base_url}#{request.path.chomp('/')}/" %>
+
+    <%= tag.link(href: canonical_url, rel: "canonical") %>
+    <%= tag.meta(property: "og:url", content: canonical_url) %>
+
+    <%= tag.meta(name: "viewport", content: "width=device-width, initial-scale=1") %>
+    <%= tag.meta(property: "og:image", content: image_path("govuk-opengraph-image.png")) %>
+    <%= tag.meta(name: "theme-color", content: "#0b0c0c") %>
+    <%= tag.meta(name: "format-detection", content: "telephone=no") %>
+
+    <%= favicon_link_tag image_path("favicon.ico"), type: nil, sizes: "48x48" %>
+    <%= favicon_link_tag image_path("favicon.svg"), type: "image/svg+xml", sizes: "any" %>
+    <%= favicon_link_tag image_path("govuk-icon-mask.svg"), rel: "mask-icon", color: "#0b0c0c", type: nil %>
+    <%= favicon_link_tag image_path("govuk-icon-180.png"), rel: "apple-touch-icon", type: nil %>
+
+    <%= stylesheet_link_tag "accessible-autocomplete.min" %>
+    <%= stylesheet_link_tag "publish/application" %>
+    <%= javascript_include_tag "publish/application", "data-turbo-track": "reload", defer: true %>
+  </head>
+
+  <body class="govuk-template__body <%= yield :body_class %>">
+    <%= render "layouts/add_js_enabled_class_to_body" %>
+
+    <%= govuk_skip_link %>
+
+    <%= render HeaderComponent.new(service_name: I18n.t("service_name.support"), service_url: support_root_path, current_user:) do |header| %>
+      <% header.with_navigation_item "Providers", support_recruitment_cycle_providers_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) %>
+      <% header.with_navigation_item "Users", support_recruitment_cycle_users_path(params[:recruitment_cycle_year] || Settings.current_recruitment_cycle_year) %>
+      <% header.with_navigation_item "Feature Flags", x_find_url(find_feature_flags_path) %>
+      <% header.with_navigation_item "View Components", support_view_components_path %>
+      <% header.with_phase_banner_text "This is a new service – your #{govuk_link_to('feedback', '#', new_tab: true)} will help us to improve it." %>
+    <% end %>
+
+    <div class="govuk-width-container">
+      <%= render SupportTitleBar.new %>
+      <%= yield :breadcrumbs %>
+    </div>
+
+    <%= render partial: "publish/shared/navigation_bar" %>
+
+    <div class="govuk-width-container">
+      <%= yield :before_content %>
+
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        <%= render(FlashBanner.new(flash:)) %>
+
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= render partial: "layouts/footer" %>
+    <%= yield(:before_body_close) %>
+  </body>
+</html>
