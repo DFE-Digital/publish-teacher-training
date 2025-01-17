@@ -4,6 +4,7 @@ require 'rails_helper'
 
 feature 'Accredited provider flow', { can_edit_current_and_next_cycles: false } do
   before do
+    allow(Settings.features).to receive_messages(provider_partnerships: false)
     given_i_am_authenticated_as_an_admin_user
     and_there_are_accredited_providers_in_the_database
     and_i_visit_the_index_page
