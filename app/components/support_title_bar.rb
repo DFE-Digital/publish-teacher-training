@@ -12,7 +12,7 @@ class SupportTitleBar < ViewComponent::Base
   end
 
   def change_cycle_link
-    govuk_link_to t('page_titles.rollover.change_cycle'), support_path, class: 'title-bar__link govuk-link--no-visited-state'
+    govuk_link_to t('page_titles.rollover.change_cycle'), support_root_path, class: 'title-bar__link govuk-link--no-visited-state'
   end
 
   def change_items

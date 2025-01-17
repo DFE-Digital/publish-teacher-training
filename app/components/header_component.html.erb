@@ -1,0 +1,28 @@
+<%= govuk_header homepage_url: "https://www.gov.uk", classes: ["app-header--wide-logo", "govuk-header--full-width-border", "govuk-header--#{colour}"] do |header| %>
+  <% if current_user %>
+    <% header.with_navigation_item(text: current_user.full_name, href: Settings.dfe_signin.profile) %>
+    <% header.with_navigation_item text: "Sign out", href: sign_out_path %>
+  <% end %>
+<% end %>
+
+<% if navigation_items %>
+  <%= govuk_service_navigation(service_name:, service_url:) do |service_navigation| %>
+    <% navigation_items.each do |navigation_item| %>
+      <%= service_navigation.with_navigation_item text: navigation_item.text, href: navigation_item.href %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div class="govuk-width-container">
+  <div class="govuk-phase-banner">
+    <p class="govuk-phase-banner__content">
+      <%= govuk_tag(**phase_banner_tag, classes: ["govuk-phase-banner__content__tag"]) %>
+
+      <% if phase_banner_text? %>
+        <span class="govuk-phase-banner__text">
+          <%= sanitize phase_banner_text.to_s %>
+        </span>
+      <% end %>
+    </p>
+  </div>
+</div>

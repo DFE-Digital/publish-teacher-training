@@ -26,8 +26,8 @@ bg_jobs:
 skylight:
   enable: true
 environment:
-  label: "Beta"
-  name: "beta"
+  label: Beta
+  name: production
 render_json_errors: true
 
 features:

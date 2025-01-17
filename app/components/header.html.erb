@@ -1,6 +1,6 @@
 <%= govuk_header(
   homepage_url: publish_root_path,
-  classes: "govuk-!-display-none-print app-header--full-border app-header--wide-logo #{environment_header_class}",
+  classes: "govuk-!-display-none-print govuk-header--full-width-border app-header--wide-logo govuk-header--#{colour}",
   navigation_classes: "govuk-header__navigation--end"
 ) do |header| %>
 
@@ -8,7 +8,7 @@
 
   <% if current_user.present? %>
     <% if current_user.admin? %>
-      <% header.with_navigation_item(text: "Support console", href: support_path, active: false) %>
+      <% header.with_navigation_item(text: "Support console", href: support_root_path, active: false) %>
       <% header.with_navigation_item(text: "Sign out", href: sign_out_path) %>
     <% else %>
       <% if current_user.associated_with_accredited_provider? %>
