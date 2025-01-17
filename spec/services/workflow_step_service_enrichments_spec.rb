@@ -8,14 +8,19 @@ describe WorkflowStepService do
   end
 
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
   end
 
   describe '#call' do
     context 'when course.is_school_direct? && when course.provider.accredited_bodies.length == 0' do
-      let(:provider) { build(:provider) }
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
+      end
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
-      let(:accredited_partnerships) { [] }
+      let(:accrediting_provider_enrichments) { nil }
       let(:accredited_provider) { nil }
 
       it 'returns the expected workflow steps' do
@@ -43,10 +48,15 @@ describe WorkflowStepService do
     end
 
     context 'when course.is_school_direct? && course.provider.accredited_bodies.length == 1' do
-      let(:provider) { build(:provider) }
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
+      end
       let(:course) { create(:course, :salary, accrediting_provider: accredited_provider, provider:) }
-      let(:accredited_provider) { build(:accredited_provider) }
-      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, description: 'Something great about the accredited provider', training_provider: provider)] }
+      let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }] }
+      let(:accredited_provider) { build(:provider, :accredited_provider) }
 
       it 'returns the expected workflow steps' do
         expected_steps = %i[
@@ -74,16 +84,16 @@ describe WorkflowStepService do
 
   context 'when school direct and teacher degree apprenticeship' do
     context 'when more than one accredited provider' do
-      let(:provider) { build(:provider) }
-      let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, provider:) }
-      let!(:accredited_partnerships) do
-        [
-          create(:provider_partnership, accredited_provider:, description: 'Something great about the accredited provider', training_provider: provider),
-          create(:provider_partnership, accredited_provider: second_accredited_provider, description: 'Something great about the accredited provider', training_provider: provider)
-        ]
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
       end
-      let(:accredited_provider) { build(:accredited_provider) }
-      let(:second_accredited_provider) { create(:accredited_provider) }
+      let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, provider:) }
+      let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }, { 'Description' => 'some description', 'UcasProviderCode' => second_accredited_provider.provider_code }] }
+      let(:accredited_provider) { build(:provider, :accredited_provider) }
+      let(:second_accredited_provider) { build(:provider, :accredited_provider) }
 
       it 'adds accredited provider step' do
         expected_steps = %i[
@@ -107,10 +117,15 @@ describe WorkflowStepService do
     end
 
     context 'when only one accredited provider' do
-      let(:provider) { build(:provider) }
+      let(:provider) do
+        build(
+          :provider,
+          accrediting_provider_enrichments:
+        )
+      end
       let(:course) { create(:course, :resulting_in_undergraduate_degree_with_qts, accrediting_provider: accredited_provider, provider:) }
-      let!(:accredited_partnerships) { [create(:provider_partnership, accredited_provider:, description: 'Something great about the accredited provider', training_provider: provider)] }
-      let(:accredited_provider) { build(:accredited_provider) }
+      let(:accrediting_provider_enrichments) { [{ 'Description' => 'Something great about the accredited provider', 'UcasProviderCode' => accredited_provider.provider_code }] }
+      let(:accredited_provider) { build(:provider, :accredited_provider) }
 
       it 'removes accredited provider step' do
         expected_steps = %i[
@@ -158,7 +173,8 @@ describe WorkflowStepService do
   end
 
   context 'when course.is_further_education?' do
-    let(:provider) { create(:accredited_provider) }
+    let(:provider) { create(:provider, :accredited_provider) }
+
     let(:course) { create(:course, provider:, level: 'further_education', subjects: [find_or_create(:further_education_subject)]) }
 
     it 'returns the expected workflow steps' do
@@ -180,7 +196,7 @@ describe WorkflowStepService do
   end
 
   context 'when course.is_uni_or_scitt?' do
-    let(:provider) { create(:accredited_provider) }
+    let(:provider) { create(:provider, :accredited_provider) }
     let(:course) { create(:course, :salary, provider:) }
 
     it 'returns the expected workflow steps' do
