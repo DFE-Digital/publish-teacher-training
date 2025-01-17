@@ -70,7 +70,7 @@ en:
   service_name:
     publish: "Publish teacher training courses"
     find: "Find teacher training courses"
-    support: "Publish support console"
+    support: "Find and Publish support console"
     get_into_teaching: "Get Into Teaching"
   header:
     items:

@@ -5,7 +5,7 @@ module Find
     include Pagy::Backend
     include DfE::Analytics::Requests
 
-    layout 'find_layout'
+    layout 'find'
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
     before_action :redirect_to_cycle_has_ended_if_find_is_down

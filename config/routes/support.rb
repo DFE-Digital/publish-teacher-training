@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :support do
-  get '/', to: 'recruitment_cycle#index'
+  root to: 'recruitment_cycle#index'
 
   resources :recruitment_cycles, param: :year, constraints: { year: /#{Settings.current_recruitment_cycle_year}|#{Settings.current_recruitment_cycle_year + 1}/ }, path: '' do
     namespace :providers do
