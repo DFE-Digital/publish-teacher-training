@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive_messages(provider_partnerships: true)
+    allow(Settings.features).to receive_messages(provider_partnerships: false)
     given_i_am_authenticated_as_a_provider_user
     when_i_visit_the_new_accredited_providers_page
   end
@@ -26,9 +26,9 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
     provider = create(:provider)
     course_one = create(:course, :with_accrediting_provider, provider:)
     course_two = create(:course, :with_accrediting_provider, provider:)
-    @accredited_provider = course_one.accrediting_provider
-    accredited_provider_two = course_two.accrediting_provider
-    provider.accredited_partnerships.create([{ accredited_provider: @accredited_provider, description: 'as' }, { accredited_provider: accredited_provider_two, description: 'a3' }])
+    @accredited_provider_code = course_one.accredited_provider_code
+    accredited_provider_code_two = course_two.accredited_provider_code
+    provider.accrediting_provider_enrichments = [{ UcasProviderCode: @accredited_provider_code }, { UcasProviderCode: accredited_provider_code_two }]
     @user = create(:user, providers: [provider])
 
     given_i_am_authenticated(user: @user)
@@ -39,7 +39,7 @@ feature 'selection accredited_bodies', { can_edit_current_and_next_cycles: false
   end
 
   def when_i_select_an_accredited_provider
-    publish_courses_new_accredited_provider_page.find("#course_accredited_provider_code_#{@accredited_provider.provider_code.downcase}").click
+    publish_courses_new_accredited_provider_page.find("#course_accredited_provider_code_#{@accredited_provider_code.downcase}").click
   end
 
   def and_i_click_continue
