@@ -30,6 +30,15 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     and_i_see_the_success_message
   end
 
+  scenario 'i cannot select accredited providers if a partnership exists' do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    when_i_click_add_accredited_provider
+    when_i_search_for_an_existing_accredited_partner
+    when_i_select_an_existing_partner
+    then_i_see_an_error_that_i_cannot_add_the_provider
+  end
+
   scenario 'i cannot delete accredited providers if they are attached to a course' do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
@@ -204,6 +213,16 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     click_continue
   end
 
+  def when_i_select_an_existing_partner
+    choose @provider.accredited_partners.first.provider_name
+    click_continue
+  end
+
+  def then_i_see_an_error_that_i_cannot_add_the_provider
+    expect(page).to have_content('There is a problem')
+    expect(page).to have_content(' partnership already exists')
+  end
+
   def when_i_select_the_provider
     choose @accredited_provider.provider_name
     click_continue
@@ -237,6 +256,11 @@ feature 'Accredited partnership flow', { can_edit_current_and_next_cycles: false
     @accredited_provider.users << user
     @accredited_provider_two = create(:provider, :accredited_provider, provider_name: 'Accredited provider two')
     @accredited_provider_three = create(:provider, :accredited_provider, provider_name: 'Accredited provider three')
+  end
+
+  def when_i_search_for_an_existing_accredited_partner
+    fill_in form_title, with: @provider.accredited_partners.first.provider_name
+    click_continue
   end
 
   def when_i_search_for_an_accredited_provider_with_a_valid_query

@@ -9,7 +9,13 @@ module Publish
 
       def new
         provider_partnership = provider.accredited_partnerships.build
-        @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: { accredited_provider_id: params[:accredited_provider_id] })
+        provider_partnership.assign_attributes(accredited_provider_id: params[:accredited_provider_id] || ProviderPartnershipForm.new(current_user, provider).accredited_provider_id)
+
+        if provider_partnership.valid?
+          @provider_partnership_form = ProviderPartnershipForm.new(current_user, provider_partnership, params: { accredited_provider_id: params[:accredited_provider_id] })
+        else
+          redirect_to search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, RecruitmentCycle.current.year), flash: { error: { message: "#{Provider.find(params[:accredited_provider_id]).name_and_code} partnership already exists" } }
+        end
       end
 
       def edit

@@ -16,6 +16,7 @@ module Publish
 
             redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year), flash: { success: t('.added') }
           else
+            flash[:error] = { 'message' => @partnership.errors[:accredited_provider].first }
             render :show
           end
         end
