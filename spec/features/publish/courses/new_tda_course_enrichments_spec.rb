@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_next_cycles do
   before do
-    allow(Settings.features).to receive_messages(provider_partnerships: true)
+    allow(Settings.features).to receive_messages(provider_partnerships: false)
   end
 
   scenario 'creating a degree awarding course from school direct provider' do
@@ -222,7 +222,14 @@ feature 'Adding a teacher degree apprenticeship course', :can_edit_current_and_n
     @provider = @user.providers.first
     create(:accredited_provider, provider_code: '1BJ')
     @accredited_provider = create(:accredited_provider, provider_code: '1BK')
-    @provider.accredited_partnerships.create(accredited_provider: @accredited_provider, description: 'description')
+    @provider.accrediting_provider_enrichments = []
+    @provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
+      {
+        UcasProviderCode: @accredited_provider.provider_code,
+        Description: 'description'
+      }
+    )
+    @provider.save
 
     given_i_am_authenticated(user: @user)
   end
