@@ -12,7 +12,7 @@ namespace :lint do
   desc 'Lint erb files'
   task erb: :environment do
     puts 'Linting erb files...'
-    system('bundle exec erblint app') || exit($CHILD_STATUS.exitstatus)
+    system('bundle exec erb_lint app') || exit($CHILD_STATUS.exitstatus)
   end
 
   desc 'Lint javascript files'
