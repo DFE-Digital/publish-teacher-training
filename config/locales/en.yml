@@ -667,6 +667,7 @@ en:
           update_description: Update description
         delete:
           title: Are you sure you want to remove this accredited provider?
+          warning: You cannot remove this accredited provider
           remove: Remove accredited provider
         destroy:
           removed: Accredited provider removed
@@ -751,6 +752,41 @@ en:
         new:
           title: *accredited_provider_title
           caption: &accredited_provider_caption "Add accredited provider - %{provider_name} (%{code})"
+      accredited_partnerships:
+        index:
+          title: About the accredited provider
+          add: Add accredited provider
+          no_providers: There are no accredited providers for %{provider_name}.
+        new:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: "Add accredited provider - %{provider_name} (%{code})"
+        edit:
+          title: About the accredited provider
+          hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
+          caption: "%{provider_name}"
+          updated: Accredited provider updated
+          update_description: Update description
+        update:
+          updated: Accredited provider updated
+        destroy:
+          removed: Accredited provider removed
+        delete:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        can_remove:
+          title: Are you sure you want to remove this accredited provider?
+          remove: Remove accredited provider
+        cannot_remove:
+          warning: You cannot remove this accredited provider
+          reason: "%{ratifying_provider_name} is an accredited provider for courses run by %{training_provider_name}. At least one of these courses is currently published on Find."
+        checks:
+          show:
+            caption: "Add accredited provider - %{provider_name} (%{code})"
+            add: Add accredited provider
+          update:
+            added: Accredited provider added
+
       accredited_providers:
         new:
           title: About the accredited provider
@@ -761,6 +797,7 @@ en:
           hint: Tell candidates about the accredited provider. You could mention their academic specialities and achievements.
           caption: "%{provider_name}"
           updated: About the accredited provider updated
+          update_description: Update description
         delete:
           title: Are you sure you want to remove this accredited provider?
           remove: Remove accredited provider
