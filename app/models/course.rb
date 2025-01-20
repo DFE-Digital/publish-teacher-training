@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Course < ApplicationRecord
+  def available_placements_count
+    2
+  end
   include Discard::Model
   include WithQualifications
   include ChangedAt

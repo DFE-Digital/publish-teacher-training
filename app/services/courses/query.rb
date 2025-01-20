@@ -32,7 +32,7 @@ module Courses
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
-      @scope = available_placements_scope
+      #@scope = available_placements_scope
       @scope = @scope.distinct
 
       @scope = @scope.includes(
