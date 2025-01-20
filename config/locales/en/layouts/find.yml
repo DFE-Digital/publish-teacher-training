@@ -1,0 +1,5 @@
+en:
+  layouts:
+    find:
+      feedback: This is a new service &ndash; %{link_to} will help us to improve it.
+      feedback_text: your feedback
