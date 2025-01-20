@@ -298,17 +298,17 @@ en:
         no_fee: There is no fee
         no_degree_required: No degree required
         fee_based:
-          location: Placement schools
+          location: Nearest placement school
         salary_based:
           location:
-            one: Employing school
-            other: Employing schools
+            one: Nearest employing school
+            other: Nearest employing school
         location:
-          one: Placement schools
-          other: Placement schools
+          one: Nearest placement school
+          other: Nearest placement school
         location_salary:
-          one: Employing schools
-          other: Employing schools
+          one: Nearest employing school
+          other: Nearest employing school
         study_site:
           one: Where you will study
           other: Where you will study
@@ -325,20 +325,20 @@ en:
       course_placements:
         nearest_location:
           zero: "No placement schools available"
-          one: "Nearest potential placement school"
-          other: "Nearest of %{count} potential placement schools"
+          one: ""
+          other: ""
         nearest_location_salary:
           zero: "No employing schools available"
-          one: "Nearest potential employing school"
-          other: "Nearest of %{count} potential employing schools"
+          one: ""
+          other: ""
         all_school_placements:
           zero: "Not listed yet"
-          one: "%{count} potential placement school"
-          other: "%{count} potential placement schools"
+          one: "Search by city, town or postcode to find the nearest potential placement school"
+          other: "Search by city, town or postcode to find the nearest potential placement school "
         all_school_placements_salary:
           zero: "No employing schools available"
-          one: "%{count} potential employing school"
-          other: "%{count} potential employing schools"
+          one: "Search by city, town or postcode to find the nearest potential employing school"
+          other: "Search by city, town or postcode to find the nearest potential employing school"
       course_study_sites:
         nearest_location:
           zero: "No study sites available"
