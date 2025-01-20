@@ -44,17 +44,42 @@ namespace :support do
       end
 
       scope module: :providers do
-        resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update], path: 'accredited-providers' do
-          member do
-            get :delete
-            delete :delete, to: 'accredited_providers#destroy'
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index new edit create update], path: 'accredited-partnerships' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_partnerships#destroy'
+            end
+            get '/check', on: :collection, to: 'accredited_partnerships/checks#show'
+            put '/check', on: :collection, to: 'accredited_partnerships/checks#update'
           end
+
+          resources :copy_courses, only: %i[new create]
+        end
+
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :accredited_providers, param: :accredited_provider_code, only: %i[index new edit create update], path: 'accredited-providers' do
+            member do
+              get :delete
+              delete :delete, to: 'accredited_providers#destroy'
+            end
+            get '/search', on: :collection, to: 'accredited_provider_search#new'
+            post '/search', on: :collection, to: 'accredited_provider_search#create'
+            put '/search', on: :collection, to: 'accredited_provider_search#update'
+
+            get '/check', on: :collection, to: 'accredited_providers/checks#show'
+            put '/check', on: :collection, to: 'accredited_providers/checks#update'
+          end
+
+          resources :copy_courses, only: %i[new create]
+        end
+        # rubocop:enable Style/RedundantConstantBase
+
+        resources :accredited_providers, param: :accredited_provider_code, only: %i[], path: 'accredited-providers' do
           get '/search', on: :collection, to: 'accredited_provider_search#new'
           post '/search', on: :collection, to: 'accredited_provider_search#create'
           put '/search', on: :collection, to: 'accredited_provider_search#update'
-
-          get '/check', on: :collection, to: 'accredited_providers/checks#show'
-          put '/check', on: :collection, to: 'accredited_providers/checks#update'
         end
 
         resources :copy_courses, only: %i[new create]
