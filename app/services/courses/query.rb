@@ -32,11 +32,35 @@ module Courses
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
+      @scope = available_placements_scope
       @scope = @scope.distinct
+
+      @scope = @scope.includes(
+        :enrichments,
+        :provider,
+        subjects: [:financial_incentive]
+      )
 
       log_query_info
 
       @scope
+    end
+
+    def available_placements_scope
+      available_placements = Course
+                             .select('site_statuses.course_id, COUNT(site_statuses.course_id) as available_placements_count')
+                             .joins("INNER JOIN course_site AS site_statuses ON site_statuses.course_id = course.id
+              INNER JOIN site ON site.id = site_statuses.site_id")
+                             .where.not("site.address1 IN ('', NULL) AND site.address2 IN ('', NULL)
+                  AND site.address3 IN ('', NULL) AND site.town IN ('', NULL)
+                  AND site.address4 IN ('', NULL) AND site.postcode IN ('', NULL)
+                  AND site.latitude IS NULL AND site.longitude IS NULL")
+                             .group('site_statuses.course_id')
+
+      @scope
+        .with(available_placements:)
+        .joins('INNER JOIN available_placements ON available_placements.course_id = course.id')
+        .select('course.*, available_placements.available_placements_count')
     end
 
     def visa_sponsorship_scope

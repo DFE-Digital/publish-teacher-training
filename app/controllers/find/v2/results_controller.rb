@@ -8,9 +8,8 @@ module Find
         @search_params = @search_courses_form.search_params
 
         @courses = ::Courses::Query.call(params: @search_params)
-        @courses_count = @courses.count
-
-        @pagy, @results = pagy(@courses)
+        @courses_count = @courses.unscope(:select).distinct.count
+        @pagy, @results = pagy(@courses, count: @courses_count)
       end
 
       private

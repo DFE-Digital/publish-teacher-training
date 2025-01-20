@@ -96,7 +96,7 @@ module Courses
     end
 
     def length_value
-      course_length = course.enrichment_attribute(:course_length).to_s
+      course_length = enrichment.course_length.to_s
       translated_course_length = t(".length_value.#{course_length}", default: course_length)
 
       [translated_course_length, course.study_mode.humanize.downcase].join(' - ')
@@ -150,11 +150,11 @@ module Courses
       t(".location_value.school_term.#{course.funding}", default: t('.location_value.school_term.default'))
     end
 
-    def uk_fees(fee_uk = course.enrichment_attribute(:fee_uk_eu))
+    def uk_fees(fee_uk = enrichment.fee_uk_eu)
       t('.fee_value.fee.uk_fees_html', value: content_tag(:b, number_to_currency(fee_uk.to_f)))
     end
 
-    def international_fees(fee_international = course.enrichment_attribute(:fee_international))
+    def international_fees(fee_international = enrichment.fee_international)
       return if fee_international.blank?
 
       t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f)))
@@ -206,7 +206,11 @@ module Courses
     end
 
     def main_subject
-      @main_subject ||= Subject.find_by(id: course.master_subject_id)
+      @main_subject ||= course.subjects.find { |subject| subject.id == course.master_subject_id }
+    end
+
+    def enrichment
+      @enrichment ||= course.enrichments.max_by(&:created_at)
     end
 
     def bursary_and_scholarship_flag_active_or_preview?

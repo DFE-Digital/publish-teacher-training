@@ -28,15 +28,15 @@ class Course < ApplicationRecord
 
   attribute :subordinate_subject_id, :integer
   after_initialize do
-    if is_primary?
-      self.master_subject_id ||= course_subjects.first&.subject_id
-    else
-      sub = course_subjects.select(&:position)
+    #  if is_primary?
+    #    self.master_subject_id ||= course_subjects.first&.subject_id
+    #  else
+    #    sub = course_subjects.select(&:position)
 
-      self.master_subject_id ||= sub.first&.subject&.id
+    #    self.master_subject_id ||= sub.first&.subject&.id
 
-      self.subordinate_subject_id ||= sub&.second&.subject&.id
-    end
+    #    self.subordinate_subject_id ||= sub&.second&.subject&.id
+    #  end
   end
 
   validates :course_code,
@@ -890,34 +890,6 @@ class Course < ApplicationRecord
 
   def name_and_code
     "#{name} (#{course_code})"
-  end
-
-  def available_placements
-    @available_placements ||= site_statuses
-                              .joins(:site)
-                              .where(
-                                status: [SiteStatus.statuses[:running], SiteStatus.statuses[:new_status]],
-                                publish: SiteStatus.publishes[:published],
-                                vac_status: [
-                                  SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
-                                  SiteStatus.vac_statuses[:part_time_vacancies],
-                                  SiteStatus.vac_statuses[:full_time_vacancies]
-                                ]
-                              )
-                              .where.not(
-                                "site.address1 IN ('', NULL)
-                                AND site.address2 IN ('', NULL)
-                                AND site.address3 IN ('', NULL)
-                                AND site.town IN ('', NULL)
-                                AND site.address4 IN ('', NULL)
-                                AND site.postcode IN ('', NULL)
-                                AND site.latitude IS NULL
-                                AND site.longitude IS NULL"
-                              )
-  end
-
-  def available_placements_count
-    @available_placements_count ||= available_placements.count
   end
 
   def visa_sponsorship
