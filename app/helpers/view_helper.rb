@@ -175,6 +175,14 @@ module ViewHelper
     end
   end
 
+  def x_accredited_partnerships_navigation_item_link_path(provider)
+    if Settings.features.provider_partnerships
+      support_recruitment_cycle_provider_accredited_partnerships_path(provider.recruitment_cycle_year, provider)
+    else
+      support_recruitment_cycle_provider_accredited_providers_path(provider.recruitment_cycle_year, provider)
+    end
+  end
+
   private
 
   def base_errors_hash(provider_code, course)

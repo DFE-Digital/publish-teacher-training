@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: "support.providers.accredited_providers.index") %>
+<%= render PageTitle.new(title: t(".title")) %>
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
@@ -18,20 +18,20 @@
   *([{ name: "Accredited providers", url: x_accredited_partnerships_navigation_item_link_path(@provider) }] unless @provider.accredited_provider?)
 ]) %>
 
-<%= govuk_button_link_to("Add accredited provider", search_support_recruitment_cycle_provider_accredited_providers_path) %>
+<%= govuk_button_link_to(t(".add"), search_support_recruitment_cycle_provider_accredited_providers_path) %>
 
-<% if @accredited_providers.none? %>
-  <p class="govuk-body">There are no accredited providers for <%= @provider.provider_name %>.</p>
+<% if @partnerships.none? %>
+  <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>.</p>
 <% else %>
-  <% @accredited_providers.each do |accredited_provider| %>
+  <% @partnerships.each do |partnership| %>
     <%= render AccreditedProviderComponent.new(
-      provider_name: govuk_link_to(accredited_provider.provider_name, support_recruitment_cycle_provider_path(accredited_provider.recruitment_cycle_year, accredited_provider)),
-      remove_path: delete_support_recruitment_cycle_provider_accredited_provider_path(
-        accredited_provider_code: accredited_provider.provider_code
+      provider_name: govuk_link_to(partnership.accredited_provider.provider_name, support_recruitment_cycle_providers_path(partnership.accredited_provider.recruitment_cycle_year, partnership.accredited_provider)),
+      remove_path: delete_support_recruitment_cycle_provider_accredited_partnership_path(
+        accredited_provider_code: partnership.accredited_provider.provider_code
       ),
-      about_accredited_provider: @provider.accredited_body(accredited_provider.provider_code)[:description],
-      change_about_accredited_provider_path: edit_support_recruitment_cycle_provider_accredited_provider_path(
-        accredited_provider_code: accredited_provider.provider_code
+      about_accredited_provider: partnership.description,
+      change_about_accredited_provider_path: edit_support_recruitment_cycle_provider_accredited_partnership_path(
+        accredited_provider_code: partnership.accredited_provider.provider_code
       )
     ) %>
   <% end %>
