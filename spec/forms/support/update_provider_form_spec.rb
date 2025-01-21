@@ -12,7 +12,7 @@ module Support
 
     describe '#save' do
       context 'provider is changed from accredited_provider to not accredited_provider' do
-        let(:attributes) { { accrediting_provider: 'not_an_accredited_provider' } }
+        let(:attributes) { { accredited: false } }
 
         it 'removes the accredited_provider_number' do
           expect { subject.save }.to change(provider.reload, :accredited_provider_number).from(provider.accredited_provider_number).to(nil)

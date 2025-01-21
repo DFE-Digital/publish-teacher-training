@@ -26,7 +26,7 @@ module Support
     end
 
     def remove_accredited_provider_number
-      return unless @provider.accrediting_provider_changed?(to: 'not_an_accredited_provider')
+      return unless @provider.accredited_changed?(to: false)
 
       @provider.accredited_provider_number = nil
     end
