@@ -5,7 +5,5 @@ module Publish
     skip_before_action :authenticate
 
     include Errorable
-
-    layout 'publish'
   end
 end
