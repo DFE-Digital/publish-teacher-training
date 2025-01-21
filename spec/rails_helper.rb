@@ -67,6 +67,15 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
+
+    postgis_table_count = ActiveRecord::Base.connection.execute(
+      'SELECT COUNT(*) FROM spatial_ref_sys;'
+    ).field_values('count').flatten.first.to_i
+
+    if postgis_table_count.zero?
+      ActiveRecord::Base.connection.execute('DROP EXTENSION IF EXISTS postgis CASCADE;')
+      ActiveRecord::Base.connection.execute('CREATE EXTENSION IF NOT EXISTS postgis;')
+    end
   end
 
   # start the transaction strategy as examples are run

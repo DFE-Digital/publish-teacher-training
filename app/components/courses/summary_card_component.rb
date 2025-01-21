@@ -2,7 +2,7 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
-    attr_reader :course, :location, :visa_sponsorship, :available_placements_count, :minimum_distance_to_search_location
+    attr_reader :course, :location, :visa_sponsorship, :available_placements_count
 
     def initialize(course:, location: nil, visa_sponsorship: nil)
       @course = course
@@ -35,7 +35,7 @@ module Courses
         t(
           '.location_value.distance',
           school_term:,
-          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location, 'mile'), class: 'govuk-!-font-weight-bold'),
+          distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil(2), 'mile'), class: 'govuk-!-font-weight-bold'),
           location: content_tag(:span, sanitize(@location), class: 'govuk-!-font-weight-bold')
         ).html_safe
       else

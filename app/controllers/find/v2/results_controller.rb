@@ -8,9 +8,9 @@ module Find
         @search_params = @search_courses_form.search_params
 
         @courses = ::Courses::Query.call(params: @search_params)
-        @courses_count = @courses.count
+        @courses_count = @courses.unscope(:order, :group).distinct.count(:id)
 
-        @pagy, @results = pagy(@courses)
+        @pagy, @results = pagy(@courses, count: @courses_count)
       end
 
       private
@@ -23,6 +23,10 @@ module Find
           :level,
           :funding,
           :age_group,
+          :location,
+          :latitude,
+          :longitude,
+          :radius,
           subjects: [],
           study_types: [],
           qualifications: [],
