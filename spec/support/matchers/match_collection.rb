@@ -37,6 +37,7 @@ RSpec::Matchers.define :match_collection do |expected_collection, attribute_name
       attribute_names.each_with_object({}) do |attr, hash|
         value = item.public_send(attr) if item.respond_to?(attr)
         hash[attr] = value
+        hash[attr] = value.round(2) if value.is_a? Float
       end.merge(id: item.id)
     end
   end

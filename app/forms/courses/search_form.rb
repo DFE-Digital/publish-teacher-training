@@ -12,6 +12,10 @@ module Courses
     attribute :qualifications
     attribute :level
     attribute :funding
+    attribute :location
+    attribute :longitude
+    attribute :latitude
+    attribute :radius
 
     attribute :age_group
     attribute :qualification

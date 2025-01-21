@@ -89,8 +89,16 @@ RSpec.describe Courses::SearchForm do
     context 'when funding is provided' do
       let(:form) { described_class.new(funding: %w[fee salary]) }
 
-      it 'returns the correct search params with study_types as an array' do
+      it 'returns the correct search params with funding as an array' do
         expect(form.search_params).to eq({ funding: %w[fee salary] })
+      end
+    end
+
+    context 'when location is provided' do
+      let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10) }
+
+      it 'returns the correct search params with location details' do
+        expect(form.search_params).to eq(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10)
       end
     end
 

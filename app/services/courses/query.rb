@@ -2,6 +2,8 @@
 
 module Courses
   class Query
+    DEFAULT_RADIUS_IN_MILES = 10
+
     def self.call(...)
       new(...).call
     end
@@ -32,7 +34,7 @@ module Courses
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
-      @scope = @scope.distinct
+      @scope = location_scope
 
       log_query_info
 
@@ -123,6 +125,49 @@ module Courses
       @applied_scopes[:funding] = params[:funding]
 
       @scope.where(funding: params[:funding])
+    end
+
+    def location_scope
+      return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
+
+      radius_in_miles = (params[:radius] || DEFAULT_RADIUS_IN_MILES).to_f
+      radius_in_meters = radius_in_miles * 1609.34
+      latitude = params[:latitude].to_f
+      longitude = params[:longitude].to_f
+
+      @applied_scopes[:location] = {
+        latitude: latitude,
+        longitude: longitude,
+        radius: radius_in_miles
+      }
+
+      @scope
+        .joins(site_statuses: :site)
+        .where('(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)')
+        .where(
+          <<~SQL.squish, longitude, latitude, radius_in_meters
+            ST_DistanceSphere(
+              ST_MakePoint(site.longitude::float, site.latitude::float),
+              ST_MakePoint(?::float, ?::float)
+            ) <= ?
+          SQL
+        )
+        .select(
+          Course.sanitize_sql_array(
+            [
+              <<~SQL.squish,
+                course.*,
+                MIN(ST_DistanceSphere(
+                  ST_MakePoint(site.longitude::float, site.latitude::float),
+                  ST_MakePoint(?::float, ?::float)
+                ) / 1609.344) AS minimum_distance_to_search_location
+              SQL
+              longitude, latitude
+            ]
+          )
+        )
+        .group(:id)
+        .order('minimum_distance_to_search_location ASC')
     end
 
     private
