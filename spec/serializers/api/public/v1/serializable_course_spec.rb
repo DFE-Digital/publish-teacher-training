@@ -17,10 +17,20 @@ RSpec.describe API::Public::V1::SerializableCourse do
 
   context 'when there is an accredited body with enrichments' do
     before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(false)
       course.provider.update(accrediting_provider_enrichments: [{ Description: 'foo', UcasProviderCode: course.accrediting_provider.provider_code }])
     end
 
     it { is_expected.to have_attribute(:about_accredited_body).with_value(course.provider.accrediting_provider_enrichments.first.Description) }
+  end
+
+  context 'when there is a ratifying provider with description' do
+    before do
+      allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+      course.provider.accredited_partnerships.create(description: 'foo', accredited_provider: course.accrediting_provider)
+    end
+
+    it { is_expected.to have_attribute(:about_accredited_body).with_value(course.provider.accredited_partnerships.find_by(accredited_provider_id: course.accrediting_provider).description) }
   end
 
   it { is_expected.to have_attribute(:about_accredited_body).with_value(nil) }

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'selection schools', { can_edit_current_and_next_cycles: false } do
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     given_i_am_authenticated_as_a_provider_user
     and_that_sites_exist
     when_i_visit_the_publish_courses_new_schools_page
@@ -50,7 +50,7 @@ feature 'selection schools', { can_edit_current_and_next_cycles: false } do
   end
 
   def then_i_am_met_with_the_accredited_provider_page
-    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/ratifying-provider/new", ignore_query: true)
+    expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{Settings.current_recruitment_cycle_year}/courses/accredited-provider/new", ignore_query: true)
     expect(page).to have_content('Accredited provider')
   end
 
