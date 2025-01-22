@@ -252,11 +252,19 @@ namespace :publish, as: :publish do
 
       scope module: :providers do
         get '/training-providers-courses', on: :member, to: 'training_providers/course_exports#index', as: 'download_training_providers_courses'
-        resources :training_providers, path: '/training-providers', only: [:index], param: :code do
-          resources :courses, module: :training_providers, only: [:index]
+        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:off)) do
+          resources :training_providers, path: '/training-providers', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'training_providers/courses'
+          end
         end
 
-        # rubocop:disable Style/RedundantConstantBase
+        constraints(::Constraints::PartnershipFeature.new(:on)) do
+          resources :training_partners, path: '/training-partners', controller: 'training_partners', only: [:index], param: :code do
+            resources :courses, only: [:index], controller: 'training_partners/courses'
+          end
+        end
+
         constraints(::Constraints::PartnershipFeature.new(:on)) do
           get '/accredited-providers', to: redirect('/publish/organisations/%{provider_code}/%{recruitment_cycle_year}/accredited-partnerships')
           resources :accredited_partnerships, param: :accredited_provider_code, except: %i[show], path: 'accredited-partnerships', controller: 'accredited_partnerships' do
