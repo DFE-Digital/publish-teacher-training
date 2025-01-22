@@ -47,6 +47,7 @@ module ViewHelper
   def enrichment_error_url(provider_code:, course:, field:, message: nil)
     base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}"
     provider_base = "/publish/organisations/#{provider_code}/#{course.recruitment_cycle_year}"
+    accrediting_provider = Settings.features.provider_partnerships ? ratifying_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code) : accredited_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)
 
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
@@ -62,7 +63,7 @@ module ViewHelper
         age_range_in_years: "#{base}/age-range?display_errors=true",
         sites: "#{base}/schools?display_errors=true",
         study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
-        accrediting_provider: accredited_provider_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code),
+        accrediting_provider:,
         applications_open_from: "#{base}/applications-open",
         a_level_subject_requirements: publish_provider_recruitment_cycle_course_a_levels_what_a_level_is_required_path(
           course.provider_code,
@@ -165,11 +166,19 @@ module ViewHelper
 
   def x_accrediting_provider_url
     if preview?(params)
-      accredited_by_publish_provider_recruitment_cycle_course_path(
-        course.provider_code,
-        course.recruitment_cycle_year,
-        course.course_code
-      )
+      if Settings.features.provider_partnerships
+        ratified_by_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code
+        )
+      else
+        accredited_by_publish_provider_recruitment_cycle_course_path(
+          course.provider_code,
+          course.recruitment_cycle_year,
+          course.course_code
+        )
+      end
     else
       find_accrediting_provider_path(course.provider_code, course.course_code)
     end
