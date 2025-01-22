@@ -429,6 +429,13 @@ class Course < ApplicationRecord
     Courses::GenerateCourseNameService.call(course: self)
   end
 
+  def ratifying_provider_description
+    return nil unless accrediting_provider
+
+    subquery = RecruitmentCycle.current.providers.where(provider_code: accrediting_provider.provider_code).select(:id)
+    provider.accredited_partnerships.find_by(accredited_provider_id: subquery)&.description
+  end
+
   def accrediting_provider_description
     return if accrediting_provider.blank?
     return if provider.accrediting_provider_enrichments.blank?
