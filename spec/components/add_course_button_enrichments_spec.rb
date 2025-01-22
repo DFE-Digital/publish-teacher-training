@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe AddCourseButton do
+describe AddCourseButtonEnrichments do
   include Rails.application.routes.url_helpers
 
   let(:recruitment_cycle) { build(:recruitment_cycle, :next) }
@@ -16,7 +16,7 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
@@ -50,7 +50,7 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
@@ -74,7 +74,7 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_no_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
@@ -98,7 +98,7 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
@@ -132,14 +132,14 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
       )
     end
 
-    it 'does not render a schools link' do
+    it 'renders a schools link' do
       expect(rendered_content).to have_no_link(
         'add a school',
         href: publish_provider_recruitment_cycle_schools_path(
@@ -166,7 +166,7 @@ describe AddCourseButton do
     it 'renders an accredited provider link' do
       expect(rendered_content).to have_no_link(
         'add an accredited provider',
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
+        href: publish_provider_recruitment_cycle_accredited_providers_path(
           provider.provider_code,
           provider.recruitment_cycle.year
         )
