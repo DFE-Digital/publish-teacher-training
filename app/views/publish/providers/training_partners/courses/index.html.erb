@@ -1,0 +1,11 @@
+<% content_for :page_title, @provider.provider_name %>
+<%= content_for :before_content, render_breadcrumbs(:training_provider_courses) %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l"><%= t(".title") %></span>
+  <%= @training_partner.provider_name %>
+</h1>
+
+<section data-qa="courses__table-section">
+  <%= render partial: "publish/courses/course_table", locals: { courses: @courses } %>
+</section>
