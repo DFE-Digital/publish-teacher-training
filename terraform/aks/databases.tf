@@ -56,4 +56,5 @@ module "postgres" {
   azure_enable_high_availability = var.postgres_enable_high_availability
   azure_maintenance_window       = var.postgres_azure_maintenance_window
   server_version                 = "14"
+  server_docker_image            = "postgis/postgis:14-3.5"
 }
