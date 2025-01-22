@@ -1,0 +1,65 @@
+<% content_for :page_title, "Training partners" %>
+<%= content_for :before_content, render_breadcrumbs(:training_providers) %>
+
+  <h1 class="govuk-heading-l">
+    <%= t(".title") %>
+  </h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <ul class="govuk-list" data-qa="provider__training_partners_list">
+      <% @training_partners.each do |training_partner| %>
+        <li data-qa="training_partner">
+          <h3 class="govuk-heading-s">
+            <% if Settings.features.provider_partnerships %>
+            <%= govuk_link_to(
+              training_partner.provider_name,
+              publish_provider_recruitment_cycle_training_partner_courses_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                training_partner.provider_code
+              ),
+              class: "govuk-!-font-weight-bold",
+              data: { qa: "training_partner_name" }
+            ) %>
+          <% else %>
+            <%= govuk_link_to(
+              training_partner.provider_name,
+              publish_provider_recruitment_cycle_training_provider_courses_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                training_partner.provider_code
+              ),
+              class: "govuk-!-font-weight-bold",
+              data: { qa: "training_partner_name" }
+            ) %>
+            <% end %>
+            <span class="govuk-hint govuk-!-display-inline" data-qa="course_count">
+              <%= pluralize(@course_counts[training_partner.provider_code], "course") %>
+            </span>
+          </h3>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <% unless @training_partners.empty? %>
+    <aside class="govuk-grid-column-one-third">
+      <div class="app-status-box" data-qa="download-section">
+        <h2 class="govuk-heading-m"><%= t(".download") %></h2>
+        <p class="govuk-body"><%= t(".export") %></p>
+        <p class="govuk-body">
+          <%= govuk_link_to(
+            t(".download_file"),
+            download_training_providers_courses_publish_provider_recruitment_cycle_path(
+              @provider.provider_code,
+              @provider.recruitment_cycle_year,
+              format: :csv
+            )
+          ) %>
+        </p>
+      </div>
+    </aside>
+  <% end %>
+</div>

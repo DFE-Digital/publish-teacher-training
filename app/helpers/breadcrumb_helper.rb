@@ -73,9 +73,13 @@ module BreadcrumbHelper
   end
 
   def training_provider_courses_breadcrumb
-    path = publish_provider_recruitment_cycle_training_provider_courses_path(@provider.provider_code, @provider.recruitment_cycle_year, @training_provider.provider_code)
-    training_providers_breadcrumb.merge({ "#{@training_provider.provider_name}’s courses" => path })
+    if Settings.features.provider_partnerships
+      path = publish_provider_recruitment_cycle_training_partner_courses_path(@provider.provider_code, @provider.recruitment_cycle_year, @training_partner.provider_code)
+      training_providers_breadcrumb.merge({ "#{@training_partner.provider_name}’s courses" => path })
+    else
+      path = publish_provider_recruitment_cycle_training_provider_courses_path(@provider.provider_code, @provider.recruitment_cycle_year, @training_provider.provider_code)
+      training_providers_breadcrumb.merge({ "#{@training_provider.provider_name}’s courses" => path })
+    end
   end
-
   # rubocop:enable Rails/HelperInstanceVariable
 end
