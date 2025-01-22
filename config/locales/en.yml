@@ -220,6 +220,11 @@ en:
       school_direct_salaried_training_programme:
         label: "Salaried"
   components:
+    add_course_button:
+      before_adding: "Before adding a course, you need to:"
+      add_course: Add course
+      add_accredited_provider: add an accredited provider
+      add_school: add a school
     providers:
       copy_course_content_warning_component:
         copied_fields_from:

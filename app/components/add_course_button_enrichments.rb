@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddCourseButtonPartnerships < ViewComponent::Base
+class AddCourseButtonEnrichments < ViewComponent::Base
   include RecruitmentCycleHelper
   attr_reader :provider
 
@@ -22,13 +22,13 @@ class AddCourseButtonPartnerships < ViewComponent::Base
   def incomplete_sections_hash
     {
       site_not_present?: publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle_year),
-      accredited_partner_not_present?: publish_provider_recruitment_cycle_accredited_partnerships_path(provider.provider_code, provider.recruitment_cycle_year)
+      accredited_provider_not_present?: publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, provider.recruitment_cycle_year)
     }
   end
 
   def incomplete_section_label_suffix(section)
     labels = {
-      accredited_partner_not_present?: 'accredited partner',
+      accredited_provider_not_present?: 'accredited provider',
       site_not_present?: 'school'
     }
 
@@ -36,23 +36,23 @@ class AddCourseButtonPartnerships < ViewComponent::Base
   end
 
   def required_organisation_details_present?
-    accredited_partner_present? && site_present?
+    accredited_provider_present? && site_present?
   end
 
-  def accredited_partner_present?
+  def accredited_provider_present?
     return true if accredited_provider?
 
-    provider.accredited_partners.any?
+    provider.accredited_providers.any?
   end
 
   def site_present?
     provider.sites.any?
   end
 
-  def accredited_partner_not_present?
-    return false if provider.accredited_provider?
+  def accredited_provider_not_present?
+    return false if provider.accredited?
 
-    !accredited_partner_present?
+    !accredited_provider_present?
   end
 
   def site_not_present?
@@ -60,10 +60,10 @@ class AddCourseButtonPartnerships < ViewComponent::Base
   end
 
   def accredited_provider?
-    provider.accredited_provider?
+    provider.accredited?
   end
 
   def incomplete_section_article(section)
-    incomplete_section_label_suffix(section) == 'accredited partner' ? 'an' : 'a'
+    incomplete_section_label_suffix(section) == 'accredited provider' ? 'an' : 'a'
   end
 end
