@@ -12,7 +12,7 @@ RSpec.feature 'view components' do
   end
 
   before do
-    allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+    allow(Settings.features).to receive(:provider_partnerships).and_return(false)
   end
 
   all_links = (ViewComponent::Preview.all.map do |component|

@@ -67,13 +67,23 @@ describe ViewHelper do
       def preview?(_) = true
 
       it 'returns the publish accrediting provider url' do
-        expect(x_accrediting_provider_url).to eq(
-          accredited_by_publish_provider_recruitment_cycle_course_path(
-            course.provider_code,
-            course.recruitment_cycle_year,
-            course.course_code
+        if Settings.features.provider_partnerships
+          expect(x_accrediting_provider_url).to eq(
+            ratified_by_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code
+            )
           )
-        )
+        else
+          expect(x_accrediting_provider_url).to eq(
+            accredited_by_publish_provider_recruitment_cycle_course_path(
+              course.provider_code,
+              course.recruitment_cycle_year,
+              course.course_code
+            )
+          )
+        end
       end
     end
 
