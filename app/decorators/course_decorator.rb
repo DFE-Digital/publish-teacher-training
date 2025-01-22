@@ -435,7 +435,11 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def about_accrediting_provider
-    object.accrediting_provider_description
+    if Settings.features.provider_partnerships
+      object.ratifying_provider_description
+    else
+      object.accrediting_provider_description
+    end
   end
 
   def has_physical_education_subject?
