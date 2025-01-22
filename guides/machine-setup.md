@@ -9,6 +9,7 @@ You'll need to have the libraries below to be able to develop the application lo
 - [Node.js](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Postgis](https://postgis.net/install/)
 - [Redis](https://redis.io/)
 - [ChromeDriver](https://chromedriver.chromium.org/)
 - [Terraform](https://www.terraform.io/)

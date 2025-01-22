@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_16_123350) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_21_161119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_16_123350) do
   enable_extension "pg_buffercache"
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "postgis"
   enable_extension "uuid-ossp"
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: { type: :string, limit: 150 }, force: :cascade do |t|
