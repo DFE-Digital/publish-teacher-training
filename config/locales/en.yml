@@ -707,6 +707,15 @@ en:
             title:  *add_accredited_provider
             caption: *add_accredited_provider
             add: *add_accredited_provider
+      training_partners:
+        index:
+          title: Training partners
+          download: Download
+          download_file: Download as a CSV file
+          export: Export all the courses you’re the accredited provider for.
+        courses:
+          index:
+            title: Training partner
       accredited_provider_search:
         new:
           title: &accredited_provider_title Enter a provider name, UKPRN or postcode
