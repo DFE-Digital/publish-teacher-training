@@ -47,7 +47,7 @@ module Support
                                        :provider_type,
                                        :ukprn,
                                        :urn,
-                                       :accrediting_provider,
+                                       :accredited,
                                        :accredited_provider_number)
     end
 
