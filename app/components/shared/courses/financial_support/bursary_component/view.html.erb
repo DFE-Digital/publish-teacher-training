@@ -5,13 +5,13 @@
         <h3 class="govuk-heading-m"><%= t("find.financial_support.bursaries") %></h3>
 
         <p class="govuk-body"><%= t("find.financial_support.bursary_amount", amount: number_to_currency(bursary_amount)) %> </p>
-        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), t("find.get_into_teaching.url_bursaries_and_scholarships")) %>.</p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), find_track_click_path(utm_content: "uk_citizens_bursary_bursaries_and_scholarships", url: t("find.get_into_teaching.url_bursaries_and_scholarships"))) %>.</p>
       <% end %>
 
       <h3 class="govuk-heading-m"><%= t("find.financial_support.student_loans") %></h3>
 
       <p class="govuk-body"><%= t("find.financial_support.eligible_for_student_loan") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.find_out_more_student_loans"), t("find.get_into_teaching.url_maintenance_loans")) %></p>
+      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.find_out_more_student_loans"), find_track_click_path(utm_content: "uk_citizens_bursary_maintenance_loans", url: t("find.get_into_teaching.url_maintenance_loans"))) %></p>
     </div>
   <% end %>
 <% end %>
@@ -25,11 +25,11 @@
           <h3 class="govuk-heading-m"><%= t("find.financial_support.bursaries") %></h3>
 
           <p class="govuk-body"><%= t("find.financial_support.bursary_amount", amount: number_to_currency(bursary_amount)) %> </p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), t("find.get_into_teaching.url_bursaries_and_scholarships")) %>.</p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary"), find_track_click_path(utm_content: "non_uk_citizens_bursary_bursaries_and_scholarships", url: t("find.get_into_teaching.url_bursaries_and_scholarships"))) %>.</p>
         <% end %>
       <% else %>
-      <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), t("find.get_into_teaching.url_non_uk_trainees")) %></p>
+        <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_bursary_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
     </div>
     <% end %>
   <% end %>
