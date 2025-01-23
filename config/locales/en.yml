@@ -304,7 +304,7 @@ en:
       providers:
         provider_search: "Provider name, code or UKPRN"
         course_search: "Course code"
-        accrediting_provider: "Accredited providers"
+        accredited: "Accredited providers"
         provider_type: "Provider Type"
         scitt: "SCITT"
         university: "University"
