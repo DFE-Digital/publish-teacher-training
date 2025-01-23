@@ -465,6 +465,12 @@ en:
     update: "Update user"
   publish:
     courses:
+      basic_details_tab:
+        ratifying_provider: Accredited provider
+      index:
+        ratifying_provider: Accredited provider
+      confirmation:
+        ratifying_provider: Accredited provider
       training_with_disabilities:
         show:
           heading: Training with disabilities and other needs at %{provider_name}
@@ -473,6 +479,16 @@ en:
       preview:
         training_with_disabilities: Training with disabilities
         training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
+      ratifying_provider:
+        new:
+          title: Accredited provider – %{name_and_code}
+        edit:
+          title: Accredited provider
+          add: Add accredited provider
+          update: Update accredited provider
+        show:
+          back: Back to %{course_name} (%{course_code})
+          heading: About %{provider_name}
     providers:
       details:
         page_title: Organisation details
