@@ -66,7 +66,7 @@ module Support
       filtered_records = text_search(filtered_records, filter_params[:text_search]) if filtered_records.respond_to?(:search)
       filtered_records = provider_search(filtered_records, filter_params[:provider_search]) if filtered_records.respond_to?(:provider_search)
       filtered_records = provider_type(filtered_records, filter_params[:provider_type])
-      filtered_records = provider_accredited_type(filtered_records, filter_params[:accrediting_provider])
+      filtered_records = provider_accredited_type(filtered_records, filter_params[:accredited])
       filtered_records = course_search(filtered_records, filter_params[:course_search]) if filtered_records.respond_to?(:course_search)
       filtered_records = user_type(filtered_records, filter_params[:user_type]) if filtered_records.respond_to?(:admins)
 
