@@ -34,25 +34,28 @@
       <%= @course.name_and_code %>
     </h1>
 
+    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
 
-    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-
-        <p class="govuk-hint govuk-body govuk-!-font-size-16">
-          <%= @course.provider_name %> normally
+        <p class="govuk-body govuk-!-font-size-16">
           <% case @course.course_code %>
             <% when "E026" %>
-              responds to applications within two weeks.
+              <strong>10 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
             <% when "R480" %>
-              takes over a month to respond to applications.
+              <strong>Over 200 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
             <% when "H971" %>
-              responds to applications within a week.
+              <strong>100 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
             <% when "36P4" %>
-              takes over a month to respond to applications
+              <strong>50 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
             <% when "Y404" %>
-              responds to applications within three weeks.
-        <% end %>
+              <strong>Be an early applicant</strong>.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
         </p>
       </div>
     </div>
@@ -143,7 +146,7 @@
                 </strong>
               </p>
               <span class="govuk-hint govuk-!-font-size-16">
-                The percentage of trainees at <%= @course.accrediting_provider.provider_name %> who achieved Qualified Teacher Status (QTS) in 2023
+                54 of 66 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
               </span>
             </dd>
           </div>
@@ -184,7 +187,7 @@
                 </strong>
               </p>
               <span class="govuk-hint govuk-!-font-size-16">
-                The percentage of trainees at <%= @course.accrediting_provider.provider_name %> who achieved Qualified Teacher Status (QTS) in 2023
+                192 of 200 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
               </span>
             </dd>
           </div>
@@ -225,7 +228,7 @@
                   </strong>
                 </p>
                 <span class="govuk-hint govuk-!-font-size-16">
-                  The percentage of trainees at <%= @course.accrediting_provider.provider_name %> who achieved Qualified Teacher Status (QTS) in 2023
+                 All 35 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
                 </span>
               </dd>
             </div>
@@ -266,7 +269,7 @@
                 </strong>
               </p>
               <span class="govuk-hint govuk-!-font-size-16">
-                The percentage of trainees at <%= @course.accrediting_provider.provider_name %> who achieved Qualified Teacher Status (QTS) in 2023
+                7 of 10 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
               </span>
             </dd>
           </div>
@@ -380,26 +383,31 @@
       <%= render partial: "find/courses/course_closed" %>
     <% end %>
 
-        <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
-      <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-       <p class="govuk-hint govuk-body govuk-!-font-size-16">
-          <%= @course.provider_name %> normally
+            <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
+    <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+        <p class="govuk-body govuk-!-font-size-16">
           <% case @course.course_code %>
             <% when "E026" %>
-              responds to applications within two weeks.
+              <strong>10 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
             <% when "R480" %>
-              takes over a month to respond to applications.
+              <strong>Over 200 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
             <% when "H971" %>
-              responds to applications within a week.
+              <strong>100 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
             <% when "36P4" %>
-              takes over a month to respond to applications
+              <strong>50 people</strong> have clicked Apply.<br><br>
+              <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
             <% when "Y404" %>
-              responds to applications within three weeks.
-        <% end %>
+              <strong>Be an early applicant</strong>.<br><br>
+              <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
+          <% end %>
         </p>
+      </div>
     </div>
-  </div>
 
   <br>
   <%= render partial: "find/courses/advice", locals: { course: @course } %>
