@@ -657,5 +657,52 @@ RSpec.describe Courses::Query do
         end
       end
     end
+
+    describe 'SQL injection tests for location search' do
+      let(:london) { build(:location, :london) }
+      let(:valid_latitude) { 51.5074 }
+      let(:valid_longitude) { -0.1278 }
+      let(:valid_radius) { 10 }
+
+      before do
+        create(
+          :course,
+          site_statuses: [
+            create(
+              :site_status,
+              :findable,
+              site: create(:site, latitude: london.latitude, longitude: london.longitude)
+            )
+          ]
+        )
+      end
+
+      it 'does not allow SQL injection via latitude' do
+        malicious_latitude = "1; DROP TABLE #{Course.table_name}; --"
+        params = { latitude: malicious_latitude, longitude: valid_longitude, radius: valid_radius }
+
+        expect { described_class.call(params: params) }.to raise_error(
+          ArgumentError, "invalid value for Float(): \"#{malicious_latitude}\""
+        )
+      end
+
+      it 'does not allow SQL injection via longitude' do
+        malicious_longitude = "1; DROP TABLE #{SiteStatus.table_name}; --"
+        params = { latitude: valid_latitude, longitude: malicious_longitude, radius: valid_radius }
+
+        expect { described_class.call(params: params) }.to raise_error(
+          ArgumentError, "invalid value for Float(): \"#{malicious_longitude}\""
+        )
+      end
+
+      it 'does not allow SQL injection via radius' do
+        malicious_radius = "10; DELETE FROM #{Course.table_name} WHERE 1=1; --"
+        params = { latitude: valid_latitude, longitude: valid_longitude, radius: malicious_radius }
+
+        expect { described_class.call(params: params) }.to raise_error(
+          ArgumentError, "invalid value for Float(): \"#{malicious_radius}\""
+        )
+      end
+    end
   end
 end

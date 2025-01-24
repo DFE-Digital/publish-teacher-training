@@ -130,10 +130,10 @@ module Courses
     def location_scope
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_miles = (params[:radius] || DEFAULT_RADIUS_IN_MILES).to_f
+      radius_in_miles = Float(params[:radius] || DEFAULT_RADIUS_IN_MILES)
       radius_in_meters = radius_in_miles * 1609.34
-      latitude = params[:latitude].to_f
-      longitude = params[:longitude].to_f
+      latitude = Float(params[:latitude])
+      longitude = Float(params[:longitude])
 
       @applied_scopes[:location] = {
         latitude: latitude,
