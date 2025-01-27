@@ -133,13 +133,13 @@ feature 'Publishing a course when course accrediting provider is invalid', { can
   end
 
   def and_i_fill_in_the_accredited_provider_form
-    publish_courses_new_accredited_provider_page.about_section_input.set('About course')
+    publish_new_accredited_provider_page.about_section_input.set('About course')
 
-    publish_courses_new_accredited_provider_page.submit.click
+    publish_new_accredited_provider_page.submit.click
   end
 
   def and_i_confirm_creation_of_the_accredited_provider
-    publish_courses_new_accredited_provider_page.submit.click
+    publish_new_accredited_provider_page.submit.click
   end
 
   def then_i_see_that_the_accredited_provider_has_been_added
