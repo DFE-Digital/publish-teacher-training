@@ -20,12 +20,15 @@
   <%= accordion.with_section(heading_text: t("find.financial_support.non_uk_citizens.title")) do %>
     <div data-qa="course__scholarship_and_bursary_details_non_uk">
 
-      <% if bursary_and_scholarship_eligible_subjects %>
-        <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
+      <% if FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
+        <% if bursary_and_scholarship_eligible_subjects %>
           <h3 class="govuk-heading-m"><%= t("find.financial_support.bursary_and_scholarships") %></h3>
 
           <p class="govuk-body" data-qa="course__scholarship_and_bursary_amount"><%= t("find.financial_support.bursary_and_scholarship_amount", scholarship_amount: number_to_currency(scholarship_amount), bursary_amount: number_to_currency(bursary_amount)) %> </p>
           <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.eligible_for_bursary_or_scholarship"), find_track_click_path(utm_content: "non_uk_citizens_bursary_and_scholarship_bursaries_and_scholarships", url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"))) %>.</p>
+        <% else %>
+          <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_bursary_and_scholarship_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
         <% end %>
       <% else %>
         <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.unlikely_to_get_help") %></p>
