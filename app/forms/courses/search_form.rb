@@ -13,6 +13,7 @@ module Courses
     attribute :qualifications
     attribute :level
     attribute :funding
+    attribute :provider_name
     attribute :location
     attribute :longitude
     attribute :latitude
@@ -22,6 +23,7 @@ module Courses
     attribute :qualification
     attribute :degree_required
     attribute :university_degree_status, :boolean
+    attribute :'provider.provider_name'
 
     def search_params
       attributes
@@ -29,6 +31,10 @@ module Courses
         .then { |params| params.except(*old_parameters) }
         .then { |params| transform_old_parameters(params) }
         .compact
+    end
+
+    def provider_name
+      old_provider_name_parameter.presence || super
     end
 
     def level
@@ -60,6 +66,7 @@ module Courses
       params.tap do
         params[:level] = level
         params[:minimum_degree_required] = minimum_degree_required
+        params[:provider_name] = provider_name
       end
     end
 
@@ -84,8 +91,12 @@ module Courses
       age_group == 'further_education' || qualification == ['pgce pgde']
     end
 
+    def old_provider_name_parameter
+      send(:'provider.provider_name')
+    end
+
     def old_parameters
-      %i[age_group qualification degree_required university_degree_status]
+      %i[age_group qualification degree_required university_degree_status provider.provider_name]
     end
   end
 end

@@ -35,6 +35,7 @@ module Courses
       @scope = applications_open_scope
       @scope = special_education_needs_scope
       @scope = funding_scope
+      @scope = provider_scope
       @scope = location_scope
 
       log_query_info
@@ -148,6 +149,22 @@ module Courses
       @applied_scopes[:funding] = params[:funding]
 
       @scope.where(funding: params[:funding])
+    end
+
+    def provider_scope
+      return @scope if params[:provider_name].blank?
+
+      provider_name = params[:provider_name]
+      @applied_scopes[:provider_name] = provider_name
+
+      providers = RecruitmentCycle.current.providers.where(provider_name:)
+      @scope.where(
+        provider_id: providers.select(:id)
+      ).or(
+        @scope.where(
+          accredited_provider_code: providers.select(:provider_code)
+        )
+      )
     end
 
     def location_scope
