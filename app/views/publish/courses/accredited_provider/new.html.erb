@@ -20,12 +20,7 @@
         <%= render "publish/shared/error_messages", error_keys: [:accredited_provider_code] %>
 
         <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_provider">
-          <% if @provider.accredited_bodies.length > 0 %>
-            <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
-          <% else %>
-            <%= fields.hidden_field :accredited_provider_code, value: :other %>
-            <%= render "provider_search_field", form: fields %>
-          <% end %>
+          <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
         </div>
       <% end %>
     <% end %>
