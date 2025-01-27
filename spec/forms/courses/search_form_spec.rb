@@ -162,6 +162,24 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when searching by provider' do
+      context 'when using the new parameter' do
+        let(:form) { described_class.new(provider_name: 'NIoT') }
+
+        it 'returns the correct search params with provider name' do
+          expect(form.search_params).to eq({ provider_name: 'NIoT' })
+        end
+      end
+
+      context 'when using the old parameter' do
+        let(:form) { described_class.new('provider.provider_name': 'NIoT') }
+
+        it 'returns the correct search params with provider name' do
+          expect(form.search_params).to eq({ provider_name: 'NIoT' })
+        end
+      end
+    end
+
     context 'when location is provided' do
       let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10) }
 

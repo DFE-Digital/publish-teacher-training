@@ -380,6 +380,60 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context 'when searching by provider name' do
+      let!(:warwick_provider) do
+        create(:provider, provider_name: 'Warwick University')
+      end
+      let!(:warwick_courses) do
+        create_list(:course, 2, :with_full_time_sites, provider: warwick_provider)
+      end
+      let!(:niot_provider) do
+        create(:provider, provider_name: 'NIoT')
+      end
+      let!(:niot_accredited_courses) do
+        create_list(:course, 2, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code)
+      end
+      let!(:essex_provider) do
+        create(:provider, provider_name: 'Essex University')
+      end
+      let!(:essex_courses) do
+        create_list(:course, 2, :with_full_time_sites, provider: essex_provider)
+      end
+
+      context 'when searching for the self ratified provider' do
+        let(:params) { { provider_name: 'Essex University' } }
+
+        it 'returns offered courses by the provider' do
+          expect(results).to match_collection(
+            essex_courses,
+            attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+
+      context 'when searching for the accredited provider' do
+        let(:params) { { provider_name: 'NIoT' } }
+
+        it 'returns offered courses by the provider' do
+          expect(results).to match_collection(
+            niot_accredited_courses,
+            attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+
+      context 'when no results' do
+        let(:params) { { provider_name: 'University that does not exist' } }
+
+        it 'returns no courses' do
+          expect(results).to match_collection(
+            [],
+            attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+    end
+
     shared_examples 'location search results' do |radius:|
       it "returns courses within a #{radius} mile radius" do
         params = { latitude: london.latitude, longitude: london.longitude, radius: }
