@@ -20,16 +20,17 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
         :resulting_in_undergraduate_degree_with_qts,
         subjects:,
         accept_gcse_equivalency: false,
-        accept_pending_gcse: false
+        accept_pending_gcse: false,
+        provider: create(:provider, provider_code: 'I31') # Avoid provider_code I30
       )
     end
 
     it 'renders A levels and GCSEs only and ignores degrees' do
-      expected_text = <<~TEXT
+      expected_text = <<~TEXT.chomp
         Entry requirements A levels Any subject - Grade A or above or equivalent qualification We’ll consider candidates with pending A levels. Equivalency tests We’ll consider candidates who need to take A level equivalency tests. Some text GCSEs Grade 4 (C) in English, maths and science or above, or equivalent qualification We will not consider candidates with pending GCSEs. Equivalency tests We will not consider candidates who need to take a GCSE equivalency test.
       TEXT
 
-      expect(result.text.gsub(/\r?\n/, ' ').squeeze(' ').strip).to include(expected_text.strip)
+      expect(result).to have_content(expected_text, normalize_ws: true)
     end
   end
 
