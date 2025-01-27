@@ -127,7 +127,6 @@ namespace :publish, as: :publish do
         end
         resource :accredited_provider, on: :member, only: %i[new], controller: 'courses/accredited_provider', path: 'accredited-provider' do
           get 'continue'
-          get 'search_new'
         end
         resource :student_visa_sponsorship, on: :member, controller: 'courses/student_visa_sponsorship', path: 'student-visa-sponsorship' do
           get 'continue'
