@@ -42,7 +42,7 @@ module Publish
         if params[:course]
           (params[:course] || ActionController::Parameters.new).permit(:age_range_in_years, :course_age_range_in_years_other_from, :course_age_range_in_years_other_to)
         else
-          @course.attributes.select { |k, _v| %w[age_range_in_years course_age_range_in_years_other_from course_age_range_in_years_other_to].include?(k) }
+          @course.attributes.slice('age_range_in_years', 'course_age_range_in_years_other_from', 'course_age_range_in_years_other_to')
         end
       end
 
