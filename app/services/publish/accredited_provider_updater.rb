@@ -24,7 +24,7 @@ module Publish
     end
 
     def update_provider
-      provider.update!(accrediting_provider: 'not_an_accredited_provider',
+      provider.update!(accredited: false,
                        accrediting_provider_enrichments: new_accrediting_provider_enrichments)
     end
 
