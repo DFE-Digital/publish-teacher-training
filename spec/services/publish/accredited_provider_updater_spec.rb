@@ -13,9 +13,9 @@ RSpec.describe Publish::AccreditedProviderUpdater do
     allow(Settings.features).to receive_messages(provider_partnerships: false)
   end
 
-  let(:provider_code) { 'A0' }
+  let(:provider_code) { 'R00' }
   let(:recruitment_cycle_year) { 2024 }
-  let(:new_accredited_provider_code) { 'A1' }
+  let(:new_accredited_provider_code) { 'S00' }
 
   let!(:recruitment_cycle) { create(:recruitment_cycle, year: recruitment_cycle_year) }
 
@@ -24,12 +24,12 @@ RSpec.describe Publish::AccreditedProviderUpdater do
   end
 
   describe '#update_provider' do
-    let!(:new_accredited_provider) { create(:provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
+    let!(:new_accredited_provider) { create(:accredited_provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
 
     describe 'updates the providers updated_at' do
       let(:updated_at) { 1.week.ago.change(sec: 0) }
       let!(:provider) do
-        create(:provider, :accredited_provider,
+        create(:provider,
                provider_code:,
                recruitment_cycle:,
                accrediting_provider_enrichments: nil,
@@ -43,7 +43,7 @@ RSpec.describe Publish::AccreditedProviderUpdater do
 
     context 'when Provider is an Accredited Provider' do
       let!(:provider) do
-        create(:provider, :accredited_provider,
+        create(:accredited_provider,
                provider_code:,
                recruitment_cycle:,
                accrediting_provider_enrichments: nil)
@@ -52,7 +52,7 @@ RSpec.describe Publish::AccreditedProviderUpdater do
       it 'updates the provider' do
         subject.update_provider
 
-        expect(provider.reload.accrediting_provider).to eq('not_an_accredited_provider')
+        expect(provider.reload.accredited).to be(false)
         expect(provider.reload.accredited_providers).to include(new_accredited_provider)
       end
     end
@@ -62,15 +62,14 @@ RSpec.describe Publish::AccreditedProviderUpdater do
         create(:provider,
                provider_code:,
                recruitment_cycle:,
-               accrediting_provider: 'not_an_accredited_provider',
-               accrediting_provider_enrichments: [{ UcasProviderCode: 'B1', Description: '' }])
+               accrediting_provider_enrichments: [{ UcasProviderCode: 'H11', Description: '' }])
       end
-      let(:accredited_provider) { create(:provider, provider_code: 'B1', recruitment_cycle:) }
+      let(:accredited_provider) { create(:accredited_provider, provider_code: 'H11', recruitment_cycle:) }
 
       it 'updates the provider' do
         subject.update_provider
 
-        expect(provider.reload.accrediting_provider).to eq('not_an_accredited_provider')
+        expect(provider.reload).not_to be_accredited
         expect(provider.reload.accredited_providers).to include(accredited_provider, new_accredited_provider)
       end
     end
@@ -96,7 +95,7 @@ RSpec.describe Publish::AccreditedProviderUpdater do
 
   describe '#update_courses' do
     let!(:provider) { create(:provider, provider_code:, recruitment_cycle:) }
-    let!(:new_accredited_provider) { create(:provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
+    let!(:new_accredited_provider) { create(:accredited_provider, provider_code: new_accredited_provider_code, recruitment_cycle:) }
 
     describe 'updates the courses updated_at' do
       let(:updated_at) { 1.week.ago.change(sec: 0) }
@@ -119,7 +118,7 @@ RSpec.describe Publish::AccreditedProviderUpdater do
     end
 
     context 'when the course has an Accredited Provider' do
-      let!(:course) { create(:course, provider:, accredited_provider_code: 'B1') }
+      let!(:course) { create(:course, provider:, accredited_provider_code: 'H11') }
 
       it "updates the course's Accrediting Provider" do
         subject.update_courses
