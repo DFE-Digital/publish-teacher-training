@@ -131,7 +131,6 @@ shared:
     - region_code
     - created_at
     - updated_at
-    - accrediting_provider
     - changed_at
     - recruitment_cycle_id
     - discarded_at
