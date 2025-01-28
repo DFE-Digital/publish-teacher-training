@@ -3329,7 +3329,7 @@ describe Course do
     context 'setting the funding to fee' do
       context 'when the provider is not self accredited' do
         it 'sets the funding to salary and the program_type to school_direct_training_programme' do
-          provider = build(:provider, accrediting_provider: :not_an_accredited_provider)
+          provider = build(:provider)
           course = create(:course, provider:, funding: 'fee')
 
           expect(course.funding).to eq('fee')

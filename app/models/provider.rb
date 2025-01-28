@@ -172,7 +172,7 @@ class Provider < ApplicationRecord
   def accredited_provider_type
     return unless accredited?
 
-    errors.add(:accrediting_provider, :invalid_provider_type) unless provider_type.to_s.in?(%w[scitt university])
+    errors.add(:accredited, :invalid_provider_type) unless provider_type.to_s.in?(%w[scitt university])
   end
 
   acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
