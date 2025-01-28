@@ -40,7 +40,7 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
       result = render_inline(described_class.new(course))
 
       expect(result.text).to include('Bursaries')
-      expect(result.text).to include('This course has a bursary of £2,000 available to eligible trainees.')
+      expect(result.text).to include('Bursaries of £2,000 are available to eligible trainees.')
     end
   end
 

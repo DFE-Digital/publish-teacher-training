@@ -9,6 +9,7 @@ body:not(.js-enabled) {
 
   .course-accordion .govuk-accordion__section-content {
     padding-bottom: govuk-spacing(3);
+    padding-top: 0px;
   }
 
   .course-accordion {
@@ -45,6 +46,8 @@ body:not(.js-enabled) {
 .course-accordion .govuk-accordion__section-content {
   padding-left: govuk-spacing(4);
   padding-right: govuk-spacing(4);
+  padding-top: 0px;
+  padding-bottom: 1px;
 }
 
 .course-accordion .govuk-accordion__section--orange {

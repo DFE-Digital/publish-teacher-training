@@ -13,7 +13,7 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
 
     it 'renders bursary details' do
       expect(page.has_text?('Find out whether you are eligible for a bursary')).to be true
-      expect(page.has_text?('This course has a bursary of £3,000 available to eligible trainees.')).to be true
+      expect(page.has_text?('Bursaries of £3,000 are available to eligible trainees.')).to be true
     end
   end
 
