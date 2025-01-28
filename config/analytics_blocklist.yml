@@ -108,7 +108,6 @@
     - uuid
     - discarded_at
   :provider:
-    - scheme_member
     - contact_name
     - email
     - telephone
