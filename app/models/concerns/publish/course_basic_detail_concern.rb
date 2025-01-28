@@ -73,7 +73,7 @@ module Publish
     end
 
     def errors
-      @course.errors.messages.select { |key, _message| error_keys.include?(key) }
+      @course.errors.messages.slice(*error_keys)
     end
 
     def error_keys
