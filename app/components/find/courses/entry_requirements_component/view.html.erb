@@ -87,7 +87,7 @@
   <% end %>
 
     <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
-      <%= accordion.with_section(heading_text: t("find.get_into_teaching.qualifications_outside_uk")) do %>
+      <%= accordion.with_section(heading_text: content_tag(:h3, t("find.get_into_teaching.qualifications_outside_uk"), class: "govuk-heading-m")) do %>
         <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
 
         <p class="govuk-body">
@@ -98,7 +98,7 @@
           <%= t("find.get_into_teaching.uk_enic_cost") %>
         </p>
 
-        <p class="govuk-body">
+        <p class="govuk-body govuk-!-padding-bottom-4">
           <%= t("find.get_into_teaching.learn_more_about_non_uk_qualifications_html") %>
         </p>
       <% end %>
