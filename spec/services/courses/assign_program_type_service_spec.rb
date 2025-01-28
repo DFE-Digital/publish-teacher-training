@@ -15,7 +15,7 @@ describe Courses::AssignProgramTypeService do
     let(:funding_type) { 'salary' }
 
     context 'and the course is not self_accredited' do
-      let(:provider) { create(:provider, accrediting_provider: 'N') }
+      let(:provider) { create(:provider) }
       let(:course) { create(:course, :with_accrediting_provider, provider:) }
 
       it 'returns :school_direct_salaried_training_programme' do
