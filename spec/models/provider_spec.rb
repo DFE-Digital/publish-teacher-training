@@ -121,7 +121,7 @@ describe Provider do
 
       it 'is invalid' do
         expect(provider).not_to be_valid
-        expect(provider.errors[:accrediting_provider]).to include('Accredited provider must not have Provider type school')
+        expect(provider.errors[:accredited]).to include('Accredited provider must not have Provider type school')
       end
     end
   end
@@ -368,7 +368,7 @@ describe Provider do
       allow(Settings.features).to receive(:provider_partnerships).and_return(true)
     end
 
-    let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
+    let(:provider) { create(:provider, accrediting_provider_enrichments:) }
     let!(:partnership) { create(:provider_partnership, training_provider: provider, accredited_provider:) }
 
     let(:accrediting_provider) { create(:accredited_provider) }
@@ -394,7 +394,7 @@ describe Provider do
       allow(Settings.features).to receive(:provider_partnerships).and_return(false)
     end
 
-    let(:provider) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
+    let(:provider) { create(:provider, accrediting_provider_enrichments:) }
 
     let(:accrediting_provider) { create(:accredited_provider) }
     let(:accredited_provider) { accrediting_provider }

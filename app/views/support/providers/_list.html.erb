@@ -26,7 +26,7 @@
 
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-            <% if provider.accrediting_provider_before_type_cast == "Y" %>
+            <% if provider.accredited? %>
                <% if provider.accredited_provider_number.present? %>
                   <%= govuk_tag(text: provider.accredited_provider_number, colour: "green") %>
                <% else %>

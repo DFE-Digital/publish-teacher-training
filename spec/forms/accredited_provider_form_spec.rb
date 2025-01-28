@@ -104,7 +104,7 @@ describe AccreditedProviderForm, type: :model do
         ]
       end
 
-      let(:model) { create(:provider, accrediting_provider: 'N', accrediting_provider_enrichments:) }
+      let(:model) { create(:provider, accrediting_provider_enrichments:) }
 
       it 'updates the provider with the new accredited provider information' do
         subject.save!
