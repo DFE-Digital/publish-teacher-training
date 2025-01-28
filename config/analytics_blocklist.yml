@@ -1,123 +1,123 @@
 ---
 :shared:
   :blazer_queries:
-  - id
-  - creator_id
-  - name
-  - description
-  - statement
-  - data_source
-  - status
-  - created_at
-  - updated_at
+    - id
+    - creator_id
+    - name
+    - description
+    - statement
+    - data_source
+    - status
+    - created_at
+    - updated_at
   :blazer_dashboard_queries:
-  - id
-  - dashboard_id
-  - query_id
-  - position
-  - created_at
-  - updated_at
+    - id
+    - dashboard_id
+    - query_id
+    - position
+    - created_at
+    - updated_at
   :blazer_dashboards:
-  - id
-  - creator_id
-  - name
-  - created_at
-  - updated_at
+    - id
+    - creator_id
+    - name
+    - created_at
+    - updated_at
   :blazer_checks:
-  - id
-  - creator_id
-  - query_id
-  - state
-  - schedule
-  - emails
-  - slack_channels
-  - check_type
-  - message
-  - last_run_at
-  - created_at
-  - updated_at
+    - id
+    - creator_id
+    - query_id
+    - state
+    - schedule
+    - emails
+    - slack_channels
+    - check_type
+    - message
+    - last_run_at
+    - created_at
+    - updated_at
   :blazer_audits:
-  - id
-  - user_id
-  - query_id
-  - statement
-  - data_source
-  - created_atator while
-  - created_at
+    - id
+    - user_id
+    - query_id
+    - statement
+    - data_source
+    - created_atator while
+    - created_at
   :organisation_provider:
-  - id
-  - provider_id
-  - organisation_id
+    - id
+    - provider_id
+    - organisation_id
   :audit:
-  - id
-  - auditable_id
-  - auditable_type
-  - associated_id
-  - associated_type
-  - user_id
-  - user_type
-  - username
-  - action
-  - audited_changes
-  - version
-  - comment
-  - remote_address
-  - request_uuid
-  - created_at
+    - id
+    - auditable_id
+    - auditable_type
+    - associated_id
+    - associated_type
+    - user_id
+    - user_type
+    - username
+    - action
+    - audited_changes
+    - version
+    - comment
+    - remote_address
+    - request_uuid
+    - created_at
   :user:
-  - email
-  - first_name
-  - last_name
-  - magic_link_token
-  - blazer_access
+    - email
+    - first_name
+    - last_name
+    - magic_link_token
+    - blazer_access
   :provider_ucas_preference:
-  - id
-  - provider_id
-  - type_of_gt12
-  - send_application_alerts
-  - application_alert_email
-  - gt12_response_destination
-  - created_at
-  - updated_at
+    - id
+    - provider_id
+    - type_of_gt12
+    - send_application_alerts
+    - application_alert_email
+    - gt12_response_destination
+    - created_at
+    - updated_at
   :organisation_user:
-  - id
-  - organisation_id
-  - user_id
+    - id
+    - organisation_id
+    - user_id
   :organisation:
-  - id
-  - name
-  - org_id
+    - id
+    - name
+    - org_id
   :course_enrichment:
-  - about_course
-  - course_length
-  - fee_details
-  - fee_international
-  - fee_uk_eu
-  - financial_support
-  - how_school_placements_work
-  - interview_process
-  - other_requirements
-  - personal_qualities
-  - required_qualifications
-  - salary_details
+    - about_course
+    - course_length
+    - fee_details
+    - fee_international
+    - fee_uk_eu
+    - financial_support
+    - how_school_placements_work
+    - interview_process
+    - other_requirements
+    - personal_qualities
+    - required_qualifications
+    - salary_details
   :contact:
-  - name
-  - email
-  - telephone
+    - name
+    - email
+    - telephone
   :site:
-  - uuid
-  - discarded_at
+    - uuid
+    - discarded_at
   :provider:
-  - scheme_member
-  - contact_name
-  - email
-  - telephone
-  - searchable
+    - scheme_member
+    - contact_name
+    - email
+    - telephone
+    - searchable
   :course:
-  - master_subject_id
-  - subordinate_subject_id
-  - campaign_name
+    - master_subject_id
+    - subordinate_subject_id
+    - campaign_name
   :gias_school:
-  - searchable
+    - searchable
   :data_migrations:
-  - version
+    - version
