@@ -380,7 +380,7 @@ RSpec.describe Courses::Query do
       end
     end
 
-    context 'when searching by provider name' do
+    context 'when searching by provider' do
       let!(:warwick_provider) do
         create(:provider, provider_name: 'Warwick University')
       end
@@ -400,7 +400,7 @@ RSpec.describe Courses::Query do
         create_list(:course, 2, :with_full_time_sites, provider: essex_provider)
       end
 
-      context 'when searching for the self ratified provider' do
+      context 'when searching by provider name for the self ratified provider' do
         let(:params) { { provider_name: 'Essex University' } }
 
         it 'returns offered courses by the provider' do
@@ -411,7 +411,18 @@ RSpec.describe Courses::Query do
         end
       end
 
-      context 'when searching for the accredited provider' do
+      context 'when searching by provider id for the self ratified provider' do
+        let(:params) { { provider_id: essex_provider.id } }
+
+        it 'returns offered courses by the provider' do
+          expect(results).to match_collection(
+            essex_courses,
+            attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+
+      context 'when searching by provider name for the accredited provider' do
         let(:params) { { provider_name: 'NIoT' } }
 
         it 'returns offered courses by the provider' do
@@ -422,7 +433,18 @@ RSpec.describe Courses::Query do
         end
       end
 
-      context 'when no results' do
+      context 'when searching by provider id for the accredited provider' do
+        let(:params) { { provider_id: niot_provider.id } }
+
+        it 'returns offered courses by the provider' do
+          expect(results).to match_collection(
+            niot_accredited_courses,
+            attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+
+      context 'when no results when searching by provider name' do
         let(:params) { { provider_name: 'University that does not exist' } }
 
         it 'returns no courses' do
