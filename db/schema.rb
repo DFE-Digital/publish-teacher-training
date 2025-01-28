@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_28_093042) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_28_141038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -295,7 +295,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_28_093042) do
   create_table "provider", id: :serial, force: :cascade do |t|
     t.text "address4"
     t.text "provider_name"
-    t.text "scheme_member"
     t.text "contact_name"
     t.text "year_code"
     t.text "provider_code"
