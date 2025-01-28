@@ -152,12 +152,16 @@ module Courses
     end
 
     def provider_scope
-      return @scope if params[:provider_name].blank?
+      return @scope if params[:provider_id].blank? && params[:provider_name].blank?
 
-      provider_name = params[:provider_name]
-      @applied_scopes[:provider_name] = provider_name
+      @applied_scopes[:provider] = params[:provider_id] || params[:provider_name]
 
-      providers = RecruitmentCycle.current.providers.where(provider_name:)
+      providers = if params[:provider_id].present?
+                    RecruitmentCycle.current.providers.where(id: params[:provider_id])
+                  else
+                    RecruitmentCycle.current.providers.where(provider_name: params[:provider_name])
+                  end
+
       @scope.where(
         provider_id: providers.select(:id)
       ).or(

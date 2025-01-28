@@ -178,6 +178,14 @@ RSpec.describe Courses::SearchForm do
           expect(form.search_params).to eq({ provider_name: 'NIoT' })
         end
       end
+
+      context 'when searching by provider id' do
+        let(:form) { described_class.new(provider_id: 1) }
+
+        it 'returns the correct search params with provider id' do
+          expect(form.search_params).to eq({ provider_id: 1 })
+        end
+      end
     end
 
     context 'when location is provided' do
