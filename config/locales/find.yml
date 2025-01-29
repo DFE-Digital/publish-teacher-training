@@ -151,6 +151,10 @@ en:
       primary_title: Visa sponsorship
       secondary_title: Do you need visa sponsorship?
     search:
+      primary: Primary (ages 3 to 11)
+      browse_primary: Browse primary courses
+      browse_secondary: Browse secondary courses
+      secondary: Secondary (ages 11 to 18)
       become_a_teacher: How to become a teacher
       become_a_teacher_html: |
         Check your qualifications, what funding is available and how to apply. %{link}

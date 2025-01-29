@@ -122,6 +122,22 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
+    <div class="quick-link-card">
+      <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
+      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: "/subjects?age_group=primary&l=2")) %></p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <div class="quick-link-card">
+      <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
+      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: "/subjects?age_group=secondary&l=2")) %></p>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
     <%= govuk_inset_text classes: "app-callout app-callout--pink" do %>
       <h3><%= t("find.search.become_a_teacher") %></h3>
       <%= t("find.search.become_a_teacher_html", link: govuk_link_to(t("find.search.become_a_teacher_link_text"), find_track_click_path(utm_content: "become_a_teacher", url: t("get_into_teaching.url_become_a_teacher")))) %>
