@@ -13,7 +13,7 @@ module Courses
     attribute :qualifications
     attribute :level
     attribute :funding
-    attribute :provider_id
+    attribute :provider_code
     attribute :provider_name
     attribute :location
     attribute :longitude
