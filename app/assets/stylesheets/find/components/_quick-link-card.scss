@@ -1,0 +1,12 @@
+.quick-link-card {
+  background-color: govuk-colour("light-grey");
+  padding: govuk-spacing(3);
+
+  @include govuk-media-query($from: tablet) {
+    padding: govuk-spacing(4);
+  }
+
+  @include govuk-media-query($until: tablet) {
+    margin-bottom: govuk-spacing(4);
+  }
+}
