@@ -179,11 +179,11 @@ RSpec.describe Courses::SearchForm do
         end
       end
 
-      context 'when searching by provider id' do
-        let(:form) { described_class.new(provider_id: 1) }
+      context 'when searching by provider code' do
+        let(:form) { described_class.new(provider_code: 'ABC') }
 
-        it 'returns the correct search params with provider id' do
-          expect(form.search_params).to eq({ provider_id: 1 })
+        it 'returns the correct search params with provider code' do
+          expect(form.search_params).to eq({ provider_code: 'ABC' })
         end
       end
     end

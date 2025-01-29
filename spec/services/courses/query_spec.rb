@@ -411,8 +411,8 @@ RSpec.describe Courses::Query do
         end
       end
 
-      context 'when searching by provider id for the self ratified provider' do
-        let(:params) { { provider_id: essex_provider.id } }
+      context 'when searching by provider code for the self ratified provider' do
+        let(:params) { { provider_code: essex_provider.provider_code } }
 
         it 'returns offered courses by the provider' do
           expect(results).to match_collection(
@@ -433,8 +433,8 @@ RSpec.describe Courses::Query do
         end
       end
 
-      context 'when searching by provider id for the accredited provider' do
-        let(:params) { { provider_id: niot_provider.id } }
+      context 'when searching by provider code for the accredited provider' do
+        let(:params) { { provider_code: niot_provider.provider_code } }
 
         it 'returns offered courses by the provider' do
           expect(results).to match_collection(
@@ -451,6 +451,48 @@ RSpec.describe Courses::Query do
           expect(results).to match_collection(
             [],
             attribute_names: %w[id name provider_name]
+          )
+        end
+      end
+
+      context 'when provider code from another cycle' do
+        let!(:last_cycle) { create(:recruitment_cycle, :previous) }
+        let!(:last_cycle_niot) do
+          create(
+            :provider,
+            provider_code: niot_provider.provider_code,
+            recruitment_cycle: last_cycle
+          )
+        end
+        let!(:last_cycle_niot_accredited_courses) do
+          create_list(:course, 2, :with_full_time_sites, accredited_provider_code: last_cycle_niot.provider_code, provider: create(:provider, recruitment_cycle: last_cycle))
+        end
+        let!(:last_cycle_essex_provider) do
+          create(:provider, provider_code: essex_provider.provider_code, recruitment_cycle: last_cycle)
+        end
+        let!(:last_cycle_essex_courses) do
+          create_list(:course, 2, :with_full_time_sites, provider: last_cycle_essex_provider)
+        end
+
+        it 'returns only accredited courses from current cycle' do
+          expect(
+            described_class.call(
+              params: { provider_code: last_cycle_niot.provider_code }
+            )
+          ).to match_collection(
+            niot_accredited_courses,
+            attribute_names: %w[id name provider_name recruitment_cycle]
+          )
+        end
+
+        it 'returns only courses from current cycle' do
+          expect(
+            described_class.call(
+              params: { provider_code: last_cycle_essex_provider.provider_code }
+            )
+          ).to match_collection(
+            essex_courses,
+            attribute_names: %w[id name provider_name recruitment_cycle]
           )
         end
       end

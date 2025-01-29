@@ -24,7 +24,7 @@ module Find
           :funding,
           :minimum_degree_required,
           :age_group,
-          :provider_id,
+          :provider_code,
           :'provider.provider_name',
           :provider_name,
           :location,
