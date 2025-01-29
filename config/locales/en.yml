@@ -189,7 +189,7 @@ en:
       3_to_7:
         label: "3 to 7"
       5_to_11:
-        label: "5 to 11"
+        label: "3 to 11"
       7_to_11:
         label: "7 to 11"
       7_to_14:
@@ -1418,7 +1418,7 @@ en:
       3_to_7:
         label: "3 to 7"
       5_to_11:
-        label: "5 to 11"
+        label: "3 to 11"
       7_to_11:
         label: "7 to 11"
       7_to_14:

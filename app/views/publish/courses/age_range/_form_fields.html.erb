@@ -26,7 +26,7 @@
     <%= form.label :age_range_in_years, t("edit_options.age_range_in_years.other.label"), value: "other", class: "govuk-label govuk-radios__label" %>
   </div>
   <div class="govuk-radios__conditional <%= "govuk-radios__conditional--hidden" unless course.other_age_range? %>" id="other-container">
-    <p class="govuk-body">Enter an age range in years, for example: 5 to 11. The course must cover 4 or more school years.</p>
+    <p class="govuk-body">Enter an age range in years, for example: 3 to 11. The course must cover 4 or more school years.</p>
     <%= render "publish/shared/error_messages", error_keys: [:age_range_in_years_from] %>
     <%= render "publish/shared/error_wrapper", error_keys: [:age_range_in_years_from], data_qa: "course__age_range_in_years_from" do %>
       <label class="govuk-label" for="course_course_age_range_in_years_other_from">From</label>
