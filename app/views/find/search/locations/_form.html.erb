@@ -120,21 +120,23 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half">
-    <div class="quick-link-card">
-      <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
-      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: "/subjects?age_group=primary&l=2")) %></p>
+<% if Settings.features.v2_results.present? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <div class="quick-link-card">
+        <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: "/subjects?age_group=primary&l=2")) %></p>
+      </div>
     </div>
-  </div>
 
-  <div class="govuk-grid-column-one-half">
-    <div class="quick-link-card">
-      <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
-      <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: "/subjects?age_group=secondary&l=2")) %></p>
+    <div class="govuk-grid-column-one-half">
+      <div class="quick-link-card">
+        <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: "/subjects?age_group=secondary&l=2")) %></p>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
