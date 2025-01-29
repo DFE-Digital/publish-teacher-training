@@ -40,7 +40,7 @@ module Courses
     def minimum_degree_required
       return super if degree_required.nil? && university_degree_status.nil?
 
-      degree_required_transformation || university_degree_status_transformation || super
+      university_degree_status_transformation || degree_required_transformation || super
     end
 
     def secondary_subjects

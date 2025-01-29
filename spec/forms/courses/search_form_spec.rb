@@ -135,6 +135,12 @@ RSpec.describe Courses::SearchForm do
                          to: { minimum_degree_required: 'no_degree_required' }
       end
 
+      context 'when old undergraduate params is used always takes precedence over degree required old param' do
+        include_examples 'minimum degree required in search params',
+                         from: { degree_required: 'show_all_courses', university_degree_status: false },
+                         to: { minimum_degree_required: 'no_degree_required' }
+      end
+
       context 'when param value does not exist' do
         include_examples 'minimum degree required in search params',
                          from: { degree_required: 'does_not_exist' },
