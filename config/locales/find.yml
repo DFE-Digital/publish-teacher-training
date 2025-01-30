@@ -433,7 +433,7 @@ en:
             other: "%{formatted_count} courses found"
   helpers:
     legend:
-      courses_query_filters:
+      courses_search_form:
         can_sponsor_visa_html: Visa sponsorship<span class="govuk-visually-hidden"> filter</span>
         primary_html: Primary<span class="govuk-visually-hidden"> filter</span>
         secondary_html: Secondary<span class="govuk-visually-hidden"> filter</span>
@@ -445,12 +445,17 @@ en:
         funding_html: Fee or salary<span class="govuk-visually-hidden"> filter</span>
         applications_open_html: Applications open<span class="govuk-visually-hidden"> filter</span>
     hint:
-      courses_query_filters:
+      courses_search_form:
         primary: (ages 3 to 11)
         further_education: (ages 16 and over)
         secondary: (ages 11 to 18)
+    submit:
+      courses_search_form:
+        filters: Apply filters
+        search: Search
+        order: Sort
     label:
-      courses_query_filters:
+      courses_search_form:
         can_sponsor_visa: Only show courses with visa sponsorship
         special_education_needs: Only show courses with a SEND specialism
         applications_open: Only show courses open for applications
@@ -471,6 +476,14 @@ en:
           fee: Fee - no salary
           salary: Salary
           apprenticeship: Teaching apprenticeship - with salary
+        ordering:
+          location: Sorted by distance
+          non_location: Sorted by
+          options:
+            course_name_ascending: Course name (A-Z)
+            course_name_descending: Course name (Z-A)
+            provider_name_ascending: Training provider (A-Z)
+            provider_name_descending: Training provider (Z-A)
   activemodel:
     errors:
       models:

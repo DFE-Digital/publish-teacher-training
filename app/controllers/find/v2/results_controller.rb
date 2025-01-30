@@ -31,6 +31,7 @@ module Find
           :latitude,
           :longitude,
           :radius,
+          :order,
           :age_group,
           :degree_required,
           :university_degree_status,

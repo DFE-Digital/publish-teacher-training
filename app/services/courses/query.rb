@@ -38,6 +38,14 @@ module Courses
       @scope = provider_scope
       @scope = location_scope
 
+      if @applied_scopes[:location].blank?
+        @scope = default_ordering_scope
+        @scope = course_name_ascending_order_scope
+        @scope = course_name_descending_order_scope
+        @scope = provider_name_ascending_order_scope
+        @scope = provider_name_descending_order_scope
+      end
+
       log_query_info
 
       @scope
@@ -214,10 +222,94 @@ module Courses
         .order('minimum_distance_to_search_location ASC')
     end
 
+    def default_ordering_scope
+      return @scope if params[:order].present?
+
+      params[:order] = 'course_name_ascending'
+
+      @scope
+    end
+
+    def course_name_ascending_order_scope
+      return @scope unless params[:order] == 'course_name_ascending'
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select('course.*, provider.provider_name')
+        .joins(:provider)
+        .order(
+          {
+            courses_table[:name] => :asc,
+            providers_table[:provider_name] => :asc,
+            courses_table[:course_code] => :asc
+          }
+        )
+    end
+
+    def course_name_descending_order_scope
+      return @scope unless params[:order] == 'course_name_descending'
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select('course.*, provider.provider_name')
+        .joins(:provider)
+        .order(
+          {
+            courses_table[:name] => :desc,
+            providers_table[:provider_name] => :asc,
+            courses_table[:course_code] => :asc
+          }
+        )
+    end
+
+    def provider_name_ascending_order_scope
+      return @scope unless params[:order] == 'provider_name_ascending'
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select('course.*, provider.provider_name')
+        .joins(:provider)
+        .order(
+          {
+            providers_table[:provider_name] => :asc,
+            courses_table[:name] => :asc,
+            courses_table[:course_code] => :asc
+          }
+        )
+    end
+
+    def provider_name_descending_order_scope
+      return @scope unless params[:order] == 'provider_name_descending'
+
+      @applied_scopes[:order] = params[:order]
+
+      @scope
+        .select('course.*, provider.provider_name')
+        .joins(:provider)
+        .order(
+          {
+            providers_table[:provider_name] => :desc,
+            courses_table[:name] => :asc,
+            courses_table[:course_code] => :asc
+          }
+        )
+    end
+
     private
 
     def log_query_info
       Courses::QueryLogger.new(self).call
+    end
+
+    def courses_table
+      Course.arel_table
+    end
+
+    def providers_table
+      Provider.arel_table
     end
   end
 end
