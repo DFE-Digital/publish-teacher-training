@@ -196,6 +196,52 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when ordering is provided' do
+      context 'when new params' do
+        let(:form) { described_class.new(order: 'course_name_ascending') }
+
+        it 'returns the correct search params with order' do
+          expect(form.search_params).to eq({ order: 'course_name_ascending' })
+        end
+      end
+
+      shared_examples 'converts old ordering' do |mapping|
+        let(:form) { described_class.new(mapping[:from]) }
+
+        it "maps #{mapping[:from]} to #{mapping[:to]}" do
+          expect(form.search_params).to eq(mapping[:to])
+        end
+
+        it "returns the expected #{mapping[:to].keys.first} value" do
+          expect(form.order).to eq(mapping[:to].values.first)
+        end
+      end
+
+      context 'when using old course name ascending order params' do
+        include_examples 'converts old ordering', from: { sortby: 'course_asc' }, to: { order: 'course_name_ascending' }
+      end
+
+      context 'when using old course name descending order params' do
+        include_examples 'converts old ordering', from: { sortby: 'course_desc' }, to: { order: 'course_name_descending' }
+      end
+
+      context 'when using old provider name ascending order params' do
+        include_examples 'converts old ordering', from: { sortby: 'provider_asc' }, to: { order: 'provider_name_ascending' }
+      end
+
+      context 'when using old provider name descending order params' do
+        include_examples 'converts old ordering', from: { sortby: 'provider_desc' }, to: { order: 'provider_name_descending' }
+      end
+
+      context 'when using old order param with a non existent value' do
+        include_examples 'converts old ordering', from: { sortby: 'something' }, to: {}
+      end
+
+      context 'when using old order params with a non existent value and also using the new parameter' do
+        include_examples 'converts old ordering', from: { sortby: 'something', order: 'course_name_ascending' }, to: { order: 'course_name_ascending' }
+      end
+    end
+
     context 'when no attributes are set' do
       let(:form) { described_class.new }
 
