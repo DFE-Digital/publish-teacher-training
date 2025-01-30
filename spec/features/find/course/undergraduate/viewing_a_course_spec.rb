@@ -16,7 +16,9 @@ feature 'Viewing an undergraduate course' do
   scenario 'user visits get into teaching advice page' do
     given_there_is_a_findable_undergraduate_course
     when_i_visit_the_course_page
-    and_i_click_to_contact_get_into_teaching
+    then_i_see_the_tda_advice_callout
+    and_i_do_not_see_the_support_and_advice_callout
+    when_i_click_to_contact_get_into_teaching
     then_i_am_redirected_to_the_git_help_and_support_page
   end
 
@@ -24,14 +26,6 @@ feature 'Viewing an undergraduate course' do
     user = create(:user, providers: [build(:provider, provider_type: 'lead_school', sites: [build(:site), build(:site)], study_sites: [build(:site, :study_site), build(:site, :study_site)])])
     provider = user.providers.first
     create(:provider, :accredited_provider, provider_code: '1BK')
-    accredited_provider = create(:provider, :accredited_provider, provider_code: '1BJ')
-    provider.accrediting_provider_enrichments = []
-    provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
-      {
-        UcasProviderCode: accredited_provider.provider_code,
-        Description: 'description'
-      }
-    )
     @course = create(:course, :published_teacher_degree_apprenticeship, :secondary, provider:, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
   end
 
@@ -42,15 +36,22 @@ feature 'Viewing an undergraduate course' do
     )
   end
 
-  def and_i_click_to_contact_get_into_teaching
-    expect(page).to have_content('Support and advice')
-    expect(page).to have_content('You can contact Get Into Teaching for free support')
-    click_link_or_button('contact Get Into Teaching')
+  def then_i_see_the_tda_advice_callout
+    expect(find_course_show_page.course_tda_advice).to have_css(:h2, text: 'Teacher degree apprenticeship')
+    expect(find_course_show_page.course_tda_advice).to have_content('On a teacher degree apprenticeship you’ll work in a school and earn a salary while getting a bachelor’s degree and qualified teacher status (QTS).')
+  end
+
+  def and_i_do_not_see_the_support_and_advice_callout
+    expect(page).to have_no_css(:h2, text: 'Support and advice')
+  end
+
+  def when_i_click_to_contact_get_into_teaching
+    click_link_or_button('Find out more about teacher degree apprenticeships.')
   end
 
   def then_i_am_redirected_to_the_git_help_and_support_page
     expect(page.current_url).to eq(
-      'https://getintoteaching.education.gov.uk/help-and-support'
+      'https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships'
     )
   end
 end
