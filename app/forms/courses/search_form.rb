@@ -26,6 +26,7 @@ module Courses
     attribute :degree_required
     attribute :university_degree_status, :boolean
     attribute :'provider.provider_name'
+    attribute :sortby
 
     def search_params
       attributes
@@ -43,6 +44,12 @@ module Courses
       return 'further_education' if old_further_education_parameters?
 
       super
+    end
+
+    def order
+      return super if sortby.blank?
+
+      sort_by_transformation || super
     end
 
     def minimum_degree_required
@@ -92,10 +99,11 @@ module Courses
         params[:level] = level
         params[:minimum_degree_required] = minimum_degree_required
         params[:provider_name] = provider_name
+        params[:order] = order
       end
     end
 
-    DEGREE_REQUIRED_OLD_PARAMETERS = {
+    DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES = {
       'show_all_courses' => 'two_one',
       'two_two' => 'two_two',
       'third_class' => 'third_class',
@@ -103,7 +111,18 @@ module Courses
     }.freeze
 
     def degree_required_transformation
-      DEGREE_REQUIRED_OLD_PARAMETERS[degree_required]
+      DEGREE_REQUIRED_OLD_VALUES_TO_NEW_VALUES[degree_required]
+    end
+
+    SORT_BY_OLD_VALUES_TO_NEW_VALUES = {
+      'course_asc' => 'course_name_ascending',
+      'course_desc' => 'course_name_descending',
+      'provider_asc' => 'provider_name_ascending',
+      'provider_desc' => 'provider_name_descending'
+    }.freeze
+
+    def sort_by_transformation
+      SORT_BY_OLD_VALUES_TO_NEW_VALUES[sortby]
     end
 
     def university_degree_status_transformation
@@ -121,7 +140,7 @@ module Courses
     end
 
     def old_parameters
-      %i[age_group qualification degree_required university_degree_status provider.provider_name]
+      %i[age_group qualification degree_required university_degree_status provider.provider_name sortby]
     end
   end
 end

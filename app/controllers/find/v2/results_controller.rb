@@ -35,6 +35,7 @@ module Find
           :age_group,
           :degree_required,
           :university_degree_status,
+          :sortby,
           subjects: [],
           study_types: [],
           qualifications: [],
