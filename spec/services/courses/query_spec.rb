@@ -31,16 +31,16 @@ RSpec.describe Courses::Query do
 
     context 'when filter for visa sponsorship' do
       let!(:course_that_sponsor_visa) do
-        create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa)
+        create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: 'Art and design')
       end
       let!(:another_course_that_sponsor_visa) do
-        create(:course, :with_full_time_sites, :can_sponsor_student_visa)
+        create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: 'Biology')
       end
       let!(:another_course_that_sponsor_all_visas) do
-        create(:course, :with_full_time_sites, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa)
+        create(:course, :with_full_time_sites, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, name: 'Computing')
       end
       let!(:course_that_does_not_sponsor_visa) do
-        create(:course, :with_full_time_sites, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false)
+        create(:course, :with_full_time_sites, can_sponsor_skilled_worker_visa: false, can_sponsor_student_visa: false, name: 'Drama')
       end
 
       let(:params) { { can_sponsor_visa: 'true' } }
@@ -132,16 +132,16 @@ RSpec.describe Courses::Query do
 
     context 'when filter by qualifications' do
       let!(:qts_course) do
-        create(:course, :with_full_time_sites, qualification: 'qts')
+        create(:course, :with_full_time_sites, qualification: 'qts', name: 'Art and design')
       end
       let!(:pgce_with_qts_course) do
-        create(:course, :with_full_time_sites, qualification: 'pgce_with_qts')
+        create(:course, :with_full_time_sites, qualification: 'pgce_with_qts', name: 'Biology')
       end
       let!(:pgde_with_qts_course) do
-        create(:course, :with_full_time_sites, qualification: 'pgde_with_qts')
+        create(:course, :with_full_time_sites, qualification: 'pgde_with_qts', name: 'Computing')
       end
       let!(:course_without_qts) do
-        create(:course, :with_full_time_sites, qualification: 'undergraduate_degree_with_qts')
+        create(:course, :with_full_time_sites, qualification: 'undergraduate_degree_with_qts', name: 'Drama')
       end
 
       context 'when filter by qts' do
@@ -231,19 +231,19 @@ RSpec.describe Courses::Query do
 
     context 'when filter by degree grade requirements' do
       let!(:requires_two_one_course) do
-        create(:course, :published_postgraduate, degree_grade: 'two_one')
+        create(:course, :published_postgraduate, degree_grade: 'two_one', name: 'Art and design')
       end
       let!(:requires_two_two_course) do
-        create(:course, :published_postgraduate, degree_grade: 'two_two')
+        create(:course, :published_postgraduate, degree_grade: 'two_two', name: 'Biology')
       end
       let!(:requires_third_class_course) do
-        create(:course, :published_postgraduate, degree_grade: 'third_class')
+        create(:course, :published_postgraduate, degree_grade: 'third_class', name: 'Computing')
       end
       let!(:requires_pass_degree) do
-        create(:course, :published_postgraduate, degree_grade: 'not_required')
+        create(:course, :published_postgraduate, degree_grade: 'not_required', name: 'Drama')
       end
       let!(:undergraduate_does_not_require_degree_course) do
-        create(:course, :published_teacher_degree_apprenticeship, degree_grade: 'not_required')
+        create(:course, :published_teacher_degree_apprenticeship, degree_grade: 'not_required', name: 'Mathematics')
       end
 
       context 'when filter by two_one' do
@@ -304,13 +304,13 @@ RSpec.describe Courses::Query do
 
     context 'when filter by funding' do
       let!(:fee_course) do
-        create(:course, :with_full_time_sites, funding: 'fee')
+        create(:course, :with_full_time_sites, funding: 'fee', name: 'Art and design')
       end
       let!(:salaried_course) do
-        create(:course, :with_full_time_sites, funding: 'salary')
+        create(:course, :with_full_time_sites, funding: 'salary', name: 'Biology')
       end
       let!(:apprenticeship_course) do
-        create(:course, :with_full_time_sites, funding: 'apprenticeship')
+        create(:course, :with_full_time_sites, funding: 'apprenticeship', name: 'Computing')
       end
 
       context 'when filter by fee' do
@@ -385,19 +385,28 @@ RSpec.describe Courses::Query do
         create(:provider, provider_name: 'Warwick University')
       end
       let!(:warwick_courses) do
-        create_list(:course, 2, :with_full_time_sites, provider: warwick_provider)
+        [
+          create(:course, :with_full_time_sites, provider: warwick_provider, name: 'Biology'),
+          create(:course, :with_full_time_sites, provider: warwick_provider, name: 'Computing')
+        ]
       end
       let!(:niot_provider) do
         create(:provider, provider_name: 'NIoT')
       end
       let!(:niot_accredited_courses) do
-        create_list(:course, 2, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code)
+        [
+          create(:course, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code, name: 'Biology'),
+          create(:course, :with_full_time_sites, accredited_provider_code: niot_provider.provider_code, name: 'Computing')
+        ]
       end
       let!(:essex_provider) do
         create(:provider, provider_name: 'Essex University')
       end
       let!(:essex_courses) do
-        create_list(:course, 2, :with_full_time_sites, provider: essex_provider)
+        [
+          create(:course, :with_full_time_sites, provider: essex_provider, name: 'Biology'),
+          create(:course, :with_full_time_sites, provider: essex_provider, name: 'Computing')
+        ]
       end
 
       context 'when searching by provider name for the self ratified provider' do
@@ -522,12 +531,14 @@ RSpec.describe Courses::Query do
       let(:guildford) { build(:location, :guildford) }
       let(:oxford) { build(:location, :oxford) }
       let(:edinburgh) { build(:location, :edinburgh) }
+      let(:london_provider) { create(:provider, provider_name: 'London university') }
 
       let!(:course_london_result) do
         test_search_result_wrapper_klass.new(
           create(
             :course,
             name: 'Mathematics (London)',
+            provider: london_provider,
             site_statuses: [
               create(
                 :site_status,
@@ -545,6 +556,7 @@ RSpec.describe Courses::Query do
           create(
             :course,
             name: 'Science (Canary Wharf)',
+            provider: london_provider,
             site_statuses: [
               create(
                 :site_status,
@@ -847,6 +859,52 @@ RSpec.describe Courses::Query do
           ]
         end
       end
+
+      context 'when latitude and longitude are given' do
+        it 'always order by distance and ignores the order param' do
+          %w[
+            course_name_ascending
+            course_name_descending
+            provider_name_ascending
+            provider_name_descending
+          ].each do |order|
+            results = described_class.call(
+              params: {
+                latitude: london.latitude,
+                longitude: london.longitude,
+                radius: 10,
+                order:
+              }
+            )
+            expect(results).to match_collection(
+              [
+                course_london_result,
+                course_canary_wharf_result,
+                course_lewisham_result
+              ],
+              attribute_names: %w[name minimum_distance_to_search_location]
+            )
+          end
+        end
+
+        it 'always order by distance when search by provider' do
+          results = described_class.call(
+            params: {
+              latitude: london.latitude,
+              longitude: london.longitude,
+              radius: 10,
+              provider_code: course_london_result.provider_code
+            }
+          )
+          expect(results).to match_collection(
+            [
+              course_london_result,
+              course_canary_wharf_result
+            ],
+            attribute_names: %w[name minimum_distance_to_search_location]
+          )
+        end
+      end
     end
 
     describe 'SQL injection tests for location search' do
@@ -893,6 +951,123 @@ RSpec.describe Courses::Query do
         expect { described_class.call(params: params) }.to raise_error(
           ArgumentError, "invalid value for Float(): \"#{malicious_radius}\""
         )
+      end
+    end
+
+    context 'when ordering' do
+      let(:niot_provider) { create(:provider, provider_name: 'Niot University') }
+      let(:essex_provider) { create(:provider, provider_name: 'Essex University') }
+      let(:oxford_provider) { create(:provider, provider_name: 'Oxford University') }
+      let(:manchester_provider) { create(:provider, provider_name: 'Manchester University') }
+
+      let!(:biology) do
+        create(:course, :with_full_time_sites, name: 'Biology', provider: niot_provider)
+      end
+      let!(:chemistry) do
+        create(:course, :with_full_time_sites, name: 'Chemistry', provider: essex_provider)
+      end
+      let!(:mathematics) do
+        create(:course, :with_full_time_sites, name: 'Mathematics', provider: oxford_provider)
+      end
+      let!(:art_and_design) do
+        create(:course, :with_full_time_sites, name: 'Art and Design', provider: manchester_provider)
+      end
+
+      context 'when ordering by course name ascending' do
+        let(:params) { { order: 'course_name_ascending' } }
+
+        it 'returns courses ordered by course name ascending' do
+          expect(results).to match_collection(
+            [
+              art_and_design,
+              biology,
+              chemistry,
+              mathematics
+            ],
+            attribute_names: %w[name]
+          )
+        end
+      end
+
+      context 'when ordering by course name descending' do
+        let(:params) { { order: 'course_name_descending' } }
+
+        it 'returns courses ordered by course name descending' do
+          expect(results).to match_collection(
+            [
+              mathematics,
+              chemistry,
+              biology,
+              art_and_design
+            ],
+            attribute_names: %w[name]
+          )
+        end
+      end
+
+      context 'when ordering by provider name ascending' do
+        let(:params) { { order: 'provider_name_ascending' } }
+
+        it 'returns courses ordered by provider name ascending' do
+          expect(results).to match_collection(
+            [
+              essex_provider.courses,
+              manchester_provider.courses,
+              niot_provider.courses,
+              oxford_provider.courses
+            ].flatten,
+            attribute_names: %w[name provider_name]
+          )
+        end
+      end
+
+      context 'when ordering by provider name descending' do
+        let(:params) { { order: 'provider_name_descending' } }
+
+        it 'returns courses ordered by provider name descending' do
+          expect(results).to match_collection(
+            [
+              oxford_provider.courses,
+              niot_provider.courses,
+              manchester_provider.courses,
+              essex_provider.courses
+            ].flatten,
+            attribute_names: %w[name]
+          )
+        end
+      end
+
+      context 'when searching by provider name' do
+        let(:provider) { create(:provider, provider_name: 'Manchester University') }
+        let!(:manchester_computing_course) do
+          create(:course, :with_full_time_sites, name: 'Computing', provider:)
+        end
+        let!(:manchester_biology_course) do
+          create(:course, :with_full_time_sites, name: 'Biology', provider:)
+        end
+        let!(:manchester_science_course) do
+          create(:course, :with_full_time_sites, name: 'Science', provider:)
+        end
+        let!(:manchester_primary_course) do
+          create(:course, :with_full_time_sites, name: 'Primary', provider:)
+        end
+        let!(:manchester_art_and_design_course) do
+          create(:course, :with_full_time_sites, name: 'Art and design', provider:)
+        end
+        let(:params) { { provider_code: provider.provider_code } }
+
+        it 'order courses by ascending order' do
+          expect(results).to match_collection(
+            [
+              manchester_art_and_design_course,
+              manchester_biology_course,
+              manchester_computing_course,
+              manchester_primary_course,
+              manchester_science_course
+            ],
+            attribute_names: %w[id name provider_name]
+          )
+        end
       end
     end
   end

@@ -19,6 +19,7 @@ module Courses
     attribute :longitude
     attribute :latitude
     attribute :radius
+    attribute :order
 
     attribute :age_group
     attribute :qualification
@@ -59,6 +60,29 @@ module Courses
 
     def primary_subjects
       Subject.where(type: 'PrimarySubject').order(:subject_name)
+    end
+
+    OrderingOption = Struct.new(:id, :name, keyword_init: true)
+
+    def ordering_options
+      [
+        OrderingOption.new(
+          id: 'course_name_ascending',
+          name: I18n.t('helpers.label.courses_search_form.ordering.options.course_name_ascending')
+        ),
+        OrderingOption.new(
+          id: 'course_name_descending',
+          name: I18n.t('helpers.label.courses_search_form.ordering.options.course_name_descending')
+        ),
+        OrderingOption.new(
+          id: 'provider_name_ascending',
+          name: I18n.t('helpers.label.courses_search_form.ordering.options.provider_name_ascending')
+        ),
+        OrderingOption.new(
+          id: 'provider_name_descending',
+          name: I18n.t('helpers.label.courses_search_form.ordering.options.provider_name_descending')
+        )
+      ]
     end
 
     private

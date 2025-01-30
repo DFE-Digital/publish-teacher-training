@@ -4,94 +4,115 @@
   <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
 </h1>
 
-<div class="app-filter-toggle"></div>
+<%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, method: :get do |form| %>
+  <div class="app-filter-toggle"></div>
 
-<div class="app-filter-layout">
-  <div class="app-filter-layout__filter">
-    <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, class: "app-filter", method: :get do |form| %>
-      <div class="app-filter__header">
-        <h2 class="govuk-heading-m">Filters</h2>
-      </div>
-
-      <div class="app-filter__content">
-        <%= form.govuk_submit "Apply filters" %>
-
-        <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.can_sponsor_visa"), size: "s" } %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :primary_subjects, legend: { text: t("helpers.legend.courses_query_filters.primary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_query_filters.primary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group" } do %>
-          <div class="scrollable-filter">
-            <% form.object.primary_subjects.each do |subject| %>
-              <%= form.govuk_check_box :subjects,
-              subject.subject_code,
-              label: { text: subject.subject_name } %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :secondary_subjects, legend: { text: t("helpers.legend.courses_query_filters.secondary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_query_filters.secondary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group", data: { controller: "filter-search" } } do %>
-          <div class="filter-search scrollable-filter" data-filter-search-target="optionsList">
-            <% form.object.secondary_subjects.each do |subject| %>
-              <%= form.govuk_check_box :subjects,
-              subject.subject_code,
-              label: { text: subject.subject_name } %>
-            <% end %>
-          </div>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t("helpers.legend.courses_query_filters.study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :study_types, "full_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.full_time"), size: "s" }, include_hidden: false %>
-          <%= form.govuk_check_box :study_types, "part_time", label: { text: t("helpers.label.courses_query_filters.study_type_options.part_time"), size: "s" }, include_hidden: false %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t("helpers.legend.courses_query_filters.qualifications_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :qualifications, "qts", label: { text: t("helpers.label.courses_query_filters.qualification_options.qts"), size: "s" }, include_hidden: false %>
-          <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t("helpers.label.courses_query_filters.qualification_options.qts_with_pgce_or_pgde"), size: "s" }, include_hidden: false %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t("helpers.legend.courses_query_filters.further_education_html"), size: "s" }, hint: { text: t("helpers.hint.courses_query_filters.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :level, "further_education", label: { text: t("helpers.label.courses_query_filters.further_education"), size: "s" }, multiple: false %>
-        <% end %>
-
-        <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t("helpers.legend.courses_query_filters.minimum_degree_required_html"), size: "s" }, class: "app-filter__group govuk-radios--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.two_one"), size: "s" } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.two_two"), size: "s" } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.third_class"), size: "s" } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.pass"), size: "s" } %>
-          <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t("helpers.label.courses_query_filters.minimum_degree_required_options.no_degree_required"), size: "s" } %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.special_education_needs"), size: "s" } %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t("helpers.legend.courses_query_filters.funding_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :funding, "fee", label: { text: t("helpers.label.courses_query_filters.funding_options.fee"), size: "s" }, include_hidden: false %>
-          <%= form.govuk_check_box :funding, "salary", label: { text: t("helpers.label.courses_query_filters.funding_options.salary"), size: "s" }, include_hidden: false %>
-          <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t("helpers.label.courses_query_filters.funding_options.apprenticeship"), size: "s" }, include_hidden: false %>
-        <% end %>
-
-        <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t("helpers.legend.courses_query_filters.applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
-          <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_query_filters.applications_open"), size: "s" } %>
-        <% end %>
-
-        <div class="govuk-!-margin-top-4">
-          <%= form.govuk_submit "Apply filters" %>
+  <div class="app-filter-layout">
+    <div class="app-filter-layout__filter app-filter">
+        <div class="app-filter__header">
+          <h2 class="govuk-heading-m">Filters</h2>
         </div>
+
+        <div class="app-filter__content">
+          <%= form.govuk_submit "Apply filters" %>
+
+          <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.courses_search_form.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.can_sponsor_visa"), size: "s" } %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :primary_subjects, legend: { text: t("helpers.legend.courses_search_form.primary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.primary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group" } do %>
+            <div class="scrollable-filter">
+              <% form.object.primary_subjects.each do |subject| %>
+                <%= form.govuk_check_box :subjects,
+                subject.subject_code,
+                label: { text: subject.subject_name } %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :secondary_subjects, legend: { text: t("helpers.legend.courses_search_form.secondary_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.secondary"), class: "govuk-!-font-size-16" }, class: "govuk-checkboxes--small", hidden: false, multiple: false, form_group: { class: "app-filter__group", data: { controller: "filter-search" } } do %>
+            <div class="filter-search scrollable-filter" data-filter-search-target="optionsList">
+              <% form.object.secondary_subjects.each do |subject| %>
+                <%= form.govuk_check_box :subjects,
+                subject.subject_code,
+                label: { text: subject.subject_name } %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :study_types, legend: { text: t("helpers.legend.courses_search_form.study_type_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :study_types, "full_time", label: { text: t("helpers.label.courses_search_form.study_type_options.full_time"), size: "s" }, include_hidden: false %>
+            <%= form.govuk_check_box :study_types, "part_time", label: { text: t("helpers.label.courses_search_form.study_type_options.part_time"), size: "s" }, include_hidden: false %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :qualifications, legend: { text: t("helpers.legend.courses_search_form.qualifications_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :qualifications, "qts", label: { text: t("helpers.label.courses_search_form.qualification_options.qts"), size: "s" }, include_hidden: false %>
+            <%= form.govuk_check_box :qualifications, "qts_with_pgce_or_pgde", label: { text: t("helpers.label.courses_search_form.qualification_options.qts_with_pgce_or_pgde"), size: "s" }, include_hidden: false %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :further_education, legend: { text: t("helpers.legend.courses_search_form.further_education_html"), size: "s" }, hint: { text: t("helpers.hint.courses_search_form.further_education"), class: "govuk-!-font-size-16" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :level, "further_education", label: { text: t("helpers.label.courses_search_form.further_education"), size: "s" }, multiple: false %>
+          <% end %>
+
+          <%= form.govuk_radio_buttons_fieldset :minimum_degree_required, legend: { text: t("helpers.legend.courses_search_form.minimum_degree_required_html"), size: "s" }, class: "app-filter__group govuk-radios--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_radio_button :minimum_degree_required, "two_one", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.two_one"), size: "s" } %>
+            <%= form.govuk_radio_button :minimum_degree_required, "two_two", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.two_two"), size: "s" } %>
+            <%= form.govuk_radio_button :minimum_degree_required, "third_class", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.third_class"), size: "s" } %>
+            <%= form.govuk_radio_button :minimum_degree_required, "pass", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.pass"), size: "s" } %>
+            <%= form.govuk_radio_button :minimum_degree_required, "no_degree_required", label: { text: t("helpers.label.courses_search_form.minimum_degree_required_options.no_degree_required"), size: "s" } %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :send_courses, multiple: false, legend: { text: t("helpers.legend.courses_search_form.special_education_needs_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :send_courses, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.special_education_needs"), size: "s" } %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :funding, legend: { text: t("helpers.legend.courses_search_form.funding_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", multiple: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :funding, "fee", label: { text: t("helpers.label.courses_search_form.funding_options.fee"), size: "s" }, include_hidden: false %>
+            <%= form.govuk_check_box :funding, "salary", label: { text: t("helpers.label.courses_search_form.funding_options.salary"), size: "s" }, include_hidden: false %>
+            <%= form.govuk_check_box :funding, "apprenticeship", label: { text: t("helpers.label.courses_search_form.funding_options.apprenticeship"), size: "s" }, include_hidden: false %>
+          <% end %>
+
+          <%= form.govuk_check_boxes_fieldset :applications_open, multiple: false, legend: { text: t("helpers.legend.courses_search_form.applications_open_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
+            <%= form.govuk_check_box :applications_open, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.applications_open"), size: "s" } %>
+          <% end %>
+
+          <div class="govuk-!-margin-top-4">
+            <%= form.govuk_submit t("helpers.submit.courses_search_form.filters") %>
+          </div>
+        </div>
+    </div>
+
+    <% if @results.present? %>
+      <div class="app-filter-layout__content">
+        <div class="app-search-results-header">
+          <div class="app-search-results-header__sort">
+            <% if @search_params[:location].present? %>
+              <p class="govuk-body">
+                <%= I18n.t("helpers.label.courses_search_form.ordering.location") %>
+              </p>
+            <% else %>
+              <%= form.govuk_collection_select(
+                  :order,
+                  form.object.ordering_options,
+                  :id,
+                  :name,
+                  label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
+                  role: "listbox", form_group: {}
+                ) %>
+
+              <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block") %>
+            <% end %>
+          </div>
+        </div>
+
+        <ul class="app-search-results">
+          <% @results.each do |course| %>
+            <%= render Courses::SummaryCardComponent.new(course:, location: @search_params[:location], visa_sponsorship: @search_params[:can_sponsor_visa]) %>
+          <% end %>
+        </ul>
+
+        <%= govuk_pagination(pagy: @pagy) %>
       </div>
     <% end %>
   </div>
-
-  <% if @results.present? %>
-    <div class="app-filter-layout__content">
-      <ul class="app-search-results">
-        <% @results.each do |course| %>
-          <%= render Courses::SummaryCardComponent.new(course:, location: @search_params[:location], visa_sponsorship: @search_params[:can_sponsor_visa]) %>
-        <% end %>
-      </ul>
-
-      <%= govuk_pagination(pagy: @pagy) %>
-    </div>
-  <% end %>
-</div>
+<% end %>
