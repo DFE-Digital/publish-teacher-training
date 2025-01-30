@@ -67,7 +67,11 @@
       </p>
     <% end %>
 
-    <%= render partial: "find/courses/advice", locals: { course: @course } %>
+    <% if @course.teacher_degree_apprenticeship? %>
+      <%= render partial: "find/courses/tda_advice" %>
+    <% else %>
+      <%= render partial: "find/courses/advice", locals: { course: @course } %>
+    <% end %>
 
     <% if @course.application_status_closed? %>
       <%= render partial: "find/courses/course_closed" %>
