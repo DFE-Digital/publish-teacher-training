@@ -21,12 +21,22 @@ module Courses
     attribute :radius
     attribute :order
 
+    attribute :keywords
+
     attribute :age_group
     attribute :qualification
     attribute :degree_required
     attribute :university_degree_status, :boolean
     attribute :'provider.provider_name'
     attribute :sortby
+
+    def keywords_list
+      Subject.active
+    end
+
+    def keywords_synonyms_fields
+      %i[subject_code]
+    end
 
     def search_params
       attributes

@@ -16,6 +16,10 @@ class Subject < ApplicationRecord
     type == 'SecondarySubject'
   end
 
+  def name
+    subject_name
+  end
+
   def to_sym
     subject_name.parameterize.underscore.to_sym
   end

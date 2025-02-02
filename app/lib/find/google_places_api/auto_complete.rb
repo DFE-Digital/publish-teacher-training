@@ -9,26 +9,17 @@ module Find
         new.call(query)
       end
 
-      def initialize(client = Client.new)
-        @client = client
+      def initialize
+        @client = case Settings.find_search_api_name
+        when 'places_api_new'
+          NewPlacesClient.new
+        else
+          OldPlacesClient.new
+        end
       end
 
       def call(query)
-        response = @client.autocomplete(query:)
-
-        return [] unless response[:suggestions]
-
-        response[:suggestions].map do |suggestion|
-          place = suggestion[:placePrediction]
-
-          Result.new(
-            name: place.dig(:structuredFormat, :mainText, :text),
-            place_id: place[:placeId],
-            latitude: place.dig(:geometry, :location, :lat),
-            longitude: place.dig(:geometry, :location, :lng),
-            location_types: place[:types]
-          )
-        end
+        @client.autocomplete(query:)
       end
     end
   end

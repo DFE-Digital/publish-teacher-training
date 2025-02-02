@@ -87,18 +87,28 @@ find_v2_location_suggestions
     <% if @results.present? %>
       <div class="app-filter-layout__content">
         <div class="app-filter">
-          <%= f.govuk_text_field :keywords,
-            label: { text: "Subject", size: "s" },
-            autocomplete: "off",
-            form: "result-filters" %>
+          <div data-controller="subjects-autocomplete">
+            <%= render DfE::Autocomplete::View.new(
+               form,
+               attribute_name: :keywords,
+               form_field: form.govuk_select(
+                 :keywords,
+                 options_for_select(
+                   dfe_autocomplete_options(form.object.keywords_list, synonyms_fields: form.object.keywords_synonyms_fields),
+                   form.object.keywords
+                 ),
+                 label: { text: 'Subjects', size: 's' }
+               )
+             ) %>
+          </div>
 
-          <%= f.govuk_text_field :location,
+          <%= form.govuk_text_field :location,
             label: { text: "City, town or postcode", size: "s" },
             autocomplete: "off",
             form: "result-filters",
             input_html: { id: "location", role: "combobox", "aria-autocomplete": "list", "aria-describedby": "location__assistiveHint" } %>
 
-          <%= f.govuk_select :radius,
+          <%= form.govuk_select :radius,
             [["1 mile", 1], ["5 miles", 5], ["10 miles", 10], ["15 miles", 15],
              ["20 miles", 20], ["25 miles", 25], ["50 miles", 50], ["100 miles", 100],
              ["200 miles", 200]],
@@ -106,12 +116,9 @@ find_v2_location_suggestions
             form: "result-filters",
             selected: 10 %>
 
-          <%= f.govuk_button "Search",
-            form: "result-filters",
-            class: "govuk-button",
-            data: { module: "govuk-button", "govuk-button-init": "" },
-            style: "margin-bottom:5px;" %>
+          <%= form.govuk_submit "Search" %>
         </div>
+
         <div class="app-search-results-header">
           <div class="app-search-results-header__sort">
             <% if @search_params[:location].present? %>

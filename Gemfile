@@ -128,6 +128,9 @@ gem 'propshaft'
 # for sending analytics data to the analytics platform
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.15.4'
 
+# A library built on top of accessible-autocomplete from GovUk.
+gem 'dfe-autocomplete', require: 'dfe/autocomplete', github: 'DFE-Digital/dfe-autocomplete'
+
 # For running data migrations
 gem 'data_migrate', '11.2.0'
 

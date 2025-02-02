@@ -9,6 +9,7 @@ module Find
       BASE_URL = 'https://places.googleapis.com/v1/'
 #      DEFAULT_FIELD_MASK = "displayName,formattedAddress,location.latitude,location.longitude"
       DEFAULT_FIELD_MASK = '*'
+#      DEFAULT_FIELD_MASK = 'places.displayName,places.formattedAddress'
 
       def initialize(api_key: Settings.google.places_api_key)
         @api_key = api_key
@@ -26,6 +27,7 @@ module Find
           body: {
             input: query,
             regionCode: 'GB',
+            languageCode: 'en-GB',
             includedRegionCodes: ["uk"]
           },
           headers: { 'X-Goog-FieldMask' => field_mask }
