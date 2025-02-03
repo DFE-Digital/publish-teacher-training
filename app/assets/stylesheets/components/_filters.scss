@@ -6,6 +6,23 @@
 @import "@ministryofjustice/frontend/moj/objects/scrollable-pane";
 @import "@ministryofjustice/frontend/moj/components/filter/filter";
 
+.app-search-results-controls {
+  background-color: govuk-colour('light-grey');
+  padding: $govuk-gutter-half;
+
+  .autocomplete__input {
+    background-color: govuk-colour('white');
+  }
+
+  .govuk-form-group {
+    margin-bottom: govuk-spacing(4);
+  }
+
+  .govuk-button {
+    margin-bottom: 0;
+  }
+}
+
 .app-filter {
   box-shadow: none;
 
@@ -52,7 +69,7 @@
   @include govuk-media-query($until: tablet) {
     // only display a scrollbar if it there is overflow to scroll
     overflow: auto;
-    // At this width the filter has `position: fixed`. We should set a max width that will safely include the filter and a scrollbar if present 
+    // At this width the filter has `position: fixed`. We should set a max width that will safely include the filter and a scrollbar if present
     max-width: calc(100vw - calc(100vw - 100%));
   }
 }

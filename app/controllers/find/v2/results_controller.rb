@@ -14,38 +14,19 @@ module Find
       end
 
       def location_suggestions
-        render json: {
-          suggestions: [
-            {
-              name: "London",
-              place_id: "AhIJ2dGMjMMEdkgRqVqzRfvXh5M",
-              latitude: 51.5007,
-              longitude: -0.1246,
-              location_types: ["landmark", "point_of_interest"]
-            },
-            {
-              name: "Buckingham Palace",
-              place_id: "BhIJ4dD4QgmEdkgRm2QR8D9T0j8",
-              latitude: 52.5014,
-              longitude: -0.2419,
-              location_types: ["tourist_attraction", "point_of_interest", "establishment"]
-            },
-            {
-              name: "London Eye",
-              place_id: "ChIJ4dD4QgmEadkgRm2QR8D9T0j8",
-              latitude: 53.5014,
-              longitude: -0.3419,
-              location_types: ["tourist_attraction", "point_of_interest", "establishment"]
-            },
-            {
-              name: "National Museum",
-              place_id: "DhIJ4dD4QgmaEdkgRm2QR8D9T0j8",
-              latitude: 54.5014,
-              longitude: -0.4419,
-              location_types: ["tourist_attraction", "point_of_interest", "establishment"]
-            }
-          ]
-        }
+        suggestions = Find::LocationSuggestions.new(
+          params[:query],
+          suggestion_strategy: GoogleOldPlacesAPI::Client.new
+        ).call
+
+        Rails.logger.info(suggestions)
+
+        #suggestions = Find::LocationSuggestions.new(
+        #  'London',
+        #  suggestion_strategy: GoogleNewPlacesAPI::Client.new
+        #).call
+
+        render json: suggestions
       end
 
       private
@@ -62,6 +43,7 @@ module Find
           :provider_code,
           :'provider.provider_name',
           :provider_name,
+          :keywords,
           :location,
           :latitude,
           :longitude,

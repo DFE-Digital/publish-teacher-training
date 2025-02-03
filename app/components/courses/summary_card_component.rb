@@ -167,7 +167,7 @@ module Courses
     end
 
     def search_by_location?
-      @location.present?
+      @location.present? && @course.respond_to?(:minimum_distance_to_search_location)
     end
 
     def search_by_visa_sponsorship?
