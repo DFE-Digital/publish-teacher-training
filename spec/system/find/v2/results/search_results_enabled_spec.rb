@@ -284,6 +284,19 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     then_i_see_no_courses_found
   end
 
+  context 'when viewing results via the primary subjects quick link' do
+    before do
+      visit find_root_path
+      and_there_are_courses_with_primary_subjects
+    end
+
+    scenario 'filter by primary subjects' do
+      click_link_or_button 'Browse primary courses'
+      when_i_select_primary_courses
+      then_i_see_only_primary_specific_courses
+    end
+  end
+
   def given_there_are_courses_that_sponsor_visa
     create(:course, :with_full_time_sites, :can_sponsor_skilled_worker_visa, name: 'Biology', course_code: 'S872')
     create(:course, :with_full_time_sites, :can_sponsor_student_visa, name: 'Chemistry', course_code: 'K592')
@@ -437,6 +450,11 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def when_i_filter_by_primary
     check 'Primary', visible: :all
     and_i_apply_the_filters
+  end
+
+  def when_i_select_primary_courses
+    check 'Primary', visible: :all
+    click_link_or_button 'Find primary courses', match: :first
   end
 
   def when_i_filter_by_primary_with_science_too

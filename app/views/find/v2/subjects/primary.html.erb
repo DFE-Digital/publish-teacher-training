@@ -1,0 +1,20 @@
+<% content_for :page_title, title_with_error_prefix(I18n.t(".find.v2.subjects.primary.page_title"), @form.errors.present?) %>
+
+<%= form_with model: @form, url: find_submit_primary_path, method: :post do |f| %>
+  <%= f.govuk_error_summary link_base_errors_to: :subjects %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l"><%= I18n.t(".find.v2.subjects.primary.page_title") %></h1>
+
+      <%= f.govuk_collection_check_boxes :subjects, @primary_subject_options, :subject_code, :subject_name, legend: { hidden: true } %>
+
+      <%= f.govuk_submit I18n.t(".find.v2.subjects.primary.find_courses_button") %>
+
+      <%= render Shared::AdviceComponent::View.new(title: t(".how_primary_specialism_works")) do %>
+        <p class="govuk-body"><%= I18n.t(".find.v2.subjects.primary.how_primary_specialism_works_para_one") %></p>
+        <p class="govuk-body"><%= I18n.t(".find.v2.subjects.primary.how_primary_specialism_works_para_two") %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

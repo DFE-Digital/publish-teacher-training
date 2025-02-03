@@ -431,6 +431,14 @@ en:
             zero: "No courses found"
             one: "1 course found"
             other: "%{formatted_count} courses found"
+      subjects:
+        primary:
+          page_title: Browse primary courses
+          find_courses_button: Find primary courses
+          how_primary_specialism_works: How primary specialisms work
+          how_primary_specialism_works_para_one: As a trainee primary teacher you’ll learn to teach all subjects across the national curriculum.
+          how_primary_specialism_works_para_two: Some courses also enable you to develop your knowledge of a particular subject. This means that when you're a teacher, you might be able to influence the way this subject is taught in your school. For example, you might mentor your colleagues to teach that subject better.
+
   helpers:
     legend:
       courses_search_form:
@@ -505,3 +513,5 @@ en:
             subjects:
               primary_subject: "Select at least one primary subject you want to teach"
               secondary_subject: "Select at least one secondary subject you want to teach"
+        find/v2/subjects/primary_subjects_form:
+          blank: "Select at least one type of primary course"

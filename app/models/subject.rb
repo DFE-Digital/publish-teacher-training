@@ -11,6 +11,7 @@ class Subject < ApplicationRecord
   }
 
   scope :active, -> { where.not(type: 'DiscontinuedSubject') }
+  scope :primary, -> { where(type: 'PrimarySubject').order(:subject_name) }
 
   def secondary_subject?
     type == 'SecondarySubject'
