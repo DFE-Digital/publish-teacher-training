@@ -17,4 +17,8 @@ describe Subject do
   it 'returns all active subjects' do
     expect(described_class.active.pluck(:type)).not_to include('DiscontinuedSubject')
   end
+
+  it 'returns all primary subjects' do
+    expect(described_class.primary.pluck(:type)).to include('PrimarySubject')
+  end
 end

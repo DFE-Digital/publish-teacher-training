@@ -21,6 +21,10 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
 
   get '/v2/results', to: 'v2/results#index', as: 'v2_results', constraints: ->(_request) { Settings.features.v2_results.present? }
+
+  get '/v2/primary', to: 'v2/subjects#primary', as: 'primary', constraints: ->(_request) { Settings.features.v2_results.present? }
+  post '/v2/primary', to: 'v2/subjects#submit', as: 'submit_primary', constraints: ->(_request) { Settings.features.v2_results.present? }
+
   get '/results', to: 'results#index', as: 'results'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
