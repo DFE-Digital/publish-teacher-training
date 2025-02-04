@@ -189,6 +189,7 @@ module Courses
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
       radius_in_miles = Float(params[:radius] || DEFAULT_RADIUS_IN_MILES)
+      # use a constant
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
@@ -224,6 +225,7 @@ module Courses
               longitude, latitude
             ]
           )
+      # use a constant for 1609.344
         )
         .group(:id)
         .order('minimum_distance_to_search_location ASC')
