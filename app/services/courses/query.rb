@@ -13,6 +13,9 @@ module Courses
     def initialize(params:)
       @params = params
       @applied_scopes = {}
+
+      # We need to have a course published concept in app
+      #
       @scope = RecruitmentCycle
                .current
                .courses
@@ -56,6 +59,9 @@ module Courses
 
       @applied_scopes[:can_sponsor_visa] = params[:can_sponsor_visa]
 
+      # bug here
+      # because of the visa sponsorship data
+      #
       @scope
         .where(
           can_sponsor_student_visa: true
@@ -205,6 +211,7 @@ module Courses
           SQL
         )
         .select(
+          # Move the site to have the st make points in the database
           Course.sanitize_sql_array(
             [
               <<~SQL.squish,

@@ -15,6 +15,11 @@ module Find
 
       private
 
+      # Maybe use params.expect or see a way type cast (expect arrays on subjects for example)
+      # Investigate the best error handling for the param types
+      #
+      # Maybe create search parameters class: Courses::SearchParameters.new()
+      #
       def search_courses_params
         params.permit(
           :can_sponsor_visa,
