@@ -1,0 +1,11 @@
+{
+  "result": {
+    "formatted_address": "123 Some Street, Some City, Some Country",
+    "geometry": {
+      "location": {
+        "lat": 12.345678,
+        "lng": 98.765432
+      }
+    }
+  }
+}
