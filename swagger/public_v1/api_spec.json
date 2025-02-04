@@ -491,6 +491,13 @@
               "example": "00"
             }
           },
+          "visa_sponsorship_application_deadline_at": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time",
+            "description": "The application deadline for candidates who require visa sponsorship.",
+            "example": "2019-06-13T10:44:31Z"
+          },
           "degree_grade": {
             "type": "string",
             "nullable": true,
