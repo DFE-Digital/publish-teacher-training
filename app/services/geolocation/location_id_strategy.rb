@@ -2,11 +2,8 @@
 
 module Geolocation
   class LocationIdStrategy < LocationLookupStrategy
-    def fetch_coordinates
+    def call
       @client.place_details(@location)
-    rescue StandardError => e
-      capture_error(e)
-      nil
     end
 
     def cache_key

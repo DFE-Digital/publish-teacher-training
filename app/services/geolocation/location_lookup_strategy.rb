@@ -35,6 +35,13 @@ module Geolocation
       response
     end
 
+    def fetch_coordinates
+      call
+    rescue StandardError => e
+      capture_error(e)
+      nil
+    end
+
     def cache_coordinates(response)
       @cache.write(cache_key, response, expires_in: @cache_expiration)
     end
