@@ -19,13 +19,6 @@ module Find
           suggestion_strategy: GoogleOldPlacesAPI::Client.new
         ).call
 
-        Rails.logger.info(suggestions)
-
-        #suggestions = Find::LocationSuggestions.new(
-        #  'London',
-        #  suggestion_strategy: GoogleNewPlacesAPI::Client.new
-        #).call
-
         render json: suggestions
       end
 
