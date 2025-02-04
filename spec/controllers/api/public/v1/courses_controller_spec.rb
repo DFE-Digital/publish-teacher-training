@@ -402,7 +402,8 @@ RSpec.describe API::Public::V1::CoursesController do
                 campaign_name
                 application_status
                 training_route
-                degree_type]
+                degree_type
+                visa_sponsorship_application_deadline_at]
           end
 
           before do

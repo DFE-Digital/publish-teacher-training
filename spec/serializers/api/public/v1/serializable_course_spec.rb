@@ -88,6 +88,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:application_status) }
   it { is_expected.to have_attribute(:training_route) }
   it { is_expected.to have_attribute(:degree_type) }
+  it { is_expected.to have_attribute(:visa_sponsorship_application_deadline_at).with_value(nil) }
 
   context 'when bursary amount is present' do
     let(:course) { create(:course, :with_accrediting_provider, :secondary, enrichments: [enrichment], subjects: [find_or_create(:secondary_subject, :classics)]) }
