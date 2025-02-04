@@ -7,13 +7,13 @@ RSpec.describe Geolocation::LocationNameStrategy do
 
   let(:london) { build(:location, :london) }
   let(:manchester) { build(:location, :manchester) }
-  let(:location_name) { 'London' }
+  let(:location) { 'London' }
   let(:client) { instance_double(GoogleOldPlacesAPI::Client) }
   let(:cache) { Rails.cache }
   let(:cache_expiration) { 30.days }
 
   let(:strategy) do
-    described_class.new(location_name, cache: cache, client: client, cache_expiration: cache_expiration)
+    described_class.new(location, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
   describe '#coordinates' do
@@ -29,7 +29,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
       end
 
       it 'logs a cache hit' do
-        expect(Rails.logger).to receive(:info).with("Cache HIT for location_name: #{location_name}")
+        expect(Rails.logger).to receive(:info).with("Cache HIT for location: #{location}")
         coordinates
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
       end
 
       it 'logs a cache miss' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location_name: #{location_name}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{location}")
         coordinates
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
 
         expect(Sentry).to have_received(:capture_exception).with(
           instance_of(StandardError),
-          hash_including(message: 'Geocoding search failed, location search ignored (user experience unaffected)')
+          hash_including(message: 'Location search failed for Geolocation::LocationNameStrategy - London, location search ignored (user experience unaffected)')
         )
       end
     end
@@ -86,7 +86,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
 
       before do
         allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
-        allow(client).to receive(:geocode).with(location_name).and_return(google_response)
+        allow(client).to receive(:geocode).with(location).and_return(google_response)
         allow(Rails.cache).to receive(:write).and_call_original
       end
 
@@ -98,7 +98,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
       end
 
       it 'logs the cache miss when coordinates are fetched' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location_name: #{location_name}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{location}")
         coordinates
       end
     end
