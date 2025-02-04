@@ -7,13 +7,13 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
   let(:london) { build(:location, :london) }
   let(:manchester) { build(:location, :manchester) }
-  let(:location_id) { 'google-place-id' }
+  let(:location) { 'google-place-id' }
   let(:client) { instance_double(GoogleOldPlacesAPI::Client) }
   let(:cache) { Rails.cache }
   let(:cache_expiration) { 30.days }
 
   let(:strategy) do
-    described_class.new(location_id, cache: cache, client: client, cache_expiration: cache_expiration)
+    described_class.new(location, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
   describe '#coordinates' do
@@ -60,7 +60,7 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
         expect(Sentry).to have_received(:capture_exception).with(
           instance_of(StandardError),
-          hash_including(message: 'Google Places API failed, location search ignored (user experience unaffected)')
+          hash_including(message: 'Location search failed for Geolocation::LocationIdStrategy - google-place-id, location search ignored (user experience unaffected)')
         )
       end
     end
