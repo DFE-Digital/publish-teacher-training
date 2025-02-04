@@ -34,6 +34,7 @@
     "@ministryofjustice/frontend": "2.0.0",
     "accessible-autocomplete": "^2.0.4",
     "core-js": "^3.9.1",
+    "dfe-autocomplete": "github:DFE-Digital/dfe-autocomplete#6a18985729ee74d21a67983cf6176605f62fed00",
     "govuk-frontend": "^5.8.0",
     "jquery": "^3.6.0",
     "lodash.throttle": "^4.1.1",
