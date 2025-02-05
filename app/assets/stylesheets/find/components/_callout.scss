@@ -4,7 +4,8 @@
   border-left-width: govuk-spacing(1);
 
   &.app-callout--pink {
-    border-left-color: govuk-colour("pink")
+    border-left-color: govuk-colour("pink");
+    margin-top: 0px;
   }
 
   @include govuk-media-query($from: tablet) {
