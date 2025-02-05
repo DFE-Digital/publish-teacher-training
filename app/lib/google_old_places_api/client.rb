@@ -2,7 +2,7 @@
 
 module GoogleOldPlacesAPI
   class Client
-    BASE_URL = 'https://maps.googleapis.com/maps/api/place/'
+    BASE_URL = 'https://maps.googleapis.com/maps/api/'
 
     def initialize(api_key: Settings.google.places_api_key, logger: Rails.logger, log_level: Rails.logger.level)
       @api_key = api_key
@@ -17,7 +17,7 @@ module GoogleOldPlacesAPI
 
     def autocomplete(query)
       response = get(
-        endpoint: 'autocomplete/json',
+        endpoint: 'place/autocomplete/json',
         params: {
           key: @api_key,
           language: 'en',
@@ -38,27 +38,43 @@ module GoogleOldPlacesAPI
 
     def place_details(place_id)
       response = get(
-        endpoint: 'details/json',
+        endpoint: 'place/details/json',
         params: {
           key: @api_key,
           place_id: place_id,
           fields: 'formatted_address,geometry'
         }
       )
+      result = response['result']
 
-      return if response['result'].blank?
+      return if result.blank?
 
       {
-        location: response['result']['formatted_address'],
-        latitude: response['result']['geometry']['location']['lat'],
-        longitude: response['result']['geometry']['location']['lng']
+        location: result['formatted_address'],
+        latitude: result.dig('geometry', 'location', 'lat'),
+        longitude: result.dig('geometry', 'location', 'lng')
       }
     end
 
     def geocode(location_name)
-      search(location_name, components: 'country:UK').first
+      response = get(
+        endpoint: 'geocode/json',
+        params: {
+          key: @api_key,
+          address: location_name,
+          components: 'country:UK',
+          language: 'en'
+        }
+      )
 
-      { latitude: result.latitude, longitude: result.longitude, location: result.address }
+      result = response.dig('results', 0)
+      return if result.blank?
+
+      {
+        location: result['formatted_address'],
+        latitude: result.dig('geometry', 'location', 'lat'),
+        longitude: result.dig('geometry', 'location', 'lng')
+      }
     end
 
     private
