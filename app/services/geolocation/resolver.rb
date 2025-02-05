@@ -2,16 +2,16 @@
 
 module Geolocation
   class Resolver
-    def initialize(location_id: nil, location: nil)
-      @location_id = location_id
-      @location = location
+    def initialize(place_id: nil, query: nil)
+      @place_id = place_id
+      @query = query
     end
 
     def call
-      strategy = if @location_id.present?
-                   Geolocation::LocationIdStrategy.new(@location_id)
-                 elsif @location.present?
-                   Geolocation::LocationNameStrategy.new(@location)
+      strategy = if @place_id.present?
+                   Geolocation::LocationIdStrategy.new(@place_id)
+                 elsif @query.present?
+                   Geolocation::LocationNameStrategy.new(@query)
                  else
                    Geolocation::NullStrategy.new
                  end

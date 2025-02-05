@@ -4,7 +4,10 @@ module Find
   module V2
     class ResultsController < Find::ApplicationController
       def index
-        @coordinates = Geolocation::Resolver.new(**location_params).call
+        @coordinates = Geolocation::Resolver.new(
+          query: params[:location],
+          place_id: params[:location_id]
+        ).call
 
         @search_courses_form = ::Courses::SearchForm.new(search_courses_params)
         @search_params = @search_courses_form.search_params.merge(@coordinates)
