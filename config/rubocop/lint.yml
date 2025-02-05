@@ -9,3 +9,9 @@ Lint/UselessMethodDefinition:
     - 'app/controllers/publish/courses/outcome_controller.rb'
     - 'app/controllers/publish/courses/sites_controller.rb'
     - 'app/controllers/publish/courses/subjects_controller.rb'
+
+Lint/MissingSuper:
+  Exclude:
+    - lib/gias/downloader.rb
+    - lib/gias/transformer.rb
+    - lib/gias/importer.rb
