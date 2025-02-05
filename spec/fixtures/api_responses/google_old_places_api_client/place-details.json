@@ -6,6 +6,7 @@
         "lat": 12.345678,
         "lng": 98.765432
       }
-    }
+    },
+    "types": ["administrative_area_level_2", "political"]
   }
 }
