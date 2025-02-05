@@ -18,7 +18,9 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
   describe '#coordinates' do
     context 'when coordinates are cached' do
-      let(:cached_coordinates) { { latitude: london.latitude, longitude: london.longitude, location: 'London' } }
+      let(:cached_coordinates) do
+        { latitude: london.latitude, longitude: london.longitude, location: 'London', location_types: %w[locality political] }
+      end
 
       before do
         allow(cache).to receive(:read).with(strategy.cache_key).and_return(cached_coordinates)
@@ -30,7 +32,9 @@ RSpec.describe Geolocation::LocationIdStrategy do
     end
 
     context 'when coordinates are not cached' do
-      let(:response) { { latitude: manchester.latitude, longitude: manchester.longitude, location: 'Manchester' } }
+      let(:response) do
+        { latitude: manchester.latitude, longitude: manchester.longitude, location: 'Manchester', location_types: %w[locality political] }
+      end
 
       before do
         allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
@@ -49,7 +53,7 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
       it 'returns coordinates_on_error' do
         allow(strategy).to receive(:fetch_coordinates).and_return(nil)
-        expect(coordinates).to eq({ latitude: nil, longitude: nil, location: nil })
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, location: nil, location_types: [] })
       end
 
       it 'captures the error in Sentry' do
