@@ -2,7 +2,7 @@
 
 module Geolocation
   class Resolver
-    def initialize(location_id:, location:)
+    def initialize(location_id: nil, location: nil)
       @location_id = location_id
       @location = location
     end

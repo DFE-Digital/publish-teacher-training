@@ -39,5 +39,13 @@ RSpec.describe Geolocation::Resolver do
         expect(resolver.call).to eq({ latitude: nil, longitude: nil, location: nil })
       end
     end
+
+    context 'when no arguments' do
+      let(:resolver) { described_class.new }
+
+      it 'uses the NullStrategy and returns blank coordinates' do
+        expect(resolver.call).to eq({ latitude: nil, longitude: nil, location: nil })
+      end
+    end
   end
 end
