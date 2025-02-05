@@ -13,7 +13,7 @@ RSpec.describe GoogleOldPlacesAPI::Client do
       "https://maps.googleapis.com/maps/api/place/details/json?fields=formatted_address,geometry&key=#{api_key}&place_id=#{place_id}"
     end
     let(:place_details_mock_response) do
-      JSON.parse(Rails.root.join('spec/fixtures/api_responses/place-details.json').read)
+      JSON.parse(Rails.root.join('spec/fixtures/api_responses/google_old_places_api_client/place-details.json').read)
     end
 
     context 'when success response' do
