@@ -4,8 +4,10 @@ module Find
   module V2
     class ResultsController < Find::ApplicationController
       def index
+        @coordinates = Geolocation::Resolver.new(**location_params).call
+
         @search_courses_form = ::Courses::SearchForm.new(search_courses_params)
-        @search_params = @search_courses_form.search_params
+        @search_params = @search_courses_form.search_params.merge(@coordinates)
 
         @courses = ::Courses::Query.call(params: @search_params)
         @courses_count = @courses.unscope(:order, :group).distinct.count(:id)
@@ -14,6 +16,10 @@ module Find
       end
 
       private
+
+      def location_params
+        params.permit(:location_id, :location).to_h.symbolize_keys
+      end
 
       def search_courses_params
         params.permit(
