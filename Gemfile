@@ -129,7 +129,7 @@ gem 'propshaft'
 gem 'dfe-analytics', github: 'DFE-Digital/dfe-analytics', tag: 'v1.15.4'
 
 # Provides an accessible and lightweight autocomplete component for forms
-gem 'dfe-autocomplete', github: 'DFE-Digital/dfe-autocomplete', tag: 'v0.1.0'
+gem 'dfe-autocomplete', github: 'DFE-Digital/dfe-autocomplete', tag: 'v0.2.0'
 
 # For running data migrations
 gem 'data_migrate', '11.2.0'

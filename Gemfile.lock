@@ -18,10 +18,10 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-autocomplete.git
-  revision: c31601c145381accab91a6b6983b16de7ddada56
-  tag: v0.1.0
+  revision: 326fcef32dcd5087adc47ca9f9bbc7fc5a9f7d0f
+  tag: v0.2.0
   specs:
-    dfe-autocomplete (0.1.0)
+    dfe-autocomplete (0.2.0)
       actionview (>= 7.0.2.3)
       activemodel (>= 7.0.2.3)
       govuk-components
