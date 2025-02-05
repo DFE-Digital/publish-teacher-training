@@ -2121,9 +2121,9 @@ detect-newline@^3.0.0:
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
-"dfe-autocomplete@github:DFE-Digital/dfe-autocomplete#6a18985729ee74d21a67983cf6176605f62fed00":
+"dfe-autocomplete@github:DFE-Digital/dfe-autocomplete#v0.2.0":
   version "0.0.1"
-  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/6a18985729ee74d21a67983cf6176605f62fed00"
+  resolved "https://codeload.github.com/DFE-Digital/dfe-autocomplete/tar.gz/903b24cf60a2aecca659acedc1f1fcbd598e4a19"
   dependencies:
     accessible-autocomplete "^3.0.1"
 
