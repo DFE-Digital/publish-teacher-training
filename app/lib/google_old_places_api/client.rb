@@ -42,7 +42,7 @@ module GoogleOldPlacesAPI
         params: {
           key: @api_key,
           place_id: place_id,
-          fields: 'formatted_address,geometry'
+          fields: 'formatted_address,geometry,types'
         }
       )
       result = response['result']
@@ -52,7 +52,8 @@ module GoogleOldPlacesAPI
       {
         location: result['formatted_address'],
         latitude: result.dig('geometry', 'location', 'lat'),
-        longitude: result.dig('geometry', 'location', 'lng')
+        longitude: result.dig('geometry', 'location', 'lng'),
+        location_types: result['types']
       }
     end
 
@@ -73,7 +74,8 @@ module GoogleOldPlacesAPI
       {
         location: result['formatted_address'],
         latitude: result.dig('geometry', 'location', 'lat'),
-        longitude: result.dig('geometry', 'location', 'lng')
+        longitude: result.dig('geometry', 'location', 'lng'),
+        location_types: result['types']
       }
     end
 
