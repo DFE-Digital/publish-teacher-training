@@ -136,3 +136,14 @@ variable "apex_urls" {
   type        = list(string)
   default     = []
 }
+
+variable "enable_sanitised_storage" {
+  description = "Enable sanitised storage account"
+  type        = bool
+  default     = false
+}
+
+variable "uploads_storage_account_name" {
+  type    = string
+  default = null
+}
