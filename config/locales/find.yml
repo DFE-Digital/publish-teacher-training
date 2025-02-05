@@ -189,6 +189,29 @@ en:
       get_help_and_support_link_text: contact Get Into Teaching
       get_help_and_support_html: |
         If you're thinking about teaching or are ready to apply, %{link} for free support.
+      learn_about: Learn about
+      tda:
+        title: Teacher degree apprenticeships (TDA)
+        degree: Teach primary or secondary if you do not have a degree and are not studying for one.
+        browse_tda_courses: Browse teacher degree apprenticeship courses.
+        teacher_degree_apprenticeships: teacher degree apprenticeships.
+      send:
+        title: Special educational needs and disabilities (SEND)
+        send_specialism: All initial teacher training courses cover teaching pupils with SEND, but some courses have a SEND specialism.
+        browse_primary_send: Browse primary courses with a SEND specialism.
+        browse_secondary_send: Browse secondary courses with a SEND specialism.
+        teaching_pupils: teaching pupils with special educational needs and disabilities.
+      other_stages:
+        title: Teaching other stages
+        nursery:
+          title: Nursery or pre-school
+          help: Help young children under 5 years old to develop by becoming an early years teacher.
+          route_to_early_years: the routes to become an early years teacher.
+        further_ed:
+          title: Further education
+          teach_young_people: Teach young people and adults over 16 who are not studying for a degree.
+          browse_further_ed: Browse further education courses.
+          teaching_further_ed: teaching in further education.
     subjects:
       primary_title: Primary courses with subject specialisms
       secondary_title: Which secondary subjects do you want to teach?
@@ -385,8 +408,11 @@ en:
       train_to_be_a_teacher: Find out about the different ways to train to be a teacher (opens in a new tab)
       url_train_to_be_a_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher
       url_tda: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/teacher-degree-apprenticeships
+      further_ed: https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/further-education-teachers
+      early_years: https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/early-years-teachers
       url_engineers_teach_physics: https://getintoteaching.education.gov.uk/subjects/engineers-teach-physics
       url_online_chat: https://getintoteaching.education.gov.uk/help-and-support
+      url_send: https://getintoteaching.education.gov.uk/life-as-a-teacher/age-groups-and-specialisms/special-educational-needs
       url_ways_to_train_no_degree: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/if-you-dont-have-a-degree
       url_ways_to_train_experienced_teacher: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/assessment-only-route-to-qts
       url_funding_your_training: https://getintoteaching.education.gov.uk/funding-your-training
