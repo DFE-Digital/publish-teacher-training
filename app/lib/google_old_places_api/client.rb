@@ -4,7 +4,7 @@ module GoogleOldPlacesAPI
   class Client
     BASE_URL = 'https://maps.googleapis.com/maps/api/'
 
-    def initialize(api_key: Settings.google.places_api_key, logger: Rails.logger, log_level: Rails.logger.level)
+    def initialize(api_key: Settings.google.gcp_api_key, logger: Rails.logger, log_level: Rails.logger.level)
       @api_key = api_key
       @connection = Faraday.new(BASE_URL) do |f|
         f.adapter :net_http_persistent
