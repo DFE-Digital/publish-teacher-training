@@ -53,8 +53,32 @@ module GeocoderHelper
           'state' => 'England',
           'country' => 'United Kingdom',
           'country_code' => 'UK',
-          'address_components' => [{ long_name: 'England' }]
+          'address_components' => [{ long_name: 'England' }],
+          'types' => %w[
+            locality
+            political
+          ]
         }
+      ]
+    )
+
+    Geocoder::Lookup::Test.add_stub(
+      'Cornwall',
+      [
+        {
+          'coordinates' => [50.5036299, -4.6524982],
+          'address' => 'Cornwall, UK',
+          'state' => 'England',
+          'state_code' => 'England',
+          'country' => 'United Kingdom',
+          'country_code' => 'UK',
+          'address_components' => [{ long_name: 'England' }],
+          'types' => %w[
+            administrative_area_level_2
+            political
+          ]
+        }
+
       ]
     )
 
@@ -68,7 +92,11 @@ module GeocoderHelper
           'state_code' => 'England',
           'country' => 'United Kingdom',
           'country_code' => 'UK',
-          'address_components' => [{ long_name: 'England' }]
+          'address_components' => [{ long_name: 'England' }],
+          'types' => %w[
+            locality
+            political
+          ]
         }
       ]
     )
@@ -83,7 +111,11 @@ module GeocoderHelper
           'state_code' => 'England',
           'country' => 'United Kingdom',
           'country_code' => 'UK',
-          'address_components' => [{ long_name: 'England' }]
+          'address_components' => [{ long_name: 'England' }],
+          'types' => %w[
+            locality
+            political
+          ]
         }
       ]
     )
