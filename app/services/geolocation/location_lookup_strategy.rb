@@ -88,7 +88,7 @@ module Geolocation
     # Returns a default error response when coordinates are invalid or an error occurs.
     # @return [Hash] A default error response with nil latitude, longitude, and location.
     def coordinates_on_error
-      { latitude: nil, longitude: nil, location: nil, location_types: [] }
+      { latitude: nil, longitude: nil, formatted_address: nil, types: [] }
     end
 
     # Validates whether the response from the API contains valid coordinates.
