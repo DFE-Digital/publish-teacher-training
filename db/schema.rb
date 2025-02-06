@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_28_141038) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_04_094031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -266,6 +266,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_28_141038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.tsvector "searchable"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["searchable"], name: "index_gias_school_on_searchable", using: :gin
     t.index ["status_code"], name: "index_gias_school_on_status_code", where: "(status_code = '1'::text)"
     t.index ["urn"], name: "index_gias_school_on_urn", unique: true

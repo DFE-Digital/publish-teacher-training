@@ -106,6 +106,8 @@ shared:
     - postcode
     - website
     - telephone
+    - latitude
+    - longitude
     - created_at
     - updated_at
   provider_partnership:
