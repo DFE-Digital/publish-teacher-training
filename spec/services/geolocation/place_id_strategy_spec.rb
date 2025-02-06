@@ -2,24 +2,24 @@
 
 require 'rails_helper'
 
-RSpec.describe Geolocation::LocationIdStrategy do
+RSpec.describe Geolocation::PlaceIdStrategy do
   subject(:coordinates) { strategy.coordinates }
 
   let(:london) { build(:location, :london) }
   let(:manchester) { build(:location, :manchester) }
-  let(:location) { 'google-place-id' }
+  let(:place_id) { 'place-id' }
   let(:client) { instance_double(GoogleOldPlacesAPI::Client) }
   let(:cache) { Rails.cache }
   let(:cache_expiration) { 30.days }
 
   let(:strategy) do
-    described_class.new(location, cache: cache, client: client, cache_expiration: cache_expiration)
+    described_class.new(place_id, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
   describe '#coordinates' do
     context 'when coordinates are cached' do
       let(:cached_coordinates) do
-        { latitude: london.latitude, longitude: london.longitude, location: 'London', location_types: %w[locality political] }
+        { latitude: london.latitude, longitude: london.longitude, formatted_address: 'London', types: %w[locality political] }
       end
 
       before do
@@ -33,7 +33,7 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
     context 'when coordinates are not cached' do
       let(:response) do
-        { latitude: manchester.latitude, longitude: manchester.longitude, location: 'Manchester', location_types: %w[locality political] }
+        { latitude: manchester.latitude, longitude: manchester.longitude, formatted_address: 'Manchester', types: %w[locality political] }
       end
 
       before do
@@ -53,7 +53,7 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
       it 'returns coordinates_on_error' do
         allow(strategy).to receive(:fetch_coordinates).and_return(nil)
-        expect(coordinates).to eq({ latitude: nil, longitude: nil, location: nil, location_types: [] })
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
       end
 
       it 'captures the error in Sentry' do
@@ -64,7 +64,7 @@ RSpec.describe Geolocation::LocationIdStrategy do
 
         expect(Sentry).to have_received(:capture_exception).with(
           instance_of(StandardError),
-          hash_including(message: 'Location search failed for Geolocation::LocationIdStrategy - google-place-id, location search ignored (user experience unaffected)')
+          hash_including(message: 'Location search failed for Geolocation::PlaceIdStrategy - place-id, location search ignored (user experience unaffected)')
         )
       end
     end

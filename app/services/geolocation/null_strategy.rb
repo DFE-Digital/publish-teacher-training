@@ -3,7 +3,7 @@
 module Geolocation
   class NullStrategy
     def coordinates
-      { latitude: nil, longitude: nil, location: nil }
+      { formatted_address: nil, latitude: nil, longitude: nil, types: [] }
     end
   end
 end

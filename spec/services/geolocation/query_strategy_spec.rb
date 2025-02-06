@@ -2,24 +2,24 @@
 
 require 'rails_helper'
 
-RSpec.describe Geolocation::LocationNameStrategy do
+RSpec.describe Geolocation::QueryStrategy do
   subject(:coordinates) { strategy.coordinates }
 
   let(:london) { build(:location, :london) }
   let(:manchester) { build(:location, :manchester) }
-  let(:location) { 'London' }
+  let(:query) { 'London' }
   let(:client) { instance_double(GoogleOldPlacesAPI::Client) }
   let(:cache) { Rails.cache }
   let(:cache_expiration) { 30.days }
 
   let(:strategy) do
-    described_class.new(location, cache: cache, client: client, cache_expiration: cache_expiration)
+    described_class.new(query, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
   describe '#coordinates' do
     context 'when coordinates are cached' do
       let(:cached_coordinates) do
-        { latitude: london.latitude, longitude: london.longitude, location: 'London', location_types: %w[locality political] }
+        { latitude: london.latitude, longitude: london.longitude, formatted_address: 'London', types: %w[locality political] }
       end
 
       before do
@@ -31,14 +31,14 @@ RSpec.describe Geolocation::LocationNameStrategy do
       end
 
       it 'logs a cache hit' do
-        expect(Rails.logger).to receive(:info).with("Cache HIT for location: #{location}")
+        expect(Rails.logger).to receive(:info).with("Cache HIT for location: #{query}")
         coordinates
       end
     end
 
     context 'when coordinates are not cached' do
       let(:response) do
-        { latitude: manchester.latitude, longitude: manchester.longitude, location: 'Manchester', location_types: %w[locality political] }
+        { latitude: manchester.latitude, longitude: manchester.longitude, formatted_address: 'Manchester', types: %w[locality political] }
       end
 
       before do
@@ -51,7 +51,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
       end
 
       it 'logs a cache miss' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{location}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{query}")
         coordinates
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
 
       it 'returns coordinates_on_error' do
         allow(strategy).to receive(:fetch_coordinates).and_return(nil)
-        expect(coordinates).to eq({ latitude: nil, longitude: nil, location: nil, location_types: [] })
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
       end
 
       it 'captures the error in Sentry' do
@@ -74,7 +74,7 @@ RSpec.describe Geolocation::LocationNameStrategy do
 
         expect(Sentry).to have_received(:capture_exception).with(
           instance_of(StandardError),
-          hash_including(message: 'Location search failed for Geolocation::LocationNameStrategy - London, location search ignored (user experience unaffected)')
+          hash_including(message: 'Location search failed for Geolocation::QueryStrategy - London, location search ignored (user experience unaffected)')
         )
       end
     end
@@ -84,26 +84,26 @@ RSpec.describe Geolocation::LocationNameStrategy do
         {
           latitude: london.latitude,
           longitude: london.longitude,
-          location: 'London, UK',
-          location_types: %w[locality political]
+          formatted_address: 'London, UK',
+          types: %w[locality political]
         }
       end
 
       before do
         allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
-        allow(client).to receive(:geocode).with(location).and_return(google_response)
+        allow(client).to receive(:geocode).with(query).and_return(google_response)
         allow(Rails.cache).to receive(:write).and_call_original
       end
 
       it 'fetches coordinates from GoogleOldPlacesAPI and caches them' do
-        coordinates = { latitude: london.latitude, longitude: london.longitude, location: 'London, UK', location_types: %w[locality political] }
+        coordinates = { latitude: london.latitude, longitude: london.longitude, formatted_address: 'London, UK', types: %w[locality political] }
         expect(strategy.coordinates).to eq(coordinates)
 
         expect(cache).to have_received(:write).with(strategy.cache_key, coordinates, expires_in: cache_expiration)
       end
 
       it 'logs the cache miss when coordinates are fetched' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{location}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{query}")
         coordinates
       end
     end

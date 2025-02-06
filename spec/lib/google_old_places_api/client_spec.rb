@@ -28,8 +28,8 @@ RSpec.describe GoogleOldPlacesAPI::Client do
           [
             {
               name: 'London, UK',
-              location_id: 'ChIJdd4hrwug2EcRmSrV3Vo6llI',
-              location_types: %w[locality political]
+              place_id: 'ChIJdd4hrwug2EcRmSrV3Vo6llI',
+              types: %w[locality political]
             }
           ]
         )
@@ -74,10 +74,10 @@ RSpec.describe GoogleOldPlacesAPI::Client do
 
         expect(result).to eq(
           {
-            location: '123 Some Street, Some City, Some Country',
+            formatted_address: '123 Some Street, Some City, Some Country',
             latitude: 12.345678,
             longitude: 98.765432,
-            location_types: %w[
+            types: %w[
               administrative_area_level_2
               political
             ]
@@ -144,10 +144,10 @@ RSpec.describe GoogleOldPlacesAPI::Client do
 
         expect(result).to eq(
           {
-            location: 'London, UK',
+            formatted_address: 'London, UK',
             latitude: 51.5074,
             longitude: -0.1278,
-            location_types: %w[locality political]
+            types: %w[locality political]
           }
         )
       end

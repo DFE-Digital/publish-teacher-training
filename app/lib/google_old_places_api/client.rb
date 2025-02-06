@@ -30,8 +30,8 @@ module GoogleOldPlacesAPI
       Array(response['predictions']).map do |prediction|
         {
           name: prediction['description'],
-          location_id: prediction['place_id'],
-          location_types: prediction['types']
+          place_id: prediction['place_id'],
+          types: prediction['types']
         }
       end
     end
@@ -50,10 +50,10 @@ module GoogleOldPlacesAPI
       return if result.blank?
 
       {
-        location: result['formatted_address'],
+        formatted_address: result['formatted_address'],
         latitude: result.dig('geometry', 'location', 'lat'),
         longitude: result.dig('geometry', 'location', 'lng'),
-        location_types: result['types']
+        types: result['types']
       }
     end
 
@@ -72,10 +72,10 @@ module GoogleOldPlacesAPI
       return if result.blank?
 
       {
-        location: result['formatted_address'],
+        formatted_address: result['formatted_address'],
         latitude: result.dig('geometry', 'location', 'lat'),
         longitude: result.dig('geometry', 'location', 'lng'),
-        location_types: result['types']
+        types: result['types']
       }
     end
 
