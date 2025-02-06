@@ -9,9 +9,9 @@ module Geolocation
 
     def call
       strategy = if @place_id.present?
-                   Geolocation::LocationIdStrategy.new(@place_id)
+                   Geolocation::PlaceIdStrategy.new(@place_id)
                  elsif @query.present?
-                   Geolocation::LocationNameStrategy.new(@query)
+                   Geolocation::QueryStrategy.new(@query)
                  else
                    Geolocation::NullStrategy.new
                  end
