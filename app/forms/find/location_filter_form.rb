@@ -5,6 +5,7 @@ module Find
     NO_OPTION = nil
     LOCATION_OPTION = '1'
     PROVIDER_OPTION = '3'
+    RADIUS_FOR_LARGE_AREA_LOCATION = 50
 
     attr_reader :params, :errors
 
@@ -55,7 +56,10 @@ module Find
         loc: results.address,
         lq: location_query,
         c: country(results)
-      }
+      }.tap do |params|
+        # Set large radius for large search areas
+        params[:radius] = RADIUS_FOR_LARGE_AREA_LOCATION if large_area?(results)
+      end
     end
 
     def selected_option
@@ -79,6 +83,10 @@ module Find
       countries = [DEVOLVED_NATIONS, 'England'].flatten
 
       countries.each { |country| return country if flattened_results.include?(country) }
+    end
+
+    def large_area?(results)
+      results.data['types'].include?('administrative_area_level_2')
     end
   end
 end
