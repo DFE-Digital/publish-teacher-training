@@ -1,20 +1,23 @@
+# frozen_string_literal: true
+
 module GoogleOldPlacesAPI
   class Client
-    BASE_URL = 'https://maps.googleapis.com/maps/api/place/'
+    BASE_URL = 'https://maps.googleapis.com/maps/api/'
 
-    def initialize
-      @api_key = Settings.google.places_api_key
-
+    def initialize(api_key: Settings.google.gcp_api_key, logger: Rails.logger, log_level: Rails.logger.level)
+      @api_key = api_key
       @connection = Faraday.new(BASE_URL) do |f|
         f.adapter :net_http_persistent
-        f.response :logger, Logger.new($stdout), { headers: false, bodies: true, formatter: Faraday::Logging::Formatter }
+        f.response(:logger, logger, { headers: false, bodies: true, formatter: Faraday::Logging::Formatter, log_level: }) do |log|
+          log.filter(@api_key, '[FILTERED]')
+        end
         f.response :json
       end
     end
 
     def autocomplete(query)
       response = get(
-        endpoint: 'autocomplete/json',
+        endpoint: 'place/autocomplete/json',
         params: {
           key: @api_key,
           language: 'en',
@@ -27,10 +30,53 @@ module GoogleOldPlacesAPI
       Array(response['predictions']).map do |prediction|
         {
           name: prediction['description'],
-          location_id: prediction['place_id'],
-          location_types: prediction['types']
+          place_id: prediction['place_id'],
+          types: prediction['types']
         }
       end
+    end
+
+    def place_details(place_id)
+      response = get(
+        endpoint: 'place/details/json',
+        params: {
+          key: @api_key,
+          place_id: place_id,
+          fields: 'formatted_address,geometry,types'
+        }
+      )
+      result = response['result']
+
+      return if result.blank?
+
+      {
+        formatted_address: result['formatted_address'],
+        latitude: result.dig('geometry', 'location', 'lat'),
+        longitude: result.dig('geometry', 'location', 'lng'),
+        types: result['types']
+      }
+    end
+
+    def geocode(location_name)
+      response = get(
+        endpoint: 'geocode/json',
+        params: {
+          key: @api_key,
+          address: location_name,
+          components: 'country:UK',
+          language: 'en'
+        }
+      )
+
+      result = response.dig('results', 0)
+      return if result.blank?
+
+      {
+        formatted_address: result['formatted_address'],
+        latitude: result.dig('geometry', 'location', 'lat'),
+        longitude: result.dig('geometry', 'location', 'lng'),
+        types: result['types']
+      }
     end
 
     private
