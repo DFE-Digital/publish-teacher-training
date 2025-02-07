@@ -188,7 +188,7 @@ group :development, :test do
   gem 'rspec-its'
 
   # Test framework
-  gem 'rspec-rails', '7.1.0'
+  gem 'rspec-rails', '7.1.1'
 
   gem 'selenium-webdriver'
 
