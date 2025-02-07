@@ -11,14 +11,15 @@ RSpec.describe GoogleOldPlacesAPI::Client do
     let(:autocomplete_api_path) do
       "https://maps.googleapis.com/maps/api/place/autocomplete/json?key=#{api_key}&language=en&input=#{query}&components=country:uk&types=geocode"
     end
-    let(:autocomplete_mock_response) do
-      JSON.parse(Rails.root.join('spec/fixtures/api_responses/google_old_places_api_client/autocomplete.json').read)
-    end
 
     context 'when success response' do
       before do
         stub_request(:get, autocomplete_api_path)
-          .to_return(status: 200, body: autocomplete_mock_response.to_json, headers: { 'Content-Type' => 'application/json' })
+          .to_return(
+            status: 200,
+            body: file_fixture('google_old_places_api_client/autocomplete/london.json').read,
+            headers: { 'Content-Type' => 'application/json' }
+          )
       end
 
       it 'returns an array of predictions' do
@@ -55,14 +56,15 @@ RSpec.describe GoogleOldPlacesAPI::Client do
     let(:geocode_api_path) do
       "https://maps.googleapis.com/maps/api/geocode/json?key=#{api_key}&address=#{query}&components=country:UK&language=en"
     end
-    let(:geocode_mock_response) do
-      JSON.parse(Rails.root.join('spec/fixtures/api_responses/google_old_places_api_client/geocode.json').read)
-    end
 
     context 'when success response' do
       before do
         stub_request(:get, geocode_api_path)
-          .to_return(status: 200, body: geocode_mock_response.to_json, headers: { 'Content-Type' => 'application/json' })
+          .to_return(
+            status: 200,
+            body: file_fixture('google_old_places_api_client/geocode/london.json'),
+            headers: { 'Content-Type' => 'application/json' }
+          )
       end
 
       it 'returns the correct location details' do
