@@ -61,7 +61,7 @@ module Publish
       def study_site_params
         return { study_site_ids: nil } if params[:publish_course_study_site_form][:study_site_ids].all?(&:empty?)
 
-        params.require(:publish_course_study_site_form).permit(study_site_ids: [])
+        params.expect(publish_course_study_site_form: [study_site_ids: []])
       end
     end
   end

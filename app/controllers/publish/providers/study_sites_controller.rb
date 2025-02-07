@@ -63,7 +63,7 @@ module Publish
       end
 
       def site_params(param_form_key)
-        params.require(param_form_key).permit(SchoolForm::FIELDS)
+        params.expect(param_form_key => SchoolForm::FIELDS)
       end
 
       def gias_school_params

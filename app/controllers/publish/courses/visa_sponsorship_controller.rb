@@ -44,7 +44,7 @@ module Publish
       def visa_sponsorship_params
         return {} if params[:publish_course_funding_form].blank?
 
-        params.require(:publish_course_funding_form).permit(CourseFundingForm::FIELDS)
+        params.expect(publish_course_funding_form: CourseFundingForm::FIELDS)
       end
 
       def success_message

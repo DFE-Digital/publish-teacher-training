@@ -9,7 +9,7 @@ module Find
     end
 
     def create
-      @confirmation = ConfirmEnvironment.new(params.require(:find_confirm_environment).permit(:from, :environment))
+      @confirmation = ConfirmEnvironment.new(params.expect(find_confirm_environment: %i[from environment]))
 
       if @confirmation.valid?
         session[:confirmed_environment_at] = Time.zone.now

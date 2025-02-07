@@ -63,35 +63,34 @@ module FilterParameters
   def form_params
     # Some legacy keys are whitelisted here as they can accept multiple values
     params
-      .require(form_name)
-      .permit(
-        *legacy_paramater_keys,
-        :visa_status,
-        :age_group,
-        :c,
-        :can_sponsor_visa,
-        :degree_required,
-        :engineers_teach_physics,
-        :funding,
-        :has_vacancies,
-        :university_degree_status,
-        :applications_open,
-        :l,
-        :latitude,
-        :loc,
-        :long,
-        :longitude,
-        :lq,
-        :radius,
-        :send_courses,
-        :sortby,
-        'provider.provider_name',
-        c: [],
-        qualification: [],
-        qualifications: [], # Legacy
-        study_type: [],
-        subjects: [],
-        subject_codes: [] # Legacy
+      .expect(
+        form_name => [*legacy_paramater_keys,
+                      :visa_status,
+                      :age_group,
+                      :c,
+                      :can_sponsor_visa,
+                      :degree_required,
+                      :engineers_teach_physics,
+                      :funding,
+                      :has_vacancies,
+                      :university_degree_status,
+                      :applications_open,
+                      :l,
+                      :latitude,
+                      :loc,
+                      :long,
+                      :longitude,
+                      :lq,
+                      :radius,
+                      :send_courses,
+                      :sortby,
+                      'provider.provider_name',
+                      { c: [],
+                        qualification: [],
+                        qualifications: [], # Legacy
+                        study_type: [],
+                        subjects: [],
+                        subject_codes: [] }] # Legacy
       )
   end
 end

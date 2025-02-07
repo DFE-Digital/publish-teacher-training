@@ -47,11 +47,11 @@ module Support
     private
 
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email).merge(state: 'new')
+      params.expect(user: %i[first_name last_name email]).merge(state: 'new')
     end
 
     def update_user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :admin)
+      params.expect(user: %i[first_name last_name email admin])
     end
 
     def user
