@@ -16,6 +16,13 @@ RSpec.describe Geolocation::CoordinatesQuery do
     described_class.new(query, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
+  let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+
+  before do
+    allow(Rails).to receive(:cache).and_return(memory_store)
+    Rails.cache.clear
+  end
+
   describe '#coordinates' do
     context 'when query is blank' do
       let(:query) { '' }
@@ -37,11 +44,12 @@ RSpec.describe Geolocation::CoordinatesQuery do
       end
 
       before do
-        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(cached_coordinates)
+        coordinates_query.cache_coordinates(cached_coordinates)
       end
 
       it 'returns the cached coordinates' do
         expect(coordinates).to eq(cached_coordinates)
+        expect(coordinates_query.cache.read(coordinates_query.cache_key)).to eq(cached_coordinates)
       end
 
       it 'logs a cache hit' do
@@ -56,12 +64,15 @@ RSpec.describe Geolocation::CoordinatesQuery do
       end
 
       before do
-        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(nil)
-        allow(coordinates_query).to receive(:fetch_and_cache_coordinates).and_return(response)
+        allow(coordinates_query).to receive(:fetch_coordinates).and_return(response)
       end
 
       it 'fetches and caches the coordinates' do
-        expect(coordinates).to eq(response)
+        expect(Rails.cache.read(coordinates_query.cache_key)).to be_nil
+
+        expect(coordinates_query.call).to eq(response)
+
+        expect(Rails.cache.read(coordinates_query.cache_key)).to eq(response)
       end
 
       it 'logs a cache miss' do
@@ -71,10 +82,6 @@ RSpec.describe Geolocation::CoordinatesQuery do
     end
 
     context 'when geocoding search results in an error' do
-      before do
-        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(nil)
-      end
-
       it 'returns coordinates_on_error' do
         allow(coordinates_query).to receive(:fetch_coordinates).and_return(nil)
         expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
