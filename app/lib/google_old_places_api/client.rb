@@ -36,27 +36,6 @@ module GoogleOldPlacesAPI
       end
     end
 
-    def place_details(place_id)
-      response = get(
-        endpoint: 'place/details/json',
-        params: {
-          key: @api_key,
-          place_id: place_id,
-          fields: 'formatted_address,geometry,types'
-        }
-      )
-      result = response['result']
-
-      return if result.blank?
-
-      {
-        formatted_address: result['formatted_address'],
-        latitude: result.dig('geometry', 'location', 'lat'),
-        longitude: result.dig('geometry', 'location', 'lng'),
-        types: result['types']
-      }
-    end
-
     def geocode(location_name)
       response = get(
         endpoint: 'geocode/json',

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Geolocation::QueryStrategy do
-  subject(:coordinates) { strategy.coordinates }
+RSpec.describe Geolocation::CoordinatesQuery do
+  subject(:coordinates) { coordinates_query.call }
 
   let(:london) { build(:location, :london) }
   let(:manchester) { build(:location, :manchester) }
@@ -12,18 +12,32 @@ RSpec.describe Geolocation::QueryStrategy do
   let(:cache) { Rails.cache }
   let(:cache_expiration) { 30.days }
 
-  let(:strategy) do
+  let(:coordinates_query) do
     described_class.new(query, cache: cache, client: client, cache_expiration: cache_expiration)
   end
 
   describe '#coordinates' do
+    context 'when query is blank' do
+      let(:query) { '' }
+
+      it 'returns blank coordinates' do
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
+      end
+
+      it 'does not cache' do
+        coordinates_query.call
+
+        expect(coordinates_query.cached_coordinates).to be_nil
+      end
+    end
+
     context 'when coordinates are cached' do
       let(:cached_coordinates) do
         { latitude: london.latitude, longitude: london.longitude, formatted_address: 'London', types: %w[locality political] }
       end
 
       before do
-        allow(cache).to receive(:read).with(strategy.cache_key).and_return(cached_coordinates)
+        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(cached_coordinates)
       end
 
       it 'returns the cached coordinates' do
@@ -31,7 +45,7 @@ RSpec.describe Geolocation::QueryStrategy do
       end
 
       it 'logs a cache hit' do
-        expect(Rails.logger).to receive(:info).with("Cache HIT for location: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache HIT for: #{query}")
         coordinates
       end
     end
@@ -42,8 +56,8 @@ RSpec.describe Geolocation::QueryStrategy do
       end
 
       before do
-        allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
-        allow(strategy).to receive(:fetch_and_cache_coordinates).and_return(response)
+        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(nil)
+        allow(coordinates_query).to receive(:fetch_and_cache_coordinates).and_return(response)
       end
 
       it 'fetches and caches the coordinates' do
@@ -51,30 +65,30 @@ RSpec.describe Geolocation::QueryStrategy do
       end
 
       it 'logs a cache miss' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for: #{query}")
         coordinates
       end
     end
 
     context 'when geocoding search results in an error' do
       before do
-        allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
+        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(nil)
       end
 
       it 'returns coordinates_on_error' do
-        allow(strategy).to receive(:fetch_coordinates).and_return(nil)
+        allow(coordinates_query).to receive(:fetch_coordinates).and_return(nil)
         expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
       end
 
       it 'captures the error in Sentry' do
-        allow(strategy.client).to receive(:geocode).and_raise(StandardError, 'Geocoding failed')
+        allow(coordinates_query.client).to receive(:geocode).and_raise(StandardError, 'Geocoding failed')
         allow(Sentry).to receive(:capture_exception)
 
         coordinates
 
         expect(Sentry).to have_received(:capture_exception).with(
           instance_of(StandardError),
-          hash_including(message: 'Location search failed for Geolocation::QueryStrategy - London, location search ignored (user experience unaffected)')
+          hash_including(message: 'Location search failed for Geolocation::CoordinatesQuery - London, location search ignored (user experience unaffected)')
         )
       end
     end
@@ -90,22 +104,30 @@ RSpec.describe Geolocation::QueryStrategy do
       end
 
       before do
-        allow(cache).to receive(:read).with(strategy.cache_key).and_return(nil)
+        allow(cache).to receive(:read).with(coordinates_query.cache_key).and_return(nil)
         allow(client).to receive(:geocode).with(query).and_return(google_response)
         allow(Rails.cache).to receive(:write).and_call_original
       end
 
       it 'fetches coordinates from GoogleOldPlacesAPI and caches them' do
         coordinates = { latitude: london.latitude, longitude: london.longitude, formatted_address: 'London, UK', types: %w[locality political] }
-        expect(strategy.coordinates).to eq(coordinates)
+        expect(coordinates_query.call).to eq(coordinates)
 
-        expect(cache).to have_received(:write).with(strategy.cache_key, coordinates, expires_in: cache_expiration)
+        expect(cache).to have_received(:write).with(coordinates_query.cache_key, coordinates, expires_in: cache_expiration)
       end
 
       it 'logs the cache miss when coordinates are fetched' do
-        expect(Rails.logger).to receive(:info).with("Cache MISS for location: #{query}")
+        expect(Rails.logger).to receive(:info).with("Cache MISS for: #{query}")
         coordinates
       end
+    end
+  end
+
+  describe '#cache_key' do
+    let(:query) { 'London, UK' }
+
+    it 'returns the formatted cache key' do
+      expect(coordinates_query.cache_key).to eq('geolocation:query:london-uk')
     end
   end
 end
