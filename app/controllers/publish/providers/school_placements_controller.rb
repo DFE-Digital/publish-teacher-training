@@ -27,7 +27,7 @@ module Publish
       private
 
       def provider_params
-        params.require(:provider).permit(:selectable_school)
+        params.expect(provider: [:selectable_school])
       end
     end
   end

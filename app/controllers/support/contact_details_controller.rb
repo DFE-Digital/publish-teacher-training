@@ -24,15 +24,15 @@ module Support
     end
 
     def update_provider_params
-      params.require(:support_contact_details_form).permit(:email,
-                                                           :telephone,
-                                                           :website,
-                                                           :address1,
-                                                           :address2,
-                                                           :address3,
-                                                           :town,
-                                                           :address4,
-                                                           :postcode)
+      params.expect(support_contact_details_form: %i[email
+                                                     telephone
+                                                     website
+                                                     address1
+                                                     address2
+                                                     address3
+                                                     town
+                                                     address4
+                                                     postcode])
     end
   end
 end

@@ -75,13 +75,13 @@ module Publish
       def accredited_provider_search_params
         return {} unless params.key?(:accredited_provider_search_form)
 
-        params.require(:accredited_provider_search_form).permit(*AccreditedProviderSearchForm::FIELDS)
+        params.expect(accredited_provider_search_form: [*AccreditedProviderSearchForm::FIELDS])
       end
 
       def accredited_provider_select_params
         return {} unless params.key?(:accredited_provider_select_form)
 
-        params.require(:accredited_provider_select_form).permit(*AccreditedProviderSelectForm::FIELDS, *AccreditedProviderSearchForm::FIELDS)
+        params.expect(accredited_provider_select_form: [*AccreditedProviderSelectForm::FIELDS, *AccreditedProviderSearchForm::FIELDS])
       end
 
       def search_result_title_component

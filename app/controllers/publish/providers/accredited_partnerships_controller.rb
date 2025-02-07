@@ -78,7 +78,7 @@ module Publish
       end
 
       def partnership_params
-        params.require(:provider_partnership_form).permit(:accredited_provider_id, :description)
+        params.expect(provider_partnership_form: %i[accredited_provider_id description])
       end
     end
   end

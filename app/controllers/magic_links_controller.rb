@@ -24,6 +24,6 @@ class MagicLinksController < ApplicationController
   private
 
   def magic_link_params
-    params.require(:publish_authentication_magic_link_form).permit(:email)
+    params.expect(publish_authentication_magic_link_form: [:email])
   end
 end

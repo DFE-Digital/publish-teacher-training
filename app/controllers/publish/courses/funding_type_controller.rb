@@ -38,7 +38,7 @@ module Publish
       def funding_type_params
         return {} if params[:publish_course_funding_form].blank?
 
-        params.require(:publish_course_funding_form).permit(:funding, :previous_tda_course)
+        params.expect(publish_course_funding_form: %i[funding previous_tda_course])
       end
 
       def handle_valid_form
