@@ -1,32 +1,11 @@
 # frozen_string_literal: true
 
 module Geolocation
-  # This class serves as an abstract superclass for strategies that look up geolocation data based on a location.
-  #
-  # Subclasses are expected to implement:
-  # - `call`: Fetches the geolocation data (either by location ID or location name, for example).
-  # - `cache_key`: Defines the unique cache key to be used for caching the coordinates.
-  #
-  # Example:
-  #
-  # class CustomLocationStrategy < LocationLookupStrategy
-  #   def call
-  #     # Logic to fetch coordinates from an external service
-  #   end
-  #
-  #   def cache_key
-  #     "geolocation:custom:#{@location}"
-  #   end
-  # end
-  #
-  # location_strategy = CustomLocationStrategy.new('London')
-  # coordinates = location_strategy.coordinates
-  #
-  class LocationLookupStrategy
-    attr_reader :location, :logger, :cache, :client, :cache_expiration
+  class CoordinatesQuery
+    attr_reader :query, :logger, :cache, :client, :cache_expiration
 
-    def initialize(location, logger: Rails.logger, cache: Rails.cache, client: GoogleOldPlacesAPI::Client.new, cache_expiration: 30.days)
-      @location = location
+    def initialize(query, logger: Rails.logger, cache: Rails.cache, client: GoogleOldPlacesAPI::Client.new, cache_expiration: 30.days)
+      @query = query
       @logger = logger
       @cache = cache
       @client = client
@@ -37,7 +16,9 @@ module Geolocation
     # It first attempts to fetch the cached coordinates. If not found, it will fetch them
     # from the API and cache the result for future use.
     # @return [Hash] The coordinates, including latitude, longitude, and location.
-    def coordinates
+    def call
+      return blank_coordinates if query.blank?
+
       cached_coordinates || fetch_and_cache_coordinates
     end
 
@@ -47,9 +28,9 @@ module Geolocation
     def cached_coordinates
       @cache.read(cache_key).tap do |cached_data|
         if cached_data
-          logger.info("Cache HIT for location: #{location}")
+          logger.info("Cache HIT for: #{query}")
         else
-          logger.info("Cache MISS for location: #{location}")
+          logger.info("Cache MISS for: #{query}")
         end
       end
     end
@@ -73,7 +54,7 @@ module Geolocation
     # during the API call.
     # @return [Hash, nil] The coordinates response from the API, or nil in case of an error.
     def fetch_coordinates
-      call
+      @client.geocode(@query)
     rescue StandardError => e
       capture_error(e)
       nil
@@ -90,6 +71,7 @@ module Geolocation
     def coordinates_on_error
       { latitude: nil, longitude: nil, formatted_address: nil, types: [] }
     end
+    alias blank_coordinates coordinates_on_error
 
     # Validates whether the response from the API contains valid coordinates.
     # @param response [Hash] The response to validate.
@@ -102,7 +84,7 @@ module Geolocation
     # Additionally, it reports the error to Sentry for further monitoring and analysis.
     # @param error [StandardError] The error that occurred.
     def capture_error(error)
-      message = "Location search failed for #{self.class} - #{location}, location search ignored (user experience unaffected)"
+      message = "Location search failed for #{self.class} - #{query}, location search ignored (user experience unaffected)"
 
       logger.info(message)
 
@@ -110,6 +92,10 @@ module Geolocation
         error,
         message:
       )
+    end
+
+    def cache_key
+      "geolocation:query:#{@query.parameterize}"
     end
   end
 end
