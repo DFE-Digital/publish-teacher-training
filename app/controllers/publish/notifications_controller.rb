@@ -38,7 +38,7 @@ module Publish
     end
 
     def permitted_params
-      params.require(:publish_notification_form).permit(*NotificationForm::FIELDS, :provider_code)
+      params.expect(publish_notification_form: [*NotificationForm::FIELDS, :provider_code])
     end
 
     def notification_params

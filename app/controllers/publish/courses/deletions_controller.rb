@@ -39,7 +39,7 @@ module Publish
       end
 
       def deletion_params
-        params.require(:publish_course_deletion_form).permit(CourseDeletionForm::FIELDS)
+        params.expect(publish_course_deletion_form: CourseDeletionForm::FIELDS)
       end
     end
   end

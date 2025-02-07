@@ -31,7 +31,7 @@ module Publish
       def provider_student_visa_params
         return { can_sponsor_student_visa: nil } if params[:publish_provider_student_visa_form].blank?
 
-        params.require(:publish_provider_student_visa_form).permit(*ProviderStudentVisaForm::FIELDS).transform_values do |value|
+        params.expect(publish_provider_student_visa_form: [*ProviderStudentVisaForm::FIELDS]).transform_values do |value|
           ActiveModel::Type::Boolean.new.cast(value)
         end
       end

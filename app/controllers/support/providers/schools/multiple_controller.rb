@@ -27,7 +27,7 @@ module Support
         end
 
         def form_params
-          params.require(:support_raw_csv_schools_form).permit(:school_details)
+          params.expect(support_raw_csv_schools_form: [:school_details])
         end
       end
     end

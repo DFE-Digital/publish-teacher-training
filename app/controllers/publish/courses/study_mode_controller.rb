@@ -34,7 +34,7 @@ module Publish
       def study_mode_params
         return { study_mode: nil } if params[:publish_course_study_mode_form].blank?
 
-        params.require(:publish_course_study_mode_form).permit(:previous_tda_course, study_mode: [])
+        params.expect(publish_course_study_mode_form: [:previous_tda_course, { study_mode: [] }])
       end
 
       def handle_redirect

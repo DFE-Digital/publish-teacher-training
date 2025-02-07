@@ -26,7 +26,7 @@ module Publish
       private
 
       def length_params
-        params.require(:publish_course_length_form).permit(*CourseLengthForm::FIELDS)
+        params.expect(publish_course_length_form: [*CourseLengthForm::FIELDS])
       end
 
       def course

@@ -70,9 +70,9 @@ module Publish
       end
 
       def update_course_params
-        params.require(:course).permit(
-          :accredited_provider_code,
-          :accredited_provider
+        params.expect(
+          course: %i[accredited_provider_code
+                     accredited_provider]
         )
       end
 

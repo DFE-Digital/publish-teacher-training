@@ -56,13 +56,13 @@ module Publish
       def school_search_params
         return {} unless params.key?(:publish_schools_search_form)
 
-        params.require(:publish_schools_search_form).permit(*Schools::SearchForm::FIELDS, :school_id)
+        params.expect(publish_schools_search_form: [*Schools::SearchForm::FIELDS, :school_id])
       end
 
       def school_select_params
         return {} unless params.key?(:publish_schools_select_form)
 
-        params.require(:publish_schools_select_form).permit(*Schools::SelectForm::FIELDS, *Schools::SearchForm::FIELDS)
+        params.expect(publish_schools_select_form: [*Schools::SelectForm::FIELDS, *Schools::SearchForm::FIELDS])
       end
 
       def search_result_title_component
