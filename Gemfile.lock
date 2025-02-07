@@ -670,9 +670,9 @@ GEM
       websocket (~> 1.0)
     semantic_logger (4.16.0)
       concurrent-ruby (~> 1.0)
-    sentry-rails (5.22.3)
+    sentry-rails (5.22.4)
       railties (>= 5.0)
-      sentry-ruby (~> 5.22.3)
+      sentry-ruby (~> 5.22.4)
     sentry-ruby (5.22.4)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
