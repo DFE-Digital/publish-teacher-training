@@ -10,6 +10,7 @@
       },
       "types": ["locality", "political"]
     }
-  ]
+  ],
+  "status": "OK"
 }
 
