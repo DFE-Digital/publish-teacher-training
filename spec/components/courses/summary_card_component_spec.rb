@@ -103,6 +103,48 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       it_behaves_like 'school location row', :apprenticeship, 3, '3 potential employing schools'
     end
 
+    describe '#search_by_location?' do
+      subject(:summary_card) do
+        described_class.new(
+          course:,
+          location:,
+          visa_sponsorship: false
+        )
+      end
+
+      let(:location) { 'London' }
+      let(:funding) { 'fee' }
+
+      context 'when there is a minimum distance' do
+        before do
+          # minimum_distance_to_search_location will be an attribute
+          # in the query SELECT list so we avoid Ruby computation and
+          # recalculation of all sites and its latitude, longitude from a single
+          # location
+          course.define_singleton_method(:minimum_distance_to_search_location) { 0.2 }
+        end
+
+        it 'returns true' do
+          expect(summary_card.search_by_location?).to be true
+        end
+      end
+
+      context 'when there is not a minimum distance' do
+        it 'returns false' do
+          expect(summary_card.search_by_location?).to be false
+          expect { render_inline(summary_card) }.not_to raise_error
+        end
+      end
+
+      context 'when there is no location params' do
+        let(:location) { nil }
+
+        it 'returns false' do
+          expect(summary_card.search_by_location?).to be false
+        end
+      end
+    end
+
     context 'when search by location' do
       let(:search_params) { { location: 'London', latitude: 1, longitude: 1 } }
 
