@@ -144,6 +144,10 @@ module Courses
       t(".visa_sponsorship_value.#{course.visa_sponsorship}")
     end
 
+    def search_by_location?
+      @location.present? && course.respond_to?(:minimum_distance_to_search_location)
+    end
+
     private
 
     def school_term
@@ -164,10 +168,6 @@ module Courses
       !bursary_and_scholarship_flag_active_or_preview? ||
         (search_by_visa_sponsorship? && !physics? && !languages?) ||
         financial_incentive.blank?
-    end
-
-    def search_by_location?
-      @location.present?
     end
 
     def search_by_visa_sponsorship?
