@@ -1,0 +1,27 @@
+<%= govuk_details(summary_text: "School distances for #{course.provider.name_and_code} - #{course.name_and_code}") do %>
+  <%= govuk_table do |table| %>
+    <%= table.with_head do |head| %>
+      <%= head.with_row do |row| %>
+        <%= row.with_cell(text: "Location Name") %>
+        <%= row.with_cell(text: "Latitude") %>
+        <%= row.with_cell(text: "Longitude") %>
+        <%= row.with_cell(text: "Distance (miles)", numeric: true) %>
+        <%= row.with_cell(text: "Google Maps") %>
+      <% end %>
+    <% end %>
+
+    <%= table.with_body do |body| %>
+      <% schools.each do |school| %>
+        <%= body.with_row do |row| %>
+          <%= row.with_cell(text: school.location_name) %>
+          <%= row.with_cell(text: school.latitude) %>
+          <%= row.with_cell(text: school.longitude) %>
+          <%= row.with_cell(text: "#{school.distance_to_search_location.round(2)} miles", numeric: true) %>
+          <%= row.with_cell do %>
+            <%= govuk_link_to("Google Maps", google_maps_direction_path(school_latitude: school.latitude, school_longitude: school.longitude), target: "_blank") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
