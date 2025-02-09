@@ -4,6 +4,14 @@
   <%= t(".page_title", count: @courses_count, formatted_count: number_with_delimiter(@courses_count)) %>
 </h1>
 
+<%= render Courses::QueryDebugHeaderComponent.new(
+  results: @results,
+  applied_filters: @courses_query.applied_scopes,
+  latitude: @search_params[:latitude],
+  longitude: @search_params[:longitude],
+  debug: params[:debug]
+) %>
+
 <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, method: :get do |form| %>
   <div class="app-filter-toggle"></div>
 
@@ -107,7 +115,18 @@
 
         <ul class="app-search-results">
           <% @results.each do |course| %>
-            <%= render Courses::SummaryCardComponent.new(course:, location: @search_params[:location], visa_sponsorship: @search_params[:can_sponsor_visa]) %>
+            <%= render Courses::SummaryCardComponent.new(
+              course:,
+              location: @search_params[:location],
+              visa_sponsorship: @search_params[:can_sponsor_visa]
+            ) %>
+
+            <%= render Courses::SchoolDistancesDebugComponent.new(
+              course:,
+              latitude: @search_params[:latitude],
+              longitude: @search_params[:longitude],
+              debug: params[:debug]
+            ) %>
           <% end %>
         </ul>
 

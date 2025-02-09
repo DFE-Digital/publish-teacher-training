@@ -6,10 +6,9 @@ module Find
       def index
         @search_courses_form = ::Courses::SearchForm.new(search_courses_params)
         @search_params = @search_courses_form.search_params
-
-        @courses = ::Courses::Query.call(params: @search_params)
+        @courses_query = ::Courses::Query.new(params: @search_params)
+        @courses = @courses_query.call
         @courses_count = @courses.unscope(:order, :group).distinct.count(:id)
-
         @pagy, @results = pagy(@courses, count: @courses_count)
       end
 

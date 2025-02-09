@@ -4,11 +4,11 @@ module Courses
   class Query
     DEFAULT_RADIUS_IN_MILES = 10
 
+    attr_reader :applied_scopes, :scope, :params
+
     def self.call(...)
       new(...).call
     end
-
-    attr_reader :scope, :params, :applied_scopes
 
     def initialize(params:)
       @params = params

@@ -1,0 +1,67 @@
+<details class="govuk-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">
+      Courses Query Information
+    </span>
+  </summary>
+  <div class="govuk-details__text">
+    <h3 class="govuk-heading-m">Applied Filters</h3>
+    <ul class="govuk-list govuk-list--bullet">
+      <% @applied_filters.each do |filter_name, filter_value| %>
+        <li><strong><%= filter_name.to_s.humanize %>:</strong> <%= filter_value.presence %></li>
+      <% end %>
+    </ul>
+
+    <% if search_by_location? %>
+      <h3 class="govuk-heading-m">Location details</h3>
+      <p class="govuk-body">
+        The search was centered at latitude <strong><%= @latitude %></strong>,
+        longitude <strong><%= @longitude %></strong>.
+      </p>
+
+      <p class="govuk-body">
+        <%= govuk_link_to("View centre location in the map", google_maps_directions_path, target: "_blank") %>
+      </p>
+
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">Course</th>
+            <th class="govuk-table__header">Provider</th>
+            <th class="govuk-table__header">Nearest Site</th>
+            <th class="govuk-table__header">Latitude</th>
+            <th class="govuk-table__header">Longitude</th>
+            <th class="govuk-table__header">Distance (miles)</th>
+            <th class="govuk-table__header">Google Maps</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% nearest_school_for_each_result.each do |result| %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell"><%= result.name_and_code %></td>
+              <td class="govuk-table__cell"><%= result.provider.name_and_code %></td>
+              <td class="govuk-table__cell">
+                <%= govuk_link_to(
+                  result.location_name,
+                  "#{Settings.base_url}#{publish_provider_recruitment_cycle_school_path(
+                    result.provider.provider_code,
+                    result.provider.recruitment_cycle_year,
+                    result.site_id
+                  )}",
+                  host: Settings.base_url,
+                  target: "_blank"
+                ) %>
+              </td>
+              <td class="govuk-table__cell"><%= result.latitude %></td>
+              <td class="govuk-table__cell"><%= result.longitude %></td>
+              <td class="govuk-table__cell"><%= result.distance_to_search_location.round(2) %> miles</td>
+              <td class="govuk-table__cell">
+                <%= govuk_link_to("Distance from the centre in Google Maps", google_maps_direction_path_from_the_centre(result), target: "_blank") %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</details>
