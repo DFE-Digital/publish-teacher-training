@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Subject < ApplicationRecord
+  belongs_to :subject_group, optional: true
+
   has_many :course_subjects
   has_many :courses, through: :course_subjects
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
@@ -24,6 +26,10 @@ class Subject < ApplicationRecord
 
   def self.secondary_subject_codes_with_incentives
     secondary.includes(:financial_incentive).pluck(:subject_code)
+  end
+
+  def self.secondary_subjects_with_subject_groups
+    secondary.where.not(subject_group: nil)
   end
 
   def secondary_subject?

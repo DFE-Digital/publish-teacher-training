@@ -1,0 +1,17 @@
+<% content_for :page_title, title_with_error_prefix(I18n.t(".find.v2.subjects.primary.page_title"), @form.errors.present?) %>
+
+<%= form_with model: @form, url: find_submit_secondary_path, method: :post do |f| %>
+  <%= f.govuk_error_summary link_base_errors_to: :subjects %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l"><%= I18n.t(".find.v2.subjects.primary.page_title") %></h1>
+
+      <% @secondary_subject_options.group_by(&:subject_group).each do |subject_group_name, subjects| %>
+        <%= f.govuk_collection_check_boxes :subjects, subjects, :code, :name, :financial_info, legend: { text: subject_group_name } %>
+      <% end %>
+
+      <%= f.govuk_submit "Find secondary courses" %>
+    </div>
+  </div>
+<% end %>
