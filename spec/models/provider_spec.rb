@@ -627,9 +627,14 @@ describe Provider do
       end
 
       it "returns only findable courses' provider and/or accrediting provider" do
-        expect(subject).to contain_exactly(findable_course.provider,
-                                           findable_course_with_accrediting_provider.provider,
-                                           findable_course_with_accrediting_provider.accrediting_provider)
+        findable_course
+        findable_course_with_accrediting_provider
+
+        non_findable_course
+        non_findable_course_with_accrediting_provider
+        expect(subject.map(&:id)).to contain_exactly(findable_course.provider.id,
+                                                     findable_course_with_accrediting_provider.provider.id,
+                                                     findable_course_with_accrediting_provider.accrediting_provider.id)
       end
 
       context 'when the provider is the accredited provider for a course' do
