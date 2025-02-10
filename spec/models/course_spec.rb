@@ -837,6 +837,32 @@ describe Course do
           end
         end
       end
+
+      describe 'training provider must have partnership with accrediting provider' do
+        context 'with accredited enrichments' do
+          before do
+            allow(Settings.features).to receive(:provider_partnerships).and_return(false)
+          end
+
+          let(:course) { create(:course, :publishable, accredited: false) }
+
+          it 'is invalid to publish when accrediting provider has no relationship with training provider' do
+            expect(subject).to be_publishable
+          end
+        end
+
+        context 'with accredited partnerships' do
+          before do
+            allow(Settings.features).to receive(:provider_partnerships).and_return(true)
+          end
+
+          let(:course) { create(:course, :publishable, accredited: false) }
+
+          it 'is invalid to publish when accrediting provider has no relationship with training provider' do
+            expect(subject).to be_publishable
+          end
+        end
+      end
     end
   end
 
