@@ -69,9 +69,10 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       :with_gcse_equivalency,
       :with_accrediting_provider,
       :closed,
-      enrichments: [create(:course_enrichment, :initial_draft)],
-      sites: [create(:site, location_name: 'location 1')],
-      study_sites: [create(:site, :study_site)]
+      accrediting_provider:,
+      enrichments: [build(:course_enrichment, :initial_draft)],
+      sites: [build(:site, location_name: 'location 1')],
+      study_sites: [build(:site, :study_site)]
     )
   end
 
@@ -80,6 +81,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
       :with_gcse_equivalency,
       :with_accrediting_provider,
       :closed,
+      accrediting_provider:,
       enrichments: [create(:course_enrichment, :rolled_over)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
@@ -89,6 +91,7 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
   def and_there_is_a_draft_course
     given_a_course_exists(
       :with_accrediting_provider,
+      accrediting_provider:,
       enrichments: [create(:course_enrichment, :initial_draft)],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
@@ -173,6 +176,10 @@ feature 'Publishing courses', { can_edit_current_and_next_cycles: false } do
 
   def and_the_relevant_errors_are_shown
     expect(publish_courses_gcse_requirements_page.error_messages).to be_present
+  end
+
+  def accrediting_provider
+    build(:accredited_provider)
   end
 
   def provider
