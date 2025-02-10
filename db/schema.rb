@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_04_094031) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_10_103514) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -423,7 +423,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_094031) do
     t.text "type"
     t.text "subject_code"
     t.text "subject_name"
+    t.bigint "subject_group_id"
     t.index ["subject_code"], name: "index_subject_on_subject_code"
+    t.index ["subject_group_id"], name: "index_subject_on_subject_group_id"
     t.index ["subject_name"], name: "index_subject_on_subject_name"
     t.index ["type"], name: "index_subject_on_type"
   end
@@ -434,6 +436,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_094031) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["typename"], name: "index_subject_area_on_typename", unique: true
+  end
+
+  create_table "subject_group", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user", id: :serial, force: :cascade do |t|
@@ -497,6 +505,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_094031) do
   add_foreign_key "study_site_placement", "course"
   add_foreign_key "study_site_placement", "site"
   add_foreign_key "subject", "subject_area", column: "type", primary_key: "typename", name: "fk_subject__subject_area"
+  add_foreign_key "subject", "subject_group"
   add_foreign_key "user_notification", "user"
   add_foreign_key "user_permission", "provider"
   add_foreign_key "user_permission", "user"
