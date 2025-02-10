@@ -938,7 +938,6 @@ en:
               blank: "Select an accredited provider"
               partnership_missing: "Training provider must have an accredited provider partnership"
               is_not_accredited: "Update the accredited provider"
-              does_not_exist_in_cycle: "The accredited provider %{accredited_provider_code} does not exist in this cycle"
             is_send:
               inclusion: Select if this course has a special educational needs and disability (SEND) specialism
             a_level_subject_requirements:

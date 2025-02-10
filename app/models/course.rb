@@ -372,7 +372,6 @@ class Course < ApplicationRecord
   validate :validate_subject_count
   validate :validate_subject_consistency
   validate :validate_custom_age_range, on: %i[create new], if: -> { age_range_in_years.present? }
-  validate :accredited_provider_exists_in_current_cycle, on: :publish, unless: -> { self_accredited? }
   validates_with UniqueCourseValidator, on: :new
   validates_with ALevelCourseValidator, on: :publish, if: :teacher_degree_apprenticeship?
 
@@ -1192,11 +1191,5 @@ class Course < ApplicationRecord
     @services.register(:content_status) do
       Courses::ContentStatusService.new
     end
-  end
-
-  def accredited_provider_exists_in_current_cycle
-    return unless accredited_provider_code
-
-    errors.add(:accrediting_provider, :does_not_exist_in_cycle, accredited_provider_code:) unless RecruitmentCycle.current.providers.exists?(provider_code: accredited_provider_code)
   end
 end
