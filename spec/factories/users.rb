@@ -21,7 +21,11 @@ FactoryBot.define do
     end
 
     trait :with_provider do
-      providers { [create(:provider)] }
+      transient do
+        provider { association(:provider) }
+      end
+
+      providers { [provider] }
     end
 
     trait :with_provider_for_next_cycle do
