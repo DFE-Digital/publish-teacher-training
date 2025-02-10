@@ -6,6 +6,7 @@ module Courses
 
     attribute :can_sponsor_visa, :boolean
     attribute :subjects
+    attribute :subject_name
     attribute :send_courses, :boolean
     attribute :applications_open, :boolean
     attribute :study_types
@@ -67,6 +68,10 @@ module Courses
 
     def primary_subjects
       Subject.where(type: 'PrimarySubject').order(:subject_name)
+    end
+
+    def all_subjects
+      Subject.active
     end
 
     OrderingOption = Struct.new(:id, :name, keyword_init: true)

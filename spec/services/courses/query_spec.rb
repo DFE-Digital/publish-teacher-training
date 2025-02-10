@@ -522,6 +522,7 @@ RSpec.describe Courses::Query do
       let(:london) { build(:location, :london) }
       let(:canary_wharf) { build(:location, :canary_wharf) }
       let(:lewisham) { build(:location, :lewisham) }
+      let(:romford) { build(:location, :romford) }
       let(:manchester) { build(:location, :manchester) }
       let(:cambridge) { build(:location, :cambridge) }
       let(:bristol) { build(:location, :bristol) }
@@ -595,7 +596,7 @@ RSpec.describe Courses::Query do
               create(
                 :site_status,
                 :findable,
-                site: create(:site, latitude: 51.5807, longitude: 0.185)
+                site: create(:site, latitude: romford.latitude, longitude: romford.longitude)
               )
             ]
           ),
