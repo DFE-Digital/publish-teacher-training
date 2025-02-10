@@ -18,6 +18,10 @@ class Subject < ApplicationRecord
       .order(:subject_name)
   }
 
+  def name
+    subject_name
+  end
+
   def self.primary_subject_codes
     primary.pluck(:subject_code)
   end

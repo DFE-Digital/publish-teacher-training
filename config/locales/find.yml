@@ -494,6 +494,9 @@ en:
         order: Sort
     label:
       courses_search_form:
+        subject_name: Subject
+        location: City, town or postcode
+        radius: Search radius
         can_sponsor_visa: Only show courses with visa sponsorship
         special_education_needs: Only show courses with a SEND specialism
         applications_open: Only show courses open for applications

@@ -75,6 +75,11 @@ FactoryBot.define do
       longitude { -0.9781 }
     end
 
+    trait :romford do
+      latitude { 51.5807 }
+      longitude { 0.185 }
+    end
+
     trait :watford do
       latitude { 51.6553 }
       longitude { -0.3960 }

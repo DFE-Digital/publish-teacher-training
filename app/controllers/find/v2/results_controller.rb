@@ -35,6 +35,7 @@ module Find
           :degree_required,
           :university_degree_status,
           :sortby,
+          :subject_name,
           subjects: [],
           study_types: [],
           qualifications: [],
