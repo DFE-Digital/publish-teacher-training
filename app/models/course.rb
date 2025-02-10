@@ -360,6 +360,7 @@ class Course < ApplicationRecord
   validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_accredited_provider_is_accredited, on: :publish
+  validate :validate_accredited_provider_partnership_exists, on: :publish
   validate :validate_degree_requirements_publishable, on: :publish
   validate :validate_gcse_requirements_publishable, on: :publish
   validate :validate_enrichment
@@ -450,6 +451,12 @@ class Course < ApplicationRecord
 
   def publishable?
     valid? :publish
+  end
+
+  def validate_accredited_provider_partnership_exists
+    return if accredited_provider_code.blank?
+
+    errors.add(:accrediting_provider, :partnership_missing) unless provider.accredited_providers.include?(accrediting_provider)
   end
 
   def update_valid?
