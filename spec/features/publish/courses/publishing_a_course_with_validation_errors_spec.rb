@@ -167,6 +167,7 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
       :with_accrediting_provider,
       :salary,
       degree_grade: nil,
+      accrediting_provider:,
       enrichments: [create(:course_enrichment, :without_content, about_course: '')],
       sites: [create(:site, location_name: 'location 1')],
       study_sites: [create(:site, :study_site)]
@@ -187,6 +188,10 @@ feature 'Publishing courses errors', { can_edit_current_and_next_cycles: false }
     publish_provider_courses_show_page.course_button_panel.publish_button.click
   end
   alias_method :when_i_click_the_publish_link, :and_i_click_the_publish_link
+
+  def accrediting_provider
+    build(:accredited_provider)
+  end
 
   def provider
     @current_user.providers.first

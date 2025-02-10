@@ -6,6 +6,7 @@ FactoryBot.define do
     sequence(:course_code) { |n| "C#{n}#{(0..9).to_a.sample(2).join}" }
     sequence(:name) { |i| "#{Faker::Lorem.word} #{i}" }
     qualification { :pgce_with_qts }
+    accrediting_provider { nil }
     with_apprenticeship
     funding { 'fee' }
 
@@ -160,7 +161,15 @@ FactoryBot.define do
     end
 
     trait :with_accrediting_provider do
-      association(:accrediting_provider, factory: %i[provider accredited_provider])
+      accrediting_provider { association(:accredited_provider) }
+
+      after(:create) do |course|
+        if Settings.features.provider_partnerships
+          create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider)
+        else
+          course.provider.update(accrediting_provider_enrichments: [AccreditingProviderEnrichment.new(Description: 'EnrichmentDescription', UcasProviderCode: course.accrediting_provider.provider_code)])
+        end
+      end
     end
 
     trait :with_higher_education do
@@ -237,7 +246,7 @@ FactoryBot.define do
     trait :publishable do
       unpublished
       draft_enrichment
-      accredited_provider_code { provider.provider_code }
+      with_accrediting_provider
 
       with_gcse_equivalency
     end
@@ -246,11 +255,18 @@ FactoryBot.define do
     trait :unpublished do
       transient do
         identifier { 'unpublished' }
+        accredited { false }
       end
 
       name { "#{identifier} course name" }
 
-      provider { find_or_create :accredited_provider, :published_scitt }
+      provider do
+        if accredited
+          find_or_create :accredited_provider, :published_scitt
+        else
+          find_or_create :provider
+        end
+      end
       sites { build_list(:site, 1, provider:) }
     end
 
