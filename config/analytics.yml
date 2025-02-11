@@ -184,6 +184,7 @@ shared:
     - type
     - subject_code
     - subject_name
+    - subject_group_id
   subject_group:
     - id
     - name
