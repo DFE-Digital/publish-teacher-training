@@ -11,12 +11,12 @@ export default class extends Controller {
       name: 'subject_name'
     })
 
-    this.element.querySelector('input').addEventListener('input', this.clearSelect.bind(this, selectEl));
+    this.element.querySelector('input').addEventListener('input', this.clearSelect.bind(this, selectEl))
   }
 
-  clearSelect(selectEl, event) {
+  clearSelect (selectEl, event) {
     if (event.target.value === '') {
-      selectEl.value = '';
+      selectEl.value = ''
     }
   }
 }

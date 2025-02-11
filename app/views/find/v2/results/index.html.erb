@@ -102,7 +102,7 @@
                  dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
                  form.object.subject_code
                ),
-               label: { text: t("helpers.label.courses_search_form.subject_name"), size: 's' }
+               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" }
              )
            ) %>
         </div>
@@ -110,18 +110,16 @@
         <%= form.govuk_text_field :location,
           label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
           form_group: {
-            'data-controller' => 'locations-autocomplete',
-            'data-locations-autocomplete-path-value' => find_geolocation_suggestions_path
+            "data-controller" => "locations-autocomplete",
+            "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path
           },
           autocomplete: "off",
-          data: { locations_autocomplete_target: "input" }
-        %>
+          data: { locations_autocomplete_target: "input" } %>
 
         <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
-          label: { text: t('helpers.label.courses_search_form.radius'), size: "s" }
-           %>
+          label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
 
-        <%= form.govuk_submit t('helpers.submit.courses_search_form.search') %>
+        <%= form.govuk_submit t("helpers.submit.courses_search_form.search") %>
       </div>
 
     <% if @results.present? %>
