@@ -18,6 +18,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
 
     when_i_start_typing_london_location
     then_i_see_location_suggestions
+    and_the_location_suggestions_for_london_is_cached
 
     when_i_select_the_first_suggestion
     and_i_click_to_search_courses_in_london
@@ -173,6 +174,18 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(page).to have_css('#location-field__listbox', visible: :hidden)
   end
 
+  def and_the_location_suggestions_for_london_is_cached
+    expect(Rails.cache.read('geolocation_suggestions:lon')).to eq(
+      [
+        {
+          name: 'London, UK',
+          place_id: 'ChIJdd4hrwug2EcRmSrV3Vo6llI',
+          types: %w[locality political]
+        }
+      ]
+    )
+  end
+
   def when_i_start_typing_london_location
     stub_request(
       :get,
@@ -185,7 +198,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
         'Keep-Alive' => '30',
         'User-Agent' => 'Faraday v2.12.2'
       }
-    ).to_return(status: 200, body: { predictions: [{ description: 'London, UK' }] }.to_json, headers: { 'Content-Type' => 'application/json' })
+    ).to_return(status: 200, body: file_fixture('google_old_places_api_client/autocomplete/london.json'), headers: { 'Content-Type' => 'application/json' })
 
     fill_in 'City, town or postcode', with: 'Lon'
   end
