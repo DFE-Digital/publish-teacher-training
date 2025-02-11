@@ -24,9 +24,6 @@ export default class extends Controller {
         inputValue: this.suggestionTemplate,
         suggestion: this.suggestionTemplate
       },
-      onConfirm: (option) => {
-        inputElement.value = option ? option.code : ''
-      },
       confirmOnBlur: false
     })
 

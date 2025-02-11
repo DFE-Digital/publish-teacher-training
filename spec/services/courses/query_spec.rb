@@ -53,6 +53,48 @@ RSpec.describe Courses::Query do
       end
     end
 
+    context 'when filter by subject code' do
+      let!(:biology) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
+      end
+      let!(:chemistry) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
+      end
+      let!(:mathematics) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+      end
+
+      let(:params) { { subject_code: 'C1' } }
+
+      it 'returns courses that match the given subject code' do
+        expect(results).to match_collection(
+          [biology],
+          attribute_names: %w[name]
+        )
+      end
+    end
+
+    context 'when filter by subject code and subjects' do
+      let!(:biology) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
+      end
+      let!(:chemistry) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Chemistry', subjects: [find_or_create(:secondary_subject, :chemistry)])
+      end
+      let!(:mathematics) do
+        create(:course, :with_full_time_sites, :secondary, name: 'Mathematics', subjects: [find_or_create(:secondary_subject, :mathematics)])
+      end
+
+      let(:params) { { subjects: %w[F1], subject_code: 'C1' } }
+
+      it 'returns courses that match both the given subject code and subjects' do
+        expect(results).to match_collection(
+          [biology, chemistry],
+          attribute_names: %w[name]
+        )
+      end
+    end
+
     context 'when filter by secondary subjects' do
       let!(:biology) do
         create(:course, :with_full_time_sites, :secondary, name: 'Biology', subjects: [find_or_create(:secondary_subject, :biology)])
@@ -858,6 +900,30 @@ RSpec.describe Courses::Query do
             course_cardiff_result,
             course_manchester_result
           ]
+        end
+      end
+
+      context 'when radius is nil default radius to 10 miles' do
+        it_behaves_like 'location search results', radius: nil do
+          let(:expected) do
+            [
+              course_london_result,
+              course_canary_wharf_result,
+              course_lewisham_result
+            ]
+          end
+        end
+      end
+
+      context 'when radius is blank default radius to 10 miles' do
+        it_behaves_like 'location search results', radius: '' do
+          let(:expected) do
+            [
+              course_london_result,
+              course_canary_wharf_result,
+              course_lewisham_result
+            ]
+          end
         end
       end
 

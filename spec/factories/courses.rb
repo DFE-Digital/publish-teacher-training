@@ -311,6 +311,11 @@ FactoryBot.define do
       can_sponsor_student_visa { true }
     end
 
+    trait :can_not_sponsor_visa do
+      can_sponsor_student_visa { false }
+      can_sponsor_skilled_worker_visa { false }
+    end
+
     trait :engineers_teach_physics do
       campaign_name { :engineers_teach_physics }
     end

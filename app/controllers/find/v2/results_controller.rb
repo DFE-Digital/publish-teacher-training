@@ -4,7 +4,9 @@ module Find
   module V2
     class ResultsController < Find::ApplicationController
       def index
-        @search_courses_form = ::Courses::SearchForm.new(search_courses_params)
+        coordinates = Geolocation::CoordinatesQuery.new(params[:location]).call
+
+        @search_courses_form = ::Courses::SearchForm.new(search_courses_params.merge(coordinates))
         @search_params = @search_courses_form.search_params
         @courses_query = ::Courses::Query.new(params: @search_params)
         @courses = @courses_query.call
@@ -35,6 +37,7 @@ module Find
           :degree_required,
           :university_degree_status,
           :sortby,
+          :subject_code,
           :subject_name,
           subjects: [],
           study_types: [],

@@ -8,7 +8,15 @@ export default class extends Controller {
     dfeAutocompleteField(this.element, {
       displayMenu: 'overlay',
       minLength: 2,
-      name: `${selectEl.name}_raw`
+      name: 'subject_name'
     })
+
+    this.element.querySelector('input').addEventListener('input', this.clearSelect.bind(this, selectEl));
+  }
+
+  clearSelect(selectEl, event) {
+    if (event.target.value === '') {
+      selectEl.value = '';
+    }
   }
 }
