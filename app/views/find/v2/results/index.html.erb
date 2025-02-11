@@ -90,45 +90,41 @@
         </div>
     </div>
 
-    <% if @results.present? %>
-      <div class="app-filter-layout__content">
-        <div class="app-search-results-controls">
-          <div class="govuk-form-group" data-controller="subjects-autocomplete">
-            <%= render DfE::Autocomplete::View.new(
-               form,
-               attribute_name: :subject_name,
-               form_field: form.govuk_select(
-                 :subject_name,
-                 options_for_select(
-                   dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
-                   form.object.subject_name
-                 ),
-                 label: { text: t("helpers.label.courses_search_form.subject_name"), size: 's' }
-               )
-             ) %>
-          </div>
-
-          <%= form.govuk_text_field :location,
-            label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
-            form_group: {
-              'data-controller' => 'locations-autocomplete',
-              'data-locations-autocomplete-path-value' => find_geolocation_suggestions_path
-            },
-            autocomplete: "off",
-            data: { locations_autocomplete_target: "input" }
-          %>
-
-          <%= form.govuk_select :radius,
-            [["1 mile", 1], ["5 miles", 5], ["10 miles", 10], ["15 miles", 15],
-             ["20 miles", 20], ["25 miles", 25], ["50 miles", 50], ["100 miles", 100],
-             ["200 miles", 200]],
-            label: { text: "Search radius", size: "s" },
-            form: "result-filters",
-            selected: 10 %>
-
-          <%= form.govuk_submit "Search" %>
+    <div class="app-filter-layout__content">
+      <div class="app-search-results-controls">
+        <div class="govuk-form-group" data-controller="subjects-autocomplete">
+          <%= render DfE::Autocomplete::View.new(
+             form,
+             attribute_name: :subject_code,
+             form_field: form.govuk_select(
+               :subject_code,
+               options_for_select(
+                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
+                 form.object.subject_code
+               ),
+               label: { text: t("helpers.label.courses_search_form.subject_name"), size: 's' }
+             )
+           ) %>
         </div>
 
+        <%= form.govuk_text_field :location,
+          label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
+          form_group: {
+            'data-controller' => 'locations-autocomplete',
+            'data-locations-autocomplete-path-value' => find_geolocation_suggestions_path
+          },
+          autocomplete: "off",
+          data: { locations_autocomplete_target: "input" }
+        %>
+
+        <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
+          label: { text: t('helpers.label.courses_search_form.radius'), size: "s" }
+           %>
+
+        <%= form.govuk_submit t('helpers.submit.courses_search_form.search') %>
+      </div>
+
+    <% if @results.present? %>
         <div class="app-search-results-header">
           <div class="app-search-results-header__sort">
             <% if @search_params[:location].present? %>
@@ -142,7 +138,8 @@
                   :id,
                   :name,
                   label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
-                  role: "listbox", form_group: {}
+                  role: "listbox", form_group: {},
+                  options: { include_blank: true }
                 ) %>
 
               <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block") %>
@@ -168,7 +165,7 @@
         </ul>
 
         <%= govuk_pagination(pagy: @pagy) %>
-      </div>
     <% end %>
   </div>
+</div>
 <% end %>

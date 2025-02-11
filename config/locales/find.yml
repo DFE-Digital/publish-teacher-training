@@ -525,6 +525,10 @@ en:
             course_name_descending: Course name (Z-A)
             provider_name_ascending: Training provider (A-Z)
             provider_name_descending: Training provider (Z-A)
+        radius_options:
+          miles:
+            one: "%{count} mile"
+            other: "%{count} miles"
   activemodel:
     errors:
       models:

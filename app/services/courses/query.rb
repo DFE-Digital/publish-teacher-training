@@ -68,11 +68,13 @@ module Courses
     end
 
     def subjects_scope
-      return @scope if params[:subjects].blank?
+      return @scope if params[:subjects].blank? && params[:subject_code].blank?
 
-      @applied_scopes[:subjects] = params[:subjects]
+      subject_codes = [params[:subjects], params[:subject_code]].flatten.compact
 
-      @scope.joins(:subjects).where(subjects: { subject_code: params[:subjects] })
+      @applied_scopes[:subjects] = subject_codes
+
+      @scope.joins(:subjects).where(subjects: { subject_code: subject_codes })
     end
 
     def study_modes_scope
@@ -182,7 +184,7 @@ module Courses
     def location_scope
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
-      radius_in_miles = Float(params[:radius] || DEFAULT_RADIUS_IN_MILES)
+      radius_in_miles = Float(params[:radius].presence || DEFAULT_RADIUS_IN_MILES)
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])

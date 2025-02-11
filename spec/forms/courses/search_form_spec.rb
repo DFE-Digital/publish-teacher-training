@@ -188,11 +188,51 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when subjects are provided' do
+      let(:form) { described_class.new(subjects: ['C1']) }
+
+      it 'returns the correct search params with subjects' do
+        expect(form.search_params).to eq({ subjects: ['C1'] })
+      end
+    end
+
+    context 'when subject code is provided' do
+      let(:form) { described_class.new(subject_name: 'Biology', subject_code: 'C1') }
+
+      it 'convert into subjects and remove subject code' do
+        expect(form.search_params).to eq({ subject_name: 'Biology', subject_code: 'C1' })
+      end
+    end
+
     context 'when location is provided' do
       let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10) }
 
       it 'returns the correct search params with location details' do
         expect(form.search_params).to eq(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10)
+      end
+    end
+
+    context 'when location is provided without radius' do
+      let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435) }
+
+      it 'returns the correct search params with location details and default radius' do
+        expect(form.search_params).to eq(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10)
+      end
+    end
+
+    context 'when location is provided with blank radius' do
+      let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: '') }
+
+      it 'returns the correct search params with location details and default radius' do
+        expect(form.search_params).to eq(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 10)
+      end
+    end
+
+    context 'when location is provided with radius' do
+      let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 200) }
+
+      it 'returns the correct search params with location details and default radius' do
+        expect(form.search_params).to eq(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 200)
       end
     end
 

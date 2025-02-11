@@ -6,6 +6,7 @@ module Courses
 
     attribute :can_sponsor_visa, :boolean
     attribute :subjects
+    attribute :subject_code
     attribute :subject_name
     attribute :send_courses, :boolean
     attribute :applications_open, :boolean
@@ -22,6 +23,9 @@ module Courses
     attribute :radius
     attribute :order
 
+    attribute :formatted_address
+    attribute :types
+
     attribute :age_group
     attribute :qualification
     attribute :degree_required
@@ -34,6 +38,7 @@ module Courses
         .symbolize_keys
         .then { |params| params.except(*old_parameters) }
         .then { |params| transform_old_parameters(params) }
+        .then { |params| inject_defaults(params) }
         .compact
     end
 
@@ -70,8 +75,10 @@ module Courses
       Subject.where(type: 'PrimarySubject').order(:subject_name)
     end
 
+    SubjectSuggestion = Struct.new(:name, :value, keyword_init: true)
+
     def all_subjects
-      Subject.active
+      Subject.active.map { |subject| SubjectSuggestion.new(name: subject.subject_name, value: subject.subject_code) }
     end
 
     OrderingOption = Struct.new(:id, :name, keyword_init: true)
@@ -97,6 +104,18 @@ module Courses
       ]
     end
 
+    RadiusOption = Struct.new(:value, :name, keyword_init: true)
+
+    def radius_options
+      [1, 5, 10, 15, 20, 25, 50, 100, 200].map do |value|
+        RadiusOption.new(value:, name: I18n.t('helpers.label.courses_search_form.radius_options.miles', count: value))
+      end
+    end
+
+    def radius
+      super.presence || 10
+    end
+
     private
 
     def transform_old_parameters(params)
@@ -105,6 +124,12 @@ module Courses
         params[:minimum_degree_required] = minimum_degree_required
         params[:provider_name] = provider_name
         params[:order] = order
+      end
+    end
+
+    def inject_defaults(params)
+      params.tap do
+        params[:radius] = radius if location.present?
       end
     end
 
