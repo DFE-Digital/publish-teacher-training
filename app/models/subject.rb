@@ -3,6 +3,7 @@
 class Subject < ApplicationRecord
   has_many :course_subjects
   has_many :courses, through: :course_subjects
+  belongs_to :subject_group, optional: true
   belongs_to :subject_area, foreign_key: :type, inverse_of: :subjects
   has_one :financial_incentive
 
