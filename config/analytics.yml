@@ -184,6 +184,11 @@ shared:
     - type
     - subject_code
     - subject_name
+  subject_group:
+    - id
+    - name
+    - created_at
+    - updated_at
   subject_area:
     - typename
     - name
