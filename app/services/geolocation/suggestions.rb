@@ -27,7 +27,7 @@ module Geolocation
     end
 
     def cache_key
-      "geolocation_suggestions:#{@query.parameterize}"
+      "geolocation:suggestions:#{@query.parameterize}"
     end
 
     def fetch_suggestions_and_cache

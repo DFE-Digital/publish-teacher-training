@@ -24,6 +24,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     and_i_click_to_search_courses_in_london
     then_i_see_only_courses_within_selected_location_within_default_radius
     and_the_default_radius_is_selected
+    and_the_location_search_for_coordinates_is_cached
 
     when_i_increase_the_radius_to_15_miles
     and_i_click_search
@@ -175,7 +176,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_the_location_suggestions_for_london_is_cached
-    expect(Rails.cache.read('geolocation_suggestions:lon')).to eq(
+    expect(Rails.cache.read('geolocation:suggestions:lon')).to eq(
       [
         {
           name: 'London, UK',
@@ -183,6 +184,17 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
           types: %w[locality political]
         }
       ]
+    )
+  end
+
+  def and_the_location_search_for_coordinates_is_cached
+    expect(Rails.cache.read('geolocation:query:london-uk')).to eq(
+      {
+        formatted_address: 'London, UK',
+        latitude: 51.5074,
+        longitude: -0.1278,
+        types: %w[locality political]
+      }
     )
   end
 

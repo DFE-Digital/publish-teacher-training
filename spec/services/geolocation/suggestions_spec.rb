@@ -92,7 +92,7 @@ RSpec.describe Geolocation::Suggestions do
     let(:query) { 'London, UK' }
 
     it 'returns the formatted cache key' do
-      expect(suggestions_query.send(:cache_key)).to eq('geolocation_suggestions:london-uk')
+      expect(suggestions_query.send(:cache_key)).to eq('geolocation:suggestions:london-uk')
     end
   end
 end
