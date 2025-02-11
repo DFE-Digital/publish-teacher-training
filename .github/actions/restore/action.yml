@@ -4,7 +4,7 @@ description: Restore AKS environment database
 inputs:
   azure-credentials:
     required: true
-  prod-credentials:
+  azure-storage-connection-string:
     required: true
   environment:
     description: Environment to restore to
@@ -25,30 +25,12 @@ runs:
       shell: bash
       run: echo "SANITISED_FILE_NAME=publish_sanitised_$(date +"%F")" >> $GITHUB_ENV
 
-    - name: Set KV environment variables
-      shell: bash
-      run: |
-        tf_vars_file=terraform/aks/workspace_variables/production.tfvars.json
-        echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
-
-    - uses: azure/login@v2
-      with:
-        creds: ${{ inputs.prod-credentials }}
-
-    - name: Set Connection String
-      shell: bash
-      run: |
-        STORAGE_CONN_STR="$(az keyvault secret show --name PUBLISH-STORAGE-ACCOUNT-CONNECTION-STRING-PRODUCTION --vault-name ${{ env.key_vault_name }} | jq -r .value)"
-        echo "::add-mask::$STORAGE_CONN_STR"
-        echo "STORAGE_CONN_STR=$STORAGE_CONN_STR" >> $GITHUB_ENV
-
     - name: Download Backup
       shell: bash
       run: |
         az storage blob download --container-name database-backup \
         --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz \
-        --connection-string '${{ env.STORAGE_CONN_STR }}'
-        az logout
+        --connection-string '${{ inputs.azure-storage-connection-string }}'
 
     - name: Set environment variables for AKS
       shell: bash

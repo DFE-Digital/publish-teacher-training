@@ -15,8 +15,8 @@ inputs:
     required: true
   slack-webhook:
     required: true
-  prod-credentials:
-    required: false
+  azure-storage-connection-string:
+    required: true
 
 outputs:
   deploy-url:
@@ -140,7 +140,7 @@ runs:
       uses: ./.github/actions/restore/
       with:
         azure-credentials: ${{ inputs.azure-credentials }}
-        prod-credentials: ${{ inputs.prod-credentials }}
+        azure-storage-connection-string: ${{ inputs.azure-storage-connection-string }}
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}
 

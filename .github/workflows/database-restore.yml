@@ -106,7 +106,7 @@ jobs:
         run: |
           az storage blob upload --container-name database-backup \
           --file ${SANITISED_FILE_NAME}.sql.gz --name ${SANITISED_FILE_NAME}.sql.gz --overwrite \
-          --connection-string '${{ env.STORAGE_CONN_STR }}'
+          --connection-string '${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}'
           rm ${SANITISED_FILE_NAME}.sql.gz
 
   restore:
@@ -127,5 +127,5 @@ jobs:
         uses: ./.github/actions/restore/
         with:
           azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
-          prod-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+          azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
           environment: ${{ matrix.environment }}

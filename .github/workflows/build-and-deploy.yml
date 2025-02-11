@@ -312,7 +312,7 @@ jobs:
           pr-number: ${{ github.event.pull_request.number }}
           sha: ${{ needs.build.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
-          prod-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+          azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
       - name: Update review-${{ github.event.pull_request.number }} status
         if: always()
