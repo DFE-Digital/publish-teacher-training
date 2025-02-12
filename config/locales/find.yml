@@ -461,6 +461,17 @@ en:
             zero: "No courses found"
             one: "1 course found"
             other: "%{formatted_count} courses found"
+        courses_guidance:
+          show:
+            heading: "Not sure which course is right for you?"
+            links:
+              choose_course: "Find out how to choose a course"
+              training_adviser: "Get a free teacher training adviser"
+              events: "Talk to teacher training providers at an event near you"
+            urls:
+              choose_course: "https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course"
+              training_adviser: "https://getintoteaching.education.gov.uk/teacher-training-advisers"
+              events: "https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events"
       subjects:
         primary:
           page_title: Browse primary courses

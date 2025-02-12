@@ -1,0 +1,13 @@
+<%= govuk_accordion(classes: ["app-courses-guidance"]) do |accordion| %>
+  <% accordion.with_section heading_text: t(".heading") do %>
+    <p class="govuk-body">
+      <%= govuk_link_to t(".links.choose_course"), t(".urls.choose_course") %>
+    </p>
+    <p class="govuk-body">
+      <%= govuk_link_to t(".links.training_adviser"), t(".urls.training_adviser") %>
+    </p>
+    <p class="govuk-body accordion--last-child">
+      <%= govuk_link_to t(".links.events"), t(".urls.events") %>
+    </p>
+  <% end %>
+<% end %>
