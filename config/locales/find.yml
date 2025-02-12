@@ -433,6 +433,8 @@ en:
       url_school_placements: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/school-placements
       url_fund_your_training: https://getintoteaching.education.gov.uk/funding-and-support
       url_visas_for_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/visas-for-non-uk-trainees
+      url_choose_course: https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course
+      url_training_adviser: https://getintoteaching.education.gov.uk/teacher-training-advisers
     qualification:
       description_with_abbreviation:
         qts:
@@ -468,10 +470,6 @@ en:
               choose_course: "Find out how to choose a course"
               training_adviser: "Get a free teacher training adviser"
               events: "Talk to teacher training providers at an event near you"
-            urls:
-              choose_course: "https://getintoteaching.education.gov.uk/train-to-be-a-teacher/how-to-choose-your-teacher-training-course"
-              training_adviser: "https://getintoteaching.education.gov.uk/teacher-training-advisers"
-              events: "https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events"
       subjects:
         primary:
           page_title: Browse primary courses
