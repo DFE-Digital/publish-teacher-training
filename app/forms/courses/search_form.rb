@@ -4,23 +4,27 @@ module Courses
   class SearchForm < ApplicationForm
     include ActiveModel::Attributes
 
-    attribute :can_sponsor_visa, :boolean
-    attribute :subjects
-    attribute :send_courses, :boolean
     attribute :applications_open, :boolean
-    attribute :study_types
-    attribute :minimum_degree_required
-    attribute :qualifications
-    attribute :level
+    attribute :can_sponsor_visa, :boolean
     attribute :funding
-    attribute :provider_code
-    attribute :provider_name
+    attribute :latitude
+    attribute :level
     attribute :location
     attribute :longitude
-    attribute :latitude
-    attribute :radius
+    attribute :minimum_degree_required
     attribute :order
+    attribute :provider_code
+    attribute :provider_name
+    attribute :qualifications # array
+    attribute :radius
+    attribute :send_courses, :boolean
+    attribute :study_types # array
 
+    # change subject_codes
+    attribute :subjects # array
+
+    # OLD parameters for backwards compatibility
+    #
     attribute :age_group
     attribute :qualification
     attribute :degree_required

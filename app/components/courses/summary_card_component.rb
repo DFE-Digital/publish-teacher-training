@@ -160,6 +160,8 @@ module Courses
       t('.fee_value.fee.international_fees_html', value: content_tag(:b, number_to_currency(fee_international.to_f)))
     end
 
+    # Change to financial incentive first?
+    #
     def hide_fee_hint?
       !bursary_and_scholarship_flag_active_or_preview? ||
         (search_by_visa_sponsorship? && !physics? && !languages?) ||
@@ -201,10 +203,13 @@ module Courses
       main_subject&.subject_name.in?(LANGUAGE_SUBJECTS)
     end
 
+    # Doing N+1 query need
     def financial_incentive
       @financial_incentive ||= main_subject&.financial_incentive
     end
 
+    # We don't have the concept of main subject
+    #
     def main_subject
       @main_subject ||= Subject.find_by(id: course.master_subject_id)
     end

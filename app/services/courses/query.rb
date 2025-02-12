@@ -13,6 +13,9 @@ module Courses
     def initialize(params:)
       @params = params
       @applied_scopes = {}
+
+      # We need to have a course published concept in app
+      #
       @scope = RecruitmentCycle
                .current
                .courses
@@ -56,6 +59,9 @@ module Courses
 
       @applied_scopes[:can_sponsor_visa] = params[:can_sponsor_visa]
 
+      # bug here
+      # because of the visa sponsorship data
+      #
       @scope
         .where(
           can_sponsor_student_visa: true
@@ -183,6 +189,7 @@ module Courses
       return @scope.distinct if params[:latitude].blank? || params[:longitude].blank?
 
       radius_in_miles = Float(params[:radius] || DEFAULT_RADIUS_IN_MILES)
+      # use a constant
       radius_in_meters = radius_in_miles * 1609.34
       latitude = Float(params[:latitude])
       longitude = Float(params[:longitude])
@@ -205,6 +212,7 @@ module Courses
           SQL
         )
         .select(
+          # Move the site to have the st make points in the database
           Course.sanitize_sql_array(
             [
               <<~SQL.squish,
@@ -217,6 +225,7 @@ module Courses
               longitude, latitude
             ]
           )
+      # use a constant for 1609.344
         )
         .group(:id)
         .order('minimum_distance_to_search_location ASC')
