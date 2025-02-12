@@ -76,6 +76,13 @@ RSpec.configure do |config|
       ActiveRecord::Base.connection.execute('DROP EXTENSION IF EXISTS postgis CASCADE;')
       ActiveRecord::Base.connection.execute('CREATE EXTENSION IF NOT EXISTS postgis;')
     end
+
+    # Pass a Settings env var to the process to override settings.yml
+    #
+    # This is mainly used in GH actions for testing matrix
+    # ../.github/workflows/build-and-deploy.yml (Jobs: Test)
+    Settings.add_source!(ENV.select { |k, _v| k[/SETTINGS__FEATURES_/] })
+    Settings.reload!
   end
 
   # start the transaction strategy as examples are run
