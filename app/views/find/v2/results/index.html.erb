@@ -88,82 +88,85 @@
             <%= form.govuk_submit t("helpers.submit.courses_search_form.filters") %>
           </div>
         </div>
-    </div>
-
-    <div class="app-filter-layout__content">
-      <div class="app-search-results-controls">
-        <div class="govuk-form-group" data-controller="subjects-autocomplete">
-          <%= render DfE::Autocomplete::View.new(
-             form,
-             attribute_name: :subject_code,
-             form_field: form.govuk_select(
-               :subject_code,
-               options_for_select(
-                 dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
-                 form.object.subject_code
-               ),
-               label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" }
-             )
-           ) %>
-        </div>
-
-        <%= form.govuk_text_field :location,
-          label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
-          form_group: {
-            "data-controller" => "locations-autocomplete",
-            "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path
-          },
-          autocomplete: "off",
-          data: { locations_autocomplete_target: "input" } %>
-
-        <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
-          label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
-
-        <%= form.govuk_submit t("helpers.submit.courses_search_form.search") %>
       </div>
 
-    <% if @results.present? %>
-        <div class="app-search-results-header">
-          <div class="app-search-results-header__sort">
-            <% if @search_params[:location].present? %>
-              <p class="govuk-body">
-                <%= I18n.t("helpers.label.courses_search_form.ordering.location") %>
-              </p>
-            <% else %>
-              <%= form.govuk_collection_select(
-                  :order,
-                  form.object.ordering_options,
-                  :id,
-                  :name,
-                  label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
-                  role: "listbox", form_group: {},
-                  options: { include_blank: true }
-                ) %>
+      <div class="app-filter-layout__content">
+        <%= render partial: "find/v2/results/courses_guidance/show" %>
 
-              <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block") %>
-            <% end %>
+        <div class="app-search-results-controls">
+          <div class="govuk-form-group" data-controller="subjects-autocomplete">
+            <%= render DfE::Autocomplete::View.new(
+               form,
+               attribute_name: :subject_code,
+               form_field: form.govuk_select(
+                 :subject_code,
+                 options_for_select(
+                   dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code]),
+                   form.object.subject_code
+                 ),
+                 label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" }
+               )
+             ) %>
           </div>
+
+          <%= form.govuk_text_field :location,
+            label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
+            form_group: {
+              "data-controller" => "locations-autocomplete",
+              "data-locations-autocomplete-path-value" => find_geolocation_suggestions_path
+            },
+            autocomplete: "off",
+            data: { locations_autocomplete_target: "input" } %>
+
+          <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
+            label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
+
+          <%= form.govuk_submit t("helpers.submit.courses_search_form.search") %>
         </div>
 
-        <ul class="app-search-results">
-          <% @results.each do |course| %>
-            <%= render Courses::SummaryCardComponent.new(
-              course:,
-              location: @search_params[:formatted_address] || @search_params[:location],
-              visa_sponsorship: @search_params[:can_sponsor_visa]
-            ) %>
+      <% if @results.present? %>
+          <div class="app-search-results-header">
+            <div class="app-search-results-header__sort">
+              <% if @search_params[:location].present? %>
+                <p class="govuk-body">
+                  <%= I18n.t("helpers.label.courses_search_form.ordering.location") %>
+                </p>
+              <% else %>
+                <%= form.govuk_collection_select(
+                    :order,
+                    form.object.ordering_options,
+                    :id,
+                    :name,
+                    label: { text: t("helpers.label.courses_search_form.ordering.non_location"), class: "govuk-!-display-inline-block" },
+                    role: "listbox", form_group: {},
+                    options: { include_blank: true }
+                  ) %>
 
-            <%= render Courses::SchoolDistancesDebugComponent.new(
-              course:,
-              latitude: @search_params[:latitude],
-              longitude: @search_params[:longitude],
-              debug: params[:debug]
-            ) %>
-          <% end %>
-        </ul>
+                <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block") %>
+              <% end %>
+            </div>
+          </div>
 
-        <%= govuk_pagination(pagy: @pagy) %>
-    <% end %>
+          <ul class="app-search-results">
+            <% @results.each do |course| %>
+              <%= render Courses::SummaryCardComponent.new(
+                course:,
+                location: @search_params[:formatted_address] || @search_params[:location],
+                visa_sponsorship: @search_params[:can_sponsor_visa]
+              ) %>
+
+              <%= render Courses::SchoolDistancesDebugComponent.new(
+                course:,
+                latitude: @search_params[:latitude],
+                longitude: @search_params[:longitude],
+                debug: params[:debug]
+              ) %>
+            <% end %>
+          </ul>
+
+          <%= render partial: "find/v2/results/courses_guidance/show" %>
+          <%= govuk_pagination(pagy: @pagy) %>
+      <% end %>
+    </div>
   </div>
-</div>
 <% end %>
