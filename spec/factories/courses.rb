@@ -165,7 +165,7 @@ FactoryBot.define do
 
       after(:create) do |course|
         if Settings.features.provider_partnerships
-          create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider)
+          create(:provider_partnership, training_provider: course.provider, accredited_provider: course.accrediting_provider, description: 'EnrichmentDescription')
         else
           course.provider.update(accrediting_provider_enrichments: [AccreditingProviderEnrichment.new(Description: 'EnrichmentDescription', UcasProviderCode: course.accrediting_provider.provider_code)])
         end
