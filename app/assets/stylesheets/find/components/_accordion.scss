@@ -15,27 +15,26 @@ body:not(.js-enabled) {
 
   .govuk-accordion__section {
     border-left: 5px solid govuk-colour("orange");
-    background-color: #f3f2f1;
-    padding-bottom: 1px;
+    background-color: govuk-colour("light-grey");
+    padding-bottom: govuk-spacing(1);
   }
 
   .govuk-accordion__section-heading {
     .govuk-accordion__section-button {
       padding-bottom: 0;
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-left: govuk-spacing(4);
+      padding-right: govuk-spacing(4);
     }
   }
 
   .govuk-accordion__section-content {
-    display: block;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: govuk-spacing(4);
+    padding-right: govuk-spacing(4);
     padding-top: 0;
     padding-bottom: 0;
   }
 
   .accordion--last-child {
-    padding-bottom: 30px;
+    padding-bottom: govuk-spacing(5);
   }
 }
