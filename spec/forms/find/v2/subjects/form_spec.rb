@@ -5,12 +5,12 @@ require 'rails_helper'
 module Find
   module V2
     module Subjects
-      describe PrimarySubjectsForm do
+      describe Form do
         describe 'validation' do
           subject { described_class.new(params) }
 
           context 'when no primary subject is selected' do
-            let(:params) { {} }
+            let(:params) { { context: 'primary' } }
 
             it 'is not valid' do
               expect(subject.valid?).to be(false)
@@ -18,7 +18,16 @@ module Find
             end
           end
 
-          context 'when primary subjects are selected' do
+          context 'when no secondary subject is selected' do
+            let(:params) { { context: 'secondary' } }
+
+            it 'is not valid' do
+              expect(subject.valid?).to be(false)
+              expect(subject.errors[:subjects]).to include('Select at least one type of secondary course')
+            end
+          end
+
+          context 'when subjects are selected' do
             let(:params) { { subjects: %w[01 02] } }
 
             it 'is valid' do
