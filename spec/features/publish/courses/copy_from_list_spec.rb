@@ -6,7 +6,7 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
   context 'with accredited courses' do
     before do
       given_i_am_authenticated_as_an_accredited_provider_user
-      and_there_is_an_accredited_course_i_want_to_edit
+      and_there_is_a_course_i_want_to_edit
 
       when_i_visit_the_how_school_placements_work_page
       then_i_see_the_current_course_information
@@ -50,6 +50,10 @@ feature 'Copying course information', { can_edit_current_and_next_cycles: false 
 
   def given_i_am_authenticated_as_an_accredited_provider_user
     given_i_am_authenticated(user: create(:user, :with_accredited_provider))
+  end
+
+  def and_there_is_an_accredited_course_i_want_to_edit
+    given_a_course_exists(enrichments: [build(:course_enrichment, :published)])
   end
 
   def and_there_is_an_accredited_course_i_want_to_edit
