@@ -3,7 +3,7 @@
 module Find
   module V2
     module Subjects
-      class PrimarySubjectsForm
+      class PrimaryForm
         include ActiveModel::Model
 
         attr_accessor :subjects

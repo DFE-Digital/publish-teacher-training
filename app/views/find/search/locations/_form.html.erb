@@ -177,14 +177,14 @@
     <div class="govuk-grid-column-one-half">
       <div class="quick-link-card">
         <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
-        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: find_primary_url)) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: find_v2_primary_path)) %></p>
       </div>
     </div>
 
     <div class="govuk-grid-column-one-half">
       <div class="quick-link-card">
         <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
-        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: "/subjects?age_group=secondary&l=2")) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: find_v2_secondary_path)) %></p>
       </div>
     </div>
   </div>
