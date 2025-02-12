@@ -105,15 +105,20 @@ module Courses
     end
 
     RadiusOption = Struct.new(:value, :name, keyword_init: true)
+    RADIUS_VALUES = [1, 5, 10, 15, 20, 25, 50, 100, 200].freeze
+    DEFAULT_RADIUS = 10
 
     def radius_options
-      [1, 5, 10, 15, 20, 25, 50, 100, 200].map do |value|
-        RadiusOption.new(value:, name: I18n.t('helpers.label.courses_search_form.radius_options.miles', count: value))
+      RADIUS_VALUES.map do |value|
+        RadiusOption.new(
+          value:,
+          name: I18n.t('helpers.label.courses_search_form.radius_options.miles', count: value)
+        )
       end
     end
 
     def radius
-      super.presence || 10
+      super.presence || DEFAULT_RADIUS
     end
 
     private
