@@ -18,6 +18,13 @@ on:
         description: Commit sha to be deployed
         required: true
 
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   deploy:
     name: Deployment to ${{ github.event.inputs.environment }}
@@ -33,7 +40,9 @@ jobs:
         id: deploy_app
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', github.event.inputs.environment)] }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: ${{ github.event.inputs.environment }}
           sha: ${{ github.event.inputs.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

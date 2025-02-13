@@ -2,8 +2,6 @@ name: restore
 description: Restore AKS environment database
 
 inputs:
-  azure-credentials:
-    required: true
   azure-storage-connection-string:
     required: true
   environment:
@@ -17,6 +15,15 @@ inputs:
   pr-number:
     description: PR number for the review app
     required: false
+  azure-client-id:
+    description: Managed identity client ID
+    required: true
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: true
+  azure-tenant-id:
+    description: Azure tenant ID
+    required: true
 
 runs:
   using: composite
@@ -38,6 +45,7 @@ runs:
         tf_vars_file=terraform/aks/workspace_variables/${{ inputs.environment }}.tfvars.json
         echo "cluster=$(jq -r '.cluster' ${tf_vars_file})" >> $GITHUB_ENV
         echo "app_environment=$(jq -r '.app_environment' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
 
     - name: Set app name variable
       shell: bash
@@ -52,7 +60,9 @@ runs:
 
     - uses: azure/login@v2
       with:
-        creds: ${{ inputs.azure-credentials }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
+        client-id: ${{ inputs.azure-client-id }}
 
     - name: Install kubectl
       if: ${{ env.app_environment != 'review' }}
@@ -60,7 +70,9 @@ runs:
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
-        azure-credentials: ${{ inputs.azure-credentials }}
+        azure-tenant-id: ${{ inputs.azure-tenant-id }}
+        azure-subscription-id: ${{ inputs.azure-subscription-id }}
+        azure-client-id: ${{ inputs.azure-client-id }}
 
     - name: K8 setup
       if: ${{ env.app_environment != 'review' }}
@@ -72,4 +84,4 @@ runs:
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        bin/konduit.sh -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 ${{ env.app_name }} -- psql
+        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 ${{ env.app_name }} -- psql

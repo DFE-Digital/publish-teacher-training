@@ -13,9 +13,12 @@ permissions:
   deployments: write
   packages: write
   pull-requests: write
+  id-token: write
 
 jobs:
   build:
+    environment:
+      name: review
     name: Build
     outputs:
       docker_image: ${{ env.DOCKER_IMAGE }}
@@ -62,7 +65,9 @@ jobs:
 
       - uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - uses: DFE-Digital/keyvault-yaml-secret@v1
         id: get-secret
@@ -293,6 +298,8 @@ jobs:
 
   deploy-review-app:
     name: Deployment To Review
+    environment:
+      name: review
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     if: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: [build]
@@ -300,15 +307,6 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Start review-${{ github.event.pull_request.number }} Deployment
-        uses: bobheadxi/deployments@v1
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: review-${{ github.event.pull_request.number }}
-          ref: ${{ github.head_ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -316,24 +314,22 @@ jobs:
         id: deploy_review
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: review
           pr-number: ${{ github.event.pull_request.number }}
           sha: ${{ needs.build.outputs.image_tag }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
-      - name: Update review-${{ github.event.pull_request.number }} status
-        if: always()
-        uses: bobheadxi/deployments@v1
+      - name: Post comment to Pull Request ${{ github.event.number }}
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: review-${{ github.event.pull_request.number }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
-          ref: ${{ github.head_ref }}
+          header: aks
+          message: |
+            Review app deployed to ${{ steps.deploy_review.outputs.deploy-url }}
 
   deploy-aks-before-production:
     name: Parallel deployment before production
@@ -355,7 +351,9 @@ jobs:
         id: deploy_app_before_production
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: ${{ matrix.environment }}
           sha: ${{ github.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
@@ -376,7 +374,9 @@ jobs:
         id: deploy_app
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: production
           sha: ${{ github.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
@@ -397,7 +397,9 @@ jobs:
         id: deploy_sandbox
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_SANDBOX }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: sandbox
           sha: ${{ github.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}

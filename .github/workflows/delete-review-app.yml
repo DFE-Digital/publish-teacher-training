@@ -7,9 +7,11 @@ on:
 
 permissions:
   deployments: write
+  id-token: write
 
 jobs:
   delete-review-app:
+    environment: review
     name: Delete Review App ${{ github.event.pull_request.number }}
     concurrency: deploy_review_${{ github.event.pull_request.number }}
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
@@ -49,7 +51,9 @@ jobs:
       - uses: azure/login@v2
         if: env.TF_STATE_EXISTS == 'true'
         with:
-          creds: ${{ secrets[format('AZURE_CREDENTIALS_REVIEW')] }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - name: Validate Azure Key Vault secrets
         if: env.TF_STATE_EXISTS == 'true'
@@ -62,7 +66,9 @@ jobs:
 
       - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
         with:
-          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_REVIEW')] }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - name: Terraform Destroy
         if: env.TF_STATE_EXISTS == 'true'
@@ -77,20 +83,3 @@ jobs:
             --connection-string $AZURE_STORAGE_CONNECTION_STRING
         env:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_REVIEW }}
-
-      - name: Update ${{ matrix.environment }} status
-        id: deactivate-env
-        if:   ${{ always() && env.TF_STATE_EXISTS == 'true' }}
-        uses: bobheadxi/deployments@v1
-        with:
-          step:   deactivate-env
-          token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    review-${{ env.PR_NUMBER }}
-
-      - name: Delete review-${{ env.PR_NUMBER }} environment
-        if:   always() && (steps.deactivate-env.outcome == 'success')
-        uses: bobheadxi/deployments@v1
-        with:
-          step:   delete-env
-          token:  ${{ secrets.ACTIONS_API_ACCESS_TOKEN }}
-          env:    review-${{ env.PR_NUMBER }}
