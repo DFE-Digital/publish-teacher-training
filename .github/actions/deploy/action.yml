@@ -2,8 +2,6 @@ name: deploy
 description: deploys application to AKS
 
 inputs:
-  azure-credentials:
-    required: true
   environment:
     description: Environment to deploy to
     required: true
@@ -16,6 +14,16 @@ inputs:
   slack-webhook:
     required: true
   azure-storage-connection-string:
+    description: Connection string
+    required: true
+  azure-client-id:
+    description: Managed identity client ID
+    required: true
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: true
+  azure-tenant-id:
+    description: Azure tenant ID
     required: true
 
 outputs:
@@ -35,6 +43,7 @@ runs:
         echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_app_secret_name=$(jq -r '.key_vault_app_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
         echo "key_vault_infra_secret_name=$(jq -r '.key_vault_infra_secret_name' ${tf_vars_file})" >> $GITHUB_ENV
+        echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
 
         terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o [0-9\.]*)
         echo "TERRAFORM_VERSION=$terraform_version" >> $GITHUB_ENV
@@ -66,7 +75,9 @@ runs:
 
     - uses: azure/login@v2
       with:
-        creds: ${{ inputs.azure-credentials }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
+        client-id: ${{ inputs.azure-client-id }}
 
     - name: Validate Azure Key Vault secrets
       uses: DFE-Digital/github-actions/validate-key-vault-secrets@master
@@ -104,7 +115,9 @@ runs:
 
     - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
       with:
-        azure-credentials: ${{ inputs.azure-credentials }}
+        azure-tenant-id: ${{ inputs.azure-tenant-id }}
+        azure-subscription-id: ${{ inputs.azure-subscription-id}}
+        azure-client-id: ${{ inputs.azure-client-id }}
 
     - name: K8 setup
       if: ${{ inputs.environment == 'review' }}
@@ -119,8 +132,7 @@ runs:
       run: |
         konduit_worked=false
 
-        stats_count=$(bin/konduit.sh ${{ env.app_name }} -- psql -xAc "select count(*) from statistic" | grep "count") && konduit_worked=true || true
-
+        stats_count=$(bin/konduit.sh -n ${NAMESPACE} ${{ env.app_name }} -- psql -xAc "select count(*) from statistic" | grep "count") && konduit_worked=true || true
         if [ "$konduit_worked" = false ] || [ "$stats_count" == 'count|0' ]; then
           echo "Postgres container query failed or stats table has no records. Setup and restore sanitised database."
           echo "USE_DB_SETUP_COMMAND=true" >> $GITHUB_ENV
@@ -139,7 +151,9 @@ runs:
       if: ${{ inputs.environment == 'review' && env.USE_DB_SETUP_COMMAND == 'true' }}
       uses: ./.github/actions/restore/
       with:
-        azure-credentials: ${{ inputs.azure-credentials }}
+        azure-tenant-id: ${{ inputs.azure-tenant-id }}
+        azure-subscription-id: ${{ inputs.azure-subscription-id}}
+        azure-client-id: ${{ inputs.azure-client-id }}
         azure-storage-connection-string: ${{ inputs.azure-storage-connection-string }}
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}

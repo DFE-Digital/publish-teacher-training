@@ -174,13 +174,13 @@ kubectl -n bat-qa exec -ti publish-loadtest-some-pod-number -- bundle exec rake 
 
 ```
 make install-konduit
-bin/konduit.sh app-name -- psql
+bin/konduit.sh -n namespace app-name -- psql
 ```
 
 Example of loading test:
 
 ```
-bin/konduit.sh publish-loadtest -- psql
+bin/konduit.sh -n bat-qa publish-loadtest -- psql
 ```
 
 ## More info

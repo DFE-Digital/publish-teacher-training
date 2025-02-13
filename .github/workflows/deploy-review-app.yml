@@ -12,29 +12,29 @@ on:
         - review
       pr-number:
         description: PR number for the existing review app to deploy to
-        required: false
+        required: true
       sha:
         description: Commit sha of an existing build image to be deployed
         required: true
+
+permissions:
+  contents: write
+  deployments: write
+  packages: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   deploy-review-app:
     name: Deployment To Review
     concurrency: deploy_review_${{ inputs.pr-number }}
     runs-on: ubuntu-latest
+    environment:
+      name: review
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Start review-${{ inputs.pr-number }} Deployment
-        uses: bobheadxi/deployments@v1
-        id:   deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env:   review-${{ inputs.pr-number }}
-          ref: ${{ github.head_ref }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -42,21 +42,18 @@ jobs:
         id: deploy_review
         uses: ./.github/actions/deploy/
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_REVIEW }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           environment: review
           pr-number: ${{ inputs.pr-number }}
           sha: ${{ inputs.sha }}
           slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
 
-      - name: Update review-${{ inputs.pr-number }} status
-        if:   always()
-        uses: bobheadxi/deployments@v1
+      - name: Post comment to Pull Request ${{ github.event.number }}
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          step:   finish
-          token:  ${{ secrets.GITHUB_TOKEN }}
-          env:    review-${{ inputs.pr-number }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          env_url: ${{ steps.deploy_review.outputs.deploy-url }}
-          ref: ${{ github.head_ref }}
+          header: aks
+          message: |
+            Review app deployed to ${{ steps.deploy_review.outputs.deploy-url }}
