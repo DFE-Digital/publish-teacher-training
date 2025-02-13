@@ -26,7 +26,7 @@ Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.automatic_label_click = true
 
 RSpec.configure do |config|
-  screen_size = [1400, 1400]
+  screen_size = [3400, 3400]
 
   config.before(:each, type: :system) do
     service = self.class.metadata[:service]

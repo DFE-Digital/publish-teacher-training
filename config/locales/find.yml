@@ -83,6 +83,25 @@ en:
         no_sponsorship: Visas cannot be sponsored
         can_sponsor_student_visa: Student visas can be sponsored
         can_sponsor_skilled_worker_visa: Skilled Worker visas can be sponsored
+    no_results_component:
+      try_another_search_content:
+        zero: You can try another search, for example by changing subject or location
+        one: You can try another search, for example by changing subject or location
+        other: You can try another search, for example by changing subjects or location
+      devolved_nation:
+        heading: This service is for courses in England
+        northern_ireland:
+          link_content: 'Learn more about teacher training in Northern Ireland'
+          link: https://www.education-ni.gov.uk/articles/initial-teacher-education-courses-northern-ireland
+        scotland:
+          link_content: 'Learn more about teacher training in Scotland'
+          link: https://teachinscotland.scot
+        wales:
+          link_content: 'Learn more about teacher training in Wales'
+          link: https://educators.wales/teacher
+      undergraduate:
+        message_html: There are not many teacher degree apprenticeship (TDA) courses on the service at the moment. You can try again soon when there may be more courses, or get in touch with us at %{contact}.
+        find_out_more_about_tda: Find out more about teacher degree apprenticeship (TDA) courses.
   find:
     cycles:
       real:

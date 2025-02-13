@@ -54,6 +54,7 @@ module GoogleOldPlacesAPI
         formatted_address: result['formatted_address'],
         latitude: result.dig('geometry', 'location', 'lat'),
         longitude: result.dig('geometry', 'location', 'lng'),
+        country: extract_country(result),
         types: result['types']
       }
     end
@@ -67,6 +68,12 @@ module GoogleOldPlacesAPI
     rescue Faraday::Error => e
       Sentry.capture_message("Google Places (Old) API error - '#{response.status}', '#{response.body}'. Exception: '#{e}'")
       {}
+    end
+
+    def extract_country(result)
+      address_components = Array(result['address_components']).pluck('long_name')
+
+      (address_components & (DEVOLVED_NATIONS + ['England'])).first
     end
   end
 end

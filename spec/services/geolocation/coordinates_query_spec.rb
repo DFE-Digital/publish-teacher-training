@@ -28,7 +28,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
       let(:query) { '' }
 
       it 'returns blank coordinates' do
-        expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, country: nil, formatted_address: nil, types: [] })
       end
 
       it 'does not cache' do
@@ -84,7 +84,7 @@ RSpec.describe Geolocation::CoordinatesQuery do
     context 'when geocoding search results in an error' do
       it 'returns coordinates_on_error' do
         allow(coordinates_query).to receive(:fetch_coordinates).and_return(nil)
-        expect(coordinates).to eq({ latitude: nil, longitude: nil, formatted_address: nil, types: [] })
+        expect(coordinates).to eq({ latitude: nil, longitude: nil, country: nil, formatted_address: nil, types: [] })
       end
 
       it 'captures the error in Sentry' do

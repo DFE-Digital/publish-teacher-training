@@ -191,8 +191,9 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     expect(Rails.cache.read('geolocation:query:london-uk')).to eq(
       {
         formatted_address: 'London, UK',
-        latitude: 51.5074,
-        longitude: -0.1278,
+        latitude: 51.5072178,
+        longitude: -0.1275862,
+        country: 'England',
         types: %w[locality political]
       }
     )
