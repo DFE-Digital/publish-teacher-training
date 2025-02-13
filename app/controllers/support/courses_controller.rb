@@ -41,7 +41,8 @@ module Support
                                    :'applications_open_from(3i)', :'applications_open_from(2i)', :'applications_open_from(1i)',
                                    :is_send,
                                    :can_sponsor_student_visa,
-                                   :can_sponsor_skilled_worker_visa]
+                                   :can_sponsor_skilled_worker_visa,
+                                   :accredited_provider_code]
       ).transform_keys { |key| date_field_to_attribute(key) }
     end
 

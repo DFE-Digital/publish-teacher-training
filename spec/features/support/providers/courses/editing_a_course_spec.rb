@@ -23,12 +23,14 @@ feature 'Edit provider course details' do
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, valid_date_year
       and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
+      and_i_change_the_ratifying_provider
       and_i_select_the_send_checkbox
       and_i_click_the_continue_button
       then_i_am_redirected_back_to_the_support_provider_courses_index_page
-      and_the_course_name_and_code_are_updated
+      and_the_course_name_code_and_ratifying_provider_are_updated
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
+      then_i_see_the_updated_ratifying_provider
       then_i_see_the_updated_applications_open_from_date
       and_i_see_the_updated_send_specialism
     end
@@ -72,12 +74,48 @@ feature 'Edit provider course details' do
     given_i_am_authenticated(user: create(:user, :admin))
   end
 
+  def ratifying_provider
+    @accredited_provider ||= create(:accredited_provider)
+  end
+
   def provider
-    @provider ||= create(:provider, courses: [build(:course), build(:course)])
+    ratifying_provider
+    @provider ||= create(:provider, courses: [
+                           build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider),
+                           build(:course, :published, :with_accrediting_provider, accrediting_provider: ratifying_provider)
+                         ]) do |provider|
+      if Settings.features.provider_partnerships
+        create(:provider_partnership, training_provider: provider, accredited_provider: ratifying_provider)
+      else
+        provider.accrediting_provider_enrichments ||= []
+        provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
+          UcasProviderCode: ratifying_provider.provider_code,
+          Description: ''
+        )
+        provider.save
+      end
+    end
+  end
+
+  def and_i_change_the_ratifying_provider
+    choose ratifying_provider_name
   end
 
   def and_there_is_a_provider_with_courses
     provider
+
+    @new_ratifying_provider = create(:accredited_provider) do |accredited_provider|
+      if Settings.features.provider_partnerships
+        create(:provider_partnership, training_provider: provider, accredited_provider:)
+      else
+        provider.accrediting_provider_enrichments ||= []
+        provider.accrediting_provider_enrichments << AccreditingProviderEnrichment.new(
+          UcasProviderCode: accredited_provider.provider_code,
+          Description: ''
+        )
+        provider.save
+      end
+    end
   end
 
   def when_i_visit_the_support_provider_courses_index_page
@@ -100,6 +138,10 @@ feature 'Edit provider course details' do
 
   def course_name
     @course_name ||= 'Geography'
+  end
+
+  def ratifying_provider_name
+    @new_ratifying_provider.provider_name
   end
 
   def valid_date_day
@@ -172,9 +214,10 @@ feature 'Edit provider course details' do
     expect(support_provider_courses_index_page).to be_displayed
   end
 
-  def and_the_course_name_and_code_are_updated
+  def and_the_course_name_code_and_ratifying_provider_are_updated
     expect(support_provider_courses_index_page).to have_text(course_code)
     expect(support_provider_courses_index_page).to have_text(course_name)
+    expect(support_provider_courses_index_page).to have_text(ratifying_provider_name)
   end
 
   def and_i_select_the_send_checkbox
@@ -194,6 +237,12 @@ feature 'Edit provider course details' do
 
   def and_i_see_the_updated_send_specialism
     expect(support_provider_course_edit_page.send_specialism_checkbox.checked?).to be true
+  end
+
+  def then_i_see_the_updated_ratifying_provider
+    radio_button = support_provider_course_edit_page.find(:label, text: ratifying_provider_name).sibling('input')
+
+    expect(radio_button).to be_checked
   end
 
   def then_i_see_the_error_summary
