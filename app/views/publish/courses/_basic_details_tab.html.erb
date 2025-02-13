@@ -165,7 +165,7 @@
      end
 
      unless @provider.accredited?
-       summary_list.with_row(html_attributes: { data: { qa: "course__accredited_provider" } }) do |row|
+       summary_list.with_row(html_attributes: { data: { qa: "course__ratifying_provider" } }) do |row|
          row.with_key { t(".ratifying_provider") }
          row.with_value { course.accrediting_provider&.provider_name }
          if course.is_published? || course.is_withdrawn?
