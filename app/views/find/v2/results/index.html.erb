@@ -13,8 +13,6 @@
 ) %>
 
 <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, method: :get do |form| %>
-  <div class="app-filter-toggle"></div>
-
   <div class="app-filter-layout">
     <div class="app-filter-layout__filter app-filter">
         <div class="app-filter__header">
@@ -23,7 +21,6 @@
 
         <div class="app-filter__content">
           <%= form.govuk_submit "Apply filters" %>
-
           <%= form.govuk_check_boxes_fieldset :can_sponsor_visa, multiple: false, legend: { text: t("helpers.legend.courses_search_form.can_sponsor_visa_html"), size: "s" }, class: "app-filter__group govuk-checkboxes--small", hidden: false, form_group: { class: "app-filter__group" } do %>
             <%= form.govuk_check_box :can_sponsor_visa, "true", multiple: false, label: { text: t("helpers.label.courses_search_form.can_sponsor_visa"), size: "s" } %>
           <% end %>
@@ -145,6 +142,7 @@
               <%= form.govuk_submit t("helpers.submit.courses_search_form.order", class: "govuk-!-display-inline-block") %>
             <% end %>
           </div>
+          <div class="app-filter-toggle govuk-!-padding-top-5"></div>
         </div>
 
         <ul class="app-search-results">

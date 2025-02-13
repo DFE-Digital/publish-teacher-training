@@ -27,7 +27,6 @@ export const FilterToggleButton = class {
 
   enableSmallMode () {
     this.options.filter.container.attr('tabindex', '-1')
-    this.hideMenu()
     this.addMenuButton()
     this.addCloseButton()
   }
