@@ -152,12 +152,17 @@
         <% end %>
 
         <% unless @provider.accredited? || course.is_further_education? %>
+          <% change_ratifying_provider_url = if Settings.features.provider_partnerships
+                                               new_publish_provider_recruitment_cycle_courses_ratifying_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true))
+                                             else
+                                               new_publish_provider_recruitment_cycle_courses_accredited_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true))
+                                             end %>
           <% summary_list.with_row(html_attributes: { data: { qa: "course__ratifying_provider" } }) do |row| %>
             <% row.with_key { t(".ratifying_provider") } %>
             <% row.with_value { course.accrediting_provider.provider_name } %>
             <% if @provider.accredited_bodies.length > 1 %>
               <% row.with_action(
-                href: new_publish_provider_recruitment_cycle_courses_accredited_provider_path(course.provider.provider_code, course.recruitment_cycle.year, params.to_unsafe_h.merge(goto_confirmation: true)),
+                href: change_ratifying_provider_url,
                 visually_hidden_text: "ratifying provider"
               ) %>
             <% else %>
