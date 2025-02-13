@@ -166,6 +166,12 @@
 
         <%= render partial: "find/v2/results/courses_guidance/show" %>
         <%= govuk_pagination(pagy: @pagy) %>
+      <% else %>
+        <%= render Courses::NoResultsComponent.new(
+          country: @search_params[:country],
+          minimum_degree_required: @search_params[:minimum_degree_required],
+          subjects: @search_params[:subjects]
+        ) %>
       <% end %>
     </div>
   </div>

@@ -69,7 +69,7 @@ module Geolocation
     # Returns a default error response when coordinates are invalid or an error occurs.
     # @return [Hash] A default error response with nil latitude, longitude, and location.
     def coordinates_on_error
-      { latitude: nil, longitude: nil, formatted_address: nil, types: [] }
+      { latitude: nil, longitude: nil, formatted_address: nil, country: nil, types: [] }
     end
     alias blank_coordinates coordinates_on_error
 

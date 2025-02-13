@@ -24,6 +24,7 @@ module Courses
     attribute :order
 
     attribute :formatted_address
+    attribute :country
     attribute :types
 
     attribute :age_group
