@@ -34,6 +34,7 @@ jobs:
         run: |
           tf_vars_file=terraform/aks/workspace_variables/production.tfvars.json
           echo "key_vault_name=$(jq -r '.key_vault_name' ${tf_vars_file})" >> $GITHUB_ENV
+          echo "NAMESPACE=$(jq -r '.namespace' ${tf_vars_file})" >> $GITHUB_ENV
 
       - uses: azure/login@v2
         with:
@@ -44,7 +45,9 @@ jobs:
 
       - uses: DFE-Digital/github-actions/set-kubelogin-environment@master
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS_PRODUCTION }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - name: K8 & konduit setup
         shell: bash
@@ -56,7 +59,7 @@ jobs:
         run: |
           now=$(date +"%F")
           PROD_BACKUP=prod_backup-$now.sql
-          bin/konduit.sh publish-production -- pg_dump -E utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
+          bin/konduit.sh publish-production -n ${NAMESPACE} -- pg_dump -E utf8 --clean --no-owner --if-exists -f $PROD_BACKUP
           tar -cvzf ${PROD_BACKUP}.tar.gz ${PROD_BACKUP}
           echo "PROD_BACKUP=$PROD_BACKUP" >> $GITHUB_ENV
 
@@ -126,6 +129,8 @@ jobs:
         id: restore
         uses: ./.github/actions/restore/
         with:
-          azure-credentials: ${{ secrets[format('AZURE_CREDENTIALS_{0}', matrix.environment)] }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-storage-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_SANITISED }}
           environment: ${{ matrix.environment }}
