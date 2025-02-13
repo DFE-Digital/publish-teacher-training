@@ -20,6 +20,16 @@
         <% end %>
       </div>
 
+      <% if @course.accrediting_provider %>
+        <%= tag.div class: "govuk-form-group" do %>
+          <%= f.govuk_fieldset legend: { text: "Ratifying provider", size: "m" } do %>
+            <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">
+              <%= render partial: "publish/courses/ratifying_provider/provider_suggestion", collection: @provider.accrediting_providers, locals: { form: f } %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+
       <%= f.govuk_date_field(:start_date, omit_day: true, legend: { text: "Start date" }) %>
 
       <%= f.govuk_date_field(:applications_open_from, legend: { text: "Applications open from date" }) %>
