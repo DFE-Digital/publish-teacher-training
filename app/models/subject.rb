@@ -31,6 +31,10 @@ class Subject < ApplicationRecord
     secondary.includes(:financial_incentive).pluck(:subject_code)
   end
 
+  def self.secondary_subjects_with_subject_groups
+    secondary.where.not(subject_group: nil)
+  end
+
   def secondary_subject?
     type == 'SecondarySubject'
   end
