@@ -18,6 +18,7 @@ export default class extends Controller {
       showNoOptionsFound: false,
       name: inputElement.name,
       defaultValue: inputElement.value,
+      displayMenu: 'overlay',
       minLength: 3,
       source: this.fetchSuggestions(),
       templates: {
