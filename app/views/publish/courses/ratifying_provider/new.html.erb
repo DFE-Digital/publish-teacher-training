@@ -10,7 +10,7 @@
   <div class="govuk-grid-column-full">
   <%= form_with url: continue_publish_provider_recruitment_cycle_courses_ratifying_provider_path(@provider.provider_code, @provider.recruitment_cycle_year), method: :get do |form| %>
     <%= render "publish/courses/new_fields_holder", form:, except_keys: [:accredited_provider_code] do |fields| %>
-      <%= render "publish/shared/error_wrapper", error_keys: [:accredited_provider_code], data_qa: "course__accredited_provider" do %>
+      <%= render "publish/shared/error_wrapper", error_keys: [:accredited_provider_code], data_qa: "course__ratifying_provider" do %>
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-fieldset__heading">
@@ -20,7 +20,7 @@
         </legend>
         <%= render "publish/shared/error_messages", error_keys: [:accredited_provider_code] %>
 
-        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__accredited_provider">
+        <div class="govuk-radios" data-module="govuk-radios" data-qa="course__ratifying_provider">
           <%= render partial: "provider_suggestion", collection: @provider.accredited_bodies.sort_by { |k| k[:provider_name] }, locals: { form: fields } %>
         </div>
       <% end %>
