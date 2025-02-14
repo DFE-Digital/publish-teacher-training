@@ -8,7 +8,9 @@ module Find
       before_action :providers
       before_action :build_results_filter_query_parameters
 
-      def start; end
+      def start
+        @search_courses_form = ::Courses::SearchForm.new
+      end
 
       def new; end
 

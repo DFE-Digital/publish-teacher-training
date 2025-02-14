@@ -1,0 +1,62 @@
+.app-homepage-search-container {
+  background-color: govuk-colour("light-grey");
+  margin-bottom: govuk-spacing(4);
+
+  @include govuk-media-query($from: tablet) {
+    margin-bottom: govuk-spacing(6);
+  }
+
+  .app-homepage-search-content {
+    padding: govuk-spacing(4);
+
+    @include govuk-media-query($from: tablet) {
+      padding: govuk-spacing(6);
+      padding-bottom: 0;
+    }
+  }
+
+  .app-homepage-search-form-container {
+    display: block;
+
+    @include govuk-media-query($from: tablet) {
+      display: flex;
+      column-gap: govuk-spacing(4);
+    }
+  }
+
+  .app-homepage-search-input-container {
+    display: block;
+
+    @include govuk-media-query($from: tablet) {
+      display: flex;
+      flex-grow: 1;
+      flex-wrap: wrap;
+      column-gap: govuk-spacing(4);
+    }
+  }
+
+  .app-homepage-search-input {
+    flex: 1;
+    margin-bottom: govuk-spacing(4);
+
+    @include govuk-media-query($from: tablet) {
+      margin-bottom: 0;
+    }
+  }
+
+  .app-homepage-search-button {
+    margin-bottom: 0;
+    margin-top: 0;
+    font-weight: 700;
+    justify-content: center;
+
+    @include govuk-media-query($from: tablet) {
+      margin-bottom: 0;
+      margin-top: 27px;
+    }
+  }
+
+  .govuk-checkboxes__label::before, input {
+    background: govuk-colour("white") !important;
+  }
+}

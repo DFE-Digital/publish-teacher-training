@@ -526,6 +526,7 @@ en:
         location: City, town or postcode
         radius: Search radius
         can_sponsor_visa: Only show courses with visa sponsorship
+        visa_sponsorship: Only show courses that offer visa sponsorship
         special_education_needs: Only show courses with a SEND specialism
         applications_open: Only show courses open for applications
         study_type_options:
