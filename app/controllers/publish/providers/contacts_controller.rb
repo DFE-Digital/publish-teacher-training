@@ -29,7 +29,7 @@ module Publish
       private
 
       def provider_contact_params
-        params.require(:publish_provider_contact_form).permit(*ProviderContactForm::FIELDS)
+        params.expect(publish_provider_contact_form: [*ProviderContactForm::FIELDS])
       end
     end
   end

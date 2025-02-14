@@ -31,7 +31,7 @@ module Publish
       def provider_skilled_worker_visa_params
         return { can_sponsor_skilled_worker_visa: nil } if params[:publish_provider_skilled_worker_visa_form].blank?
 
-        params.require(:publish_provider_skilled_worker_visa_form).permit(*ProviderSkilledWorkerVisaForm::FIELDS).transform_values do |value|
+        params.expect(publish_provider_skilled_worker_visa_form: [*ProviderSkilledWorkerVisaForm::FIELDS]).transform_values do |value|
           ActiveModel::Type::Boolean.new.cast(value)
         end
       end

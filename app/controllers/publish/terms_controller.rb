@@ -19,7 +19,7 @@ module Publish
     private
 
     def accept_term_params
-      params.require(:publish_interruption_accept_terms_form).permit(*Interruption::AcceptTermsForm::FIELDS)
+      params.expect(publish_interruption_accept_terms_form: [*Interruption::AcceptTermsForm::FIELDS])
     end
   end
 end

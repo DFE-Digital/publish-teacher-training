@@ -62,7 +62,7 @@ module Support
       end
 
       def user_params
-        params.require(:support_user_form).permit(:first_name, :last_name, :email)
+        params.expect(support_user_form: %i[first_name last_name email])
       end
 
       def provider
