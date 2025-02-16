@@ -2,6 +2,8 @@
 
 <%= form_with model: @form, url: find_submit_primary_path, method: :post do |f| %>
   <%= f.govuk_error_summary link_base_errors_to: :subjects %>
+  <%= f.hidden_field :utm_source, value: "home" %>
+  <%= f.hidden_field :utm_medium, value: "primary_courses" %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

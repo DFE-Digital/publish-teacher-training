@@ -40,7 +40,7 @@ module Courses
         .then { |params| params.except(*old_parameters) }
         .then { |params| transform_old_parameters(params) }
         .then { |params| inject_defaults(params) }
-        .compact
+        .compact_blank
     end
 
     def provider_name
@@ -135,7 +135,7 @@ module Courses
 
     def inject_defaults(params)
       params.tap do
-        params[:radius] = radius if location.present?
+        params[:radius] = (radius if location.present?)
       end
     end
 
