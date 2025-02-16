@@ -6,7 +6,7 @@ module Find
       utm_content = params[:utm_content]
       url = params[:url]
 
-      Find::TrackClick.new(request:).track_click(utm_content:, url:)
+      Find::Analytics::ClickEvent.new(utm_content:, url:, request:).send_event
 
       redirect_to url, allow_other_host: true
     end

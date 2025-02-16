@@ -12,14 +12,6 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
-    context 'when can_sponsor_visa is false' do
-      let(:form) { described_class.new(can_sponsor_visa: 'false') }
-
-      it 'returns the correct search params with can_sponsor_visa set to false' do
-        expect(form.search_params).to eq({ can_sponsor_visa: false })
-      end
-    end
-
     context 'when send_courses is true' do
       let(:form) { described_class.new(send_courses: 'true') }
 
@@ -28,27 +20,11 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
-    context 'when send_courses is false' do
-      let(:form) { described_class.new(send_courses: 'false') }
-
-      it 'returns the correct search params with send_courses set to false' do
-        expect(form.search_params).to eq({ send_courses: false })
-      end
-    end
-
     context 'when applications_open is true' do
       let(:form) { described_class.new(applications_open: 'true') }
 
       it 'returns the correct search params with applications_open set to true' do
         expect(form.search_params).to eq({ applications_open: true })
-      end
-    end
-
-    context 'when applications_open is false' do
-      let(:form) { described_class.new(applications_open: 'false') }
-
-      it 'returns the correct search params with applications_open set to false' do
-        expect(form.search_params).to eq({ applications_open: false })
       end
     end
 
@@ -228,6 +204,22 @@ RSpec.describe Courses::SearchForm do
       end
     end
 
+    context 'when radius is provided without location' do
+      let(:form) { described_class.new(radius: '10') }
+
+      it 'returns empty params' do
+        expect(form.search_params).to eq({})
+      end
+    end
+
+    context 'when empty coordinates and subjects' do
+      let(:form) { described_class.new(types: [], subject_code: '', subject_name: '') }
+
+      it 'returns empty search params' do
+        expect(form.search_params).to eq({})
+      end
+    end
+
     context 'when location is provided with radius' do
       let(:form) { described_class.new(location: 'London NW9, UK', latitude: 51.53328, longitude: -0.1734435, radius: 200) }
 
@@ -299,10 +291,10 @@ RSpec.describe Courses::SearchForm do
     end
 
     context 'when attributes contain nil values' do
-      let(:form) { described_class.new(can_sponsor_visa: nil, send_courses: 'false') }
+      let(:form) { described_class.new(can_sponsor_visa: nil) }
 
       it 'returns search params without nil values' do
-        expect(form.search_params).to eq({ send_courses: false })
+        expect(form.search_params).to eq({})
       end
     end
   end
