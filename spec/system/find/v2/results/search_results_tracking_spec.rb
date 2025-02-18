@@ -31,7 +31,6 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
     end
 
     scenario 'when browse secondary courses' do
-      pending 'waiting for the secondary work to be merged'
       when_i_browse_secondary_courses
       and_i_choose_art_and_design
       and_i_click_find_secondary_courses
@@ -149,6 +148,9 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
       course_code: 'Y565',
       provider: build(:provider, provider_name: 'Brighton university', provider_code: '1UR')
     )
+
+    subject_group = create(:subject_group, name: 'Arts, humanities and social sciences')
+    find_or_create(:secondary_subject, :art_and_design).update(subject_group:)
   end
 
   def when_i_visit_the_homepage

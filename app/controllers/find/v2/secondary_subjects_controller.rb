@@ -13,7 +13,7 @@ module Find
 
       def submit
         if @form.valid?
-          redirect_to find_results_path(subjects: @form.subjects)
+          redirect_to find_results_path({ subjects: @form.subjects }.merge(track_params))
         else
           @secondary_subject_options = formatted_secondary_subject_options
           render :index
@@ -41,6 +41,10 @@ module Find
 
       def subject_params
         params.fetch(:find_v2_subjects_secondary_form, {}).permit(subjects: [])
+      end
+
+      def track_params
+        params.fetch(:find_v2_subjects_secondary_form, {}).permit(:utm_source, :utm_medium)
       end
     end
   end
