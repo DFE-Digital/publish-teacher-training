@@ -3,7 +3,8 @@
 module Find
   module Analytics
     class SearchResultsEvent < ApplicationEvent
-      attr_accessor :search_params, :track_params, :total, :page, :results
+      attr_accessor :search_params, :total, :page, :results
+      attr_writer :track_params
 
       def event_name
         :search_results
@@ -28,6 +29,33 @@ module Find
             provider_code: result.provider_code
           }
         end
+      end
+
+      DEFAULT_TRACK_PARAMS = { utm_source: 'results', utm_medium: 'no_referer' }.freeze
+
+      def track_params
+        return DEFAULT_TRACK_PARAMS if request.referer.blank?
+
+        if course_view_referer?
+          { utm_source: 'course', utm_medium: 'course_view' }.merge(course_view_referer)
+        else
+          @track_params
+        end
+      end
+
+      def course_view_referer?
+        course_view_referer.present?
+      end
+
+      def course_view_referer
+        uri = URI.parse(request.referer)
+        match = uri.path.match(
+          %r{\A/course/(?<provider_code>[^/]+)/(?<code>[^/]+)\z}
+        )
+
+        { provider_code: match[:provider_code], code: match[:code] } if match.present?
+      rescue StandardError
+        nil
       end
     end
   end

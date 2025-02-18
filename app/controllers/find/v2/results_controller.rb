@@ -18,7 +18,7 @@ module Find
           total: @courses_count,
           page: @pagy.page,
           search_params: @search_params,
-          track_params:,
+          track_params: params.permit(:utm_source, :utm_medium),
           results: @results
         ).send_event
       end
@@ -54,14 +54,6 @@ module Find
           qualification: [],
           funding: []
         )
-      end
-
-      def track_params
-        if request.referer.present?
-          params.permit(:utm_source, :utm_medium)
-        else
-          { utm_source: 'results', utm_medium: 'no_referer' }
-        end
       end
     end
   end

@@ -39,23 +39,79 @@ RSpec.describe Find::Analytics::SearchResultsEvent do
       }
     end
 
-    it 'returns a hash with all the results information' do
-      expect(subject.event_data).to eq(
-        total: 1360,
-        page: 2,
-        visible_courses: [
-          { code: 'abc', provider_code: 'rst' },
-          { code: 'def', provider_code: 'uvw' }
-        ],
-        search_params: {
-          send_courses: true,
-          can_sponsor_visa: true
-        },
-        track_params: {
-          utm_source: 'homepage',
-          utm_medium: 'search-form'
-        }
-      )
+    context 'when there is a referer' do
+      it 'returns a hash with all the results information' do
+        allow(request).to receive(:referer).and_return('/')
+
+        expect(subject.event_data).to eq(
+          total: 1360,
+          page: 2,
+          visible_courses: [
+            { code: 'abc', provider_code: 'rst' },
+            { code: 'def', provider_code: 'uvw' }
+          ],
+          search_params: {
+            send_courses: true,
+            can_sponsor_visa: true
+          },
+          track_params: {
+            utm_source: 'homepage',
+            utm_medium: 'search-form'
+          }
+        )
+      end
+    end
+
+    context 'when there is not a referer' do
+      before do
+        allow(request).to receive(:referer).and_return(nil)
+      end
+
+      it 'returns a hash with all the results information and no referer' do
+        expect(subject.event_data).to eq(
+          total: 1360,
+          page: 2,
+          visible_courses: [
+            { code: 'abc', provider_code: 'rst' },
+            { code: 'def', provider_code: 'uvw' }
+          ],
+          search_params: {
+            send_courses: true,
+            can_sponsor_visa: true
+          },
+          track_params: {
+            utm_source: 'results',
+            utm_medium: 'no_referer'
+          }
+        )
+      end
+    end
+
+    context 'when the referer is the course view page' do
+      before do
+        allow(request).to receive(:referer).and_return('/course/19S/2DTK')
+      end
+
+      it 'returns a hash with all the results information and course referer' do
+        expect(subject.event_data).to eq(
+          total: 1360,
+          page: 2,
+          visible_courses: [
+            { code: 'abc', provider_code: 'rst' },
+            { code: 'def', provider_code: 'uvw' }
+          ],
+          search_params: {
+            send_courses: true,
+            can_sponsor_visa: true
+          },
+          track_params: {
+            utm_source: 'course',
+            utm_medium: 'course_view',
+            code: '2DTK',
+            provider_code: '19S'
+          }
+        )
+      end
     end
   end
 end
