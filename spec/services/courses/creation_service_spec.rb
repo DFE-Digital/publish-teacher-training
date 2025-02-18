@@ -19,6 +19,59 @@ describe Courses::CreationService do
 
   let(:next_available_course_code) { false }
 
+  context 'visa sponsorship is duplicated in params' do
+    context 'when funding is fee' do
+      let(:valid_course_params) do
+        {
+          'level' => 'primary',
+          'can_sponsor_skilled_worker_visa' => 'true',
+          'can_sponsor_student_visa' => 'true',
+          'funding' => 'fee',
+          'qualification' => 'pgde'
+        }
+      end
+
+      it 'cannot sponsor skilled workers visas' do
+        expect(subject.can_sponsor_student_visa).to be(true)
+        expect(subject.can_sponsor_skilled_worker_visa).to be(false)
+      end
+    end
+
+    context 'when funding is salary' do
+      let(:valid_course_params) do
+        {
+          'level' => 'primary',
+          'can_sponsor_skilled_worker_visa' => 'true',
+          'can_sponsor_student_visa' => 'true',
+          'funding' => 'salary',
+          'qualification' => 'pgde'
+        }
+      end
+
+      it 'cannot sponsor skilled workers visas' do
+        expect(subject.can_sponsor_student_visa).to be(false)
+        expect(subject.can_sponsor_skilled_worker_visa).to be(true)
+      end
+    end
+
+    context 'when funding is apprenticeship' do
+      let(:valid_course_params) do
+        {
+          'level' => 'primary',
+          'can_sponsor_skilled_worker_visa' => 'true',
+          'can_sponsor_student_visa' => 'true',
+          'funding' => 'apprenticeship',
+          'qualification' => 'pgde'
+        }
+      end
+
+      it 'cannot sponsor skilled workers visas' do
+        expect(subject.can_sponsor_student_visa).to be(false)
+        expect(subject.can_sponsor_skilled_worker_visa).to be(true)
+      end
+    end
+  end
+
   context 'when teacher degree apprenticeship course' do
     let(:valid_course_params) do
       {

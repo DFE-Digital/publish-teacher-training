@@ -40,11 +40,20 @@ module Courses
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
       Courses::AssignProgramTypeService.new.execute(course.funding, course)
+      clean_up_visa_properies(course)
       course.valid?(:new) if course.errors.blank?
 
       course.remove_carat_from_error_messages
 
       course
+    end
+
+    def clean_up_visa_properies(course)
+      if course.fee?
+        course.can_sponsor_skilled_worker_visa = false
+      else
+        course.can_sponsor_student_visa = false
+      end
     end
 
     def course_attributes
