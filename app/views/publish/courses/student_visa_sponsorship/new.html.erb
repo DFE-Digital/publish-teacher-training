@@ -10,13 +10,13 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render CaptionText.new(text: t("course.add_course")) %>
     <%= form_with(
-          url:continue_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(
+          url: continue_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(
             @provider.provider_code,
-            @provider.recruitment_cycle_year,
-            ),
+            @provider.recruitment_cycle_year
+          ),
           method: :get,
-          local: true,
-          )do |form| %>
+          local: true
+        ) do |form| %>
 
       <%= render "publish/courses/new_fields_holder", form:, except_keys: [:can_sponsor_student_visa] do |fields| %>
         <%= render "form_fields", form: fields %>
