@@ -62,6 +62,14 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     then_i_see_only_mathematics_courses
   end
 
+  scenario 'when I search by provider' do
+    when_i_search_for_a_provider
+    and_i_choose_the_first_provider_suggestion
+    and_i_click_search
+    then_i_see_only_courses_from_that_provider
+    and_the_provider_field_is_visible
+  end
+
   scenario 'when search results update after filter changes' do
     when_i_search_for_math
     and_i_choose_the_first_subject_suggestion
@@ -127,6 +135,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :primary,
       name: 'Primary - London',
+      provider: create(:provider, provider_name: 'First university'),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
       subjects: [primary_subject]
     )
@@ -135,6 +144,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
       :course,
       :primary,
       name: 'Primary - Romford',
+      provider: create(:provider, provider_name: 'Second university'),
       site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
       subjects: [primary_subject]
     )
@@ -420,6 +430,35 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   def and_i_am_on_the_results_page
     expect(page).to have_current_path(find_results_path, ignore_query: true)
   end
+
+  def when_i_search_for_a_provider
+    page.find(
+      'summary.govuk-details__summary',
+      text: 'Search by training provider'
+    ).click
+
+    fill_in 'Enter a provider name', with: 'uni'
+  end
+
+  def and_i_choose_the_first_provider_suggestion
+    page.find_by_id('provider-code-field__option--0').click
+  end
+
+  def then_i_see_only_courses_from_that_provider
+    expect(results).to have_content('First university')
+
+    providers = Provider.where.not(provider_name: 'First university')
+
+    providers.each do |provider|
+      expect(results).to have_no_content(provider.provider_name)
+    end
+  end
+
+  def and_the_provider_field_is_visible
+    expect(page).to have_css('details.govuk-details[open]')
+  end
+
+  private
 
   def results
     page.first('.app-search-results')

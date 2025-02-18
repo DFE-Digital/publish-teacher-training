@@ -121,6 +121,26 @@
           <%= form.govuk_collection_select :radius, form.object.radius_options, :value, :name,
             label: { text: t("helpers.label.courses_search_form.radius"), size: "s" } %>
 
+          <details class="govuk-details" data-module="govuk-details" <%= "open" if form.object.provider_name.present? %>>
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Search by training provider
+              </span>
+            </summary>
+
+            <div class="govuk-details__text">
+              <div class="govuk-form-group" data-controller="v2-provider-autocomplete">
+                <%= render Find::AutocompleteComponent.new(
+                  form_field: form.govuk_select(
+                    :provider_code,
+                    dfe_autocomplete_options(form.object.providers_list, synonyms_fields: %i[code]),
+                    label: { text: t("helpers.label.courses_search_form.provider"), size: "s" }
+                  )
+                ) %>
+              </div>
+            </div>
+          </details>
+
           <%= form.govuk_submit t("helpers.submit.courses_search_form.search"), name: "utm_medium", value: "search" %>
         </div>
 
