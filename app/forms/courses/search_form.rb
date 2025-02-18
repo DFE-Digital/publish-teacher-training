@@ -2,6 +2,12 @@
 
 module Courses
   class SearchForm < ApplicationForm
+    class ProviderOption
+      include ActiveModel::Model
+
+      attr_accessor :id, :name, :code, :value
+    end
+
     include ActiveModel::Attributes
 
     attribute :can_sponsor_visa, :boolean
@@ -120,6 +126,14 @@ module Courses
 
     def radius
       super.presence || DEFAULT_RADIUS
+    end
+
+    def providers_list
+      Rails.cache.fetch('find:search:providers-list', expires_in: 1.hour) do
+        RecruitmentCycle.current.providers.by_name_ascending.select(:id, :provider_name, :provider_code).map do |provider|
+          ProviderOption.new(id: provider.id, name: provider.name_and_code, code: provider.provider_code, value: provider.provider_code)
+        end
+      end
     end
 
     private

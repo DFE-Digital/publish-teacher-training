@@ -89,7 +89,9 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
         subject_code: 'W1',
         location: '',
         radius: '10',
-        order: ''
+        order: '',
+        provider_name: '',
+        provider_code: ''
       }
     )
   end
