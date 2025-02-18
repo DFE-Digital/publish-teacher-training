@@ -312,8 +312,9 @@ en:
           date_can_apply: Date you can apply from
           start_date: Start date
           qualification: Qualification awarded
-          provider: Provider
-          accredited_by: Accredited by
+          provider: Training provider
+          accredited_by: Accredited provider
+          success_rate: Success rate
           for_uk_citizens: Fee - UK citizens
           for_non_uk_citizens: Fee - Non-UK citizens
       providers:
