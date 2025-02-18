@@ -12,7 +12,7 @@
   debug: params[:debug]
 ) %>
 
-<%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, method: :get do |form| %>
+<%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get do |form| %>
   <%= form.hidden_field :utm_source, value: "results" %>
 
   <div class="app-filter-layout">

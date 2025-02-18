@@ -39,7 +39,7 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
   end
 
   def when_i_visit_the_results_page
-    visit(find_v2_results_path)
+    visit(find_results_path)
   end
 
   def when_i_filter_for_send_courses
@@ -78,10 +78,10 @@ RSpec.describe 'V2 results - view a course', :js, service: :find do
   end
 
   def then_i_am_on_search_results_page_with_the_applied_search
-    expect(page).to have_current_path(find_v2_results_path, ignore_query: true)
+    expect(page).to have_current_path(find_results_path, ignore_query: true)
 
     expect(
-      query_params(URI(page.current_url)).symbolize_keys
+      query_params(URI(page.current_url)).symbolize_keys.except(:utm_source, :utm_medium)
     ).to eq(
       {
         send_courses: 'true',

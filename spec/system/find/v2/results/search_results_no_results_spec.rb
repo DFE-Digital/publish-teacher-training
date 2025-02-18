@@ -8,7 +8,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
     allow(Settings.features).to receive_messages(v2_results: true)
 
     given_courses_exist
-    visit find_v2_results_path
+    visit find_results_path
   end
 
   scenario 'when searching for courses in Northern Ireland' do
