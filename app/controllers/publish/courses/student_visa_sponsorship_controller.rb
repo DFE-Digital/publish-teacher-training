@@ -6,7 +6,7 @@ module Publish
       def new
         authorize(@provider, :can_create_course?)
         @course.can_sponsor_student_visa = @provider.can_sponsor_student_visa unless @course.can_sponsor_student_visa
-        return if course.fee_based?
+        return if course.fee?
 
         redirect_to next_step
       end
