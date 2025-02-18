@@ -31,26 +31,22 @@
       <%= @course.name_and_code %>
     </h1>
 
-    <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
-
-    <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner govuk-notification-banner--grey" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
         <p class="govuk-body govuk-!-font-size-16">
           <% case @course.course_code %>
             <% when "E026" %>
-              <strong>12 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
             <% when "R480" %>
-              <strong>164 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
             <% when "H971" %>
-              <strong>41 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
             <% when "36P4" %>
-              <strong>5 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
             <% when "Y404" %>
-              <strong>Be an early applicant</strong>.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
           <% end %>
         </p>
@@ -403,22 +399,20 @@
 
     <div class="govuk-notification-banner govuk-notification-banner--git" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__content govuk-notification-banner__content--grey">
+
+        <%= render Find::Courses::ApplyComponent::View.new(@course) if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+
         <p class="govuk-body govuk-!-font-size-16">
           <% case @course.course_code %>
             <% when "E026" %>
-              <strong>12 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within two weeks</strong>.
             <% when "R480" %>
-              <strong>164 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications.
             <% when "H971" %>
-              <strong>41 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within a week</strong>.
             <% when "36P4" %>
-              <strong>5 people</strong> have applied.<br><br>
               <%= @course.provider_name %> normally takes <strong>over a month</strong> to respond to applications
             <% when "Y404" %>
-              <strong>Be an early applicant</strong>.<br><br>
               <%= @course.provider_name %> normally responds to applications <strong>within three weeks</strong>.
           <% end %>
         </p>

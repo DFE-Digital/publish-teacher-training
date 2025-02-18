@@ -309,8 +309,8 @@ en:
           date_can_apply: Date you can apply from
           start_date: Start date
           qualification: Qualification awarded
-          provider: Provider
-          accredited_by: Accredited by
+          provider: Training provider
+          accredited_by: Accredited provider
           for_uk_citizens: for UK citizens
           for_non_uk_citizens: for Non-UK citizens
           fee_key: Fee or salary
@@ -324,6 +324,7 @@ en:
                 bursaries_and_scholarship_html: "Scholarships of %{scholarship_amount} or bursaries of %{bursary_amount} are available"
                 bursaries_only_html: "Bursaries of %{bursary_amount} are available"
                 scholarship_only_html: "Scholarships of %{scholarship_amount} are available"
+          success_rate: Success rate
       providers:
         show:
           heading: About %{provider_name}

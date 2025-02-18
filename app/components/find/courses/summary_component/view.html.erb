@@ -35,21 +35,86 @@
     <% end %>
   <% end %>
 
-  <#% summary_list.with_row do |row| %>
-    <#% row.with_key(text: t(".provider")) %>
-    <#% row.with_value do %>
-      <#%= govuk_link_to course.provider_name, x_provider_url(course) %>
-    <#% end %>
-  <#% end %>
+  <% if start_date.present? %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".start_date")) %>
+    <% row.with_value(text: l(start_date&.to_date, format: :short)) %>
+  <% end %>
+<% end %>
 
-  <#% if course.accrediting_provider.present? %>
-    <#% summary_list.with_row do |row| %>
-      <#% row.with_key(text: t(".accredited_by")) %>
-      <#% row.with_value do %>
-        <#%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url(course) %>
-      <#% end %>
-    <#% end %>
-  <#% end %>
+  <% summary_list.with_row do |row| %>
+    <% row.with_key(text: t(".provider")) %>
+    <% row.with_value do %>
+      <%= govuk_link_to course.provider_name, x_provider_url(course) %><br>
+      <span class="govuk-hint govuk-!-font-size-16">They deliver the training</span>
+    <% end %>
+  <% end %>
+
+  <% if course.accrediting_provider.present? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".accredited_by")) %>
+      <% row.with_value do %>
+        <%= govuk_link_to course.accrediting_provider.provider_name, x_accrediting_provider_url(course) %><br>
+        <span class="govuk-hint govuk-!-font-size-16">They oversee the quality of the training</span>
+        <% end %>
+    <% end %>
+  <% end %>
+
+    <% summary_list.with_row do |row| %>
+      <% row.with_key(text: t(".success_rate")) %>
+      <% row.with_value do %>
+        <% case @course.course_code %>
+          <% when "E026" %>
+            <p class="govuk-body">
+            <strong class="govuk-tag govuk-tag--blue">
+              Over 80%
+            </strong>
+            </p>
+            <span class="govuk-hint govuk-!-font-size-16">
+              54 of 66 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+            </span>
+          <% when "R480" %>
+            <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                Over 95%
+              </strong>
+            </p>
+            <span class="govuk-hint govuk-!-font-size-16">
+              192 of 200 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+            </span>
+          <% when "H971" %>
+            <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                100%
+              </strong>
+            </p>
+            <span class="govuk-hint govuk-!-font-size-16">
+              All 35 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+            </span>
+          <% when "36P4" %>
+            <p class="govuk-body">
+              <strong class="govuk-tag govuk-tag--blue">
+                Under 80%
+              </strong>
+            </p>
+            <span class="govuk-hint govuk-!-font-size-16">
+              7 of 10 trainees achieved Qualified Teacher Status (QTS) at <%= @course.accrediting_provider.provider_name %> in 2023
+            </span>
+          <% when "Y404" %>
+            <details class="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  No data yet - why?
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                We use data from 2022 to 2023 to calculate the success rate. <%= @course.accrediting_provider.provider_name %> did not run courses that year.
+              </div>
+            </details>
+        <% end %>
+      <% end %>
+    <% end %>
+
 
   <% if show_apply_from_row? %>
     <% summary_list.with_row do |row| %>
@@ -58,10 +123,4 @@
     <% end %>
   <% end %>
 
-  <% if start_date.present? %>
-    <% summary_list.with_row do |row| %>
-      <% row.with_key(text: t(".start_date")) %>
-      <% row.with_value(text: l(start_date&.to_date, format: :short)) %>
-    <% end %>
-  <% end %>
 <% end %>
