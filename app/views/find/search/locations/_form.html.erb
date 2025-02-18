@@ -5,7 +5,7 @@
     <div class="app-homepage-search-content">
       <h1 class="govuk-heading-l">Find teacher training courses in England</h1>
 
-      <%= form_with model: @search_courses_form, scope: "", url: find_v2_results_path, method: :get, class: "app-homepage-search-form-container" do |form| %>
+      <%= form_with model: @search_courses_form, scope: "", url: find_results_path, method: :get, class: "app-homepage-search-form-container" do |form| %>
         <%= form.hidden_field :utm_source, value: "home" %>
         <%= form.hidden_field :utm_medium, value: "main_search" %>
 
@@ -177,14 +177,14 @@
     <div class="govuk-grid-column-one-half">
       <div class="quick-link-card">
         <h2 class="govuk-heading-m"><%= t("find.search.primary") %></h2>
-        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: find_v2_primary_path)) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_primary"), find_track_click_path(utm_content: "primary-quick-link", url: find_primary_path)) %></p>
       </div>
     </div>
 
     <div class="govuk-grid-column-one-half">
       <div class="quick-link-card">
         <h2 class="govuk-heading-m"><%= t("find.search.secondary") %></h2>
-        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: find_v2_secondary_path)) %></p>
+        <p class="govuk-body"><%= govuk_link_to(t("find.search.browse_secondary"), find_track_click_path(utm_content: "secondary-quick-link", url: find_secondary_path)) %></p>
       </div>
     </div>
   </div>
@@ -194,14 +194,14 @@
       <%= govuk_accordion(html_attributes: { class: "accordion-without-controls" }) do |accordion| %>
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.tda.title"), class: "govuk-heading-m")) do %>
           <p class="govuk-body"><%= t("find.search.tda.degree") %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.tda.browse_tda_courses"), find_v2_results_path({ minimum_degree_required: "no_degree_required", utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses" })) %></p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.search.tda.browse_tda_courses"), find_results_path({ minimum_degree_required: "no_degree_required", utm_source: "home", utm_medium: "teacher_degree_apprenticeship_courses" })) %></p>
           <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.tda.teacher_degree_apprenticeships"), t("find.get_into_teaching.url_tda")) %></p>
         <% end %>
 
         <%= accordion.with_section(heading_text: content_tag(:h3, t("find.search.send.title"), class: "govuk-heading-m")) do %>
           <p class="govuk-body"><%= t("find.search.send.send_specialism") %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_primary_send"), find_v2_results_path({ send_courses: true, subjects: Subject.primary_subject_codes, utm_source: "home", utm_medium: "send_primary_courses" })) %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_secondary_send"), find_v2_results_path({ send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives, utm_source: "home", utm_medium: "send_secondary_courses" })) %></p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_primary_send"), find_results_path({ send_courses: true, subjects: Subject.primary_subject_codes, utm_source: "home", utm_medium: "send_primary_courses" })) %></p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.search.send.browse_secondary_send"), find_results_path({ send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives, utm_source: "home", utm_medium: "send_secondary_courses" })) %></p>
           <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.send.teaching_pupils"), t("find.get_into_teaching.url_send")) %></p>
         <% end %>
 
@@ -214,7 +214,7 @@
           <h4 class="govuk-heading-s"><%= t("find.search.other_stages.further_ed.title") %></h4>
 
           <p class="govuk-body"><%= t("find.search.other_stages.further_ed.teach_young_people") %></p>
-          <p class="govuk-body"><%= govuk_link_to(t("find.search.other_stages.further_ed.browse_further_ed"), find_v2_results_path({ level: "further_education", utm_source: "home", utm_medium: "further_education_courses" })) %></p>
+          <p class="govuk-body"><%= govuk_link_to(t("find.search.other_stages.further_ed.browse_further_ed"), find_results_path({ level: "further_education", utm_source: "home", utm_medium: "further_education_courses" })) %></p>
           <p class="govuk-body"><%= t("find.search.learn_about") %> <%= govuk_link_to(t("find.search.other_stages.further_ed.teaching_further_ed"), t("find.get_into_teaching.further_ed")) %></p>
         <% end %>
       <% end %>

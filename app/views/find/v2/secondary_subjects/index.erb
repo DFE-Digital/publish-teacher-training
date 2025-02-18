@@ -1,6 +1,6 @@
 <% content_for :page_title, title_with_error_prefix(t(".page_title"), @form.errors.present?) %>
 
-<%= form_with model: @form, url: find_v2_secondary_path, method: :post do |f| %>
+<%= form_with model: @form, url: find_secondary_path, method: :post do |f| %>
   <%= f.govuk_error_summary link_base_errors_to: :subjects %>
 
   <div class="govuk-grid-row">

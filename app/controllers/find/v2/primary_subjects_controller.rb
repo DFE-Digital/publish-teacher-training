@@ -13,7 +13,7 @@ module Find
 
       def submit
         if @form.valid?
-          redirect_to find_v2_results_path(subjects: @form.subjects)
+          redirect_to find_results_path(subjects: @form.subjects)
         else
           @primary_subject_options = Subject.primary
           render :index

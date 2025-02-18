@@ -379,43 +379,43 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def when_i_visit_the_find_results_page
-    visit find_v2_results_path
+    visit find_results_path
   end
 
   def when_i_visit_the_find_results_page_using_old_salary_parameter
-    visit(find_v2_results_path(funding: 'salary'))
+    visit(find_results_path(funding: 'salary'))
   end
 
   def when_i_visit_the_find_results_page_passing_mathematics_in_the_params
-    visit(find_v2_results_path(subjects: ['G1']))
+    visit(find_results_path(subjects: ['G1']))
   end
 
   def when_i_visit_the_find_results_page_using_the_old_age_group_parameter
-    visit(find_v2_results_path(age_group: 'further_education'))
+    visit(find_results_path(age_group: 'further_education'))
   end
 
   def when_i_visit_the_find_results_page_using_the_old_pgce_pgde_parameter
-    visit(find_v2_results_path(qualification: ['pgce pgde']))
+    visit(find_results_path(qualification: ['pgce pgde']))
   end
 
   def when_i_visit_the_find_results_page_using_old_two_one_parameter
-    visit(find_v2_results_path(degree_required: 'show_all_courses'))
+    visit(find_results_path(degree_required: 'show_all_courses'))
   end
 
   def when_i_visit_the_find_results_page_using_old_two_two_parameter
-    visit(find_v2_results_path(degree_required: 'two_two'))
+    visit(find_results_path(degree_required: 'two_two'))
   end
 
   def when_i_visit_the_find_results_page_using_old_third_class_parameter
-    visit(find_v2_results_path(degree_required: 'third_class'))
+    visit(find_results_path(degree_required: 'third_class'))
   end
 
   def when_i_visit_the_find_results_page_using_old_pass_parameter
-    visit(find_v2_results_path(degree_required: 'not_required'))
+    visit(find_results_path(degree_required: 'not_required'))
   end
 
   def when_i_visit_the_find_results_page_using_old_undergraduate_courses_parameter
-    visit(find_v2_results_path(university_degree_status: false))
+    visit(find_results_path(university_degree_status: false))
   end
 
   def and_i_search_for_the_mathematics_option

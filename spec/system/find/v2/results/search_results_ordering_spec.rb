@@ -87,23 +87,23 @@ RSpec.describe 'V2 results ordering', :js, service: :find do
   end
 
   def when_i_visit_the_find_results_page
-    visit find_v2_results_path
+    visit find_results_path
   end
 
   def when_i_visit_the_find_results_page_using_the_old_course_name_descending
-    visit find_v2_results_path(sortby: 'course_desc')
+    visit find_results_path(sortby: 'course_desc')
   end
 
   def when_i_visit_the_find_results_page_using_the_old_course_name_ascending
-    visit find_v2_results_path(sortby: 'course_asc')
+    visit find_results_path(sortby: 'course_asc')
   end
 
   def when_i_visit_the_find_results_page_using_the_old_provider_name_descending
-    visit find_v2_results_path(sortby: 'provider_desc')
+    visit find_results_path(sortby: 'provider_desc')
   end
 
   def when_i_visit_the_find_results_page_using_the_old_provider_name_ascending
-    visit find_v2_results_path(sortby: 'provider_asc')
+    visit find_results_path(sortby: 'provider_asc')
   end
 
   def when_i_click_on_the_second_page

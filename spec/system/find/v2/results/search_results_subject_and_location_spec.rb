@@ -202,7 +202,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def when_i_visit_the_results_page
-    visit find_v2_results_path
+    visit find_results_path
   end
 
   def when_i_start_typing_an_invalid_location
@@ -418,7 +418,7 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def and_i_am_on_the_results_page
-    expect(page).to have_current_path(find_v2_results_path, ignore_query: true)
+    expect(page).to have_current_path(find_results_path, ignore_query: true)
   end
 
   def results
@@ -426,6 +426,6 @@ RSpec.describe 'V2 results - enabled', :js, service: :find do
   end
 
   def search_params
-    query_params(URI(page.current_url)).symbolize_keys
+    query_params(URI(page.current_url)).symbolize_keys.except(:utm_source, :utm_medium)
   end
 end

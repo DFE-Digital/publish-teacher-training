@@ -202,7 +202,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   end
 
   def and_i_am_on_the_results_page
-    expect(page).to have_current_path(find_v2_results_path, ignore_query: true)
+    expect(page).to have_current_path(find_results_path, ignore_query: true)
   end
 
   def when_i_browse_primary_courses
@@ -420,7 +420,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   end
 
   def when_i_visit_the_results_page
-    visit find_v2_results_path
+    visit find_results_path
   end
 
   def and_i_filter_for_primary_courses
@@ -596,7 +596,7 @@ RSpec.describe 'V2 results - tracking', :js, service: :find do
   end
 
   def when_i_visit_the_results_page_bookmarked_an_old_tracked_url
-    visit find_v2_results_path(utm_source: 'home', utm_medium: 'main_search')
+    visit find_results_path(utm_source: 'home', utm_medium: 'main_search')
   end
 
   def then_search_result_is_tracked_with_new_search_using_results_as_utm_medium

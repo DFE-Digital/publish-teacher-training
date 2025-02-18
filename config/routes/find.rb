@@ -20,16 +20,20 @@ namespace :find, path: '/' do
   get '/course/:provider_code/:course_code/git/:git_path', to: 'courses#git_redirect', as: :get_into_teaching_redirect
   get '/course/:provider_code/:course_code/provider/website', to: 'courses#provider_website', as: :provider_website
 
-  get '/v2/results', to: 'v2/results#index', as: 'v2_results', constraints: ->(_request) { Settings.features.v2_results.present? }
   get '/geolocation-suggestions', to: 'geolocation_suggestions#index'
 
-  get '/v2/primary', to: 'v2/primary_subjects#index', constraints: ->(_request) { Settings.features.v2_results.present? }
-  post '/v2/primary', to: 'v2/primary_subjects#submit', constraints: ->(_request) { Settings.features.v2_results.present? }
+  constraints(FindV2ResultsConstraint) do
+    get '/results', to: 'v2/results#index', as: 'v2_results'
+    get '/primary', to: 'v2/primary_subjects#index'
+    post '/primary', to: 'v2/primary_subjects#submit'
+    get '/secondary', to: 'v2/secondary_subjects#index'
+    post '/secondary', to: 'v2/secondary_subjects#submit'
+  end
 
-  get '/v2/secondary', to: 'v2/secondary_subjects#index', constraints: ->(_request) { Settings.features.v2_results.present? }
-  post '/v2/secondary', to: 'v2/secondary_subjects#submit', constraints: ->(_request) { Settings.features.v2_results.present? }
+  constraints(FindV1ResultsConstraint) do
+    get '/results', to: 'results#index', as: 'results'
+  end
 
-  get '/results', to: 'results#index', as: 'results'
   get '/location-suggestions', to: 'location_suggestions#index'
   get '/cycle-has-ended', to: 'pages#cycle_has_ended', as: 'cycle_has_ended'
 
